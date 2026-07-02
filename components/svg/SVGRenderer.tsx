@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
+import type { SVGSpec } from '@/utils/types';
 
 interface SVGNode {
   id: string;
   label: string;
-  type?: 'root' | 'parent' | 'child' | 'leaf';
+  type?: string;
   children?: string[];
   value?: number;
 }
@@ -23,21 +24,6 @@ interface SVGStructure {
   edges?: SVGEdge[];
   levels?: number;
   orientation?: 'vertical' | 'horizontal';
-}
-
-interface SVGSpec {
-  svgId: string;
-  type: 'org-tree' | 'flowchart' | 'decision-tree' | 'sankey' | 'treemap' | 'timeline' | 'comparison-matrix';
-  purpose: string;
-  question?: string;
-  structure: SVGStructure;
-  styling?: Record<string, string | number>;
-  caption: string;
-  altText: string;
-  interactive?: boolean;
-  responsive?: boolean;
-  theme?: string;
-  lazyLoad?: boolean;
 }
 
 interface SVGRendererProps {
@@ -74,7 +60,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
       if (!node) return [];
 
       const elements: React.ReactNode[] = [];
-      const children = node.children?.map((cid) => nodeMap.get(cid)).filter(Boolean) || [];
+      const children = node.children?.map((cid) => nodeMap.get(cid)).filter((n): n is SVGNode => n != null) || [];
       const totalWidth = children.length * (nodeW + gapX) - gapX;
       const startX = x - totalWidth / 2;
 
@@ -434,6 +420,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
     return (
       <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: '100%', height: 'auto', maxHeight: '450px' }} role="img" aria-label={altText}>
         {nodes.map((node, i) => {
+          const n = node as SVGNode;
           const col = i % cols;
           const row = Math.floor(i / cols);
           const x = col * cellW + 2;
@@ -442,11 +429,11 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
           const h = cellH - 4;
           const color = colors[i % colors.length];
           return (
-            <g key={node.id}>
+            <g key={n.id}>
               <rect x={x} y={y} width={w} height={h} rx={6} fill={color} opacity="0.3" stroke={color} strokeWidth={1} />
-              <text x={x + w / 2} y={y + h / 2 - 4} textAnchor="middle" fill="var(--color-text-primary)" fontSize="12px" fontWeight="600" fontFamily="var(--font-sans)">{node.label}</text>
-              {node.value !== undefined && (
-                <text x={x + w / 2} y={y + h / 2 + 14} textAnchor="middle" fill="var(--color-text-muted)" fontSize="10px" fontFamily="var(--font-sans)">{node.value}</text>
+              <text x={x + w / 2} y={y + h / 2 - 4} textAnchor="middle" fill="var(--color-text-primary)" fontSize="12px" fontWeight="600" fontFamily="var(--font-sans)">{n.label}</text>
+              {n.value !== undefined && (
+                <text x={x + w / 2} y={y + h / 2 + 14} textAnchor="middle" fill="var(--color-text-muted)" fontSize="10px" fontFamily="var(--font-sans)">{n.value}</text>
               )}
             </g>
           );
@@ -473,15 +460,16 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
         <line x1={spacing * 0.5} y1={svgH / 2} x2={svgW - spacing * 0.5} y2={svgH / 2} stroke="var(--color-border-default)" strokeWidth={2} />
         {/* Nodes */}
         {nodes.map((node, i) => {
+          const n = node as SVGNode;
           const x = spacing * (i + 1);
           const y = svgH / 2;
           const isLast = i === nodes.length - 1;
           return (
-            <g key={node.id}>
+            <g key={n.id}>
               <circle cx={x} cy={y} r={8} fill={isLast ? 'var(--color-brand-400)' : 'var(--color-bg-secondary)'} stroke={isLast ? 'var(--color-brand-400)' : 'var(--color-border-default)'} strokeWidth={2} />
-              <text x={x} y={y + 30} textAnchor="middle" fill="var(--color-text-primary)" fontSize="11px" fontWeight="500" fontFamily="var(--font-sans)">{node.label}</text>
-              {node.value !== undefined && (
-                <text x={x} y={y + 44} textAnchor="middle" fill="var(--color-text-muted)" fontSize="10px" fontFamily="var(--font-sans)">{node.value}</text>
+              <text x={x} y={y + 30} textAnchor="middle" fill="var(--color-text-primary)" fontSize="11px" fontWeight="500" fontFamily="var(--font-sans)">{n.label}</text>
+              {n.value !== undefined && (
+                <text x={x} y={y + 44} textAnchor="middle" fill="var(--color-text-muted)" fontSize="10px" fontFamily="var(--font-sans)">{n.value}</text>
               )}
             </g>
           );
@@ -514,24 +502,27 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
         {/* Divider */}
         <line x1={0} y1={35} x2={svgW} y2={35} stroke="var(--color-border-default)" strokeWidth={1} />
         {/* Data rows */}
-        {nodes.map((node, row) => (
-          <g key={node.id}>
-            <text x={10} y={65 + row * rowH} textAnchor="start" fill="var(--color-text-primary)" fontSize="11px" fontWeight="500" fontFamily="var(--font-sans)">{node.label}</text>
+        {nodes.map((node, row) => {
+          const n = node as SVGNode;
+          return (
+          <g key={n.id}>
+            <text x={10} y={65 + row * rowH} textAnchor="start" fill="var(--color-text-primary)" fontSize="11px" fontWeight="500" fontFamily="var(--font-sans)">{n.label}</text>
             {edges.map((edge, col) => {
               const cx = startX + col * colW + colW / 2;
               const cy = 60 + row * rowH;
-              const hasValue = node.value !== undefined;
+              const hasValue = n.value !== undefined;
               return (
-                <g key={`${node.id}-${col}`}>
+                <g key={`${n.id}-${col}`}>
                   <circle cx={cx} cy={cy} r={hasValue ? 12 : 6} fill={hasValue ? 'var(--color-brand-400)' : 'var(--color-bg-tertiary)'} opacity={hasValue ? 0.8 : 0.4} />
                   {hasValue && (
-                    <text x={cx} y={cy + 4} textAnchor="middle" fill="var(--color-text-inverse)" fontSize="9px" fontWeight="600" fontFamily="var(--font-sans)">{node.value}</text>
+                    <text x={cx} y={cy + 4} textAnchor="middle" fill="var(--color-text-inverse)" fontSize="9px" fontWeight="600" fontFamily="var(--font-sans)">{n.value}</text>
                   )}
                 </g>
               );
             })}
           </g>
-        ))}
+          );
+        })}
       </svg>
     );
   };

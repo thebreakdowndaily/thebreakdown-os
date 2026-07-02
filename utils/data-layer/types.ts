@@ -182,16 +182,25 @@ export interface APIFixSection {
 
 export interface APIStakeholder {
   name: string;
-  type: string;
+  type:
+    | 'government'
+    | 'citizen'
+    | 'private-sector'
+    | 'civil-society'
+    | 'international';
   role: string;
   interest: string;
-  stance?: string;
+  stance?: 'supports' | 'opposes' | 'neutral' | 'mixed';
 }
 
 export interface APIExistingSolution {
   name: string;
   description: string;
-  status: string;
+  status:
+    | 'active'
+    | 'proposed'
+    | 'expired'
+    | 'failed';
   effectiveness?: string;
   source?: string;
 }
@@ -208,8 +217,8 @@ export interface APIGlobalExample {
 export interface APIFixAction {
   title: string;
   description: string;
-  priority: string;
-  timeframe: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  timeframe: 'immediate' | 'short-term' | 'medium-term' | 'long-term';
   actors: string[];
 }
 
@@ -270,3 +279,4 @@ export interface APIError {
   status: number;
   details?: string;
 }
+export const __TEST__ = "DATA_LAYER_TYPES";

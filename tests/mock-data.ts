@@ -61,6 +61,7 @@ export const mockStory: StoryJSON = {
       confidence: 0.85,
     },
   ],
+  verificationScore: 85,
   sources: [
     {
       name: 'Ministry of Statistics',

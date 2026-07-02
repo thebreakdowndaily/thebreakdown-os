@@ -75,7 +75,7 @@ interface TrackedSectionProps {
   storySlug: string;
   sectionId: string;
   children: React.ReactNode;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
   className?: string;
   style?: React.CSSProperties;
 }

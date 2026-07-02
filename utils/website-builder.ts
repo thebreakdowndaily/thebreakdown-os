@@ -300,7 +300,7 @@ function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, any
     'data-cards': d => ({ datasets: d.datasets }),
     'charts': d => ({ charts: d.charts }),
     'maps': d => ({ geoData: d.geoData }),
-    'debate': d => ({ sides: d.debate?.sides, arguments: d.debate?.arguments }),
+    'debate': d => ({ sides: d.debate?.sides, arguments: d.debate?.sides?.[0]?.arguments }),
     'faq': d => ({ questions: d.faq }),
     'primary-sources': d => ({ sources: d.primarySources }),
     'related-stories': d => ({ stories: d.relatedStories }),

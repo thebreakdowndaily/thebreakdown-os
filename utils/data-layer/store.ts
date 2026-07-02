@@ -36,6 +36,7 @@ function seed(): DataStore {
   const countries = new Map<string, APICountry>();
   const organizations = new Map<string, APIOrganization>();
   const timelines = new Map<string, APITimeline>();
+  const fixes = new Map<string, APIFix>();
 
   // ── Stories ───────────────────────────────────────────────────────
 
@@ -509,7 +510,7 @@ function seed(): DataStore {
 
 /* ── Store Initialization ───────────────────────────────────────────── */
 
-function getStore(): DataStore {
+export function getStore(): DataStore {
   if (!store) {
     store = seed();
   }

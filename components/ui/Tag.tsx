@@ -19,16 +19,16 @@ const categoryColors: Record<string, string> = {
   default: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
 };
 
-const variantStyles = {
+const variantStyles = (label: string) => ({
   default: 'bg-gray-700 text-gray-300 border-gray-600',
   category: categoryColors[label.toLowerCase()] || categoryColors.default,
   topic: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-};
+});
 
 const Tag: React.FC<TagProps> = ({ label, href, variant = 'default', onRemove }) => {
   const baseClasses =
     'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors';
-  const classes = `${baseClasses} ${variantStyles[variant]} ${onRemove ? 'pr-1' : ''}`;
+  const classes = `${baseClasses} ${variantStyles(label)[variant]} ${onRemove ? 'pr-1' : ''}`;
 
   const content = (
     <>

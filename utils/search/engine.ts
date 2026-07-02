@@ -88,7 +88,7 @@ function understandQuery(query: string): ConceptMatch[] {
       }
 
       if (score > 0) {
-        scored.set(c.id, { concept, score });
+        scored.set(c.id, { concept: c, score });
       }
     }
   }

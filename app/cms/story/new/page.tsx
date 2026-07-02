@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CMSShell from '@/components/cms/CMSShell';
 import StoryEditor from '@/components/cms/StoryEditor';
@@ -53,7 +53,7 @@ const TEMPLATES: Record<string, Partial<CMSStory>> = {
   },
 };
 
-export default function NewStoryPage() {
+function NewStoryForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const template = searchParams?.get('template') || 'blank';
@@ -100,5 +100,19 @@ export default function NewStoryPage() {
     <CMSShell>
       <StoryEditor story={story} onSave={handleSave} />
     </CMSShell>
+  );
+}
+
+export default function NewStoryPage() {
+  return (
+    <Suspense fallback={
+      <CMSShell>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--color-text-tertiary)' }}>
+          Loading...
+        </div>
+      </CMSShell>
+    }>
+      <NewStoryForm />
+    </Suspense>
   );
 }

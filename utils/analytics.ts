@@ -101,6 +101,12 @@ export type AnalyticsEvent =
   | ShareEvent
   | BookmarkEvent;
 
+// Properly distributed Omit for discriminated unions.
+// Each union member is Omit'd individually, preserving the discriminant.
+export type TrackEventPayload = {
+  [K in AnalyticsEvent['type']]: Omit<Extract<AnalyticsEvent, { type: K }>, 'sessionId' | 'ts'>
+}[AnalyticsEvent['type']];
+
 // ── Aggregated Analytics ───────────────────────────────────────────────────
 
 export interface SectionEngagement {
@@ -243,7 +249,7 @@ function scheduleFlush(): void {
  * Track a single analytics event.
  * Batches events and sends every 5 seconds.
  */
-export function trackEvent(event: Omit<AnalyticsEvent, 'sessionId' | 'ts'>): void {
+export function trackEvent(event: TrackEventPayload): void {
   try {
     const fullEvent = {
       ...event,

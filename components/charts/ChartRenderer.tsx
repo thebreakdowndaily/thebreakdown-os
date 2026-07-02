@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import type { ChartSpec, ChartType } from '@/utils/types';
+import * as d3 from 'd3';
 
 /**
  * THE BREAKDOWN — ChartRenderer
@@ -100,7 +101,7 @@ async function loadD3() {
     import('d3-selection'),
     import('d3-scale-chromatic'),
     import('d3-hierarchy'),
-    import('d3-sankey'),
+    import('d3-sankey' as any),
     import('d3-force'),
     import('d3-chord'),
     import('d3-geo'),
@@ -1124,7 +1125,7 @@ chartRenderers.treemap = (svg, data, width, height, theme, spec) => {
     .sort((a: any, b: any) => (b.value || 0) - (a.value || 0));
 
   const treemapLayout = d3.treemap().size([width, height]).padding(2);
-  treemapLayout(root);
+  treemapLayout(root as any);
 
   const maxVal = Math.max(...data.map((d) => Number(d[yField])), 1);
   const colorScale = d3.scaleSequential(d3.interpolateOranges)

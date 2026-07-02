@@ -126,8 +126,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
         const theme = readGlobeTheme(container);
 
         // Create globe instance
-        const globeInstance = Globe({
-          container,
+        const globeInstance = new (Globe as any)(container, {
           width: dimensions.width,
           height: dimensions.height,
           rendererConfig: {
@@ -135,7 +134,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
             alpha: true,
             powerPreference: 'high-performance',
           },
-        });
+        } as any);
 
         // Basic configuration
         globeInstance
@@ -148,9 +147,9 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
             altitude: globe.pov?.altitude ?? 2.5,
           })
           .globeMaterial({
-            specularColor: { r: 0.2, g: 0.1, b: 0 },
+            specular: { r: 0.2, g: 0.1, b: 0 },
             shininess: 10,
-          })
+          } as any)
           .atmosphereColor('#f59e0b')
           .atmosphereAltitude(0.25);
 

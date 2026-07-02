@@ -70,7 +70,7 @@ const Visuals: React.FC<VisualsProps> = ({ visuals }) => {
 
         {/* Infographic Cards */}
         {visuals.infographics?.map((inf, i) => (
-          <InfographicRenderer key={`inf-${i}`} infographic={inf} />
+          <InfographicRenderer key={`inf-${i}`} cards={inf.cards} />
         ))}
       </div>
     </section>

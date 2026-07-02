@@ -1,3 +1,5 @@
+import type { APIFix } from '@/utils/data-layer/types';
+import { __TEST__ } from '@/utils/data-layer/types';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getFixes } from '@/utils/data-layer/store';
@@ -10,6 +12,7 @@ export const metadata: Metadata = {
 export default function FixLandingPage() {
   const fixes = getFixes({ pageSize: 50 });
 
+  console.log(__TEST__);
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -30,7 +33,7 @@ export default function FixLandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {fixes.data.map((fix) => (
+          {fixes.data.map((fix: APIFix) => (
             <Link key={fix.slug} href={`/fix/${fix.slug}`} className="group block bg-gray-800/50 border border-gray-700/50 rounded-lg p-5 hover:border-amber-700/50 transition-colors">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-xs bg-emerald-900/40 text-emerald-300 px-2 py-0.5 rounded-full">Score: {fix.evidenceScore}</span>
@@ -41,10 +44,17 @@ export default function FixLandingPage() {
               </h3>
               <p className="text-sm text-gray-400 line-clamp-2">{fix.summary}</p>
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {fix.tags.slice(0, 3).map((tag) => (
-                  <span key={tag} className="text-xs bg-gray-800 text-gray-500 px-2 py-0.5 rounded border border-gray-700">{tag}</span>
-                ))}
-              </div>
+             {fix.tags.slice(0, 3).map((tag: string, index: number) => {
+                return (
+                  <span
+                   key={index}
+                       className="text-xs bg-gray-800 text-gray-500 px-2 py-0.5 rounded border border-gray-700"
+      >
+        {tag}
+      </span>
+    );
+  })}
+</div>
             </Link>
           ))}
         </div>

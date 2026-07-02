@@ -58,7 +58,7 @@ export { Link } from './components/Link';
 export type { LinkProps, LinkVariant } from './components/Link';
 
 export { Heading } from './components/Heading';
-export type { HeadingProps, HeadingLevel, HeadingVariant } from './components/Heading';
+export type { HeadingProps, HeadingLevel } from './components/Heading';
 
 export { Text } from './components/Text';
 export type { TextProps, TextSize } from './components/Text';
@@ -70,7 +70,7 @@ export { Stack } from './components/Stack';
 export type { StackProps, StackDirection, StackGap } from './components/Stack';
 
 export { Grid } from './components/Grid';
-export type { GridProps, GridColumns } from './components/Grid';
+export type { GridProps, ResponsiveColumns } from './components/Grid';
 
 export { Divider } from './components/Divider';
 export type { DividerProps } from './components/Divider';

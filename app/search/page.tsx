@@ -142,13 +142,10 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                   )}
                   <EntityCard
                     entity={{
-                      id: result.id,
                       slug: result.id,
                       name: result.title,
                       type: result.category || 'entity',
                       description: result.description,
-                      storyCount: 0,
-                      updatedAt: new Date().toISOString(),
                     }}
                   />
                 </div>

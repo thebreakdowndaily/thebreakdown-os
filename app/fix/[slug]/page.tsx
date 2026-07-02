@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import type { FixJSON } from '@/utils/types';
+import type { FixJSON, ExistingSolution } from '@/utils/types';
 import { buildFix } from '@/utils/website-builder';
 import { getFix } from '@/utils/data-layer/store';
 import FixLayout from '@/layouts/FixLayout';
@@ -31,11 +31,37 @@ function loadFix(slug: string): FixJSON | null {
     rootCauses: apiFix.rootCauses,
     evidence: apiFix.evidence,
     stakeholders: apiFix.stakeholders,
-    existingSolutions: apiFix.existingSolutions,
+    existingSolutions: apiFix.existingSolutions.map(
+      (s): ExistingSolution => ({
+        name: s.name,
+        description: s.description,
+        status: s.status as ExistingSolution['status'],
+        effectiveness: s.effectiveness as ExistingSolution['effectiveness'],
+        source: s.source,
+      })
+    ),
     globalExamples: apiFix.globalExamples,
-    recommendedActions: apiFix.recommendedActions,
-    citizenActions: apiFix.citizenActions,
-    governmentActions: apiFix.governmentActions,
+    recommendedActions: apiFix.recommendedActions.map((action) => ({
+      title: action.title,
+      description: action.description,
+      priority: action.priority as 'low' | 'medium' | 'high' | 'critical',
+      timeframe: action.timeframe,
+      actors: action.actors,
+    })),
+    citizenActions: apiFix.citizenActions.map((action) => ({
+      title: action.title,
+      description: action.description,
+      priority: action.priority as 'low' | 'medium' | 'high' | 'critical',
+      timeframe: action.timeframe,
+      actors: action.actors,
+    })),
+    governmentActions: apiFix.governmentActions.map((action) => ({
+      title: action.title,
+      description: action.description,
+      priority: action.priority as 'low' | 'medium' | 'high' | 'critical',
+      timeframe: action.timeframe,
+      actors: action.actors,
+    })),
     metricsToTrack: apiFix.metricsToTrack,
     relatedStories: apiFix.relatedStories,
     relatedEntities: apiFix.relatedEntities,

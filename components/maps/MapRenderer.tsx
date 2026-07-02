@@ -35,7 +35,7 @@ async function loadD3Geo() {
     array,
   ] = await Promise.all([
     import('d3-geo'),
-    import('d3-geo-projection'),
+    import('d3-geo-projection' as any),
     import('d3-selection'),
     import('d3-array'),
   ]);
@@ -325,7 +325,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
 
     try {
-      const d3 = d3;
+      const d3: any = d3GeoModules;
 
       // Create projection
       const [centerLat, centerLng, scale] = config.projectionParams;
@@ -454,7 +454,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       errText.setAttribute('fill', theme.textMuted);
       errText.setAttribute('font-size', '14');
       errText.setAttribute('font-family', theme.fontFamily);
-      errText.textContent = `${mapTypeLabels[map.type] || 'Map'} — ${features ? 'rendered' : 'no data'}`;
+      errText.textContent = `${mapTypeLabels[map.type] || 'Map'} — ${config?.geoJSON?.features ? 'rendered' : 'no data'}`;
       svg.appendChild(errText);
     }
   }, [isVisible, dimensions, map, renderKey]);
