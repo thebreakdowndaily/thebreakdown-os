@@ -5,9 +5,9 @@ import { aggregateStoryAnalytics, generateImprovementReport } from '@/utils/anal
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = params;
+  const { slug } = await context.params;
 
   try {
     // Fetch raw events from the main analytics store

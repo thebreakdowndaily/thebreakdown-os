@@ -76,8 +76,9 @@ export function generateStaticParams() {
   return mockTopics.map((topic) => ({ slug: topic.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const data = topicMap.get(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = topicMap.get(slug);
   if (!data) return { title: 'Topic Not Found' };
   const pageSpec = buildTopic(data);
   return {
@@ -92,8 +93,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function TopicPage({ params }: { params: { slug: string } }) {
-  const data = topicMap.get(params.slug);
+export default async function TopicPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = topicMap.get(slug);
   if (!data) notFound();
 
   const pageSpec = buildTopic(data);

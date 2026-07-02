@@ -100,8 +100,9 @@ export function generateStaticParams() {
   return mockEntities.map((entity) => ({ slug: entity.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const data = entityMap.get(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = entityMap.get(slug);
   if (!data) return { title: 'Entity Not Found' };
   const pageSpec = buildEntity(data);
   return {
@@ -116,8 +117,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function EntityPage({ params }: { params: { slug: string } }) {
-  const data = entityMap.get(params.slug);
+export default async function EntityPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = entityMap.get(slug);
   if (!data) notFound();
 
   const pageSpec = buildEntity(data);

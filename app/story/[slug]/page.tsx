@@ -215,10 +215,11 @@ export async function generateStaticParams() {
   return mockStories.map((story) => ({ slug: story.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   // Try API first, fallback to mocks
-  const apiData = await getStory(params.slug).catch(() => null);
-  const data = apiData || storyMap.get(params.slug);
+  const apiData = await getStory(slug).catch(() => null);
+  const data = apiData || storyMap.get(slug);
 
   if (!data) {
     return {
@@ -244,10 +245,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function StoryPage({ params }: { params: { slug: string } }) {
+export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   // Try API first (for CMS-created stories), fallback to mocks
-  const apiData = await getStory(params.slug).catch(() => null);
-  const data = apiData || storyMap.get(params.slug);
+  const apiData = await getStory(slug).catch(() => null);
+  const data = apiData || storyMap.get(slug);
 
   if (!data) notFound();
 

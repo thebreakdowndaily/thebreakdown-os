@@ -89,8 +89,9 @@ export function generateStaticParams() {
   return mockOrganizations.map((org) => ({ slug: org.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const data = orgMap.get(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = orgMap.get(slug);
   if (!data) return { title: 'Organization Not Found' };
   const pageSpec = buildEntity(data);
   return {
@@ -105,8 +106,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function OrganizationPage({ params }: { params: { slug: string } }) {
-  const data = orgMap.get(params.slug);
+export default async function OrganizationPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = orgMap.get(slug);
   if (!data) notFound();
 
   const pageSpec = buildEntity(data);

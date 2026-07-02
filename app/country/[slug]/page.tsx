@@ -88,8 +88,9 @@ export function generateStaticParams() {
   return mockCountries.map((country) => ({ slug: country.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const data = countryMap.get(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = countryMap.get(slug);
   if (!data) return { title: 'Country Not Found' };
   const pageSpec = buildCountry(data);
   return {
@@ -104,8 +105,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function CountryPage({ params }: { params: { slug: string } }) {
-  const data = countryMap.get(params.slug);
+export default async function CountryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = countryMap.get(slug);
   if (!data) notFound();
 
   const pageSpec = buildCountry(data);

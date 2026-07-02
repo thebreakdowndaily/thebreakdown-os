@@ -9,7 +9,7 @@ import EntityCard from '@/components/ui/EntityCard';
 import ConceptTrail from '@/components/search/ConceptTrail';
 
 interface SearchPageProps {
-  searchParams: { q?: string; type?: string; page?: string };
+  searchParams: Promise<{ q?: string; type?: string; page?: string }>;
 }
 
 function searchResults(query: string, typeFilter: string, page: number): {
@@ -38,17 +38,16 @@ function searchResults(query: string, typeFilter: string, page: number): {
 }
 
 export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
-  const query = searchParams.q || '';
+  const { q: query = '' } = await searchParams;
   return {
     title: query ? `Search: ${query} — The Breakdown` : 'Search — The Breakdown',
     description: query ? `Semantic search results for "${query}" on The Breakdown` : 'Search stories, topics, entities on The Breakdown.',
   };
 }
 
-export default function SearchPage({ searchParams }: SearchPageProps) {
-  const query = searchParams.q || '';
-  const typeFilter = searchParams.type || '';
-  const currentPage = parseInt(searchParams.page || '1', 10);
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const { q: query = '', type: typeFilter = '', page: pageStr = '1' } = await searchParams;
+  const currentPage = parseInt(pageStr, 10);
 
   const { results, understood, total, totalPages } = searchResults(query, typeFilter, currentPage);
 

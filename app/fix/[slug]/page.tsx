@@ -6,7 +6,7 @@ import FixLayout from '@/layouts/FixLayout';
 import FixRenderer from '@/components/fix/FixRenderer';
 
 interface FixPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 function loadFix(slug: string): FixJSON | null {
@@ -69,8 +69,9 @@ function loadFix(slug: string): FixJSON | null {
   };
 }
 
-export function generateMetadata({ params }: FixPageProps): Metadata {
-  const fix = loadFix(params.slug);
+export async function generateMetadata({ params }: FixPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const fix = loadFix(slug);
   if (!fix) return { title: 'Fix Not Found — The Breakdown' };
 
   return {
@@ -79,8 +80,9 @@ export function generateMetadata({ params }: FixPageProps): Metadata {
   };
 }
 
-export default function FixPage({ params }: FixPageProps) {
-  const fix = loadFix(params.slug);
+export default async function FixPage({ params }: FixPageProps) {
+  const { slug } = await params;
+  const fix = loadFix(slug);
 
   if (!fix) {
     return (
