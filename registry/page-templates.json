@@ -1,0 +1,95 @@
+[
+  {
+    "id": "story",
+    "description": "Standard in-depth story page",
+    "layout": "story-layout",
+    "sections": [
+      "hero",
+      "executive-summary",
+      "quick-facts",
+      "timeline",
+      "evidence",
+      "data-cards",
+      "charts",
+      "maps",
+      "visuals",
+      "debate",
+      "faq",
+      "primary-sources",
+      "related-stories",
+      "related-entities",
+      "author-box",
+      "newsletter"
+    ],
+    "required_sections": ["hero", "executive-summary", "evidence", "related-stories", "author-box"]
+  },
+  {
+    "id": "entity",
+    "description": "Entity profile page",
+    "layout": "entity-layout",
+    "sections": [
+      "entity-overview",
+      "entity-timeline",
+      "entity-data",
+      "entity-sources",
+      "related-stories",
+      "faq"
+    ],
+    "required_sections": ["entity-overview", "related-stories"]
+  },
+  {
+    "id": "topic",
+    "description": "Topic aggregation page",
+    "layout": "topic-layout",
+    "sections": [
+      "topic-header",
+      "topic-collections",
+      "topic-charts",
+      "related-stories"
+    ],
+    "required_sections": ["topic-header", "topic-collections"]
+  },
+  {
+    "id": "homepage",
+    "description": "Homepage with featured and section grids",
+    "layout": "homepage-layout",
+    "sections": [
+      "top-story",
+      "trending-analysis",
+      "latest-investigations",
+      "data-stories",
+      "the-fix",
+      "policy-tracker",
+      "global-watch",
+      "latest-updates"
+    ],
+    "required_sections": ["top-story", "trending-analysis", "latest-updates"]
+  },
+  {
+    "id": "search",
+    "description": "Search results page",
+    "layout": "search-layout",
+    "sections": [],
+    "required_sections": []
+  },
+  {
+    "id": "fix",
+    "description": "The Fix framework page — evidence-based solutions with actionable steps",
+    "layout": "fix-layout",
+    "sections": [
+      "fix-header",
+      "fix-problem",
+      "fix-affected",
+      "fix-root-causes",
+      "fix-evidence",
+      "fix-stakeholders",
+      "fix-existing-solutions",
+      "fix-global-examples",
+      "fix-recommended-actions",
+      "fix-citizen-actions",
+      "fix-government-actions",
+      "fix-metrics"
+    ],
+    "required_sections": ["fix-header", "fix-problem", "fix-evidence", "fix-recommended-actions", "fix-metrics"]
+  }
+]

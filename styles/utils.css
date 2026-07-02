@@ -1,0 +1,61 @@
+.container-main {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.content-width {
+  @apply max-w-3xl mx-auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in-delayed {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in:nth-child(1) { animation-delay: 0ms; }
+.animate-fade-in:nth-child(2) { animation-delay: 80ms; }
+.animate-fade-in:nth-child(3) { animation-delay: 160ms; }
+.animate-fade-in:nth-child(4) { animation-delay: 240ms; }
+.animate-fade-in:nth-child(5) { animation-delay: 320ms; }
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gradient-overlay {
+  background: linear-gradient(to top, rgba(17,24,39,0.95) 0%, rgba(17,24,39,0.5) 50%, rgba(17,24,39,0.1) 100%);
+}
+
+.gradient-overlay-dark {
+  background: linear-gradient(to top, rgba(17,24,39,1) 0%, rgba(17,24,39,0.8) 40%, rgba(17,24,39,0.3) 80%, transparent 100%);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  @apply bg-gray-800 rounded;
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}

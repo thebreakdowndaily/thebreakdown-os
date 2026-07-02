@@ -1,0 +1,42 @@
+[
+  {
+    "id": "story-layout",
+    "component": "StoryLayout",
+    "path": "layouts/StoryLayout.tsx",
+    "description": "Story page layout with sidebar, TOC, reading progress",
+    "slots": ["header", "sidebar-left", "content", "sidebar-right", "footer"],
+    "defaultSlot": "content"
+  },
+  {
+    "id": "entity-layout",
+    "component": "EntityLayout",
+    "path": "layouts/EntityLayout.tsx",
+    "description": "Entity page layout with navigation tabs",
+    "slots": ["header", "tabs", "content", "sidebar", "footer"],
+    "defaultSlot": "content"
+  },
+  {
+    "id": "topic-layout",
+    "component": "TopicLayout",
+    "path": "layouts/TopicLayout.tsx",
+    "description": "Topic page layout with collections grid",
+    "slots": ["header", "collections", "charts", "sidebar", "footer"],
+    "defaultSlot": "collections"
+  },
+  {
+    "id": "homepage-layout",
+    "component": "HomepageLayout",
+    "path": "layouts/HomepageLayout.tsx",
+    "description": "Homepage layout with featured and grid sections",
+    "slots": ["hero", "trending", "grid", "sidebar", "footer"],
+    "defaultSlot": "grid"
+  },
+  {
+    "id": "search-layout",
+    "component": "SearchLayout",
+    "path": "layouts/SearchLayout.tsx",
+    "description": "Search results page layout",
+    "slots": ["header", "filters", "results", "sidebar", "footer"],
+    "defaultSlot": "results"
+  }
+]

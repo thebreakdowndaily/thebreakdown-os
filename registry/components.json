@@ -1,0 +1,282 @@
+[
+  {
+    "id": "hero",
+    "component": "Hero",
+    "path": "components/story/Hero.tsx",
+    "description": "Story hero with headline, summary, metadata, hero image",
+    "required": true,
+    "props": ["headline", "summary", "heroImage", "publishedAt", "updatedAt", "readingTime", "author", "evidenceScore"]
+  },
+  {
+    "id": "executive-summary",
+    "component": "ExecutiveSummary",
+    "path": "components/story/ExecutiveSummary.tsx",
+    "description": "TL;DR executive summary in 3-5 bullet points",
+    "required": true,
+    "props": ["summary", "keyPoints"]
+  },
+  {
+    "id": "quick-facts",
+    "component": "QuickFacts",
+    "path": "components/story/QuickFacts.tsx",
+    "description": "Key data points and statistics in card layout",
+    "required": false,
+    "props": ["facts"]
+  },
+  {
+    "id": "timeline",
+    "component": "Timeline",
+    "path": "components/story/Timeline.tsx",
+    "description": "Chronological event timeline with dates and descriptions",
+    "required": false,
+    "props": ["events"]
+  },
+  {
+    "id": "evidence",
+    "component": "Evidence",
+    "path": "components/story/Evidence.tsx",
+    "description": "Evidence dashboard with sources, claims, verification scores",
+    "required": true,
+    "props": ["claims", "sources", "verificationScore"]
+  },
+  {
+    "id": "data-cards",
+    "component": "DataCards",
+    "path": "components/story/DataCards.tsx",
+    "description": "Statistical data presented in card grid",
+    "required": false,
+    "props": ["datasets"]
+  },
+  {
+    "id": "charts",
+    "component": "Charts",
+    "path": "components/story/Charts.tsx",
+    "description": "Interactive data visualizations",
+    "required": false,
+    "props": ["charts"]
+  },
+  {
+    "id": "maps",
+    "component": "Maps",
+    "path": "components/story/Maps.tsx",
+    "description": "Geographic data visualizations",
+    "required": false,
+    "props": ["geoData"]
+  },
+  {
+    "id": "debate",
+    "component": "Debate",
+    "path": "components/story/Debate.tsx",
+    "description": "Multiple perspectives and debate points",
+    "required": false,
+    "props": ["sides", "arguments"]
+  },
+  {
+    "id": "faq",
+    "component": "FAQ",
+    "path": "components/story/FAQ.tsx",
+    "description": "Frequently asked questions with expandable answers",
+    "required": false,
+    "props": ["questions"]
+  },
+  {
+    "id": "primary-sources",
+    "component": "PrimarySources",
+    "path": "components/story/PrimarySources.tsx",
+    "description": "Primary source documents and references",
+    "required": false,
+    "props": ["sources"]
+  },
+  {
+    "id": "related-stories",
+    "component": "RelatedStories",
+    "path": "components/story/RelatedStories.tsx",
+    "description": "Related stories from the knowledge graph",
+    "required": true,
+    "props": ["stories"]
+  },
+  {
+    "id": "related-entities",
+    "component": "RelatedEntities",
+    "path": "components/story/RelatedEntities.tsx",
+    "description": "Related people, organizations, laws, schemes",
+    "required": false,
+    "props": ["entities"]
+  },
+  {
+    "id": "author-box",
+    "component": "AuthorBox",
+    "path": "components/story/AuthorBox.tsx",
+    "description": "Author bio and attribution",
+    "required": true,
+    "props": ["author"]
+  },
+  {
+    "id": "newsletter",
+    "component": "Newsletter",
+    "path": "components/story/Newsletter.tsx",
+    "description": "Newsletter signup CTA",
+    "required": false,
+    "props": []
+  },
+  {
+    "id": "visuals",
+    "component": "Visuals",
+    "path": "components/story/Visuals.tsx",
+    "description": "Advanced visualizations — globe, SVG, animation, infographic",
+    "required": false,
+    "props": ["visuals"]
+  },
+  {
+    "id": "entity-overview",
+    "component": "EntityOverview",
+    "path": "components/entity/EntityOverview.tsx",
+    "description": "Entity header with name, type, description, stats",
+    "required": true,
+    "props": ["entity"]
+  },
+  {
+    "id": "entity-timeline",
+    "component": "EntityTimeline",
+    "path": "components/entity/EntityTimeline.tsx",
+    "description": "Entity-specific timeline of events",
+    "required": false,
+    "props": ["events"]
+  },
+  {
+    "id": "entity-data",
+    "component": "EntityData",
+    "path": "components/entity/EntityData.tsx",
+    "description": "Entity data dashboard",
+    "required": false,
+    "props": ["datasets", "statistics"]
+  },
+  {
+    "id": "entity-sources",
+    "component": "EntitySources",
+    "path": "components/entity/EntitySources.tsx",
+    "description": "Entity source documents and references",
+    "required": false,
+    "props": ["sources"]
+  },
+  {
+    "id": "topic-header",
+    "component": "TopicHeader",
+    "path": "components/topic/TopicHeader.tsx",
+    "description": "Topic page header with description and stats",
+    "required": true,
+    "props": ["topic"]
+  },
+  {
+    "id": "topic-collections",
+    "component": "TopicCollections",
+    "path": "components/topic/TopicCollections.tsx",
+    "description": "Collections of stories, entities, policies for a topic",
+    "required": true,
+    "props": ["stories", "people", "organizations", "policies", "budgets", "reports"]
+  },
+  {
+    "id": "topic-charts",
+    "component": "TopicCharts",
+    "path": "components/topic/TopicCharts.tsx",
+    "description": "Topic-specific data visualizations",
+    "required": false,
+    "props": ["charts"]
+  },
+  {
+    "id": "fix-header",
+    "component": "FixHeader",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Fix headline, summary, author, tags, link to original story",
+    "required": true,
+    "props": ["fix"]
+  },
+  {
+    "id": "fix-problem",
+    "component": "FixProblem",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "What's wrong? — one-line problem statement with supporting data",
+    "required": true,
+    "props": ["section"]
+  },
+  {
+    "id": "fix-affected",
+    "component": "FixAffected",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Who is affected? — quantified impact with demographic breakdown",
+    "required": true,
+    "props": ["section"]
+  },
+  {
+    "id": "fix-root-causes",
+    "component": "FixRootCauses",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Root causes — immediate, systemic, and structural",
+    "required": true,
+    "props": ["section"]
+  },
+  {
+    "id": "fix-evidence",
+    "component": "FixEvidence",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Evidence summary with quantitative data and sources",
+    "required": true,
+    "props": ["section"]
+  },
+  {
+    "id": "fix-stakeholders",
+    "component": "FixStakeholders",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Stakeholder mapping with type, role, interest, stance",
+    "required": true,
+    "props": ["stakeholders"]
+  },
+  {
+    "id": "fix-existing-solutions",
+    "component": "FixExistingSolutions",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "What has been tried? — existing solutions and their effectiveness",
+    "required": true,
+    "props": ["solutions"]
+  },
+  {
+    "id": "fix-global-examples",
+    "component": "FixGlobalExamples",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Global examples with outcomes and applicability assessment",
+    "required": true,
+    "props": ["examples"]
+  },
+  {
+    "id": "fix-recommended-actions",
+    "component": "FixRecommendedActions",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Recommended policy/structural actions by priority and timeframe",
+    "required": true,
+    "props": ["actions"]
+  },
+  {
+    "id": "fix-citizen-actions",
+    "component": "FixCitizenActions",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "What citizens can do — specific, feasible actions",
+    "required": true,
+    "props": ["actions"]
+  },
+  {
+    "id": "fix-government-actions",
+    "component": "FixGovernmentActions",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "What governments can do — legislative, executive, fiscal",
+    "required": true,
+    "props": ["actions"]
+  },
+  {
+    "id": "fix-metrics",
+    "component": "FixMetrics",
+    "path": "components/fix/FixRenderer.tsx",
+    "description": "Metrics to track — baseline, target, data source, frequency",
+    "required": true,
+    "props": ["metrics"]
+  }
+]

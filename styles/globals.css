@@ -1,0 +1,207 @@
+/**
+ * THE BREAKDOWN — Global Styles
+ *
+ * Imports design system tokens and provides base styles.
+ * Uses CSS custom properties from tokens.css for all values.
+ * No hardcoded color/layout values — everything comes from the design system.
+ *
+ * @tailwind directives are preserved for when Tailwind is activated,
+ * but the site works without Tailwind via CSS custom properties.
+ */
+
+@import '../design-system/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-warning-light);
+    color: var(--color-text-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* ── Scrollbar (dark theme) ──────────────────────────────────── */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-default) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: var(--spacing-1-5);
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-default);
+    border-radius: var(--spacing-1);
+  }
+}
+
+@layer components {
+  /* ── Prose (story body) ──────────────────────────────────────── */
+  .prose-custom {
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+  }
+  .prose-custom h2 {
+    color: var(--color-text-primary);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-bold);
+    margin-top: var(--spacing-12);
+    margin-bottom: var(--spacing-4);
+  }
+  .prose-custom h3 {
+    color: var(--color-text-primary);
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-semibold);
+    margin-top: var(--spacing-8);
+    margin-bottom: var(--spacing-3);
+  }
+  .prose-custom p {
+    margin-bottom: var(--spacing-4);
+  }
+  .prose-custom a {
+    color: var(--color-brand-400);
+    text-decoration: underline;
+  }
+  .prose-custom a:hover {
+    color: var(--color-brand-300);
+  }
+  .prose-custom ul {
+    list-style-type: disc;
+    list-style-position: inside;
+    margin-bottom: var(--spacing-4);
+  }
+  .prose-custom ul li + li {
+    margin-top: var(--spacing-1);
+  }
+  .prose-custom ol {
+    list-style-type: decimal;
+    list-style-position: inside;
+    margin-bottom: var(--spacing-4);
+  }
+  .prose-custom ol li + li {
+    margin-top: var(--spacing-1);
+  }
+  .prose-custom blockquote {
+    border-left-width: var(--border-thick);
+    border-left-style: solid;
+    border-left-color: var(--color-warning);
+    padding-left: var(--spacing-4);
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
+  }
+  .prose-custom code {
+    background-color: var(--color-bg-tertiary);
+    padding-left: var(--spacing-1-5);
+    padding-right: var(--spacing-1-5);
+    padding-top: var(--spacing-0-5);
+    padding-bottom: var(--spacing-0-5);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    color: var(--color-brand-300);
+  }
+
+  /* ── Utilities for common component patterns ─────────────────── */
+  .bg-surface-primary {
+    background-color: var(--color-bg-primary);
+  }
+  .bg-surface-secondary {
+    background-color: var(--color-bg-secondary);
+  }
+  .bg-surface-tertiary {
+    background-color: var(--color-bg-tertiary);
+  }
+  .text-surface-primary {
+    color: var(--color-text-primary);
+  }
+  .text-surface-secondary {
+    color: var(--color-text-secondary);
+  }
+  .text-surface-muted {
+    color: var(--color-text-muted);
+  }
+  .text-surface-inverse {
+    color: var(--color-text-inverse);
+  }
+  .border-surface {
+    border-color: var(--color-border-default);
+  }
+  .border-surface-hover {
+    border-color: var(--color-border-hover);
+  }
+
+  /* ── Skeleton loading fallback ────────────────────────────────── */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-bg-tertiary) 25%,
+      var(--color-bg-secondary) 50%,
+      var(--color-bg-tertiary) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s var(--easing-in-out) infinite;
+  }
+}
+
+@layer utilities {
+  /* ── Transition presets ───────────────────────────────────────── */
+  .transition-fast {
+    transition: all var(--duration-fast) var(--easing-out);
+  }
+  .transition-default {
+    transition: all var(--duration-default) var(--easing-out);
+  }
+  .transition-slow {
+    transition: all var(--duration-slow) var(--easing-out);
+  }
+
+  /* ── Focus ring ───────────────────────────────────────────────── */
+  .focus-ring {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 2px;
+  }
+
+  /* ── Group hover patterns (Tailwind-free) ──────────────────────── */
+  .group { position: relative; }
+
+  .group:hover .group-hover-accent {
+    color: var(--color-brand-400) !important;
+    transition: color var(--duration-fast) var(--easing-out);
+  }
+
+  .group:hover .group-hover-scale {
+    transform: scale(1.05);
+    transition: transform var(--duration-default) var(--easing-out);
+  }
+
+  .group:hover .group-hover-border-accent {
+    border-color: var(--color-brand-400) !important;
+    transition: border-color var(--duration-fast) var(--easing-out);
+  }
+}
