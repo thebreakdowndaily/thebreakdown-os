@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import type { PageSpec, SearchResult } from '@/utils/types';
+import type { PageSpec } from '@/utils/types';
 import { buildSearch } from '@/utils/website-builder';
 import { semanticSearch } from '@/utils/search/engine';
 import type { SemanticSearchResponse, SemanticResult } from '@/utils/search/engine';
@@ -51,11 +51,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const { results, understood, total, totalPages } = searchResults(query, typeFilter, currentPage);
 
-  const pageSpec: PageSpec = buildSearch(query, results as SearchResult[]);
+  const pageSpec: PageSpec = buildSearch(query, results);
 
   return (
     <SearchLayout seo={pageSpec.seo} query={query}>
-      {understood && understood.detectedConcepts?.length > 0 && (
+      {understood && understood.detectedConcepts.length > 0 && (
         <div className="mb-6">
           <ConceptTrail
             detectedConcepts={understood.detectedConcepts}
@@ -89,7 +89,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               if (result.type === 'story') {
                 return (
                   <div key={`${result.type}:${result.id}`}>
-                    {result.matchType && result.matchType !== 'keyword' && (
+                    {result.matchType !== 'keyword' && (
                       <div className="mb-1">
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                           result.matchType === 'exact' ? 'bg-emerald-900/50 text-emerald-300'
@@ -100,10 +100,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                             : result.matchType === 'concept' ? 'Concept match'
                             : 'Expanded match'}
                         </span>
-                        {result.conceptMatch && result.conceptMatch.length > 0 && (
+                        {result.conceptMatch.length > 0 && (
                           <span className="text-xs text-gray-500 ml-2">
                             via {result.conceptMatch.slice(0, 2).join(', ')}
-                            {result.conceptMatch.length > 2 ? ` +${result.conceptMatch.length - 2}` : ''}
+                            {result.conceptMatch.length > 2 ? ` +${String(result.conceptMatch.length - 2)}` : ''}
                           </span>
                         )}
                       </div>
@@ -126,7 +126,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               }
               return (
                 <div key={`${result.type}:${result.id}`}>
-                  {result.matchType && result.matchType !== 'keyword' && (
+                  {result.matchType !== 'keyword' && (
                     <div className="mb-1">
                       <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                         result.matchType === 'exact' ? 'bg-emerald-900/50 text-emerald-300'
@@ -157,7 +157,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <div className="flex items-center justify-center gap-2 mt-8">
             {currentPage > 1 && (
               <a
-                href={`/search?q=${encodeURIComponent(query)}&type=${typeFilter}&page=${currentPage - 1}`}
+                href={`/search?q=${encodeURIComponent(query)}&type=${typeFilter}&page=${String(currentPage - 1)}`}
                 className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors text-sm"
               >
                 Previous
@@ -168,7 +168,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </span>
             {currentPage < totalPages && (
               <a
-                href={`/search?q=${encodeURIComponent(query)}&type=${typeFilter}&page=${currentPage + 1}`}
+                href={`/search?q=${encodeURIComponent(query)}&type=${typeFilter}&page=${String(currentPage + 1)}`}
                 className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors text-sm"
               >
                 Next

@@ -13,7 +13,7 @@ const Newsletter: React.FC = () => (
       </p>
       <form
         className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => { e.preventDefault(); }}
       >
         <label htmlFor="newsletter-email" className="sr-only">
           Email address

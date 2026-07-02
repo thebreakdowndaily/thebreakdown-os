@@ -19,7 +19,7 @@ export const classes = {
 
 export const stagger = (childCount: number, baseDelay: number = 80): string[] => {
   return Array.from({ length: childCount }, (_, i) =>
-    `${classes.fadeIn} animate-delay-${i * baseDelay}`
+    `${classes.fadeIn} animate-delay-${String(i * baseDelay)}`
   );
 };
 

@@ -35,7 +35,7 @@ function loadFix(slug: string): FixJSON | null {
       (s): ExistingSolution => ({
         name: s.name,
         description: s.description,
-        status: s.status as ExistingSolution['status'],
+        status: s.status,
         effectiveness: s.effectiveness as ExistingSolution['effectiveness'],
         source: s.source,
       })
@@ -44,21 +44,21 @@ function loadFix(slug: string): FixJSON | null {
     recommendedActions: apiFix.recommendedActions.map((action) => ({
       title: action.title,
       description: action.description,
-      priority: action.priority as 'low' | 'medium' | 'high' | 'critical',
+      priority: action.priority,
       timeframe: action.timeframe,
       actors: action.actors,
     })),
     citizenActions: apiFix.citizenActions.map((action) => ({
       title: action.title,
       description: action.description,
-      priority: action.priority as 'low' | 'medium' | 'high' | 'critical',
+      priority: action.priority,
       timeframe: action.timeframe,
       actors: action.actors,
     })),
     governmentActions: apiFix.governmentActions.map((action) => ({
       title: action.title,
       description: action.description,
-      priority: action.priority as 'low' | 'medium' | 'high' | 'critical',
+      priority: action.priority,
       timeframe: action.timeframe,
       actors: action.actors,
     })),

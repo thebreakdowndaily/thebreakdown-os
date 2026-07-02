@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { semanticSearch } from '@/utils/search/engine';
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q') || '';
   const typeFilter = searchParams.get('type') || '';

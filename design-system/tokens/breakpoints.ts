@@ -14,11 +14,11 @@ export const breakpoints = {
 } as const;
 
 export const mediaQuery = {
-  sm: `@media (min-width: ${breakpoints.sm}px)`,
-  md: `@media (min-width: ${breakpoints.md}px)`,
-  lg: `@media (min-width: ${breakpoints.lg}px)`,
-  xl: `@media (min-width: ${breakpoints.xl}px)`,
-  '2xl': `@media (min-width: ${breakpoints['2xl']}px)`,
+  sm: `@media (min-width: ${String(breakpoints.sm)}px)`,
+  md: `@media (min-width: ${String(breakpoints.md)}px)`,
+  lg: `@media (min-width: ${String(breakpoints.lg)}px)`,
+  xl: `@media (min-width: ${String(breakpoints.xl)}px)`,
+  '2xl': `@media (min-width: ${String(breakpoints['2xl'])}px)`,
   motionSafe: '@media (prefers-reduced-motion: no-preference)',
   motionReduce: '@media (prefers-reduced-motion: reduce)',
   darkMode: '@media (prefers-color-scheme: dark)',

@@ -10,7 +10,7 @@ import EntitySources from '@/components/entity/EntitySources';
 import RelatedStories from '@/components/story/RelatedStories';
 import FAQ from '@/components/story/FAQ';
 
-const sectionComponents: Record<string, React.ComponentType<any>> = {
+const sectionComponents: Record<string, React.ElementType | undefined> = {
   'entity-overview': EntityOverview,
   'entity-timeline': EntityTimeline,
   'entity-data': EntityData,

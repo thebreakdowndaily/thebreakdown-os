@@ -25,7 +25,7 @@ const SourceBadge: React.FC<SourceBadgeProps> = ({ tier, size = 'md' }) => {
     <span
       className={`inline-flex items-center rounded border font-medium ${config.color} ${sizeConfig[size]} cursor-default`}
       title={config.description}
-      aria-label={`Tier ${tier}: ${config.description}`}
+      aria-label={`Tier ${String(tier)}: ${config.description}`}
     >
       {config.label}
     </span>

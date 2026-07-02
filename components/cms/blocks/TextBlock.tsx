@@ -5,7 +5,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface TextBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 const FORMAT_BUTTONS = [
@@ -21,7 +21,8 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
   const editorRef = useRef<HTMLDivElement>(null);
 
   const exec = useCallback((command: string, value?: string) => {
-    document.execCommand(command, false, value);
+    const doc = document as unknown as Record<string, (command: string, show: boolean, value?: string) => boolean>;
+    doc['execCommand'](command, false, value);
     editorRef.current?.focus();
     // Update data after formatting
     setTimeout(() => {
@@ -57,7 +58,7 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
           <button
             key={btn.label}
             title={btn.title}
-            onClick={() => exec(btn.tag === 'h2' ? 'formatBlock' : btn.tag === 'a' ? 'createLink' : btn.tag === 'li' ? 'insertUnorderedList' : btn.tag.toLowerCase(), btn.tag === 'h2' ? '<h2>' : btn.tag === 'a' ? 'https://' : undefined)}
+            onClick={() => { exec(btn.tag === 'h2' ? 'formatBlock' : btn.tag === 'a' ? 'createLink' : btn.tag === 'li' ? 'insertUnorderedList' : btn.tag.toLowerCase(), btn.tag === 'h2' ? '<h2>' : btn.tag === 'a' ? 'https://' : undefined); }}
             style={{
               background: 'none',
               border: 'none',

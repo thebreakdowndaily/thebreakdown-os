@@ -21,38 +21,17 @@ export function useChartInteraction(
     const el = containerRef.current;
     if (!el) return;
 
-    const handleInteraction = (e: MouseEvent | WheelEvent) => {
-      let action: 'hover' | 'click' | 'zoom' = 'hover';
-
-      if (e.type === 'click') {
-        action = 'click';
-      } else if (e.type === 'wheel') {
-        action = 'zoom';
-      }
-
-      trackEvent({
-        type: 'chart_interaction',
-        storySlug,
-        chartId,
-        action,
-      });
-    };
-
     el.addEventListener('mouseenter', () => {
       trackEvent({ type: 'chart_interaction', storySlug, chartId, action: 'hover' });
     });
 
-    el.addEventListener('click', (e) => {
+    el.addEventListener('click', () => {
       trackEvent({ type: 'chart_interaction', storySlug, chartId, action: 'click' });
     });
 
-    el.addEventListener('wheel', (e) => {
+    el.addEventListener('wheel', () => {
       trackEvent({ type: 'chart_interaction', storySlug, chartId, action: 'zoom' });
     });
-
-    return () => {
-      // Cleanup handled by ref
-    };
   }, [storySlug, chartId]);
 
   return containerRef;

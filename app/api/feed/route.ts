@@ -56,7 +56,7 @@ ${items}
 </rss>`;
 }
 
-function buildJsonFeed(): Record<string, any> {
+function buildJsonFeed() {
   return {
     version: 'https://jsonfeed.org/version/1.1',
     title: 'The Breakdown',
@@ -78,7 +78,7 @@ function buildJsonFeed(): Record<string, any> {
   };
 }
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const format = searchParams.get('format') || 'rss';
 

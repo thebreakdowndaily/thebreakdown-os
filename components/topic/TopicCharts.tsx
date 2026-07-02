@@ -4,7 +4,7 @@ interface ChartDef {
   type: 'line' | 'bar' | 'pie' | 'area' | 'scatter' | 'table';
   title: string;
   description?: string;
-  data: Array<Record<string, any>>;
+  data: Array<Record<string, unknown>>;
   xKey: string;
   yKey: string;
   color?: string;

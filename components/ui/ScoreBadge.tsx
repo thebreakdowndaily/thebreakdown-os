@@ -38,8 +38,8 @@ const ScoreBadge: React.FC<ScoreBadgeProps> = ({ score, size = 'md', showLabel =
         fontSize: cfg.fontSize,
         boxShadow: `0 0 0 1px ${color.ring}`,
       }}
-      title={`Evidence score: ${clampedScore}%`}
-      aria-label={`Evidence score: ${clampedScore}%`}
+      title={`Evidence score: ${String(clampedScore)}%`}
+      aria-label={`Evidence score: ${String(clampedScore)}%`}
     >
       <span
         style={{

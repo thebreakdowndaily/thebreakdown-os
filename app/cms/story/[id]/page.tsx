@@ -4,12 +4,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import CMSShell from '@/components/cms/CMSShell';
 import StoryEditor from '@/components/cms/StoryEditor';
-import { mockCMSStories, createNewStory, type CMSStory } from '@/utils/cms-data';
+import { mockCMSStories, type CMSStory } from '@/utils/cms-data';
 
 export default function StoryEditorPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params?.id as string;
+  const id = params.id as string;
 
   const [story, setStory] = useState<CMSStory | null>(null);
   const [loading, setLoading] = useState(true);

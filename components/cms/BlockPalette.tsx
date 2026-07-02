@@ -78,7 +78,7 @@ export default function BlockPalette({ onAddBlock, storyBlockCount }: BlockPalet
               return (
                 <button
                   key={type}
-                  onClick={() => onAddBlock(type)}
+                  onClick={() => { onAddBlock(type); }}
                   style={{
                     width: '100%',
                     display: 'flex',

@@ -6,7 +6,7 @@ interface QuickFactsProps {
 }
 
 const QuickFacts: React.FC<QuickFactsProps> = ({ facts }) => {
-  if (!facts || facts.length === 0) return null;
+  if (facts.length === 0) return null;
 
   return (
     <section aria-label="Quick facts" style={{

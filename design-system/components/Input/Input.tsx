@@ -47,7 +47,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       maxLength,
       disabled,
       className = '',
-      style,
       id,
       type = 'text',
       ...props
@@ -107,7 +106,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             aria-invalid={!!error}
             aria-describedby={
-              error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+              error ? `${String(inputId)}-error` : helperText ? `${String(inputId)}-helper` : undefined
             }
             maxLength={maxLength}
             className={className}
@@ -134,7 +133,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 <button
                   type="button"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  onClick={() => setShowPassword((v) => !v)}
+                  onClick={() => { setShowPassword((v) => !v); }}
                   style={{
                     background: 'none',
                     border: 'none',
@@ -155,7 +154,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
         {error && (
           <span
-            id={`${inputId}-error`}
+            id={`${String(inputId)}-error`}
             role="alert"
             style={{
               fontSize: 'var(--text-xs)',
@@ -167,7 +166,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         {helperText && !error && (
           <span
-            id={`${inputId}-helper`}
+            id={`${String(inputId)}-helper`}
             style={{
               fontSize: 'var(--text-xs)',
               color: 'var(--color-text-muted)',

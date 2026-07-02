@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import type { CountryJSON, EntityJSON, Section } from '@/utils/types';
-import { buildCountry, buildEntity } from '@/utils/website-builder';
+import type { CountryJSON, Section } from '@/utils/types';
+import { buildCountry } from '@/utils/website-builder';
 import EntityLayout from '@/layouts/EntityLayout';
 import EntityOverview from '@/components/entity/EntityOverview';
 import EntityTimeline from '@/components/entity/EntityTimeline';
@@ -10,7 +10,7 @@ import EntitySources from '@/components/entity/EntitySources';
 import RelatedStories from '@/components/story/RelatedStories';
 import FAQ from '@/components/story/FAQ';
 
-const sectionComponents: Record<string, React.ComponentType<any>> = {
+const sectionComponents: Record<string, React.ElementType | undefined> = {
   'entity-overview': EntityOverview,
   'entity-timeline': EntityTimeline,
   'entity-data': EntityData,

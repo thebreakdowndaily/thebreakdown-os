@@ -1,19 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import StatisticsGrid from '@/components/statistics/StatisticsGrid';
 
 interface DataCardsProps {
   datasets: Array<{
     label: string;
     description: string;
-    data: Array<Record<string, any>>;
+    data: Array<Record<string, string | number | boolean | null>>;
     source?: string;
   }>;
 }
 
 const DataCards: React.FC<DataCardsProps> = ({ datasets }) => {
-  if (!datasets || datasets.length === 0) return null;
+  if (datasets.length === 0) return null;
 
   return (
     <section aria-label="Data" style={{
@@ -123,7 +122,7 @@ const DataCard: React.FC<{ dataset: DataCardsProps['datasets'][0] }> = ({ datase
       {/* Expand/Collapse */}
       {hasMore && (
         <button
-          onClick={() => setExpanded((e) => !e)}
+          onClick={() => { setExpanded((e) => !e); }}
           style={{
             marginTop: 'var(--spacing-3)',
             fontSize: 'var(--text-xs)',
@@ -134,7 +133,7 @@ const DataCard: React.FC<{ dataset: DataCardsProps['datasets'][0] }> = ({ datase
           }}
           aria-expanded={expanded}
         >
-          {expanded ? 'Show less ↑' : `View full data (${dataset.data.length} rows) ↓`}
+          {expanded ? 'Show less ↑' : `View full data (${String(dataset.data.length)} rows) ↓`}
         </button>
       )}
 

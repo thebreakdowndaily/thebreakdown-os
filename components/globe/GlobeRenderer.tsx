@@ -43,6 +43,44 @@ interface GlobeTheme {
   fontFamily: string;
 }
 
+interface GlobeInstance {
+  _destructor?: () => void;
+  renderer?: { dispose: () => void; domElement: HTMLElement | null };
+  _globe?: { material: null };
+  controls: () => { autoRotate: boolean; autoRotateSpeed: number };
+  globeImageUrl: (url: string) => GlobeInstance;
+  bumpImageUrl: (url: string) => GlobeInstance;
+  backgroundImageUrl: (url: string) => GlobeInstance;
+  pointOfView: (pov: { lat: number; lng: number; altitude: number }) => GlobeInstance;
+  globeMaterial: (mat: Record<string, unknown>) => GlobeInstance;
+  atmosphereColor: (color: string) => GlobeInstance;
+  atmosphereAltitude: (alt: number) => GlobeInstance;
+  hexBinPointsData: (data: unknown[]) => GlobeInstance;
+  hexBinPointLat: (field: string) => GlobeInstance;
+  hexBinPointLng: (field: string) => GlobeInstance;
+  hexBinPointColor: (field: string) => GlobeInstance;
+  hexBinLabel: (fn: (d: unknown) => string) => GlobeInstance;
+  hexBinResolution: (res: number) => GlobeInstance;
+  hexMargin: (margin: number) => GlobeInstance;
+  arcsData: (data: unknown[]) => GlobeInstance;
+  arcStartLat: (fn: (d: unknown) => number) => GlobeInstance;
+  arcStartLng: (fn: (d: unknown) => number) => GlobeInstance;
+  arcEndLat: (fn: (d: unknown) => number) => GlobeInstance;
+  arcEndLng: (fn: (d: unknown) => number) => GlobeInstance;
+  arcColor: (fn: (d: unknown) => string[]) => GlobeInstance;
+  arcStroke: (s: number) => GlobeInstance;
+  arcDashLength: (len: number) => GlobeInstance;
+  arcDashGap: (gap: number) => GlobeInstance;
+  arcDashAnimateTime: (t: number) => GlobeInstance;
+  pointsData: (data: unknown[]) => GlobeInstance;
+  pointLat: (field: string) => GlobeInstance;
+  pointLng: (field: string) => GlobeInstance;
+  pointAltitude: (field: string) => GlobeInstance;
+  pointColor: (fn: (d: unknown) => string) => GlobeInstance;
+  pointRadius: (r: number) => GlobeInstance;
+  pointsMerge: (merge: boolean) => GlobeInstance;
+}
+
 /* ── Main Component ────────────────────────────────────────────────── */
 
 interface GlobeRendererProps {
@@ -52,21 +90,24 @@ interface GlobeRendererProps {
 const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const globeContainerRef = useRef<HTMLDivElement>(null);
-  const globeInstanceRef = useRef<any>(null);
+  const globeInstanceRef = useRef<GlobeInstance | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isRotating, setIsRotating] = useState(globe.autoRotate ?? true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+  );
   const [dimensions, setDimensions] = useState({ width: 600, height: 450 });
 
   // Detect reduced motion
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    const handler = (e: MediaQueryListEvent) => { setReducedMotion(e.matches); };
     mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    return () => { mq.removeEventListener('change', handler); };
   }, []);
 
   // Lazy load with IntersectionObserver
@@ -85,7 +126,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); };
   }, []);
 
   // Responsive sizing
@@ -102,9 +143,9 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
     };
 
     updateSize();
-    const ro = new ResizeObserver(() => updateSize());
+    const ro = new ResizeObserver(() => { updateSize(); });
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => { ro.disconnect(); };
   }, []);
 
   // Initialize globe
@@ -118,15 +159,15 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
         // Dynamic import of globe.gl and three
         const GlobeModule = await import('globe.gl');
 
-        if (!mounted || !globeContainerRef.current) return;
+        if (!mounted) return;
 
         const container = globeContainerRef.current;
-        const Globe = GlobeModule.default || GlobeModule;
+        const GlobeCtor = GlobeModule.default as unknown as new (container: HTMLElement, opts: Record<string, unknown>) => GlobeInstance;
 
         const theme = readGlobeTheme(container);
 
         // Create globe instance
-        const globeInstance = new (Globe as any)(container, {
+        const globeInstance = new GlobeCtor(container, {
           width: dimensions.width,
           height: dimensions.height,
           rendererConfig: {
@@ -134,7 +175,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
             alpha: true,
             powerPreference: 'high-performance',
           },
-        } as any);
+        });
 
         // Basic configuration
         globeInstance
@@ -149,7 +190,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
           .globeMaterial({
             specular: { r: 0.2, g: 0.1, b: 0 },
             shininess: 10,
-          } as any)
+          })
           .atmosphereColor('#f59e0b')
           .atmosphereAltitude(0.25);
 
@@ -163,15 +204,15 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
         applyGlobeData(globeInstance, globe, theme);
 
         globeInstanceRef.current = globeInstance;
-        if (mounted) setIsLoaded(true);
+        setIsLoaded(true);
 
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('GlobeRenderer: Failed to initialize:', err);
-        if (mounted) setError(err.message || 'Failed to load 3D globe');
+        if (mounted) setError(err instanceof Error ? err.message : 'Failed to load 3D globe');
       }
     };
 
-    initGlobe();
+    void initGlobe();
 
     return () => {
       mounted = false;
@@ -198,10 +239,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
   // Handle rotation toggle
   useEffect(() => {
     if (!globeInstanceRef.current) return;
-    const controls = globeInstanceRef.current.controls();
-    if (controls) {
-      controls.autoRotate = isRotating && !reducedMotion;
-    }
+    globeInstanceRef.current.controls().autoRotate = isRotating && !reducedMotion;
   }, [isRotating, reducedMotion]);
 
   const handleToggleRotation = useCallback(() => {
@@ -321,7 +359,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
             ref={globeContainerRef}
             style={{
               width: '100%',
-              height: `${dimensions.height}px`,
+              height: `${String(dimensions.height)}px`,
               position: 'relative',
             }}
             aria-hidden="true"
@@ -416,15 +454,33 @@ function readGlobeTheme(el: Element): GlobeTheme {
 
 /* ── Data Applicator ─────────────────────────────────────────────────── */
 
-function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) {
-  const features = spec.features || {};
+interface ArcData {
+  source: [number, number];
+  target: [number, number];
+  value?: number;
+}
+
+interface PointData {
+  lat: number;
+  lng: number;
+  value?: number;
+}
+
+interface HexBinData {
+  lat: number;
+  lng: number;
+  color: string;
+  label: string;
+}
+
+function applyGlobeData(globeInstance: GlobeInstance, spec: GlobeSpec, theme: GlobeTheme) {
+  const features = spec.features;
 
   switch (spec.type) {
     case 'country-highlights': {
-      // Highlight specific countries
-      const countries = (features.highlightedCountries as string[]) || ['India', 'China', 'USA'];
-      const hexData = countries.map((country) => {
-        // Approximate lat/lng for major countries
+      const raw = features.highlightedCountries;
+      const countries: string[] = Array.isArray(raw) ? raw as string[] : ['India', 'China', 'USA'];
+      const hexData: HexBinData[] = countries.map((country) => {
         const coords: Record<string, [number, number]> = {
           India: [20, 78],
           China: [35, 105],
@@ -447,7 +503,7 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
           Canada: [56, -106],
           Argentina: [-38, -64],
         };
-        const pos = coords[country] || [0, 0];
+        const pos = (coords as Record<string, [number, number] | undefined>)[country] || [0, 0];
         return { lat: pos[0], lng: pos[1], color: theme.brand, label: country };
       });
 
@@ -456,7 +512,7 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
         .hexBinPointLat('lat')
         .hexBinPointLng('lng')
         .hexBinPointColor('color')
-        .hexBinLabel('label')
+        .hexBinLabel((d) => (d as HexBinData).label)
         .hexBinResolution(4)
         .hexMargin(0.2);
       break;
@@ -464,20 +520,20 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
 
     case 'trade-routes':
     case 'shipping-lanes': {
-      // Draw arcs between points
-      const arcs = (features.arcs as any[]) || [
-        { source: [18, 72] as [number, number], target: [38, -97] as [number, number], value: 100 },
-        { source: [20, 78] as [number, number], target: [35, 105] as [number, number], value: 80 },
-        { source: [20, 78] as [number, number], target: [51, 10] as [number, number], value: 60 },
+      const raw = features.arcs;
+      const arcs: ArcData[] = Array.isArray(raw) ? raw as ArcData[] : [
+        { source: [18, 72], target: [38, -97], value: 100 },
+        { source: [20, 78], target: [35, 105], value: 80 },
+        { source: [20, 78], target: [51, 10], value: 60 },
       ];
 
       globeInstance
         .arcsData(arcs)
-        .arcStartLat((d: any) => d.source[0])
-        .arcStartLng((d: any) => d.source[1])
-        .arcEndLat((d: any) => d.target[0])
-        .arcEndLng((d: any) => d.target[1])
-        .arcColor((d: any) => [theme.brand, theme.brand])
+        .arcStartLat((d) => (d as ArcData).source[0])
+        .arcStartLng((d) => (d as ArcData).source[1])
+        .arcEndLat((d) => (d as ArcData).target[0])
+        .arcEndLng((d) => (d as ArcData).target[1])
+        .arcColor(() => [theme.brand, theme.brand])
         .arcStroke(0.5)
         .arcDashLength(0.15)
         .arcDashGap(0.05)
@@ -487,8 +543,8 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
 
     case 'point-density':
     case 'satellite-coverage': {
-      // Show data points
-      const points = (features.points as any[]) || [
+      const raw = features.points;
+      const points: PointData[] = Array.isArray(raw) ? raw as PointData[] : [
         { lat: 20, lng: 78, value: 50 },
         { lat: 35, lng: 105, value: 80 },
         { lat: 38, lng: -97, value: 100 },
@@ -509,9 +565,9 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
 
     case 'diplomatic-visits':
     case 'election-results': {
-      // Mixed: arcs + highlighted countries
-      const highlights = (features.highlightedCountries as string[]) || ['India', 'USA', 'China'];
-      const hexData = highlights.map((c) => {
+      const raw = features.highlightedCountries;
+      const highlights: string[] = Array.isArray(raw) ? raw as string[] : ['India', 'USA', 'China'];
+      const hexData: HexBinData[] = highlights.map((c) => {
         const coords: Record<string, [number, number]> = {
           India: [20, 78],
           China: [35, 105],
@@ -521,7 +577,7 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
           France: [46, 2],
           Japan: [36, 138],
         };
-        const pos = coords[c] || [0, 0];
+        const pos = (coords as Record<string, [number, number] | undefined>)[c] || [0, 0];
         return { lat: pos[0], lng: pos[1], color: theme.brand, label: c };
       });
 
@@ -530,27 +586,28 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
         .hexBinPointLat('lat')
         .hexBinPointLng('lng')
         .hexBinPointColor('color')
-        .hexBinLabel('label')
+        .hexBinLabel((d) => (d as HexBinData).label)
         .hexBinResolution(4)
         .hexMargin(0.2);
 
-      const arcs = (features.arcs as any[]) || [];
+      const arcsRaw = features.arcs;
+      const arcs: ArcData[] = Array.isArray(arcsRaw) ? arcsRaw as ArcData[] : [];
       if (arcs.length > 0) {
         globeInstance
           .arcsData(arcs)
-          .arcStartLat((d: any) => d.source[0])
-          .arcStartLng((d: any) => d.source[1])
-          .arcEndLat((d: any) => d.target[0])
-          .arcEndLng((d: any) => d.target[1])
-          .arcColor((d: any) => [theme.brand, theme.brand])
+          .arcStartLat((d) => (d as ArcData).source[0])
+          .arcStartLng((d) => (d as ArcData).source[1])
+          .arcEndLat((d) => (d as ArcData).target[0])
+          .arcEndLng((d) => (d as ArcData).target[1])
+          .arcColor(() => [theme.brand, theme.brand])
           .arcStroke(0.5);
       }
       break;
     }
 
     case 'submarine-cables': {
-      // Curved lines representing cables
-      const arcs = (features.arcs as any[]) || [
+      const raw = features.arcs;
+      const arcs: ArcData[] = Array.isArray(raw) ? raw as ArcData[] : [
         { source: [18, 72], target: [-33, 18], value: 1 },
         { source: [-33, 18], target: [38, -97], value: 1 },
         { source: [38, -97], target: [51, 10], value: 1 },
@@ -559,10 +616,10 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
 
       globeInstance
         .arcsData(arcs)
-        .arcStartLat((d: any) => d.source[0])
-        .arcStartLng((d: any) => d.source[1])
-        .arcEndLat((d: any) => d.target[0])
-        .arcEndLng((d: any) => d.target[1])
+        .arcStartLat((d) => (d as ArcData).source[0])
+        .arcStartLng((d) => (d as ArcData).source[1])
+        .arcEndLat((d) => (d as ArcData).target[0])
+        .arcEndLng((d) => (d as ArcData).target[1])
         .arcColor(() => ['#60a5fa', '#3b82f6'])
         .arcStroke(0.8)
         .arcDashLength(0.3)
@@ -572,7 +629,6 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
     }
 
     default: {
-      // Fallback: show some generic points
       globeInstance
         .pointsData([
           { lat: 20, lng: 78, value: 100 },
@@ -588,11 +644,6 @@ function applyGlobeData(globeInstance: any, spec: GlobeSpec, theme: GlobeTheme) 
         .pointRadius(0.5);
       break;
     }
-  }
-
-  // Custom label for the globe type
-  if (spec.type === 'country-highlights' || spec.type === 'election-results') {
-    globeInstance.hexBinLabel((d: any) => d.label || '');
   }
 }
 

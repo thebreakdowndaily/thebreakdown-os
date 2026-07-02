@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface CalloutBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 const CALLOUT_TYPES = [
@@ -31,8 +31,8 @@ export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
       <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
         <span style={{ fontSize: '16px' }}>{CALLOUT_TYPES.find((t) => t.value === d.type)?.label.split(' ')[0]}</span>
         <select
-          value={d.type || 'info'}
-          onChange={(e) => onUpdate({ ...d, type: e.target.value })}
+          value={(d.type as string) || 'info'}
+          onChange={(e) => { onUpdate({ ...d, type: e.target.value }); }}
           style={{
             border: '1px solid var(--color-border-subtle)',
             borderRadius: '6px',
@@ -52,8 +52,8 @@ export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
       </div>
 
       <input
-        value={d.title || ''}
-        onChange={(e) => onUpdate({ ...d, title: e.target.value })}
+        value={(d.title as string) || ''}
+        onChange={(e) => { onUpdate({ ...d, title: e.target.value }); }}
         placeholder="Callout title..."
         style={{
           width: '100%',
@@ -69,8 +69,8 @@ export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
       />
 
       <textarea
-        value={d.body || ''}
-        onChange={(e) => onUpdate({ ...d, body: e.target.value })}
+        value={(d.body as string) || ''}
+        onChange={(e) => { onUpdate({ ...d, body: e.target.value }); }}
         placeholder="Callout body text..."
         rows={3}
         style={{

@@ -4,7 +4,7 @@ interface EntityDataProps {
   datasets: Array<{
     label: string;
     description: string;
-    data: Array<Record<string, any>>;
+    data: Array<Record<string, unknown>>;
     source?: string;
   }>;
   statistics: Record<string, number | string>;

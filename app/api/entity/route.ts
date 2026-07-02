@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const mockEntityData: Record<string, any> = {
+const mockEntityData: Record<string, unknown> = {
   mgnrega: {
     id: 'mgnrega',
     slug: 'mgnrega',
@@ -49,7 +49,7 @@ const mockEntityData: Record<string, any> = {
   },
 };
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug');
 
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const entity = mockEntityData[slug];
+  const entity = mockEntityData[slug] as Record<string, unknown> | undefined;
 
   if (!entity) {
     return NextResponse.json(

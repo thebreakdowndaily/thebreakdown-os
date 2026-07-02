@@ -55,7 +55,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       }
     };
     window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    return () => { window.removeEventListener('keydown', handler); };
   }, []);
 
   return (
@@ -88,8 +88,8 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             setSelectedIndex(-1);
             setIsOpen(true);
           }}
-          onFocus={() => setIsOpen(true)}
-          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+          onFocus={() => { setIsOpen(true); }}
+          onBlur={() => setTimeout(() => { setIsOpen(false); }, 200)}
           onKeyDown={handleKeyDown}
           style={{
             flex: 1,
@@ -147,7 +147,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           ) : (
             suggestions.map((suggestion, i) => (
               <div
-                key={`${suggestion}-${i}`}
+                key={`${suggestion}-${String(i)}`}
                 style={{
                   padding: '10px 14px',
                   cursor: 'pointer',
@@ -163,7 +163,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
                   setIsOpen(false);
                   onSearch?.(suggestion);
                 }}
-                onMouseEnter={() => setSelectedIndex(i)}
+                onMouseEnter={() => { setSelectedIndex(i); }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" />

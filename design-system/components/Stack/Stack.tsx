@@ -46,7 +46,7 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
           alignItems: align ? alignMap[align] : undefined,
           justifyContent: justify ? justifyMap[justify] : undefined,
           flexWrap: wrap ? 'wrap' : undefined,
-          gap: gap !== undefined ? `var(--spacing-${gap})` : undefined,
+          gap: `var(--spacing-${String(gap)})`,
           ...style,
         }}
         {...props}

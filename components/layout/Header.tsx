@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import Link from 'next/link';
 import SearchBar from '../ui/SearchBar';
 
 interface HeaderProps {
@@ -44,8 +45,8 @@ const CloseIcon: React.FC = () => (
 const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const toggleMobile = useCallback(() => setMobileOpen((prev) => !prev), []);
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
+  const toggleMobile = useCallback(() => { setMobileOpen((prev) => !prev); }, []);
+  const closeMobile = useCallback(() => { setMobileOpen(false); }, []);
 
   return (
     <header
@@ -80,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
           }}
         >
           {/* Logo */}
-<a
+<Link
   href="/"
   aria-label="The Breakdown — Home"
   style={{
@@ -124,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
       India Explained
     </span>
   </div>
-</a>
+  </Link>
           {/* Desktop nav */}
           <nav
             style={{

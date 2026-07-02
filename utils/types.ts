@@ -12,15 +12,15 @@ export interface PageSpec {
   sections: Section[];
   seo: SEOData;
   breadcrumbs: Breadcrumb[];
-  schema: Record<string, any>;
-  metadata: Record<string, any>;
+  schema: Record<string, unknown>;
+  metadata: Record<string, unknown>;
   searchResults?: SearchResult[];
 }
 
 export interface Section {
   id: string;
   component: string;
-  props: Record<string, any>;
+  props: Record<string, unknown>;
 }
 
 export interface ComponentSpec {
@@ -145,7 +145,7 @@ export interface Source {
 export interface Dataset {
   label: string;
   description: string;
-  data: Array<Record<string, any>>;
+  data: Array<Record<string, unknown>>;
   source?: string;
 }
 
@@ -153,7 +153,7 @@ export interface ChartDef {
   type: 'line' | 'bar' | 'pie' | 'area' | 'scatter' | 'table';
   title: string;
   description?: string;
-  data: Array<Record<string, any>>;
+  data: Array<Record<string, unknown>>;
   xKey: string;
   yKey: string;
   color?: string;

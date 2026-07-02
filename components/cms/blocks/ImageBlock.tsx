@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface ImageBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
@@ -51,7 +51,7 @@ export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <input
           value={d.src || ''}
-          onChange={(e) => onUpdate({ ...d, src: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, src: e.target.value }); }}
           placeholder="Image URL..."
           style={{
             width: '100%',
@@ -68,7 +68,7 @@ export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <input
             value={d.alt || ''}
-            onChange={(e) => onUpdate({ ...d, alt: e.target.value })}
+            onChange={(e) => { onUpdate({ ...d, alt: e.target.value }); }}
             placeholder="Alt text (accessibility)"
             style={{
               border: '1px solid var(--color-border-subtle)',
@@ -83,7 +83,7 @@ export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
           />
           <input
             value={d.credit || ''}
-            onChange={(e) => onUpdate({ ...d, credit: e.target.value })}
+            onChange={(e) => { onUpdate({ ...d, credit: e.target.value }); }}
             placeholder="Photo credit"
             style={{
               border: '1px solid var(--color-border-subtle)',
@@ -99,7 +99,7 @@ export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
         </div>
         <input
           value={d.caption || ''}
-          onChange={(e) => onUpdate({ ...d, caption: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, caption: e.target.value }); }}
           placeholder="Caption text..."
           style={{
             width: '100%',

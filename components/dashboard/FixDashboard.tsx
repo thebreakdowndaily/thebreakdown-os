@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { getFixes } from '@/utils/data-layer/store';
 
-const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
 const priorityColors: Record<string, string> = {
   critical: '#ef4444', high: '#f59e0b', medium: '#3b82f6', low: '#6b7280',
 };
@@ -60,7 +59,7 @@ export default function FixDashboard() {
         {(['score', 'date', 'priority'] as const).map((opt) => (
           <button
             key={opt}
-            onClick={() => setSortBy(opt)}
+            onClick={() => { setSortBy(opt); }}
             style={{
               padding: '6px 14px', borderRadius: '6px', fontSize: '12px', fontWeight: 600,
               background: sortBy === opt ? 'var(--color-amber-500)' : 'var(--color-surface-elevated)',

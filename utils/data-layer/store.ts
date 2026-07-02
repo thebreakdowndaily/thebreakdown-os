@@ -9,8 +9,7 @@
 import type {
   APIStory, APIEntity, APITopic, APITimeline, APICountry, APIOrganization, APIFix,
   APIGraphQuery, APIGraphNode, APIGraphLink, APIStatistics,
-  APIListResponse, APIFact, APIClaim, APISource, APIFAQItem,
-  APIRelatedStory, APIRelatedEntity, APITimelineEvent,
+  APIListResponse, APIRelatedEntity,
 } from './types';
 
 /* ── Internal Store ────────────────────────────────────────────────── */
@@ -303,8 +302,8 @@ function seed(): DataStore {
 
   entityData.forEach((e) => {
     entities.set(e.slug, e);
-    if (e.type === 'country') countries.set(e.slug, e as APICountry);
-    if (e.type === 'organization') organizations.set(e.slug, e as APIOrganization);
+    if (e.type === 'country') countries.set(e.slug, e);
+    if (e.type === 'organization') organizations.set(e.slug, e);
   });
 
   // ── Topics ────────────────────────────────────────────────────────
@@ -321,7 +320,7 @@ function seed(): DataStore {
     const storySlugs = t.stories.map((s) => ({ slug: s.slug, headline: s.headline, summary: s.summary, publishedAt: s.publishedAt, readingTime: s.readingTime, evidenceScore: s.evidenceScore, category: s.category }));
     const entityList = t.entities.map((eid) => {
       const ent = entities.get(eid);
-      return ent ? { id: ent.id, slug: ent.slug, name: ent.name, type: ent.type } as APIRelatedEntity : null;
+      return ent ? { id: ent.id, slug: ent.slug, name: ent.name, type: ent.type } : null;
     }).filter(Boolean) as APIRelatedEntity[];
 
     topics.set(t.slug, {
@@ -542,7 +541,7 @@ function paginate<T>(items: T[], params: QueryParams): APIListResponse<T> {
   return { data, meta: { total, page, pageSize, totalPages } };
 }
 
-function searchFilter<T extends Record<string, any>>(items: T[], query: string, fields: (keyof T)[]): T[] {
+function searchFilter<T extends Record<string, unknown>>(items: T[], query: string, fields: (keyof T)[]): T[] {
   if (!query) return items;
   const lower = query.toLowerCase();
   return items.filter((item) =>
@@ -553,7 +552,7 @@ function searchFilter<T extends Record<string, any>>(items: T[], query: string, 
   );
 }
 
-function sortItems<T extends Record<string, any>>(items: T[], field: string, order: 'asc' | 'desc' = 'desc'): T[] {
+function sortItems<T extends Record<string, unknown>>(items: T[], field: string, order: 'asc' | 'desc' = 'desc'): T[] {
   return [...items].sort((a, b) => {
     const aVal = a[field];
     const bVal = b[field];
@@ -571,8 +570,8 @@ export function getStories(params: QueryParams = {}): APIListResponse<APIStory> 
   let items = Array.from(s.stories.values());
 
   if (params.category) items = items.filter((st) => st.category === params.category);
-  if (params.tag) items = items.filter((st) => st.tags.includes(params.tag!));
-  if (params.author) items = items.filter((st) => st.author.name.toLowerCase().includes(params.author!.toLowerCase()));
+  if (params.tag) items = items.filter((st) => st.tags.includes(params.tag));
+  if (params.author) items = items.filter((st) => st.author.name.toLowerCase().includes(params.author.toLowerCase()));
   if (params.search) items = searchFilter(items, params.search, ['headline', 'summary', 'tags']);
   if (params.sort) items = sortItems(items, params.sort, params.order);
 
@@ -705,7 +704,7 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
   s.entities.forEach((entity) => {
     entity.relatedEntities.forEach((re) => {
       if (!params.type || entity.type === params.type || re.type === params.type) {
-        links.push({ source: entity.id, sourceType: entity.type, target: re.id, targetType: re.type, type: 'relates-to', weight: 2 } as any);
+        links.push({ source: entity.id, sourceType: entity.type, target: re.id, targetType: re.type, type: 'relates-to', weight: 2 });
       }
     });
   });
@@ -724,8 +723,6 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
 export function getStatistics(): APIStatistics {
   const s = getStore();
   const stories = Array.from(s.stories.values());
-  const entities = Array.from(s.entities.values());
-
   // Stories by category
   const storiesByCategory: Record<string, number> = {};
   stories.forEach((st) => { storiesByCategory[st.category] = (storiesByCategory[st.category] || 0) + 1; });
@@ -742,7 +739,7 @@ export function getStatistics(): APIStatistics {
 
   // Top tags
   const tagCounts: Record<string, number> = {};
-  stories.forEach((st) => st.tags.forEach((tag) => { tagCounts[tag] = (tagCounts[tag] || 0) + 1; }));
+  stories.forEach((st) => { st.tags.forEach((tag) => { tagCounts[tag] = (tagCounts[tag] || 0) + 1; }); });
   const topTags = Object.entries(tagCounts)
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count)

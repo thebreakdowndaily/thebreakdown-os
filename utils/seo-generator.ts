@@ -31,7 +31,7 @@ export function generateMetaTags(seo: SEOData): Record<string, string> {
   return tags;
 }
 
-export function generateJsonLd(schema: Record<string, any>): string {
+export function generateJsonLd(schema: Record<string, unknown>): string {
   const full = {
     '@context': 'https://schema.org',
     ...schema,
@@ -64,7 +64,7 @@ export function generateTwitterCard(seo: SEOData): Record<string, string> {
   };
 }
 
-export function generateBreadcrumbJsonLd(breadcrumbs: Breadcrumb[]): Record<string, any> {
+export function generateBreadcrumbJsonLd(breadcrumbs: Breadcrumb[]): Record<string, unknown> {
   return {
     '@type': 'BreadcrumbList',
     itemListElement: breadcrumbs.map((crumb, index) => ({

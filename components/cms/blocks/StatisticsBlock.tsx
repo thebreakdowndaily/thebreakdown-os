@@ -4,20 +4,20 @@ import type { Block } from '@/utils/cms-data';
 
 interface StatisticsBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProps) {
   const stats: Array<{ value: string; label: string; change: string; direction: 'up' | 'down' }> = block.data.stats || [];
 
-  const updateStat = (idx: number, field: string, value: any) => {
+  const updateStat = (idx: number, field: string, value: string) => {
     const next = [...stats];
     next[idx] = { ...next[idx], [field]: value };
     onUpdate({ ...block.data, stats: next });
   };
 
-  const addStat = () => onUpdate({ ...block.data, stats: [...stats, { value: '', label: '', change: '', direction: 'up' }] });
-  const removeStat = (idx: number) => onUpdate({ ...block.data, stats: stats.filter((_, i) => i !== idx) });
+  const addStat = () => { onUpdate({ ...block.data, stats: [...stats, { value: '', label: '', change: '', direction: 'up' }] }); };
+  const removeStat = (idx: number) => { onUpdate({ ...block.data, stats: stats.filter((_, i) => i !== idx) }); };
 
   return (
     <div>
@@ -48,7 +48,7 @@ export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProp
           >
             <input
               value={stat.value}
-              onChange={(e) => updateStat(i, 'value', e.target.value)}
+              onChange={(e) => { updateStat(i, 'value', e.target.value); }}
               placeholder="e.g. 6.50%"
               style={{
                 width: '100%',
@@ -64,7 +64,7 @@ export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProp
             />
             <input
               value={stat.label}
-              onChange={(e) => updateStat(i, 'label', e.target.value)}
+              onChange={(e) => { updateStat(i, 'label', e.target.value); }}
               placeholder="Label"
               style={{
                 width: '100%',
@@ -80,7 +80,7 @@ export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProp
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <select
                 value={stat.direction}
-                onChange={(e) => updateStat(i, 'direction', e.target.value)}
+                onChange={(e) => { updateStat(i, 'direction', e.target.value); }}
                 style={{
                   border: '1px solid var(--color-border-subtle)',
                   borderRadius: '4px',
@@ -98,7 +98,7 @@ export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProp
               </select>
               <input
                 value={stat.change}
-                onChange={(e) => updateStat(i, 'change', e.target.value)}
+                onChange={(e) => { updateStat(i, 'change', e.target.value); }}
                 placeholder="e.g. +0.1pp"
                 style={{
                   flex: 1,
@@ -113,7 +113,7 @@ export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProp
                 }}
               />
               {stats.length > 1 && (
-                <button onClick={() => removeStat(i)} style={{ background: 'none', border: 'none', color: 'var(--color-text-tertiary)', cursor: 'pointer', fontSize: '12px', opacity: 0.4, padding: '2px' }}
+                <button onClick={() => { removeStat(i); }} style={{ background: 'none', border: 'none', color: 'var(--color-text-tertiary)', cursor: 'pointer', fontSize: '12px', opacity: 0.4, padding: '2px' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-rose-500)'; e.currentTarget.style.opacity = '1'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-tertiary)'; e.currentTarget.style.opacity = '0.4'; }}
                 >✕</button>

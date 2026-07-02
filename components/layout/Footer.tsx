@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 const footerSections = [
   {
@@ -94,7 +95,7 @@ const Footer: React.FC = () => (
       >
         {/* Brand column */}
         <div>
-          <a
+          <Link
             href="/"
             style={{
               fontSize: 'var(--text-xl)',
@@ -104,7 +105,7 @@ const Footer: React.FC = () => (
             }}
           >
             The Breakdown
-          </a>
+          </Link>
           <p style={{ marginTop: 'var(--spacing-2)', fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)' }}>
             India Explained
           </p>

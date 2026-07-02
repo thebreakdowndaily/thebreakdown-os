@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { mockCMSStories, type CMSStory, type StoryStatus } from '@/utils/cms-data';
+import { mockCMSStories, type StoryStatus } from '@/utils/cms-data';
 
 interface CMSShellProps {
   children: React.ReactNode;
@@ -17,10 +17,10 @@ const statusColors: Record<StoryStatus, string> = {
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
   if (diff < 1) return 'just now';
-  if (diff < 60) return `${diff}m ago`;
+  if (diff < 60) return `${String(diff)}m ago`;
   const h = Math.floor(diff / 60);
-  if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h / 24)}d ago`;
+  if (h < 24) return `${String(h)}h ago`;
+  return `${String(Math.floor(h / 24))}d ago`;
 }
 
 export default function CMSShell({ children, selectedId }: CMSShellProps) {
@@ -64,7 +64,7 @@ export default function CMSShell({ children, selectedId }: CMSShellProps) {
             </div>
             <div style={{ position: 'relative' }}>
               <button
-                onClick={() => setShowNewMenu(!showNewMenu)}
+                onClick={() => { setShowNewMenu(!showNewMenu); }}
                 style={{
                   background: 'var(--color-amber-500)',
                   color: '#000',
@@ -95,7 +95,7 @@ export default function CMSShell({ children, selectedId }: CMSShellProps) {
                     width: '200px',
                     overflow: 'hidden',
                   }}
-                  onMouseLeave={() => setShowNewMenu(false)}
+                  onMouseLeave={() => { setShowNewMenu(false); }}
                 >
                   <button
                     style={{ width: '100%', padding: '10px 14px', border: 'none', background: 'none', color: 'var(--color-text-primary)', fontSize: '13px', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}

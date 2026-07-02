@@ -83,8 +83,8 @@ export default function StatsCards({ stats }: StatsCardsProps) {
       <StatCard label="Research Queue" value={stats.researchQueue} sub="2 in progress" accent="var(--color-blue-500)" />
       <StatCard label="Editorial Review" value={stats.editorialQueue} sub="1 overdue" accent="var(--color-orange-500)" />
       <StatCard label="Publishing Queue" value={stats.publishingQueue} sub="2 critical" accent="var(--color-rose-500)" />
-      <StatCard label="Monitors Active" value={stats.activeMonitors} sub={`${stats.criticalAlerts} critical alerts`} accent="var(--color-cyan-500)" />
-      <StatCard label="Published This Week" value={stats.publishedThisWeek} sub={`Avg score: ${stats.avgEvidenceScore}`} accent="var(--color-emerald-500)" />
+      <StatCard label="Monitors Active" value={stats.activeMonitors} sub={`${String(stats.criticalAlerts)} critical alerts`} accent="var(--color-cyan-500)" />
+      <StatCard label="Published This Week" value={stats.publishedThisWeek} sub={`Avg score: ${String(stats.avgEvidenceScore)}`} accent="var(--color-emerald-500)" />
     </div>
   );
 }

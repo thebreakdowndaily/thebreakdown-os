@@ -21,7 +21,7 @@ interface StatisticsGridProps {
  * Best for: highlight boxes with key numbers at the top of a story.
  */
 const StatisticsGrid: React.FC<StatisticsGridProps> = ({ stats, columns = 3, title, caption }) => {
-  if (!stats || stats.length === 0) return null;
+  if (stats.length === 0) return null;
 
   return (
     <figure
@@ -44,7 +44,7 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({ stats, columns = 3, tit
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${Math.min(columns, stats.length)}, 1fr)`,
+          gridTemplateColumns: `repeat(${String(Math.min(columns, stats.length))}, 1fr)`,
           gap: 'var(--spacing-3)',
         }}
       >

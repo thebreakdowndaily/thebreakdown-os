@@ -6,20 +6,18 @@
 
 import type { StoryJSON, EntityJSON, Breadcrumb, FAQItem } from './types';
 
-export function articleSchema(story: StoryJSON): Record<string, any> {
+export function articleSchema(story: StoryJSON): Record<string, unknown> {
   return {
     '@type': 'NewsArticle',
     headline: story.headline,
     description: story.summary,
     datePublished: story.publishedAt,
     dateModified: story.updatedAt,
-    author: story.author
-      ? {
-          '@type': 'Person',
-          name: story.author.name,
-          url: story.author.url,
-        }
-      : undefined,
+    author: {
+      '@type': 'Person',
+      name: story.author.name,
+      url: story.author.url,
+    },
     publisher: {
       '@type': 'Organization',
       name: 'The Breakdown',
@@ -28,13 +26,13 @@ export function articleSchema(story: StoryJSON): Record<string, any> {
     image: story.heroImage,
     mainEntityOfPage: `https://thebreakdown.in/story/${story.slug}`,
     wordCount: story.wordCount,
-    timeRequired: `PT${story.readingTime}M`,
-    keywords: story.tags?.join(', '),
+    timeRequired: `PT${String(story.readingTime)}M`,
+    keywords: story.tags.join(', '),
     articleSection: story.category,
   };
 }
 
-export function personSchema(entity: EntityJSON): Record<string, any> {
+export function personSchema(entity: EntityJSON): Record<string, unknown> {
   return {
     '@type': 'Person',
     name: entity.name,
@@ -45,7 +43,7 @@ export function personSchema(entity: EntityJSON): Record<string, any> {
   };
 }
 
-export function organizationSchema(entity: EntityJSON): Record<string, any> {
+export function organizationSchema(entity: EntityJSON): Record<string, unknown> {
   return {
     '@type': 'Organization',
     name: entity.name,
@@ -56,7 +54,7 @@ export function organizationSchema(entity: EntityJSON): Record<string, any> {
   };
 }
 
-export function websiteSchema(): Record<string, any> {
+export function websiteSchema(): Record<string, unknown> {
   return {
     '@type': 'WebSite',
     name: 'The Breakdown',
@@ -70,7 +68,7 @@ export function websiteSchema(): Record<string, any> {
   };
 }
 
-export function breadcrumbListSchema(crumbs: Breadcrumb[]): Record<string, any> {
+export function breadcrumbListSchema(crumbs: Breadcrumb[]): Record<string, unknown> {
   return {
     '@type': 'BreadcrumbList',
     itemListElement: crumbs.map((crumb, index) => ({
@@ -84,7 +82,7 @@ export function breadcrumbListSchema(crumbs: Breadcrumb[]): Record<string, any> 
   };
 }
 
-export function faqPageSchema(faqs: FAQItem[]): Record<string, any> {
+export function faqPageSchema(faqs: FAQItem[]): Record<string, unknown> {
   return {
     '@type': 'FAQPage',
     mainEntity: faqs.map((faq) => ({
@@ -98,7 +96,7 @@ export function faqPageSchema(faqs: FAQItem[]): Record<string, any> {
   };
 }
 
-export function sitelinksSearchBox(): Record<string, any> {
+export function sitelinksSearchBox(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',

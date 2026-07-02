@@ -167,12 +167,10 @@ export interface ImprovementReport {
 
 const SESSION_KEY = 'tbd_session_id';
 const VISIT_KEY = 'tbd_visit_count';
-const SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
-
 export function getSessionId(): string {
   let sessionId = localStorage.getItem(SESSION_KEY);
   if (!sessionId) {
-    sessionId = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 14)}`;
+    sessionId = `sess_${String(Date.now())}_${Math.random().toString(36).slice(2, 14)}`;
     localStorage.setItem(SESSION_KEY, sessionId);
   }
   return sessionId;
@@ -212,19 +210,8 @@ function sendBatch(events: AnalyticsEvent[]): void {
   };
 
   // Use sendBeacon for reliability on page unload
-  if (navigator.sendBeacon) {
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    navigator.sendBeacon(API_ENDPOINT, blob);
-  } else {
-    fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      keepalive: true,
-    }).catch(() => {
-      // Silently drop — analytics should never break the page
-    });
-  }
+  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+  navigator.sendBeacon(API_ENDPOINT, blob);
 
   eventQueue = events.slice(MAX_BATCH_SIZE);
 }
@@ -255,7 +242,7 @@ export function trackEvent(event: TrackEventPayload): void {
       ...event,
       sessionId: getSessionId(),
       ts: new Date().toISOString(),
-    } as AnalyticsEvent;
+    };
 
     eventQueue.push(fullEvent);
     scheduleFlush();
@@ -289,7 +276,7 @@ const BOOKMARKS_KEY = 'tbd_bookmarks';
 export function getBookmarkedSlugs(): string[] {
   try {
     const raw = localStorage.getItem(BOOKMARKS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    return raw ? (JSON.parse(raw) as string[]) : [];
   } catch {
     return [];
   }
@@ -409,7 +396,7 @@ export function aggregateStoryAnalytics(
 
   // Low engagement sections — dropoffRate > 0.12
   const lowEngagementSections = Object.entries(sectionEngagement)
-    .filter(([_, s]) => s.dropoffRate > 0.12)
+    .filter(([, s]) => s.dropoffRate > 0.12)
     .map(([id]) => id);
 
   // Learning Effectiveness Score
@@ -531,13 +518,13 @@ export function generateImprovementReport(
 
   // Analyze scroll completion
   if (analytics.avgScrollCompletion >= 0.7) {
-    strengths.push(`High scroll completion (${Math.round(analytics.avgScrollCompletion * 100)}%) — readers reach the end`);
+    strengths.push(`High scroll completion (${String(Math.round(analytics.avgScrollCompletion * 100))}%) — readers reach the end`);
   } else if (analytics.avgScrollCompletion < 0.5) {
-    weaknesses.push(`Low scroll completion (${Math.round(analytics.avgScrollCompletion * 100)}%) — readers dropping off early`);
+    weaknesses.push(`Low scroll completion (${String(Math.round(analytics.avgScrollCompletion * 100))}%) — readers dropping off early`);
     recommendations.push({
       action: 'restructure',
       target: 'top sections',
-      reason: `${Math.round(analytics.avgScrollCompletion * 100)}% scroll completion indicates early dropoff`,
+      reason: `${String(Math.round(analytics.avgScrollCompletion * 100))}% scroll completion indicates early dropoff`,
       priority: 'high',
     });
   }
@@ -545,11 +532,11 @@ export function generateImprovementReport(
   // Analyze dropoff points
   if (analytics.highDropoffPoints.length > 0) {
     const worst = analytics.highDropoffPoints[0];
-    weaknesses.push(`Readers drop off at ${Math.round(worst * 100)}% scroll depth`);
+    weaknesses.push(`Readers drop off at ${String(Math.round(worst * 100))}% scroll depth`);
     recommendations.push({
       action: 'restructure',
-      target: `section at ${Math.round(worst * 100)}% depth`,
-      reason: `${Math.round((1 - worst) * 100)}% of readers lost at this point`,
+      target: `section at ${String(Math.round(worst * 100))}% depth`,
+      reason: `${String(Math.round((1 - worst) * 100))}% of readers lost at this point`,
       priority: 'high',
     });
   }
@@ -557,15 +544,15 @@ export function generateImprovementReport(
   // Analyze section engagement
   for (const [sectionId, engagement] of Object.entries(analytics.sectionEngagement)) {
     if (engagement.dropoffRate > 0.12) {
-      weaknesses.push(`"${sectionId}" section has ${Math.round(engagement.dropoffRate * 100)}% dropoff rate`);
+      weaknesses.push(`"${sectionId}" section has ${String(Math.round(engagement.dropoffRate * 100))}% dropoff rate`);
       recommendations.push({
         action: 'shorten',
         target: sectionId,
-        reason: `${Math.round(engagement.dropoffRate * 100)}% dropoff rate`,
+        reason: `${String(Math.round(engagement.dropoffRate * 100))}% dropoff rate`,
         priority: 'medium',
       });
     } else if (engagement.avgTime > 60000 && engagement.dropoffRate < 0.05) {
-      strengths.push(`"${sectionId}" section holds attention (avg ${Math.round(engagement.avgTime / 1000)}s)`);
+      strengths.push(`"${sectionId}" section holds attention (avg ${String(Math.round(engagement.avgTime / 1000))}s)`);
     }
   }
 
@@ -586,7 +573,7 @@ export function generateImprovementReport(
   // Analyze FAQ
   if (analytics.popularFAQIndices.length > 0) {
     const topFAQ = analytics.popularFAQIndices[0];
-    strengths.push(`FAQ #${topFAQ + 1} is most expanded — readers are curious about this`);
+    strengths.push(`FAQ #${String(topFAQ + 1)} is most expanded — readers are curious about this`);
   }
   if (analytics.faqExpansions / Math.max(analytics.totalReaders, 1) < 0.3) {
     weaknesses.push('Low FAQ engagement — consider more relevant questions');
@@ -600,22 +587,22 @@ export function generateImprovementReport(
 
   // Analyze return visits
   if (analytics.returnVisitorRate >= 0.2) {
-    strengths.push(`Strong return visit rate (${Math.round(analytics.returnVisitorRate * 100)}%)`);
+    strengths.push(`Strong return visit rate (${String(Math.round(analytics.returnVisitorRate * 100))}%)`);
   } else if (analytics.returnVisitorRate < 0.1) {
-    weaknesses.push(`Low return visit rate (${Math.round(analytics.returnVisitorRate * 100)}%)`);
+    weaknesses.push(`Low return visit rate (${String(Math.round(analytics.returnVisitorRate * 100))}%)`);
     recommendations.push({
       action: 'expand',
       target: 'story depth',
-      reason: `${Math.round(analytics.returnVisitorRate * 100)}% return rate — add more depth or follow-up content`,
+      reason: `${String(Math.round(analytics.returnVisitorRate * 100))}% return rate — add more depth or follow-up content`,
       priority: 'medium',
     });
   }
 
   // Analyze shares
-  const totalShares = Object.values(analytics.sharesPerMedium).reduce((a, b) => a + b, 0);
+  const totalShares = (Object.values(analytics.sharesPerMedium) as number[]).reduce((a: number, b: number) => a + b, 0);
   if (totalShares > 0) {
     const topMedium = Object.entries(analytics.sharesPerMedium).sort((a, b) => b[1] - a[1])[0];
-    strengths.push(`Shared ${totalShares} times — most on ${topMedium[0]}`);
+    strengths.push(`Shared ${String(totalShares)} times — most on ${topMedium[0]}`);
   }
 
   // Compare with previous period
@@ -625,7 +612,7 @@ export function generateImprovementReport(
     const timeChange = analytics.avgTimeOnPage - previous.avgTimeOnPage;
     compareToPrevious = {
       scrollCompletionChange: `${scrollChange >= 0 ? '+' : ''}${(scrollChange * 100).toFixed(0)}%`,
-      avgTimeChange: `${timeChange >= 0 ? '+' : ''}${Math.round(timeChange / 1000)}s`,
+      avgTimeChange: `${timeChange >= 0 ? '+' : ''}${String(Math.round(timeChange / 1000))}s`,
     };
   }
 

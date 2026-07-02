@@ -56,26 +56,25 @@ const TEMPLATES: Record<string, Partial<CMSStory>> = {
 function NewStoryForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const template = searchParams?.get('template') || 'blank';
+  const template = searchParams.get('template') || 'blank';
 
   const [story, setStory] = useState<CMSStory | null>(null);
 
   useEffect(() => {
-    // Create new story with optional template
-    const base = createNewStory();
-    if (template && TEMPLATES[template]) {
-      const tmpl = TEMPLATES[template];
-      base.title = tmpl.title || base.title;
-      base.slug = tmpl.slug || base.slug;
-      base.blocks = tmpl.blocks ? tmpl.blocks.map((b) => ({
-        ...b,
-        id: `blk-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      })) : base.blocks;
-    }
-    setStory(base);
-
-    // Add to mock store
-    mockCMSStories.unshift(base);
+    queueMicrotask(() => {
+      const base = createNewStory();
+      const tmpl = (TEMPLATES as Record<string, Partial<CMSStory> | undefined>)[template];
+      if (tmpl) {
+        base.title = tmpl.title || base.title;
+        base.slug = tmpl.slug || base.slug;
+        base.blocks = tmpl.blocks ? tmpl.blocks.map((b) => ({
+          ...b,
+          id: `blk-${String(Date.now())}-${Math.random().toString(36).slice(2, 6)}`,
+        })) : base.blocks;
+      }
+      mockCMSStories.unshift(base);
+      setStory(base);
+    });
   }, [template]);
 
   const handleSave = (updated: CMSStory) => {

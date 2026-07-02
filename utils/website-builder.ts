@@ -45,8 +45,7 @@ import type {
   FixJSON,
   SearchResult,
   PageSpec,
-  ComponentSpec,
-  Section,
+
   SEOData,
   Breadcrumb,
 } from './types';
@@ -54,7 +53,8 @@ import type {
 // ── Public API ──────────────────────────────────────────────────────────
 
 export function buildStory(data: StoryJSON): PageSpec {
-  const template = templates.find(t => t.id === 'story')!;
+  const template = templates.find(t => t.id === 'story');
+  if (!template) throw new Error('Template not found: story');
   const sections = filterSections(template.sections, data);
 
   return {
@@ -75,7 +75,8 @@ export function buildStory(data: StoryJSON): PageSpec {
 }
 
 export function buildEntity(data: EntityJSON): PageSpec {
-  const template = templates.find(t => t.id === 'entity')!;
+  const template = templates.find(t => t.id === 'entity');
+  if (!template) throw new Error('Template not found: entity');
   const sections = filterSections(template.sections, data);
 
   return {
@@ -96,7 +97,8 @@ export function buildEntity(data: EntityJSON): PageSpec {
 }
 
 export function buildTopic(data: TopicJSON): PageSpec {
-  const template = templates.find(t => t.id === 'topic')!;
+  const template = templates.find(t => t.id === 'topic');
+  if (!template) throw new Error('Template not found: topic');
   const sections = filterSections(template.sections, data);
 
   return {
@@ -120,11 +122,12 @@ export function buildCountry(data: CountryJSON): PageSpec {
   return buildEntity({
     ...data,
     type: 'country',
-  } as EntityJSON);
+  });
 }
 
 export function buildHomepage(data: HomepageJSON): PageSpec {
-  const template = templates.find(t => t.id === 'homepage')!;
+  const template = templates.find(t => t.id === 'homepage');
+  if (!template) throw new Error('Template not found: homepage');
   const sections = filterSections(template.sections, data);
 
   return {
@@ -255,7 +258,7 @@ function resolveHomepageComponent(sectionId: string): string {
 
 // ── Section Filtering ───────────────────────────────────────────────────
 
-function filterSections(sections: string[], data: any): string[] {
+function filterSections(sections: string[], data: Record<string, unknown>): string[] {
   return sections.filter(id => {
     const entry = registry.find(c => c.id === id);
     if (!entry) return false;
@@ -264,7 +267,7 @@ function filterSections(sections: string[], data: any): string[] {
     if (entry.required && entry.props.length > 0) {
       // If the section has required props and data is missing them, skip
       const hasData = entry.props.some(p => data[p] !== undefined && data[p] !== null);
-      if (!hasData && !entry.required) return false;
+      if (!hasData) return false;
     }
 
     return true;
@@ -273,8 +276,8 @@ function filterSections(sections: string[], data: any): string[] {
 
 // ── Section Props Mapping ───────────────────────────────────────────────
 
-function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, any> {
-  const propMap: Record<string, (d: StoryJSON) => any> = {
+function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, unknown> {
+  const propMap: Record<string, (d: StoryJSON) => Record<string, unknown>> = {
       'hero': d => ({
         headline: d.headline,
         summary: d.summary,
@@ -284,7 +287,7 @@ function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, any
         readingTime: d.readingTime,
         author: d.author,
         evidenceScore: d.evidenceScore,
-        sources: d.sources?.length || 0,
+        sources: d.sources.length,
       }),
     'executive-summary': d => ({
       summary: d.summary,
@@ -300,7 +303,7 @@ function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, any
     'data-cards': d => ({ datasets: d.datasets }),
     'charts': d => ({ charts: d.charts }),
     'maps': d => ({ geoData: d.geoData }),
-    'debate': d => ({ sides: d.debate?.sides, arguments: d.debate?.sides?.[0]?.arguments }),
+    'debate': d => ({ sides: d.debate?.sides, arguments: d.debate?.sides[0]?.arguments }),
     'faq': d => ({ questions: d.faq }),
     'primary-sources': d => ({ sources: d.primarySources }),
     'related-stories': d => ({ stories: d.relatedStories }),
@@ -308,20 +311,20 @@ function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, any
     'author-box': d => ({ author: d.author }),
     'visuals': d => ({
       visuals: {
-        globes: (d as any).visuals?.globes,
-        svgs: (d as any).visuals?.svgs,
-        animations: (d as any).visuals?.animations,
-        infographics: (d as any).visuals?.infographics,
+        globes: d.visuals?.globes,
+        svgs: d.visuals?.svgs,
+        animations: d.visuals?.animations,
+        infographics: d.visuals?.infographics,
       },
     }),
     'newsletter': () => ({}),
   };
 
-  return propMap[sectionId]?.(data) || {};
+  return propMap[sectionId](data);
 }
 
-function mapEntitySectionProps(sectionId: string, data: EntityJSON): Record<string, any> {
-  const propMap: Record<string, (d: EntityJSON) => any> = {
+function mapEntitySectionProps(sectionId: string, data: EntityJSON): Record<string, unknown> {
+  const propMap: Record<string, (d: EntityJSON) => Record<string, unknown>> = {
     'entity-overview': d => ({ entity: d }),
     'entity-timeline': d => ({ events: d.timeline }),
     'entity-data': d => ({ datasets: d.datasets, statistics: d.statistics }),
@@ -330,11 +333,11 @@ function mapEntitySectionProps(sectionId: string, data: EntityJSON): Record<stri
     'faq': d => ({ questions: d.faq }),
   };
 
-  return propMap[sectionId]?.(data) || {};
+  return propMap[sectionId](data);
 }
 
-function mapTopicSectionProps(sectionId: string, data: TopicJSON): Record<string, any> {
-  const propMap: Record<string, (d: TopicJSON) => any> = {
+function mapTopicSectionProps(sectionId: string, data: TopicJSON): Record<string, unknown> {
+  const propMap: Record<string, (d: TopicJSON) => Record<string, unknown>> = {
     'topic-header': d => ({ topic: d }),
     'topic-collections': d => ({
       stories: d.stories,
@@ -348,11 +351,11 @@ function mapTopicSectionProps(sectionId: string, data: TopicJSON): Record<string
     'related-stories': d => ({ stories: d.stories }),
   };
 
-  return propMap[sectionId]?.(data) || {};
+  return propMap[sectionId](data);
 }
 
-function mapHomepageSectionProps(sectionId: string, data: HomepageJSON): Record<string, any> {
-  const propMap: Record<string, (d: HomepageJSON) => any> = {
+function mapHomepageSectionProps(sectionId: string, data: HomepageJSON): Record<string, unknown> {
+  const propMap: Record<string, (d: HomepageJSON) => Record<string, unknown>> = {
     'top-story': d => ({ story: d.topStory }),
     'trending-analysis': d => ({ stories: d.trendingAnalyses }),
     'latest-investigations': d => ({ stories: d.latestInvestigations }),
@@ -363,7 +366,7 @@ function mapHomepageSectionProps(sectionId: string, data: HomepageJSON): Record<
     'latest-updates': d => ({ stories: d.latestUpdates }),
   };
 
-  return propMap[sectionId]?.(data) || {};
+  return propMap[sectionId](data);
 }
 
 // ── SEO Generation ──────────────────────────────────────────────────────
@@ -371,20 +374,20 @@ function mapHomepageSectionProps(sectionId: string, data: HomepageJSON): Record<
 function generateSEO(data: StoryJSON): SEOData {
   return {
     title: `${data.headline} — The Breakdown`,
-    description: data.summary?.substring(0, 160) || '',
+    description: data.summary.substring(0, 160),
     canonical: `https://thebreakdown.in/story/${data.slug}`,
     ogType: 'article',
     ogImage: data.heroImage || '/images/og-default.jpg',
     ogPublishDate: data.publishedAt,
     twitterCard: 'summary_large_image',
-    keywords: data.tags?.join(', '),
+    keywords: data.tags.join(', '),
   };
 }
 
 function generateEntitySEO(data: EntityJSON): SEOData {
   return {
     title: `${data.name} — ${capitalize(data.type)} Profile — The Breakdown`,
-    description: data.description?.substring(0, 160) || `${data.name} profile, timeline, and related stories on The Breakdown`,
+    description: data.description.substring(0, 160),
     canonical: `https://thebreakdown.in/entity/${data.slug}`,
     ogType: 'profile',
     ogImage: data.image || '/images/og-entity.jpg',
@@ -395,7 +398,7 @@ function generateEntitySEO(data: EntityJSON): SEOData {
 function generateTopicSEO(data: TopicJSON): SEOData {
   return {
     title: `${data.name} — Topic — The Breakdown`,
-    description: data.description?.substring(0, 160) || `All stories, entities, and data about ${data.name} on The Breakdown`,
+    description: data.description.substring(0, 160),
     canonical: `https://thebreakdown.in/topic/${data.slug}`,
     ogType: 'website',
     ogImage: '/images/og-topic.jpg',
@@ -405,7 +408,7 @@ function generateTopicSEO(data: TopicJSON): SEOData {
 
 // ── Breadcrumbs ─────────────────────────────────────────────────────────
 
-function generateBreadcrumbs(type: string, data: any): Breadcrumb[] {
+function generateBreadcrumbs(type: string, data: { slug: string; headline?: string; name?: string; type?: string }): Breadcrumb[] {
   const crumbs: Breadcrumb[] = [
     { label: 'Home', href: '/' },
   ];
@@ -419,7 +422,7 @@ function generateBreadcrumbs(type: string, data: any): Breadcrumb[] {
       break;
     case 'entity':
       crumbs.push(
-        { label: capitalize(data.type) + 's', href: `/${data.type}s` },
+        { label: capitalize(data.type) + 's', href: `/${String(data.type)}s` },
         { label: data.name, href: `/entity/${data.slug}` }
       );
       break;
@@ -436,7 +439,7 @@ function generateBreadcrumbs(type: string, data: any): Breadcrumb[] {
 
 // ── Schema.org Generation ───────────────────────────────────────────────
 
-function generateSchema(type: string, data: any): Record<string, any> {
+function generateSchema(type: string, data: Record<string, unknown>): Record<string, unknown> {
   const base = {
     '@context': 'https://schema.org',
   };
@@ -450,18 +453,17 @@ function generateSchema(type: string, data: any): Record<string, any> {
         description: data.summary,
         datePublished: data.publishedAt,
         dateModified: data.updatedAt,
-        author: data.author ? {
-          '@type': 'Person',
-          name: data.author.name,
-          url: data.author.url,
-        } : undefined,
+        author: (() => {
+          const auth = data.author as { name?: string; url?: string } | undefined;
+          return auth ? { '@type': 'Person' as const, name: auth.name, url: auth.url } : undefined;
+        })(),
         publisher: {
           '@type': 'Organization',
           name: 'The Breakdown',
           url: 'https://thebreakdown.in',
         },
         image: data.heroImage,
-        mainEntityOfPage: `https://thebreakdown.in/story/${data.slug}`,
+        mainEntityOfPage: `https://thebreakdown.in/story/${data.slug as string}`,
       };
 
     case 'entity':
@@ -470,7 +472,7 @@ function generateSchema(type: string, data: any): Record<string, any> {
         '@type': data.type === 'person' ? 'Person' : 'Organization',
         name: data.name,
         description: data.description,
-        url: `https://thebreakdown.in/entity/${data.slug}`,
+        url: `https://thebreakdown.in/entity/${data.slug as string}`,
         ...(data.aliases ? { additionalName: data.aliases } : {}),
       };
 
@@ -480,7 +482,7 @@ function generateSchema(type: string, data: any): Record<string, any> {
         '@type': 'CollectionPage',
         name: data.name,
         description: data.description,
-        url: `https://thebreakdown.in/topic/${data.slug}`,
+        url: `https://thebreakdown.in/topic/${String(data.slug)}`,
       };
 
     default:
@@ -535,8 +537,7 @@ export async function buildAllEntities(entities: EntityJSON[]): Promise<PageSpec
 // ── Static Paths Generation ─────────────────────────────────────────────
 
 export function generateStaticPaths(
-  items: Array<{ slug: string }>,
-  type: string
+  items: Array<{ slug: string }>
 ): Array<{ params: { slug: string } }> {
   return items.map(item => ({
     params: { slug: item.slug },

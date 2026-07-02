@@ -126,7 +126,7 @@ const InfographicRenderer: React.FC<InfographicRendererProps> = ({ cards }) => {
             <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary)', marginBottom: 'var(--spacing-4)' }}>
               {card.purpose}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${card.items.length}, 1fr)`, gap: 'var(--spacing-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${String(card.items.length)}, 1fr)`, gap: 'var(--spacing-4)' }}>
               {card.items.map((item, j) => (
                 <div key={j} style={{ padding: 'var(--spacing-3)', backgroundColor: 'var(--color-bg-tertiary)', borderRadius: 'var(--radius-md)' }}>
                   <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-bold)', color: item.color || 'var(--color-text-primary)', marginBottom: 'var(--spacing-3)', textAlign: 'center' }}>
@@ -158,7 +158,7 @@ const InfographicRenderer: React.FC<InfographicRendererProps> = ({ cards }) => {
             </div>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: `repeat(${Math.min(card.columns || 3, card.stats.length)}, 1fr)`,
+              gridTemplateColumns: `repeat(${String(Math.min(card.columns || 3, card.stats.length))}, 1fr)`,
               gap: 'var(--spacing-3)',
             }}>
               {card.stats.map((stat, j) => (
@@ -292,7 +292,7 @@ const InfographicRenderer: React.FC<InfographicRendererProps> = ({ cards }) => {
     }
   };
 
-  if (!cards || cards.length === 0) return null;
+  if (cards.length === 0) return null;
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--spacing-4)' }}>

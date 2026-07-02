@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface SourcesBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 const TIER_LABELS: Record<number, string> = {
@@ -18,14 +18,14 @@ const TIER_LABELS: Record<number, string> = {
 export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
   const sources: Array<{ title: string; url: string; accessedAt: string; tier: number }> = block.data.sources || [];
 
-  const updateSource = (idx: number, field: string, value: any) => {
+  const updateSource = (idx: number, field: string, value: string | number) => {
     const next = [...sources];
     next[idx] = { ...next[idx], [field]: value };
     onUpdate({ ...block.data, sources: next });
   };
 
-  const addSource = () => onUpdate({ ...block.data, sources: [...sources, { title: '', url: '', accessedAt: '', tier: 2 }] });
-  const removeSource = (idx: number) => onUpdate({ ...block.data, sources: sources.filter((_, i) => i !== idx) });
+  const addSource = () => { onUpdate({ ...block.data, sources: [...sources, { title: '', url: '', accessedAt: '', tier: 2 }] }); };
+  const removeSource = (idx: number) => { onUpdate({ ...block.data, sources: sources.filter((_, i) => i !== idx) }); };
 
   return (
     <div>
@@ -57,7 +57,7 @@ export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px', gap: '8px', marginBottom: '6px' }}>
               <input
                 value={src.title}
-                onChange={(e) => updateSource(i, 'title', e.target.value)}
+                onChange={(e) => { updateSource(i, 'title', e.target.value); }}
                 placeholder="Source title..."
                 style={{
                   border: '1px solid var(--color-border-subtle)',
@@ -73,7 +73,7 @@ export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
               />
               <select
                 value={src.tier}
-                onChange={(e) => updateSource(i, 'tier', parseInt(e.target.value))}
+                onChange={(e) => { updateSource(i, 'tier', parseInt(e.target.value)); }}
                 style={{
                   border: '1px solid var(--color-border-subtle)',
                   borderRadius: '6px',
@@ -93,7 +93,7 @@ export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <input
                 value={src.url}
-                onChange={(e) => updateSource(i, 'url', e.target.value)}
+                onChange={(e) => { updateSource(i, 'url', e.target.value); }}
                 placeholder="https://..."
                 style={{
                   flex: 1,
@@ -110,7 +110,7 @@ export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
               <input
                 type="date"
                 value={src.accessedAt}
-                onChange={(e) => updateSource(i, 'accessedAt', e.target.value)}
+                onChange={(e) => { updateSource(i, 'accessedAt', e.target.value); }}
                 style={{
                   width: '120px',
                   border: '1px solid var(--color-border-subtle)',
@@ -124,7 +124,7 @@ export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
                 }}
               />
               {sources.length > 1 && (
-                <button onClick={() => removeSource(i)} style={{ background: 'none', border: 'none', color: 'var(--color-text-tertiary)', cursor: 'pointer', fontSize: '14px', opacity: 0.4, padding: '4px' }}
+                <button onClick={() => { removeSource(i); }} style={{ background: 'none', border: 'none', color: 'var(--color-text-tertiary)', cursor: 'pointer', fontSize: '14px', opacity: 0.4, padding: '4px' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-rose-500)'; e.currentTarget.style.opacity = '1'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-tertiary)'; e.currentTarget.style.opacity = '0.4'; }}
                 >✕</button>

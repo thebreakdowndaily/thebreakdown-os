@@ -75,7 +75,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, baseUr
 
     if (baseUrl && !onPageChange) {
       return (
-        <a href={`${baseUrl}?page=${page}`} className={classes} aria-label={ariaLabel} aria-current={page === currentPage ? 'page' : undefined}>
+        <a href={`${baseUrl}?page=${String(page)}`} className={classes} aria-label={ariaLabel} aria-current={page === currentPage ? 'page' : undefined}>
           {children}
         </a>
       );
@@ -104,12 +104,12 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, baseUr
 
       {pageNumbers.map((page, idx) =>
         page === 'ellipsis' ? (
-          <span key={`ellipsis-${idx}`} className="px-2 text-gray-500 select-none" aria-hidden="true">
+          <span key={`ellipsis-${String(idx)}`} className="px-2 text-gray-500 select-none" aria-hidden="true">
             &hellip;
           </span>
         ) : (
           <React.Fragment key={page}>
-            {linkOrButton(page, false, String(page), `Page ${page}`)}
+            {linkOrButton(page, false, String(page), `Page ${String(page)}`)}
           </React.Fragment>
         ),
       )}

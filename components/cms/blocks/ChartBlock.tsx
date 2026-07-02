@@ -4,26 +4,26 @@ import type { Block } from '@/utils/cms-data';
 
 interface ChartBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 const CHART_TYPES = ['bar', 'line', 'pie', 'area', 'scatter', 'radar', 'heatmap', 'treemap'];
 
 export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
   const d = block.data;
-  const dataPoints: Array<{ label: string; value: number }> = d.data || [];
+  const dataPoints: Array<{ label: string; value: number }> = (d.data as Array<{ label: string; value: number }> | undefined) ?? [];
 
-  const updateMeta = (field: string, value: any) => onUpdate({ ...d, [field]: value });
+  const updateMeta = (field: string, value: string) => { onUpdate({ ...d, [field]: value }); };
 
-  const updateDataPoint = (idx: number, field: string, value: any) => {
+  const updateDataPoint = (idx: number, field: string, value: string) => {
     const next = [...dataPoints];
     next[idx] = { ...next[idx], [field]: field === 'value' ? parseFloat(value) || 0 : value };
     onUpdate({ ...d, data: next });
   };
 
-  const addDataPoint = () => onUpdate({ ...d, data: [...dataPoints, { label: '', value: 0 }] });
+  const addDataPoint = () => { onUpdate({ ...d, data: [...dataPoints, { label: '', value: 0 }] }); };
 
-  const removeDataPoint = (idx: number) => onUpdate({ ...d, data: dataPoints.filter((_, i) => i !== idx) });
+  const removeDataPoint = (idx: number) => { onUpdate({ ...d, data: dataPoints.filter((_, i) => i !== idx) }); };
 
   return (
     <div>
@@ -32,8 +32,8 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
           Chart Title
         </label>
         <input
-          value={d.title || ''}
-          onChange={(e) => updateMeta('title', e.target.value)}
+          value={(d.title as string) || ''}
+          onChange={(e) => { updateMeta('title', e.target.value); }}
           placeholder="Chart title..."
           style={{
             width: '100%',
@@ -58,7 +58,7 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
           {CHART_TYPES.map((ct) => (
             <button
               key={ct}
-              onClick={() => updateMeta('chartType', ct)}
+              onClick={() => { updateMeta('chartType', ct); }}
               style={{
                 padding: '5px 12px',
                 borderRadius: '6px',
@@ -104,7 +104,7 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
             <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <input
                 value={dp.label}
-                onChange={(e) => updateDataPoint(i, 'label', e.target.value)}
+                onChange={(e) => { updateDataPoint(i, 'label', e.target.value); }}
                 placeholder="Label"
                 style={{
                   flex: 1,
@@ -121,7 +121,7 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
               <input
                 type="number"
                 value={dp.value}
-                onChange={(e) => updateDataPoint(i, 'value', e.target.value)}
+                onChange={(e) => { updateDataPoint(i, 'value', e.target.value); }}
                 placeholder="Value"
                 style={{
                   width: '80px',
@@ -138,7 +138,7 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
               />
               {dataPoints.length > 1 && (
                 <button
-                  onClick={() => removeDataPoint(i)}
+                  onClick={() => { removeDataPoint(i); }}
                   style={{
                     background: 'none',
                     border: 'none',
@@ -164,8 +164,8 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
           Caption
         </label>
         <input
-          value={d.caption || ''}
-          onChange={(e) => updateMeta('caption', e.target.value)}
+          value={(d.caption as string) || ''}
+          onChange={(e) => { updateMeta('caption', e.target.value); }}
           placeholder="Source attribution for the chart data..."
           style={{
             width: '100%',

@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface TimelineBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function TimelineBlock({ block, onUpdate }: TimelineBlockProps) {
@@ -62,7 +62,7 @@ export default function TimelineBlock({ block, onUpdate }: TimelineBlockProps) {
               <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px' }}>
                 <input
                   value={ev.date}
-                  onChange={(e) => updateEvent(i, 'date', e.target.value)}
+                  onChange={(e) => { updateEvent(i, 'date', e.target.value); }}
                   placeholder="Date (e.g. Jul 2026)"
                   style={{
                     border: '1px solid var(--color-border-subtle)',
@@ -78,7 +78,7 @@ export default function TimelineBlock({ block, onUpdate }: TimelineBlockProps) {
                 />
                 <input
                   value={ev.title}
-                  onChange={(e) => updateEvent(i, 'title', e.target.value)}
+                  onChange={(e) => { updateEvent(i, 'title', e.target.value); }}
                   placeholder="Event title"
                   style={{
                     border: '1px solid var(--color-border-subtle)',
@@ -95,7 +95,7 @@ export default function TimelineBlock({ block, onUpdate }: TimelineBlockProps) {
               </div>
               <textarea
                 value={ev.description}
-                onChange={(e) => updateEvent(i, 'description', e.target.value)}
+                onChange={(e) => { updateEvent(i, 'description', e.target.value); }}
                 placeholder="Event description..."
                 rows={2}
                 style={{
@@ -116,7 +116,7 @@ export default function TimelineBlock({ block, onUpdate }: TimelineBlockProps) {
 
             {events.length > 1 && (
               <button
-                onClick={() => removeEvent(i)}
+                onClick={() => { removeEvent(i); }}
                 style={{
                   position: 'absolute',
                   top: '8px',

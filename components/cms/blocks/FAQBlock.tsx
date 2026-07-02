@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface FAQBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function FAQBlock({ block, onUpdate }: FAQBlockProps) {
@@ -16,8 +16,8 @@ export default function FAQBlock({ block, onUpdate }: FAQBlockProps) {
     onUpdate({ ...block.data, items: next });
   };
 
-  const addItem = () => onUpdate({ ...block.data, items: [...items, { question: '', answer: '' }] });
-  const removeItem = (idx: number) => onUpdate({ ...block.data, items: items.filter((_, i) => i !== idx) });
+  const addItem = () => { onUpdate({ ...block.data, items: [...items, { question: '', answer: '' }] }); };
+  const removeItem = (idx: number) => { onUpdate({ ...block.data, items: items.filter((_, i) => i !== idx) }); };
 
   return (
     <div>
@@ -48,7 +48,7 @@ export default function FAQBlock({ block, onUpdate }: FAQBlockProps) {
           >
             <input
               value={item.question}
-              onChange={(e) => updateItem(i, 'question', e.target.value)}
+              onChange={(e) => { updateItem(i, 'question', e.target.value); }}
               placeholder="Question..."
               style={{
                 width: '100%',
@@ -66,7 +66,7 @@ export default function FAQBlock({ block, onUpdate }: FAQBlockProps) {
             />
             <textarea
               value={item.answer}
-              onChange={(e) => updateItem(i, 'answer', e.target.value)}
+              onChange={(e) => { updateItem(i, 'answer', e.target.value); }}
               placeholder="Answer..."
               rows={3}
               style={{
@@ -85,7 +85,7 @@ export default function FAQBlock({ block, onUpdate }: FAQBlockProps) {
             />
             {items.length > 1 && (
               <button
-                onClick={() => removeItem(i)}
+                onClick={() => { removeItem(i); }}
                 style={{
                   position: 'absolute',
                   top: '8px',

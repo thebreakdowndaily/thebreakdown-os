@@ -8,7 +8,7 @@ import TopicCollections from '@/components/topic/TopicCollections';
 import TopicCharts from '@/components/topic/TopicCharts';
 import RelatedStories from '@/components/story/RelatedStories';
 
-const sectionComponents: Record<string, React.ComponentType<any>> = {
+const sectionComponents: Record<string, React.ElementType | undefined> = {
   'topic-header': TopicHeader,
   'topic-collections': TopicCollections,
   'topic-charts': TopicCharts,

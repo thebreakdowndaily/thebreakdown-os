@@ -1,5 +1,4 @@
 import React from 'react';
-import StoryImage from '@/components/story/StoryImage';
 import Container from '@/components/layout/Container';
 
 interface Story {

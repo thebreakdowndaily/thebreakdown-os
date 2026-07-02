@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface QuoteBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function QuoteBlock({ block, onUpdate }: QuoteBlockProps) {
@@ -34,7 +34,7 @@ export default function QuoteBlock({ block, onUpdate }: QuoteBlockProps) {
 
       <textarea
         value={d.text || ''}
-        onChange={(e) => onUpdate({ ...d, text: e.target.value })}
+        onChange={(e) => { onUpdate({ ...d, text: e.target.value }); }}
         placeholder="The quote text..."
         rows={3}
         style={{
@@ -66,7 +66,7 @@ export default function QuoteBlock({ block, onUpdate }: QuoteBlockProps) {
       >
         <input
           value={d.speaker || ''}
-          onChange={(e) => onUpdate({ ...d, speaker: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, speaker: e.target.value }); }}
           placeholder="Speaker name"
           style={{
             flex: 1,
@@ -83,7 +83,7 @@ export default function QuoteBlock({ block, onUpdate }: QuoteBlockProps) {
         />
         <input
           value={d.context || ''}
-          onChange={(e) => onUpdate({ ...d, context: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, context: e.target.value }); }}
           placeholder="Context (e.g., during press conference)"
           style={{
             flex: 1,

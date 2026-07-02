@@ -36,7 +36,7 @@ function fmtPct(n: number): string {
 function fmtTime(ms: number): string {
   if (ms >= 60_000) return (ms / 60_000).toFixed(1) + 'm';
   if (ms >= 1_000) return (ms / 1_000).toFixed(0) + 's';
-  return ms + 'ms';
+  return String(ms) + 'ms';
 }
 
 // ── Styles ─────────────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ function SectionEngagementBar({ sectionId, engagement }: {
         position: 'relative',
       }}>
         <div style={{
-          width: `${barWidth}%`,
+          width: `${String(barWidth)}%`,
           height: '100%',
           backgroundColor: isLow ? 'var(--color-error)' : isGood ? 'var(--color-success)' : 'var(--color-brand-400)',
           borderRadius: 'var(--radius-sm)',
@@ -156,7 +156,7 @@ function RecommendationCard({ rec }: { rec: ImprovementReport['recommendations']
     low: { bg: 'var(--color-bg-tertiary)', text: 'var(--color-text-secondary)' },
   };
 
-  const pc = priorityColors[rec.priority] || priorityColors.low;
+  const pc = priorityColors[rec.priority];
 
   return (
     <div style={{
@@ -211,30 +211,35 @@ export default function AnalyticsDashboard({ defaultStory, storySlugs }: Analyti
   // Fetch summary on mount
   useEffect(() => {
     fetch('/api/analytics?aggregate=false')
-      .then((r) => r.json())
+      .then((r) => r.json() as Promise<{ summary: AnalyticsSummary }>)
       .then((data) => {
         setSummary(data.summary);
-        if (!selectedSlug && data.summary?.stories?.length > 0) {
+        if (data.summary.stories.length > 0) {
           setSelectedSlug(data.summary.stories[0]);
         }
       })
-      .catch(() => setError('Failed to load analytics summary'))
-      .finally(() => setLoading(false));
+      .catch(() => { setError('Failed to load analytics summary'); })
+      .finally(() => { setLoading(false); });
   }, []);
 
   // Fetch per-story analytics when selected
   useEffect(() => {
     if (!selectedSlug) return;
-    setLoading(true);
 
-    fetch(`/api/analytics/story/${selectedSlug}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setStoryData(data);
-        setError(null);
-      })
-      .catch(() => setError('Failed to load story analytics'))
-      .finally(() => setLoading(false));
+    const id = setTimeout(() => {
+      setLoading(true);
+
+      fetch(`/api/analytics/story/${selectedSlug}`)
+        .then((r) => r.json() as Promise<StoryAnalyticsResponse>)
+        .then((data) => {
+          setStoryData(data);
+          setError(null);
+        })
+        .catch(() => { setError('Failed to load story analytics'); })
+        .finally(() => { setLoading(false); });
+    }, 0);
+
+    return () => { clearTimeout(id); };
   }, [selectedSlug]);
 
   const analytics = storyData?.analytics;
@@ -260,7 +265,7 @@ export default function AnalyticsDashboard({ defaultStory, storySlugs }: Analyti
           </label>
           <select
             value={selectedSlug}
-            onChange={(e) => setSelectedSlug(e.target.value)}
+            onChange={(e) => { setSelectedSlug(e.target.value); }}
             style={{
               padding: 'var(--spacing-1) var(--spacing-3)',
               borderRadius: 'var(--radius-md)',
@@ -358,7 +363,7 @@ export default function AnalyticsDashboard({ defaultStory, storySlugs }: Analyti
             <MetricCard
               value={fmtPct(analytics.avgScrollCompletion)}
               label="Avg Scroll Completion"
-              trend={{ dir: analytics.avgScrollCompletion >= 0.7 ? 'up' : 'down', pct: `${Math.round(analytics.avgScrollCompletion * 100)}%` }}
+              trend={{ dir: analytics.avgScrollCompletion >= 0.7 ? 'up' : 'down', pct: `${String(Math.round(analytics.avgScrollCompletion * 100))}%` }}
             />
             <MetricCard
               value={fmtTime(analytics.avgTimeOnPage)}
@@ -379,11 +384,11 @@ export default function AnalyticsDashboard({ defaultStory, storySlugs }: Analyti
             <MetricCard
               value={fmtPct(analytics.returnVisitorRate)}
               label="Return Visit Rate"
-              trend={{ dir: analytics.returnVisitorRate >= 0.2 ? 'up' : 'down', pct: `${Math.round(analytics.returnVisitorRate * 100)}%` }}
+              trend={{ dir: analytics.returnVisitorRate >= 0.2 ? 'up' : 'down', pct: `${String(Math.round(analytics.returnVisitorRate * 100))}%` }}
             />
             <MetricCard value={fmt(analytics.totalReaders)} label="Total Readers" />
             <MetricCard
-              value={fmt(Object.values(analytics.sharesPerMedium).reduce((a, b) => a + b, 0))}
+              value={fmt(Object.values(analytics.sharesPerMedium as unknown as Record<string, number>).reduce((a, b) => a + b, 0))}
               label="Total Shares"
             />
           </div>

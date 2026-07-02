@@ -15,15 +15,9 @@ export function useRelatedStories(storyId: string, limit?: number): UseRelatedSt
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!storyId) {
-      setLoading(false);
-      setError('No story ID provided');
-      return;
-    }
+    if (!storyId) return;
 
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     const searchParams = new URLSearchParams();
     searchParams.set('storyId', storyId);
@@ -32,17 +26,17 @@ export function useRelatedStories(storyId: string, limit?: number): UseRelatedSt
     fetch(`/api/stories/related?${searchParams.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch related stories');
-        return res.json();
+        return res.json() as Promise<{ stories?: RelatedStory[] }>;
       })
       .then((data) => {
         if (!cancelled) {
-          setStories(data.stories || data || []);
+          setStories(data.stories ?? []);
           setLoading(false);
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
           setLoading(false);
         }
       });
@@ -51,6 +45,10 @@ export function useRelatedStories(storyId: string, limit?: number): UseRelatedSt
       cancelled = true;
     };
   }, [storyId, limit]);
+
+  if (!storyId) {
+    return { stories: [], loading: false, error: 'No story ID provided' };
+  }
 
   return { stories, loading, error };
 }
@@ -65,13 +63,9 @@ export function useEntityStories(entitySlug: string, limit?: number): UseEntityS
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!entitySlug) {
-      setLoading(false);
-      return;
-    }
+    if (!entitySlug) return;
 
     let cancelled = false;
-    setLoading(true);
 
     const searchParams = new URLSearchParams();
     searchParams.set('slug', entitySlug);
@@ -80,11 +74,11 @@ export function useEntityStories(entitySlug: string, limit?: number): UseEntityS
     fetch(`/api/entity/stories?${searchParams.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch entity stories');
-        return res.json();
+        return res.json() as Promise<{ stories?: RelatedStory[] }>;
       })
       .then((data) => {
         if (!cancelled) {
-          setStories(data.stories || data || []);
+          setStories(data.stories ?? []);
           setLoading(false);
         }
       })
@@ -99,6 +93,10 @@ export function useEntityStories(entitySlug: string, limit?: number): UseEntityS
       cancelled = true;
     };
   }, [entitySlug, limit]);
+
+  if (!entitySlug) {
+    return { stories: [], loading: false };
+  }
 
   return { stories, loading };
 }

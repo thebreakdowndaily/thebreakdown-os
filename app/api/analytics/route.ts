@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { AnalyticsEvent, AggregateStoryAnalytics } from '@/utils/analytics';
+import type { AnalyticsEvent } from '@/utils/analytics';
 import { aggregateStoryAnalytics } from '@/utils/analytics';
 
 // ── In-Memory Event Store (replace with DB in production) ──────────────────
@@ -49,43 +49,43 @@ const VALID_EVENT_TYPES = [
   'return_visit', 'share', 'bookmark',
 ];
 
-function validateEvent(event: any): event is AnalyticsEvent {
-  if (!event || typeof event !== 'object') return false;
-  if (!VALID_EVENT_TYPES.includes(event.type)) return false;
-  if (!event.storySlug || typeof event.storySlug !== 'string') return false;
-  if (!event.ts || typeof event.ts !== 'string') return false;
+function validateEvent(event: unknown): event is AnalyticsEvent {
+  if (typeof event !== 'object' || event === null) return false;
+  const e = event as Record<string, unknown>;
+  if (typeof e.type !== 'string' || !VALID_EVENT_TYPES.includes(e.type)) return false;
+  if (typeof e.storySlug !== 'string') return false;
+  if (typeof e.ts !== 'string') return false;
   return true;
 }
 
 // ── POST /api/analytics — Receive event batch ─────────────────────────────
 
+interface EventBatch {
+  events?: unknown[];
+  sessionId?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as EventBatch;
 
-    if (!body || !body.events || !Array.isArray(body.events)) {
+    if (!body.events || body.events.length === 0) {
       return NextResponse.json({ error: 'Invalid payload: events array required' }, { status: 400 });
-    }
-
-    if (body.events.length === 0) {
-      return NextResponse.json({ error: 'Empty events array' }, { status: 400 });
     }
 
     const sessionId = body.sessionId || 'unknown';
 
-    // Rate limit check
     if (!checkRateLimit(sessionId)) {
       return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
-    // Validate and store events
-    const batch = body.events.slice(0, 50); // Max 50 per batch
+    const batch = body.events.slice(0, 50);
     let validCount = 0;
     let invalidCount = 0;
 
     for (const event of batch) {
       if (validateEvent(event)) {
-        store.events.push(event as AnalyticsEvent);
+        store.events.push(event);
         validCount++;
       } else {
         invalidCount++;
@@ -93,8 +93,8 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(
-      `[Analytics] Stored ${validCount} events from session ${sessionId.slice(0, 12)}... ` +
-      `(${invalidCount} invalid dropped). Total: ${store.events.length}`
+      `[Analytics] Stored ${String(validCount)} events from session ${sessionId.slice(0, 12)}... ` +
+      `(${String(invalidCount)} invalid dropped). Total: ${String(store.events.length)}`
     );
 
     return NextResponse.json({
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
 
 // ── GET /api/analytics — Retrieve aggregated analytics ─────────────────────
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const storySlug = searchParams.get('story');
   const aggregate = searchParams.get('aggregate') !== 'false';
@@ -166,7 +166,7 @@ export async function GET(request: NextRequest) {
 
 // ── DELETE /api/analytics — Clear events (dev only) ────────────────────────
 
-export async function DELETE() {
+export function DELETE() {
   const count = store.events.length;
   store.events = [];
   rateLimitMap.clear();

@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface TableBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function TableBlock({ block, onUpdate }: TableBlockProps) {
@@ -24,7 +24,7 @@ export default function TableBlock({ block, onUpdate }: TableBlockProps) {
     onUpdate({ ...d, rows: next });
   };
 
-  const addRow = () => onUpdate({ ...d, rows: [...rows, headers.map(() => '')] });
+  const addRow = () => { onUpdate({ ...d, rows: [...rows, headers.map(() => '')] }); };
   const addColumn = () => {
     onUpdate({
       ...d,
@@ -71,8 +71,8 @@ export default function TableBlock({ block, onUpdate }: TableBlockProps) {
                 >
                   <input
                     value={h}
-                    onChange={(e) => updateHeader(ci, e.target.value)}
-                    placeholder={`Column ${ci + 1}`}
+                    onChange={(e) => { updateHeader(ci, e.target.value); }}
+                    placeholder={`Column ${String(ci + 1)}`}
                     style={{
                       width: '100%',
                       border: 'none',
@@ -88,7 +88,7 @@ export default function TableBlock({ block, onUpdate }: TableBlockProps) {
                   />
                   {headers.length > 1 && (
                     <button
-                      onClick={() => removeColumn(ci)}
+                      onClick={() => { removeColumn(ci); }}
                       style={{
                         position: 'absolute',
                         top: '1px',
@@ -154,7 +154,7 @@ export default function TableBlock({ block, onUpdate }: TableBlockProps) {
                   >
                     <input
                       value={cell}
-                      onChange={(e) => updateCell(ri, ci, e.target.value)}
+                      onChange={(e) => { updateCell(ri, ci, e.target.value); }}
                       style={{
                         width: '100%',
                         border: 'none',
@@ -177,7 +177,7 @@ export default function TableBlock({ block, onUpdate }: TableBlockProps) {
                 >
                   {rows.length > 1 && (
                     <button
-                      onClick={() => removeRow(ri)}
+                      onClick={() => { removeRow(ri); }}
                       style={{
                         width: '24px',
                         height: '24px',
@@ -222,7 +222,7 @@ export default function TableBlock({ block, onUpdate }: TableBlockProps) {
         </button>
         <input
           value={d.caption || ''}
-          onChange={(e) => onUpdate({ ...d, caption: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, caption: e.target.value }); }}
           placeholder="Table caption..."
           style={{
             flex: 1,

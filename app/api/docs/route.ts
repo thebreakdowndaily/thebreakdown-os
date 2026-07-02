@@ -276,6 +276,6 @@ const openApiDoc = {
   },
 };
 
-export async function GET() {
+export function GET() {
   return NextResponse.json(openApiDoc);
 }

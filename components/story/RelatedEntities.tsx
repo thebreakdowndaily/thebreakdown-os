@@ -17,8 +17,7 @@ const RelatedEntities: React.FC<RelatedEntitiesProps> = ({ entities }) => {
   const grouped: Record<string, typeof entities> = {};
   for (const e of entities) {
     const key = capitalize(e.type);
-    if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(e);
+    (grouped[key] ??= []).push(e);
   }
   const groupKeys = Object.keys(grouped);
 

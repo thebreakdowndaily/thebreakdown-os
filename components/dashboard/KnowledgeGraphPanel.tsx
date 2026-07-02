@@ -17,7 +17,7 @@ const typeColors: Record<string, string> = {
 };
 
 // Pre-compute a simple force-directed layout
-function computeLayout(nodes: KGNode[], edges: KGEdge[]) {
+function computeLayout(nodes: KGNode[]) {
   const centerX = 300;
   const centerY = 180;
   const radius = 130;
@@ -34,7 +34,7 @@ function computeLayout(nodes: KGNode[], edges: KGEdge[]) {
 }
 
 export default function KnowledgeGraphPanel({ nodes, edges }: KnowledgeGraphPanelProps) {
-  const layouted = computeLayout(nodes, edges);
+  const layouted = computeLayout(nodes);
   const nodeMap = new Map(layouted.map((n) => [n.id, n]));
 
   return (
@@ -73,7 +73,7 @@ export default function KnowledgeGraphPanel({ nodes, edges }: KnowledgeGraphPane
             if (!source || !target) return null;
 
             return (
-              <g key={`edge-${i}`}>
+              <g key={`edge-${String(i)}`}>
                 <line
                   x1={source.x}
                   y1={source.y}
@@ -149,7 +149,7 @@ export default function KnowledgeGraphPanel({ nodes, edges }: KnowledgeGraphPane
           {/* Legend */}
           <g transform="translate(460, 16)">
             {Object.entries(typeColors).map(([type, color], i) => (
-              <g key={type} transform={`translate(0, ${i * 18})`}>
+              <g key={type} transform={`translate(0, ${String(i * 18)})`}>
                 <circle cx="6" cy="6" r="5" fill={color} />
                 <text x="16" y="10" fontSize="10" fill="var(--color-text-tertiary)" style={{ textTransform: 'capitalize' }}>
                   {type}

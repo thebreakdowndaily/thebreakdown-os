@@ -59,18 +59,20 @@ export function useSectionTracking(storySlug: string, sectionId: string): React.
 
     observer.observe(el);
 
+    const timer = timerRef.current;
+
     return () => {
       observer.disconnect();
       // Record final accumulated time on unmount
       if (isVisibleRef.current) {
-        const elapsed = Date.now() - timerRef.current.start;
-        timerRef.current.total += elapsed;
+        const elapsed = Date.now() - timer.start;
+        timer.total += elapsed;
         if (elapsed > 100) {
           trackEvent({
             type: 'section_view',
             storySlug,
             sectionId,
-            duration: timerRef.current.total,
+            duration: timer.total,
           });
         }
       }

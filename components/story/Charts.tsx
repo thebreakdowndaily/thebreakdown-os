@@ -15,8 +15,8 @@ function chartDefToSpec(def: ChartDef, index: number) {
   const encodedData = def.data.length > 0 ? JSON.stringify(def.data) : '';
 
   return {
-    chartId: `chart-${index}-${def.type}`,
-    type: def.type as any, // ChartDef uses subset, ChartSpec uses full 22
+    chartId: `chart-${String(index)}-${def.type}`,
+    type: def.type,
     purpose: def.title || 'Data visualization',
     question: def.description,
     xAxis: {
@@ -46,7 +46,7 @@ function chartDefToSpec(def: ChartDef, index: number) {
 }
 
 const Charts: React.FC<ChartsProps> = ({ charts }) => {
-  if (!charts || charts.length === 0) return null;
+  if (charts.length === 0) return null;
 
   return (
     <section aria-label="Charts and visualizations" style={{
@@ -71,7 +71,7 @@ const Charts: React.FC<ChartsProps> = ({ charts }) => {
       }}>
         {charts.map((chart, i) => (
           <ChartRenderer
-            key={`chart-${i}`}
+            key={`chart-${String(i)}`}
             chart={chartDefToSpec(chart, i)}
           />
         ))}

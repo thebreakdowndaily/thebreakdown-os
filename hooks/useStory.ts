@@ -15,20 +15,14 @@ export function useStory(slug: string): UseStoryResult {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!slug) {
-      setLoading(false);
-      setError('No slug provided');
-      return;
-    }
+    if (!slug) return;
 
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     fetch(`/api/story?slug=${encodeURIComponent(slug)}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch story: ${res.statusText}`);
-        return res.json();
+        return res.json() as Promise<StoryJSON>;
       })
       .then((data) => {
         if (!cancelled) {
@@ -36,9 +30,9 @@ export function useStory(slug: string): UseStoryResult {
           setLoading(false);
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
           setLoading(false);
         }
       });
@@ -47,6 +41,10 @@ export function useStory(slug: string): UseStoryResult {
       cancelled = true;
     };
   }, [slug]);
+
+  if (!slug) {
+    return { story: null, loading: false, error: 'No slug provided' };
+  }
 
   return { story, loading, error };
 }
@@ -75,8 +73,6 @@ export function useStories(params: UseStoriesParams = {}): UseStoriesResult {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     const searchParams = new URLSearchParams();
     if (category) searchParams.set('category', category);
@@ -87,18 +83,18 @@ export function useStories(params: UseStoriesParams = {}): UseStoriesResult {
     fetch(`/api/stories?${searchParams.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch stories: ${res.statusText}`);
-        return res.json();
+        return res.json() as Promise<{ stories: StoryJSON[]; total: number }>;
       })
       .then((data) => {
         if (!cancelled) {
-          setStories(data.stories || data);
-          setTotal(data.total || data.length || 0);
+          setStories(data.stories);
+          setTotal(data.total);
           setLoading(false);
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
           setLoading(false);
         }
       });

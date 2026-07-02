@@ -74,7 +74,7 @@ const TopicCollections: React.FC<TopicCollectionsProps> = ({
         {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => { setActiveTab(tab); }}
             disabled={!hasContent[tab]}
             className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${
               activeTab === tab

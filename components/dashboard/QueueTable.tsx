@@ -32,11 +32,11 @@ function timeAgo(dateStr: string): string {
   const date = new Date(dateStr);
   const diff = Math.floor((now.getTime() - date.getTime()) / 60000);
   if (diff < 1) return 'just now';
-  if (diff < 60) return `${diff}m ago`;
+  if (diff < 60) return `${String(diff)}m ago`;
   const hours = Math.floor(diff / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `${String(hours)}h ago`;
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return `${String(days)}d ago`;
 }
 
 export default function QueueTable({ items, type, title }: QueueTableProps) {

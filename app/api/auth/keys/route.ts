@@ -7,7 +7,7 @@ function getAuthKey(request: NextRequest): string | null {
   return request.headers.get('x-api-key');
 }
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const apiKey = getAuthKey(request);
   if (!apiKey) {
     return NextResponse.json({ error: 'Unauthorized', message: 'Missing API key' }, { status: 401 });
@@ -30,6 +30,11 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ keys });
 }
 
+interface CreateKeyRequest {
+  name?: string;
+  role?: 'editor' | 'reader';
+}
+
 export async function POST(request: NextRequest) {
   const apiKey = getAuthKey(request);
   if (!apiKey) {
@@ -42,9 +47,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
-    const name = body?.name || 'Unnamed Key';
-    const role = (body?.role === 'editor' || body?.role === 'reader') ? body.role : 'reader';
+    const body = (await request.json()) as CreateKeyRequest;
+    const name = body.name || 'Unnamed Key';
+    const role = (body.role === 'editor' || body.role === 'reader') ? body.role : 'reader';
 
     const newKey = createApiKey(name, role);
     return NextResponse.json({

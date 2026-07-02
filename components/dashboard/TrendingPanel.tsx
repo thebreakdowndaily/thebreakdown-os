@@ -108,7 +108,7 @@ export default function TrendingPanel({ topics }: TrendingPanelProps) {
                 <div
                   style={{
                     height: '100%',
-                    width: `${topic.volume}%`,
+                    width: `${String(topic.volume)}%`,
                     background:
                       topic.direction === 'up'
                         ? 'var(--color-emerald-500)'

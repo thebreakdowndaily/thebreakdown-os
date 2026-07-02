@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const mockStoryData: Record<string, any> = {
+const mockStoryData: Record<string, unknown> = {
   'mgnrega-reform': {
     id: 'mgnrega-reform',
     slug: 'mgnrega-reform',
@@ -77,7 +77,7 @@ const mockStoryData: Record<string, any> = {
   },
 };
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug');
 
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const story = mockStoryData[slug];
+  const story = mockStoryData[slug] as Record<string, unknown> | undefined;
 
   if (!story) {
     return NextResponse.json(

@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface HeroBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
@@ -18,7 +18,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
         </label>
         <input
           value={d.headline || ''}
-          onChange={(e) => onUpdate({ ...d, headline: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, headline: e.target.value }); }}
           placeholder="Story headline..."
           style={{
             width: '100%',
@@ -41,7 +41,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
         </label>
         <textarea
           value={d.summary || ''}
-          onChange={(e) => onUpdate({ ...d, summary: e.target.value })}
+          onChange={(e) => { onUpdate({ ...d, summary: e.target.value }); }}
           placeholder="One or two sentences summarizing the story..."
           rows={2}
           style={{
@@ -67,7 +67,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
           </label>
           <input
             value={d.author || ''}
-            onChange={(e) => onUpdate({ ...d, author: e.target.value })}
+            onChange={(e) => { onUpdate({ ...d, author: e.target.value }); }}
             placeholder="Author name"
             style={{
               width: '100%',
@@ -88,7 +88,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
           </label>
           <select
             value={d.category || ''}
-            onChange={(e) => onUpdate({ ...d, category: e.target.value })}
+            onChange={(e) => { onUpdate({ ...d, category: e.target.value }); }}
             style={{
               width: '100%',
               border: '1px solid var(--color-border-subtle)',
@@ -116,7 +116,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
           </label>
           <input
             value={d.heroImage || ''}
-            onChange={(e) => onUpdate({ ...d, heroImage: e.target.value })}
+            onChange={(e) => { onUpdate({ ...d, heroImage: e.target.value }); }}
             placeholder="/images/stories/..."
             style={{
               width: '100%',

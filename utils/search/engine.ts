@@ -434,7 +434,7 @@ export function semanticSearch(
   }
 
   // Step 5: Sort by score descending
-  let sorted = Array.from(seen.values()).sort((a, b) => {
+  const sorted = Array.from(seen.values()).sort((a, b) => {
     // Exact matches first
     if (a.matchType !== b.matchType) {
       const order = ['exact', 'concept', 'expanded', 'keyword'];

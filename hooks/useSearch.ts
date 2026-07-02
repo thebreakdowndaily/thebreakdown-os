@@ -36,17 +36,29 @@ export function useSearch(query: string, options: UseSearchOptions = {}): UseSea
       clearTimeout(timerRef.current);
     }
 
+    let syncActive = true;
+
     if (!query || query.trim().length === 0) {
-      setResults([]);
-      setLoading(false);
-      setError(null);
-      setTotal(0);
-      setTotalPages(0);
-      return;
+      queueMicrotask(() => {
+        if (syncActive) {
+          setResults([]);
+          setLoading(false);
+          setError(null);
+          setTotal(0);
+          setTotalPages(0);
+        }
+      });
+      return () => {
+        syncActive = false;
+      };
     }
 
-    setLoading(true);
-    setError(null);
+    queueMicrotask(() => {
+      if (syncActive) {
+        setLoading(true);
+        setError(null);
+      }
+    });
 
     timerRef.current = setTimeout(() => {
       cancelledRef.current = false;
@@ -60,19 +72,23 @@ export function useSearch(query: string, options: UseSearchOptions = {}): UseSea
       fetch(`/api/search?${searchParams.toString()}`)
         .then((res) => {
           if (!res.ok) throw new Error(`Search failed: ${res.statusText}`);
-          return res.json();
+          return res.json() as Promise<{
+            results?: SearchResult[];
+            total?: number;
+            totalPages?: number;
+          }>;
         })
         .then((data) => {
           if (!cancelledRef.current) {
-            setResults(data.results || []);
-            setTotal(data.total || 0);
-            setTotalPages(data.totalPages || Math.ceil((data.total || 0) / limit) || 0);
+            setResults(data.results ?? []);
+            setTotal(data.total ?? 0);
+            setTotalPages(data.totalPages ?? Math.ceil((data.total ?? 0) / limit) || 0);
             setLoading(false);
           }
         })
-        .catch((err) => {
+        .catch((err: unknown) => {
           if (!cancelledRef.current) {
-            setError(err.message || 'Search failed');
+            setError(err instanceof Error ? err.message : 'Search failed');
             setResults([]);
             setLoading(false);
           }
@@ -80,6 +96,7 @@ export function useSearch(query: string, options: UseSearchOptions = {}): UseSea
     }, DEBOUNCE_DELAY);
 
     return () => {
+      syncActive = false;
       cancelledRef.current = true;
       if (timerRef.current) {
         clearTimeout(timerRef.current);

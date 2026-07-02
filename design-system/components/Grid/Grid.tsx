@@ -20,11 +20,11 @@ const justifyMap: Record<string, string> = {
 function generateResponsiveGridStyles(columns: number | ResponsiveColumns): React.CSSProperties {
   if (typeof columns === 'number') {
     return {
-      gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+      gridTemplateColumns: `repeat(${String(columns)}, minmax(0, 1fr))`,
     };
   }
   return {
-    gridTemplateColumns: `repeat(${columns.sm ?? 1}, minmax(0, 1fr))`,
+      gridTemplateColumns: `repeat(${String(columns.sm ?? 1)}, minmax(0, 1fr))`,
   };
 }
 
@@ -32,22 +32,22 @@ function generateResponsiveMediaStyles(columns: ResponsiveColumns): string {
   const parts: string[] = [];
   if (columns.sm) {
     parts.push(
-      `@media (min-width: 640px) { .grid-cols-responsive { grid-template-columns: repeat(${columns.sm}, minmax(0, 1fr)); } }`,
+      `@media (min-width: 640px) { .grid-cols-responsive { grid-template-columns: repeat(${String(columns.sm)}, minmax(0, 1fr)); } }`,
     );
   }
   if (columns.md) {
     parts.push(
-      `@media (min-width: 768px) { .grid-cols-responsive { grid-template-columns: repeat(${columns.md}, minmax(0, 1fr)); } }`,
+      `@media (min-width: 768px) { .grid-cols-responsive { grid-template-columns: repeat(${String(columns.md)}, minmax(0, 1fr)); } }`,
     );
   }
   if (columns.lg) {
     parts.push(
-      `@media (min-width: 1024px) { .grid-cols-responsive { grid-template-columns: repeat(${columns.lg}, minmax(0, 1fr)); } }`,
+      `@media (min-width: 1024px) { .grid-cols-responsive { grid-template-columns: repeat(${String(columns.lg)}, minmax(0, 1fr)); } }`,
     );
   }
   if (columns.xl) {
     parts.push(
-      `@media (min-width: 1280px) { .grid-cols-responsive { grid-template-columns: repeat(${columns.xl}, minmax(0, 1fr)); } }`,
+      `@media (min-width: 1280px) { .grid-cols-responsive { grid-template-columns: repeat(${String(columns.xl)}, minmax(0, 1fr)); } }`,
     );
   }
   return parts.join(' ');
@@ -69,9 +69,9 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
   ) => {
     const isResponsive = typeof columns === 'object';
     const baseStyles = isResponsive
-      ? generateResponsiveGridStyles(columns as ResponsiveColumns)
-      : generateResponsiveGridStyles(columns as number);
-    const mediaStyles = isResponsive ? generateResponsiveMediaStyles(columns as ResponsiveColumns) : '';
+      ? generateResponsiveGridStyles(columns)
+      : generateResponsiveGridStyles(columns);
+    const mediaStyles = isResponsive ? generateResponsiveMediaStyles(columns) : '';
 
     return (
       <>
@@ -83,7 +83,7 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
           className={`${isResponsive ? 'grid-cols-responsive' : ''} ${className}`}
           style={{
             display: 'grid',
-            gap: `var(--spacing-${gap})`,
+            gap: `var(--spacing-${String(gap)})`,
             alignItems: align ? alignMap[align] : undefined,
             justifyContent: justify ? justifyMap[justify] : undefined,
             ...baseStyles,

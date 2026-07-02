@@ -35,7 +35,7 @@ const categoryBadge = (category: string) => {
     default:     { bg: 'var(--color-neutral-500)', text: 'var(--color-text-muted)' },
   };
 
-  const c = palette[category.toLowerCase()] || palette.default;
+  const c = palette[category.toLowerCase()];
   return (
     <span
       style={{

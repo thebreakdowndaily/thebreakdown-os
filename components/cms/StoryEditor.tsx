@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import type { CMSStory, Block, BlockType } from '@/utils/cms-data';
 import { reorderBlocks, updateBlock, removeBlock, addBlock, duplicateBlock, getBlockIcon, getBlockLabel } from '@/utils/cms-data';
 import BlockToolbar from './BlockToolbar';
@@ -23,7 +23,12 @@ interface StoryEditorProps {
   onSave: (story: CMSStory) => void;
 }
 
-const BLOCK_RENDERERS: Record<string, React.FC<{ block: Block; onUpdate: (data: Record<string, any>) => void }>> = {
+interface BlockRendererProps {
+  block: Block;
+  onUpdate: (data: Record<string, unknown>) => void;
+}
+
+const BLOCK_RENDERERS: Record<string, React.FC<BlockRendererProps>> = {
   hero: HeroBlock,
   text: TextBlock,
   timeline: TimelineBlock,
@@ -45,13 +50,13 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
   const [blocks, setBlocks] = useState<Block[]>(story.blocks);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const dragBlockRef = useRef<{ index: number } | null>(null);
   const [savedIndicator, setSavedIndicator] = useState<'saved' | 'saving' | 'unsaved'>('saved');
 
-  const markUnsaved = useCallback(() => setSavedIndicator('unsaved'), []);
+  const markUnsaved = useCallback(() => { setSavedIndicator('unsaved'); }, []);
 
-  const handleBlockUpdate = useCallback((blockId: string, data: Record<string, any>) => {
+  const handleBlockUpdate = useCallback((blockId: string, data: Record<string, unknown>) => {
     setBlocks((prev) => {
       markUnsaved();
       return updateBlock(prev, blockId, { data });
@@ -102,7 +107,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
 
   // Drag & Drop handlers
   const handleDragStart = useCallback((e: React.DragEvent, index: number) => {
-    dragBlockRef.current = { index };
+    setDragIndex(index);
     setIsDragging(true);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', String(index));
@@ -121,7 +126,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
   const handleDragEnd = useCallback(() => {
     setIsDragging(false);
     setDragOverIndex(null);
-    dragBlockRef.current = null;
+    setDragIndex(null);
     // Reset all opacities
     document.querySelectorAll('[data-block-id]').forEach((el) => {
       (el as HTMLElement).style.opacity = '1';
@@ -155,14 +160,14 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
     };
     onSave(updated);
     setStory(updated);
-    setTimeout(() => setSavedIndicator('saved'), 800);
+    setTimeout(() => { setSavedIndicator('saved'); }, 800);
   }, [story, title, slug, blocks, onSave]);
 
   // Auto-save on title/slug/blocks change
   React.useEffect(() => {
     if (savedIndicator === 'unsaved') {
-      const timer = setTimeout(() => handleSave(), 5000);
-      return () => clearTimeout(timer);
+      const timer = setTimeout(() => { handleSave(); }, 5000);
+      return () => { clearTimeout(timer); };
     }
   }, [savedIndicator, handleSave]);
 
@@ -264,7 +269,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
 
             {/* Preview toggle */}
             <button
-              onClick={() => setShowPreview(!showPreview)}
+              onClick={() => { setShowPreview(!showPreview); }}
               style={{
                 padding: '7px 14px',
                 border: '1px solid var(--color-border-subtle)',
@@ -317,8 +322,6 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
             </h1>
             {blocks.map((block) => {
               if (block.collapsed) return null;
-              const Renderer = BLOCK_RENDERERS[block.type];
-              if (!Renderer) return null;
               return (
                 <div key={block.id} style={{ marginBottom: '24px' }}>
                   {block.type === 'hero' ? null : (
@@ -365,12 +368,15 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
                       <p style={{ fontSize: '12px', color: 'var(--color-text-tertiary)' }}>Source: {block.data.source}</p>
                     </div>
                   )}
-                  {block.type === 'statistics' && block.data.stats?.map((s: any, i: number) => (
-                    <div key={i} style={{ display: 'inline-block', padding: '12px 20px', margin: '4px', background: 'var(--color-surface-secondary)', borderRadius: '8px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-amber-500)' }}>{s.value}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-tertiary)' }}>{s.label}</div>
-                    </div>
-                  ))}
+                  {block.type === 'statistics' && Array.isArray(block.data.stats) && block.data.stats.map((s, i) => {
+                    const stat = s as { value?: string; label?: string };
+                    return (
+                      <div key={i} style={{ display: 'inline-block', padding: '12px 20px', margin: '4px', background: 'var(--color-surface-secondary)', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-amber-500)' }}>{stat.value}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-text-tertiary)' }}>{stat.label}</div>
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}
@@ -380,7 +386,6 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
           <div>
             {blocks.map((block, index) => {
               const Renderer = BLOCK_RENDERERS[block.type];
-              if (!Renderer) return null;
 
               return (
                 <div
@@ -395,13 +400,13 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
                       : '1px solid var(--color-border-subtle)',
                     borderRadius: '12px',
                     transition: 'border 0.15s, opacity 0.15s',
-                    opacity: isDragging && dragBlockRef.current?.index === index ? 0.4 : 1,
+                    opacity: isDragging && dragIndex === index ? 0.4 : 1,
                   }}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, index)}
-                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDragStart={(e) => { handleDragStart(e, index); }}
+                  onDragOver={(e) => { handleDragOver(e, index); }}
                   onDragEnd={handleDragEnd}
-                  onDrop={(e) => handleDrop(e, index)}
+                  onDrop={(e) => { handleDrop(e, index); }}
                 >
                   {/* Block header */}
                   <div
@@ -425,15 +430,15 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
                       block={block}
                       index={index}
                       total={blocks.length}
-                      onMoveUp={() => handleMoveUp(index)}
-                      onMoveDown={() => handleMoveDown(index)}
-                      onDuplicate={() => handleDuplicate(block.id)}
-                      onDelete={() => handleDelete(block.id)}
-                      onToggleCollapse={() => handleToggleCollapse(block.id)}
+                      onMoveUp={() => { handleMoveUp(index); }}
+                      onMoveDown={() => { handleMoveDown(index); }}
+                      onDuplicate={() => { handleDuplicate(block.id); }}
+                      onDelete={() => { handleDelete(block.id); }}
+                      onToggleCollapse={() => { handleToggleCollapse(block.id); }}
                       dragHandlers={{
                         draggable: true,
-                        onDragStart: (e) => handleDragStart(e, index),
-                        onDragOver: (e) => handleDragOver(e, index),
+                        onDragStart: (e) => { handleDragStart(e, index); },
+                        onDragOver: (e) => { handleDragOver(e, index); },
                         onDragEnd: handleDragEnd,
                       }}
                     />
@@ -441,7 +446,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
 
                   {/* Block body */}
                   {!block.collapsed && (
-                    <Renderer block={block} onUpdate={(data) => handleBlockUpdate(block.id, data)} />
+                    <Renderer block={block} onUpdate={(data) => { handleBlockUpdate(block.id, data); }} />
                   )}
 
                   {block.collapsed && (

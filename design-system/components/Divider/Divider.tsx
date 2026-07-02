@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DividerProps } from './Divider.types';
 
 export const Divider = forwardRef<HTMLHRElement, DividerProps>(
@@ -17,7 +17,7 @@ export const Divider = forwardRef<HTMLHRElement, DividerProps>(
     if (orientation === 'vertical') {
       return (
         <div
-          ref={ref as React.Ref<HTMLDivElement>}
+          ref={ref}
           className={className}
           role="separator"
           aria-orientation="vertical"
@@ -25,12 +25,12 @@ export const Divider = forwardRef<HTMLHRElement, DividerProps>(
             width: 'var(--border-thin)',
             height: '100%',
             backgroundColor: color || 'var(--color-border-default)',
-            marginLeft: `var(--spacing-${spacing})`,
-            marginRight: `var(--spacing-${spacing})`,
+            marginLeft: `var(--spacing-${String(spacing)})`,
+            marginRight: `var(--spacing-${String(spacing)})`,
             flexShrink: 0,
             ...style,
           }}
-          {...(props as React.HTMLAttributes<HTMLDivElement>)}
+          {...(props)}
         />
       );
     }
@@ -45,11 +45,11 @@ export const Divider = forwardRef<HTMLHRElement, DividerProps>(
             display: 'flex',
             alignItems: 'center',
             gap: 'var(--spacing-3)',
-            marginTop: `var(--spacing-${spacing})`,
-            marginBottom: `var(--spacing-${spacing})`,
+            marginTop: `var(--spacing-${String(spacing)})`,
+            marginBottom: `var(--spacing-${String(spacing)})`,
             ...style,
           }}
-          {...(props as React.HTMLAttributes<HTMLDivElement>)}
+          {...(props)}
         >
           <span
             style={{
@@ -91,11 +91,11 @@ export const Divider = forwardRef<HTMLHRElement, DividerProps>(
           backgroundColor: color || 'var(--color-border-default)',
           border: 'none',
           margin: 0,
-          marginTop: `var(--spacing-${spacing})`,
-          marginBottom: `var(--spacing-${spacing})`,
+          marginTop: `var(--spacing-${String(spacing)})`,
+          marginBottom: `var(--spacing-${String(spacing)})`,
           ...style,
         }}
-        {...(props as React.HTMLAttributes<HTMLHRElement>)}
+        {...(props)}
       />
     );
   },

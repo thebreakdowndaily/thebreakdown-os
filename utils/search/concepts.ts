@@ -767,7 +767,9 @@ export function expandConcept(conceptId: string, depth: number = 1): Set<string>
   const queue: Array<{ id: string; d: number }> = [{ id: conceptId, d: 0 }];
 
   while (queue.length > 0) {
-    const { id, d } = queue.shift()!;
+    const entry = queue.shift();
+    if (!entry) continue;
+    const { id, d } = entry;
     if (visited.has(id) || d > depth) continue;
     visited.add(id);
 
@@ -800,7 +802,9 @@ export function getConceptPath(fromId: string, toId: string, maxDepth: number = 
   const visited = new Set<string>();
 
   while (queue.length > 0) {
-    const { id, path } = queue.shift()!;
+    const entry = queue.shift();
+    if (!entry) continue;
+    const { id, path } = entry;
     if (path.length > maxDepth) continue;
     if (visited.has(id)) continue;
     visited.add(id);

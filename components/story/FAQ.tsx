@@ -9,7 +9,7 @@ interface FAQProps {
 const FAQ: React.FC<FAQProps> = ({ questions }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggle = (i: number) => setOpenIndex((prev) => (prev === i ? null : i));
+  const toggle = (i: number) => { setOpenIndex((prev) => (prev === i ? null : i)); };
 
   return (
     <section aria-label="Frequently asked questions" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -19,11 +19,11 @@ const FAQ: React.FC<FAQProps> = ({ questions }) => {
       <div className="space-y-3">
         {questions.map((item, i) => {
           const isOpen = openIndex === i;
-          const id = `faq-answer-${i}`;
+          const id = `faq-answer-${String(i)}`;
           return (
             <div key={i} className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
               <button
-                onClick={() => toggle(i)}
+                onClick={() => { toggle(i); }}
                 className="w-full flex items-center justify-between px-5 py-4 text-left text-gray-100 font-medium hover:bg-gray-700/50 transition-colors"
                 aria-expanded={isOpen}
                 aria-controls={id}

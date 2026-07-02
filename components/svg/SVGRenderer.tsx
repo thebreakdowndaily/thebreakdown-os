@@ -11,21 +11,6 @@ interface SVGNode {
   value?: number;
 }
 
-interface SVGEdge {
-  from: string;
-  to: string;
-  label?: string;
-  value?: number;
-}
-
-interface SVGStructure {
-  layout: 'top-to-bottom' | 'left-to-right' | 'radial' | 'nested';
-  nodes: SVGNode[];
-  edges?: SVGEdge[];
-  levels?: number;
-  orientation?: 'vertical' | 'horizontal';
-}
-
 interface SVGRendererProps {
   svg: SVGSpec;
 }
@@ -53,7 +38,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
 
     const nodeMap = new Map(structure.nodes.map((n) => [n.id, n]));
     const xOffset = 400; // center offset
-    let yPos = 40;
+    const yPos = 40;
 
     const renderNode = (nodeId: string, x: number, y: number): React.ReactNode[] => {
       const node = nodeMap.get(nodeId);
@@ -116,7 +101,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
 
     return (
       <svg
-        viewBox={`0 0 800 ${(structure.levels || 3) * (nodeH + gapY) + 60}`}
+        viewBox={`0 0 800 ${String((structure.levels || 3) * (nodeH + gapY) + 60)}`}
         style={{ width: '100%', height: 'auto', maxHeight: '500px' }}
         role="img"
         aria-label={altText}
@@ -139,7 +124,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
 
     return (
       <svg
-        viewBox={`0 0 ${Math.max(800, totalW + 100)} 250`}
+        viewBox={`0 0 ${String(Math.max(800, totalW + 100))} 250`}
         style={{ width: '100%', height: 'auto', maxHeight: '300px' }}
         role="img"
         aria-label={altText}
@@ -179,7 +164,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
                     strokeWidth={1.5}
                   />
                   <polygon
-                    points={`${x + stepW + gapX - 6},${y - 4} ${x + stepW + gapX - 6},${y + 4} ${x + stepW + gapX},${y}`}
+                    points={`${String(x + stepW + gapX - 6)},${String(y - 4)} ${String(x + stepW + gapX - 6)},${String(y + 4)} ${String(x + stepW + gapX)},${String(y)}`}
                     fill="var(--color-border-hover)"
                   />
                 </>
@@ -215,7 +200,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
         elements.push(
           <g key={node.id}>
             <polygon
-              points={`${x},${y - 20} ${x + 20},${y} ${x},${y + 20} ${x - 20},${y}`}
+              points={`${String(x)},${String(y - 20)} ${String(x + 20)},${String(y)} ${String(x)},${String(y + 20)} ${String(x - 20)},${String(y)}`}
               fill="var(--color-bg-secondary)"
               stroke="var(--color-border-default)"
               strokeWidth={1}
@@ -345,13 +330,17 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
     const colW = svgW / (maxLevel + 1);
     const levelNodes = new Map<number, typeof nodes>();
     nodes.forEach((n) => {
-      const l = levelMap.get(n.id) || 0;
-      if (!levelNodes.has(l)) levelNodes.set(l, []);
-      levelNodes.get(l)!.push(n);
+      const l = levelMap.get(n.id) ?? 0;
+      const existing = levelNodes.get(l);
+      if (existing) {
+        existing.push(n);
+      } else {
+        levelNodes.set(l, [n]);
+      }
     });
 
     const yPositions = new Map<string, number>();
-    levelNodes.forEach((levelN, l) => {
+    levelNodes.forEach((levelN) => {
       const spacing = svgH / (levelN.length + 1);
       levelN.forEach((n, i) => {
         yPositions.set(n.id, spacing * (i + 1));
@@ -359,7 +348,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
     });
 
     return (
-      <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: '100%', height: 'auto', maxHeight: '400px' }} role="img" aria-label={altText}>
+      <svg viewBox={`0 0 ${String(svgW)} ${String(svgH)}`} style={{ width: '100%', height: 'auto', maxHeight: '400px' }} role="img" aria-label={altText}>
         {/* Edges */}
         {edges.map((edge, i) => {
           const x1 = (levelMap.get(edge.from) || 0) * colW + colW * 0.6;
@@ -369,7 +358,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
           return (
             <path
               key={i}
-              d={`M${x1},${y1} C${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`}
+              d={`M${String(x1)},${String(y1)} C${String((x1 + x2) / 2)},${String(y1)} ${String((x1 + x2) / 2)},${String(y2)} ${String(x2)},${String(y2)}`}
               fill="none"
               stroke="var(--color-brand-400)"
               strokeWidth={Math.max(2, (edge.value || 10) / 5)}
@@ -402,7 +391,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
 
     if (nodes.length === 0) {
       return (
-        <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: '100%', height: 'auto', maxHeight: '450px' }} role="img" aria-label={altText}>
+        <svg viewBox={`0 0 ${String(svgW)} ${String(svgH)}`} style={{ width: '100%', height: 'auto', maxHeight: '450px' }} role="img" aria-label={altText}>
           <text x={svgW / 2} y={svgH / 2} textAnchor="middle" fill="var(--color-text-muted)" fontSize="14px" fontFamily="var(--font-sans)">Treemap — No data</text>
         </svg>
       );
@@ -418,7 +407,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
     const colors = ['var(--color-brand-400)', 'var(--color-blue-400)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-error)', 'var(--color-info)'];
 
     return (
-      <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: '100%', height: 'auto', maxHeight: '450px' }} role="img" aria-label={altText}>
+      <svg viewBox={`0 0 ${String(svgW)} ${String(svgH)}`} style={{ width: '100%', height: 'auto', maxHeight: '450px' }} role="img" aria-label={altText}>
         {nodes.map((node, i) => {
           const n = node as SVGNode;
           const col = i % cols;
@@ -455,7 +444,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
     const spacing = svgW / (nodes.length + 1);
 
     return (
-      <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: '100%', height: 'auto', maxHeight: '250px' }} role="img" aria-label={altText}>
+      <svg viewBox={`0 0 ${String(svgW)} ${String(svgH)}`} style={{ width: '100%', height: 'auto', maxHeight: '250px' }} role="img" aria-label={altText}>
         {/* Horizontal line */}
         <line x1={spacing * 0.5} y1={svgH / 2} x2={svgW - spacing * 0.5} y2={svgH / 2} stroke="var(--color-border-default)" strokeWidth={2} />
         {/* Nodes */}
@@ -494,7 +483,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
     const startX = colW;
 
     return (
-      <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: '100%', height: 'auto', maxHeight: '500px' }} role="img" aria-label={altText}>
+      <svg viewBox={`0 0 ${String(svgW)} ${String(svgH)}`} style={{ width: '100%', height: 'auto', maxHeight: '500px' }} role="img" aria-label={altText}>
         {/* Header row */}
         {edges.map((edge, i) => (
           <text key={i} x={startX + i * colW + colW / 2} y={25} textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11px" fontWeight="600" fontFamily="var(--font-sans)">{edge.label || edge.from}</text>
@@ -512,7 +501,7 @@ const SVGRenderer: React.FC<SVGRendererProps> = ({ svg }) => {
               const cy = 60 + row * rowH;
               const hasValue = n.value !== undefined;
               return (
-                <g key={`${n.id}-${col}`}>
+                <g key={`${n.id}-${String(col)}`}>
                   <circle cx={cx} cy={cy} r={hasValue ? 12 : 6} fill={hasValue ? 'var(--color-brand-400)' : 'var(--color-bg-tertiary)'} opacity={hasValue ? 0.8 : 0.4} />
                   {hasValue && (
                     <text x={cx} y={cy + 4} textAnchor="middle" fill="var(--color-text-inverse)" fontSize="9px" fontWeight="600" fontFamily="var(--font-sans)">{n.value}</text>

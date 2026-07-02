@@ -21,7 +21,7 @@ interface SearchLayoutProps {
   query: string;
 }
 
-const SearchLayout: React.FC<SearchLayoutProps> = ({ children, seo, query }) => (
+const SearchLayout: React.FC<SearchLayoutProps> = ({ children, query }) => (
   <main className="flex-1 w-full" role="main">
     <Container className="py-6">
       <div className="max-w-2xl mx-auto mb-8">

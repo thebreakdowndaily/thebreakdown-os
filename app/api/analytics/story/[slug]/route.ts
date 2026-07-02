@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { aggregateStoryAnalytics, generateImprovementReport } from '@/utils/analytics';
+import type { AggregateStoryAnalytics } from '@/utils/analytics';
+import { generateImprovementReport } from '@/utils/analytics';
 
-// ── GET /api/analytics/story/[slug] — Per-story analytics with improvement report ──
+interface AnalyticsResponse {
+  analytics: AggregateStoryAnalytics | null;
+  totalEvents: number;
+}
 
 export async function GET(
   _request: NextRequest,
@@ -10,15 +14,14 @@ export async function GET(
   const { slug } = await context.params;
 
   try {
-    // Fetch raw events from the main analytics store
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const res = await fetch(`${baseUrl}/api/analytics?story=${slug}&aggregate=true`);
-    
+
     if (!res.ok) {
       return NextResponse.json({ error: 'Analytics data not available' }, { status: 404 });
     }
 
-    const data = await res.json();
+    const data = (await res.json()) as AnalyticsResponse;
 
     if (!data.analytics) {
       return NextResponse.json({
@@ -29,7 +32,6 @@ export async function GET(
       });
     }
 
-    // Generate improvement report
     const improvementReport = generateImprovementReport(data.analytics);
 
     return NextResponse.json({

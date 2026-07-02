@@ -4,7 +4,7 @@ import type { Block } from '@/utils/cms-data';
 
 interface EvidenceBlockProps {
   block: Block;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
@@ -38,8 +38,8 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
           Claim
         </label>
         <textarea
-          value={d.claim || ''}
-          onChange={(e) => onUpdate({ ...d, claim: e.target.value })}
+           value={(d.claim as string) || ''}
+          onChange={(e) => { onUpdate({ ...d, claim: e.target.value }); }}
           placeholder="What claim does this evidence support?"
           rows={2}
           style={{
@@ -62,8 +62,8 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
           Data / Evidence
         </label>
         <textarea
-          value={d.data || ''}
-          onChange={(e) => onUpdate({ ...d, data: e.target.value })}
+          value={(d.data as string) || ''}
+          onChange={(e) => { onUpdate({ ...d, data: e.target.value }); }}
           placeholder="The actual data or evidence text..."
           rows={2}
           style={{
@@ -87,8 +87,8 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
             Source Name
           </label>
           <input
-            value={d.source || ''}
-            onChange={(e) => onUpdate({ ...d, source: e.target.value })}
+            value={(d.source as string) || ''}
+            onChange={(e) => { onUpdate({ ...d, source: e.target.value }); }}
             placeholder="Source name"
             style={{
               width: '100%',
@@ -108,8 +108,8 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
             Trust Tier
           </label>
           <select
-            value={d.tier ?? 1}
-            onChange={(e) => onUpdate({ ...d, tier: parseInt(e.target.value) })}
+            value={(d.tier !== undefined ? d.tier : 1)}
+            onChange={(e) => { onUpdate({ ...d, tier: parseInt(e.target.value) }); }}
             style={{
               width: '100%',
               border: '1px solid var(--color-border-subtle)',

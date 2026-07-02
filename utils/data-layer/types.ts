@@ -70,7 +70,7 @@ export interface APISource {
 export interface APIChart {
   type: string;
   title: string;
-  data: Record<string, any>[];
+  data: Record<string, unknown>[];
   xKey: string;
   yKey: string;
 }
@@ -142,9 +142,9 @@ export interface APITimeline {
   dateRange: { start: string; end: string };
 }
 
-export interface APICountry extends APIEntity {}
+export type APICountry = APIEntity;
 
-export interface APIOrganization extends APIEntity {}
+export type APIOrganization = APIEntity;
 
 export interface APIFix {
   id: string;
@@ -248,6 +248,8 @@ export interface APIGraphLink {
   target: string;
   type: string;
   weight?: number;
+  sourceType?: string;
+  targetType?: string;
 }
 
 export interface APIStatistics {

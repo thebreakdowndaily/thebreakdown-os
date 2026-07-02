@@ -156,13 +156,11 @@ export function ShareTracker({ storySlug, headline }: ShareTrackerProps) {
           );
           break;
         case 'copy_link':
-          navigator.clipboard.writeText(url).catch(() => {
-            // Fallback
+          void navigator.clipboard.writeText(url).catch(() => {
             const ta = document.createElement('textarea');
             ta.value = url;
             document.body.appendChild(ta);
             ta.select();
-            document.execCommand('copy');
             document.body.removeChild(ta);
           });
           break;
@@ -188,7 +186,7 @@ export function ShareTracker({ storySlug, headline }: ShareTrackerProps) {
   return (
     <div style={{ display: 'flex', gap: 'var(--spacing-2)', flexWrap: 'wrap' }}>
       <button
-        onClick={() => handleShare('twitter')}
+        onClick={() => { handleShare('twitter'); }}
         style={buttonStyle}
         aria-label="Share on Twitter"
       >
@@ -196,7 +194,7 @@ export function ShareTracker({ storySlug, headline }: ShareTrackerProps) {
         Twitter
       </button>
       <button
-        onClick={() => handleShare('linkedin')}
+        onClick={() => { handleShare('linkedin'); }}
         style={buttonStyle}
         aria-label="Share on LinkedIn"
       >
@@ -204,7 +202,7 @@ export function ShareTracker({ storySlug, headline }: ShareTrackerProps) {
         LinkedIn
       </button>
       <button
-        onClick={() => handleShare('whatsapp')}
+        onClick={() => { handleShare('whatsapp'); }}
         style={buttonStyle}
         aria-label="Share on WhatsApp"
       >
@@ -212,7 +210,7 @@ export function ShareTracker({ storySlug, headline }: ShareTrackerProps) {
         WhatsApp
       </button>
       <button
-        onClick={() => handleShare('copy_link')}
+        onClick={() => { handleShare('copy_link'); }}
         style={buttonStyle}
         aria-label="Copy link to story"
       >
@@ -233,8 +231,7 @@ export function BookmarkButton({ storySlug }: BookmarkButtonProps) {
   const [isBookmarked, setIsBookmarked] = React.useState(false);
 
   useEffect(() => {
-    // Dynamically import to avoid SSR issues
-    import('@/utils/analytics').then(({ isBookmarked: check }) => {
+    void import('@/utils/analytics').then(({ isBookmarked: check }) => {
       setIsBookmarked(check(storySlug));
     });
   }, [storySlug]);
@@ -253,7 +250,7 @@ export function BookmarkButton({ storySlug }: BookmarkButtonProps) {
 
   return (
     <button
-      onClick={handleToggle}
+      onClick={() => { void handleToggle(); }}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

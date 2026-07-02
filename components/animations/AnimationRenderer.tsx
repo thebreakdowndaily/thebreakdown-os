@@ -49,17 +49,20 @@ const AnimationRenderer: React.FC<AnimationRendererProps> = ({ animation }) => {
   const [currentStep, setCurrentStep] = useState(-1); // -1 = before start
   const [isPlaying, setIsPlaying] = useState(animation.controls?.autoplay ?? false);
   const [speed, setSpeed] = useState(1);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+  );
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Detect prefers-reduced-motion
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReducedMotion(mediaQuery.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    const handler = (e: MediaQueryListEvent) => { setReducedMotion(e.matches); };
     mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
+    return () => { mediaQuery.removeEventListener('change', handler); };
   }, []);
 
   // Play logic
@@ -81,21 +84,17 @@ const AnimationRenderer: React.FC<AnimationRendererProps> = ({ animation }) => {
     setCurrentStep(-1);
   }, [pause]);
 
-  const seekTo = useCallback((stepIndex: number) => {
-    pause();
-    setCurrentStep(stepIndex);
-  }, [pause]);
-
   // Step timer
   useEffect(() => {
     if (!isPlaying || reducedMotion) return;
     if (currentStep >= animation.steps.length) {
       if (animation.controls?.loop) {
-        setCurrentStep(0);
+        const id = setTimeout(() => { setCurrentStep(0); }, 0);
+        return () => { clearTimeout(id); };
       } else {
-        setIsPlaying(false);
+        const id = setTimeout(() => { setIsPlaying(false); }, 0);
+        return () => { clearTimeout(id); };
       }
-      return;
     }
     if (currentStep < 0) return;
 
@@ -181,7 +180,7 @@ const AnimationRenderer: React.FC<AnimationRendererProps> = ({ animation }) => {
               <button
                 key={s}
                 type="button"
-                onClick={() => setSpeed(s)}
+                onClick={() => { setSpeed(s); }}
                 style={{
                   padding: '2px 8px',
                   borderRadius: 'var(--radius-sm)',
@@ -191,7 +190,7 @@ const AnimationRenderer: React.FC<AnimationRendererProps> = ({ animation }) => {
                   fontSize: 'var(--text-xs)',
                   cursor: 'pointer',
                 }}
-                aria-label={`Speed ${s}x`}
+                aria-label={`Speed ${String(s)}x`}
               >
                 {s}x
               </button>
@@ -268,7 +267,7 @@ const AnimationRenderer: React.FC<AnimationRendererProps> = ({ animation }) => {
           <div
             style={{
               height: '100%',
-              width: `${Math.max(0, Math.min(100, ((currentStep + 1) / animation.steps.length) * 100))}%`,
+              width: `${String(Math.max(0, Math.min(100, ((currentStep + 1) / animation.steps.length) * 100)))}%`,
               backgroundColor: 'var(--color-brand-400)',
               transition: 'width 0.3s ease-out',
             }}

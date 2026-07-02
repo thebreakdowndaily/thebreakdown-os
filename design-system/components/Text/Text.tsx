@@ -43,7 +43,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
 
     return (
       <Tag
-        ref={ref as any}
+        ref={ref as React.Ref<HTMLElement>}
         className={className}
         style={{
           fontFamily: 'var(--font-sans)',

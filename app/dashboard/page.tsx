@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
 import StatsCards from '@/components/dashboard/StatsCards';
 import QueueTable from '@/components/dashboard/QueueTable';
 import MonitoringFeed from '@/components/dashboard/MonitoringFeed';
@@ -93,7 +92,7 @@ export default function DashboardPage() {
             </div>
           )}
           <button
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            onClick={() => { setSidebarCollapsed(!sidebarCollapsed); }}
             style={{
               background: 'none',
               border: 'none',
@@ -116,7 +115,7 @@ export default function DashboardPage() {
           {sidebarItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => { setActiveTab(item.id); }}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -223,7 +222,7 @@ export default function DashboardPage() {
               {formatDate()}
             </p>
           </div>
-          <SearchBar onSearch={(q) => console.log('Search:', q)} />
+          <SearchBar onSearch={(q) => { console.log('Search:', q); }} />
         </div>
 
         {/* ─── Overview Tab ────────────────────────── */}

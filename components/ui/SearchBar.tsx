@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search s
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    (e: React.SyntheticEvent) => {
       e.preventDefault();
       if (onSearch && query.trim()) {
         onSearch(query.trim());
@@ -49,7 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search s
           ref={inputRef}
           type="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => { setQuery(e.target.value); }}
           placeholder={placeholder}
           className="w-full bg-gray-800 border border-gray-700 text-gray-100 text-sm rounded-lg pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400 placeholder-gray-500 transition-colors"
           aria-label={placeholder}

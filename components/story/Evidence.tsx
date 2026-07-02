@@ -29,7 +29,7 @@ const Evidence: React.FC<EvidenceProps> = ({ claims, sources, verificationScore 
       <div className="mt-3 w-full max-w-xs mx-auto h-2 bg-gray-700 rounded-full overflow-hidden">
         <div
           className="h-full bg-amber-400 rounded-full transition-all"
-          style={{ width: `${verificationScore}%` }}
+          style={{ width: `${String(verificationScore)}%` }}
           role="progressbar"
           aria-valuenow={verificationScore}
           aria-valuemin={0}
@@ -40,7 +40,7 @@ const Evidence: React.FC<EvidenceProps> = ({ claims, sources, verificationScore 
 
     <div className="space-y-4 mb-8">
       {claims.map((item, i) => {
-        const vc = verificationConfig[item.verification] || verificationConfig.unverifiable;
+        const vc = verificationConfig[item.verification];
         return (
           <div key={i} className="bg-gray-800 border border-gray-700 rounded-xl p-5">
             <div className="flex items-start justify-between gap-4 mb-3">

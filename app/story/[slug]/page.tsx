@@ -20,7 +20,7 @@ import AuthorBox from '@/components/story/AuthorBox';
 import Newsletter from '@/components/story/Newsletter';
 import Visuals from '@/components/story/Visuals';
 
-const sectionComponents: Record<string, React.ComponentType<any>> = {
+const sectionComponents: Record<string, React.ElementType | undefined> = {
   hero: Hero,
   'executive-summary': ExecutiveSummary,
   'quick-facts': QuickFacts,
@@ -63,8 +63,8 @@ async function getStory(slug: string): Promise<StoryJSON | null> {
       next: { revalidate: 60 }, // ISR: revalidate every 60 seconds
     });
     if (res.ok) {
-      const data = await res.json();
-      return data as StoryJSON;
+      const data = (await res.json()) as StoryJSON;
+      return data;
     }
   } catch {
     // API not available, fall through to mocks
@@ -211,7 +211,7 @@ const mockStories: StoryJSON[] = [
 const storyMap = new Map<string, StoryJSON>();
 mockStories.forEach((s) => storyMap.set(s.slug, s));
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return mockStories.map((story) => ({ slug: story.slug }));
 }
 

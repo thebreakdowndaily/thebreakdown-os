@@ -15,20 +15,14 @@ export function useEntity(slug: string): UseEntityResult {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!slug) {
-      setLoading(false);
-      setError('No slug provided');
-      return;
-    }
+    if (!slug) return;
 
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     fetch(`/api/entity?slug=${encodeURIComponent(slug)}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch entity: ${res.statusText}`);
-        return res.json();
+        return res.json() as Promise<EntityJSON>;
       })
       .then((data) => {
         if (!cancelled) {
@@ -36,9 +30,9 @@ export function useEntity(slug: string): UseEntityResult {
           setLoading(false);
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
           setLoading(false);
         }
       });
@@ -47,6 +41,10 @@ export function useEntity(slug: string): UseEntityResult {
       cancelled = true;
     };
   }, [slug]);
+
+  if (!slug) {
+    return { entity: null, loading: false, error: 'No slug provided' };
+  }
 
   return { entity, loading, error };
 }
@@ -61,22 +59,18 @@ export function useEntityTimeline(entitySlug: string): UseEntityTimelineResult {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!entitySlug) {
-      setLoading(false);
-      return;
-    }
+    if (!entitySlug) return;
 
     let cancelled = false;
-    setLoading(true);
 
     fetch(`/api/entity/timeline?slug=${encodeURIComponent(entitySlug)}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch timeline');
-        return res.json();
+        return res.json() as Promise<{ events?: TimelineEvent[] }>;
       })
       .then((data) => {
         if (!cancelled) {
-          setEvents(data.events || data || []);
+          setEvents(data.events ?? []);
           setLoading(false);
         }
       })
@@ -91,6 +85,10 @@ export function useEntityTimeline(entitySlug: string): UseEntityTimelineResult {
       cancelled = true;
     };
   }, [entitySlug]);
+
+  if (!entitySlug) {
+    return { events: [], loading: false };
+  }
 
   return { events, loading };
 }

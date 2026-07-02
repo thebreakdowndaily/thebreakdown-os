@@ -33,7 +33,7 @@ class ApiKeyManager {
     for (const entry of raw.split(',')) {
       const parts = entry.trim().split(':');
       if (parts.length >= 2) {
-        this.addKeyInternal(parts[0], parts[1], (parts[2] as ApiKey['role']) || 'reader');
+        this.addKeyInternal(parts[0], parts[1], (parts[2] || 'reader') as ApiKey['role']);
       }
     }
   }

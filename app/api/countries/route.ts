@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCountries } from '@/utils/data-layer/store';
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
+  const pageRaw = searchParams.get('page');
+  const pageSizeRaw = searchParams.get('pageSize');
+  const orderRaw = searchParams.get('order');
+
   const params = {
-    page: searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : undefined,
-    pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!, 10) : undefined,
+    page: pageRaw ? parseInt(pageRaw, 10) : undefined,
+    pageSize: pageSizeRaw ? parseInt(pageSizeRaw, 10) : undefined,
     sort: searchParams.get('sort') || undefined,
-    order: (searchParams.get('order') as 'asc' | 'desc') || undefined,
+    order: orderRaw === 'asc' || orderRaw === 'desc' ? orderRaw as 'asc' | 'desc' : undefined,
     search: searchParams.get('search') || undefined,
   };
 

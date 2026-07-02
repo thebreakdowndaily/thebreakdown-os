@@ -19,7 +19,7 @@ export const BLOCK_META: Record<BlockType, {
   label: string;
   icon: string;
   description: string;
-  defaultData: Record<string, any>;
+  defaultData: Record<string, unknown>;
 }> = {
   hero: {
     label: 'Hero',
@@ -98,7 +98,7 @@ export const BLOCK_META: Record<BlockType, {
 export interface Block {
   id: string;
   type: BlockType;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   collapsed: boolean;
 }
 
@@ -120,13 +120,13 @@ export interface CMSStory {
 
 let blockCounter = 0;
 function bid(): string {
-  return `blk-${++blockCounter}`;
+  return `blk-${String(++blockCounter)}`;
 }
 
 export function createNewStory(): CMSStory {
   blockCounter = 0;
   return {
-    id: `story-new-${Date.now()}`,
+    id: `story-new-${String(Date.now())}`,
     title: 'Untitled Story',
     slug: 'untitled-story',
     status: 'draft',
@@ -406,11 +406,11 @@ export const mockCMSStories: CMSStory[] = [
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
 export function getBlockIcon(type: BlockType): string {
-  return BLOCK_META[type]?.icon || '📄';
+  return BLOCK_META[type].icon || '📄';
 }
 
 export function getBlockLabel(type: BlockType): string {
-  return BLOCK_META[type]?.label || type;
+  return BLOCK_META[type].label || type;
 }
 
 export function reorderBlocks(blocks: Block[], fromIndex: number, toIndex: number): Block[] {
@@ -430,7 +430,7 @@ export function removeBlock(blocks: Block[], blockId: string): Block[] {
 
 export function addBlock(blocks: Block[], type: BlockType, afterId?: string): Block[] {
   const newBlock: Block = {
-    id: `blk-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    id: `blk-${String(Date.now())}-${Math.random().toString(36).slice(2, 6)}`,
     type,
     data: { ...BLOCK_META[type].defaultData },
     collapsed: false,
@@ -448,8 +448,8 @@ export function duplicateBlock(blocks: Block[], blockId: string): Block[] {
   const block = blocks.find((b) => b.id === blockId);
   if (!block) return blocks;
   const newBlock: Block = {
-    ...JSON.parse(JSON.stringify(block)),
-    id: `blk-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    ...(JSON.parse(JSON.stringify(block)) as Block),
+    id: `blk-${String(Date.now())}-${Math.random().toString(36).slice(2, 6)}`,
   };
   const idx = blocks.findIndex((b) => b.id === blockId);
   const result = [...blocks];

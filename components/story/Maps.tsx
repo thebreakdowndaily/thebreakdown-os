@@ -13,7 +13,7 @@ interface MapsProps {
  */
 function geoDataToSpec(data: GeoData): MapSpec {
   // Encode region data as JSON in data.source for MapRenderer to parse
-  const encodedRegions = JSON.stringify(data.regions || []);
+  const encodedRegions = JSON.stringify(data.regions);
 
   // Map GeoData types to MapSpec types (StoryJSON format → MapRenderer format)
   const typeMap: Record<string, MapSpec['type']> = {
@@ -21,7 +21,7 @@ function geoDataToSpec(data: GeoData): MapSpec {
     'world-map': 'world-choropleth',
     'state-map': 'india-state',
   };
-  const mapType = typeMap[data.type] || (data.type as MapSpec['type']);
+  const mapType = typeMap[data.type];
 
   return {
     mapId: `map-${data.type}`,
@@ -36,15 +36,15 @@ function geoDataToSpec(data: GeoData): MapSpec {
       valueField: 'value',
       joinKey: 'id',
     },
-    caption: `${data.regions.length} regions shown`,
-    altText: `Map showing ${data.regions.length} geographic regions`,
+    caption: `${String(data.regions.length)} regions shown`,
+    altText: `Map showing ${String(data.regions.length)} geographic regions`,
     responsive: true,
     lazyLoad: true,
   };
 }
 
 const Maps: React.FC<MapsProps> = ({ geoData }) => {
-  if (!geoData || !geoData.regions || geoData.regions.length === 0) return null;
+  if (geoData.regions.length === 0) return null;
 
   return (
     <section aria-label="Geographic data" style={{

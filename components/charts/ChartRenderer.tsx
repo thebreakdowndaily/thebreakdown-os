@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import type { ChartSpec, ChartType } from '@/utils/types';
+import React, { useRef, useEffect, useState } from 'react';
+import type { ChartSpec } from '@/utils/types';
 import * as d3 from 'd3';
 
 /**
@@ -52,81 +52,12 @@ interface D3Theme {
 
 type ChartRenderFunction = (
   svg: SVGSVGElement,
-  data: Record<string, any>[],
+  data: Record<string, unknown>[],
   width: number,
   height: number,
   theme: D3Theme,
   spec: ChartSpec
 ) => void;
-
-/* ─── Shared D3 Utilities (compat imports for D3 v7) ────────────────── */
-
-function getD3() {
-  // Dynamic import wrapper — D3 is large, loaded on demand
-  try {
-    /* D3 modules are accessed via the global `d3` object.
-       We use require-style access within the render functions.
-       This module provides helpers that use D3 under the hood. */
-    return null; // D3 is accessed directly in render functions
-  } catch {
-    return null;
-  }
-}
-
-// Store resolved D3 modules once loaded
-let d3Modules: any = null;
-
-async function loadD3() {
-  if (d3Modules) return d3Modules;
-
-  const [
-    d3Scale,
-    d3Array,
-    d3Axis,
-    d3Shape,
-    d3Selection,
-    d3ScaleChromatic,
-    d3Hierarchy,
-    d3Sankey,
-    d3Force,
-    d3Chord,
-    d3Geo,
-    d3Contour,
-    d3TimeFormat,
-  ] = await Promise.all([
-    import('d3-scale'),
-    import('d3-array'),
-    import('d3-axis'),
-    import('d3-shape'),
-    import('d3-selection'),
-    import('d3-scale-chromatic'),
-    import('d3-hierarchy'),
-    import('d3-sankey' as any),
-    import('d3-force'),
-    import('d3-chord'),
-    import('d3-geo'),
-    import('d3-contour'),
-    import('d3-time-format'),
-  ]);
-
-  d3Modules = {
-    ...d3Scale,
-    ...d3Array,
-    ...d3Axis,
-    ...d3Shape,
-    ...d3Selection,
-    ...d3ScaleChromatic,
-    ...d3Hierarchy,
-    ...d3Sankey,
-    ...d3Force,
-    ...d3Chord,
-    ...d3Geo,
-    ...d3Contour,
-    ...d3TimeFormat,
-  };
-
-  return d3Modules;
-}
 
 /* ─── Theme Reader ──────────────────────────────────────────────────── */
 
@@ -171,7 +102,7 @@ chartRenderers.bar = (svg, data, width, height, theme, spec) => {
   const sorted = [...data].sort((a, b) => (b[yField] as number) - (a[yField] as number));
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   // Scales
@@ -199,15 +130,15 @@ chartRenderers.bar = (svg, data, width, height, theme, spec) => {
     bar.setAttribute('rx', '3');
     bar.style.cursor = 'pointer';
     bar.setAttribute('role', 'img');
-    bar.setAttribute('aria-label', `${d[xField]}: ${d[yField]}`);
+    bar.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(bar);
   });
 
   // X Axis
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
@@ -221,7 +152,7 @@ chartRenderers.bar = (svg, data, width, height, theme, spec) => {
   // Y Axis
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(6);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
@@ -256,7 +187,7 @@ chartRenderers['horizontal-bar'] = (svg, data, width, height, theme, spec) => {
   const sorted = [...data].sort((a, b) => (b[yField] as number) - (a[yField] as number));
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const yScale = d3.scaleBand()
@@ -280,32 +211,32 @@ chartRenderers['horizontal-bar'] = (svg, data, width, height, theme, spec) => {
     bar.setAttribute('height', String(barH));
     bar.setAttribute('fill', theme.brand);
     bar.setAttribute('rx', '3');
-    bar.setAttribute('aria-label', `${d[xField]}: ${d[yField]}`);
+    bar.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(bar);
   });
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
     t.setAttribute('font-family', theme.fontFamily);
     t.setAttribute('text-anchor', 'end');
   });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale).ticks(5);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
     t.setAttribute('font-family', theme.fontFamily);
   });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 };
 
@@ -321,11 +252,11 @@ chartRenderers.line = (svg, data, width, height, theme, spec) => {
   const isTime = spec.xAxis.type === 'time';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   // Scales
-  let xScale: any;
+  let xScale: d3.ScalePoint<string> | d3.ScaleTime<number, number>;
   const xLabels = data.map((d) => String(d[xField]));
 
   if (isTime) {
@@ -343,14 +274,17 @@ chartRenderers.line = (svg, data, width, height, theme, spec) => {
     .range([innerH, 0]);
 
   // Line path
-  const lineGen = d3.line()
-    .x((d: any) => isTime
-      ? xScale(new Date(String(d[xField])))
-      : xScale(String(d[xField])))
-    .y((d: any) => yScale(Number(d[yField])));
+  const lineGen = d3.line<Record<string, unknown>>()
+    .x((d) => {
+      const rawX = isTime
+        ? (xScale as (v: Date) => number | undefined)(new Date(String(d[xField])))
+        : (xScale as (v: string) => number | undefined)(String(d[xField]));
+      return rawX ?? 0;
+    })
+    .y((d) => yScale(Number(d[yField])));
 
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', lineGen(data as any) || '');
+  path.setAttribute('d', lineGen(data) || '');
   path.setAttribute('fill', 'none');
   path.setAttribute('stroke', theme.brand);
   path.setAttribute('stroke-width', '2');
@@ -360,7 +294,9 @@ chartRenderers.line = (svg, data, width, height, theme, spec) => {
 
   // Dots
   data.forEach((d) => {
-    const cx = isTime ? xScale(new Date(String(d[xField]))) : xScale(String(d[xField]));
+    const cx = isTime
+      ? (xScale as (v: Date) => number | undefined)(new Date(String(d[xField])))
+      : (xScale as (v: string) => number | undefined)(String(d[xField]));
     const cy = yScale(Number(d[yField]));
     const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     dot.setAttribute('cx', String(cx));
@@ -369,46 +305,46 @@ chartRenderers.line = (svg, data, width, height, theme, spec) => {
     dot.setAttribute('fill', theme.brand);
     dot.setAttribute('stroke', theme.bg);
     dot.setAttribute('stroke-width', '2');
-    dot.setAttribute('aria-label', `${d[xField]}: ${d[yField]}`);
+    dot.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(dot);
   });
 
   // Area fill under line
-  const areaGen = d3.area()
-    .x((d: any) => isTime
-      ? xScale(new Date(String(d[xField])))
-      : xScale(String(d[xField])))
+  const areaGen = d3.area<Record<string, unknown>>()
+    .x((d) => (isTime
+      ? (xScale as (v: Date) => number | undefined)(new Date(String(d[xField])))
+      : (xScale as (v: string) => number | undefined)(String(d[xField]))) ?? 0)
     .y0(innerH)
-    .y1((d: any) => yScale(Number(d[yField])));
+    .y1((d) => yScale(Number(d[yField])));
 
   const areaPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  areaPath.setAttribute('d', areaGen(data as any) || '');
+  areaPath.setAttribute('d', areaGen(data) || '');
   areaPath.setAttribute('fill', theme.brand);
   areaPath.setAttribute('opacity', '0.08');
   container.appendChild(areaPath);
 
   // Axes
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
-  const xAxis = isTime ? d3.axisBottom(xScale).ticks(6) : d3.axisBottom(xScale);
-  xAxis(xAxisG as any);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
+  const xAxis = isTime ? d3.axisBottom(xScale as unknown as d3.AxisScale<d3.NumberValue>).ticks(6) : d3.axisBottom(xScale as unknown as d3.AxisScale<string>);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
     t.setAttribute('font-family', theme.fontFamily);
   });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(6);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
     t.setAttribute('font-family', theme.fontFamily);
   });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -436,7 +372,7 @@ chartRenderers.scatter = (svg, data, width, height, theme, spec) => {
   const yField = spec.yAxis.field || 'y';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const xMax = Math.max(...data.map((d) => Number(d[xField])), 0);
@@ -452,29 +388,29 @@ chartRenderers.scatter = (svg, data, width, height, theme, spec) => {
     dot.setAttribute('r', '5');
     dot.setAttribute('fill', theme.brand);
     dot.setAttribute('opacity', '0.7');
-    dot.setAttribute('aria-label', `${d[xField]}: ${d[yField]}`);
+    dot.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(dot);
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale).ticks(6);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
   });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(6);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
   });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -490,7 +426,7 @@ chartRenderers.bubble = (svg, data, width, height, theme, spec) => {
   const sizeField = spec.sizeField || 'value';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const xMax = Math.max(...data.map((d) => Number(d[xField])), 0);
@@ -509,23 +445,23 @@ chartRenderers.bubble = (svg, data, width, height, theme, spec) => {
     dot.setAttribute('r', String(rScale(Number(d[sizeField]))));
     dot.setAttribute('fill', theme.brand);
     dot.setAttribute('opacity', '0.6');
-    dot.setAttribute('aria-label', `${d[xField]}, ${d[yField]}, size: ${d[sizeField]}`);
+    dot.setAttribute('aria-label', `${String(d[xField])}, ${String(d[yField])}, size: ${String(d[sizeField])}`);
     container.appendChild(dot);
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale).ticks(6);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(6);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -551,7 +487,7 @@ chartRenderers.heatmap = (svg, data, width, height, theme, spec) => {
     .domain([Math.min(...values, 0), Math.max(...values, 1)]);
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   data.forEach((d) => {
@@ -564,31 +500,31 @@ chartRenderers.heatmap = (svg, data, width, height, theme, spec) => {
     rect.setAttribute('height', String(yScale.bandwidth()));
     rect.setAttribute('fill', colorScale(Number(d[valueField])));
     rect.setAttribute('rx', '2');
-    rect.setAttribute('aria-label', `${d[xField]}, ${d[yField]}: ${d[valueField]}`);
+    rect.setAttribute('aria-label', `${String(d[xField])}, ${String(d[yField])}: ${String(d[valueField])}`);
     container.appendChild(rect);
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '10');
     t.setAttribute('transform', 'rotate(-45)');
     t.setAttribute('text-anchor', 'end');
   });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '10');
   });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -603,7 +539,7 @@ chartRenderers.histogram = (svg, data, width, height, theme, spec) => {
   const values = data.map((d) => Number(d[yField]));
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const bins = d3.bin().thresholds(10)(values);
@@ -624,26 +560,26 @@ chartRenderers.histogram = (svg, data, width, height, theme, spec) => {
     rect.setAttribute('width', String(barW));
     rect.setAttribute('height', String(barH));
     rect.setAttribute('fill', theme.brand);
-    rect.setAttribute('aria-label', `${bin.x0?.toFixed(1)}-${bin.x1?.toFixed(1)}: ${bin.length}`);
+    rect.setAttribute('aria-label', `${String(bin.x0?.toFixed(1))}-${String(bin.x1?.toFixed(1))}: ${String(bin.length)}`);
     container.appendChild(rect);
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale).ticks(8);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
   });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(5);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -656,10 +592,10 @@ chartRenderers['dot-plot'] = (svg, data, width, height, theme, spec) => {
 
   const xField = spec.xAxis.field || 'x';
   const yField = spec.yAxis.field || 'y';
-  const sorted = [...data].sort((a, b) => (Number(a[yField]) as number) - (Number(b[yField]) as number));
+  const sorted = [...data].sort((a, b) => (Number(a[yField])) - (Number(b[yField])));
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const yScale = d3.scaleBand()
@@ -690,27 +626,27 @@ chartRenderers['dot-plot'] = (svg, data, width, height, theme, spec) => {
     dot.setAttribute('cy', String(y));
     dot.setAttribute('r', '5');
     dot.setAttribute('fill', theme.brand);
-    dot.setAttribute('aria-label', `${d[xField]}: ${d[yField]}`);
+    dot.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(dot);
   });
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
     t.setAttribute('text-anchor', 'end');
   });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale).ticks(5);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 };
 
@@ -724,10 +660,10 @@ chartRenderers.lollipop = (svg, data, width, height, theme, spec) => {
 
   const xField = spec.xAxis.field || 'x';
   const yField = spec.yAxis.field || 'y';
-  const sorted = [...data].sort((a, b) => (Number(b[yField]) as number) - (Number(a[yField]) as number));
+  const sorted = [...data].sort((a, b) => (Number(b[yField])) - (Number(a[yField])));
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const xScale = d3.scaleBand()
@@ -756,26 +692,26 @@ chartRenderers.lollipop = (svg, data, width, height, theme, spec) => {
     dot.setAttribute('cy', String(y));
     dot.setAttribute('r', '6');
     dot.setAttribute('fill', theme.brand);
-    dot.setAttribute('aria-label', `${d[xField]}: ${d[yField]}`);
+    dot.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(dot);
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => {
     t.setAttribute('fill', theme.textMuted);
     t.setAttribute('font-size', '11');
   });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(5);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -790,7 +726,7 @@ chartRenderers.waterfall = (svg, data, width, height, theme, spec) => {
   const yField = spec.yAxis.field || 'y';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   let runningTotal = 0;
@@ -827,23 +763,23 @@ chartRenderers.waterfall = (svg, data, width, height, theme, spec) => {
     rect.setAttribute('height', String(Math.max(1, y1 - y0)));
     rect.setAttribute('fill', color);
     rect.setAttribute('rx', '2');
-    rect.setAttribute('aria-label', `${b.label}: ${b.value >= 0 ? '+' : ''}${b.value}`);
+    rect.setAttribute('aria-label', `${b.label}: ${b.value >= 0 ? '+' : ''}${String(b.value)}`);
     container.appendChild(rect);
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(6);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -867,7 +803,7 @@ chartRenderers.radar = (svg, data, width, height, theme, spec) => {
   const rScale = d3.scaleLinear().domain([0, maxVal * 1.1]).range([0, radius]);
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left + centerX},${margin.top + centerY})`);
+  container.setAttribute('transform', `translate(${String(margin.left + centerX)},${String(margin.top + centerY)})`);
   svg.appendChild(container);
 
   // Grid circles
@@ -887,7 +823,7 @@ chartRenderers.radar = (svg, data, width, height, theme, spec) => {
   const points = data.map((d, i) => {
     const angle = angleSlice * i - Math.PI / 2;
     const r = rScale(Number(d[yField]));
-    return `${Math.cos(angle) * r},${Math.sin(angle) * r}`;
+    return `${String(Math.cos(angle) * r)},${String(Math.sin(angle) * r)}`;
   });
   const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
   polygon.setAttribute('points', points.join(' '));
@@ -926,13 +862,11 @@ chartRenderers.slope = (svg, data, width, height, theme, spec) => {
   const yField = spec.yAxis.field || 'y';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   // Group data by label (each item has start/end values)
   // Expects data like: [{category:"A", start:10, end:20}, ...]
-  const categories = data.map((d) => String(d[xField]));
-
   const allValues = data.flatMap((d) => [Number(d.start) || 0, Number(d[yField]) || 0]);
   const yMin = Math.min(...allValues, 0);
   const yMax = Math.max(...allValues, 0);
@@ -940,7 +874,7 @@ chartRenderers.slope = (svg, data, width, height, theme, spec) => {
   const yScale = d3.scaleLinear().domain([yMin, yMax]).range([height - margin.top - margin.bottom, 0]);
   const xScale = d3.scalePoint().domain(['start', 'end']).range([0, innerW]);
 
-  data.forEach((d, i) => {
+  data.forEach((d) => {
     const startVal = Number(d.start) || 0;
     const endVal = Number(d[yField]) || 0;
 
@@ -968,7 +902,7 @@ chartRenderers.slope = (svg, data, width, height, theme, spec) => {
     startText.setAttribute('dominant-baseline', 'middle');
     startText.setAttribute('fill', theme.textMuted);
     startText.setAttribute('font-size', '10');
-    startText.textContent = `${String(d[xField])}: ${startVal}`;
+    startText.textContent = `${String(d[xField])}: ${String(startVal)}`;
     container.appendChild(startText);
 
     // End label
@@ -979,7 +913,7 @@ chartRenderers.slope = (svg, data, width, height, theme, spec) => {
     endText.setAttribute('dominant-baseline', 'middle');
     endText.setAttribute('fill', theme.textMuted);
     endText.setAttribute('font-size', '10');
-    endText.textContent = `${String(d[xField])}: ${endVal}`;
+    endText.textContent = `${String(d[xField])}: ${String(endVal)}`;
     container.appendChild(endText);
 
     // Start dot
@@ -1011,7 +945,7 @@ chartRenderers['box-plot'] = (svg, data, width, height, theme, spec) => {
   const yField = spec.yAxis.field || 'y';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   const categories = [...new Set(data.map((d) => String(d[xField])))];
@@ -1096,18 +1030,18 @@ chartRenderers['box-plot'] = (svg, data, width, height, theme, spec) => {
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 
   const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const yAxis = d3.axisLeft(yScale).ticks(5);
-  yAxis(yAxisG as any);
+  d3.select(yAxisG).call(yAxis);
   yAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  yAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  yAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(yAxisG);
 };
 
@@ -1120,18 +1054,22 @@ chartRenderers.treemap = (svg, data, width, height, theme, spec) => {
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   svg.appendChild(container);
 
-  const root = d3.hierarchy({ children: data as any })
-    .sum((d: any) => Number(d[yField] || 0))
-    .sort((a: any, b: any) => (b.value || 0) - (a.value || 0));
+  const root = d3.hierarchy<Record<string, unknown>>({ children: data })
+    .sum((d) => {
+      const nodeData = d.data as Record<string, unknown>;
+      return typeof nodeData[yField] === 'number' ? (nodeData[yField] as number) : Number(nodeData[yField]) || 0;
+    })
+    .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
-  const treemapLayout = d3.treemap().size([width, height]).padding(2);
-  treemapLayout(root as any);
+  const treemapLayout = d3.treemap<Record<string, unknown>>().size([width, height]).padding(2);
+  treemapLayout(root);
 
   const maxVal = Math.max(...data.map((d) => Number(d[yField])), 1);
   const colorScale = d3.scaleSequential(d3.interpolateOranges)
     .domain([0, maxVal]);
 
-  root.leaves().forEach((node: any) => {
+  root.leaves().forEach((_node) => {
+    const node = _node as d3.HierarchyNode<Record<string, unknown>> & { x0: number; y0: number; x1: number; y1: number };
     const d = node.data;
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     rect.setAttribute('x', String(node.x0));
@@ -1140,13 +1078,13 @@ chartRenderers.treemap = (svg, data, width, height, theme, spec) => {
     rect.setAttribute('height', String(Math.max(1, node.y1 - node.y0)));
     rect.setAttribute('fill', colorScale(Number(d[yField])));
     rect.setAttribute('rx', '2');
-    rect.setAttribute('aria-label', `${String(d[xField])}: ${d[yField]}`);
+    rect.setAttribute('aria-label', `${String(d[xField])}: ${String(d[yField])}`);
     container.appendChild(rect);
 
     if ((node.x1 - node.x0) > 40 && (node.y1 - node.y0) > 20) {
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', String((node.x0 + node.x1) / 2));
-      text.setAttribute('y', String((node.y0 + node.y1) / 2));
+      text.setAttribute('x', String((Number(node.x0) + Number(node.x1)) / 2));
+      text.setAttribute('y', String((Number(node.y0) + Number(node.y1)) / 2));
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('dominant-baseline', 'middle');
       text.setAttribute('fill', '#fff');
@@ -1165,11 +1103,11 @@ chartRenderers.sunburst = (svg, data, width, height, theme, spec) => {
   const valueField = spec.yAxis.field || 'y';
 
   // Build hierarchy from flat data
-  const idMap = new Map(data.map((d) => [String(d.id), d]));
-  const rootId = data.find((d) => !d.parentId)?.id || data[0]?.id;
+  const rootItem = data.find((d) => !d.parentId) ?? data[0];
+  const rootId = String(rootItem.id);
   if (!rootId) return;
 
-  const buildChildren = (parentId: string): any[] => {
+  const buildChildren = (parentId: string): Record<string, unknown>[] => {
     return data
       .filter((d) => String(d.parentId) === parentId)
       .map((d) => ({
@@ -1178,41 +1116,46 @@ chartRenderers.sunburst = (svg, data, width, height, theme, spec) => {
       }));
   };
 
+  const found = data.find((d) => String(d.id) === rootId);
   const root = {
     id: rootId,
-    name: String(data.find((d) => d.id === rootId)?.[spec.xAxis.field || 'x'] || ''),
-    children: buildChildren(String(rootId)),
+    name: found ? String(found[spec.xAxis.field || 'x']) : '',
+    children: buildChildren(rootId),
   };
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const cx = width / 2;
   const cy = height / 2;
-  container.setAttribute('transform', `translate(${cx},${cy})`);
+  container.setAttribute('transform', `translate(${String(cx)},${String(cy)})`);
   svg.appendChild(container);
 
-  const partition = d3.partition().size([2 * Math.PI, Math.min(width, height) / 2]);
-  const hierRoot = d3.hierarchy(root as any)
-    .sum((d: any) => Number(d[valueField] || 0))
-    .sort((a: any, b: any) => (b.value || 0) - (a.value || 0));
+  const partition = d3.partition<Record<string, unknown>>().size([2 * Math.PI, Math.min(width, height) / 2]);
+  const hierRoot = d3.hierarchy<Record<string, unknown>>(root)
+    .sum((d) => {
+      const nodeData = d.data as Record<string, unknown>;
+      return typeof nodeData[valueField] === 'number' ? (nodeData[valueField] as number) : Number(nodeData[valueField]) || 0;
+    })
+    .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
   partition(hierRoot);
 
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  hierRoot.descendants().forEach((node: any) => {
+  hierRoot.descendants().forEach((_node) => {
+    const node = _node as d3.HierarchyNode<Record<string, unknown>> & { x0: number; y0: number; x1: number; y1: number };
     if (node.depth === 0) return;
-    const arc = d3.arc()
+    const arc = d3.arc<d3.DefaultArcObject>()
       .startAngle(node.x0)
       .endAngle(node.x1)
       .innerRadius(node.y0)
       .outerRadius(node.y1);
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', arc({} as any) || '');
+    path.setAttribute('d', arc(node as unknown as d3.DefaultArcObject) || '');
     path.setAttribute('fill', color(String(node.data.name || node.data.id)));
     path.setAttribute('stroke', theme.bg);
     path.setAttribute('stroke-width', '1');
-    path.setAttribute('aria-label', `${node.data.name || node.data.id}: ${node.value}`);
+    path.setAttribute('aria-label', `${String(node.data.name || node.data.id)}: ${String(node.value)}`);
     container.appendChild(path);
   });
 };
@@ -1230,7 +1173,6 @@ chartRenderers.calendar = (svg, data, width, height, theme, spec) => {
   const dayHeight = cellSize + 2;
   const colWidth = cellSize + 2;
 
-  const parseDate = d3.timeParse('%Y-%m-%d');
   const dateMap = new Map(data.map((d) => [String(d[dateField]), Number(d[valueField])]));
 
   const year = 2025;
@@ -1255,7 +1197,7 @@ chartRenderers.calendar = (svg, data, width, height, theme, spec) => {
     rect.setAttribute('height', String(cellSize));
     rect.setAttribute('rx', '2');
     rect.setAttribute('fill', val > 0 ? colorScale(val) : theme.bgTertiary);
-    rect.setAttribute('aria-label', `${dateStr}: ${val}`);
+    rect.setAttribute('aria-label', `${dateStr}: ${String(val)}`);
     container.appendChild(rect);
 
     day = new Date(day.getTime() + 86400000);
@@ -1302,15 +1244,19 @@ chartRenderers.ridgeline = (svg, data, width, height, theme, spec) => {
   const yField = spec.yAxis.field || 'y';
 
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  container.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+  container.setAttribute('transform', `translate(${String(margin.left)},${String(margin.top)})`);
   svg.appendChild(container);
 
   // Group data by category
   const catMap = new Map<string, number[]>();
   data.forEach((d) => {
     const cat = String(d[xField]);
-    if (!catMap.has(cat)) catMap.set(cat, []);
-    catMap.get(cat)!.push(Number(d[yField]));
+    const arr = catMap.get(cat);
+    if (arr) {
+      arr.push(Number(d[yField]));
+    } else {
+      catMap.set(cat, [Number(d[yField])]);
+    }
   });
 
   const categories = [...catMap.keys()];
@@ -1327,28 +1273,22 @@ chartRenderers.ridgeline = (svg, data, width, height, theme, spec) => {
     const vals = catMap.get(cat) || [];
     if (vals.length < 2) return;
 
-    const density = d3.contourDensity()
-      .x((d: any) => xScale(d))
-      .y(() => 0)
-      .size([innerW, 1])
-      .bandwidth(8);
-
     const y0 = i * rowHeight * (1 - overlap) + rowHeight * overlap;
 
     // KDE via histogram + smoothing
     const bins = d3.bin().thresholds(20)(vals);
     const maxFreq = Math.max(...bins.map((b) => b.length), 1);
 
-    const areaGen2 = d3.area()
-      .x((d: any) => xScale(d.x0))
+    const areaGen2 = d3.area<d3.Bin<number, number>>()
+      .x((d) => xScale(d.x0 ?? 0))
       .y0(rowHeight)
-      .y1((d: any) => rowHeight - (d.length / maxFreq) * rowHeight * 0.8);
+      .y1((d) => rowHeight - (d.length / maxFreq) * rowHeight * 0.8);
 
     const areaPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    areaPath.setAttribute('d', areaGen2(bins as any) || '');
+    areaPath.setAttribute('d', areaGen2(bins) || '');
     areaPath.setAttribute('fill', theme.brand);
     areaPath.setAttribute('opacity', '0.3');
-    areaPath.setAttribute('transform', `translate(0,${y0})`);
+    areaPath.setAttribute('transform', `translate(0,${String(y0)})`);
     container.appendChild(areaPath);
 
     // Category label
@@ -1365,11 +1305,11 @@ chartRenderers.ridgeline = (svg, data, width, height, theme, spec) => {
   });
 
   const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  xAxisG.setAttribute('transform', `translate(0,${innerH})`);
+  xAxisG.setAttribute('transform', `translate(0,${String(innerH)})`);
   const xAxis = d3.axisBottom(xScale).ticks(5);
-  xAxis(xAxisG as any);
+  d3.select(xAxisG).call(xAxis);
   xAxisG.querySelectorAll('text').forEach((t) => { t.setAttribute('fill', theme.textMuted); t.setAttribute('font-size', '11'); });
-  xAxisG.querySelectorAll('line, path').forEach((l) => l.setAttribute('stroke', theme.border));
+  xAxisG.querySelectorAll('line, path').forEach((l) => { l.setAttribute('stroke', theme.border); });
   container.appendChild(xAxisG);
 };
 
@@ -1382,13 +1322,13 @@ chartRenderers.chord = (svg, data, width, height, theme, spec) => {
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const cx = width / 2;
   const cy = height / 2;
-  container.setAttribute('transform', `translate(${cx},${cy})`);
+  container.setAttribute('transform', `translate(${String(cx)},${String(cy)})`);
   svg.appendChild(container);
 
   // Build matrix
   const names = [...new Set(data.flatMap((d) => [String(d.source || d[spec.xAxis.field || 'x']), String(d.target || d[spec.yAxis.field || 'y'])]))];
   const n = names.length;
-  const matrix = Array.from({ length: n }, () => Array(n).fill(0));
+  const matrix: number[][] = Array.from({ length: n }, () => Array<number>(n).fill(0));
   const nameIndex = new Map(names.map((name, i) => [name, i]));
 
   data.forEach((d) => {
@@ -1405,12 +1345,12 @@ chartRenderers.chord = (svg, data, width, height, theme, spec) => {
   const color = d3.scaleOrdinal(d3.schemeCategory10).domain(names);
 
   // Ribbons
-  chords.groups.forEach((group: any) => {
+  chords.groups.forEach((group) => {
     const arcGen = d3.arc()
       .innerRadius(Math.min(cx, cy) * 0.7)
       .outerRadius(Math.min(cx, cy) * 0.8);
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', arcGen(group as any) || '');
+    path.setAttribute('d', arcGen(group as unknown as d3.DefaultArcObject) || '');
     path.setAttribute('fill', color(names[group.index]));
     path.setAttribute('opacity', '0.7');
     path.setAttribute('stroke', theme.bg);
@@ -1419,7 +1359,7 @@ chartRenderers.chord = (svg, data, width, height, theme, spec) => {
   });
 
   // Labels
-  chords.groups.forEach((group: any) => {
+  chords.groups.forEach((group) => {
     const angle = (group.startAngle + group.endAngle) / 2;
     const r = Math.min(cx, cy) * 0.85;
     const x = Math.cos(angle - Math.PI / 2) * r;
@@ -1439,7 +1379,7 @@ chartRenderers.chord = (svg, data, width, height, theme, spec) => {
 
 /* ── 20+21+22. Sankey / Network / Violin (simplified) ──────────────── */
 
-chartRenderers.sankey = (svg, data, width, height, theme, spec) => {
+chartRenderers.sankey = (svg, data, width, height, theme) => {
   // Simplified Sankey — shows as a labeled flow diagram
   const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   svg.appendChild(container);
@@ -1451,7 +1391,7 @@ chartRenderers.sankey = (svg, data, width, height, theme, spec) => {
   text.setAttribute('fill', theme.textMuted);
   text.setAttribute('font-size', '13');
   text.setAttribute('font-family', theme.fontFamily);
-  text.textContent = `Sankey: ${data.length} flows`;
+  text.textContent = `Sankey: ${String(data.length)} flows`;
   container.appendChild(text);
 };
 
@@ -1461,11 +1401,18 @@ chartRenderers.network = (svg, data, width, height, theme, spec) => {
   svg.appendChild(container);
 
   // Simple force-directed layout using D3 force
-  const nodes = data.map((d, i) => ({
-    id: String(d.id || d[spec.xAxis.field || 'x'] || i),
-    label: String(d[spec.xAxis.field || 'x'] || d.id || i),
-    value: Number(d[spec.yAxis.field || 'y'] || 10),
-  }));
+  const nodes = data.map((d, i) => {
+    const idRaw = d.id;
+    const xRaw = d[spec.xAxis.field || 'x'];
+    const yRaw = d[spec.yAxis.field || 'y'];
+    const idStr = typeof idRaw === 'string' ? idRaw : typeof idRaw === 'number' || typeof idRaw === 'boolean' ? String(idRaw) : '';
+    const xStr = typeof xRaw === 'string' ? xRaw : typeof xRaw === 'number' || typeof xRaw === 'boolean' ? String(xRaw) : '';
+    return {
+      id: idStr || xStr || String(i),
+      label: xStr || idStr || String(i),
+      value: yRaw ? Number(yRaw) : 10,
+    };
+  });
 
   const maxValue = Math.max(...nodes.map((n) => n.value), 1);
   const rScale = d3.scaleSqrt().domain([0, maxValue]).range([3, 12]);
@@ -1542,7 +1489,7 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ chart }) => {
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); };
   }, []);
 
   // Responsive sizing
@@ -1565,7 +1512,7 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ chart }) => {
       setRenderKey((k) => k + 1);
     });
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => { ro.disconnect(); };
   }, []);
 
   // Render chart with D3
@@ -1579,34 +1526,25 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ chart }) => {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
 
     const renderer = chartRenderers[chart.type];
-    if (renderer) {
-      try {
-        // Extract data from the spec
-        // Path 1: dataset.source contains JSON-encoded data (bridge from StoryJSON via chartDefToSpec)
-        // Path 2: dataset.fields are defined but source is empty (future Visual Intelligence Engine path)
-        // Path 3: fallback to sample data generation for development
-        let chartData: Record<string, any>[] = [];
+    try {
+      let chartData: Record<string, unknown>[] = [];
 
-        if (chart.dataset && chart.dataset.source) {
-          try {
-            const parsed = JSON.parse(chart.dataset.source);
-            if (Array.isArray(parsed)) {
-              chartData = parsed;
-            }
-          } catch {
-            // Not JSON — ignore
+      if (chart.dataset.source) {
+        try {
+          const raw = JSON.parse(chart.dataset.source) as unknown;
+          if (Array.isArray(raw)) {
+            chartData = raw as Record<string, unknown>[];
           }
+        } catch {
+          // Not JSON — ignore
         }
-
-        // If no data found, generate sample data
-        const finalData = chartData.length > 0 ? chartData : generateSampleData(chart);
-
-        renderer(svg, finalData, dimensions.width, dimensions.height, theme, chart);
-      } catch (err) {
-        console.error(`ChartRenderer: Error rendering ${chart.type}:`, err);
-        renderFallback(svg, chart.type, dimensions.width, dimensions.height, theme);
       }
-    } else {
+
+      const finalData = chartData.length > 0 ? chartData : generateSampleData(chart);
+
+      renderer(svg, finalData, dimensions.width, dimensions.height, theme, chart);
+    } catch (err) {
+      console.error(`ChartRenderer: Error rendering ${chart.type}:`, err);
       renderFallback(svg, chart.type, dimensions.width, dimensions.height, theme);
     }
   }, [isVisible, dimensions, chart, renderKey]);
@@ -1652,7 +1590,7 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ chart }) => {
             height={dimensions.height}
             style={{
               width: '100%',
-              height: `${dimensions.height}px`,
+              height: `${String(dimensions.height)}px`,
               display: 'block',
               overflow: 'visible',
             }}
@@ -1679,7 +1617,7 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ chart }) => {
 
 /* ── Sample Data Generator (for development/mock stories) ──────────── */
 
-function generateSampleData(spec: ChartSpec): Record<string, any>[] {
+function generateSampleData(spec: ChartSpec): Record<string, unknown>[] {
   const xField = spec.xAxis.field || 'x';
   const yField = spec.yAxis.field || 'y';
 
@@ -1687,7 +1625,7 @@ function generateSampleData(spec: ChartSpec): Record<string, any>[] {
   if (spec.xAxis.type === 'time' || spec.type === 'line' || spec.type === 'area') {
     const points = 8;
     return Array.from({ length: points }, (_, i) => ({
-      [xField]: `${2020 + i}`,
+      [xField]: String(2020 + i),
       [yField]: Math.round(50 + Math.random() * 200 + i * 15),
     }));
   }
@@ -1695,7 +1633,7 @@ function generateSampleData(spec: ChartSpec): Record<string, any>[] {
   // For histograms, generate raw values
   if (spec.type === 'histogram' || spec.type === 'violin' || spec.type === 'ridgeline') {
     return Array.from({ length: 100 }, (_, i) => ({
-      [xField]: `item-${i}`,
+      [xField]: `item-${String(i)}`,
       [yField]: Math.round(Math.random() * 100),
     }));
   }

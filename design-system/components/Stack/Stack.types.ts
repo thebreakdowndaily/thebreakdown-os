@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes } from 'react';
 
 export type StackDirection = 'row' | 'column';
 export type StackAlign = 'start' | 'center' | 'end' | 'stretch';

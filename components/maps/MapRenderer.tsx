@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import type { MapSpec } from '@/utils/types';
+import * as d3Geo from 'd3-geo';
+import * as d3Scale from 'd3-scale';
+import * as d3ScaleChromatic from 'd3-scale-chromatic';
 
 /**
  * THE BREAKDOWN — MapRenderer
@@ -21,29 +24,6 @@ import type { MapSpec } from '@/utils/types';
  *   - Lazy loaded with IntersectionObserver
  */
 
-/* ── D3 Module loader (dynamic) ─────────────────────────────────────── */
-
-let d3GeoModules: any = null;
-
-async function loadD3Geo() {
-  if (d3GeoModules) return d3GeoModules;
-
-  const [
-    geo,
-    geoProjection,
-    selection,
-    array,
-  ] = await Promise.all([
-    import('d3-geo'),
-    import('d3-geo-projection' as any),
-    import('d3-selection'),
-    import('d3-array'),
-  ]);
-
-  d3GeoModules = { ...geo, ...geoProjection, ...selection, ...array };
-  return d3GeoModules;
-}
-
 /* ── Types ──────────────────────────────────────────────────────────── */
 
 interface MapTheme {
@@ -62,6 +42,18 @@ interface MapTheme {
   error: string;
   water: string;
   land: string;
+}
+
+interface RegionData {
+  [key: string]: unknown;
+  id?: string;
+  name?: string;
+  value?: number;
+}
+
+interface FeatureProperties {
+  name?: string;
+  [key: string]: unknown;
 }
 
 function readTheme(el: Element): MapTheme {
@@ -290,7 +282,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       { rootMargin: '200px' }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); };
   }, []);
 
   // Responsive
@@ -310,7 +302,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       setRenderKey((k) => k + 1);
     });
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => { ro.disconnect(); };
   }, []);
 
   // Render map
@@ -319,22 +311,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
 
     const svg = svgRef.current;
     const theme = readTheme(svg);
-    const config = mapTypeConfigs[map.type] || mapTypeConfigs['india-state'];
+    const config = mapTypeConfigs[map.type];
 
     // Clear previous
     while (svg.firstChild) svg.removeChild(svg.firstChild);
 
     try {
-      const d3: any = d3GeoModules;
-
       // Create projection
       const [centerLat, centerLng, scale] = config.projectionParams;
-      const projection = d3.geoMercator()
+      const projection = d3Geo.geoMercator()
         .center([centerLng, centerLat])
         .scale(scale)
         .translate([dimensions.width / 2, dimensions.height / 2]);
 
-      const pathGen = d3.geoPath().projection(projection);
+      const pathGen = d3Geo.geoPath().projection(projection);
 
       // Background (ocean)
       const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -346,14 +336,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       // Build region value map from spec data
       const valueMap = new Map<string, number>();
       if (map.data) {
-        let regions: any[] = [];
+        let regions: RegionData[] = [];
 
         // Path 1: data.source contains JSON-encoded regions (bridge from StoryJSON via geoDataToSpec)
         if (map.data.source) {
           try {
-            const parsed = JSON.parse(map.data.source);
+            const parsed: unknown = JSON.parse(map.data.source);
             if (Array.isArray(parsed)) {
-              regions = parsed;
+              regions = parsed as RegionData[];
             }
           } catch {
             // Not JSON — ignore
@@ -367,9 +357,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
 
         const joinKey = map.data.joinKey || 'id';
         const valueField = map.data.valueField || 'value';
-        regions.forEach((r: any) => {
-          const key = r[joinKey] || r.id || r.name;
-          valueMap.set(String(key).toLowerCase(), Number(r[valueField] || r.value || 0));
+        regions.forEach((r: RegionData) => {
+          const rawKey = r[joinKey];
+          const key = typeof rawKey === 'string' ? rawKey : typeof r.id === 'string' ? r.id : typeof r.name === 'string' ? r.name : '';
+          const rawVal = r[valueField] ?? r.value;
+          valueMap.set(key.toLowerCase(), Number(rawVal ?? 0));
         });
       }
 
@@ -377,15 +369,18 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       const allValues = Array.from(valueMap.values());
       const minVal = Math.min(...allValues, 0);
       const maxVal = Math.max(...allValues, 1);
-      const colorScale = d3.scaleSequential(d3.interpolateOranges)
+      const colorScale = d3Scale.scaleSequential(d3ScaleChromatic.interpolateOranges)
         .domain([minVal, maxVal]);
 
       // Render features
       const features = config.geoJSON.features;
 
-      features.forEach((feature: any) => {
-        const name = feature.properties[config.labelField] || '';
-        const joinKey = (feature.properties[config.joinField] || name).toLowerCase();
+      features.forEach((feature: GeoJSON.Feature<GeoJSON.Geometry, FeatureProperties>) => {
+        const props = feature.properties;
+        const rawName = props[config.labelField];
+        const name = typeof rawName === 'string' ? rawName : '';
+        const rawJoin = props[config.joinField];
+        const joinKey = (typeof rawJoin === 'string' ? rawJoin : name).toLowerCase();
         const value = valueMap.get(joinKey);
         const hasValue = value !== undefined;
 
@@ -404,21 +399,24 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
 
         // Interaction
         path.style.cursor = 'pointer';
-        path.setAttribute('aria-label', `${name}${hasValue ? `: ${value}` : ''}`);
+        path.setAttribute('aria-label', `${name}${hasValue ? `: ${String(value)}` : ''}`);
 
         // Hover highlight
         path.addEventListener('mouseenter', () => {
           path.setAttribute('stroke', theme.brand);
           path.setAttribute('stroke-width', '2');
           if (tooltipRef.current) {
-            tooltipRef.current.textContent = `${name}${hasValue ? `: ${value}` : ''}`;
+            tooltipRef.current.textContent = `${name}${hasValue ? `: ${String(value)}` : ''}`;
             tooltipRef.current.style.display = 'block';
           }
         });
         path.addEventListener('mousemove', (e) => {
           if (tooltipRef.current) {
-            tooltipRef.current.style.left = `${e.clientX - containerRef.current!.getBoundingClientRect().left + 10}px`;
-            tooltipRef.current.style.top = `${e.clientY - containerRef.current!.getBoundingClientRect().top + 10}px`;
+            const containerRect = containerRef.current?.getBoundingClientRect();
+            if (containerRect) {
+              tooltipRef.current.style.left = `${String(e.clientX - containerRect.left + 10)}px`;
+              tooltipRef.current.style.top = `${String(e.clientY - containerRect.top + 10)}px`;
+            }
           }
         });
         path.addEventListener('mouseleave', () => {
@@ -454,7 +452,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       errText.setAttribute('fill', theme.textMuted);
       errText.setAttribute('font-size', '14');
       errText.setAttribute('font-family', theme.fontFamily);
-      errText.textContent = `${mapTypeLabels[map.type] || 'Map'} — ${config?.geoJSON?.features ? 'rendered' : 'no data'}`;
+      errText.textContent = `${mapTypeLabels[map.type]} — rendered`;
       svg.appendChild(errText);
     }
   }, [isVisible, dimensions, map, renderKey]);
@@ -496,7 +494,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
             height={dimensions.height}
             style={{
               width: '100%',
-              height: `${dimensions.height}px`,
+              height: `${String(dimensions.height)}px`,
               display: 'block',
             }}
             aria-hidden="true"

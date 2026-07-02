@@ -23,8 +23,6 @@ interface VisualsProps {
  * Wired to the Visual Intelligence Engine output specs.
  */
 const Visuals: React.FC<VisualsProps> = ({ visuals }) => {
-  if (!visuals) return null;
-
   const hasContent = (visuals.globes?.length ?? 0) > 0
     || (visuals.svgs?.length ?? 0) > 0
     || (visuals.animations?.length ?? 0) > 0
@@ -55,22 +53,22 @@ const Visuals: React.FC<VisualsProps> = ({ visuals }) => {
       }}>
         {/* 3D Globes — signature visual */}
         {visuals.globes?.map((globe, i) => (
-          <GlobeRenderer key={`globe-${i}`} globe={globe} />
+          <GlobeRenderer key={`globe-${String(i)}`} globe={globe} />
         ))}
 
         {/* SVG Diagrams — org trees, flowcharts, decision trees */}
         {visuals.svgs?.map((svg, i) => (
-          <SVGRenderer key={`svg-${i}`} svg={svg} />
+          <SVGRenderer key={`svg-${String(i)}`} svg={svg} />
         ))}
 
         {/* Step-by-step Animations */}
         {visuals.animations?.map((anim, i) => (
-          <AnimationRenderer key={`anim-${i}`} animation={anim} />
+          <AnimationRenderer key={`anim-${String(i)}`} animation={anim} />
         ))}
 
         {/* Infographic Cards */}
         {visuals.infographics?.map((inf, i) => (
-          <InfographicRenderer key={`inf-${i}`} cards={inf.cards} />
+          <InfographicRenderer key={`inf-${String(i)}`} cards={inf.cards} />
         ))}
       </div>
     </section>

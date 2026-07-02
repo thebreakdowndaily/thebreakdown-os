@@ -32,11 +32,11 @@ const sourceIcons: Record<string, string> = {
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
   if (diff < 1) return 'just now';
-  if (diff < 60) return `${diff}m ago`;
+  if (diff < 60) return `${String(diff)}m ago`;
   const h = Math.floor(diff / 60);
-  if (h < 24) return `${h}h ago`;
+  if (h < 24) return `${String(h)}h ago`;
   const d = Math.floor(h / 24);
-  return `${d}d ago`;
+  return `${String(d)}d ago`;
 }
 
 export default function MonitoringFeed({ alerts }: MonitoringFeedProps) {

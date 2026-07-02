@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { SelectProps } from './Select.types';
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
@@ -40,7 +40,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             disabled={disabled}
             aria-invalid={!!error}
             aria-describedby={
-              error ? `${selectId}-error` : helperText ? `${selectId}-helper` : undefined
+              error ? `${String(selectId)}-error` : helperText ? `${String(selectId)}-helper` : undefined
             }
             className={className}
             style={{
@@ -92,7 +92,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         </div>
         {error && (
           <span
-            id={`${selectId}-error`}
+            id={`${String(selectId)}-error`}
             role="alert"
             style={{ fontSize: 'var(--text-xs)', color: 'var(--color-error)' }}
           >
@@ -101,7 +101,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         )}
         {helperText && !error && (
           <span
-            id={`${selectId}-helper`}
+            id={`${String(selectId)}-helper`}
             style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}
           >
             {helperText}

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { ContainerProps } from './Container.types';
 
 const maxWidthMap: Record<string, string> = {

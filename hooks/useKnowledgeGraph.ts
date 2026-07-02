@@ -31,24 +31,22 @@ export function useKnowledgeGraph(): UseKnowledgeGraphResult {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     fetch('/api/knowledge-graph')
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch knowledge graph');
-        return res.json();
+        return res.json() as Promise<{ nodes?: GraphNode[]; edges?: GraphEdge[] }>;
       })
       .then((data) => {
         if (!cancelled) {
-          setNodes(data.nodes || []);
-          setEdges(data.edges || []);
+          setNodes(data.nodes ?? []);
+          setEdges(data.edges ?? []);
           setLoading(false);
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
           setLoading(false);
         }
       });
@@ -71,22 +69,18 @@ export function useRelatedEntities(entityId: string, depth: number = 1): UseRela
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!entityId) {
-      setLoading(false);
-      return;
-    }
+    if (!entityId) return;
 
     let cancelled = false;
-    setLoading(true);
 
-    fetch(`/api/knowledge-graph/related?entityId=${encodeURIComponent(entityId)}&depth=${depth}`)
+    fetch(`/api/knowledge-graph/related?entityId=${encodeURIComponent(entityId)}&depth=${String(depth)}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch related entities');
-        return res.json();
+        return res.json() as Promise<{ entities?: RelatedEntity[] }>;
       })
       .then((data) => {
         if (!cancelled) {
-          setEntities(data.entities || data || []);
+          setEntities(data.entities ?? []);
           setLoading(false);
         }
       })
@@ -101,6 +95,10 @@ export function useRelatedEntities(entityId: string, depth: number = 1): UseRela
       cancelled = true;
     };
   }, [entityId, depth]);
+
+  if (!entityId) {
+    return { entities: [], loading: false };
+  }
 
   return { entities, loading };
 }
