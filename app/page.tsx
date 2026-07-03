@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import type { HomepageJSON } from '@/utils/types';
 import { buildHomepage } from '@/utils/website-builder';
-import { getStory } from '@/utils/data-layer/store';
+import { getStory, getStories } from '@/utils/data-layer/store';
 import HomepageLayout from '@/layouts/HomepageLayout';
 import Hero from '@/components/home/hero/Hero';
-import FeaturedStories from '@/components/homepage/FeaturedStories';
+import { FeaturedStories } from '@/components/home/featured';
 
 const mockHomepageData: HomepageJSON = {
   topStory: {
@@ -149,13 +149,14 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const { topStory, trendingAnalyses } = mockHomepageData;
+  const { topStory } = mockHomepageData;
   const heroStory = getStory(topStory.slug);
+  const allStories = getStories().data;
 
   return (
     <HomepageLayout seo={pageSpec.seo}>
       {heroStory && <Hero story={heroStory} />}
-      <FeaturedStories primary={topStory} secondary={trendingAnalyses} />
+      <FeaturedStories stories={allStories} />
     </HomepageLayout>
   );
 }
