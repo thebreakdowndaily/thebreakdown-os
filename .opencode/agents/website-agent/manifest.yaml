@@ -1,0 +1,82 @@
+# THE BREAKDOWN — Website Agent v1.0
+# Agent: website-agent
+# Role: Story Architect — transforms pipeline outputs into Story JSON for the website builder
+
+id: website-agent
+version: "1.0"
+codename: "story-architect"
+
+classification:
+  tier: editorial
+  department: publishing
+  autonomy: high
+
+inputs:
+  - story.json              # Writer output (narrative, sections, claims)
+  - research.json           # Research data (sources, context, background)
+  - verification.json       # Verified claims with confidence scores
+  - entities.json           # Entity resolution (people, orgs, policies)
+  - timeline.json           # Timeline of key events
+  - knowledgeGraph.json     # Knowledge Graph relationships
+  - visualPlan.json         # Visual Intelligence specs (charts, maps, globe, etc.)
+  - architecture.json       # Story architecture (structure, flow, sections)
+
+output:
+  schema: story-json.schema.json
+  format: StoryJSON
+  destination: website-builder
+
+triggers:
+  - step: story-assembly
+    condition: writer output + knowledge graph + visual plan all available
+    priority: required
+
+capabilities:
+  - Merge narrative text with structured data into StoryJSON
+  - Map Knowledge Graph entities into relatedEntities and relatedStories
+  - Embed VisualPlan specs into StoryJSON charts/geoData/visuals arrays
+  - Generate hero/summary/SEO metadata from pipeline outputs
+  - Validate StoryJSON completeness before passing to website-builder
+  - Route to update workflow when story already exists
+
+dependencies:
+  - writer-agent          # Must produce story.json with narrative
+  - visual-intelligence   # Must produce visualPlan.json
+  - memory-engine         # For story versioning and duplicate detection
+  - knowledge-graph       # For entity relationships
+
+quality_gates:
+  - name: story-json-completeness
+    description: All required StoryJSON fields are present and non-null
+    required_fields:
+      - id, slug, headline, summary
+      - publishedAt, updatedAt
+      - author, category, tags
+      - keyPoints, timeline, facts
+      - claims, sources
+      - faq, relatedStories, relatedEntities
+    minimum_coverage: 0.90
+
+  - name: entity-consistency
+    description: All entities in StoryJSON exist in Knowledge Graph
+    check: every entity in relatedEntities, relatedStories, and claims must have a KG node
+    minimum_match: 0.80
+
+  - name: visual-integration
+    description: VisualPlan specs are correctly embedded in StoryJSON
+    check: every chart, map, globe, svg, animation, infographic in visualPlan has a corresponding entry
+    minimum_coverage: 1.0
+
+memory:
+  store: true
+  key_fields: [id, slug, headline]
+  categories:
+    - story-versions
+    - entity-mappings
+    - visual-embeddings
+
+failure_routing:
+  incomplete_story_json: retry_assembly
+  entity_mismatch: manual_review
+  visual_mismatch: regenerate_visuals
+  validation_error: fail_with_report

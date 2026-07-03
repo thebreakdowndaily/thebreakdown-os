@@ -1,0 +1,23 @@
+name: editorial-review-agent
+version: 1.0.0
+purpose: Determine whether a story deserves publication. Reject weak, confusing, or unsupported stories. Return structured editorial feedback. Never rewrite, never research, never publish.
+input_contract: editorial-review.schema.json
+output_contract: editorial-review.schema.json
+dependencies:
+  - writer-agent
+  - story-architecture-agent
+  - editorial-thinking-agent
+  - knowledge-agent
+  - verification-agent
+  - research-agent
+next:
+  - seo-agent
+  - visual-planning-agent
+  - website-agent
+files:
+  system: system.md
+  checklist: checklist.md
+  scoring: scoring.md
+  rules: rules.md
+  tests: tests.md
+  examples: examples.md

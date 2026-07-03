@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Relationship Memory",
+  "description": "A directed relationship between two entities in the knowledge graph",
+  "allOf": [
+    { "$ref": "memory.schema.json" },
+    {
+      "type": "object",
+      "required": ["from", "relationship", "to", "confidence"],
+      "properties": {
+        "from": { "type": "string", "description": "Source entity ID" },
+        "relationship": { "type": "string", "description": "Type of relationship (e.g., 'implements', 'manages', 'funds')" },
+        "to": { "type": "string", "description": "Target entity ID" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Confidence score 0-1" },
+        "sources": { "type": "array", "items": { "type": "string" }, "description": "Story IDs or source URLs supporting this relationship" },
+        "firstObserved": { "type": "string", "format": "date-time" },
+        "lastObserved": { "type": "string", "format": "date-time" },
+        "active": { "type": "boolean", "default": true }
+      }
+    }
+  ]
+}

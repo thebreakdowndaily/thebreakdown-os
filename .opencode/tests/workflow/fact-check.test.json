@@ -1,0 +1,38 @@
+{
+  "test": "Fact Check Workflow",
+  "description": "Validate Fact Check — shortest full workflow, highest quality gates",
+  "checks": {
+    "workflow_exists": true,
+    "steps_count": 5,
+    "step_ids": ["research", "verification", "writer", "editor", "publish"],
+    "all_agents_resolved": {
+      "research": "research-agent",
+      "verification": "verification-agent",
+      "writer": "writer-agent",
+      "editor": "editorial-review-agent",
+      "publish": null
+    },
+    "schema_exists": ["research.schema.json", "verification.schema.json", "writer.schema.json", "editorial-review.schema.json"],
+    "quality_gates_valid": {
+      "editorial": 90,
+      "research": 90,
+      "evidence": 95,
+      "trust": 95,
+      "readability": 90
+    },
+    "failure_routing_valid": {
+      "verification": "research",
+      "editor": "writer"
+    },
+    "depends_on_acyclic": true,
+    "terminal_step": "publish",
+    "expected_dag": {
+      "research": [],
+      "verification": ["research"],
+      "writer": ["verification"],
+      "editor": ["writer"],
+      "publish": ["editor"]
+    },
+    "parallel_branches": []
+  }
+}

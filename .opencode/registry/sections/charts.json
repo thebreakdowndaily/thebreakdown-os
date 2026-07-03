@@ -1,0 +1,36 @@
+{
+  "section": "charts",
+  "version": "1.0.0",
+  "purpose": "Present key data through standalone chart visualizations — each chart tells one story and is fully explained in text.",
+  "requiredInputs": [
+    "charts[]"
+  ],
+  "optionalInputs": [
+    "chartAnnotations",
+    "dataSources[]",
+    "interactiveToggle"
+  ],
+  "supportedVisuals": [
+    "bar-chart",
+    "line-chart",
+    "pie-chart",
+    "scatter-plot",
+    "area-chart",
+    "waterfall-chart",
+    "inline-svg"
+  ],
+  "writingRules": [
+    "Every chart must have a title that states the insight",
+    "Chart must be understandable in greyscale (accessible design)",
+    "Data source and year must be visible on or below the chart",
+    "Significant trends and outliers must be called out in adjacent text",
+    "Interactive charts should default to the most telling view"
+  ],
+  "seoRules": [
+    "Use schema.org Dataset markup for chart data",
+    "Alt text must describe the trend, not just 'chart showing X'",
+    "Chart data should be available as accessible table below the visual"
+  ],
+  "dependencies": [],
+  "narrativeStage": "evidence"
+}

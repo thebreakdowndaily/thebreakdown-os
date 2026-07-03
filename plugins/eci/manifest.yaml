@@ -1,0 +1,42 @@
+# THE BREAKDOWN — Plugin: Election Commission of India
+# Monitors election schedules, results, and electoral data
+
+id: eci
+name: Election Commission of India Tracker
+version: "1.0"
+description: Tracks election schedules, results, model code of conduct violations, voter list updates, and electoral data from the ECI
+author: The Breakdown
+type: data-source
+trust_tier: 1
+status: active
+schedule: every 6 hours
+
+sources:
+  - url: https://eci.gov.in/RSS/rss.aspx
+    type: rss
+    method: GET
+  - url: https://results.eci.gov.in
+    type: api
+    method: GET
+  - url: https://eci.gov.in/news-and-updates/
+    type: scrape
+    method: GET
+
+config:
+  trackElectionSchedule: true
+  trackResults: true
+  trackMCC: true
+  trackVoterLists: true
+  trackByElections: true
+  states: []
+  limit: 50
+
+tags:
+  - election-commission
+  - elections
+  - democracy
+  - voting
+  - india
+  - electoral-data
+
+documentation: Covers all ECI announcements including election schedules, phase-wise polling dates, constituency-wise results, model code of conduct enforcement, voter list revisions, and by-election notifications.

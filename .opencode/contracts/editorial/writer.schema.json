@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WriterOutput",
+  "description": "Complete written story content produced by the Writer Agent, precisely following the architecture blueprint.",
+  "type": "object",
+  "properties": {
+    "storyId": { "type": "string" },
+    "headline": { "type": "string" },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" },
+          "module": { "type": "string" },
+          "heading": { "type": "string" },
+          "content": { "type": "string" },
+          "wordCount": { "type": "integer" },
+          "tone": { "type": "string" },
+          "visuals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "placeholder": { "type": "string" },
+                "type": { "type": "string" },
+                "purpose": { "type": "string" },
+                "dataRefs": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "source": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["inline", "quote", "footnote"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "totalWordCount": { "type": "integer" },
+        "sectionsCompleted": { "type": "integer" },
+        "sectionsTotal": { "type": "integer" },
+        "evidenceRefsUsed": { "type": "integer" },
+        "evidenceRefsTotal": { "type": "integer" },
+        "citationsCount": { "type": "integer" },
+        "visualPlaceholders": { "type": "integer" }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "allZeroTolerancePassed": { "type": "boolean" },
+        "wordCountsWithinRange": { "type": "boolean" },
+        "allQuestionsPresent": { "type": "boolean" },
+        "noExtraSections": { "type": "boolean" },
+        "sectionOrderMatches": { "type": "boolean" }
+      }
+    }
+  }
+}

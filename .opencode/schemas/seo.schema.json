@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.in/schemas/seo.json",
+  "title": "SEO Metadata",
+  "description": "SEO and social metadata for a story or page on The Breakdown OS.",
+  "type": "object",
+  "required": ["title", "description", "path"],
+  "properties": {
+    "title": { "type": "string", "maxLength": 70 },
+    "description": { "type": "string", "maxLength": 165 },
+    "path": { "type": "string", "pattern": "^/" },
+    "ogImage": { "type": "string", "format": "uri" },
+    "ogType": {
+      "type": "string",
+      "enum": ["article", "website", "profile"],
+      "default": "article"
+    },
+    "twitterCard": {
+      "type": "string",
+      "enum": ["summary_large_image", "summary", "player"],
+      "default": "summary_large_image"
+    },
+    "canonicalUrl": { "type": "string", "format": "uri" },
+    "jsonLd": { "type": "object" },
+    "robots": {
+      "type": "object",
+      "properties": {
+        "index": { "type": "boolean", "default": true },
+        "follow": { "type": "boolean", "default": true }
+      }
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 10
+    },
+    "article": {
+      "type": "object",
+      "properties": {
+        "publishedTime": { "type": "string", "format": "date-time" },
+        "modifiedTime": { "type": "string", "format": "date-time" },
+        "author": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

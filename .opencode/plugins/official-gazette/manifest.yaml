@@ -1,0 +1,35 @@
+id: official-gazette
+name: Gazette of India
+version: "1.0"
+description: "Government of India official gazette notifications, statutory orders, and legislative changes"
+
+source:
+  url: https://egazette.gov.in
+  type: scrape-pdf
+  frequency: as-published
+  auth: false
+  pagination: date-based
+
+triggers:
+  - egazette
+  - gazette
+  - gazette notification
+  - official gazette
+  - statutory order
+  - legislative notification
+  - government notification
+  - egazette.gov.in
+
+trust_tier: 1
+
+output_schema: schemas/document.schema.json
+
+tags:
+  - government
+  - legislation
+  - regulation
+  - india
+
+refresh:
+  mode: poll
+  interval_minutes: 360

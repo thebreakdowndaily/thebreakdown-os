@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fact",
+  "description": "A verified fact with source attribution, verification status, and confidence score.",
+  "type": "object",
+  "properties": {
+    "statement": { "type": "string" },
+    "source": { "type": "string" },
+    "verified": { "type": "boolean" },
+    "confidence": {
+      "type": "number",
+      "description": "0–1 confidence score based on source reliability and corroboration",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "lastVerified": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}

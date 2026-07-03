@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Claim",
+  "description": "A debatable or contested claim found in a story, requiring verification or presenting multiple viewpoints.",
+  "type": "object",
+  "properties": {
+    "statement": { "type": "string" },
+    "speaker": { "type": "string" },
+    "date": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["Verified", "Partially Verified", "Disputed", "False", "Unverified"]
+    },
+    "evidence": { "type": "array" },
+    "confidence": {
+      "type": "number",
+      "description": "0–1 confidence score",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

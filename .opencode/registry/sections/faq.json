@@ -1,0 +1,32 @@
+{
+  "section": "faq",
+  "version": "1.0.0",
+  "purpose": "Answer common reader questions quickly and directly, reducing friction and improving comprehension.",
+  "requiredInputs": [
+    "questions[]",
+    "answers[]"
+  ],
+  "optionalInputs": [
+    "relatedQuestions[]",
+    "seeAlso[]"
+  ],
+  "supportedVisuals": [
+    "accordion",
+    "expandable-cards",
+    "linked-contents"
+  ],
+  "writingRules": [
+    "Each Q&A pair must be self-contained — reader should not need to read other sections to understand the answer",
+    "Answers should be 2–4 sentences, no more than 100 words each",
+    "Questions must be phrased as a reader would ask, not as an editor would write",
+    "Link to deeper sections in the story for readers who want more detail",
+    "Maximum 8 Q&A pairs per FAQ section"
+  ],
+  "seoRules": [
+    "Use FAQ schema markup for rich snippet eligibility",
+    "Each question should target a long-tail keyword",
+    "Answers must be distinct — no duplicate content across Q&As"
+  ],
+  "dependencies": [],
+  "narrativeStage": "understanding"
+}

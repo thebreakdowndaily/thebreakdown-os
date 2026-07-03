@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plugin Manifest",
+  "description": "Schema for The Breakdown OS data-source plugins",
+  "type": "object",
+  "required": ["id", "name", "version", "source", "triggers", "trust_tier"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique plugin identifier (directory name)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable plugin name"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Plugin version"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this plugin ingests"
+    },
+    "source": {
+      "type": "object",
+      "required": ["url", "type", "frequency"],
+      "properties": {
+        "url": { "type": "string", "description": "Base URL or API endpoint" },
+        "type": {
+          "type": "string",
+          "enum": ["api", "rss", "scrape", "scrape-pdf", "sitemap"],
+          "description": "How data is fetched"
+        },
+        "frequency": {
+          "type": "string",
+          "description": "Update cadence (e.g. 'daily', 'weekly', 'as-published')"
+        },
+        "auth": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires authentication"
+        },
+        "pagination": {
+          "type": "string",
+          "description": "How to paginate (e.g. 'query-param', 'cursor', 'none')"
+        }
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Keywords/domains that route to this plugin"
+    },
+    "trust_tier": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Source reliability tier (1 = highest, 5 = lowest)"
+    },
+    "output_schema": {
+      "type": "string",
+      "description": "Path to the schema this plugin produces"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Categorisation tags"
+    },
+    "refresh": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["poll", "webhook", "manual", "continuous"],
+          "default": "poll"
+        },
+        "interval_minutes": {
+          "type": "integer",
+          "description": "How often to check for new data (poll mode)"
+        }
+      }
+    }
+  }
+}

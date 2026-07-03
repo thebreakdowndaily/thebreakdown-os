@@ -1,0 +1,73 @@
+# THE BREAKDOWN — Monitoring Engine v1.0
+# Agent: monitoring-agent
+# Role: Watchman — detects changes in 12+ government/global sources, links to existing stories, triggers updates
+
+id: monitoring-agent
+version: "1.0"
+codename: "watchman"
+
+classification:
+  tier: operational
+  department: monitoring
+  autonomy: high
+
+inputs:
+  - source_raw.json       # Raw fetched data from watcher
+  - memory_engine.json    # Existing story index for impact analysis
+  - knowledge_graph.json  # Entity relationships for change linking
+  - story.json            # Existing story to update (if update workflow)
+
+output:
+  schema: monitoring.schema.json
+  format: MonitoringReport
+  destination: [orchestrator, memory-engine, knowledge-graph]
+
+triggers:
+  - schedule: "*/15 * * * *"  # Every 15 min (fast watchers: PIB, RSS, social)
+  - schedule: "0 */6 * * *"   # Every 6 hours (medium: Supreme Court, Parliament)
+  - schedule: "0 0 * * *"     # Every 24 hours (slow: World Bank, IMF, OECD)
+  - event: change_detected
+    action: run_update_workflow
+
+capabilities:
+  - Fetch and parse 12+ government/global source feeds
+  - Detect meaningful change (diff against last known state)
+  - Link change to existing stories via Memory Engine + Knowledge Graph
+  - Classify change severity (critical/major/minor/informational)
+  - Generate editor notification (urgency + affected stories + change summary)
+  - Trigger update workflow (minimal re-run: skip research, keep verified facts)
+  - Auto-republish if severity is critical or major
+
+watchers:
+  - parliament       # Lok Sabha / Rajya Sabha bill tracking, debates, committee reports
+  - supreme-court    # Daily orders, judgments, constitution bench cases
+  - pib              # Press Information Bureau releases (govt announcements)
+  - press-releases   # Ministry-specific press releases
+  - rbi              # RBI monetary policy, circulars, financial stability reports
+  - election-commission # Election schedules, results, MCC violations
+  - cag              # CAG audit reports (union, state, public sector)
+  - state-govts      # State government announcements, budget, policy changes
+  - world-bank       # World Bank reports, loans, economic outlook
+  - un               # UN resolutions, reports, peacekeeping, SDG tracking
+  - who              # WHO health alerts, disease outbreaks, guidelines
+  - imf              # IMF country reports, Article IV consultations, SDR allocations
+  - oecd             # OECD economic surveys, education/PISA, tax reports
+
+constraints:
+  - Never modify existing fact — flag it for editor review
+  - Never publish without editor approval for severity=minor
+  - Always preserve original story ID across updates
+  - Always version-stamp the update (story v1, v2, v3...)
+  - Watcher must implement exponential backoff on fetch failure
+
+performance:
+  timeout: 60       # Per-watcher fetch timeout
+  retries: 3
+  required: false   # Monitoring runs independently of story pipeline
+
+quality_gates:
+  - change_meaningful: true
+  - impact_analysis_complete: true
+  - affected_stories_linked: true
+  - severity_classified: true
+  - notification_generated: true

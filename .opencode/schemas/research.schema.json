@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research",
+  "description": "A research output item — can represent an evidence statement, an entity, or a finding with attribution metadata.",
+  "type": "object",
+  "properties": {
+    "question": { "type": "string" },
+    "importance": { "type": "string" },
+    "name": { "type": "string" },
+    "type": { "type": "string" },
+    "description": { "type": "string" },
+    "statement": { "type": "string" },
+    "speaker": { "type": "string" },
+    "date": { "type": "string" },
+    "event": { "type": "string" },
+    "verified": { "type": "boolean" },
+    "source": { "type": "string" },
+    "confidence": {
+      "type": "number",
+      "description": "0–1 confidence score based on source tier",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

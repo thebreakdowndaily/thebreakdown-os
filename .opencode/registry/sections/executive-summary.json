@@ -1,0 +1,31 @@
+{
+  "section": "executive-summary",
+  "version": "1.0.0",
+  "purpose": "Provide a TL;DR for busy readers — the essential facts, key tension, and bottom line in under 150 words.",
+  "requiredInputs": [
+    "summary",
+    "keyQuestion"
+  ],
+  "optionalInputs": [
+    "keyNumbers[]",
+    "bottomLine"
+  ],
+  "supportedVisuals": [
+    "highlight-box",
+    "key-number-cards"
+  ],
+  "writingRules": [
+    "Maximum 150 words — every word must carry weight",
+    "Answer: what happened, why it matters, what's at stake",
+    "No citations in the summary — those go in the evidence section",
+    "Write last, display first — summarize what the story actually says",
+    "Must be understandable without reading the rest of the story"
+  ],
+  "seoRules": [
+    "Meta description should be derived from the executive summary",
+    "Primary keyword must appear in the first 50 words",
+    "Summary should be structured as paragraph not bullet list for featured snippet"
+  ],
+  "dependencies": [],
+  "narrativeStage": "attention"
+}

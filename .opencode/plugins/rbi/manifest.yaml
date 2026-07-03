@@ -1,0 +1,40 @@
+id: rbi
+name: Reserve Bank of India
+version: "1.0"
+description: "RBI circulars, monetary policy, financial regulation, and economic data"
+
+source:
+  url: https://rbi.org.in
+  type: scrape-pdf
+  frequency: as-published
+  auth: false
+  pagination: date-based
+
+triggers:
+  - rbi
+  - reserve bank
+  - rbi.org.in
+  - monetary policy
+  - repo rate
+  - reverse repo
+  - crr
+  - slr
+  - banking regulation
+  - rbi circular
+  - rbi notification
+  - financial stability report
+
+trust_tier: 1
+
+output_schema: schemas/document.schema.json
+
+tags:
+  - finance
+  - banking
+  - regulation
+  - india
+  - monetary-policy
+
+refresh:
+  mode: poll
+  interval_minutes: 120

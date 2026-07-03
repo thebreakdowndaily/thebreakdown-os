@@ -1,0 +1,34 @@
+{
+  "section": "debate",
+  "version": "1.0.0",
+  "purpose": "Present multiple viewpoints on a contested issue, allowing readers to understand different perspectives and form their own conclusion.",
+  "requiredInputs": [
+    "viewpoints[]",
+    "stakeholders[]"
+  ],
+  "optionalInputs": [
+    "counterArguments[]",
+    "expertQuotes[]",
+    "pollingData"
+  ],
+  "supportedVisuals": [
+    "pro-con-table",
+    "argument-map",
+    "stakeholder-quote-cards",
+    "position-spectrum"
+  ],
+  "writingRules": [
+    "Each viewpoint must be attributed to a named person or organization",
+    "Present viewpoints neutrally — no implied endorsement of any position",
+    "Each viewpoint must be supported by evidence, not just assertion",
+    "Missing viewpoints must be explicitly noted",
+    "Let the reader decide — do not steer toward a conclusion"
+  ],
+  "seoRules": [
+    "Use FAQ schema if debate is structured as questions",
+    "Include primary and opposing keywords for balanced SEO",
+    "Quote schema for attributed statements"
+  ],
+  "dependencies": [],
+  "narrativeStage": "context"
+}

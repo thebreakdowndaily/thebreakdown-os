@@ -1,0 +1,36 @@
+id: imf
+name: International Monetary Fund
+version: "1.0"
+description: "IMF country reports, economic outlook, and financial sector assessments"
+
+source:
+  url: https://imf.org
+  type: api
+  frequency: weekly
+  auth: false
+  pagination: query-param
+
+triggers:
+  - imf
+  - international monetary fund
+  - imf.org
+  - economic outlook
+  - fiscal monitor
+  - financial stability
+  - gdp growth forecast
+  - imf report
+  - article iv
+
+trust_tier: 2
+
+output_schema: schemas/research.schema.json
+
+tags:
+  - finance
+  - economy
+  - international
+  - forecasts
+
+refresh:
+  mode: poll
+  interval_minutes: 1440

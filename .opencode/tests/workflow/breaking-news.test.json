@@ -1,0 +1,42 @@
+{
+  "test": "Breaking News Workflow",
+  "description": "Validate Breaking News workflow loads and all steps resolve",
+  "checks": {
+    "workflow_exists": true,
+    "steps_count": 7,
+    "step_ids": ["research", "verification", "writer", "editor", "seo", "memory", "publish"],
+    "all_agents_resolved": {
+      "research": "research-agent",
+      "verification": "verification-agent",
+      "writer": "writer-agent",
+      "editor": "editorial-review-agent",
+      "seo": "seo-agent",
+      "memory": "memory-engine",
+      "publish": null
+    },
+    "schema_exists": ["research.schema.json", "verification.schema.json", "writer.schema.json", "editorial-review.schema.json", "memory.schema.json", "seo.schema.json"],
+    "quality_gates_valid": {
+      "editorial": 80,
+      "evidence": 80,
+      "trust": 85
+    },
+    "failure_routing_valid": {
+      "editor": "writer"
+    },
+    "depends_on_acyclic": true,
+    "terminal_step": "publish",
+    "expected_dag": {
+      "research": [],
+      "verification": ["research"],
+      "writer": ["verification"],
+      "editor": ["writer"],
+      "seo": ["writer"],
+      "memory": ["editor"],
+      "publish": ["memory", "seo"]
+    },
+    "parallel_branches": [
+      ["editor", "seo"],
+      ["memory", "seo"]
+    ]
+  }
+}

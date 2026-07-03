@@ -1,0 +1,31 @@
+{
+  "section": "glossary",
+  "version": "1.0.0",
+  "purpose": "Define key terms, acronyms, and concepts used in the story — enabling readers to understand specialized vocabulary without leaving the page.",
+  "requiredInputs": [
+    "terms[]"
+  ],
+  "optionalInputs": [
+    "acronymExpansions[]",
+    "relatedTerms[]"
+  ],
+  "supportedVisuals": [
+    "definition-list",
+    "tooltip-hover-cards",
+    "accordion"
+  ],
+  "writingRules": [
+    "Each definition must be 1–2 sentences, maximum 50 words",
+    "Define acronyms even if expanded in text (readers may skip ahead)",
+    "Use plain language — define technical terms with everyday equivalents",
+    "Link to relevant sections in the story where the term is used",
+    "Alphabetical order for more than 5 terms"
+  ],
+  "seoRules": [
+    "Use DefinitionList schema markup",
+    "Glossary terms should be linked inline from body text",
+    "Each term page eligible for its own featured snippet"
+  ],
+  "dependencies": [],
+  "narrativeStage": "understanding"
+}

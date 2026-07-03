@@ -1,0 +1,35 @@
+{
+  "section": "global-comparison",
+  "version": "1.0.0",
+  "purpose": "Place the Indian story in global context — compare policies, metrics, or outcomes across countries to reveal what is unique or universal.",
+  "requiredInputs": [
+    "comparisonData[]",
+    "countries[]"
+  ],
+  "optionalInputs": [
+    "rankingTables",
+    "bestPractices[]",
+    "indexScores"
+  ],
+  "supportedVisuals": [
+    "comparison-table",
+    "world-map",
+    "bar-chart-grouped",
+    "radar-chart",
+    "ranking-list"
+  ],
+  "writingRules": [
+    "Always specify the year and source of comparison data",
+    "Adjust for purchasing power and population when comparing economic data",
+    "Explain why the comparison is relevant — what can India learn?",
+    "Include both similar and dissimilar countries for context",
+    "Avoid 'India vs Pakistan' framing unless explicitly relevant"
+  ],
+  "seoRules": [
+    "Use table schema for comparison data",
+    "Country names should use schema.org Country markup",
+    "Ranking data eligible for listicle featured snippets"
+  ],
+  "dependencies": [],
+  "narrativeStage": "context"
+}

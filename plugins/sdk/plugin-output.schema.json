@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plugin Output",
+  "description": "Validates every plugin's fetch() output before it reaches the Research Agent",
+  "type": "object",
+  "required": ["pluginId", "manifestVersion", "fetchedAt", "items", "metadata"],
+  "properties": {
+    "pluginId": { "type": "string" },
+    "manifestVersion": { "type": "string" },
+    "fetchedAt": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "summary", "url", "publishedAt", "source"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "publishedAt": { "type": "string", "format": "date-time" },
+          "source": { "type": "string" },
+          "category": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "metadata": { "type": "object" },
+          "trust_tier": { "type": "integer", "minimum": 1, "maximum": 5 }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["totalItems", "source", "status", "durationMs"],
+      "properties": {
+        "totalItems": { "type": "integer", "minimum": 0 },
+        "source": { "type": "string" },
+        "status": { "type": "string", "enum": ["success", "partial", "error", "no_data"] },
+        "error": { "type": "string" },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "rateLimitRemaining": { "type": "integer" }
+      }
+    }
+  }
+}

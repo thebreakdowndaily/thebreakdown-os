@@ -1,0 +1,34 @@
+id: pib
+name: Press Information Bureau
+version: "1.0"
+description: "Government of India press releases, official statements, and ministerial announcements"
+
+source:
+  url: https://pib.gov.in
+  type: scrape
+  frequency: as-published
+  auth: false
+  pagination: date-based
+
+triggers:
+  - pib
+  - press information bureau
+  - government release
+  - ministry statement
+  - pib.gov.in
+  - government press release
+  - official statement
+
+trust_tier: 1
+
+output_schema: schemas/document.schema.json
+
+tags:
+  - government
+  - media
+  - press-release
+  - india
+
+refresh:
+  mode: poll
+  interval_minutes: 60

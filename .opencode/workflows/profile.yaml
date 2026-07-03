@@ -1,0 +1,142 @@
+name: Profile
+version: "1.0"
+description: "Profile of a person, organization, or institution"
+
+steps:
+  - id: research
+    agent: research-agent
+    required: true
+    timeout: 120
+    retries: 3
+    output: research.schema.json
+
+  - id: entity
+    agent: entity-agent
+    required: true
+    timeout: 60
+    retries: 2
+    output: entity.schema.json
+    depends_on: [research]
+
+  - id: timeline
+    agent: timeline-agent
+    required: true
+    timeout: 90
+    retries: 2
+    output: timeline.schema.json
+    depends_on: [entity]
+
+  - id: knowledge
+    agent: knowledge-agent
+    required: true
+    timeout: 60
+    retries: 2
+    output: document.schema.json
+    depends_on: [timeline]
+
+  - id: editorial-thinking
+    agent: editorial-thinking-agent
+    required: true
+    timeout: 60
+    retries: 2
+    output: editorial-thinking.schema.json
+    depends_on: [knowledge]
+
+  - id: story-architecture
+    agent: story-architecture-agent
+    required: true
+    timeout: 90
+    retries: 2
+    output: story-architecture.schema.json
+    depends_on: [editorial-thinking]
+
+  - id: writer
+    agent: writer-agent
+    required: true
+    timeout: 300
+    retries: 2
+    output: writer.schema.json
+    depends_on: [story-architecture]
+
+  - id: editorial-review
+    agent: editorial-review-agent
+    required: true
+    timeout: 60
+    retries: 1
+    output: editorial-review.schema.json
+    depends_on: [writer]
+
+  - id: seo
+    agent: seo-agent
+    required: false
+    timeout: 30
+    retries: 1
+    output: seo.schema.json
+    depends_on: [writer]
+
+  - id: memory
+    agent: memory-engine
+    required: true
+    timeout: 60
+    retries: 2
+    output: memory.schema.json
+    depends_on: [editorial-review]
+
+  - id: graph
+    agent: knowledge-graph
+    required: false
+    timeout: 60
+    retries: 2
+    output: graph.schema.json
+    depends_on: [memory]
+
+  - id: visual-planning
+    agent: visual-intelligence-agent
+    required: false
+    timeout: 180
+    retries: 2
+    output: visual.schema.json
+    depends_on: [graph]
+
+  - id: website
+    agent: website-agent
+    required: true
+    timeout: 180
+    retries: 2
+    output: page.schema.json
+    depends_on: [seo, visual-planning]
+
+  - id: publishing
+    agent: publishing-agent
+    required: true
+    timeout: 120
+    retries: 2
+    output: publishing.schema.json
+    depends_on: [website]
+
+  - id: publish
+    timeout: 0
+    retries: 0
+    terminal: true
+    depends_on: [publishing]
+
+quality:
+  editorial: 85
+  research: 85
+  evidence: 90
+  trust: 90
+  context: 90
+  readability: 85
+
+failure:
+  editorial-review:
+    goto: writer
+
+on_success:
+  memory_update: true
+  publish: true
+
+
+
+
+

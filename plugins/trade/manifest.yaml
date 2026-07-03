@@ -1,0 +1,69 @@
+# THE BREAKDOWN — Plugin: Trade Data
+# Tracks India's import, export, and trade balance data
+
+id: trade
+name: India Trade Data Monitor
+version: "1.0"
+description: Monitors India's international trade data including exports, imports, trade balance, commodity-wise trade, and bilateral trade flows
+author: The Breakdown
+type: data-source
+trust_tier: 2
+status: active
+schedule: every 24 hours
+
+sources:
+  - url: https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070
+    type: api
+    method: GET
+    auth: api-key
+    authConfig:
+      apiKeyEnv: DATA_GOV_API_KEY
+      apiKeyHeader: x-api-key
+    rate_limit:
+      requestsPerMinute: 30
+  - url: https://comtrade.un.org/api/
+    type: api
+    method: GET
+    rate_limit:
+      requestsPerMinute: 10
+  - url: https://tradestat.commerce.gov.in/rss/
+    type: rss
+    method: GET
+
+config:
+  trackExports: true
+  trackImports: true
+  trackTradeBalance: true
+  trackCommodityWise: true
+  trackCountryWise: true
+  topTradePartners:
+    - US
+    - China
+    - UAE
+    - Saudi Arabia
+    - Iraq
+    - Indonesia
+    - Singapore
+    - Hong Kong
+  topCommodities:
+    - petroleum-products
+    - gems-jewellery
+    - pharmaceutical
+    - textiles
+    - electronics
+    - machinery
+    - iron-steel
+    - chemicals
+  fiscalYear: 2026-27
+  limit: 200
+
+tags:
+  - trade
+  - exports
+  - imports
+  - commerce
+  - economy
+  - india
+  - globalization
+
+documentation: Aggregates India's trade data from DGCI&S, Ministry of Commerce, and UN Comtrade. Provides monthly updates on export-import trends, trade balance, commodity-specific performance, and bilateral trade flows with top partners.

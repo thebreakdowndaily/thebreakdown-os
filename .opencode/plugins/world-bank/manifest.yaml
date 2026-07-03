@@ -1,0 +1,36 @@
+id: world-bank
+name: World Bank
+version: "1.0"
+description: "World Bank data, reports, indicators, and development research"
+
+source:
+  url: https://worldbank.org
+  type: api
+  frequency: weekly
+  auth: false
+  pagination: query-param
+
+triggers:
+  - world bank
+  - worldbank
+  - worldbank.org
+  - poverty
+  - development
+  - per capita income
+  - gni
+  - ease of doing business
+  - world development
+
+trust_tier: 2
+
+output_schema: schemas/research.schema.json
+
+tags:
+  - finance
+  - development
+  - international
+  - data
+
+refresh:
+  mode: poll
+  interval_minutes: 1440

@@ -1,0 +1,66 @@
+{
+  "test": "Investigation Workflow",
+  "description": "Validate Investigation workflow — longest path, conditional step, DAG structure",
+  "checks": {
+    "workflow_exists": true,
+    "steps_count": 14,
+    "step_ids": ["research", "verification", "knowledge", "timeline", "editorial-thinking", "story-architecture", "writer", "editorial-review", "legal-review", "memory", "seo", "visual-planning", "website", "publish"],
+    "all_agents_resolved": {
+      "research": "research-agent",
+      "verification": "verification-agent",
+      "knowledge": "knowledge-agent",
+      "timeline": "timeline-agent",
+      "editorial-thinking": "editorial-thinking-agent",
+      "story-architecture": "story-architecture-agent",
+      "writer": "writer-agent",
+      "editorial-review": "editorial-review-agent",
+      "legal-review": "legal-review-agent",
+      "memory": "memory-engine",
+      "seo": "seo-agent",
+      "visual-planning": "visual-agent",
+      "website": "website-agent",
+      "publish": null
+    },
+    "schema_exists": ["research.schema.json", "verification.schema.json", "document.schema.json", "timeline.schema.json", "editorial-thinking.schema.json", "story-architecture.schema.json", "writer.schema.json", "editorial-review.schema.json", "memory.schema.json", "seo.schema.json", "visual.schema.json", "page.schema.json"],
+    "quality_gates_valid": {
+      "editorial": 90,
+      "research": 90,
+      "evidence": 95,
+      "trust": 95,
+      "readability": 90,
+      "context": 90
+    },
+    "failure_routing_valid": {
+      "verification": "research",
+      "editorial-review": "writer",
+      "legal-review": "editor"
+    },
+    "conditional_step": {
+      "id": "legal-review",
+      "condition": "storyType == 'Investigation'",
+      "depends_on": ["editorial-review"]
+    },
+    "depends_on_acyclic": true,
+    "terminal_step": "publish",
+    "expected_dag": {
+      "research": [],
+      "verification": ["research"],
+      "knowledge": ["verification"],
+      "timeline": ["verification"],
+      "editorial-thinking": ["knowledge", "timeline"],
+      "story-architecture": ["editorial-thinking"],
+      "writer": ["story-architecture"],
+      "editorial-review": ["writer"],
+      "legal-review": ["editorial-review"],
+      "memory": ["editorial-review"],
+      "seo": ["writer"],
+      "visual-planning": ["legal-review", "memory"],
+      "website": ["seo", "visual-planning"],
+      "publish": ["website"]
+    },
+    "parallel_regions": [
+      ["knowledge", "timeline"],
+      ["seo", "editorial-review", "legal-review", "memory", "visual-planning"]
+    ]
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "test": "Story Architecture Agent v2.0",
+  "target": "story-architecture-agent.md",
+  "schema": "story-architecture.schema.json",
+  "sections": [
+    {
+      "name": "1. Schema Conformance",
+      "checks": [
+        "architecture.headlinePurpose is a non-empty string",
+        "architecture.readerJourney is an array of ≥ 3 questions",
+        "architecture.sections is an array with ≥ 3 items",
+        "Every section has id, question, objective, module, visual, narrativeStage",
+        "Every section.module is one of the 19 enum values",
+        "Every section.question ends with ?",
+        "Every section.narrativeStage is one of the 8 enum values",
+        "architecture.visualPlan is an array with ≥ 1 item",
+        "Every visualPlan item has sectionId, type (10 enum), purpose",
+        "architecture.complexity is one of the 5 enum values",
+        "architecture.estimatedReadingTime is a positive integer",
+        "architecture.templateUsed is one of the 5 enum values"
+      ]
+    },
+    {
+      "name": "2. Story Complexity (Step 1)",
+      "checks": [
+        "Complexity is explicitly determined, not defaulted",
+        "Simple: ≤ 3 sections, ≤ 5 min read",
+        "Standard: 4–6 sections, 5–10 min read",
+        "Complex: 7–10 sections, 10–15 min read",
+        "Deep Investigation: 10+ sections, 15+ min read"
+      ]
+    },
+    {
+      "name": "3. Reader Journey (Step 2)",
+      "checks": [
+        "Reader journey is mapped as questions, not section names",
+        "Questions follow logical sequence (what → why → how → what next)",
+        "Every question in the journey maps to a section"
+      ]
+    },
+    {
+      "name": "4. Section Objectives (Step 4)",
+      "checks": [
+        "Every section answers exactly ONE question",
+        "No section has two questions in its objective",
+        "No question is shared between two sections"
+      ]
+    },
+    {
+      "name": "5. Visual Planning (Step 5)",
+      "checks": [
+        "Every section has at least one visual element",
+        "No section with text-only content",
+        "Visual type matches section purpose (chart for data, timeline for chronology, etc.)",
+        "visualPlan covers all sections"
+      ]
+    },
+    {
+      "name": "6. Information Density (Step 6)",
+      "checks": [
+        "Sections follow progressive disclosure (simple → deep)",
+        "Hero or Quick Facts comes first",
+        "Sources or Glossary comes last"
+      ]
+    },
+    {
+      "name": "7. Narrative Flow (Step 7)",
+      "checks": [
+        "Sections follow: attention → understanding → evidence → context → analysis → consequences → solutions → future",
+        "No narrative stage is skipped unless justified",
+        "No stage appears out of order"
+      ]
+    },
+    {
+      "name": "8. Reader Questions (Step 8)",
+      "checks": [
+        "Every section title is a question",
+        "Questions are distinct (no duplicates)",
+        "Questions are answerable by available evidence"
+      ]
+    },
+    {
+      "name": "9. Knowledge Connections (Step 9)",
+      "checks": [
+        "≥ 3 related items recommended",
+        "Connections cover at least 3 different types (stories, people, orgs, laws, schemes, budgets, countries)",
+        "Entity references resolve to existing entity IDs"
+      ]
+    },
+    {
+      "name": "10. Template Selection",
+      "checks": [
+        "Template is one of the 5 options (breaking-news, explainer, investigation, data-story, the-fix)",
+        "Template selection is justified by story type and complexity",
+        "Template was customized (not used as-is)"
+      ]
+    },
+    {
+      "name": "11. Quality Gate",
+      "checks": [
+        "Story complexity is explicitly determined",
+        "Reader journey is mapped in questions",
+        "Every section answers exactly ONE question",
+        "Every section has at least one visual element",
+        "Information density follows progressive disclosure",
+        "Narrative flow follows the 8-stage sequence",
+        "Every section title is a question",
+        "Knowledge connections recommend ≥ 3 related items",
+        "Template selection is justified",
+        "Estimated reading time is calculated from section count and complexity",
+        "Never start writing — design first"
+      ]
+    }
+  ],
+  "results": {
+    "1. Schema Conformance": { "pass": 0, "fail": 0, "na": 0 },
+    "2. Story Complexity": { "pass": 0, "fail": 0, "na": 0 },
+    "3. Reader Journey": { "pass": 0, "fail": 0, "na": 0 },
+    "4. Section Objectives": { "pass": 0, "fail": 0, "na": 0 },
+    "5. Visual Planning": { "pass": 0, "fail": 0, "na": 0 },
+    "6. Information Density": { "pass": 0, "fail": 0, "na": 0 },
+    "7. Narrative Flow": { "pass": 0, "fail": 0, "na": 0 },
+    "8. Reader Questions": { "pass": 0, "fail": 0, "na": 0 },
+    "9. Knowledge Connections": { "pass": 0, "fail": 0, "na": 0 },
+    "10. Template Selection": { "pass": 0, "fail": 0, "na": 0 },
+    "11. Quality Gate": { "pass": 0, "fail": 0, "na": 0 },
+    "overall": { "pass": 0, "fail": 0, "na": 0 }
+  }
+}

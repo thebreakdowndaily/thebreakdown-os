@@ -1,0 +1,37 @@
+{
+  "section": "data",
+  "version": "1.0.0",
+  "purpose": "Present quantitative information through charts, tables, and visualizations that reveal patterns and trends.",
+  "requiredInputs": [
+    "datasets[]"
+  ],
+  "optionalInputs": [
+    "chartType",
+    "comparisonData",
+    "historicalTrends",
+    "sourceMethodology"
+  ],
+  "supportedVisuals": [
+    "bar-chart",
+    "line-chart",
+    "pie-chart",
+    "scatter-plot",
+    "data-table",
+    "heat-map",
+    "trend-line"
+  ],
+  "writingRules": [
+    "Every chart must have a title that states the insight, not just the data",
+    "Axes must be labelled with units and source",
+    "Raw data must be accessible (table or download)",
+    "Highlight the most important data point in text",
+    "Do not mislead with axis manipulation or cherry-picked ranges"
+  ],
+  "seoRules": [
+    "Use schema.org Dataset markup",
+    "Key numbers should be in paragraph text for featured snippets",
+    "Alt text on charts must describe the trend, not just the chart type"
+  ],
+  "dependencies": [],
+  "narrativeStage": "analysis"
+}

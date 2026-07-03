@@ -1,0 +1,47 @@
+# THE BREAKDOWN — Plugin: Reserve Bank of India
+# Monitors RBI circulars, monetary policy, and financial regulation
+
+id: rbi
+name: Reserve Bank of India Monitor
+version: "1.0"
+description: Tracks RBI circulars, monetary policy announcements, master directions, financial stability reports, and regulatory changes
+author: The Breakdown
+type: data-source
+trust_tier: 1
+status: active
+schedule: every 6 hours
+
+sources:
+  - url: https://rbi.org.in/RSS/rss.aspx
+    type: rss
+    method: GET
+  - url: https://rbi.org.in/Scripts/BS_PressRelease.aspx
+    type: rss
+    method: GET
+  - url: https://rbi.org.in/Scripts/BS_ViewCirculars.aspx
+    type: rss
+    method: GET
+
+config:
+  categories:
+    - monetary-policy
+    - financial-regulation
+    - banking
+    - foreign-exchange
+    - government-securities
+    - payment-systems
+    - financial-inclusion
+  trackRepoRate: true
+  trackCRR: true
+  trackSLR: true
+  limit: 100
+
+tags:
+  - rbi
+  - central-bank
+  - monetary-policy
+  - banking
+  - financial-regulation
+  - india-economy
+
+documentation: Covers all RBI communications including monetary policy statements (bi-monthly), circulars to banks, master directions, financial stability reports, and press releases. Key rate changes flagged immediately.

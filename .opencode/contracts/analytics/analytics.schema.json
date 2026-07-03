@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Analytics Report",
+  "description": "Schema for the Analytics Engine output — learning-centered metrics, not page views",
+  "type": "object",
+  "definitions": {
+    "AnalyticsEvent": {
+      "type": "object",
+      "required": ["type", "storySlug", "ts"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "section_view", "scroll", "chart_interaction",
+            "timeline_interaction", "faq_expansion", "search",
+            "return_visit", "share", "bookmark"
+          ]
+        },
+        "storySlug": { "type": "string" },
+        "ts": { "type": "string", "format": "date-time" },
+        "sessionId": { "type": "string" },
+        "sectionId": { "type": "string" },
+        "duration": { "type": "integer", "minimum": 0 },
+        "depth": { "type": "number", "minimum": 0, "maximum": 1 },
+        "maxDepth": { "type": "number", "minimum": 0, "maximum": 1 },
+        "chartId": { "type": "string" },
+        "action": { "type": "string" },
+        "eventDate": { "type": "string" },
+        "questionIndex": { "type": "integer", "minimum": 0 },
+        "query": { "type": "string" },
+        "resultsCount": { "type": "integer", "minimum": 0 },
+        "visitCount": { "type": "integer", "minimum": 1 },
+        "medium": { "type": "string", "enum": ["twitter", "linkedin", "whatsapp", "copy_link"] }
+      }
+    },
+    "AggregateStoryAnalytics": {
+      "type": "object",
+      "required": ["storySlug", "period", "totalReaders"],
+      "properties": {
+        "storySlug": { "type": "string" },
+        "period": {
+          "type": "object",
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        },
+        "totalReaders": { "type": "integer", "minimum": 0 },
+        "avgTimeOnPage": { "type": "integer", "minimum": 0 },
+        "avgScrollCompletion": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sectionEngagement": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "avgTime": { "type": "integer" },
+              "totalEntries": { "type": "integer" },
+              "dropoffRate": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "chartInteractions": { "type": "integer", "minimum": 0 },
+        "timelineInteractions": { "type": "integer", "minimum": 0 },
+        "faqExpansions": { "type": "integer", "minimum": 0 },
+        "popularFAQIndices": { "type": "array", "items": { "type": "integer" } },
+        "searchReferrals": { "type": "integer", "minimum": 0 },
+        "returnVisitorRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sharesPerMedium": {
+          "type": "object",
+          "properties": {
+            "twitter": { "type": "integer" },
+            "linkedin": { "type": "integer" },
+            "whatsapp": { "type": "integer" },
+            "copyLink": { "type": "integer" }
+          }
+        },
+        "bookmarks": { "type": "integer", "minimum": 0 },
+        "lowEngagementSections": { "type": "array", "items": { "type": "string" } },
+        "highDropoffPoints": { "type": "array", "items": { "type": "number" } },
+        "learningEffectivenessScore": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "ImprovementReport": {
+      "type": "object",
+      "required": ["storySlug", "score", "recommendations"],
+      "properties": {
+        "storySlug": { "type": "string" },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "strengths": { "type": "array", "items": { "type": "string" } },
+        "weaknesses": { "type": "array", "items": { "type": "string" } },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": { "type": "string", "enum": ["restructure", "reorder", "shorten", "expand", "add_visual", "improve_headline", "add_faq", "other"] },
+              "target": { "type": "string" },
+              "reason": { "type": "string" },
+              "priority": { "type": "string", "enum": ["high", "medium", "low"] }
+            }
+          }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/definitions/AnalyticsEvent" },
+    { "$ref": "#/definitions/AggregateStoryAnalytics" },
+    { "$ref": "#/definitions/ImprovementReport" }
+  ]
+}

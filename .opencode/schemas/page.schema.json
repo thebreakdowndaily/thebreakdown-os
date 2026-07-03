@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Page Configuration",
+  "description": "Configuration for a static hub page on The Breakdown OS website.",
+  "type": "object",
+  "properties": {
+    "hero": { "type": "object" },
+    "sections": { "type": "array" },
+    "seo": { "type": "object" },
+    "relatedStories": { "type": "array" },
+    "knowledgeGraph": { "type": "array" }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Event Memory",
+  "description": "A notable event with date, entities, and sources",
+  "allOf": [
+    { "$ref": "memory.schema.json" },
+    {
+      "type": "object",
+      "required": ["event", "date", "entities"],
+      "properties": {
+        "event": { "type": "string", "description": "Event description" },
+        "date": { "type": "string", "description": "Date string (ISO or flexible)" },
+        "endDate": { "type": "string", "description": "End date (if range)" },
+        "entities": { "type": "array", "items": { "type": "string" }, "description": "Entity IDs involved" },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "category": { "type": "string", "description": "e.g., 'election', 'policy-change', 'judgement', 'disaster'" },
+        "significance": { "type": "integer", "minimum": 1, "maximum": 10, "description": "Importance rating" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+# THE BREAKDOWN — Plugin: Indian Parliament
+# Tracks bills, debates, questions, and committee activities
+
+id: parliament
+name: Indian Parliament Tracker
+version: "1.0"
+description: Monitors Lok Sabha and Rajya Sabha proceedings, bills introduced, debates, committee reports, and parliamentary questions
+author: The Breakdown
+type: data-source
+trust_tier: 1
+status: active
+schedule: every 6 hours
+
+sources:
+  - url: https://loksabha.nic.in/RSS/rss.aspx
+    type: rss
+    method: GET
+  - url: https://rajyasabha.nic.in/RSS/rss.aspx
+    type: rss
+    method: GET
+  - url: https://prsindia.org/rss/bills
+    type: rss
+    method: GET
+
+config:
+  houses:
+    - lok-sabha
+    - rajya-sabha
+  trackBills: true
+  trackQuestions: true
+  trackCommitteeReports: true
+  trackDebates: true
+  limitPerHouse: 100
+
+tags:
+  - parliament
+  - legislation
+  - bills
+  - democracy
+  - lok-sabha
+  - rajya-sabha
+  - policy
+
+documentation: Tracks all legislative activity including bill status changes, parliamentary questions (starred/unstarred), committee reports, and debate transcripts. Links to PRS Legislative Research for analysis.

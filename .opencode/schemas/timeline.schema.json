@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Timeline",
+  "description": "A structured timeline output with historical, story, and future event sequences.",
+  "type": "object",
+  "properties": {
+    "timeline": {
+      "type": "object",
+      "properties": {
+        "historical": {
+          "type": "array",
+          "description": "Past events providing context",
+          "items": { "$ref": "#/$defs/timelineEvent" }
+        },
+        "story": {
+          "type": "array",
+          "description": "Events directly related to the current news",
+          "items": { "$ref": "#/$defs/timelineEvent" }
+        },
+        "future": {
+          "type": "array",
+          "description": "Expected, scheduled, or possible future events",
+          "items": { "$ref": "#/$defs/futureEvent" }
+        }
+      }
+    },
+    "visualization": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "interactive", "milestone", "comparative", "dual"]
+        },
+        "interactive": { "type": "boolean" },
+        "groupBy": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "timelineEvent": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Law", "Policy", "Election", "Budget", "Court",
+            "Technology", "Disaster", "War", "Agreement", "Project",
+            "Report", "Speech", "Scheme", "Economic Data", "International Event"
+          ]
+        },
+        "entities": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "futureEvent": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Law", "Policy", "Election", "Budget", "Court",
+            "Technology", "Disaster", "War", "Agreement", "Project",
+            "Report", "Speech", "Scheme", "Economic Data", "International Event"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["confirmed", "scheduled", "expected", "possible"]
+        },
+        "entities": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

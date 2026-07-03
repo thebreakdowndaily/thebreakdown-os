@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Knowledge Graph Node Schema",
+  "description": "Schema for a node in The Breakdown OS Knowledge Graph",
+  "type": "object",
+  "required": ["id", "type", "label"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_|:-]+$",
+      "description": "Canonical ID: <type>::<sanitized-label>"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "person", "organization", "company",
+        "country", "state", "district", "city",
+        "law", "policy", "scheme",
+        "budget", "report", "committee",
+        "court-case", "technology", "project",
+        "event", "article", "dataset", "statistic",
+        "topic"
+      ]
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Human-readable label/name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Brief description of the entity"
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Alternative names for the entity"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Arbitrary metadata key-value pairs"
+    },
+    "firstSeen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of first observation"
+    },
+    "lastSeen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "storyCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of stories referencing this entity"
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Whether the node is active or soft-deleted"
+    }
+  }
+}

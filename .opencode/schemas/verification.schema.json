@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Verification",
+  "description": "A verification result with status, confidence score, reasoning, and contradiction tracking.",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "mostly_verified",
+        "partially_verified",
+        "unsupported",
+        "disputed",
+        "false",
+        "insufficient_evidence"
+      ]
+    },
+    "confidence": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "integer",
+          "description": "0–100 confidence score",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "reason": { "type": "string" }
+      }
+    },
+    "question": { "type": "string" },
+    "importance": { "type": "string" },
+    "contradictions": {
+      "type": "array",
+      "description": "List of contradictions found between sources or claims",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": { "type": "string" },
+          "sourceA": { "type": "string" },
+          "sourceB": { "type": "string" },
+          "possibleReason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

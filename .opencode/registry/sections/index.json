@@ -1,0 +1,36 @@
+{
+  "registry": "section-registry",
+  "version": "1.0.0",
+  "description": "Master index of all available section specifications. Adding a new section requires only registering it here and creating its JSON file.",
+  "sections": [
+    { "id": "hero", "file": "hero.json", "narrativeStage": "attention" },
+    { "id": "executive-summary", "file": "executive-summary.json", "narrativeStage": "attention" },
+    { "id": "quick-facts", "file": "quick-facts.json", "narrativeStage": "attention" },
+    { "id": "timeline", "file": "timeline.json", "narrativeStage": "understanding" },
+    { "id": "how-it-works", "file": "how-it-works.json", "narrativeStage": "understanding" },
+    { "id": "faq", "file": "faq.json", "narrativeStage": "understanding" },
+    { "id": "glossary", "file": "glossary.json", "narrativeStage": "understanding" },
+    { "id": "evidence", "file": "evidence.json", "narrativeStage": "evidence" },
+    { "id": "charts", "file": "charts.json", "narrativeStage": "evidence" },
+    { "id": "maps", "file": "maps.json", "narrativeStage": "evidence" },
+    { "id": "context", "file": "global-comparison.json", "narrativeStage": "context" },
+    { "id": "stakeholders", "file": "stakeholders.json", "narrativeStage": "context" },
+    { "id": "debate", "file": "debate.json", "narrativeStage": "context" },
+    { "id": "data", "file": "data.json", "narrativeStage": "analysis" },
+    { "id": "money-flow", "file": "money-flow.json", "narrativeStage": "analysis" },
+    { "id": "root-causes", "file": "root-causes.json", "narrativeStage": "analysis" },
+    { "id": "the-fix", "file": "the-fix.json", "narrativeStage": "solutions" },
+    { "id": "sources", "file": "sources.json", "narrativeStage": "solutions" },
+    { "id": "related-stories", "file": "related-stories.json", "narrativeStage": "future" }
+  ],
+  "stages": {
+    "attention": ["hero", "executive-summary", "quick-facts"],
+    "understanding": ["timeline", "how-it-works", "faq", "glossary"],
+    "evidence": ["evidence", "charts", "maps"],
+    "context": ["global-comparison", "stakeholders", "debate"],
+    "analysis": ["data", "money-flow", "root-causes"],
+    "consequences": [],
+    "solutions": ["the-fix", "sources"],
+    "future": ["related-stories"]
+  }
+}

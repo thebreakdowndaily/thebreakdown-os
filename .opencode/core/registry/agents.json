@@ -1,0 +1,226 @@
+﻿[
+    {
+        "id":  "research-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/research-agent.md",
+        "output":  "research.schema.json",
+        "timeout":  120,
+        "retries":  3,
+        "required":  true
+    },
+    {
+        "id":  "verification-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/verification-agent.md",
+        "output":  "verification.schema.json",
+        "timeout":  60,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "entity-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/entity-agent.md",
+        "output":  "entity.schema.json",
+        "timeout":  60,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "timeline-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/timeline-agent.md",
+        "output":  "timeline.schema.json",
+        "timeout":  60,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "knowledge-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/knowledge-agent.md",
+        "output":  "document.schema.json",
+        "timeout":  60,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "editorial-thinking-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/editorial-thinking-agent.md",
+        "output":  "editorial-thinking.schema.json",
+        "timeout":  60,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "story-architecture-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/story-architecture-agent.md",
+        "output":  "story-architecture.schema.json",
+        "timeout":  90,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "writer-agent",
+        "version":  "2.0",
+        "prompt":  ".opencode/agents/writer-agent/system.md",
+        "manifest":  ".opencode/agents/writer-agent/manifest.yaml",
+        "output":  "writer.schema.json",
+        "timeout":  300,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "editorial-review-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/editorial-review-agent/system.md",
+        "manifest":  ".opencode/agents/editorial-review-agent/manifest.yaml",
+        "output":  "editorial-review.schema.json",
+        "timeout":  60,
+        "retries":  1,
+        "required":  true
+    },
+    {
+        "id":  "legal-review-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/legal-review-agent.md",
+        "output":  "legal-review.schema.json",
+        "timeout":  90,
+        "retries":  1,
+        "required":  true
+    },
+    {
+        "id":  "seo-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/seo-agent.md",
+        "output":  "seo.schema.json",
+        "timeout":  30,
+        "retries":  1,
+        "required":  false
+    },
+    {
+        "id":  "visual-intelligence-agent",
+        "version":  "1.0",
+        "system":  ".opencode/agents/visual-intelligence-agent/system.md",
+        "manifest":  ".opencode/agents/visual-intelligence-agent/manifest.yaml",
+        "engine":  {
+            "decision":  ".opencode/agents/visual-intelligence-agent/decision-engine.md",
+            "chart":  ".opencode/agents/visual-intelligence-agent/chart-selector.md",
+            "svg":  ".opencode/agents/visual-intelligence-agent/svg-generator.md",
+            "map":  ".opencode/agents/visual-intelligence-agent/map-generator.md",
+            "globe":  ".opencode/agents/visual-intelligence-agent/3d-globe-engine.md",
+            "animation":  ".opencode/agents/visual-intelligence-agent/animation-planner.md",
+            "infographic":  ".opencode/agents/visual-intelligence-agent/infographic-planner.md"
+        },
+        "output":  "visual.schema.json",
+        "timeout":  180,
+        "retries":  2,
+        "required":  false
+    },
+    {
+        "id":  "website-agent",
+        "version":  "1.0",
+        "prompt":  ".opencode/agents/website-agent.md",
+        "output":  "page.schema.json",
+        "timeout":  180,
+        "retries":  2,
+        "required":  true
+    },
+    {
+        "id":  "memory-engine",
+        "version":  "1.0",
+        "output":  "memory.schema.json",
+        "prompt":  ".opencode/core/memory/manager.ts",
+        "required":  true,
+        "retries":  2,
+        "timeout":  120
+    },
+    {
+        "id":  "knowledge-graph",
+        "version":  "1.0",
+        "output":  "graph.schema.json",
+        "prompt":  ".opencode/core/knowledge-graph/graph-manager.ts",
+        "required":  false,
+        "retries":  2,
+        "timeout":  120
+    },
+    {
+        "id":  "publishing-agent",
+        "version":  "1.0",
+        "system":  ".opencode/agents/publishing-agent/system.md",
+        "manifest":  ".opencode/agents/publishing-agent/manifest.yaml",
+        "output":  "publishing.schema.json",
+        "required":  true,
+        "retries":  2,
+        "timeout":  120,
+        "channels":  [
+            "website",
+            "newsletter",
+            "instagram",
+            "x",
+            "linkedin",
+            "youtube",
+            "podcast",
+            "telegram",
+            "email",
+            "rss"
+        ]
+    },
+    {
+        "id":  "monitoring-agent",
+        "version":  "1.0",
+        "system":  ".opencode/agents/monitoring-agent/system.md",
+        "manifest":  ".opencode/agents/monitoring-agent/manifest.yaml",
+        "output":  "monitoring.schema.json",
+        "engine":  {
+            "impact":  ".opencode/agents/monitoring-agent/impact-analysis.md",
+            "notification":  ".opencode/agents/monitoring-agent/notification-engine.md",
+            "watchers":  ".opencode/agents/monitoring-agent/watchers/"
+        },
+        "required":  false,
+        "retries":  3,
+        "timeout":  60,
+        "watchers":  [
+            "parliament",
+            "supreme-court",
+            "pib",
+            "press-releases",
+            "rbi",
+            "election-commission",
+            "cag",
+            "state-govts",
+            "world-bank",
+            "un",
+            "who",
+            "imf",
+            "oecd"
+        ]
+    },
+    {
+        "id":  "analytics-agent",
+        "version":  "1.0",
+        "system":  ".opencode/agents/analytics-agent/system.md",
+        "manifest":  ".opencode/agents/analytics-agent/manifest.yaml",
+        "output":  "analytics.schema.json",
+        "contract":  ".opencode/contracts/analytics/analytics.schema.json",
+        "engine": {
+            "metrics": ".opencode/agents/analytics-agent/metrics-definitions.md"
+        },
+        "required":  false,
+        "retries":  1,
+        "timeout":  30,
+        "metrics": [
+            "section_view",
+            "scroll",
+            "chart_interaction",
+            "timeline_interaction",
+            "faq_expansion",
+            "search",
+            "return_visit",
+            "share",
+            "bookmark"
+        ]
+    }
+]

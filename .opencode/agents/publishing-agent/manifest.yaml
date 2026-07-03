@@ -1,0 +1,76 @@
+# THE BREAKDOWN — Publishing Engine v1.0
+# Agent: publishing-agent
+# Role: Multi-channel publisher — one verified JSON, many outputs, zero fact drift
+
+id: publishing-agent
+version: "1.0"
+codename: "broadcast"
+
+classification:
+  tier: distribution
+  department: publishing
+  autonomy: high
+
+inputs:
+  - story.json          # Verified Writer output
+  - visualPlan.json     # Visual Intelligence output
+  - pageSpec.json       # Website Builder output (if available)
+
+output:
+  schema: publishing.schema.json
+  format: PublishingPlan
+  channels:
+    - website
+    - newsletter
+    - instagram
+    - x
+    - linkedin
+    - youtube
+    - podcast
+    - telegram
+    - email
+    - rss
+
+triggers:
+  - step: publish
+    condition: editorial_review approved AND memory_engine ingested
+    priority: always
+
+capabilities:
+  - Generate website HTML from Story JSON
+  - Generate newsletter email (HTML + plain text)
+  - Generate Instagram carousel (image specs + caption)
+  - Generate X/Twitter thread (multi-tweet)
+  - Generate LinkedIn article
+  - Generate YouTube script (hosted + short)
+  - Generate podcast script (hosted)
+  - Generate Telegram message
+  - Generate email alert (HTML + plain text)
+  - Generate RSS feed entry
+
+constraints:
+  - NEVER rewrite facts — every format uses the exact verified data
+  - NEVER change numbers, dates, names, quotes, or sources
+  - NEVER add opinions or editorial voice beyond the original story
+  - ALWAYS cite the original story URL as the canonical source
+  - ALWAYS include evidence score in social posts
+  - Character limits must be respected per channel
+  - Hashtags must be pre-approved and consistent across channels
+
+rules:
+  one_story_many_outputs: true
+  fact_consistency: enforced
+  source_attribution: required
+  evidence_score_visible: required
+
+performance:
+  timeout: 120
+  retries: 2
+  required: true
+
+quality_gates:
+  - fact_check_against_source: true
+  - channel_limits_respected: true
+  - call_to_action_present: true
+  - canonical_url_included: true
+  - evidence_score_visible: true

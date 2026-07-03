@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Source Memory",
+  "description": "A tracked information source with credibility score",
+  "allOf": [
+    { "$ref": "memory.schema.json" },
+    {
+      "type": "object",
+      "required": ["publisher", "credibility"],
+      "properties": {
+        "publisher": { "type": "string", "description": "Source name (e.g., 'Reuters', 'PIB', 'RBI')" },
+        "credibility": { "type": "integer", "minimum": 0, "maximum": 100, "description": "Credibility score" },
+        "url": { "type": "string", "description": "Base URL or page" },
+        "lastUsed": { "type": "string", "format": "date-time" },
+        "stories": { "type": "array", "items": { "type": "string" }, "description": "Story IDs that used this source" },
+        "tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  ]
+}

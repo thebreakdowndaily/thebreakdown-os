@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StoryArchitecture",
+  "description": "Complete story architecture blueprint — reader journey, sections, visual plan, and narrative flow.",
+  "type": "object",
+  "properties": {
+    "architecture": {
+      "type": "object",
+      "properties": {
+        "headlinePurpose": { "type": "string", "description": "What the headline must communicate" },
+        "readerJourney": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Sequence of questions the reader will follow"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "question": { "type": "string", "description": "The single question this section answers" },
+              "objective": { "type": "string", "description": "What this section achieves" },
+              "module": {
+                "type": "string",
+                "enum": [
+                  "Hero", "Executive Summary", "Quick Facts", "Timeline",
+                  "Evidence", "How It Works", "Money Flow", "Stakeholders",
+                  "Data", "Maps", "Charts", "The Debate", "Global Comparison",
+                  "Root Causes", "The Fix", "FAQ", "Primary Sources",
+                  "Glossary", "Related Stories"
+                ]
+              },
+              "visual": { "type": "string", "description": "Visual element for this section" },
+              "narrativeStage": {
+                "type": "string",
+                "enum": ["attention", "understanding", "evidence", "context", "analysis", "consequences", "solutions", "future"]
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string", "enum": ["fact", "claim", "source", "entity", "timeline"] },
+                    "id": { "type": "string" }
+                  }
+                }
+              },
+              "knowledgeConnections": {
+                "type": "object",
+                "properties": {
+                  "relatedStories": { "type": "array", "items": { "type": "string" } },
+                  "relatedEntities": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        },
+        "visualPlan": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sectionId": { "type": "string" },
+              "type": {
+                "type": "string",
+                "enum": ["chart", "svg", "comparison", "map", "timeline", "quote", "infographic", "hero-image", "table", "diagram"]
+              },
+              "purpose": { "type": "string" }
+            }
+          }
+        },
+        "interactiveElements": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "storyType": { "type": "string" },
+        "complexity": {
+          "type": "string",
+          "enum": ["Simple", "Standard", "Complex", "Deep Investigation", "Reference Guide"]
+        },
+        "estimatedReadingTime": {
+          "type": "integer",
+          "description": "Estimated reading time in minutes"
+        },
+        "templateUsed": {
+          "type": "string",
+          "enum": ["breaking-news", "explainer", "investigation", "data-story", "the-fix"]
+        }
+      }
+    }
+  }
+}

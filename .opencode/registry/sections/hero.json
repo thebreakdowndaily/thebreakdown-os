@@ -1,0 +1,34 @@
+{
+  "section": "hero",
+  "version": "1.0.0",
+  "purpose": "Open the story with a compelling visual and headline that captures attention and sets the narrative frame.",
+  "requiredInputs": [
+    "headline",
+    "primaryAngle"
+  ],
+  "optionalInputs": [
+    "subheadline",
+    "heroImage",
+    "byline",
+    "publishedDate",
+    "category"
+  ],
+  "supportedVisuals": [
+    "hero-image",
+    "featured-graphic",
+    "video-embed"
+  ],
+  "writingRules": [
+    "Headline must communicate the core tension or question, not just describe the topic",
+    "Subheadline adds context the reader needs before scrolling",
+    "No clickbait — headline must be deliverable by the story",
+    "Maximum 12 words for headline, 25 for subheadline"
+  ],
+  "seoRules": [
+    "Primary keyword must appear in the headline",
+    "Meta description derived from subheadline + first paragraph",
+    "OG image must be set to heroImage or generated fallback"
+  ],
+  "dependencies": [],
+  "narrativeStage": "attention"
+}

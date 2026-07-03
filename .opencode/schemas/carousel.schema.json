@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.in/schemas/carousel.json",
+  "title": "Instagram Carousel Post",
+  "description": "Specification for an Instagram carousel post promoting a Breakdown OS story.",
+  "type": "object",
+  "required": ["storySlug", "slides", "caption"],
+  "properties": {
+    "storySlug": { "type": "string" },
+    "storyTitle": { "type": "string" },
+    "slides": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["type", "content"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["cover", "hook", "explainer", "data", "comparison", "timeline", "quote", "debate", "bottom-line", "cta", "sources"]
+          },
+          "headline": { "type": "string", "maxLength": 60 },
+          "content": {
+            "type": "array",
+            "items": { "type": "string" },
+            "maxItems": 6
+          },
+          "visual": {
+            "type": "object",
+            "properties": {
+              "chart": { "type": "string" },
+              "emphasis": { "type": "string", "enum": ["number", "quote", "comparison"] },
+              "icon": { "type": "string" }
+            }
+          },
+          "notes": { "type": "string", "description": "Design/production notes for this slide" }
+        }
+      }
+    },
+    "caption": {
+      "type": "object",
+      "required": ["primary", "hook"],
+      "properties": {
+        "primary": { "type": "string", "maxLength": 2200 },
+        "hook": { "type": "string", "maxLength": 150 },
+        "cta": { "type": "string", "maxLength": 100 },
+        "hashtags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 8,
+          "maxItems": 12
+        },
+        "mentions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "design": {
+      "type": "object",
+      "properties": {
+        "aspectRatio": { "type": "string", "enum": ["4:5", "1:1"], "default": "4:5" },
+        "colorPalette": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string", "default": "#D4A843" },
+            "background": { "type": "string", "default": "#0A0A0F" },
+            "text": { "type": "string", "default": "#F5F5F5" },
+            "accent": { "type": "string", "default": "#E4A11D" }
+          }
+        },
+        "fontHeadings": { "type": "string", "default": "Bebas Neue" },
+        "fontBody": { "type": "string", "default": "Source Sans 3" }
+      }
+    },
+    "publishing": {
+      "type": "object",
+      "properties": {
+        "platform": { "type": "string", "enum": ["instagram"], "default": "instagram" },
+        "optimalTime": { "type": "string", "description": "Recommended posting time in IST" },
+        "firstComment": { "type": "string", "description": "Additional links/details in first comment" },
+        "storyLink": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}

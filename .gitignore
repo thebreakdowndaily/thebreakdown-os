@@ -2,7 +2,6 @@
 node_modules/
 
 # Next.js
-.next/
 out/
 
 # Build
@@ -10,6 +9,7 @@ dist/
 build/
 .open-next/
 .wrangler/
+.next/
 
 # Environment
 .env

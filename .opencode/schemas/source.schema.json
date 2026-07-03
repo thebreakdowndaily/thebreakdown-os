@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Source",
+  "description": "A reference source used to support facts, claims, or evidence in a story.",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string" },
+    "publisher": { "type": "string" },
+    "url": { "type": "string", "format": "uri" },
+    "published": { "type": "string" },
+    "accessed": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Government",
+        "Research",
+        "Court",
+        "News",
+        "NGO",
+        "Academic",
+        "International Organization"
+      ]
+    },
+    "credibility": { "type": "string" }
+  }
+}

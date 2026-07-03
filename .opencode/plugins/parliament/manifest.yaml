@@ -1,0 +1,38 @@
+id: parliament
+name: Parliament of India
+version: "1.0"
+description: "Lok Sabha and Rajya Sabha proceedings, bills, debates, and committee reports"
+
+source:
+  url: https://sansad.in
+  type: scrape
+  frequency: as-published
+  auth: false
+  pagination: date-based
+
+triggers:
+  - parliament
+  - sansad
+  - sansad.in
+  - lok sabha
+  - rajya sabha
+  - bill
+  - parliamentary committee
+  - question hour
+  - zero hour
+  - debate
+  - legislation parliament
+
+trust_tier: 1
+
+output_schema: schemas/document.schema.json
+
+tags:
+  - government
+  - legislation
+  - parliament
+  - india
+
+refresh:
+  mode: poll
+  interval_minutes: 120

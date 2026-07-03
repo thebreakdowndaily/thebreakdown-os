@@ -1,0 +1,386 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.in/schemas/visual.schema.json",
+  "title": "VisualPlan",
+  "description": "THE BREAKDOWN — Visual Intelligence Engine output contract. Specifies all visuals needed for a story.",
+  "type": "object",
+  "required": ["visualPlan", "metadata"],
+  "properties": {
+    "visualPlan": {
+      "type": "object",
+      "required": ["storySlug", "gateResult", "storyFlow"],
+      "properties": {
+        "storySlug": { "type": "string", "description": "Unique slug for the story" },
+        "gateResult": { "type": "string", "enum": ["visual_required", "text_only"], "description": "Gate decision: whether visuals are needed" },
+        "gateReason": { "type": "string", "description": "Explanation of gate decision" },
+        "primaryVisual": { "$ref": "#/definitions/VisualSpec" },
+        "secondaryVisuals": { "type": "array", "items": { "$ref": "#/definitions/VisualSpec" } },
+        "heroVisual": { "$ref": "#/definitions/HeroVisual" },
+        "charts": { "type": "array", "items": { "$ref": "#/definitions/ChartSpec" } },
+        "maps": { "type": "array", "items": { "$ref": "#/definitions/MapSpec" } },
+        "globes": { "type": "array", "items": { "$ref": "#/definitions/GlobeSpec" } },
+        "svgs": { "type": "array", "items": { "$ref": "#/definitions/SVGSpec" } },
+        "animations": { "type": "array", "items": { "$ref": "#/definitions/AnimationSpec" } },
+        "infographics": { "type": "array", "items": { "$ref": "#/definitions/InfographicSpec" } },
+        "cards": { "type": "array", "items": { "$ref": "#/definitions/CardSpec" } },
+        "storyFlow": {
+          "type": "array",
+          "description": "Ordered list of visuals in story reading order",
+          "items": {
+            "type": "object",
+            "required": ["position", "type", "visualId"],
+            "properties": {
+              "position": { "type": "integer", "minimum": 1 },
+              "type": { "type": "string", "enum": ["hero", "chart", "map", "globe", "svg", "animation", "infographic", "card"] },
+              "visualId": { "type": "string" }
+            }
+          },
+          "maxItems": 8
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "type"],
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string", "enum": ["svg", "map", "chart", "globe", "animation", "card"] },
+              "lazyLoad": { "type": "boolean", "default": true }
+            }
+          }
+        },
+        "captions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["visualId", "caption", "altText"],
+            "properties": {
+              "visualId": { "type": "string" },
+              "caption": { "type": "string", "description": "Plain-English caption visible below the visual" },
+              "altText": { "type": "string", "description": "Screen-reader description of the visual data" },
+              "longDescription": { "type": "string", "description": "Extended description for complex visuals" }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["generatedBy", "version", "visualCount"],
+      "properties": {
+        "generatedBy": { "type": "string", "const": "visual-intelligence-agent" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "visualCount": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "totalAssets": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "definitions": {
+    "VisualSpec": {
+      "type": "object",
+      "required": ["type", "purpose"],
+      "properties": {
+        "type": { "type": "string", "enum": ["chart", "map", "globe", "svg", "animation", "infographic", "card"] },
+        "engine": { "type": "string", "description": "Reference to the engine module that selected this type" },
+        "purpose": { "type": "string", "description": "The specific question this visual answers" },
+        "reason": { "type": "string", "description": "Why this visual type was chosen" }
+      }
+    },
+    "HeroVisual": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "const": "hero" },
+        "heroImage": { "type": "string", "description": "URL or reference for hero image" },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" }
+      }
+    },
+    "ChartSpec": {
+      "type": "object",
+      "required": ["chartId", "type", "purpose", "xAxis", "yAxis", "dataset", "caption", "altText"],
+      "properties": {
+        "chartId": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["line", "bar", "horizontal-bar", "area", "scatter", "bubble", "treemap", "sankey", "network", "radar", "heatmap", "sunburst", "waterfall", "histogram", "box-plot", "violin", "slope", "calendar", "dot-plot", "lollipop", "ridgeline", "chord"]
+        },
+        "purpose": { "type": "string" },
+        "question": { "type": "string" },
+        "xAxis": {
+          "type": "object",
+          "required": ["label", "field", "type"],
+          "properties": {
+            "label": { "type": "string" },
+            "field": { "type": "string" },
+            "type": { "type": "string", "enum": ["category", "numeric", "time", "ordinal"] }
+          }
+        },
+        "yAxis": {
+          "type": "object",
+          "required": ["label", "field", "type"],
+          "properties": {
+            "label": { "type": "string" },
+            "field": { "type": "string" },
+            "type": { "type": "string", "enum": ["category", "numeric", "ordinal"] }
+          }
+        },
+        "dataset": {
+          "type": "object",
+          "required": ["source", "fields"],
+          "properties": {
+            "source": { "type": "string" },
+            "fields": { "type": "array", "items": { "type": "string" } },
+            "filters": { "type": "object" },
+            "transformations": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "colorField": { "type": "string" },
+        "sizeField": { "type": "string" },
+        "facetField": { "type": "string" },
+        "interactive": { "type": "boolean", "default": false },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "sortOrder": { "type": "string", "enum": ["ascending", "descending", "none"] },
+        "zeroBaseline": { "type": "boolean", "default": true },
+        "theme": { "type": "string", "default": "dark" },
+        "responsive": { "type": "boolean", "default": true },
+        "lazyLoad": { "type": "boolean", "default": true }
+      }
+    },
+    "MapSpec": {
+      "type": "object",
+      "required": ["mapId", "type", "purpose", "geography", "caption", "altText"],
+      "properties": {
+        "mapId": { "type": "string" },
+        "type": { "type": "string", "enum": ["india-state", "india-district", "world-choropleth", "trade-routes", "migration", "conflict", "infrastructure", "river-basin", "rail-network", "air-routes", "heatmap"] },
+        "purpose": { "type": "string" },
+        "geography": {
+          "type": "object",
+          "properties": {
+            "scope": { "type": "string" },
+            "projection": { "type": "string" },
+            "center": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+            "zoom": { "type": "number" }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "source": { "type": "string" },
+            "valueField": { "type": "string" },
+            "joinKey": { "type": "string" },
+            "colorScale": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string", "enum": ["sequential", "diverging", "categorical"] },
+                "steps": { "type": "integer", "minimum": 3, "maximum": 9 }
+              }
+            }
+          }
+        },
+        "interaction": {
+          "type": "object",
+          "properties": {
+            "hover": { "type": "string" },
+            "click": { "type": "string" }
+          }
+        },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" },
+        "theme": { "type": "string", "default": "dark" },
+        "responsive": { "type": "boolean", "default": true },
+        "lazyLoad": { "type": "boolean", "default": true },
+        "accessible": { "$ref": "#/definitions/Accessibility" }
+      }
+    },
+    "GlobeSpec": {
+      "type": "object",
+      "required": ["globeId", "type", "purpose", "features"],
+      "properties": {
+        "globeId": { "type": "string" },
+        "type": { "type": "string", "enum": ["country-highlights", "trade-routes", "point-density", "shipping-lanes", "submarine-cables", "diplomatic-visits", "election-results", "satellite-coverage"] },
+        "purpose": { "type": "string" },
+        "features": { "type": "object" },
+        "technologies": { "type": "array", "items": { "type": "string" } },
+        "autoRotate": { "type": "boolean", "default": true },
+        "autoRotateSpeed": { "type": "number", "default": 0.5 },
+        "pov": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" },
+            "altitude": { "type": "number" }
+          }
+        },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" },
+        "theme": { "type": "string", "default": "dark" },
+        "lazyLoad": { "type": "boolean", "default": true },
+        "accessible": { "$ref": "#/definitions/Accessibility" }
+      }
+    },
+    "SVGSpec": {
+      "type": "object",
+      "required": ["svgId", "type", "purpose", "structure"],
+      "properties": {
+        "svgId": { "type": "string" },
+        "type": { "type": "string", "enum": ["org-tree", "flowchart", "decision-tree", "sankey", "treemap", "timeline", "comparison-matrix"] },
+        "purpose": { "type": "string" },
+        "question": { "type": "string" },
+        "structure": {
+          "type": "object",
+          "required": ["layout", "nodes"],
+          "properties": {
+            "layout": { "type": "string", "enum": ["top-to-bottom", "left-to-right", "radial", "nested"] },
+            "nodes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "label"],
+                "properties": {
+                  "id": { "type": "string" },
+                  "label": { "type": "string" },
+                  "type": { "type": "string", "enum": ["root", "parent", "child", "leaf"] },
+                  "children": { "type": "array", "items": { "type": "string" } }
+                }
+              },
+              "maxItems": 20
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["from", "to"],
+                "properties": {
+                  "from": { "type": "string" },
+                  "to": { "type": "string" },
+                  "label": { "type": "string" },
+                  "value": { "type": "number" }
+                }
+              }
+            },
+            "levels": { "type": "integer", "maximum": 3 },
+            "orientation": { "type": "string", "enum": ["vertical", "horizontal"] }
+          }
+        },
+        "styling": { "type": "object" },
+        "interactive": { "type": "boolean", "default": false },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" },
+        "theme": { "type": "string", "default": "dark" },
+        "responsive": { "type": "boolean", "default": true },
+        "lazyLoad": { "type": "boolean", "default": true },
+        "accessible": { "$ref": "#/definitions/Accessibility" }
+      }
+    },
+    "AnimationSpec": {
+      "type": "object",
+      "required": ["animationId", "type", "purpose", "duration", "steps"],
+      "properties": {
+        "animationId": { "type": "string" },
+        "type": { "type": "string", "enum": ["cascade", "progressive-reveal", "data-animation", "map-animation"] },
+        "purpose": { "type": "string" },
+        "duration": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step", "time", "duration", "action", "description"],
+            "properties": {
+              "step": { "type": "integer" },
+              "time": { "type": "integer" },
+              "duration": { "type": "integer" },
+              "action": { "type": "string" },
+              "target": { "type": "string" },
+              "description": { "type": "string" },
+              "easing": { "type": "string" },
+              "transition": { "type": "string", "enum": ["fade-in", "slide-path", "crossfade", "morph", "scale-in", "draw", "color-transition"] }
+            }
+          },
+          "maxItems": 10
+        },
+        "controls": {
+          "type": "object",
+          "properties": {
+            "autoplay": { "type": "boolean", "default": true },
+            "loop": { "type": "boolean", "default": false },
+            "showTimeline": { "type": "boolean", "default": true },
+            "playPauseButton": { "type": "boolean", "default": true },
+            "speedControl": { "type": "array", "items": { "type": "number" } }
+          }
+        },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" },
+        "theme": { "type": "string", "default": "dark" },
+        "lazyLoad": { "type": "boolean", "default": true },
+        "accessible": { "$ref": "#/definitions/Accessibility" }
+      }
+    },
+    "InfographicSpec": {
+      "type": "object",
+      "required": ["infographicId", "cards"],
+      "properties": {
+        "infographicId": { "type": "string" },
+        "purpose": { "type": "string" },
+        "cards": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/CardSpec" }
+        },
+        "theme": { "type": "string", "default": "dark" },
+        "responsive": { "type": "boolean", "default": true },
+        "lazyLoad": { "type": "boolean", "default": true }
+      }
+    },
+    "CardSpec": {
+      "type": "object",
+      "required": ["cardId", "type", "purpose"],
+      "properties": {
+        "cardId": { "type": "string" },
+        "type": { "type": "string", "enum": ["comparison", "fact", "timeline", "statistics", "country", "quote", "explainer"] },
+        "purpose": { "type": "string" },
+        "caption": { "type": "string" },
+        "altText": { "type": "string" },
+        "items": { "type": "array" },
+        "value": { "type": "string" },
+        "label": { "type": "string" },
+        "context": { "type": "string" },
+        "icon": { "type": "string" },
+        "events": { "type": "array" },
+        "stats": { "type": "array" },
+        "steps": { "type": "array" },
+        "quote": { "type": "string" },
+        "attribution": { "type": "string" },
+        "source": { "type": "string" },
+        "country": { "type": "object" },
+        "orientation": { "type": "string", "enum": ["vertical", "horizontal"] },
+        "columns": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "interactive": { "type": "boolean", "default": false },
+        "showConnector": { "type": "boolean", "default": false }
+      }
+    },
+    "Accessibility": {
+      "type": "object",
+      "properties": {
+        "altText": { "type": "string" },
+        "longDescription": { "type": "string" },
+        "keyboardNavigation": { "type": "boolean", "default": true },
+        "focusable": { "type": "boolean", "default": true },
+        "ariaLabel": { "type": "string" },
+        "highContrast": { "type": "boolean", "default": true },
+        "reducedMotion": { "type": "boolean", "default": true },
+        "colorBlindSafe": { "type": "boolean", "default": true },
+        "textZoom": { "type": "string", "default": "Supports 200%" }
+      }
+    }
+  }
+}

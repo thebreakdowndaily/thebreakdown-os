@@ -1,0 +1,35 @@
+{
+  "section": "maps",
+  "version": "1.0.0",
+  "purpose": "Present geographic data — regional variations, spatial patterns, and location-based insights that text alone cannot convey.",
+  "requiredInputs": [
+    "geoData[]"
+  ],
+  "optionalInputs": [
+    "regions[]",
+    "colorScale",
+    "labels[]",
+    "interactiveLayers"
+  ],
+  "supportedVisuals": [
+    "choropleth-map",
+    "bubble-map",
+    "heat-map",
+    "pin-map",
+    "comparison-map"
+  ],
+  "writingRules": [
+    "Must include a legend explaining colors, sizes, and symbols",
+    "Regional names must match official census or government designations",
+    "Contentious borders must follow Government of India mapping standards",
+    "Highlight 2–3 key regional insights in text",
+    "Interactive maps should default to national view, zoom to region on click"
+  ],
+  "seoRules": [
+    "Use schema.org Map markup",
+    "Region names should appear in text for geographic keyword targeting",
+    "Alt text must describe the geographic pattern shown"
+  ],
+  "dependencies": [],
+  "narrativeStage": "evidence"
+}

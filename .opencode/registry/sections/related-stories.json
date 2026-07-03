@@ -1,0 +1,31 @@
+{
+  "section": "related-stories",
+  "version": "1.0.0",
+  "purpose": "Connect readers to relevant coverage — previous stories, related topics, and deeper dives that build on what they just read.",
+  "requiredInputs": [
+    "relatedStories[]"
+  ],
+  "optionalInputs": [
+    "seriesNavigation",
+    "topicTags[]"
+  ],
+  "supportedVisuals": [
+    "story-cards",
+    "series-navigation-bar",
+    "topic-cluster"
+  ],
+  "writingRules": [
+    "Each related story must include title, slug, and one-line description",
+    "Order by relevance, not chronology",
+    "Maximum 6 related stories — too many choices reduces engagement",
+    "Include stories from different angles to show breadth",
+    "Label series stories clearly (Part 1, Part 2, etc.)"
+  ],
+  "seoRules": [
+    "Use schema.org CreativeWorkSeries for multi-part stories",
+    "Internal links should use descriptive anchor text",
+    "Related stories should be marked as 'see also' in navigation markup"
+  ],
+  "dependencies": [],
+  "narrativeStage": "future"
+}

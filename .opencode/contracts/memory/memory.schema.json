@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Memory",
+  "description": "Schema for the Memory Engine — the newsroom's institutional knowledge store",
+  "type": "object",
+  "required": ["version", "updatedAt"],
+  "properties": {
+    "version": { "type": "integer", "description": "Current version number (increments on each update)" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "history": {
+      "type": "array",
+      "description": "Version history — never overwrite, always append",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "integer" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "updatedBy": { "type": "string", "description": "Story ID or agent that triggered the update" },
+          "changes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Knowledge Graph Schema",
+  "description": "Schema for The Breakdown OS Knowledge Graph — validates the graph structure, node and edge definitions, and query results",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Graph schema version",
+      "enum": ["1.0.0"]
+    },
+    "config": {
+      "$ref": "#/definitions/GraphConfig"
+    },
+    "statistics": {
+      "$ref": "#/definitions/GraphStatistics"
+    },
+    "queryResult": {
+      "$ref": "#/definitions/QueryResult"
+    },
+    "relatedResult": {
+      "$ref": "#/definitions/RelatedResult"
+    },
+    "validationReport": {
+      "$ref": "#/definitions/ValidationReport"
+    },
+    "ingestReport": {
+      "$ref": "#/definitions/IngestReport"
+    },
+    "buildReport": {
+      "$ref": "#/definitions/BuildReport"
+    }
+  },
+  "definitions": {
+    "GraphConfig": {
+      "type": "object",
+      "required": ["store", "inference", "validation"],
+      "properties": {
+        "store": {
+          "type": "object",
+          "required": ["nodes_path", "edges_path"],
+          "properties": {
+            "nodes_path": { "type": "string" },
+            "edges_path": { "type": "string" }
+          }
+        },
+        "inference": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "max_depth": { "type": "integer", "minimum": 1, "maximum": 10 },
+            "min_confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "schedule": { "type": "string" },
+            "fuzzy_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+            "stale_edge_days": { "type": "integer", "minimum": 1 },
+            "auto_repair": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "GraphNode": {
+      "type": "object",
+      "required": ["id", "type", "label"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_|:-]+$",
+          "description": "Canonical ID: <type>::<sanitized-label>"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["person", "organization", "company", "country", "state", "district", "city", "law", "policy", "scheme", "budget", "report", "committee", "court-case", "technology", "project", "event", "article", "dataset", "statistic", "topic"]
+        },
+        "label": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "metadata": { "type": "object" },
+        "firstSeen": { "type": "string", "format": "date-time" },
+        "lastSeen": { "type": "string", "format": "date-time" },
+        "storyCount": { "type": "integer", "minimum": 0 },
+        "active": { "type": "boolean" }
+      }
+    },
+    "GraphEdge": {
+      "type": "object",
+      "required": ["id", "from", "to", "relationship", "confidence"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_|:-]+$",
+          "description": "Canonical ID: <from>|<rel>|<to>"
+        },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "relationship": {
+          "type": "string",
+          "enum": ["implements", "created_by", "approved_by", "funded_by", "managed_by", "reports_to", "member_of", "located_in", "criticised_by", "supports", "opposes", "related_to", "amends", "replaces", "references", "cites", "depends_on", "caused_by", "influenced_by", "regulated_by", "audited_by"]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "weight": { "type": "number", "minimum": 0 },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "metadata": { "type": "object" },
+        "firstObserved": { "type": "string", "format": "date-time" },
+        "lastObserved": { "type": "string", "format": "date-time" },
+        "active": { "type": "boolean" }
+      }
+    },
+    "QueryResult": {
+      "type": "object",
+      "properties": {
+        "nodes": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "edges": { "type": "array", "items": { "$ref": "#/definitions/GraphEdge" } },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": { "type": "string" },
+              "relationship": { "type": "string" },
+              "to": { "type": "string" },
+              "confidence": { "type": "number" }
+            }
+          }
+        },
+        "totalCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "RelatedResult": {
+      "type": "object",
+      "properties": {
+        "people": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "organizations": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "countries": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "laws": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "schemes": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "budgets": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "reports": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "events": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "courtCases": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "articles": { "type": "array", "items": { "$ref": "#/definitions/GraphNode" } },
+        "allEdges": { "type": "array", "items": { "$ref": "#/definitions/GraphEdge" } }
+      }
+    },
+    "ValidationReport": {
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "totalNodes": { "type": "integer" },
+            "totalEdges": { "type": "integer" },
+            "issuesFound": { "type": "integer" },
+            "autoRepaired": { "type": "integer" },
+            "flaggedForReview": { "type": "integer" }
+          }
+        },
+        "checks": {
+          "type": "object",
+          "properties": {
+            "brokenNodes": { "$ref": "#/definitions/ValidationCheck" },
+            "duplicateEntities": { "$ref": "#/definitions/ValidationCheck" },
+            "circularReferences": { "$ref": "#/definitions/ValidationCheck" },
+            "orphanEntities": { "$ref": "#/definitions/ValidationCheck" },
+            "invalidIds": { "$ref": "#/definitions/ValidationCheck" },
+            "missingRelationships": { "$ref": "#/definitions/ValidationCheck" }
+          }
+        }
+      }
+    },
+    "ValidationCheck": {
+      "type": "object",
+      "properties": {
+        "count": { "type": "integer" },
+        "details": { "type": "array", "items": { "type": "string" } },
+        "autoRepaired": { "type": "integer" }
+      }
+    },
+    "IngestReport": {
+      "type": "object",
+      "properties": {
+        "nodesCreated": { "type": "integer" },
+        "nodesUpdated": { "type": "integer" },
+        "edgesCreated": { "type": "integer" },
+        "edgesUpdated": { "type": "integer" },
+        "inferredEdges": { "type": "integer" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "BuildReport": {
+      "type": "object",
+      "properties": {
+        "nodesCreated": { "type": "integer" },
+        "nodesUpdated": { "type": "integer" },
+        "edgesCreated": { "type": "integer" },
+        "edgesUpdated": { "type": "integer" },
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "duration": { "type": "integer" }
+      }
+    },
+    "GraphStatistics": {
+      "type": "object",
+      "properties": {
+        "nodeCount": { "type": "integer" },
+        "edgeCount": { "type": "integer" },
+        "nodesByType": { "type": "object" },
+        "edgesByType": { "type": "object" },
+        "avgDegree": { "type": "number" },
+        "density": { "type": "number" },
+        "topConnected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "count": { "type": "integer" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

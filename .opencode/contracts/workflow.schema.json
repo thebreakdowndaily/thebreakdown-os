@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workflow Definition",
+  "description": "Schema for The Breakdown OS workflow YAML files",
+  "type": "object",
+  "required": ["name", "version", "steps"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable workflow name"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Workflow schema version"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this workflow produces"
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          { "type": "string", "description": "Step ID — look up defaults from agent registry" },
+          {
+            "type": "object",
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string", "description": "Unique step identifier within this workflow" },
+              "agent": { "type": "string", "description": "Agent ID in the agent registry" },
+              "required": { "type": "boolean", "default": true },
+              "timeout": { "type": "integer", "minimum": 0, "description": "Max execution seconds" },
+              "retries": { "type": "integer", "minimum": 0, "description": "Retry attempts on failure" },
+              "output": { "type": "string", "description": "Output schema path relative to .opencode/" },
+              "terminal": { "type": "boolean", "default": false, "description": "No agent execution, marks completion" },
+              "depends_on": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Steps that must complete before this one"
+              },
+              "condition": {
+                "type": "object",
+                "properties": {
+                  "if": { "type": "string", "description": "Expression like \"storyType == 'Investigation'\"" },
+                  "then": { "type": "string", "enum": ["include", "execute"], "default": "execute" },
+                  "else": { "type": "string", "enum": ["skip", "exclude"], "default": "skip" }
+                },
+                "required": ["if"],
+                "description": "Conditional execution based on runtime context"
+              }
+            },
+            "allOf": [
+              {
+                "if": { "properties": { "terminal": { "const": true } } },
+                "then": {
+                  "properties": {
+                    "agent": { "const": "publish" },
+                    "required": { "const": true }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "quality": {
+      "type": "object",
+      "description": "Quality gate thresholds per dimension",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z_]+$": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "description": "Failure routing — step → goto step",
+      "patternProperties": {
+        "^[a-z_-]+$": {
+          "type": "object",
+          "properties": {
+            "goto": { "type": "string" }
+          },
+          "required": ["goto"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "on_success": {
+      "type": "object",
+      "description": "Post-completion actions",
+      "properties": {
+        "memory_update": { "type": "boolean", "default": true },
+        "publish": { "type": "boolean", "default": false },
+        "notify": { "type": "string" }
+      }
+    }
+  }
+}

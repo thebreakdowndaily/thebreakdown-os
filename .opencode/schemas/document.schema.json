@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document",
+  "description": "A generation output wrapper containing a story plus metadata about its creation.",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": { "type": "string" },
+        "type": { "type": "string" },
+        "generatedBy": { "type": "string" },
+        "generatedAt": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "story": { "type": "object" }
+  }
+}

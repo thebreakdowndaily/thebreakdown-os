@@ -1,0 +1,99 @@
+# THE BREAKDOWN — Analytics Engine v1.0
+# Agent: analytics-agent
+# Role: Learning Analyst — measures what readers actually learn, not just page views
+
+id: analytics-agent
+version: "1.0"
+codename: "learning-analyst"
+
+classification:
+  tier: editorial
+  department: audience
+  autonomy: high
+
+inputs:
+  - analytics-events.json    # Raw event stream from client-side tracking
+  - story-analytics.json     # Aggregated per-story metrics
+  - stories.json             # Story metadata for correlation
+
+output:
+  schema: analytics.schema.json
+  format: AnalyticsReport
+  destinations:
+    - dashboard          # Real-time analytics UI
+    - editorial-review   # Story improvement recommendations
+    - memory-engine      # Store learning signals
+
+triggers:
+  - step: analytics-collection
+    condition: story page loaded OR user interaction event fired
+    priority: continuous
+  - step: analytics-aggregation
+    condition: every 15 minutes (cron)
+    priority: scheduled
+  - step: story-improvement
+    condition: weekly digest of low-engagement stories
+    priority: weekly
+
+capabilities:
+  - Track 9 learning metrics per story (not page views)
+  - Measure time-on-section per story section
+  - Calculate scroll completion percentage per reader
+  - Count chart/timeline/FAQ interactions
+  - Track search terms with zero-click rate
+  - Identify return visitors by session cookie
+  - Measure share and bookmark rates
+  - Detect high-dropoff sections in stories
+  - Generate story improvement recommendations from engagement data
+  - Maintain reader-level analytics (anonymous, aggregated)
+
+metrics:
+  learning:
+    - time-on-section        # Seconds per story section
+    - scroll-completion      # % of story scrolled (0-100)
+    - chart-interaction      # Clicks/hovers on charts
+    - timeline-interaction   # Events clicked on timeline
+    - faq-expansion          # FAQs opened (which ones)
+  discovery:
+    - search-terms           # Internal search queries
+    - return-visits          # Readers returning within 7 days
+    - shares                 # Share events per medium
+    - bookmarks              # Save-for-later events
+
+quality_gates:
+  - name: event-validity
+    description: All events must have valid type, storySlug, and timestamp
+    rules:
+      - event.type must be one of 9 defined types
+      - event.storySlug must match existing story
+      - event.timestamp must be within 5 minutes of server time
+
+  - name: data-completeness
+    description: Aggregated analytics must cover all 9 metrics
+    required_metrics:
+      - time-on-section, scroll-completion, chart-interaction
+      - timeline-interaction, faq-expansion, search-terms
+      - return-visits, shares, bookmarks
+    minimum_daily_readers: 10
+
+  - name: privacy
+    description: No personally identifiable information stored
+    rules:
+      - No IP addresses in analytics store
+      - No user IDs (anonymous session only)
+      - Session cookies expire after 24 hours
+      - Search terms cleared after 30 days
+
+memory:
+  store: true
+  key_fields: [slug, date, metric]
+  categories:
+    - story-analytics       # Per-story aggregated metrics
+    - reader-sessions        # Anonymous session data (24h TTL)
+    - improvement-signals    # Story improvement recommendations
+    - search-log            # Internal search queries (30d TTL)
+
+failure_routing:
+  invalid_event: drop_silently
+  aggregation_error: retry_next_cycle
+  storage_fullage: archive_old_sessions

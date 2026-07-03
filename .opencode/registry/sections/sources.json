@@ -1,0 +1,32 @@
+{
+  "section": "sources",
+  "version": "1.0.0",
+  "purpose": "Provide full attribution for every fact, claim, and data point — enabling verification and further reading.",
+  "requiredInputs": [
+    "sources[]"
+  ],
+  "optionalInputs": [
+    "methodologyNotes",
+    "accessDates",
+    "sourceTiers"
+  ],
+  "supportedVisuals": [
+    "source-table",
+    "citation-list",
+    "tier-badges"
+  ],
+  "writingRules": [
+    "Every source must include title, publisher, URL, and access date",
+    "Sources grouped by tier (primary, secondary, tertiary)",
+    "Government and official sources listed first",
+    "Dead links flagged — verify all URLs at time of publication",
+    "Include brief context for each source (why it was used, what it covers)"
+  ],
+  "seoRules": [
+    "Use schema.org Citation markup",
+    "Outbound links should use appropriate rel attributes",
+    "Sources section should be indexable but not primary content"
+  ],
+  "dependencies": [],
+  "narrativeStage": "solutions"
+}

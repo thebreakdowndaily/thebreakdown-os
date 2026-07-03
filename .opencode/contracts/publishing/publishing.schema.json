@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.in/schemas/publishing.schema.json",
+  "title": "PublishingPlan",
+  "description": "THE BREAKDOWN — Publishing Engine output contract. One verified story, 10+ channel outputs, zero fact drift.",
+  "type": "object",
+  "required": ["publishingPlan", "metadata"],
+  "properties": {
+    "publishingPlan": {
+      "type": "object",
+      "required": ["storySlug", "publishedAt", "canonicalUrl", "channels"],
+      "properties": {
+        "storySlug": { "type": "string", "description": "Unique slug matching the story" },
+        "publishedAt": { "type": "string", "format": "date-time", "description": "ISO 8601 publication timestamp" },
+        "canonicalUrl": { "type": "string", "format": "uri", "description": "Canonical URL on thebreakdown.in" },
+        "factConsistencyVerified": { "type": "boolean", "default": true, "description": "Whether all channel outputs were verified for fact consistency" },
+        "channels": {
+          "type": "object",
+          "description": "One output per channel",
+          "properties": {
+            "website": { "$ref": "#/definitions/ChannelOutput", "description": "Published story page (canonical)" },
+            "newsletter": { "$ref": "#/definitions/ChannelOutput", "description": "Email newsletter edition" },
+            "instagram": { "$ref": "#/definitions/InstagramOutput", "description": "Instagram carousel post" },
+            "x": { "$ref": "#/definitions/ThreadOutput", "description": "X/Twitter thread" },
+            "linkedin": { "$ref": "#/definitions/ChannelOutput", "description": "LinkedIn article" },
+            "youtube": { "$ref": "#/definitions/YouTubeOutput", "description": "YouTube video + Short scripts" },
+            "podcast": { "$ref": "#/definitions/ChannelOutput", "description": "Podcast episode script" },
+            "telegram": { "$ref": "#/definitions/ChannelOutput", "description": "Telegram channel message" },
+            "email": { "$ref": "#/definitions/ChannelOutput", "description": "Transactional email alert" },
+            "rss": { "$ref": "#/definitions/RSSOutput", "description": "RSS feed entry" }
+          },
+          "minProperties": 1
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["generatedBy", "version", "channelCount", "factConsistencyVerified"],
+      "properties": {
+        "generatedBy": { "type": "string", "const": "publishing-agent" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "channelCount": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "factConsistencyVerified": { "type": "boolean", "const": true },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "verificationHash": { "type": "string", "description": "SHA-256 of original story.json — for audit trail" }
+      }
+    }
+  },
+  "definitions": {
+    "ChannelOutput": {
+      "type": "object",
+      "required": ["published", "format"],
+      "properties": {
+        "published": { "type": "boolean" },
+        "format": { "type": "string" },
+        "content": { "type": "string", "description": "The formatted content (HTML, text, JSON, XML)" },
+        "url": { "type": "string", "format": "uri" },
+        "characterCount": { "type": "integer" },
+        "wordCount": { "type": "integer" },
+        "readingTimeMinutes": { "type": "integer" },
+        "error": { "type": "string" }
+      }
+    },
+    "InstagramOutput": {
+      "type": "object",
+      "required": ["published", "format", "slides"],
+      "properties": {
+        "published": { "type": "boolean" },
+        "format": { "type": "string", "const": "carousel" },
+        "slides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slideNumber", "contentType", "description"],
+            "properties": {
+              "slideNumber": { "type": "integer", "minimum": 1, "maximum": 10 },
+              "contentType": { "type": "string", "enum": ["title", "chart", "map", "text", "badge", "cta", "credits"] },
+              "description": { "type": "string", "description": "What to render on this slide" },
+              "altText": { "type": "string" },
+              "imageSpec": {
+                "type": "object",
+                "properties": {
+                  "width": { "type": "integer", "default": 1080 },
+                  "height": { "type": "integer", "default": 1080 },
+                  "format": { "type": "string", "default": "webp" }
+                }
+              }
+            }
+          },
+          "maxItems": 10
+        },
+        "caption": { "type": "string", "maxLength": 2200 },
+        "hashtags": { "type": "array", "items": { "type": "string" }, "maxItems": 5 }
+      }
+    },
+    "ThreadOutput": {
+      "type": "object",
+      "required": ["published", "format", "tweets"],
+      "properties": {
+        "published": { "type": "boolean" },
+        "format": { "type": "string", "const": "thread" },
+        "tweets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["tweetNumber", "content"],
+            "properties": {
+              "tweetNumber": { "type": "integer", "minimum": 1 },
+              "content": { "type": "string", "maxLength": 280 },
+              "mediaUrl": { "type": "string", "format": "uri" },
+              "hashtags": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "maxItems": 25
+        }
+      }
+    },
+    "YouTubeOutput": {
+      "type": "object",
+      "required": ["published", "format", "hostedScript"],
+      "properties": {
+        "published": { "type": "boolean" },
+        "format": { "type": "string", "const": "video" },
+        "hostedScript": { "type": "string", "description": "Full script for 5-8 min hosted video" },
+        "shortScript": { "type": "string", "description": "Script for 30-60 sec YouTube Short" },
+        "duration": { "type": "string", "description": "Estimated duration e.g. '6:30'" },
+        "thumbnailTitle": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 5000 }
+      }
+    },
+    "RSSOutput": {
+      "type": "object",
+      "required": ["published", "format", "xml"],
+      "properties": {
+        "published": { "type": "boolean" },
+        "format": { "type": "string", "const": "xml" },
+        "xml": { "type": "string", "description": "RSS XML <item> element content" },
+        "title": { "type": "string" },
+        "guid": { "type": "string", "format": "uri" },
+        "pubDate": { "type": "string" },
+        "categories": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Visual",
+  "description": "A visual asset specification for a story — chart, infographic, map, timeline, etc.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "Timeline",
+        "Chart",
+        "SVG",
+        "Infographic",
+        "Map",
+        "Comparison",
+        "Process",
+        "Flow",
+        "Network",
+        "Quote",
+        "Statistic Card"
+      ]
+    },
+    "title": { "type": "string" },
+    "purpose": { "type": "string" },
+    "data": { "type": "array" },
+    "placement": { "type": "string" }
+  }
+}

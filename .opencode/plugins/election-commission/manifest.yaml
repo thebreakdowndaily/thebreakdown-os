@@ -1,0 +1,37 @@
+id: election-commission
+name: Election Commission of India
+version: "1.0"
+description: "Election Commission of India notifications, schedules, results, and electoral data"
+
+source:
+  url: https://eci.gov.in
+  type: scrape
+  frequency: as-published
+  auth: false
+  pagination: date-based
+
+triggers:
+  - election commission
+  - eci
+  - eci.gov.in
+  - elections
+  - electoral roll
+  - voter turnout
+  - election results
+  - election schedule
+  - model code of conduct
+  - election notification
+
+trust_tier: 1
+
+output_schema: schemas/research.schema.json
+
+tags:
+  - government
+  - elections
+  - democracy
+  - india
+
+refresh:
+  mode: poll
+  interval_minutes: 240

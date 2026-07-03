@@ -1,0 +1,131 @@
+# THE BREAKDOWN OS — Knowledge Graph Manifest
+# Central node: connects every story, entity, relationship across the newsroom.
+# The graph is the brain. The memory is the record.
+
+version: 1.0.0
+
+role: knowledge-graph
+type: core
+
+description: >
+  The Knowledge Graph is the central brain of The Breakdown OS.
+  It connects everything — stories, people, organizations, laws, budgets,
+  policies, countries, reports, events, sources — through typed, weighted,
+  and time-stamped relationships.
+  It never writes stories. It never researches. It never verifies.
+  Its only responsibility is connecting knowledge and making those connections
+  available to every other agent.
+
+  Nothing exists in isolation. Every story strengthens the graph.
+
+dependencies:
+  - memory-engine  # Graph is built from Memory Engine store
+  - entity-agent   # Entities extracted by the entity agent seed the graph
+
+node_types: 20
+  - person
+  - organization
+  - company
+  - country
+  - state
+  - district
+  - city
+  - law
+  - policy
+  - scheme
+  - budget
+  - report
+  - committee
+  - court-case
+  - technology
+  - project
+  - event
+  - article
+  - dataset
+  - statistic
+
+edge_types: 21
+  - implements
+  - created_by
+  - approved_by
+  - funded_by
+  - managed_by
+  - reports_to
+  - member_of
+  - located_in
+  - criticised_by
+  - supports
+  - opposes
+  - related_to
+  - amends
+  - replaces
+  - references
+  - cites
+  - depends_on
+  - caused_by
+  - influenced_by
+  - regulated_by
+  - audited_by
+
+store:
+  nodes: memory/knowledge/nodes/
+  edges: memory/knowledge/edges/
+
+inference:
+  enabled: true
+  max_depth: 2
+  min_confidence: 0.5
+  transitive_closure: true
+  co_occurrence: true
+
+validation:
+  schedule: "0 0 * * *"   # Nightly
+  fuzzy_threshold: 0.85
+  stale_edge_days: 90
+  auto_repair: true
+
+search:
+  similarity_engine: jaccard
+  max_results: 50
+  boost:
+    recency: 1.5
+    story_count: 2.0
+    confidence: 1.0
+
+build:
+  rebuild_on_schema_change: true
+  incremental_index: true
+
+agents:
+  graph-manager:
+    path: core/knowledge-graph/graph-manager.ts
+    description: Public API — createNode, search, related, timeline, statistics
+  entity-manager:
+    path: core/knowledge-graph/entity-manager.ts
+    description: Node CRUD — create, update, delete, merge, dedup
+  relationship-manager:
+    path: core/knowledge-graph/relationship-manager.ts
+    description: Edge CRUD — create, delete, query, transitive inference
+  graph-search:
+    path: core/knowledge-graph/graph-search.ts
+    description: Search — traversal, path finding, similarity, structured queries
+  graph-updater:
+    path: core/knowledge-graph/graph-updater.ts
+    description: Story ingestion — extract entities, create edges, run inference
+  graph-builder:
+    path: core/knowledge-graph/graph-builder.ts
+    description: Full rebuild from Memory Engine store
+  graph-validator:
+    path: core/knowledge-graph/graph-validator.ts
+    description: Nightly validation — broken nodes, duplicates, cycles, orphans
+
+input:
+  entities: Array of extracted entities with type, label, aliases
+  relationships: Array of typed relationships between entities
+  story: { title, url, summary, body, category, publishedAt }
+
+output:
+  nodes: Knowledge graph nodes (typed entities with connections)
+  edges: Knowledge graph edges (typed, weighted, time-stamped relationships)
+  search: Graph search results with paths and context
+  statistics: Graph-level metrics (density, degree, distribution)

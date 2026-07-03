@@ -1,0 +1,59 @@
+# THE BREAKDOWN — Plugin: Weather & Climate
+# Provides weather data, forecasts, and climate alerts for India
+
+id: weather
+name: India Weather & Climate Data
+version: "1.0"
+description: Fetches real-time weather data, IMD alerts, air quality indices, and climate statistics for Indian cities and regions
+author: The Breakdown
+type: data-source
+trust_tier: 2
+status: active
+schedule: every 1 hour
+
+sources:
+  - url: https://api.openweathermap.org/data/2.5/weather
+    type: api
+    method: GET
+    auth: api-key
+    authConfig:
+      apiKeyEnv: OPENWEATHER_API_KEY
+      apiKeyHeader: x-api-key
+    rate_limit:
+      requestsPerMinute: 60
+  - url: https://api.weather.gov/alerts/active
+    type: api
+    method: GET
+  - url: https://mausam.imd.gov.in/api/
+    type: api
+    method: GET
+
+config:
+  cities:
+    - Delhi
+    - Mumbai
+    - Bengaluru
+    - Chennai
+    - Kolkata
+    - Hyderabad
+    - Ahmedabad
+    - Pune
+    - Jaipur
+    - Lucknow
+  trackAQI: true
+  trackAlerts: true
+  trackForecast: true
+  trackHistorical: false
+  units: metric
+  language: en
+
+tags:
+  - weather
+  - climate
+  - imd
+  - air-quality
+  - environment
+  - india
+  - disasters
+
+documentation: Provides current weather, 5-day forecast, air quality index (AQI), and Indian Meteorological Department (IMD) alerts for major Indian cities. Supports cyclone and heatwave tracking.

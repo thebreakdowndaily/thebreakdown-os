@@ -1,0 +1,110 @@
+{
+  "test": "Editorial Thinking Agent v2.0",
+  "target": "editorial-thinking-agent.md",
+  "schema": "editorial-thinking.schema.json",
+  "sections": [
+    {
+      "name": "1. Schema Conformance",
+      "checks": [
+        "storyType is one of the 11 enum values",
+        "primaryAngle is a non-empty string",
+        "secondaryAngle is a non-empty string distinct from primary",
+        "readerPromise is a non-empty string",
+        "targetAudience is an array with ≥ 1 item from the 8-value enum",
+        "knowledgeGap is a non-empty string",
+        "editorialQuestions is an array with exactly 5 items",
+        "Each editorialQuestion ends with ?",
+        "storyDepth is one of the 5 enum values",
+        "recommendedModules is an array of valid module names"
+      ]
+    },
+    {
+      "name": "2. Story Discovery (Step 1)",
+      "checks": [
+        "Primary angle answers 'why is this happening?' not just 'what happened?'",
+        "Angle identifies a systemic issue, not just a surface event",
+        "Angle identifies who benefits and who loses",
+        "Angle identifies what changed"
+      ]
+    },
+    {
+      "name": "3. Angle Generation (Step 2)",
+      "checks": [
+        "≥ 5 possible angles were generated (traceable in reasoning)",
+        "Primary and secondary angles are distinct categories (e.g. Economic vs Political)",
+        "Angles are ranked, not randomly selected"
+      ]
+    },
+    {
+      "name": "4. Story Type & Depth (Steps 3 & 8)",
+      "checks": [
+        "Story type is explicitly chosen and justified by the evidence",
+        "Story depth matches story type (e.g. Investigation → Long-form+)",
+        "Opinion type is only used if explicitly requested"
+      ]
+    },
+    {
+      "name": "5. Reader Promise & Audience (Steps 4 & 5)",
+      "checks": [
+        "Reader promise is specific (not 'you'll learn about X')",
+        "Reader promise is honest and deliverable with available evidence",
+        "Target audience is explicitly classified from the controlled list",
+        "Audience detection is justified by topic and angle"
+      ]
+    },
+    {
+      "name": "6. Knowledge Gap (Step 6)",
+      "checks": [
+        "Knowledge gap identifies a specific misconception or unknown",
+        "Knowledge gap is not trivial ('people don't know about this')",
+        "If no genuine gap exists, story is flagged as unnecessary"
+      ]
+    },
+    {
+      "name": "7. Editorial Questions (Step 7)",
+      "checks": [
+        "Exactly 5 editorial questions",
+        "Questions are distinct, not rephrasings of each other",
+        "Questions cover who, what, why, how, and what next",
+        "Every question can be answered by available evidence",
+        "Questions define the scope — every module answers at least one"
+      ]
+    },
+    {
+      "name": "8. Module Recommendations (Step 9)",
+      "checks": [
+        "Only relevant modules are included (no filler)",
+        "Module list is not the default set — tailored to the story",
+        "Minimum 3 modules, maximum 8",
+        "Hero module is included (visual anchor required)"
+      ]
+    },
+    {
+      "name": "9. Quality Gate",
+      "checks": [
+        "≥ 5 story angles generated and ranked",
+        "Reader promise is specific, honest, and deliverable",
+        "Target audience explicitly identified from controlled list",
+        "Knowledge gap clearly stated — flag if no gap exists",
+        "Exactly 5 editorial questions from ≥ 20 generated",
+        "Story depth matches complexity and evidence quality",
+        "Only relevant modules recommended (no filler)",
+        "Story type explicitly chosen, not defaulted",
+        "No writing — output is strategic, not editorial content",
+        "Primary angle is distinct from secondary angle"
+      ]
+    }
+  ],
+  "results": {
+    "1. Schema Conformance": { "pass": 0, "fail": 0, "na": 0 },
+    "2. Story Discovery": { "pass": 0, "fail": 0, "na": 0 },
+    "3. Angle Generation": { "pass": 0, "fail": 0, "na": 0 },
+    "4. Story Type & Depth": { "pass": 0, "fail": 0, "na": 0 },
+    "5. Reader Promise & Audience": { "pass": 0, "fail": 0, "na": 0 },
+    "6. Knowledge Gap": { "pass": 0, "fail": 0, "na": 0 },
+    "7. Editorial Questions": { "pass": 0, "fail": 0, "na": 0 },
+    "8. Module Recommendations": { "pass": 0, "fail": 0, "na": 0 },
+    "9. Quality Gate": { "pass": 0, "fail": 0, "na": 0 },
+    "overall": { "pass": 0, "fail": 0, "na": 0 }
+  }
+}

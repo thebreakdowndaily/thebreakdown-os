@@ -1,0 +1,39 @@
+id: who
+name: World Health Organization
+version: "1.0"
+description: "WHO disease outbreaks, health guidelines, research, and global health data"
+
+source:
+  url: https://who.int
+  type: api
+  frequency: daily
+  auth: false
+  pagination: query-param
+
+triggers:
+  - who
+  - world health organisation
+  - world health organization
+  - who.int
+  - disease outbreak
+  - pandemic
+  - epidemic
+  - public health emergency
+  - health guidelines
+  - global health
+  - vaccination
+  - health advisory
+
+trust_tier: 2
+
+output_schema: schemas/research.schema.json
+
+tags:
+  - health
+  - international
+  - research
+  - data
+
+refresh:
+  mode: poll
+  interval_minutes: 360

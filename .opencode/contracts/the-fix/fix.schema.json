@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.in/schemas/fix.schema.json",
+  "title": "FixJSON",
+  "description": "THE BREAKDOWN — The Fix Agent output contract. Transforms verified stories into structured, actionable fix frameworks.",
+  "type": "object",
+  "required": [
+    "id", "slug", "storySlug", "headline", "summary",
+    "publishedAt", "updatedAt", "readingTime", "author", "evidenceScore", "tags",
+    "problem", "whoIsAffected", "rootCauses", "evidence",
+    "stakeholders", "existingSolutions", "globalExamples",
+    "recommendedActions", "citizenActions", "governmentActions", "metricsToTrack",
+    "relatedStories", "relatedEntities"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^fix-" },
+    "slug": { "type": "string" },
+    "storySlug": { "type": "string" },
+    "headline": { "type": "string", "minLength": 10 },
+    "summary": { "type": "string", "minLength": 50 },
+    "heroImage": { "type": "string" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "readingTime": { "type": "integer", "minimum": 1 },
+    "author": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "avatar": { "type": "string" },
+        "bio": { "type": "string" }
+      }
+    },
+    "evidenceScore": { "type": "number", "minimum": 0, "maximum": 100 },
+    "tags": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+    "problem": { "$ref": "#/definitions/FixSection" },
+    "whoIsAffected": { "$ref": "#/definitions/FixSection" },
+    "rootCauses": { "$ref": "#/definitions/FixSection" },
+    "evidence": { "$ref": "#/definitions/FixSection" },
+    "stakeholders": { "type": "array", "items": { "$ref": "#/definitions/Stakeholder" } },
+    "existingSolutions": { "type": "array", "items": { "$ref": "#/definitions/ExistingSolution" } },
+    "globalExamples": { "type": "array", "items": { "$ref": "#/definitions/GlobalExample" } },
+    "recommendedActions": { "type": "array", "items": { "$ref": "#/definitions/FixAction" }, "minItems": 2 },
+    "citizenActions": { "type": "array", "items": { "$ref": "#/definitions/FixAction" } },
+    "governmentActions": { "type": "array", "items": { "$ref": "#/definitions/FixAction" } },
+    "metricsToTrack": { "type": "array", "items": { "$ref": "#/definitions/Metric" }, "minItems": 3 },
+    "relatedStories": { "type": "array", "items": { "$ref": "#/definitions/RelatedStory" } },
+    "relatedEntities": { "type": "array", "items": { "$ref": "#/definitions/RelatedEntity" } }
+  },
+  "definitions": {
+    "FixSection": {
+      "type": "object",
+      "required": ["title", "content"],
+      "properties": {
+        "title": { "type": "string", "minLength": 5 },
+        "content": { "type": "string", "minLength": 50 },
+        "supportingData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "Stakeholder": {
+      "type": "object",
+      "required": ["name", "type", "role", "interest"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["government", "citizen", "private-sector", "civil-society", "international"] },
+        "role": { "type": "string" },
+        "interest": { "type": "string" },
+        "stance": { "type": "string", "enum": ["supports", "opposes", "neutral", "mixed"] }
+      }
+    },
+    "ExistingSolution": {
+      "type": "object",
+      "required": ["name", "description", "status"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "proposed", "expired", "failed"] },
+        "effectiveness": { "type": "string", "enum": ["high", "medium", "low", "unknown"] },
+        "source": { "type": "string" }
+      }
+    },
+    "GlobalExample": {
+      "type": "object",
+      "required": ["country", "policy", "description", "outcome"],
+      "properties": {
+        "country": { "type": "string" },
+        "policy": { "type": "string" },
+        "description": { "type": "string" },
+        "outcome": { "type": "string" },
+        "source": { "type": "string" },
+        "applicableToIndia": { "type": "boolean" }
+      }
+    },
+    "FixAction": {
+      "type": "object",
+      "required": ["title", "description", "priority", "timeframe", "actors"],
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+        "timeframe": { "type": "string", "enum": ["immediate", "short-term", "medium-term", "long-term"] },
+        "actors": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      }
+    },
+    "Metric": {
+      "type": "object",
+      "required": ["name", "currentValue", "targetValue", "dataSource", "updateFrequency"],
+      "properties": {
+        "name": { "type": "string" },
+        "currentValue": { "type": "string" },
+        "targetValue": { "type": "string" },
+        "dataSource": { "type": "string" },
+        "updateFrequency": { "type": "string" }
+      }
+    },
+    "RelatedStory": {
+      "type": "object",
+      "required": ["slug", "headline"],
+      "properties": {
+        "slug": { "type": "string" },
+        "headline": { "type": "string" },
+        "summary": { "type": "string" },
+        "publishedAt": { "type": "string" },
+        "readingTime": { "type": "integer" },
+        "evidenceScore": { "type": "number" },
+        "category": { "type": "string" }
+      }
+    },
+    "RelatedEntity": {
+      "type": "object",
+      "required": ["id", "slug", "name", "type"],
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+name: writer-agent
+version: 1.0.0
+purpose: Write story content that precisely follows the architecture blueprint — no editorial decisions, only execution.
+input_contract: story-architecture.schema.json
+output_contract: writer.schema.json
+dependencies:
+  - story-architecture-agent
+  - editorial-thinking-agent
+  - knowledge-agent
+  - entity-agent
+  - timeline-agent
+  - verification-agent
+  - research-agent
+next:
+  - editorial-review-agent
+files:
+  system: system.md
+  style: style.md
+  rules: rules.md
+  tests: tests.md

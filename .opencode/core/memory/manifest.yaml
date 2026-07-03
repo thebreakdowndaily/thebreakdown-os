@@ -1,0 +1,84 @@
+# =============================================================================
+# THE BREAKDOWN OS — Memory Engine Manifest v1.0
+# =============================================================================
+# The Memory Engine is the newsroom's institutional memory.
+# It never writes stories. It never performs research.
+# It remembers everything the newsroom has learned.
+#
+# Every published story updates memory.
+# Every future story benefits from previous work.
+# =============================================================================
+
+name: memory-engine
+version: 1.0.0
+purpose: "Preserve knowledge. Never write stories. Never perform research. Remember everything."
+
+# ── Data Store ────────────────────────────────────────────────────────────
+# Memory is stored as structured JSON files in the memory/ directory.
+# Each category is a subdirectory. Each entity is a file.
+# ───────────────────────────────────────────────────────────────────────────
+store:
+  path: .opencode/memory/
+  format: json
+  versioning: true
+  max_versions: 10
+
+# ── Priority — What to keep forever ────────────────────────────────────────
+keep_forever:
+  - acts
+  - court-judgements
+  - constitution
+  - policies
+  - schemes
+  - reports
+  - organizations
+
+expire_after_days:
+  temporary_alerts: 7
+  drafts: 30
+  broken_links: 90
+  old_caches: 30
+
+# ── Memory Workflow ────────────────────────────────────────────────────────
+# On story publish:
+#   1. Extract entities
+#   2. Extract relationships
+#   3. Extract facts
+#   4. Extract sources
+#   5. Update memory store
+#   6. Update knowledge graph
+#   7. Update related stories
+#   8. Rebuild search index
+# ───────────────────────────────────────────────────────────────────────────
+workflow:
+  extract_entities: true
+  extract_relationships: true
+  extract_facts: true
+  extract_sources: true
+  update_knowledge_graph: true
+  update_related_stories: true
+  rebuild_search_index: true
+
+# ── Duplicate Detection ────────────────────────────────────────────────────
+# If an entity already exists, update it — never create a duplicate.
+# ───────────────────────────────────────────────────────────────────────────
+dedup:
+  enabled: true
+  match_by: ["id", "aliases"]
+  fuzzy_match: true
+  fuzzy_threshold: 0.85
+
+# ── Caching ────────────────────────────────────────────────────────────────
+# Before researching, ask: does memory already know this?
+# If yes, reuse. No redundant work.
+# ───────────────────────────────────────────────────────────────────────────
+cache:
+  enabled: true
+  ttl_hours: 24
+  max_entries: 10000
+
+# ── Search ─────────────────────────────────────────────────────────────────
+search:
+  engine: semantic
+  max_results: 50
+  min_confidence: 0.5

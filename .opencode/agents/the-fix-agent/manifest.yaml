@@ -1,0 +1,82 @@
+# THE BREAKDOWN — The Fix Agent v1.0
+# Agent: the-fix-agent
+# Role: Solutions Architect — transforms verified stories into actionable fix frameworks
+
+id: the-fix-agent
+version: "1.0"
+codename: "solutions-architect"
+
+classification:
+  tier: editorial
+  department: publishing
+  autonomy: high
+
+inputs:
+  - story.json                # Verified story (facts, claims, evidence)
+  - research.json             # Original research and context
+  - verification.json         # Verified claims with confidence scores
+  - entities.json             # Entity resolution
+  - knowledgeGraph.json       # Entity relationships
+  - timeline.json             # Key events chronology
+
+output:
+  schema: fix.schema.json
+  format: FixJSON
+  destination: website-builder / fix-page
+
+triggers:
+  - step: solutions-assembly
+    condition: story output available and story type is "the-fix"
+    priority: required
+
+capabilities:
+  - Extract problem statement and root causes from story narrative
+  - Identify affected populations and quantify impact
+  - Map stakeholder positions from entity relationships
+  - Research existing solutions and global policy examples
+  - Generate actionable recommendations by priority and timeframe
+  - Define measurable metrics with baselines and targets
+  - Route citizen and government actions by feasibility
+  - Validate all recommendations against verified evidence
+
+dependencies:
+  - writer-agent              # Must produce story.json with narrative
+  - verification-agent        # For verified claims and evidence
+  - knowledge-graph           # For stakeholder mapping
+  - research-agent            # For solutions research and global examples
+
+quality_gates:
+  - name: evidence-grounding
+    description: Every recommendation must be grounded in verified evidence
+    check: all recommended actions link to verified claim or data point
+    minimum_coverage: 0.95
+
+  - name: global-example-validity
+    description: Global examples must have verifiable sources and outcomes
+    check: each global example has a named source and quantitative outcome
+    minimum_coverage: 1.0
+
+  - name: metric-measurability
+    description: All metrics must have current values, targets, and data sources
+    check: each metric has currentValue, targetValue, and dataSource
+    minimum_coverage: 1.0
+
+  - name: action-actionability
+    description: Every action must specify actors and timeframe
+    check: each action has at least one named actor and timeframe
+    minimum_coverage: 1.0
+
+memory:
+  store: true
+  key_fields: [id, slug, headline, storySlug]
+  categories:
+    - fix-recommendations
+    - global-examples
+    - metric-baselines
+    - action-tracking
+
+failure_routing:
+  missing_evidence: escalate_to_editorial_review
+  unverifiable_global_example: remove_example_and_note
+  incomplete_metrics: flag_for_research
+  unrealistic_action: downgrade_priority

@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thebreakdown.in/schemas/editorial-review.schema.json",
+  "title": "Editorial Review",
+  "description": "The Editorial Review Agent's verdict on a story — approved, rejected, or revision required — with structured feedback for the Writer Agent.",
+  "type": "object",
+  "required": [
+    "approved",
+    "status",
+    "score",
+    "summary",
+    "qualityGates",
+    "editorialScore",
+    "checklist",
+    "issues",
+    "revisionPlan",
+    "selfCritique"
+  ],
+  "properties": {
+    "approved": {
+      "type": "boolean",
+      "description": "Whether the story is approved for publication."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["approved", "revision_required", "rejected"],
+      "description": "Publication decision. Only three states."
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall editorial score. Stories below quality gate thresholds must be rejected."
+    },
+    "summary": {
+      "type": "string",
+      "description": "One-paragraph editorial verdict summary."
+    },
+    "qualityGates": {
+      "type": "object",
+      "description": "Gate scores for the six mandatory quality gates. Any gate below its threshold fails the story.",
+      "required": ["research", "evidence", "accuracy", "readability", "trust", "context"],
+      "properties": {
+        "research": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Research quality score. Minimum gate: 90."
+        },
+        "evidence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Evidence integrity score. Minimum gate: 90."
+        },
+        "accuracy": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Factual accuracy score. Minimum gate: 95."
+        },
+        "readability": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Readability and clarity score. Minimum gate: 90."
+        },
+        "trust": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Trustworthiness score. Minimum gate: 95."
+        },
+        "context": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Context and background score. Minimum gate: 90."
+        }
+      }
+    },
+    "editorialScore": {
+      "type": "object",
+      "description": "Detailed editorial scoring across nine dimensions.",
+      "required": [
+        "Research", "Evidence", "Accuracy", "Structure",
+        "Readability", "Context", "VisualPotential",
+        "Originality", "Trust"
+      ],
+      "properties": {
+        "Research": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Evidence": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Accuracy": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Structure": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Readability": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Context": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "VisualPotential": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Originality": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Trust": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "checklist": {
+      "type": "object",
+      "description": "Pre-publication checklist — every item must be true for approval.",
+      "required": [
+        "headlineAccurate",
+        "readerPromiseFulfilled",
+        "noUnsupportedClaims",
+        "timelineCorrect",
+        "dataExplained",
+        "sourcesLinked",
+        "definitionsIncluded",
+        "visualRecommendationsComplete",
+        "relatedStoriesSuggested"
+      ],
+      "properties": {
+        "headlineAccurate": { "type": "boolean" },
+        "readerPromiseFulfilled": { "type": "boolean" },
+        "noUnsupportedClaims": { "type": "boolean" },
+        "timelineCorrect": { "type": "boolean" },
+        "dataExplained": { "type": "boolean" },
+        "sourcesLinked": { "type": "boolean" },
+        "definitionsIncluded": { "type": "boolean" },
+        "visualRecommendationsComplete": { "type": "boolean" },
+        "relatedStoriesSuggested": { "type": "boolean" }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "description": "Structured issues found during review.",
+      "items": {
+        "type": "object",
+        "required": ["type", "severity", "section", "description"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "evidence_gap",
+              "missing_citation",
+              "structural_error",
+              "clarity_issue",
+              "bias_issue",
+              "tone_mismatch",
+              "readability_issue",
+              "factual_error",
+              "speculation",
+              "missing_section",
+              "incomplete_visual",
+              "rhetorical_language",
+              "audience_mismatch"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "major", "minor"]
+          },
+          "section": {
+            "type": "string",
+            "description": "Section ID where the issue was found."
+          },
+          "description": {
+            "type": "string",
+            "description": "Clear description of the issue."
+          }
+        }
+      }
+    },
+    "strengths": {
+      "type": "array",
+      "description": "What the story does well.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missingSections": {
+      "type": "array",
+      "description": "Sections required by the architecture but absent from the story.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revisionPlan": {
+      "type": "array",
+      "description": "Actionable revision instructions — never vague, always delegate to the correct agent.",
+      "items": {
+        "type": "object",
+        "required": ["priority", "agent", "section", "reason"],
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "agent": {
+            "type": "string",
+            "enum": ["writer", "research", "verification", "timeline", "entity", "architecture"],
+            "description": "Which agent needs to fix this."
+          },
+          "section": {
+            "type": "string",
+            "description": "Target section or component."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Specific, actionable reason for the revision."
+          }
+        }
+      }
+    },
+    "selfCritique": {
+      "type": "object",
+      "description": "The editor's own critique: would this meet Reuters standards?",
+      "required": ["wouldMeetReutersStandards", "reason"],
+      "properties": {
+        "wouldMeetReutersStandards": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string",
+          "description": "If not, why not?"
+        }
+      }
+    }
+  }
+}

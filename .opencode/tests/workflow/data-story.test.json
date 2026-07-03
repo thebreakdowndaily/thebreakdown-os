@@ -1,0 +1,61 @@
+{
+  "test": "Data Story Workflow",
+  "description": "Validate Data Story — data-analysis step, 14-step chain",
+  "checks": {
+    "workflow_exists": true,
+    "steps_count": 15,
+    "step_ids": ["research", "data-analysis", "verification", "entity", "timeline", "knowledge", "editorial-thinking", "story-architecture", "writer", "editorial-review", "memory", "seo", "visual-planning", "website", "publish"],
+    "all_agents_resolved": {
+      "research": "research-agent",
+      "data-analysis": "research-agent",
+      "verification": "verification-agent",
+      "entity": "entity-agent",
+      "timeline": "timeline-agent",
+      "knowledge": "knowledge-agent",
+      "editorial-thinking": "editorial-thinking-agent",
+      "story-architecture": "story-architecture-agent",
+      "writer": "writer-agent",
+      "editorial-review": "editorial-review-agent",
+      "memory": "memory-engine",
+      "seo": "seo-agent",
+      "visual-planning": "visual-agent",
+      "website": "website-agent",
+      "publish": null
+    },
+    "schema_exists": ["research.schema.json", "verification.schema.json", "entity.schema.json", "timeline.schema.json", "document.schema.json", "editorial-thinking.schema.json", "story-architecture.schema.json", "writer.schema.json", "editorial-review.schema.json", "memory.schema.json", "seo.schema.json", "visual.schema.json", "page.schema.json"],
+    "quality_gates_valid": {
+      "editorial": 85,
+      "research": 85,
+      "evidence": 90,
+      "trust": 90,
+      "readability": 85
+    },
+    "failure_routing_valid": {
+      "verification": "research",
+      "editorial-review": "writer"
+    },
+    "depends_on_acyclic": true,
+    "terminal_step": "publish",
+    "expected_dag": {
+      "research": [],
+      "data-analysis": ["research"],
+      "verification": ["data-analysis"],
+      "entity": ["verification"],
+      "timeline": ["verification"],
+      "knowledge": ["entity", "timeline"],
+      "editorial-thinking": ["knowledge"],
+      "story-architecture": ["editorial-thinking"],
+      "writer": ["story-architecture"],
+      "editorial-review": ["writer"],
+      "memory": ["editorial-review"],
+      "seo": ["writer"],
+      "visual-planning": ["memory"],
+      "website": ["seo", "visual-planning"],
+      "publish": ["website"]
+    },
+    "parallel_regions": [
+      ["entity", "timeline"],
+      ["seo", "editorial-review", "memory", "visual-planning"]
+    ]
+  }
+}

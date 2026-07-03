@@ -1,0 +1,99 @@
+name: Breaking News
+version: "1.0"
+description: "Fastest path from event to publication"
+
+steps:
+  - id: research
+    agent: research-agent
+    required: true
+    timeout: 120
+    retries: 3
+    output: research.schema.json
+
+  - id: verification
+    agent: verification-agent
+    required: true
+    timeout: 60
+    retries: 2
+    output: verification.schema.json
+    depends_on: [research]
+
+  - id: writer
+    agent: writer-agent
+    required: true
+    timeout: 300
+    retries: 2
+    output: writer.schema.json
+    depends_on: [verification]
+
+  - id: editor
+    agent: editorial-review-agent
+    required: true
+    timeout: 30
+    retries: 1
+    output: editorial-review.schema.json
+    depends_on: [writer]
+
+  - id: seo
+    agent: seo-agent
+    required: false
+    timeout: 30
+    retries: 1
+    output: seo.schema.json
+    depends_on: [writer]
+
+  - id: memory
+    agent: memory-engine
+    required: true
+    timeout: 60
+    retries: 2
+    output: memory.schema.json
+    depends_on: [editor]
+
+  - id: graph
+    agent: knowledge-graph
+    required: false
+    timeout: 60
+    retries: 2
+    output: graph.schema.json
+    depends_on: [memory]
+
+  - id: visual
+    agent: visual-intelligence-agent
+    required: false
+    timeout: 120
+    retries: 1
+    output: visual.schema.json
+    depends_on: [graph]
+
+  - id: publishing
+    agent: publishing-agent
+    required: true
+    timeout: 120
+    retries: 2
+    output: publishing.schema.json
+    depends_on: [visual]
+
+  - id: publish
+    timeout: 0
+    retries: 0
+    terminal: true
+    depends_on: [publishing]
+
+quality:
+  editorial: 80
+  evidence: 80
+  trust: 85
+
+failure:
+  editor:
+    goto: writer
+
+on_success:
+  memory_update: true
+  publish: true
+
+
+
+
+

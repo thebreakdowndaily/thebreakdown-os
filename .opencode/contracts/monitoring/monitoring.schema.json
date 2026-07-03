@@ -1,0 +1,194 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.news/schemas/monitoring.schema.json",
+  "title": "MonitoringReport",
+  "description": "Output schema for the Monitoring Engine — detected changes, impact analysis, notifications",
+  "type": "object",
+  "required": ["report_id", "generated_at", "polls", "changes", "impact", "notifications"],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "pattern": "^mon-report-[a-z0-9-]+$",
+      "description": "Unique report identifier"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this monitoring report was generated"
+    },
+    "polls": {
+      "type": "array",
+      "description": "Results from each watcher poll in this cycle",
+      "items": {
+        "$ref": "#/definitions/WatcherPoll"
+      },
+      "minItems": 0
+    },
+    "changes": {
+      "type": "array",
+      "description": "All meaningful changes detected across all watchers",
+      "items": {
+        "$ref": "#/definitions/Change"
+      },
+      "minItems": 0
+    },
+    "impact": {
+      "type": "object",
+      "description": "Impact analysis linking changes to existing stories",
+      "properties": {
+        "total_changes": { "type": "integer", "minimum": 0 },
+        "total_affected_stories": { "type": "integer", "minimum": 0 },
+        "analyses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImpactAnalysis"
+          }
+        }
+      },
+      "required": ["total_changes", "total_affected_stories", "analyses"]
+    },
+    "notifications": {
+      "type": "array",
+      "description": "Notifications generated for editors",
+      "items": {
+        "$ref": "#/definitions/Notification"
+      },
+      "minItems": 0
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "watchers_polled": { "type": "integer" },
+        "watchers_failed": { "type": "integer" },
+        "duration_ms": { "type": "integer" },
+        "next_poll_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "definitions": {
+    "WatcherPoll": {
+      "type": "object",
+      "required": ["watcher_id", "polled_at", "status"],
+      "properties": {
+        "watcher_id": {
+          "type": "string",
+          "enum": ["parliament", "supreme-court", "pib", "press-releases", "rbi", "election-commission", "cag", "state-govts", "world-bank", "un", "who", "imf", "oecd"]
+        },
+        "polled_at": { "type": "string", "format": "date-time" },
+        "status": {
+          "type": "string",
+          "enum": ["success", "failed", "no_change", "rate_limited"]
+        },
+        "items_fetched": { "type": "integer", "minimum": 0 },
+        "new_items": { "type": "integer", "minimum": 0 },
+        "error": { "type": "string" },
+        "duration_ms": { "type": "integer" }
+      }
+    },
+    "Change": {
+      "type": "object",
+      "required": ["change_id", "source", "detected_at", "type", "entity_id", "entity_name", "summary", "severity"],
+      "properties": {
+        "change_id": {
+          "type": "string",
+          "pattern": "^chg-[a-z0-9-]+$"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["parliament", "supreme-court", "pib", "press-releases", "rbi", "election-commission", "cag", "state-govts", "world-bank", "un", "who", "imf", "oecd"]
+        },
+        "detected_at": { "type": "string", "format": "date-time" },
+        "type": {
+          "type": "string",
+          "enum": ["new_entity", "status_change", "value_change", "amendment", "date_change", "personnel_change", "report_publication", "schedule_change", "regulation_change", "policy_change", "guideline_update", "data_update"]
+        },
+        "entity_id": { "type": "string" },
+        "entity_name": { "type": "string" },
+        "from": { "type": "string", "description": "Previous value/status (for status/value changes)" },
+        "to": { "type": "string", "description": "New value/status" },
+        "date": { "type": "string", "format": "date" },
+        "summary": { "type": "string", "maxLength": 500 },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "major", "minor", "informational"]
+        },
+        "url": { "type": "string", "format": "uri" },
+        "raw_data": { "type": "object" }
+      }
+    },
+    "ImpactAnalysis": {
+      "type": "object",
+      "required": ["change_id", "analysis_id", "total_affected"],
+      "properties": {
+        "change_id": { "type": "string" },
+        "analysis_id": { "type": "string", "pattern": "^impact-[a-z0-9-]+$" },
+        "analysis_time_ms": { "type": "integer" },
+        "total_affected": { "type": "integer", "minimum": 0 },
+        "affected_stories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AffectedStory"
+          }
+        }
+      }
+    },
+    "AffectedStory": {
+      "type": "object",
+      "required": ["story_id", "title", "current_version", "match_score", "severity", "reason"],
+      "properties": {
+        "story_id": { "type": "string" },
+        "title": { "type": "string" },
+        "current_version": { "type": "integer", "minimum": 1 },
+        "match_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "matched_entities": { "type": "array", "items": { "type": "string" } },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "major", "minor", "none"]
+        },
+        "reason": { "type": "string", "maxLength": 300 },
+        "suggested_action": {
+          "type": "string",
+          "enum": ["update_and_republish", "update_only", "log_only", "dismiss"]
+        },
+        "published_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Notification": {
+      "type": "object",
+      "required": ["notification_id", "severity", "sent_at", "channels", "title", "summary", "action"],
+      "properties": {
+        "notification_id": {
+          "type": "string",
+          "pattern": "^ntf-[a-z0-9-]+$"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "major", "minor", "informational"]
+        },
+        "sent_at": { "type": "string", "format": "date-time" },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["dashboard", "email", "slack", "push"]
+          },
+          "minItems": 1
+        },
+        "title": { "type": "string", "maxLength": 200 },
+        "summary": { "type": "string", "maxLength": 1000 },
+        "affected_count": { "type": "integer", "minimum": 0 },
+        "affected_stories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "action": {
+          "type": "string",
+          "enum": ["update_and_republish", "update_only", "log_only", "dismiss"]
+        },
+        "dismissed": { "type": "boolean", "default": false },
+        "dismissed_at": { "type": "string", "format": "date-time" },
+        "dismissed_by": { "type": "string" }
+      }
+    }
+  }
+}

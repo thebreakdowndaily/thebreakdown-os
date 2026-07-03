@@ -1,0 +1,69 @@
+[
+  {
+    "id": "breaking-news",
+    "file": ".opencode/workflows/breaking-news.yaml",
+    "triggers": ["news", "breaking", "event", "update"],
+    "description": "Fastest path from event to publication"
+  },
+  {
+    "id": "daily-briefing",
+    "file": ".opencode/workflows/daily-briefing.yaml",
+    "triggers": ["briefing", "daily", "roundup", "summary"],
+    "description": "Multi-story daily news briefing"
+  },
+  {
+    "id": "fact-check",
+    "file": ".opencode/workflows/fact-check.yaml",
+    "triggers": ["fact-check", "claim", "verify", "true", "false", "misleading"],
+    "description": "Verify a specific claim or set of claims"
+  },
+  {
+    "id": "timeline",
+    "file": ".opencode/workflows/timeline.yaml",
+    "triggers": ["timeline", "chronology", "history", "evolution"],
+    "description": "Chronological narrative of events"
+  },
+  {
+    "id": "profile",
+    "file": ".opencode/workflows/profile.yaml",
+    "triggers": ["profile", "biography", "who-is", "backgrounder"],
+    "description": "Profile of a person, organization, or institution"
+  },
+  {
+    "id": "investigation",
+    "file": ".opencode/workflows/investigation.yaml",
+    "triggers": ["corruption", "scandal", "systemic", "investigation", "probe"],
+    "description": "Deep investigation with maximum verification"
+  },
+  {
+    "id": "explainer",
+    "file": ".opencode/workflows/explainer.yaml",
+    "triggers": ["explainer", "explained", "background", "context"],
+    "description": "Standard explainer with research, context, and analysis"
+  },
+  {
+    "id": "policy-analysis",
+    "file": ".opencode/workflows/policy-analysis.yaml",
+    "triggers": ["budget", "bill", "regulation", "reform", "policy", "law", "scheme"],
+    "description": "Deep policy analysis with data visualization"
+  },
+  {
+    "id": "data-story",
+    "file": ".opencode/workflows/data-story.yaml",
+    "triggers": ["data", "statistics", "survey", "report", "analysis", "numbers"],
+    "description": "Data-driven storytelling with charts and analysis"
+  },
+  {
+    "id": "the-fix",
+    "file": ".opencode/workflows/the-fix.yaml",
+    "triggers": ["solution", "reform", "fix", "what-can-be-done"],
+    "description": "Solutions-focused storytelling with actionable fixes"
+  },
+  {
+    "id": "update-story",
+    "file": ".opencode/workflows/update-story.yaml",
+    "triggers": ["change_detected", "monitor", "update", "republish", "story-update"],
+    "description": "Minimal update workflow — reuses verified data, re-runs visuals/website/publishing",
+    "source": "monitoring-agent"
+  }
+]

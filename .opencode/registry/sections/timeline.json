@@ -1,0 +1,35 @@
+{
+  "section": "timeline",
+  "version": "1.0.0",
+  "purpose": "Present chronological sequence of events so the reader understands how the situation evolved over time.",
+  "requiredInputs": [
+    "events[]"
+  ],
+  "optionalInputs": [
+    "causalLinks[]",
+    "dateRange",
+    "entityRefs[]"
+  ],
+  "supportedVisuals": [
+    "horizontal-timeline",
+    "vertical-timeline",
+    "interactive-timeline",
+    "milestone-chart"
+  ],
+  "writingRules": [
+    "Every event must have a date and title",
+    "Events ordered chronologically (earliest first)",
+    "Events grouped by phase or theme if more than 8 items",
+    "Causal links shown as arrows or connectors between events",
+    "Gaps longer than 6 months must be flagged with context"
+  ],
+  "seoRules": [
+    "Timeline section structured as ordered list for rich snippet eligibility",
+    "Key dates should appear in the first 50 words",
+    "Use schema.org Event markup for each entry"
+  ],
+  "dependencies": [
+    "timeline-agent"
+  ],
+  "narrativeStage": "understanding"
+}

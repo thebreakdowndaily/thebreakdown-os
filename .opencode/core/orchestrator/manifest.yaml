@@ -1,0 +1,78 @@
+# =============================================================================
+# THE BREAKDOWN OS — Agent Orchestrator Manifest v2.0
+# =============================================================================
+# The orchestrator is a meta-agent. It never writes stories, never performs
+# research, never creates images. It only coordinates.
+#
+# Architecture:
+#   - Agent registry    → .opencode/core/registry/agents.json
+#   - Workflow registry → .opencode/core/registry/workflows.json
+#   - Plugin directory  → .opencode/plugins/<plugin>/manifest.yaml + system.md
+#   - Memory Engine     → .opencode/core/memory/manager.ts (institutional knowledge)
+#   - Memory store      → .opencode/memory/<category>/<id>.json
+#   - Workflow definitions → .opencode/workflows/<name>.yaml
+#   - Agent prompts     → .opencode/agents/<agent>.md or <agent>/system.md
+#   - Schemas           → .opencode/schemas/<schema>.json
+#   - Contracts         → .opencode/contracts/<domain>/<schema>.json
+#
+# Pipeline Order:
+#   Research → Verification → Entity → Timeline → Knowledge →
+#   Editorial Thinking → Story Architecture → Writer →
+#   Editorial Review → MEMORY ENGINE → Knowledge Graph →
+#   SEO → Visual Planning → Website → Publish
+#
+# Editors change workflows by editing YAML — no programming required.
+# =============================================================================
+
+name: orchestrator
+version: 2.0.0
+purpose: "Coordinate all newsroom agents. Never write. Never research. Never create images. Only coordinate."
+
+# ── Registry References ────────────────────────────────────────────────────
+# All agent and workflow definitions live in these registries.
+# The orchestrator loads them at startup.
+# ───────────────────────────────────────────────────────────────────────────
+registries:
+  agents: .opencode/core/registry/agents.json
+  workflows: .opencode/core/registry/workflows.json
+  plugins: .opencode/plugins/
+  memory:
+    store: .opencode/memory/
+    engine: .opencode/core/memory/manager.ts
+    schema: .opencode/contracts/memory/memory.schema.json
+  knowledge:
+    store: .opencode/knowledge/
+    nodes: .opencode/knowledge/nodes/
+    edges: .opencode/knowledge/edges/
+    engine: .opencode/core/knowledge-graph/graph-manager.ts
+    schema: .opencode/contracts/knowledge/graph.schema.json
+
+# ── Input Detection ───────────────────────────────────────────────────────
+# Detect input type and route to the correct workflow.
+# Workflow selection uses keyword matching against workflow triggers.
+# ───────────────────────────────────────────────────────────────────────────
+input_detection:
+  url:
+    patterns:
+      - "*.pdf": { action: extract_text }
+      - "youtube.com/*": { action: transcribe }
+      - "youtu.be/*": { action: transcribe }
+      - "instagram.com/*": { action: scrape }
+      - "x.com/*": { action: scrape }
+      - "*.gov.in/*": { action: fetch }
+    default: { action: fetch }
+  topic:
+    default: { action: search }
+
+# ── Global Settings ───────────────────────────────────────────────────────
+settings:
+  strict_validation: true
+  fail_fast: false
+  checkpoint: true
+  cache_enabled: true
+  cache_ttl_hours: 24
+  default_timeout: 60
+  default_retries: 2
+  max_revision_attempts: 3
+  log_retention_days: 90
+  log_dir: .opencode/logs/

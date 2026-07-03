@@ -1,0 +1,32 @@
+{
+  "section": "quick-facts",
+  "version": "1.0.0",
+  "purpose": "Present key numbers and essential facts in scannable bullet form — giving readers the critical data at a glance.",
+  "requiredInputs": [
+    "facts[]"
+  ],
+  "optionalInputs": [
+    "statistics[]",
+    "comparisons[]"
+  ],
+  "supportedVisuals": [
+    "stat-card",
+    "number-highlight",
+    "bullet-list",
+    "infographic-strip"
+  ],
+  "writingRules": [
+    "Each fact must be one line — no more than 20 words",
+    "Include source for every fact (inline or via numbered reference)",
+    "Maximum 8 facts — prioritise the most impactful",
+    "Facts should be surprising or counter-intuitive where possible",
+    "Numbers must use consistent formatting (₹, %, Cr, etc.)"
+  ],
+  "seoRules": [
+    "Bullet points eligible for featured snippet",
+    "Key numbers should use schema.org StatisticalPopulation where applicable",
+    "Each bullet should start with a strong keyword"
+  ],
+  "dependencies": [],
+  "narrativeStage": "attention"
+}

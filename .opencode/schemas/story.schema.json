@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Story",
+  "type": "object",
+  "required": [
+    "id",
+    "headline",
+    "summary",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "subheadline": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "published",
+        "archived"
+      ]
+    },
+    "readingTime": {
+      "type": "integer"
+    },
+    "entities": {
+      "type": "array"
+    },
+    "claims": {
+      "type": "array"
+    },
+    "facts": {
+      "type": "array"
+    },
+    "sources": {
+      "type": "array"
+    },
+    "timeline": {
+      "type": "array"
+    },
+    "visuals": {
+      "type": "array"
+    }
+  }
+}

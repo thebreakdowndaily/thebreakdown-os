@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EditorialThinking",
+  "description": "Editorial strategy contract — angle, reader promise, story type, audience, knowledge gap, and recommended structure.",
+  "type": "object",
+  "properties": {
+    "storyType": {
+      "type": "string",
+      "enum": [
+        "Breaking News", "Explainer", "Investigation", "Timeline",
+        "Policy Analysis", "Data Story", "The Fix", "Fact Check",
+        "Opinion", "Profile", "Case Study"
+      ]
+    },
+    "primaryAngle": { "type": "string", "description": "Top-ranked story angle" },
+    "secondaryAngle": { "type": "string", "description": "Second-ranked story angle" },
+    "readerPromise": { "type": "string", "description": "What the reader will know after reading" },
+    "targetAudience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "General Public", "Students", "Civil Service Aspirants",
+          "Researchers", "Journalists", "Policy Makers",
+          "Professionals", "Investors"
+        ]
+      },
+      "minItems": 1
+    },
+    "knowledgeGap": { "type": "string", "description": "What the audience doesn't know that this story reveals" },
+    "editorialQuestions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 5,
+      "maxItems": 5,
+      "description": "Exactly 5 editorial questions that define the story scope"
+    },
+    "storyDepth": {
+      "type": "string",
+      "enum": ["Quick Brief", "Standard Story", "Long-form", "Investigation", "Reference Guide"]
+    },
+    "recommendedModules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Hero", "Executive Summary", "Quick Facts", "Timeline",
+          "Evidence", "System", "Data", "Debate",
+          "Global Comparison", "Solutions", "Sources"
+        ]
+      }
+    }
+  }
+}

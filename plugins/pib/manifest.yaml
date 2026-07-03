@@ -1,0 +1,53 @@
+# THE BREAKDOWN — Plugin: Press Information Bureau
+# Fetches official press releases from Government of India's PIB
+
+id: pib
+name: Press Information Bureau
+version: "1.1"
+description: Fetches and categorises official press releases and statements from the Press Information Bureau, Government of India
+author: The Breakdown
+type: data-source
+trust_tier: 1
+status: active
+schedule: every 15 minutes
+
+sources:
+  - url: https://pib.gov.in/RSS/rss.aspx
+    type: rss
+    method: GET
+    rate_limit:
+      requestsPerMinute: 6
+      burstSize: 10
+  - url: https://pib.gov.in/RSS/rss.aspx?mod=2
+    type: rss
+    method: GET
+  - url: https://pib.gov.in/RSS/dRelease.aspx
+    type: rss
+    method: GET
+
+config:
+  categories:
+    - all
+    - agriculture
+    - defence
+    - economy
+    - education
+    - energy
+    - environment
+    - health
+    - infrastructure
+    - science-tech
+    - social-justice
+  limit: 50
+  minSummaryLength: 100
+  deduplicate: true
+
+tags:
+  - government
+  - press-releases
+  - india
+  - official
+  - schemas
+  - policy
+
+documentation: Each PIB release includes ministry attribution, release ID, and language tags. Category is inferred from RSS feed source.

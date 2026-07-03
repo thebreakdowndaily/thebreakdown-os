@@ -1,0 +1,36 @@
+{
+  "section": "evidence",
+  "version": "1.0.0",
+  "purpose": "Present the factual foundation of the story — data, sources, and verified claims that support the narrative.",
+  "requiredInputs": [
+    "facts[]",
+    "sources[]"
+  ],
+  "optionalInputs": [
+    "claims[]",
+    "evidenceChains[]",
+    "confidenceScores"
+  ],
+  "supportedVisuals": [
+    "evidence-table",
+    "citation-block",
+    "confidence-meter",
+    "fact-checklist"
+  ],
+  "writingRules": [
+    "Every fact must trace to a source with a tier and confidence score",
+    "Present strongest evidence first within each claim",
+    "Conflicting evidence must be shown alongside supporting evidence, not hidden",
+    "Use inline citations for every factual claim",
+    "Mark unverified claims explicitly as 'not yet verified'"
+  ],
+  "seoRules": [
+    "Use blockquote schema for cited statements",
+    "Source URLs should use rel=nofollow where appropriate",
+    "Key statistics should be highlighted for featured snippet eligibility"
+  ],
+  "dependencies": [
+    "verification-agent"
+  ],
+  "narrativeStage": "evidence"
+}

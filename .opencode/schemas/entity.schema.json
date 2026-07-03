@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Entity",
+  "type": "object",
+  "required": ["id", "type", "name"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Person",
+        "Organization",
+        "Company",
+        "Country",
+        "State",
+        "City",
+        "District",
+        "Village",
+        "Act",
+        "Bill",
+        "Policy",
+        "Scheme",
+        "Budget",
+        "Committee",
+        "Report",
+        "Court Case",
+        "Technology",
+        "Product",
+        "Currency",
+        "Political Party",
+        "Ministry",
+        "Department",
+        "University",
+        "NGO",
+        "International Organization",
+        "Event",
+        "Project",
+        "Statistic"
+      ]
+    },
+    "name": { "type": "string" },
+    "aliases": {
+      "type": "array",
+      "description": "Alternative names, abbreviations, and common variants",
+      "items": { "type": "string" }
+    },
+    "description": { "type": "string" },
+    "country": { "type": "string" },
+    "website": { "type": "string", "format": "uri" },
+    "relatedEntities": { "type": "array" },
+    "relatedStories": { "type": "array" },
+    "sources": { "type": "array" },
+    "confidence": {
+      "type": "number",
+      "description": "0–1 confidence score for entity identification",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

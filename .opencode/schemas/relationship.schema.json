@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Relationship",
+  "description": "A typed relationship between two entities in the knowledge graph.",
+  "type": "object",
+  "properties": {
+    "source": { "type": "string", "description": "Entity ID of the source node" },
+    "target": { "type": "string", "description": "Entity ID of the target node" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "implemented_by",
+        "regulated_by",
+        "funded_by",
+        "reported_by",
+        "located_in",
+        "member_of",
+        "created_by",
+        "approved_by",
+        "audited_by",
+        "criticised_by",
+        "supported_by",
+        "replaced_by",
+        "related_to"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0–1 confidence score for this relationship",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

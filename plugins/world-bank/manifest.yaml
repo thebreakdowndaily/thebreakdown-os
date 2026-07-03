@@ -1,0 +1,49 @@
+# THE BREAKDOWN — Plugin: World Bank
+# Tracks World Bank projects, loans, and economic data for India
+
+id: world-bank
+name: World Bank India Tracker
+version: "1.0"
+description: Monitors World Bank-funded projects in India, loan agreements, economic reports, and India-specific development data
+author: The Breakdown
+type: data-source
+trust_tier: 1
+status: active
+schedule: every 24 hours
+
+sources:
+  - url: https://api.worldbank.org/v2/country/IN/projects?format=json
+    type: api
+    method: GET
+  - url: https://api.worldbank.org/v2/country/IN/indicator/NY.GDP.MKTP.CD?format=json
+    type: api
+    method: GET
+  - url: https://www.worldbank.org/en/news/rss/region/sar
+    type: rss
+    method: GET
+
+config:
+  countryCode: IN
+  region: South Asia
+  trackProjects: true
+  trackIndicators: true
+  trackNews: true
+  indicators:
+    - NY.GDP.MKTP.CD       # GDP (current US$)
+    - NY.GDP.MKTP.KD.ZG    # GDP growth (annual %)
+    - SI.POV.DDAY           # Poverty headcount
+    - SE.PRM.ENRR           # Primary enrollment
+    - SH.XPD.CHEX.GD.ZS     # Health expenditure
+    - EG.USE.ELEC.KH.PC     # Electricity consumption
+  limitProjects: 50
+
+tags:
+  - world-bank
+  - international-finance
+  - development
+  - loans
+  - economic-data
+  - india
+  - south-asia
+
+documentation: Tracks active World Bank projects in India, loan commitments, disbursements, and key economic indicators. Provides structured data on project status, sector allocation, and geographic distribution.

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Entity Memory",
+  "description": "Persistent memory for a single entity (person, organization, country, etc.)",
+  "allOf": [
+    { "$ref": "memory.schema.json" },
+    {
+      "type": "object",
+      "required": ["id", "type", "name"],
+      "properties": {
+        "id": { "type": "string", "description": "Canonical entity ID (e.g., 'person-narendra-modi')" },
+        "type": { "type": "string", "enum": ["person", "organization", "country", "law", "scheme", "budget", "report", "court-case", "event", "topic", "statistic"] },
+        "name": { "type": "string", "description": "Primary display name" },
+        "aliases": { "type": "array", "items": { "type": "string" }, "description": "Alternate names, acronyms, translations" },
+        "roles": { "type": "array", "items": { "type": "string" }, "description": "Current and past roles (for people)" },
+        "organizations": { "type": "array", "items": { "type": "string" }, "description": "Associated organization IDs" },
+        "stories": { "type": "array", "items": { "type": "string" }, "description": "Story IDs referencing this entity" },
+        "timeline": { "type": "array", "items": { "type": "object", "properties": { "date": { "type": "string" }, "event": { "type": "string" }, "source": { "type": "string" } } } },
+        "sources": { "type": "array", "items": { "type": "string" }, "description": "Source IDs used to build this entity" },
+        "metadata": { "type": "object", "description": "Type-specific metadata" }
+      }
+    }
+  ]
+}

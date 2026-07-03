@@ -1,0 +1,34 @@
+{
+  "section": "how-it-works",
+  "version": "1.0.0",
+  "purpose": "Explain a system, process, or mechanism — how something functions, who is involved, and what the flow of money or authority looks like.",
+  "requiredInputs": [
+    "processSteps[]"
+  ],
+  "optionalInputs": [
+    "flowDiagram",
+    "stakeholderRoles[]",
+    "decisionTree"
+  ],
+  "supportedVisuals": [
+    "flow-chart",
+    "system-diagram",
+    "decision-tree",
+    "process-timeline",
+    "architecture-svg"
+  ],
+  "writingRules": [
+    "Explain as if the reader has no prior knowledge of the system",
+    "Use analogies for complex mechanisms",
+    "Every technical term must be defined (inline or in glossary)",
+    "Visual must show the flow — text should explain what the visual shows",
+    "Start with the simplest version, then add complexity"
+  ],
+  "seoRules": [
+    "Use HowTo schema where applicable",
+    "Step-by-step processes marked as ordered lists",
+    "Technical terms should link to glossary or explanatory pages"
+  ],
+  "dependencies": [],
+  "narrativeStage": "understanding"
+}

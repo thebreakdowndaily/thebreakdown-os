@@ -1,0 +1,46 @@
+# THE BREAKDOWN — Plugin: Supreme Court of India
+# Tracks Supreme Court judgments, cases, and constitutional bench decisions
+
+id: supreme-court
+name: Supreme Court of India Tracker
+version: "1.0"
+description: Monitors Supreme Court judgments, case listings, constitutional bench decisions, and significant legal developments
+author: The Breakdown
+type: data-source
+trust_tier: 1
+status: active
+schedule: every 6 hours
+
+sources:
+  - url: https://main.sci.gov.in/rss/judgments
+    type: rss
+    method: GET
+  - url: https://main.sci.gov.in/rss/caseListing
+    type: rss
+    method: GET
+  - url: https://main.sci.gov.in/rss/causeList
+    type: rss
+    method: GET
+
+config:
+  trackJudgments: true
+  trackCaseListings: true
+  trackConstitutionBench: true
+  trackCaveats: true
+  benches:
+    - constitution-bench
+    - division-bench
+    - single-judge
+  limit: 100
+  minJudgmentLength: 500
+
+tags:
+  - supreme-court
+  - judiciary
+  - judgments
+  - constitution
+  - law
+  - legal
+  - india
+
+documentation: Tracks all Supreme Court judgments with cause title, bench composition, date of judgment, acts involved, and outcome. Constitution bench cases flagged separately for significance.

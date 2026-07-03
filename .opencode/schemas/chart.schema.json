@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://thebreakdown.in/schemas/chart.json",
+  "title": "Chart Specification",
+  "description": "A data visualisation spec for inline SVG charts used in Breakdown OS stories.",
+  "type": "object",
+  "required": ["id", "type", "title", "data"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^chart-[a-z0-9-]+$" },
+    "type": {
+      "type": "string",
+      "enum": ["bar", "bar-horizontal", "line", "area", "pie", "donut", "scatter", "heatmap", "table", "comparison-grid", "scenario-cards", "timeline-compact", "stats-grid", "multi-panel"]
+    },
+    "title": { "type": "string", "maxLength": 120 },
+    "subtitle": { "type": "string" },
+    "caption": { "type": "string" },
+    "data": {
+      "type": "array",
+      "description": "Array of data series or data points",
+      "items": { "type": "object" }
+    },
+    "series": {
+      "type": "array",
+      "description": "Multiple data series for multi-line/multi-bar charts",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "values": { "type": "array", "items": { "type": "number" } }
+        }
+      }
+    },
+    "labels": {
+      "type": "object",
+      "properties": {
+        "xAxis": { "type": "string" },
+        "yAxis": { "type": "string" },
+        "unit": { "type": "string" }
+      }
+    },
+    "source": { "type": "string" },
+    "sourceUrl": { "type": "string", "format": "uri" },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "integer", "default": 800 },
+        "height": { "type": "integer", "default": 400 }
+      }
+    },
+    "darkMode": { "type": "boolean", "default": true },
+    "colorScheme": {
+      "type": "string",
+      "enum": ["gold", "saffron", "green", "blue", "red", "multi", "monochrome"]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "section": "root-causes",
+  "version": "1.0.0",
+  "purpose": "Analyze the underlying causes of an event or situation — moving beyond symptoms to structural, political, and economic drivers.",
+  "requiredInputs": [
+    "causalChain[]"
+  ],
+  "optionalInputs": [
+    "historicalContext",
+    "systemicFactors[]",
+    "triggerEvents[]"
+  ],
+  "supportedVisuals": [
+    "cause-effect-diagram",
+    "fishbone-diagram",
+    "causal-loop",
+    "layered-analysis"
+  ],
+  "writingRules": [
+    "Distinguish between proximate causes (trigger) and root causes (systemic)",
+    "Each cause must be supported by evidence, not speculation",
+    "Show how causes interconnect — root causes rarely act alone",
+    "Acknowledge where causation is uncertain",
+    "End with implications — what addressing the root cause would require"
+  ],
+  "seoRules": [
+    "Structure as ordered list for depth analysis rich results",
+    "Key causal relationships should be in paragraph text",
+    "Use FAQ schema for causal chain questions"
+  ],
+  "dependencies": [
+    "timeline-agent"
+  ],
+  "narrativeStage": "analysis"
+}

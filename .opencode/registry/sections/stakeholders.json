@@ -1,0 +1,35 @@
+{
+  "section": "stakeholders",
+  "version": "1.0.0",
+  "purpose": "Identify and explain the positions of key stakeholders — who is involved, what they want, and how they are affected.",
+  "requiredInputs": [
+    "stakeholders[]"
+  ],
+  "optionalInputs": [
+    "positions[]",
+    "quotes[]",
+    "powerMap"
+  ],
+  "supportedVisuals": [
+    "stakeholder-map",
+    "influence-diagram",
+    "quote-cards",
+    "position-table"
+  ],
+  "writingRules": [
+    "Each stakeholder must be named and their interest explained",
+    "Include quotes from stakeholders where available",
+    "Show power dynamics — who has influence, who is affected without power",
+    "Include stakeholders who are affected but not represented",
+    "Update stakeholder positions if they change over time"
+  ],
+  "seoRules": [
+    "Use Person and Organization schema for named stakeholders",
+    "Quotes should use Quote schema markup",
+    "Stakeholder names should appear as natural text, not lists"
+  ],
+  "dependencies": [
+    "entity-agent"
+  ],
+  "narrativeStage": "context"
+}

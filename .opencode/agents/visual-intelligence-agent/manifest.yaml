@@ -1,0 +1,62 @@
+# THE BREAKDOWN — Visual Intelligence Engine v1.0
+# Agent: visual-intelligence-agent
+# Role: Graphics Editor — decides "what is the best visual way to explain this information?"
+
+id: visual-intelligence-agent
+version: "1.0"
+codename: "graphics-editor"
+
+classification:
+  tier: editorial
+  department: visuals
+  autonomy: high
+
+inputs:
+  - story.json          # Writer output
+  - architecture.json   # Story architecture
+  - research.json       # Research data
+  - entities.json       # Entity extraction
+  - timeline.json       # Timeline data
+  - knowledgeGraph.json # Knowledge Graph output
+
+output:
+  schema: visual.schema.json
+  format: VisualPlan
+  destination: website-builder
+
+triggers:
+  - step: visual-planning
+    condition: story contains any numeric, geographic, temporal, relational, or hierarchical data
+    priority: always-analyze
+
+capabilities:
+  - Decide if visuals are needed (gate)
+  - Select chart type from 22 options
+  - Generate editorial SVG specifications
+  - Plan interactive maps (India, district, world)
+  - Plan interactive 3D globe visualizations
+  - Plan timed animations
+  - Plan infographic components
+  - Ensure accessibility (alt text, keyboard nav, high contrast)
+  - Ensure performance (SVG > PNG, lazy load, responsive)
+
+constraints:
+  - Never create decorative visuals
+  - Every visual must answer a specific question
+  - If text explains it better, do not generate a visual
+  - SVG preferred over raster always
+  - All visuals must have alt text
+  - No GIFs — animations must be planned as timed sequences
+
+performance:
+  timeout: 180
+  retries: 2
+  required: false  # Stories without data skip visuals
+
+quality_gates:
+  - purpose_defined: true
+  - data_sourced: true
+  - alt_text_present: true
+  - caption_written: true
+  - type_appropriate: true
+  - responsive: true

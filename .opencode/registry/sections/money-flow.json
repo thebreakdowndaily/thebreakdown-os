@@ -1,0 +1,35 @@
+{
+  "section": "money-flow",
+  "version": "1.0.0",
+  "purpose": "Trace the movement of money — budgets, funding sources, allocations, expenditures, and financial flows between entities.",
+  "requiredInputs": [
+    "budgetFigures[]",
+    "flowEdges[]"
+  ],
+  "optionalInputs": [
+    "fundingSources[]",
+    "allocationBreakdown",
+    "yearOverYear"
+  ],
+  "supportedVisuals": [
+    "sankey-diagram",
+    "flow-chart",
+    "treemap",
+    "budget-pie-chart",
+    "allocation-table"
+  ],
+  "writingRules": [
+    "All figures must include source and fiscal year",
+    "Show both absolute numbers and percentage of total",
+    "Highlight changes from previous period (increase/decrease)",
+    "Trace money from source to destination — who pays and who receives",
+    "Use consistent currency formatting (₹ with Cr/L/Cr notation)"
+  ],
+  "seoRules": [
+    "Table data should use schema.org Table markup",
+    "Key allocation figures should appear in paragraph text",
+    "Use StatisticalPopulation schema for per-capita figures"
+  ],
+  "dependencies": [],
+  "narrativeStage": "analysis"
+}
