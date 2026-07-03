@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Header from '@/components/layout/Header';
+import { Navigation } from '@/components/navigation';
 import Footer from '@/components/layout/Footer';
 import SEOHead from '@/components/layout/SEOHead';
 import '@/styles/globals.css';
@@ -46,9 +46,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <SEOHead seo={defaultSEO} />
       </head>
-      <body className="min-h-screen bg-[#0B1020] text-[#F8FAFC] font-sans flex flex-col">
-        <Header />
-        {children}
+      <body className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5] font-sans flex flex-col">
+        <Navigation />
+        <main className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
         <Footer />
       </body>
     </html>

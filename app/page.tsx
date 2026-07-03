@@ -2,14 +2,8 @@ import type { Metadata } from 'next';
 import type { HomepageJSON } from '@/utils/types';
 import { buildHomepage } from '@/utils/website-builder';
 import HomepageLayout from '@/layouts/HomepageLayout';
-import TopStory from '@/components/homepage/TopStory';
-import TrendingAnalysis from '@/components/homepage/TrendingAnalysis';
-import LatestInvestigations from '@/components/homepage/LatestInvestigations';
-import DataStories from '@/components/homepage/DataStories';
-import TheFix from '@/components/homepage/TheFix';
-import PolicyTracker from '@/components/homepage/PolicyTracker';
-import GlobalWatch from '@/components/homepage/GlobalWatch';
-import LatestUpdates from '@/components/homepage/LatestUpdates';
+import HomeHero from '@/components/homepage/HomeHero';
+import FeaturedStories from '@/components/homepage/FeaturedStories';
 
 const mockHomepageData: HomepageJSON = {
   topStory: {
@@ -154,16 +148,12 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const { topStory, trendingAnalyses, theFix, policyTracker, latestUpdates } = mockHomepageData;
+
   return (
     <HomepageLayout seo={pageSpec.seo}>
-      <TopStory story={mockHomepageData.topStory} />
-      <TrendingAnalysis stories={mockHomepageData.trendingAnalyses} />
-      <LatestInvestigations stories={mockHomepageData.latestInvestigations} />
-      <DataStories stories={mockHomepageData.dataStories} />
-      <TheFix stories={mockHomepageData.theFix} />
-      <PolicyTracker policies={mockHomepageData.policyTracker} />
-      <GlobalWatch stories={mockHomepageData.globalWatch} />
-      <LatestUpdates stories={mockHomepageData.latestUpdates} />
+      <HomeHero story={topStory} />
+      <FeaturedStories primary={topStory} secondary={trendingAnalyses} />
     </HomepageLayout>
   );
 }

@@ -189,6 +189,7 @@ const config: Config = {
         'fade-in': 'fadeIn var(--duration-default) var(--easing-out) forwards',
         'slide-up': 'slideUp var(--duration-default) var(--easing-out) forwards',
         'slide-down': 'slideDown var(--duration-default) var(--easing-out) forwards',
+        'slide-in-right': 'slideInRight 300ms var(--easing-out) forwards',
         'scale-in': 'scaleIn var(--duration-default) var(--easing-out) forwards',
         shimmer: 'shimmer 1.5s var(--easing-in-out) infinite',
         spin: 'spin 1s var(--easing-linear) infinite',
@@ -210,6 +211,10 @@ const config: Config = {
         slideDown: {
           from: { opacity: '0', transform: 'translateY(-8px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideInRight: {
+          from: { opacity: '0', transform: 'translateX(100%)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
         },
         scaleIn: {
           from: { opacity: '0', transform: 'scale(0.95)' },
