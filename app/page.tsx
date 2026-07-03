@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import type { HomepageJSON } from '@/utils/types';
 import { buildHomepage } from '@/utils/website-builder';
+import { getStory } from '@/utils/data-layer/store';
 import HomepageLayout from '@/layouts/HomepageLayout';
-import HomeHero from '@/components/homepage/HomeHero';
+import Hero from '@/components/home/hero/Hero';
 import FeaturedStories from '@/components/homepage/FeaturedStories';
 
 const mockHomepageData: HomepageJSON = {
@@ -148,11 +149,12 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const { topStory, trendingAnalyses, theFix, policyTracker, latestUpdates } = mockHomepageData;
+  const { topStory, trendingAnalyses } = mockHomepageData;
+  const heroStory = getStory(topStory.slug);
 
   return (
     <HomepageLayout seo={pageSpec.seo}>
-      <HomeHero story={topStory} />
+      {heroStory && <Hero story={heroStory} />}
       <FeaturedStories primary={topStory} secondary={trendingAnalyses} />
     </HomepageLayout>
   );
