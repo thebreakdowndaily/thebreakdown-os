@@ -4,7 +4,7 @@ import MapRenderer from '@/components/maps/MapRenderer';
 import type { MapSpec } from '@/utils/types';
 
 interface MapsProps {
-  geoData: GeoData;
+  geoData?: GeoData;
 }
 
 /**
@@ -44,7 +44,7 @@ function geoDataToSpec(data: GeoData): MapSpec {
 }
 
 const Maps: React.FC<MapsProps> = ({ geoData }) => {
-  if (geoData.regions.length === 0) return null;
+  if (!geoData || geoData.regions.length === 0) return null;
 
   return (
     <section aria-label="Geographic data" style={{

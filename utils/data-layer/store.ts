@@ -541,24 +541,26 @@ function paginate<T>(items: T[], params: QueryParams): APIListResponse<T> {
   return { data, meta: { total, page, pageSize, totalPages } };
 }
 
-function searchFilter<T extends Record<string, unknown>>(items: T[], query: string, fields: (keyof T)[]): T[] {
+function searchFilter<T>(items: T[], query: string, fields: (keyof T)[]): T[] {
   if (!query) return items;
   const lower = query.toLowerCase();
   return items.filter((item) =>
     fields.some((field) => {
-      const val = item[field];
-      return val ? String(val).toLowerCase().includes(lower) : false;
+      const val = (item as Record<string, unknown>)[field as string];
+      if (val == null) return false;
+      const str = typeof val === 'string' ? val : JSON.stringify(val);
+      return str.toLowerCase().includes(lower);
     })
   );
 }
 
-function sortItems<T extends Record<string, unknown>>(items: T[], field: string, order: 'asc' | 'desc' = 'desc'): T[] {
+function sortItems<T>(items: T[], field: string, order: 'asc' | 'desc' = 'desc'): T[] {
   return [...items].sort((a, b) => {
-    const aVal = a[field];
-    const bVal = b[field];
+    const aVal = (a as Record<string, unknown>)[field];
+    const bVal = (b as Record<string, unknown>)[field];
     if (aVal == null) return 1;
     if (bVal == null) return -1;
-    const cmp = typeof aVal === 'string' ? aVal.localeCompare(bVal) : Number(aVal) - Number(bVal);
+    const cmp = typeof aVal === 'string' && typeof bVal === 'string' ? aVal.localeCompare(bVal) : Number(aVal) - Number(bVal);
     return order === 'desc' ? -cmp : cmp;
   });
 }
@@ -570,9 +572,12 @@ export function getStories(params: QueryParams = {}): APIListResponse<APIStory> 
   let items = Array.from(s.stories.values());
 
   if (params.category) items = items.filter((st) => st.category === params.category);
-  if (params.tag) items = items.filter((st) => st.tags.includes(params.tag));
-  if (params.author) items = items.filter((st) => st.author.name.toLowerCase().includes(params.author.toLowerCase()));
-  if (params.search) items = searchFilter(items, params.search, ['headline', 'summary', 'tags']);
+  const tagFilter = params.tag;
+  if (tagFilter) items = items.filter((st) => st.tags.includes(tagFilter));
+  const authorFilter = params.author;
+  if (authorFilter) items = items.filter((st) => st.author.name.toLowerCase().includes(authorFilter.toLowerCase()));
+  const searchQuery = params.search;
+  if (searchQuery) items = searchFilter(items, searchQuery, ['headline', 'summary', 'tags']);
   if (params.sort) items = sortItems(items, params.sort, params.order);
 
   return paginate(items, params);

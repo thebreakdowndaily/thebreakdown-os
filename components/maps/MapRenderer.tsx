@@ -51,10 +51,6 @@ interface RegionData {
   value?: number;
 }
 
-interface FeatureProperties {
-  name?: string;
-  [key: string]: unknown;
-}
 
 function readTheme(el: Element): MapTheme {
   const style = getComputedStyle(el);
@@ -375,11 +371,12 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       // Render features
       const features = config.geoJSON.features;
 
-      features.forEach((feature: GeoJSON.Feature<GeoJSON.Geometry, FeatureProperties>) => {
+      features.forEach((feature) => {
         const props = feature.properties;
-        const rawName = props[config.labelField];
+        if (!props) return;
+        const rawName: unknown = props[config.labelField];
         const name = typeof rawName === 'string' ? rawName : '';
-        const rawJoin = props[config.joinField];
+        const rawJoin: unknown = props[config.joinField];
         const joinKey = (typeof rawJoin === 'string' ? rawJoin : name).toLowerCase();
         const value = valueMap.get(joinKey);
         const hasValue = value !== undefined;

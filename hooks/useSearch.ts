@@ -82,7 +82,7 @@ export function useSearch(query: string, options: UseSearchOptions = {}): UseSea
           if (!cancelledRef.current) {
             setResults(data.results ?? []);
             setTotal(data.total ?? 0);
-            setTotalPages(data.totalPages ?? Math.ceil((data.total ?? 0) / limit) || 0);
+            setTotalPages(data.totalPages ?? (Math.ceil((data.total ?? 0) / limit) || 0));
             setLoading(false);
           }
         })

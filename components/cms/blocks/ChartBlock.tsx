@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, ChartBlockData } from '@/utils/cms-data';
 
 interface ChartBlockProps {
   block: Block;
@@ -10,8 +10,8 @@ interface ChartBlockProps {
 const CHART_TYPES = ['bar', 'line', 'pie', 'area', 'scatter', 'radar', 'heatmap', 'treemap'];
 
 export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
-  const d = block.data;
-  const dataPoints: Array<{ label: string; value: number }> = (d.data as Array<{ label: string; value: number }> | undefined) ?? [];
+  const d = block.data as ChartBlockData;
+  const dataPoints = d.data;
 
   const updateMeta = (field: string, value: string) => { onUpdate({ ...d, [field]: value }); };
 
@@ -32,7 +32,7 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
           Chart Title
         </label>
         <input
-          value={(d.title as string) || ''}
+           value={d.title || ''}
           onChange={(e) => { updateMeta('title', e.target.value); }}
           placeholder="Chart title..."
           style={{
@@ -164,7 +164,7 @@ export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
           Caption
         </label>
         <input
-          value={(d.caption as string) || ''}
+           value={d.caption || ''}
           onChange={(e) => { updateMeta('caption', e.target.value); }}
           placeholder="Source attribution for the chart data..."
           style={{

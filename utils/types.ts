@@ -374,8 +374,8 @@ export interface Metric {
 // ── Visual Intelligence Types ────────────────────────────────────────────
 
 export type ChartType =
-  | 'line' | 'bar' | 'horizontal-bar' | 'area' | 'scatter' | 'bubble'
-  | 'treemap' | 'sankey' | 'network' | 'radar' | 'heatmap' | 'sunburst'
+  | 'line' | 'bar' | 'horizontal-bar' | 'pie' | 'area' | 'scatter' | 'bubble'
+  | 'treemap' | 'sankey' | 'network' | 'radar' | 'heatmap' | 'sunburst' | 'table'
   | 'waterfall' | 'histogram' | 'box-plot' | 'violin' | 'slope' | 'calendar'
   | 'dot-plot' | 'lollipop' | 'ridgeline' | 'chord';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, CalloutBlockData } from '@/utils/cms-data';
 
 interface CalloutBlockProps {
   block: Block;
@@ -15,7 +15,7 @@ const CALLOUT_TYPES = [
 ];
 
 export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
-  const d = block.data;
+  const d = block.data as CalloutBlockData;
   const calloutType = CALLOUT_TYPES.find((t) => t.value === d.type) || CALLOUT_TYPES[0];
 
   return (
@@ -31,7 +31,7 @@ export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
       <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
         <span style={{ fontSize: '16px' }}>{CALLOUT_TYPES.find((t) => t.value === d.type)?.label.split(' ')[0]}</span>
         <select
-          value={(d.type as string) || 'info'}
+          value={d.type || 'info'}
           onChange={(e) => { onUpdate({ ...d, type: e.target.value }); }}
           style={{
             border: '1px solid var(--color-border-subtle)',
@@ -52,7 +52,7 @@ export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
       </div>
 
       <input
-        value={(d.title as string) || ''}
+        value={d.title || ''}
         onChange={(e) => { onUpdate({ ...d, title: e.target.value }); }}
         placeholder="Callout title..."
         style={{
@@ -69,8 +69,8 @@ export default function CalloutBlock({ block, onUpdate }: CalloutBlockProps) {
       />
 
       <textarea
-        value={(d.body as string) || ''}
-        onChange={(e) => { onUpdate({ ...d, body: e.target.value }); }}
+        value={d.text || ''}
+        onChange={(e) => { onUpdate({ ...d, text: e.target.value }); }}
         placeholder="Callout body text..."
         rows={3}
         style={{

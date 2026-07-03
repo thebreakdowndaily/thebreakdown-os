@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, EvidenceBlockData } from '@/utils/cms-data';
 
 interface EvidenceBlockProps {
   block: Block;
@@ -8,7 +8,7 @@ interface EvidenceBlockProps {
 }
 
 export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
-  const d = block.data;
+  const d = block.data as EvidenceBlockData;
 
   return (
     <div
@@ -38,7 +38,7 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
           Claim
         </label>
         <textarea
-           value={(d.claim as string) || ''}
+           value={d.claim || ''}
           onChange={(e) => { onUpdate({ ...d, claim: e.target.value }); }}
           placeholder="What claim does this evidence support?"
           rows={2}
@@ -62,7 +62,7 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
           Data / Evidence
         </label>
         <textarea
-          value={(d.data as string) || ''}
+           value={d.data || ''}
           onChange={(e) => { onUpdate({ ...d, data: e.target.value }); }}
           placeholder="The actual data or evidence text..."
           rows={2}
@@ -87,7 +87,7 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
             Source Name
           </label>
           <input
-            value={(d.source as string) || ''}
+            value={d.source || ''}
             onChange={(e) => { onUpdate({ ...d, source: e.target.value }); }}
             placeholder="Source name"
             style={{
@@ -108,7 +108,7 @@ export default function EvidenceBlock({ block, onUpdate }: EvidenceBlockProps) {
             Trust Tier
           </label>
           <select
-            value={(d.tier !== undefined ? d.tier : 1)}
+             value={d.tier}
             onChange={(e) => { onUpdate({ ...d, tier: parseInt(e.target.value) }); }}
             style={{
               width: '100%',

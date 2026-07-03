@@ -162,6 +162,7 @@ const GlobeRenderer: React.FC<GlobeRendererProps> = ({ globe }) => {
         if (!mounted) return;
 
         const container = globeContainerRef.current;
+        if (!container) return;
         const GlobeCtor = GlobeModule.default as unknown as new (container: HTMLElement, opts: Record<string, unknown>) => GlobeInstance;
 
         const theme = readGlobeTheme(container);

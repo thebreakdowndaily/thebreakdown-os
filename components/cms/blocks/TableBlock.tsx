@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, TableBlockData } from '@/utils/cms-data';
 
 interface TableBlockProps {
   block: Block;
@@ -8,9 +8,9 @@ interface TableBlockProps {
 }
 
 export default function TableBlock({ block, onUpdate }: TableBlockProps) {
-  const d = block.data;
-  const headers: string[] = d.headers || [''];
-  const rows: string[][] = d.rows || [['']];
+  const d = block.data as TableBlockData;
+  const headers = d.headers;
+  const rows = d.rows;
 
   const updateHeader = (idx: number, value: string) => {
     const next = [...headers];

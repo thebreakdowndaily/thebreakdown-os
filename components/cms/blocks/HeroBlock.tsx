@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, HeroBlockData } from '@/utils/cms-data';
 
 interface HeroBlockProps {
   block: Block;
@@ -8,7 +8,7 @@ interface HeroBlockProps {
 }
 
 export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
-  const d = block.data;
+  const d = block.data as HeroBlockData;
 
   return (
     <div style={{ padding: '0 4px' }}>
@@ -40,7 +40,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
           Summary
         </label>
         <textarea
-          value={d.summary || ''}
+          value={(d as { summary: string }).summary || ''}
           onChange={(e) => { onUpdate({ ...d, summary: e.target.value }); }}
           placeholder="One or two sentences summarizing the story..."
           rows={2}
@@ -66,7 +66,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
             Author
           </label>
           <input
-            value={d.author || ''}
+            value={(d as { author: string }).author || ''}
             onChange={(e) => { onUpdate({ ...d, author: e.target.value }); }}
             placeholder="Author name"
             style={{
@@ -87,7 +87,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
             Category
           </label>
           <select
-            value={d.category || ''}
+            value={(d as { category: string }).category || ''}
             onChange={(e) => { onUpdate({ ...d, category: e.target.value }); }}
             style={{
               width: '100%',

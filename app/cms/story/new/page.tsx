@@ -31,7 +31,7 @@ const TEMPLATES: Record<string, Partial<CMSStory>> = {
       { id: 'blk-fx-e1', type: 'evidence', data: { claim: '', data: '', source: '', sourceUrl: '', tier: 2 }, collapsed: false },
       { id: 'blk-fx-s1', type: 'statistics', data: { stats: [{ value: '', label: 'Affected population', change: '', direction: 'up' }] }, collapsed: false },
       { id: 'blk-fx-c1', type: 'chart', data: { chartType: 'bar', title: 'Key Data', data: [{ label: '', value: 0 }], caption: '' }, collapsed: false },
-      { id: 'blk-fx-c2', type: 'callout', data: { type: 'global-example', title: 'Global Example', text: 'What other countries did...' }, collapsed: false },
+      { id: 'blk-fx-c2', type: 'callout', data: { title: 'Global Example', text: 'What other countries did...' }, collapsed: false },
       { id: 'blk-fx-t4', type: 'text', data: { html: '<p><strong>Recommended actions:</strong> List specific, timebound recommendations.</p>' }, collapsed: false },
       { id: 'blk-fx-t5', type: 'text', data: { html: '<p><strong>What citizens can do:</strong> Feasible actions for ordinary people.</p>' }, collapsed: false },
       { id: 'blk-fx-t6', type: 'text', data: { html: '<p><strong>What governments can do:</strong> Legislative, executive, fiscal actions.</p>' }, collapsed: false },

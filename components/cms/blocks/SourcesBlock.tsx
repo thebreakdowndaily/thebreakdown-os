@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, SourcesBlockData } from '@/utils/cms-data';
 
 interface SourcesBlockProps {
   block: Block;
@@ -16,16 +16,17 @@ const TIER_LABELS: Record<number, string> = {
 };
 
 export default function SourcesBlock({ block, onUpdate }: SourcesBlockProps) {
-  const sources: Array<{ title: string; url: string; accessedAt: string; tier: number }> = block.data.sources || [];
+  const d = block.data as SourcesBlockData;
+  const sources = d.sources;
 
   const updateSource = (idx: number, field: string, value: string | number) => {
     const next = [...sources];
     next[idx] = { ...next[idx], [field]: value };
-    onUpdate({ ...block.data, sources: next });
+    onUpdate({ ...d, sources: next });
   };
 
-  const addSource = () => { onUpdate({ ...block.data, sources: [...sources, { title: '', url: '', accessedAt: '', tier: 2 }] }); };
-  const removeSource = (idx: number) => { onUpdate({ ...block.data, sources: sources.filter((_, i) => i !== idx) }); };
+  const addSource = () => { onUpdate({ ...d, sources: [...sources, { title: '', url: '', accessedAt: '', tier: 2 }] }); };
+  const removeSource = (idx: number) => { onUpdate({ ...d, sources: sources.filter((_, i) => i !== idx) }); };
 
   return (
     <div>

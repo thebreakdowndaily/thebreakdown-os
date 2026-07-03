@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, QuoteBlockData } from '@/utils/cms-data';
 
 interface QuoteBlockProps {
   block: Block;
@@ -8,7 +8,7 @@ interface QuoteBlockProps {
 }
 
 export default function QuoteBlock({ block, onUpdate }: QuoteBlockProps) {
-  const d = block.data;
+  const d = block.data as QuoteBlockData;
 
   return (
     <div

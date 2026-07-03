@@ -258,7 +258,7 @@ function resolveHomepageComponent(sectionId: string): string {
 
 // ── Section Filtering ───────────────────────────────────────────────────
 
-function filterSections(sections: string[], data: Record<string, unknown>): string[] {
+function filterSections(sections: string[], data: unknown): string[] {
   return sections.filter(id => {
     const entry = registry.find(c => c.id === id);
     if (!entry) return false;
@@ -266,7 +266,7 @@ function filterSections(sections: string[], data: Record<string, unknown>): stri
     // Check if required props are available
     if (entry.required && entry.props.length > 0) {
       // If the section has required props and data is missing them, skip
-      const hasData = entry.props.some(p => data[p] !== undefined && data[p] !== null);
+      const hasData = entry.props.some(p => (data as Record<string, unknown>)[p] !== undefined && (data as Record<string, unknown>)[p] !== null);
       if (!hasData) return false;
     }
 
@@ -417,19 +417,19 @@ function generateBreadcrumbs(type: string, data: { slug: string; headline?: stri
     case 'story':
       crumbs.push(
         { label: 'Stories', href: '/stories' },
-        { label: data.headline, href: `/story/${data.slug}` }
+        { label: data.headline || data.slug, href: `/story/${data.slug}` }
       );
       break;
     case 'entity':
       crumbs.push(
-        { label: capitalize(data.type) + 's', href: `/${String(data.type)}s` },
-        { label: data.name, href: `/entity/${data.slug}` }
+        { label: capitalize(data.type || 'entity') + 's', href: `/${(data.type || 'entity')}s` },
+        { label: data.name || 'Entity', href: `/entity/${data.slug}` }
       );
       break;
     case 'topic':
       crumbs.push(
         { label: 'Topics', href: '/topics' },
-        { label: data.name, href: `/topic/${data.slug}` }
+        { label: data.name || data.slug, href: `/topic/${data.slug}` }
       );
       break;
   }
@@ -439,7 +439,8 @@ function generateBreadcrumbs(type: string, data: { slug: string; headline?: stri
 
 // ── Schema.org Generation ───────────────────────────────────────────────
 
-function generateSchema(type: string, data: Record<string, unknown>): Record<string, unknown> {
+function generateSchema(type: string, data: unknown): Record<string, unknown> {
+  const d = data as Record<string, unknown>;
   const base = {
     '@context': 'https://schema.org',
   };
@@ -449,12 +450,12 @@ function generateSchema(type: string, data: Record<string, unknown>): Record<str
       return {
         ...base,
         '@type': 'NewsArticle',
-        headline: data.headline,
-        description: data.summary,
-        datePublished: data.publishedAt,
-        dateModified: data.updatedAt,
+        headline: d.headline,
+        description: d.summary,
+        datePublished: d.publishedAt,
+        dateModified: d.updatedAt,
         author: (() => {
-          const auth = data.author as { name?: string; url?: string } | undefined;
+          const auth = d.author as { name?: string; url?: string } | undefined;
           return auth ? { '@type': 'Person' as const, name: auth.name, url: auth.url } : undefined;
         })(),
         publisher: {
@@ -462,27 +463,27 @@ function generateSchema(type: string, data: Record<string, unknown>): Record<str
           name: 'The Breakdown',
           url: 'https://thebreakdown.in',
         },
-        image: data.heroImage,
-        mainEntityOfPage: `https://thebreakdown.in/story/${data.slug as string}`,
+        image: d.heroImage,
+        mainEntityOfPage: `https://thebreakdown.in/story/${d.slug as string}`,
       };
 
     case 'entity':
       return {
         ...base,
-        '@type': data.type === 'person' ? 'Person' : 'Organization',
-        name: data.name,
-        description: data.description,
-        url: `https://thebreakdown.in/entity/${data.slug as string}`,
-        ...(data.aliases ? { additionalName: data.aliases } : {}),
+        '@type': d.type === 'person' ? 'Person' : 'Organization',
+        name: d.name,
+        description: d.description,
+        url: `https://thebreakdown.in/entity/${d.slug as string}`,
+        ...(d.aliases ? { additionalName: d.aliases } : {}),
       };
 
     case 'topic':
       return {
         ...base,
         '@type': 'CollectionPage',
-        name: data.name,
-        description: data.description,
-        url: `https://thebreakdown.in/topic/${String(data.slug)}`,
+        name: d.name,
+        description: d.description,
+        url: `https://thebreakdown.in/topic/${String(d.slug)}`,
       };
 
     default:

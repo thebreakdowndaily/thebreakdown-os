@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, FAQBlockData } from '@/utils/cms-data';
 
 interface FAQBlockProps {
   block: Block;
@@ -8,16 +8,17 @@ interface FAQBlockProps {
 }
 
 export default function FAQBlock({ block, onUpdate }: FAQBlockProps) {
-  const items: Array<{ question: string; answer: string }> = block.data.items || [];
+  const d = block.data as FAQBlockData;
+  const items = d.items;
 
   const updateItem = (idx: number, field: string, value: string) => {
     const next = [...items];
     next[idx] = { ...next[idx], [field]: value };
-    onUpdate({ ...block.data, items: next });
+    onUpdate({ ...d, items: next });
   };
 
-  const addItem = () => { onUpdate({ ...block.data, items: [...items, { question: '', answer: '' }] }); };
-  const removeItem = (idx: number) => { onUpdate({ ...block.data, items: items.filter((_, i) => i !== idx) }); };
+  const addItem = () => { onUpdate({ ...d, items: [...items, { question: '', answer: '' }] }); };
+  const removeItem = (idx: number) => { onUpdate({ ...d, items: items.filter((_, i) => i !== idx) }); };
 
   return (
     <div>

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, ImageBlockData } from '@/utils/cms-data';
 
 interface ImageBlockProps {
   block: Block;
@@ -8,7 +8,7 @@ interface ImageBlockProps {
 }
 
 export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
-  const d = block.data;
+  const d = block.data as ImageBlockData;
 
   return (
     <div>

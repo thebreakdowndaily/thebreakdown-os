@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, TimelineBlockData } from '@/utils/cms-data';
 
 interface TimelineBlockProps {
   block: Block;
@@ -8,24 +8,25 @@ interface TimelineBlockProps {
 }
 
 export default function TimelineBlock({ block, onUpdate }: TimelineBlockProps) {
-  const events: Array<{ date: string; title: string; description: string }> = block.data.events || [];
+  const d = block.data as TimelineBlockData;
+  const events = d.events;
 
   const updateEvent = (idx: number, field: string, value: string) => {
     const next = [...events];
     next[idx] = { ...next[idx], [field]: value };
-    onUpdate({ ...block.data, events: next });
+    onUpdate({ ...d, events: next });
   };
 
   const addEvent = () => {
     onUpdate({
-      ...block.data,
+      ...d,
       events: [...events, { date: '', title: '', description: '' }],
     });
   };
 
   const removeEvent = (idx: number) => {
     onUpdate({
-      ...block.data,
+      ...d,
       events: events.filter((_, i) => i !== idx),
     });
   };

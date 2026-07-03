@@ -1057,7 +1057,7 @@ chartRenderers.treemap = (svg, data, width, height, theme, spec) => {
   const root = d3.hierarchy<Record<string, unknown>>({ children: data })
     .sum((d) => {
       const nodeData = d.data as Record<string, unknown>;
-      return typeof nodeData[yField] === 'number' ? (nodeData[yField] as number) : Number(nodeData[yField]) || 0;
+      return typeof nodeData[yField] === 'number' ? nodeData[yField] : Number(nodeData[yField]) || 0;
     })
     .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
@@ -1083,8 +1083,8 @@ chartRenderers.treemap = (svg, data, width, height, theme, spec) => {
 
     if ((node.x1 - node.x0) > 40 && (node.y1 - node.y0) > 20) {
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', String((Number(node.x0) + Number(node.x1)) / 2));
-      text.setAttribute('y', String((Number(node.y0) + Number(node.y1)) / 2));
+      text.setAttribute('x', String((node.x0 + node.x1) / 2));
+      text.setAttribute('y', String((node.y0 + node.y1) / 2));
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('dominant-baseline', 'middle');
       text.setAttribute('fill', '#fff');
@@ -1133,7 +1133,7 @@ chartRenderers.sunburst = (svg, data, width, height, theme, spec) => {
   const hierRoot = d3.hierarchy<Record<string, unknown>>(root)
     .sum((d) => {
       const nodeData = d.data as Record<string, unknown>;
-      return typeof nodeData[valueField] === 'number' ? (nodeData[valueField] as number) : Number(nodeData[valueField]) || 0;
+      return typeof nodeData[valueField] === 'number' ? nodeData[valueField] : Number(nodeData[valueField]) || 0;
     })
     .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 

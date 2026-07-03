@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useCallback } from 'react';
-import type { Block } from '@/utils/cms-data';
+import type { Block, TextBlockData } from '@/utils/cms-data';
 
 interface TextBlockProps {
   block: Block;
@@ -19,12 +19,12 @@ const FORMAT_BUTTONS = [
 
 export default function TextBlock({ block, onUpdate }: TextBlockProps) {
   const editorRef = useRef<HTMLDivElement>(null);
+  const d = block.data as TextBlockData;
 
   const exec = useCallback((command: string, value?: string) => {
     const doc = document as unknown as Record<string, (command: string, show: boolean, value?: string) => boolean>;
     doc['execCommand'](command, false, value);
     editorRef.current?.focus();
-    // Update data after formatting
     setTimeout(() => {
       if (editorRef.current) {
         onUpdate({ html: editorRef.current.innerHTML });
@@ -40,7 +40,6 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
 
   return (
     <div>
-      {/* Formatting toolbar */}
       <div
         style={{
           display: 'flex',
@@ -84,14 +83,13 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
         </span>
       </div>
 
-      {/* Rich text editor */}
       <div
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
         onBlur={handleInput}
-        dangerouslySetInnerHTML={{ __html: block.data.html || '<p>Start writing...</p>' }}
+        dangerouslySetInnerHTML={{ __html: d.html || '<p>Start writing...</p>' }}
         style={{
           border: '1px solid var(--color-border-subtle)',
           borderRadius: '0 0 8px 8px',

@@ -15,11 +15,83 @@ export type BlockType =
   | 'callout'
   | 'table';
 
+// Type-safe data structures for different block types
+// Type-safe data structures for each block type - matching BLOCK_META structure
+export type HeroBlockData = {
+  headline: string;
+  summary: string;
+  heroImage: string;
+  category: string;
+  author: string;
+  publishedAt: string;
+};
+
+export type TextBlockData = { html: string };
+
+export type TimelineBlockData = { events: Array<{ date: string; title: string; description: string }> };
+
+export type EvidenceBlockData = {
+  claim: string;
+  data: string;
+  source: string;
+  sourceUrl: string;
+  tier: number;
+};
+
+export type ChartBlockData = {
+  chartType: 'bar' | 'line' | 'pie' | 'area' | 'scatter' | 'table' | 'radar' | 'heatmap' | 'treemap';
+  title: string;
+  data: Array<{ label: string; value: number }>;
+  caption: string;
+};
+
+export type FAQBlockData = { items: Array<{ question: string; answer: string }> };
+
+export type SourcesBlockData = { sources: Array<{ title: string; url: string; accessedAt: string; tier: number }> };
+
+export type ImageBlockData = {
+  src: string;
+  alt: string;
+  caption: string;
+  credit: string;
+};
+
+export type QuoteBlockData = { text: string; speaker?: string; context?: string };
+
+export type StatisticsBlockData = { stats: Array<{ value: string; label: string; change: string; direction: 'up' | 'down' }> };
+
+export type CalloutBlockData = { type: string; title: string; text: string };
+
+export type TableBlockData = { headers: string[]; rows: string[][]; caption: string };
+
+// Union type for all block data - matches BLOCK_META.defaultData structures
+export type BlockData =
+  | HeroBlockData
+  | TextBlockData
+  | TimelineBlockData
+  | EvidenceBlockData
+  | ChartBlockData
+  | FAQBlockData
+  | SourcesBlockData
+  | ImageBlockData
+  | QuoteBlockData
+  | StatisticsBlockData
+  | CalloutBlockData
+  | TableBlockData;
+
+// Main Block interface - type-safe representation of all blocks
+export interface Block {
+  id: string;
+  type: BlockType;
+  data: BlockData;
+  collapsed?: boolean;
+}
+
 export const BLOCK_META: Record<BlockType, {
   label: string;
   icon: string;
   description: string;
-  defaultData: Record<string, unknown>;
+  defaultData: BlockData;
 }> = {
   hero: {
     label: 'Hero',
@@ -85,7 +157,7 @@ export const BLOCK_META: Record<BlockType, {
     label: 'Callout',
     icon: '💡',
     description: 'Highlighted information box',
-    defaultData: { type: 'info', title: '', body: '' },
+    defaultData: { type: '', title: '', text: '' },
   },
   table: {
     label: 'Table',
@@ -98,8 +170,8 @@ export const BLOCK_META: Record<BlockType, {
 export interface Block {
   id: string;
   type: BlockType;
-  data: Record<string, unknown>;
-  collapsed: boolean;
+  data: BlockData;
+  collapsed?: boolean;
 }
 
 export type StoryStatus = 'draft' | 'review' | 'published';
@@ -391,7 +463,7 @@ export const mockCMSStories: CMSStory[] = [
         data: {
           type: 'warning',
           title: 'What\'s at Stake',
-          body: 'If the court overturns its 2018 judgment, over 1.3 billion Aadhaar enrollments and thousands of government services linked to Aadhaar could be affected. The judgment could redefine the scope of privacy rights under Article 21.',
+          text: 'If the court overturns its 2018 judgment, over 1.3 billion Aadhaar enrollments and thousands of government services linked to Aadhaar could be affected. The judgment could redefine the scope of privacy rights under Article 21.',
         },
         collapsed: false,
       },

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@/utils/cms-data';
+import type { Block, StatisticsBlockData } from '@/utils/cms-data';
 
 interface StatisticsBlockProps {
   block: Block;
@@ -8,16 +8,17 @@ interface StatisticsBlockProps {
 }
 
 export default function StatisticsBlock({ block, onUpdate }: StatisticsBlockProps) {
-  const stats: Array<{ value: string; label: string; change: string; direction: 'up' | 'down' }> = block.data.stats || [];
+  const d = block.data as StatisticsBlockData;
+  const stats = d.stats;
 
   const updateStat = (idx: number, field: string, value: string) => {
     const next = [...stats];
     next[idx] = { ...next[idx], [field]: value };
-    onUpdate({ ...block.data, stats: next });
+    onUpdate({ ...d, stats: next });
   };
 
-  const addStat = () => { onUpdate({ ...block.data, stats: [...stats, { value: '', label: '', change: '', direction: 'up' }] }); };
-  const removeStat = (idx: number) => { onUpdate({ ...block.data, stats: stats.filter((_, i) => i !== idx) }); };
+  const addStat = () => { onUpdate({ ...d, stats: [...stats, { value: '', label: '', change: '', direction: 'up' }] }); };
+  const removeStat = (idx: number) => { onUpdate({ ...d, stats: stats.filter((_, i) => i !== idx) }); };
 
   return (
     <div>
