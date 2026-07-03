@@ -13,6 +13,7 @@
     "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.63.0",
     "d3": "^7.9.0",
     "d3-geo-projection": "^4.0.0",
     "d3-sankey": "^0.12.3",
