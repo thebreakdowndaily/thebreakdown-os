@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import type { HomepageJSON } from '@/utils/types';
 import { buildHomepage } from '@/utils/website-builder';
-import { getStory, getStories, getFixes } from '@/utils/data-layer/store';
+import { getStory, getStories, getFixes, getTopics } from '@/utils/data-layer/store';
 import HomepageLayout from '@/layouts/HomepageLayout';
 import Hero from '@/components/home/hero/Hero';
 import { FeaturedStories } from '@/components/home/featured';
 import { TheFixSection } from '@/components/home/fix';
+import { TopicExplorer } from '@/components/home/topics';
 
 const mockHomepageData: HomepageJSON = {
   topStory: {
@@ -154,12 +155,14 @@ export default function HomePage() {
   const heroStory = getStory(topStory.slug);
   const allStories = getStories().data;
   const fixes = getFixes().data;
+  const topics = getTopics().data;
 
   return (
     <HomepageLayout seo={pageSpec.seo}>
       {heroStory && <Hero story={heroStory} />}
       <FeaturedStories stories={allStories} />
       <TheFixSection fixes={fixes} />
+      <TopicExplorer topics={topics} />
     </HomepageLayout>
   );
 }
