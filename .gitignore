@@ -8,6 +8,8 @@ out/
 # Build
 dist/
 build/
+.open-next/
+.wrangler/
 
 # Environment
 .env
