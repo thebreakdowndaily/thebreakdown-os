@@ -10,7 +10,7 @@
     "cf:deploy": "npx opennextjs-cloudflare deploy",
     "start": "next start",
     "lint": "eslint .",
-    "test": "echo \"Tests are run from root\""
+    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts"
   },
   "dependencies": {
     "d3": "^7.9.0",

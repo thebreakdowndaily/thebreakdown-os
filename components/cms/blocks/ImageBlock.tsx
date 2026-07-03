@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import type { Block, ImageBlockData } from '@/utils/cms-data';
 
 interface ImageBlockProps {
@@ -28,6 +29,7 @@ export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
               style={{
                 width: '100%',
                 height: '160px',
+                position: 'relative',
                 background: `var(--color-surface-primary)`,
                 borderRadius: '6px',
                 display: 'flex',
@@ -38,7 +40,7 @@ export default function ImageBlock({ block, onUpdate }: ImageBlockProps) {
                 overflow: 'hidden',
               }}
             >
-              <img src={d.src} alt={d.alt || ''} style={{ maxWidth: '100%', maxHeight: '160px', objectFit: 'cover', borderRadius: '6px' }} />
+              <Image src={d.src} alt={d.alt || ''} fill style={{ objectFit: 'cover', borderRadius: '6px' }} />
             </div>
           </div>
         ) : (

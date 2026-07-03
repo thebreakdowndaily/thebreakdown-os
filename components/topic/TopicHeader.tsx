@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface TopicHeaderProps {
   topic: {
@@ -19,7 +20,7 @@ const TopicHeader: React.FC<TopicHeaderProps> = ({ topic }) => (
   >
     {topic.image && (
       <>
-        <img src={topic.image} alt="" className="absolute inset-0 w-full h-full object-cover" aria-hidden="true" />
+        <Image src={topic.image} alt="" fill className="object-cover" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/80 to-gray-900/60" />
       </>
     )}

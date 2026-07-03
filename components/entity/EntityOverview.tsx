@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface EntityOverviewProps {
   entity: {
@@ -27,7 +28,7 @@ const EntityOverview: React.FC<EntityOverviewProps> = ({ entity }) => (
     <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
       {entity.image && (
         <div className="w-full h-56 sm:h-72 relative">
-          <img src={entity.image} alt={entity.name} className="w-full h-full object-cover" />
+          <Image src={entity.image} alt={entity.name} fill className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-800 to-transparent" />
         </div>
       )}
