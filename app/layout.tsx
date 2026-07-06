@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/layout/Footer';
 import SEOHead from '@/components/layout/SEOHead';
+import { AuthWrapper } from '@/features/auth/components/AuthWrapper';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -47,9 +48,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SEOHead seo={defaultSEO} />
       </head>
       <body className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5] font-sans flex flex-col">
-        <Navigation />
-        <main className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
-        <Footer />
+        <AuthWrapper>
+          <Navigation />
+          <main className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
+          <Footer />
+        </AuthWrapper>
       </body>
     </html>
   );

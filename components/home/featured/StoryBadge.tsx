@@ -1,3 +1,5 @@
+import Badge from '@/components/ui/Badge';
+
 interface StoryBadgeProps {
   category: string;
 }
@@ -11,8 +13,8 @@ const labels: Record<string, string> = {
 
 export default function StoryBadge({ category }: StoryBadgeProps) {
   return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-gray-800 text-gray-300 border border-gray-700">
+    <Badge variant="category">
       {labels[category] || category}
-    </span>
+    </Badge>
   );
 }

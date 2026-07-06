@@ -7,20 +7,23 @@ import TopicHeader from '@/components/topic/TopicHeader';
 import TopicCollections from '@/components/topic/TopicCollections';
 import TopicCharts from '@/components/topic/TopicCharts';
 import RelatedStories from '@/components/story/RelatedStories';
+import { TopicGraphSection } from '@/features/graph/components/TopicGraphSection';
 
 const sectionComponents: Record<string, React.ElementType | undefined> = {
   'topic-header': TopicHeader,
   'topic-collections': TopicCollections,
   'topic-charts': TopicCharts,
   'related-stories': RelatedStories,
+  'topic-graph': TopicGraphSection,
 };
 
-function SectionRenderer({ sections }: { sections: Section[] }) {
+function SectionRenderer({ sections, slug }: { sections: Section[]; slug: string }) {
   return (
     <>
       {sections.map((section) => {
         const Component = sectionComponents[section.id];
         if (!Component) return null;
+        if (section.id === 'topic-graph') return <Component key={section.id} topicSlug={slug} />;
         return <Component key={section.id} {...section.props} />;
       })}
     </>
@@ -102,7 +105,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
 
   return (
     <TopicLayout seo={pageSpec.seo} breadcrumbs={pageSpec.breadcrumbs}>
-      <SectionRenderer sections={pageSpec.sections} />
+      <SectionRenderer sections={pageSpec.sections} slug={slug} />
     </TopicLayout>
   );
 }

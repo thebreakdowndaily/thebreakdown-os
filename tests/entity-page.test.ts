@@ -1,9 +1,3 @@
-/**
- * THE BREAKDOWN — Entity Page Tests
- *
- * Tests buildEntity() for persons, organizations, SEO, and breadcrumbs.
- */
-
 import { buildEntity } from '../utils/website-builder';
 import type { PageSpec } from '../utils/types';
 import { mockPersonEntity, mockOrganizationEntity } from './mock-data';
@@ -45,33 +39,24 @@ async function runTests() {
     failed++;
   }
 
-  // Test 3: Entity sections are present
+  // Test 3: Entity sections include new intelligence sections
   try {
     const page: PageSpec = buildEntity(mockPersonEntity);
     const sectionIds = page.sections.map(s => s.id);
-    assert(sectionIds.includes('entity-overview'), 'entity-overview section present');
+    assert(sectionIds.includes('entity-hero'), 'entity-hero section present');
+    assert(sectionIds.includes('quick-facts'), 'quick-facts section present');
     assert(sectionIds.includes('entity-timeline'), 'entity-timeline section present');
-    assert(sectionIds.includes('entity-data'), 'entity-data section present');
+    assert(sectionIds.includes('entity-statistics'), 'entity-statistics section present');
+    assert(sectionIds.includes('entity-related-stories'), 'entity-related-stories section present');
+    assert(sectionIds.includes('entity-related-entities'), 'entity-related-entities section present');
+    assert(sectionIds.includes('entity-faq'), 'entity-faq section present');
     assert(sectionIds.includes('entity-sources'), 'entity-sources section present');
-    assert(sectionIds.includes('related-stories'), 'related-stories section present');
-    assert(sectionIds.includes('faq'), 'faq section present');
   } catch (e) {
     console.error('  FAIL: Entity sections check threw exception', e);
     failed++;
   }
 
-  // Test 4: Organization sections are present
-  try {
-    const page: PageSpec = buildEntity(mockOrganizationEntity);
-    const sectionIds = page.sections.map(s => s.id);
-    assert(sectionIds.includes('entity-overview'), 'Org: entity-overview present');
-    assert(sectionIds.includes('related-stories'), 'Org: related-stories present');
-  } catch (e) {
-    console.error('  FAIL: Organization sections check threw exception', e);
-    failed++;
-  }
-
-  // Test 5: Person SEO generation
+  // Test 4: Person SEO generation
   try {
     const page: PageSpec = buildEntity(mockPersonEntity);
     assert(page.seo.title === `${mockPersonEntity.name} — Person Profile — The Breakdown`, 'Person SEO title is correct');
@@ -85,7 +70,7 @@ async function runTests() {
     failed++;
   }
 
-  // Test 6: Organization SEO generation
+  // Test 5: Organization SEO generation
   try {
     const page: PageSpec = buildEntity(mockOrganizationEntity);
     assert(page.seo.title === `${mockOrganizationEntity.name} — Organization Profile — The Breakdown`, 'Org SEO title is correct');
@@ -97,7 +82,7 @@ async function runTests() {
     failed++;
   }
 
-  // Test 7: Person breadcrumbs
+  // Test 6: Person breadcrumbs
   try {
     const page: PageSpec = buildEntity(mockPersonEntity);
     assert(page.breadcrumbs.length === 3, 'Person has 3 breadcrumbs');
@@ -111,7 +96,7 @@ async function runTests() {
     failed++;
   }
 
-  // Test 8: Organization breadcrumbs
+  // Test 7: Organization breadcrumbs
   try {
     const page: PageSpec = buildEntity(mockOrganizationEntity);
     assert(page.breadcrumbs.length === 3, 'Org has 3 breadcrumbs');
@@ -122,7 +107,7 @@ async function runTests() {
     failed++;
   }
 
-  // Test 9: Person schema is Person
+  // Test 8: Person schema is Person
   try {
     const page: PageSpec = buildEntity(mockPersonEntity);
     assert(page.schema['@type'] === 'Person', 'Person schema type is Person');
@@ -133,7 +118,7 @@ async function runTests() {
     failed++;
   }
 
-  // Test 10: Organization schema is Organization
+  // Test 9: Organization schema is Organization
   try {
     const page: PageSpec = buildEntity(mockOrganizationEntity);
     assert(page.schema['@type'] === 'Organization', 'Org schema type is Organization');
@@ -143,18 +128,18 @@ async function runTests() {
     failed++;
   }
 
-  // Test 11: All sections present even with empty data (filterSections retains non-required sections)
+  // Test 10: Sections present even with empty data
   try {
-    const minimalEntity = { ...mockPersonEntity, timeline: [], datasets: [], statistics: {}, sources: [], faq: [] };
+    const minimalEntity = { ...mockPersonEntity, timeline: [], datasets: [], statistics: {}, sources: [], faq: [], relatedEntities: [] };
     const page: PageSpec = buildEntity(minimalEntity);
     const sectionIds = page.sections.map(s => s.id);
-    // filterSections only filters unknown section IDs, not sections with empty data
-    assert(sectionIds.includes('entity-timeline'), 'entity-timeline present (non-required, kept by filterSections)');
-    assert(sectionIds.includes('entity-data'), 'entity-data present');
+    assert(sectionIds.includes('entity-hero'), 'entity-hero present (required)');
+    assert(sectionIds.includes('entity-related-stories'), 'entity-related-stories present (required)');
+    assert(sectionIds.includes('quick-facts'), 'quick-facts present');
+    assert(sectionIds.includes('entity-timeline'), 'entity-timeline present');
+    assert(sectionIds.includes('entity-statistics'), 'entity-statistics present');
+    assert(sectionIds.includes('entity-faq'), 'entity-faq present');
     assert(sectionIds.includes('entity-sources'), 'entity-sources present');
-    assert(sectionIds.includes('faq'), 'faq present');
-    assert(sectionIds.includes('entity-overview'), 'entity-overview still present');
-    assert(sectionIds.includes('related-stories'), 'related-stories still present');
   } catch (e) {
     console.error('  FAIL: Entity sections with empty data threw exception', e);
     failed++;

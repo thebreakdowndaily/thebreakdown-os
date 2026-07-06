@@ -16,13 +16,13 @@ function timeAgo(dateStr: string): string {
 export default function TopicMeta({ storyCount, updatedAt, latestHeadline }: TopicMetaProps) {
   return (
     <div className="space-y-1.5">
-      <div className="flex items-center gap-2 text-xs text-gray-400">
-        <span className="font-semibold text-gray-200">{storyCount} {storyCount === 1 ? 'Story' : 'Stories'}</span>
+      <div className="flex items-center gap-2 text-xs text-[#A1A1AA]">
+        <span className="font-semibold text-[#A1A1AA]">{storyCount} {storyCount === 1 ? 'Story' : 'Stories'}</span>
         <span aria-hidden="true">·</span>
         <span>Updated {timeAgo(updatedAt)}</span>
       </div>
       {latestHeadline && (
-        <p className="text-xs text-gray-500 line-clamp-1">Latest: {latestHeadline}</p>
+        <p className="text-xs text-[#A1A1AA] line-clamp-1">Latest: {latestHeadline}</p>
       )}
     </div>
   );

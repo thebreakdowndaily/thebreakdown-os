@@ -9,6 +9,7 @@ import EntityData from '@/components/entity/EntityData';
 import EntitySources from '@/components/entity/EntitySources';
 import RelatedStories from '@/components/story/RelatedStories';
 import FAQ from '@/components/story/FAQ';
+import { EntityGraphSection } from '@/features/graph/components/EntityGraphSection';
 
 const sectionComponents: Record<string, React.ElementType | undefined> = {
   'entity-overview': EntityOverview,
@@ -17,14 +18,16 @@ const sectionComponents: Record<string, React.ElementType | undefined> = {
   'entity-sources': EntitySources,
   'related-stories': RelatedStories,
   faq: FAQ,
+  'entity-graph': EntityGraphSection,
 };
 
-function SectionRenderer({ sections }: { sections: Section[] }) {
+function SectionRenderer({ sections, slug }: { sections: Section[]; slug: string }) {
   return (
     <>
       {sections.map((section) => {
         const Component = sectionComponents[section.id];
         if (!Component) return null;
+        if (section.id === 'entity-graph') return <Component key={section.id} entitySlug={slug} />;
         return <Component key={section.id} {...section.props} />;
       })}
     </>
@@ -126,7 +129,7 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
 
   return (
     <EntityLayout seo={pageSpec.seo} breadcrumbs={pageSpec.breadcrumbs} entityType={data.type}>
-      <SectionRenderer sections={pageSpec.sections} />
+      <SectionRenderer sections={pageSpec.sections} slug={slug} />
     </EntityLayout>
   );
 }

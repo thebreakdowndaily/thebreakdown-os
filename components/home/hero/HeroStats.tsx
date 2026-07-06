@@ -18,23 +18,23 @@ export default function HeroStats({ evidenceScore, sourcesCount, updatedAt, read
   return (
     <div className="flex flex-wrap items-center gap-5">
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">Evidence</span>
-        <span className="text-lg font-bold text-amber-500 tabular-nums">{evidenceScore}</span>
+        <span className="text-xs text-[#A1A1AA] uppercase tracking-wider">Evidence</span>
+        <span className="text-lg font-bold text-[#D4A843] tabular-nums">{evidenceScore}</span>
       </div>
-      <div className="w-px h-5 bg-gray-700" />
+      <div className="w-px h-5 bg-[#2A2A2A]" />
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">Sources</span>
-        <span className="text-sm font-semibold text-gray-300">{sourcesCount}</span>
+        <span className="text-xs text-[#A1A1AA] uppercase tracking-wider">Sources</span>
+        <span className="text-sm font-semibold text-[#A1A1AA]">{sourcesCount}</span>
       </div>
-      <div className="w-px h-5 bg-gray-700" />
+      <div className="w-px h-5 bg-[#2A2A2A]" />
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">Updated</span>
-        <span className="text-sm text-gray-300">{timeAgo(updatedAt)}</span>
+        <span className="text-xs text-[#A1A1AA] uppercase tracking-wider">Updated</span>
+        <span className="text-sm text-[#A1A1AA]">{timeAgo(updatedAt)}</span>
       </div>
-      <div className="w-px h-5 bg-gray-700" />
+      <div className="w-px h-5 bg-[#2A2A2A]" />
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">Read</span>
-        <span className="text-sm text-gray-300">{readingTime} min</span>
+        <span className="text-xs text-[#A1A1AA] uppercase tracking-wider">Read</span>
+        <span className="text-sm text-[#A1A1AA]">{readingTime} min</span>
       </div>
     </div>
   );

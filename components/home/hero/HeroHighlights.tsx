@@ -1,3 +1,5 @@
+import Heading from '@/components/ui/Heading';
+
 interface HeroHighlightsProps {
   keyPoints: string[];
 }
@@ -6,12 +8,14 @@ export default function HeroHighlights({ keyPoints }: HeroHighlightsProps) {
   if (!keyPoints.length) return null;
 
   return (
-    <div className="border-t border-gray-800 pt-5">
-      <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Key Findings</h2>
+    <div>
+      <Heading level="caption" as="h2" className="font-semibold uppercase tracking-wider mb-3">
+        Key Findings
+      </Heading>
       <ul className="space-y-2">
         {keyPoints.slice(0, 3).map((point, i) => (
-          <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
-            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+          <li key={i} className="flex items-start gap-3 text-sm text-[#A1A1AA]">
+            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#D4A843] shrink-0" />
             {point}
           </li>
         ))}

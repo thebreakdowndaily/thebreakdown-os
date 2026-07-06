@@ -1,4 +1,5 @@
 import type { APIStory } from '@/utils/data-layer/types';
+import Container from '@/components/ui/Container';
 import HeroContent from './HeroContent';
 import HeroVisual from './HeroVisual';
 
@@ -9,12 +10,10 @@ interface HeroProps {
 export default function Hero({ story }: HeroProps) {
   return (
     <section className="relative w-full min-h-[80vh] lg:min-h-[85vh] flex items-center bg-[#0A0A0A] overflow-hidden">
-      {/* Background ambient gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-500/[0.03] via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#D4A843]/[0.03] via-transparent to-transparent pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-0">
+      <Container as="div" className="relative z-10 py-16 lg:py-0">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          {/* Content */}
           <HeroContent
             headline={story.headline}
             summary={story.summary}
@@ -27,7 +26,6 @@ export default function Hero({ story }: HeroProps) {
             keyPoints={story.keyPoints}
           />
 
-          {/* Visual */}
           <div className="lg:row-span-2">
             <HeroVisual
               heroImage={story.heroImage}
@@ -38,9 +36,8 @@ export default function Hero({ story }: HeroProps) {
             />
           </div>
         </div>
-      </div>
+      </Container>
 
-      {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0A0A0A] to-transparent pointer-events-none" />
     </section>
   );

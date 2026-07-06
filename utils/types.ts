@@ -223,11 +223,15 @@ export interface EntityJSON {
   aliases?: string[];
   storyCount: number;
   updatedAt: string;
+  evidenceScore?: number;
+  overview?: string;
   timeline: TimelineEvent[];
   datasets: Dataset[];
   statistics: Record<string, number | string>;
   sources: PrimarySource[];
   relatedStories: RelatedStory[];
+  relatedEntities?: RelatedEntity[];
+  relatedTopics?: RelatedEntity[];
   faq: FAQItem[];
 }
 
@@ -238,6 +242,7 @@ export interface TopicJSON {
   slug: string;
   name: string;
   description: string;
+  overview?: string;
   image?: string;
   storyCount: number;
   entityCount: number;
@@ -248,7 +253,11 @@ export interface TopicJSON {
   policies: RelatedEntity[];
   budgets: RelatedEntity[];
   reports: RelatedEntity[];
+  countries?: RelatedEntity[];
   charts: ChartDef[];
+  timeline?: TimelineEvent[];
+  faq?: FAQItem[];
+  statistics?: Array<{ label: string; value: string }>;
 }
 
 // ── Country JSON ────────────────────────────────────────────────────────

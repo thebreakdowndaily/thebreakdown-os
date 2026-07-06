@@ -25,17 +25,20 @@
   },
   {
     "id": "entity",
-    "description": "Entity profile page",
+    "description": "Entity intelligence dossier",
     "layout": "entity-layout",
     "sections": [
-      "entity-overview",
+      "entity-hero",
+      "quick-facts",
       "entity-timeline",
-      "entity-data",
-      "entity-sources",
-      "related-stories",
-      "faq"
+      "entity-statistics",
+      "entity-related-stories",
+      "entity-related-entities",
+      "entity-graph",
+      "entity-faq",
+      "entity-sources"
     ],
-    "required_sections": ["entity-overview", "related-stories"]
+    "required_sections": ["entity-hero"]
   },
   {
     "id": "topic",
@@ -45,6 +48,7 @@
       "topic-header",
       "topic-collections",
       "topic-charts",
+      "topic-graph",
       "related-stories"
     ],
     "required_sections": ["topic-header", "topic-collections"]

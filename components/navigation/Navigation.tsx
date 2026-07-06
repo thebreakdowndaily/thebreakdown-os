@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import Logo from './Logo';
 import DesktopMenu from './DesktopMenu';
 import MobileMenu from './MobileMenu';
-import SearchDialog from './SearchDialog';
+import UnifiedSearchDialog from '@/components/search/UnifiedSearchDialog';
 import SubscribeButton from './SubscribeButton';
+import { ProfileDropdown } from '@/features/auth/components/ProfileDropdown';
 import type { NavLink } from './DesktopMenu';
 
 interface NavigationProps {
@@ -20,6 +21,7 @@ const navLinks: NavLink[] = [
   { label: 'Organizations', href: '/organizations' },
   { label: 'The Fix', href: '/fix' },
   { label: 'Data', href: '/data' },
+  { label: 'Graph', href: '/graph' },
 ];
 
 export default function Navigation({ currentPath = '', transparent = false }: NavigationProps) {
@@ -78,8 +80,9 @@ export default function Navigation({ currentPath = '', transparent = false }: Na
                 </svg>
               </button>
 
-              <div className="hidden lg:block">
+              <div className="hidden lg:flex items-center gap-2">
                 <SubscribeButton />
+                <ProfileDropdown />
               </div>
 
               {/* Mobile hamburger */}
@@ -98,7 +101,7 @@ export default function Navigation({ currentPath = '', transparent = false }: Na
       </header>
 
       <MobileMenu open={mobileOpen} links={navLinks} onClose={closeMobile} />
-      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <UnifiedSearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

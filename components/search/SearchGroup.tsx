@@ -1,0 +1,36 @@
+import React from 'react';
+import SearchResultItem from './SearchResultItem';
+import type { SearchResultData } from './SearchResultItem';
+
+interface SearchGroupProps {
+  label: string;
+  results: SearchResultData[];
+  selectedIndex: number;
+  globalOffset: number;
+  onSelect: (index: number) => void;
+}
+
+export default function SearchGroup({ label, results, selectedIndex, globalOffset, onSelect }: SearchGroupProps) {
+  if (results.length === 0) return null;
+  return (
+    <div className="mb-2">
+      <div className="flex items-center gap-2 px-4 py-2">
+        <h3 className="text-[10px] font-semibold uppercase tracking-widest text-[#A1A1AA]">{label}</h3>
+        <span className="text-[10px] text-[#A1A1AA]/40">{results.length}</span>
+      </div>
+      <div className="space-y-0.5">
+        {results.map((result, i) => {
+          const idx = globalOffset + i;
+          return (
+            <SearchResultItem
+              key={`${result.type}:${result.id}`}
+              result={result}
+              selected={selectedIndex === idx}
+              onSelect={() => onSelect(idx)}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}

@@ -10,11 +10,11 @@ function formatDate(dateStr: string): string {
 
 export default function StoryMetadata({ evidenceScore, readingTime, publishedAt }: StoryMetadataProps) {
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
-      <span className="text-amber-500 font-semibold tabular-nums">{evidenceScore}</span>
-      <span className="text-gray-600" aria-hidden="true">/</span>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#A1A1AA]">
+      <span className="text-[#D4A843] font-semibold tabular-nums">{evidenceScore}</span>
+      <span className="text-[#2A2A2A]" aria-hidden="true">/</span>
       <span>{readingTime} min</span>
-      <span className="text-gray-600" aria-hidden="true">·</span>
+      <span className="text-[#2A2A2A]" aria-hidden="true">·</span>
       <span>{formatDate(publishedAt)}</span>
     </div>
   );

@@ -1,3 +1,7 @@
+import Badge from '@/components/ui/Badge';
+import Heading from '@/components/ui/Heading';
+import Stack from '@/components/ui/Stack';
+import Divider from '@/components/ui/Divider';
 import HeroStats from './HeroStats';
 import HeroActions from './HeroActions';
 import HeroHighlights from './HeroHighlights';
@@ -19,27 +23,20 @@ export default function HeroContent({
   readingTime, category, storySlug, keyPoints,
 }: HeroContentProps) {
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Breaking badge + category */}
+    <Stack gap="lg" className="animate-fade-in">
       <div className="flex items-center gap-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-semibold uppercase tracking-wider">
-          <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
-          Breaking
-        </div>
-        <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">{category}</span>
+        <Badge variant="breaking">Breaking</Badge>
+        <span className="text-xs text-[#A1A1AA] font-medium uppercase tracking-wider">{category}</span>
       </div>
 
-      {/* Headline */}
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] tracking-tight">
+      <Heading level="display" as="h1">
         {headline}
-      </h1>
+      </Heading>
 
-      {/* Tagline */}
-      <p className="text-base sm:text-lg text-gray-400 max-w-lg leading-relaxed">
+      <p className="text-base sm:text-lg text-[#A1A1AA] max-w-lg leading-relaxed">
         Complex stories. Clear analysis.
       </p>
 
-      {/* Trust signals */}
       <HeroStats
         evidenceScore={evidenceScore}
         sourcesCount={sourcesCount}
@@ -47,16 +44,18 @@ export default function HeroContent({
         readingTime={readingTime}
       />
 
-      {/* Summary */}
-      <p className="text-gray-300 max-w-xl leading-relaxed text-sm">
+      <p className="text-[#A1A1AA] max-w-xl leading-relaxed text-sm">
         {summary}
       </p>
 
-      {/* CTAs */}
       <HeroActions storySlug={storySlug} />
 
-      {/* Key Findings */}
-      <HeroHighlights keyPoints={keyPoints} />
-    </div>
+      {keyPoints.length > 0 && (
+        <>
+          <Divider />
+          <HeroHighlights keyPoints={keyPoints} />
+        </>
+      )}
+    </Stack>
   );
 }

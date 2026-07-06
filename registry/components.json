@@ -128,28 +128,68 @@
     "props": ["visuals"]
   },
   {
-    "id": "entity-overview",
-    "component": "EntityOverview",
-    "path": "components/entity/EntityOverview.tsx",
-    "description": "Entity header with name, type, description, stats",
+    "id": "entity-hero",
+    "component": "EntityHero",
+    "path": "components/entity/EntityHero.tsx",
+    "description": "Entity hero with name, type badge, description, stats, score",
     "required": true,
-    "props": ["entity"]
+    "props": ["name", "type", "description", "image", "aliases", "storyCount", "evidenceScore", "updatedAt"]
+  },
+  {
+    "id": "quick-facts",
+    "component": "QuickFacts",
+    "path": "components/entity/QuickFacts.tsx",
+    "description": "Key-value fact cards for entity",
+    "required": false,
+    "props": ["facts"]
   },
   {
     "id": "entity-timeline",
     "component": "EntityTimeline",
     "path": "components/entity/EntityTimeline.tsx",
-    "description": "Entity-specific timeline of events",
+    "description": "Entity-specific timeline using InteractiveTimelineBlock",
     "required": false,
     "props": ["events"]
   },
   {
-    "id": "entity-data",
-    "component": "EntityData",
-    "path": "components/entity/EntityData.tsx",
-    "description": "Entity data dashboard",
+    "id": "entity-statistics",
+    "component": "EntityStatistics",
+    "path": "components/entity/EntityStatistics.tsx",
+    "description": "Entity statistics cards and interactive dataset charts",
     "required": false,
-    "props": ["datasets", "statistics"]
+    "props": ["statistics", "datasets"]
+  },
+  {
+    "id": "entity-related-stories",
+    "component": "EntityRelatedStories",
+    "path": "components/entity/RelatedStories.tsx",
+    "description": "Related stories magazine grid for entity",
+    "required": false,
+    "props": ["stories"]
+  },
+  {
+    "id": "entity-related-entities",
+    "component": "EntityRelatedEntities",
+    "path": "components/entity/RelatedEntities.tsx",
+    "description": "Related entity cards for entity",
+    "required": false,
+    "props": ["entities", "title"]
+  },
+  {
+    "id": "entity-graph",
+    "component": "KnowledgeGraph",
+    "path": "components/entity/KnowledgeGraph.tsx",
+    "description": "Knowledge graph connection explorer for entity",
+    "required": false,
+    "props": ["nodes"]
+  },
+  {
+    "id": "entity-faq",
+    "component": "EntityFAQ",
+    "path": "components/entity/EntityFAQ.tsx",
+    "description": "Entity FAQs with accordion",
+    "required": false,
+    "props": ["questions"]
   },
   {
     "id": "entity-sources",

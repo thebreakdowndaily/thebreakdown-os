@@ -1,4 +1,6 @@
 import type { APIStory } from '@/utils/data-layer/types';
+import Container from '@/components/ui/Container';
+import SectionHeader from '@/components/ui/SectionHeader';
 import FeaturedHeroCard from './FeaturedHeroCard';
 import FeaturedStoryCard from './FeaturedStoryCard';
 
@@ -10,20 +12,20 @@ export default function FeaturedStories({ stories }: FeaturedStoriesProps) {
   const featured = stories.slice(0, 4);
   if (featured.length === 0) {
     return (
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <p className="text-gray-500 text-center">No featured stories yet.</p>
-      </section>
+      <Container as="section" className="py-16 sm:py-20">
+        <p className="text-[#A1A1AA] text-center">No featured stories yet.</p>
+      </Container>
     );
   }
 
   const [hero, ...side] = featured;
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-      <div className="flex items-center gap-3 mb-10">
-        <div className="w-1 h-6 bg-amber-500 rounded-full" />
-        <h2 className="text-2xl sm:text-3xl font-bold text-white">Featured Analysis</h2>
-      </div>
+    <Container as="section" className="py-16 sm:py-20">
+      <SectionHeader
+        eyebrow="Editorial"
+        title="Featured Analysis"
+      />
 
       <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
         <FeaturedHeroCard story={hero} />
@@ -33,6 +35,6 @@ export default function FeaturedStories({ stories }: FeaturedStoriesProps) {
           ))}
         </div>
       </div>
-    </section>
+    </Container>
   );
 }

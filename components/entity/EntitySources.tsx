@@ -1,58 +1,48 @@
 import React from 'react';
+import type { PrimarySource } from '@/utils/types';
 
 interface EntitySourcesProps {
-  sources: Array<{
-    name: string;
-    url: string;
-    type: string;
-    description: string;
-  }>;
+  sources: PrimarySource[];
 }
 
-const typeBadgeColor: Record<string, string> = {
-  government: 'bg-blue-500',
-  research: 'bg-purple-500',
-  news: 'bg-amber-500',
-  primary: 'bg-green-500',
-  expert: 'bg-red-500',
+const typeColors: Record<string, string> = {
+  government: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+  research: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+  news: 'bg-[#D4A843]/10 text-[#D4A843] border-[#D4A843]/30',
+  primary: 'bg-green-500/10 text-green-400 border-green-500/30',
+  expert: 'bg-red-500/10 text-red-400 border-red-500/30',
+  default: 'bg-gray-500/10 text-gray-400 border-gray-500/30',
 };
 
-const EntitySources: React.FC<EntitySourcesProps> = ({ sources }) => {
+export default function EntitySources({ sources }: EntitySourcesProps) {
   if (sources.length === 0) return null;
-
   return (
-    <section aria-label="Sources" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h2 className="text-xl sm:text-2xl font-bold text-gray-100 mb-6">Sources</h2>
+    <section aria-label="Sources" className="py-6 sm:py-8">
+      <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F5] mb-5">Sources</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {sources.map((source, i) => (
-          <div
-            key={i}
-            className="bg-gray-800 border border-gray-700 rounded-xl p-5 hover:border-amber-400/50 transition-colors"
-          >
-            <div className="flex items-start justify-between gap-3 mb-2">
-              <h3 className="text-lg font-semibold text-gray-100">{source.name}</h3>
-              <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white flex-shrink-0 ${
-                  typeBadgeColor[source.type] || 'bg-gray-500'
-                }`}
+        {sources.map((source, i) => {
+          const tc = typeColors[source.type] || typeColors.default;
+          return (
+            <article key={i} className="bg-[#151515] border border-[#2A2A2A] rounded-xl p-5 hover:border-[#D4A843]/50 transition-colors">
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <h3 className="text-sm font-semibold text-[#F5F5F5]">{source.name}</h3>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border flex-shrink-0 ${tc}`}>
+                  {source.type}
+                </span>
+              </div>
+              <p className="text-xs text-[#A1A1AA] leading-relaxed mb-3">{source.description}</p>
+              <a
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-[#D4A843] hover:text-[#D4A843]/80 transition-colors font-medium"
               >
-                {source.type}
-              </span>
-            </div>
-            <p className="text-gray-300 text-sm mb-3">{source.description}</p>
-            <a
-              href={source.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors font-medium"
-            >
-              Open Source &rarr;
-            </a>
-          </div>
-        ))}
+                Open Source &rarr;
+              </a>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
-};
-
-export default EntitySources;
+}

@@ -1,35 +1,19 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import type { EntityJSON, Section } from '@/utils/types';
+import type { EntityJSON } from '@/utils/types';
 import { buildEntity } from '@/utils/website-builder';
-import EntityLayout from '@/layouts/EntityLayout';
-import EntityOverview from '@/components/entity/EntityOverview';
+import { buildEntityViewModel } from '@/lib/view-models/entity';
+import { connections, entityNodeId } from '@/lib/graph/graphData';
+import EntityHero from '@/components/entity/EntityHero';
+import QuickFacts from '@/components/entity/QuickFacts';
 import EntityTimeline from '@/components/entity/EntityTimeline';
-import EntityData from '@/components/entity/EntityData';
+import EntityStatistics from '@/components/entity/EntityStatistics';
+import RelatedStories from '@/components/entity/RelatedStories';
+import RelatedEntitiesBlock from '@/components/entity/RelatedEntities';
+import KnowledgeGraph from '@/components/entity/KnowledgeGraph';
+import EntityFAQ from '@/components/entity/EntityFAQ';
 import EntitySources from '@/components/entity/EntitySources';
-import RelatedStories from '@/components/story/RelatedStories';
-import FAQ from '@/components/story/FAQ';
-
-const sectionComponents: Record<string, React.ElementType | undefined> = {
-  'entity-overview': EntityOverview,
-  'entity-timeline': EntityTimeline,
-  'entity-data': EntityData,
-  'entity-sources': EntitySources,
-  'related-stories': RelatedStories,
-  faq: FAQ,
-};
-
-function SectionRenderer({ sections }: { sections: Section[] }) {
-  return (
-    <>
-      {sections.map((section) => {
-        const Component = sectionComponents[section.id];
-        if (!Component) return null;
-        return <Component key={section.id} {...section.props} />;
-      })}
-    </>
-  );
-}
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 const mockOrganizations: EntityJSON[] = [
   {
@@ -39,22 +23,29 @@ const mockOrganizations: EntityJSON[] = [
     type: 'organization',
     description: 'Nodal ministry of Government of India responsible for rural development policies, programmes, and schemes including MGNREGA, PMAY-G, and DAY-NRLM.',
     image: '/images/entities/mord.jpg',
+    aliases: ['MoRD', 'Rural Development Ministry'],
     storyCount: 56,
-    updatedAt: '2026-06-10T08:00:00Z',
+    evidenceScore: 91,
+    updatedAt: '2026-06-18T08:00:00Z',
     timeline: [
-      { date: '1979-01-01', title: 'Ministry Established', description: 'Department of Rural Development created under Ministry of Agriculture.' },
-      { date: '1999-10-01', title: 'Independent Ministry', description: 'Department of Rural Development upgraded to full Ministry status.' },
+      { date: '1979-01-01', title: 'Department Created', description: 'Department of Rural Development created under Ministry of Agriculture.', source: 'Cabinet Secretariat' },
+      { date: '1999-10-01', title: 'Full Ministry Status', description: 'Department upgraded to independent Ministry of Rural Development.', source: 'PIB' },
     ],
     datasets: [],
-    statistics: { 'Schemes Managed': '15', 'Annual Budget 2025-26': '₹1.56 lakh crore', 'Districts Covered': '740+' },
+    statistics: { 'Schemes Managed': '15', 'Annual Budget': '₹1.56 lakh cr', 'Districts Covered': '740+', 'Staff': '12,000+' },
     sources: [
-      { name: 'MoRD Official Website', url: 'https://rural.gov.in', type: 'government', description: 'Official ministry portal with all scheme details.' },
+      { name: 'MoRD Official Website', url: 'https://rural.gov.in', type: 'government', description: 'Official ministry portal with scheme details.' },
     ],
     relatedStories: [
-      { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: 'Data-driven assessment.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+      { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment', summary: 'Two decades of rural employment guarantee scheme examined.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+    ],
+    relatedEntities: [
+      { id: 'mgnrega', slug: 'mgnrega', name: 'MGNREGA', type: 'policy' },
+      { id: 'pmgsy', slug: 'pmgsy', name: 'PM Gram Sadak Yojana', type: 'scheme' },
     ],
     faq: [
-      { question: 'What schemes does the Ministry oversee?', answer: 'Key schemes include MGNREGA, PMAY-G, DAY-NRLM, PMGSY, and NSAP.' },
+      { question: 'What schemes does the Ministry oversee?', answer: 'Key schemes include MGNREGA (employment), PMAY-G (housing), DAY-NRLM (livelihoods), PMGSY (roads), and NSAP (pensions).' },
+      { question: 'What is the annual budget of MoRD?', answer: 'The Ministry\'s budget for 2025-26 is approximately ₹1.56 lakh crore, making it one of the largest social sector ministries.' },
     ],
   },
   {
@@ -62,23 +53,31 @@ const mockOrganizations: EntityJSON[] = [
     slug: 'rbi',
     name: 'Reserve Bank of India',
     type: 'organization',
-    description: 'India\'s central banking institution that controls the monetary policy, regulates the banking system, and manages the country\'s currency and foreign exchange reserves.',
+    description: 'India\'s central banking institution controlling monetary policy, currency issuance, and financial system regulation.',
     image: '/images/entities/rbi.jpg',
     aliases: ['RBI', 'Central Bank of India'],
     storyCount: 89,
-    updatedAt: '2026-06-08T14:00:00Z',
+    evidenceScore: 96,
+    updatedAt: '2026-06-18T14:00:00Z',
     timeline: [
-      { date: '1935-04-01', title: 'Establishment', description: 'RBI established under the Reserve Bank of India Act, 1934.' },
-      { date: '1949-01-01', title: 'Nationalization', description: 'RBI nationalized after India\'s independence.' },
+      { date: '1935-04-01', title: 'RBI Established', description: 'Reserve Bank of India established under RBI Act 1934.', source: 'RBI History' },
+      { date: '1949-01-01', title: 'Nationalisation', description: 'RBI nationalised post-independence.', source: 'RBI Archives' },
     ],
     datasets: [],
-    statistics: { 'Policy Repo Rate': '6.25%', 'GDP Growth Forecast': '6.8%', 'Inflation Target': '4.0%', 'Foreign Exchange Reserves': '$675 billion' },
+    statistics: { 'Policy Rate': '6.00%', 'GDP Forecast': '6.8%', 'Inflation Target': '4.0%', 'FX Reserves': '$675 B' },
     sources: [
-      { name: 'RBI Official Website', url: 'https://rbi.org.in', type: 'government', description: 'Reserve Bank of India official portal.' },
+      { name: 'RBI Official Website', url: 'https://rbi.org.in', type: 'government', description: 'Official portal with data and publications.' },
     ],
-    relatedStories: [],
+    relatedStories: [
+      { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
+    ],
+    relatedEntities: [
+      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization' },
+      { id: 'sebi', slug: 'sebi', name: 'SEBI', type: 'organization' },
+    ],
     faq: [
-      { question: 'What is the current repo rate?', answer: 'The repo rate as of June 2026 is 6.25%.' },
+      { question: 'What is the current repo rate?', answer: 'The repo rate as of June 2026 is 6.00%.' },
+      { question: 'How does RBI control inflation?', answer: 'RBI uses the repo rate, CRR, SLR, and open market operations to manage money supply and inflation.' },
     ],
   },
 ];
@@ -111,11 +110,43 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
   const data = orgMap.get(slug);
   if (!data) notFound();
 
-  const pageSpec = buildEntity(data);
+  const vm = buildEntityViewModel(data);
+  const graphNodes = connections(entityNodeId(data.slug, data.type), { maxDepth: 2 }).map((c) => c.node);
 
   return (
-    <EntityLayout seo={pageSpec.seo} breadcrumbs={pageSpec.breadcrumbs} entityType="organization">
-      <SectionRenderer sections={pageSpec.sections} />
-    </EntityLayout>
+    <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-8">
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Organizations', href: '/organizations' },
+        { label: data.name, href: `/organization/${data.slug}` },
+      ]} />
+
+      <EntityHero
+        name={vm.entity.name}
+        type={vm.entity.type}
+        description={vm.entity.description}
+        image={vm.entity.image}
+        aliases={vm.entity.aliases}
+        storyCount={vm.entity.storyCount}
+        evidenceScore={vm.entity.evidenceScore}
+        updatedAt={vm.entity.updatedAt}
+      />
+
+      {vm.quickFacts.length > 1 && <QuickFacts facts={vm.quickFacts} />}
+
+      <EntityTimeline events={vm.timeline} />
+
+      <EntityStatistics statistics={vm.statistics} datasets={vm.datasets} />
+
+      <RelatedStories stories={vm.stories} />
+
+      {vm.entities.length > 0 && <RelatedEntitiesBlock entities={vm.entities} title="Related Entities" />}
+
+      <KnowledgeGraph nodes={graphNodes} />
+
+      <EntityFAQ questions={vm.faq} />
+
+      <EntitySources sources={vm.sources} />
+    </div>
   );
 }

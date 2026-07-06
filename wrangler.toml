@@ -1,4 +1,23 @@
 name = "thebreakdown-website"
 compatibility_date = "2026-07-02"
 compatibility_flags = ["nodejs_compat"]
-main = ".open-next/worker.js"
+pages_build_output_dir = ".open-next"
+
+# ─── D1 Database (Auth + Reader) ───────────────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "thebreakdown-auth"
+database_id = "907a0505-77d5-4126-ab1f-d1a81bd3b3f8"
+migrations_dir = "migrations"
+
+# ─── R2 Media Bucket ───────────────────────────────────────────
+# Enable R2 via Cloudflare Dashboard: Dashboard > R2 > Enable
+# Then uncomment below and run: wrangler r2 bucket create thebreakdown-media
+# [[r2_buckets]]
+# binding = "MEDIA_BUCKET"
+# bucket_name = "thebreakdown-media"
+
+# ─── AI Inference ──────────────────────────────────────────────
+# Enable Workers AI in the dashboard for AI-powered features
+# [[ai]]
+# binding = "AI"

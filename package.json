@@ -10,10 +10,16 @@
     "cf:deploy": "npx opennextjs-cloudflare deploy",
     "start": "next start",
     "lint": "eslint .",
-    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts"
+    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts",
+    "test:dataset": "npx tsx tests/dataset.test.ts",
+    "test:dataset:e2e": "npx tsx tests/dataset-e2e.test.ts",
+    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.1",
     "@sentry/nextjs": "^10.63.0",
+    "@supabase/supabase-js": "^2.110.0",
+    "better-auth": "^1.6.23",
     "d3": "^7.9.0",
     "d3-geo-projection": "^4.0.0",
     "d3-sankey": "^0.12.3",
@@ -27,7 +33,6 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.20.1",
     "@types/d3": "^7.4.0",
     "@types/node": "^20.14.0",
     "@types/react": "^19.1.0",

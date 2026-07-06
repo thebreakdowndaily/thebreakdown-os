@@ -325,10 +325,17 @@ function mapSectionProps(sectionId: string, data: StoryJSON): Record<string, unk
 
 function mapEntitySectionProps(sectionId: string, data: EntityJSON): Record<string, unknown> {
   const propMap: Record<string, (d: EntityJSON) => Record<string, unknown>> = {
-    'entity-overview': d => ({ entity: d }),
+    'entity-hero': d => ({ entity: { name: d.name, type: d.type, description: d.description, image: d.image, aliases: d.aliases, storyCount: d.storyCount, updatedAt: d.updatedAt } }),
+    'quick-facts': d => ({ facts: Object.entries(d.statistics).map(([label, value]) => ({ label, value: String(value) })) }),
     'entity-timeline': d => ({ events: d.timeline }),
-    'entity-data': d => ({ datasets: d.datasets, statistics: d.statistics }),
+    'entity-statistics': d => ({ statistics: d.statistics, datasets: d.datasets }),
+    'entity-related-stories': d => ({ stories: d.relatedStories }),
+    'entity-related-entities': d => ({ entities: d.relatedEntities ?? [], title: 'Related Entities' }),
+    'entity-graph': () => ({ slug: '' }),
+    'entity-faq': d => ({ questions: d.faq }),
     'entity-sources': d => ({ sources: d.sources }),
+    'entity-overview': d => ({ entity: d }),
+    'entity-data': d => ({ datasets: d.datasets, statistics: d.statistics }),
     'related-stories': d => ({ stories: d.relatedStories }),
     'faq': d => ({ questions: d.faq }),
   };
@@ -348,6 +355,7 @@ function mapTopicSectionProps(sectionId: string, data: TopicJSON): Record<string
       reports: d.reports,
     }),
     'topic-charts': d => ({ charts: d.charts }),
+    'topic-graph': d => ({ slug: d.slug }),
     'related-stories': d => ({ stories: d.stories }),
   };
 
