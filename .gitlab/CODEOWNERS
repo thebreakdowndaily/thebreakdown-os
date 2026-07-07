@@ -1,0 +1,15 @@
+# Global owners
+* @thebreakdown
+
+# Core architecture files
+types/canonical.ts @thebreakdown
+services/ @thebreakdown
+
+# Feature areas
+features/auth/ @thebreakdown
+features/cms/ @thebreakdown
+features/dataset/ @thebreakdown
+
+# Infrastructure
+.gitlab-ci.yml @thebreakdown
+Dockerfile @thebreakdown

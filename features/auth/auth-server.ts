@@ -1,43 +1,44 @@
-import { betterAuth } from 'better-auth';
-import { nextCookies } from 'better-auth/next-js';
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
 
-export const auth = betterAuth({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-  database: {} as any,
-  plugins: [nextCookies()],
-  emailAndPassword: {
-    enabled: true,
-    autoSignIn: true,
-  },
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    },
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID || '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-    },
-  },
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  advanced: ({
-    defaultPasswordHash: 'argon2',
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  }) as any,
+export async function getSupabaseAuth() {
+  const cookieStore = await cookies();
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => cookieStore.getAll() } }
+  );
+}
+
+export interface AuthSession {
   user: {
-    additionalFields: {
-      displayName: { type: 'string', required: false },
-      avatarUrl: { type: 'string', required: false },
-      role: { type: 'string', required: false, defaultValue: 'reader' },
-    },
-  },
+    id: string;
+    email: string;
+    name: string;
+    image?: string | null;
+    role?: string;
+  };
   session: {
-    expiresIn: 60 * 60 * 24 * 7,
-    updateAge: 60 * 60 * 24,
-    additionalFields: {
-      currentWorkspace: { type: 'string', required: false },
-    },
-  },
-});
+    id: string;
+    expiresAt: number;
+  };
+}
 
-export type Auth = typeof auth;
+export async function getSession(): Promise<AuthSession | null> {
+  const supabase = await getSupabaseAuth();
+  const { data: { session: s } } = await supabase.auth.getSession();
+  if (!s) return null;
+  return {
+    user: {
+      id: s.user.id,
+      email: s.user.email ?? '',
+      name: s.user.user_metadata?.name || s.user.email?.split('@')[0] || '',
+      image: s.user.user_metadata?.avatar_url || null,
+      role: s.user.user_metadata?.role || 'reader',
+    },
+    session: {
+      id: s.user.id,
+      expiresAt: s.expires_at ? s.expires_at * 1000 : 0,
+    },
+  };
+}

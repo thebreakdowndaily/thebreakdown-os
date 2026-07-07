@@ -1,27 +1,28 @@
-import { auth } from '@/features/auth/auth-server';
+import { getSupabaseAuth, getSession } from '@/features/auth/auth-server';
+import type { AuthSession } from '@/features/auth/auth-server';
 
 export class AuthService {
-  get handler() { return auth.handler; }
-
-  async getSession(headers: Headers) {
-    const session = await auth.api.getSession({ headers });
-    return session;
+  async getSession(): Promise<AuthSession | null> {
+    return getSession();
   }
 
-  async signInEmail(data: { email: string; password: string }, headers: Headers) {
-    return auth.api.signInEmail({ body: data, headers });
+  async signInEmail(data: { email: string; password: string }) {
+    const supabase = await getSupabaseAuth();
+    return supabase.auth.signInWithPassword(data);
   }
 
-  async signUpEmail(data: { name: string; email: string; password: string }, headers: Headers) {
-    return auth.api.signUpEmail({ body: data, headers });
+  async signUpEmail(data: { name: string; email: string; password: string }) {
+    const supabase = await getSupabaseAuth();
+    return supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: { data: { name: data.name } },
+    });
   }
 
-  async signOut(headers: Headers) {
-    return auth.api.signOut({ headers });
-  }
-
-  async listSessions(headers: Headers) {
-    return auth.api.listSessions({ headers });
+  async signOut() {
+    const supabase = await getSupabaseAuth();
+    return supabase.auth.signOut();
   }
 }
 

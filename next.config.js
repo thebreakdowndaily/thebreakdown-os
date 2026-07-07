@@ -1,11 +1,16 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: true,
+  outputFileTracingRoot: path.resolve(__dirname),
   images: {
-    domains: [],
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+    ],
     unoptimized: process.env.NODE_ENV === 'development',
   },
   experimental: {

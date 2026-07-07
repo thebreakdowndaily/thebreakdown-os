@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 import { validateApiKey, checkRateLimit } from './utils/api-auth';
-import { auth } from '@/features/auth/auth-server';
 
 const PUBLIC_PATHS = ['/api/docs', '/api/feed', '/api/auth', '/api/v1/auth/login', '/api/v1/auth/register'];
 
@@ -52,8 +52,19 @@ export async function middleware(request: NextRequest) {
   // Page auth: protect /workspace, /cms, /dashboard, /settings, /admin
   if (PROTECTED_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     try {
-      const headers = new Headers(request.headers);
-      const session = await auth.api.getSession({ headers });
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll: () => request.cookies.getAll(),
+            setAll: (cookiesToSet) => {
+              cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+            },
+          },
+        }
+      );
+      const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         const loginUrl = new URL('/login', request.url);
         loginUrl.searchParams.set('redirect', pathname);

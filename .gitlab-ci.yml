@@ -1,0 +1,79 @@
+image: node:22-alpine
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    - .open-next/
+
+stages:
+  - install
+  - lint
+  - typecheck
+  - test
+  - build
+  - deploy
+
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
+install:
+  stage: install
+  script:
+    - npm ci --prefer-offline
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1h
+
+lint:
+  stage: lint
+  dependencies:
+    - install
+  script:
+    - npx next lint --no-cache
+  allow_failure: true
+
+typecheck:
+  stage: typecheck
+  dependencies:
+    - install
+  script:
+    - npx tsc --noEmit
+  allow_failure: true
+
+test:
+  stage: test
+  dependencies:
+    - install
+  script:
+    - npm test
+  artifacts:
+    reports:
+      junit: junit.xml
+    expire_in: 1h
+
+build:
+  stage: build
+  dependencies:
+    - install
+  script:
+    - npm run cf:build
+  artifacts:
+    paths:
+      - .open-next/
+      - public/
+    expire_in: 1h
+
+deploy:
+  stage: deploy
+  dependencies:
+    - build
+  script:
+    - npm install -g wrangler
+    - wrangler pages deploy .open-next --project-name=thebreakdown-website --branch=main
+  environment:
+    name: production
+    url: https://thebreakdown.in
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { authClient } from '../auth-client';
+import { supabase } from '../auth-client';
 
 export function ForgotPassword({ onBack }: { onBack?: () => void }) {
   const [email, setEmail] = useState('');
@@ -9,23 +9,19 @@ export function ForgotPassword({ onBack }: { onBack?: () => void }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
-    (authClient as any).forgetPassword({ email, redirectTo: '/reset-password' }).then(({ error: err }: { error: any }) => {
-      if (err) {
-        setError(err.message || 'Failed to send reset email');
-      } else {
-        setSent(true);
-      }
-    }).catch(() => {
-      setError('An unexpected error occurred');
-    }).finally(() => {
-      setLoading(false);
+    const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback`,
     });
-    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
+    if (err) {
+      setError(err.message);
+    } else {
+      setSent(true);
+    }
+    setLoading(false);
   };
 
   if (sent) {

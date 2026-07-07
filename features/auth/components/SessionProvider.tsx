@@ -1,13 +1,11 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
-
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import type { Session, User } from '../auth-client';
-import { authClient } from '../auth-client';
+import { supabase, mapUser } from '../auth-client';
+import type { Session } from '../auth-client';
 
 interface AuthContextValue {
-  user: User | null;
+  user: Session['user'] | null;
   session: Session | null;
   loading: boolean;
   refresh: () => Promise<void>;
@@ -23,47 +21,18 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Session['user'] | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const d: any = await authClient.getSession();
-      const data = d?.data ?? d;
-      if (data) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const u: any = data.user;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const s: any = data.session;
-        setUser({
-          id: u?.id || '',
-          email: u?.email || '',
-          name: u?.name || '',
-          image: u?.image,
-          emailVerified: !!u?.emailVerified,
-          displayName: u?.displayName,
-          avatarUrl: u?.avatarUrl,
-          role: u?.role,
-        });
+      const { data: { session: s } } = await supabase.auth.getSession();
+      if (s?.user) {
+        setUser(mapUser(s.user));
         setSession({
-          user: {
-            id: u?.id || '',
-            email: u?.email || '',
-            name: u?.name || '',
-            image: u?.image,
-          },
-          session: {
-            id: s?.id || '',
-            expiresAt: typeof s?.expiresAt === 'object' ? s.expiresAt.getTime() : (s?.expiresAt || 0),
-            token: s?.token || '',
-            createdAt: String(s?.createdAt || ''),
-            updatedAt: String(s?.updatedAt || ''),
-            ipAddress: s?.ipAddress || undefined,
-            userAgent: s?.userAgent || undefined,
-            currentWorkspace: s?.currentWorkspace || undefined,
-          },
+          user: mapUser(s.user),
+          session: { id: s.user.id, expiresAt: s.expires_at ? s.expires_at * 1000 : 0 },
         });
       } else {
         setUser(null);
@@ -78,14 +47,27 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      refresh().catch(() => {});
-    }, 0);
-    return () => { clearTimeout(timer); };
+    refresh();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+      if (s?.user) {
+        setUser(mapUser(s.user));
+        setSession({
+          user: mapUser(s.user),
+          session: { id: s.user.id, expiresAt: s.expires_at ? s.expires_at * 1000 : 0 },
+        });
+      } else {
+        setUser(null);
+        setSession(null);
+      }
+      setLoading(false);
+    });
+
+    return () => { subscription.unsubscribe(); };
   }, [refresh]);
 
   const signOut = useCallback(async () => {
-    await authClient.signOut();
+    await supabase.auth.signOut();
     setUser(null);
     setSession(null);
   }, []);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { authClient } from '../auth-client';
+import { supabase } from '../auth-client';
 
 export function RegisterForm({ onSuccess, onLoginClick }: { onSuccess?: () => void; onLoginClick?: () => void }) {
   const [name, setName] = useState('');
@@ -10,24 +10,24 @@ export function RegisterForm({ onSuccess, onLoginClick }: { onSuccess?: () => vo
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
-    const client = authClient as any;
-    client.signUp.email({ name, email, password }).then(({ error: err }: { error: any }) => {
-      if (err) {
-        setError(err.message || 'Registration failed');
-      } else {
-        onSuccess?.();
-      }
-    }).catch(() => {
-      setError('An unexpected error occurred');
-    }).finally(() => {
-      setLoading(false);
+    const { error: err } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
-    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
+    if (err) {
+      setError(err.message);
+    } else {
+      onSuccess?.();
+    }
+    setLoading(false);
   };
 
   return (
@@ -66,8 +66,8 @@ export function RegisterForm({ onSuccess, onLoginClick }: { onSuccess?: () => vo
             value={password}
             onChange={(e) => { setPassword(e.target.value); }}
             required
-            minLength={8}
-            placeholder="At least 8 characters"
+            minLength={6}
+            placeholder="At least 6 characters"
             style={{ width: '100%', padding: 'var(--spacing-2) var(--spacing-3)', background: 'var(--color-bg-secondary)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-md)', color: 'var(--color-text-primary)', fontSize: 'var(--text-sm)', outline: 'none' }}
           />
         </div>
