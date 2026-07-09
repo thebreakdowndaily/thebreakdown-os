@@ -9,7 +9,7 @@ export default ts.config(
   js.configs.recommended,
   ...ts.configs.strictTypeChecked.map((config) => ({
     ...config,
-    ignores: ['.next/**', '.open-next/**', '.opencode/**', 'node_modules/**', 'next-env.d.ts', 'tests/**', '*.js', '*.mjs'],
+    ignores: ['.next/**', '.open-next/**', '.opencode/**', 'node_modules/**', 'dist/**', 'next-env.d.ts', 'tests/**', '*.js', '*.mjs'],
   })),
   {
     languageOptions: {
@@ -47,6 +47,6 @@ export default ts.config(
     },
   },
   {
-    ignores: ['.next/**', '.open-next/**', '.opencode/**', 'node_modules/**'],
+    ignores: ['.next/**', '.open-next/**', '.opencode/**', 'node_modules/**', 'dist/**'],
   },
 );
