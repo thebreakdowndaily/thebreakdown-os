@@ -2,7 +2,6 @@ import type { Story, Entity, Topic, GraphNode, GraphEdge } from '@/types/canonic
 import type { Services } from '@/services/registry';
 import { EditorialAI, type HeadlineSuggestion, type EntitySuggestion, type SourceGap, type FAQSuggestion } from '@/features/ai/editorial';
 import { ReaderAI, type SimplifiedStory } from '@/features/ai/reader';
-import { GraphService } from '@/lib/graph/graphService';
 
 export interface WorkspaceViewModel {
   story: Story;
@@ -26,10 +25,9 @@ export function buildWorkspace(services: Services, storySlug: string): Workspace
 
   const editorialAI = new EditorialAI(services);
   const readerAI = new ReaderAI();
-  const graph = new GraphService(services);
 
-  const fullGraph = graph.build();
-  const conns = graph.getConnections(story.id, { maxDepth: 1 });
+  const fullGraph = services.graph.build();
+  const conns = services.graph.getConnections(story.id, { maxDepth: 1 });
 
   const relatedEntities = (story.relatedEntityIds || []).map(id => services.entities.getEntity(id)).filter(Boolean) as Entity[];
   const relatedTopics = (story.relatedTopicIds || []).map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];

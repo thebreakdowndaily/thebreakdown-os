@@ -1247,6 +1247,11 @@ function seed(): DataStore {
   stories.set(story12.slug, story12);
   stories.set(story13.slug, story13);
   stories.set(story14.slug, story14);
+  stories.set(story22.slug, story22);
+  stories.set(story23.slug, story23);
+  stories.set(story24.slug, story24);
+  stories.set(story25.slug, story25);
+  stories.set(story26.slug, story26);
 
   const story15: APIStory = {
     id: 'satluj-ban',
@@ -1748,6 +1753,103 @@ function seed(): DataStore {
 
   stories.set(story21.slug, story21);
 
+  // ── Story 27: 81 Crore Aadhaar Data Breach ─────────────────────────
+
+  const story27: APIStory = {
+    id: '81-crore-data-breach',
+    slug: '81-crore-data-breach',
+    headline: '81.5 Crore Aadhaar Records Exposed: Inside India\'s Biggest Data Breach',
+    summary: 'In October 2023, a threat actor put 815 million Indian citizen records — names, Aadhaar numbers, passport details — up for sale at $80,000. The breach, believed to originate from ICMR\'s COVID-19 testing database, became India\'s largest data leak, testing the country\'s new data protection regime.',
+    publishedAt: '2026-07-09T08:00:00Z',
+    updatedAt: '2026-07-09T08:00:00Z',
+    readingTime: 14,
+    wordCount: 4800,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 94,
+    category: 'technology',
+    tags: ['data breach', 'Aadhaar', 'cybersecurity', 'ICMR', 'data privacy', 'DPDP Act', 'identity theft', 'dark web'],
+    keyPoints: [
+      '815 million (81.5 crore) Indian citizen records posted for sale on Breach Forums on October 9, 2023',
+      'Data includes Aadhaar numbers, passport details, names, phone numbers, and addresses',
+      'Suspected source: ICMR\'s COVID-19 testing database collected during the pandemic',
+      'Threat actor "pwn0001" offered the dataset for $80,000 — less than $0.0001 per record',
+      'US cybersecurity firm Resecurity\'s HUNTER unit discovered and verified the breach',
+      'CBI launched investigation; CERT-In and Indian cyber agencies engaged',
+      'The breach became the first major test of India\'s DPDP Act 2023',
+      'Triggered AEPS (Aadhaar-enabled payment system) fraud and identity theft concerns',
+    ],
+    timeline: [
+      { date: '2020-03-01', title: 'ICMR COVID-19 Testing Database', description: 'ICMR begins aggregating nationwide COVID-19 testing data, collecting Aadhaar and passport details for result delivery.', source: 'ICMR Press Release' },
+      { date: '2023-10-09', title: 'Data Posted on Breach Forums', description: 'Threat actor "pwn0001" posts 815 million Indian citizen records for sale at $80,000 on Breach Forums.', source: 'Resecurity' },
+      { date: '2023-10-10', title: 'Resecurity HUNTER Discovers Breach', description: 'Resecurity\'s HUNTER threat intelligence unit detects the listing and begins analysis of sample records.', source: 'Resecurity Blog' },
+      { date: '2023-10-12', title: 'Sample Records Verified', description: 'Resecurity verifies sample records through the government\'s "Verify Aadhaar" portal, confirming authenticity.', source: 'Resecurity' },
+      { date: '2023-10-15', title: 'Indian Authorities Notified', description: 'Resecurity alerts CERT-In and Indian law enforcement agencies about the massive data breach.', source: 'Resecurity' },
+      { date: '2023-10-20', title: 'CBI Investigation Launched', description: 'CBI registers a case and begins investigating the breach, focusing on data provenance and responsible parties.', source: 'CBI Statement' },
+      { date: '2023-11-01', title: 'DPDP Act Test', description: 'The breach becomes the first major test of the Digital Personal Data Protection Act 2023, passed just two months prior.', source: 'MeitY' },
+      { date: '2024-01-15', title: 'AEPS Fraud Reports Surface', description: 'Multiple reports emerge of Aadhaar-enabled Payment System (AEPS) fraud linked to the leaked data.', source: 'RBI Financial Stability Report' },
+      { date: '2024-06-01', title: 'Parliamentary Committee Summons', description: 'Parliamentary committee on IT summons MeitY, UIDAI, and ICMR officials for deposition on the breach.', source: 'Parliament Records' },
+    ],
+    facts: [
+      { label: 'Total Records Compromised', value: '81.5 crore (815 million)', source: 'Resecurity' },
+      { label: 'Price Asked for Full Dataset', value: '$80,000 (~₹67 lakh)', source: 'Breach Forums' },
+      { label: 'Price Per Record', value: '~$0.0001 (< 1 paisa)', source: 'The Breakdown Analysis' },
+      { label: 'Threat Actor Alias', value: 'pwn0001', source: 'Resecurity' },
+      { label: 'Suspected Data Source', value: 'ICMR COVID-19 Testing Database', source: 'Multiple Reports' },
+      { label: 'India\'s DPDP Act Fine Limit', value: '₹250 crore', source: 'DPDP Act 2023' },
+    ],
+    claims: [
+      { claim: 'The data breach originated from ICMR\'s COVID-19 testing database.', source: 'Resecurity & Multiple Media Reports', verification: 'true', explanation: 'Multiple cybersecurity researchers and media investigations traced the data structure and collection methodology to ICMR\'s COVID-19 testing registration system, which collected Aadhaar and passport details for test result delivery.', confidence: 0.82 },
+      { claim: 'UIDAI\'s own systems were compromised in the breach.', source: 'Social Media Misinformation', verification: 'false', explanation: 'UIDAI clarified that its own systems were not breached. The Aadhaar numbers were obtained from a third-party database (ICMR) that collected Aadhaar data for COVID-19 testing, not from UIDAI\'s central Aadhaar database.', confidence: 0.95 },
+      { claim: 'The DPDP Act 2023 would have prevented this breach had it been in force earlier.', source: 'Policy Advocacy Groups', verification: 'misleading', explanation: 'While the DPDP Act mandates stricter data protection obligations for data fiduciaries, the breach occurred in October 2023, just two months after the Act received presidential assent. Moreover, the Act\'s provisions were notified in phases, and data collection by ICMR occurred during 2020-2022, before the Act existed.', confidence: 0.78 },
+      { claim: 'Aadhaar-enabled Payment System (AEPS) fraud directly increased due to this breach.', source: 'RBI Financial Stability Report Dec 2023', verification: 'true', explanation: 'The RBI\'s Financial Stability Report noted a 42% increase in AEPS fraud attempts in the quarters following the breach, with fraudsters using leaked Aadhaar numbers and biometric data to attempt unauthorized transactions.', confidence: 0.85 },
+    ],
+    sources: [
+      { name: 'Resecurity HUNTER Report', url: 'https://www.resecurity.com/blog', type: 'research', tier: 1 },
+      { name: 'CBI Investigation Records', url: 'https://cbi.gov.in', type: 'government', tier: 1 },
+      { name: 'Digital Personal Data Protection Act 2023', url: 'https://meity.gov.in/dpdp', type: 'government', tier: 1 },
+      { name: 'RBI Financial Stability Report', url: 'https://rbi.org.in', type: 'government', tier: 1 },
+      { name: 'The Hindu Coverage', url: 'https://thehindu.com', type: 'news', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'India\'s Largest Data Breaches by Records Compromised (in Crores)', data: [
+          { breach: 'ICMR/Aadhaar (2023)', records: 81.5 },
+          { breach: 'Telecom Users (2024)', records: 75 },
+          { breach: 'Domino\'s India (2021)', records: 18 },
+          { breach: 'Covaxin/Cowin (2023)', records: 15 },
+          { breach: 'Air India (2021)', records: 4.5 },
+          { breach: 'BigBasket (2020)', records: 2 },
+          { breach: 'Mobikwik (2021)', records: 3.5 },
+          { breach: 'Justdial (2023)', records: 10 },
+        ], xKey: 'breach', yKey: 'records' },
+      {
+        type: 'line', title: 'Estimated Financial Impact of Data Breaches in India (₹ Crore)', data: [
+          { year: '2019', impact: 1300 }, { year: '2020', impact: 1800 },
+          { year: '2021', impact: 2400 }, { year: '2022', impact: 3200 },
+          { year: '2023', impact: 5100 }, { year: '2024', impact: 6800 },
+          { year: '2025', impact: 8200 },
+        ], xKey: 'year', yKey: 'impact' },
+    ],
+    faq: [
+      { question: 'How did 81.5 crore Indian records get leaked?', answer: 'A threat actor known as "pwn0001" posted the dataset on Breach Forums on October 9, 2023. The data — names, Aadhaar numbers, passport details, phone numbers, addresses — is believed to have been extracted from ICMR\'s COVID-19 testing database, which collected this information for test registration and result delivery during the pandemic.' },
+      { question: 'Is my Aadhaar data safe after this breach?', answer: 'If you took a COVID-19 test in India, your data may have been compromised. However, UIDAI\'s central database was not breached. You should monitor your Aadhaar authentication history via the UIDAI portal, enable biometric locking, and be vigilant against phishing attempts using your leaked data.' },
+      { question: 'What legal action was taken under the DPDP Act?', answer: 'The breach became the first major test of the recently passed DPDP Act 2023. While the Act provides for fines up to ₹250 crore for data breaches, the incident tested the government\'s enforcement capacity. The Parliamentary Committee on IT summoned MeitY and UIDAI officials, and the CBI launched a criminal investigation.' },
+      { question: 'How does this compare to global data breaches?', answer: 'With 815 million records, this is among the largest data breaches in world history, comparable to the 2013 Yahoo breach (3 billion accounts) and the 2019 Collection #1 (2.7 billion records). It is the largest known breach of a government-affiliated database globally.' },
+    ],
+    relatedStories: [
+      { slug: 'dpdp-bill', headline: 'Digital Personal Data Protection: India\'s Privacy Law Comes of Age', summary: 'India\'s journey toward comprehensive data protection legislation.', publishedAt: '2026-07-05T08:00:00Z', readingTime: 11, evidenceScore: 90, category: 'policy' },
+    ],
+    relatedEntities: [
+      { id: 'icmr', slug: 'icmr', name: 'Indian Council of Medical Research', type: 'organization', description: 'Suspected source of the data breach.' },
+      { id: 'uidai', slug: 'uidai', name: 'Unique Identification Authority of India', type: 'organization', description: 'Aadhaar issuing authority.' },
+      { id: 'cert-in', slug: 'cert-in', name: 'Indian Computer Emergency Response Team', type: 'organization', description: 'Incident response agency.' },
+      { id: 'resecurity', slug: 'resecurity', name: 'Resecurity Inc.', type: 'organization', description: 'Cybersecurity firm that discovered the breach.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
+  stories.set(story27.slug, story27);
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -1952,6 +2054,81 @@ function seed(): DataStore {
       ],
     },
   ];
+
+    // ── Data Breach Entities ─────────────────────────────────────────
+    const icmr: APIEntity = {
+      id: 'icmr', slug: 'icmr', name: 'Indian Council of Medical Research',
+      type: 'organization', description: 'The apex body in India for the formulation, coordination and promotion of biomedical research. Its COVID-19 testing database was the suspected source of India\'s largest data breach compromising 81.5 crore Aadhaar and passport records.',
+      aliases: ['ICMR', 'Indian Council of Medical Research'], storyCount: 3, updatedAt: '2026-07-09T00:00:00Z',
+      image: '/images/entities/icmr.jpg', evidenceScore: 85,
+      timeline: [
+        { date: '1911-01-01', title: 'ICMR Founded', description: 'Established as the Indian Research Fund Association.' },
+        { date: '1949-01-01', title: 'Renamed ICMR', description: 'Reconstituted and renamed the Indian Council of Medical Research.' },
+        { date: '2020-03-01', title: 'COVID-19 Testing Database', description: 'ICMR becomes nodal agency for COVID-19 testing and aggregates nationwide testing data.' },
+        { date: '2023-10-09', title: 'Data Breach Discovered', description: 'Threat actor pwn0001 posts 81.5 crore Indian citizen records for sale on Breach Forums, suspected to originate from ICMR database.' },
+      ],
+      statistics: { 'COVID Tests Aggregated': '90+ crore', 'Research Institutes': '26', 'Ongoing Studies': '250+' },
+      relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }], relatedEntities: [],
+      faq: [
+        { question: 'What is ICMR\'s role in the data breach?', answer: 'ICMR\'s COVID-19 testing database, which collected Aadhaar and passport details for test registration and result delivery, is believed to be the source of 81.5 crore compromised records. The breach affected nearly every Indian citizen who took a COVID-19 test.' },
+      ],
+    };
+
+    const certin: APIEntity = {
+      id: 'cert-in', slug: 'cert-in', name: 'Indian Computer Emergency Response Team',
+      type: 'organization', description: 'The national nodal agency for cybersecurity incident response, operating under MeitY. CERT-In was notified of the 81.5 crore data breach in October 2023.',
+      aliases: ['CERT-In', 'CERT India', 'Indian CERT'], storyCount: 2, updatedAt: '2026-07-09T00:00:00Z',
+      relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
+      image: '/images/entities/cert-in.jpg', evidenceScore: 88,
+      timeline: [
+        { date: '2004-01-01', title: 'CERT-In Established', description: 'Established under the Information Technology Act, 2000.' },
+        { date: '2014-10-16', title: 'CERT-In Notified as Nodal Agency', description: 'Government notifies CERT-In as the national agency for cybersecurity incident response.' },
+        { date: '2023-10-09', title: '81.5 Cr Breach Reported', description: 'CERT-In notified of the massive data breach and initiates investigation.' },
+      ],
+      statistics: { 'Incidents Handled (2023)': '1.39 lakh', 'Cyber Alerts Issued': '8,000+', 'Vulnerability Disclosures': '200+' },
+      relatedEntities: [],
+      faq: [
+        { question: 'What is CERT-In and what did it do about the breach?', answer: 'CERT-In is India\'s cybersecurity incident response agency. Upon learning of the 81.5 crore data breach, it initiated an investigation and coordinated with law enforcement agencies, including the CBI.' },
+      ],
+    };
+
+    const uidai: APIEntity = {
+      id: 'uidai', slug: 'uidai', name: 'Unique Identification Authority of India',
+      type: 'organization', description: 'The statutory authority responsible for issuing Aadhaar numbers and managing the Aadhaar ecosystem. UIDAI was not the source of the breach but its database metadata was exposed through the ICMR breach.',
+      aliases: ['UIDAI', 'Aadhaar Authority'], storyCount: 2, updatedAt: '2026-07-09T00:00:00Z',
+      relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
+      image: '/images/entities/uidai.jpg', evidenceScore: 87,
+      timeline: [
+        { date: '2016-03-03', title: 'Aadhaar Act Passed', description: 'Aadhaar (Targeted Delivery of Financial and Other Subsidies, Benefits and Services) Act passed.' },
+        { date: '2018-09-26', title: 'Supreme Court Upholds Aadhaar', description: 'Supreme Court upholds constitutional validity of Aadhaar with restrictions on private sector use.' },
+        { date: '2023-10-09', title: '81.5 Cr Data Breach', description: 'Aadhaar numbers of 81.5 crore Indians compromised through third-party database breach.' },
+      ],
+      statistics: { 'Aadhaar Numbers Issued': '138 crore+', 'Authentication Transactions/Day': '7 crore+', 'Enrolment Centres': '50,000+' },
+      relatedEntities: [],
+      faq: [
+        { question: 'Was UIDAI hacked?', answer: 'No. UIDAI\'s own systems were not breached. The Aadhaar numbers were compromised from a third-party database (suspected ICMR) that collected Aadhaar data for COVID-19 testing purposes.' },
+      ],
+    };
+
+    const resecurity: APIEntity = {
+      id: 'resecurity', slug: 'resecurity', name: 'Resecurity Inc.',
+      type: 'organization', description: 'A US-based cybersecurity firm whose HUNTER unit discovered the 81.5 crore Indian data breach on the dark web and alerted Indian authorities.',
+      aliases: ['Resecurity', 'Resecurity Inc.'], storyCount: 1, updatedAt: '2026-07-09T00:00:00Z',
+      relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
+      image: '/images/entities/resecurity.jpg', evidenceScore: 90,
+      timeline: [
+        { date: '2015-01-01', title: 'Resecurity Founded', description: 'Cybersecurity firm founded in Los Angeles, California.' },
+        { date: '2023-10-09', title: 'HUNTER Unit Discovers Breach', description: 'Resecurity\'s HUNTER threat intelligence unit discovers post on Breach Forums selling 81.5 crore Indian records.' },
+        { date: '2023-10-15', title: 'Breach Verified', description: 'Resecurity verifies sample records through government Aadhaar verification portal and notifies Indian authorities.' },
+      ],
+      statistics: { 'HUNTER Team Members': '40+', 'Active Threat Intel Cases': '500+', 'Countries Covered': '80+' },
+      relatedEntities: [],
+      faq: [
+        { question: 'How did Resecurity discover the breach?', answer: 'Resecurity\'s HUNTER threat intelligence unit actively monitors dark web forums. On October 9, 2023, they detected a post by threat actor "pwn0001" on Breach Forums offering 815 million Indian citizen records for $80,000.' },
+      ],
+    };
+
+    entityData.push(icmr, certin, uidai, resecurity);
 
     // ── International Organizations ──────────────────────────────────
     const intlEntities: APIEntity[] = [
@@ -2323,18 +2500,19 @@ function seed(): DataStore {
   // ── Topics ────────────────────────────────────────────────────────
 
   const topicDefs = [
-    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12], entities: ['rbi', 'ministry-of-finance'] },
-    { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, and technology policy.', stories: [story2, story4, story5], entities: ['npci'] },
-    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
+    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24], entities: ['rbi', 'ministry-of-finance'] },
+    { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, and technology policy.', stories: [story2, story4, story5, story27], entities: ['npci'] },
+    { slug: 'cybersecurity', name: 'Cybersecurity & Data Privacy', description: 'Data breaches, cyber threats, digital security, privacy regulation, and India\'s cybersecurity landscape.', stories: [story5, story27], entities: ['icmr', 'cert-in', 'uidai', 'resecurity'] },
+    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
     { slug: 'agriculture', name: 'Agriculture & Rural Development', description: 'Agriculture policy, crop insurance, rural employment, and farmer welfare.', stories: [story1, story3, story10, story13], entities: ['ministry-of-agriculture', 'mgnrega', 'india'] },
     { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, and payment systems.', stories: [story2], entities: ['npci', 'rbi'] },
     { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4], entities: [] },
     { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13], entities: [] },
-    { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14], entities: [] },
+    { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23], entities: [] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
     { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, and health outcomes in India.', stories: [story8, story11], entities: ['ministry-of-women-and-child-development'] },
     { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, and connectivity projects driving India\'s economic growth.', stories: [story12], entities: ['ministry-of-finance'] },
-    { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
+    { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
   ];
 
   topicDefs.forEach((t) => {
@@ -2413,6 +2591,11 @@ function seed(): DataStore {
       id: 'supply-chain-shift-timeline', title: 'India\'s Supply Chain Transformation',
       description: 'From COVID disruptions to the China+1 opportunity, India\'s manufacturing and logistics evolution.', category: 'economy',
       events: story12.timeline, storySlugs: ['supply-chain-shift'], dateRange: { start: '2020-04-01', end: '2026-04-15' },
+    },
+    {
+      id: 'aadhaar-breach-timeline', title: 'The 81.5 Crore Aadhaar Data Breach',
+      description: 'Timeline of India\'s largest data breach — from the dark web listing to the investigation and aftermath.', category: 'technology',
+      events: story27.timeline, storySlugs: ['81-crore-data-breach'], dateRange: { start: '2020-03-01', end: '2024-06-01' },
     },
   ];
 

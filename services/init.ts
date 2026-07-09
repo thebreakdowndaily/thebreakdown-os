@@ -10,6 +10,7 @@ import { MemoryDatasetService } from './datasets/service';
 import { MemoryMediaService } from './media/service';
 import { MemorySearchService } from './search/service';
 import { MemoryAnalyticsService } from './analytics/service';
+import { MemoryGraphProjectionService } from './graph/service';
 import { CanonicalStoryService } from './stories/canonical-repository';
 import { CanonicalTopicService } from './topics/canonical-repository';
 import { CanonicalEntityService } from './entities/canonical-repository';
@@ -17,6 +18,14 @@ import { CanonicalTimelineService } from './timelines/canonical-repository';
 import { CanonicalFixService } from './fixes/canonical-repository';
 import { CanonicalSearchService } from './search/canonical-repository';
 import { CanonicalAnalyticsService } from './analytics/canonical-repository';
+
+function buildWithGraph(base: Omit<Services, 'graph'>): Services {
+  const graph = new MemoryGraphProjectionService(base as Services);
+  const services: Services = { ...base, graph };
+  initServices(services);
+  graph.setServices(services);
+  return services;
+}
 
 // ── Memory-backed (default for SSG / mock data) ─────────────────────────
 
@@ -29,7 +38,7 @@ export function initDefaultServices(
   seedDatasets: Dataset[],
   seedMedia: MediaItem[],
 ): Services {
-  const services: Services = {
+  return buildWithGraph({
     stories: new MemoryStoryService(seedStories),
     topics: new MemoryTopicService(seedTopics),
     entities: new MemoryEntityService(seedEntities),
@@ -39,27 +48,21 @@ export function initDefaultServices(
     media: new MemoryMediaService(seedMedia),
     search: new MemorySearchService(),
     analytics: new MemoryAnalyticsService(),
-  };
-  initServices(services);
-  return services;
+  });
 }
 
 // ── Canonical / DB-backed (for API routes & production runtime) ─────────
 
 export function initCanonicalServices(): Services {
-  const datasets = new MemoryDatasetService();
-
-  const services: Services = {
+  return buildWithGraph({
     stories: new CanonicalStoryService() as unknown as Services['stories'],
     topics: new CanonicalTopicService() as unknown as Services['topics'],
     entities: new CanonicalEntityService() as unknown as Services['entities'],
     timelines: new CanonicalTimelineService() as unknown as Services['timelines'],
     fixes: new CanonicalFixService() as unknown as Services['fixes'],
-    datasets: datasets as unknown as Services['datasets'],
+    datasets: new MemoryDatasetService() as unknown as Services['datasets'],
     media: new MemoryMediaService([]) as unknown as Services['media'],
     search: new CanonicalSearchService() as unknown as Services['search'],
     analytics: new CanonicalAnalyticsService() as unknown as Services['analytics'],
-  };
-  initServices(services);
-  return services;
+  });
 }
