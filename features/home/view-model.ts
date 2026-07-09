@@ -23,7 +23,7 @@ export function buildHomepage(services: Services): HomepageData {
   const investigations = [...allStories]
     .filter(s => s.evidenceScore >= 90 && s.slug !== topStoryCanonical?.slug)
     .sort((a, b) => b.evidenceScore - a.evidenceScore || new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, 4)
+    .slice(0, 6)
     .map(storyToAPIStory);
   const fixes = services.fixes.getFixes().data.map(fixToAPIFix);
   const topics = services.topics.getTopics().data.map(topicToAPITopic);
