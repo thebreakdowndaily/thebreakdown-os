@@ -236,6 +236,28 @@ function scheduleFlush(): void {
  * Track a single analytics event.
  * Batches events and sends every 5 seconds.
  */
+function sendToGA4(event: TrackEventPayload): void {
+  if (typeof window.gtag === 'undefined') return;
+  try {
+    const params: Record<string, string | number> = { event_category: event.type };
+    if ('storySlug' in event && event.storySlug) params.story_slug = event.storySlug;
+    if ('sectionId' in event && event.sectionId) params.section_id = event.sectionId;
+    if ('depth' in event && event.depth !== undefined) params.scroll_depth = Math.round(event.depth * 100);
+    if ('query' in event && event.query) params.search_query = event.query;
+    if ('resultsCount' in event && event.resultsCount !== undefined) params.results_count = event.resultsCount;
+    if ('visitCount' in event && event.visitCount !== undefined) params.visit_count = event.visitCount;
+    if ('questionIndex' in event && event.questionIndex !== undefined) params.question_index = event.questionIndex;
+    if ('duration' in event && event.duration !== undefined) params.duration_ms = event.duration;
+    if ('chartId' in event && event.chartId) params.chart_id = event.chartId;
+    if ('action' in event && event.action) params.action = event.action;
+    if ('eventDate' in event && event.eventDate) params.event_date = event.eventDate;
+    if ('medium' in event && event.medium) params.share_medium = event.medium;
+    window.gtag('event', event.type, params);
+  } catch {
+    // never break page
+  }
+}
+
 export function trackEvent(event: TrackEventPayload): void {
   try {
     const fullEvent = {
@@ -246,6 +268,7 @@ export function trackEvent(event: TrackEventPayload): void {
 
     eventQueue.push(fullEvent);
     scheduleFlush();
+    sendToGA4(event);
   } catch {
     // Analytics should never break the page
   }

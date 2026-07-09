@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/layout/Footer';
 import { AuthWrapper } from '@/features/auth/components/AuthWrapper';
+import { GATracker } from '@/components/analytics/GATracker';
+import { Suspense } from 'react';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -33,6 +35,8 @@ export const metadata: Metadata = {
   },
   // DNS TXT verification completed via Cloudflare
 };
+
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const websiteSchema = {
@@ -69,11 +73,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="schema-organization" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(organizationSchema)}
         </Script>
+        {GA_MEASUREMENT_ID && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });`}
+            </Script>
+          </>
+        )}
         <AuthWrapper>
           <Navigation />
           <main className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
           <Footer />
         </AuthWrapper>
+        {GA_MEASUREMENT_ID && <Suspense><GATracker gaId={GA_MEASUREMENT_ID} /></Suspense>}
       </body>
     </html>
   );
