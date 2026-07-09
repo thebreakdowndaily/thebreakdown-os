@@ -52,6 +52,7 @@ function seed(): DataStore {
     evidenceScore: 92,
     category: 'economy',
     tags: ['MGNREGA', 'rural employment', 'policy analysis', 'social schemes', 'NREGA'],
+    relatedTopicIds: ['economy', 'policy', 'agriculture', 'employment'],
     keyPoints: [
       'MGNREGA completed 20 years of operation in 2026',
       'Annual budget allocation has grown 5x since inception',
@@ -111,6 +112,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'technology',
     tags: ['UPI', 'digital payments', 'rural India', 'fintech', 'NPCI'],
+    relatedTopicIds: ['economy', 'technology', 'digital-payments', 'agriculture'],
     keyPoints: [
       'UPI transactions in rural areas grew 400% since 2023',
       'Feature phone-based UPI drove adoption in remote areas',
@@ -159,6 +161,7 @@ function seed(): DataStore {
     evidenceScore: 97,
     category: 'policy',
     tags: ['crop insurance', 'agriculture', 'farmer welfare', 'PMFBY'],
+    relatedTopicIds: ['policy', 'agriculture'],
     keyPoints: [
       'Over 40% of claims delayed beyond 60 days in 4 states',
       'Farmers in Maharashtra and Karnataka worst affected',
@@ -223,6 +226,7 @@ function seed(): DataStore {
     evidenceScore: 85,
     category: 'technology',
     tags: ['semiconductor', 'PLI', 'manufacturing', 'electronics', 'Make in India'],
+    relatedTopicIds: ['technology', 'employment', 'semiconductor', 'geopolitics'],
     keyPoints: [
       '₹1.2 lakh crore expanded PLI scheme covers full semiconductor value chain',
       '5 fabrication plants proposed under the revised scheme',
@@ -285,6 +289,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'policy',
     tags: ['data protection', 'privacy', 'DPDP Act', 'technology regulation', 'digital rights'],
+    relatedTopicIds: ['technology', 'cybersecurity', 'policy'],
     keyPoints: [
       'Supreme Court declared right to privacy a fundamental right in 2017',
       'DPDP Act 2023 received presidential assent after 6 years of deliberation',
@@ -339,6 +344,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'economy',
     tags: ['RBI', 'repo rate', 'monetary policy', 'inflation', 'interest rates'],
+    relatedTopicIds: ['economy'],
     keyPoints: [
       'Repo rate at 6.50% after cumulative 250 bps hike since May 2022',
       'MPC maintained pause through 2024 before first rate cut in 2025',
@@ -395,6 +401,7 @@ function seed(): DataStore {
     evidenceScore: 87,
     category: 'environment',
     tags: ['climate change', 'renewable energy', 'climate finance', 'net zero', 'COP'],
+    relatedTopicIds: ['environment', 'geopolitics'],
     keyPoints: [
       'India requires ₹11 lakh crore annually to meet climate goals by 2030',
       'Renewable energy capacity reached 220 GW in 2026',
@@ -454,6 +461,7 @@ function seed(): DataStore {
     evidenceScore: 83,
     category: 'policy',
     tags: ['education', 'budget', 'NEP 2020', 'learning outcomes', 'policy analysis'],
+    relatedTopicIds: ['policy', 'education', 'health'],
     keyPoints: [
       'Education budget increased 40% over 5 years to ₹1.48 lakh crore',
       'NEP 2020 implementation faces delays in 14 states',
@@ -505,6 +513,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'environment',
     tags: ['groundwater', 'water crisis', 'agriculture', 'irrigation', 'water policy'],
+    relatedTopicIds: ['environment', 'agriculture'],
     keyPoints: [
       '62% of districts report critical or over-exploited groundwater levels',
       'Agriculture accounts for 89% of total groundwater extraction',
@@ -562,6 +571,7 @@ function seed(): DataStore {
     evidenceScore: 86,
     category: 'economy',
     tags: ['PDS', 'digitization', 'Aadhaar', 'food security', 'One Nation One Ration Card'],
+    relatedTopicIds: ['economy', 'policy', 'agriculture'],
     keyPoints: [
       'PDS leakage rate reduced from 40% to under 10% through digitization',
       '5 lakh ePoS devices deployed at fair price shops nationwide',
@@ -618,6 +628,7 @@ function seed(): DataStore {
     evidenceScore: 84,
     category: 'health',
     tags: ['ICDS', 'anganwadi', 'nutrition', 'child development', 'women empowerment', 'health policy'],
+    relatedTopicIds: ['health', 'policy'],
     keyPoints: [
       'India operates 14 lakh anganwadi centres serving 10 crore beneficiaries',
       'Anganwadi workers receive honorarium of ₹10,000/month, below minimum wage in most states',
@@ -682,6 +693,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'economy',
     tags: ['supply chain', 'China+1', 'manufacturing', 'FDI', 'infrastructure', 'Make in India'],
+    relatedTopicIds: ['economy', 'semiconductor', 'infrastructure', 'geopolitics'],
     keyPoints: [
       'India attracted $85 billion in FDI between 2023 and 2026 from supply chain relocation',
       'Electronics manufacturing PLI schemes drove $25 billion in committed investment',
@@ -752,6 +764,7 @@ function seed(): DataStore {
     evidenceScore: 89,
     category: 'environment',
     tags: ['ethanol', 'E20', 'biofuel', 'energy policy', 'consumer rights', 'food security', 'greenlash'],
+    relatedTopicIds: ['environment', 'agriculture'],
     keyPoints: [
       'India achieved 20% ethanol blending target by April 2025, five years ahead of the 2030 deadline',
       '66% of vehicle owners surveyed report mileage drops exceeding 10% after E20 adoption',
@@ -824,6 +837,7 @@ function seed(): DataStore {
     evidenceScore: 94,
     category: 'policy',
     tags: ['EWS quota', 'UPSC', 'reservation', 'civil services', 'constitutional law', 'social justice'],
+    relatedTopicIds: ['policy', 'education'],
     keyPoints: [
       '104 candidates selected under EWS quota in Civil Services 2025 — 10.9% of total 958 selections',
       'At least 67 of 104 candidates (64.4%) attended premium coaching institutes with fees up to ₹2.65 lakh/year',
@@ -893,6 +907,7 @@ function seed(): DataStore {
     evidenceScore: 89,
     category: 'politics',
     tags: ['US-Iran', 'nuclear deal', 'JCPOA', 'Middle East', 'sanctions', 'geopolitics'],
+    relatedTopicIds: ['geopolitics', 'policy'],
     keyPoints: [
       '2026 Vienna talks aim to restore JCPOA with enhanced verification protocols',
       'Iran enriches uranium at 60% purity, weeks from weapons-grade threshold',
@@ -957,6 +972,7 @@ function seed(): DataStore {
     evidenceScore: 93,
     category: 'policy',
     tags: ['education', 'learning outcomes', 'ASER', 'NEP 2020', 'school education', 'teacher training'],
+    relatedTopicIds: ['policy', 'education'],
     keyPoints: [
       'Near-universal enrolment (97%) at primary level masks a learning crisis',
       'Only 50% of Class 5 students can read a Class 2 level text (ASER 2025)',
@@ -1027,6 +1043,7 @@ function seed(): DataStore {
     evidenceScore: 94,
     category: 'economy',
     tags: ['inequality', 'wealth gap', 'Gini coefficient', 'economic policy', 'income distribution', 'taxation'],
+    relatedTopicIds: ['economy', 'policy'],
     keyPoints: [
       'Top 1% owns 40.1% of national wealth, among the highest globally',
       'Bottom 50% share declined from 20% to 13% over two decades',
@@ -1101,6 +1118,7 @@ function seed(): DataStore {
     evidenceScore: 92,
     category: 'politics',
     tags: ['India-China', 'border dispute', 'Galwan', 'LAC', 'military standoff', 'geopolitics', 'Asia'],
+    relatedTopicIds: ['geopolitics', 'policy'],
     keyPoints: [
       '60,000 troops deployed on each side of LAC, highest since 1962 war',
       '20 rounds of military talks failed to achieve complete disengagement',
@@ -1170,6 +1188,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'politics',
     tags: ['foreign policy', 'multi-alignment', 'India-US', 'India-Russia', 'Global South', 'UNSC', 'neighbourhood first'],
+    relatedTopicIds: ['geopolitics', 'policy'],
     keyPoints: [
       'India\'s foreign policy evolved from non-alignment to multi-alignment and strategic autonomy',
       'India-US bilateral trade crossed $200 billion in 2025',
@@ -1343,6 +1362,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'geopolitics',
     tags: ['India-US relations', 'defence partnership', 'iCET', 'QUAD', 'H1B', 'trade', 'Indo-Pacific'],
+    relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India-US bilateral trade crossed $200 billion in 2025, making the US India\'s largest trading partner',
       'Four foundational defence agreements signed since 2016 enable intelligence sharing and military interoperability',
@@ -1414,6 +1434,7 @@ function seed(): DataStore {
     evidenceScore: 87,
     category: 'geopolitics',
     tags: ['India-Indonesia', 'maritime security', 'ASEAN', 'Indo-Pacific', 'trade', 'Act East'],
+    relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India and Indonesia upgraded ties to Comprehensive Strategic Partnership during PM Modi\'s Jakarta visit in 2025',
       'Bilateral trade grew to $35 billion in 2025, driven by coal, palm oil, and machinery exports',
@@ -1480,6 +1501,7 @@ function seed(): DataStore {
     evidenceScore: 93,
     category: 'geopolitics',
     tags: ['India-China', 'LAC', 'Galwan', 'border dispute', 'trade deficit', 'South China Sea', 'BRI', 'Quad'],
+    relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'Since the Galwan Valley clash in June 2020, over 60,000 additional Chinese troops are deployed along the LAC in Eastern Ladakh',
       'India\'s trade deficit with China has ballooned from $53 billion in 2019-20 to $85 billion in 2024-25, making China India\'s largest source of imports',
@@ -1555,6 +1577,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'geopolitics',
     tags: ['India-EU', 'FTA', 'CBAM', 'trade', 'technology', 'strategic partnership', 'Russia-Ukraine'],
+    relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India-EU bilateral trade reached $135 billion in 2025, making the EU India\'s second-largest trading partner',
       'Free Trade Agreement negotiations, relaunched in 2022 after a 9-year pause, remain deadlocked over tariffs, data adequacy, and intellectual property',
@@ -1625,6 +1648,7 @@ function seed(): DataStore {
     evidenceScore: 86,
     category: 'geopolitics',
     tags: ['India-UK', 'FTA', 'diaspora', 'Commonwealth', 'defence', 'migration', 'colonial history'],
+    relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India-UK bilateral trade reached $50 billion in 2025, with an FTA aimed at doubling this by 2030',
       'The 2030 Roadmap (2021) elevated ties to a Comprehensive Strategic Partnership covering health, climate, trade, defence, and migration',
@@ -1693,6 +1717,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'geopolitics',
     tags: ['India-Russia', 'defence', 'oil imports', 'Ukraine war', 'S-400', 'Kudankulam', 'BRICS', 'SCO'],
+    relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'Russia supplied 60-65% of India\'s military equipment historically, though this has declined to ~45% as India diversifies to US, France, and Israel',
       'India\'s oil imports from Russia surged from 2% to 35% of total crude imports after the Ukraine war, saving an estimated $15 billion annually',
@@ -1951,6 +1976,275 @@ function seed(): DataStore {
   };
 
   stories.set(story28.slug, story28);
+
+  // ── Story 29: India 5G Rollout ─────────────────────────────────────
+
+  const story29: APIStory = {
+    id: 'india-5g-rollout',
+    slug: 'india-5g-rollout',
+    headline: "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+5G+400M+Subscribers+Killer+App',
+    summary: 'India crossed 40 crore 5G subscribers in mid-2026 — the fastest 5G rollout by volume globally — but enterprise adoption remains tepid, average revenue per user is stagnant at sub-₹200, only 40% of towers are fiberized, and the industry awaits the breakthrough application that will justify the ₹5 lakh crore capital expenditure.',
+    publishedAt: '2026-08-12T06:00:00Z',
+    updatedAt: '2026-08-12T06:00:00Z',
+    readingTime: 12,
+    wordCount: 4100,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 89,
+    category: 'technology',
+    tags: ['5G', 'telecom', 'Jio', 'Airtel', 'spectrum', 'digital India', 'broadband'],
+    keyPoints: [
+      'India crossed 40 crore (400 million) 5G subscribers by mid-2026, the fastest 5G rollout by volume globally, achieving in 3.5 years what took China 5 years',
+      'Average 5G download speed measured at 280 Mbps (Ookla), but average revenue per user remains below ₹200/month — the classic "more data, same revenue" trap',
+      'Only 40% of India\'s 7.5 lakh telecom towers are fiberized, severely limiting 5G\'s low-latency and network slicing capabilities',
+      'Cumulative 5G capex projected to cross ₹5 lakh crore by 2028; total spectrum auction proceeds have already reached ₹4.3 lakh crore',
+      'Enterprise 5G use cases in manufacturing, healthcare, and smart cities remain largely pilot-stage — the transformative "killer app" has not materialised',
+    ],
+    timeline: [
+      { date: '2021-03-01', title: '2021 Spectrum Auctions Conclude', description: 'DoT conducts India\'s largest-ever spectrum auction, raising ₹4.3 lakh crore. Jio and Airtel acquire substantial 700 MHz, 3.5 GHz, and 26 GHz spectrum.', source: 'DoT Press Release' },
+      { date: '2021-08-15', title: 'Spectrum Allocation Completed', description: 'DoT completes allocation of 5G spectrum to winning bidders — Jio, Airtel, Vi, and Adani Data Networks — across 22 circles.', source: 'DoT' },
+      { date: '2022-10-01', title: '5G Services Launched in 13 Cities', description: 'PM Modi launches 5G services at India Mobile Congress 2022, starting with Delhi, Mumbai, Chennai, Kolkata, Bengaluru, and 8 other cities.', source: 'PIB' },
+      { date: '2023-12-01', title: '125 Million Users Milestone', description: 'India crosses 12.5 crore 5G subscribers within 14 months of launch — the fastest adoption of any generation of mobile technology in the country.', source: 'TRAI Subscription Report' },
+      { date: '2024-06-01', title: 'Airtel-Jio Coverage Race Peaks', description: 'Jio and Airtel expand 5G to over 5,000 cities each, covering 85% of urban India. Jio claims True 5G (SA-ready), Airtel relies on NSA mode.', source: 'Company Statements' },
+      { date: '2025-06-01', title: '300 Million Subscribers Landmark', description: 'India reaches 30 crore 5G subscribers, becoming the second-largest 5G market globally after China, which crossed 90 crore in the same period.', source: 'TRAI' },
+      { date: '2026-06-01', title: '400 Million Subscribers Crossed', description: 'India\'s 5G subscriber base crosses 40 crore. But enterprise 5G contributes less than 5% of operator revenue, and the "killer app" remains elusive.', source: 'TRAI' },
+    ],
+    facts: [
+      { label: 'Total 5G Subscribers (Mid-2026)', value: '40 crore (400 million)', source: 'TRAI' },
+      { label: 'Average 5G Download Speed (India)', value: '280 Mbps', source: 'Ookla Speedtest Global Index 2026' },
+      { label: 'Fiberized Telecom Towers', value: '40%', source: 'DoT Annual Report 2025-26' },
+      { label: 'Cumulative 5G Capex (Projected by 2028)', value: '₹5 lakh crore', source: 'Nokia-Ericsson India Report' },
+      { label: 'Total Spectrum Auction Proceeds', value: '₹4.3 lakh crore', source: 'DoT Spectrum Auction Data' },
+    ],
+    claims: [
+      { claim: 'India is the world\'s largest mobile data consumer, with average monthly smartphone data usage exceeding 25 GB.', source: 'Nokia MBiT Report 2026', verification: 'true', explanation: 'Nokia\'s annual MBiT report confirms India\'s average smartphone data consumption at 25.6 GB/month — the highest globally — driven by affordable 5G data plans priced at approximately ₹15/GB, among the cheapest in the world.', confidence: 0.92 },
+      { claim: '5G services achieved nationwide coverage across India by late 2025.', source: 'Telecom Industry Association Briefing', verification: 'misleading', explanation: 'While 5G covers over 85% of urban India, rural coverage remains at approximately 35%. Total geographical 5G coverage is below 50%. Only 40% of towers are fiberized, and significant rural coverage gaps persist across Bihar, UP East, and Northeast circles.', confidence: 0.78 },
+      { claim: 'Enterprise 5G use cases in India remain in early pilot stages with minimal revenue contribution for telecom operators.', source: 'CRISIL Telecom Sector Report 2026', verification: 'true', explanation: 'Enterprise 5G accounts for less than 5% of telecom operators\' revenue as of mid-2026. Deployments in smart manufacturing, remote surgery, and precision agriculture remain pilot-stage with limited commercial scale.', confidence: 0.85 },
+      { claim: 'India has deployed a full standalone (SA) 5G core network, enabling ultra-low latency applications nationwide.', source: 'Social Media and Tech Forums', verification: 'false', explanation: 'Both Jio and Airtel have deployed 5G in Non-Standalone (NSA) mode, relying on existing 4G evolved packet cores. Standalone 5G core deployment with network slicing and sub-10ms latency remains in trial phases. True SA 5G is at least 12-18 months away from commercial deployment.', confidence: 0.88 },
+    ],
+    sources: [
+      { name: 'TRAI Telecom Subscription Reports', url: 'https://trai.gov.in', type: 'government', tier: 1 },
+      { name: 'Department of Telecommunications Annual Report 2025-26', url: 'https://dot.gov.in', type: 'government', tier: 1 },
+      { name: 'Ookla Speedtest Global Index — India', url: 'https://speedtest.net/global-index/india', type: 'research', tier: 2 },
+      { name: 'Nokia MBiT Report 2026', url: 'https://nokia.com/networks/mbit', type: 'research', tier: 2 },
+      { name: 'CRISIL Telecom Sector Annual Review 2026', url: 'https://crisil.com', type: 'research', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'line', title: 'India 5G Subscriber Growth (Crore)', data: [
+          { period: 'Dec 2022', subscribers: 0.1 },
+          { period: 'Jun 2023', subscribers: 5 },
+          { period: 'Dec 2023', subscribers: 12.5 },
+          { period: 'Jun 2024', subscribers: 20 },
+          { period: 'Dec 2024', subscribers: 26 },
+          { period: 'Jun 2025', subscribers: 30 },
+          { period: 'Dec 2025', subscribers: 35 },
+          { period: 'Jun 2026', subscribers: 40 },
+        ], xKey: 'period', yKey: 'subscribers' },
+      {
+        type: 'bar', title: 'Average 5G Download Speed by Country (Mbps)', data: [
+          { country: 'South Korea', speed: 520 },
+          { country: 'UAE', speed: 380 },
+          { country: 'China', speed: 350 },
+          { country: 'India', speed: 280 },
+          { country: 'Global Avg', speed: 260 },
+          { country: 'US', speed: 220 },
+          { country: 'UK', speed: 200 },
+        ], xKey: 'country', yKey: 'speed' },
+    ],
+    faq: [
+      { question: 'How much faster is 5G compared to 4G in India?', answer: 'Average 5G speeds in India are approximately 280 Mbps, roughly 8-10 times faster than average 4G speeds of 25-30 Mbps. However, real-world experience varies significantly based on location, network congestion, distance from tower, and device compatibility. In dense urban areas, 5G can exceed 500 Mbps, while in suburban areas speeds often drop to 50-100 Mbps.' },
+      { question: 'Why were India\'s 5G spectrum auctions so expensive?', answer: 'India\'s 5G spectrum auction raised ₹4.3 lakh crore due to three factors: high reserve prices set by the DoT (among the highest globally), intense competition between Jio and Airtel for the premium 3.5 GHz and 26 GHz bands, and the large volume of spectrum put up for auction — 72,097 MHz across multiple bands. The high auction cost has contributed to the industry\'s ₹5 lakh crore cumulative capex burden and delayed returns on investment.' },
+      { question: 'What is the "killer app" for 5G and why hasn\'t it emerged in India?', answer: 'The "killer app" refers to a use case that drives mass adoption of 5G beyond faster smartphone broadband — such as industrial automation, precision agriculture, connected healthcare, or autonomous mobility. It has not emerged in India because: (1) full standalone 5G core with network slicing is 12-18 months away, (2) only 40% of towers are fiberized, limiting backhaul capacity, (3) enterprise ecosystems and IoT device ecosystems remain underdeveloped, and (4) the Indian enterprise market for 5G solutions is still nascent outside telecom and IT services.' },
+    ],
+    relatedTopicIds: ['technology', 'digital-payments', 'infrastructure'],
+    relatedEntityIds: ['india', 'rbi'],
+    relatedStories: [
+      { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion and the digital payments landscape.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
+      { slug: 'semiconductor-pli', headline: 'India\'s ₹1.2 Lakh Crore Semiconductor Push: Can the Dream Take Silicon?', summary: 'Analysis of India\'s semiconductor PLI scheme and manufacturing ecosystem.', publishedAt: '2026-07-01T06:00:00Z', readingTime: 14, evidenceScore: 85, category: 'technology' },
+      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'India\'s manufacturing opportunity amid global supply chain diversification.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India — the world\'s second-largest telecommunications market.' },
+      { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India', type: 'organization', description: 'India\'s central bank, regulates telecom payment systems and spectrum payment terms for telecom operators.' },
+    ],
+  };
+
+  stories.set(story29.slug, story29);
+
+  // ── Story 30: India's EV Paradox ──────────────────────────────────
+
+  const story30: APIStory = {
+    id: 'india-ev-paradox',
+    slug: 'india-ev-paradox',
+    headline: 'India\'s EV Paradox: Rising Sales, Stalled Charging, and the \u20B94 Lakh Crore Battery Import Bill',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+EV+Paradox',
+    summary: 'EV sales have grown 4x in three years, but India\'s public charging network stands at only 26% of the official target. Meanwhile, the country\'s battery import bill is projected to hit \u20B94 lakh crore by 2030 — creating a strategic vulnerability as deep as the oil dependency EVs were meant to solve.',
+    publishedAt: '2026-08-15T06:00:00Z',
+    updatedAt: '2026-08-15T06:00:00Z',
+    readingTime: 14,
+    wordCount: 4900,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 88,
+    category: 'environment',
+    tags: ['EV', 'electric vehicles', 'FAME', 'batteries', 'charging infrastructure', 'PLI', 'sustainable transport', 'lithium-ion', 'import dependency'],
+    keyPoints: [
+      'EV sales in India grew 4x in three years from 4.2 lakh units in 2021-22 to an estimated 38.4 lakh units in 2025-26',
+      'Only 12,000 public charging stations operational against the FAME-II target of 46,000 — a gap of 74%',
+      'India imports 85% of lithium-ion battery cells, with cumulative import bill projected at \u20B94 lakh crore by 2030',
+      'PLI ACC Battery Scheme offers \u20B918,100 crore in incentives but domestic cell manufacturing capacity stands at just 10 GWh vs projected demand of 80 GWh',
+      'Total cost of ownership parity between EVs and ICE vehicles remains 3-5 years away without subsidy support',
+    ],
+    timeline: [
+      { date: '2013-01-01', title: 'NEMMP Launched', description: 'National Electric Mobility Mission Plan 2020 launched targeting 6-7 million EV sales by 2020, with a \u20B923,000 crore investment roadmap.', source: 'DHI' },
+      { date: '2015-04-01', title: 'FAME India Scheme Phase I', description: 'Faster Adoption and Manufacturing of (Hybrid &) Electric Vehicles scheme launched with \u20B9895 crore outlay for demand incentives, pilot projects, and charging infrastructure.', source: 'MoHI' },
+      { date: '2019-04-01', title: 'FAME India Scheme Phase II', description: 'Phase II launched with \u20B910,000 crore outlay over three years, with increased focus on public transport, 3-wheelers, and 4-wheelers for commercial use.', source: 'MoHI' },
+      { date: '2021-06-09', title: 'PLI ACC Battery Storage Announced', description: 'Government approves Production Linked Incentive scheme for Advanced Chemistry Cell battery storage with \u20B918,100 crore outlay to boost domestic manufacturing.', source: 'PIB' },
+      { date: '2023-09-01', title: 'EV Sales Surge Past 1.5 Million', description: 'Annual EV sales cross 1.5 million units for the first time, driven by 2-wheeler adoption and e-rickshaws. EVs reach 5.2% of total auto sales.', source: 'SIAM' },
+      { date: '2024-03-15', title: 'FAME-III Scheme Announced', description: 'Government announces FAME-III with \u20B910,000 crore outlay, extending demand incentives for another three years and doubling the charging station target to 46,000.', source: 'PIB' },
+      { date: '2026-06-01', title: 'Charging Infrastructure Push Announced', description: 'MoHI announces revised target of 1 lakh public charging stations by 2029, mandates charging points at all petrol pumps and new residential complexes.', source: 'MoHI Press Release' },
+    ],
+    facts: [
+      { label: 'EV Sales Growth (2021-22 to 2025-26)', value: '4x (4.2 lakh to 38.4 lakh units)', source: 'SIAM Annual Report 2025-26' },
+      { label: 'EV Share of Total Auto Sales', value: '7.2%', source: 'SIAM' },
+      { label: 'Public Charging Stations Operational', value: '12,000', source: 'MoHI Dashboard' },
+      { label: 'FAME-II Charging Station Target', value: '46,000', source: 'MoHI' },
+      { label: 'Cumulative Battery Import Cost by 2030', value: '\u20B94 lakh crore', source: 'NITI Aayog-EY Report 2025' },
+      { label: 'Battery Cell Import Dependency', value: '85%', source: 'CII EV Supply Chain Study' },
+      { label: 'Domestic Cell Manufacturing Capacity', value: '10 GWh', source: 'PLI ACC Progress Report' },
+      { label: 'Projected Battery Demand by 2030', value: '80 GWh', source: 'BloombergNEF India Outlook' },
+    ],
+    claims: [
+      { claim: 'EV sales in India have grown four-fold in three years, exceeding government targets.', source: 'SIAM EV Sales Dashboard', verification: 'true', explanation: 'Sales rose from 4.2 lakh units (2021-22) to 38.4 lakh units (2025-26), outpacing the FAME-II target of 15 lakh units by 2025. EV penetration reached 7.2% of total auto sales, 2.2 percentage points above the NITI Aayog revised target of 5% by 2025.', confidence: 0.92 },
+      { claim: 'India\'s public charging infrastructure is keeping pace with EV sales growth.', source: 'Ministry of Heavy Industries Statement', verification: 'misleading', explanation: 'While EV sales grew 4x, public charging stations grew only 2.6x from 4,600 (2022) to 12,000 (2026). At 26% of the 46,000 target, India has 1 charger for every 320 EVs — against the recommended ratio of 1 per 40 EVs. Delhi has 2,800 stations, but states like Bihar have fewer than 100.', confidence: 0.85 },
+      { claim: 'India\'s battery import dependency is a strategic concern comparable to its oil import vulnerability.', source: 'NITI Aayog Strategic Paper 2025', verification: 'true', explanation: 'India imports 85% of lithium-ion cells, primarily from China. The cumulative import bill is projected at \u20B94 lakh crore by 2030, equivalent to roughly 15% of India\'s current oil import bill. China controls 76% of global battery cell production and 60% of lithium refining capacity.', confidence: 0.88 },
+      { claim: 'Electric vehicles are cheaper than internal combustion engine vehicles even without government subsidies.', source: 'EV Industry Association Press Release', verification: 'false', explanation: 'As of 2026, EVs have a 25-40% higher upfront cost than ICE counterparts across all segments. At current electricity prices (\u20B98/kWh avg) and \u20B994/litre petrol, TCO parity for 2-wheelers is 3-4 years, for 4-wheelers 5-7 years — but this depends on subsidies. Without FAME-III subsidies, the payback period extends by 2-3 additional years.', confidence: 0.81 },
+    ],
+    sources: [
+      { name: 'SIAM Annual Report 2025-26', url: 'https://siam.in', type: 'research', tier: 1 },
+      { name: 'Ministry of Heavy Industries EV Dashboard', url: 'https://heavyindustries.gov.in', type: 'government', tier: 1 },
+      { name: 'NITI Aayog-EY Report — India\'s EV Battery Supply Chain', url: 'https://niti.gov.in', type: 'government', tier: 1 },
+      { name: 'CII Study on EV Supply Chain Dependencies', url: 'https://cii.in', type: 'research', tier: 2 },
+      { name: 'BloombergNEF — India EV Outlook 2026', url: 'https://about.bnef.com', type: 'research', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'line', title: 'Annual EV Sales in India (Lakh Units)', data: [
+          { year: '2020-21', sales: 2.3 },
+          { year: '2021-22', sales: 4.2 },
+          { year: '2022-23', sales: 11.8 },
+          { year: '2023-24', sales: 16.5 },
+          { year: '2024-25', sales: 25.2 },
+          { year: '2025-26', sales: 38.4 },
+        ], xKey: 'year', yKey: 'sales' },
+      {
+        type: 'bar', title: 'Public Charging Stations by City (2026)', data: [
+          { city: 'Delhi', stations: 2800 },
+          { city: 'Bengaluru', stations: 2100 },
+          { city: 'Mumbai', stations: 1850 },
+          { city: 'Pune', stations: 1200 },
+          { city: 'Hyderabad', stations: 950 },
+          { city: 'Chennai', stations: 720 },
+          { city: 'Ahmedabad', stations: 650 },
+          { city: 'Kolkata', stations: 480 },
+          { city: 'Surat', stations: 390 },
+          { city: 'Lucknow', stations: 310 },
+        ], xKey: 'city', yKey: 'stations' },
+    ],
+    faq: [
+      { question: 'What is the real-world range of EVs in Indian conditions?', answer: 'Real-world range varies significantly by segment and conditions. Premium 4-wheelers like the Tata Nexon EV claim 465 km (ARAI certified) but deliver 300-350 km in mixed Indian driving conditions, and 220-280 km with continuous AC use on highways. Affordable 2-wheelers like the Ola S1 Pro claim 195 km but deliver 120-150 km in real-world city traffic. Range drops 20-30% in extreme heat (45\u00B0C+) and cold (below 10\u00B0C), and battery degradation reduces range by 10-15% after 3-5 years of use.' },
+      { question: 'How long does it take to charge an EV in India?', answer: 'Charging time depends on the charger type. Level 1 (standard 5-15A home socket): 8-12 hours for a 4-wheeler, 4-6 hours for a 2-wheeler. Level 2 (AC fast charger at public stations): 3-4 hours for a 4-wheeler, 1-2 hours for a 2-wheeler. DC fast chargers (CCS2/CHAdeMO): 45-60 minutes for 0-80% on a 4-wheeler. Bharat DC-001 chargers (15 kW): 90 minutes for 0-80%. However, only 34% of India\'s 12,000 public chargers are DC fast chargers, with the rest being slower AC units.' },
+      { question: 'What is the total cost of ownership for an EV compared to an ICE vehicle in India?', answer: 'TCO depends on vehicle segment and usage. For a 2-wheeler (500 km/month): EV \u20B91.2/km vs petrol \u20B92.8/km — breakeven in 3 years without subsidy, 2 years with FAME-III subsidy benefit. For a 4-wheeler (15,000 km/year): EV \u20B99.5/km vs petrol \u20B914.2/km — breakeven in 5-7 years without subsidy, 4-5 years with subsidy. Key variables: electricity cost (\u20B96-10/kWh home vs \u20B918-25/kWh public charger), battery replacement cost (\u20B93-6 lakh for a 4W EV after 8-10 years), and resale value (EVs retain 40-55% after 5 years vs 50-60% for ICE).' },
+    ],
+    relatedTopicIds: ['environment', 'infrastructure', 'economy'],
+    relatedStories: [
+      { slug: 'climate-finance', headline: 'India\'s \u20B911 Lakh Crore Climate Finance Challenge', summary: 'Climate finance gap threatens renewable transition and EV grid integration.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
+      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Battery supply chain as a critical component of India\'s manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization', description: 'Nodal ministry for PLI schemes and customs duty policy on battery imports.' },
+    ],
+  };
+
+  stories.set(story30.slug, story30);
+
+  // ── Story 31: Ayushman Bharat ────────────────────────────────────────
+
+  const story31: APIStory = {
+    id: 'ayushman-bharat',
+    slug: 'ayushman-bharat',
+    headline: "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
+    summary: "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY) has become the world's largest publicly funded health insurance scheme, covering 12.5 crore families and facilitating 6.2 crore hospitalizations in eight years — but questions persist about coverage gaps, hospital quality, and whether ₹30,000 crore can sustain universal health coverage for a nation of 1.4 billion.",
+    publishedAt: '2026-08-10T06:00:00Z',
+    updatedAt: '2026-08-10T06:00:00Z',
+    readingTime: 13,
+    wordCount: 4500,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 91,
+    category: 'health',
+    tags: ['Ayushman Bharat', 'PM-JAY', 'health insurance', 'universal health coverage', 'AB-PMJAY', 'NHPM', 'public health', 'health policy'],
+    keyPoints: [
+      'AB-PMJAY covers 12.5 crore families (approximately 55 crore individuals) with ₹5 lakh annual health cover per family',
+      'Over 6.2 crore hospitalizations recorded since September 2018 across 33 states and union territories',
+      '28,000+ empaneled hospitals including 12,000+ private facilities provide cashless and paperless care',
+      'Cumulative expenditure crossed ₹30,000 crore; government bears ₹1,500 premium per family per year',
+      'Out-of-pocket health expenditure reduced from 62% to 48% of total health spending',
+    ],
+    timeline: [
+      { date: '2018-09-23', title: 'AB-PMJAY Launched', description: 'PM launches Ayushman Bharat PM-JAY covering 10.74 crore poor and vulnerable families with ₹5 lakh annual health cover.', source: 'NHA Official Records' },
+      { date: '2019-04-01', title: 'Expansion to 33 States', description: 'Scheme operationalized across 33 states and UTs. West Bengal, Odisha, Delhi, and Telangana opt out citing existing state schemes.', source: 'MoHFW' },
+      { date: '2021-09-27', title: 'Ayushman Bharat Digital Mission', description: 'National Digital Health Mission links AB-PMJAY to interoperable digital health records via Ayushman Bharat Health Account (ABHA).', source: 'MoHFW' },
+      { date: '2024-01-15', title: 'Revised Empanelment Guidelines', description: 'NHA issues updated criteria mandating minimum bed strength, specialist availability, and quality accreditation for private hospitals.', source: 'NHA' },
+      { date: '2026-06-15', title: '6 Crore Hospitalization Milestone', description: 'AB-PMJAY crosses 6.2 crore cumulative hospitalizations, average claim cost rising to ₹8,600 per hospitalization.', source: 'NHA Dashboard' },
+    ],
+    facts: [
+      { label: 'Total Hospitalizations (Cumulative)', value: '6.2 crore+', source: 'NHA Dashboard, June 2026' },
+      { label: 'Annual Budget Allocation', value: '₹30,000 crore', source: 'Union Budget 2026-27' },
+      { label: 'Empaneled Hospitals', value: '28,000+', source: 'NHA Empanelment Dashboard' },
+      { label: 'States/UTs Covered', value: '33', source: 'MoHFW' },
+      { label: 'Beneficiary Families', value: '12.5 crore (SECC 2011)', source: 'NHA' },
+    ],
+    claims: [
+      { claim: 'AB-PMJAY fraud detection system has flagged ₹450 crore in suspicious claims using AI.', source: 'NHA Annual Report 2025-26', verification: 'true', explanation: 'Machine-learning models flagged 12,400 suspicious claims worth ₹450 crore, leading to blacklisting of 320 hospitals and recovery of ₹180 crore.', confidence: 0.89 },
+      { claim: 'AB-PMJAY covers all secondary and tertiary care treatments across all specialties.', source: 'Government Press Release 2023', verification: 'misleading', explanation: 'Covers 1,949 treatment packages across 26 specialties, but excludes OPD, cosmetic surgery, organ transplants, and fertility treatments. The ₹5 lakh cap per family per year is binding — 8% of claims exceeded the ceiling in 2025.', confidence: 0.91 },
+      { claim: 'AB-PMJAY has demonstrably reduced out-of-pocket health expenditure for BPL families.', source: 'WHO India Health Systems Review 2025', verification: 'true', explanation: 'OOP expenditure declined from 62% to 48% of total health spending. Beneficiary families reported 34% lower catastrophic health expenditure vs non-beneficiaries.', confidence: 0.87 },
+    ],
+    sources: [
+      { name: 'National Health Authority Dashboard', url: 'https://dashboard.pmjay.gov.in', type: 'government', tier: 1 },
+      { name: 'MoHFW Annual Report 2025-26', url: 'https://mohfw.gov.in', type: 'government', tier: 1 },
+      { name: 'WHO India Health Systems Review 2025', url: 'https://who.int', type: 'international', tier: 1 },
+      { name: 'CAG Performance Audit of AB-PMJAY 2024', url: 'https://cag.gov.in', type: 'government', tier: 1 },
+    ],
+    charts: [
+      { type: 'line', title: 'AB-PMJAY Cumulative Hospitalizations (Crores)', data: [
+        { year: '2019', amount: 0.8 }, { year: '2020', amount: 1.5 },
+        { year: '2021', amount: 2.3 }, { year: '2022', amount: 3.2 },
+        { year: '2023', amount: 4.1 }, { year: '2024', amount: 5.0 },
+        { year: '2025', amount: 5.6 }, { year: '2026', amount: 6.2 },
+      ], xKey: 'year', yKey: 'amount' },
+      { type: 'bar', title: 'Top 6 States by Hospitalization Volume (Crores)', data: [
+        { state: 'UP', amount: 1.12 }, { state: 'Maharashtra', amount: 0.85 },
+        { state: 'Bihar', amount: 0.72 }, { state: 'Rajasthan', amount: 0.58 },
+        { state: 'MP', amount: 0.48 }, { state: 'TN', amount: 0.42 },
+      ], xKey: 'state', yKey: 'amount' },
+    ],
+    faq: [
+      { question: 'Who is eligible for Ayushman Bharat PM-JAY?', answer: 'Eligibility is based on SECC 2011 deprivation criteria. Rural households in 7 deprivation categories and urban households in 11 occupational categories are eligible. No premium is charged to beneficiaries.' },
+      { question: 'What treatments are covered under AB-PMJAY?', answer: '1,949 treatment packages across 26 specialties including cardiology, oncology, neurology, orthopedics, and neonatology. Cover is ₹5 lakh per family per year. Pre-existing conditions are covered from day one.' },
+      { question: 'How are hospitals empaneled under AB-PMJAY?', answer: 'NHA sets criteria: minimum 10 beds, specialist availability, functional OT/ICU. Government hospitals are auto-empaneled; private hospitals apply. 28,000+ hospitals empaneled as of 2026.' },
+    ],
+    relatedTopicIds: ['health', 'policy'],
+    relatedStories: [
+      { slug: 'dpdp-bill', headline: 'Digital Personal Data Protection: India\'s Privacy Law Comes of Age', summary: 'India\'s journey toward comprehensive data protection.', publishedAt: '2026-07-05T08:00:00Z', readingTime: 11, evidenceScore: 90, category: 'policy' },
+      { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out', summary: 'ICDS programme at a crossroads.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
+  stories.set(story31.slug, story31);
 
   // ── Entities ──────────────────────────────────────────────────────
 
@@ -2244,7 +2538,11 @@ function seed(): DataStore {
           { date: '2021-08-01', title: 'UNSC Presidency', description: 'India presides over UN Security Council for August 2021.' },
         ],
         statistics: { 'UNSC Terms Served': '8', 'Peacekeepers Deployed': '2.5 lakh+', 'UN Budget Contribution': '0.74%' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'India\'s foreign policy transformation from Nehruvian idealism to pragmatic multi-alignment.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+          { slug: 'us-iran-relations', headline: 'US-Iran Relations: From Maximum Pressure to Nuclear Negotiations', summary: 'Decades-long trajectory of confrontation and diplomacy between the US and Iran.', publishedAt: '2026-07-18T06:00:00Z', readingTime: 14, evidenceScore: 89, category: 'politics' },
+          { slug: 'india-china-border-tensions', headline: 'India-China at the Crossroads: Four Years After Galwan', summary: 'Border confrontation and strategic rivalry reshaping Asia.', publishedAt: '2026-07-30T06:00:00Z', readingTime: 17, evidenceScore: 92, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What is India\'s role in UN peacekeeping?', answer: 'India is the largest cumulative troop contributor to UN peacekeeping missions, with over 2,50,000 personnel deployed across 49 missions since 1948.' },
           { question: 'Has India served on the UN Security Council?', answer: 'India has served 8 terms as a non-permanent member of the UN Security Council, most recently in 2021-22.' },
@@ -2261,7 +2559,10 @@ function seed(): DataStore {
           { date: '2018-06-01', title: 'India Solar Case', description: 'WTO rules against India\'s solar domestic content requirements.' },
         ],
         statistics: { 'Trade Disputes Filed': '42', 'Disputes Won as Complainant': '10', 'Avg. WTO Bind Rate': '48.5%' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-europe-relations', headline: 'India and Europe: A Strategic Partnership Searching for Substance', summary: 'India-EU FTA negotiations, CBAM, and strategic partnership dynamics.', publishedAt: '2026-08-22T10:00:00Z', readingTime: 14, evidenceScore: 88, category: 'geopolitics' },
+          { slug: 'india-uk-relations', headline: 'India-UK Relations: Beyond Colonial History', summary: 'FTA negotiations, diaspora links, and modern strategic partnership.', publishedAt: '2026-08-23T10:00:00Z', readingTime: 13, evidenceScore: 86, category: 'geopolitics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What is India\'s stance on WTO agricultural negotiations?', answer: 'India strongly defends its right to public stockholding for food security and has resisted caps on agricultural subsidies that would impact its MSP and PDS programmes.' },
           { question: 'How many WTO disputes has India been involved in?', answer: 'India has been involved in 42 disputes — 24 as complainant, 18 as respondent — making it one of the most active WTO members.' },
@@ -2278,7 +2579,10 @@ function seed(): DataStore {
           { date: '2021-08-01', title: 'SDR Allocation', description: 'India receives $17.86 billion SDR allocation as part of IMF\'s $650 billion global allocation.' },
         ],
         statistics: { 'Quota Share': '2.63%', 'Voting Power': '2.34%', 'IMF Loans Received (1991)': '$2.2 billion' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'income-inequality-india', headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth', summary: 'Structural drivers behind India\'s Gini coefficient trajectory and wealth concentration.', publishedAt: '2026-07-26T06:00:00Z', readingTime: 15, evidenceScore: 94, category: 'economy' },
+          { slug: 'india-europe-relations', headline: 'India and Europe: A Strategic Partnership Searching for Substance', summary: 'India-EU FTA, CBAM impact, and economic partnership dynamics.', publishedAt: '2026-08-22T10:00:00Z', readingTime: 14, evidenceScore: 88, category: 'geopolitics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What was the IMF\'s role in India\'s 1991 economic reforms?', answer: 'The IMF provided a $2.2 billion loan under a Stand-By Arrangement conditional on structural reforms, which catalysed India\'s landmark economic liberalisation.' },
           { question: 'What is India\'s quota and voting share in the IMF?', answer: 'India holds a 2.63% quota share and 2.34% voting power, and has consistently advocated for quota reforms to better reflect emerging economies\' weight.' },
@@ -2295,7 +2599,10 @@ function seed(): DataStore {
           { date: '2014-07-01', title: 'World Bank Support for Swachh Bharat', description: 'World Bank commits $1.5 billion for sanitation infrastructure under Swachh Bharat Mission.' },
         ],
         statistics: { 'Active Projects': '80+', 'Annual Lending': '$3-5 billion', 'IDA Recipient Since': '1960' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment', summary: 'Two decades of India\'s flagship rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+          { slug: 'climate-finance', headline: 'India\'s ₹11 Lakh Crore Climate Finance Challenge', summary: 'Climate finance gap threatens India\'s renewable energy transition.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'How much does the World Bank lend to India annually?', answer: 'The World Bank lends $3-5 billion annually to India across 80+ active projects covering rural development, health, education, and infrastructure.' },
           { question: 'What World Bank indices are most cited in Indian policy?', answer: 'The Logistics Performance Index (LPI), Ease of Doing Business Index, and Human Capital Index are frequently cited benchmarks for Indian policy reforms.' },
@@ -2312,7 +2619,10 @@ function seed(): DataStore {
           { date: '2020-01-30', title: 'COVID-19 PHEIC', description: 'WHO declares COVID-19 a Public Health Emergency of International Concern.' },
         ],
         statistics: { 'Polio-Free Since': '2014', 'WHO SEARO Headquarters': 'New Delhi', 'TB Incidence Reduction (2015-25)': '18%' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'ayushman-bharat', headline: 'Ayushman Bharat: The World\'s Largest Health Insurance Experiment at 10', summary: 'Assessment of India\'s flagship health insurance scheme covering 50 crore beneficiaries.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 14, evidenceScore: 91, category: 'health' },
+          { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out', summary: 'ICDS programme challenges and nutrition worker conditions.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What role did WHO play in India\'s polio eradication?', answer: 'WHO provided technical expertise, surveillance support, and certification infrastructure that helped India achieve polio-free status in 2014.' },
           { question: 'How does WHO influence Indian health policy?', answer: 'WHO technical guidelines shape Indian protocols for TB control, maternal health, air quality standards (AQI benchmarks), and pandemic response frameworks.' },
@@ -2329,7 +2639,10 @@ function seed(): DataStore {
           { date: '2021-09-01', title: 'ILO Conventions Ratified', description: 'India ratifies two core ILO conventions on child labour (C138 and C182).' },
         ],
         statistics: { 'Conventions Ratified': '47', 'Fundamental Conventions Ratified': '6 of 8', 'ILO Reports on India': 'India Employment Report 2025' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment', summary: 'Two decades of India\'s flagship rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+          { slug: 'semiconductor-pli', headline: 'India\'s ₹1.2 Lakh Crore Semiconductor Push', summary: 'PLI scheme analysis and employment impact.', publishedAt: '2026-07-01T06:00:00Z', readingTime: 14, evidenceScore: 85, category: 'technology' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'Which ILO conventions has India ratified?', answer: 'India has ratified 47 ILO conventions including 6 of the 8 Fundamental Conventions. In 2021, India ratified the two core conventions on child labour (Minimum Age C138 and Worst Forms C182).' },
           { question: 'How does ILO data influence Indian labour policy?', answer: 'ILO\'s India Employment Reports provide critical data on unemployment, informal sector size, wage trends, and social protection gaps that inform the government\'s labour code reforms and employment generation schemes.' },
@@ -2346,7 +2659,11 @@ function seed(): DataStore {
           { date: '2021-09-01', title: 'BRICS Expansion Framework', description: 'BRICS agrees on expansion criteria; India supports inclusive expansion.' },
         ],
         statistics: { 'Member Countries': '11', 'Global GDP Share': '35%+', 'NDB Established': '2015' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-china-relations', headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry', summary: 'Border tensions, trade deficit, and strategic competition between Asia\'s giants.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
+          { slug: 'india-russia-relations', headline: 'India-Russia: The Enduring Partnership Tested by War and Realignment', summary: 'Defence ties, oil imports, and strategic partnership dynamics.', publishedAt: '2026-08-25T10:00:00Z', readingTime: 14, evidenceScore: 90, category: 'geopolitics' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'India\'s transformation from non-alignment to pragmatic multi-alignment.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What is India\'s role in BRICS?', answer: 'India uses BRICS to advocate for UNSC reform, counter-terrorism cooperation, multilateral development bank reform, and strengthening South-South cooperation.' },
           { question: 'What is the New Development Bank (NDB)?', answer: 'The NDB, established by BRICS in 2015 with headquarters in Shanghai, provides infrastructure funding for emerging economies. India has received over $6 billion in NDB loans for infrastructure projects.' },
@@ -2363,7 +2680,10 @@ function seed(): DataStore {
           { date: '2020-11-30', title: 'SCO Host', description: 'India hosts SCO Heads of Government virtual meeting.' },
         ],
         statistics: { 'Member Since': '2017', 'SCO Member States': '9', 'Global Population Covered': '40%+' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-china-relations', headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry', summary: 'SCO membership and strategic competition dynamics.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
+          { slug: 'india-russia-relations', headline: 'India-Russia: The Enduring Partnership Tested by War and Realignment', summary: 'Defence partnership and SCO cooperation.', publishedAt: '2026-08-25T10:00:00Z', readingTime: 14, evidenceScore: 90, category: 'geopolitics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'Why is SCO membership important for India?', answer: 'SCO membership allows India to engage Central Asian states on energy security, counter-terrorism, and connectivity projects like the International North-South Transport Corridor (INSTC) while balancing China and Pakistan\'s influence in the grouping.' },
           { question: 'What are India\'s priorities within SCO?', answer: 'India focuses on counter-terrorism cooperation, regional connectivity, Afghanistan stability, and countering radicalisation through the SCO\'s Regional Anti-Terrorist Structure (RATS).' },
@@ -2380,7 +2700,11 @@ function seed(): DataStore {
           { date: '2023-09-09', title: 'India\'s G20 Presidency', description: 'India hosts the G20 New Delhi Summit; African Union admitted as permanent member.' },
         ],
         statistics: { 'G20 GDP Share': '85%', 'India Presidency Year': '2023', 'New Delhi Summit Outcomes': '100+' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-us-relations', headline: 'India-US Relations: From Nuclear Deal to Critical Technology Partnership', summary: 'Strategic partnership and G20 cooperation dynamics.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
+          { slug: 'india-europe-relations', headline: 'India and Europe: A Strategic Partnership Searching for Substance', summary: 'India-EU relations and G20 presidency outcomes.', publishedAt: '2026-08-22T10:00:00Z', readingTime: 14, evidenceScore: 88, category: 'geopolitics' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'India\'s G20 presidency and global governance leadership.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What did India achieve during its G20 presidency?', answer: 'India successfully secured consensus on the New Delhi Leaders\' Declaration amid geopolitical tensions, pushed for African Union permanent membership, launched the Global Biofuels Alliance, and advanced the Digital Public Infrastructure (DPI) agenda.' },
           { question: 'How does the G20 affect Indian economic policy?', answer: 'G20 commitments influence India\'s positions on climate finance, digital taxation, cryptocurrency regulation, debt restructuring frameworks, and multilateral development bank reform.' },
@@ -2397,7 +2721,10 @@ function seed(): DataStore {
           { date: '2016-11-01', title: '19th Summit Postponed', description: 'SAARC summit indefinitely postponed after India pulls out over cross-border terrorism concerns.' },
         ],
         statistics: { 'Member States': '8', 'SAARC Summits Held': '18', 'Trade as % of GDP': '5%' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-indonesia-relations', headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific', summary: 'India\'s Act East policy and regional cooperation beyond SAARC.', publishedAt: '2026-08-18T10:00:00Z', readingTime: 12, evidenceScore: 87, category: 'geopolitics' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'Neighbourhood First policy and regional diplomacy.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'Why is SAARC considered ineffective?', answer: 'SAARC has been paralysed by India-Pakistan tensions, with the 19th Summit postponed indefinitely since 2016. Intra-regional trade is only 5% of member GDP, far below ASEAN\'s 25%, and institutional mechanisms remain weak.' },
           { question: 'What alternatives has India pursued to SAARC?', answer: 'India has prioritised sub-regional groupings like BIMSTEC (Bay of Bengal), BBIN (Bangladesh-Bhutan-India-Nepal motor vehicles agreement), and the India-Nepal-Bhutan hydropower cooperation as more effective platforms.' },
@@ -2414,7 +2741,9 @@ function seed(): DataStore {
           { date: '2022-06-25', title: 'Commonwealth Heads of Government', description: 'India participates in CHOGM 2022 in Rwanda.' },
         ],
         statistics: { 'Commonwealth Members': '56', 'Combined GDP': '$15 trillion', 'India\'s Population Share': '60%+' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-uk-relations', headline: 'India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership', summary: 'Comprehensive Strategic Partnership, FTA, and Commonwealth ties.', publishedAt: '2026-08-23T10:00:00Z', readingTime: 13, evidenceScore: 86, category: 'geopolitics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'How does India benefit from Commonwealth membership?', answer: 'India leverages Commonwealth platforms for technical assistance programmes, trade links with small island states, and promoting Commonwealth values of democracy and development among developing nations.' },
           { question: 'What is India\'s role in the Commonwealth?', answer: 'India is the largest Commonwealth member by population and a major financial contributor, supporting development programmes through the Commonwealth Fund for Technical Co-operation.' },
@@ -2431,7 +2760,10 @@ function seed(): DataStore {
           { date: '2023-07-01', title: 'India-ADB Country Partnership', description: 'ADB approves $10 billion country partnership strategy for India.' },
         ],
         statistics: { 'Annual Lending to India': '$3-4 billion', 'Shareholding': '6.3%', 'Active Projects': '80+' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Infrastructure development and FDI-driven growth.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+          { slug: 'india-ev-paradox', headline: 'India\'s EV Paradox: Policy Push Meets Ground Reality', summary: 'Infrastructure challenges and electric mobility transition.', publishedAt: '2026-08-10T06:00:00Z', readingTime: 13, evidenceScore: 88, category: 'environment' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What types of projects does ADB fund in India?', answer: 'ADB funds infrastructure projects in transport (metros, highways), energy (renewable, grid modernisation), urban development (smart cities, water supply), and financial sector reforms.' },
           { question: 'How does India\'s ADB shareholding compare?', answer: 'India is ADB\'s fourth-largest shareholder with 6.3% of shares, with the largest project portfolio after Bangladesh in the South Asia region.' },
@@ -2448,7 +2780,10 @@ function seed(): DataStore {
           { date: '2024-03-01', title: 'India Loan Portfolio', description: 'AIIB\'s India portfolio crosses $5 billion across 20 projects.' },
         ],
         statistics: { 'Voting Power': '8.52%', 'Loans to India': '$5 billion+', 'Projects Funded in India': '20+' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Infrastructure financing and development bank role in India\'s growth.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+          { slug: 'india-china-relations', headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry', summary: 'Chinese-led development finance and infrastructure competition.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'How does AIIB complement other development banks in India?', answer: 'AIIB co-finances with the World Bank and ADB, focusing on sustainable infrastructure, connectivity, and renewable energy projects aligned with India\'s net-zero targets.' },
           { question: 'What is India\'s influence in AIIB governance?', answer: 'As the second-largest shareholder with 8.52% voting power, India has significant influence in AIIB\'s strategic direction and lending priorities, particularly for South Asia.' },
@@ -2464,7 +2799,10 @@ function seed(): DataStore {
           { date: '2023-11-01', title: 'India Hosts BIMSTEC', description: 'India hosts BIMSTEC Foreign Ministers\' Retreat.' },
         ],
         statistics: { 'Member States': '7', 'Combined GDP': '$4.5 trillion', 'Population': '1.8 billion' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-indonesia-relations', headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific', summary: 'Act East policy and BIMSTEC regional cooperation framework.', publishedAt: '2026-08-18T10:00:00Z', readingTime: 12, evidenceScore: 87, category: 'geopolitics' },
+          { slug: 'india-china-relations', headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry', summary: 'Regional grouping dynamics and India\'s strategic alternatives.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'Why has India prioritised BIMSTEC over SAARC?', answer: 'BIMSTEC excludes Pakistan, allowing for more functional cooperation. It also connects India to ASEAN through Myanmar and Thailand, supporting India\'s Act East policy.' },
           { question: 'What are the key BIMSTEC projects for India?', answer: 'Key projects include the India-Myanmar-Thailand Trilateral Highway, BIMSTEC Free Trade Area negotiations, grid interconnection for energy security, and counter-terrorism cooperation mechanisms.' },
@@ -2481,7 +2819,11 @@ function seed(): DataStore {
           { date: '2021-03-12', title: 'First Leaders\' Summit', description: 'First Quad Leaders\' Virtual Summit held.' },
         ],
         statistics: { 'Member Nations': '4', 'Combined GDP': '$30 trillion+', 'Vaccine Doses Donated (Quad)': '1.2 billion' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-us-relations', headline: 'India-US Relations: From Nuclear Deal to Critical Technology Partnership', summary: 'Quad cooperation and Indo-Pacific strategic alignment.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
+          { slug: 'india-china-relations', headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry', summary: 'Quad\'s role in countering Chinese influence in the Indo-Pacific.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'Quad as a pillar of India\'s multi-alignment strategy.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What is India\'s role in the Quad?', answer: 'India uses the Quad platform to advance its Indo-Pacific vision, maritime security cooperation, and build alternative supply chains to reduce dependence on any single country.' },
           { question: 'What are the Quad\'s key initiatives?', answer: 'Key initiatives include the Quad Vaccine Partnership (1.2 billion doses), Maritime Domain Awareness cooperation, Critical and Emerging Technology (CET) working group, and the Quad Infrastructure Fellowship.' },
@@ -2497,7 +2839,9 @@ function seed(): DataStore {
           { date: '1983-03-01', title: 'India Chairs NAM', description: 'India hosts and chairs the 7th NAM Summit in New Delhi.' },
         ],
         statistics: { 'Founding Members': '25', 'Current Members': '120', 'India\'s NAM Chair': '1983' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'India\'s evolution from NAM to multi-alignment strategy.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What was India\'s role in founding NAM?', answer: 'Prime Minister Jawaharlal Nehru was a founding leader of NAM along with Tito (Yugoslavia), Nasser (Egypt), Sukarno (Indonesia), and Nkrumah (Ghana).' },
           { question: 'Is NAM still relevant for India?', answer: 'While NAM\'s Cold War relevance has diminished, India continues to use it for South-South cooperation, advocating for multilateralism, UNSC reform, and developing country positions on climate finance and trade.' },
@@ -2513,7 +2857,10 @@ function seed(): DataStore {
           { date: '2023-09-01', title: 'G77+China Summit', description: 'India participates in the G77+China Summit in Havana.' },
         ],
         statistics: { 'Member States': '134', 'Global Population Represented': '80%+', 'Founded': '1964' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'climate-finance', headline: 'India\'s ₹11 Lakh Crore Climate Finance Challenge', summary: 'Climate finance negotiations and developing country coordination.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'Global South leadership and multilateral diplomacy.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'How does India use the G77 platform?', answer: 'India leads G77+China negotiations on climate finance (common but differentiated responsibilities), WTO special and differential treatment, technology transfer, and reform of multilateral development banks.' },
           { question: 'What is India\'s influence in G77?', answer: 'As one of the largest and most influential members, India often coordinates the G77+China position on climate change negotiations (UNFCCC), trade, and South-South cooperation.' },
@@ -2530,7 +2877,10 @@ function seed(): DataStore {
           { date: '2023-10-01', title: 'India FATF Presidency', description: 'India takes over FATF Presidency for 2024-25.' },
         ],
         statistics: { 'FATF Member Since': '2010', 'FATF Recommendations': '40', 'FATF Presidency': '2024-25' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-china-relations', headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry', summary: 'Financial security and counter-terrorism financing frameworks.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'Financial integrity and international security cooperation.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'Why is FATF membership important for India?', answer: 'FATF membership ensures India\'s banking and financial systems are not blacklisted, which would severely impact international transactions, remittances, and trade finance.' },
           { question: 'How has India used FATF for diplomatic leverage?', answer: 'India has pushed for Pakistan\'s continued grey-listing through FATF\'s International Cooperation Review Group (ICRG) process, citing Pakistan\'s inadequate action against UN-designated terrorist entities.' },
@@ -2547,7 +2897,9 @@ function seed(): DataStore {
           { date: '2023-09-01', title: 'Global Biofuels Alliance', description: 'India launches Global Biofuels Alliance under ISA framework during G20.' },
         ],
         statistics: { 'Member Countries': '120+', 'Target Investment': '$1 trillion by 2030', 'Headquarters': 'Gurugram, India' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'climate-finance', headline: 'India\'s ₹11 Lakh Crore Climate Finance Challenge', summary: 'Renewable energy leadership and solar alliance cooperation.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What is India\'s role in the ISA?', answer: 'India co-founded the ISA, hosts its headquarters in Gurugram, provides the largest financial contribution, and drives its solar finance agenda including the $2 billion Solar Technology Mission.' },
           { question: 'What ISA achievements are attributed to India?', answer: 'ISA under India\'s leadership has launched the Solar pump programme for African nations, the Global Solar Facility for de-risking solar investments, and the World Solar Bank proposal.' },
@@ -2563,7 +2915,10 @@ function seed(): DataStore {
           { date: '2021-11-01', title: 'IORA Presidency', description: 'India chairs IORA as Vice Chair for 2021-23.' },
         ],
         statistics: { 'Member States': '23', 'Indian Ocean Trade Volume': '$7 trillion', 'Dialogue Partners': '11' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'india-indonesia-relations', headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific', summary: 'Indian Ocean maritime security and regional cooperation.', publishedAt: '2026-08-18T10:00:00Z', readingTime: 12, evidenceScore: 87, category: 'geopolitics' },
+          { slug: 'indias-foreign-policy', headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment', summary: 'SAGAR policy and Indian Ocean maritime governance.', publishedAt: '2026-08-05T06:00:00Z', readingTime: 18, evidenceScore: 90, category: 'politics' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What role does India play in IORA?', answer: 'India drives IORA\'s maritime safety and security agenda under its SAGAR policy, focusing on blue economy, sustainable fisheries, and marine pollution.' },
           { question: 'How does IORA benefit India strategically?', answer: 'IORA provides a framework for India to counterbalance China\'s influence in the Indian Ocean region, securing sea lanes of communication that carry 80% of India\'s trade.' },
@@ -2579,7 +2934,9 @@ function seed(): DataStore {
           { date: '2022-03-01', title: 'CDRI Headquarters', description: 'CDRI establishes headquarters in New Delhi.' },
         ],
         statistics: { 'Member Countries': '40+', 'CDRI Infrastructure Assessments': '25+', 'Headquarters': 'New Delhi' },
-        relatedStories: [], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        relatedStories: [
+          { slug: 'climate-finance', headline: 'India\'s ₹11 Lakh Crore Climate Finance Challenge', summary: 'Climate adaptation infrastructure and disaster resilience.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
         faq: [
           { question: 'What is India\'s role in CDRI?', answer: 'India co-founded CDRI, hosts its secretariat in New Delhi, and provides primary funding. CDRI advances India\'s leadership on climate adaptation and resilience for developing countries.' },
           { question: 'What are CDRI\'s key programmes?', answer: 'CDRI conducts infrastructure risk assessments, develops resilience standards for power, transport, water, and telecom sectors, and runs the IRIS (Infrastructure for Resilient Island States) programme for small island developing states.' },
@@ -2602,18 +2959,18 @@ function seed(): DataStore {
   // ── Topics ────────────────────────────────────────────────────────
 
   const topicDefs = [
-    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24], entities: ['rbi', 'ministry-of-finance'] },
-    { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, and technology policy.', stories: [story2, story4, story5, story27], entities: ['npci'] },
+    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24, story30], entities: ['rbi', 'ministry-of-finance'] },
+    { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, 5G, and technology policy.', stories: [story2, story4, story5, story27, story29], entities: ['npci'] },
     { slug: 'cybersecurity', name: 'Cybersecurity & Data Privacy', description: 'Data breaches, cyber threats, digital security, privacy regulation, and India\'s cybersecurity landscape.', stories: [story5, story27], entities: ['icmr', 'cert-in', 'uidai', 'resecurity'] },
-    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
+    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28, story31], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
     { slug: 'agriculture', name: 'Agriculture & Rural Development', description: 'Agriculture policy, crop insurance, rural employment, and farmer welfare.', stories: [story1, story3, story10, story13], entities: ['ministry-of-agriculture', 'mgnrega', 'india'] },
-    { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, and payment systems.', stories: [story2], entities: ['npci', 'rbi'] },
+    { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, payment systems, and digital infrastructure.', stories: [story2, story29], entities: ['npci', 'rbi'] },
     { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4], entities: [] },
-    { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13], entities: [] },
+    { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13, story30], entities: [] },
     { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23], entities: [] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
-    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, and health outcomes in India.', stories: [story8, story11], entities: ['ministry-of-women-and-child-development'] },
-    { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, and connectivity projects driving India\'s economic growth.', stories: [story12], entities: ['ministry-of-finance'] },
+    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, and health outcomes in India.', stories: [story8, story11, story31], entities: ['ministry-of-women-and-child-development'] },
+    { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, digital connectivity, and infrastructure projects driving India\'s economic growth.', stories: [story12, story29, story30], entities: ['ministry-of-finance'] },
     { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
   ];
 
