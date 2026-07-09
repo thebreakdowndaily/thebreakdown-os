@@ -445,6 +445,22 @@ export interface DatasetPageViewModel {
   breadcrumbs: Breadcrumb[];
 }
 
+export interface FixPageViewModel {
+  fixJSON: Record<string, unknown>;
+  headline: string;
+  summary: string;
+  tags: string[];
+  heroImage?: string;
+  publishedAt: string;
+  evidenceScore: number;
+  readingTime: number;
+  storySlug: string;
+  relatedStories: Story[];
+  relatedEntities: Entity[];
+  seo: SEOData;
+  breadcrumbs: Breadcrumb[];
+}
+
 export interface PageSection {
   id: string;
   component: string;
@@ -521,4 +537,55 @@ export interface ActivityEntry {
   timestamp: string;
   userId?: string;
   link?: string;
+}
+
+// ─── Monitoring ──────────────────────────────────────────────────────────────
+
+export type WatcherSource =
+  | 'supreme-court' | 'pib' | 'parliament' | 'rbi'
+  | 'who' | 'election-commission' | 'oecd' | 'imf'
+  | 'world-bank' | 'un' | 'cag' | 'press-releases'
+  | 'state-govts';
+
+export type AlertSeverity = 'critical' | 'major' | 'minor' | 'informational';
+
+export type AlertAction = 'update_and_republish' | 'update_only' | 'log_only' | 'dismiss';
+
+export interface MonitorAlert {
+  id: string;
+  source: WatcherSource;
+  severity: AlertSeverity;
+  title: string;
+  summary: string;
+  detectedAt: string;
+  affectedStoryIds: string[];
+  acknowledged: boolean;
+  acknowledgedAt?: string;
+  acknowledgedBy?: string;
+  action: AlertAction;
+  url?: string;
+}
+
+export interface WatcherStatus {
+  id: string;
+  source: WatcherSource;
+  name: string;
+  description: string;
+  enabled: boolean;
+  lastCheckAt: string | null;
+  lastAlertAt: string | null;
+  alertCount: number;
+  criticalAlertCount: number;
+  status: 'active' | 'error' | 'idle';
+  errorMessage?: string;
+}
+
+export interface MonitorSummary {
+  totalWatchers: number;
+  activeWatchers: number;
+  totalAlerts: number;
+  unacknowledgedAlerts: number;
+  criticalAlerts: number;
+  watcherStatuses: WatcherStatus[];
+  recentAlerts: MonitorAlert[];
 }

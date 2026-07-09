@@ -8,6 +8,7 @@ import type { MediaService } from './media/service';
 import type { SearchService } from './search/service';
 import type { AnalyticsService } from './analytics/service';
 import type { GraphProjectionService } from './graph/service';
+import type { MonitorService } from './monitoring/service';
 
 export interface Services {
   stories: StoryService;
@@ -20,6 +21,7 @@ export interface Services {
   search: SearchService;
   analytics: AnalyticsService;
   graph: GraphProjectionService;
+  monitoring: MonitorService;
 }
 
 let instance: Services | null = null;

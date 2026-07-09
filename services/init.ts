@@ -11,6 +11,7 @@ import { MemoryMediaService } from './media/service';
 import { MemorySearchService } from './search/service';
 import { MemoryAnalyticsService } from './analytics/service';
 import { MemoryGraphProjectionService } from './graph/service';
+import { MemoryMonitorService, registerAllWatchers } from './monitoring/service';
 import { CanonicalStoryService } from './stories/canonical-repository';
 import { CanonicalTopicService } from './topics/canonical-repository';
 import { CanonicalEntityService } from './entities/canonical-repository';
@@ -19,9 +20,18 @@ import { CanonicalFixService } from './fixes/canonical-repository';
 import { CanonicalSearchService } from './search/canonical-repository';
 import { CanonicalAnalyticsService } from './analytics/canonical-repository';
 
-function buildWithGraph(base: Omit<Services, 'graph'>): Services {
-  const graph = new MemoryGraphProjectionService(base as Services);
-  const services: Services = { ...base, graph };
+function createMonitorService(): MemoryMonitorService {
+  const svc = new MemoryMonitorService();
+  registerAllWatchers(svc);
+  svc.runAllChecks();
+  return svc;
+}
+
+function buildWithGraph(base: Omit<Services, 'graph' | 'monitoring'>): Services {
+  const monitoring = createMonitorService();
+  const partial = { ...base, monitoring, graph: null as unknown as Services['graph'] };
+  const graph = new MemoryGraphProjectionService(partial as Services);
+  const services: Services = { ...partial, graph };
   initServices(services);
   graph.setServices(services);
   return services;

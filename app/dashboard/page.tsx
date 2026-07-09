@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StatsCards from '@/components/dashboard/StatsCards';
 import QueueTable from '@/components/dashboard/QueueTable';
+import MonitorTab from '@/components/dashboard/MonitorTab';
 import MonitoringFeed from '@/components/dashboard/MonitoringFeed';
 import TrendingPanel from '@/components/dashboard/TrendingPanel';
 import EntityUpdates from '@/components/dashboard/EntityUpdates';
@@ -14,33 +15,48 @@ import { mockDashboardData } from '@/utils/dashboard-data';
 
 type DashboardTab = 'overview' | 'stories' | 'research' | 'editorial' | 'publishing' | 'monitor' | 'trending' | 'entities' | 'knowledge-graph' | 'analytics' | 'the-fix';
 
-const sidebarItems: { id: DashboardTab; label: string; icon: string; count?: number }[] = [
-  { id: 'overview', label: 'Dashboard', icon: '◈' },
-  { id: 'stories', label: 'Stories', icon: '📰', count: mockDashboardData.stats.storiesToday },
-  { id: 'research', label: 'Research', icon: '🔍', count: mockDashboardData.stats.researchQueue },
-  { id: 'editorial', label: 'Editorial', icon: '✎', count: mockDashboardData.stats.editorialQueue },
-  { id: 'publishing', label: 'Publishing', icon: '📡', count: mockDashboardData.stats.publishingQueue },
-  { id: 'monitor', label: 'Monitor', icon: '👁️', count: mockDashboardData.stats.criticalAlerts },
-  { id: 'trending', label: 'Trending', icon: '📈' },
-  { id: 'entities', label: 'Entities', icon: '🔗' },
-  { id: 'knowledge-graph', label: 'Knowledge Graph', icon: '🌐' },
-  { id: 'analytics', label: 'Analytics', icon: '📊' },
-  { id: 'the-fix', label: 'The Fix', icon: '🔧', count: mockDashboardData.stats.editorialQueue },
-];
-
-function formatDate(): string {
-  const now = new Date();
-  return now.toLocaleDateString('en-IN', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [criticalAlerts, setCriticalAlerts] = useState(mockDashboardData.stats.criticalAlerts);
+
+  useEffect(() => {
+    async function loadMonitorStats() {
+      try {
+        const { bootstrapServices } = await import('@/lib/bootstrap');
+        const { getServices } = await import('@/services/registry');
+        bootstrapServices();
+        const svc = getServices().monitoring;
+        const counts = svc.getAlertCount();
+        setCriticalAlerts(counts.unacknowledged);
+      } catch {}
+    }
+    loadMonitorStats();
+  }, []);
+
+  const sidebarItems: { id: DashboardTab; label: string; icon: string; count?: number }[] = [
+    { id: 'overview', label: 'Dashboard', icon: '◈' },
+    { id: 'stories', label: 'Stories', icon: '📰', count: mockDashboardData.stats.storiesToday },
+    { id: 'research', label: 'Research', icon: '🔍', count: mockDashboardData.stats.researchQueue },
+    { id: 'editorial', label: 'Editorial', icon: '✎', count: mockDashboardData.stats.editorialQueue },
+    { id: 'publishing', label: 'Publishing', icon: '📡', count: mockDashboardData.stats.publishingQueue },
+    { id: 'monitor', label: 'Monitor', icon: '👁️', count: criticalAlerts },
+    { id: 'trending', label: 'Trending', icon: '📈' },
+    { id: 'entities', label: 'Entities', icon: '🔗' },
+    { id: 'knowledge-graph', label: 'Knowledge Graph', icon: '🌐' },
+    { id: 'analytics', label: 'Analytics', icon: '📊' },
+    { id: 'the-fix', label: 'The Fix', icon: '🔧', count: mockDashboardData.stats.editorialQueue },
+  ];
+
+  function formatDate(): string {
+    const now = new Date();
+    return now.toLocaleDateString('en-IN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
 
   const data = mockDashboardData;
 
@@ -394,10 +410,7 @@ export default function DashboardPage() {
 
         {/* ─── Monitor Tab ─────────────────────────── */}
         {activeTab === 'monitor' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <MonitoringFeed alerts={data.alerts} />
-            <TrendingPanel topics={data.trending} />
-          </div>
+          <MonitorTab />
         )}
 
         {/* ─── Trending Tab ────────────────────────── */}

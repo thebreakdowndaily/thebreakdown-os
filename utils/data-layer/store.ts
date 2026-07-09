@@ -2246,6 +2246,122 @@ function seed(): DataStore {
 
   stories.set(story31.slug, story31);
 
+  // ── Story 32: Electoral Bonds ────────────────────────────────────────
+
+  const story32: APIStory = {
+    id: 'electoral-bonds',
+    slug: 'electoral-bonds',
+    headline: 'Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme the Supreme Court Struck Down',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Electoral+Bonds:+The+Anonymous+Donation+Scheme',
+    summary: 'Electoral Bonds were meant to clean up political funding. Instead, they created the most opaque campaign finance system in Indian history — ₹12,769 crore in anonymous donations, 47.5% flowing to the BJP, with shell companies and contractors under investigation pouring ₹4,200+ crore into ruling party coffers. The Supreme Court struck down the scheme in February 2024.',
+    publishedAt: '2026-08-14T06:00:00Z',
+    updatedAt: '2026-08-14T06:00:00Z',
+    readingTime: 16,
+    wordCount: 5500,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 95,
+    category: 'policy',
+    tags: ['electoral bonds', 'political funding', 'Supreme Court', 'Election Commission', 'BJP', 'campaign finance', 'corruption', 'anonymous donations', 'SBI', 'transparency'],
+    keyPoints: [
+      'Total electoral bonds worth ₹12,769 crore sold between April 2019 and February 2024 across 29 tranches',
+      'BJP received ₹6,060 crore (47.5% of total) — more than all other parties combined',
+      'Future Gaming and Hotel Services donated ₹1,368 crore — the single largest donor, now under ED investigation',
+      '41 companies under CBI/ED/IT investigation donated ₹2,471 crore to the BJP',
+      '30 shell companies with no real business operations donated ₹143.2 crore',
+      '33 donor entities with 172 government contracts worth ₹3.7 lakh crore donated ₹1,751 crore to BJP',
+      'Supreme Court unanimously struck down the scheme on February 15, 2024, calling it unconstitutional',
+      'SBI was the only authorized issuer, creating a monopoly on political donation data access',
+    ],
+    timeline: [
+      { date: '2017-07-12', title: 'Electoral Bonds Scheme Proposed', description: 'Finance Minister Arun Jaitley introduces Electoral Bond scheme in the Union Budget 2017-18 as an alternative to cash donations.', source: 'Union Budget Speech 2017' },
+      { date: '2018-01-02', title: 'Scheme Notified', description: 'Government notifies the Electoral Bond Scheme, 2018. Bonds available for purchase at SBI branches in phases.', source: 'Gazette of India' },
+      { date: '2018-03-01', title: 'First Tranche Sold', description: 'First tranche of electoral bonds goes on sale. Bonds available for 10 days in January, April, July, and October each year.', source: 'SBI Press Release' },
+      { date: '2019-04-01', title: 'First Post-Lok Sabha Tranche', description: 'Bonds sold after the 2019 Lok Sabha elections. Total donations begin to accelerate significantly.', source: 'ECI Data' },
+      { date: '2021-04-01', title: '₹1,000 Crore+ Annual Threshold Crossed', description: 'Annual electoral bond sales cross ₹1,000 crore for the first time, driven by corporate donations.', source: 'ECI Data' },
+      { date: '2023-11-01', title: 'Supreme Court Hearings Begin', description: 'Supreme Court begins final hearings on petitions challenging the constitutional validity of electoral bonds.', source: 'Supreme Court Proceedings' },
+      { date: '2024-02-15', title: 'Supreme Court Strikes Down Scheme', description: '5-judge Constitution Bench unanimously declares Electoral Bond Scheme unconstitutional as a violation of Article 19(1)(a) — right to information.', source: 'Supreme Court of India' },
+      { date: '2024-03-11', title: 'SBI Ordered to Disclose Data', description: 'Supreme Court extends deadline and orders SBI to submit all electoral bond details to EC by March 12, 2024.', source: 'Supreme Court Order' },
+      { date: '2024-03-14', title: 'EC Publishes Donor Data', description: 'Election Commission publishes donor data on its website — revealing for the first time who gave how much to which party.', source: 'Election Commission of India' },
+      { date: '2024-04-01', title: 'ED Launches Investigations', description: 'Enforcement Directorate begins investigating multiple electoral bond donors under FEMA and money laundering provisions.', source: 'ED Statements' },
+    ],
+    facts: [
+      { label: 'Total Bonds Sold (Apr 2019–Feb 2024)', value: '₹12,769 crore', source: 'ECI / SBI Data' },
+      { label: 'BJP Share', value: '₹6,060 crore (47.5%)', source: 'ECI Data' },
+      { label: 'INC (Congress) Share', value: '₹1,422 crore (11.1%)', source: 'ECI Data' },
+      { label: 'Trinamool Congress Share', value: '₹1,391 crore (10.9%)', source: 'ECI Data' },
+      { label: 'BJP Share of Probed Companies\' Donations', value: '₹2,471 crore (96%)', source: 'The Breakdown Analysis' },
+      { label: 'Shell Companies\' Total Donations', value: '₹143.2 crore', source: 'ADR Report' },
+      { label: 'Government Contractors Who Donated to BJP', value: '33 entities · ₹1,751 crore', source: 'The Breakdown Analysis' },
+      { label: 'Total Government Contracts Held by Donors', value: '172 contracts · ₹3.7 lakh crore', source: 'Government Procurement Data' },
+      { label: 'Largest Single Donor', value: 'Future Gaming: ₹1,368 crore', source: 'ECI Data' },
+    ],
+    claims: [
+      { claim: 'Electoral bonds ended anonymous cash donations and brought transparency to political funding.', source: 'Government of India', verification: 'misleading', explanation: 'While bonds replaced cash donations, they created a new form of anonymity — donations through bonds were completely anonymous, with no public disclosure of donor identity. Cash donations to political parties actually increased 4x after the scheme, from ₹283 crore (2016-17) to ₹1,168 crore (2022-23).', confidence: 0.91 },
+      { claim: 'The Supreme Court struck down electoral bonds because they violated the right to information.', source: 'Supreme Court of India', verification: 'true', explanation: 'The 5-judge Constitution Bench unanimously held that anonymous political donations violate Article 19(1)(a) — the right to know the sources of funding of candidates and political parties. The Court called information asymmetry "the antithesis of democracy."', confidence: 0.97 },
+      { claim: 'Companies under investigation donated disproportionately to the BJP.', source: 'The Breakdown Analysis', verification: 'true', explanation: '41 companies under CBI, ED, or Income Tax investigation donated ₹2,471 crore to the BJP, accounting for 96% of all probed companies\' bond donations. Only ₹100 crore from probed companies went to all other parties combined.', confidence: 0.88 },
+      { claim: 'Electoral bonds were redeemable only by registered political parties, preventing misuse.', source: 'Government of India', verification: 'misleading', explanation: 'While technically true that only registered parties could redeem bonds, there was no upper limit on donations, no cap on corporate donations (removed in 2017), and no disclosure requirement — creating a perfect vehicle for quid pro quo arrangements, as evidenced by the contractor-donor overlap.', confidence: 0.86 },
+      { claim: 'Shell companies with no real operations could not purchase electoral bonds.', source: 'Common Misconception', verification: 'false', explanation: 'ADR analysis identified 30 shell companies — registered at the same addresses, with negligible business activity and minimal tax payments — that collectively purchased ₹143.2 crore in electoral bonds. Companies needed only a valid bank account and KYC documents.', confidence: 0.92 },
+    ],
+    sources: [
+      { name: 'Election Commission of India — Electoral Bond Donor Data', url: 'https://eci.gov.in', type: 'government', tier: 1 },
+      { name: 'Supreme Court of India — Electoral Bond Judgment (2024)', url: 'https://main.sci.gov.in', type: 'government', tier: 1 },
+      { name: 'Association for Democratic Reforms (ADR) Reports', url: 'https://adrindia.org', type: 'research', tier: 1 },
+      { name: 'State Bank of India — Bond Issuance Records', url: 'https://sbi.co.in', type: 'corporate', tier: 1 },
+      { name: 'The Hindu — Electoral Bond Investigation Series', url: 'https://thehindu.com', type: 'news', tier: 2 },
+      { name: 'Financial Times — India Electoral Bond Analysis', url: 'https://ft.com', type: 'news', tier: 2 },
+      { name: 'Livemint — Electoral Bond Data Analysis', url: 'https://livemint.com', type: 'news', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'Party-wise Electoral Bond Donations (₹ Crore)', data: [
+          { party: 'BJP', amount: 6060 },
+          { party: 'INC', amount: 1422 },
+          { party: 'TMC', amount: 1391 },
+          { party: 'BRS', amount: 908 },
+          { party: 'BJD', amount: 775 },
+          { party: 'DMK', amount: 612 },
+          { party: 'YSRCP', amount: 420 },
+          { party: 'AAP', amount: 86 },
+          { party: 'Others', amount: 1095 },
+        ], xKey: 'party', yKey: 'amount' },
+      {
+        type: 'bar', title: 'Donor Categories — Total Contributions', data: [
+          { category: 'Under Investigation', amount: 2573 },
+          { category: 'Govt Contractors', amount: 1751 },
+          { category: 'Shell Companies', amount: 143 },
+          { category: 'Other Corporates', amount: 8302 },
+        ], xKey: 'category', yKey: 'amount' },
+      {
+        type: 'line', title: 'Electoral Bond Sales by Tranche (₹ Crore)', data: [
+          { year: '2018', amount: 1055 },
+          { year: '2019', amount: 3946 },
+          { year: '2020', amount: 1075 },
+          { year: '2021', amount: 1599 },
+          { year: '2022', amount: 2194 },
+          { year: '2023', amount: 2330 },
+          { year: '2024', amount: 570 },
+        ], xKey: 'year', yKey: 'amount' },
+    ],
+    faq: [
+      { question: 'What were electoral bonds?', answer: 'Electoral bonds were financial instruments — essentially bearer bonds — that could be purchased from SBI and donated to registered political parties. The key feature was complete anonymity: neither the buyer nor the recipient was required to disclose the donor\'s identity. They were sold in denominations of ₹1,000, ₹10,000, ₹1 lakh, ₹10 lakh, and ₹1 crore.' },
+      { question: 'Why did the Supreme Court strike down the scheme?', answer: 'A 5-judge Constitution Bench unanimously held that anonymous donations violated Article 19(1)(a) — the fundamental right to information. The Court ruled that voters have a right to know who funds political parties, and that unlimited, anonymous corporate donations could lead to quid pro quo arrangements. The judgment was delivered on February 15, 2024.' },
+      { question: 'Who benefited most from electoral bonds?', answer: 'The BJP received ₹6,060 crore — 47.5% of all bond donations. The Congress received ₹1,422 crore (11.1%). The scheme was structured in a way that donations were overwhelmingly concentrated in the ruling party, with companies under investigation and government contractors disproportionately donating to the BJP.' },
+      { question: 'Which was the largest donor?', answer: 'Future Gaming and Hotel Services — a lottery and gaming company from Sikkim — donated ₹1,368 crore through electoral bonds, making it the single largest donor. The company\'s directors have since been summoned by the Enforcement Directorate under the Prevention of Money Laundering Act.' },
+      { question: 'Did the scheme reduce black money in political funding?', answer: 'The evidence suggests it did not. Cash donations to political parties actually increased after the scheme — from ₹283 crore reported in 2016-17 to ₹1,168 crore in 2022-23. The scheme may have shifted some cash to formal channels, but it did not eliminate opacity; it merely replaced one form of anonymity with another.' },
+    ],
+    relatedTopicIds: ['policy', 'economy'],
+    relatedStories: [
+      { slug: 'ews-quota-upsc-investigation', headline: 'Who Really Gets the EWS Quota? A Data-Driven Investigation into UPSC Selections', summary: 'Investigation into EWS quota implementation in government jobs.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 12, evidenceScore: 94, category: 'policy' },
+      { slug: 'income-inequality-india', headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth', summary: 'Structural drivers behind India\'s growing wealth concentration.', publishedAt: '2026-07-26T06:00:00Z', readingTime: 15, evidenceScore: 94, category: 'economy' },
+    ],
+    relatedEntities: [
+      { id: 'election-commission', slug: 'election-commission', name: 'Election Commission of India', type: 'organization', description: 'Constitutional body that published electoral bond donor data after Supreme Court order.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
+  stories.set(story32.slug, story32);
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -2448,6 +2564,29 @@ function seed(): DataStore {
         { question: 'What is India\'s GDP growth rate?', answer: 'India\'s GDP grew at 6.8% in 2025-26, maintaining its position as the fastest-growing major economy.' },
         { question: 'What are India\'s key international memberships?', answer: 'India is a member of the UN, WTO, IMF, World Bank, WHO, ILO, BRICS, SCO, G20, SAARC, Commonwealth, ADB, AIIB, BIMSTEC, Quad, ISA, FATF, NAM, G77, IORA, and CDRI.' },
       ],
+    },
+    {
+      id: 'election-commission', slug: 'election-commission', name: 'Election Commission of India',
+      type: 'organization', description: 'Independent constitutional body responsible for administering election processes at national and state levels. The ECI published electoral bond donor data following the Supreme Court\'s February 2024 judgment striking down the anonymous donation scheme.',
+      aliases: ['ECI', 'Election Commission', 'Election Commission of India'], storyCount: 5, updatedAt: '2026-08-14T06:00:00Z',
+      image: '/images/entities/election-commission.jpg', evidenceScore: 92,
+      timeline: [
+        { date: '1950-01-25', title: 'ECI Established', description: 'Election Commission constituted under Article 324 of the Constitution, one day before the Republic Day.' },
+        { date: '1993-10-01', title: 'Multi-Member Commission', description: 'ECI becomes a multi-member body with three Election Commissioners.' },
+        { date: '2019-03-10', title: 'First Full-Fledged EVM VVPAT Election', description: 'General Election 2019 becomes the first general election conducted entirely on EVMs with VVPATs.' },
+        { date: '2024-02-15', title: 'Supreme Court Strikes Down Electoral Bonds', description: '5-judge bench declares electoral bonds unconstitutional; ECI ordered to publish bond data.' },
+        { date: '2024-03-14', title: 'ECI Publishes Electoral Bond Data', description: 'ECI publishes complete donor data on its website for public scrutiny for the first time.', source: 'ECI Official Website' },
+      ],
+      statistics: { 'Voter Strength': '96.8 crore', 'Polling Stations': '10.5 lakh', 'States/UTs Administered': '36', 'EVM+VVPAT Coverage': '100%' },
+      relatedStories: [
+        { slug: 'electoral-bonds', headline: 'Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme', summary: 'The rise and fall of India\'s anonymous political donation system.', publishedAt: '2026-08-14T06:00:00Z', readingTime: 16, evidenceScore: 95, category: 'policy' },
+      ],
+      relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+      faq: [
+        { question: 'What is the role of the Election Commission?', answer: 'The ECI is responsible for conducting free and fair elections to the Lok Sabha, Rajya Sabha, State Legislative Assemblies, and the offices of the President and Vice President of India.' },
+        { question: 'What role did the ECI play in the electoral bonds case?', answer: 'After the Supreme Court struck down the electoral bond scheme, the ECI was directed to publish all donor data. On March 14, 2024, the ECI made the data public for the first time, revealing the identities of donors and the amounts given to each political party.' },
+      ],
+      sources: [{ name: 'Election Commission of India Official Website', url: 'https://eci.gov.in', type: 'government', description: 'Official ECI portal with election data and results.' }],
     },
   ];
 
@@ -2959,10 +3098,10 @@ function seed(): DataStore {
   // ── Topics ────────────────────────────────────────────────────────
 
   const topicDefs = [
-    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24, story30], entities: ['rbi', 'ministry-of-finance'] },
+    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24, story30, story32], entities: ['rbi', 'ministry-of-finance'] },
     { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, 5G, and technology policy.', stories: [story2, story4, story5, story27, story29], entities: ['npci'] },
     { slug: 'cybersecurity', name: 'Cybersecurity & Data Privacy', description: 'Data breaches, cyber threats, digital security, privacy regulation, and India\'s cybersecurity landscape.', stories: [story5, story27], entities: ['icmr', 'cert-in', 'uidai', 'resecurity'] },
-    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28, story31], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
+    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28, story31, story32], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag', 'election-commission'] },
     { slug: 'agriculture', name: 'Agriculture & Rural Development', description: 'Agriculture policy, crop insurance, rural employment, and farmer welfare.', stories: [story1, story3, story10, story13], entities: ['ministry-of-agriculture', 'mgnrega', 'india'] },
     { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, payment systems, and digital infrastructure.', stories: [story2, story29], entities: ['npci', 'rbi'] },
     { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4], entities: [] },
