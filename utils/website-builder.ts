@@ -252,6 +252,7 @@ function resolveHomepageComponent(sectionId: string): string {
 // ── Section Filtering ───────────────────────────────────────────────────
 
 function filterSections(sections: string[], data: unknown): string[] {
+  const dataRecord = data as Record<string, unknown>;
   return sections.filter(id => {
     const entry = registry.find(c => c.id === id);
     if (!entry) return false;
@@ -259,7 +260,7 @@ function filterSections(sections: string[], data: unknown): string[] {
     // Check if required props are available
     if (entry.required && entry.props.length > 0) {
       // If the section has required props and data is missing them, skip
-      const hasData = entry.props.some(p => (data as Record<string, unknown>)[p] !== undefined && (data as Record<string, unknown>)[p] !== null);
+      const hasData = entry.props.some(p => dataRecord[p] !== undefined && dataRecord[p] !== null);
       if (!hasData) return false;
     }
 
@@ -476,69 +477,82 @@ function generateBreadcrumbSchema(type: string, data: { slug: string; headline?:
 }
 
 function generateSchema(type: string, data: unknown): Record<string, unknown> {
+  // Type guard for data
+  if (typeof data !== 'object' || data === null) {
+    return { '@context': 'https://schema.org' };
+  }
+
   const d = data as Record<string, unknown>;
   const base = {
     '@context': 'https://schema.org',
   };
 
   switch (type) {
-    case 'story':
+    case 'story': {
+      const storyData = d as unknown as StoryJSON;
       return {
         ...base,
         '@type': 'NewsArticle',
-        headline: d.headline,
-        description: d.summary,
-        datePublished: d.publishedAt,
-        dateModified: d.updatedAt,
-        wordCount: d.wordCount,
-        author: (() => {
-          const auth = d.author as { name?: string; url?: string } | undefined;
-          return auth ? { '@type': 'Person' as const, name: auth.name, url: auth.url } : undefined;
-        })(),
+        headline: storyData.headline,
+        description: storyData.summary,
+        datePublished: storyData.publishedAt,
+        dateModified: storyData.updatedAt,
+        wordCount: storyData.wordCount,
+        author: { 
+          '@type': 'Person' as const, 
+          name: storyData.author.name, 
+          url: storyData.author.url 
+        },
         publisher: {
           '@type': 'Organization',
           name: 'The Breakdown',
           url: 'https://thebreakdown.in',
           logo: { '@type': 'ImageObject', url: 'https://thebreakdown.in/images/og-home.jpg' },
         },
-        image: d.heroImage,
+        image: storyData.heroImage,
         mainEntityOfPage: {
           '@type': 'WebPage',
-          '@id': `https://thebreakdown.in/story/${d.slug as string}`,
+          '@id': `https://thebreakdown.in/story/${storyData.slug}`,
         },
       };
+    }
 
-    case 'entity':
+    case 'entity': {
+      const entityData = d as unknown as EntityJSON;
       return {
         ...base,
-        '@type': d.type === 'person' ? 'Person' : 'Organization',
-        name: d.name,
-        description: d.description,
-        url: `https://thebreakdown.in/entity/${d.slug as string}`,
-        ...(d.aliases ? { additionalName: d.aliases } : {}),
-        ...(d.image ? { image: d.image } : {}),
+        '@type': entityData.type === 'person' ? 'Person' : 'Organization',
+        name: entityData.name,
+        description: entityData.description,
+        url: `https://thebreakdown.in/entity/${entityData.slug}`,
+        ...(entityData.aliases ? { additionalName: entityData.aliases } : {}),
+        ...(entityData.image ? { image: entityData.image } : {}),
       };
+    }
 
-    case 'topic':
+    case 'topic': {
+      const topicData = d as unknown as TopicJSON;
       return {
         ...base,
         '@type': 'CollectionPage',
-        name: d.name,
-        description: d.description,
-        url: `https://thebreakdown.in/topic/${String(d.slug)}`,
+        name: topicData.name,
+        description: topicData.description,
+        url: `https://thebreakdown.in/topic/${topicData.slug}`,
       };
+    }
 
-    case 'fix':
+    case 'fix': {
+      const fixData = d as unknown as FixJSON;
       return {
         ...base,
         '@type': 'Article',
-        headline: d.headline,
-        description: d.summary,
-        datePublished: d.publishedAt,
-        dateModified: d.updatedAt,
-        author: {
+        headline: fixData.headline,
+        description: fixData.summary,
+        datePublished: fixData.publishedAt,
+        dateModified: fixData.updatedAt,
+author: {
           '@type': 'Person',
-          name: (d.author as { name?: string })?.name || 'The Breakdown Editorial',
+          name: fixData.author.name,
         },
         publisher: {
           '@type': 'Organization',
@@ -546,6 +560,7 @@ function generateSchema(type: string, data: unknown): Record<string, unknown> {
           url: 'https://thebreakdown.in',
         },
       };
+    }
 
     default:
       return base;
