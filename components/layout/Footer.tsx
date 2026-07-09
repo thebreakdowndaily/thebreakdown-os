@@ -5,7 +5,7 @@ const footerSections = [
   {
     title: 'Sections',
     links: [
-      { label: 'Investigations', href: '/story?category=investigation' },
+      { label: 'Investigations', href: '/investigations' },
       { label: 'Data Stories', href: '/data' },
       { label: 'Policy Tracker', href: '/topic/policy' },
       { label: 'The Fix', href: '/fix' },

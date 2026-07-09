@@ -1,30 +1,55 @@
 'use client';
 
-import { useState } from 'react';
-import { cmsStore, type CMSTimeline } from '@/utils/cms-store';
+import { useState, useEffect } from 'react';
+import type { CMSTimeline } from '@/utils/cms-types';
 
 function emptyTimeline(): CMSTimeline {
   return { id: '', title: '', description: '', category: '', storyIds: [], entityIds: [], topicIds: [], events: [{ date: '', title: '', description: '' }], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
 }
 
 export default function CMSTimelinesPage() {
-  const [timelines, setTimelines] = useState(cmsStore.getTimelines());
+  const [timelines, setTimelines] = useState<CMSTimeline[]>([]);
+  const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState<CMSTimeline>(emptyTimeline);
   const [editing, setEditing] = useState(false);
   const [search, setSearch] = useState('');
 
+  useEffect(() => {
+    fetch('/api/v1/timelines')
+      .then(r => r.json())
+      .then(res => { setTimelines((res as { data: CMSTimeline[] }).data || []); })
+      .finally(() => setLoading(false));
+  }, []);
+
   const filtered = timelines.filter((t) => !search || t.title.toLowerCase().includes(search.toLowerCase()));
 
-  function save() {
+  async function save() {
     if (!draft.title) return;
-    if (draft.id) { cmsStore.saveTimeline(draft); }
-    else { const id = `timeline-${Date.now().toString(36)}`; cmsStore.saveTimeline({ ...draft, id, createdAt: new Date().toISOString() }); }
-    setTimelines(cmsStore.getTimelines()); setEditing(false); setDraft(emptyTimeline());
+    if (draft.id) {
+      await fetch(`/api/v1/timelines/${draft.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+    } else {
+      await fetch('/api/v1/timelines', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+    }
+    const res = await fetch('/api/v1/timelines').then(r => r.json()) as { data: CMSTimeline[] };
+    setTimelines(res.data || []); setEditing(false); setDraft(emptyTimeline());
   }
 
   function edit(t: CMSTimeline) { setEditing(true); setDraft({ ...t }); }
-  function remove(id: string) { cmsStore.deleteTimeline(id); setTimelines(cmsStore.getTimelines()); if (draft.id === id) { setEditing(false); setDraft(emptyTimeline()); } }
+  async function remove(id: string) {
+    await fetch(`/api/v1/timelines/${id}`, { method: 'DELETE' });
+    const delRes = await fetch('/api/v1/timelines').then(r => r.json()) as { data: CMSTimeline[] };
+    setTimelines(delRes.data || []);
+    if (draft.id === id) { setEditing(false); setDraft(emptyTimeline()); }
+  }
   function removeEvent(idx: number) { const events = draft.events.filter((_, i) => i !== idx); setDraft({ ...draft, events }); }
+
+  if (loading) return <div style={{ padding: '32px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px' }}>Loading...</div>;
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
@@ -69,7 +94,6 @@ export default function CMSTimelinesPage() {
                   <textarea value={draft.description} onChange={(e) => { setDraft({ ...draft, description: e.target.value }); }} style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--color-border-subtle)', borderRadius: '6px', background: 'var(--color-surface-secondary)', color: 'var(--color-text-primary)', fontSize: '13px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', resize: 'vertical', minHeight: '50px' }} />
                 </div>
 
-                {/* Events */}
                 <div>
                   <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>Events (drag to reorder)</label>
                   {draft.events.map((ev, i) => (

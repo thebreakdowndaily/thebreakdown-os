@@ -40,7 +40,7 @@ export default function HeroContent({
       <HeroStats
         evidenceScore={evidenceScore}
         sourcesCount={sourcesCount}
-        updatedAt={updatedAt}
+        keyPointsCount={keyPoints.length}
         readingTime={readingTime}
       />
 

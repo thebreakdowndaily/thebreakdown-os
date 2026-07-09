@@ -33,7 +33,7 @@ export function useDataset(slug: string) {
         if (!res.ok) throw new Error(`Dataset not found: ${slug}`);
         return res.json();
       })
-      .then((body: { data: Dataset }) => {
+      .then((body: any) => {
         const dataset = body.data;
         const version = getLatestVersion(dataset);
         const metricId = dataset.metrics[0]?.id || '';

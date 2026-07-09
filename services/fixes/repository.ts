@@ -44,7 +44,11 @@ export class SupabaseFixRepository implements FixRepository {
   async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToFix(data) : undefined; }
   async findBySlug(slug: string) { const { data, error } = await sb().select('*').eq('slug', slug).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToFix(data) : undefined; }
   async save(fix: Fix) { const { data, error } = await sb().upsert(rowFromFix(fix)).select().single(); if (error) throw error; return rowToFix(data); }
-  async update(id: string, updates: Partial<Fix>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToFix(data); }
+  async update(id: string, updates: Partial<Fix>) {
+    const { data, error } = await sb().update({ ...rowFromFix(updates as Fix), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToFix(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
@@ -53,5 +57,5 @@ function rowToFix(row: any): Fix {
   return { id: row.id, slug: row.slug, title: row.title, problem: row.problem, rootCauses: row.root_causes || [], existingSolutions: row.existing_solutions || [], globalExamples: row.global_examples || [], recommendedActions: row.recommended_actions || [], citizenActions: row.citizen_actions || [], governmentActions: row.government_actions || [], metrics: row.metrics || [], status: row.status, createdAt: row.created_at, updatedAt: row.updated_at };
 }
 function rowFromFix(fix: Fix): any {
-  return { slug: fix.slug, title: fix.title, problem: fix.problem, root_causes: fix.rootCauses || [], existing_solutions: fix.existingSolutions || [], global_examples: fix.globalExamples || [], recommended_actions: fix.recommendedActions || [], citizen_actions: fix.citizenActions || [], government_actions: fix.governmentActions || [], metrics: fix.metrics || [], status: fix.status };
+  return { id: fix.id, slug: fix.slug, title: fix.title, problem: fix.problem, root_causes: fix.rootCauses || [], existing_solutions: fix.existingSolutions || [], global_examples: fix.globalExamples || [], recommended_actions: fix.recommendedActions || [], citizen_actions: fix.citizenActions || [], government_actions: fix.governmentActions || [], metrics: fix.metrics || [], status: fix.status };
 }

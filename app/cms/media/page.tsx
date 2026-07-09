@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { cmsStore, type CMSMediaItem } from '@/utils/cms-store';
+import { useState, useEffect } from 'react';
+import type { CMSMediaItem } from '@/utils/cms-types';
 
 const TYPE_COLORS: Record<string, string> = { image: '#3B82F6', video: '#EF4444', chart: '#22C55E', document: '#8B5CF6', svg: '#F59E0B', map: '#06B6D4' };
 
@@ -12,10 +12,18 @@ function formatSize(bytes?: number): string {
 }
 
 export default function CMSMediaPage() {
-  const [media, setMedia] = useState(cmsStore.getMedia());
+  const [media, setMedia] = useState<CMSMediaItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [draft, setDraft] = useState<CMSMediaItem | null>(null);
+
+  useEffect(() => {
+    fetch('/api/v1/media')
+      .then(r => r.json())
+      .then(res => { setMedia((res as { data: CMSMediaItem[] }).data || []); })
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered = media.filter((m) => {
     if (typeFilter !== 'all' && m.type !== typeFilter) return false;
@@ -23,17 +31,25 @@ export default function CMSMediaPage() {
     return true;
   });
 
-  function saveItem() {
+  async function saveItem() {
     if (!draft) return;
-    if (!draft.id) {
-      const id = `media-${Date.now().toString(36)}`;
-      cmsStore.saveMediaItem({ ...draft, id, createdAt: new Date().toISOString() });
+    if (draft.id) {
+      await fetch(`/api/v1/media/${draft.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
     } else {
-      cmsStore.saveMediaItem(draft);
+      await fetch('/api/v1/media', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
     }
-    setMedia(cmsStore.getMedia());
+    const res = await fetch('/api/v1/media').then(r => r.json()) as { data: CMSMediaItem[] };
+    setMedia(res.data || []);
     setDraft(null);
   }
+
+  if (loading) return <div style={{ padding: '32px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px' }}>Loading...</div>;
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
@@ -80,7 +96,6 @@ export default function CMSMediaPage() {
         </div>
       )}
 
-      {/* Filters */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <select value={typeFilter} onChange={(e) => { setTypeFilter(e.target.value); }} style={{ padding: '7px 12px', background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '8px', color: 'var(--color-text-primary)', fontSize: '12px', outline: 'none', fontFamily: 'inherit' }}>
           <option value="all">All Types</option>
@@ -89,7 +104,6 @@ export default function CMSMediaPage() {
         <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); }} placeholder="Search by caption, alt, or tags..." style={{ flex: 1, padding: '7px 12px', background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '8px', fontSize: '12px', color: 'var(--color-text-primary)', outline: 'none', fontFamily: 'inherit' }} />
       </div>
 
-      {/* Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
         {filtered.length === 0 && (
           <div style={{ gridColumn: '1 / -1', padding: '48px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px', background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '12px' }}>

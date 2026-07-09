@@ -77,11 +77,19 @@ function NewStoryForm() {
     });
   }, [template]);
 
-  const handleSave = (updated: CMSStory) => {
-    console.log('New story saved:', updated.id, updated.title);
+  const handleSave = async (updated: CMSStory) => {
     const idx = mockCMSStories.findIndex((s) => s.id === updated.id);
     if (idx >= 0) mockCMSStories[idx] = updated;
-    // Redirect to the new story
+    // Sync to canonical store via API v1
+    try {
+      await fetch('/api/v1/stories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+    } catch (e) {
+      console.error('Failed to sync new story to API:', e);
+    }
     router.replace(`/cms/story/${updated.id}`);
   };
 

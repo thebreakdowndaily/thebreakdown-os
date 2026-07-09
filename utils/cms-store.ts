@@ -1,133 +1,10 @@
-// ─── Unified CMS Data Store ─────────────────────────────────────────────────
-// The Breakdown — Editorial CMS persistence layer
-// All CMS entities live here; in-memory now, swaps to a real backend later
+// ─── CMS Store (legacy seed data, used only by scripts/seed-d1.ts) ────────
 
-import { mockCMSStories, type CMSStory, type BlockType, type BlockData, type Block, type StoryStatus } from './cms-data';
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-export type EntityType =
-  | 'person'
-  | 'organization'
-  | 'policy'
-  | 'scheme'
-  | 'budget'
-  | 'report'
-  | 'dataset'
-  | 'source'
-  | 'country';
-
-export interface CMSEntity {
-  id: string;
-  type: EntityType;
-  name: string;
-  slug: string;
-  description: string;
-  aliases: string[];
-  image?: string;
-  storyCount?: number;
-  evidenceScore?: number;
-  relatedEntityIds: string[];
-  relatedStoryIds: string[];
-  relatedTopicIds: string[];
-  statistics: Array<{ label: string; value: string; change?: string }>;
-  timeline: Array<{ date: string; title: string; description: string }>;
-  faq: Array<{ question: string; answer: string }>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CMSTopic {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  overview?: string;
-  image?: string;
-  storyIds: string[];
-  relatedEntityIds: string[];
-  featuredStoryIds: string[];
-  countries: string[];
-  faq: Array<{ question: string; answer: string }>;
-  timeline: Array<{ date: string; title: string; description: string }>;
-  statistics: Array<{ label: string; value: string }>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CMSTimeline {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  storyIds: string[];
-  entityIds: string[];
-  topicIds: string[];
-  events: Array<{ date: string; title: string; description: string }>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CMSFix {
-  id: string;
-  title: string;
-  slug: string;
-  problem: string;
-  rootCauses: string[];
-  existingSolutions: Array<{ title: string; description: string; link?: string }>;
-  globalExamples: Array<{ country: string; approach: string; outcome: string; link?: string }>;
-  recommendedActions: Array<{ action: string; responsible: string; timeline: string }>;
-  citizenActions: string[];
-  governmentActions: string[];
-  metrics: Array<{ metric: string; currentValue: string; targetValue: string; source?: string }>;
-  status: 'draft' | 'review' | 'published';
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CMSMediaItem {
-  id: string;
-  type: 'image' | 'video' | 'chart' | 'document' | 'svg' | 'map';
-  src: string;
-  alt: string;
-  caption: string;
-  tags: string[];
-  credit: string;
-  width?: number;
-  height?: number;
-  fileSize?: number;
-  version: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CMSUser {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'editor' | 'writer' | 'researcher' | 'designer';
-  avatar?: string;
-  createdAt: string;
-}
-
-export interface ActivityEntry {
-  id: string;
-  type: 'story_created' | 'story_updated' | 'story_published' | 'topic_created' | 'topic_updated' | 'entity_created' | 'entity_updated' | 'timeline_created' | 'timeline_updated' | 'fix_created' | 'fix_updated' | 'media_uploaded';
-  label: string;
-  timestamp: string;
-  userId?: string;
-  link?: string;
-}
-
-export interface StoryRevision {
-  id: string;
-  storyId: string;
-  version: number;
-  snapshot: string; // JSON
-  createdAt: string;
-  userId?: string;
-  message: string;
-}
+import { mockCMSStories, type CMSStory, type StoryStatus } from './cms-data';
+import type {
+  CMSEntity, CMSTopic, CMSTimeline, CMSFix, CMSMediaItem,
+  CMSUser, ActivityEntry, StoryRevision, EntityType,
+} from './cms-types';
 
 // ─── Store ──────────────────────────────────────────────────────────────────
 
@@ -148,11 +25,7 @@ const seedMedia: CMSMediaItem[] = [
 
 // Seed users
 const seedUsers: CMSUser[] = [
-  { id: uid('user'), name: 'Admin User', email: 'admin@thebreakdown.in', role: 'admin', createdAt: '2025-01-01T00:00:00Z' },
-  { id: uid('user'), name: 'Priya Sharma', email: 'priya@thebreakdown.in', role: 'editor', createdAt: '2025-03-15T00:00:00Z' },
-  { id: uid('user'), name: 'Vikram Joshi', email: 'vikram@thebreakdown.in', role: 'writer', createdAt: '2025-06-01T00:00:00Z' },
-  { id: uid('user'), name: 'Ananya Mehta', email: 'ananya@thebreakdown.in', role: 'writer', createdAt: '2025-06-01T00:00:00Z' },
-  { id: uid('user'), name: 'Ravi Desai', email: 'ravi@thebreakdown.in', role: 'researcher', createdAt: '2025-08-20T00:00:00Z' },
+  { id: uid('user'), name: 'The Breakdown Editorial', email: 'editorial@thebreakdown.in', role: 'admin', createdAt: '2025-01-01T00:00:00Z' },
 ];
 
 // Seed topics
@@ -335,11 +208,11 @@ class CMSStore {
     const now = Date.now();
     this.activity.push(
       { id: uid('act'), type: 'story_published', label: 'Published: Semiconductor PLI Expansion', timestamp: new Date(now - 60000).toISOString(), userId: 'user-1', link: '/cms/story/story-semiconductor-pli' },
-      { id: uid('act'), type: 'story_updated', label: 'Updated: DPDP Amendment Bill', timestamp: new Date(now - 180000).toISOString(), userId: 'user-2', link: '/cms/story/story-dpdp-bill' },
+      { id: uid('act'), type: 'story_updated', label: 'Updated: DPDP Amendment Bill', timestamp: new Date(now - 180000).toISOString(), userId: 'user-1', link: '/cms/story/story-dpdp-bill' },
       { id: uid('act'), type: 'topic_created', label: 'Created topic: Technology Policy', timestamp: new Date(now - 360000).toISOString(), userId: 'user-1' },
-      { id: uid('act'), type: 'timeline_created', label: 'Created timeline: Data Protection Law Journey', timestamp: new Date(now - 720000).toISOString(), userId: 'user-3' },
-      { id: uid('act'), type: 'story_updated', label: 'Updated: RBI Repo Rate Explained', timestamp: new Date(now - 1440000).toISOString(), userId: 'user-4', link: '/cms/story/story-rbi-repo-rate' },
-      { id: uid('act'), type: 'entity_updated', label: 'Updated: MGNREGA entity page', timestamp: new Date(now - 2880000).toISOString(), userId: 'user-5' },
+      { id: uid('act'), type: 'timeline_created', label: 'Created timeline: Data Protection Law Journey', timestamp: new Date(now - 720000).toISOString(), userId: 'user-1' },
+      { id: uid('act'), type: 'story_updated', label: 'Updated: RBI Repo Rate Explained', timestamp: new Date(now - 1440000).toISOString(), userId: 'user-1', link: '/cms/story/story-rbi-repo-rate' },
+      { id: uid('act'), type: 'entity_updated', label: 'Updated: MGNREGA entity page', timestamp: new Date(now - 2880000).toISOString(), userId: 'user-1' },
       { id: uid('act'), type: 'media_uploaded', label: 'Uploaded: Semiconductor capacity chart', timestamp: new Date(now - 3600000).toISOString(), userId: 'user-1' },
     );
   }

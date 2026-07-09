@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServices } from '@/services/registry';
 import type { APIListParams } from '@/types/canonical';
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const services = getServices();
 

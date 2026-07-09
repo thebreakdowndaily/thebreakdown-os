@@ -1,6 +1,11 @@
 import { bootstrapServices } from '@/lib/bootstrap';
 import { DatasetExplorer } from '@/features/dataset/components/DatasetExplorer';
 import type { Dataset } from '@/types/canonical';
+import { seedDatasets } from '@/lib/datasets/seed-data';
+
+export function generateStaticParams() {
+  return seedDatasets.map((ds) => ({ slug: ds.slug }));
+}
 
 export default async function DatasetPage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;

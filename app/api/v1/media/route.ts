@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { SupabaseMediaRepository } from '@/services/media/repository';
 import type { MediaItem, APIResponse, APIListParams } from '@/types/canonical';
 
-export function GET(request: NextRequest) {
+const repo = new SupabaseMediaRepository();
+
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const services = getServices();
 
   const typeFilter = searchParams.get('type');
 
   if (typeFilter) {
-    const result = services.media.getMedia();
+    const result = await repo.findAll();
     const filtered = result.data.filter(item => item.type === typeFilter);
     const res: APIResponse<MediaItem[]> = { data: filtered, meta: { total: filtered.length, page: 1, pageSize: filtered.length } };
     return NextResponse.json(res);
@@ -23,12 +24,11 @@ export function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = services.media.getMedia(params);
+  const result = await repo.findAll(params);
   return NextResponse.json(result);
 }
 
 export async function POST(request: NextRequest) {
-  const services = getServices();
   const body = (await request.json()) as Partial<MediaItem>;
 
   const now = new Date().toISOString();
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = services.media.saveMediaItem(item);
+  const saved = await repo.save(item);
   const res: APIResponse<MediaItem> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

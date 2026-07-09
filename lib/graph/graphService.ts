@@ -44,6 +44,13 @@ export class GraphService {
 
     for (const topic of topics) {
       this.addNode(nodes, { id: topic.id, type: 'topic', title: topic.name, slug: topic.slug, subtitle: topic.description });
+      for (const storyId of topic.storyIds) {
+        const story = stories.find(s => s.id === storyId || s.slug === storyId);
+        if (story) {
+          this.addNodeIfMissing(nodes, { id: story.id, type: 'story', title: story.title, slug: story.slug, description: story.summary }, 'story');
+          edges.push({ from: story.id, to: topic.id, relation: 'belongs_to', confidence: 0.9 });
+        }
+      }
       for (const entityId of topic.relatedEntityIds) {
         const entity = entities.find(e => e.id === entityId);
         if (entity) {
@@ -62,6 +69,13 @@ export class GraphService {
           edges.push({ from: entity.id, to: related.id, relation: 'related_to', confidence: 0.8 });
         }
       }
+      for (const storyId of entity.relatedStoryIds) {
+        const story = stories.find(s => s.id === storyId || s.slug === storyId);
+        if (story) {
+          this.addNodeIfMissing(nodes, { id: story.id, type: 'story', title: story.title, slug: story.slug, description: story.summary }, 'story');
+          edges.push({ from: story.id, to: entity.id, relation: 'mentions', confidence: 0.9 });
+        }
+      }
       for (const topicId of entity.relatedTopicIds) {
         const topic = topics.find(t => t.id === topicId);
         if (topic) {
@@ -74,7 +88,7 @@ export class GraphService {
     for (const timeline of timelines) {
       this.addNode(nodes, { id: timeline.id, type: 'timeline', title: timeline.title, slug: '', subtitle: timeline.description });
       for (const storyId of timeline.storyIds) {
-        const story = stories.find(s => s.id === storyId);
+        const story = stories.find(s => s.id === storyId || s.slug === storyId);
         if (story) {
           this.addNodeIfMissing(nodes, story, 'story');
           edges.push({ from: timeline.id, to: story.id, relation: 'covers', confidence: 0.9 });
@@ -111,7 +125,7 @@ export class GraphService {
         }
       }
       for (const storyId of dataset.relatedStoryIds) {
-        const story = stories.find(s => s.id === storyId);
+        const story = stories.find(s => s.id === storyId || s.slug === storyId);
         if (story) {
           this.addNodeIfMissing(nodes, story, 'story');
           edges.push({ from: dataset.id, to: story.id, relation: 'references', confidence: 0.8 });

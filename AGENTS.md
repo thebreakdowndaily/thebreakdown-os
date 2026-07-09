@@ -148,13 +148,54 @@ thebreakdown-os/
 - Claims with confidence badges, sources with tier badges, ForceGraph visualization
 - 12.6 kB JS
 
+### Sprint 14 — Deployment & Audit (Phase 6)
+- **Static deployment** — `scripts/deploy-static.ps1` extracts pre-rendered HTML from `.next/server/app/`, creates directory-based clean URLs (`path/index.html`), copies `_next/static/` and `public/`, generates minimal `_redirects` + `_routes.json`.
+- **Live at thebreakdown.in** — 54 static pages serving 200, deployed via `wrangler pages deploy`. Cloudflare free plan 3 MiB Worker limit forces static-only approach.
+- **`generateStaticParams` added** to `fix/[slug]/`, `dataset/[slug]/`, `datasets/[slug]/` for full static generation.
+- **Topic mock data**: 2→6 (economy, technology, policy, agriculture, employment, digital-payments)
+- **Organization mock data**: 2→5 (ministry-of-rural-development, rbi, npci, ministry-of-agriculture, cag)
+- **Auth lazy Proxy fix** in `features/auth/auth-client.ts` unblocks static generation.
+- **`next.config.js`** `images.unoptimized: true` set.
+- **GitHub Actions** `.github/workflows/deploy.yml` created (needs repo secrets).
+- **Placeholder images** — 15 images downloaded via placehold.co for `authors/` (1), `entities/` (8), `topics/` (6) with dark-theme styling.
+- **`_not-found` route** — deploy script creates both `404.html` and `_not-found/index.html`.
+- **Broken link audit** — fixed 15+ hardcoded links in 7 components (Footer, Header, Navigation, MobileMenu, SubscribeButton, EntityLayout, DataInsights, TopicExplorer) pointing to non-existent pages.
+- **Build**: 86/86 pages, 0 errors. 19/19 routes verified 200 on live site.
+
 ## Build Status
-- 55/55 pages static, 0 errors
+- 129 routes, 0 errors (15 story SSG + 12 topic SSG + 12 entity SSG + 2 country SSG + 5 organization SSG + 6 fix SSG + 5 dataset SSG + 30 API v1 + 12 API legacy + 14 CMS + 16 static + ...)
+
+## View-Model Refactoring (Sprint 15)
+**4 of 4 main content pages refactored** to consume canonical services + view models:
+
+| Page | Before | After | Key Change |
+|------|--------|-------|------------|
+| `/` (homepage) | `mockHomepageData` + old store | `bootstrapServices()` + `buildHomepage(services)` | Removed `utils/website-builder` dep |
+| `/story/[slug]` | 12 inline mock stories + SectionRenderer + 16 legacy components | `bootstrapServices()` + `buildStoryPage()` + `BlockRenderer` | Removed 1.2 kB mock data; uses block system |
+| `/topic/[slug]` | 12 inline mock topics + `buildTopic()` | `bootstrapServices()` + `buildTopicPage()` | Removed 12 kB inline mock data |
+| `/entity/[slug]` | 3 inline mock entities + `buildEntity()` | `bootstrapServices()` + `buildEntityPage()` | Removed inline mock data |
+
+**Data layer fixes during refactoring:**
+- `lib/mappers/to-api-types.ts` — canonical→API type mappers (`storyToAPIStory`, `fixToAPIFix`, `topicToAPITopic`)
+- `lib/bootstrap.ts` — fixed `apiStoryToCanonical` to properly map `relatedStoryIds`, `author`, `relatedEntityIds`, `relatedTopicIds`; fixed evidence block claim mapping to `StoryClaim` format
+- **Ripple bug fixes**: `relatedStoryIds` was `undefined` (missing mapping from old `relatedStories`); `supportingEvidence` was `undefined` on claims (evidence block expected `StoryClaim` format but got raw `APIClaim` data); `author` was an object instead of string
+- 0 regressions: 129/129 pages build successfully
+
+**Remaining (not refactored, but functional):**
+- `/fix/[slug]` — uses `buildFix()` + old store (no view model in `features/fix/`)
+- `/organization/[slug]` — inline mock data + Sprint 9 components
+- `/country/[slug]` — inline mock data + Sprint 9 components
+- `/search` — dynamic, uses `semanticSearch` engine
 
 ## Next Steps
-1. Refactor existing pages to consume view models (pages → pure renderers)
-2. Connect CMS store to real API backend + database
-3. Production data layer: sync CMS ↔ public data store
+1. ✅ Homepage, Story, Topic, Entity pages refactored to view models
+2. ✅ Fix page refactored — uses `bootstrapServices()` + `services.fixes.getFixBySlug()` + `toFixJSON()` mapper (bypasses canonical Fix reduced model via `_raw` field in `apiFixToCanonical`)
+3. ⬜ Organization/Country pages — consolidate with entity page or refactor Sprint 9 components
+4. ⬜ Search page — migrate from `semanticSearch` to `services.search.search()`
+5. Connect CMS store to real API backend + database
+6. Production data layer: sync CMS ↔ public data store
+7. Replace placeholder images with real editorial photography
+8. Set GitHub repo secrets for CI/CD auto-deploy
 
 ## Key Files
 - `types/canonical.ts` — canonical data models (the single source of truth)

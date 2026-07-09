@@ -17,26 +17,40 @@ export default function StoryEditorPage() {
   useEffect(() => {
     if (!id) return;
 
-    // Simulate async fetch
     setTimeout(() => {
       const found = mockCMSStories.find((s) => s.id === id);
       if (found) {
         setStory(found);
       } else {
-        // Story not found — redirect to CMS home
         router.replace('/cms');
       }
       setLoading(false);
     }, 100);
   }, [id, router]);
 
-  const handleSave = (updated: CMSStory) => {
-    console.log('Saving story:', updated.id, updated.title);
-    // In production, this would call an API
-    // For mock, update in memory
+  const handleSave = async (updated: CMSStory) => {
     const idx = mockCMSStories.findIndex((s) => s.id === updated.id);
     if (idx >= 0) {
       mockCMSStories[idx] = updated;
+    }
+    // Sync to canonical store via API v1
+    try {
+      await fetch(`/api/v1/stories/${updated.slug}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+    } catch {
+      // Story may not exist in canonical store yet; create it
+      try {
+        await fetch('/api/v1/stories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated),
+        });
+      } catch (e) {
+        console.error('Failed to sync story to API:', e);
+      }
     }
   };
 

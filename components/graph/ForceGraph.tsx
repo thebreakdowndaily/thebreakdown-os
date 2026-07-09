@@ -45,8 +45,8 @@ const TYPE_LABELS: Record<string, string> = {
 
 const typeHref: Record<string, (slug: string) => string> = {
   story: (s) => `/story/${s}`, topic: (s) => `/topic/${s}`,
-  entity: (s) => `/entity/${s}`, organization: (s) => `/organization/${s}`,
-  country: (s) => `/country/${s}`, person: (s) => `/entity/${s}`,
+  entity: (s) => `/entity/${s}`, organization: (s) => `/entity/${s}`,
+  country: (s) => `/entity/${s}`, person: (s) => `/entity/${s}`,
   policy: (s) => `/entity/${s}`, scheme: (s) => `/entity/${s}`,
   budget: (s) => `/entity/${s}`, report: (s) => `/entity/${s}`,
 };

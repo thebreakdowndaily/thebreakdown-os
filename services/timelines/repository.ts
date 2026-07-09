@@ -41,7 +41,11 @@ export class SupabaseTimelineRepository implements TimelineRepository {
   }
   async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToTimeline(data) : undefined; }
   async save(timeline: Timeline) { const { data, error } = await sb().upsert(rowFromTimeline(timeline)).select().single(); if (error) throw error; return rowToTimeline(data); }
-  async update(id: string, updates: Partial<Timeline>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToTimeline(data); }
+  async update(id: string, updates: Partial<Timeline>) {
+    const { data, error } = await sb().update({ ...rowFromTimeline(updates as Timeline), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToTimeline(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
@@ -50,5 +54,5 @@ function rowToTimeline(row: any): Timeline {
   return { id: row.id, title: row.title, description: row.description, category: row.category, storyIds: row.story_ids || [], entityIds: row.entity_ids || [], topicIds: row.topic_ids || [], events: row.events || [], createdAt: row.created_at, updatedAt: row.updated_at };
 }
 function rowFromTimeline(timeline: Timeline): any {
-  return { title: timeline.title, description: timeline.description, category: timeline.category, story_ids: timeline.storyIds || [], entity_ids: timeline.entityIds || [], topic_ids: timeline.topicIds || [], events: timeline.events || [] };
+  return { id: timeline.id, title: timeline.title, description: timeline.description, category: timeline.category, story_ids: timeline.storyIds || [], entity_ids: timeline.entityIds || [], topic_ids: timeline.topicIds || [], events: timeline.events || [] };
 }

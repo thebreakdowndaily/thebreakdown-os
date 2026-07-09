@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { SupabaseTopicRepository } from '@/services/topics/repository';
 import type { Topic, APIResponse } from '@/types/canonical';
+import { syncTopic, deleteTopic } from '@/lib/data-sync';
+
+const repo = new SupabaseTopicRepository();
 
 export async function GET(
   _request: NextRequest,
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const services = getServices();
-  const topic = services.topics.getTopicBySlug(slug);
+  const topic = await repo.findBySlug(slug);
 
   if (!topic) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
@@ -23,8 +25,7 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const services = getServices();
-  const existing = services.topics.getTopicBySlug(slug);
+  const existing = await repo.findBySlug(slug);
 
   if (!existing) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
@@ -32,7 +33,8 @@ export async function PUT(
 
   const body = (await request.json()) as Partial<Topic>;
   const updated: Topic = { ...existing, ...body, slug: existing.slug, id: existing.id, updatedAt: new Date().toISOString() };
-  const saved = services.topics.saveTopic(updated);
+  const saved = await repo.save(updated);
+  syncTopic(saved);
   const res: APIResponse<Topic> = { data: saved };
   return NextResponse.json(res);
 }
@@ -42,13 +44,13 @@ export async function DELETE(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const services = getServices();
-  const topic = services.topics.getTopicBySlug(slug);
+  const topic = await repo.findBySlug(slug);
 
   if (!topic) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
   }
 
-  services.topics.deleteTopic(topic.id);
+  await repo.delete(topic.id);
+  deleteTopic(slug);
   return new NextResponse(null, { status: 204 });
 }

@@ -1,25 +1,32 @@
 interface TopicIconProps {
   slug: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const icons: Record<string, string> = {
-  economy: '\uD83D\uDCC8',
-  technology: '\uD83D\uDCF1',
-  policy: '\uD83D\uDCDD',
-  agriculture: '\uD83C\uDF3E',
-  'digital-payments': '\uD83D\uDCB3',
-  defence: '\uD83D\uDEE1\uFE0F',
-  climate: '\uD83C\uDF27\uFE0F',
-  healthcare: '\uD83C\uDFE5',
-  elections: '\uD83D\uDDF3\uFE0F',
-  governance: '\uD83C\uDFDB\uFE0F',
-  economyfinance: '\uD83D\uDCC8',
+  economy: '📈',
+  technology: '📱',
+  policy: '📝',
+  agriculture: '🌾',
+  'digital-payments': '💳',
+  defence: '🛡️',
+  climate: '🌧️',
+  healthcare: '🏥',
+  elections: '🗳️',
+  governance: '🏛️',
+  economyfinance: '📈',
 };
 
-export default function TopicIcon({ slug }: TopicIconProps) {
+const sizes = {
+  sm: 'text-xl',
+  md: 'text-2xl',
+  lg: 'text-3xl',
+};
+
+export default function TopicIcon({ slug, size = 'md' }: TopicIconProps) {
   return (
-    <span className="text-2xl leading-none" aria-hidden="true">
-      {icons[slug] || '\uD83D\uDCCA'}
+    <span className={`${sizes[size]} leading-none flex-shrink-0`} aria-hidden="true">
+      {icons[slug] || '📊'}
     </span>
   );
 }

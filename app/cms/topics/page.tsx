@@ -1,35 +1,58 @@
 'use client';
 
-import { useState } from 'react';
-import { cmsStore, type CMSTopic } from '@/utils/cms-store';
+import { useState, useEffect } from 'react';
+import type { CMSTopic } from '@/utils/cms-types';
 
 function emptyTopic(): CMSTopic {
   return { id: '', name: '', slug: '', description: '', overview: '', image: '', storyIds: [], relatedEntityIds: [], featuredStoryIds: [], countries: [], faq: [], timeline: [], statistics: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
 }
 
 export default function CMSTopicsPage() {
-  const [topics, setTopics] = useState(cmsStore.getTopics());
+  const [topics, setTopics] = useState<CMSTopic[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<CMSTopic | null>(null);
   const [draft, setDraft] = useState<CMSTopic>(emptyTopic);
   const [search, setSearch] = useState('');
 
+  useEffect(() => {
+    fetch('/api/v1/topics')
+      .then(r => r.json())
+      .then(res => { setTopics((res as { data: CMSTopic[] }).data || []); })
+      .finally(() => setLoading(false));
+  }, []);
+
   const filtered = topics.filter((t) => !search || t.name.toLowerCase().includes(search.toLowerCase()));
 
-  function save() {
+  async function save() {
     if (!draft.name) return;
     if (draft.id) {
-      cmsStore.saveTopic(draft);
+      await fetch(`/api/v1/topics/${draft.slug}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
     } else {
-      const id = `topic-${Date.now().toString(36)}`;
-      cmsStore.saveTopic({ ...draft, id, createdAt: new Date().toISOString() });
+      await fetch('/api/v1/topics', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
     }
-    setTopics(cmsStore.getTopics());
+    const res = await fetch('/api/v1/topics').then(r => r.json()) as { data: CMSTopic[] };
+    setTopics(res.data || []);
     setEditing(null);
     setDraft(emptyTopic());
   }
 
   function edit(t: CMSTopic) { setEditing(t); setDraft({ ...t }); }
-  function remove(id: string) { cmsStore.deleteTopic(id); setTopics(cmsStore.getTopics()); if (editing?.id === id) { setEditing(null); setDraft(emptyTopic()); } }
+  async function remove(id: string) {
+    const t = topics.find(x => x.id === id);
+    if (!t) return;
+    await fetch(`/api/v1/topics/${t.slug}`, { method: 'DELETE' });
+    const delRes = await fetch('/api/v1/topics').then(r => r.json()) as { data: CMSTopic[] };
+    setTopics(delRes.data || []);
+    if (editing?.id === id) { setEditing(null); setDraft(emptyTopic()); }
+  }
+
+  if (loading) return <div style={{ padding: '32px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px' }}>Loading...</div>;
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
@@ -44,7 +67,6 @@ export default function CMSTopicsPage() {
       <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); }} placeholder="Search topics..." style={{ width: '100%', padding: '8px 14px', background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '8px', fontSize: '13px', color: 'var(--color-text-primary)', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', marginBottom: '20px' }} />
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-        {/* Topic list */}
         <div>
           <div style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '12px', overflow: 'hidden' }}>
             {filtered.length === 0 && <div style={{ padding: '32px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px' }}>No topics found</div>}
@@ -57,7 +79,6 @@ export default function CMSTopicsPage() {
           </div>
         </div>
 
-        {/* Editor */}
         <div>
           {editing !== null || !draft.id ? (
             <div style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '12px', padding: '20px' }}>

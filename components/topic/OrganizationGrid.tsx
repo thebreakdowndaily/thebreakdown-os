@@ -15,7 +15,7 @@ export default function OrganizationGrid({ organizations }: { organizations: Org
         {organizations.map((org) => (
           <Link
             key={org.slug}
-            href={`/organization/${org.slug}`}
+            href={`/entity/${org.slug}`}
             className="group rounded-xl bg-[#151515] border border-[#2A2A2A] p-4 hover:border-[#D4A843]/30 transition-colors"
           >
             <div className="w-8 h-8 rounded-lg bg-[#D4A843]/10 flex items-center justify-center mb-3">

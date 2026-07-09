@@ -1,69 +1,54 @@
 import type { Metadata } from 'next';
-import type { PageSpec } from '@/utils/types';
-import { buildSearch } from '@/utils/website-builder';
-import { semanticSearch } from '@/utils/search/engine';
-import type { SemanticSearchResponse, SemanticResult } from '@/utils/search/engine';
+import { bootstrapServices } from '@/lib/bootstrap';
+import type { SearchIndexEntry } from '@/types/canonical';
 import SearchLayout from '@/layouts/SearchLayout';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
-import ConceptTrail from '@/components/search/ConceptTrail';
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; type?: string; page?: string }>;
-}
-
-function searchResults(query: string, typeFilter: string, page: number): {
-  results: SemanticSearchResponse['results'];
-  understood: SemanticSearchResponse['understood'] | null;
-  total: number;
-  totalPages: number;
-} {
-  if (!query.trim()) {
-    return { results: [], understood: null, total: 0, totalPages: 0 };
-  }
-
-  const result = semanticSearch(query, {
-    page,
-    pageSize: 10,
-    type: typeFilter || undefined,
-    depth: 2,
-  });
-
-  return {
-    results: result.results,
-    understood: result.understood,
-    total: result.meta.total,
-    totalPages: result.meta.totalPages,
-  };
 }
 
 export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
   const { q: query = '' } = await searchParams;
   return {
     title: query ? `Search: ${query} — The Breakdown` : 'Search — The Breakdown',
-    description: query ? `Semantic search results for "${query}" on The Breakdown` : 'Search stories, topics, entities on The Breakdown.',
+    description: query ? `Search results for "${query}" on The Breakdown` : 'Search stories, topics, entities on The Breakdown.',
   };
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q: query = '', type: typeFilter = '', page: pageStr = '1' } = await searchParams;
   const currentPage = parseInt(pageStr, 10);
+  const services = bootstrapServices();
 
-  const { results, understood, total, totalPages } = searchResults(query, typeFilter, currentPage);
+  let results: SearchIndexEntry[] = [];
+  let total = 0;
+  if (query.trim()) {
+    const pageSize = 10;
+    const res = typeFilter
+      ? services.search.searchByType(query, typeFilter, { page: currentPage, pageSize })
+      : services.search.search(query, { page: currentPage, pageSize });
+    results = res.data;
+    total = res.meta?.total ?? 0;
+  }
 
-  const pageSpec: PageSpec = buildSearch(query, results);
+  const totalPages = Math.ceil(total / 10);
+
+  const seo = query ? {
+    title: `Search: ${query} — The Breakdown`,
+    description: `Search results for "${query}" on The Breakdown`,
+    canonical: `https://thebreakdown.in/search?q=${encodeURIComponent(query)}`,
+    ogType: 'website' as const,
+  } : {
+    title: 'Search — The Breakdown',
+    description: 'Search stories, topics, entities on The Breakdown.',
+    canonical: 'https://thebreakdown.in/search',
+    ogType: 'website' as const,
+  };
 
   return (
-    <SearchLayout seo={pageSpec.seo} query={query}>
-      {understood && understood.detectedConcepts.length > 0 && (
-        <div className="mb-6">
-          <ConceptTrail
-            detectedConcepts={understood.detectedConcepts}
-            expansionTrail={understood.expansionTrail}
-          />
-        </div>
-      )}
-
+    <SearchLayout seo={seo} query={query}>
       <div>
         <p className="text-sm text-gray-400 mb-4">
           {total} result{total !== 1 ? 's' : ''} for &quot;{query || 'all'}&quot;
@@ -85,69 +70,34 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {results.map((result: SemanticResult) => {
+            {results.map((result) => {
               if (result.type === 'story') {
                 return (
-                  <div key={`${result.type}:${result.id}`}>
-                    {result.matchType !== 'keyword' && (
-                      <div className="mb-1">
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                          result.matchType === 'exact' ? 'bg-emerald-900/50 text-emerald-300'
-                          : result.matchType === 'concept' ? 'bg-blue-900/50 text-blue-300'
-                          : 'bg-amber-900/50 text-amber-300'
-                        }`}>
-                          {result.matchType === 'exact' ? 'Direct match'
-                            : result.matchType === 'concept' ? 'Concept match'
-                            : 'Expanded match'}
-                        </span>
-                        {result.conceptMatch.length > 0 && (
-                          <span className="text-xs text-gray-500 ml-2">
-                            via {result.conceptMatch.slice(0, 2).join(', ')}
-                            {result.conceptMatch.length > 2 ? ` +${String(result.conceptMatch.length - 2)}` : ''}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                    <StoryCard
-                      story={{
-                        slug: result.id,
-                        headline: result.title,
-                        summary: result.description,
-                        heroImage: result.image,
-                        publishedAt: result.date || new Date().toISOString(),
-                        readingTime: 0,
-                        evidenceScore: result.score,
-                        category: result.category || 'general',
-                      }}
-                      variant={result.score > 85 ? 'featured' : 'default'}
-                    />
-                  </div>
+                  <StoryCard
+                    key={`${result.type}:${result.id}`}
+                    story={{
+                      slug: result.slug,
+                      headline: result.title,
+                      summary: result.description,
+                      publishedAt: result.updatedAt,
+                      readingTime: 0,
+                      evidenceScore: result.score,
+                      category: 'general',
+                    }}
+                    variant={result.score > 85 ? 'featured' : 'default'}
+                  />
                 );
               }
               return (
-                <div key={`${result.type}:${result.id}`}>
-                  {result.matchType !== 'keyword' && (
-                    <div className="mb-1">
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                        result.matchType === 'exact' ? 'bg-emerald-900/50 text-emerald-300'
-                        : result.matchType === 'concept' ? 'bg-blue-900/50 text-blue-300'
-                        : 'bg-amber-900/50 text-amber-300'
-                      }`}>
-                        {result.matchType === 'exact' ? 'Direct match'
-                          : result.matchType === 'concept' ? 'Concept match'
-                          : 'Expanded match'}
-                      </span>
-                    </div>
-                  )}
-                  <EntityCard
-                    entity={{
-                      slug: result.id,
-                      name: result.title,
-                      type: result.category || 'entity',
-                      description: result.description,
-                    }}
-                  />
-                </div>
+                <EntityCard
+                  key={`${result.type}:${result.id}`}
+                  entity={{
+                    slug: result.slug,
+                    name: result.title,
+                    type: result.type,
+                    description: result.description,
+                  }}
+                />
               );
             })}
           </div>

@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS dataset_dimensions (
   dataset_id TEXT NOT NULL REFERENCES datasets(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   label TEXT NOT NULL,
-  values TEXT NOT NULL DEFAULT '[]',
+  "values" TEXT NOT NULL DEFAULT '[]',
   PRIMARY KEY (id, dataset_id)
 );
 

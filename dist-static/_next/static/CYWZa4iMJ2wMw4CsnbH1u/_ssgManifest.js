@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fcountry\u002F[slug]","\u002Fdataset\u002F[slug]","\u002Fdatasets\u002F[slug]","\u002Fentity\u002F[slug]","\u002Ffix\u002F[slug]","\u002Forganization\u002F[slug]","\u002Fstory\u002F[slug]","\u002Ftopic\u002F[slug]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

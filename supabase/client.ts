@@ -39,5 +39,9 @@ export function getServiceClient() {
 }
 
 export function getSupabaseClient() {
+  // Use service_role key for API routes (bypasses RLS)
+  if (typeof window === 'undefined') {
+    return getServiceClient();
+  }
   return getBrowserClient();
 }

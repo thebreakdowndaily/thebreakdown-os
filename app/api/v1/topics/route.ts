@@ -1,25 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { SupabaseTopicRepository } from '@/services/topics/repository';
 import type { Topic, APIResponse, APIListParams } from '@/types/canonical';
+import { syncTopic } from '@/lib/data-sync';
 
-export function GET(request: NextRequest) {
+const repo = new SupabaseTopicRepository();
+
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const services = getServices();
-
-  const pageStr = searchParams.get('page');
-  const pageSizeStr = searchParams.get('pageSize');
   const params: APIListParams = {
-    page: pageStr ? parseInt(pageStr, 10) : undefined,
-    pageSize: pageSizeStr ? parseInt(pageSizeStr, 10) : undefined,
+    page: searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : undefined,
+    pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!, 10) : undefined,
     search: searchParams.get('search') || undefined,
   };
 
-  const result = services.topics.getTopics(params);
+  const result = await repo.findAll(params);
   return NextResponse.json(result);
 }
 
 export async function POST(request: NextRequest) {
-  const services = getServices();
   const body = (await request.json()) as Partial<Topic>;
 
   const now = new Date().toISOString();
@@ -41,7 +39,8 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = services.topics.saveTopic(topic);
+  const saved = await repo.save(topic);
+  syncTopic(saved);
   const res: APIResponse<Topic> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

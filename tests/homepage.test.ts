@@ -69,9 +69,10 @@ async function runTests() {
   // Test 7: Schema is Website
   try {
     const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.schema['@context'] === 'https://schema.org', 'Schema context is schema.org');
-    assert(page.schema['@type'] === 'WebSite', 'Schema type is WebSite');
-    assert(page.schema.name === 'The Breakdown', 'Schema name is The Breakdown');
+    assert(Array.isArray(page.schema), 'Schema is an array');
+    assert(page.schema[0]['@context'] === 'https://schema.org', 'Schema context is schema.org');
+    assert(page.schema[0]['@type'] === 'WebSite', 'Schema type is WebSite');
+    assert(page.schema[0].name === 'The Breakdown', 'Schema name is The Breakdown');
   } catch (e) {
     console.error('  FAIL: Homepage schema check threw exception', e);
     failed++;
@@ -90,7 +91,7 @@ async function runTests() {
   // Test 9: Schema URL is correct
   try {
     const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.schema.url === 'https://thebreakdown.in', 'Schema url is correct');
+    assert(page.schema[0].url === 'https://thebreakdown.in', 'Schema url is correct');
   } catch (e) {
     console.error('  FAIL: Homepage schema URL check threw exception', e);
     failed++;

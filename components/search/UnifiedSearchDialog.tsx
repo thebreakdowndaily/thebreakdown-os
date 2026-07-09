@@ -50,7 +50,7 @@ export default function UnifiedSearchDialog({ open, onClose }: UnifiedSearchDial
         const params = new URLSearchParams({ q: query.trim(), limit: '20' });
         if (filter) params.set('type', filter);
         const res = await fetch(`/api/search?${params}`);
-        const data = await res.json();
+        const data: any = await res.json();
         const mapped: SearchResultData[] = (data.results || []).map((r: any) => ({
           id: r.id,
           type: r.type,

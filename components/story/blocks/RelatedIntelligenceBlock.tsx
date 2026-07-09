@@ -3,8 +3,6 @@ import type { RelatedIntelligenceData } from './types';
 import Card from '@/components/ui/Card';
 
 function entityHref(entity: { slug: string; type: string }): string {
-  if (entity.type === 'organization') return `/organization/${entity.slug}`;
-  if (entity.type === 'country') return `/country/${entity.slug}`;
   return `/entity/${entity.slug}`;
 }
 
@@ -69,7 +67,7 @@ export default function RelatedIntelligenceBlock({ topics, entities, countries, 
             <h3 className="text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-3">Countries</h3>
             <div className="flex flex-wrap gap-2">
               {countries.map((c) => (
-                <Link key={c.slug} href={`/country/${c.slug}`}
+                <Link key={c.slug} href={`/entity/${c.slug}`}
                   className="px-3 py-1 rounded-full text-xs font-medium bg-[#1D1D1D] text-[#A1A1AA] border border-[#2A2A2A] hover:border-[#D4A843]/30 hover:text-[#D4A843] transition-colors"
                 >
                   {c.name}
@@ -84,7 +82,7 @@ export default function RelatedIntelligenceBlock({ topics, entities, countries, 
             <h3 className="text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-3">Organizations</h3>
             <div className="flex flex-wrap gap-2">
               {organizations.map((o) => (
-                <Link key={o.slug} href={`/organization/${o.slug}`}
+                <Link key={o.slug} href={`/entity/${o.slug}`}
                   className="px-3 py-1 rounded-full text-xs font-medium bg-[#1D1D1D] text-[#A1A1AA] border border-[#2A2A2A] hover:border-[#D4A843]/30 hover:text-[#D4A843] transition-colors"
                 >
                   {o.name}

@@ -21,7 +21,7 @@ export function DatasetReferenceBlock(props: DatasetReferenceData) {
     if (datasetTitle) return;
     fetch(`/api/v1/datasets/${datasetSlug}`)
       .then(r => r.json())
-      .then((body: { data: Dataset }) => {
+      .then((body: any) => {
         setDataset(body.data);
         setLoading(false);
       })

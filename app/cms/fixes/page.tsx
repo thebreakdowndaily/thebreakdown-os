@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { cmsStore, type CMSFix } from '@/utils/cms-store';
+import { useState, useEffect } from 'react';
+import type { CMSFix } from '@/utils/cms-types';
 
 function emptyFix(): CMSFix {
   return { id: '', title: '', slug: '', problem: '', rootCauses: [''], existingSolutions: [{ title: '', description: '' }], globalExamples: [{ country: '', approach: '', outcome: '' }], recommendedActions: [{ action: '', responsible: '', timeline: '' }], citizenActions: [''], governmentActions: [''], metrics: [{ metric: '', currentValue: '', targetValue: '' }], status: 'draft', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
@@ -10,22 +10,49 @@ function emptyFix(): CMSFix {
 const STATUS_COLORS: Record<string, string> = { draft: 'var(--color-text-tertiary)', review: 'var(--color-amber-500)', published: 'var(--color-emerald-500)' };
 
 export default function CMSFixesPage() {
-  const [fixes, setFixes] = useState(cmsStore.getFixes());
+  const [fixes, setFixes] = useState<CMSFix[]>([]);
+  const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState<CMSFix>(emptyFix);
   const [editing, setEditing] = useState(false);
   const [search, setSearch] = useState('');
 
+  useEffect(() => {
+    fetch('/api/v1/fixes')
+      .then(r => r.json())
+      .then(res => { setFixes((res as { data: CMSFix[] }).data || []); })
+      .finally(() => setLoading(false));
+  }, []);
+
   const filtered = fixes.filter((f) => !search || f.title.toLowerCase().includes(search.toLowerCase()));
 
-  function save() {
+  async function save() {
     if (!draft.title) return;
-    if (draft.id) { cmsStore.saveFix(draft); }
-    else { const id = `fix-${Date.now().toString(36)}`; cmsStore.saveFix({ ...draft, id, createdAt: new Date().toISOString() }); }
-    setFixes(cmsStore.getFixes()); setEditing(false); setDraft(emptyFix());
+    if (draft.id) {
+      await fetch(`/api/v1/fixes/${draft.slug}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+    } else {
+      await fetch('/api/v1/fixes', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+    }
+    const res = await fetch('/api/v1/fixes').then(r => r.json()) as { data: CMSFix[] };
+    setFixes(res.data || []); setEditing(false); setDraft(emptyFix());
   }
 
   function edit(f: CMSFix) { setEditing(true); setDraft({ ...f }); }
-  function remove(id: string) { cmsStore.deleteFix(id); setFixes(cmsStore.getFixes()); if (draft.id === id) { setEditing(false); setDraft(emptyFix()); } }
+  async function remove(id: string) {
+    const f = fixes.find(x => x.id === id);
+    if (!f) return;
+    await fetch(`/api/v1/fixes/${f.slug}`, { method: 'DELETE' });
+    const delRes = await fetch('/api/v1/fixes').then(r => r.json()) as { data: CMSFix[] };
+    setFixes(delRes.data || []);
+    if (draft.id === id) { setEditing(false); setDraft(emptyFix()); }
+  }
+
+  if (loading) return <div style={{ padding: '32px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px' }}>Loading...</div>;
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
@@ -79,14 +106,12 @@ export default function CMSFixesPage() {
                   <textarea value={draft.problem} onChange={(e) => { setDraft({ ...draft, problem: e.target.value }); }} style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--color-border-subtle)', borderRadius: '6px', background: 'var(--color-surface-secondary)', color: 'var(--color-text-primary)', fontSize: '13px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', resize: 'vertical', minHeight: '60px' }} />
                 </div>
 
-                {/* Root Causes */}
                 <Section label="Root Causes" count={draft.rootCauses.length} onAdd={() => { setDraft({ ...draft, rootCauses: [...draft.rootCauses, ''] }); }} onRemove={(i) => { setDraft({ ...draft, rootCauses: draft.rootCauses.filter((_, j) => j !== i) }); }}>
                   {draft.rootCauses.map((rc, i) => (
                     <input key={i} value={rc} onChange={(e) => { const r = [...draft.rootCauses]; r[i] = e.target.value; setDraft({ ...draft, rootCauses: r }); }} placeholder={`Root cause ${String(i + 1)}`} style={inputStyle} />
                   ))}
                 </Section>
 
-                {/* Existing Solutions */}
                 <Section label="Existing Solutions" count={draft.existingSolutions.length} onAdd={() => { setDraft({ ...draft, existingSolutions: [...draft.existingSolutions, { title: '', description: '' }] }); }} onRemove={(i) => { setDraft({ ...draft, existingSolutions: draft.existingSolutions.filter((_, j) => j !== i) }); }}>
                   {draft.existingSolutions.map((s, i) => (
                     <div key={i} style={{ marginBottom: '6px', padding: '8px', background: 'var(--color-surface-secondary)', borderRadius: '6px' }}>
@@ -96,7 +121,6 @@ export default function CMSFixesPage() {
                   ))}
                 </Section>
 
-                {/* Global Examples */}
                 <Section label="Global Examples" count={draft.globalExamples.length} onAdd={() => { setDraft({ ...draft, globalExamples: [...draft.globalExamples, { country: '', approach: '', outcome: '' }] }); }} onRemove={(i) => { setDraft({ ...draft, globalExamples: draft.globalExamples.filter((_, j) => j !== i) }); }}>
                   {draft.globalExamples.map((ex, i) => (
                     <div key={i} style={{ marginBottom: '6px', padding: '8px', background: 'var(--color-surface-secondary)', borderRadius: '6px' }}>
@@ -107,7 +131,6 @@ export default function CMSFixesPage() {
                   ))}
                 </Section>
 
-                {/* Recommended Actions */}
                 <Section label="Recommended Actions" count={draft.recommendedActions.length} onAdd={() => { setDraft({ ...draft, recommendedActions: [...draft.recommendedActions, { action: '', responsible: '', timeline: '' }] }); }} onRemove={(i) => { setDraft({ ...draft, recommendedActions: draft.recommendedActions.filter((_, j) => j !== i) }); }}>
                   {draft.recommendedActions.map((a, i) => (
                     <div key={i} style={{ marginBottom: '6px', padding: '8px', background: 'var(--color-surface-secondary)', borderRadius: '6px' }}>
@@ -120,21 +143,18 @@ export default function CMSFixesPage() {
                   ))}
                 </Section>
 
-                {/* Citizen Actions */}
                 <Section label="Citizen Actions" count={draft.citizenActions.length} onAdd={() => { setDraft({ ...draft, citizenActions: [...draft.citizenActions, ''] }); }} onRemove={(i) => { setDraft({ ...draft, citizenActions: draft.citizenActions.filter((_, j) => j !== i) }); }}>
                   {draft.citizenActions.map((ca, i) => (
                     <input key={i} value={ca} onChange={(e) => { const arr = [...draft.citizenActions]; arr[i] = e.target.value; setDraft({ ...draft, citizenActions: arr }); }} placeholder={`Citizen action ${String(i + 1)}`} style={inputStyle} />
                   ))}
                 </Section>
 
-                {/* Gov Actions */}
                 <Section label="Government Actions" count={draft.governmentActions.length} onAdd={() => { setDraft({ ...draft, governmentActions: [...draft.governmentActions, ''] }); }} onRemove={(i) => { setDraft({ ...draft, governmentActions: draft.governmentActions.filter((_, j) => j !== i) }); }}>
                   {draft.governmentActions.map((ga, i) => (
                     <input key={i} value={ga} onChange={(e) => { const arr = [...draft.governmentActions]; arr[i] = e.target.value; setDraft({ ...draft, governmentActions: arr }); }} placeholder={`Government action ${String(i + 1)}`} style={inputStyle} />
                   ))}
                 </Section>
 
-                {/* Metrics */}
                 <Section label="Metrics to Track" count={draft.metrics.length} onAdd={() => { setDraft({ ...draft, metrics: [...draft.metrics, { metric: '', currentValue: '', targetValue: '' }] }); }} onRemove={(i) => { setDraft({ ...draft, metrics: draft.metrics.filter((_, j) => j !== i) }); }}>
                   {draft.metrics.map((m, i) => (
                     <div key={i} style={{ marginBottom: '6px', padding: '8px', background: 'var(--color-surface-secondary)', borderRadius: '6px' }}>

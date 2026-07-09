@@ -1,135 +1,261 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import type { EntityJSON, Section } from '@/utils/types';
-import { buildEntity } from '@/utils/website-builder';
-import EntityLayout from '@/layouts/EntityLayout';
-import EntityOverview from '@/components/entity/EntityOverview';
-import EntityTimeline from '@/components/entity/EntityTimeline';
-import EntityData from '@/components/entity/EntityData';
-import EntitySources from '@/components/entity/EntitySources';
-import RelatedStories from '@/components/story/RelatedStories';
+import { bootstrapServices } from '@/lib/bootstrap';
+import { buildEntityPage } from '@/features/entity/view-model';
+import Container from '@/components/ui/Container';
+import SectionHeader from '@/components/ui/SectionHeader';
+import StoryCard from '@/components/ui/StoryCard';
+import EntityCard from '@/components/ui/EntityCard';
+import Divider from '@/components/ui/Divider';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import InteractiveTimelineBlock from '@/components/story/blocks/InteractiveTimelineBlock';
 import FAQ from '@/components/story/FAQ';
 import { EntityGraphSection } from '@/features/graph/components/EntityGraphSection';
+import EntityData from '@/components/entity/EntityData';
+import EntitySources from '@/components/entity/EntitySources';
 
-const sectionComponents: Record<string, React.ElementType | undefined> = {
-  'entity-overview': EntityOverview,
-  'entity-timeline': EntityTimeline,
-  'entity-data': EntityData,
-  'entity-sources': EntitySources,
-  'related-stories': RelatedStories,
-  faq: FAQ,
-  'entity-graph': EntityGraphSection,
+const typeBadgeColor: Record<string, string> = {
+  person: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  organization: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+  policy: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  scheme: 'bg-green-500/20 text-green-400 border-green-500/30',
+  budget: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  report: 'bg-red-500/20 text-red-400 border-red-500/30',
+  country: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
+  dataset: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
+  source: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
 };
 
-function SectionRenderer({ sections, slug }: { sections: Section[]; slug: string }) {
-  return (
-    <>
-      {sections.map((section) => {
-        const Component = sectionComponents[section.id];
-        if (!Component) return null;
-        if (section.id === 'entity-graph') return <Component key={section.id} entitySlug={slug} />;
-        return <Component key={section.id} {...section.props} />;
-      })}
-    </>
-  );
+function createJsonLd(entity: { name: string; description: string; slug: string; type: string }) {
+  const schemaType =
+    entity.type === 'organization' ? 'Organization' :
+    entity.type === 'person' ? 'Person' : 'Thing';
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': schemaType,
+      name: entity.name,
+      description: entity.description,
+      url: `https://thebreakdown.in/entity/${entity.slug}`,
+      publisher: { '@type': 'Organization', name: 'The Breakdown' },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://thebreakdown.in/' },
+        { '@type': 'ListItem', position: 2, name: 'Entities', item: 'https://thebreakdown.in/entities' },
+        { '@type': 'ListItem', position: 3, name: entity.name, item: `https://thebreakdown.in/entity/${entity.slug}` },
+      ],
+    },
+  ];
 }
 
-const mockEntities: EntityJSON[] = [
-  {
-    id: 'mgnrega',
-    slug: 'mgnrega',
-    name: 'Mahatma Gandhi National Rural Employment Guarantee Act',
-    type: 'policy',
-    description: 'India\'s flagship rural employment guarantee scheme providing 100 days of guaranteed employment to rural households.',
-    image: '/images/entities/mgnrega.jpg',
-    aliases: ['MGNREGA', 'NREGA', 'Rural Employment Scheme'],
-    storyCount: 24,
-    updatedAt: '2026-06-15T10:00:00Z',
-    timeline: [
-      { date: '2005-08-23', title: 'Bill Introduced in Parliament', description: 'The National Rural Employment Guarantee Bill was introduced in the Lok Sabha.' },
-      { date: '2006-02-02', title: 'Act Comes into Force', description: 'MGNREGA notified across 200 districts initially.' },
-    ],
-    datasets: [
-      { label: 'Annual Budget Allocation', description: 'Central allocation for MGNREGA by financial year', data: [{ year: '2020-21', allocation: 111500 }, { year: '2021-22', allocation: 98000 }, { year: '2022-23', allocation: 89000 }, { year: '2023-24', allocation: 95000 }, { year: '2025-26', allocation: 86000 }], source: 'Union Budget' },
-    ],
-    statistics: { 'Total Person-Days': '385 crore', 'Active Workers': '14.2 crore', 'Average Wage': '₹267/day', 'Women Participation': '55.3%' },
-    sources: [
-      { name: 'Ministry of Rural Development', url: 'https://rural.gov.in', type: 'government', description: 'Official ministry website with scheme documentation.' },
-    ],
-    relatedStories: [
-      { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: 'Data-driven assessment of the rural employment scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
-    ],
-    faq: [
-      { question: 'What is the objective of MGNREGA?', answer: 'To provide 100 days of guaranteed wage employment to rural households.' },
-    ],
-  },
-  {
-    id: 'ministry-of-rural-development',
-    slug: 'ministry-of-rural-development',
-    name: 'Ministry of Rural Development',
-    type: 'organization',
-    description: 'Nodal ministry of Government of India responsible for rural development policies and programmes.',
-    image: '/images/entities/mord.jpg',
-    storyCount: 56,
-    updatedAt: '2026-06-10T08:00:00Z',
-    timeline: [],
-    datasets: [],
-    statistics: { 'Schemes Managed': '15', 'Annual Budget': '₹1.5 lakh crore' },
-    sources: [{ name: 'MoRD Official Website', url: 'https://rural.gov.in', type: 'government', description: 'Official ministry portal.' }],
-    relatedStories: [],
-    faq: [],
-  },
-  {
-    id: 'rbi',
-    slug: 'rbi',
-    name: 'Reserve Bank of India',
-    type: 'organization',
-    description: 'India\'s central banking institution controlling monetary policy and currency issuance.',
-    image: '/images/entities/rbi.jpg',
-    storyCount: 89,
-    updatedAt: '2026-06-08T14:00:00Z',
-    timeline: [],
-    datasets: [],
-    statistics: { 'Policy Rate': '6.25%', 'GDP Forecast': '6.8%', 'Inflation Target': '4.0%' },
-    sources: [{ name: 'RBI Official Website', url: 'https://rbi.org.in', type: 'government', description: 'Reserve Bank of India portal.' }],
-    relatedStories: [],
-    faq: [],
-  },
-];
-
-const entityMap = new Map(mockEntities.map((e) => [e.slug, e]));
-
 export function generateStaticParams() {
-  return mockEntities.map((entity) => ({ slug: entity.slug }));
+  const services = bootstrapServices();
+  return services.entities.getEntities({ pageSize: 100 }).data.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const data = entityMap.get(slug);
-  if (!data) return { title: 'Entity Not Found' };
-  const pageSpec = buildEntity(data);
+  const services = bootstrapServices();
+  const vm = buildEntityPage(services, slug);
+  if (!vm) return { title: 'Entity Not Found - The Breakdown' };
+  const { entity } = vm;
   return {
-    title: pageSpec.seo.title,
-    description: pageSpec.seo.description,
+    title: entity.name,
+    description: entity.description,
+    keywords: entity.aliases?.join(', ') || '',
+    alternates: { canonical: `https://thebreakdown.in/entity/${entity.slug}` },
     openGraph: {
-      title: pageSpec.seo.title,
-      description: pageSpec.seo.description,
-      type: 'profile',
-      url: `https://thebreakdown.in/entity/${data.slug}`,
+      title: entity.name,
+      description: entity.description,
+      type: 'article',
+      url: `https://thebreakdown.in/entity/${entity.slug}`,
+      images: entity.image ? [{ url: entity.image, width: 1200, height: 630, alt: entity.name }] : [],
     },
+    twitter: { card: 'summary_large_image', title: entity.name, description: entity.description },
   };
 }
 
 export default async function EntityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const data = entityMap.get(slug);
-  if (!data) notFound();
+  const services = bootstrapServices();
+  const vm = buildEntityPage(services, slug);
+  if (!vm) notFound();
+  const { entity, stories, relatedEntities } = vm;
 
-  const pageSpec = buildEntity(data);
+  const statsRecord: Record<string, number | string> = {};
+  entity.statistics.forEach((s) => { statsRecord[s.label] = s.value; });
+
+  const hasTimeline = entity.timeline.length > 0;
+  const hasData = Object.keys(statsRecord).length > 0 || (entity as any).datasets?.length > 0;
+  const hasSources = (entity as any).sources?.length > 0;
+  const hasFaq = entity.faq.length > 0;
 
   return (
-    <EntityLayout seo={pageSpec.seo} breadcrumbs={pageSpec.breadcrumbs} entityType={data.type}>
-      <SectionRenderer sections={pageSpec.sections} slug={slug} />
-    </EntityLayout>
+    <>
+      {createJsonLd(entity).map((ld, i) => (
+        <Script key={`sc-${i}`} id={`schema-${i}`} type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify(ld)}
+        </Script>
+      ))}
+
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Entities', href: '/entities' },
+          { label: entity.name, href: `/entity/${entity.slug}` },
+        ]}
+      />
+
+      <main className="flex-1 w-full" role="main">
+        <section aria-label={`Dossier: ${entity.name}`} className="bg-[#0A0A0A] border-b border-[#2A2A2A]">
+          <Container className="py-8 sm:py-10">
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-10">
+              {entity.image && (
+                <div className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-[#2A2A2A]">
+                  <Image src={entity.image} alt={entity.name} width={128} height={128} className="w-full h-full object-cover" />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F5F5F5]">{entity.name}</h1>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${typeBadgeColor[entity.type] || 'bg-gray-500/20 text-gray-400 border-gray-500/30'}`}>
+                    {entity.type}
+                  </span>
+                </div>
+                {entity.aliases.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {entity.aliases.map((alias, i) => (
+                      <span key={i} className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#151515] text-[#A1A1AA] border border-[#2A2A2A]">
+                        {alias}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <p className="text-base text-[#A1A1AA] leading-relaxed max-w-3xl">{entity.description}</p>
+                <div className="flex flex-wrap items-center gap-4 mt-4 text-sm">
+                  <span className="text-[#D4A843] font-bold">{stories.length} stories</span>
+                  {Object.entries(statsRecord).slice(0, 4).map(([key, value]) => (
+                    <span key={key} className="text-[#A1A1AA]">
+                      <span className="text-[#F5F5F5] font-semibold">{value}</span> {key}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Container>
+
+          <div className="sticky top-0 z-20 bg-[#0A0A0A]/95 backdrop-blur-sm border-b border-[#2A2A2A]">
+            <Container>
+              <nav className="flex items-center gap-1 overflow-x-auto py-3" aria-label="Dossier sections">
+                {[
+                  { id: 'overview', label: 'Overview' },
+                  ...(hasTimeline ? [{ id: 'timeline', label: 'Timeline' }] : []),
+                  ...(hasData ? [{ id: 'data', label: 'Data' }] : []),
+                  ...(hasSources ? [{ id: 'sources', label: 'Sources' }] : []),
+                  { id: 'graph', label: 'Connections' },
+                  ...(hasFaq ? [{ id: 'faq', label: 'FAQ' }] : []),
+                  { id: 'stories', label: 'Stories' },
+                ].map((section) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#A1A1AA] hover:text-[#D4A843] hover:bg-[#151515] rounded-lg transition-colors"
+                  >
+                    {section.label}
+                  </a>
+                ))}
+              </nav>
+            </Container>
+          </div>
+        </section>
+
+        <Container className="py-8">
+          {hasTimeline && (
+            <section id="timeline" className="mb-12 scroll-mt-20">
+              <SectionHeader eyebrow="History" title="Timeline" />
+              <InteractiveTimelineBlock events={entity.timeline} />
+            </section>
+          )}
+
+          {hasData && (
+            <>
+              <Divider className="mb-12" />
+              <section id="data" className="mb-12 scroll-mt-20">
+                <SectionHeader eyebrow="Statistics" title="Data & Metrics" />
+                <EntityData
+                  datasets={(entity as any).datasets || []}
+                  statistics={statsRecord}
+                />
+              </section>
+            </>
+          )}
+
+          {hasSources && (
+            <>
+              <Divider className="mb-12" />
+              <section id="sources" className="mb-12 scroll-mt-20">
+                <SectionHeader eyebrow="References" title="Sources" />
+                <EntitySources sources={(entity as any).sources || []} />
+              </section>
+            </>
+          )}
+
+          <Divider className="mb-12" />
+          <section id="graph" className="mb-12 scroll-mt-20">
+            <SectionHeader
+              eyebrow="Connections"
+              title="Knowledge Graph"
+              description="Related entities, stories, and topics"
+            />
+            <div className="bg-[#151515] rounded-2xl border border-[#2A2A2A] p-4 min-h-[300px]">
+              <EntityGraphSection entitySlug={slug} />
+            </div>
+          </section>
+
+          {hasFaq && (
+            <>
+              <Divider className="mb-12" />
+              <section id="faq" className="mb-12 scroll-mt-20">
+                <SectionHeader eyebrow="Explainer" title="Frequently Asked Questions" />
+                <FAQ questions={entity.faq} />
+              </section>
+            </>
+          )}
+
+          {relatedEntities.length > 0 && (
+            <>
+              <Divider className="mb-12" />
+              <section id="related" className="mb-12 scroll-mt-20">
+                <SectionHeader eyebrow="Network" title="Related Entities" description={`${relatedEntities.length} entities connected to ${entity.name}`} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {relatedEntities.map((e) => (
+                    <EntityCard key={e.slug} entity={e} size="sm" />
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+
+          {stories.length > 0 && (
+            <>
+              <Divider className="mb-12" />
+              <section id="stories" className="scroll-mt-20">
+                <SectionHeader eyebrow="Coverage" title="Related Stories" description={`${stories.length} stories referencing ${entity.name}`} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {stories.map((s) => (
+                    <StoryCard key={s.slug} story={s} variant="compact" />
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+        </Container>
+      </main>
+    </>
   );
 }

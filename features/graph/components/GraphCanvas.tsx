@@ -112,8 +112,8 @@ export const GraphCanvas = memo(function GraphCanvas({
   const [dragging, setDragging] = useState(false);
   const [dragNode, setDragNode] = useState<string | null>(null);
   const [showLabels, setShowLabels] = useState(true);
+  const [layoutNodes, setLayoutNodes] = useState<LayoutNode[]>([]);
   const dragStart = useRef({ x: 0, y: 0, nodeX: 0, nodeY: 0 });
-  const layoutRef = useRef<LayoutNode[]>([]);
 
   const nodeMap = useMemo(() => {
     const m = new Map<string, GraphNode>();
@@ -142,8 +142,12 @@ export const GraphCanvas = memo(function GraphCanvas({
     return s;
   }, [highlighted, edgeMap]);
 
+  const layoutRef = useRef<LayoutNode[]>([]);
+
   useEffect(() => {
-    layoutRef.current = runForceSimulation(inputNodes, inputEdges, width, height, mini);
+    const result = runForceSimulation(inputNodes, inputEdges, width, height, mini);
+    layoutRef.current = result;
+    setLayoutNodes(result);
   }, [inputNodes, inputEdges, width, height, mini]);
 
   const handleNodeMouseDown = useCallback((e: React.MouseEvent, nodeId: string) => {
@@ -218,8 +222,6 @@ export const GraphCanvas = memo(function GraphCanvas({
     if (mini) return;
     setShowLabels(viewport.scale >= 0.5);
   }, [viewport.scale, mini]);
-
-  const layoutNodes = layoutRef.current;
 
   return (
     <svg

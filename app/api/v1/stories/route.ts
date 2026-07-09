@@ -1,25 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { SupabaseStoryRepository } from '@/services/stories/repository';
 import type { Story, APIResponse, APIListParams } from '@/types/canonical';
+import { syncStory } from '@/lib/data-sync';
 
-export function GET(request: NextRequest) {
+const repo = new SupabaseStoryRepository();
+
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const services = getServices();
-
-  const pageStr = searchParams.get('page');
-  const pageSizeStr = searchParams.get('pageSize');
   const params: APIListParams = {
-    page: pageStr ? parseInt(pageStr, 10) : undefined,
-    pageSize: pageSizeStr ? parseInt(pageSizeStr, 10) : undefined,
+    page: searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : undefined,
+    pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!, 10) : undefined,
     search: searchParams.get('search') || undefined,
   };
 
-  const result = services.stories.getStories(params);
+  const result = await repo.findAll(params);
   return NextResponse.json(result);
 }
 
 export async function POST(request: NextRequest) {
-  const services = getServices();
   const body = (await request.json()) as Partial<Story>;
 
   const now = new Date().toISOString();
@@ -52,7 +50,8 @@ export async function POST(request: NextRequest) {
     updatedBy: body.updatedBy,
   };
 
-  const saved = services.stories.saveStory(story);
+  const saved = await repo.save(story);
+  syncStory(saved);
   const res: APIResponse<Story> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

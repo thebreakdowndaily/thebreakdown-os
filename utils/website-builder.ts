@@ -69,7 +69,7 @@ export function buildStory(data: StoryJSON): PageSpec {
     })),
     seo: generateSEO(data),
     breadcrumbs: generateBreadcrumbs('story', data),
-    schema: generateSchema('story', data),
+    schema: [generateBreadcrumbSchema('story', data), generateSchema('story', data)],
     metadata: extractMetadata(data),
   };
 }
@@ -91,7 +91,7 @@ export function buildEntity(data: EntityJSON): PageSpec {
     })),
     seo: generateEntitySEO(data),
     breadcrumbs: generateBreadcrumbs('entity', data),
-    schema: generateSchema('entity', data),
+    schema: [generateBreadcrumbSchema('entity', data), generateSchema('entity', data)],
     metadata: extractEntityMetadata(data),
   };
 }
@@ -113,7 +113,7 @@ export function buildTopic(data: TopicJSON): PageSpec {
     })),
     seo: generateTopicSEO(data),
     breadcrumbs: generateBreadcrumbs('topic', data),
-    schema: generateSchema('topic', data),
+    schema: [generateBreadcrumbSchema('topic', data), generateSchema('topic', data)],
     metadata: extractTopicMetadata(data),
   };
 }
@@ -148,12 +148,12 @@ export function buildHomepage(data: HomepageJSON): PageSpec {
       ogImage: '/images/og-home.jpg',
     },
     breadcrumbs: [],
-    schema: {
+    schema: [{
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'The Breakdown',
       url: 'https://thebreakdown.in',
-    },
+    }],
     metadata: { readingTime: 0, updatedAt: new Date().toISOString() },
   };
 }
@@ -175,7 +175,7 @@ export function buildSearch(query: string, results: SearchResult[]): PageSpec {
       { label: 'Home', href: '/' },
       { label: `Search: ${query}`, href: `/search?q=${encodeURIComponent(query)}` },
     ],
-    schema: {},
+    schema: [],
     metadata: { resultCount: results.length, query },
     searchResults: results,
   };
@@ -214,14 +214,7 @@ export function buildFix(data: FixJSON): PageSpec {
       { label: 'The Fix', href: '/fix' },
       { label: data.headline, href: `/fix/${data.slug}` },
     ],
-    schema: {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: data.headline,
-      description: data.summary,
-      author: { '@type': 'Person', name: data.author.name },
-      datePublished: data.publishedAt,
-    },
+    schema: [generateSchema('fix', data)],
     metadata: {
       storySlug: data.storySlug,
       evidenceScore: data.evidenceScore,
@@ -447,6 +440,41 @@ function generateBreadcrumbs(type: string, data: { slug: string; headline?: stri
 
 // ── Schema.org Generation ───────────────────────────────────────────────
 
+function generateBreadcrumbSchema(type: string, data: { slug: string; headline?: string; name?: string }): Record<string, unknown> {
+  const siteUrl = 'https://thebreakdown.in';
+
+  const items: Array<{ '@type': 'ListItem'; position: number; name: string; item: string }> = [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+  ];
+
+  switch (type) {
+    case 'story':
+      items.push(
+        { '@type': 'ListItem', position: 2, name: 'Stories', item: `${siteUrl}/stories` },
+        { '@type': 'ListItem', position: 3, name: data.headline || data.slug, item: `${siteUrl}/story/${data.slug}` }
+      );
+      break;
+    case 'entity':
+      items.push(
+        { '@type': 'ListItem', position: 2, name: 'Entities', item: `${siteUrl}/entities` },
+        { '@type': 'ListItem', position: 3, name: data.name || data.slug, item: `${siteUrl}/entity/${data.slug}` }
+      );
+      break;
+    case 'topic':
+      items.push(
+        { '@type': 'ListItem', position: 2, name: 'Topics', item: `${siteUrl}/topics` },
+        { '@type': 'ListItem', position: 3, name: data.name || data.slug, item: `${siteUrl}/topic/${data.slug}` }
+      );
+      break;
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  };
+}
+
 function generateSchema(type: string, data: unknown): Record<string, unknown> {
   const d = data as Record<string, unknown>;
   const base = {
@@ -462,6 +490,7 @@ function generateSchema(type: string, data: unknown): Record<string, unknown> {
         description: d.summary,
         datePublished: d.publishedAt,
         dateModified: d.updatedAt,
+        wordCount: d.wordCount,
         author: (() => {
           const auth = d.author as { name?: string; url?: string } | undefined;
           return auth ? { '@type': 'Person' as const, name: auth.name, url: auth.url } : undefined;
@@ -470,9 +499,13 @@ function generateSchema(type: string, data: unknown): Record<string, unknown> {
           '@type': 'Organization',
           name: 'The Breakdown',
           url: 'https://thebreakdown.in',
+          logo: { '@type': 'ImageObject', url: 'https://thebreakdown.in/images/og-home.jpg' },
         },
         image: d.heroImage,
-        mainEntityOfPage: `https://thebreakdown.in/story/${d.slug as string}`,
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://thebreakdown.in/story/${d.slug as string}`,
+        },
       };
 
     case 'entity':
@@ -483,6 +516,7 @@ function generateSchema(type: string, data: unknown): Record<string, unknown> {
         description: d.description,
         url: `https://thebreakdown.in/entity/${d.slug as string}`,
         ...(d.aliases ? { additionalName: d.aliases } : {}),
+        ...(d.image ? { image: d.image } : {}),
       };
 
     case 'topic':
@@ -492,6 +526,25 @@ function generateSchema(type: string, data: unknown): Record<string, unknown> {
         name: d.name,
         description: d.description,
         url: `https://thebreakdown.in/topic/${String(d.slug)}`,
+      };
+
+    case 'fix':
+      return {
+        ...base,
+        '@type': 'Article',
+        headline: d.headline,
+        description: d.summary,
+        datePublished: d.publishedAt,
+        dateModified: d.updatedAt,
+        author: {
+          '@type': 'Person',
+          name: (d.author as { name?: string })?.name || 'The Breakdown Editorial',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'The Breakdown',
+          url: 'https://thebreakdown.in',
+        },
       };
 
     default:

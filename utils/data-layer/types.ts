@@ -26,6 +26,8 @@ export interface APIStory {
   charts: APIChart[];
   geoData?: APIGeoData;
   faq: APIFAQItem[];
+  relatedTopicIds?: string[];
+  relatedEntityIds?: string[];
   relatedStories: APIRelatedStory[];
   relatedEntities: APIRelatedEntity[];
   organisations?: APIRelatedEntity[];
@@ -118,6 +120,15 @@ export interface APIEntity {
   relatedStories: APIRelatedStory[];
   relatedEntities: APIRelatedEntity[];
   faq: APIFAQItem[];
+  image?: string;
+  evidenceScore?: number;
+  datasets?: Array<{ label: string; description: string; data: Record<string, unknown>[]; source: string }>;
+  sources?: Array<{ name: string; url: string; type: string; description: string }>;
+  relatedTopics?: APIRelatedEntity[];
+  overview?: string;
+  population?: number;
+  gdp?: number;
+  capital?: string;
 }
 
 export interface APITopic {

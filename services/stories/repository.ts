@@ -48,7 +48,11 @@ export class SupabaseStoryRepository implements StoryRepository {
   async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToStory(data) : undefined; }
   async findBySlug(slug: string) { const { data, error } = await sb().select('*').eq('slug', slug).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToStory(data) : undefined; }
   async save(story: Story) { const { data, error } = await sb().upsert(rowFromStory(story)).select().single(); if (error) throw error; return rowToStory(data); }
-  async update(id: string, updates: Partial<Story>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToStory(data); }
+  async update(id: string, updates: Partial<Story>) {
+    const { data, error } = await sb().update({ ...rowFromStory(updates as Story), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToStory(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
@@ -56,14 +60,22 @@ export class SupabaseStoryRepository implements StoryRepository {
 function rowToStory(row: any): Story {
   return {
     id: row.id, slug: row.slug, title: row.title, headline: row.title, summary: row.summary,
-    heroImage: '', author: row.author_id, category: row.category, status: row.status,
-    evidenceScore: 0, readingTime: 0, publishedAt: row.published_at || '', createdAt: row.created_at,
-    updatedAt: row.updated_at, tags: row.tags || [], blocks: row.content?.blocks || [],
+    heroImage: row.hero_image || '', author: row.author_id || '', category: row.category || '',
+    status: row.status || 'draft',
+    evidenceScore: 0, readingTime: 0, publishedAt: row.published_at || '',
+    createdAt: row.created_at, updatedAt: row.updated_at,
+    tags: row.tags || [], blocks: row.content?.blocks || [],
     sources: [], claims: [], timeline: [], faq: [], charts: [],
-    relatedStoryIds: [], relatedEntityIds: [], relatedTopicIds: [],
+    relatedStoryIds: row.related_story_ids || [], relatedEntityIds: row.related_entity_ids || [],
+    relatedTopicIds: row.related_topic_ids || [],
   };
 }
 
 function rowFromStory(story: Story): any {
-  return { slug: story.slug, title: story.title, summary: story.summary, content: { blocks: story.blocks }, author_id: story.author, category: story.category, status: story.status, tags: story.tags, published_at: story.publishedAt || null };
+  return {
+    id: story.id, slug: story.slug, title: story.title, summary: story.summary,
+    content: { blocks: story.blocks || [] },
+    author_id: story.author, category: story.category, status: story.status,
+    tags: story.tags || [], published_at: story.publishedAt || null,
+  };
 }

@@ -1,17 +1,39 @@
-import type { Story, Topic, Entity, HomepageViewModel, PageSection } from '@/types/canonical';
+import type { Story, HomepageViewModel, PageSection } from '@/types/canonical';
 import type { Services } from '@/services/registry';
+import type { APIStory, APIFix, APITopic } from '@/utils/data-layer/types';
+import { storyToAPIStory, fixToAPIFix, topicToAPITopic } from '@/lib/mappers/to-api-types';
 
-export function buildHomepage(services: Services): HomepageViewModel {
-  const stories = services.stories.getStories({ pageSize: 10 }).data;
-  const topics = services.topics.getTopics().data;
-  const topStory = stories[0];
+export interface HomepageData {
+  seo: { title: string; description: string; canonical: string; ogType: string };
+  topStory: APIStory | null;
+  stories: APIStory[];
+  fixes: APIFix[];
+  topics: APITopic[];
+  sections: PageSection[];
+  allStories: Story[];
+}
+
+export function buildHomepage(services: Services): HomepageData {
+  const allStories = [...services.stories.getStories({ pageSize: 20 }).data]
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  const topStoryCanonical = allStories[0];
+  const topStory = topStoryCanonical ? storyToAPIStory(topStoryCanonical) : null;
+  const stories = allStories.map(storyToAPIStory);
+  const fixes = services.fixes.getFixes().data.map(fixToAPIFix);
+  const topics = services.topics.getTopics().data.map(topicToAPITopic);
+
   const trending = stories.slice(0, 3);
   const latest = stories.slice(3, 6);
 
   return {
-    seo: { title: 'The Breakdown — India Explained', description: 'Independent, data-driven journalism on Indian policy, politics, and society.' },
+    seo: { title: 'The Breakdown — India Explained', description: 'Independent, data-driven journalism on Indian policy, politics, and society.', canonical: 'https://thebreakdown.in', ogType: 'website' },
+    topStory,
+    stories,
+    fixes,
+    topics,
+    allStories,
     sections: [
-      { id: 'hero', component: 'Hero', props: { story: topStory } },
+      { id: 'hero', component: 'Hero', props: { story: topStoryCanonical } },
       { id: 'featured', component: 'FeaturedStories', props: { stories: trending } },
       { id: 'latest', component: 'LatestInvestigations', props: { stories: latest } },
       { id: 'topics', component: 'TopicExplorer', props: { topics } },

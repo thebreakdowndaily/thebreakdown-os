@@ -114,7 +114,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                   fontSize: '11px', fontWeight: 700, color: '#000',
                   cursor: 'pointer',
                 }}
-                title="Admin User (admin)"
+                title="The Breakdown Editorial (admin)"
               >
                 A
               </div>

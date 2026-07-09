@@ -15,9 +15,9 @@ const categorySlugs: Record<string, string> = {
   technology: 'topic/technology',
   policy: 'topic/policy',
   agriculture: 'topic/agriculture',
-  environment: 'topic/climate',
-  education: 'topic/education',
-  health: 'topic/healthcare',
+  environment: 'topic/environment',
+  education: 'topic/employment',
+  health: 'topic/policy',
   politics: 'topic/policy',
 };
 

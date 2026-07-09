@@ -25,9 +25,9 @@ export default function Card({
   accent = 'gold',
   as: Tag = 'article',
 }: CardProps) {
-  const baseClasses = 'rounded-2xl bg-[#151515] transition-all duration-200';
+  const baseClasses = 'rounded-2xl bg-[#151515] transition-all duration-300';
   const hoverClasses = hover
-    ? `hover:-translate-y-1 ${accentBorders[accent]} ${accentShadows[accent]}`
+    ? `hover:-translate-y-1 ${accentBorders[accent]} ${accentShadows[accent]} group-hover:animate-accent-pulse`
     : '';
 
   return (

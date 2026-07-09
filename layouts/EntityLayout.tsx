@@ -26,11 +26,11 @@ interface EntityLayoutProps {
 }
 
 const entityTabs = [
-  { label: 'Overview', href: '', icon: 'document' },
-  { label: 'Timeline', href: '/timeline', icon: 'clock' },
-  { label: 'Data', href: '/data', icon: 'tag' },
-  { label: 'Sources', href: '/sources', icon: 'link' },
-  { label: 'Stories', href: '/stories', icon: 'document' },
+  { label: 'Overview', href: '#overview', icon: 'document' },
+  { label: 'Timeline', href: '#timeline', icon: 'clock' },
+  { label: 'Data', href: '#data', icon: 'tag' },
+  { label: 'Sources', href: '#sources', icon: 'link' },
+  { label: 'Stories', href: '#stories', icon: 'document' },
 ];
 
 const EntityLayout: React.FC<EntityLayoutProps> = ({ children, breadcrumbs }) => (

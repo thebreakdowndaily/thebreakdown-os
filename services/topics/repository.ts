@@ -44,7 +44,11 @@ export class SupabaseTopicRepository implements TopicRepository {
   async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToTopic(data) : undefined; }
   async findBySlug(slug: string) { const { data, error } = await sb().select('*').eq('slug', slug).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToTopic(data) : undefined; }
   async save(topic: Topic) { const { data, error } = await sb().upsert(rowFromTopic(topic)).select().single(); if (error) throw error; return rowToTopic(data); }
-  async update(id: string, updates: Partial<Topic>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToTopic(data); }
+  async update(id: string, updates: Partial<Topic>) {
+    const { data, error } = await sb().update({ ...rowFromTopic(updates as Topic), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToTopic(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
@@ -53,5 +57,5 @@ function rowToTopic(row: any): Topic {
   return { id: row.id, slug: row.slug, name: row.name, description: row.description, storyIds: row.story_ids || [], relatedEntityIds: row.related_entity_ids || [], featuredStoryIds: row.featured_story_ids || [], countries: row.countries || [], faq: row.faq || [], timeline: row.timeline || [], statistics: row.statistics || [], createdAt: row.created_at, updatedAt: row.updated_at };
 }
 function rowFromTopic(topic: Topic): any {
-  return { slug: topic.slug, name: topic.name, description: topic.description, story_ids: topic.storyIds || [], related_entity_ids: topic.relatedEntityIds || [], featured_story_ids: topic.featuredStoryIds || [], countries: topic.countries || [], faq: topic.faq, timeline: topic.timeline, statistics: topic.statistics };
+  return { id: topic.id, slug: topic.slug, name: topic.name, description: topic.description, story_ids: topic.storyIds || [], related_entity_ids: topic.relatedEntityIds || [], featured_story_ids: topic.featuredStoryIds || [], countries: topic.countries || [], faq: topic.faq, timeline: topic.timeline, statistics: topic.statistics };
 }

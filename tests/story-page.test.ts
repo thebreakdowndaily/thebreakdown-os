@@ -94,11 +94,14 @@ async function runTests() {
   // Test 6: Schema is generated
   try {
     const page: PageSpec = buildStory(mockStory);
-    assert(page.schema['@type'] === 'NewsArticle', 'Schema type is NewsArticle');
-    assert(page.schema.headline === mockStory.headline, 'Schema headline matches');
-    assert(page.schema.datePublished === mockStory.publishedAt, 'Schema datePublished matches');
-    assert(page.schema.author['@type'] === 'Person', 'Schema author type is Person');
-    assert(page.schema.author.name === mockStory.author.name, 'Schema author name matches');
+    assert(Array.isArray(page.schema), 'Schema is array');
+    const articleSchema = page.schema.find((s: Record<string, unknown>) => s['@type'] === 'NewsArticle');
+    assert(articleSchema !== undefined, 'NewsArticle schema found');
+    assert(articleSchema!['@type'] === 'NewsArticle', 'Schema type is NewsArticle');
+    assert(articleSchema!.headline === mockStory.headline, 'Schema headline matches');
+    assert(articleSchema!.datePublished === mockStory.publishedAt, 'Schema datePublished matches');
+    assert((articleSchema!.author as Record<string, unknown>)['@type'] === 'Person', 'Schema author type is Person');
+    assert((articleSchema!.author as Record<string, unknown>).name === mockStory.author.name, 'Schema author name matches');
   } catch (e) {
     console.error('  FAIL: Schema check threw exception', e);
     failed++;

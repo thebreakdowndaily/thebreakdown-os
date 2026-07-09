@@ -150,7 +150,7 @@ Architecture Agent   →  architecture.json (structure, flow)
   "updatedAt": "2026-07-02T06:00:00Z",
   "readingTime": 8,
   "wordCount": 1600,
-  "author": { "name": "Anjali Sharma", "bio": "Senior Investigative Journalist" },
+  "author": { "name": "The Breakdown Editorial", "bio": "The Breakdown editorial desk." },
   "evidenceScore": 91,
   "verificationScore": 94,
   "category": "technology",

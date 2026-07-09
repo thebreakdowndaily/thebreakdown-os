@@ -24,6 +24,7 @@ export default function TopicCard({ topic }: TopicCardProps) {
 
       <TopicMeta
         storyCount={topic.storyCount}
+        entityCount={topic.entityCount}
         updatedAt={topic.updatedAt}
         latestHeadline={latestStory?.headline}
       />

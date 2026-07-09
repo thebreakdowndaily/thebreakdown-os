@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { cmsStore, type CMSEntity, type EntityType } from '@/utils/cms-store';
+import { useState, useEffect } from 'react';
+import type { CMSEntity, EntityType } from '@/utils/cms-types';
 
 const ENTITY_TYPES: EntityType[] = ['person', 'organization', 'policy', 'scheme', 'budget', 'report', 'dataset', 'source', 'country'];
 
@@ -10,11 +10,19 @@ function emptyEntity(): CMSEntity {
 }
 
 export default function CMSEntitiesPage() {
-  const [entities, setEntities] = useState(cmsStore.getEntities());
+  const [entities, setEntities] = useState<CMSEntity[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<CMSEntity | null>(null);
   const [draft, setDraft] = useState<CMSEntity>(emptyEntity);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<EntityType | 'all'>('all');
+
+  useEffect(() => {
+    fetch('/api/v1/entities')
+      .then(r => r.json())
+      .then(res => { setEntities((res as { data: CMSEntity[] }).data || []); })
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered = entities.filter((e) => {
     if (typeFilter !== 'all' && e.type !== typeFilter) return false;
@@ -22,15 +30,34 @@ export default function CMSEntitiesPage() {
     return true;
   });
 
-  function save() {
+  async function save() {
     if (!draft.name) return;
-    if (draft.id) { cmsStore.saveEntity(draft); }
-    else { const id = `entity-${Date.now().toString(36)}`; cmsStore.saveEntity({ ...draft, id, createdAt: new Date().toISOString() }); }
-    setEntities(cmsStore.getEntities()); setEditing(null); setDraft(emptyEntity());
+    if (draft.id) {
+      await fetch(`/api/v1/entities/${draft.slug}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+    } else {
+      await fetch('/api/v1/entities', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft),
+      });
+    }
+    const res = await fetch('/api/v1/entities').then(r => r.json()) as { data: CMSEntity[] };
+    setEntities(res.data || []); setEditing(null); setDraft(emptyEntity());
   }
 
   function edit(e: CMSEntity) { setEditing(e); setDraft({ ...e }); }
-  function remove(id: string) { cmsStore.deleteEntity(id); setEntities(cmsStore.getEntities()); if (editing?.id === id) { setEditing(null); setDraft(emptyEntity()); } }
+  async function remove(id: string) {
+    const e = entities.find(x => x.id === id);
+    if (!e) return;
+    await fetch(`/api/v1/entities/${e.slug}`, { method: 'DELETE' });
+    const delRes = await fetch('/api/v1/entities').then(r => r.json()) as { data: CMSEntity[] };
+    setEntities(delRes.data || []);
+    if (editing?.id === id) { setEditing(null); setDraft(emptyEntity()); }
+  }
+
+  if (loading) return <div style={{ padding: '32px', textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: '13px' }}>Loading...</div>;
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>

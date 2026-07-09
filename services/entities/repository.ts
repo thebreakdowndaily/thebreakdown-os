@@ -50,7 +50,11 @@ export class SupabaseEntityRepository implements EntityRepository {
   async findByType(type: EntityKind) { const { data, error } = await sb().select('*').eq('type', type); if (error) throw error; return (data || []).map(rowToEntity); }
   async findByAlias(alias: string) { const { data, error } = await sb().select('*').contains('aliases', [alias]); if (error) throw error; return data?.[0] ? rowToEntity(data[0]) : undefined; }
   async save(entity: Entity) { const { data, error } = await sb().upsert(rowFromEntity(entity)).select().single(); if (error) throw error; return rowToEntity(data); }
-  async update(id: string, updates: Partial<Entity>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToEntity(data); }
+  async update(id: string, updates: Partial<Entity>) {
+    const { data, error } = await sb().update({ ...rowFromEntity(updates as Entity), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToEntity(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
@@ -59,5 +63,5 @@ function rowToEntity(row: any): Entity {
   return { id: row.id, slug: row.slug, name: row.name, description: row.description, type: row.type, aliases: row.aliases || [], image: row.image, storyCount: row.story_count ?? 0, evidenceScore: row.evidence_score ?? 0, relatedEntityIds: row.related_entity_ids ?? [], relatedStoryIds: row.related_story_ids ?? [], relatedTopicIds: row.related_topic_ids ?? [], statistics: row.statistics ?? [], timeline: row.timeline ?? [], faq: row.faq ?? [], createdAt: row.created_at, updatedAt: row.updated_at };
 }
 function rowFromEntity(entity: Entity): any {
-  return { slug: entity.slug, name: entity.name, description: entity.description, type: entity.type, aliases: entity.aliases || [], image: entity.image, story_count: entity.storyCount, evidence_score: entity.evidenceScore, related_entity_ids: entity.relatedEntityIds, related_story_ids: entity.relatedStoryIds, related_topic_ids: entity.relatedTopicIds, statistics: entity.statistics, timeline: entity.timeline, faq: entity.faq };
+  return { id: entity.id, slug: entity.slug, name: entity.name, description: entity.description, type: entity.type, aliases: entity.aliases || [], image: entity.image, story_count: entity.storyCount, evidence_score: entity.evidenceScore, related_entity_ids: entity.relatedEntityIds, related_story_ids: entity.relatedStoryIds, related_topic_ids: entity.relatedTopicIds, statistics: entity.statistics, timeline: entity.timeline, faq: entity.faq };
 }

@@ -92,7 +92,7 @@ export function DatasetEditor({ dataset: initial }: { dataset: Dataset | null })
       const url = dataset.id ? `/api/v1/datasets/${dataset.slug}` : '/api/v1/datasets';
       const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!res.ok) throw new Error(`Save failed: ${res.status}`);
-      const result = await res.json();
+      const result: any = await res.json();
       setDataset(result.data || result);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);

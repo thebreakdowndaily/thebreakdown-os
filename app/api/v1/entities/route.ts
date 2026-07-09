@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { SupabaseEntityRepository } from '@/services/entities/repository';
 import type { Entity, EntityKind, APIResponse, APIListParams } from '@/types/canonical';
+import { syncEntity } from '@/lib/data-sync';
 
-export function GET(request: NextRequest) {
+const repo = new SupabaseEntityRepository();
+
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const services = getServices();
 
   const typeParam = searchParams.get('type') as EntityKind | null;
 
   if (typeParam) {
-    const entities = services.entities.getEntitiesByType(typeParam);
+    const entities: Entity[] = await repo.findByType(typeParam);
     const search = searchParams.get('search')?.toLowerCase();
     let filtered = entities;
     if (search) {
-      filtered = entities.filter(e => e.name.toLowerCase().includes(search) || e.description.toLowerCase().includes(search));
+      filtered = entities.filter((e: Entity) => e.name.toLowerCase().includes(search) || e.description.toLowerCase().includes(search));
     }
     const res: APIResponse<Entity[]> = { data: filtered, meta: { total: filtered.length, page: 1, pageSize: filtered.length } };
     return NextResponse.json(res);
@@ -27,12 +29,11 @@ export function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = services.entities.getEntities(params);
+  const result = await repo.findAll(params);
   return NextResponse.json(result);
 }
 
 export async function POST(request: NextRequest) {
-  const services = getServices();
   const body = (await request.json()) as Partial<Entity>;
 
   const now = new Date().toISOString();
@@ -56,7 +57,8 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = services.entities.saveEntity(entity);
+  const saved = await repo.save(entity);
+  syncEntity(saved);
   const res: APIResponse<Entity> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

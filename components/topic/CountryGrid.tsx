@@ -15,7 +15,7 @@ export default function CountryGrid({ countries }: { countries: CountryCard[] })
         {countries.map((c) => (
           <Link
             key={c.slug}
-            href={`/country/${c.slug}`}
+            href={`/entity/${c.slug}`}
             className="px-4 py-2 rounded-xl bg-[#151515] border border-[#2A2A2A] text-sm text-[#A1A1AA] hover:text-[#F5F5F5] hover:border-[#D4A843]/30 transition-all"
           >
             {c.name}

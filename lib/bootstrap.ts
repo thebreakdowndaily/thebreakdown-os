@@ -38,9 +38,16 @@ function createBlocksFromStory(s: Record<string, any>): StoryBlock[] {
     blocks.push({ id: 'executive-summary', type: 'executive-summary', data: { summary: s.summary, keyPoints: s.keyPoints } });
   }
 
-  const evidenceClaims = s.claims || [];
+  const evidenceClaims = (s.claims || []).map((c: any) => ({
+    id: c.id || `claim-${Math.random().toString(36).slice(2, 8)}`,
+    text: c.claim || c.text || '',
+    confidence: Math.round((c.confidence || 50) * 100),
+    status: c.verification === 'true' ? 'verified' as const : c.verification === 'false' ? 'unverified' as const : c.confidence >= 0.8 ? 'strong' as const : c.confidence >= 0.6 ? 'moderate' as const : 'unverified' as const,
+    sources: c.source ? [{ name: c.source || '', url: c.sourceUrl || '', group: 'report' as const }] : [],
+    supportingEvidence: c.explanation ? [c.explanation] : [],
+  }));
   if (evidenceClaims.length > 0) {
-    const verifiedCount = evidenceClaims.filter((c: any) => c.status === 'verified' || c.confidence >= 95).length;
+    const verifiedCount = evidenceClaims.filter((c: any) => c.status === 'verified').length;
     blocks.push({
       id: 'evidence', type: 'evidence', data: {
         overallScore: s.evidenceScore ?? s.verificationScore ?? 0,
@@ -109,8 +116,10 @@ function apiStoryToCanonical(s: Record<string, any>): Story {
     blocks,
     sources: mappedSources,
     claims: mappedClaims,
-    relatedTopicIds: s.relatedTopicIds || [],
-    relatedEntityIds: s.relatedEntityIds || [],
+    author: typeof s.author === 'string' ? s.author : (s.author?.name || ''),
+    relatedStoryIds: (s.relatedStories || []).map((rs: any) => rs.slug),
+    relatedEntityIds: (s.relatedEntities || []).map((re: any) => re.id || re.slug),
+    relatedTopicIds: (s.relatedTopics || []).map((rt: any) => rt.id).filter(Boolean),
     repo: undefined,
   } as unknown as Story;
 }
@@ -129,7 +138,7 @@ function apiTopicToCanonical(t: Record<string, any>): Topic {
 }
 
 function apiEntityToCanonical(e: Record<string, any>): Entity {
-  return {
+  const entity: Record<string, any> = {
     ...e,
     evidenceScore: e.evidenceScore || 85,
     relatedEntityIds: (e.relatedEntities || []).map((re: any) => re.id),
@@ -138,7 +147,9 @@ function apiEntityToCanonical(e: Record<string, any>): Entity {
     statistics: Object.entries(e.statistics || {}).map(([label, value]) => ({ label, value: String(value) })),
     createdAt: e.updatedAt,
     repo: undefined,
-  } as unknown as Entity;
+    _raw: e,
+  };
+  return entity as unknown as Entity;
 }
 
 function apiTimelineToCanonical(t: Record<string, any>): Timeline {
@@ -153,7 +164,7 @@ function apiTimelineToCanonical(t: Record<string, any>): Timeline {
 }
 
 function apiFixToCanonical(f: Record<string, any>): Fix {
-  return {
+  const fix: Record<string, any> = {
     ...f,
     title: f.headline,
     problem: f.problem?.content || f.problem?.title || '',
@@ -167,5 +178,7 @@ function apiFixToCanonical(f: Record<string, any>): Fix {
     createdAt: f.publishedAt,
     status: 'published',
     repo: undefined,
-  } as unknown as Fix;
+    _raw: f,
+  };
+  return fix as unknown as Fix;
 }

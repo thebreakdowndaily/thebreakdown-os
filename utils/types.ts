@@ -12,7 +12,7 @@ export interface PageSpec {
   sections: Section[];
   seo: SEOData;
   breadcrumbs: Breadcrumb[];
-  schema: Record<string, unknown>;
+  schema: Record<string, unknown>[];
   metadata: Record<string, unknown>;
   searchResults?: SearchResult[];
 }
