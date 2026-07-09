@@ -199,12 +199,13 @@
 /* ── Typography ───────────────────────────────────────────────────────── */
 
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+  --font-sans: var(--font-inter, 'Inter'), system-ui, -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
+  --font-serif: var(--font-playfair, 'Playfair Display'), Georgia, 'Times New Roman', serif;
+  --font-editorial: var(--font-playfair, 'Playfair Display'), Georgia, serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas,
     monospace;
-  --font-display: 'Inter', system-ui, sans-serif;
+  --font-display: var(--font-inter, 'Inter'), system-ui, sans-serif;
 
   /* Type scale */
   --text-xs: 0.75rem;
@@ -212,7 +213,7 @@
   --text-sm: 0.875rem;
   --text-sm--line-height: 1.25rem;
   --text-base: 1rem;
-  --text-base--line-height: 1.625rem;
+  --text-base--line-height: 1.75rem;
   --text-lg: 1.125rem;
   --text-lg--line-height: 1.75rem;
   --text-xl: 1.25rem;
@@ -224,23 +225,34 @@
   --text-4xl: 2.25rem;
   --text-4xl--line-height: 2.75rem;
   --text-5xl: 3rem;
-  --text-5xl--line-height: 3.5rem;
+  --text-5xl--line-height: 1.1;
   --text-6xl: 3.75rem;
-  --text-6xl--line-height: 4.25rem;
+  --text-6xl--line-height: 1.05;
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+  --text-8xl: 6rem;
+  --text-8xl--line-height: 1;
 
   /* Heading scale */
-  --heading-h1: 2.25rem;
-  --heading-h1--line-height: 2.75rem;
-  --heading-h2: 1.875rem;
-  --heading-h2--line-height: 2.375rem;
+  --heading-h1: 2.5rem;
+  --heading-h1--line-height: 1.15;
+  --heading-h2: 2rem;
+  --heading-h2--line-height: 1.25;
   --heading-h3: 1.5rem;
-  --heading-h3--line-height: 2rem;
+  --heading-h3--line-height: 1.375;
   --heading-h4: 1.25rem;
-  --heading-h4--line-height: 1.875rem;
+  --heading-h4--line-height: 1.5;
   --heading-h5: 1.125rem;
-  --heading-h5--line-height: 1.75rem;
+  --heading-h5--line-height: 1.625;
   --heading-h6: 1rem;
-  --heading-h6--line-height: 1.5rem;
+  --heading-h6--line-height: 1.5;
+
+  /* Letter spacing */
+  --tracking-tight: -0.025em;
+  --tracking-tighter: -0.05em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
 
   /* Font weights */
   --font-weight-light: 300;
@@ -327,18 +339,23 @@
 /* ── Motion ───────────────────────────────────────────────────────────── */
 
 :root {
-  --duration-instant: 50ms;
-  --duration-fast: 150ms;
-  --duration-default: 200ms;
-  --duration-slow: 300ms;
-  --duration-slower: 500ms;
-  --duration-slowest: 700ms;
+  --duration-instant:     50ms;
+  --duration-fast:       150ms;  /* Rule 28: hover, color, focus */
+  --duration-default:    200ms;  /* Rule 28: transforms, layout  */
+  --duration-slow:       300ms;  /* image zoom only              */
+  --duration-slower:     500ms;
+  --duration-slowest:    700ms;
 
-  --easing-linear: linear;
-  --easing-in: cubic-bezier(0.4, 0, 1, 1);
-  --easing-out: cubic-bezier(0, 0, 0.2, 1);
-  --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Semantic aliases — prefer these in components */
+  --duration-interaction: 150ms; /* color, opacity, border       */
+  --duration-transition:  200ms; /* transform, size              */
+  --duration-image-zoom:  300ms; /* image scale on hover         */
+
+  --easing-linear:    linear;
+  --easing-in:        cubic-bezier(0.4, 0, 1, 1);
+  --easing-out:       cubic-bezier(0, 0, 0.2, 1);
+  --easing-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bounce:    cubic-bezier(0.34, 1.56, 0.64, 1);
   --easing-emphasize: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

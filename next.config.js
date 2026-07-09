@@ -53,7 +53,11 @@ nextConfig.redirects = async () => [
   },
 ];
 
-module.exports = withSentryConfig(nextConfig, {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
   org: process.env.SENTRY_ORG || '',
   project: process.env.SENTRY_PROJECT || '',
   authToken: process.env.SENTRY_AUTH_TOKEN || '',

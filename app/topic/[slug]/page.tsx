@@ -12,6 +12,9 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import InteractiveTimelineBlock from '@/components/story/blocks/InteractiveTimelineBlock';
 import FAQ from '@/components/story/FAQ';
 import { TopicGraphSection } from '@/features/graph/components/TopicGraphSection';
+import Image from 'next/image';
+import TopicHero from '@/components/topic/TopicHero';
+import TopicStats from '@/components/topic/TopicStats';
 
 function createJsonLd(topic: { name: string; description: string; slug: string }) {
   return [
@@ -106,35 +109,22 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
 
       <main className="flex-1 w-full" role="main">
         {/* ── Hero Section ── */}
-        <section aria-label={`Topic: ${topic.name}`} className="relative w-full min-h-[35vh] flex items-center bg-[#0A0A0A] overflow-hidden">
-          {topic.image && (
-            <div className="absolute inset-0">
-              <img src={topic.image} alt="" className="w-full h-full object-cover" aria-hidden="true" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/80 to-[#0A0A0A]/60" />
-            </div>
-          )}
-          <Container className="relative z-10 py-12">
-            {!topic.image && <div className="w-16 h-1 bg-[#D4A843] rounded-full mb-6" aria-hidden="true" />}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F5F5F5] leading-tight mb-4">
-              {topic.name}
-            </h1>
-            <p className="text-lg sm:text-xl text-[#A1A1AA] max-w-3xl leading-relaxed mb-6">
-              {topic.description}
-            </p>
-            <div className="flex flex-wrap items-center gap-6 text-sm">
-              {[
-                { label: 'Stories', count: stories.length },
-                { label: 'Entities', count: entities.length },
-                ...(topic.statistics || []).slice(0, 3).map((s) => ({ label: s.label, count: s.value })),
-              ].map((stat) => (
-                <div key={stat.label} className="flex items-center gap-1.5">
-                  <span className="text-[#D4A843] font-bold text-lg">{stat.count}</span>
-                  <span className="text-[#A1A1AA]">{stat.label}</span>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </section>
+        <TopicHero
+          name={topic.name}
+          description={topic.description}
+          image={topic.image}
+        />
+
+        {/* ── Key Statistics (Prioritized over Stories) ── */}
+        <Container>
+          <TopicStats
+            statistics={[
+              { label: 'Stories', value: String(stories.length) },
+              { label: 'Entities', value: String(entities.length) },
+              ...(topic.statistics || []).map((s) => ({ label: s.label, value: s.value })),
+            ]}
+          />
+        </Container>
 
         {/* ── Featured Stories Grid ── */}
         {featuredStories.length > 0 && (

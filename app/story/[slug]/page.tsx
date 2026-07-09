@@ -10,6 +10,10 @@ import { BlockRenderer } from '@/components/story/blocks/registry';
 import RelatedStories from '@/components/story/RelatedStories';
 import RelatedEntities from '@/components/story/RelatedEntities';
 import AuthorBox from '@/components/story/AuthorBox';
+import ExecutiveSummary from '@/components/story/ExecutiveSummary';
+import Timeline from '@/components/story/Timeline';
+import Evidence from '@/components/story/Evidence';
+import SourcesList from '@/components/story/SourcesList';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
@@ -133,8 +137,27 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           author={{ name: story.author }}
           evidenceScore={story.evidenceScore}
           sources={story.sources.length}
+          charts={story.charts?.map(c => ({ type: c.chartType, title: c.title, data: c.data, xKey: 'label', yKey: 'value' }))}
+          geoData={undefined}
+          timeline={story.timeline}
         />
-        <BlocksRenderer blocks={story.blocks} />
+        <div className="pt-8">
+          <ExecutiveSummary summary={story.summary} keyPoints={[]} />
+          <BlocksRenderer blocks={story.blocks} />
+          <Timeline events={story.timeline} />
+          <Evidence 
+            claims={story.claims?.map(c => ({
+              claim: c.claim,
+              source: c.source,
+              verification: c.status === 'verified' || c.status === 'strong' ? 'true' : c.status === 'moderate' ? 'misleading' : 'unverifiable',
+              explanation: c.data,
+              confidence: c.confidence
+            })) || []} 
+            sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} 
+            verificationScore={story.evidenceScore} 
+          />
+          <SourcesList sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} />
+        </div>
         {relatedStories.length > 0 && (
           <RelatedStories
             stories={relatedStories.map((s) => ({

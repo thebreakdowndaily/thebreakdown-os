@@ -15,6 +15,7 @@ import FAQ from '@/components/story/FAQ';
 import { EntityGraphSection } from '@/features/graph/components/EntityGraphSection';
 import EntityData from '@/components/entity/EntityData';
 import EntitySources from '@/components/entity/EntitySources';
+import EntityHero from '@/components/entity/EntityHero';
 
 const typeBadgeColor: Record<string, string> = {
   person: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
@@ -112,67 +113,40 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
       />
 
       <main className="flex-1 w-full" role="main">
-        <section aria-label={`Dossier: ${entity.name}`} className="bg-[#0A0A0A] border-b border-[#2A2A2A]">
-          <Container className="py-8 sm:py-10">
-            <div className="flex flex-col sm:flex-row gap-6 sm:gap-10">
-              {entity.image && (
-                <div className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-[#2A2A2A]">
-                  <Image src={entity.image} alt={entity.name} width={128} height={128} className="w-full h-full object-cover" />
-                </div>
-              )}
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F5F5F5]">{entity.name}</h1>
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${typeBadgeColor[entity.type] || 'bg-gray-500/20 text-gray-400 border-gray-500/30'}`}>
-                    {entity.type}
-                  </span>
-                </div>
-                {entity.aliases.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {entity.aliases.map((alias, i) => (
-                      <span key={i} className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#151515] text-[#A1A1AA] border border-[#2A2A2A]">
-                        {alias}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <p className="text-base text-[#A1A1AA] leading-relaxed max-w-3xl">{entity.description}</p>
-                <div className="flex flex-wrap items-center gap-4 mt-4 text-sm">
-                  <span className="text-[#D4A843] font-bold">{stories.length} stories</span>
-                  {Object.entries(statsRecord).slice(0, 4).map(([key, value]) => (
-                    <span key={key} className="text-[#A1A1AA]">
-                      <span className="text-[#F5F5F5] font-semibold">{value}</span> {key}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Container>
+        <EntityHero
+          name={entity.name}
+          type={entity.type}
+          description={entity.description}
+          image={entity.image}
+          aliases={entity.aliases}
+          storyCount={stories.length}
+          evidenceScore={undefined} // Or calculate from stories if needed
+          updatedAt={entity.updatedAt}
+        />
 
-          <div className="sticky top-0 z-20 bg-[#0A0A0A]/95 backdrop-blur-sm border-b border-[#2A2A2A]">
-            <Container>
-              <nav className="flex items-center gap-1 overflow-x-auto py-3" aria-label="Dossier sections">
-                {[
-                  { id: 'overview', label: 'Overview' },
-                  ...(hasTimeline ? [{ id: 'timeline', label: 'Timeline' }] : []),
-                  ...(hasData ? [{ id: 'data', label: 'Data' }] : []),
-                  ...(hasSources ? [{ id: 'sources', label: 'Sources' }] : []),
-                  { id: 'graph', label: 'Connections' },
-                  ...(hasFaq ? [{ id: 'faq', label: 'FAQ' }] : []),
-                  { id: 'stories', label: 'Stories' },
-                ].map((section) => (
-                  <a
-                    key={section.id}
-                    href={`#${section.id}`}
-                    className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#A1A1AA] hover:text-[#D4A843] hover:bg-[#151515] rounded-lg transition-colors"
-                  >
-                    {section.label}
-                  </a>
-                ))}
-              </nav>
-            </Container>
-          </div>
-        </section>
+        <div className="sticky top-0 z-20 bg-neutral-950/95 backdrop-blur-sm border-b border-neutral-900">
+          <Container>
+            <nav className="flex items-center gap-1 overflow-x-auto py-3" aria-label="Dossier sections">
+              {[
+                { id: 'overview', label: 'Overview' },
+                ...(hasTimeline ? [{ id: 'timeline', label: 'Timeline' }] : []),
+                ...(hasData ? [{ id: 'data', label: 'Data' }] : []),
+                ...(hasSources ? [{ id: 'sources', label: 'Sources' }] : []),
+                { id: 'graph', label: 'Connections' },
+                ...(hasFaq ? [{ id: 'faq', label: 'FAQ' }] : []),
+                { id: 'stories', label: 'Stories' },
+              ].map((section) => (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-neutral-500 hover:text-amber-400 hover:bg-neutral-900 rounded-lg transition-colors"
+                >
+                  {section.label}
+                </a>
+              ))}
+            </nav>
+          </Container>
+        </div>
 
         <Container className="py-8">
           {hasTimeline && (

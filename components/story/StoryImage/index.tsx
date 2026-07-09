@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 const categoryFallback: Record<string, string> = {
   economy: '/images/placeholders/economy-placeholder.svg',
@@ -50,20 +51,22 @@ export default function StoryImage({
     }
   }
 
+  const isFill = fill || (!width && !height);
+
   const img = (
-    <img
+    <Image
       src={imgSrc}
       alt={alt}
       className={className || undefined}
       style={style}
-      width={fill ? undefined : width}
-      height={fill ? undefined : height}
+      fill={isFill}
+      width={isFill ? undefined : width}
+      height={isFill ? undefined : height}
       onError={handleError}
-      loading="lazy"
     />
   );
 
-  if (fill || wrapperClassName) {
+  if (isFill || wrapperClassName) {
     return <div className={wrapperClassName || 'relative w-full h-full'}>{img}</div>;
   }
 

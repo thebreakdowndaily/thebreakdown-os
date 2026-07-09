@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface EntityCardEntity {
   slug: string;
@@ -73,11 +74,12 @@ const EntityCard: React.FC<EntityCardProps> = ({ entity, size = 'md' }) => {
     >
       <a href={`/entity/${entity.slug}`} className="flex items-start gap-4" aria-label={entity.name}>
         {entity.image ? (
-          <div className={`flex-shrink-0 rounded-xl overflow-hidden ${cfg.image}`}>
-            <img
+          <div className={`flex-shrink-0 rounded-xl overflow-hidden relative ${cfg.image}`}>
+            <Image
               src={entity.image}
               alt={entity.name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
         ) : (

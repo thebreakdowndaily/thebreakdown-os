@@ -61,60 +61,78 @@
 }
 
 @layer components {
-  /* ── Prose (story body) ──────────────────────────────────────── */
+  /* ── Editorial font ───────────────────────────────────────────────── */
+  .font-editorial {
+    font-family: var(--font-editorial);
+  }
+
+  /* ── Prose (story body) ──────────────────────────────────────────── */
   .prose-custom {
     color: var(--color-text-secondary);
-    line-height: 1.75;
+    line-height: 1.85;
+    font-size: 1.0625rem; /* 17px — comfortable reading size */
   }
   .prose-custom h2 {
+    font-family: var(--font-editorial);
     color: var(--color-text-primary);
-    font-size: var(--text-2xl);
+    font-size: var(--text-3xl);
     font-weight: var(--font-weight-bold);
-    margin-top: var(--spacing-12);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--spacing-16);
     margin-bottom: var(--spacing-4);
+    line-height: 1.25;
   }
   .prose-custom h3 {
+    font-family: var(--font-editorial);
     color: var(--color-text-primary);
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
     font-weight: var(--font-weight-semibold);
-    margin-top: var(--spacing-8);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--spacing-10);
     margin-bottom: var(--spacing-3);
+    line-height: 1.375;
   }
   .prose-custom p {
-    margin-bottom: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
   }
   .prose-custom a {
     color: var(--color-brand-400);
     text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color var(--duration-fast) var(--easing-out);
   }
   .prose-custom a:hover {
     color: var(--color-brand-300);
   }
   .prose-custom ul {
     list-style-type: disc;
-    list-style-position: inside;
-    margin-bottom: var(--spacing-4);
+    list-style-position: outside;
+    padding-left: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
   }
   .prose-custom ul li + li {
-    margin-top: var(--spacing-1);
+    margin-top: var(--spacing-2);
   }
   .prose-custom ol {
     list-style-type: decimal;
-    list-style-position: inside;
-    margin-bottom: var(--spacing-4);
+    list-style-position: outside;
+    padding-left: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
   }
   .prose-custom ol li + li {
-    margin-top: var(--spacing-1);
+    margin-top: var(--spacing-2);
   }
   .prose-custom blockquote {
-    border-left-width: var(--border-thick);
-    border-left-style: solid;
-    border-left-color: var(--color-warning);
-    padding-left: var(--spacing-4);
+    border-left: 3px solid var(--color-brand-400);
+    padding-left: var(--spacing-6);
+    font-family: var(--font-editorial);
     font-style: italic;
-    color: var(--color-text-muted);
-    margin-top: var(--spacing-6);
-    margin-bottom: var(--spacing-6);
+    font-size: var(--text-xl);
+    color: var(--color-text-primary);
+    margin-top: var(--spacing-8);
+    margin-bottom: var(--spacing-8);
+    opacity: 0.9;
   }
   .prose-custom code {
     background-color: var(--color-bg-tertiary);
@@ -125,6 +143,26 @@
     border-radius: var(--radius-sm);
     font-size: var(--text-sm);
     color: var(--color-brand-300);
+  }
+
+  /* ── Section label (Editorial / Analysis / Investigation) ─────────── */
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-brand-400);
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background-color: var(--color-brand-400);
+    flex-shrink: 0;
   }
 
   /* ── Utilities for common component patterns ─────────────────── */
@@ -169,72 +207,126 @@
   }
 }
 
-/* ── Ambient animations ────────────────────────────────────────── */
-@keyframes ambient-gradient {
-  0% { transform: translate(0%, 0%) scale(1); opacity: 0.3; }
-  25% { transform: translate(5%, -5%) scale(1.05); opacity: 0.2; }
-  50% { transform: translate(-3%, 3%) scale(0.95); opacity: 0.25; }
-  75% { transform: translate(3%, -2%) scale(1.02); opacity: 0.2; }
-  100% { transform: translate(0%, 0%) scale(1); opacity: 0.3; }
+/* ── Approved animations ───────────────────────────────────────
+ *
+ * Rule 28: 150–200ms transitions only.
+ * Permitted: fade, elevation, image zoom on hover, progressive loading.
+ * Prohibited: floating blobs, constant movement, heavy parallax.
+ *
+ * Do not add keyframes here without updating Rule 28 in RULES.md.
+ * ─────────────────────────────────────────────────────────────── */
+
+/* Fade — used for overlays, dialogs, empty states */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@keyframes float-particle {
-  0% { transform: translateY(0px) scale(1); opacity: 0; }
-  10% { opacity: 0.15; }
-  90% { opacity: 0.15; }
-  100% { transform: translateY(-120px) scale(0.5); opacity: 0; }
+/* Slide-up — used for content entering the viewport */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes accent-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0); }
-  50% { box-shadow: 0 0 12px 2px rgba(212, 168, 67, 0.08); }
+/* Shimmer — skeleton loading only */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
 }
 
-.animate-ambient-gradient {
-  animation: ambient-gradient 8s ease-in-out infinite;
+/* Spin — loading indicators only */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-.animate-float-particle {
-  animation: float-particle 6s ease-out infinite;
+/* Pulse — low-frequency status indicators only (not constant movement) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
 }
 
-.group:hover .group-hover\:animate-accent-pulse {
-  animation: accent-pulse 2s ease-in-out infinite;
+/* ── Animation utility classes ──────────────────────────────── */
+.animate-fade-in  { animation: fade-in  var(--duration-default) var(--easing-out) both; }
+.animate-slide-up { animation: slide-up var(--duration-default) var(--easing-out) both; }
+.animate-shimmer  { animation: shimmer  1.5s var(--easing-in-out) infinite; }
+.animate-spin     { animation: spin     1s   linear infinite; }
+.animate-pulse    { animation: pulse    2s   var(--easing-in-out) infinite; }
+
+/* Stagger helpers */
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+
+/* Respect reduced-motion preference — mandatory */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
 }
 
 @layer utilities {
-  /* ── Transition presets ───────────────────────────────────────── */
-  .transition-fast {
-    transition: all var(--duration-fast) var(--easing-out);
+  /* ── Transition presets (150–200ms, Rule 28) ──────────────── */
+  .transition-interaction {
+    /* 150ms: hover states, color changes, focus rings */
+    transition: color            150ms var(--easing-out),
+                background-color 150ms var(--easing-out),
+                border-color     150ms var(--easing-out),
+                opacity          150ms var(--easing-out),
+                box-shadow       150ms var(--easing-out);
   }
-  .transition-default {
-    transition: all var(--duration-default) var(--easing-out);
+  .transition-layout {
+    /* 200ms: size, position, transform changes */
+    transition: transform 200ms var(--easing-out),
+                width     200ms var(--easing-out),
+                height    200ms var(--easing-out);
   }
-  .transition-slow {
-    transition: all var(--duration-slow) var(--easing-out);
+  /* Legacy aliases — kept for backward compat, prefer above */
+  .transition-fast    { transition: all 150ms var(--easing-out); }
+  .transition-default { transition: all 200ms var(--easing-out); }
+  .transition-slow    { transition: all var(--duration-slow) var(--easing-out); }
+
+  /* ── Image zoom on hover (approved pattern) ───────────────── */
+  .hover-image-zoom img,
+  .hover-image-zoom {
+    transition: transform 300ms var(--easing-out);
+  }
+  .hover-image-zoom:hover img,
+  .group:hover .group-hover-image-zoom {
+    transform: scale(1.03); /* max 3% — subtle, not dramatic */
   }
 
-  /* ── Focus ring ───────────────────────────────────────────────── */
+  /* ── Elevation on hover (approved pattern) ────────────────── */
+  .hover-elevate {
+    transition: box-shadow 150ms var(--easing-out),
+                transform  150ms var(--easing-out);
+  }
+  .hover-elevate:hover {
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+    transform: translateY(-1px);
+  }
+
+  /* ── Focus ring ───────────────────────────────────────────── */
   .focus-ring {
-    outline: 2px solid var(--color-brand-400);
+    outline:        2px solid var(--color-brand-400);
     outline-offset: 2px;
   }
 
-  /* ── Group hover patterns (Tailwind-free) ──────────────────────── */
+  /* ── Group hover patterns ─────────────────────────────────── */
   .group { position: relative; }
 
   .group:hover .group-hover-accent {
     color: var(--color-brand-400) !important;
-    transition: color var(--duration-fast) var(--easing-out);
-  }
-
-  .group:hover .group-hover-scale {
-    transform: scale(1.05);
-    transition: transform var(--duration-default) var(--easing-out);
+    transition: color 150ms var(--easing-out);
   }
 
   .group:hover .group-hover-border-accent {
     border-color: var(--color-brand-400) !important;
-    transition: border-color var(--duration-fast) var(--easing-out);
+    transition: border-color 150ms var(--easing-out);
   }
 }

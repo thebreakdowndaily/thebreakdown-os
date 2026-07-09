@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface StoryCard {
   slug: string;
@@ -99,11 +100,12 @@ const TopicCollections: React.FC<TopicCollectionsProps> = ({
               className="group bg-gray-800 border border-gray-700 rounded-xl overflow-hidden hover:border-amber-400/50 transition-colors"
             >
               {story.heroImage && (
-                <div className="w-full h-40 overflow-hidden">
-                  <img
+                <div className="w-full h-40 overflow-hidden relative">
+                  <Image
                     src={story.heroImage}
                     alt=""
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               )}

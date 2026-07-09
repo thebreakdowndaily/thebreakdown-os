@@ -5,44 +5,45 @@ interface EntitySourcesProps {
   sources: PrimarySource[];
 }
 
-const typeColors: Record<string, string> = {
-  government: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-  research: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-  news: 'bg-[#D4A843]/10 text-[#D4A843] border-[#D4A843]/30',
-  primary: 'bg-green-500/10 text-green-400 border-green-500/30',
-  expert: 'bg-red-500/10 text-red-400 border-red-500/30',
-  default: 'bg-gray-500/10 text-gray-400 border-gray-500/30',
-};
-
 export default function EntitySources({ sources }: EntitySourcesProps) {
-  if (sources.length === 0) return null;
+  if (!sources || sources.length === 0) return null;
+
   return (
-    <section aria-label="Sources" className="py-6 sm:py-8">
-      <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F5] mb-5">Sources</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {sources.map((source, i) => {
-          const tc = typeColors[source.type] || typeColors.default;
-          return (
-            <article key={i} className="bg-[#151515] border border-[#2A2A2A] rounded-xl p-5 hover:border-[#D4A843]/50 transition-colors">
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <h3 className="text-sm font-semibold text-[#F5F5F5]">{source.name}</h3>
-                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border flex-shrink-0 ${tc}`}>
-                  {source.type}
-                </span>
+    <div className="w-full">
+      <ul className="space-y-4">
+        {sources.map((source, i) => (
+          <li key={i} className="group relative bg-neutral-900/40 hover:bg-neutral-900 border border-neutral-800 rounded-xl p-4 sm:p-5 transition-colors">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-sm font-medium text-neutral-200 group-hover:text-amber-400 transition-colors">
+                    {source.name}
+                  </h3>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest text-neutral-500 bg-neutral-800">
+                    {source.type || 'Source'}
+                  </span>
+                </div>
+                {source.description && (
+                  <p className="text-sm text-neutral-400 leading-relaxed mb-3 max-w-3xl">
+                    {source.description}
+                  </p>
+                )}
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-neutral-500 hover:text-amber-400 transition-colors"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  View Source
+                </a>
               </div>
-              <p className="text-xs text-[#A1A1AA] leading-relaxed mb-3">{source.description}</p>
-              <a
-                href={source.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-[#D4A843] hover:text-[#D4A843]/80 transition-colors font-medium"
-              >
-                Open Source &rarr;
-              </a>
-            </article>
-          );
-        })}
-      </div>
-    </section>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

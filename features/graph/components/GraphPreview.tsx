@@ -2,8 +2,16 @@
 
 import { useMemo } from 'react';
 import type { GraphNode, GraphEdge } from '@/types/canonical';
-import { KnowledgeGraph } from './KnowledgeGraph';
+import dynamic from 'next/dynamic';
 
+const KnowledgeGraph = dynamic(() => import('./KnowledgeGraph').then(mod => mod.KnowledgeGraph), {
+  ssr: false,
+  loading: () => (
+    <div style={{ height: 350, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-bg-primary)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--color-border-default)', color: 'var(--color-text-secondary)' }}>
+      Loading knowledge graph...
+    </div>
+  )
+});
 interface GraphPreviewProps {
   centerNode?: GraphNode;
   connections: Array<{ node: GraphNode; edge: GraphEdge }>;

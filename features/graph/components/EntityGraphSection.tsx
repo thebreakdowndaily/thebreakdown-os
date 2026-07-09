@@ -1,6 +1,3 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import { GraphPreview } from './GraphPreview';
 import { buildEntityGraphPreview } from '@/features/graph/view-model';
 import { bootstrapServices } from '@/lib/bootstrap';
@@ -11,14 +8,8 @@ interface EntityGraphSectionProps {
 }
 
 export function EntityGraphSection({ entitySlug }: EntityGraphSectionProps) {
-  const [vm, setVm] = useState<ReturnType<typeof buildEntityGraphPreview>>(null);
-
-  useEffect(() => {
-    bootstrapServices();
-    const result = buildEntityGraphPreview(getServices(), entitySlug);
-    const timer = setTimeout(() => { setVm(result); }, 0);
-    return () => { clearTimeout(timer); };
-  }, [entitySlug]);
+  bootstrapServices();
+  const vm = buildEntityGraphPreview(getServices(), entitySlug);
 
   if (!vm) return null;
 

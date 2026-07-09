@@ -11,11 +11,16 @@
     "cf:build": "npx @opennextjs/cloudflare build",
     "cf:deploy": "npx opennextjs-cloudflare deploy",
     "start": "next start",
+    "analyze": "cross-env ANALYZE=true npm run build",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "typecheck": "tsc --noEmit",
     "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts",
     "test:dataset": "npx tsx tests/dataset.test.ts",
     "test:dataset:e2e": "npx tsx tests/dataset-e2e.test.ts",
-    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e"
+    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.1",
@@ -35,7 +40,10 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@cloudflare/workers-types": "^4.20260702.1",
+    "@next/bundle-analyzer": "^16.2.10",
+    "@playwright/test": "^1.61.1",
     "@types/d3": "^7.4.0",
     "@types/node": "^20.14.0",
     "@types/react": "^19.1.0",
@@ -43,6 +51,7 @@
     "@types/three": "^0.169.0",
     "@types/topojson-client": "^3.1.0",
     "autoprefixer": "^10.4.0",
+    "cross-env": "^10.1.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.10",
     "globals": "^17.7.0",

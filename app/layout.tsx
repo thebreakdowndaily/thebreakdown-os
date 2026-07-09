@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/layout/Footer';
 import { AuthWrapper } from '@/features/auth/components/AuthWrapper';
@@ -12,6 +12,14 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -65,8 +73,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" data-theme="dark" className={inter.variable}>
-      <body className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5] font-sans flex flex-col">
+    <html lang="en" data-theme="dark" className={`${inter.variable} ${playfair.variable}`}>
+      <body className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] font-sans flex flex-col antialiased">
         <Script id="schema-website" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(websiteSchema)}
         </Script>

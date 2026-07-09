@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { AggregateStoryAnalytics, ImprovementReport } from '@/utils/analytics';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -21,176 +21,11 @@ interface StoryAnalyticsResponse {
   totalEvents: number;
 }
 
-// ── Number Formatter ───────────────────────────────────────────────────────
-
-function fmt(n: number): string {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
-  return String(n);
-}
-
-function fmtPct(n: number): string {
-  return (n * 100).toFixed(0) + '%';
-}
-
-function fmtTime(ms: number): string {
-  if (ms >= 60_000) return (ms / 60_000).toFixed(1) + 'm';
-  if (ms >= 1_000) return (ms / 1_000).toFixed(0) + 's';
-  return String(ms) + 'ms';
-}
-
-// ── Styles ─────────────────────────────────────────────────────────────────
-
-const sectionStyle: React.CSSProperties = {
-  backgroundColor: 'var(--color-bg-secondary)',
-  border: '1px solid var(--color-border-default)',
-  borderRadius: 'var(--radius-lg)',
-  padding: 'var(--spacing-5)',
-};
-
-const headingStyle: React.CSSProperties = {
-  fontSize: 'var(--text-sm)',
-  fontWeight: 'var(--font-weight-semibold)',
-  color: 'var(--color-text-secondary)',
-  textTransform: 'uppercase',
-  letterSpacing: '0.05em',
-  marginBottom: 'var(--spacing-3)',
-};
-
-const valueStyle: React.CSSProperties = {
-  fontSize: 'var(--text-2xl)',
-  fontWeight: 'var(--font-weight-bold)',
-  color: 'var(--color-text-primary)',
-};
-
-const labelStyle: React.CSSProperties = {
-  fontSize: 'var(--text-xs)',
-  color: 'var(--color-text-muted)',
-};
-
-// ── Metric Card ────────────────────────────────────────────────────────────
-
-function MetricCard({ value, label, trend }: { value: string; label: string; trend?: { dir: 'up' | 'down' | 'neutral'; pct: string } }) {
-  return (
-    <div style={sectionStyle}>
-      <div style={valueStyle}>{value}</div>
-      <div style={{ ...labelStyle, marginTop: 'var(--spacing-1)' }}>{label}</div>
-      {trend && (
-        <div style={{
-          fontSize: 'var(--text-xs)',
-          marginTop: 'var(--spacing-1)',
-          color: trend.dir === 'up' ? 'var(--color-success)' : trend.dir === 'down' ? 'var(--color-error)' : 'var(--color-text-muted)',
-        }}>
-          {trend.dir === 'up' ? '▲' : trend.dir === 'down' ? '▼' : '◆'} {trend.pct}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Section Engagement Bar ─────────────────────────────────────────────────
-
-function SectionEngagementBar({ sectionId, engagement }: {
-  sectionId: string;
-  engagement: { avgTime: number; totalEntries: number; dropoffRate: number };
-}) {
-  const barWidth = Math.max(4, (1 - engagement.dropoffRate) * 100);
-  const isLow = engagement.dropoffRate > 0.12;
-  const isGood = engagement.dropoffRate < 0.05 && engagement.avgTime > 30000;
-
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 'var(--spacing-3)',
-      padding: 'var(--spacing-2) 0',
-      borderBottom: '1px solid var(--color-border-subtle)',
-    }}>
-      {/* Section label */}
-      <div style={{
-        width: '140px',
-        flexShrink: 0,
-        fontSize: 'var(--text-sm)',
-        color: 'var(--color-text-primary)',
-        fontWeight: isLow ? 'var(--font-weight-semibold)' : 'var(--font-weight-normal)',
-      }}>
-        {sectionId.replace(/-/g, ' ')}
-        {isLow && <span style={{ color: 'var(--color-error)', marginLeft: 'var(--spacing-1)' }}>⚠</span>}
-        {isGood && <span style={{ color: 'var(--color-success)', marginLeft: 'var(--spacing-1)' }}>✓</span>}
-      </div>
-
-      {/* Engagement bar */}
-      <div style={{
-        flex: 1,
-        height: '20px',
-        backgroundColor: 'var(--color-bg-tertiary)',
-        borderRadius: 'var(--radius-sm)',
-        overflow: 'hidden',
-        position: 'relative',
-      }}>
-        <div style={{
-          width: `${String(barWidth)}%`,
-          height: '100%',
-          backgroundColor: isLow ? 'var(--color-error)' : isGood ? 'var(--color-success)' : 'var(--color-brand-400)',
-          borderRadius: 'var(--radius-sm)',
-          opacity: 0.7,
-          transition: 'width 0.3s ease',
-        }} />
-      </div>
-
-      {/* Stats */}
-      <div style={{ width: '100px', textAlign: 'right', fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
-        <div>{fmtTime(engagement.avgTime)} avg</div>
-        <div>{engagement.totalEntries} entries</div>
-      </div>
-    </div>
-  );
-}
-
-// ── Improvement Recommendation Card ────────────────────────────────────────
-
-function RecommendationCard({ rec }: { rec: ImprovementReport['recommendations'][0] }) {
-  const priorityColors: Record<string, { bg: string; text: string }> = {
-    high: { bg: 'var(--color-error)', text: 'white' },
-    medium: { bg: 'var(--color-warning)', text: 'var(--color-bg-primary)' },
-    low: { bg: 'var(--color-bg-tertiary)', text: 'var(--color-text-secondary)' },
-  };
-
-  const pc = priorityColors[rec.priority];
-
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: 'var(--spacing-3)',
-      padding: 'var(--spacing-3)',
-      backgroundColor: 'var(--color-bg-tertiary)',
-      borderRadius: 'var(--radius-md)',
-      borderLeft: `3px solid ${pc.bg}`,
-    }}>
-      <div style={{
-        padding: '2px 6px',
-        borderRadius: 'var(--radius-sm)',
-        backgroundColor: pc.bg,
-        color: pc.text,
-        fontSize: '10px',
-        fontWeight: 'var(--font-weight-bold)',
-        textTransform: 'uppercase',
-        flexShrink: 0,
-      }}>
-        {rec.priority}
-      </div>
-      <div>
-        <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary)' }}>
-          {rec.action.replace(/_/g, ' ')} — {rec.target}
-        </div>
-        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginTop: 'var(--spacing-1)' }}>
-          {rec.reason}
-        </div>
-      </div>
-    </div>
-  );
-}
+import { fmt, fmtPct, fmtTime } from './formatters';
+import { sectionStyle, headingStyle, valueStyle, labelStyle } from './styles';
+import { MetricCard } from './MetricCard';
+import { SectionEngagementBar } from './SectionEngagementBar';
+import { RecommendationCard } from './RecommendationCard';
 
 // ── Main Dashboard ─────────────────────────────────────────────────────────
 
@@ -211,7 +46,7 @@ export default function AnalyticsDashboard({ defaultStory, storySlugs }: Analyti
   // Fetch summary on mount
   useEffect(() => {
     fetch('/api/analytics?aggregate=false')
-      .then((r) => r.json() as Promise<{ summary: AnalyticsSummary }>)
+      .then<{ summary: AnalyticsSummary }>((r) => r.json())
       .then((data) => {
         setSummary(data.summary);
         if (data.summary.stories.length > 0) {
@@ -230,7 +65,7 @@ export default function AnalyticsDashboard({ defaultStory, storySlugs }: Analyti
       setLoading(true);
 
       fetch(`/api/analytics/story/${selectedSlug}`)
-        .then((r) => r.json() as Promise<StoryAnalyticsResponse>)
+        .then<StoryAnalyticsResponse>((r) => r.json())
         .then((data) => {
           setStoryData(data);
           setError(null);

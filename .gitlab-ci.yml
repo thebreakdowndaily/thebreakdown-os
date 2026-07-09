@@ -1,4 +1,4 @@
-image: node:22-alpine
+image: mcr.microsoft.com/playwright:v1.40.0-jammy
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -8,10 +8,12 @@ cache:
 
 stages:
   - install
-  - lint
   - typecheck
-  - test
+  - lint
   - build
+  - playwright
+  - accessibility
+  - report
   - deploy
 
 variables:
@@ -26,54 +28,85 @@ install:
       - node_modules/
     expire_in: 1h
 
-lint:
-  stage: lint
-  dependencies:
-    - install
-  script:
-    - npx next lint --no-cache
-  allow_failure: true
-
 typecheck:
   stage: typecheck
   dependencies:
     - install
   script:
-    - npx tsc --noEmit
-  allow_failure: true
+    - npm run typecheck
 
-test:
-  stage: test
+lint:
+  stage: lint
   dependencies:
     - install
   script:
-    - npm test
-  artifacts:
-    reports:
-      junit: junit.xml
-    expire_in: 1h
+    - npm run lint
 
 build:
   stage: build
   dependencies:
     - install
   script:
+    - npm run build
     - npm run cf:build
   artifacts:
     paths:
       - .open-next/
+      - .next/
       - public/
     expire_in: 1h
 
-deploy:
+playwright:
+  stage: playwright
+  dependencies:
+    - install
+    - build
+  script:
+    - npm run test:e2e
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 30 days
+
+accessibility:
+  stage: accessibility
+  dependencies:
+    - install
+    - build
+  script:
+    - npx playwright test tests/e2e/accessibility.spec.ts
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+    expire_in: 30 days
+
+upload_reports:
+  stage: report
+  dependencies:
+    - playwright
+    - accessibility
+  script:
+    - echo "Playwright and Accessibility reports are ready for review."
+  artifacts:
+    paths:
+      - playwright-report/
+    expire_in: 30 days
+
+deploy_production:
   stage: deploy
   dependencies:
     - build
+    - playwright
+    - accessibility
   script:
     - npm install -g wrangler
     - wrangler pages deploy .open-next --project-name=thebreakdown-website --branch=main
   environment:
     name: production
     url: https://thebreakdown.in
+  when: manual
   rules:
     - if: $CI_COMMIT_BRANCH == "main"

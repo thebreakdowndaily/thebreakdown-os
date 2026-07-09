@@ -9,7 +9,7 @@ import { MemoryFixService } from './fixes/service';
 import { MemoryDatasetService } from './datasets/service';
 import { MemoryMediaService } from './media/service';
 import { MemorySearchService } from './search/service';
-import { MemoryAnalyticsService } from './analytics/service';
+import { PluginAnalyticsService } from './analytics/service';
 import { MemoryGraphProjectionService } from './graph/service';
 import { MemoryMonitorService, registerAllWatchers } from './monitoring/service';
 import { CanonicalStoryService } from './stories/canonical-repository';
@@ -57,7 +57,7 @@ export function initDefaultServices(
     datasets: new MemoryDatasetService(seedDatasets),
     media: new MemoryMediaService(seedMedia),
     search: new MemorySearchService(),
-    analytics: new MemoryAnalyticsService(),
+    analytics: new PluginAnalyticsService(),
   });
 }
 

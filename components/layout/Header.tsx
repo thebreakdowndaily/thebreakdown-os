@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import SearchBar from '../ui/SearchBar';
+import UnifiedSearchDialog from '../ui/UnifiedSearchDialog';
 
 interface HeaderProps {
   transparent?: boolean;
@@ -44,6 +45,18 @@ const CloseIcon: React.FC = () => (
 /* ── Header ────────────────────────────────────────────────────────────── */
 const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const toggleMobile = useCallback(() => { setMobileOpen((prev) => !prev); }, []);
   const closeMobile = useCallback(() => { setMobileOpen(false); }, []);
@@ -153,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
             ))}
           </nav>
 
-          {/* Search */}
+          {/* Search Button (Command Palette Trigger) */}
           <div
             style={{
               display: 'none',
@@ -163,8 +176,23 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
             }}
             className="search-desktop"
           >
-            <SearchBar />
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="w-full flex items-center justify-between bg-neutral-900 border border-neutral-800 text-neutral-400 text-sm rounded-lg px-4 py-2 hover:bg-neutral-800 hover:border-neutral-700 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>Search...</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-bold text-neutral-500 bg-neutral-950 border border-neutral-800 rounded">⌘K</kbd>
+              </div>
+            </button>
           </div>
+
+          <UnifiedSearchDialog isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
           {/* Mobile menu button */}
           <button
@@ -237,7 +265,20 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
                 borderTop: '1px solid var(--color-border-default)',
               }}
             >
-              <SearchBar />
+              <button
+                onClick={() => {
+                  setSearchOpen(true);
+                  setMobileOpen(false);
+                }}
+                className="w-full flex items-center justify-between bg-neutral-900 border border-neutral-800 text-neutral-400 text-sm rounded-lg px-4 py-3 hover:bg-neutral-800 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <span>Search stories, topics...</span>
+                </div>
+              </button>
             </div>
           </nav>
         </div>
