@@ -169,7 +169,7 @@ bootstrapServices() → services.{stories,topics,...} → view-model → page
 
 ### Knowledge Graph
 
-`GraphService.build()` traverses all stories, topics, entities, timelines, and fixes to produce typed nodes and edges. BFS traversal, shortest-path, and trending connections are available at any depth.
+The platform exclusively uses the `GraphProjectionService` to dynamically project nodes and edges from the canonical `Services` locator registry. This eliminates legacy manual data parsing and ensures the graph is a pure reflection of the underlying entity, topic, and story data. BFS traversal, shortest-path, and trending connections are available at any depth.
 
 ### AI Layer
 

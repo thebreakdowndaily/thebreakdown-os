@@ -17,7 +17,7 @@ This directory captures the *how* of system design — data flows, service bound
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| _(none yet)_ | — | — |
+| [Knowledge Graph Architecture](./graph.md) | Details the projection-based graph architecture | active |
 
 ## Conventions
 

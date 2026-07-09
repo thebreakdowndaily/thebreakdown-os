@@ -10,67 +10,24 @@ No module writes directly to the website.
 
 ---
 
-Input
-
-↓
-
-Discovery
-
-↓
-
-Research
-
-↓
-
-Verification
-
-↓
-
-Entity Extraction
-
-↓
-
-Timeline
-
-↓
-
-Editorial Thinking
-
-↓
-
-Story Architecture
-
-↓
-
-Writing
-
-↓
-
-Editing
-
-↓
-
-SEO
-
-↓
-
-Visual Planning
-
-↓
-
-Website Builder
-
-↓
-
-Publishing
-
-↓
-
-Knowledge Graph
-
-↓
-
-Monitoring
+```mermaid
+graph TD
+    Input[Input] --> Discovery
+    Discovery --> Research
+    Research --> Verification
+    Verification --> EntityExt[Entity Extraction]
+    EntityExt --> Timeline
+    Timeline --> EdThinking[Editorial Thinking]
+    EdThinking --> StoryArch[Story Architecture]
+    StoryArch --> Writing
+    Writing --> Editing
+    Editing --> SEO
+    SEO --> VisPlan[Visual Planning]
+    VisPlan --> WebBuilder[Website Builder]
+    WebBuilder --> Publishing
+    Publishing --> KG[Knowledge Graph Service]
+    KG --> Monitoring
+```
 
 ---
 
