@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import type { GraphNode, GraphEdge, NodeType, RelationType } from '@/lib/graph/graphTypes';
+import type { GraphNode, GraphEdge } from '@/types/canonical';
 
 interface LayoutNode extends GraphNode {
   x: number;
