@@ -1,6 +1,6 @@
 import React from 'react';
 import ExploreConnections from '@/components/graph/ExploreConnections';
-import type { GraphNode } from '@/lib/graph/graphTypes';
+import type { GraphNode } from '@/types/canonical';
 
 interface KnowledgeGraphProps {
   nodes: GraphNode[];

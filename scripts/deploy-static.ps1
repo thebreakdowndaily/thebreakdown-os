@@ -81,14 +81,16 @@ if (Test-Path -LiteralPath $publicDir) {
     Write-Host "Copied public/" -ForegroundColor Green
 }
 
-# 5. Generate _headers for cache control
+# 5. Generate _headers for cache control + CSP
 $headers = @(
     "# HTML pages: short CDN cache so updates appear immediately",
     "#",
     "/",
     "  Cache-Control: public, max-age=0, must-revalidate",
+    "  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://thebreakdown.in https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://thebreakdown.in https://placehold.co; font-src 'self' data:; connect-src 'self' https://thebreakdown.in https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://o*.ingest.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     "/*",
     "  Cache-Control: public, max-age=0, must-revalidate",
+    "  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://thebreakdown.in https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://thebreakdown.in https://placehold.co; font-src 'self' data:; connect-src 'self' https://thebreakdown.in https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://o*.ingest.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     "",
     "# Static assets: long cache with immutable",
     "/_next/static/*",

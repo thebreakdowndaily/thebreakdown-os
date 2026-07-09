@@ -17,6 +17,29 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['d3', 'maplibre-gl', 'three'],
   },
+
+  async headers() {
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://thebreakdown.in https://www.googletagmanager.com https://static.cloudflareinsights.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https://thebreakdown.in https://placehold.co",
+      "font-src 'self' data:",
+      "connect-src 'self' https://thebreakdown.in https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://o*.ingest.sentry.io",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; ');
+
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Content-Security-Policy', value: csp },
+        ],
+      },
+    ];
+  },
 };
 
 const { withSentryConfig } = require('@sentry/nextjs');
