@@ -6,6 +6,7 @@ import Hero from '@/components/home/hero/Hero';
 import { FeaturedStories } from '@/components/home/featured';
 import { TheFixSection } from '@/components/home/fix';
 import { TopicExplorer } from '@/components/home/topics';
+import { InvestigationsSection } from '@/components/home/investigations';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export const metadata: Metadata = {
@@ -39,9 +40,10 @@ export default function HomePage() {
   return (
     <HomepageLayout seo={vm.seo}>
       {vm.topStory && <Hero story={vm.topStory} />}
-      <AnimatedSection as="div"><FeaturedStories stories={vm.stories} /></AnimatedSection>
-      <AnimatedSection as="div" delay={100}><TheFixSection fixes={vm.fixes} /></AnimatedSection>
-      <AnimatedSection as="div" delay={200}><TopicExplorer topics={vm.topics} /></AnimatedSection>
+      <AnimatedSection as="div"><InvestigationsSection stories={vm.investigations} /></AnimatedSection>
+      <AnimatedSection as="div" delay={100}><FeaturedStories stories={vm.stories} /></AnimatedSection>
+      <AnimatedSection as="div" delay={200}><TheFixSection fixes={vm.fixes} /></AnimatedSection>
+      <AnimatedSection as="div" delay={300}><TopicExplorer topics={vm.topics} /></AnimatedSection>
     </HomepageLayout>
   );
 }

@@ -2,103 +2,103 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://thebreakdown.in</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/stories</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/topics</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/entities</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/organizations</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/countries</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/data</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/investigations</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/fix</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/timeline</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/newsletter</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/about</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/about/contact</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/about/methodology</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/about/team</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/graph</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://thebreakdown.in/workspace</loc>
-    <lastmod>2026-07-08</lastmod>
+    <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -229,6 +229,48 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://thebreakdown.in/story/us-iran-relations</loc>
+    <lastmod>2026-07-18T06:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/story/indian-education-crisis</loc>
+    <lastmod>2026-07-22T06:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/story/income-inequality-india</loc>
+    <lastmod>2026-07-25T06:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/story/india-china-border-tensions</loc>
+    <lastmod>2026-07-30T06:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/story/indias-foreign-policy</loc>
+    <lastmod>2026-08-05T06:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/story/81-crore-data-breach</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/story/bjp-mission-360</loc>
+    <lastmod>2026-07-10T08:00:00Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://thebreakdown.in/entity/ministry-of-rural-development</loc>
     <lastmod>2026-06-01T00:00:00Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -255,6 +297,30 @@
   <url>
     <loc>https://thebreakdown.in/entity/cag</loc>
     <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/entity/icmr</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/entity/cert-in</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/entity/uidai</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/entity/resecurity</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -469,6 +535,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://thebreakdown.in/topic/cybersecurity</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://thebreakdown.in/fix/fix-mgnrega-reform</loc>
     <lastmod>2026-06-01T00:00:00Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -515,5 +587,119 @@
     <lastmod>2026-06-01T00:00:00Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/ministry-of-rural-development</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/ministry-of-agriculture</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/rbi</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/npci</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/cag</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/icmr</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/cert-in</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/uidai</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/organization/resecurity</loc>
+    <lastmod>2026-07-09T08:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/dataset/gdp-growth</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/dataset/inflation-cpi</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/dataset/trade-deficit</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/dataset/fiscal-deficit</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/dataset/employment-rate</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/datasets/gdp-growth</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/datasets/inflation-cpi</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/datasets/trade-deficit</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/datasets/fiscal-deficit</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://thebreakdown.in/datasets/employment-rate</loc>
+    <lastmod>2026-06-01T00:00:00Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

@@ -3,7 +3,7 @@ const path = require('path');
 
 const siteUrl = 'https://thebreakdown.in';
 
-// Inline data to avoid module loading issues
+// Keep in sync with all stories, entities, topics, and fixes in utils/data-layer/store.ts
 const stories = [
   { slug: 'mgnrega-reform', updatedAt: '2026-06-22T10:00:00Z' },
   { slug: 'digital-payments-boom', updatedAt: '2026-06-20T08:30:00Z' },
@@ -26,6 +26,13 @@ const stories = [
   { slug: 'india-europe-relations', updatedAt: '2026-07-01T10:00:00Z' },
   { slug: 'india-uk-relations', updatedAt: '2026-07-01T10:00:00Z' },
   { slug: 'india-russia-relations', updatedAt: '2026-07-01T10:00:00Z' },
+  { slug: 'us-iran-relations', updatedAt: '2026-07-18T06:00:00Z' },
+  { slug: 'indian-education-crisis', updatedAt: '2026-07-22T06:00:00Z' },
+  { slug: 'income-inequality-india', updatedAt: '2026-07-25T06:00:00Z' },
+  { slug: 'india-china-border-tensions', updatedAt: '2026-07-30T06:00:00Z' },
+  { slug: 'indias-foreign-policy', updatedAt: '2026-08-05T06:00:00Z' },
+  { slug: '81-crore-data-breach', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'bjp-mission-360', updatedAt: '2026-07-10T08:00:00Z' },
 ];
 
 const entities = [
@@ -34,6 +41,10 @@ const entities = [
   { slug: 'rbi', updatedAt: '2026-06-01T00:00:00Z' },
   { slug: 'npci', updatedAt: '2026-06-01T00:00:00Z' },
   { slug: 'cag', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'icmr', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'cert-in', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'uidai', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'resecurity', updatedAt: '2026-07-09T08:00:00Z' },
   { slug: 'un', updatedAt: '2026-07-01T00:00:00Z' },
   { slug: 'wto', updatedAt: '2026-07-01T00:00:00Z' },
   { slug: 'imf', updatedAt: '2026-07-01T00:00:00Z' },
@@ -72,6 +83,7 @@ const topics = [
   { slug: 'infrastructure', updatedAt: '2026-06-01T00:00:00Z' },
   { slug: 'defence', updatedAt: '2026-06-01T00:00:00Z' },
   { slug: 'climate', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'cybersecurity', updatedAt: '2026-07-09T08:00:00Z' },
 ];
 
 const fixes = [
@@ -84,28 +96,48 @@ const fixes = [
 ];
 
 const staticPages = [
-  { url: siteUrl, lastmod: '2026-07-08', changefreq: 'daily', priority: '1.0' },
-  { url: `${siteUrl}/stories`, lastmod: '2026-07-08', changefreq: 'daily', priority: '0.8' },
-  { url: `${siteUrl}/topics`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.6' },
-  { url: `${siteUrl}/entities`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.6' },
-  { url: `${siteUrl}/organizations`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.5' },
-  { url: `${siteUrl}/countries`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.5' },
-  { url: `${siteUrl}/data`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.6' },
-  { url: `${siteUrl}/investigations`, lastmod: '2026-07-08', changefreq: 'daily', priority: '0.8' },
-  { url: `${siteUrl}/fix`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.7' },
-  { url: `${siteUrl}/timeline`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.4' },
-  { url: `${siteUrl}/newsletter`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.4' },
-  { url: `${siteUrl}/about`, lastmod: '2026-07-08', changefreq: 'monthly', priority: '0.4' },
-  { url: `${siteUrl}/about/contact`, lastmod: '2026-07-08', changefreq: 'monthly', priority: '0.3' },
-  { url: `${siteUrl}/about/methodology`, lastmod: '2026-07-08', changefreq: 'monthly', priority: '0.3' },
-  { url: `${siteUrl}/about/team`, lastmod: '2026-07-08', changefreq: 'monthly', priority: '0.3' },
-  { url: `${siteUrl}/graph`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.3' },
-  { url: `${siteUrl}/workspace`, lastmod: '2026-07-08', changefreq: 'weekly', priority: '0.3' },
+  { url: siteUrl, lastmod: '2026-07-10', changefreq: 'daily', priority: '1.0' },
+  { url: `${siteUrl}/stories`, lastmod: '2026-07-10', changefreq: 'daily', priority: '0.8' },
+  { url: `${siteUrl}/topics`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.6' },
+  { url: `${siteUrl}/entities`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.6' },
+  { url: `${siteUrl}/organizations`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.5' },
+  { url: `${siteUrl}/countries`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.5' },
+  { url: `${siteUrl}/data`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.6' },
+  { url: `${siteUrl}/investigations`, lastmod: '2026-07-10', changefreq: 'daily', priority: '0.8' },
+  { url: `${siteUrl}/fix`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.7' },
+  { url: `${siteUrl}/timeline`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.4' },
+  { url: `${siteUrl}/newsletter`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.4' },
+  { url: `${siteUrl}/about`, lastmod: '2026-07-10', changefreq: 'monthly', priority: '0.4' },
+  { url: `${siteUrl}/about/contact`, lastmod: '2026-07-10', changefreq: 'monthly', priority: '0.3' },
+  { url: `${siteUrl}/about/methodology`, lastmod: '2026-07-10', changefreq: 'monthly', priority: '0.3' },
+  { url: `${siteUrl}/about/team`, lastmod: '2026-07-10', changefreq: 'monthly', priority: '0.3' },
+  { url: `${siteUrl}/graph`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.3' },
+  { url: `${siteUrl}/workspace`, lastmod: '2026-07-10', changefreq: 'weekly', priority: '0.3' },
 ];
 
 const countries = [
   { slug: 'india', updatedAt: '2026-06-01T00:00:00Z' },
   { slug: 'bihar', updatedAt: '2026-06-01T00:00:00Z' },
+];
+
+const organizations = [
+  { slug: 'ministry-of-rural-development', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'ministry-of-agriculture', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'rbi', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'npci', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'cag', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'icmr', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'cert-in', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'uidai', updatedAt: '2026-07-09T08:00:00Z' },
+  { slug: 'resecurity', updatedAt: '2026-07-09T08:00:00Z' },
+];
+
+const datasets = [
+  { slug: 'gdp-growth', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'inflation-cpi', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'trade-deficit', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'fiscal-deficit', updatedAt: '2026-06-01T00:00:00Z' },
+  { slug: 'employment-rate', updatedAt: '2026-06-01T00:00:00Z' },
 ];
 
 const urls = [
@@ -115,6 +147,9 @@ const urls = [
   ...topics.map(t => ({ url: `${siteUrl}/topic/${t.slug}`, lastmod: t.updatedAt, changefreq: 'weekly', priority: '0.8' })),
   ...fixes.map(f => ({ url: `${siteUrl}/fix/${f.slug}`, lastmod: f.updatedAt, changefreq: 'weekly', priority: '0.8' })),
   ...countries.map(c => ({ url: `${siteUrl}/country/${c.slug}`, lastmod: c.updatedAt, changefreq: 'weekly', priority: '0.5' })),
+  ...organizations.map(o => ({ url: `${siteUrl}/organization/${o.slug}`, lastmod: o.updatedAt, changefreq: 'weekly', priority: '0.5' })),
+  ...datasets.map(d => ({ url: `${siteUrl}/dataset/${d.slug}`, lastmod: d.updatedAt, changefreq: 'weekly', priority: '0.6' })),
+  ...datasets.map(d => ({ url: `${siteUrl}/datasets/${d.slug}`, lastmod: d.updatedAt, changefreq: 'weekly', priority: '0.6' })),
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

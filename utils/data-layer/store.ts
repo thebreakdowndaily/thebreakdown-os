@@ -1759,6 +1759,7 @@ function seed(): DataStore {
     id: '81-crore-data-breach',
     slug: '81-crore-data-breach',
     headline: '81.5 Crore Aadhaar Records Exposed: Inside India\'s Biggest Data Breach',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=81.5+Crore+Aadhaar+Records+Exposed',
     summary: 'In October 2023, a threat actor put 815 million Indian citizen records — names, Aadhaar numbers, passport details — up for sale at $80,000. The breach, believed to originate from ICMR\'s COVID-19 testing database, became India\'s largest data leak, testing the country\'s new data protection regime.',
     publishedAt: '2026-07-09T08:00:00Z',
     updatedAt: '2026-07-09T08:00:00Z',
@@ -1836,6 +1837,7 @@ function seed(): DataStore {
       { question: 'What legal action was taken under the DPDP Act?', answer: 'The breach became the first major test of the recently passed DPDP Act 2023. While the Act provides for fines up to ₹250 crore for data breaches, the incident tested the government\'s enforcement capacity. The Parliamentary Committee on IT summoned MeitY and UIDAI officials, and the CBI launched a criminal investigation.' },
       { question: 'How does this compare to global data breaches?', answer: 'With 815 million records, this is among the largest data breaches in world history, comparable to the 2013 Yahoo breach (3 billion accounts) and the 2019 Collection #1 (2.7 billion records). It is the largest known breach of a government-affiliated database globally.' },
     ],
+    relatedTopicIds: ['cybersecurity', 'technology', 'policy'],
     relatedStories: [
       { slug: 'dpdp-bill', headline: 'Digital Personal Data Protection: India\'s Privacy Law Comes of Age', summary: 'India\'s journey toward comprehensive data protection legislation.', publishedAt: '2026-07-05T08:00:00Z', readingTime: 11, evidenceScore: 90, category: 'policy' },
     ],
@@ -1856,6 +1858,7 @@ function seed(): DataStore {
     id: 'bjp-mission-360',
     slug: 'bjp-mission-360',
     headline: 'Mission 360: Inside BJP\'s Push for a Two-Thirds Majority and the Battle Over India\'s Constitutional Future',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Mission+360+BJP+Two-Thirds+Majority',
     summary: 'After the shock defeat of the delimitation-cum-women\'s reservation bill on April 17, 2026, the BJP launched a high-stakes strategy to secure 360+ Lok Sabha seats — enough for a two-thirds majority — by engineering defections, targeting regional parties, and leveraging its historic Bengal win. The outcome will determine whether the government can reshape India\'s electoral map through constitutional reform.',
     publishedAt: '2026-07-10T08:00:00Z',
     updatedAt: '2026-07-10T08:00:00Z',
@@ -1937,6 +1940,7 @@ function seed(): DataStore {
       { question: 'How did the TMC MPs defect to the NDA?', answer: 'Twenty Trinamool Congress Lok Sabha MPs joined the Nationalist Citizens Party of India (NCPI), a Tripura-based registered unrecognised party. This move bypasses anti-defection hurdles because a merger of two-thirds of a party\'s MPs with another party is legally valid. The NCPI then aligned with the NDA, effectively boosting the ruling coalition\'s strength by 20 seats.' },
       { question: 'What happens if the government reaches 360 seats?', answer: 'If the NDA reaches a two-thirds majority, it could pass the Constitution (131st Amendment) Bill to increase Lok Sabha to 850 seats based on the 2011 census, implement women\'s reservation from the 2029 elections, advance the One Nation One Election framework, and pursue judicial reforms including a unified pension code and appointment commission.' },
     ],
+    relatedTopicIds: ['policy'],
     relatedStories: [
       { slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' },
       { slug: 'india-china-border-tensions', headline: 'India-China at the Crossroads', summary: 'Border flashpoint and strategic rivalry.', publishedAt: '2026-07-30T06:00:00Z', readingTime: 17, evidenceScore: 92, category: 'politics' },

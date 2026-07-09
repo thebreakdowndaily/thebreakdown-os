@@ -197,6 +197,9 @@ thebreakdown-os/
 7. Replace placeholder images with real editorial photography
 8. Set GitHub repo secrets for CI/CD auto-deploy
 
+## Recent Additions
+- **Sprint 16 — Investigative Stories & SEO**: Researched and built 2 high-impact investigative stories — 81.5 Crore Aadhaar Data Breach (story27) and BJP Mission 360 (story28) — with full timeline, evidence-scored claims, charts, FAQ, and 5 sources each. Added 4 cybersecurity entities (ICMR, CERT-In, UIDAI, Resecurity) and `cybersecurity` topic. Wired orphaned stories 22-26 into store and topics. Fixed `relatedTopicIds` mapping bug in `apiStoryToCanonical`. SEO enhancements: `heroImage` on both stories for OG/Twitter/schema images, `relatedTopicIds` for cross-linking, comprehensive sitemap (117 URLs). Added `InvestigationsSection` homepage component to surface high-evidence stories (>= 90%) that would otherwise be buried by newer-dated content. 207/207 pages, 0 errors.
+
 ## Key Files
 - `types/canonical.ts` — canonical data models (the single source of truth)
 - `services/registry.ts` — service locator pattern

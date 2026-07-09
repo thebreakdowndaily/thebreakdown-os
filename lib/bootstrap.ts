@@ -119,7 +119,7 @@ function apiStoryToCanonical(s: Record<string, any>): Story {
     author: typeof s.author === 'string' ? s.author : (s.author?.name || ''),
     relatedStoryIds: (s.relatedStories || []).map((rs: any) => rs.slug),
     relatedEntityIds: (s.relatedEntities || []).map((re: any) => re.id || re.slug),
-    relatedTopicIds: (s.relatedTopics || []).map((rt: any) => rt.id).filter(Boolean),
+    relatedTopicIds: s.relatedTopicIds || (s.relatedTopics || []).map((rt: any) => rt.id).filter(Boolean),
     repo: undefined,
   } as unknown as Story;
 }
