@@ -22,8 +22,9 @@ jobs:
           cache: npm
       - run: npm ci --prefer-offline
       - run: npm run cf:build
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
+          name: cloudflare-build
           path: .open-next
 
   deploy-cloudflare:
@@ -31,6 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v5
+        with:
+          name: cloudflare-build
+          path: .open-next
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v4
         with:
@@ -47,13 +51,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --prefer-offline
-      - run: npx next build
+      - run: npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      - run: npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       - uses: actions/upload-artifact@v5
         with:
           name: vercel-build
-          path: |
-            .next
-            public
+          path: .vercel/output
 
   deploy-vercel:
     needs: build-vercel
@@ -62,5 +71,9 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: vercel-build
+          path: .vercel/output
       - name: Deploy to Vercel
         run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
