@@ -1850,6 +1850,104 @@ function seed(): DataStore {
 
   stories.set(story27.slug, story27);
 
+  // ── Story 28: BJP Mission 360 ──────────────────────────────────────
+
+  const story28: APIStory = {
+    id: 'bjp-mission-360',
+    slug: 'bjp-mission-360',
+    headline: 'Mission 360: Inside BJP\'s Push for a Two-Thirds Majority and the Battle Over India\'s Constitutional Future',
+    summary: 'After the shock defeat of the delimitation-cum-women\'s reservation bill on April 17, 2026, the BJP launched a high-stakes strategy to secure 360+ Lok Sabha seats — enough for a two-thirds majority — by engineering defections, targeting regional parties, and leveraging its historic Bengal win. The outcome will determine whether the government can reshape India\'s electoral map through constitutional reform.',
+    publishedAt: '2026-07-10T08:00:00Z',
+    updatedAt: '2026-07-10T08:00:00Z',
+    readingTime: 16,
+    wordCount: 5600,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 93,
+    category: 'politics',
+    tags: ['Mission 360', 'BJP', 'delimitation', 'women reservation', 'One Nation One Election', 'constitutional amendment', 'NDA', 'Lok Sabha', 'West Bengal', 'TMC', 'Suvendu Adhikari'],
+    keyPoints: [
+      'BJP\'s Mission 360 aims to secure a two-thirds Lok Sabha majority to pass constitutional amendments on delimitation, women\'s reservation, and One Nation One Election',
+      'The Constitution (131st Amendment) Bill was defeated on April 17, 2026 — 298 for, 230 against, 54 short of the required 352 votes',
+      'NDA strength rose from 298 to 319 after 20 TMC MPs defected to NCPI and 6 Shiv Sena (UBT) MPs switched to the Shinde camp',
+      'BJP now needs 41 more MPs and is targeting SP (37), DMK (22), NCP-Sharad (8), and remaining TMC MPs',
+      'The West Bengal election landslide (BJP 206, TMC 81) in May 2026 provided political momentum and triggered defections',
+      'Suvendu Adhikari became Bengal\'s first BJP CM after defeating Mamata Banerjee in Bhabanipur by 15,105 votes',
+      'Two strategies: recruit 41 MPs through defections, OR reduce effective House strength by securing opposition absenteeism during voting',
+      'Congress alleges the real goal is to end reservations; Jairam Ramesh called it "todh-phod ki rajniti"',
+    ],
+    timeline: [
+      { date: '2023-09-19', title: 'Nari Shakti Vandan Adhiniyam Passed', description: 'Parliament passes 106th Constitutional Amendment reserving 33% of Lok Sabha and Assembly seats for women, tied to future delimitation.', source: 'PRS Legislative' },
+      { date: '2024-06-04', title: 'Modi 3.0 Takes Office', description: 'BJP returns with 240 seats, NDA at 293 — first time Modi government without single-party majority. Two-thirds majority out of reach.', source: 'Election Commission' },
+      { date: '2025-11-23', title: 'BJP Sweeps Bihar', description: 'NDA wins Bihar assembly elections in a landslide, giving Amit Shah the "Bihar model" template for Bengal.', source: 'Election Commission' },
+      { date: '2025-12-05', title: 'Amit Shah\'s Operation Bengal', description: 'Shah announces "Mission 2026" for West Bengal, plans to spend maximum days in Bengal from a house in Salt Lake.', source: 'ETV Bharat' },
+      { date: '2026-03-12', title: 'BJP Finalises Bengal Strategy', description: 'PM Modi and Amit Shah chair key meeting to finalise candidates and strategy for Bengal and Kerala assembly polls.', source: 'India Today' },
+      { date: '2026-04-16', title: 'Delimitation Bills Introduced', description: 'Government introduces Constitution (131st Amendment) Bill, Delimitation Bill, and UT Laws Bill in Lok Sabha — proposing to increase Lok Sabha to 850 seats.', source: 'PRS Legislative' },
+      { date: '2026-04-17', title: 'Bill Defeated in Lok Sabha', description: 'In a major setback, the Bill gets 298 votes for and 230 against — 54 short of the 352 required for a two-thirds majority. Opposition unites.', source: 'Lok Sabha Records' },
+      { date: '2026-04-18', title: 'DMK\'s Stalin Claims Victory', description: 'Tamil Nadu CM MK Stalin declares the defeat "a fire that scorched Delhi\'s arrogance." Southern states opposed delimitation fearing seat loss.', source: 'Economic Times' },
+      { date: '2026-04-28', title: 'BJP\'s 4-Pronged Bengal Strategy', description: 'BJP deploys strategy focused on demographic change, corruption, Hindu identity, and women\'s safety for Bengal polls.', source: 'OpIndia' },
+      { date: '2026-05-04', title: 'BJP Wins Bengal With 206 Seats', description: 'BJP wins 206/294 seats in West Bengal, ending TMC\'s 15-year rule. Suvendu Adhikari defeats Mamata Banerjee in Bhabanipur by 15,105 votes.', source: 'Election Commission' },
+      { date: '2026-05-09', title: 'Suvendu Adhikari Sworn In', description: 'Adhikari takes oath as West Bengal\'s first BJP chief minister in a ceremony featuring Bengali cultural motifs.', source: 'Economic Times' },
+      { date: '2026-06-01', title: 'Centre Plans Revival of Bills', description: 'Home Ministry drafts revised delimitation legislation aimed at passing in the Monsoon Session, buoyed by Bengal victory.', source: 'Indian Express' },
+      { date: '2026-06-24', title: 'Congress Alleges Conspiracy', description: 'Jairam Ramesh accuses BJP of chasing two-thirds majority to amend the Constitution and end reservations.', source: 'India Today' },
+      { date: '2026-07-02', title: 'Mission 360 Revealed', description: 'BJP leadership intensifies Mission 360 strategy. NDA strength reaches 319 after 20 TMC MPs defect to NCPI, 6 Shiv Sena (UBT) MPs switch.', source: 'Bhaskar English' },
+    ],
+    facts: [
+      { label: 'Votes Needed for Two-Thirds Majority (Apr 17)', value: '352 of 528 present', source: 'Lok Sabha' },
+      { label: 'Votes Actually Received', value: '298 for, 230 against', source: 'Lok Sabha' },
+      { label: 'NDA Strength After Bengal Defections', value: '319 MPs', source: 'Multiple Reports' },
+      { label: 'Additional MPs Needed', value: '41', source: 'The Breakdown Analysis' },
+      { label: 'BJP Seats in West Bengal (2026)', value: '206 out of 294', source: 'Election Commission' },
+      { label: 'TMC Seats in West Bengal (2026)', value: '81 out of 294', source: 'Election Commission' },
+      { label: 'Highest Voter Turnout in Bengal History', value: '92.47%', source: 'Election Commission' },
+      { label: 'Proposed Lok Sabha Size After Delimitation', value: '850 seats', source: 'PRS Legislative' },
+    ],
+    claims: [
+      { claim: 'The delimitation bill would have reduced southern states\' parliamentary representation.', source: 'Tamil Nadu CM MK Stalin', verification: 'true', explanation: 'Based on the 2011 census, southern states with better population control would see their share of Lok Sabha seats decline relative to northern states. Tamil Nadu\'s share would drop from 39 to approximately 31 seats if total seats increased to 850 proportionally.', confidence: 0.88 },
+      { claim: 'The BJP\'s real goal in pursuing a two-thirds majority is to end reservation for SCs, STs, and OBCs.', source: 'Congress Leader Jairam Ramesh', verification: 'misleading', explanation: 'While BJP leaders like Anantkumar Hegde have spoken about "changing the Constitution to save Hinduism," the party\'s official manifesto and public statements do not call for ending reservations. The party\'s stated goal is to pass women\'s reservation, delimitation, One Nation One Election, and judicial reforms — all requiring constitutional amendments.', confidence: 0.65 },
+      { claim: 'The 20 TMC MPs who joined NCPI have legally merged with the NDA through a legitimate party merger.', source: 'BJP Spokesperson', verification: 'true', explanation: 'The TMC MPs joined the Nationalist Citizens Party of India (NCPI), a Tripura-based registered unrecognised party, and then merged with the NDA. Under the anti-defection law, a merger of two-thirds of a party\'s MPs with another party is legal. The 20 MPs represent more than two-thirds of TMC\'s 29 Lok Sabha MPs.', confidence: 0.82 },
+      { claim: 'The opposition united against the bill solely because of the delimitation clause, not women\'s reservation.', source: 'Opposition Leaders', verification: 'true', explanation: 'Multiple opposition leaders including Rahul Gandhi, MK Stalin, and Jairam Ramesh stated they support women\'s reservation but oppose the linkage to delimitation based on the 2011 census. Congress demanded implementing women\'s reservation on the existing 543 seats first.', confidence: 0.85 },
+    ],
+    sources: [
+      { name: 'PRS Legislative — Constitution (131st Amendment) Bill', url: 'https://prsindia.org/billtrack/the-constitution-131st-amendment-bill-2026', type: 'research', tier: 1 },
+      { name: 'Bhaskar English — Mission 360 Report', url: 'https://www.bhaskarenglish.in/national/news/bjp-mission-360-two-thirds-majority-constitutional-reforms-138340238.html', type: 'news', tier: 2 },
+      { name: 'ABP News — Delimitation Bill Defeat', url: 'https://news.abplive.com/news/india/big-setback-for-govt-delimitation-bill-falls-in-lok-sabha-despite-nda-s-298-votes-1837138', type: 'news', tier: 2 },
+      { name: 'Election Commission of India — 2026 Results', url: 'https://eci.gov.in', type: 'government', tier: 1 },
+      { name: 'India Today — Congress Allegations', url: 'https://www.indiatoday.in/india/story/congress-bjp-two-thirds-majority-end-reservation-delimitation-constitution-amendment-jairam-ramesh-2933217-2026-06-24', type: 'news', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'Lok Sabha Vote on Delimitation Bill (April 17, 2026)', data: [
+          { category: 'For (NDA)', votes: 298 },
+          { category: 'Against (Opposition)', votes: 230 },
+          { category: 'Required (Two-Thirds)', votes: 352 },
+        ], xKey: 'category', yKey: 'votes' },
+      {
+        type: 'bar', title: 'West Bengal Assembly Results (2026)', data: [
+          { party: 'BJP', seats: 206 },
+          { party: 'TMC', seats: 81 },
+          { party: 'Congress', seats: 2 },
+          { party: 'CPI(M)', seats: 1 },
+          { party: 'Others', seats: 4 },
+        ], xKey: 'party', yKey: 'seats' },
+    ],
+    faq: [
+      { question: 'What is Mission 360?', answer: 'Mission 360 is the BJP\'s strategy to secure a two-thirds majority (360+ seats) in the Lok Sabha, enabling it to pass constitutional amendments without opposition support. The strategy involves engineering defections from opposition parties and leveraging the NDA\'s recent electoral momentum after winning West Bengal.' },
+      { question: 'Why does the BJP need a two-thirds majority?', answer: 'Constitutional amendments require a two-thirds majority of members present and voting in each House of Parliament. The BJP\'s legislative agenda — delimitation (redrawing constituencies), implementing women\'s reservation, One Nation One Election, and judicial reforms — all require constitutional amendments that cannot pass without opposition support.' },
+      { question: 'What is delimitation and why is it controversial?', answer: 'Delimitation is the redrawing of constituency boundaries based on population. The 1971 census freeze expires after 2026. Southern states oppose delimitation based on the 2011 census because their better population control would reduce their seat share relative to northern states. The government proposes increasing Lok Sabha from 543 to 850 seats to accommodate population growth without reducing absolute seats of any state.' },
+      { question: 'How did the TMC MPs defect to the NDA?', answer: 'Twenty Trinamool Congress Lok Sabha MPs joined the Nationalist Citizens Party of India (NCPI), a Tripura-based registered unrecognised party. This move bypasses anti-defection hurdles because a merger of two-thirds of a party\'s MPs with another party is legally valid. The NCPI then aligned with the NDA, effectively boosting the ruling coalition\'s strength by 20 seats.' },
+      { question: 'What happens if the government reaches 360 seats?', answer: 'If the NDA reaches a two-thirds majority, it could pass the Constitution (131st Amendment) Bill to increase Lok Sabha to 850 seats based on the 2011 census, implement women\'s reservation from the 2029 elections, advance the One Nation One Election framework, and pursue judicial reforms including a unified pension code and appointment commission.' },
+    ],
+    relatedStories: [
+      { slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' },
+      { slug: 'india-china-border-tensions', headline: 'India-China at the Crossroads', summary: 'Border flashpoint and strategic rivalry.', publishedAt: '2026-07-30T06:00:00Z', readingTime: 17, evidenceScore: 92, category: 'politics' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
+  stories.set(story28.slug, story28);
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -2503,7 +2601,7 @@ function seed(): DataStore {
     { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24], entities: ['rbi', 'ministry-of-finance'] },
     { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, and technology policy.', stories: [story2, story4, story5, story27], entities: ['npci'] },
     { slug: 'cybersecurity', name: 'Cybersecurity & Data Privacy', description: 'Data breaches, cyber threats, digital security, privacy regulation, and India\'s cybersecurity landscape.', stories: [story5, story27], entities: ['icmr', 'cert-in', 'uidai', 'resecurity'] },
-    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
+    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag'] },
     { slug: 'agriculture', name: 'Agriculture & Rural Development', description: 'Agriculture policy, crop insurance, rural employment, and farmer welfare.', stories: [story1, story3, story10, story13], entities: ['ministry-of-agriculture', 'mgnrega', 'india'] },
     { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, and payment systems.', stories: [story2], entities: ['npci', 'rbi'] },
     { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4], entities: [] },
