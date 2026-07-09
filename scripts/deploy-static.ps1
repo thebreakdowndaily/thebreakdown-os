@@ -81,7 +81,40 @@ if (Test-Path -LiteralPath $publicDir) {
     Write-Host "Copied public/" -ForegroundColor Green
 }
 
-# 5. Skip _redirects - Cloudflare handles directory/index.html routing natively
+# 5. Generate _headers for cache control
+$headers = @(
+    "# HTML pages: short CDN cache so updates appear immediately",
+    "#",
+    "/",
+    "  Cache-Control: public, max-age=0, must-revalidate",
+    "/*",
+    "  Cache-Control: public, max-age=0, must-revalidate",
+    "",
+    "# Static assets: long cache with immutable",
+    "/_next/static/*",
+    "  Cache-Control: public, max-age=31536000, immutable",
+    "# images: medium cache",
+    "/*.svg",
+    "  Cache-Control: public, max-age=86400",
+    "/*.png",
+    "  Cache-Control: public, max-age=86400",
+    "/*.jpg",
+    "  Cache-Control: public, max-age=86400",
+    "/*.jpeg",
+    "  Cache-Control: public, max-age=86400",
+    "/*.webp",
+    "  Cache-Control: public, max-age=86400",
+    "/*.ico",
+    "  Cache-Control: public, max-age=86400",
+    "",
+    "# Fonts",
+    "/_next/static/media/*",
+    "  Cache-Control: public, max-age=31536000, immutable"
+)
+Set-Content -Path (Join-Path -Path $Dist -ChildPath "_headers") -Value ($headers -join "`n")
+Write-Host "Generated _headers with cache control" -ForegroundColor Green
+
+# 6. Generate _redirects - Cloudflare handles directory/index.html routing natively
 # But we need one to handle the root / -> index.html cleanly
 $redirects = @(
     "/ /index.html 200"
@@ -89,7 +122,7 @@ $redirects = @(
 Set-Content -Path (Join-Path -Path $Dist -ChildPath "_redirects") -Value ($redirects -join "`n")
 Write-Host "Generated minimal _redirects" -ForegroundColor Green
 
-# 6. Generate _routes.json
+# 7. Generate _routes.json
 $routesJson = @{
     version = 1
     include = @("/*")

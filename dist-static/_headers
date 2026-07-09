@@ -1,0 +1,27 @@
+# HTML pages: short CDN cache so updates appear immediately
+#
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Static assets: long cache with immutable
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+# images: medium cache
+/*.svg
+  Cache-Control: public, max-age=86400
+/*.png
+  Cache-Control: public, max-age=86400
+/*.jpg
+  Cache-Control: public, max-age=86400
+/*.jpeg
+  Cache-Control: public, max-age=86400
+/*.webp
+  Cache-Control: public, max-age=86400
+/*.ico
+  Cache-Control: public, max-age=86400
+
+# Fonts
+/_next/static/media/*
+  Cache-Control: public, max-age=31536000, immutable
