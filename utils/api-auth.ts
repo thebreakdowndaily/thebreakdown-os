@@ -27,7 +27,9 @@ class ApiKeyManager {
   private seedFromEnv() {
     const raw = process.env.API_KEYS || '';
     if (!raw) {
-      this.addKeyInternal('dev-key-0000-0000-0000-000000000000', 'Development Default', 'admin');
+      if (process.env.NODE_ENV === 'development') {
+        this.addKeyInternal('dev-key-0000-0000-0000-000000000000', 'Development Default', 'admin');
+      }
       return;
     }
     for (const entry of raw.split(',')) {

@@ -43,7 +43,6 @@ lint:
     - install
   script:
     - npm run lint
-  allow_failure: true
 
 build:
   stage: build
