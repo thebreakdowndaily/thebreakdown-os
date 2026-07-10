@@ -34,6 +34,10 @@ export interface StoryRow {
     published_at: string | null;
     created_at: string;
     updated_at: string;
+    hero_image: string | null;
+    related_story_ids: string[] | null;
+    related_entity_ids: string[] | null;
+    related_topic_ids: string[] | null;
   };
   Insert: {
     id?: string;
@@ -48,6 +52,10 @@ export interface StoryRow {
     published_at?: string | null;
     created_at?: string;
     updated_at?: string;
+    hero_image?: string | null;
+    related_story_ids?: string[] | null;
+    related_entity_ids?: string[] | null;
+    related_topic_ids?: string[] | null;
   };
   Update: {
     id?: string;
@@ -62,6 +70,10 @@ export interface StoryRow {
     published_at?: string | null;
     created_at?: string;
     updated_at?: string;
+    hero_image?: string | null;
+    related_story_ids?: string[] | null;
+    related_entity_ids?: string[] | null;
+    related_topic_ids?: string[] | null;
   };
 }
 

@@ -1,5 +1,5 @@
 import type { Story, APIListParams, APIResponse } from '@/types/canonical';
-import { getSupabaseClient } from '@/supabase/client';
+import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 export interface StoryRepository {
   findAll(params?: APIListParams): Promise<APIResponse<Story[]>>;
@@ -11,7 +11,10 @@ export interface StoryRepository {
   count(): Promise<number>;
 }
 
-function sb() { return getSupabaseClient().from('stories') as any; }
+type StoryRow = TypedDatabase['public']['Tables']['stories']['Row'];
+type StoryInsert = TypedDatabase['public']['Tables']['stories']['Insert'];
+
+function sb() { return getSupabaseClient().from('stories'); }
 
 export class MemoryStoryRepository implements StoryRepository {
   private store = new Map<string, Story>();
@@ -57,25 +60,30 @@ export class SupabaseStoryRepository implements StoryRepository {
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToStory(row: any): Story {
+function rowToStory(row: StoryRow): Story {
+  const content = row.content as { blocks?: any[] } | null;
   return {
     id: row.id, slug: row.slug, title: row.title, headline: row.title, summary: row.summary,
     heroImage: row.hero_image || '', author: row.author_id || '', category: row.category || '',
-    status: row.status || 'draft',
+    status: (row.status as Story['status']) || 'draft',
     evidenceScore: 0, readingTime: 0, publishedAt: row.published_at || '',
     createdAt: row.created_at, updatedAt: row.updated_at,
-    tags: row.tags || [], blocks: row.content?.blocks || [],
+    tags: row.tags || [], blocks: content?.blocks || [],
     sources: [], claims: [], timeline: [], faq: [], charts: [],
     relatedStoryIds: row.related_story_ids || [], relatedEntityIds: row.related_entity_ids || [],
     relatedTopicIds: row.related_topic_ids || [],
   };
 }
 
-function rowFromStory(story: Story): any {
+function rowFromStory(story: Story): StoryInsert {
   return {
     id: story.id, slug: story.slug, title: story.title, summary: story.summary,
     content: { blocks: story.blocks || [] },
     author_id: story.author, category: story.category, status: story.status,
     tags: story.tags || [], published_at: story.publishedAt || null,
+    hero_image: story.heroImage || null,
+    related_story_ids: story.relatedStoryIds || null,
+    related_entity_ids: story.relatedEntityIds || null,
+    related_topic_ids: story.relatedTopicIds || null,
   };
 }
