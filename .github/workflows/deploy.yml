@@ -22,7 +22,7 @@ jobs:
       - run: npm run precf:build
       - run: npx @opennextjs/cloudflare build -c wrangler.toml
       - name: Debug listing
-        run: ls -la .open-next/ 2>/dev/null || echo "ERROR: .open-next/ directory not found"
+        run: "ls -la .open-next/ 2>/dev/null || echo 'ERROR: .open-next/ directory not found'"
       - uses: actions/upload-artifact@v5
         with:
           name: cloudflare-build
