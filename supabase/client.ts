@@ -51,10 +51,45 @@ export function getServiceClient() {
   return adminClient;
 }
 
+import { cookies } from 'next/headers';
+
 export function getSupabaseClient(): SupabaseClient<TypedDatabase> {
-  // Use service_role key for API routes (bypasses RLS)
+  // Safe request-bound server client mapping user cookies dynamically (respects RLS)
   if (typeof window === 'undefined') {
-    return getServiceClient() as unknown as SupabaseClient<TypedDatabase>;
+    try {
+      return createServerClient<TypedDatabase>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            async getAll() {
+              try {
+                const cookieStore = await cookies();
+                return cookieStore.getAll();
+              } catch {
+                return [];
+              }
+            },
+            async setAll(cookiesToSet) {
+              try {
+                const cookieStore = await cookies();
+                cookiesToSet.forEach(({ name, value, options }) =>
+                  cookieStore.set(name, value, options)
+                );
+              } catch {
+                // Safe to ignore on server components
+              }
+            }
+          }
+        }
+      ) as unknown as SupabaseClient<TypedDatabase>;
+    } catch {
+      // Fallback client using anon key when outside a request context (e.g. static generation)
+      return createClient<TypedDatabase>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      ) as unknown as SupabaseClient<TypedDatabase>;
+    }
   }
   return getBrowserClient() as unknown as SupabaseClient<TypedDatabase>;
 }

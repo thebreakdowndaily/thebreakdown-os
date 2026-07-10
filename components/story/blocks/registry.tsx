@@ -11,6 +11,8 @@ import SourcesBlock from './SourcesBlock';
 import ChartBlock from './ChartBlock';
 import { DatasetReferenceBlock } from './DatasetReferenceBlock';
 
+import DOMPurify from 'isomorphic-dompurify';
+
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
   'executive-summary': ExecutiveSummaryBlock,
   'evidence': EvidencePanelBlock,
@@ -22,7 +24,10 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'sources': SourcesBlock,
   'text': ({ content }: BlockMap['text']) => (
     <section className="py-8 sm:py-10">
-      <div className="text-base text-[#A1A1AA] leading-relaxed space-y-4" dangerouslySetInnerHTML={{ __html: content }} />
+      <div 
+        className="text-base text-[#A1A1AA] leading-relaxed space-y-4" 
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} 
+      />
     </section>
   ),
   'chart': (props: BlockMap['chart']) => <ChartBlock {...props} />,

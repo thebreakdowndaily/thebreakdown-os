@@ -52,6 +52,12 @@ export async function middleware(request: NextRequest) {
   // Page auth: protect /workspace, /cms, /dashboard, /settings, /admin
   if (PROTECTED_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     try {
+      let response = NextResponse.next({
+        request: {
+          headers: request.headers,
+        },
+      });
+
       const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -59,17 +65,21 @@ export async function middleware(request: NextRequest) {
           cookies: {
             getAll: () => request.cookies.getAll(),
             setAll: (cookiesToSet) => {
-              cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+              cookiesToSet.forEach(({ name, value, options }) => {
+                request.cookies.set(name, value);
+                response.cookies.set(name, value, options);
+              });
             },
           },
         }
       );
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
         const loginUrl = new URL('/login', request.url);
         loginUrl.searchParams.set('redirect', pathname);
         return NextResponse.redirect(loginUrl);
       }
+      return response;
     } catch {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('redirect', pathname);
