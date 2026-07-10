@@ -229,6 +229,7 @@ export interface FixRow {
     tags: string[];
     created_at: string;
     updated_at: string;
+    status: string | null;
   };
   Insert: {
     id?: string;
@@ -246,6 +247,7 @@ export interface FixRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    status?: string | null;
   };
   Update: {
     id?: string;
@@ -263,6 +265,7 @@ export interface FixRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    status?: string | null;
   };
 }
 

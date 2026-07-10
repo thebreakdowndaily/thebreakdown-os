@@ -1,5 +1,5 @@
-import type { Fix, APIListParams, APIResponse } from '@/types/canonical';
-import { getSupabaseClient } from '@/supabase/client';
+import type { Fix, APIListParams, APIResponse, FixSolution, GlobalExample, FixAction, StoryStatus } from '@/types/canonical';
+import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 export interface FixRepository {
   findAll(params?: APIListParams): Promise<APIResponse<Fix[]>>;
@@ -11,7 +11,10 @@ export interface FixRepository {
   count(): Promise<number>;
 }
 
-function sb() { return getSupabaseClient().from('fixes') as any; }
+type FixRow = TypedDatabase['public']['Tables']['fixes']['Row'];
+type FixInsert = TypedDatabase['public']['Tables']['fixes']['Insert'];
+
+function sb() { return getSupabaseClient().from('fixes'); }
 
 export class MemoryFixRepository implements FixRepository {
   private store = new Map<string, Fix>();
@@ -53,9 +56,37 @@ export class SupabaseFixRepository implements FixRepository {
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToFix(row: any): Fix {
-  return { id: row.id, slug: row.slug, title: row.title, problem: row.problem, rootCauses: row.root_causes || [], existingSolutions: row.existing_solutions || [], globalExamples: row.global_examples || [], recommendedActions: row.recommended_actions || [], citizenActions: row.citizen_actions || [], governmentActions: row.government_actions || [], metrics: row.metrics || [], status: row.status, createdAt: row.created_at, updatedAt: row.updated_at };
+function rowToFix(row: FixRow): Fix {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    problem: row.problem,
+    rootCauses: row.root_causes || [],
+    existingSolutions: (row.existing_solutions as unknown as FixSolution[]) || [],
+    globalExamples: (row.global_examples as unknown as GlobalExample[]) || [],
+    recommendedActions: (row.recommended_actions as unknown as FixAction[]) || [],
+    citizenActions: row.citizen_actions || [],
+    governmentActions: row.government_actions || [],
+    metrics: (row.metrics as any[]) || [],
+    status: (row.status as StoryStatus) || 'draft',
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
-function rowFromFix(fix: Fix): any {
-  return { id: fix.id, slug: fix.slug, title: fix.title, problem: fix.problem, root_causes: fix.rootCauses || [], existing_solutions: fix.existingSolutions || [], global_examples: fix.globalExamples || [], recommended_actions: fix.recommendedActions || [], citizen_actions: fix.citizenActions || [], government_actions: fix.governmentActions || [], metrics: fix.metrics || [], status: fix.status };
+function rowFromFix(fix: Fix): FixInsert {
+  return {
+    id: fix.id,
+    slug: fix.slug,
+    title: fix.title,
+    problem: fix.problem,
+    root_causes: fix.rootCauses || [],
+    existing_solutions: fix.existingSolutions as unknown as string[] || [],
+    global_examples: fix.globalExamples as unknown as string[] || [],
+    recommended_actions: fix.recommendedActions as unknown as string[] || [],
+    citizen_actions: fix.citizenActions || [],
+    government_actions: fix.governmentActions || [],
+    metrics: fix.metrics || [],
+    status: fix.status
+  };
 }
