@@ -127,6 +127,15 @@ export interface EntityRow {
     tags: string[];
     created_at: string;
     updated_at: string;
+    image: string | null;
+    story_count: number | null;
+    evidence_score: number | null;
+    related_entity_ids: string[] | null;
+    related_story_ids: string[] | null;
+    related_topic_ids: string[] | null;
+    statistics: unknown | null;
+    timeline: unknown | null;
+    faq: unknown | null;
   };
   Insert: {
     id?: string;
@@ -138,6 +147,15 @@ export interface EntityRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    image?: string | null;
+    story_count?: number | null;
+    evidence_score?: number | null;
+    related_entity_ids?: string[] | null;
+    related_story_ids?: string[] | null;
+    related_topic_ids?: string[] | null;
+    statistics?: unknown | null;
+    timeline?: unknown | null;
+    faq?: unknown | null;
   };
   Update: {
     id?: string;
@@ -149,6 +167,15 @@ export interface EntityRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    image?: string | null;
+    story_count?: number | null;
+    evidence_score?: number | null;
+    related_entity_ids?: string[] | null;
+    related_story_ids?: string[] | null;
+    related_topic_ids?: string[] | null;
+    statistics?: unknown | null;
+    timeline?: unknown | null;
+    faq?: unknown | null;
   };
 }
 

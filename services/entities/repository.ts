@@ -1,5 +1,5 @@
 import type { Entity, EntityKind, APIListParams, APIResponse } from '@/types/canonical';
-import { getSupabaseClient } from '@/supabase/client';
+import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 export interface EntityRepository {
   findAll(params?: APIListParams): Promise<APIResponse<Entity[]>>;
@@ -13,7 +13,10 @@ export interface EntityRepository {
   count(): Promise<number>;
 }
 
-function sb() { return getSupabaseClient().from('entities') as any; }
+type EntityRow = TypedDatabase['public']['Tables']['entities']['Row'];
+type EntityInsert = TypedDatabase['public']['Tables']['entities']['Insert'];
+
+function sb() { return getSupabaseClient().from('entities'); }
 
 export class MemoryEntityRepository implements EntityRepository {
   private store = new Map<string, Entity>();
@@ -59,9 +62,43 @@ export class SupabaseEntityRepository implements EntityRepository {
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToEntity(row: any): Entity {
-  return { id: row.id, slug: row.slug, name: row.name, description: row.description, type: row.type, aliases: row.aliases || [], image: row.image, storyCount: row.story_count ?? 0, evidenceScore: row.evidence_score ?? 0, relatedEntityIds: row.related_entity_ids ?? [], relatedStoryIds: row.related_story_ids ?? [], relatedTopicIds: row.related_topic_ids ?? [], statistics: row.statistics ?? [], timeline: row.timeline ?? [], faq: row.faq ?? [], createdAt: row.created_at, updatedAt: row.updated_at };
+function rowToEntity(row: EntityRow): Entity {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    description: row.description,
+    type: row.type as EntityKind,
+    aliases: row.aliases || [],
+    image: row.image || '',
+    storyCount: row.story_count ?? 0,
+    evidenceScore: row.evidence_score ?? 0,
+    relatedEntityIds: row.related_entity_ids ?? [],
+    relatedStoryIds: row.related_story_ids ?? [],
+    relatedTopicIds: row.related_topic_ids ?? [],
+    statistics: (row.statistics as any[]) ?? [],
+    timeline: (row.timeline as any[]) ?? [],
+    faq: (row.faq as any[]) ?? [],
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
-function rowFromEntity(entity: Entity): any {
-  return { id: entity.id, slug: entity.slug, name: entity.name, description: entity.description, type: entity.type, aliases: entity.aliases || [], image: entity.image, story_count: entity.storyCount, evidence_score: entity.evidenceScore, related_entity_ids: entity.relatedEntityIds, related_story_ids: entity.relatedStoryIds, related_topic_ids: entity.relatedTopicIds, statistics: entity.statistics, timeline: entity.timeline, faq: entity.faq };
+function rowFromEntity(entity: Entity): EntityInsert {
+  return {
+    id: entity.id,
+    slug: entity.slug,
+    name: entity.name,
+    description: entity.description,
+    type: entity.type,
+    aliases: entity.aliases || [],
+    image: entity.image,
+    story_count: entity.storyCount,
+    evidence_score: entity.evidenceScore,
+    related_entity_ids: entity.relatedEntityIds,
+    related_story_ids: entity.relatedStoryIds,
+    related_topic_ids: entity.relatedTopicIds,
+    statistics: entity.statistics,
+    timeline: entity.timeline,
+    faq: entity.faq
+  };
 }
