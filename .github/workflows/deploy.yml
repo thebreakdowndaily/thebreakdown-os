@@ -21,18 +21,12 @@ jobs:
       - run: npm ci --prefer-offline
       - run: npm run precf:build
       - run: npx @opennextjs/cloudflare build -c wrangler.toml
-      - name: Debug listing
-        run: ls -la .open-next/
-      - name: Deploy to Cloudflare
+      - name: Verify story data
+        run: npx tsx -e "const {getStories} = require('./utils/data-layer/store'); const s = getStories({pageSize:100}).data; const eb = s.find(x => x.slug === 'electoral-bonds'); console.log('Stories:', s.length); console.log('electoral-bonds found:', !!eb); if (!eb) { process.exit(1); }"
+      - name: Deploy to Cloudflare Pages
         id: deploy
-        continue-on-error: true
-        run: |
-          npx opennextjs-cloudflare deploy 2>&1 | tee deploy-output.txt
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      - name: Upload deploy output (even on failure)
-        uses: actions/upload-artifact@v5
+        uses: cloudflare/wrangler-action@v4
         with:
-          name: deploy-output
-          path: deploy-output.txt
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .open-next --project-name=the-breakdown --branch=main
