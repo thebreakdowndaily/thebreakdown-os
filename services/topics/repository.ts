@@ -1,5 +1,5 @@
 import type { Topic, APIListParams, APIResponse } from '@/types/canonical';
-import { getSupabaseClient } from '@/supabase/client';
+import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 export interface TopicRepository {
   findAll(params?: APIListParams): Promise<APIResponse<Topic[]>>;
@@ -11,7 +11,10 @@ export interface TopicRepository {
   count(): Promise<number>;
 }
 
-function sb() { return getSupabaseClient().from('topics') as any; }
+type TopicRow = TypedDatabase['public']['Tables']['topics']['Row'];
+type TopicInsert = TypedDatabase['public']['Tables']['topics']['Insert'];
+
+function sb() { return getSupabaseClient().from('topics'); }
 
 export class MemoryTopicRepository implements TopicRepository {
   private store = new Map<string, Topic>();
@@ -53,9 +56,35 @@ export class SupabaseTopicRepository implements TopicRepository {
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToTopic(row: any): Topic {
-  return { id: row.id, slug: row.slug, name: row.name, description: row.description, storyIds: row.story_ids || [], relatedEntityIds: row.related_entity_ids || [], featuredStoryIds: row.featured_story_ids || [], countries: row.countries || [], faq: row.faq || [], timeline: row.timeline || [], statistics: row.statistics || [], createdAt: row.created_at, updatedAt: row.updated_at };
+function rowToTopic(row: TopicRow): Topic {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    description: row.description,
+    storyIds: row.story_ids || [],
+    relatedEntityIds: row.related_entity_ids || [],
+    featuredStoryIds: row.featured_story_ids || [],
+    countries: row.countries || [],
+    faq: (row.faq as any[]) || [],
+    timeline: (row.timeline as any[]) || [],
+    statistics: (row.statistics as any[]) || [],
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
-function rowFromTopic(topic: Topic): any {
-  return { id: topic.id, slug: topic.slug, name: topic.name, description: topic.description, story_ids: topic.storyIds || [], related_entity_ids: topic.relatedEntityIds || [], featured_story_ids: topic.featuredStoryIds || [], countries: topic.countries || [], faq: topic.faq, timeline: topic.timeline, statistics: topic.statistics };
+function rowFromTopic(topic: Topic): TopicInsert {
+  return {
+    id: topic.id,
+    slug: topic.slug,
+    name: topic.name,
+    description: topic.description,
+    story_ids: topic.storyIds || [],
+    related_entity_ids: topic.relatedEntityIds || [],
+    featured_story_ids: topic.featuredStoryIds || [],
+    countries: topic.countries || [],
+    faq: topic.faq,
+    timeline: topic.timeline,
+    statistics: topic.statistics
+  };
 }

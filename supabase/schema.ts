@@ -89,6 +89,12 @@ export interface TopicRow {
     related_story_ids: string[];
     created_at: string;
     updated_at: string;
+    story_ids: string[] | null;
+    featured_story_ids: string[] | null;
+    countries: string[] | null;
+    faq: unknown | null;
+    timeline: unknown | null;
+    statistics: unknown | null;
   };
   Insert: {
     id?: string;
@@ -101,6 +107,12 @@ export interface TopicRow {
     related_story_ids?: string[];
     created_at?: string;
     updated_at?: string;
+    story_ids?: string[] | null;
+    featured_story_ids?: string[] | null;
+    countries?: string[] | null;
+    faq?: unknown | null;
+    timeline?: unknown | null;
+    statistics?: unknown | null;
   };
   Update: {
     id?: string;
@@ -113,6 +125,12 @@ export interface TopicRow {
     related_story_ids?: string[];
     created_at?: string;
     updated_at?: string;
+    story_ids?: string[] | null;
+    featured_story_ids?: string[] | null;
+    countries?: string[] | null;
+    faq?: unknown | null;
+    timeline?: unknown | null;
+    statistics?: unknown | null;
   };
 }
 
