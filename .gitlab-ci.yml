@@ -5,6 +5,8 @@ cache:
   paths:
     - node_modules/
     - .open-next/
+    - .next/cache/
+    - .npm/
 
 stages:
   - install
