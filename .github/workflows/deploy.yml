@@ -10,10 +10,8 @@ env:
   SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
 jobs:
-  build-cloudflare:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      output-dir: .open-next
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -21,14 +19,17 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --prefer-offline
-      - run: npm run cf:build
+      - run: npm run precf:build
+      - run: npx @opennextjs/cloudflare build -c wrangler.toml
+      - name: Debug listing
+        run: ls -la .open-next/ 2>/dev/null || echo "ERROR: .open-next/ directory not found"
       - uses: actions/upload-artifact@v5
         with:
           name: cloudflare-build
           path: .open-next
 
-  deploy-cloudflare:
-    needs: build-cloudflare
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v5
@@ -41,39 +42,3 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy .open-next --project-name=the-breakdown --branch=main
-
-  build-vercel:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci --prefer-offline
-      - run: npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      - run: npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      - uses: actions/upload-artifact@v5
-        with:
-          name: vercel-build
-          path: .vercel/output
-
-  deploy-vercel:
-    needs: build-vercel
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v5
-        with:
-          name: vercel-build
-          path: .vercel/output
-      - name: Deploy to Vercel
-        run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
