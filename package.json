@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260702.1",
+    "@next/bundle-analyzer": "^16.2.10",
     "@types/d3": "^7.4.0",
     "@types/node": "^20.14.0",
     "@types/react": "^19.1.0",

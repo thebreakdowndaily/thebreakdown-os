@@ -32,6 +32,22 @@ export interface APIStory {
   relatedEntities: APIRelatedEntity[];
   organisations?: APIRelatedEntity[];
   countries?: APIRelatedEntity[];
+  status?: 'breaking' | 'developing' | 'verified' | 'explainer' | 'archive';
+  versionHistory?: Array<{ date: string; description: string }>;
+  confidenceBreakdown?: {
+    overallScore: number;
+    sourceQuality: number;
+    confirmations: number;
+    dataAvailability: number;
+    verificationStatus: number;
+  };
+  location?: string;
+  stakeholderNames?: string[];
+  impactLevel?: 'low' | 'medium' | 'high' | 'critical';
+  legislation?: string;
+  costValue?: string;
+  takeaway?: string;
+  whoIsAffected?: string;
 }
 
 export interface APIAuthor {

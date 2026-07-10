@@ -5,6 +5,7 @@ import { bootstrapServices } from '@/lib/bootstrap';
 import { buildStoryPage } from '@/features/story/view-model';
 import type { Story, StoryBlock } from '@/types/canonical';
 import StoryLayout from '@/layouts/StoryLayout';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import Hero from '@/components/story/Hero';
 import { BlockRenderer } from '@/components/story/blocks/registry';
 import RelatedStories from '@/components/story/RelatedStories';
@@ -18,6 +19,13 @@ import SourcesList from '@/components/story/SourcesList';
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
   return blocks.map((block) => <BlockRenderer key={block.id} block={block as any} />);
+}
+
+function deriveKeyPoints(story: Story): string[] {
+  if (story.claims && story.claims.length >= 3) {
+    return story.claims.slice(0, 4).map(c => c.claim);
+  }
+  return [];
 }
 
 function createJsonLd(story: Story): Record<string, unknown>[] {
@@ -54,7 +62,7 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://thebreakdown.in/' },
-        { '@type': 'ListItem', position: 2, name: breadcrumbs, item: `https://thebreakdown.in/stories` },
+        { '@type': 'ListItem', position: 2, name: breadcrumbs, item: 'https://thebreakdown.in/stories' },
         { '@type': 'ListItem', position: 3, name: story.headline.slice(0, 60), item: `https://thebreakdown.in/story/${story.slug}` },
       ],
     },
@@ -102,8 +110,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function StoryPage({ 
+  params,
+  searchParams,
+}: { 
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { slug } = await params;
+  const resolvedSearchParams = await searchParams;
+  const mode = (resolvedSearchParams?.mode as string) || 'standard';
   const services = bootstrapServices();
   const vm = buildStoryPage(services, slug);
   if (!vm) notFound();
@@ -116,35 +132,30 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           {JSON.stringify(ld)}
         </Script>
       ))}
-      <StoryLayout
-        seo={{
-          title: vm.seo.title,
-          description: vm.seo.description,
-          canonical: vm.seo.canonical ?? '',
-          ogType: 'article',
-          ogImage: vm.seo.ogImage,
-          keywords: story.tags.join(', '),
-        }}
-        breadcrumbs={vm.breadcrumbs}
-      >
-        <Hero
-          headline={story.headline}
-          summary={story.summary}
-          heroImage={story.heroImage}
-          publishedAt={story.publishedAt}
-          updatedAt={story.updatedAt}
-          readingTime={story.readingTime}
-          author={{ name: story.author }}
-          evidenceScore={story.evidenceScore}
-          sources={story.sources.length}
-          charts={story.charts?.map(c => ({ type: c.chartType, title: c.title, data: c.data, xKey: 'label', yKey: 'value' }))}
-          geoData={undefined}
-          timeline={story.timeline}
-        />
-        <div className="pt-8">
-          <ExecutiveSummary summary={story.summary} keyPoints={[]} />
+
+      <Breadcrumbs items={vm.breadcrumbs} />
+      <Hero story={story} />
+
+      <StoryLayout story={story} tableOfContents={vm.tableOfContents}>
+        {mode !== 'timeline' && mode !== 'data' && (
+          <ExecutiveSummary
+            summary={story.summary}
+            keyPoints={deriveKeyPoints(story)}
+            takeaway={story.takeaway}
+            whoIsAffected={story.whoIsAffected}
+            impactLevel={story.impactLevel}
+          />
+        )}
+        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
           <BlocksRenderer blocks={story.blocks} />
+        )}
+        {mode === 'data' && (
+          <BlocksRenderer blocks={story.blocks.filter(b => b.type === 'chart' || b.type === 'key-numbers' || b.type === 'dataset-reference')} />
+        )}
+        {mode !== 'quick' && mode !== 'data' && (
           <Timeline events={story.timeline} />
+        )}
+        {mode !== 'quick' && mode !== 'timeline' && (
           <Evidence 
             claims={story.claims?.map(c => ({
               claim: c.claim,
@@ -156,8 +167,13 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
             sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} 
             verificationScore={story.evidenceScore} 
           />
+        )}
+        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
           <SourcesList sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} />
-        </div>
+        )}
+      </StoryLayout>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {relatedStories.length > 0 && (
           <RelatedStories
             stories={relatedStories.map((s) => ({
@@ -184,7 +200,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           />
         )}
         <AuthorBox author={{ name: story.author }} />
-      </StoryLayout>
+      </div>
     </>
   );
 }

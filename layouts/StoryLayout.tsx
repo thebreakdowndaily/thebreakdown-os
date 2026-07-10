@@ -1,59 +1,52 @@
 import React from 'react';
-import Breadcrumbs from '../components/ui/Breadcrumbs';
-import Sidebar from '../components/layout/Sidebar';
-import Container from '../components/layout/Container';
-
-interface Breadcrumb {
-  label: string;
-  href: string;
-}
-
-interface SEOData {
-  title: string;
-  description: string;
-  canonical: string;
-  ogType: string;
-  ogImage?: string;
-  ogPublishDate?: string;
-  twitterCard?: string;
-  keywords?: string;
-}
+import TableOfContents from '@/components/story/TableOfContents';
+import ReadingProgress from '@/components/story/ReadingProgress';
+import StorySnapshot from '@/components/story/StorySnapshot';
+import type { Story, TOCItem } from '@/types/canonical';
 
 interface StoryLayoutProps {
   children: React.ReactNode;
-  seo: SEOData;
-  breadcrumbs: Breadcrumb[];
+  story: Story;
+  tableOfContents: TOCItem[];
 }
 
-const StoryLayout: React.FC<StoryLayoutProps> = ({ children, seo, breadcrumbs }) => (
+const StoryLayout: React.FC<StoryLayoutProps> = ({ children, story, tableOfContents }) => (
   <>
-    <Breadcrumbs items={breadcrumbs} />
-
+    <ReadingProgress />
     <main className="flex-1 w-full" role="main">
-      <Container>
-        <div className="flex flex-col lg:flex-row gap-8 py-6">
-          <article className="flex-1 min-w-0" aria-label={seo.title}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div className="lg:grid lg:grid-cols-[220px_1fr_240px] lg:gap-10 xl:gap-12 relative">
+          {/* Left: TOC */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-24">
+              <TableOfContents items={tableOfContents} />
+            </div>
+          </aside>
+
+          {/* Center: Article content */}
+          <article className="min-w-0" aria-label="Article content">
             {children}
           </article>
 
-          <aside className="w-full lg:w-72 flex-shrink-0" aria-label="Related content">
-            <Sidebar
-              sticky
-              sections={[
-                {
-                  title: 'Table of Contents',
-                  items: [
-                    { label: 'Overview', href: '#overview', icon: 'document' },
-                    { label: 'Evidence', href: '#evidence', icon: 'tag' },
-                    { label: 'Timeline', href: '#timeline', icon: 'clock' },
-                    { label: 'Sources', href: '#sources', icon: 'link' },
-                  ],
-                },
-              ]}
-            />
+          {/* Right: Snapshot rail */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-24">
+              <StorySnapshot
+                status={story.status}
+                category={story.category}
+                location={story.location}
+                stakeholderNames={story.stakeholderNames}
+                impactLevel={story.impactLevel}
+                legislation={story.legislation}
+                costValue={story.costValue}
+                updatedAt={story.updatedAt}
+                evidenceScore={story.evidenceScore}
+                sourceCount={story.sources?.length}
+              />
+            </div>
           </aside>
         </div>
-      </Container>
+      </div>
     </main>
   </>
 );

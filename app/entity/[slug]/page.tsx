@@ -120,7 +120,7 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
           image={entity.image}
           aliases={entity.aliases}
           storyCount={stories.length}
-          evidenceScore={undefined} // Or calculate from stories if needed
+          evidenceScore={0} // Or calculate from stories if needed
           updatedAt={entity.updatedAt}
         />
 

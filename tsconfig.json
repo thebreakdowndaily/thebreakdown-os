@@ -38,6 +38,7 @@
     "node_modules",
     "tests",
     ".open-next",
-    "scripts"
+    "scripts",
+    "playwright.config.ts"
   ]
 }

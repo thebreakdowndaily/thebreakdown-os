@@ -71,6 +71,34 @@ export interface SourcesData {
   sources: SourceItem[];
 }
 
+export interface CalloutData {
+  variant: 'context' | 'definition' | 'why-it-matters' | 'what-changed' | 'warning';
+  title?: string;
+  content: string;
+}
+
+export interface EvidenceInlineData {
+  claimIndex: number;
+  claim: string;
+  source: string;
+  verification: 'true' | 'false' | 'misleading' | 'unverifiable';
+  confidence: number;
+  explanation: string;
+}
+
+export interface ImageBlockData {
+  src: string;
+  alt: string;
+  caption?: string;
+  credit?: string;
+  width?: 'narrow' | 'full' | 'wide';
+}
+
+export interface ChapterHeadingData {
+  title: string;
+  anchorId: string;
+}
+
 export interface BlockMap {
   'executive-summary': ExecutiveSummaryData;
   'evidence': EvidencePanelData;
@@ -80,6 +108,10 @@ export interface BlockMap {
   'related-intelligence': RelatedIntelligenceData;
   'faq': FAQData;
   'sources': SourcesData;
+  'callout': CalloutData;
+  'evidence-inline': EvidenceInlineData;
+  'image': ImageBlockData;
+  'chapter-heading': ChapterHeadingData;
   'text': { content: string };
   'chart': {
     chartId: string;

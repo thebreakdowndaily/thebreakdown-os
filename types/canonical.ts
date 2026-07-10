@@ -49,6 +49,21 @@ export interface Story {
   relatedTopicIds: string[];
   notes?: string;
   updatedBy?: string;
+  takeaway?: string;
+  whoIsAffected?: string;
+  impactLevel?: 'low' | 'medium' | 'high' | 'critical';
+  location?: string;
+  stakeholderNames?: string[];
+  legislation?: string;
+  costValue?: string;
+  versionHistory?: Array<{ date: string; description: string }>;
+  confidenceBreakdown?: {
+    overallScore: number;
+    sourceQuality: number;
+    confirmations: number;
+    dataAvailability: number;
+    verificationStatus: number;
+  };
 }
 
 export interface Topic {
@@ -416,6 +431,47 @@ export interface StoryPageViewModel {
   relatedEntities: Entity[];
   seo: SEOData;
   breadcrumbs: Breadcrumb[];
+  tableOfContents: TOCItem[];
+  snapshot?: StorySnapshot;
+  executiveBrief?: ExecutiveBrief;
+  evidenceSummary?: EvidenceSummary;
+}
+
+export interface StorySnapshot {
+  status: string;
+  category: string;
+  location?: string;
+  stakeholders: string[];
+  costValue?: string;
+  impactLevel?: string;
+  legislation?: string;
+  lastUpdated: string;
+}
+
+export interface ExecutiveBrief {
+  takeaway: string;
+  keyPoints: string[];
+  whoIsAffected?: string;
+  impactLevel?: string;
+}
+
+export interface EvidenceSummary {
+  overallScore: number;
+  sourceQuality: number;
+  confirmations: number;
+  dataAvailability: number;
+  verificationStatus: number;
+  totalClaims: number;
+  verified: number;
+  misleading: number;
+  unverifiable: number;
+  sourceTierBreakdown: Record<number, number>;
+}
+
+export interface TOCItem {
+  id: string;
+  label: string;
+  level: number;
 }
 
 export interface TopicPageViewModel {

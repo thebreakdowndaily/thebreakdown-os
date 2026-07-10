@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { cn } from '@/utils/cn';
 
 export default function ReadingProgress() {
   const [progress, setProgress] = useState(0);

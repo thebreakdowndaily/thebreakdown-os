@@ -113,6 +113,11 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
           name={topic.name}
           description={topic.description}
           image={topic.image}
+          storyCount={stories.length}
+          entityCount={entities.length}
+          countryCount={entities.filter(e => e.type === 'country').length}
+          orgCount={entities.filter(e => e.type === 'organization').length}
+          updatedAt={topic.updatedAt}
         />
 
         {/* ── Key Statistics (Prioritized over Stories) ── */}

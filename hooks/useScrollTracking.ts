@@ -1,0 +1,1 @@
+export function useScrollTracking(_storySlug: string) {}
