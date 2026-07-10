@@ -38,7 +38,7 @@ interface DataInsightsProps {
 
 export default function DataInsights({ stats, trending, leaderboard, recentUpdates }: DataInsightsProps) {
   return (
-    <section className="w-full bg-[#0A0A0A] border-t border-[#2A2A2A]/60">
+    <section className="w-full bg-surface-primary border-t border-border">
       <Container as="div" className="py-16 sm:py-20">
         <div className="flex items-start justify-between gap-4 mb-10">
           <div className="flex-1 min-w-0">

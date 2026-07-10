@@ -30,11 +30,11 @@ export interface EvidencePanelData {
   verification?: VerificationTimelineData;
 }
 
-export const STATUS_CONFIG: Record<ClaimStatus, { label: string; color: string; bg: string }> = {
-  verified: { label: 'Verified', color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
-  strong: { label: 'Strong', color: '#3B82F6', bg: 'rgba(59,130,246,0.1)' },
-  moderate: { label: 'Moderate', color: '#D4A843', bg: 'rgba(212,168,67,0.1)' },
-  unverified: { label: 'Unverified', color: '#EF4444', bg: 'rgba(239,68,68,0.1)' },
+export const STATUS_CONFIG: Record<ClaimStatus, { label: string; wrapperClass: string; dotClass: string }> = {
+  verified: { label: 'Verified', wrapperClass: 'bg-green-500/10 text-green-500 border-green-500/20', dotClass: 'bg-green-500' },
+  strong: { label: 'Strong', wrapperClass: 'bg-blue-500/10 text-blue-500 border-blue-500/20', dotClass: 'bg-blue-500' },
+  moderate: { label: 'Moderate', wrapperClass: 'bg-brand-400/10 text-brand-400 border-brand-400/20', dotClass: 'bg-brand-400' },
+  unverified: { label: 'Unverified', wrapperClass: 'bg-red-500/10 text-red-500 border-red-500/20', dotClass: 'bg-red-500' },
 };
 
 export function getStatus(confidence: number): ClaimStatus {

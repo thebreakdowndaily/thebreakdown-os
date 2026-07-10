@@ -5,17 +5,17 @@ export default function KeyNumbersBlock({ items }: KeyNumbersData) {
 
   return (
     <section id="key-numbers" aria-label="Key numbers" className="py-8 sm:py-10">
-      <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F5] mb-5">Key Numbers</h2>
+      <h2 className="text-xs font-bold text-text-primary uppercase tracking-widest mb-6">Key Numbers</h2>
       <div
         className="grid gap-4 sm:gap-6"
-        style={{ gridTemplateColumns: `repeat(${Math.min(items.length, 3)}, 1fr)` }}
+        style={{ gridTemplateColumns: `repeat(auto-fit, minmax(200px, 1fr))` }}
       >
         {items.map((item, i) => (
-          <div key={i} className="rounded-2xl bg-[#151515] border border-[#2A2A2A] p-5 sm:p-6 flex flex-col items-center text-center">
-            <span className="text-3xl sm:text-4xl font-bold text-[#D4A843] tabular-nums leading-none">{item.value}</span>
-            <span className="text-sm text-[#A1A1AA] mt-3">{item.label}</span>
+          <div key={i} className="rounded-lg bg-surface-secondary border border-border p-5 sm:p-6 flex flex-col items-start text-left hover:border-brand-400/50 transition-colors">
+            <span className="text-4xl sm:text-5xl font-bold text-brand-400 tabular-nums leading-none tracking-tighter">{item.value}</span>
+            <span className="text-sm font-semibold text-text-primary mt-3 uppercase tracking-wider">{item.label}</span>
             {item.source && (
-              <span className="text-[10px] text-[#A1A1AA]/40 mt-2">{item.source}</span>
+              <span className="text-xs text-text-muted mt-2 font-mono uppercase tracking-widest">{item.source}</span>
             )}
           </div>
         ))}

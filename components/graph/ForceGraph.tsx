@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import type { GraphNode, GraphEdge } from '@/types/canonical';
+import type { GraphNode, GraphEdge, NodeType, RelationType } from '@/lib/graph/graphTypes';
 
 interface LayoutNode extends GraphNode {
   x: number;
@@ -20,7 +20,7 @@ const LABEL_OFFSET = 14;
 
 const TYPE_COLORS: Record<string, string> = {
   story: '#3B82F6',
-  topic: '#D4A843',
+  topic: 'var(--color-brand-400, #D4A843)',
   entity: '#A855F7',
   organization: '#8B5CF6',
   country: '#F43F5E',
@@ -270,7 +270,7 @@ export default function ForceGraph({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className="w-full h-full bg-[#0A0A0A] rounded-xl cursor-grab active:cursor-grabbing select-none"
+      className="w-full h-full bg-surface-primary border border-border rounded-xl cursor-grab active:cursor-grabbing select-none"
       onWheel={handleWheel}
       onMouseDown={(e) => handleMouseDown(e)}
       onMouseMove={handleMouseMove}
@@ -291,7 +291,7 @@ export default function ForceGraph({
               <line
                 x1={source.x} y1={source.y}
                 x2={target.x} y2={target.y}
-                stroke={isHighlighted ? '#D4A843' : '#2A2A2A'}
+                stroke={isHighlighted ? 'var(--color-brand-400, #D4A843)' : 'var(--color-border, #2A2A2A)'}
                 strokeWidth={isHighlighted ? 2 : 0.8}
                 opacity={isDimmed ? 0.1 : isHighlighted ? 0.9 : 0.4}
                 className="transition-all duration-300"
@@ -301,9 +301,9 @@ export default function ForceGraph({
                   x={(source.x + target.x) / 2}
                   y={(source.y + target.y) / 2 - 4}
                   textAnchor="middle"
-                  fill="#A1A1AA"
+                  fill="currentColor"
+                  className="text-text-muted"
                   fontSize="8"
-                  className="pointer-events-none"
                 >
                   {edge.relation.replace(/_/g, ' ')}
                 </text>
@@ -343,8 +343,8 @@ export default function ForceGraph({
               {/* Node circle */}
               <circle
                 r={radius}
-                fill={isDimmed ? '#2A2A2A' : color}
-                stroke={isHovered ? '#F5F5F5' : 'transparent'}
+                fill={isDimmed ? 'var(--color-border, #2A2A2A)' : color}
+                stroke={isHovered ? 'var(--color-text-primary, #F5F5F5)' : 'transparent'}
                 strokeWidth={1.5}
                 opacity={isDimmed ? 0.2 : 1}
                 className="transition-all duration-200"
@@ -354,9 +354,9 @@ export default function ForceGraph({
                 <text
                   y={radius + LABEL_OFFSET}
                   textAnchor="middle"
-                  fill={isDimmed ? '#2A2A2A' : isHovered ? '#F5F5F5' : '#A1A1AA'}
+                  fill="currentColor"
+                  className={isDimmed ? "text-border" : isHovered ? "text-text-primary font-bold" : "text-text-secondary"}
                   fontSize="9"
-                  className="pointer-events-none transition-colors duration-200"
                   opacity={isDimmed ? 0.3 : 1}
                 >
                   {node.title.length > 20 ? node.title.slice(0, 18) + '...' : node.title}

@@ -1,27 +1,7 @@
-'use client';
-
 import React from 'react';
-import type { GeoData, MapSpec } from '@/utils/types';
-import dynamic from 'next/dynamic';
-
-const MapRenderer = dynamic(() => import('@/components/maps/MapRenderer'), {
-  ssr: false,
-  loading: () => (
-    <div style={{
-      height: 400,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'var(--color-bg-secondary)',
-      border: '1px solid var(--color-border-default)',
-      borderRadius: 'var(--radius-md)',
-      color: 'var(--color-text-secondary)',
-      fontSize: 'var(--text-sm)'
-    }}>
-      Loading map...
-    </div>
-  )
-});
+import type { GeoData } from '@/utils/types';
+import MapRenderer from '@/components/maps/MapRenderer';
+import type { MapSpec } from '@/utils/types';
 
 interface MapsProps {
   geoData?: GeoData;

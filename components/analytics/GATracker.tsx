@@ -14,7 +14,7 @@ export function GATracker({ gaId }: { gaId: string }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
     if (typeof window.gtag !== 'undefined') {
       window.gtag('config', gaId, { page_path: url });
     }

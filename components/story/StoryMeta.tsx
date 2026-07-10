@@ -1,5 +1,4 @@
 import Badge from '@/components/ui/Badge';
-import Image from 'next/image';
 
 interface StoryMetaProps {
   author: { name: string; avatar?: string; bio?: string };
@@ -31,7 +30,7 @@ export default function StoryMeta({
     <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
       <div className="flex items-center gap-3">
         {author.avatar ? (
-          <Image src={author.avatar} alt={author.name} width={36} height={36} className="rounded-full object-cover" />
+          <img src={author.avatar} alt={author.name} className="w-9 h-9 rounded-full object-cover" />
         ) : (
           <span className="w-9 h-9 rounded-full bg-[#D4A843] text-black flex items-center justify-center font-bold text-sm">
             {author.name.charAt(0)}

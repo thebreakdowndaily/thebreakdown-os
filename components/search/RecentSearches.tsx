@@ -17,13 +17,13 @@ export default function RecentSearches({ onSelect }: RecentSearchesProps) {
   if (items.length === 0) return null;
 
   return (
-    <div className="px-4 py-3">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-[10px] font-semibold uppercase tracking-widest text-[#A1A1AA]">Recent Searches</h3>
+    <div className="px-4 py-4">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Recent Searches</h3>
         <button
           type="button"
           onClick={() => { clearRecentSearches(); setItems([]); }}
-          className="text-[10px] text-[#A1A1AA]/40 hover:text-[#D4A843] transition-colors"
+          className="text-[10px] font-bold uppercase tracking-widest text-text-muted/40 hover:text-brand-400 transition-colors"
         >
           Clear
         </button>
@@ -34,9 +34,9 @@ export default function RecentSearches({ onSelect }: RecentSearchesProps) {
             key={q}
             type="button"
             onClick={() => onSelect(q)}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-[#A1A1AA] bg-[#151515] border border-[#2A2A2A] hover:border-[#D4A843]/30 hover:text-[#F5F5F5] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold uppercase tracking-widest text-text-secondary bg-surface-tertiary border border-border hover:border-brand-400/50 hover:text-brand-400 transition-colors"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             {q}
           </button>
         ))}

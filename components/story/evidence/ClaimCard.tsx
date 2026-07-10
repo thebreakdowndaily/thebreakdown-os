@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useId } from 'react';
+import { cn } from '@/utils/cn';
 import type { StoryClaim } from './types';
 import ConfidenceBadge from './ConfidenceBadge';
 import SourceGroup from './SourceGroup';
@@ -12,27 +13,22 @@ export default function ClaimCard({ claim }: { claim: StoryClaim }) {
   return (
     <div
       id={claim.id}
-      className="rounded-xl bg-[#0A0A0A] border border-[#2A2A2A] transition-all duration-200"
-      style={{
-        borderColor: hovered ? `${STATUS_COLORS[claim.status]}40` : undefined,
-        boxShadow: hovered ? `0 0 0 1px ${STATUS_COLORS[claim.status]}20` : undefined,
-      }}
+      className={cn(
+        "bg-surface-secondary border-b border-border transition-all duration-200",
+        hovered && "bg-surface-tertiary"
+      )}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="p-4 sm:p-5">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <p className="text-sm text-[#F5F5F5] font-medium leading-relaxed">{claim.text}</p>
+      <div className="py-4 sm:py-5 px-1 sm:px-2">
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <p className="text-[0.95rem] text-text-primary font-medium leading-relaxed font-serif">
+            {claim.text} 
+            {claim.sources.length > 0 && (
+              <sup className="ml-1 text-xs text-brand-400 font-sans cursor-pointer hover:underline">[{claim.sources.length}]</sup>
+            )}
+          </p>
           <ConfidenceBadge status={claim.status} confidence={claim.confidence} />
-        </div>
-
-        <div className="flex items-center gap-4 text-xs text-[#A1A1AA]/60 mb-3">
-          <span>Primary Sources: <span className="text-[#A1A1AA] tabular-nums">{claim.sources.length}</span></span>
-          {claim.supportingEvidence.length > 0 && (
-            <span>
-              Evidence: <span className="text-[#A1A1AA] tabular-nums">{claim.supportingEvidence.length}</span> items
-            </span>
-          )}
         </div>
 
         <div
@@ -42,16 +38,15 @@ export default function ClaimCard({ claim }: { claim: StoryClaim }) {
             opacity: hovered ? 1 : 0,
           }}
         >
-          <div className="pt-3 border-t border-[#2A2A2A] space-y-3">
+          <div className="pt-4 mt-2 border-t border-border space-y-4">
             {claim.supportingEvidence.length > 0 && (
               <div>
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5 block">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2 block">
                   Supporting Evidence
                 </span>
-                <ul className="space-y-1">
+                <ul className="space-y-2">
                   {claim.supportingEvidence.map((ev, i) => (
-                    <li key={i} className="text-xs text-[#A1A1AA]/70 flex items-start gap-2">
-                      <span className="text-[#D4A843] mt-0.5 shrink-0">&#9654;</span>
+                    <li key={i} className="text-[0.8rem] text-text-secondary flex items-start gap-3 border-l-2 border-brand-400 pl-3">
                       <span>{ev}</span>
                     </li>
                   ))}
@@ -60,16 +55,9 @@ export default function ClaimCard({ claim }: { claim: StoryClaim }) {
             )}
 
             <div>
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5 block">Sources</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2 block">Citations</span>
               <SourceGroup sources={claim.sources} />
             </div>
-
-            <a
-              href={`#claim-${claim.id}-sources`}
-              className="inline-flex items-center gap-1 text-xs font-medium text-[#D4A843] hover:text-[#D4A843]/80 transition-colors"
-            >
-              View Sources &rarr;
-            </a>
           </div>
         </div>
       </div>
@@ -78,8 +66,8 @@ export default function ClaimCard({ claim }: { claim: StoryClaim }) {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  verified: '#22C55E',
-  strong: '#3B82F6',
-  moderate: '#D4A843',
-  unverified: '#EF4444',
+  verified: 'var(--color-green-500)',
+  strong: 'var(--color-blue-500)',
+  moderate: 'var(--color-brand-400)',
+  unverified: 'var(--color-red-500)',
 };

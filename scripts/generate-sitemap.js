@@ -34,6 +34,8 @@ const stories = [
   { slug: '81-crore-data-breach', updatedAt: '2026-07-09T08:00:00Z' },
   { slug: 'bjp-mission-360', updatedAt: '2026-07-10T08:00:00Z' },
   { slug: 'electoral-bonds', updatedAt: '2026-08-14T06:00:00Z' },
+  { slug: 'pm-modi-publicity-blitz', updatedAt: '2026-07-20T06:00:00Z' },
+  { slug: 'bjp-washing-machine', updatedAt: '2026-07-25T06:00:00Z' },
 ];
 
 const entities = [

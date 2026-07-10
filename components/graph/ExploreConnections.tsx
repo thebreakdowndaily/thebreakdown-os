@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { GraphNode } from '@/types/canonical';
+import type { GraphNode } from '@/lib/graph/graphTypes';
 
 const typeHref: Record<string, (slug: string) => string> = {
   story: (s) => `/story/${s}`,

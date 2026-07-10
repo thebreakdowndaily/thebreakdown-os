@@ -1,4 +1,8 @@
 import Badge from '@/components/ui/Badge';
+import Heading from '@/components/ui/Heading';
+import Stack from '@/components/ui/Stack';
+import Divider from '@/components/ui/Divider';
+import HeroStats from './HeroStats';
 import HeroActions from './HeroActions';
 import HeroHighlights from './HeroHighlights';
 
@@ -15,49 +19,43 @@ interface HeroContentProps {
 }
 
 export default function HeroContent({
-  headline, summary, evidenceScore, sourcesCount,
+  headline, summary, evidenceScore, sourcesCount, updatedAt,
   readingTime, category, storySlug, keyPoints,
 }: HeroContentProps) {
   return (
-    <div className="space-y-7 animate-slideUp">
-      {/* Category label */}
+    <Stack gap="lg" className="animate-fade-in">
       <div className="flex items-center gap-3">
-        <span className="section-label">{category}</span>
+        <Badge variant="breaking">Breaking</Badge>
+        <span className="text-xs text-[#A1A1AA] font-medium uppercase tracking-wider">{category}</span>
       </div>
 
-      {/* Headline — editorial serif, large */}
-      <h1
-        id="hero-headline"
-        className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-[-0.025em] text-white"
-        style={{ fontFamily: 'var(--font-editorial)' }}
-      >
+      <Heading level="display" as="h1">
         {headline}
-      </h1>
+      </Heading>
 
-      {/* Summary */}
-      <p className="text-lg text-neutral-400 leading-relaxed max-w-lg">
+      <p className="text-base sm:text-lg text-[#A1A1AA] max-w-lg leading-relaxed">
+        Complex stories. Clear analysis.
+      </p>
+
+      <HeroStats
+        evidenceScore={evidenceScore}
+        sourcesCount={sourcesCount}
+        keyPointsCount={keyPoints.length}
+        readingTime={readingTime}
+      />
+
+      <p className="text-[#A1A1AA] max-w-xl leading-relaxed text-sm">
         {summary}
       </p>
 
-      {/* Trust signals */}
-      <div className="flex items-center gap-5 text-xs text-neutral-500 font-medium">
-        <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" aria-hidden="true" />
-          {evidenceScore}% evidence score
-        </span>
-        <span>{sourcesCount} sources</span>
-        <span>{readingTime} min read</span>
-      </div>
-
-      {/* CTA */}
       <HeroActions storySlug={storySlug} />
 
-      {/* Key points */}
       {keyPoints.length > 0 && (
-        <div className="pt-6 border-t border-neutral-800">
+        <>
+          <Divider />
           <HeroHighlights keyPoints={keyPoints} />
-        </div>
+        </>
       )}
-    </div>
+    </Stack>
   );
 }

@@ -12,10 +12,10 @@ export default function StatCard({ label, value, href }: StatCardProps) {
 
   const inner = (
     <>
-      <span className="text-4xl sm:text-5xl font-bold text-[#F5F5F5] tabular-nums leading-none">
+      <span className="text-4xl sm:text-5xl font-bold text-text-primary tabular-nums leading-none tracking-tighter">
         {formatted}
       </span>
-      <span className="text-sm text-[#A1A1AA] mt-2">{label}</span>
+      <span className="text-[10px] font-bold text-text-muted mt-3 uppercase tracking-widest">{label}</span>
     </>
   );
 

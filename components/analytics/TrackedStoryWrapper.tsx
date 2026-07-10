@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useCallback } from 'react';
-import { useTracking } from '@/hooks/useTracking';
+import { useScrollTracking } from '@/hooks/useScrollTracking';
+import { useSectionTracking } from '@/hooks/useSectionTracking';
 import { incrementVisitCount, getVisitCount, trackEvent, flushAnalytics } from '@/utils/analytics';
 
 interface TrackedStoryWrapperProps {
@@ -22,7 +23,7 @@ interface TrackedStoryWrapperProps {
  */
 export default function TrackedStoryWrapper({ storySlug, children }: TrackedStoryWrapperProps) {
   // Track scroll depth across the entire story
-  useTracking({ storySlug, enableScrollTracking: true });
+  useScrollTracking(storySlug);
 
   // Track return visit on mount
   useEffect(() => {
@@ -95,12 +96,11 @@ export function TrackedSection({
   className,
   style,
 }: TrackedSectionProps) {
-  const { registerSection } = useTracking({ storySlug });
+  const sectionRef = useSectionTracking(storySlug, sectionId);
 
   return (
     <Tag
-      id={sectionId}
-      ref={registerSection(sectionId)}
+      ref={sectionRef}
       data-section-id={sectionId}
       className={className}
       style={style}

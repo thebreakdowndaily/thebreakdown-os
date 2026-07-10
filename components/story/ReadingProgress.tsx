@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { cn } from '@/utils/cn';
 
 export default function ReadingProgress() {
   const [progress, setProgress] = useState(0);
@@ -19,7 +20,7 @@ export default function ReadingProgress() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 h-0.5 z-50 bg-transparent"
+      className="fixed top-0 left-0 right-0 h-[3px] z-[100] bg-transparent"
       role="progressbar"
       aria-valuenow={Math.round(progress * 100)}
       aria-valuemin={0}
@@ -27,7 +28,7 @@ export default function ReadingProgress() {
       aria-label="Reading progress"
     >
       <div
-        className="h-full bg-[#D4A843] transition-[width] duration-150 ease-out"
+        className="h-full bg-brand-400 transition-[width] duration-150 ease-out"
         style={{ width: `${progress * 100}%` }}
       />
     </div>

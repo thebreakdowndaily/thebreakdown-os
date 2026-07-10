@@ -1,3 +1,5 @@
+import { cn } from '@/utils/cn';
+
 interface SkeletonProps {
   className?: string;
   variant?: 'text' | 'rect' | 'circle';
@@ -6,15 +8,19 @@ interface SkeletonProps {
 }
 
 const variants: Record<string, string> = {
-  text: 'rounded-md h-4',
-  rect: 'rounded-2xl',
+  text: 'rounded-sm h-4',
+  rect: 'rounded-md',
   circle: 'rounded-full',
 };
 
 export default function Skeleton({ className = '', variant = 'text', width, height }: SkeletonProps) {
   return (
     <div
-      className={`animate-pulse bg-[#2A2A2A] ${variants[variant]} ${className}`}
+      className={cn(
+        "animate-pulse bg-surface-tertiary",
+        variants[variant],
+        className
+      )}
       style={{ width, height }}
       aria-hidden="true"
     />

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 
 const categoryFallback: Record<string, string> = {
   economy: '/images/placeholders/economy-placeholder.svg',
@@ -37,7 +36,6 @@ export default function StoryImage({
 }: StoryImageProps) {
   const [imgSrc, setImgSrc] = useState(src || getFallback(category));
   const [hasError, setHasError] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   function getFallback(cat?: string): string {
     if (cat && categoryFallback[cat]) return categoryFallback[cat];
@@ -52,26 +50,21 @@ export default function StoryImage({
     }
   }
 
-  const isFill = fill || (!width && !height);
-
   const img = (
-    <Image
+    <img
       src={imgSrc}
       alt={alt}
-      className={`${className} transition-all duration-500 ease-out ${loading ? 'blur-md opacity-40' : 'blur-0 opacity-100'}`}
+      className={className || undefined}
       style={style}
-      fill={isFill}
-      width={isFill ? undefined : width}
-      height={isFill ? undefined : height}
+      width={fill ? undefined : width}
+      height={fill ? undefined : height}
       onError={handleError}
-      onLoad={() => setLoading(false)}
-      placeholder="blur"
-      blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzE1MTUxNSIvPjwvc3ZnPg=="
+      loading="lazy"
     />
   );
 
-  if (isFill || wrapperClassName) {
-    return <div className={wrapperClassName || 'relative w-full h-full overflow-hidden'}>{img}</div>;
+  if (fill || wrapperClassName) {
+    return <div className={wrapperClassName || 'relative w-full h-full'}>{img}</div>;
   }
 
   return img;

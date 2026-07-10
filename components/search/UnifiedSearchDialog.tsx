@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { AnimatePresence, m } from 'framer-motion';
 import FilterTabs from './FilterTabs';
 import SearchGroup from './SearchGroup';
 import SearchEmpty from './SearchEmpty';
@@ -171,79 +172,95 @@ export default function UnifiedSearchDialog({ open, onClose }: UnifiedSearchDial
     setQuery(q);
   }, []);
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" role="dialog" aria-modal="true" aria-label="Search">
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div
-        className="relative w-full max-w-2xl mx-4 bg-[#0A0A0A] border border-[#2A2A2A] rounded-xl shadow-2xl overflow-hidden max-h-[70vh] flex flex-col"
-        onKeyDown={handleKeyDown}
-      >
-        {/* Search Input */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#2A2A2A]">
-          <svg className="w-5 h-5 text-[#A1A1AA] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search stories, topics, entities, countries..."
-            className="flex-1 bg-transparent text-sm text-[#F5F5F5] placeholder-[#A1A1AA] outline-none"
-            aria-label="Search input"
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[10vh] px-4" role="dialog" aria-modal="true" aria-label="Search">
+          <m.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm" 
+            onClick={onClose} 
           />
-          {loading && (
-            <svg className="w-4 h-4 text-[#D4A843] animate-spin" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-          )}
-          <kbd className="hidden sm:inline-flex items-center px-2 py-1 text-[10px] text-[#A1A1AA] bg-[#151515] rounded border border-[#2A2A2A] shrink-0">ESC</kbd>
-        </div>
-
-        {/* Filter Tabs */}
-        <FilterTabs active={filter} onChange={setFilter} />
-
-        {/* Results */}
-        <div ref={listRef} className="flex-1 overflow-y-auto" role="listbox" aria-label="Search results">
-          {idle ? (
-            <SearchEmpty query={query} onSearch={handleSearch} />
-          ) : totalResults > 0 ? (
-            <div className="py-2">
-              {groups.map((group, gi) => {
-                const offset = groupOffsets[gi];
-                return (
-                  <SearchGroup
-                    key={group.key}
-                    label={group.label}
-                    results={group.results}
-                    selectedIndex={selectedIndex}
-                    globalOffset={offset}
-                    onSelect={setSelectedIndex}
-                  />
-                );
-              })}
+          <m.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="relative w-full max-w-2xl bg-surface-primary/95 backdrop-blur-xl border border-brand-400/20 rounded-2xl shadow-[0_0_40px_-15px_rgba(212,168,67,0.15)] overflow-hidden max-h-[80vh] flex flex-col"
+            onKeyDown={handleKeyDown}
+          >
+            {/* Search Input */}
+            <div className="flex items-center gap-3 px-4 py-4 border-b border-border bg-transparent">
+              <svg className="w-5 h-5 text-brand-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search stories, topics, entities, countries..."
+                className="flex-1 bg-transparent text-lg text-text-primary placeholder-text-muted/50 outline-none font-serif tracking-wide"
+                aria-label="Search input"
+              />
+              {loading && (
+                <svg className="w-5 h-5 text-brand-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              )}
+              <kbd className="hidden sm:inline-flex items-center px-2 py-1 text-[9px] font-bold text-text-muted bg-surface-tertiary rounded-sm border border-border shrink-0 font-mono tracking-widest uppercase">ESC</kbd>
             </div>
-          ) : (
-            <SearchEmpty query={query} onSearch={handleSearch} />
-          )}
-        </div>
 
-        {/* Footer hints */}
-        <div className="flex items-center gap-4 px-5 py-2.5 border-t border-[#2A2A2A] bg-[#0A0A0A]">
-          <span className="text-[10px] text-[#A1A1AA]/40 flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-[#151515] rounded text-[10px] border border-[#2A2A2A]">↑↓</kbd> Navigate
-          </span>
-          <span className="text-[10px] text-[#A1A1AA]/40 flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-[#151515] rounded text-[10px] border border-[#2A2A2A]">⏎</kbd> Open
-          </span>
-          <span className="text-[10px] text-[#A1A1AA]/40 flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-[#151515] rounded text-[10px] border border-[#2A2A2A]">Esc</kbd> Close
-          </span>
+            {/* Filter Tabs */}
+            <div className="bg-surface-secondary/50">
+              <FilterTabs active={filter} onChange={setFilter} />
+            </div>
+
+            {/* Results */}
+            <div ref={listRef} className="flex-1 overflow-y-auto bg-transparent scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent" role="listbox" aria-label="Search results">
+              {idle ? (
+                <div className="py-2">
+                  <SearchEmpty query={query} onSearch={handleSearch} />
+                </div>
+              ) : totalResults > 0 ? (
+                <div className="py-2 px-2">
+                  {groups.map((group, gi) => {
+                    const offset = groupOffsets[gi];
+                    return (
+                      <SearchGroup
+                        key={group.key}
+                        label={group.label}
+                        results={group.results}
+                        selectedIndex={selectedIndex}
+                        globalOffset={offset}
+                        onSelect={setSelectedIndex}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="py-2">
+                  <SearchEmpty query={query} onSearch={handleSearch} />
+                </div>
+              )}
+            </div>
+
+            {/* Footer hints */}
+            <div className="flex items-center gap-6 px-5 py-3 border-t border-border bg-surface-secondary/30">
+              <span className="text-[9px] text-text-muted flex items-center gap-2 font-bold uppercase tracking-widest">
+                <kbd className="px-1.5 py-0.5 bg-surface-tertiary rounded-sm border border-border font-mono tracking-normal text-text-secondary">↑↓</kbd> Navigate
+              </span>
+              <span className="text-[9px] text-text-muted flex items-center gap-2 font-bold uppercase tracking-widest">
+                <kbd className="px-1.5 py-0.5 bg-surface-tertiary rounded-sm border border-border font-mono tracking-normal text-text-secondary">⏎</kbd> Open
+              </span>
+            </div>
+          </m.div>
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 }

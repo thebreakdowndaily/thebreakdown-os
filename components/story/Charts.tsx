@@ -1,27 +1,6 @@
-'use client';
-
 import React from 'react';
 import type { ChartDef } from '@/utils/types';
-import dynamic from 'next/dynamic';
-
-const ChartRenderer = dynamic(() => import('@/components/charts/ChartRenderer'), {
-  ssr: false,
-  loading: () => (
-    <div style={{
-      height: 300,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'var(--color-bg-secondary)',
-      border: '1px solid var(--color-border-default)',
-      borderRadius: 'var(--radius-md)',
-      color: 'var(--color-text-secondary)',
-      fontSize: 'var(--text-sm)'
-    }}>
-      Loading chart...
-    </div>
-  )
-});
+import ChartRenderer from '@/components/charts/ChartRenderer';
 
 interface ChartsProps {
   charts: ChartDef[];

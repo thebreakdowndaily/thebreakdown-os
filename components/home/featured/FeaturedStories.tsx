@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { APIStory } from '@/utils/data-layer/types';
+import Card from '@/components/ui/Card';
+import Badge from '@/components/ui/Badge';
 import StoryMetadata from './StoryMetadata';
 import Skeleton from '@/components/ui/Skeleton';
 
@@ -10,161 +12,121 @@ interface FeaturedStoriesProps {
   stories: APIStory[];
 }
 
-function EmptyState() {
-  return (
-    <section className="py-20 sm:py-24" aria-labelledby="featured-heading">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader />
-        <p className="text-neutral-500 text-center py-16 text-sm">No featured stories yet.</p>
-      </div>
-    </section>
-  );
-}
-
-function SectionHeader() {
-  return (
-    <div className="mb-10 sm:mb-12">
-      <span className="section-label">Editorial</span>
-      <h2
-        id="featured-heading"
-        className="mt-3 text-3xl sm:text-4xl font-bold text-white leading-tight tracking-tight"
-        style={{ fontFamily: 'var(--font-editorial)', letterSpacing: '-0.02em' }}
-      >
-        Featured Analysis
-      </h2>
-    </div>
-  );
-}
-
-interface HeroCardProps {
-  story: APIStory;
-}
-
-function HeroCard({ story }: HeroCardProps) {
-  return (
-    <article className="group">
-      <Link
-        href={`/story/${story.slug}`}
-        className="block h-full"
-        aria-label={`Read: ${story.headline}`}
-      >
-        <div className="relative h-full overflow-hidden rounded-2xl border border-neutral-800/60 bg-neutral-900 min-h-[380px] lg:min-h-[480px]">
-          {story.heroImage && (
-            <Image
-              src={story.heroImage}
-              alt={story.headline}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-              priority
-            />
-          )}
-          {/* Gradient only in bottom third */}
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/30 to-transparent" aria-hidden="true" />
-
-          {/* Category badge */}
-          <div className="absolute top-4 left-4">
-            <span className="inline-flex items-center px-2.5 py-1 text-[10px] font-semibold tracking-widest uppercase text-amber-400 bg-neutral-950/70 backdrop-blur-sm border border-amber-400/20 rounded-full">
-              {story.category}
-            </span>
-          </div>
-
-          {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-8">
-            <h3
-              className="text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight tracking-tight group-hover:text-amber-300 transition-colors duration-200"
-              style={{ fontFamily: 'var(--font-editorial)', letterSpacing: '-0.02em' }}
-            >
-              {story.headline}
-            </h3>
-            <p className="mt-2 text-sm text-neutral-400 line-clamp-2 max-w-prose">
-              {story.summary}
-            </p>
-            <div className="mt-4 flex items-center justify-between">
-              <StoryMetadata
-                evidenceScore={story.evidenceScore}
-                readingTime={story.readingTime}
-                publishedAt={story.publishedAt}
-              />
-              <span
-                className="inline-flex items-center gap-1 text-xs font-medium text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                aria-hidden="true"
-              >
-                Read
-                <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </span>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </article>
-  );
-}
-
-interface SideCardProps {
-  story: APIStory;
-}
-
-function SideCard({ story }: SideCardProps) {
-  return (
-    <article className="group">
-      <Link
-        href={`/story/${story.slug}`}
-        className="flex gap-4 items-start p-4 rounded-xl border border-neutral-800/40 bg-neutral-900/30 hover:bg-neutral-800/40 hover:border-neutral-700/60 transition-all duration-200"
-        aria-label={`Read: ${story.headline}`}
-      >
-        {/* Thumbnail */}
-        {story.heroImage && (
-          <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden">
-            <Image
-              src={story.heroImage}
-              alt={story.headline}
-              fill
-              sizes="80px"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-            />
-          </div>
-        )}
-        {/* Text */}
-        <div className="flex-1 min-w-0 space-y-1.5">
-          <span className="text-[10px] font-semibold tracking-widest uppercase text-amber-400/70">
-            {story.category}
-          </span>
-          <h3 className="text-sm font-semibold text-neutral-100 leading-snug line-clamp-2 group-hover:text-white transition-colors">
-            {story.headline}
-          </h3>
-          <StoryMetadata
-            evidenceScore={story.evidenceScore}
-            readingTime={story.readingTime}
-            publishedAt={story.publishedAt}
-          />
-        </div>
-      </Link>
-    </article>
-  );
-}
-
 export default function FeaturedStories({ stories }: FeaturedStoriesProps) {
   const featured = stories.slice(0, 4);
-  if (featured.length === 0) return <EmptyState />;
+  if (featured.length === 0) {
+    return (
+      <section className="py-16 sm:py-20" aria-labelledby="featured-heading">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between gap-4 mb-10 sm:mb-12">
+            <div>
+              <span className="inline-block px-3 py-1 text-xs font-semibold text-[#D4A843] bg-[#D4A843]/10 rounded-full mb-2">Editorial</span>
+              <h2 id="featured-heading" className="text-3xl sm:text-4xl font-bold text-[#F5F5F5]">Featured Analysis</h2>
+            </div>
+          </div>
+          <p className="text-[#A1A1AA] text-center py-12">No featured stories yet.</p>
+        </div>
+      </section>
+    );
+  }
 
   const [hero, ...side] = featured;
 
   return (
-    <section className="py-20 sm:py-24" aria-labelledby="featured-heading">
+    <section className="py-16 sm:py-20" aria-labelledby="featured-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader />
+        <div className="flex items-end justify-between gap-4 mb-10 sm:mb-12">
+          <div>
+            <span className="inline-block px-3 py-1 text-xs font-semibold text-[#D4A843] bg-[#D4A843]/10 rounded-full mb-2">Editorial</span>
+            <h2 id="featured-heading" className="text-3xl sm:text-4xl font-bold text-[#F5F5F5]">Featured Analysis</h2>
+          </div>
+        </div>
 
-        <div className="grid lg:grid-cols-[3fr_2fr] gap-6">
-          {/* Hero card — left column */}
-          <HeroCard story={hero} />
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          <article className="md:col-span-1 lg:row-span-2 group">
+            <Link href={`/story/${hero.slug}`} className="block h-full" aria-label={`Read: ${hero.headline}`}>
+              <Card className="relative h-full overflow-hidden" accent="gold">
+                <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[320px] lg:min-h-[420px] overflow-hidden">
+                  <Image
+                    src={hero.heroImage || '/images/og-default.jpg'}
+                    alt={hero.headline}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#151515] via-[#151515]/20 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <Badge variant="category">{hero.category}</Badge>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 lg:p-8">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#F5F5F5] leading-tight group-hover:text-[#D4A843] transition-colors duration-200">
+                    {hero.headline}
+                  </h3>
+                  <p className="mt-2 text-sm sm:text-base text-[#A1A1AA] line-clamp-3 max-w-prose">
+                    {hero.summary}
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                    <StoryMetadata
+                      evidenceScore={hero.evidenceScore}
+                      readingTime={hero.readingTime}
+                      publishedAt={hero.publishedAt}
+                    />
+                    <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#D4A843] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      Read
+                      <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          </article>
 
-          {/* Side cards — right column: compact list layout */}
-          <div className="flex flex-col gap-3">
-            {side.map((story) => (
-              <SideCard key={story.id} story={story} />
+          <div className="flex flex-col gap-4 sm:gap-6">
+            {side.map((story, index) => (
+              <article key={story.id} className="group">
+                <Link href={`/story/${story.slug}`} className="block" aria-label={`Read: ${story.headline}`}>
+                  <Card className="relative overflow-hidden" accent="gold">
+                    <div className="relative aspect-[16/9] overflow-hidden">
+                      <Image
+                        src={story.heroImage || '/images/og-default.jpg'}
+                        alt={story.headline}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#151515] via-[#151515]/20 to-transparent" />
+                      <div className="absolute top-3 left-3">
+                        <Badge variant="category">{story.category}</Badge>
+                      </div>
+                    </div>
+                    <div className="p-4 sm:p-5">
+                      <h3 className="text-base sm:text-lg font-bold text-[#F5F5F5] leading-snug group-hover:text-[#D4A843] transition-colors duration-200">
+                        {story.headline}
+                      </h3>
+                      <p className="mt-1.5 text-sm text-[#A1A1AA] line-clamp-2">
+                        {story.summary}
+                      </p>
+                      <div className="mt-3 flex items-center justify-between">
+                        <StoryMetadata
+                          evidenceScore={story.evidenceScore}
+                          readingTime={story.readingTime}
+                          publishedAt={story.publishedAt}
+                        />
+                        <span className="text-sm font-medium text-[#D4A843] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          Read
+                          <svg className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              </article>
             ))}
           </div>
         </div>
@@ -175,18 +137,20 @@ export default function FeaturedStories({ stories }: FeaturedStoriesProps) {
 
 export function FeaturedStoriesSkeleton() {
   return (
-    <section className="py-20 sm:py-24" aria-hidden="true">
+    <section className="py-16 sm:py-20" aria-hidden="true">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 space-y-3">
-          <Skeleton className="h-3 w-20 rounded-full" />
-          <Skeleton className="h-10 w-56 rounded-lg" />
+        <div className="flex items-end justify-between gap-4 mb-10 sm:mb-12">
+          <div className="h-6 w-40 bg-[#151515] rounded animate-pulse" />
+          <div className="h-10 w-48 bg-[#151515] rounded animate-pulse" />
         </div>
-        <div className="grid lg:grid-cols-[3fr_2fr] gap-6">
-          <Skeleton className="min-h-[480px] rounded-2xl" />
-          <div className="flex flex-col gap-3">
-            <Skeleton className="h-24 rounded-xl" />
-            <Skeleton className="h-24 rounded-xl" />
-            <Skeleton className="h-24 rounded-xl" />
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          <div className="md:col-span-1 lg:row-span-2">
+            <Skeleton className="aspect-[4/3] lg:aspect-auto lg:h-[420px] min-h-[320px] rounded-xl" />
+          </div>
+          <div className="flex flex-col gap-4 sm:gap-6">
+            <Skeleton className="aspect-[16/9] rounded-xl" />
+            <Skeleton className="aspect-[16/9] rounded-xl" />
+            <Skeleton className="aspect-[16/9] rounded-xl" />
           </div>
         </div>
       </div>

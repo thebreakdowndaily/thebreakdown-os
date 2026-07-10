@@ -16,20 +16,20 @@ export default function EvidenceLeaderboard({ stories }: EvidenceLeaderboardProp
 
   return (
     <Card className="p-5 sm:p-6" accent="gold">
-      <h3 className="text-sm font-semibold uppercase tracking-wider text-[#D4A843] mb-4">
+      <h3 className="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-5">
         Highest Evidence Stories
       </h3>
-      <ul className="space-y-3">
+      <ul className="space-y-4">
         {stories.map((story) => (
           <li key={story.slug}>
             <Link
               href={`/story/${story.slug}`}
-              className="flex items-start gap-3 group"
+              className="flex items-start gap-4 group"
             >
-              <span className="text-lg font-bold text-[#D4A843] tabular-nums leading-none mt-0.5 shrink-0">
+              <span className="text-xl font-bold text-brand-400 tabular-nums leading-none mt-0.5 shrink-0 tracking-tighter">
                 {story.evidenceScore}
               </span>
-              <span className="text-sm text-[#A1A1AA] group-hover:text-[#F5F5F5] transition-colors duration-200 leading-snug">
+              <span className="text-sm font-serif text-text-secondary group-hover:text-brand-400 transition-colors duration-200 leading-snug">
                 {story.headline}
               </span>
             </Link>

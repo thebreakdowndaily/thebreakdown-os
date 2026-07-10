@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RelatedEntity } from '@/utils/types';
-import EntityCard from '@/components/ui/EntityCard';
+import KnowledgeCard from '@/components/ui/KnowledgeCard';
 
 interface RelatedEntitiesProps {
   entities: RelatedEntity[];
@@ -14,7 +14,7 @@ export default function RelatedEntities({ entities, title = 'Related Entities' }
       <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F5] mb-5">{title}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {entities.map((entity, i) => (
-          <EntityCard key={i} entity={entity} size="sm" />
+          <KnowledgeCard key={i} entity={entity} size="sm" />
         ))}
       </div>
     </section>

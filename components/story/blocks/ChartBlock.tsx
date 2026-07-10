@@ -117,19 +117,19 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
   return (
     <section id={`chart-${chartId}`} aria-label={title} className="py-8 sm:py-10">
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F5]">{title}</h2>
+        <h2 className="text-xs font-bold text-text-primary uppercase tracking-widest">{title}</h2>
         {zoomRange && (
           <button
             type="button"
             onClick={() => setZoomRange(null)}
-            className="text-[11px] font-medium text-[#D4A843] hover:text-[#D4A843]/80 transition-colors"
+            className="text-[10px] font-bold uppercase tracking-widest text-brand-400 hover:text-brand-500 transition-colors"
           >
             Reset zoom
           </button>
         )}
       </div>
 
-      <div className="rounded-2xl bg-[#151515] border border-[#2A2A2A] p-4 sm:p-6">
+      <div className="rounded-lg bg-surface-primary border border-border p-4 sm:p-6 overflow-hidden">
         <svg
           viewBox={`0 0 ${svgW} ${svgH}`}
           className="w-full h-auto select-none"
@@ -142,7 +142,7 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
           aria-label={`Chart: ${title}`}
         >
           {isDragging && dragStart !== null && type === 'line' && (
-            <rect x={PAD.left} y={PAD.top} width={plotW} height={plotH} fill="rgba(212,168,67,0.05)" />
+            <rect x={PAD.left} y={PAD.top} width={plotW} height={plotH} fill="var(--color-brand-400, #D4A843)" opacity={0.05} />
           )}
 
           {Array.from({ length: 5 }).map((_, i) => {
@@ -150,8 +150,8 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
             const y = yScale(v);
             return (
               <g key={i}>
-                <line x1={PAD.left} y1={y} x2={PAD.left + plotW} y2={y} stroke="#2A2A2A" strokeWidth={1} />
-                <text x={PAD.left - 8} y={y + 3} textAnchor="end" fill="#A1A1AA" fontSize={10} fontFamily="monospace">
+                <line x1={PAD.left} y1={y} x2={PAD.left + plotW} y2={y} stroke="currentColor" className="text-border" strokeWidth={1} />
+                <text x={PAD.left - 8} y={y + 3} textAnchor="end" fill="currentColor" className="text-text-muted" fontSize={10} fontFamily="monospace">
                   {formatValue(v)}
                 </text>
               </g>
@@ -164,7 +164,7 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
                 <path d={areaPath} fill="url(#gradient)" opacity={0.15} />
               )}
               {linePath && (
-                <path d={linePath} fill="none" stroke="#D4A843" strokeWidth={2} strokeLinejoin="round" />
+                <path d={linePath} fill="none" stroke="var(--color-brand-400, #D4A843)" strokeWidth={2} strokeLinejoin="round" />
               )}
             </>
           )}
@@ -182,7 +182,7 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
                 width={w}
                 height={h}
                 fill={COLORS[i % COLORS.length]}
-                rx={2}
+                rx={1}
                 opacity={0.85}
                 className="hover:opacity-100 transition-opacity"
               />
@@ -194,11 +194,11 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
               key={i}
               cx={xScale(i)}
               cy={yScale(d.value)}
-              r={4}
-              fill="#D4A843"
-              stroke="#0A0A0A"
-              strokeWidth={2}
-              className="hover:r-6 transition-all"
+              r={3.5}
+              fill="var(--color-brand-400, #D4A843)"
+              stroke="var(--color-surface-primary, #0A0A0A)"
+              strokeWidth={1.5}
+              className="hover:r-5 transition-all"
             />
           ))}
 
@@ -212,7 +212,8 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
                 y={PAD.top + plotH + 16}
                 textAnchor="end"
                 transform={`rotate(${labelAngle}, ${x}, ${PAD.top + plotH + 16})`}
-                fill="#A1A1AA"
+                fill="currentColor"
+                className="text-text-muted"
                 fontSize={10}
                 fontFamily="monospace"
               >
@@ -223,19 +224,19 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
 
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#D4A843" />
-              <stop offset="100%" stopColor="#D4A843" stopOpacity={0} />
+              <stop offset="0%" stopColor="var(--color-brand-400, #D4A843)" />
+              <stop offset="100%" stopColor="var(--color-brand-400, #D4A843)" stopOpacity={0} />
             </linearGradient>
           </defs>
 
           {tooltip && (
             <g>
-              <line x1={tooltip.x} y1={PAD.top} x2={tooltip.x} y2={PAD.top + plotH} stroke="#D4A843" strokeWidth={1} strokeDasharray="3,2" />
-              <rect x={tooltip.x + 10} y={tooltip.y - 24} width={120} height={38} rx={6} fill="#1D1D1D" stroke="#2A2A2A" />
-              <text x={tooltip.x + 16} y={tooltip.y - 10} fill="#F5F5F5" fontSize={11} fontFamily="monospace" fontWeight={600}>
+              <line x1={tooltip.x} y1={PAD.top} x2={tooltip.x} y2={PAD.top + plotH} stroke="var(--color-brand-400, #D4A843)" strokeWidth={1} strokeDasharray="3,2" />
+              <rect x={tooltip.x + 10} y={tooltip.y - 24} width={120} height={38} rx={2} fill="var(--color-surface-secondary, #151515)" stroke="var(--color-border, #2A2A2A)" />
+              <text x={tooltip.x + 16} y={tooltip.y - 10} fill="currentColor" className="text-text-primary" fontSize={11} fontFamily="monospace" fontWeight={600}>
                 {formatValue(tooltip.value)}
               </text>
-              <text x={tooltip.x + 16} y={tooltip.y + 4} fill="#A1A1AA" fontSize={9}>
+              <text x={tooltip.x + 16} y={tooltip.y + 4} fill="currentColor" className="text-text-secondary" fontSize={9}>
                 {tooltip.label}
               </text>
             </g>
@@ -243,7 +244,7 @@ export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: C
         </svg>
 
         {type === 'line' && parsedData.length > 5 && (
-          <p className="text-[10px] text-[#A1A1AA]/40 text-center mt-3">
+          <p className="text-[10px] text-text-muted/60 text-center mt-3 uppercase tracking-widest">
             Drag to select a range to zoom in
           </p>
         )}

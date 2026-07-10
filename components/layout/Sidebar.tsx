@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '@/utils/cn';
 
 interface SidebarSection {
   title: string;
@@ -34,10 +35,10 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ sections, sticky = false }) => (
-  <aside aria-label="Sidebar" className={`space-y-6 ${sticky ? 'sticky top-24' : ''}`}>
+  <aside aria-label="Sidebar" className={cn("space-y-6", sticky && "sticky top-24")}>
     {sections.map((section) => (
-      <div key={section.title} className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-3">
+      <div key={section.title} className="bg-surface-secondary border border-border p-4">
+        <h3 className="text-xs font-bold text-text-primary uppercase tracking-widest mb-3">
           {section.title}
         </h3>
         <nav aria-label={section.title}>
@@ -46,10 +47,10 @@ const Sidebar: React.FC<SidebarProps> = ({ sections, sticky = false }) => (
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className="flex items-center gap-2 px-2 py-1.5 text-sm text-gray-400 hover:text-amber-400 hover:bg-gray-700/50 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-2 py-1.5 text-sm text-text-secondary hover:text-text-primary hover:bg-surface-tertiary transition-colors no-underline"
                 >
                   {item.icon && (
-                    <span className="flex-shrink-0 text-gray-500" aria-hidden="true">
+                    <span className="flex-shrink-0 text-text-muted" aria-hidden="true">
                       {iconMap[item.icon] || iconMap.link}
                     </span>
                   )}

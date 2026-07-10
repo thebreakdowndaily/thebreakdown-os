@@ -11,19 +11,19 @@ interface ConceptTrailProps {
 }
 
 const domainColors: Record<string, string> = {
-  'rural-development': 'bg-emerald-900/40 text-emerald-300 border-emerald-700',
-  'economy': 'bg-blue-900/40 text-blue-300 border-blue-700',
-  'employment': 'bg-violet-900/40 text-violet-300 border-violet-700',
-  'technology': 'bg-cyan-900/40 text-cyan-300 border-cyan-700',
-  'governance': 'bg-amber-900/40 text-amber-300 border-amber-700',
-  'legal': 'bg-red-900/40 text-red-300 border-red-700',
-  'institutions': 'bg-indigo-900/40 text-indigo-300 border-indigo-700',
-  'infrastructure': 'bg-orange-900/40 text-orange-300 border-orange-700',
-  'social-welfare': 'bg-pink-900/40 text-pink-300 border-pink-700',
+  'rural-development': 'bg-green-500/10 text-green-500 border-green-500/20',
+  'economy': 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+  'employment': 'bg-purple-500/10 text-purple-500 border-purple-500/20',
+  'technology': 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
+  'governance': 'bg-brand-400/10 text-brand-400 border-brand-400/20',
+  'legal': 'bg-rose-500/10 text-rose-500 border-rose-500/20',
+  'institutions': 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
+  'infrastructure': 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+  'social-welfare': 'bg-pink-500/10 text-pink-500 border-pink-500/20',
 };
 
 function getDomainColor(domain: string): string {
-  return domainColors[domain] || 'bg-gray-800 text-gray-300 border-gray-600';
+  return domainColors[domain] || 'bg-surface-tertiary text-text-muted border-border';
 }
 
 const relationLabels: Record<string, string> = {
@@ -101,20 +101,20 @@ export default function ConceptTrail({ detectedConcepts, expansionTrail }: Conce
   const trailSteps = expansionTrail.slice(0, 6);
 
   return (
-    <div className="bg-gray-900/60 border border-gray-800 rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="bg-surface-secondary border border-border rounded-md p-4">
+      <div className="flex items-center gap-2 mb-4">
+        <svg className="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
-        <span className="text-sm font-medium text-gray-200">Search Understanding</span>
+        <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary">Search Understanding</span>
       </div>
 
       {/* Detected concepts */}
-      <div className="flex flex-wrap gap-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-4">
         {detectedConcepts.map((c) => (
           <span
             key={c.id}
-            className={`text-xs px-2.5 py-1 rounded-full border ${getDomainColor(c.domain)}`}
+            className={`text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded-sm border ${getDomainColor(c.domain)}`}
             title={`Domain: ${c.domain}`}
           >
             {c.label}
@@ -124,25 +124,25 @@ export default function ConceptTrail({ detectedConcepts, expansionTrail }: Conce
 
       {/* Expansion trail */}
       {trailSteps.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 text-xs text-gray-400">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
           {trailSteps.map((step, i) => (
-            <span key={i} className="flex items-center gap-1.5">
-              {i > 0 && <span className="text-gray-600 mx-0.5">·</span>}
-              <span className="text-gray-300 font-medium">{step.from}</span>
-              <span className="text-gray-500 italic">{getRelationLabel(step.relation)}</span>
-              <span className="text-gray-300">{step.to}</span>
+            <span key={i} className="flex items-center gap-2">
+              {i > 0 && <span className="text-text-muted/40 mx-0.5 font-bold">·</span>}
+              <span className="text-text-secondary font-bold font-serif">{step.from}</span>
+              <span className="text-text-muted italic">{getRelationLabel(step.relation)}</span>
+              <span className="text-text-secondary font-bold font-serif">{step.to}</span>
             </span>
           ))}
           {expansionTrail.length > 6 && (
-            <span className="text-gray-500 ml-1">
-              +{expansionTrail.length - 6} more connections
+            <span className="text-text-muted/60 ml-2 font-mono tabular-nums text-[10px]">
+              +{expansionTrail.length - 6} MORE
             </span>
           )}
         </div>
       )}
 
-      <div className="mt-2 text-xs text-gray-600">
-        Results include direct matches, concept-based matches, and expanded semantic results.
+      <div className="mt-4 text-[10px] text-text-muted font-bold tracking-widest uppercase">
+        Results include direct, concept, and semantic matches.
       </div>
     </div>
   );
