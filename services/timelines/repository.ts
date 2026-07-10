@@ -10,7 +10,12 @@ export interface TimelineRepository {
   count(): Promise<number>;
 }
 
-function sb() { return getSupabaseClient().from('timelines') as any; }
+import { type TypedDatabase } from '@/supabase/client';
+
+type TimelineRow = TypedDatabase['public']['Tables']['timelines']['Row'];
+type TimelineInsert = TypedDatabase['public']['Tables']['timelines']['Insert'];
+
+function sb() { return getSupabaseClient().from('timelines'); }
 
 export class MemoryTimelineRepository implements TimelineRepository {
   private store = new Map<string, Timeline>();
@@ -50,9 +55,26 @@ export class SupabaseTimelineRepository implements TimelineRepository {
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToTimeline(row: any): Timeline {
-  return { id: row.id, title: row.title, description: row.description, category: row.category, storyIds: row.story_ids || [], entityIds: row.entity_ids || [], topicIds: row.topic_ids || [], events: row.events || [], createdAt: row.created_at, updatedAt: row.updated_at };
+function rowToTimeline(row: TimelineRow): Timeline {
+  return { 
+    id: row.id, 
+    title: row.title, 
+    description: row.description, 
+    category: row.category, 
+    storyIds: [], 
+    entityIds: [], 
+    topicIds: [], 
+    events: (row.events as any) || [], 
+    createdAt: row.created_at, 
+    updatedAt: row.updated_at 
+  };
 }
-function rowFromTimeline(timeline: Timeline): any {
-  return { id: timeline.id, title: timeline.title, description: timeline.description, category: timeline.category, story_ids: timeline.storyIds || [], entity_ids: timeline.entityIds || [], topic_ids: timeline.topicIds || [], events: timeline.events || [] };
+function rowFromTimeline(timeline: Timeline): TimelineInsert {
+  return { 
+    id: timeline.id, 
+    title: timeline.title, 
+    description: timeline.description, 
+    category: timeline.category, 
+    events: timeline.events || []
+  };
 }

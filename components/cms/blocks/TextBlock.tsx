@@ -3,6 +3,8 @@
 import { useRef, useCallback } from 'react';
 import type { Block, TextBlockData } from '@/utils/cms-data';
 
+import DOMPurify from 'isomorphic-dompurify';
+
 interface TextBlockProps {
   block: Block;
   onUpdate: (data: Record<string, unknown>) => void;
@@ -89,7 +91,7 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
         suppressContentEditableWarning
         onInput={handleInput}
         onBlur={handleInput}
-        dangerouslySetInnerHTML={{ __html: d.html || '<p>Start writing...</p>' }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(d.html || '<p>Start writing...</p>') }}
         style={{
           border: '1px solid var(--color-border-subtle)',
           borderRadius: '0 0 8px 8px',

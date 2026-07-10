@@ -26,19 +26,19 @@ export interface AuthSession {
 
 export async function getSession(): Promise<AuthSession | null> {
   const supabase = await getSupabaseAuth();
-  const { data: { session: s } } = await supabase.auth.getSession();
-  if (!s) return null;
+  const { data: { user: u } } = await supabase.auth.getUser();
+  if (!u) return null;
   return {
     user: {
-      id: s.user.id,
-      email: s.user.email ?? '',
-      name: s.user.user_metadata?.name || s.user.email?.split('@')[0] || '',
-      image: s.user.user_metadata?.avatar_url || null,
-      role: s.user.user_metadata?.role || 'reader',
+      id: u.id,
+      email: u.email ?? '',
+      name: u.user_metadata?.name || u.email?.split('@')[0] || '',
+      image: u.user_metadata?.avatar_url || null,
+      role: u.user_metadata?.role || 'reader',
     },
     session: {
-      id: s.user.id,
-      expiresAt: s.expires_at ? s.expires_at * 1000 : 0,
+      id: u.id,
+      expiresAt: 0,
     },
   };
 }
