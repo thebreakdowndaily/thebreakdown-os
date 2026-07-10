@@ -63,4 +63,5 @@ module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
   authToken: process.env.SENTRY_AUTH_TOKEN || '',
   silent: !process.env.CI,
   widenClientFileUpload: true,
+  dryRun: !process.env.SENTRY_AUTH_TOKEN,
 });

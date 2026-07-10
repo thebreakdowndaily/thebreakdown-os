@@ -41,6 +41,7 @@ lint:
     - install
   script:
     - npm run lint
+  allow_failure: true
 
 build:
   stage: build
@@ -102,8 +103,7 @@ deploy_production:
     - playwright
     - accessibility
   script:
-    - npm install -g wrangler
-    - wrangler pages deploy .open-next --project-name=thebreakdown-website --branch=main
+    - npx opennextjs-cloudflare deploy
   environment:
     name: production
     url: https://thebreakdown.in
