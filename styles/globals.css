@@ -32,6 +32,10 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  a, button {
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
   ::selection {
     background-color: var(--color-warning-light);
     color: var(--color-text-primary);
@@ -61,6 +65,10 @@
 }
 
 @layer components {
+  /* ── Smooth transitions utility ── */
+  .smooth-transition {
+    @apply transition-all duration-200 ease-in-out;
+  }
   /* ── Editorial font ───────────────────────────────────────────────── */
   .font-editorial {
     font-family: var(--font-editorial);

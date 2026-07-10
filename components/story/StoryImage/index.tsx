@@ -37,6 +37,7 @@ export default function StoryImage({
 }: StoryImageProps) {
   const [imgSrc, setImgSrc] = useState(src || getFallback(category));
   const [hasError, setHasError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   function getFallback(cat?: string): string {
     if (cat && categoryFallback[cat]) return categoryFallback[cat];
@@ -57,17 +58,20 @@ export default function StoryImage({
     <Image
       src={imgSrc}
       alt={alt}
-      className={className || undefined}
+      className={`${className} transition-all duration-500 ease-out ${loading ? 'blur-md opacity-40' : 'blur-0 opacity-100'}`}
       style={style}
       fill={isFill}
       width={isFill ? undefined : width}
       height={isFill ? undefined : height}
       onError={handleError}
+      onLoad={() => setLoading(false)}
+      placeholder="blur"
+      blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzE1MTUxNSIvPjwvc3ZnPg=="
     />
   );
 
   if (isFill || wrapperClassName) {
-    return <div className={wrapperClassName || 'relative w-full h-full'}>{img}</div>;
+    return <div className={wrapperClassName || 'relative w-full h-full overflow-hidden'}>{img}</div>;
   }
 
   return img;
