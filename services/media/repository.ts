@@ -1,5 +1,5 @@
 import type { MediaItem, APIListParams, APIResponse } from '@/types/canonical';
-import { getSupabaseClient } from '@/supabase/client';
+import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 export interface MediaRepository {
   findAll(params?: APIListParams): Promise<APIResponse<MediaItem[]>>;
@@ -11,7 +11,10 @@ export interface MediaRepository {
   count(): Promise<number>;
 }
 
-function sb() { return getSupabaseClient().from('media_items') as any; }
+type MediaItemRow = TypedDatabase['public']['Tables']['media_items']['Row'];
+type MediaItemInsert = TypedDatabase['public']['Tables']['media_items']['Insert'];
+
+function sb() { return getSupabaseClient().from('media_items'); }
 
 export class MemoryMediaRepository implements MediaRepository {
   private store = new Map<string, MediaItem>();
@@ -44,14 +47,46 @@ export class SupabaseMediaRepository implements MediaRepository {
   async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToMediaItem(data) : undefined; }
   async findByTags(tags: string[]) { const { data, error } = await sb().select('*').contains('tags', tags); if (error) throw error; return (data || []).map(rowToMediaItem); }
   async save(item: MediaItem) { const { data, error } = await sb().upsert(rowFromMediaItem(item)).select().single(); if (error) throw error; return rowToMediaItem(data); }
-  async update(id: string, updates: Partial<MediaItem>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToMediaItem(data); }
+  async update(id: string, updates: Partial<MediaItem>) {
+    const { data, error } = await sb().update({ ...rowFromMediaItem(updates as MediaItem), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToMediaItem(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToMediaItem(row: any): MediaItem {
-  return { id: row.id, type: row.type, src: row.src, alt: row.alt || '', caption: row.caption || '', tags: row.tags || [], credit: row.credit || '', width: row.width, height: row.height, fileSize: row.file_size, version: row.version ?? 1, createdAt: row.created_at, updatedAt: row.updated_at };
+function rowToMediaItem(row: MediaItemRow): MediaItem {
+  return {
+    id: row.id,
+    type: row.type as MediaItem['type'],
+    src: row.src || row.url || '',
+    alt: row.alt || '',
+    caption: row.caption || row.title || '',
+    tags: row.tags || [],
+    credit: row.credit || '',
+    width: row.width || 0,
+    height: row.height || 0,
+    fileSize: row.file_size || 0,
+    version: row.version ?? 1,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
-function rowFromMediaItem(item: MediaItem): any {
-  return { type: item.type, src: item.src, alt: item.alt || '', caption: item.caption || '', tags: item.tags || [], credit: item.credit || '', width: item.width, height: item.height, file_size: item.fileSize, version: item.version ?? 1 };
+function rowFromMediaItem(item: MediaItem): MediaItemInsert {
+  return {
+    id: item.id,
+    type: item.type,
+    src: item.src,
+    alt: item.alt || '',
+    caption: item.caption || '',
+    tags: item.tags || [],
+    credit: item.credit || '',
+    width: item.width,
+    height: item.height,
+    file_size: item.fileSize,
+    version: item.version ?? 1,
+    title: item.caption || '',
+    url: item.src || ''
+  };
 }

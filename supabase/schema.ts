@@ -300,6 +300,10 @@ export interface MediaItemRow {
     tags: string[];
     created_at: string;
     updated_at: string;
+    src: string | null;
+    caption: string | null;
+    credit: string | null;
+    version: number | null;
   };
   Insert: {
     id?: string;
@@ -313,6 +317,10 @@ export interface MediaItemRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    src?: string | null;
+    caption?: string | null;
+    credit?: string | null;
+    version?: number | null;
   };
   Update: {
     id?: string;
@@ -326,6 +334,10 @@ export interface MediaItemRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    src?: string | null;
+    caption?: string | null;
+    credit?: string | null;
+    version?: number | null;
   };
 }
 
