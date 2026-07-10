@@ -1,5 +1,5 @@
-import type { Dataset, APIResponse, APIListParams } from '@/types/canonical';
-import { getSupabaseClient } from '@/supabase/client';
+import type { Dataset, APIResponse, APIListParams, DatasetCategory, DatasetFrequency } from '@/types/canonical';
+import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 // ─── Sync Repository (used by existing MemoryDatasetService) ──────────────
 
@@ -46,7 +46,11 @@ export class MemoryDatasetRepository implements DatasetRepository {
 
 // ─── Async Repository (used by SupabaseDatasetService) ────────────────────
 
-function sb() { return getSupabaseClient().from('datasets') as any; }
+type DatasetRow = TypedDatabase['public']['Tables']['datasets']['Row'];
+type DatasetInsert = TypedDatabase['public']['Tables']['datasets']['Insert'];
+type DatasetUpdate = TypedDatabase['public']['Tables']['datasets']['Update'];
+
+function sb() { return getSupabaseClient().from('datasets'); }
 
 export interface AsyncDatasetRepository {
   findAll(params?: APIListParams): Promise<APIResponse<Dataset[]>>;
@@ -72,17 +76,22 @@ export class SupabaseDatasetRepository implements AsyncDatasetRepository {
   async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToDataset(data) : undefined; }
   async findBySlug(slug: string) { const { data, error } = await sb().select('*').eq('slug', slug).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToDataset(data) : undefined; }
   async save(dataset: Dataset) { const { data, error } = await sb().upsert(rowFromDataset(dataset)).select().single(); if (error) throw error; return rowToDataset(data); }
-  async update(id: string, updates: Partial<Dataset>) { const { data, error } = await sb().update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single(); if (error) throw error; return rowToDataset(data); }
+  async update(id: string, updates: Partial<Dataset>) {
+    const { data, error } = await sb().update({ ...rowFromDataset(updates as Dataset), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    if (error) throw error;
+    return rowToDataset(data);
+  }
   async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
   async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
 }
 
-function rowToDataset(row: any): Dataset {
+function rowToDataset(row: DatasetRow): Dataset {
   return {
     id: row.id, slug: row.slug, title: row.title, description: row.description,
-    category: row.category, frequency: row.frequency,
-    unitLabel: row.unit_label, source: row.source, sourceUrl: row.source_url,
-    methodology: row.methodology, tags: row.tags || [],
+    category: (row.category as DatasetCategory) || 'economics',
+    frequency: (row.frequency as DatasetFrequency) || 'annual',
+    unitLabel: row.unit_label || '', source: row.source || '', sourceUrl: row.source_url || '',
+    methodology: row.methodology || '', tags: row.tags || [],
     versions: [], metrics: [], dimensions: [], visualizations: [],
     relatedEntityIds: row.related_entity_ids || [],
     relatedStoryIds: row.related_story_ids || [],
@@ -91,12 +100,18 @@ function rowToDataset(row: any): Dataset {
   };
 }
 
-function rowFromDataset(dataset: Dataset): any {
+function rowFromDataset(dataset: Dataset): DatasetInsert {
   return {
-    slug: dataset.slug, title: dataset.title, description: dataset.description,
-    category: dataset.category, frequency: dataset.frequency,
-    unit_label: dataset.unitLabel, source: dataset.source,
-    source_url: dataset.sourceUrl, methodology: dataset.methodology,
+    id: dataset.id,
+    slug: dataset.slug,
+    title: dataset.title,
+    description: dataset.description,
+    category: dataset.category,
+    frequency: dataset.frequency,
+    unit_label: dataset.unitLabel,
+    source: dataset.source,
+    source_url: dataset.sourceUrl,
+    methodology: dataset.methodology,
     tags: dataset.tags,
     related_entity_ids: dataset.relatedEntityIds || [],
     related_story_ids: dataset.relatedStoryIds || [],
