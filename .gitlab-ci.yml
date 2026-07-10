@@ -103,7 +103,7 @@ deploy_production:
     - playwright
     - accessibility
   script:
-    - npx opennextjs-cloudflare deploy
+    - npx wrangler pages deploy .open-next --project-name=thebreakdown-website --branch=main
   environment:
     name: production
     url: https://thebreakdown.in
