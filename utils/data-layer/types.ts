@@ -4,6 +4,17 @@
  * Public-facing API response types (enriched versions of internal types).
  */
 
+export interface APIQuickBrief {
+  summary: string;
+  keyPoints: string[];
+}
+
+export interface APIDeepResearch {
+  summary: string;
+  methodology: string;
+  expandedSources?: Array<{ name: string; url: string; description: string }>;
+}
+
 export interface APIStory {
   id: string;
   slug: string;
@@ -13,6 +24,10 @@ export interface APIStory {
   publishedAt: string;
   updatedAt: string;
   readingTime: number;
+  quickReadTime?: number;
+  deepReadTime?: number;
+  quickBrief?: APIQuickBrief;
+  deepResearch?: APIDeepResearch;
   wordCount?: number;
   author: APIAuthor;
   evidenceScore: number;

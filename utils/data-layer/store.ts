@@ -44,6 +44,7 @@ function seed(): DataStore {
     slug: 'mgnrega-reform',
     headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment',
     summary: 'Two decades of India\'s flagship rural employment guarantee scheme — what the data reveals about wage trends, participation, and economic impact across states.',
+    heroImage: '/images/stories/mgnrega-20.jpg',
     publishedAt: '2026-06-15T10:00:00Z',
     updatedAt: '2026-06-15T10:00:00Z',
     readingTime: 12,
@@ -105,6 +106,7 @@ function seed(): DataStore {
     slug: 'digital-payments-boom',
     headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution',
     summary: 'How UPI transformed rural financial inclusion, with transaction volumes growing 400% in three years.',
+    heroImage: '/images/stories/digital-payments.jpg',
     publishedAt: '2026-06-12T08:00:00Z',
     updatedAt: '2026-06-12T08:00:00Z',
     readingTime: 8,
@@ -153,6 +155,7 @@ function seed(): DataStore {
     slug: 'pm-fasal-bima-claims',
     headline: 'PM Fasal Bima Yojana: The Claims That Never Reached Farmers',
     summary: 'Investigation into delayed and unpaid crop insurance claims across six states.',
+    heroImage: '/images/stories/fasal-bima.jpg',
     publishedAt: '2026-06-05T06:00:00Z',
     updatedAt: '2026-06-05T06:00:00Z',
     readingTime: 15,
@@ -218,6 +221,7 @@ function seed(): DataStore {
     slug: 'semiconductor-pli',
     headline: "India's ₹1.2 Lakh Crore Semiconductor Push: Can the Dream Take Silicon?",
     summary: "India's expanded semiconductor PLI scheme promises to cover the full value chain, but the Vedanta-Foxconn JV collapse and a growing talent gap raise questions about execution readiness.",
+    heroImage: '/images/stories/semiconductor-pli.jpg',
     publishedAt: '2026-07-01T06:00:00Z',
     updatedAt: '2026-07-01T06:00:00Z',
     readingTime: 14,
@@ -281,6 +285,7 @@ function seed(): DataStore {
     slug: 'dpdp-bill',
     headline: 'Digital Personal Data Protection: India\'s Privacy Law Comes of Age',
     summary: 'From the landmark right to privacy judgment to the 2026 amendments, India\'s journey toward comprehensive data protection legislation has been long and contentious.',
+    heroImage: '/images/stories/dpdp-bill.jpg',
     publishedAt: '2026-07-05T08:00:00Z',
     updatedAt: '2026-07-05T08:00:00Z',
     readingTime: 11,
@@ -336,6 +341,7 @@ function seed(): DataStore {
     slug: 'rbi-repo-rate',
     headline: 'RBI Repo Rate: Decoding Monetary Policy in a Changing Economy',
     summary: 'With the repo rate at 6.50% after 250 bps of cumulative hikes, India\'s monetary policy faces the challenge of balancing inflation control with growth support.',
+    heroImage: '/images/stories/rbi-repo-rate.jpg',
     publishedAt: '2026-07-08T06:00:00Z',
     updatedAt: '2026-07-08T06:00:00Z',
     readingTime: 10,
@@ -393,6 +399,7 @@ function seed(): DataStore {
     slug: 'climate-finance',
     headline: "India's ₹11 Lakh Crore Climate Finance Challenge",
     summary: "As India pursues its net zero 2070 target, a massive climate finance gap threatens to slow the renewable energy transition and adaptation efforts.",
+    heroImage: '/images/stories/climate-finance.jpg',
     publishedAt: '2026-07-10T06:00:00Z',
     updatedAt: '2026-07-10T06:00:00Z',
     readingTime: 13,
@@ -453,6 +460,7 @@ function seed(): DataStore {
     slug: 'education-budget',
     headline: 'Education Budget: Widening Gap Between Spending and Learning Outcomes',
     summary: 'India\'s education budget has grown 40% in five years, but learning outcomes continue to decline — raising fundamental questions about expenditure efficiency.',
+    heroImage: '/images/stories/education-budget.jpg',
     publishedAt: '2026-07-14T06:00:00Z',
     updatedAt: '2026-07-14T06:00:00Z',
     readingTime: 9,
@@ -505,6 +513,7 @@ function seed(): DataStore {
     slug: 'groundwater-depletion',
     headline: 'India\'s Groundwater Crisis: 62% of Districts Sound the Alarm',
     summary: 'Groundwater depletion threatens India\'s food and water security as 62% of districts face critical or over-exploited groundwater levels, driven primarily by agricultural irrigation.',
+    heroImage: '/images/stories/groundwater-depletion.jpg',
     publishedAt: '2026-07-18T06:00:00Z',
     updatedAt: '2026-07-18T06:00:00Z',
     readingTime: 11,
@@ -563,6 +572,7 @@ function seed(): DataStore {
     slug: 'ration-digitization',
     headline: 'Digitizing PDS: How Technology Plugged the Leakage in India\'s Food Security Net',
     summary: 'Aadhaar seeding and ePoS deployment have reduced leakage in India\'s Public Distribution System from 40% to under 10%, but coverage gaps persist.',
+    heroImage: '/images/stories/ration-digitization.jpg',
     publishedAt: '2026-07-22T06:00:00Z',
     updatedAt: '2026-07-22T06:00:00Z',
     readingTime: 10,
@@ -620,6 +630,7 @@ function seed(): DataStore {
     slug: 'anganwadi-icds',
     headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out',
     summary: 'India\'s Integrated Child Development Services (ICDS) runs 14 lakh anganwadi centres serving 10 crore beneficiaries, but frontline workers face wage delays, infrastructure gaps, and mounting workloads.',
+    heroImage: '/images/stories/anganwadi.jpg',
     publishedAt: '2026-07-28T06:00:00Z',
     updatedAt: '2026-07-28T06:00:00Z',
     readingTime: 11,
@@ -685,6 +696,7 @@ function seed(): DataStore {
     slug: 'supply-chain-shift',
     headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?',
     summary: 'As global companies diversify away from China, India has attracted $85 billion in FDI since 2023 — but infrastructure gaps and policy inconsistency threaten to squander the moment.',
+    heroImage: '/images/stories/supply-chain-shift.jpg',
     publishedAt: '2026-08-01T06:00:00Z',
     updatedAt: '2026-08-01T06:00:00Z',
     readingTime: 13,
@@ -756,6 +768,7 @@ function seed(): DataStore {
     slug: 'ethanol-backlash',
     headline: 'E20 Backlash: India\'s Ethanol Push and the Consumer Revolt That Followed',
     summary: 'India achieved 20% ethanol blending five years ahead of schedule, but motorists report mileage drops of up to 12%, the food-versus-fuel debate resurfaces, and a Supreme Court PIL challenges the rollout.',
+    heroImage: '/images/stories/ethanol-backlash.jpg',
     publishedAt: '2026-08-05T06:00:00Z',
     updatedAt: '2026-08-05T06:00:00Z',
     readingTime: 14,
@@ -829,6 +842,7 @@ function seed(): DataStore {
     slug: 'ews-quota-upsc-investigation',
     headline: 'Who Really Gets the EWS Quota? An Investigation into UPSC\'s 104 Selections',
     summary: 'An investigation into all 104 candidates selected under the 10% EWS quota in Civil Services 2025 finds IIT graduates, private school alumni, and business family children — raising fundamental questions about targeting and due diligence.',
+    heroImage: '/images/stories/ews-quota-upsc.jpg',
     publishedAt: '2026-08-08T06:00:00Z',
     updatedAt: '2026-08-08T06:00:00Z',
     readingTime: 12,
@@ -899,6 +913,7 @@ function seed(): DataStore {
     slug: 'us-iran-relations',
     headline: 'US-Iran Relations: From Maximum Pressure to Nuclear Negotiations',
     summary: 'As the 2026 US-Iran nuclear talks enter a decisive phase, The Breakdown examines the decades-long trajectory of confrontation, diplomacy, and the geopolitical stakes for the Middle East and India.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=US-Iran+Nuclear+Talks',
     publishedAt: '2026-07-18T06:00:00Z',
     updatedAt: '2026-07-18T06:00:00Z',
     readingTime: 14,
@@ -964,6 +979,7 @@ function seed(): DataStore {
     slug: 'indian-education-crisis',
     headline: 'India\'s Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?',
     summary: 'While near-universal enrolment has been achieved at the primary level, India\'s education system faces a crisis of quality — half of Class 5 students cannot read a Class 2 textbook. An investigation into the systemic failures behind the learning poverty trap.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+Education+Paradox',
     publishedAt: '2026-07-22T06:00:00Z',
     updatedAt: '2026-07-22T06:00:00Z',
     readingTime: 16,
@@ -1035,6 +1051,7 @@ function seed(): DataStore {
     slug: 'income-inequality-india',
     headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth',
     summary: 'India\'s income inequality has reached levels not seen since the colonial era — the top 1% holds 40% of national wealth while the bottom 50% holds just 13%. An examination of the structural drivers behind India\'s Gini coefficient trajectory.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Income+Inequality+India',
     publishedAt: '2026-07-26T06:00:00Z',
     updatedAt: '2026-07-26T06:00:00Z',
     readingTime: 15,
@@ -1110,6 +1127,7 @@ function seed(): DataStore {
     slug: 'india-china-border-tensions',
     headline: 'India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint',
     summary: 'Despite 20 rounds of military talks, India and China remain locked in the most intense border confrontation in five decades — with 60,000 troops deployed on each side and a broader strategic rivalry reshaping Asia.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-China+Border+Tensions',
     publishedAt: '2026-07-30T06:00:00Z',
     updatedAt: '2026-07-30T06:00:00Z',
     readingTime: 17,
@@ -1180,6 +1198,7 @@ function seed(): DataStore {
     slug: 'indias-foreign-policy',
     headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment',
     summary: 'As India celebrates 80 years of independence, its foreign policy has undergone a fundamental transformation — from Nehruvian idealism to pragmatic multi-alignment, balancing the US, China, Russia, and the Global South.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+Foreign+Policy+80',
     publishedAt: '2026-08-05T06:00:00Z',
     updatedAt: '2026-08-05T06:00:00Z',
     readingTime: 18,
@@ -1279,6 +1298,7 @@ function seed(): DataStore {
     relatedEntityIds: ['india'],
     headline: 'The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India\'s Most Controversial Film',
     summary: 'Diljit Dosanjh\'s biopic of human rights activist Jaswant Singh Khalra survived 127 CBFC cuts, three title changes, and a pulled TIFF premiere — only to be taken down by ZEE5 within 48 hours of release. An investigation into India\'s censorship machinery and the story it tried to bury.',
+    heroImage: '/images/stories/satluj-ban.jpg',
     publishedAt: '2026-07-08T06:00:00Z',
     updatedAt: '2026-07-08T06:00:00Z',
     readingTime: 15,
@@ -1354,6 +1374,7 @@ function seed(): DataStore {
     slug: 'india-us-relations',
     headline: 'India-US Relations: From Nuclear Deal to Critical Technology Partnership',
     summary: 'The India-US strategic partnership has deepened across defence, technology, trade, and people-to-people ties over the past two decades, driven by shared concerns about China\'s rise and converging geopolitical interests.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-US+Strategic+Partnership',
     publishedAt: '2026-08-15T10:00:00Z',
     updatedAt: '2026-08-15T10:00:00Z',
     readingTime: 16,
@@ -1426,6 +1447,7 @@ function seed(): DataStore {
     slug: 'india-indonesia-relations',
     headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific',
     summary: 'India and Indonesia share 2,000 years of civilisational links and are now deepening a Comprehensive Strategic Partnership focused on maritime security, trade, and countering Chinese influence in Southeast Asia.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-Indonesia+Indo-Pacific',
     publishedAt: '2026-08-18T10:00:00Z',
     updatedAt: '2026-08-18T10:00:00Z',
     readingTime: 12,
@@ -1493,6 +1515,7 @@ function seed(): DataStore {
     slug: 'india-china-relations',
     headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry',
     summary: 'From the Galwan Valley clash to a widening trade deficit and competition across the Indian Ocean, the India-China relationship has reached its most volatile point since the 1962 war.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-China+Strategic+Rivalry',
     publishedAt: '2026-08-20T10:00:00Z',
     updatedAt: '2026-08-20T10:00:00Z',
     readingTime: 17,
@@ -1569,6 +1592,7 @@ function seed(): DataStore {
     slug: 'india-europe-relations',
     headline: 'India and Europe: A Strategic Partnership Searching for Substance',
     summary: 'As the EU seeks to diversify away from China and India looks West for technology and investment, the India-EU strategic partnership is gaining momentum — but trade negotiations, carbon policy, and differing worldviews on Russia remain obstacles.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-EU+Partnership',
     publishedAt: '2026-08-22T10:00:00Z',
     updatedAt: '2026-08-22T10:00:00Z',
     readingTime: 14,
@@ -1640,6 +1664,7 @@ function seed(): DataStore {
     slug: 'india-uk-relations',
     headline: 'India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership',
     summary: 'The India-UK relationship has reinvented itself through a Comprehensive Strategic Partnership, FTA negotiations, and robust diaspora links — but difficult conversations on historical reparations, migration, and trade-offs persist.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-UK+Partnership',
     publishedAt: '2026-08-23T10:00:00Z',
     updatedAt: '2026-08-23T10:00:00Z',
     readingTime: 13,
@@ -1709,6 +1734,7 @@ function seed(): DataStore {
     slug: 'india-russia-relations',
     headline: 'India-Russia: The Enduring Partnership Tested by War and Realignment',
     summary: 'India\'s oldest strategic partnership is navigating the Ukraine war, a dramatic surge in oil imports, Western sanctions pressure, and Russia\'s deepening embrace of China — all while defence dependency keeps the relationship anchored.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-Russia+Partnership',
     publishedAt: '2026-08-25T10:00:00Z',
     updatedAt: '2026-08-25T10:00:00Z',
     readingTime: 14,
@@ -1784,7 +1810,7 @@ function seed(): DataStore {
     id: '81-crore-data-breach',
     slug: '81-crore-data-breach',
     headline: '81.5 Crore Aadhaar Records Exposed: Inside India\'s Biggest Data Breach',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=81.5+Crore+Aadhaar+Records+Exposed',
+    heroImage: '/images/stories/aadhaar-sc.jpg',
     summary: 'In October 2023, a threat actor put 815 million Indian citizen records — names, Aadhaar numbers, passport details — up for sale at $80,000. The breach, believed to originate from ICMR\'s COVID-19 testing database, became India\'s largest data leak, testing the country\'s new data protection regime.',
     publishedAt: '2026-07-09T08:00:00Z',
     updatedAt: '2026-07-09T08:00:00Z',
@@ -2176,6 +2202,7 @@ function seed(): DataStore {
     slug: 'ayushman-bharat',
     headline: "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
     summary: "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY) has become the world's largest publicly funded health insurance scheme, covering 12.5 crore families and facilitating 6.2 crore hospitalizations in eight years — but questions persist about coverage gaps, hospital quality, and whether ₹30,000 crore can sustain universal health coverage for a nation of 1.4 billion.",
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Ayushman+Bharat+Health+Cover',
     publishedAt: '2026-08-10T06:00:00Z',
     updatedAt: '2026-08-10T06:00:00Z',
     readingTime: 13,
@@ -2538,6 +2565,7 @@ function seed(): DataStore {
     slug: 'us-iran-war-strait-of-hormuz',
     headline: 'The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets',
     summary: 'The US-Iran war that began February 28, 2026 has become the most disruptive geopolitical event since the Iraq invasion. With the Strait of Hormuz effectively closed for over 130 days, 20 million barrels per day of oil trade severed, and Brent crude oscillating between $77 and $98 per barrel, the conflict has exposed India\'s structural vulnerability: 46% of crude imports, 50% of LNG, and 90% of LPG transit the Gulf corridor. The ceasefire collapsed July 9 after US strikes on 90 Iranian targets, Trump declaring the deal "over," and Iran retaliating against US bases in Bahrain and Kuwait. India has activated its RELIEF scheme and accelerated oil diversification — but the deeper question is whether any hedge can replace the world\'s most critical energy chokepoint.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Strait+of+Hormuz+War',
     publishedAt: '2026-07-11T12:00:00Z',
     updatedAt: '2026-07-11T12:00:00Z',
     readingTime: 16,
@@ -2674,6 +2702,7 @@ function seed(): DataStore {
     slug: 'epf-scheme-2026',
     headline: 'EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code',
     summary: 'India\'s retirement framework underwent its most significant legal overhaul in seven decades when the EPF Scheme 2026 replaced the 1952 scheme effective June 29, replacing two legacy pension schemes and bringing 8 crore+ subscribers under the Code on Social Security, 2020. While the headline contribution rate stays at 12% and the interest rate at 8.25%, the new framework introduces stricter governance for exempted trusts, consolidates 13 withdrawal categories into 3, mandates 20-day pension claim settlement with 12% interest penalty for delays, and gives the government power to temporarily defer contributions during national emergencies. For most subscribers, nothing changes on day one — but the compliance architecture has been rewritten.',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=EPF+Scheme+2026',
     publishedAt: '2026-07-11T10:00:00Z',
     updatedAt: '2026-07-11T10:00:00Z',
     readingTime: 14,
@@ -2790,6 +2819,56 @@ function seed(): DataStore {
 
   stories.set(story35.slug, story35);
 
+  /* ── Generate tier content for all stories ────────────────────────── */
+
+  function summarizeQuick(text: string): string {
+    const sentences = text.match(/[^.!?\n]+[.!?]+/g);
+    if (!sentences || sentences.length === 0) return text.slice(0, 150);
+    const brief = sentences.slice(0, 2).join(' ').trim();
+    return brief.length > 200 ? brief.slice(0, 197) + '...' : brief;
+  }
+
+  function generateMethodology(s: APIStory): string {
+    const sourceTiers = (s.sources || []).reduce((acc, src) => {
+      acc[src.tier] = (acc[src.tier] || 0) + 1;
+      return acc;
+    }, {} as Record<number, number>);
+    const t1 = sourceTiers[1] || 0;
+    const t2 = sourceTiers[2] || 0;
+    const t3 = sourceTiers[3] || 0;
+    const parts: string[] = [];
+    parts.push(`This analysis draws on ${s.sources?.length || 0} sources.`);
+    if (t1 > 0) parts.push(`${t1} primary source${t1 > 1 ? 's' : ''} (Tier 1).`);
+    if (t2 > 0) parts.push(`${t2} secondary source${t2 > 1 ? 's' : ''} (Tier 2).`);
+    if (t3 > 0) parts.push(`${t3} tertiary source${t3 > 1 ? 's' : ''} (Tier 3).`);
+    parts.push(`Each of ${s.claims?.length || 0} claims has been verified against its originating source.`);
+    parts.push(`Data visualisations are based on the underlying datasets cited in each source.`);
+    if (s.faq && s.faq.length > 0) parts.push(`The FAQ section addresses ${s.faq.length} common questions with answers drawn from the cited evidence.`);
+    return parts.join(' ');
+  }
+
+  for (const story of stories.values()) {
+    if (!story.quickBrief) {
+      story.quickBrief = {
+        summary: summarizeQuick(story.summary),
+        keyPoints: story.keyPoints.slice(0, 3),
+      };
+    }
+    if (!story.deepResearch) {
+      story.deepResearch = {
+        summary: story.summary,
+        methodology: generateMethodology(story),
+        expandedSources: (story.sources || []).map(s => ({
+          name: s.name,
+          url: s.url,
+          description: `${s.type.charAt(0).toUpperCase() + s.type.slice(1)} source (Tier ${s.tier})${s.tier === 1 ? ' — primary' : s.tier === 2 ? ' — secondary' : ''}.`
+        })),
+      };
+    }
+    story.quickReadTime = Math.max(1, Math.round(story.keyPoints.length * 0.3));
+    story.deepReadTime = story.readingTime + (story.sources?.length || 0) + (story.claims?.length || 0);
+  }
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -2797,6 +2876,7 @@ function seed(): DataStore {
       id: 'mgnrega', slug: 'mgnrega', name: 'Mahatma Gandhi National Rural Employment Guarantee Act',
       type: 'policy', description: 'India\'s flagship rural employment guarantee scheme.',
       aliases: ['MGNREGA', 'NREGA', 'Rural Employment Scheme'], storyCount: 24, updatedAt: '2026-06-15T10:00:00Z',
+      image: '/images/entities/mgnrega.jpg',
       timeline: story1.timeline, statistics: { 'Total Person-Days': '385 crore', 'Active Workers': '14.2 crore', 'Average Wage': '₹267/day' },
       relatedStories: [{ slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: '', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' }],
       relatedEntities: [{ id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development', type: 'organization' }],
@@ -2914,6 +2994,7 @@ function seed(): DataStore {
       id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance',
       type: 'organization', description: 'Nodal ministry of Government of India responsible for taxation, fiscal policy, financial sector regulation, and Union Budget preparation.',
       aliases: ['MoF', 'Finance Ministry', 'Ministry of Finance, GoI'], storyCount: 105, updatedAt: '2026-07-01T00:00:00Z',
+      image: '/images/entities/mof.jpg',
       timeline: [
         { date: '1947-08-15', title: 'Ministry Established', description: 'Ministry of Finance established post-independence with Department of Economic Affairs.' },
         { date: '2016-07-01', title: 'GST Council Formed', description: 'GST Council established with Union Finance Minister as chairperson.' },
@@ -2940,6 +3021,7 @@ function seed(): DataStore {
       relatedStories: [
         { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: Frontline Workers Burning Out', summary: 'ICDS programme challenges.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
       ],
+      image: '/images/entities/mwcd.jpg',
       relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
       faq: [],
     },

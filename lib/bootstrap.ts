@@ -153,6 +153,21 @@ function createBlocksFromStory(s: APIStory): StoryBlock[] {
     blocks.push({ id: 'sources', type: 'sources', region: 'main', data: { sources: allSources } });
   }
 
+  if (s.deepResearch?.methodology) {
+    blocks.push({
+      id: 'research-methodology',
+      type: 'research-methodology',
+      region: 'main',
+      data: {
+        methodology: s.deepResearch.methodology,
+        expandedSources: s.deepResearch.expandedSources || [],
+        sourceCount: allSources.length,
+        claimCount: s.claims?.length || 0,
+        faqCount: s.faq?.length || 0,
+      }
+    });
+  }
+
   const relData: Record<string, unknown> = {};
   if (s.relatedStories && s.relatedStories.length > 0) {
     relData.stories = s.relatedStories;
@@ -190,11 +205,18 @@ export function apiStoryToCanonical(s: APIStory): Story {
     confidence: c.confidence || 0.5,
     status: c.verification === 'true' ? 'verified' : (c.confidence || 0) >= 0.8 ? 'strong' : (c.confidence || 0) >= 0.6 ? 'moderate' : 'unverified',
   }));
+  const quickRt = s.quickReadTime || Math.max(1, Math.round((s.keyPoints?.length || 3) * 0.3));
+  const deepRt = s.deepReadTime || s.readingTime + (s.sources?.length || 0) + (s.claims?.length || 0) + Math.round((s.faq?.length || 0) * 0.5);
+
   return {
     ...s as unknown as Story,
     title: s.headline,
     createdAt: s.publishedAt,
     status: 'published',
+    quickReadTime: quickRt,
+    deepReadTime: deepRt,
+    quickBrief: s.quickBrief,
+    deepResearch: s.deepResearch,
     blocks,
     sources: mappedSources,
     claims: mappedClaims,

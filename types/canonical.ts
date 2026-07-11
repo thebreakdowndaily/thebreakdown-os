@@ -22,6 +22,17 @@ export type UserRole = 'admin' | 'editor' | 'writer' | 'researcher' | 'designer'
 
 // ─── Content Models ─────────────────────────────────────────────────────────
 
+export interface QuickBriefContent {
+  summary: string;
+  keyPoints: string[];
+}
+
+export interface DeepResearchContent {
+  summary: string;
+  methodology: string;
+  expandedSources?: Array<{ name: string; url: string; description: string }>;
+}
+
 export interface Story {
   id: string;
   title: string;
@@ -34,6 +45,10 @@ export interface Story {
   status: StoryStatus;
   evidenceScore: number;
   readingTime: number;
+  quickReadTime?: number;
+  deepReadTime?: number;
+  quickBrief?: QuickBriefContent;
+  deepResearch?: DeepResearchContent;
   publishedAt: string;
   createdAt: string;
   updatedAt: string;
