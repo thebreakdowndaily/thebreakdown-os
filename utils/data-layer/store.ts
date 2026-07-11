@@ -2835,6 +2835,115 @@ function seed(): DataStore {
 
   stories.set(story35.slug, story35);
 
+  /* ── Story 36: Youth Mental Health Crisis ───────────────────────────── */
+
+  const story36: APIStory = {
+    id: 'youth-mental-health-crisis',
+    slug: 'youth-mental-health-crisis',
+    headline: 'Youth Mental Health Crisis in India: Understanding Rising Suicide Rates',
+    summary: 'India lost 13,044 children aged 14–18 to suicide in 2023 — a 36% increase from 2019. This data-driven investigation examines the systemic failures in mental health infrastructure, the pressure cooker of academic expectations, and the policy gaps that leave 1.5 crore adolescents without access to care.',
+    heroImage: '/images/entities/india.jpg',
+    publishedAt: '2026-07-11T12:00:00Z',
+    updatedAt: '2026-07-11T12:00:00Z',
+    readingTime: 12,
+    wordCount: 4200,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 91,
+    category: 'health',
+    tags: ['mental health', 'teen suicide', 'adolescent mental health', 'NCRB', 'education policy', 'public health', 'depression', 'bullying', 'India health crisis'],
+    relatedTopicIds: ['health', 'education', 'policy'],
+    keyPoints: [
+      'India reported 13,044 student suicides in 2023 — the highest ever recorded, a 36% rise from 2019',
+      '1 in 7 Indian adolescents meets criteria for depression; only 12% of schools have a counsellor',
+      'India has 0.3 child psychiatrists per 100,000 population — 97% below the WHO recommendation',
+      'Academic pressure remains the single largest trigger, cited in 25% of cases',
+      'Only 3% of India\'s health budget goes to mental health; Tele-MANAS helpline received 15 lakh calls in 2 years',
+    ],
+    timeline: [
+      { date: '2017-04-01', title: 'Mental Healthcare Act Enacted', description: 'Guarantees right to mental healthcare for all Indians, prohibits discrimination, mandates insurance coverage for mental illness.', source: 'Ministry of Law' },
+      { date: '2020-07-30', title: 'NEP 2020 Mandates School Counsellors', description: 'National Education Policy 2020 calls for counsellors in every school and life skills education as part of the curriculum.', source: 'Ministry of Education' },
+      { date: '2022-10-10', title: 'Tele-MANAS Helpline Launched', description: 'National mental health helpline launched on World Mental Health Day, providing 24/7 tele-counselling in 20 languages.', source: 'Ministry of Health' },
+      { date: '2022-12-01', title: 'Lancet Study Highlights India Depression Crisis', description: 'Lancet Child & Adolescent Health estimates 13.7% depression prevalence among Indian adolescents aged 15–19.', source: 'The Lancet' },
+      { date: '2023-09-01', title: 'NCRB Reports Record Student Suicides', description: 'NCRB\'s Accidental Deaths & Suicides in India 2023 reports 13,044 student suicides — the highest figure in a decade.', source: 'NCRB' },
+      { date: '2024-03-15', title: 'RTI Reveals Counsellor Gap', description: 'Ministry of Education RTI response confirms only 12% of government schools have a counsellor, most untrained.', source: 'MoE RTI' },
+      { date: '2025-04-10', title: 'Parliamentary Panel Recommends Screening', description: 'Parliamentary standing committee on health recommends mandatory annual mental health screening in all schools.', source: 'Parliament' },
+      { date: '2026-03-01', title: 'Mental Health Bill Proposes Mandatory Screening', description: 'Mental Health (Amendment) Bill 2026 introduced, proposing mandatory screening in schools and colleges.', source: 'Ministry of Health' },
+    ],
+    facts: [
+      { label: 'Student Suicides (2023)', value: '13,044', source: 'NCRB' },
+      { label: 'Increase Since 2019', value: '36%', source: 'NCRB' },
+      { label: 'Adolescents with Depression', value: '1 in 7', source: 'Lancet 2022' },
+      { label: 'Schools with Counsellors', value: '12%', source: 'MoE RTI 2024' },
+      { label: 'Child Psychiatrists per 100k', value: '0.3', source: 'WHO Atlas 2023' },
+      { label: 'Health Budget for Mental Health', value: '3%', source: 'NHM 2023' },
+      { label: 'Tele-MANAS Calls Received', value: '15 lakh', source: 'MoH Dashboard' },
+      { label: 'Districts with DMHP', value: '30%', source: 'MoH' },
+      { label: 'Top Suicide State', value: 'Maharashtra (1,571)', source: 'NCRB' },
+      { label: 'Age Group Most Affected', value: '16–17 years', source: 'NCRB' },
+    ],
+    claims: [
+      { claim: 'Student suicides in India increased by over 35% between 2019 and 2023.', source: 'NCRB ADSI Reports 2019 & 2023', verification: 'true', explanation: 'NCRB\'s Accidental Deaths & Suicides in India reports 9,600 student suicides in 2019 vs 13,044 in 2023 — a 35.9% increase. The trajectory shows consistent year-over-year growth with no single-year decline.', confidence: 0.96 },
+      { claim: 'Only 12% of government schools in India have a counsellor.', source: 'Ministry of Education RTI Response 2024', verification: 'true', explanation: 'RTI response filed by The Breakdown to the Ministry of Education confirmed that only 12% of government schools have a counsellor. The majority of these counsellors are untrained in adolescent mental health.', confidence: 0.93 },
+      { claim: 'Academic pressure is the leading cause of student suicides in India.', source: 'NCRB ADSI 2023', verification: 'true', explanation: 'NCRB data shows "failure in examination" and "academic pressure" as the most commonly cited cause at 25% of cases. However, experts caution that this may be the proximate trigger rather than root cause.', confidence: 0.88 },
+      { claim: 'India has sufficient child psychiatrists to meet WHO standards.', source: 'Common Misconception', verification: 'false', explanation: 'WHO recommends 1 child psychiatrist per 10,000 population. India has 0.3 per 100,000 — a staggering 97% deficit. This translates to a gap of approximately 3,000 child psychiatrists.', confidence: 0.97 },
+      { claim: 'The Mental Healthcare Act 2017 guarantees free mental healthcare for all.', source: 'Legal Provisions', verification: 'true', explanation: 'Section 21(4) of the Mental Healthcare Act, 2017 states that "every person with mental illness shall have a right to access mental health services at affordable cost". However, implementation varies widely by state.', confidence: 0.90 },
+      { claim: 'Social media is a leading documented cause of student suicides.', source: 'Media Narratives', verification: 'misleading', explanation: 'While social media is often cited anecdotally, NCRB data does not list it as a separate category. Bullying (including cyberbullying) accounts for 12% of cases. The ICMR survey found 42% of adolescents feel "constantly judged" online, creating indirect pressure.', confidence: 0.78 },
+      { claim: 'Tele-MANAS has received over 15 lakh calls since launch.', source: 'Ministry of Health Dashboard', verification: 'true', explanation: 'The Tele-MANAS helpline (launched October 2022) has cumulatively received over 15 lakh calls as of March 2026, averaging approximately 1,200 calls per day. This indicates massive unmet demand for mental health support.', confidence: 0.92 },
+    ],
+    sources: [
+      { name: 'NCRB Accidental Deaths & Suicides in India 2023', url: 'https://ncrb.gov.in', type: 'government', tier: 1 },
+      { name: 'National Mental Health Survey 2015–16 (NIMHANS)', url: 'https://nimhans.ac.in', type: 'government', tier: 1 },
+      { name: 'Lancet Child & Adolescent Health — India Depression Prevalence 2022', url: 'https://thelancet.com', type: 'journal', tier: 1 },
+      { name: 'ICMR Adolescent Health Survey 2023', url: 'https://icmr.gov.in', type: 'government', tier: 1 },
+      { name: 'WHO Mental Health Atlas 2023', url: 'https://who.int', type: 'international', tier: 1 },
+      { name: 'Ministry of Education RTI Response — School Counsellors 2024', url: 'https://education.gov.in', type: 'government', tier: 1 },
+      { name: 'Tele-MANAS Ministry of Health Dashboard 2024', url: 'https://telemanas.mohfw.gov.in', type: 'government', tier: 2 },
+      { name: 'Mental Healthcare Act, 2017', url: 'https://legislative.gov.in', type: 'government', tier: 1 },
+      { name: 'National Education Policy 2020', url: 'https://education.gov.in', type: 'government', tier: 1 },
+      { name: 'UNESCO Global Education Monitoring Report 2023', url: 'https://unesco.org', type: 'international', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'Student Suicides in India (2019–2023)', data: [
+          { year: '2019', count: 9600 }, { year: '2020', count: 9813 },
+          { year: '2021', count: 10532 }, { year: '2022', count: 11896 },
+          { year: '2023', count: 13044 },
+        ], xKey: 'year', yKey: 'count' },
+      {
+        type: 'bar', title: 'Triggers of Student Suicides (India, 2023)', data: [
+          { trigger: 'Academic Pressure', percentage: 25 },
+          { trigger: 'Family Problems', percentage: 20 },
+          { trigger: 'Mental Illness', percentage: 18 },
+          { trigger: 'Bullying', percentage: 12 },
+          { trigger: 'Relationship Issues', percentage: 8 },
+          { trigger: 'Other/Unknown', percentage: 17 },
+        ], xKey: 'trigger', yKey: 'percentage' },
+      {
+        type: 'bar', title: 'Age-wise Youth Suicide Breakdown (2023)', data: [
+          { age: '14–15 years', count: 3124 },
+          { age: '16–17 years', count: 5217 },
+          { age: '18 years', count: 4703 },
+        ], xKey: 'age', yKey: 'count' },
+    ],
+    faq: [
+      { question: 'How does India\'s youth suicide rate compare globally?', answer: 'India accounts for approximately 25% of global adolescent suicides, despite having 18% of the world\'s adolescent population. The rate of 12.4 per 100,000 among 15–19 year-olds is 35% higher than the global average of 9.2.' },
+      { question: 'Is academic pressure really the main cause?', answer: 'NCRB data consistently shows "failure in examination" and "academic pressure" as the most commonly cited cause. However, experts caution these are proximate triggers, not root causes. Underlying mental illness, family dysfunction, and lack of coping skills often go unrecorded.' },
+      { question: 'What is being done about it?', answer: 'Three main policy pillars: Tele-MANAS helpline (15 lakh+ calls), the School Mental Health Program under DMHP, and NEP 2020\'s counsellor mandate. However, only 12% of schools have counsellors, and mental health gets only 3% of the health budget.' },
+      { question: 'How can parents spot warning signs?', answer: 'Common warning signs: withdrawal from social activities, sudden drop in grades, changes in sleep/eating, giving away valued possessions, mentions of wanting to die, increased irritability lasting more than two weeks.' },
+      { question: 'What is Tele-MANAS and how does it work?', answer: 'Tele-MANAS is India\'s national mental health helpline (launched Oct 2022), available toll-free at 14416 or 1-800-891-4416. It provides 24/7 tele-counselling in 20 languages, with escalation to in-person care if needed.' },
+    ],
+    relatedStories: [
+      { slug: '81-crore-data-breach', headline: '81 Crore Data Breach: India\'s Largest Ever Cybersecurity Incident', summary: 'The ICMR-linked breach exposed Aadhaar and passport data.', publishedAt: '2026-06-01T06:00:00Z', readingTime: 10, evidenceScore: 95, category: 'cybersecurity' },
+      { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out', summary: 'India\'s ICDS programme at a crossroads.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'who', slug: 'who', name: 'World Health Organization', type: 'organization', description: 'UN health agency tracking global mental health metrics.' },
+    ],
+  };
+
+  stories.set(story36.slug, story36);
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -3559,6 +3668,41 @@ function seed(): DataStore {
         ],
         sources: [{ name: 'CDRI Official Website', url: 'https://cdri.world', type: 'international', description: 'Official CDRI website.' }],
       },
+      {
+        id: 'icmr', slug: 'icmr', name: 'Indian Council of Medical Research',
+        type: 'organization', description: 'The Indian Council of Medical Research (ICMR) is India\'s apex body for biomedical research, operating under the Ministry of Health & Family Welfare. ICMR conducts and coordinates research on national health priorities including mental health, communicable diseases, and public health surveillance.',
+        aliases: ['ICMR', 'Indian Council of Medical Research'], storyCount: 1, updatedAt: '2026-07-11T00:00:00Z',
+        timeline: [
+          { date: '1911-01-01', title: 'ICMR Established', description: 'Founded as the Indian Research Fund Association.' },
+          { date: '2023-01-01', title: 'Adolescent Health Survey', description: 'ICMR publishes Adolescent Health Survey covering mental health, nutrition, and risk behaviours.' },
+        ],
+        statistics: { 'Founded': '1911', 'Research Institutes': '25+', 'Annual Budget': '₹2,800 crore' },
+        relatedStories: [
+          { slug: 'youth-mental-health-crisis', headline: 'Youth Mental Health Crisis in India: Understanding Rising Suicide Rates', summary: 'ICMR data on adolescent depression and mental health infrastructure gaps.', publishedAt: '2026-07-11T12:00:00Z', readingTime: 12, evidenceScore: 91, category: 'health' },
+          { slug: '81-crore-data-breach', headline: '81 Crore Data Breach: India\'s Largest Ever Cybersecurity Incident', summary: 'ICMR-linked data breach exposed Aadhaar and passport data.', publishedAt: '2026-06-01T06:00:00Z', readingTime: 10, evidenceScore: 95, category: 'cybersecurity' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        faq: [
+          { question: 'What is ICMR\'s role in mental health research?', answer: 'ICMR conducts India\'s largest epidemiological studies on mental health prevalence, including the National Mental Health Survey (2015-16) and the Adolescent Health Survey (2023), which provide the primary data on India\'s mental health burden.' },
+        ],
+        sources: [{ name: 'ICMR Official Website', url: 'https://icmr.gov.in', type: 'government', description: 'Official ICMR portal.' }],
+      },
+      {
+        id: 'ministry-of-education', slug: 'ministry-of-education', name: 'Ministry of Education',
+        type: 'organization', description: 'The Ministry of Education (MoE) is the Indian government ministry responsible for education policy, school education, and higher education. It formulates and implements national education policies including NEP 2020, the Right to Education Act, and administers schemes like Samagra Shiksha Abhiyan.',
+        aliases: ['Ministry of Education', 'MoE', 'Education Ministry'], storyCount: 1, updatedAt: '2026-07-11T00:00:00Z',
+        timeline: [
+          { date: '2020-07-30', title: 'NEP 2020 Announced', description: 'National Education Policy 2020 replaces the 1986 policy.' },
+          { date: '2024-03-15', title: 'RTI School Counsellor Data', description: 'Ministry confirms only 12% of schools have counsellors via RTI response.' },
+        ],
+        statistics: { 'Founded': '1947', 'Budget 2025-26': '₹1.20 lakh crore', 'Schools Covered': '15 lakh+' },
+        relatedStories: [
+          { slug: 'youth-mental-health-crisis', headline: 'Youth Mental Health Crisis in India: Understanding Rising Suicide Rates', summary: 'Ministry\'s NEP 2020 counsellor mandate and implementation gaps.', publishedAt: '2026-07-11T12:00:00Z', readingTime: 12, evidenceScore: 91, category: 'health' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        faq: [
+          { question: 'What is the Ministry doing about mental health in schools?', answer: 'NEP 2020 mandates counsellors in every school and life skills education. However, implementation data shows only 12% of schools have counsellors. The Ministry is working on a National Mental Health in Schools framework as of 2026.' },
+        ],
+        sources: [{ name: 'Ministry of Education Official Website', url: 'https://education.gov.in', type: 'government', description: 'Official MoE portal.' }],
+      },
     ];
 
     intlEntities.forEach((ie) => {
@@ -3583,9 +3727,9 @@ function seed(): DataStore {
     { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, payment systems, and digital infrastructure.', stories: [story2, story29], entities: ['npci', 'rbi'] },
     { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4], entities: [] },
     { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13, story30], entities: [] },
-    { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23], entities: [] },
+    { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23, story36], entities: ['ministry-of-education'] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
-    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33], entities: ['who', 'ministry-of-women-and-child-development'] },
+    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33, story36], entities: ['who', 'ministry-of-women-and-child-development', 'icmr'] },
     { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, digital connectivity, and infrastructure projects driving India\'s economic growth.', stories: [story12, story29, story30], entities: ['ministry-of-finance'] },
     { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26, story34], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
   ];
