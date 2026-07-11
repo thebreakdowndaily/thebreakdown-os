@@ -899,7 +899,8 @@ function seed(): DataStore {
       { question: 'Has the Supreme Court upheld the EWS quota?', answer: 'Yes, by a 3:2 majority in November 2022. Two dissenting judges held that economic criteria alone cannot justify reservation.' },
     ],
     relatedStories: [
-      { slug: 'education-budget', headline: 'Education Budget: Spending vs Learning', summary: 'Gap between education spending and outcomes.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 9, evidenceScore: 83, category: 'policy' },
+      { slug: 'education-budget',
+    headline: 'Education Budget: Spending vs Learning', summary: 'Gap between education spending and outcomes.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 9, evidenceScore: 83, category: 'policy' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
@@ -913,7 +914,7 @@ function seed(): DataStore {
     slug: 'us-iran-relations',
     headline: 'US-Iran Relations: From Maximum Pressure to Nuclear Negotiations',
     summary: 'As the 2026 US-Iran nuclear talks enter a decisive phase, The Breakdown examines the decades-long trajectory of confrontation, diplomacy, and the geopolitical stakes for the Middle East and India.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=US-Iran+Nuclear+Talks',
+    heroImage: '/images/stories/education-budget.jpg',
     publishedAt: '2026-07-18T06:00:00Z',
     updatedAt: '2026-07-18T06:00:00Z',
     readingTime: 14,
@@ -964,7 +965,8 @@ function seed(): DataStore {
       { question: 'Why does US-Iran tension matter for India?', answer: 'India imports 80% of its oil from the Middle East. US-Iran tensions directly affect oil prices, the viability of the Chabahar port project, and India\'s strategic balancing between the US and Iran.' },
     ],
     relatedStories: [
-      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+      { slug: 'supply-chain-shift',
+    headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
       { id: 'un', slug: 'un', name: 'United Nations',image: '/images/entities/un.jpg',  type: 'organization', description: 'International organization.' },
@@ -979,7 +981,7 @@ function seed(): DataStore {
     slug: 'indian-education-crisis',
     headline: 'India\'s Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?',
     summary: 'While near-universal enrolment has been achieved at the primary level, India\'s education system faces a crisis of quality — half of Class 5 students cannot read a Class 2 textbook. An investigation into the systemic failures behind the learning poverty trap.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+Education+Paradox',
+    heroImage: '/images/stories/supply-chain-shift.jpg',
     publishedAt: '2026-07-22T06:00:00Z',
     updatedAt: '2026-07-22T06:00:00Z',
     readingTime: 16,
@@ -1035,7 +1037,8 @@ function seed(): DataStore {
       { question: 'What are the key reforms under NEP 2020?', answer: 'NEP 2020 introduces a 5+3+3+4 curriculum structure (replacing 10+2), early childhood education integration, vocational training from Class 6, mother tongue instruction until Class 5, and a multidisciplinary approach to higher education.' },
     ],
     relatedStories: [
-      { slug: 'education-budget', headline: 'Education Budget: Spending vs Learning', summary: 'Gap between education spending and outcomes.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 9, evidenceScore: 83, category: 'policy' },
+      { slug: 'education-budget',
+    headline: 'Education Budget: Spending vs Learning', summary: 'Gap between education spending and outcomes.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 9, evidenceScore: 83, category: 'policy' },
       { slug: 'ews-quota', headline: 'EWS Quota: Economic Reservation Debate', summary: 'Supreme Court upholds 10% EWS quota.', publishedAt: '2026-07-16T06:00:00Z', readingTime: 11, evidenceScore: 87, category: 'policy' },
     ],
     relatedEntities: [
@@ -1051,7 +1054,7 @@ function seed(): DataStore {
     slug: 'income-inequality-india',
     headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth',
     summary: 'India\'s income inequality has reached levels not seen since the colonial era — the top 1% holds 40% of national wealth while the bottom 50% holds just 13%. An examination of the structural drivers behind India\'s Gini coefficient trajectory.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Income+Inequality+India',
+    heroImage: '/images/stories/education-budget.jpg',
     publishedAt: '2026-07-26T06:00:00Z',
     updatedAt: '2026-07-26T06:00:00Z',
     readingTime: 15,
@@ -1110,7 +1113,8 @@ function seed(): DataStore {
       { question: 'How does India\'s inequality compare to other countries?', answer: 'India\'s top 1% wealth share (40.1%) is higher than the US (34%), China (30%), and Brazil (38%), but lower than Russia (43%). India\'s bottom 50% share (13%) is among the lowest globally.' },
     ],
     relatedStories: [
-      { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: 'Data-driven assessment of rural employment.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+      { slug: 'mgnrega-reform',
+    headline: 'MGNREGA Completes 20 Years', summary: 'Data-driven assessment of rural employment.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
       { slug: 'ration-digitization', headline: 'Digitizing PDS', summary: 'Aadhaar and ePoS impact on food security.', publishedAt: '2026-07-22T06:00:00Z', readingTime: 10, evidenceScore: 86, category: 'economy' },
     ],
     relatedEntities: [
@@ -1127,7 +1131,7 @@ function seed(): DataStore {
     slug: 'india-china-border-tensions',
     headline: 'India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint',
     summary: 'Despite 20 rounds of military talks, India and China remain locked in the most intense border confrontation in five decades — with 60,000 troops deployed on each side and a broader strategic rivalry reshaping Asia.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-China+Border+Tensions',
+    heroImage: '/images/stories/mgnrega-reform.jpg',
     publishedAt: '2026-07-30T06:00:00Z',
     updatedAt: '2026-07-30T06:00:00Z',
     readingTime: 17,
@@ -1183,7 +1187,8 @@ function seed(): DataStore {
       { question: 'Why does India-China border tension matter for the global economy?', answer: 'India and China together account for 36% of the world\'s population and 20% of global GDP. A sustained conflict could disrupt global supply chains, energy markets, and shipping lanes in the Indian Ocean, affecting trade worth $7 trillion annually.' },
     ],
     relatedStories: [
-      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+      { slug: 'supply-chain-shift',
+    headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
@@ -1198,7 +1203,7 @@ function seed(): DataStore {
     slug: 'indias-foreign-policy',
     headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment',
     summary: 'As India celebrates 80 years of independence, its foreign policy has undergone a fundamental transformation — from Nehruvian idealism to pragmatic multi-alignment, balancing the US, China, Russia, and the Global South.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+Foreign+Policy+80',
+    heroImage: '/images/stories/supply-chain-shift.jpg',
     publishedAt: '2026-08-05T06:00:00Z',
     updatedAt: '2026-08-05T06:00:00Z',
     readingTime: 18,
@@ -1358,7 +1363,8 @@ function seed(): DataStore {
       { question: 'Does the CBFC regulate OTT?', answer: 'No. OTT is regulated under IT Rules 2021 — a self-regulatory framework, not CBFC pre-certification.' },
     ],
     relatedStories: [
-      { slug: 'ews-quota-upsc-investigation', headline: 'Who Really Gets the EWS Quota?', summary: 'Investigation into UPSC EWS selections.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 12, evidenceScore: 94, category: 'policy' },
+      { slug: 'ews-quota-upsc-investigation',
+    headline: 'Who Really Gets the EWS Quota?', summary: 'Investigation into UPSC EWS selections.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 12, evidenceScore: 94, category: 'policy' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
@@ -1374,7 +1380,7 @@ function seed(): DataStore {
     slug: 'india-us-relations',
     headline: 'India-US Relations: From Nuclear Deal to Critical Technology Partnership',
     summary: 'The India-US strategic partnership has deepened across defence, technology, trade, and people-to-people ties over the past two decades, driven by shared concerns about China\'s rise and converging geopolitical interests.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-US+Strategic+Partnership',
+    heroImage: '/images/stories/ews-quota-upsc-investigation.jpg',
     publishedAt: '2026-08-15T10:00:00Z',
     updatedAt: '2026-08-15T10:00:00Z',
     readingTime: 16,
@@ -1428,7 +1434,8 @@ function seed(): DataStore {
       { question: 'What is the significance of iCET for India?', answer: 'iCET enables co-production of GE F414 jet engines for Tejas Mk2, collaboration on AI and semiconductors, and joint space missions between ISRO and NASA — a level of technology sharing the US typically reserves for closest allies.' },
     ],
     relatedStories: [
-      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+      { slug: 'supply-chain-shift',
+    headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
       { slug: 'semiconductor-pli', headline: 'India\'s Semiconductor Push', summary: 'PLI scheme analysis.', publishedAt: '2026-07-01T06:00:00Z', readingTime: 14, evidenceScore: 85, category: 'technology' },
     ],
     relatedEntities: [
@@ -1447,7 +1454,7 @@ function seed(): DataStore {
     slug: 'india-indonesia-relations',
     headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific',
     summary: 'India and Indonesia share 2,000 years of civilisational links and are now deepening a Comprehensive Strategic Partnership focused on maritime security, trade, and countering Chinese influence in Southeast Asia.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-Indonesia+Indo-Pacific',
+    heroImage: '/images/stories/supply-chain-shift.jpg',
     publishedAt: '2026-08-18T10:00:00Z',
     updatedAt: '2026-08-18T10:00:00Z',
     readingTime: 12,
@@ -1497,7 +1504,8 @@ function seed(): DataStore {
       { question: 'How does Indonesia view China\'s Belt and Road Initiative?', answer: 'Indonesia has engaged selectively with BRI (Jakarta-Bandung high-speed railway) but has also sought to balance Chinese influence by deepening maritime cooperation with India, Japan, and the US through ASEAN centrality.' },
     ],
     relatedStories: [
-      { slug: 'india-us-relations', headline: 'India-US Relations', summary: 'Strategic partnership deepening.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
+      { slug: 'india-us-relations',
+    headline: 'India-US Relations', summary: 'Strategic partnership deepening.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
       { slug: 'india-china-relations', headline: 'India-China Relations', summary: 'Border tensions and rivalry.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
     ],
     relatedEntities: [
@@ -1515,7 +1523,7 @@ function seed(): DataStore {
     slug: 'india-china-relations',
     headline: 'India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry',
     summary: 'From the Galwan Valley clash to a widening trade deficit and competition across the Indian Ocean, the India-China relationship has reached its most volatile point since the 1962 war.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-China+Strategic+Rivalry',
+    heroImage: '/images/stories/india-us-relations.jpg',
     publishedAt: '2026-08-20T10:00:00Z',
     updatedAt: '2026-08-20T10:00:00Z',
     readingTime: 17,
@@ -1571,7 +1579,8 @@ function seed(): DataStore {
       { question: 'Why has India rejected China\'s proposal for a complete troop disengagement?', answer: 'India insists that disengagement must be followed by de-escalation and restoration of the status quo ante as of April 2020. China\'s proposals would legitimise its new forward deployments and infrastructure built since the Galwan clash, which India considers unacceptable.' },
     ],
     relatedStories: [
-      { slug: 'india-us-relations', headline: 'India-US Relations', summary: 'Strategic partnership deepening.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
+      { slug: 'india-us-relations',
+    headline: 'India-US Relations', summary: 'Strategic partnership deepening.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
       { slug: 'india-russia-relations', headline: 'India-Russia Relations', summary: 'Enduring defence partnership.', publishedAt: '2026-08-25T10:00:00Z', readingTime: 14, evidenceScore: 90, category: 'geopolitics' },
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'China+1 opportunity for India.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
@@ -1592,7 +1601,7 @@ function seed(): DataStore {
     slug: 'india-europe-relations',
     headline: 'India and Europe: A Strategic Partnership Searching for Substance',
     summary: 'As the EU seeks to diversify away from China and India looks West for technology and investment, the India-EU strategic partnership is gaining momentum — but trade negotiations, carbon policy, and differing worldviews on Russia remain obstacles.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-EU+Partnership',
+    heroImage: '/images/stories/india-us-relations.jpg',
     publishedAt: '2026-08-22T10:00:00Z',
     updatedAt: '2026-08-22T10:00:00Z',
     readingTime: 14,
@@ -1645,7 +1654,8 @@ function seed(): DataStore {
       { question: 'What is the India-EU Trade and Technology Council (TTC)?', answer: 'The TTC, launched in 2022, is a ministerial-level forum covering strategic technologies (AI, semiconductors, 5G/6G), green energy, and trade. It serves as a platform to align on digital standards, data governance, and supply chain resilience.' },
     ],
     relatedStories: [
-      { slug: 'india-uk-relations', headline: 'India-UK Relations', summary: 'Colonial ties to strategic partnership.', publishedAt: '2026-08-23T10:00:00Z', readingTime: 13, evidenceScore: 86, category: 'geopolitics' },
+      { slug: 'india-uk-relations',
+    headline: 'India-UK Relations', summary: 'Colonial ties to strategic partnership.', publishedAt: '2026-08-23T10:00:00Z', readingTime: 13, evidenceScore: 86, category: 'geopolitics' },
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
@@ -1664,7 +1674,7 @@ function seed(): DataStore {
     slug: 'india-uk-relations',
     headline: 'India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership',
     summary: 'The India-UK relationship has reinvented itself through a Comprehensive Strategic Partnership, FTA negotiations, and robust diaspora links — but difficult conversations on historical reparations, migration, and trade-offs persist.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-UK+Partnership',
+    heroImage: '/images/stories/india-uk-relations.jpg',
     publishedAt: '2026-08-23T10:00:00Z',
     updatedAt: '2026-08-23T10:00:00Z',
     readingTime: 13,
@@ -1716,7 +1726,8 @@ function seed(): DataStore {
       { question: 'Why has the India-UK FTA taken so long?', answer: 'Key sticking points include UK demands for whisky and wine tariff reductions (currently 150%), liberalisation of legal and financial services, stricter data protection standards, and India\'s demand for easier visa access for students and professionals. The UK also seeks commitments on climate provisions.' },
     ],
     relatedStories: [
-      { slug: 'india-europe-relations', headline: 'India and Europe', summary: 'Strategic partnership with the EU.', publishedAt: '2026-08-22T10:00:00Z', readingTime: 14, evidenceScore: 88, category: 'geopolitics' },
+      { slug: 'india-europe-relations',
+    headline: 'India and Europe', summary: 'Strategic partnership with the EU.', publishedAt: '2026-08-22T10:00:00Z', readingTime: 14, evidenceScore: 88, category: 'geopolitics' },
       { slug: 'india-us-relations', headline: 'India-US Relations', summary: 'From nuclear deal to iCET.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
     ],
     relatedEntities: [
@@ -1734,7 +1745,7 @@ function seed(): DataStore {
     slug: 'india-russia-relations',
     headline: 'India-Russia: The Enduring Partnership Tested by War and Realignment',
     summary: 'India\'s oldest strategic partnership is navigating the Ukraine war, a dramatic surge in oil imports, Western sanctions pressure, and Russia\'s deepening embrace of China — all while defence dependency keeps the relationship anchored.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India-Russia+Partnership',
+    heroImage: '/images/stories/india-europe-relations.jpg',
     publishedAt: '2026-08-25T10:00:00Z',
     updatedAt: '2026-08-25T10:00:00Z',
     readingTime: 14,
@@ -1993,7 +2004,8 @@ function seed(): DataStore {
     ],
     relatedTopicIds: ['policy'],
     relatedStories: [
-      { slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' },
+      { slug: '81-crore-data-breach',
+    headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' },
       { slug: 'india-china-border-tensions', headline: 'India-China at the Crossroads', summary: 'Border flashpoint and strategic rivalry.', publishedAt: '2026-07-30T06:00:00Z', readingTime: 17, evidenceScore: 92, category: 'politics' },
     ],
     relatedEntities: [
@@ -2009,7 +2021,7 @@ function seed(): DataStore {
     id: 'india-5g-rollout',
     slug: 'india-5g-rollout',
     headline: "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+5G+400M+Subscribers+Killer+App',
+    heroImage: '/images/stories/81-crore-data-breach.jpg',
     summary: 'India crossed 40 crore 5G subscribers in mid-2026 — the fastest 5G rollout by volume globally — but enterprise adoption remains tepid, average revenue per user is stagnant at sub-₹200, only 40% of towers are fiberized, and the industry awaits the breakthrough application that will justify the ₹5 lakh crore capital expenditure.',
     publishedAt: '2026-08-12T06:00:00Z',
     updatedAt: '2026-08-12T06:00:00Z',
@@ -2088,7 +2100,8 @@ function seed(): DataStore {
     relatedStories: [
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion and the digital payments landscape.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
       { slug: 'semiconductor-pli', headline: 'India\'s ₹1.2 Lakh Crore Semiconductor Push: Can the Dream Take Silicon?', summary: 'Analysis of India\'s semiconductor PLI scheme and manufacturing ecosystem.', publishedAt: '2026-07-01T06:00:00Z', readingTime: 14, evidenceScore: 85, category: 'technology' },
-      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'India\'s manufacturing opportunity amid global supply chain diversification.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+      { slug: 'supply-chain-shift',
+    headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'India\'s manufacturing opportunity amid global supply chain diversification.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India — the world\'s second-largest telecommunications market.' },
@@ -2104,7 +2117,7 @@ function seed(): DataStore {
     id: 'india-ev-paradox',
     slug: 'india-ev-paradox',
     headline: 'India\'s EV Paradox: Rising Sales, Stalled Charging, and the \u20B94 Lakh Crore Battery Import Bill',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=India+EV+Paradox',
+    heroImage: '/images/stories/supply-chain-shift.jpg',
     summary: 'EV sales have grown 4x in three years, but India\'s public charging network stands at only 26% of the official target. Meanwhile, the country\'s battery import bill is projected to hit \u20B94 lakh crore by 2030 — creating a strategic vulnerability as deep as the oil dependency EVs were meant to solve.',
     publishedAt: '2026-08-15T06:00:00Z',
     updatedAt: '2026-08-15T06:00:00Z',
@@ -2185,7 +2198,8 @@ function seed(): DataStore {
     relatedTopicIds: ['environment', 'infrastructure', 'economy'],
     relatedStories: [
       { slug: 'climate-finance', headline: 'India\'s \u20B911 Lakh Crore Climate Finance Challenge', summary: 'Climate finance gap threatens renewable transition and EV grid integration.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
-      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Battery supply chain as a critical component of India\'s manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+      { slug: 'supply-chain-shift',
+    headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Battery supply chain as a critical component of India\'s manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
@@ -2202,7 +2216,7 @@ function seed(): DataStore {
     slug: 'ayushman-bharat',
     headline: "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
     summary: "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY) has become the world's largest publicly funded health insurance scheme, covering 12.5 crore families and facilitating 6.2 crore hospitalizations in eight years — but questions persist about coverage gaps, hospital quality, and whether ₹30,000 crore can sustain universal health coverage for a nation of 1.4 billion.",
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Ayushman+Bharat+Health+Cover',
+    heroImage: '/images/stories/supply-chain-shift.jpg',
     publishedAt: '2026-08-10T06:00:00Z',
     updatedAt: '2026-08-10T06:00:00Z',
     readingTime: 13,
@@ -2279,7 +2293,7 @@ function seed(): DataStore {
     id: 'electoral-bonds',
     slug: 'electoral-bonds',
     headline: 'Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme the Supreme Court Struck Down',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Electoral+Bonds:+The+Anonymous+Donation+Scheme',
+    heroImage: '/images/stories/electoral-bonds.jpg',
     summary: 'Electoral Bonds were meant to clean up political funding. Instead, they created the most opaque campaign finance system in Indian history — ₹12,769 crore in anonymous donations, 47.5% flowing to the BJP, with shell companies and contractors under investigation pouring ₹4,200+ crore into ruling party coffers. The Supreme Court struck down the scheme in February 2024.',
     publishedAt: '2026-08-14T06:00:00Z',
     updatedAt: '2026-08-14T06:00:00Z',
@@ -2378,7 +2392,8 @@ function seed(): DataStore {
     ],
     relatedTopicIds: ['policy', 'economy'],
     relatedStories: [
-      { slug: 'ews-quota-upsc-investigation', headline: 'Who Really Gets the EWS Quota? A Data-Driven Investigation into UPSC Selections', summary: 'Investigation into EWS quota implementation in government jobs.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 12, evidenceScore: 94, category: 'policy' },
+      { slug: 'ews-quota-upsc-investigation',
+    headline: 'Who Really Gets the EWS Quota? A Data-Driven Investigation into UPSC Selections', summary: 'Investigation into EWS quota implementation in government jobs.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 12, evidenceScore: 94, category: 'policy' },
       { slug: 'income-inequality-india', headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth', summary: 'Structural drivers behind India\'s growing wealth concentration.', publishedAt: '2026-07-26T06:00:00Z', readingTime: 15, evidenceScore: 94, category: 'economy' },
     ],
     relatedEntities: [
@@ -2395,7 +2410,7 @@ function seed(): DataStore {
     id: 'who-cancer-report-2026',
     slug: 'who-cancer-report-2026',
     headline: 'Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Global+Cancer+Crisis:+WHO+Report+2026',
+    heroImage: '/images/stories/ews-quota-upsc-investigation.jpg',
     summary: 'The World Health Organization\'s Global Status Report on Cancer 2026 reveals 20.6 million new diagnoses and nearly 10 million deaths in 2024 — with projections escalating to 35 million annual cases by 2050. Lung, breast, and colorectal cancers dominate the global burden while vast disparities persist: 87% breast cancer survival in high-income countries versus 42% in low-income nations. The report\'s seven recommendations call for three strategic shifts: better capabilities, better protections, and better value in cancer care worldwide.',
     publishedAt: '2026-07-08T10:00:00Z',
     updatedAt: '2026-07-08T10:00:00Z',
@@ -2565,7 +2580,7 @@ function seed(): DataStore {
     slug: 'us-iran-war-strait-of-hormuz',
     headline: 'The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets',
     summary: 'The US-Iran war that began February 28, 2026 has become the most disruptive geopolitical event since the Iraq invasion. With the Strait of Hormuz effectively closed for over 130 days, 20 million barrels per day of oil trade severed, and Brent crude oscillating between $77 and $98 per barrel, the conflict has exposed India\'s structural vulnerability: 46% of crude imports, 50% of LNG, and 90% of LPG transit the Gulf corridor. The ceasefire collapsed July 9 after US strikes on 90 Iranian targets, Trump declaring the deal "over," and Iran retaliating against US bases in Bahrain and Kuwait. India has activated its RELIEF scheme and accelerated oil diversification — but the deeper question is whether any hedge can replace the world\'s most critical energy chokepoint.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Strait+of+Hormuz+War',
+    heroImage: '/images/stories/us-iran-war-strait-of-hormuz.jpg',
     publishedAt: '2026-07-11T12:00:00Z',
     updatedAt: '2026-07-11T12:00:00Z',
     readingTime: 16,
@@ -2684,7 +2699,8 @@ function seed(): DataStore {
       { question: 'What diplomatic solutions are possible?', answer: 'Pakistan had served as the primary mediator for the April ceasefire and June MOU. The EU and Gulf Arab states continue to push for negotiations. However, Iran has conditioned peace with Washington on a ceasefire in Lebanon, and the US Senate\'s war-powers resolution (50-48 vote June 23) reflects domestic opposition. The NATO summit in Ankara (July 7-8) failed to produce a breakthrough.' },
     ],
     relatedStories: [
-      { slug: 'us-iran-relations', headline: 'US-Iran Relations: From Maximum Pressure to Nuclear Negotiations', summary: 'The diplomatic track preceding the war: JCPOA negotiations, sanctions, and the path to the 2026 Vienna talks.', publishedAt: '2026-07-18T06:00:00Z', readingTime: 14, evidenceScore: 89, category: 'politics' },
+      { slug: 'us-iran-relations',
+    headline: 'US-Iran Relations: From Maximum Pressure to Nuclear Negotiations', summary: 'The diplomatic track preceding the war: JCPOA negotiations, sanctions, and the path to the 2026 Vienna talks.', publishedAt: '2026-07-18T06:00:00Z', readingTime: 14, evidenceScore: 89, category: 'politics' },
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'How the Hormuz crisis is accelerating India\'s energy diversification and China+1 manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
@@ -2702,7 +2718,7 @@ function seed(): DataStore {
     slug: 'epf-scheme-2026',
     headline: 'EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code',
     summary: 'India\'s retirement framework underwent its most significant legal overhaul in seven decades when the EPF Scheme 2026 replaced the 1952 scheme effective June 29, replacing two legacy pension schemes and bringing 8 crore+ subscribers under the Code on Social Security, 2020. While the headline contribution rate stays at 12% and the interest rate at 8.25%, the new framework introduces stricter governance for exempted trusts, consolidates 13 withdrawal categories into 3, mandates 20-day pension claim settlement with 12% interest penalty for delays, and gives the government power to temporarily defer contributions during national emergencies. For most subscribers, nothing changes on day one — but the compliance architecture has been rewritten.',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=EPF+Scheme+2026',
+    heroImage: '/images/stories/us-iran-relations.jpg',
     publishedAt: '2026-07-11T10:00:00Z',
     updatedAt: '2026-07-11T10:00:00Z',
     readingTime: 14,

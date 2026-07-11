@@ -1,4 +1,4 @@
-import React from 'react';
+import Image from 'next/image';
 
 const typeColors: Record<string, string> = {
   person: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
@@ -41,11 +41,18 @@ export default function EntityHero({
       <div className="bg-[#151515] border border-[#2A2A2A] rounded-xl overflow-hidden">
         {image && (
           <div className="w-full h-48 sm:h-56 relative bg-[#0A0A0A]">
-            <img src={image} alt={name} className="w-full h-full object-cover opacity-60" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#151515] to-transparent" />
+            <Image
+              src={image}
+              alt={name}
+              fill
+              priority
+              className="object-cover opacity-60"
+              sizes="(max-width: 1280px) 100vw, 1280px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#151515] to-transparent z-10" />
           </div>
         )}
-        <div className="p-6 sm:p-8">
+        <div className="p-6 sm:p-8 relative z-20">
           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-3 mb-3">

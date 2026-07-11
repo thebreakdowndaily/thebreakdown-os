@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { cn } from '@/utils/cn';
 
 interface KnowledgeCardProps {
@@ -65,16 +66,18 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({ entity, size = 'md', href
     >
       <a href={`/${hrefPrefix}/${entity.slug}`} className="flex items-start gap-4 no-underline" aria-label={entity.name}>
         {entity.image ? (
-          <div className={cn("flex-shrink-0 border border-border bg-surface-tertiary overflow-hidden", cfg.image, size === 'lg' ? 'rounded-lg' : 'rounded-md')}>
-            <img
+          <div className={cn("flex-shrink-0 border border-border bg-surface-tertiary overflow-hidden relative", cfg.image, entity.type === 'person' ? 'rounded-full' : (size === 'lg' ? 'rounded-lg' : 'rounded-md'))}>
+            <Image
               src={entity.image}
               alt={entity.name}
-              className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-fast"
+              fill
+              className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-fast"
+              sizes="(max-width: 640px) 100px, 150px"
             />
           </div>
         ) : (
           <div
-            className={cn("flex-shrink-0 border border-border bg-surface-tertiary flex items-center justify-center font-bold text-text-muted", cfg.image, cfg.icon, size === 'lg' ? 'rounded-lg' : 'rounded-md')}
+            className={cn("flex-shrink-0 border border-border bg-surface-tertiary flex items-center justify-center font-bold text-text-muted", cfg.image, cfg.icon, entity.type === 'person' ? 'rounded-full' : (size === 'lg' ? 'rounded-lg' : 'rounded-md'))}
             aria-hidden="true"
           >
             {initials}
