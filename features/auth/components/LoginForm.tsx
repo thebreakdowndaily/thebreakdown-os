@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { supabase } from '../auth-client';
+import { isDemoMode, enableDemoSession } from '../demo';
 
 export function LoginForm({ onSuccess, onRegisterClick }: { onSuccess?: () => void; onRegisterClick?: () => void }) {
   const [email, setEmail] = useState('');
@@ -79,6 +80,20 @@ export function LoginForm({ onSuccess, onRegisterClick }: { onSuccess?: () => vo
             Sign up
           </button>
         </p>
+      )}
+
+      {isDemoMode() && (
+        <div style={{ marginTop: 'var(--spacing-6)', paddingTop: 'var(--spacing-6)', borderTop: '1px solid var(--color-border-default)' }}>
+          <button
+            onClick={() => { enableDemoSession(); window.location.reload(); }}
+            style={{ width: '100%', padding: 'var(--spacing-2) var(--spacing-4)', background: 'transparent', border: '1px dashed var(--color-brand-400)', color: 'var(--color-brand-400)', borderRadius: 'var(--radius-md)', cursor: 'pointer', fontSize: 'var(--text-sm)', fontWeight: 600 }}
+          >
+            Continue as Demo Editor
+          </button>
+          <p style={{ marginTop: 'var(--spacing-2)', textAlign: 'center', fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
+            Supabase not configured — dev demo mode. Set NEXT_PUBLIC_SUPABASE_URL for real auth.
+          </p>
+        </div>
       )}
     </div>
   );

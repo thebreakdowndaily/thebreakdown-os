@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase, mapUser } from '../auth-client';
 import type { Session } from '../auth-client';
+import { isDemoMode, hasDemoSession, buildDemoSession, disableDemoSession, DEMO_USER } from '../demo';
 
 interface AuthContextValue {
   user: Session['user'] | null;
@@ -26,6 +27,17 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
+    if (isDemoMode()) {
+      if (hasDemoSession()) {
+        setUser(DEMO_USER);
+        setSession(buildDemoSession());
+      } else {
+        setUser(null);
+        setSession(null);
+      }
+      setLoading(false);
+      return;
+    }
     try {
       const { data: { session: s } } = await supabase.auth.getSession();
       if (s?.user) {
@@ -49,6 +61,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     refresh();
 
+    if (isDemoMode()) return;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
       if (s?.user) {
         setUser(mapUser(s.user));
@@ -67,6 +81,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
 
   const signOut = useCallback(async () => {
+    if (isDemoMode()) {
+      disableDemoSession();
+      setUser(null);
+      setSession(null);
+      if (typeof window !== 'undefined') window.location.reload();
+      return;
+    }
     await supabase.auth.signOut();
     setUser(null);
     setSession(null);
