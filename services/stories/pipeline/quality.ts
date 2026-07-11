@@ -2,53 +2,78 @@ import { KnowledgeStory, StoryBuilder } from './builder';
 
 export class QualityBuilder implements StoryBuilder {
   async build(story: KnowledgeStory): Promise<KnowledgeStory> {
-    let score = 100;
-    const issues = [];
-
-    if (!story.visualAssets?.hero || story.visualAssets.hero.resolvedAsset?.optimization.cdnUrl.includes('/placeholders/')) {
-      score -= 20;
-      issues.push('Missing Official Hero Image');
-    }
+    const raw = story.raw;
+    const visuals = story.visualAssets;
     
-    // Check visual richness
-    if (!story.visualAssets?.gallery || story.visualAssets.gallery.length < 2) {
-      score -= 5;
-      issues.push('Lacking Visual Context (Gallery)');
-    }
+    // Checklists
+    const checklist = {
+      heroImage: !!visuals?.hero && !visuals.hero.resolvedAsset?.optimization.cdnUrl.includes('/placeholders/'),
+      summary: !!raw.summary && raw.summary.length > 10,
+      timeline: !!story.unifiedTimeline && story.unifiedTimeline.length > 0,
+      evidence: !!raw.claims && raw.claims.length > 0,
+      sources: !!raw.sources && raw.sources.length > 0,
+      faq: !!raw.faq && raw.faq.length > 0,
+      relatedStories: !!raw.relatedStoryIds && raw.relatedStoryIds.length > 0,
+      relatedEntities: !!raw.relatedEntityIds && raw.relatedEntityIds.length > 0,
+      gallery: !!visuals?.gallery && visuals.gallery.length > 0,
+      metadata: !!raw.tags && raw.tags.length > 0,
+      schema: true, // Assuming SEO/Schema is injected if published
+      socialImage: !!visuals?.hero // Assume hero is social image for now
+    };
 
-    if (!story.unifiedTimeline || story.unifiedTimeline.length === 0) {
-      score -= 10;
-      issues.push('Missing Timeline');
-    }
+    // Sub-scores
+    let visualScore = 100;
+    if (!checklist.heroImage) visualScore -= 50;
+    if (!checklist.gallery) visualScore -= 20;
+    if (!visuals?.portraits?.length) visualScore -= 10;
+    
+    let evidenceScore = 100;
+    if (!checklist.evidence) evidenceScore -= 50;
+    
+    let sourcesScore = 100;
+    if (!checklist.sources) sourcesScore -= 50;
+    
+    let timelineScore = 100;
+    if (!checklist.timeline) timelineScore -= 50;
+    
+    let seoScore = 100;
+    if (!checklist.summary) seoScore -= 20;
+    if (!checklist.metadata) seoScore -= 10;
+    
+    let accessibilityScore = 100;
+    // Mock accessibility check for image alt text presence
+    if (visuals?.hero && !visuals.hero.resolvedAsset?.altText) accessibilityScore -= 30;
 
-    if (!story.raw.sources || story.raw.sources.length === 0) {
-      score -= 30;
-      issues.push('Missing Sources');
-    }
+    // Averages and bounds
+    const clamp = (val: number) => Math.max(0, Math.min(100, val));
+    visualScore = clamp(visualScore);
+    evidenceScore = clamp(evidenceScore);
+    sourcesScore = clamp(sourcesScore);
+    timelineScore = clamp(timelineScore);
+    seoScore = clamp(seoScore);
+    accessibilityScore = clamp(accessibilityScore);
 
-    if (!story.raw.claims || story.raw.claims.length === 0) {
-      score -= 15;
-      issues.push('Missing Evidence');
-    }
+    const overallScore = Math.round((visualScore + evidenceScore + sourcesScore + timelineScore + seoScore + accessibilityScore) / 6);
 
-    if (!story.resolvedEntities?.primary) {
-      score -= 15;
-      issues.push('Missing Primary Entity Link');
-    }
+    const issues = [];
+    if (!checklist.heroImage) issues.push({ level: 'Critical', message: 'Missing Hero Image' });
+    if (!checklist.timeline) issues.push({ level: 'Important', message: 'Missing Timeline' });
+    if (!checklist.sources) issues.push({ level: 'Critical', message: 'Missing Sources' });
+    if (!checklist.faq) issues.push({ level: 'Minor', message: 'Missing FAQ' });
 
     story.qualityScore = {
-      score: Math.max(0, score),
-      issues,
-      status: score >= 90 ? 'Excellent' : score >= 70 ? 'Good' : 'Needs Review',
-      visualScore: {
-        score: Math.min(100, 20 + (story.visualAssets?.portraits.length || 0)*10 + (story.visualAssets?.logos.length || 0)*10 + (story.visualAssets?.maps.length || 0)*20),
-        hero: !!story.visualAssets?.hero,
-        people: story.visualAssets?.portraits.length || 0,
-        organizations: story.visualAssets?.logos.length || 0,
-        maps: story.visualAssets?.maps.length || 0,
-        charts: story.visualAssets?.charts.length || 0,
-        gallery: story.visualAssets?.gallery.length || 0,
-      }
+      score: overallScore,
+      status: overallScore >= 90 ? 'Excellent' : overallScore >= 70 ? 'Good' : 'Needs Review',
+      subScores: {
+        visuals: visualScore,
+        evidence: evidenceScore,
+        sources: sourcesScore,
+        timeline: timelineScore,
+        seo: seoScore,
+        accessibility: accessibilityScore
+      },
+      checklist,
+      issues
     };
 
     return story;

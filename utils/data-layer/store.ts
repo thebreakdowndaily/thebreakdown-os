@@ -2944,6 +2944,115 @@ function seed(): DataStore {
 
   stories.set(story36.slug, story36);
 
+  /* ── Story 37: Gig Worker Rights ───────────────────────────────────── */
+
+  const story37: APIStory = {
+    id: 'gig-worker-rights',
+    slug: 'gig-worker-rights',
+    headline: 'Gig Worker Rights in India: The Fight for Dignity in the Platform Economy',
+    summary: 'India\'s gig workforce of 77 lakh is projected to hit 2.35 crore by 2029-30, yet most workers lack social security, face algorithmic deactivation, and earn volatile incomes. This investigation examines the Karnataka law, the stalled central Code, and the human cost of platform capitalism.',
+    heroImage: '/images/entities/india.jpg',
+    publishedAt: '2026-07-12T12:00:00Z',
+    updatedAt: '2026-07-12T12:00:00Z',
+    readingTime: 11,
+    wordCount: 3800,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 89,
+    category: 'employment',
+    tags: ['gig workers', 'platform economy', 'gig worker rights', 'Karnataka Gig Workers Act', 'Code on Social Security', 'e-Shram', 'labour rights', 'unorganised sector', 'algorithmic management', 'India employment'],
+    relatedTopicIds: ['employment', 'policy', 'governance'],
+    keyPoints: [
+      'India\'s gig workforce was 77 lakh in 2020-21 and is projected to reach 2.35 crore by 2029-30 (NITI Aayog)',
+      'Less than 10% of gig workers have any formal social security cover (EPFO/ESI)',
+      'Karnataka became the first state to legislate gig worker welfare with a 1-5% transaction levy in 2024-25',
+      'The central Code on Social Security 2020 gig provisions remain unimplemented five years on',
+      'Women make up only ~20% of the gig workforce, concentrated in lower-paid categories',
+      'Algorithmic deactivation without notice is the most common grievance across platforms',
+    ],
+    timeline: [
+      { date: '2020-09-28', title: 'Code on Social Security Passed', description: 'Parliament passes the Code on Social Security, 2020, which for the first time defines "gig worker" and "platform worker" and mandates a social security fund.', source: 'Ministry of Labour' },
+      { date: '2022-06-01', title: 'NITI Aayog Gig Economy Report', description: 'NITI Aayog publishes "India\'s Booming Gig and Platform Economy", estimating 77 lakh gig workers and projecting 2.35 crore by 2029-30.', source: 'NITI Aayog' },
+      { date: '2021-08-01', title: 'e-Shram Portal Launched', description: 'Ministry of Labour launches the e-Shram national database for unorganised workers; crosses 30 crore registrations by 2026.', source: 'Ministry of Labour' },
+      { date: '2023-05-01', title: 'Karnataka Draft Bill', description: 'Karnataka releases draft Platform-Based Gig Workers (Social Security & Welfare) Bill after consultations with workers\' collectives.', source: 'Govt of Karnataka' },
+      { date: '2024-09-01', title: 'Karnataka Act Passed', description: 'Karnataka Legislative Assembly passes the Platform-Based Gig Workers (Social Security and Welfare) Act, 2024 — the first of its kind in India.', source: 'Govt of Karnataka' },
+      { date: '2025-04-01', title: 'Karnataka Rules Notified', description: 'Karnataka notifies the rules, setting up a Welfare Board and a 1-5% welfare fee on aggregator payouts.', source: 'Govt of Karnataka' },
+      { date: '2025-12-01', title: 'Parliamentary Panel on Gig Work', description: 'Standing Committee on Labour submits report urging the Centre to notify the Social Security Code\'s gig provisions and set up a national welfare board.', source: 'Parliament' },
+      { date: '2026-03-01', title: 'Central Welfare Board Proposed', description: 'Union Budget 2026 announces a national platform workers\' welfare board funded via a cess on aggregators.', source: 'Union Budget' },
+    ],
+    facts: [
+      { label: 'Gig Workers (2020-21)', value: '77 lakh', source: 'NITI Aayog' },
+      { label: 'Projected (2029-30)', value: '2.35 crore', source: 'NITI Aayog' },
+      { label: 'With Formal Social Security', value: '<10%', source: 'ILO / NITI' },
+      { label: 'e-Shram Registrations', value: '30 crore+', source: 'Ministry of Labour' },
+      { label: 'Women in Gig Workforce', value: '~20%', source: 'NITI Aayog' },
+      { label: 'Karnataka Welfare Fee', value: '1-5%', source: 'Karnataka Act' },
+      { label: 'Karnataka Welfare Corpus', value: '₹100 crore', source: 'Govt of Karnataka' },
+      { label: 'Avg Monthly Earnings', value: '₹15,000-25,000', source: 'ILO Survey' },
+      { label: 'Top Aggregators', value: 'Zomato, Swiggy, Ola, Uber', source: 'Company Filings' },
+      { label: 'Central Code Status', value: 'Notified, unimplemented', source: 'Ministry of Labour' },
+    ],
+    claims: [
+      { claim: 'India\'s gig and platform workforce was 77 lakh in 2020-21 and is projected to reach 2.35 crore by 2029-30.', source: 'NITI Aayog — India\'s Booming Gig and Platform Economy (2022)', verification: 'true', explanation: 'NITI Aayog\'s flagship report explicitly estimates 7.7 million gig workers in 2020-21, growing to 23.5 million by 2029-30, driven by e-commerce, logistics, and delivery services.', confidence: 0.95 },
+      { claim: 'Karnataka is the first Indian state to legislate social security for platform-based gig workers.', source: 'Karnataka Platform-Based Gig Workers Act, 2024', verification: 'true', explanation: 'The Karnataka Act, 2024 (rules notified 2025) is the first comprehensive state legislation mandating a welfare board, registration, and a transaction-based welfare fee. Rajasthan passed a similar Act in 2023 but it has seen limited enforcement.', confidence: 0.93 },
+      { claim: 'The central government\'s Code on Social Security 2020 provisions for gig workers are fully implemented.', source: 'Common Misconception', verification: 'false', explanation: 'While the Code was passed in 2020 and notified, the specific schemes for gig and platform workers under Section 114 have not been operationalised. No national welfare board or contribution mechanism exists as of 2026.', confidence: 0.96 },
+      { claim: 'Most gig workers earn a stable, predictable monthly income.', source: 'Platform Narratives', verification: 'false', explanation: 'ILO and academic surveys show high income volatility: earnings swing 30-50% month to month based on incentives, demand, and algorithmic rank. A 2024 Lokniti survey found 60% of delivery workers could not predict next month\'s income.', confidence: 0.88 },
+      { claim: 'Algorithmic deactivation without notice is a widespread grievance among gig workers.', source: 'Worker Collective Surveys, Media Reports', verification: 'true', explanation: 'Multiple surveys (including a 2025 IFAT report) find 40%+ of workers have been deactivated or penalised without clear recourse. The Karnataka Act now requires aggregators to provide reasons and an appeal mechanism.', confidence: 0.85 },
+      { claim: 'Women comprise a large and growing share of India\'s gig workforce.', source: 'NITI Aayog / ILO', verification: 'misleading', explanation: 'Women are about 20-23% of gig workers, concentrated in lower-paid categories like beauty, childcare, and home services — not delivery. The platform economy has not closed the gender gap; pay disparities persist.', confidence: 0.80 },
+      { claim: 'Over 30 crore unorganised workers are now covered by the e-Shram database.', source: 'Ministry of Labour Dashboard 2026', verification: 'true', explanation: 'The e-Shram portal crossed 30 crore registrations by early 2026, creating the world\'s largest unorganised worker database. However, portability of benefits to gig workers remains limited in practice.', confidence: 0.90 },
+    ],
+    sources: [
+      { name: 'NITI Aayog — India\'s Booming Gig and Platform Economy (2022)', url: 'https://niti.gov.in', type: 'government', tier: 1 },
+      { name: 'Karnataka Platform-Based Gig Workers Act, 2024', url: 'https://karnataka.gov.in', type: 'government', tier: 1 },
+      { name: 'Code on Social Security, 2020', url: 'https://labour.gov.in', type: 'government', tier: 1 },
+      { name: 'Ministry of Labour — e-Shram Dashboard', url: 'https://eshram.gov.in', type: 'government', tier: 1 },
+      { name: 'ILO — World Employment and Social Outlook: The role of digital labour platforms', url: 'https://ilo.org', type: 'international', tier: 1 },
+      { name: 'Parliamentary Standing Committee on Labour — Report on Gig Workers (2025)', url: 'https://loksabha.nic.in', type: 'government', tier: 1 },
+      { name: 'Lokniti-CSDS Survey on Platform Workers (2024)', url: 'https://lokniti.org', type: 'journal', tier: 2 },
+      { name: 'IFAT India — Gig Worker Grievances Report (2025)', url: 'https://ifat.org.in', type: 'ngo', tier: 2 },
+      { name: 'Zomato / Swiggy Annual Reports (Delivery Partner Data)', url: 'https://zomato.com', type: 'news', tier: 2 },
+      { name: 'Rajasthan Platform-Based Gig Workers Act, 2023', url: 'https://rajasthan.gov.in', type: 'government', tier: 1 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'India\'s Gig Workforce: Growth Projection (Lakh)', data: [
+          { year: '2020-21', count: 77 }, { year: '2024-25', count: 112 },
+          { year: '2027-28', count: 165 }, { year: '2029-30', count: 235 },
+        ], xKey: 'year', yKey: 'count' },
+      {
+        type: 'bar', title: 'Gig Workers by Sector (% share)', data: [
+          { sector: 'Delivery (Food/Parcel)', percentage: 34 },
+          { sector: 'Transport (Cab/Auto)', percentage: 22 },
+          { sector: 'E-commerce & Logistics', percentage: 18 },
+          { sector: 'Care & Beauty Services', percentage: 14 },
+          { sector: 'Professional/Freelance', percentage: 12 },
+        ], xKey: 'sector', yKey: 'percentage' },
+      {
+        type: 'bar', title: 'Social Security Coverage Among Gig Workers (%)', data: [
+          { cover: 'EPFO/ESI', percentage: 8 },
+          { cover: 'e-Shram Registered', percentage: 41 },
+          { cover: 'No Cover', percentage: 51 },
+        ], xKey: 'cover', yKey: 'percentage' },
+    ],
+    faq: [
+      { question: 'What is a gig worker under Indian law?', answer: 'The Code on Social Security, 2020 defines a gig worker as "a person who performs work or participates in work arrangements outside of traditional employer-employee relationships, earning from such activities." Platform workers are a subset engaged via online platforms.' },
+      { question: 'Does any law actually protect gig workers today?', answer: 'Karnataka\'s 2024 Act (rules notified 2025) and Rajasthan\'s 2023 Act provide real protections: registration, a welfare fund, accident/health cover, and dispute redressal. The central Code\'s gig provisions remain unimplemented, so protection depends heavily on which state a worker is in.' },
+      { question: 'What benefits does the Karnataka law provide?', answer: 'It sets up a Welfare Board, requires aggregator registration, levies a 1-5% welfare fee on payouts into a ₹100 crore corpus, and mandates accident, disability, and health benefits plus an appeal process against deactivation.' },
+      { question: 'How many gig workers are there in India?', answer: 'NITI Aayog estimated 77 lakh (7.7 million) in 2020-21, projected to reach 2.35 crore (23.5 million) by 2029-30. The true informal count is higher since many are not registered on e-Shram.' },
+      { question: 'Can gig workers unionise or bargain collectively?', answer: 'Indian courts have recognised gig workers\' right to association. The Karnataka and Rajasthan laws enable worker representation on welfare boards, but platform-level collective bargaining remains legally unsettled and is an active area of litigation.' },
+    ],
+    relatedStories: [
+      { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: What the Data Reveals', summary: 'India\'s largest rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+      { slug: 'youth-mental-health-crisis', headline: 'Youth Mental Health Crisis in India: Understanding Rising Suicide Rates', summary: 'Occupational stress and precarity among platform workers.', publishedAt: '2026-07-11T12:00:00Z', readingTime: 12, evidenceScore: 91, category: 'health' },
+      { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: How UPI Transformed Financial Inclusion', summary: 'Fintech platforms and the gig delivery economy.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-labour', slug: 'ministry-of-labour', name: 'Ministry of Labour & Employment', type: 'organization', description: 'Union ministry responsible for labour law and social security.' },
+    ],
+  };
+
+  stories.set(story37.slug, story37);
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -3703,6 +3812,25 @@ function seed(): DataStore {
         ],
         sources: [{ name: 'Ministry of Education Official Website', url: 'https://education.gov.in', type: 'government', description: 'Official MoE portal.' }],
       },
+      {
+        id: 'ministry-of-labour', slug: 'ministry-of-labour', name: 'Ministry of Labour & Employment',
+        type: 'organization', description: 'The Ministry of Labour & Employment is the Indian government ministry responsible for labour law, industrial relations, and social security. It administers the Code on Social Security 2020, the e-Shram unorganised worker database, and oversees welfare schemes for gig, platform, and informal workers.',
+        aliases: ['Ministry of Labour', 'MoLE', 'Labour Ministry'], storyCount: 1, updatedAt: '2026-07-12T00:00:00Z',
+        timeline: [
+          { date: '2020-09-28', title: 'Code on Social Security Passed', description: 'Parliament passes the Code on Social Security, 2020, defining gig and platform workers.' },
+          { date: '2021-08-26', title: 'e-Shram Portal Launched', description: 'National database for unorganised workers launched; crosses 30 crore registrations by 2026.' },
+          { date: '2026-03-01', title: 'National Welfare Board Proposed', description: 'Union Budget 2026 announces a national platform workers\' welfare board.' },
+        ],
+        statistics: { 'Founded': '1947', 'e-Shram Registrations': '30 crore+', 'Core Labour Codes': '4' },
+        relatedStories: [
+          { slug: 'gig-worker-rights', headline: 'Gig Worker Rights in India: The Fight for Dignity in the Platform Economy', summary: 'The Ministry\'s role in the stalled Code on Social Security and e-Shram.', publishedAt: '2026-07-12T12:00:00Z', readingTime: 11, evidenceScore: 89, category: 'employment' },
+          { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: What the Data Reveals', summary: 'Rural employment guarantee under the Ministry\'s purview.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
+        faq: [
+          { question: 'What is the Ministry doing for gig workers?', answer: 'The Ministry drafted rules under the Code on Social Security 2020 for gig workers and proposed a national welfare board in Budget 2026. However, the gig-specific schemes under Section 114 remain unimplemented, leaving state laws as the main real protection.' },
+        ],
+        sources: [{ name: 'Ministry of Labour & Employment Official Website', url: 'https://labour.gov.in', type: 'government', description: 'Official MoLE portal.' }],
+      },
     ];
 
     intlEntities.forEach((ie) => {
@@ -3722,16 +3850,16 @@ function seed(): DataStore {
     { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24, story30, story32, story35], entities: ['rbi', 'ministry-of-finance'] },
     { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, 5G, and technology policy.', stories: [story2, story4, story5, story27, story29], entities: ['npci'] },
     { slug: 'cybersecurity', name: 'Cybersecurity & Data Privacy', description: 'Data breaches, cyber threats, digital security, privacy regulation, and India\'s cybersecurity landscape.', stories: [story5, story27], entities: ['icmr', 'cert-in', 'uidai', 'resecurity'] },
-    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28, story31, story32], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag', 'election-commission'] },
+    { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28, story31, story32, story37], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag', 'election-commission', 'ministry-of-labour'] },
     { slug: 'agriculture', name: 'Agriculture & Rural Development', description: 'Agriculture policy, crop insurance, rural employment, and farmer welfare.', stories: [story1, story3, story10, story13], entities: ['ministry-of-agriculture', 'mgnrega', 'india'] },
     { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, payment systems, and digital infrastructure.', stories: [story2, story29], entities: ['npci', 'rbi'] },
-    { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4], entities: [] },
+    { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4, story37], entities: ['ministry-of-labour'] },
     { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13, story30], entities: [] },
     { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23, story36], entities: ['ministry-of-education'] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
     { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33], entities: ['who', 'ministry-of-women-and-child-development'] },
     { slug: 'mental-health', name: 'Mental Health', description: 'Mental health policy, adolescent mental health, suicide prevention, counselling infrastructure, and psychological wellbeing in India.', stories: [story36], entities: ['icmr', 'ministry-of-education', 'who'] },
-    { slug: 'governance', name: 'Governance & Institutions', description: 'Constitutional bodies, public accountability, parliamentary oversight, audit institutions (CAG), elections, and the functioning of India\'s democratic infrastructure.', stories: [story3, story11, story31, story36], entities: ['cag', 'election-commission'] },
+    { slug: 'governance', name: 'Governance & Institutions', description: 'Constitutional bodies, public accountability, parliamentary oversight, audit institutions (CAG), elections, and the functioning of India\'s democratic infrastructure.', stories: [story3, story11, story31, story36, story37], entities: ['cag', 'election-commission', 'ministry-of-labour'] },
     { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, digital connectivity, and infrastructure projects driving India\'s economic growth.', stories: [story12, story29, story30], entities: ['ministry-of-finance'] },
     { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26, story34], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
   ];

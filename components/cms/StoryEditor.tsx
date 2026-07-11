@@ -5,6 +5,7 @@ import type { CMSStory, Block, BlockType, BlockData, HeroBlockData, TextBlockDat
 import { reorderBlocks, updateBlock, removeBlock, addBlock, duplicateBlock, getBlockIcon, getBlockLabel } from '@/utils/cms-data';
 import BlockToolbar from './BlockToolbar';
 import BlockPalette from './BlockPalette';
+import StoryIntelligenceSidebar from '../editorial/StoryIntelligenceSidebar';
 import HeroBlock from './blocks/HeroBlock';
 import TextBlock from './blocks/TextBlock';
 import TimelineBlock from './blocks/TimelineBlock';
@@ -481,8 +482,11 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
         )}
       </div>
 
-      {/* ─── Block Palette ─────────────────────────── */}
-      <BlockPalette onAddBlock={handleAddBlock} storyBlockCount={blocks.length} />
+      {/* ─── Right Sidebars ─────────────────────────── */}
+      <div style={{ display: 'flex', borderLeft: '1px solid var(--color-border-subtle)' }}>
+        <BlockPalette onAddBlock={handleAddBlock} storyBlockCount={blocks.length} />
+        <StoryIntelligenceSidebar story={story} />
+      </div>
     </div>
   );
 }

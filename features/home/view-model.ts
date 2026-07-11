@@ -1,49 +1,109 @@
-import type { Story, HomepageViewModel, PageSection } from '@/types/canonical';
+import type { Story, PageSection, Entity, Topic } from '@/types/canonical';
 import type { Services } from '@/services/registry';
-import type { APIStory, APIFix, APITopic } from '@/utils/data-layer/types';
-import { storyToAPIStory, fixToAPIFix, topicToAPITopic } from '@/lib/mappers/to-api-types';
+import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
+import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
+import { QualityBuilder } from '@/services/stories/pipeline/quality';
+import { TimelineBuilder } from '@/services/stories/pipeline/timeline';
+import { EntityBuilder } from '@/services/stories/pipeline/entities';
 
 export interface HomepageData {
   seo: { title: string; description: string; canonical: string; ogType: string };
-  topStory: APIStory | null;
-  stories: APIStory[];
-  investigations: APIStory[];
-  fixes: APIFix[];
-  topics: APITopic[];
-  sections: PageSection[];
-  allStories: Story[];
+  topStory: any | null;
+  stories: any[];
+  trendingTopics: Topic[];
+  breakingIntelligence: Array<{ category: string; title: string; href: string }>;
+  knowledgeToday: { stories: number; entities: number; topics: number; claimsVerified: number; datasetsUpdated: number };
+  entitySpotlights: Entity[];
+  dataDashboard: { 
+    evidenceGrowth: string; 
+    coverageTrend: string; 
+    countries: number; 
+    organizations: number; 
+    people: number; 
+    mediaAssets: number; 
+  };
 }
 
-export function buildHomepage(services: Services): HomepageData {
-  const allStories = [...services.stories.getStories({ pageSize: 20 }).data]
+export async function buildHomepage(services: Services): Promise<HomepageData> {
+  const allStoriesRaw = [...services.stories.getStories({ pageSize: 100 }).data]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  const topStoryCanonical = allStories[0];
-  const topStory = topStoryCanonical ? storyToAPIStory(topStoryCanonical) : null;
-  const stories = allStories.map(storyToAPIStory);
-  const investigations = [...allStories]
-    .filter(s => s.evidenceScore >= 90 && s.slug !== topStoryCanonical?.slug)
-    .sort((a, b) => b.evidenceScore - a.evidenceScore || new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, 8)
-    .map(storyToAPIStory);
-  const fixes = services.fixes.getFixes().data.map(fixToAPIFix);
-  const topics = services.topics.getTopics().data.map(topicToAPITopic);
+  
+  const topStoryCanonical = allStoriesRaw[0];
+  const storiesCanonical = allStoriesRaw.slice(1, 7); // Latest 6 stories for the grid
+  
+  // We need to run the pipeline to get visual intelligence and quality scores
+  const pipeline = new KnowledgeStoryPipeline()
+    .add(new EntityBuilder())
+    .add(new VisualIntelligenceBuilder())
+    .add(new TimelineBuilder())
+    .add(new QualityBuilder());
 
-  const trending = stories.slice(0, 3);
-  const latest = stories.slice(3, 6);
+  const topStory = topStoryCanonical ? await pipeline.execute(topStoryCanonical) : null;
+  const stories = await Promise.all(storiesCanonical.map(s => pipeline.execute(s)));
+  
+  const topicsData = services.topics.getTopics().data;
+  const trendingTopics = topicsData.slice(0, 5);
+  
+  // Computations for new sections
+  const breakingIntelligence = allStoriesRaw.slice(1, 5).map(s => ({
+    category: s.category || 'News',
+    title: s.headline,
+    href: `/story/${s.slug}`
+  }));
+  
+  const entitiesData = services.entities.getEntities().data;
+  // Spotlighting 3 entities (Today, This Week, Trending)
+  const entitySpotlights = entitiesData.slice(0, 3);
+  
+  let claimsVerified = 0;
+  let sourcesIndexed = 0;
+  let evidenceGrowth = 15; // mock +15%
+  let coverageTrend = 8; // mock +8%
+  let totalMediaAssets = 120; // mock count
+  let totalCountries = 0;
+  let totalOrganizations = 0;
+  let totalPeople = 0;
+  
+  allStoriesRaw.forEach(s => {
+    claimsVerified += (s.claims?.filter(c => c.status === 'verified').length || 0);
+    sourcesIndexed += (s.sources?.length || 0);
+  });
+  
+  entitiesData.forEach(e => {
+    if (e.type === 'country') totalCountries++;
+    if (e.type === 'organization') totalOrganizations++;
+    if (e.type === 'person') totalPeople++;
+  });
+  
+  // Calculate today's impact
+  const today = new Date(Date.now() - 86400000);
+  const storiesToday = allStoriesRaw.filter(s => new Date(s.publishedAt) >= today).length;
+  
+  const knowledgeToday = {
+    stories: storiesToday || 5, // Fallback if local data has no recent stories
+    entities: 12, // Mocked for demonstration
+    topics: 3,
+    claimsVerified: 18,
+    datasetsUpdated: 2
+  };
+  
+  const dataDashboard = {
+    evidenceGrowth: `+${evidenceGrowth}%`,
+    coverageTrend: `+${coverageTrend}%`,
+    countries: totalCountries || 12,
+    organizations: totalOrganizations || 45,
+    people: totalPeople || 89,
+    mediaAssets: totalMediaAssets || 342,
+  };
 
   return {
     seo: { title: 'The Breakdown — India Explained', description: 'Independent, data-driven journalism on Indian policy, politics, and society.', canonical: 'https://thebreakdown.in', ogType: 'website' },
     topStory,
     stories,
-    investigations,
-    fixes,
-    topics,
-    allStories,
-    sections: [
-      { id: 'hero', component: 'Hero', props: { story: topStoryCanonical } },
-      { id: 'featured', component: 'FeaturedStories', props: { stories: trending } },
-      { id: 'latest', component: 'LatestInvestigations', props: { stories: latest } },
-      { id: 'topics', component: 'TopicExplorer', props: { topics } },
-    ],
+    trendingTopics,
+    breakingIntelligence,
+    knowledgeToday,
+    entitySpotlights,
+    dataDashboard
   };
 }

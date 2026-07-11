@@ -22,6 +22,18 @@ export type UserRole = 'admin' | 'editor' | 'writer' | 'researcher' | 'designer'
 
 // ─── Content Models ─────────────────────────────────────────────────────────
 
+export type FreshnessStatus = 'Fresh' | 'Monitoring' | 'Changed' | 'Review Required' | 'Approved' | 'Archived';
+
+export interface FreshnessMetadata {
+  status: FreshnessStatus;
+  lastVerified: string;
+  confidence: number;
+  primarySourcesCount: number;
+  secondarySourcesCount?: number;
+  nextCheckAt?: string;
+  pendingUpdates?: number;
+}
+
 export interface Story {
   id: string;
   title: string;
@@ -57,6 +69,7 @@ export interface Story {
   legislation?: string;
   costValue?: string;
   versionHistory?: Array<{ date: string; description: string }>;
+  freshness?: FreshnessMetadata;
   confidenceBreakdown?: {
     overallScore: number;
     sourceQuality: number;
@@ -80,6 +93,7 @@ export interface Topic {
   faq: FAQItem[];
   timeline: TimelineEvent[];
   statistics: StatItem[];
+  freshness?: FreshnessMetadata;
   createdAt: string;
   updatedAt: string;
 }
@@ -156,6 +170,7 @@ export interface EntityBase {
 
   version: number;
   usageGraph: EntityUsageGraph;
+  freshness?: FreshnessMetadata;
   
   createdAt: string;
   updatedAt: string;
@@ -431,6 +446,8 @@ export interface Claim {
   tier: ConfidenceTier;
   confidence: number;
   status: 'verified' | 'strong' | 'moderate' | 'unverified';
+  verificationLevel?: 'primary' | 'secondary';
+  verifiedAt?: string;
 }
 
 export interface TimelineEvent {
@@ -611,6 +628,52 @@ export interface Event {
   userId?: string;
 }
 
+// ─── Knowledge Lifecycle & Editorial Workflow ─────────────────────────────────
+
+export interface RegisteredSource {
+  id: string;
+  name: string;
+  provider: string;
+  trustScore: number;
+  refreshFrequency: string; // CRON expression
+  country?: string;
+  domain?: string;
+  categories: string[];
+  topics: string[];
+  entities: string[];
+  stories: string[];
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  enabled: boolean;
+  lastSuccess?: string;
+  lastFailure?: string;
+  failureCount: number;
+  status: 'active' | 'failing' | 'paused' | 'archived';
+}
+
+export interface EditorialTask {
+  id: string;
+  title: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  severity: 'blocker' | 'major' | 'minor';
+  owner?: string;
+  createdAt: string;
+  updatedAt: string;
+  deadline?: string;
+  evidence: {
+    sourceId: string;
+    diffSummary: string;
+    url?: string;
+  };
+  affectedContent: {
+    stories: string[];
+    topics: string[];
+    entities: string[];
+    claims: string[];
+  };
+  resolution?: string;
+  status: 'pending' | 'assigned' | 'in_review' | 'approved' | 'dismissed' | 'resolved';
+}
+
 // ─── ViewModels (page-level) ────────────────────────────────────────────────
 
 export interface HomepageViewModel {
@@ -732,6 +795,7 @@ export interface TopicTerminalViewModel {
     missingMedia: string[];
     brokenLinks: string[];
   };
+  freshness?: FreshnessMetadata;
   seo: SEOData;
   breadcrumbs: { label: string; href: string }[];
 }
@@ -796,6 +860,7 @@ export interface EntityTerminalViewModel {
     coverageTrend: string;
   };
   
+  freshness?: FreshnessMetadata;
   seo: SEOData;
 }
 

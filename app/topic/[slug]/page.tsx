@@ -119,6 +119,16 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               </span>
               <span>•</span>
               <span>{statistics.totalEntities} Entities Tracked</span>
+
+              {topic.freshness && (
+                <>
+                  <span>•</span>
+                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Verified {topic.freshness.lastVerified}
+                  </span>
+                </>
+              )}
             </div>
           </header>
 

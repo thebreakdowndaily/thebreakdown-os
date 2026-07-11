@@ -100,7 +100,7 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
       verification: c.status,
       confidence: c.confidence
     })) || [],
-    sources: story.sources?.map(s => ({
+    sources: story.sources?.map((s: any) => ({
       title: s.title,
       url: s.url,
       tier: s.tier
@@ -200,7 +200,7 @@ export default async function StoryPage({
               {story.headline}
             </h1>
             
-            <div className="flex items-center gap-4 text-sm text-neutral-400">
+            <div className="flex items-center gap-4 text-sm text-neutral-400 flex-wrap">
               <span className="text-emerald-400 font-mono">{story.author}</span>
               <span>•</span>
               <time dateTime={story.publishedAt}>
@@ -213,6 +213,18 @@ export default async function StoryPage({
                 </svg>
                 {qualityScore.score}% Quality Score
               </span>
+              
+              {story.freshness && (
+                <>
+                  <span>•</span>
+                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Verified {story.freshness.lastVerified}
+                  </span>
+                  <span>•</span>
+                  <span className="text-neutral-500 font-mono text-xs">Primary Sources: {story.freshness.primarySourcesCount}</span>
+                </>
+              )}
             </div>
 
             {heroImage && (
@@ -251,7 +263,7 @@ export default async function StoryPage({
 
             {/* Render traditional blocks for standard/deep modes */}
             {mode !== 'quick' && (
-              <BlocksRenderer blocks={story.blocks?.filter((b) => !b.region || b.region === 'main')} />
+              <BlocksRenderer blocks={story.blocks?.filter((b: any) => !b.region || b.region === 'main')} />
             )}
 
             {mode === 'deep' && deepView && (
@@ -378,7 +390,7 @@ export default async function StoryPage({
                   <span className="block text-[10px] uppercase tracking-widest text-neutral-500">Claims</span>
                 </div>
               </div>
-              <SourcesList sources={story.sources?.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
+              <SourcesList sources={story.sources?.map((s: any) => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
             </section>
 
           </div>

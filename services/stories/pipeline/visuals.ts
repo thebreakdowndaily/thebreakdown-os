@@ -9,7 +9,7 @@ export class VisualIntelligenceBuilder implements StoryBuilder {
     const supportingEntities = story.resolvedEntities?.supporting || [];
     
     // Also include the story slug as context, or fallback to topics if available
-    const topics = []; // Could be populated if topics are resolved before visuals
+    const topics: any[] = []; // Could be populated if topics are resolved before visuals
     
     const context = {
       storySlug: story.raw.slug,

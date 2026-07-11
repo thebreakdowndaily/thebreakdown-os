@@ -2,11 +2,16 @@ import type { Metadata } from 'next';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildHomepage } from '@/features/home/view-model';
 import HomepageLayout from '@/layouts/HomepageLayout';
+
 import Hero from '@/components/home/hero/Hero';
-import { FeaturedStories } from '@/components/home/featured';
-import { TheFixSection } from '@/components/home/fix';
-import { TopicExplorer } from '@/components/home/topics';
-import { InvestigationsSection } from '@/components/home/investigations';
+import BreakingIntelligence from '@/components/home/breaking/BreakingIntelligence';
+import LatestStories from '@/components/home/latest/LatestStories';
+import TrendingTopics from '@/components/home/topics/TrendingTopics';
+import EntitySpotlight from '@/components/home/entities/EntitySpotlight';
+import KnowledgeGraphPreview from '@/components/home/graph/KnowledgeGraphPreview';
+import DataDashboard from '@/components/home/dashboard/DataDashboard';
+import Newsletter from '@/components/home/newsletter/Newsletter';
+import KnowledgeToday from '@/components/home/breaking/KnowledgeToday';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export const metadata: Metadata = {
@@ -33,17 +38,55 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
   const services = bootstrapServices();
-  const vm = buildHomepage(services);
+  const vm = await buildHomepage(services);
 
   return (
     <HomepageLayout seo={vm.seo}>
+      {/* 1. Global Search (In header, usually part of HomepageLayout) */}
+      
+      {/* 2. Hero Story */}
       {vm.topStory && <Hero story={vm.topStory} />}
-      <AnimatedSection as="div"><InvestigationsSection stories={vm.investigations} /></AnimatedSection>
-      <AnimatedSection as="div" delay={100}><FeaturedStories stories={vm.stories} /></AnimatedSection>
-      <AnimatedSection as="div" delay={200}><TheFixSection fixes={vm.fixes} /></AnimatedSection>
-      <AnimatedSection as="div" delay={300}><TopicExplorer topics={vm.topics} /></AnimatedSection>
+      
+      {/* 3. Breaking Intelligence */}
+      <BreakingIntelligence items={vm.breakingIntelligence} />
+      
+      {/* 4. Knowledge Today */}
+      <AnimatedSection as="div" delay={100}>
+        <KnowledgeToday metrics={vm.knowledgeToday} />
+      </AnimatedSection>
+      
+      {/* 5. Latest Stories */}
+      <AnimatedSection as="div" delay={200}>
+        <LatestStories stories={vm.stories} />
+      </AnimatedSection>
+      
+      {/* 6. Trending Topics */}
+      <AnimatedSection as="div" delay={300}>
+        <TrendingTopics topics={vm.trendingTopics} />
+      </AnimatedSection>
+      
+      {/* 7. Entity Spotlight */}
+      <AnimatedSection as="div" delay={400}>
+        <EntitySpotlight entities={vm.entitySpotlights} />
+      </AnimatedSection>
+      
+      {/* 8. Knowledge Graph Preview */}
+      <AnimatedSection as="div" delay={500}>
+        <KnowledgeGraphPreview />
+      </AnimatedSection>
+      
+      {/* 9. Data Dashboard */}
+      <AnimatedSection as="div" delay={600}>
+        <DataDashboard data={vm.dataDashboard} />
+      </AnimatedSection>
+      
+      {/* 10. Newsletter */}
+      <AnimatedSection as="div" delay={700}>
+        <Newsletter />
+      </AnimatedSection>
+      
     </HomepageLayout>
   );
 }

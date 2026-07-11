@@ -39,7 +39,7 @@ export default function TerminalHeader({ viewModel }: { viewModel: EntityTermina
             </div>
 
             <div className="flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex flex-wrap items-center gap-3 mb-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-neutral-800 text-neutral-300 border border-neutral-700 uppercase">
                   {type}
                 </span>
@@ -48,6 +48,16 @@ export default function TerminalHeader({ viewModel }: { viewModel: EntityTermina
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
                 <span className="text-xs text-neutral-500 font-mono tracking-wider">ACTIVE</span>
+                
+                {viewModel.freshness && (
+                  <>
+                    <span className="text-neutral-700">•</span>
+                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Verified {viewModel.freshness.lastVerified}
+                    </span>
+                  </>
+                )}
               </div>
               
               <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white tracking-tight mb-2">
