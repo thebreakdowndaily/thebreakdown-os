@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ChartDef } from '@/utils/types';
+import type { ChartDef } from '@/types/canonical';
 import ChartRenderer from '@/components/charts/ChartRenderer';
 
 interface ChartsProps {
@@ -7,7 +7,7 @@ interface ChartsProps {
 }
 
 /**
- * Convert ChartDef (StoryJSON format) to ChartSpec (VisualPlan format).
+ * Convert ChartDef (Story format) to ChartSpec (VisualPlan format).
  * ChartRenderer expects ChartSpec; Charts.tsx bridges the two data models.
  */
 function chartDefToSpec(def: ChartDef, index: number) {
@@ -16,7 +16,7 @@ function chartDefToSpec(def: ChartDef, index: number) {
 
   return {
     chartId: `chart-${String(index)}-${def.type}`,
-    type: def.type,
+    type: (def.type || def.chartType) as any,
     purpose: def.title || 'Data visualization',
     question: def.description,
     xAxis: {

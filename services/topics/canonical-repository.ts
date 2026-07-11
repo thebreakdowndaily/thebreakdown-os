@@ -38,37 +38,42 @@ export class CanonicalTopicService {
   }
 }
 
-function rowToTopic(row: any): Topic {
+function rowToTopic(row: import('@/supabase/client').TypedDatabase['public']['Tables']['topics']['Row']): Topic {
   return {
     id: row.id,
     slug: row.slug,
     name: row.name,
     description: row.description || '',
-    overview: row.overview || undefined,
-    image: row.image || '',
-    storyIds: [],
-    relatedEntityIds: [],
-    featuredStoryIds: [],
+    overview: undefined,
+    image: '',
+    storyIds: row.story_ids || [],
+    relatedEntityIds: row.related_entity_ids || [],
+    featuredStoryIds: row.featured_story_ids || [],
     countries: row.countries || [],
-    faq: row.faq || [],
-    timeline: [],
-    statistics: row.statistics || [],
+    faq: (row.faq as import('@/types/canonical').FAQItem[]) || [],
+    timeline: (row.timeline as import('@/types/canonical').TimelineEvent[]) || [],
+    statistics: (row.statistics as import('@/types/canonical').StatItem[]) || [],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-function rowFromTopic(t: Topic): any {
+function rowFromTopic(t: Topic): import('@/supabase/client').TypedDatabase['public']['Tables']['topics']['Insert'] {
   return {
     id: t.id,
     slug: t.slug,
     name: t.name,
     description: t.description,
-    overview: t.overview,
-    image: t.image,
+    category: '', // Missing in canonical
+    tags: [],     // Missing in canonical
+    related_entity_ids: t.relatedEntityIds,
+    related_story_ids: [],
+    story_ids: t.storyIds,
+    featured_story_ids: t.featuredStoryIds,
     countries: t.countries,
     faq: t.faq,
     statistics: t.statistics,
+    timeline: t.timeline,
     updated_at: new Date().toISOString(),
   };
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import type { RelatedEntity } from '@/utils/types';
+import type { Entity } from '@/types/canonical';
 import KnowledgeCard from '@/components/ui/KnowledgeCard';
 
 interface RelatedEntitiesProps {
-  entities: RelatedEntity[];
+  entities: Entity[];
   title?: string;
 }
 

@@ -37,10 +37,9 @@ async function runTests() {
   // ── Auth Server Config ───────────────────────────────────────────────
 
   try {
-    const { auth } = await import('../features/auth/auth-server');
-    assert(!!auth, 'Auth server initialized');
-    assert(!!auth.handler, 'Auth handler exists');
-    assert(!!auth.api, 'Auth API exists');
+    const serverModule = await import('../features/auth/auth-server');
+    assert(!!serverModule.getSupabaseAuth, 'Auth server initialized');
+    assert(!!serverModule.getSession, 'Auth session function exists');
   } catch (e) {
     console.error('  FAIL: Auth server config threw:', e);
     failed++;
@@ -49,8 +48,8 @@ async function runTests() {
   // ── Auth Client Config ───────────────────────────────────────────────
 
   try {
-    const { authClient } = await import('../features/auth/auth-client');
-    assert(!!authClient, 'Auth client initialized');
+    const clientModule = await import('../features/auth/auth-client');
+    assert(!!clientModule.supabase, 'Auth client initialized');
   } catch (e) {
     console.error('  FAIL: Auth client threw:', e);
     failed++;

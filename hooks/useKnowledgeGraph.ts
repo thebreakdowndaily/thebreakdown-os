@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { RelatedEntity } from '../utils/types';
+import type { Entity } from '../types/canonical';
 
 export interface GraphNode {
   id: string;
@@ -23,7 +23,7 @@ interface UseKnowledgeGraphResult {
   error: string | null;
 }
 
-export function useKnowledgeGraph(): UseKnowledgeGraphResult {
+export function useKnowledgeGraph(initialEntities: Entity[] = []): UseKnowledgeGraphResult {
   const [nodes, setNodes] = useState<GraphNode[]>([]);
   const [edges, setEdges] = useState<GraphEdge[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,12 +60,12 @@ export function useKnowledgeGraph(): UseKnowledgeGraphResult {
 }
 
 interface UseRelatedEntitiesResult {
-  entities: RelatedEntity[];
+  entities: Entity[];
   loading: boolean;
 }
 
-export function useRelatedEntities(entityId: string, depth: number = 1): UseRelatedEntitiesResult {
-  const [entities, setEntities] = useState<RelatedEntity[]>([]);
+export function useRelatedEntities(entityId: string, depth: number = 1, initialEntities: Entity[] = []): UseRelatedEntitiesResult {
+  const [entities, setEntities] = useState<Entity[]>(initialEntities);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export function useRelatedEntities(entityId: string, depth: number = 1): UseRela
     fetch(`/api/knowledge-graph/related?entityId=${encodeURIComponent(entityId)}&depth=${String(depth)}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch related entities');
-        return res.json() as Promise<{ entities?: RelatedEntity[] }>;
+        return res.json() as Promise<{ entities?: Entity[] }>;
       })
       .then((data) => {
         if (!cancelled) {

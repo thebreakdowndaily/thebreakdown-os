@@ -1,21 +1,33 @@
 import React from 'react';
-import type { GeoData } from '@/utils/types';
+import type { MapSpec } from '@/types/canonical';
+
+export interface GeoRegion {
+  id: string;
+  name: string;
+  value: number;
+  color?: string;
+}
+
+export interface GeoData {
+  type: 'india-map' | 'world-map' | 'state-map';
+  regions: GeoRegion[];
+}
+
 import MapRenderer from '@/components/maps/MapRenderer';
-import type { MapSpec } from '@/utils/types';
 
 interface MapsProps {
   geoData?: GeoData;
 }
 
 /**
- * Convert GeoData (StoryJSON format) to MapSpec (VisualPlan format).
+ * Convert GeoData (Story format) to MapSpec (VisualPlan format).
  * MapRenderer expects MapSpec; Maps.tsx bridges the two data models.
  */
 function geoDataToSpec(data: GeoData): MapSpec {
   // Encode region data as JSON in data.source for MapRenderer to parse
   const encodedRegions = JSON.stringify(data.regions);
 
-  // Map GeoData types to MapSpec types (StoryJSON format → MapRenderer format)
+  // Map GeoData types to MapSpec types (Story format → MapRenderer format)
   const typeMap: Record<string, MapSpec['type']> = {
     'india-map': 'india-state',
     'world-map': 'world-choropleth',
@@ -71,7 +83,7 @@ const Maps: React.FC<MapsProps> = ({ geoData }) => {
         gap: 'var(--spacing-2)',
         marginTop: 'var(--spacing-4)',
       }}>
-        {geoData.regions.map((region) => (
+        {geoData.regions.map((region: GeoRegion) => (
           <div
             key={region.id}
             style={{

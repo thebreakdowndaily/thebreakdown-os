@@ -1,6 +1,6 @@
 import React from 'react';
 import TopicFAQ from '@/components/topic/TopicFAQ';
-import type { FAQItem } from '@/utils/types';
+import type { FAQItem } from '@/types/canonical';
 
 interface EntityFAQProps {
   questions: FAQItem[];

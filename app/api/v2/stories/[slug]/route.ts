@@ -20,8 +20,8 @@ export async function PUT(
 ) {
   try {
     const { slug } = await context.params;
-    const body: any = await request.json();
-    const { data, error } = await (db().from('stories') as any).update(body).eq('slug', slug).select().single();
+    const body = await request.json();
+    const { data, error } = await db().from('stories').update(body as import('@/supabase/schema').Database['public']['Tables']['stories']['Update']).eq('slug', slug).select().single();
     if (error) throw error;
     if (!data) return notFound('Story');
     return ok(data);

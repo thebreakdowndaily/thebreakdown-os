@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { StoryJSON } from '../utils/types';
+import type { Story } from '@/types/canonical';
 
 interface UseStoryResult {
-  story: StoryJSON | null;
+  story: Story | null;
   loading: boolean;
   error: string | null;
 }
 
 export function useStory(slug: string): UseStoryResult {
-  const [story, setStory] = useState<StoryJSON | null>(null);
+  const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ export function useStory(slug: string): UseStoryResult {
     fetch(`/api/story?slug=${encodeURIComponent(slug)}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch story: ${res.statusText}`);
-        return res.json() as Promise<StoryJSON>;
+        return res.json() as Promise<Story>;
       })
       .then((data) => {
         if (!cancelled) {
@@ -57,14 +57,14 @@ interface UseStoriesParams {
 }
 
 interface UseStoriesResult {
-  stories: StoryJSON[];
+  stories: Story[];
   loading: boolean;
   error: string | null;
   total: number;
 }
 
 export function useStories(params: UseStoriesParams = {}): UseStoriesResult {
-  const [stories, setStories] = useState<StoryJSON[]>([]);
+  const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
@@ -83,7 +83,7 @@ export function useStories(params: UseStoriesParams = {}): UseStoriesResult {
     fetch(`/api/stories?${searchParams.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch stories: ${res.statusText}`);
-        return res.json() as Promise<{ stories: StoryJSON[]; total: number }>;
+        return res.json() as Promise<{ stories: Story[]; total: number }>;
       })
       .then((data) => {
         if (!cancelled) {

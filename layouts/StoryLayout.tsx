@@ -1,16 +1,26 @@
 import React from 'react';
 import TableOfContents from '@/components/story/TableOfContents';
 import ReadingProgress from '@/components/story/ReadingProgress';
-import StorySnapshot from '@/components/story/StorySnapshot';
-import type { Story, TOCItem } from '@/types/canonical';
+import { BlockRenderer } from '@/components/story/blocks/registry';
+import type { Story, TOCItem, StoryBlock } from '@/types/canonical';
 
 interface StoryLayoutProps {
   children: React.ReactNode;
   story: Story;
   tableOfContents: TOCItem[];
+  sidebarBlocks?: StoryBlock[];
 }
 
-const StoryLayout: React.FC<StoryLayoutProps> = ({ children, story, tableOfContents }) => (
+function SidebarBlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
+  if (!blocks || blocks.length === 0) return null;
+  return (
+    <div className="flex flex-col gap-6">
+      {blocks.map((block) => <BlockRenderer key={block.id} block={block as any} />)}
+    </div>
+  );
+}
+
+const StoryLayout: React.FC<StoryLayoutProps> = ({ children, story, tableOfContents, sidebarBlocks }) => (
   <>
     <ReadingProgress />
     <main className="flex-1 w-full" role="main">
@@ -31,18 +41,7 @@ const StoryLayout: React.FC<StoryLayoutProps> = ({ children, story, tableOfConte
           {/* Right: Snapshot rail */}
           <aside className="hidden lg:block">
             <div className="sticky top-24">
-              <StorySnapshot
-                status={story.status}
-                category={story.category}
-                location={story.location}
-                stakeholderNames={story.stakeholderNames}
-                impactLevel={story.impactLevel}
-                legislation={story.legislation}
-                costValue={story.costValue}
-                updatedAt={story.updatedAt}
-                evidenceScore={story.evidenceScore}
-                sourceCount={story.sources?.length}
-              />
+              <SidebarBlocksRenderer blocks={sidebarBlocks} />
             </div>
           </aside>
         </div>

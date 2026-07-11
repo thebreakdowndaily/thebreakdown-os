@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { EntityJSON, TimelineEvent } from '../utils/types';
+import type { Entity, TimelineEvent } from '@/types/canonical';
 
 interface UseEntityResult {
-  entity: EntityJSON | null;
+  entity: Entity | null;
   loading: boolean;
   error: string | null;
 }
 
 export function useEntity(slug: string): UseEntityResult {
-  const [entity, setEntity] = useState<EntityJSON | null>(null);
+  const [entity, setEntity] = useState<Entity | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ export function useEntity(slug: string): UseEntityResult {
     fetch(`/api/entity?slug=${encodeURIComponent(slug)}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch entity: ${res.statusText}`);
-        return res.json() as Promise<EntityJSON>;
+        return res.json() as Promise<Entity>;
       })
       .then((data) => {
         if (!cancelled) {

@@ -1,4 +1,4 @@
-import type { ChartSpec } from '@/utils/types';
+import type { ChartSpec } from '@/types/canonical';
 import { Registry } from '@/lib/registry';
 
 export interface D3Theme {

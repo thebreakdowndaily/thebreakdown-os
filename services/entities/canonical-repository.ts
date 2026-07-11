@@ -50,29 +50,29 @@ export class CanonicalEntityService {
   }
 }
 
-function rowToEntity(row: any): Entity {
+function rowToEntity(row: import('@/supabase/client').TypedDatabase['public']['Tables']['entities']['Row']): Entity {
   return {
     id: row.id,
     slug: row.slug,
     name: row.name,
-    type: row.type,
+    type: row.type as EntityKind,
     description: row.description || '',
     aliases: row.aliases || [],
     image: row.image || '',
     storyCount: row.story_count || 0,
     evidenceScore: row.evidence_score || 0,
-    relatedEntityIds: [],
-    relatedStoryIds: [],
-    relatedTopicIds: [],
-    statistics: row.statistics || [],
-    timeline: row.timeline || [],
-    faq: row.faq || [],
+    relatedEntityIds: row.related_entity_ids || [],
+    relatedStoryIds: row.related_story_ids || [],
+    relatedTopicIds: row.related_topic_ids || [],
+    statistics: (row.statistics as import('@/types/canonical').StatItem[]) || [],
+    timeline: (row.timeline as import('@/types/canonical').TimelineEvent[]) || [],
+    faq: (row.faq as import('@/types/canonical').FAQItem[]) || [],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-function rowFromEntity(e: Entity): any {
+function rowFromEntity(e: Entity): import('@/supabase/client').TypedDatabase['public']['Tables']['entities']['Insert'] {
   return {
     id: e.id,
     slug: e.slug,
@@ -83,6 +83,9 @@ function rowFromEntity(e: Entity): any {
     image: e.image,
     story_count: e.storyCount,
     evidence_score: e.evidenceScore,
+    related_entity_ids: e.relatedEntityIds,
+    related_story_ids: e.relatedStoryIds,
+    related_topic_ids: e.relatedTopicIds,
     statistics: e.statistics,
     timeline: e.timeline,
     faq: e.faq,

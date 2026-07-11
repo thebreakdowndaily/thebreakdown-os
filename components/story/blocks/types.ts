@@ -99,6 +99,51 @@ export interface ChapterHeadingData {
   anchorId: string;
 }
 
+export interface HeroBlockData {
+  headline: string;
+  summary: string;
+  heroImage: string;
+  publishedAt: string;
+  updatedAt: string;
+  readingTime: number;
+  author: string;
+  evidenceScore: number;
+  sources: import('@/types/canonical').Source[];
+  tags: string[];
+  category: string;
+  slug: string;
+  versionHistory?: Array<{ date: string; description: string }>;
+}
+
+export interface AuthorBoxBlockData {
+  author: { name: string; avatar?: string; bio?: string; url?: string };
+}
+
+export interface StorySnapshotBlockData {
+  status?: string;
+  category?: string;
+  location?: string;
+  stakeholderNames?: string[];
+  impactLevel?: string;
+  legislation?: string;
+  costValue?: string;
+  updatedAt?: string;
+  evidenceScore?: number;
+  sourceCount?: number;
+}
+
+export interface ConfidenceMeterBlockData {
+  overallScore: number;
+  sourceQuality: number;
+  confirmations: number;
+  dataAvailability: number;
+  verificationStatus: number;
+  totalClaims: number;
+  verified: number;
+  misleading: number;
+  unverifiable: number;
+}
+
 export interface BlockMap {
   'executive-summary': ExecutiveSummaryData;
   'evidence': EvidencePanelData;
@@ -123,6 +168,10 @@ export interface BlockMap {
   };
   'quote': { text: string; attribution?: string };
   'dataset-reference': import('./DatasetReferenceBlock').DatasetReferenceData;
+  'hero': HeroBlockData;
+  'author-box': AuthorBoxBlockData;
+  'story-snapshot': StorySnapshotBlockData;
+  'confidence-meter': ConfidenceMeterBlockData;
 }
 
 export type BlockType = keyof BlockMap;

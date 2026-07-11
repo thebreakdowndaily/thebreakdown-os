@@ -9,7 +9,7 @@ export type { NextRequest } from 'next/server';
 export type Row = Record<string, any>;
 
 export function db() {
-  return getSupabaseClient() as any;
+  return getSupabaseClient();
 }
 
 export function ok<T>(data: T, status = 200) {

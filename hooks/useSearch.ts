@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { SearchResult } from '../utils/types';
+import type { SearchIndexEntry } from '@/types/canonical';
 
 interface UseSearchOptions {
   type?: string;
@@ -10,7 +10,7 @@ interface UseSearchOptions {
 }
 
 interface UseSearchResult {
-  results: SearchResult[];
+  results: SearchIndexEntry[];
   loading: boolean;
   error: string | null;
   total: number;
@@ -20,7 +20,7 @@ interface UseSearchResult {
 const DEBOUNCE_DELAY = 300;
 
 export function useSearch(query: string, options: UseSearchOptions = {}): UseSearchResult {
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<SearchIndexEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
@@ -73,7 +73,7 @@ export function useSearch(query: string, options: UseSearchOptions = {}): UseSea
         .then((res) => {
           if (!res.ok) throw new Error(`Search failed: ${res.statusText}`);
           return res.json() as Promise<{
-            results?: SearchResult[];
+            results: SearchIndexEntry[];
             total?: number;
             totalPages?: number;
           }>;

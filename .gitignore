@@ -7,8 +7,6 @@ out/
 # Build
 dist/
 build/
-.open-next/
-.wrangler/
 .next/
 
 # Environment
@@ -27,3 +25,4 @@ Thumbs.db
 
 # VS Code
 .vscode/
+.vercel

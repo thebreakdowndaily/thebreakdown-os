@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: any = await request.json();
-    const { data, error } = await (db().from('entities') as any).insert(body).select().single();
+    const body = await request.json();
+    const { data, error } = await db().from('entities').insert(body as import('@/supabase/schema').Database['public']['Tables']['entities']['Insert']).select().single();
     if (error) throw error;
     return created(data);
   } catch (e) { return serverError(e); }

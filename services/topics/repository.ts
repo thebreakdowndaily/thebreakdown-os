@@ -66,9 +66,9 @@ function rowToTopic(row: TopicRow): Topic {
     relatedEntityIds: row.related_entity_ids || [],
     featuredStoryIds: row.featured_story_ids || [],
     countries: row.countries || [],
-    faq: (row.faq as any[]) || [],
-    timeline: (row.timeline as any[]) || [],
-    statistics: (row.statistics as any[]) || [],
+    faq: (row.faq as import('@/types/canonical').FAQItem[]) || [],
+    timeline: (row.timeline as import('@/types/canonical').TimelineEvent[]) || [],
+    statistics: (row.statistics as import('@/types/canonical').StatItem[]) || [],
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };

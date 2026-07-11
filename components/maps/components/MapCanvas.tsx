@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { MapSpec } from '@/utils/types';
+import type { MapSpec } from '@/types/canonical';
 import type { MapTheme } from '../config/theme';
 import { mapTypeConfigs, type MapTypeConfig } from '../config/mapTypes';
 import { getProjection } from '../projection/ProjectionRegistry';

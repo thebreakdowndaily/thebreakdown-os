@@ -75,7 +75,7 @@ export class MemorySearchService implements SearchService {
       ...topics.map(t => toEntry(t.id, 'topic', t.name, t.slug, t.description, [], t.overview || '', t.updatedAt)),
       ...entities.map(e => toEntry(e.id, 'entity', e.name, e.slug, e.description, e.aliases, e.statistics.map(s => s.label + ' ' + s.value).join(' '), e.updatedAt)),
       ...timelines.map(t => toEntry(t.id, 'timeline', t.title, '', t.description, [], t.events.map(e => e.title + ' ' + e.description).join(' '), t.updatedAt)),
-      ...fixes.map(f => toEntry(f.id, 'fix', f.title, f.slug, f.problem, [], f.rootCauses.join(' ') + ' ' + f.recommendedActions.map(a => a.action).join(' '), f.updatedAt)),
+      ...fixes.map(f => toEntry(f.id, 'fix', f.headline, f.slug, f.problem.content, [], f.rootCauses.content + ' ' + f.recommendedActions.map(a => a.title).join(' '), f.updatedAt)),
       ...(datasets || []).map(d => toEntry(d.id, 'dataset', d.title, d.slug, d.description, d.tags, d.metrics.map(m => m.label).join(' ') + ' ' + d.methodology, d.updatedAt)),
     ];
     this.index(items);

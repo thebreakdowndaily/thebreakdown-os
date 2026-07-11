@@ -16,6 +16,12 @@ export interface Database {
       dataset_visualizations: DatasetVisualizationRow;
       users: UserRow;
       bookmarks: BookmarkRow;
+      activity_log: ActivityLogRow;
+      index_entries: IndexEntryRow;
+      nodes: GraphNodeRow;
+      edges: GraphEdgeRow;
+      claims: ClaimRow;
+      sources: SourceRow;
     };
   };
 }
@@ -207,6 +213,9 @@ export interface TimelineRow {
     tags: string[];
     created_at: string;
     updated_at: string;
+    story_ids: string[] | null;
+    entity_ids: string[] | null;
+    topic_ids: string[] | null;
   };
   Insert: {
     id?: string;
@@ -217,6 +226,9 @@ export interface TimelineRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    story_ids?: string[] | null;
+    entity_ids?: string[] | null;
+    topic_ids?: string[] | null;
   };
   Update: {
     id?: string;
@@ -227,6 +239,9 @@ export interface TimelineRow {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    story_ids?: string[] | null;
+    entity_ids?: string[] | null;
+    topic_ids?: string[] | null;
   };
 }
 
@@ -691,3 +706,94 @@ export interface BookmarkRow {
     created_at?: string;
   };
 }
+
+export interface ActivityLogRow {
+  Row: {
+    id: string;
+    event_type: string;
+    entity_type: string;
+    entity_id: string;
+    entity_slug: string | null;
+    user_id: string | null;
+    metadata: unknown | null;
+    created_at: string;
+  };
+  Insert: {
+    id?: string;
+    event_type: string;
+    entity_type: string;
+    entity_id: string;
+    entity_slug?: string | null;
+    user_id?: string | null;
+    metadata?: unknown | null;
+    created_at?: string;
+  };
+  Update: {
+    id?: string;
+    event_type?: string;
+    entity_type?: string;
+    entity_id?: string;
+    entity_slug?: string | null;
+    user_id?: string | null;
+    metadata?: unknown | null;
+    created_at?: string;
+  };
+}
+
+export interface GraphNodeRow {
+  Row: { id: string; slug: string; ref_type: string; ref_id: string; [key: string]: unknown };
+  Insert: { id?: string; slug?: string; ref_type?: string; ref_id?: string; [key: string]: unknown };
+  Update: { id?: string; slug?: string; ref_type?: string; ref_id?: string; [key: string]: unknown };
+}
+export interface GraphEdgeRow {
+  Row: { source_id: string; target_id: string; relation: string; [key: string]: unknown };
+  Insert: { source_id?: string; target_id?: string; relation?: string; [key: string]: unknown };
+  Update: { source_id?: string; target_id?: string; relation?: string; [key: string]: unknown };
+}
+export interface ClaimRow {
+  Row: { id: string; status: string; confidence: number; [key: string]: unknown };
+  Insert: { id?: string; status?: string; confidence?: number; [key: string]: unknown };
+  Update: { id?: string; status?: string; confidence?: number; [key: string]: unknown };
+}
+export interface SourceRow {
+  Row: { id: string; tier: string; title: string; [key: string]: unknown };
+  Insert: { id?: string; tier?: string; title?: string; [key: string]: unknown };
+  Update: { id?: string; tier?: string; title?: string; [key: string]: unknown };
+}
+
+export interface IndexEntryRow {
+  Row: {
+    ref_id: string;
+    ref_type: string;
+    ref_slug: string;
+    title: string;
+    description: string | null;
+    content: string | null;
+    tags: string[] | null;
+    score: number | null;
+    updated_at: string;
+  };
+  Insert: {
+    ref_id: string;
+    ref_type: string;
+    ref_slug: string;
+    title: string;
+    description?: string | null;
+    content?: string | null;
+    tags?: string[] | null;
+    score?: number | null;
+    updated_at?: string;
+  };
+  Update: {
+    ref_id?: string;
+    ref_type?: string;
+    ref_slug?: string;
+    title?: string;
+    description?: string | null;
+    content?: string | null;
+    tags?: string[] | null;
+    score?: number | null;
+    updated_at?: string;
+  };
+}
+

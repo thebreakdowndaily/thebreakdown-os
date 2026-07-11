@@ -4,14 +4,14 @@ import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 import FixLayout from '@/layouts/FixLayout';
 import FixRenderer from '@/components/fix/FixRenderer';
-import type { FixJSON, ExistingSolution } from '@/utils/types';
+import type { Fix, ExistingSolution } from '@/types/canonical';
 
 export function generateStaticParams() {
   const services = bootstrapServices();
   return services.fixes.getFixes({ pageSize: 100 }).data.map((f) => ({ slug: f.slug }));
 }
 
-function toFixJSON(fix: Record<string, unknown>): FixJSON {
+function toFixJSON(fix: Record<string, unknown>): Fix {
   const raw = (fix._raw || fix) as Record<string, unknown>;
   return {
     id: raw.id as string,
@@ -23,14 +23,14 @@ function toFixJSON(fix: Record<string, unknown>): FixJSON {
     publishedAt: raw.publishedAt as string,
     updatedAt: raw.updatedAt as string,
     readingTime: raw.readingTime as number,
-    author: raw.author as FixJSON['author'],
+    author: raw.author as Fix['author'],
     evidenceScore: raw.evidenceScore as number,
     tags: (raw.tags || []) as string[],
-    problem: raw.problem as FixJSON['problem'],
-    whoIsAffected: raw.whoIsAffected as FixJSON['whoIsAffected'],
-    rootCauses: raw.rootCauses as FixJSON['rootCauses'],
-    evidence: raw.evidence as FixJSON['evidence'],
-    stakeholders: raw.stakeholders as FixJSON['stakeholders'],
+    problem: raw.problem as Fix['problem'],
+    whoIsAffected: raw.whoIsAffected as Fix['whoIsAffected'],
+    rootCauses: raw.rootCauses as Fix['rootCauses'],
+    evidence: raw.evidence as Fix['evidence'],
+    stakeholders: raw.stakeholders as Fix['stakeholders'],
     existingSolutions: ((raw.existingSolutions || []) as Array<Record<string, unknown>>).map((s): ExistingSolution => ({
       name: s.name as string,
       description: s.description as string,
@@ -38,14 +38,14 @@ function toFixJSON(fix: Record<string, unknown>): FixJSON {
       effectiveness: s.effectiveness as ExistingSolution['effectiveness'],
       source: s.source as string | undefined,
     })),
-    globalExamples: raw.globalExamples as FixJSON['globalExamples'],
-    recommendedActions: raw.recommendedActions as FixJSON['recommendedActions'],
-    citizenActions: raw.citizenActions as FixJSON['citizenActions'],
-    governmentActions: raw.governmentActions as FixJSON['governmentActions'],
-    metricsToTrack: raw.metricsToTrack as FixJSON['metricsToTrack'],
-    relatedStories: raw.relatedStories as FixJSON['relatedStories'],
-    relatedEntities: raw.relatedEntities as FixJSON['relatedEntities'],
-    sources: (raw.sources || []) as FixJSON['sources'],
+    globalExamples: raw.globalExamples as Fix['globalExamples'],
+    recommendedActions: raw.recommendedActions as Fix['recommendedActions'],
+    citizenActions: raw.citizenActions as Fix['citizenActions'],
+    governmentActions: raw.governmentActions as Fix['governmentActions'],
+    metricsToTrack: raw.metricsToTrack as Fix['metricsToTrack'],
+    relatedStories: raw.relatedStories as Fix['relatedStories'],
+    relatedEntities: raw.relatedEntities as Fix['relatedEntities'],
+    sources: (raw.sources || []) as Fix['sources'],
   };
 }
 
@@ -108,49 +108,7 @@ export default async function FixPage({ params }: { params: Promise<{ slug: stri
           { label: headline, href: `/fix/${fix.slug}` },
         ]}
       >
-        <FixRenderer
-          fix={fixJSON}
-          pageSpec={{
-            type: 'fix',
-            slug: fix.slug,
-            template: 'fix',
-            layout: 'fix-layout',
-            sections: [
-              { id: 'fix-header', component: 'FixHeader', props: { fix: fixJSON } },
-              { id: 'fix-problem', component: 'FixProblem', props: { section: fixJSON.problem } },
-              { id: 'fix-affected', component: 'FixAffected', props: { section: fixJSON.whoIsAffected } },
-              { id: 'fix-root-causes', component: 'FixRootCauses', props: { section: fixJSON.rootCauses } },
-              { id: 'fix-evidence', component: 'FixEvidence', props: { section: fixJSON.evidence } },
-              { id: 'fix-stakeholders', component: 'FixStakeholders', props: { stakeholders: fixJSON.stakeholders } },
-              { id: 'fix-existing-solutions', component: 'FixExistingSolutions', props: { solutions: fixJSON.existingSolutions } },
-              { id: 'fix-global-examples', component: 'FixGlobalExamples', props: { examples: fixJSON.globalExamples } },
-              { id: 'fix-recommended-actions', component: 'FixRecommendedActions', props: { actions: fixJSON.recommendedActions } },
-              { id: 'fix-citizen-actions', component: 'FixCitizenActions', props: { actions: fixJSON.citizenActions } },
-              { id: 'fix-government-actions', component: 'FixGovernmentActions', props: { actions: fixJSON.governmentActions } },
-              { id: 'fix-metrics', component: 'FixMetrics', props: { metrics: fixJSON.metricsToTrack } },
-            ],
-            seo: {
-              title: `${headline} — The Breakdown Fix`,
-              description: summary.slice(0, 160),
-              canonical: `https://thebreakdown.in/fix/${fix.slug}`,
-              ogType: 'article',
-              ogPublishDate: f.publishedAt as string,
-              keywords: tags.join(', '),
-            },
-            breadcrumbs: [
-              { label: 'Home', href: '/' },
-              { label: 'The Fix', href: '/fix' },
-              { label: headline, href: `/fix/${fix.slug}` },
-            ],
-            schema: [],
-            metadata: {
-              storySlug: f.storySlug as string,
-              evidenceScore: fixJSON.evidenceScore,
-              readingTime: fixJSON.readingTime,
-              frameworkSections: 11,
-            },
-          }}
-        />
+        <FixRenderer fix={fixJSON} />
       </FixLayout>
     </>
   );

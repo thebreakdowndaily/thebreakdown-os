@@ -1,8 +1,8 @@
 import React from 'react';
-import type { RelatedStory } from '@/utils/types';
+import type { Story } from '@/types/canonical';
 
 interface RelatedStoriesProps {
-  stories: RelatedStory[];
+  stories: Story[];
 }
 
 const categoryColors: Record<string, string> = {
@@ -43,7 +43,7 @@ export default function RelatedStories({ stories }: RelatedStoriesProps) {
                   <time className="text-xs text-[#A1A1AA]">
                     {new Date(story.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short' })}
                   </time>
-                  <span className="text-xs font-medium text-[#22C55E]">{story.evidenceScore}%</span>
+                  <span className="font-medium text-slate-800 dark:text-slate-200">{story.evidenceScore}%</span>
                 </div>
               </a>
             </article>

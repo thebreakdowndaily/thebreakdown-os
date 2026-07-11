@@ -5,7 +5,7 @@
 [![Build](https://github.com/thebreakdowndaily/thebreakdown-os/actions/workflows/deploy.yml/badge.svg)](https://github.com/thebreakdowndaily/thebreakdown-os/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org)
-[![Deployed on Cloudflare](https://img.shields.io/badge/deployed-Cloudflare%20Pages-orange)](https://thebreakdown.in)
+[![Deployed on Vercel](https://img.shields.io/badge/deployed-Vercel-black)](https://thebreakdown.in)
 
 ---
 
@@ -36,8 +36,8 @@ The Breakdown OS transforms raw information into structured, interconnected know
 | Framework | [Next.js 15.5](https://nextjs.org) — App Router, React Server Components |
 | Language | TypeScript (strict) |
 | Styling | Tailwind CSS + design tokens |
-| Deployment | Cloudflare Pages (fully static) |
-| CI/CD | GitHub Actions → `wrangler pages deploy` |
+| Deployment | Vercel (Next.js SSR) |
+| CDN / Edge | Cloudflare Edge (Security & Caching) |
 | Analytics | Sentry (edge + server) |
 | Search | In-memory scored full-text index |
 | Graph | SVG force-directed — zero runtime dependencies |
@@ -139,12 +139,13 @@ npm run dev
 npm run build
 ```
 
-### Deploy (Cloudflare Pages)
+### Deploy (Vercel)
+
+The project is natively deployed on Vercel. Pushing to the `main` branch will automatically trigger a deployment.
+Alternatively, deploy manually via the Vercel CLI:
 
 ```bash
-# Static extraction + deploy
-pwsh scripts/deploy-static.ps1
-wrangler pages deploy dist-static --project-name thebreakdown
+vercel deploy --prod
 ```
 
 ---

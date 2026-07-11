@@ -19,7 +19,7 @@ export class MemoryFixService implements FixService {
     let list = Array.from(this.fixes.values());
     if (params?.search) {
       const q = params.search.toLowerCase();
-      list = list.filter(f => f.title.toLowerCase().includes(q) || f.problem.toLowerCase().includes(q));
+      list = list.filter(f => f.headline.toLowerCase().includes(q) || f.problem.content.toLowerCase().includes(q));
     }
     const total = list.length;
     if (params?.page && params?.pageSize) {

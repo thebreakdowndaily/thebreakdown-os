@@ -10,16 +10,15 @@ export async function GET(request: NextRequest) {
 
     if (!nodeSlug) {
       // Return full graph (limited)
-      const { data: nodes, error: nodeErr } = await (db().from('nodes') as any).select('*').limit(100);
+      const { data: nodes, error: nodeErr } = await db().from('nodes').select('*').limit(100);
       if (nodeErr) throw nodeErr;
-      const { data: edges, error: edgeErr } = await (db().from('edges') as any).select('*').limit(200);
+      const { data: edges, error: edgeErr } = await db().from('edges').select('*').limit(200);
       if (edgeErr) throw edgeErr;
       return ok({ nodes: nodes || [], edges: edges || [] });
     }
 
     // BFS traversal from a specific node
-    const { data: startNodes } = await (db()
-      .from('nodes') as any)
+    const { data: startNodes } = await db().from('nodes')
       .select('id, ref_type, ref_id')
       .eq('slug', nodeSlug);
 
@@ -29,8 +28,8 @@ export async function GET(request: NextRequest) {
 
     const startId = startNodes[0].id;
     const visited = new Set<string>();
-    const resultNodes: any[] = [];
-    const resultEdges: any[] = [];
+    const resultNodes: import('@/supabase/schema').Database['public']['Tables']['nodes']['Row'][] = [];
+    const resultEdges: import('@/supabase/schema').Database['public']['Tables']['edges']['Row'][] = [];
     let queue = [{ id: startId, level: 0 }];
 
     while (queue.length > 0) {
@@ -38,11 +37,11 @@ export async function GET(request: NextRequest) {
       if (visited.has(currentId)) continue;
       visited.add(currentId);
 
-      const { data: node } = await (db().from('nodes') as any).select('*').eq('id', currentId).single();
+      const { data: node } = await db().from('nodes').select('*').eq('id', currentId).single();
       if (node) resultNodes.push(node);
 
       if (level < depth) {
-        let edgeQuery = (db().from('edges') as any).select('*').or(`source_id.eq.${currentId},target_id.eq.${currentId}`);
+        let edgeQuery = db().from('edges').select('*').or(`source_id.eq.${currentId},target_id.eq.${currentId}`);
         if (relation) edgeQuery = edgeQuery.eq('relation', relation);
 
         const { data: edges } = await edgeQuery;

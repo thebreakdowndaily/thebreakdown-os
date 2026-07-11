@@ -1,8 +1,8 @@
 import React from 'react';
-import type { PrimarySource } from '@/utils/types';
+import type { Source } from '@/types/canonical';
 
 interface EntitySourcesProps {
-  sources: PrimarySource[];
+  sources: Source[];
 }
 
 const typeColors: Record<string, string> = {
@@ -21,16 +21,16 @@ export default function EntitySources({ sources }: EntitySourcesProps) {
       <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F5] mb-5">Sources</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {sources.map((source, i) => {
-          const tc = typeColors[source.type] || typeColors.default;
+          const tc = typeColors[source.tier] || typeColors.default;
           return (
             <article key={i} className="bg-[#151515] border border-[#2A2A2A] rounded-xl p-5 hover:border-[#D4A843]/50 transition-colors">
               <div className="flex items-start justify-between gap-3 mb-2">
-                <h3 className="text-sm font-semibold text-[#F5F5F5]">{source.name}</h3>
+                <h3 className="text-sm font-semibold text-[#F5F5F5]">{source.title}</h3>
                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border flex-shrink-0 ${tc}`}>
-                  {source.type}
+                  {source.tier}
                 </span>
               </div>
-              <p className="text-xs text-[#A1A1AA] leading-relaxed mb-3">{source.description}</p>
+              <p className="text-xs text-[#A1A1AA] leading-relaxed mb-3">{source.accessedAt}</p>
               <a
                 href={source.url}
                 target="_blank"

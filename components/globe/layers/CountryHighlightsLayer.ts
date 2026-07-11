@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { GlobeLayerStrategy } from '../registries/GlobeLayerRegistry';
-import type { GlobeSpec } from '@/utils/types';
+import type { GlobeSpec } from '@/types/canonical';
 import type { GlobeTheme } from '../hooks/useGlobeTheme';
 
 export const CountryHighlightsLayer: GlobeLayerStrategy = {

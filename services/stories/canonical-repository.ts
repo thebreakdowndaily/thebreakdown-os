@@ -38,51 +38,47 @@ export class CanonicalStoryService {
   }
 }
 
-function rowToStory(row: any): Story {
+function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Tables']['stories']['Row']): Story {
   return {
     id: row.id,
     slug: row.slug,
     title: row.title,
-    headline: row.headline || row.title,
+    headline: row.title,
     summary: row.summary || '',
     heroImage: row.hero_image || '',
-    author: row.author || '',
+    author: row.author_id || '',
     category: row.category || '',
-    status: row.status || 'draft',
-    evidenceScore: row.evidence_score || 0,
-    readingTime: row.reading_time || 0,
+    status: (row.status as import('@/types/canonical').StoryStatus) || 'draft',
+    evidenceScore: 0,
+    readingTime: 0,
     publishedAt: row.published_at || '',
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     tags: row.tags || [],
-    blocks: row.blocks || [],
+    blocks: [],
     sources: [],
     claims: [],
     timeline: [],
-    faq: row.faq || [],
+    faq: [],
     charts: [],
-    relatedStoryIds: [],
-    relatedEntityIds: [],
-    relatedTopicIds: [],
+    relatedStoryIds: row.related_story_ids || [],
+    relatedEntityIds: row.related_entity_ids || [],
+    relatedTopicIds: row.related_topic_ids || [],
   };
 }
 
-function rowFromStory(s: Story): any {
+function rowFromStory(s: Story): import('@/supabase/client').TypedDatabase['public']['Tables']['stories']['Insert'] {
   return {
     id: s.id,
     slug: s.slug,
     title: s.title,
-    headline: s.headline,
     summary: s.summary,
+    content: s.blocks,
     hero_image: s.heroImage,
-    author: s.author,
+    author_id: s.author,
     category: s.category,
     status: s.status,
-    evidence_score: s.evidenceScore,
-    reading_time: s.readingTime,
     tags: s.tags,
-    blocks: s.blocks,
-    faq: s.faq,
     published_at: s.publishedAt,
     updated_at: new Date().toISOString(),
   };

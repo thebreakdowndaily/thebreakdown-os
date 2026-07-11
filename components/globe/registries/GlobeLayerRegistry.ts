@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Registry } from '@/lib/registry';
-import type { GlobeSpec } from '@/utils/types';
+import type { GlobeSpec } from '@/types/canonical';
 import type { GlobeTheme } from '../hooks/useGlobeTheme';
 import { CountryHighlightsLayer } from '../layers/CountryHighlightsLayer';
 import { TradeRoutesLayer } from '../layers/TradeRoutesLayer';

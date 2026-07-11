@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Dataset } from '@/utils/types';
+import type { Dataset } from '@/types/canonical';
 import ChartBlock from '@/components/story/blocks/ChartBlock';
 
 interface EntityStatisticsProps {
@@ -31,18 +31,20 @@ export default function EntityStatistics({ statistics, datasets }: EntityStatist
         <div className="space-y-6">
           {datasets.map((dataset, i) => (
             <div key={i} className="bg-[#151515] border border-[#2A2A2A] rounded-xl p-5">
-              <h3 className="text-base font-semibold text-[#F5F5F5] mb-1">{dataset.label}</h3>
+              <h3 className="text-base font-semibold text-[#F5F5F5] mb-1">{dataset.title}</h3>
               {dataset.description && (
                 <p className="text-sm text-[#A1A1AA] mb-4">{dataset.description}</p>
               )}
-              <ChartBlock
-                chartId={`entity-chart-${i}`}
-                type="line"
-                title={dataset.label}
-                data={dataset.data as Array<Record<string, unknown>>}
-                xKey={Object.keys(dataset.data[0] || {})[0] || 'year'}
-                yKey={Object.keys(dataset.data[0] || {})[1] || 'value'}
-              />
+              {dataset.visualizations?.[0] && (
+                <ChartBlock
+                  chartId={`entity-chart-${i}`}
+                  type={dataset.visualizations[0].type as any}
+                  title={dataset.visualizations[0].title}
+                  data={dataset.visualizations[0].config?.data as Array<Record<string, unknown>> || []}
+                  xKey={(dataset.visualizations[0].config?.xAxis as string) || 'year'}
+                  yKey={(dataset.visualizations[0].config?.yAxis as string) || 'value'}
+                />
+              )}
               {dataset.source && (
                 <p className="text-xs text-[#A1A1AA] mt-3">Source: {dataset.source}</p>
               )}

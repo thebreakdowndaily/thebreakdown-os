@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { RelatedStory } from '../utils/types';
+import type { Story } from '../types/canonical';
 
 interface UseRelatedStoriesResult {
-  stories: RelatedStory[];
+  stories: Story[];
   loading: boolean;
   error: string | null;
 }
 
 export function useRelatedStories(storyId: string, limit?: number): UseRelatedStoriesResult {
-  const [stories, setStories] = useState<RelatedStory[]>([]);
+  const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ export function useRelatedStories(storyId: string, limit?: number): UseRelatedSt
     fetch(`/api/stories/related?${searchParams.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch related stories');
-        return res.json() as Promise<{ stories?: RelatedStory[] }>;
+        return res.json() as Promise<{ stories?: Story[] }>;
       })
       .then((data) => {
         if (!cancelled) {
@@ -54,12 +54,12 @@ export function useRelatedStories(storyId: string, limit?: number): UseRelatedSt
 }
 
 interface UseEntityStoriesResult {
-  stories: RelatedStory[];
+  stories: Story[];
   loading: boolean;
 }
 
 export function useEntityStories(entitySlug: string, limit?: number): UseEntityStoriesResult {
-  const [stories, setStories] = useState<RelatedStory[]>([]);
+  const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export function useEntityStories(entitySlug: string, limit?: number): UseEntityS
     fetch(`/api/entity/stories?${searchParams.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch entity stories');
-        return res.json() as Promise<{ stories?: RelatedStory[] }>;
+        return res.json() as Promise<{ stories?: Story[] }>;
       })
       .then((data) => {
         if (!cancelled) {

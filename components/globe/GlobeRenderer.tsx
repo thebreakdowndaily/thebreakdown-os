@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import type { GlobeSpec } from '@/utils/types';
+import type { GlobeSpec } from '@/types/canonical';
 
 /**
  * THE BREAKDOWN — GlobeRenderer

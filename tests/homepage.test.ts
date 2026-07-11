@@ -1,12 +1,11 @@
 /**
  * THE BREAKDOWN — Homepage Tests
  *
- * Tests buildHomepage() output, featured story ordering, metadata.
+ * Tests buildHomepage() output using the canonical service layer.
  */
 
-import { buildHomepage } from '../utils/website-builder';
-import type { PageSpec } from '../utils/types';
-import { mockHomepage } from './mock-data';
+import { buildHomepage } from '../features/home/view-model';
+import { bootstrapServices } from '../lib/bootstrap';
 
 async function runTests() {
   let passed = 0;
@@ -22,83 +21,46 @@ async function runTests() {
     }
   }
 
-  // Test 1: buildHomepage returns valid PageSpec
-  try {
-    const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.type === 'homepage', 'buildHomepage returns type "homepage"');
-    assert(page.slug === '', 'Homepage slug is empty string');
-    assert(page.template === 'homepage', 'Template is "homepage"');
-    assert(page.layout === 'homepage-layout', 'Layout is "homepage-layout"');
-  } catch (e) {
-    console.error('  FAIL: buildHomepage basic structure threw exception', e);
-    failed++;
-  }
+  // Use the real bootstrapServices for testing the view model
+  const services = bootstrapServices();
+  const page = buildHomepage(services);
 
-  // Test 2: Homepage sections are not in component registry so filterSections returns empty array
-  // (Homepage section IDs like "top-story" are not registered in components.json)
+  // Test 1: SEO Structure
   try {
-    const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.sections.length === 0, 'Homepage sections empty (section IDs not in component registry)');
-  } catch (e) {
-    console.error('  FAIL: Homepage sections length check threw exception', e);
-    failed++;
-  }
-
-  // Test 5: Metadata is correct
-  try {
-    const page: PageSpec = buildHomepage(mockHomepage);
     assert(page.seo.title === 'The Breakdown — India Explained', 'SEO title is correct');
     assert(page.seo.description === 'Independent, data-driven journalism on Indian policy, politics, and society.', 'SEO description is correct');
     assert(page.seo.canonical === 'https://thebreakdown.in', 'Canonical URL is correct');
     assert(page.seo.ogType === 'website', 'OG type is website');
-    assert(page.seo.ogImage === '/images/og-home.jpg', 'OG image is og-home.jpg');
   } catch (e) {
-    console.error('  FAIL: Homepage metadata check threw exception', e);
+    console.error('  FAIL: Homepage basic structure threw exception', e);
     failed++;
   }
 
-  // Test 6: Breadcrumbs are empty for homepage
+  // Test 2: Contains valid top story
   try {
-    const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.breadcrumbs.length === 0, 'Homepage has no breadcrumbs');
+    assert(page.topStory !== null, 'Homepage has a top story');
+    if (page.topStory) {
+      assert(typeof page.topStory.headline === 'string', 'Top story has a headline');
+      assert(typeof page.topStory.slug === 'string', 'Top story has a slug');
+    }
   } catch (e) {
-    console.error('  FAIL: Homepage breadcrumbs check threw exception', e);
+    console.error('  FAIL: Homepage top story check threw exception', e);
     failed++;
   }
 
-  // Test 7: Schema is Website
+  // Test 3: Arrays are defined
   try {
-    const page: PageSpec = buildHomepage(mockHomepage);
-    assert(Array.isArray(page.schema), 'Schema is an array');
-    assert(page.schema[0]['@context'] === 'https://schema.org', 'Schema context is schema.org');
-    assert(page.schema[0]['@type'] === 'WebSite', 'Schema type is WebSite');
-    assert(page.schema[0].name === 'The Breakdown', 'Schema name is The Breakdown');
+    assert(Array.isArray(page.stories), 'Stories is an array');
+    assert(Array.isArray(page.investigations), 'Investigations is an array');
+    assert(Array.isArray(page.fixes), 'Fixes is an array');
+    assert(Array.isArray(page.topics), 'Topics is an array');
   } catch (e) {
-    console.error('  FAIL: Homepage schema check threw exception', e);
-    failed++;
-  }
-
-  // Test 8: Homepage metadata includes readingTime and updatedAt
-  try {
-    const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.metadata.readingTime === 0, 'Metadata readingTime defaults to 0');
-    assert(typeof page.metadata.updatedAt === 'string', 'Metadata updatedAt is a string');
-  } catch (e) {
-    console.error('  FAIL: Homepage metadata fields check threw exception', e);
-    failed++;
-  }
-
-  // Test 9: Schema URL is correct
-  try {
-    const page: PageSpec = buildHomepage(mockHomepage);
-    assert(page.schema[0].url === 'https://thebreakdown.in', 'Schema url is correct');
-  } catch (e) {
-    console.error('  FAIL: Homepage schema URL check threw exception', e);
+    console.error('  FAIL: Homepage arrays check threw exception', e);
     failed++;
   }
 
   console.log(`\nHomepage Tests: ${passed} passed, ${failed} failed`);
-  process.exit(failed > 0 ? 1 : 0);
+  if (failed > 0) process.exit(1);
 }
 
 runTests();

@@ -6,28 +6,14 @@ import { buildStoryPage } from '@/features/story/view-model';
 import type { Story, StoryBlock } from '@/types/canonical';
 import StoryLayout from '@/layouts/StoryLayout';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
-import Hero from '@/components/story/Hero';
 import { BlockRenderer } from '@/components/story/blocks/registry';
-import AuthorBox from '@/components/story/AuthorBox';
-import ExecutiveSummary from '@/components/story/ExecutiveSummary';
-import Timeline from '@/components/story/Timeline';
-import Evidence from '@/components/story/Evidence';
 import SourcesList from '@/components/story/SourcesList';
-import StorySnapshot from '@/components/story/StorySnapshot';
 import KnowledgeLayer from '@/components/story/KnowledgeLayer';
 import NextExploration from '@/components/story/NextExploration';
-import ConfidenceMeter from '@/components/story/ConfidenceMeter';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
   return blocks.map((block) => <BlockRenderer key={block.id} block={block as any} />);
-}
-
-function deriveKeyPoints(story: Story): string[] {
-  if (story.claims && story.claims.length >= 3) {
-    return story.claims.slice(0, 4).map(c => c.claim);
-  }
-  return [];
 }
 
 function createJsonLd(story: Story): Record<string, unknown>[] {
@@ -183,13 +169,20 @@ export default async function StoryPage({
   if (!vm) notFound();
   const { story, relatedStories, relatedEntities } = vm;
 
-  const verified = story.claims?.filter(c => c.status === 'verified' || c.status === 'strong').length || 0;
-  const misleading = story.claims?.filter(c => c.status === 'moderate').length || 0;
-  const unverifiable = story.claims?.filter(c => c.status === 'unverified').length || 0;
-  const totalClaims = story.claims?.length || 0;
-  const t1t2 = story.sources?.filter(s => s.tier <= 2).length || 0;
-  const sourceQuality = story.sources?.length > 0 ? Math.round((t1t2 / story.sources.length) * 100) : 0;
-  const verificationStatus = totalClaims > 0 ? Math.round((verified / totalClaims) * 100) : 0;
+  const heroBlocks = story.blocks?.filter(b => b.region === 'hero') || [];
+  const footerBlocks = story.blocks?.filter(b => b.region === 'footer') || [];
+  let mainBlocks = story.blocks?.filter(b => !b.region || b.region === 'main') || [];
+  let sidebarBlocks = story.blocks?.filter(b => b.region === 'sidebar') || [];
+
+  if (mode === 'data') {
+    mainBlocks = story.blocks?.filter(b => b.type === 'chart' || b.type === 'key-numbers' || b.type === 'dataset-reference') || [];
+    sidebarBlocks = [];
+  } else if (mode === 'timeline') {
+    mainBlocks = story.blocks?.filter(b => b.type === 'timeline') || [];
+    sidebarBlocks = [];
+  } else if (mode === 'quick') {
+    mainBlocks = mainBlocks.filter(b => b.type === 'executive-summary' || b.type === 'key-numbers');
+  }
 
   return (
     <>
@@ -200,81 +193,23 @@ export default async function StoryPage({
       ))}
 
       <Breadcrumbs items={vm.breadcrumbs} />
-      <Hero story={story} />
+      <BlocksRenderer blocks={heroBlocks} />
 
-      <StoryLayout story={story} tableOfContents={vm.tableOfContents}>
-        {mode !== 'timeline' && mode !== 'data' && (
-          <>
-            <ExecutiveSummary
-              summary={story.summary}
-              keyPoints={deriveKeyPoints(story)}
-              takeaway={story.takeaway}
-              whoIsAffected={story.whoIsAffected}
-              impactLevel={story.impactLevel}
-            />
-            {/* Mobile Story Snapshot (hidden on large screens) */}
-            <div className="lg:hidden mt-8 mb-8">
-              <StorySnapshot
-                status={story.status}
-                category={story.category}
-                location={story.location}
-                stakeholderNames={story.stakeholderNames}
-                impactLevel={story.impactLevel}
-                legislation={story.legislation}
-                costValue={story.costValue}
-                updatedAt={story.updatedAt}
-                evidenceScore={story.evidenceScore}
-                sourceCount={story.sources?.length}
-              />
-            </div>
-          </>
-        )}
-        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
-          <BlocksRenderer blocks={story.blocks} />
-        )}
+      <StoryLayout story={story} tableOfContents={vm.tableOfContents} sidebarBlocks={sidebarBlocks}>
+        {/* Mobile Sidebar/Snapshot (hidden on large screens) */}
+        <div className="lg:hidden mt-8 mb-8">
+          <BlocksRenderer blocks={sidebarBlocks} />
+        </div>
         
-        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
-          <div className="mt-12 mb-8 border-t border-[#2A2A2A] pt-10">
-            <h2 className="text-xl font-bold text-text-primary mb-6">Evidence & Confidence Summary</h2>
-            <ConfidenceMeter
-              overallScore={story.evidenceScore}
-              sourceQuality={sourceQuality}
-              confirmations={80}
-              dataAvailability={70}
-              verificationStatus={verificationStatus}
-              totalClaims={totalClaims}
-              verified={verified}
-              misleading={misleading}
-              unverifiable={unverifiable}
-            />
-          </div>
-        )}
-        {mode === 'data' && (
-          <BlocksRenderer blocks={story.blocks.filter(b => b.type === 'chart' || b.type === 'key-numbers' || b.type === 'dataset-reference')} />
-        )}
-        {(mode === 'deep' || mode === 'timeline') && (
-          <Timeline events={story.timeline} />
-        )}
-        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
-          <Evidence 
-            claims={story.claims?.map(c => ({
-              claim: c.claim,
-              source: c.source,
-              verification: c.status === 'verified' || c.status === 'strong' ? 'true' : c.status === 'moderate' ? 'misleading' : 'unverifiable',
-              explanation: c.data,
-              confidence: c.confidence
-            })) || []} 
-            sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} 
-            verificationScore={story.evidenceScore} 
-          />
-        )}
+        <BlocksRenderer blocks={mainBlocks} />
+
         {mode === 'deep' && (
           <SourcesList sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} />
         )}
       </StoryLayout>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <AuthorBox author={{ name: story.author }} />
+        <BlocksRenderer blocks={footerBlocks} />
       </div>
 
       <KnowledgeLayer story={story} relatedEntities={relatedEntities} />

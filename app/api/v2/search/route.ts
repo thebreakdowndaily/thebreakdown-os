@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       return list([], 0, page, pageSize);
     }
 
-    let query = (db().from('index_entries') as any).select('*', { count: 'exact' });
+    let query = db().from('index_entries').select('*', { count: 'exact' });
 
     const tsq = q.split(/\s+/).filter(Boolean).join(' & ');
     if (tsq) {

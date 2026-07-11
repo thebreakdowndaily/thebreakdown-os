@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import ListenButton from './ListenButton';
 import SaveButton from './SaveButton';
@@ -8,7 +9,7 @@ interface ActionBarProps {
   slug: string;
 }
 
-export default function ActionBar({ slug }: ActionBarProps) {
+function ActionBarContent({ slug }: ActionBarProps) {
   const url = `https://thebreakdown.in/story/${slug}`;
   const router = useRouter();
   const pathname = usePathname();
@@ -74,5 +75,13 @@ export default function ActionBar({ slug }: ActionBarProps) {
         </select>
       </div>
     </div>
+  );
+}
+
+export default function ActionBar({ slug }: ActionBarProps) {
+  return (
+    <Suspense fallback={<div className="h-8" />}>
+      <ActionBarContent slug={slug} />
+    </Suspense>
   );
 }

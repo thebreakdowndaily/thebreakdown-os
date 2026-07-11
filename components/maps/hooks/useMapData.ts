@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { MapSpec } from '@/utils/types';
+import type { MapSpec } from '@/types/canonical';
 import type { RegionData } from '../config/theme';
 
 export function useMapData(mapData: MapSpec['data']) {

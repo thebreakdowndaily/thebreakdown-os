@@ -37,27 +37,31 @@ export class CanonicalTimelineService {
   }
 }
 
-function rowToTimeline(row: any): Timeline {
+function rowToTimeline(row: import('@/supabase/client').TypedDatabase['public']['Tables']['timelines']['Row']): Timeline {
   return {
     id: row.id,
     title: row.title,
     description: row.description || '',
     category: row.category || '',
-    storyIds: [],
-    entityIds: [],
-    topicIds: [],
-    events: row.events || [],
+    storyIds: row.story_ids || [],
+    entityIds: row.entity_ids || [],
+    topicIds: row.topic_ids || [],
+    events: (row.events as import('@/types/canonical').TimelineEvent[]) || [],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-function rowFromTimeline(t: Timeline): any {
+function rowFromTimeline(t: Timeline): import('@/supabase/client').TypedDatabase['public']['Tables']['timelines']['Insert'] {
   return {
     id: t.id,
     title: t.title,
     description: t.description,
     category: t.category,
+    tags: [],
+    story_ids: t.storyIds,
+    entity_ids: t.entityIds,
+    topic_ids: t.topicIds,
     events: t.events,
     updated_at: new Date().toISOString(),
   };

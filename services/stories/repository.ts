@@ -61,7 +61,7 @@ export class SupabaseStoryRepository implements StoryRepository {
 }
 
 function rowToStory(row: StoryRow): Story {
-  const content = row.content as { blocks?: any[] } | null;
+  const content = row.content as { blocks?: import('@/types/canonical').StoryBlock[] } | null;
   return {
     id: row.id, slug: row.slug, title: row.title, headline: row.title, summary: row.summary,
     heroImage: row.hero_image || '', author: row.author_id || '', category: row.category || '',

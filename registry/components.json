@@ -93,7 +93,7 @@
     "path": "components/story/RelatedStories.tsx",
     "description": "Related stories from the knowledge graph",
     "required": true,
-    "props": ["stories"]
+    "props": ["stories", "relatedStories"]
   },
   {
     "id": "related-entities",

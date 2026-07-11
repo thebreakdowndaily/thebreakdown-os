@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
     const status = searchParams.get('status') || '';
 
-    let query = (db().from('claims') as any).select('*', { count: 'exact' });
+    let query = db().from('claims').select('*', { count: 'exact' });
     if (status) query = query.eq('status', status);
 
     const { data, count, error } = await query
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { data, error } = await (db().from('claims') as any).insert(body).select().single();
+    const { data, error } = await db().from('claims').insert(body).select().single();
     if (error) throw error;
     return created(data);
   } catch (e) { return serverError(e); }

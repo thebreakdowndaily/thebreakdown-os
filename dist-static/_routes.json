@@ -1,9 +1,0 @@
-{
-    "include":  [
-                    "/*"
-                ],
-    "version":  1,
-    "exclude":  [
-                    "/cdn-cgi/*"
-                ]
-}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { SVGSpec } from '@/utils/types';
+import type { SVGSpec } from '@/types/canonical';
 
 interface SVGNode {
   id: string;

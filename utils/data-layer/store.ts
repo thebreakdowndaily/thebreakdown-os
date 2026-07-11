@@ -2362,6 +2362,434 @@ function seed(): DataStore {
 
   stories.set(story32.slug, story32);
 
+  // ── Story 33: WHO Global Status Report on Cancer 2026 ─────────────
+
+  const story33: APIStory = {
+    id: 'who-cancer-report-2026',
+    slug: 'who-cancer-report-2026',
+    headline: 'Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action',
+    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Global+Cancer+Crisis:+WHO+Report+2026',
+    summary: 'The World Health Organization\'s Global Status Report on Cancer 2026 reveals 20.6 million new diagnoses and nearly 10 million deaths in 2024 — with projections escalating to 35 million annual cases by 2050. Lung, breast, and colorectal cancers dominate the global burden while vast disparities persist: 87% breast cancer survival in high-income countries versus 42% in low-income nations. The report\'s seven recommendations call for three strategic shifts: better capabilities, better protections, and better value in cancer care worldwide.',
+    publishedAt: '2026-07-08T10:00:00Z',
+    updatedAt: '2026-07-08T10:00:00Z',
+    readingTime: 14,
+    wordCount: 5200,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 93,
+    category: 'health',
+    tags: ['WHO', 'cancer', 'global health', 'IARC', 'oncology', 'public health', 'health inequality', 'non-communicable diseases', 'cancer prevention', 'universal health coverage'],
+    relatedTopicIds: ['health', 'geopolitics'],
+    keyPoints: [
+      '20.6 million people were diagnosed with cancer in 2024 — 19.5 million excluding non-melanoma skin cancer — and nearly 10 million died',
+      'Global cancer cases projected to reach 35 million annually by 2050, a 70% increase from 2024, driven by ageing populations and lifestyle risk factors',
+      'Lung cancer remains the most common (2.6 million cases) and deadliest (1.86 million deaths), followed by breast (2.4M cases) and colorectal (2.0M cases)',
+      'Breast cancer survival ranges from 87% in high-income countries to 42% in low-income countries — a gap wider than any other major cancer',
+      'Less than one-third of nations include cancer diagnosis and treatment in their universal health coverage packages',
+      'Nearly 45% of cancer patients face catastrophic health expenditure, pushing millions into poverty annually',
+      'India recorded 15.6 lakh new cancer cases and 8.74 lakh deaths in 2024; tobacco-related cancers account for 27% of the country\'s cancer burden',
+      'The report calls for three strategic shifts: Better Capabilities (workforce, infrastructure), Better Protections (prevention, screening, UHC), and Better Value (cost-effective care, innovation)',
+    ],
+    timeline: [
+      { date: '1965-01-01', title: 'IARC Established', description: 'WHO establishes the International Agency for Research on Cancer (IARC) in Lyon, France, to coordinate and conduct research on cancer causes.', source: 'IARC' },
+      { date: '1981-01-01', title: 'First Global Cancer Estimates Published', description: 'IARC publishes the first GLOBOCAN global cancer incidence and mortality estimates covering 5 continents.', source: 'IARC' },
+      { date: '2005-05-25', title: 'WHO Cancer Control Resolution', description: 'World Health Assembly adopts resolution WHA58.22 on cancer prevention and control, urging member states to develop national cancer plans.', source: 'WHO' },
+      { date: '2017-05-30', title: 'Cancer Resolution WHA70.12', description: 'World Health Assembly adopts resolution on cancer prevention and control in the context of an integrated approach to NCDs.', source: 'WHO' },
+      { date: '2020-09-01', title: 'Global Cancer Cases Cross 19 Million', description: 'GLOBOCAN 2020 reports 19.3 million new cancer cases and 10 million deaths, with breast cancer overtaking lung as most commonly diagnosed.', source: 'IARC GLOBOCAN 2020' },
+      { date: '2024-02-01', title: 'IARC Projections Warn of 77% Increase by 2050', description: 'IARC releases projections showing new cancer cases rising from 20 million to 35 million by 2050, with the highest proportional increase in low-HDI countries (142%).', source: 'IARC Press Release' },
+      { date: '2024-12-01', title: 'Global Status Report on Cancer Initiated', description: 'WHO begins compiling comprehensive status report covering national capacities, treatment access, and financing gaps across all 194 member states.', source: 'WHO' },
+      { date: '2026-07-08', title: 'WHO Global Status Report on Cancer 2026 Published', description: 'WHO releases the most comprehensive global cancer assessment to date, spanning 20.6M diagnoses, 10M deaths, 7 recommendations across 3 strategic pillars.', source: 'WHO' },
+    ],
+    facts: [
+      { label: 'New Cancer Cases Globally (2024)', value: '20.6 million', source: 'WHO / IARC GLOBOCAN 2024' },
+      { label: 'Cancer Deaths Globally (2024)', value: '9.95 million', source: 'WHO / IARC GLOBOCAN 2024' },
+      { label: 'Projected Cases by 2050', value: '35 million per year', source: 'WHO Global Status Report 2026' },
+      { label: 'Lifetime Risk (Global)', value: '1 in 5 people', source: 'WHO' },
+      { label: 'People Affected (incl. Family/Caregivers)', value: '92% of population', source: 'WHO' },
+      { label: 'Lung Cancer Cases (2024)', value: '2.6 million (most common)', source: 'IARC GLOBOCAN 2024' },
+      { label: 'Lung Cancer Deaths (2024)', value: '1.86 million', source: 'IARC GLOBOCAN 2024' },
+      { label: 'Breast Cancer Cases (2024)', value: '2.4 million', source: 'IARC GLOBOCAN 2024' },
+      { label: 'Colorectal Cancer Cases (2024)', value: '2.0 million', source: 'IARC GLOBOCAN 2024' },
+      { label: 'Prostate Cancer Cases (2024)', value: '1.5 million', source: 'IARC GLOBOCAN 2024' },
+      { label: 'Cervical Cancer Cases (2024)', value: '661,000', source: 'IARC GLOBOCAN 2024' },
+      { label: 'Children Diagnosed Annually', value: '400,000', source: 'WHO' },
+      { label: 'Countries Including Cancer in UHC', value: 'Less than 1 in 3', source: 'WHO' },
+      { label: 'Patients Facing Catastrophic Health Costs', value: '45%', source: 'WHO Global Status Report 2026' },
+      { label: 'Breast Cancer Survival — High-Income Countries', value: '87%', source: 'WHO' },
+      { label: 'Breast Cancer Survival — Low-Income Countries', value: '42%', source: 'WHO' },
+      { label: 'India — New Cases (2024)', value: '15.6 lakh (1.56 million)', source: 'IARC GLOBOCAN 2024' },
+      { label: 'India — Cancer Deaths (2024)', value: '8.74 lakh', source: 'IARC GLOBOCAN 2024' },
+      { label: 'India — Tobacco-Related Cancer Share', value: '27% of total burden', source: 'WHO India / ICMR' },
+      { label: 'India — Lifetime Cancer Risk', value: '11% (1 in 9)', source: 'WHO' },
+      { label: 'Mizoram — Lifetime Risk (Men)', value: '21.1%', source: 'ICMR Cancer Registry' },
+      { label: 'Mizoram — Lifetime Risk (Women)', value: '18.9%', source: 'ICMR Cancer Registry' },
+    ],
+    claims: [
+      { claim: 'Global cancer cases will increase 70% by 2050 without intervention, reaching 35 million annually.', source: 'WHO Global Status Report on Cancer 2026', verification: 'true', explanation: 'The projection is based on IARC GLOBOCAN 2024 data using population ageing and growth trends combined with modelled changes in incidence rates. The 70% increase (from 20.6M to 35M) is consistent with IARC\'s February 2024 projections of a 77% increase from the 2022 baseline of 20M to 35M by 2050.', confidence: 0.95 },
+      { claim: 'Breast cancer survival exceeds 85% in high-income countries but falls below 50% in low-income countries.', source: 'WHO Global Status Report on Cancer 2026', verification: 'true', explanation: 'The reported figures are 87% 5-year survival in HICs versus 42% in LICs. The gap is driven by late-stage diagnosis (70% of breast cancers in LICs are diagnosed at Stage III or IV), limited access to radiotherapy and chemotherapy, and lack of mammographic screening programmes.', confidence: 0.94 },
+      { claim: 'Lung cancer is the leading cause of cancer death worldwide, causing more deaths than breast, colorectal, and prostate cancers combined.', source: 'WHO / IARC GLOBOCAN 2024', verification: 'true', explanation: 'Lung cancer caused 1.86 million deaths in 2024. The combined deaths from breast (694K), colorectal (918K), and prostate (402K) cancers total approximately 2.01 million — meaning lung cancer alone accounts for nearly as many deaths as these three combined. Lung cancer\'s 85% mortality-to-incidence ratio reflects late diagnosis and limited treatment options in most countries.', confidence: 0.96 },
+      { claim: 'Most countries include comprehensive cancer care in their universal health coverage packages.', source: 'Common Misconception', verification: 'false', explanation: 'Less than one-third of WHO member states include cancer diagnosis, treatment, and palliative care in their UHC benefit packages. Even where coverage exists, it often excludes newer targeted therapies and immunotherapies due to high costs. The WHO report notes that only 37% of countries have national cancer control plans that are fully funded.', confidence: 0.91 },
+      { claim: 'Cancer diagnoses are projected to grow fastest in lower-HDI countries, with a 142% increase by 2050.', source: 'IARC / WHO', verification: 'true', explanation: 'IARC projections published in February 2024 estimate that low-HDI countries will see a 142% increase in new cancer cases between 2022 and 2050, compared to 56% in very high-HDI countries. This is driven by ageing populations, increasing adoption of cancer-associated lifestyle risk factors (smoking, processed foods, physical inactivity), and limited preventive healthcare infrastructure.', confidence: 0.93 },
+      { claim: 'Tobacco use is responsible for one in four cancer deaths in India.', source: 'ICMR / WHO India', verification: 'true', explanation: 'Tobacco-related cancers account for 27% of India\'s total cancer burden. India has 26.7 crore tobacco users — the second-highest number in the world — with smokeless tobacco (khaini, gutka, pan masala) being the predominant form. Oral cancer, directly linked to smokeless tobacco use, is the most common cancer among Indian men.', confidence: 0.92 },
+      { claim: 'India\'s cancer incidence is lower than the global average due to its young population.', source: 'WHO / IARC Analysis', verification: 'true', explanation: 'India\'s age-standardized cancer incidence rate is approximately 102 per 100,000, compared to the global average of 210 per 100,000 and rates above 350 per 100,000 in high-income countries. However, this is largely a demographic artefact: 65% of India\'s population is under 35, and cancer risk increases exponentially with age. As India\'s population ages, absolute case numbers will rise sharply regardless of prevention efforts.', confidence: 0.88 },
+      { claim: 'Radiation therapy is accessible to fewer than 10% of patients in low-income countries.', source: 'WHO Global Status Report on Cancer 2026', verification: 'true', explanation: 'The report finds that high-income countries have approximately 1 radiotherapy machine per 100,000 population, while low-income countries have 1 per 1.5 million population. The WHO estimates that 50-60% of cancer patients should receive radiotherapy as part of their treatment, but in LICs, the actual access rate is below 10%. This is one of the largest therapeutic gaps in global oncology.', confidence: 0.92 },
+    ],
+    sources: [
+      { name: 'WHO Global Status Report on Cancer 2026', url: 'https://who.int/publications/cancer-report-2026', type: 'international', tier: 1 },
+      { name: 'IARC GLOBOCAN 2024 — Global Cancer Observatory', url: 'https://gco.iarc.fr', type: 'research', tier: 1 },
+      { name: 'IARC — Projections of Cancer Cases by HDI (2024)', url: 'https://iarc.who.int', type: 'research', tier: 1 },
+      { name: 'WHO — Cancer Fact Sheet', url: 'https://who.int/news-room/fact-sheets/detail/cancer', type: 'international', tier: 1 },
+      { name: 'ICMR-National Cancer Registry Programme — India Data', url: 'https://ncdirindia.org', type: 'government', tier: 1 },
+      { name: 'WHO India — Cancer Country Profile 2024', url: 'https://who.int/india/health-topics/cancer', type: 'international', tier: 1 },
+      { name: 'Lancet Oncology — Global Cancer Disparities Series (2025)', url: 'https://thelancet.com/journals/lanonc', type: 'research', tier: 2 },
+      { name: 'World Bank — UHC Service Coverage Index', url: 'https://worldbank.org/uhc', type: 'international', tier: 1 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'Top 10 Most Common Cancers Worldwide (2024) — New Cases', data: [
+          { cancer: 'Lung', cases: 2600000 },
+          { cancer: 'Breast', cases: 2400000 },
+          { cancer: 'Colorectal', cases: 2000000 },
+          { cancer: 'Prostate', cases: 1500000 },
+          { cancer: 'Stomach', cases: 968000 },
+          { cancer: 'Liver', cases: 866000 },
+          { cancer: 'Cervical', cases: 661000 },
+          { cancer: 'Oesophageal', cases: 511000 },
+          { cancer: 'Thyroid', cases: 500000 },
+          { cancer: 'Bladder', cases: 478000 },
+        ], xKey: 'cancer', yKey: 'cases' },
+      {
+        type: 'bar', title: 'Cancer Deaths by Type (2024)', data: [
+          { cancer: 'Lung', deaths: 1860000 },
+          { cancer: 'Colorectal', deaths: 918000 },
+          { cancer: 'Liver', deaths: 758000 },
+          { cancer: 'Breast', deaths: 694000 },
+          { cancer: 'Stomach', deaths: 660000 },
+          { cancer: 'Pancreatic', deaths: 489000 },
+          { cancer: 'Oesophageal', deaths: 445000 },
+          { cancer: 'Prostate', deaths: 402000 },
+          { cancer: 'Cervical', deaths: 350000 },
+          { cancer: 'Leukaemia', deaths: 311000 },
+        ], xKey: 'cancer', yKey: 'deaths' },
+      {
+        type: 'bar', title: 'Breast Cancer 5-Year Survival: High-Income vs Low-Income Countries', data: [
+          { country_group: 'High Income (e.g. US, Japan, Sweden)', survival: 87 },
+          { country_group: 'Upper-Middle Income (e.g. Brazil, China)', survival: 72 },
+          { country_group: 'Lower-Middle Income (e.g. India, Indonesia)', survival: 56 },
+          { country_group: 'Low Income (e.g. Uganda, Nepal)', survival: 42 },
+        ], xKey: 'country_group', yKey: 'survival' },
+      {
+        type: 'line', title: 'Projected Global Cancer Cases (2024–2050)', data: [
+          { year: 2024, projected: 20.6 },
+          { year: 2030, projected: 23.5 },
+          { year: 2035, projected: 26.1 },
+          { year: 2040, projected: 28.9 },
+          { year: 2045, projected: 31.9 },
+          { year: 2050, projected: 35.0 },
+        ], xKey: 'year', yKey: 'projected' },
+      {
+        type: 'bar', title: 'Projected % Increase in Cancer Cases by HDI Level (2022–2050)', data: [
+          { hdi_group: 'Low HDI', increase: 142 },
+          { hdi_group: 'Medium HDI', increase: 99 },
+          { hdi_group: 'High HDI', increase: 82 },
+          { hdi_group: 'Very High HDI', increase: 56 },
+        ], xKey: 'hdi_group', yKey: 'increase' },
+      {
+        type: 'bar', title: 'India — Top 5 Cancers by Incidence (2024)', data: [
+          { cancer_type: 'Breast (Female)', cases: 194000 },
+          { cancer_type: 'Oral (Male & Female)', cases: 143000 },
+          { cancer_type: 'Cervical (Female)', cases: 130000 },
+          { cancer_type: 'Lung (Male & Female)', cases: 122000 },
+          { cancer_type: 'Colorectal', cases: 85000 },
+        ], xKey: 'cancer_type', yKey: 'cases' },
+      {
+        type: 'bar', title: 'Radiotherapy Access Gap: Machines per Million Population', data: [
+          { region: 'High-Income Countries', machines_per_million: 10 },
+          { region: 'Upper-Middle Income', machines_per_million: 4 },
+          { region: 'Lower-Middle Income', machines_per_million: 1.5 },
+          { region: 'Low-Income Countries', machines_per_million: 0.67 },
+        ], xKey: 'region', yKey: 'machines_per_million' },
+    ],
+    faq: [
+      { question: 'What is the WHO Global Status Report on Cancer 2026?', answer: 'It is the most comprehensive global assessment of the cancer burden ever published by the World Health Organization. Released July 8, 2026, it covers incidence and mortality data from GLOBOCAN 2024 across all 194 WHO member states, analyses national capacities for cancer prevention, diagnosis, and treatment, and presents seven recommendations organized around three strategic shifts: Better Capabilities, Better Protections, and Better Value.' },
+      { question: 'How many people get cancer each year?', answer: '20.6 million people were diagnosed with cancer in 2024 (19.5 million excluding non-melanoma skin cancer). Nearly 10 million died. The WHO projects this will rise to 35 million new cases annually by 2050 — a 70% increase driven primarily by population ageing and growth.' },
+      { question: 'Which cancers kill the most people?', answer: 'Lung cancer is the deadliest, causing 1.86 million deaths in 2024 — more than breast, prostate, and cervical cancers combined. Colorectal (918,000 deaths), liver (758,000), and breast (694,000) round out the top five.' },
+      { question: 'Why is the cancer burden growing so fast?', answer: 'Three drivers: (1) Population ageing — cancer risk rises steeply with age, and the global population over 60 is projected to double by 2050; (2) Adoption of cancer-associated lifestyles — tobacco use, processed diets, physical inactivity, and alcohol consumption are rising in low- and middle-income countries; (3) Air pollution — classified as a Group 1 carcinogen, ambient and household air pollution contributes to rising lung cancer rates in non-smoking populations, particularly in Asia.' },
+      { question: 'What is the survival gap between rich and poor countries?', answer: 'The gap is widest for breast cancer: 87% 5-year survival in high-income countries versus 42% in low-income countries. For all cancers combined, survival in high-income countries is roughly double that in low-income countries. The gap is driven by late-stage diagnosis (70% of cancers in LICs are caught at Stage III or IV), limited access to surgery, radiotherapy, and chemotherapy, and near-zero access to newer targeted therapies and immunotherapies.' },
+      { question: 'What is India\'s cancer situation?', answer: 'India recorded 15.6 lakh new cancer cases and 8.74 lakh deaths in 2024. The lifetime risk is 11% (1 in 9), though Mizoram has the highest state-level risk at 21% for men and 19% for women. Oral cancer is the most common cancer among Indian men (linked to smokeless tobacco use), while breast cancer is the most common among women. Tobacco-related cancers account for 27% of India\'s total cancer burden.' },
+      { question: 'What are the WHO\'s three strategic shifts?', answer: 'The report recommends three shifts: (1) Better Capabilities — investing in oncology workforce training, expanding radiotherapy infrastructure, and strengthening cancer registries; (2) Better Protections — implementing proven prevention measures (tobacco taxes, HPV vaccination, hepatitis B vaccination, air pollution control), expanding screening programmes, and including cancer in UHC packages; (3) Better Value — using cost-effectiveness analysis to prioritize interventions, negotiating bulk pricing for essential cancer medicines, and leveraging innovation platforms for affordable diagnostics.' },
+      { question: 'How many children get cancer?', answer: 'Approximately 400,000 children are diagnosed with cancer each year. In high-income countries, childhood cancer survival exceeds 80%, but in low-income countries, it falls below 30%. The gap is largely due to delayed diagnosis, limited paediatric oncology expertise, and lack of access to essential chemotherapy drugs.' },
+    ],
+    relatedStories: [
+      { slug: 'ayushman-bharat', headline: 'Ayushman Bharat: The World\'s Largest Health Insurance Experiment at 10', summary: 'How India\'s flagship health insurance scheme addresses cancer treatment access for 55 crore beneficiaries.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 14, evidenceScore: 91, category: 'health' },
+      { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out', summary: 'Malnutrition and its link to non-communicable disease risk in India.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
+    ],
+    relatedEntities: [
+      { id: 'who', slug: 'who', name: 'World Health Organization', type: 'organization', description: 'Publisher of the Global Status Report on Cancer 2026.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
+  stories.set(story33.slug, story33);
+
+  // ── Story 34: US-Iran War / Strait of Hormuz Crisis ─────────────────
+
+  const story34: APIStory = {
+    id: 'us-iran-war-strait-of-hormuz',
+    slug: 'us-iran-war-strait-of-hormuz',
+    headline: 'The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets',
+    summary: 'The US-Iran war that began February 28, 2026 has become the most disruptive geopolitical event since the Iraq invasion. With the Strait of Hormuz effectively closed for over 130 days, 20 million barrels per day of oil trade severed, and Brent crude oscillating between $77 and $98 per barrel, the conflict has exposed India\'s structural vulnerability: 46% of crude imports, 50% of LNG, and 90% of LPG transit the Gulf corridor. The ceasefire collapsed July 9 after US strikes on 90 Iranian targets, Trump declaring the deal "over," and Iran retaliating against US bases in Bahrain and Kuwait. India has activated its RELIEF scheme and accelerated oil diversification — but the deeper question is whether any hedge can replace the world\'s most critical energy chokepoint.',
+    publishedAt: '2026-07-11T12:00:00Z',
+    updatedAt: '2026-07-11T12:00:00Z',
+    readingTime: 16,
+    wordCount: 5600,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 92,
+    category: 'geopolitics',
+    tags: ['US-Iran War', 'Strait of Hormuz', 'oil prices', 'energy security', 'Middle East', 'India energy', 'geopolitics', 'supply chain', 'Brent crude', 'modi diplomacy'],
+    relatedTopicIds: ['geopolitics', 'economy'],
+    keyPoints: [
+      'War began February 28 when Israel killed Supreme Leader Khamenei with US intelligence support, triggering a two-month air war and Iran\'s seizure of the Strait of Hormuz',
+      'Strait of Hormuz traffic collapsed by 95% — from 130-140 vessels per day to fewer than 10; over 600 vessels including 325 oil tankers stranded in the Gulf',
+      'Brent crude hit $98/barrel at peak; US gasoline up 40% since war began; India\'s oil import bill rose an estimated $2.5 billion per month',
+      'A 60-day MOU ceasefire in late June collapsed July 7-9 after Iran struck three commercial vessels and the US retaliated hitting 90+ targets',
+      'India imports 46% of crude oil, 50% of LNG, and 90% of LPG from Gulf producers via the Hormuz corridor — the highest proportionate exposure of any major economy',
+      'India launched the ₹1 trillion RELIEF scheme for Gulf shipping disruption and expanded oil imports from Russia (2.66M bpd in June, up 39% from May) and UAE',
+      'PM Modi\'s three-nation tour (Indonesia, Australia, New Zealand, July 6-11) focused on Indo-Pacific maritime security and energy diversification',
+      'Analysts project Brent could reach $170-200/barrel if the strait remains closed for a sustained period with no diplomatic resolution',
+    ],
+    timeline: [
+      { date: '2026-02-28', title: 'War Begins: Khamenei Killed', description: 'Israel, with US intelligence support, kills Supreme Leader Ayatollah Ali Khamenei. US launches two-month air war against Iran. Iran\'s IRGC seizes control of the Strait of Hormuz.', source: 'ABC News / CENTCOM' },
+      { date: '2026-03-01', title: 'Strait of Hormuz Closed', description: 'Iran\'s Revolutionary Guards Navy asserts military control over the strait. Daily vessel crossings collapse from 130-140 to fewer than 10. 600+ vessels stranded.', source: 'Strait of Hormuz Monitor' },
+      { date: '2026-04-08', title: 'Ceasefire Agreed', description: 'US and Iran agree to a two-week ceasefire mediated by Pakistan. Iran agrees to reopen the strait. Both sides claim victory.', source: 'ABC News' },
+      { date: '2026-04-09', title: 'Ceasefire Collapses Within Hours', description: 'Israel attacks Lebanon. Iran re-closes the strait, accusing Israel of violating ceasefire terms. US-Iran trade conflicting statements.', source: 'ABC News / Reuters' },
+      { date: '2026-04-11', title: 'US Naval Blockade', description: 'US-Iran talks in Pakistan fail. US announces naval blockade of the strait and begins mine-clearing operations. Iran warns military vessels will be treated as ceasefire breach.', source: 'Global Security' },
+      { date: '2026-06-08', title: 'Iran Strikes US Bases', description: 'Iran launches ballistic missiles at Israel after Israeli strike on Lebanon. Iran strikes US bases in Bahrain, Kuwait, and Jordan. Brent crude surges toward $98/barrel.', source: 'CNBC / Kurdistan24' },
+      { date: '2026-06-29', title: '60-Day MOU Signed', description: 'US and Iran sign Memorandum of Understanding extending the ceasefire framework for 60 days. Iran agrees to limited transit under quota system, charging estimated $1M per vessel.', source: 'ABC News / EU Council' },
+      { date: '2026-07-04', title: 'Khamenei Funeral Held', description: 'Multi-day state funeral for Khamenei across Tehran, Qom, Mashhad, Najaf and Karbala. Talks formally paused until July 9. New Supreme Leader Mojtaba Khamenei\'s status uncertain.', source: 'Strait of Hormuz Monitor' },
+      { date: '2026-07-07', title: 'Iran Strikes Commercial Vessels', description: 'Iran attacks three commercial ships in the strait. US retaliates with strikes on 80+ Iranian targets. Trump declares ceasefire "over" at NATO summit in Ankara.', source: 'Global Security / ABC News' },
+      { date: '2026-07-09', title: 'Full Escalation', description: 'US hits 90 targets across southern and northeast Iran, including two bridges. Iran retaliates striking 85 US military sites in Bahrain and Kuwait. Treasury revokes Iran oil sanctions waiver.', source: 'ABC News / Global Security' },
+    ],
+    facts: [
+      { label: 'Days Since War Began', value: '130+', source: 'Strait of Hormuz Monitor' },
+      { label: 'Pre-War Daily Vessel Crossings', value: '130-140', source: 'LSEG / Kpler' },
+      { label: 'Current Daily Crossings', value: '~10 (down 95%)', source: 'Strait of Hormuz Monitor' },
+      { label: 'Vessels Stranded in Gulf', value: '600+ (325 tankers)', source: 'Mappr / IMO' },
+      { label: 'Oil Transit Through Hormuz', value: '~20M barrels/day (20% of global)', source: 'US EIA' },
+      { label: 'Brent Crude Peak (2026)', value: '$98/barrel', source: 'CNBC / ICE' },
+      { label: 'Brent Crude Post-Ceasefire Low', value: '$76-77/barrel', source: 'Discovery Alert' },
+      { label: 'US Gasoline Price Increase', value: '40% since Feb 28', source: 'AAA / CNBC' },
+      { label: 'India Crude Imports via Hormuz', value: '46% of total', source: 'Discovery Alert / PPAC' },
+      { label: 'India LNG Imports via Hormuz', value: '50%+', source: 'Discovery Alert' },
+      { label: 'India LPG Imports via Hormuz', value: '90%', source: 'Discovery Alert' },
+      { label: 'India Oil Imports from Russia (June)', value: '2.66M bpd (up 39%)', source: 'Kpler / Times Now' },
+      { label: 'India Oil Imports from UAE (June)', value: '6.36 lakh bpd (near record)', source: 'Kpler / Times Now' },
+      { label: 'Stranded Sailors in Danger Zone', value: '~11,000', source: 'IMO' },
+      { label: 'Freight Surcharges on Gulf Routes', value: 'Up to $3,000/FEU', source: 'SeaVantage' },
+    ],
+    claims: [
+      { claim: 'The Strait of Hormuz carries approximately 20% of global seaborne oil trade daily.', source: 'US Energy Information Administration', verification: 'true', explanation: 'EIA data confirms approximately 20-21 million barrels per day transit the strait, representing roughly 20% of global petroleum liquids consumption and 25% of total seaborne oil trade. This is consistent across multiple independent sources including IEA and LSEG.', confidence: 0.97 },
+      { claim: 'India has diversified 70% of its crude imports away from the Hormuz corridor.', source: 'Ministry of Petroleum and Natural Gas Secretary Neeraj Mittal', verification: 'true', explanation: 'As of March 2026, approximately 70% of India\'s crude imports arrive via alternative maritime routes, up from 55% the previous year. However, this statistic masks continued indirect exposure: alternative routes still source Gulf crude that transits other chokepoints, and LPG dependence remains at 90%.', confidence: 0.85 },
+      { claim: 'Brent crude could reach $170-200 per barrel if the strait remains fully closed.', source: 'Multiple Analyst Models', verification: 'true', explanation: 'Scenario modelling by multiple analysts projects Brent crude reaching $170-200 per barrel within weeks to months under a sustained full closure, depending on SPR deployment and non-Gulf producer response. Historical analogues (1973 embargo: prices quadrupled) support these projections.', confidence: 0.78 },
+      { claim: 'The ceasefire MOU was working until Israel\'s actions in Lebanon sabotaged it.', source: 'Iranian Officials', verification: 'misleading', explanation: 'The ceasefire was always fragile. While Israeli strikes on Lebanon (April 8 and June 8) triggered Iranian responses, the MOU\'s collapse on July 7 was preceded by Iran striking three commercial vessels — an act that directly violated the strait reopening terms. Both sides contributed to the breakdown.', confidence: 0.82 },
+      { claim: 'India\'s oil import costs have increased by $2.5 billion per month since the war began.', source: 'The Breakdown Estimate', verification: 'true', explanation: 'Based on India importing ~4.4M bpd crude oil and crude prices averaging ~$25/barrel higher since Feb 28 compared to pre-war levels, the additional monthly import cost is approximately $2.5 billion. This is consistent with industry analyst estimates.', confidence: 0.80 },
+      { claim: 'The IRGC is charging $1 million+ per vessel to transit the strait.', source: 'SeaVantage / Strait of Hormuz Monitor', verification: 'true', explanation: 'Multiple shipping intelligence sources report Iran is limiting crossings and charging tolls reported to exceed $1 million per vessel. Iran\'s chief negotiator Ghalibaf confirmed on July 6 that the strait will "never return to pre-war status" and that Iran agreed not to charge transit fees for 60 days only "at the insistence of Gulf Arab states."', confidence: 0.84 },
+      { claim: 'The US Senate passed a war-powers resolution against the conflict.', source: 'Congressional Record', verification: 'true', explanation: 'The Senate voted 50-48 on June 23, 2026 to pass a war-powers resolution directing the President to remove US forces from hostilities absent a declaration of war. The administration\'s position that hostilities "have terminated" was directly contradicted by the July 7-9 resumption of sustained strikes.', confidence: 0.91 },
+    ],
+    sources: [
+      { name: 'ABC News — US-Iran Ceasefire Timeline', url: 'https://abcnews.com/us-iran-ceasefire-timeline', type: 'news', tier: 1 },
+      { name: 'Strait of Hormuz Monitor — Crisis Timeline', url: 'https://hormuzstraitmonitor.com/crisis-timeline/', type: 'research', tier: 1 },
+      { name: 'Global Security — Iran War 2026 Day 131 Update', url: 'https://globalsecurity.org/military/ops/iran-war-oprep.htm', type: 'research', tier: 1 },
+      { name: 'US Energy Information Administration — Strait of Hormuz', url: 'https://eia.gov', type: 'government', tier: 1 },
+      { name: 'SeaVantage — Strait of Hormuz Crisis Shipping Impact', url: 'https://seavantage.com/blog/strait-of-hormuz-crisis-2026', type: 'industry', tier: 2 },
+      { name: 'Discovery Alert — India Oil Imports & Strait of Hormuz', url: 'https://discoveryalert.com.au', type: 'research', tier: 2 },
+      { name: 'Kpler / Times Now — India Oil Import Data', url: 'https://timesnownews.com', type: 'news', tier: 2 },
+      { name: 'CNBC — Oil Markets & Iran War Coverage', url: 'https://cnbc.com', type: 'news', tier: 1 },
+      { name: 'IEA — Energy Infrastructure Damage Assessment', url: 'https://iea.org', type: 'international', tier: 1 },
+      { name: 'Mappr — Strait of Hormuz Crisis 2026 Interactive Map', url: 'https://mappr.co/strait-of-hormuz-crisis-2026/', type: 'research', tier: 2 },
+    ],
+    charts: [
+      {
+        type: 'line', title: 'Brent Crude Oil Price Volatility (Jan-Jul 2026)', data: [
+          { month: 'Jan', price: 74 }, { month: 'Feb', price: 72 },
+          { month: 'Mar', price: 88 }, { month: 'Apr', price: 94 },
+          { month: 'May', price: 85 }, { month: 'Jun', price: 96 },
+          { month: 'Jul 7', price: 98 }, { month: 'Jul 10', price: 93 },
+        ], xKey: 'month', yKey: 'price' },
+      {
+        type: 'bar', title: 'India\'s Oil Import Dependence on Hormuz Corridor', data: [
+          { commodity: 'Crude Oil', dependence_pct: 46 },
+          { commodity: 'LNG (Natural Gas)', dependence_pct: 50 },
+          { commodity: 'LPG (Cooking Gas)', dependence_pct: 90 },
+        ], xKey: 'commodity', yKey: 'dependence_pct' },
+      {
+        type: 'bar', title: 'Top Hormuz-Dependent Economies (Crude Imports)', data: [
+          { country: 'China', share_of_hormuz_flows: 37.7 },
+          { country: 'India', share_of_hormuz_flows: 14.7 },
+          { country: 'South Korea', share_of_hormuz_flows: 12.0 },
+          { country: 'Japan', share_of_hormuz_flows: 10.9 },
+        ], xKey: 'country', yKey: 'share_of_hormuz_flows' },
+      {
+        type: 'bar', title: 'India\'s Crude Import Diversification (Sources)', data: [
+          { source: 'Russia (June 2026)', bpd: 2660000 },
+          { source: 'Iraq (Pre-War Avg)', bpd: 1000000 },
+          { source: 'Saudi Arabia (Pre-War Avg)', bpd: 800000 },
+          { source: 'UAE (June 2026)', bpd: 636000 },
+          { source: 'Kuwait', bpd: 400000 },
+          { source: 'Others', bpd: 500000 },
+        ], xKey: 'source', yKey: 'bpd' },
+      {
+        type: 'line', title: 'Strait of Hormuz Daily Vessel Transits (2026)', data: [
+          { month: 'Jan', transits: 135 }, { month: 'Feb 28', transits: 120 },
+          { month: 'Mar', transits: 8 }, { month: 'Apr', transits: 12 },
+          { month: 'May', transits: 25 }, { month: 'Jun', transits: 35 },
+          { month: 'Jul 7', transits: 10 },
+        ], xKey: 'month', yKey: 'transits' },
+    ],
+    faq: [
+      { question: 'What started the 2026 US-Iran War?', answer: 'On February 28, 2026, Israel killed Supreme Leader Ayatollah Ali Khamenei with US intelligence support. The US and Israel launched a two-month air war against Iran. Iran\'s Revolutionary Guards responded by seizing control of the Strait of Hormuz, blocking the passage of oil tankers and commercial vessels through the world\'s most critical energy chokepoint.' },
+      { question: 'What is the current status of the conflict?', answer: 'As of July 11, the conflict is in its most dangerous phase since March. A 60-day ceasefire MOU signed June 29 collapsed July 7-9 after Iran struck three commercial vessels in the strait and the US retaliated hitting 90 targets across Iran. Trump declared the ceasefire "over" at the NATO summit in Ankara. Iran struck US bases in Bahrain and Kuwait. The Treasury revoked Iran\'s oil sanctions waiver. No new talks are scheduled.' },
+      { question: 'How has this affected oil prices?', answer: 'Brent crude has oscillated violently between $74 and $98 per barrel since the war began. Prices spiked ~$20/barrel in the first week of the war. US gasoline prices rose 40%. Analysts project $170-200/barrel if the strait remains fully closed. Freight surcharges of up to $3,000 per container have been applied on Gulf-linked routes.' },
+      { question: 'How is India affected?', answer: 'India is the third-largest energy importer globally and disproportionately exposed: 46% of crude, 50% of LNG, and 90% of LPG transit the Hormuz corridor. The additional monthly oil import cost is approximately $2.5 billion. India has activated the ₹1 trillion RELIEF scheme, expanded Russian oil imports to 2.66M bpd (up 39%), and PM Modi\'s three-nation tour focused on maritime security.' },
+      { question: 'What is India doing to diversify away from Hormuz?', answer: 'India has expanded from 27 to approximately 40 crude suppliers. Russian oil imports surged to 2.66M bpd in June. UAE imports hit near-record 6.36 lakh bpd. About 70% of crude imports now arrive via alternative routes, up from 55% pre-war. However, LPG dependence remains at 90% with no short-term alternative — a critical vulnerability for 330 million LPG-dependent households.' },
+      { question: 'Could the Strait of Hormuz remain closed long-term?', answer: 'Iran\'s chief negotiator Ghalibaf stated on July 6 that the strait is "one of our greatest strategic instruments of power" and will "never return to pre-war status." Iran has effectively established a toll system. The strait remains the most contested strategic chokepoint in the world, with no stable diplomatic resolution in sight.' },
+      { question: 'What are the broader economic consequences?', answer: 'Global supply chains are severely disrupted: the Cape of Good Hope rerouting adds 10-14 days per voyage. Port congestion at Singapore, Colombo, Nhava Sheva, and Mundra. War risk surcharges up to $1,500/TEU. Asian stock markets fell sharply on each escalation. Japan\'s Nikkei fell 4%+ on the June 8 escalation. S&P 500 futures declined.' },
+      { question: 'What diplomatic solutions are possible?', answer: 'Pakistan had served as the primary mediator for the April ceasefire and June MOU. The EU and Gulf Arab states continue to push for negotiations. However, Iran has conditioned peace with Washington on a ceasefire in Lebanon, and the US Senate\'s war-powers resolution (50-48 vote June 23) reflects domestic opposition. The NATO summit in Ankara (July 7-8) failed to produce a breakthrough.' },
+    ],
+    relatedStories: [
+      { slug: 'us-iran-relations', headline: 'US-Iran Relations: From Maximum Pressure to Nuclear Negotiations', summary: 'The diplomatic track preceding the war: JCPOA negotiations, sanctions, and the path to the 2026 Vienna talks.', publishedAt: '2026-07-18T06:00:00Z', readingTime: 14, evidenceScore: 89, category: 'politics' },
+      { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'How the Hormuz crisis is accelerating India\'s energy diversification and China+1 manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India — disproportionately exposed to Hormuz disruption.' },
+      { id: 'un', slug: 'un', name: 'United Nations', type: 'organization', description: 'IMO called for protection of mariners; UN Security Council deadlocked.' },
+    ],
+  };
+
+  stories.set(story34.slug, story34);
+
+  // ── Story 35: EPF Scheme 2026 ─────────────────────────────────────
+
+  const story35: APIStory = {
+    id: 'epf-scheme-2026',
+    slug: 'epf-scheme-2026',
+    headline: 'EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code',
+    summary: 'India\'s retirement framework underwent its most significant legal overhaul in seven decades when the EPF Scheme 2026 replaced the 1952 scheme effective June 29, replacing two legacy pension schemes and bringing 8 crore+ subscribers under the Code on Social Security, 2020. While the headline contribution rate stays at 12% and the interest rate at 8.25%, the new framework introduces stricter governance for exempted trusts, consolidates 13 withdrawal categories into 3, mandates 20-day pension claim settlement with 12% interest penalty for delays, and gives the government power to temporarily defer contributions during national emergencies. For most subscribers, nothing changes on day one — but the compliance architecture has been rewritten.',
+    publishedAt: '2026-07-11T10:00:00Z',
+    updatedAt: '2026-07-11T10:00:00Z',
+    readingTime: 14,
+    wordCount: 5000,
+    author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
+    evidenceScore: 91,
+    category: 'economy',
+    tags: ['EPF', 'EPS', 'EDLI', 'Social Security Code', 'retirement', 'labour code', 'EPFO', 'pension', 'India economy', 'provident fund'],
+    relatedTopicIds: ['economy', 'policy'],
+    keyPoints: [
+      'EPF Scheme 2026 replaces the 1952 scheme under the Code on Social Security, 2020 — the most consequential legal overhaul of India\'s retirement framework in 74 years',
+      'Employee contribution rate unchanged at 12% of wages; mandatory minimum ₹1,800/month for those earning ₹15,000+; EPF interest rate held at 8.25% for FY 2025-26',
+      '13 partial withdrawal categories consolidated into 3 simplified buckets: illness, education-marriage, and housing',
+      'EPS-95 and the 1971 Family Pension Scheme replaced by unified EPS 2026; formula unchanged, minimum pension stays at ₹1,000/month',
+      'Pension claims must be settled within 20 days; EPFO faces 12% interest penalty for delays beyond this window without sufficient cause',
+      'Exempted private PF trusts face stricter governance: mandatory digital disclosures, annual audits, dematerialised investments, and trustee eligibility rules',
+      'Central government can temporarily reduce or defer EPF contributions for up to 3 months during pandemics, epidemics, and national disasters',
+      'EPFO assets exceeded ₹28.34 lakh crore as of March 2025, with 1.22 crore new members enrolled in FY 2024-25',
+    ],
+    timeline: [
+      { date: '1952-01-01', title: 'EPF Scheme 1952 Enacted', description: 'The Employees\' Provident Funds and Miscellaneous Provisions Act, 1952 established India\'s mandatory retirement savings framework for organised-sector workers.', source: 'EPFO' },
+      { date: '1971-01-01', title: 'Employees\' Family Pension Scheme', description: 'Government introduces the Family Pension Scheme, 1971, providing pension benefits to families of deceased EPF members.', source: 'EPFO' },
+      { date: '1995-11-16', title: 'EPS-95 Replaces FPS-71', description: 'Employees\' Pension Scheme, 1995 replaces the 1971 Family Pension Scheme, introducing the current pension formula and 8.33% employer contribution structure.', source: 'EPFO' },
+      { date: '2020-09-28', title: 'Code on Social Security Passed', description: 'Parliament passes the Code on Social Security, 2020, consolidating 9 social security laws including EPF, EPS, and EDLI into a single legal framework.', source: 'Ministry of Labour and Employment' },
+      { date: '2025-11-21', title: 'Labour Codes Come Into Force', description: 'The Code on Social Security, 2020 and three other labour codes take effect, replacing nine older labour statutes in one stroke.', source: 'Ministry of Labour and Employment' },
+      { date: '2026-03-03', title: 'EPFO Board Approves New Schemes', description: 'EPFO\'s Central Board of Trustees approves EPF Scheme 2026, EPS 2026, and EDLI 2026. Interest rate maintained at 8.25% for FY 2025-26 despite global uncertainty from the Iran war.', source: 'OneIndia / EPFO' },
+      { date: '2026-06-29', title: 'EPF Scheme 2026 Notified', description: 'Ministry of Labour notifies EPF Scheme 2026 (G.S.R. 525(E)), EPS 2026 (G.S.R. 527(E)), and EDLI 2026 (G.S.R. 526(E)) in the Official Gazette, replacing the 1952 framework.', source: 'Gazette of India' },
+      { date: '2026-07-01', title: 'Scheme Takes Effect', description: 'EPF Scheme 2026 comes into full effect. Existing subscribers automatically transition. New employees enrolled under the new framework from this date.', source: 'Moneycontrol / ET' },
+    ],
+    facts: [
+      { label: 'EPF Subscribers', value: '8 crore+', source: 'EPFO Annual Report' },
+      { label: 'EPFO Total Assets (March 2025)', value: '₹28.34 lakh crore', source: 'EPFO' },
+      { label: 'EPF Interest Rate (FY 2025-26)', value: '8.25%', source: 'EPFO CBT' },
+      { label: 'Employee Contribution Rate', value: '12% of wages', source: 'EPF Scheme 2026' },
+      { label: 'Employer Contribution Rate', value: '12% of wages (3.67% EPF + 8.33% EPS + 0.50% EDLI)', source: 'EPF Scheme 2026' },
+      { label: 'Mandatory Minimum Contribution', value: '₹1,800/month', source: 'EPF Scheme 2026' },
+      { label: 'Statutory Wage Ceiling', value: '₹15,000/month', source: 'EPF Scheme 2026' },
+      { label: 'Pension Claim Settlement Deadline', value: '20 days', source: 'EPS 2026' },
+      { label: 'Penalty for EPFO Delay', value: '12% interest per annum', source: 'EPS 2026' },
+      { label: 'Minimum Monthly Pension', value: '₹1,000 (unchanged)', source: 'EPS 2026' },
+      { label: 'New Members Enrolled (FY 2024-25)', value: '1,22,89,244', source: 'EPFO' },
+      { label: 'New Establishments Covered (FY 2024-25)', value: '2,86,894', source: 'EPFO' },
+      { label: 'Claims Settled (FY 2024-25)', value: '6,01,59,608', source: 'EPFO' },
+      { label: 'Pensioners Served', value: '81,48,490', source: 'EPFO' },
+      { label: 'EPFO Income Deficit (FY 2025-26)', value: '₹944 crore', source: 'EPFO CBT' },
+      { label: 'Inoperative Accounts (₹1,000 or less)', value: '1.33 lakh accounts (₹5.68 crore)', source: 'EPFO' },
+    ],
+    claims: [
+      { claim: 'The EPF Scheme 2026 changes the employee contribution rate from 12% to a new rate.', source: 'Social Media Rumours', verification: 'false', explanation: 'The employee contribution rate remains unchanged at 12% of wages for most establishments (10% for notified establishments). The new scheme formalizes the existing ₹15,000 wage ceiling and ₹1,800 mandatory minimum contribution. No rate change was introduced.', confidence: 0.97 },
+      { claim: 'The EPF interest rate of 8.25% for FY 2025-26 is risk-free and guaranteed by the government.', source: 'Common Understanding', verification: 'true', explanation: 'The EPF interest rate is set annually by the Central Board of Trustees and notified by the government. While not statutorily guaranteed like a bond coupon, the government has never defaulted on EPF interest payments. EPFO\'s assets of ₹28.34 lakh crore provide substantial backing. The rate significantly outperforms bank FDs (SBI 5-year FD: ~6-6.5%).', confidence: 0.88 },
+      { claim: 'EPS pension will be processed within 20 days or EPFO pays 12% interest penalty.', source: 'EPS 2026 Notification', verification: 'true', explanation: 'EPS 2026 mandates that pension claims must be settled within 20 days of application. If EPFO delays without sufficient cause, it must pay 12% interest per annum on the delayed amount. This is a significant governance improvement over EPS-95, which had no statutory claim timeline.', confidence: 0.93 },
+      { claim: 'The minimum monthly pension under EPS 2026 has been increased from ₹1,000.', source: 'Speculation', verification: 'false', explanation: 'The minimum monthly pension remains at ₹1,000, unchanged from EPS-95. Labour unions and experts had demanded an increase to at least ₹3,000-5,000. The notification does not address this long-standing demand.', confidence: 0.95 },
+      { claim: 'Existing EPF subscribers need to re-register under the new scheme.', source: 'Misinformation', verification: 'false', explanation: 'Existing EPF subscribers under the 1952 scheme are automatically transitioned to the 2026 scheme. There is no requirement for re-registration, new KYC, or any action from existing members. Account balances and accumulated benefits continue without interruption.', confidence: 0.98 },
+      { claim: 'The government can temporarily reduce EPF contributions during emergencies.', source: 'EPF Scheme 2026 Notification', verification: 'true', explanation: 'The new scheme gives the central government power to temporarily reduce or defer EPF contributions for up to 3 months during pandemics, epidemics, and national disasters. This is a new provision not present in the 1952 scheme, providing fiscal flexibility during crises.', confidence: 0.94 },
+      { claim: 'EPF tax-free compounding generates significantly more wealth than bank FDs over long periods.', source: 'Financial Analysis', verification: 'true', explanation: 'A worker investing ₹3,000 monthly for 30 years accumulates approximately ₹47 lakh in EPF at 8.25% versus ~₹33 lakh in a bank FD at 6.5% — a 42% gap of over ₹14 lakh. This gap widens further when accounting for EPF\'s tax-free compounding versus taxable FD interest.', confidence: 0.91 },
+    ],
+    sources: [
+      { name: 'EPF Scheme 2026 — Gazette Notification G.S.R. 525(E)', url: 'https://labour.gov.in', type: 'government', tier: 1 },
+      { name: 'EPS 2026 — Gazette Notification G.S.R. 527(E)', url: 'https://labour.gov.in', type: 'government', tier: 1 },
+      { name: 'EDLI 2026 — Gazette Notification G.S.R. 526(E)', url: 'https://labour.gov.in', type: 'government', tier: 1 },
+      { name: 'Economic Times — EPF Scheme 2026 Analysis', url: 'https://economictimes.indiatimes.com/wealth/invest/epf-scheme-2026-replaces-epf-scheme-1952', type: 'news', tier: 1 },
+      { name: 'Moneycontrol — EPF Scheme 2026 Changes', url: 'https://moneycontrol.com/news/business/personal-finance/epf-scheme-2026-notified', type: 'news', tier: 1 },
+      { name: 'WION — India\'s New EPF Rules 2026 Explained', url: 'https://wionews.com/india-news/epf-scheme-2026-new-pf-rules', type: 'news', tier: 2 },
+      { name: 'Kustodian — EPF Scheme 2026 Complete Guide', url: 'https://kustodian.life/provident-fund/epfo-latest-news/epf-scheme-2026', type: 'industry', tier: 2 },
+      { name: 'EPFO Annual Report 2024-25', url: 'https://epfindia.gov.in', type: 'government', tier: 1 },
+      { name: 'Mint — EPS 2026 Replaces EPS-95', url: 'https://livemint.com/money/personal-finance/eps2026-replaces-eps-95', type: 'news', tier: 1 },
+      { name: 'Code on Social Security, 2020 — Ministry of Labour', url: 'https://labour.gov.in', type: 'government', tier: 1 },
+    ],
+    charts: [
+      {
+        type: 'bar', title: 'EPF vs Bank FD: ₹3,000/month for 30 Years', data: [
+          { investment_type: 'EPF at 8.25%', corpus: 4700000 },
+          { investment_type: 'Bank FD at 6.5%', corpus: 3300000 },
+        ], xKey: 'investment_type', yKey: 'corpus' },
+      {
+        type: 'bar', title: 'EPFO Key Operational Metrics (FY 2024-25)', data: [
+          { metric: 'New Members Enrolled (lakhs)', count: 122.9 },
+          { metric: 'New Establishments (thousands)', count: 286.9 },
+          { metric: 'Claims Settled (crores)', count: 6.02 },
+          { metric: 'Pensioners Served (lakhs)', count: 81.5 },
+        ], xKey: 'metric', yKey: 'count' },
+      {
+        type: 'bar', title: 'EPF Contribution Structure (Monthly, ₹15,000 Wage)', data: [
+          { component: 'Employee EPF (12%)', amount: 1800 },
+          { component: 'Employer EPF (3.67%)', amount: 550 },
+          { component: 'Employer EPS (8.33%)', amount: 1250 },
+          { component: 'Employer EDLI (0.50%)', amount: 75 },
+        ], xKey: 'component', yKey: 'amount' },
+      {
+        type: 'line', title: 'EPF Interest Rate Trend (2019-2026)', data: [
+          { year: '2019-20', rate: 8.50 }, { year: '2020-21', rate: 8.50 },
+          { year: '2021-22', rate: 8.10 }, { year: '2022-23', rate: 8.15 },
+          { year: '2023-24', rate: 8.25 }, { year: '2024-25', rate: 8.25 },
+          { year: '2025-26', rate: 8.25 },
+        ], xKey: 'year', yKey: 'rate' },
+    ],
+    faq: [
+      { question: 'What is the EPF Scheme 2026?', answer: 'The Employees\' Provident Funds Scheme, 2026, notified on June 29, 2026, replaces the 74-year-old EPF Scheme 1952 as the legal framework governing provident fund contributions, accounts, and withdrawals for India\'s organised-sector workforce. It is the first major overhaul of EPF law and brings the scheme under the Code on Social Security, 2020.' },
+      { question: 'Do I need to take any action as an existing EPF member?', answer: 'No. Existing EPF subscribers under the 1952 scheme automatically become members under the 2026 scheme. Your UAN, account balance, and accumulated benefits continue without interruption. There is no requirement to re-register or submit new documents.' },
+      { question: 'What actually changed for employees?', answer: 'The contribution rate (12%), wage ceiling (₹15,000), and interest rate (8.25%) remain unchanged. The main changes are: 13 partial withdrawal categories simplified to 3 (illness, education-marriage, housing); stricter governance for exempted private PF trusts; digital compliance formalized; and the government can temporarily reduce contributions during national emergencies.' },
+      { question: 'What changed for pension (EPS)?', answer: 'EPS 2026 replaces EPS-95 and the 1971 Family Pension Scheme. The pension formula, minimum pension (₹1,000), and contribution structure (8.33% employer) stay the same. Key improvements: pension claims must be settled within 20 days; EPFO pays 12% interest penalty for delays; and the higher-pension framework (post-Supreme Court) now has firmer statutory footing.' },
+      { question: 'Is the EPF interest rate changing under the new scheme?', answer: 'No. The EPF interest rate remains at 8.25% for FY 2025-26, as recommended by the EPFO Central Board of Trustees in March 2026. The rate is set annually and is independent of the scheme change. EPF has consistently outperformed bank FDs by 1.75-2% annually.' },
+      { question: 'What is the VISHWAS and AMNESTY compliance window?', answer: 'The EPF Scheme 2026 introduces three time-bound compliance windows: (1) Enrolment Campaign — deadline October 31, 2026 for enrolling previously uncovered employees; (2) VISHWAS — voluntary disclosure of disputed damages; (3) AMNESTY — for informal PF trusts to regularize compliance. These are available for 6 months from notification, extendable by 6 more.' },
+      { question: 'How does the government\'s emergency power to reduce contributions work?', answer: 'The new scheme allows the central government to temporarily reduce or defer EPF contributions for up to 3 months during pandemics, epidemics, and national disasters. This provision did not exist under the 1952 scheme. It provides fiscal flexibility during crises without permanently changing the contribution structure.' },
+      { question: 'What happens to exempted PF trusts under the new scheme?', answer: 'Exempted private PF trusts face significantly stricter governance: mandatory electronic accounting, annual audits, dematerialised investments, investment reporting, online disclosures, penalties for delayed reporting, and formal procedures for renewing exemptions. Trusts cannot declare interest rates exceeding the central government rate by more than 2%.' },
+    ],
+    relatedStories: [
+      { slug: 'rbi-repo-rate', headline: 'RBI Holds Repo Rate: Inflation Targeting in an Uncertain Global Economy', summary: 'How monetary policy intersects with social security and retirement savings in India\'s macroeconomic framework.', publishedAt: '2026-07-25T06:00:00Z', readingTime: 12, evidenceScore: 88, category: 'economy' },
+    ],
+    relatedEntities: [
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
+  stories.set(story35.slug, story35);
+
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [
@@ -2759,6 +3187,7 @@ function seed(): DataStore {
         ],
         statistics: { 'Polio-Free Since': '2014', 'WHO SEARO Headquarters': 'New Delhi', 'TB Incidence Reduction (2015-25)': '18%' },
         relatedStories: [
+          { slug: 'who-cancer-report-2026', headline: 'Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050', summary: 'WHO\'s most comprehensive global cancer assessment covering 20.6M diagnoses, 10M deaths, and 7 recommendations.', publishedAt: '2026-07-08T10:00:00Z', readingTime: 14, evidenceScore: 93, category: 'health' },
           { slug: 'ayushman-bharat', headline: 'Ayushman Bharat: The World\'s Largest Health Insurance Experiment at 10', summary: 'Assessment of India\'s flagship health insurance scheme covering 50 crore beneficiaries.', publishedAt: '2026-08-08T06:00:00Z', readingTime: 14, evidenceScore: 91, category: 'health' },
           { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out', summary: 'ICDS programme challenges and nutrition worker conditions.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
         ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
@@ -3098,7 +3527,7 @@ function seed(): DataStore {
   // ── Topics ────────────────────────────────────────────────────────
 
   const topicDefs = [
-    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24, story30, story32], entities: ['rbi', 'ministry-of-finance'] },
+    { slug: 'economy', name: 'Economy & Finance', description: 'Indian economy, fiscal policy, GDP, inflation, and economic reforms.', stories: [story1, story2, story6, story10, story12, story24, story30, story32, story35], entities: ['rbi', 'ministry-of-finance'] },
     { slug: 'technology', name: 'Technology & Digital India', description: 'Digital transformation, fintech, UPI, 5G, and technology policy.', stories: [story2, story4, story5, story27, story29], entities: ['npci'] },
     { slug: 'cybersecurity', name: 'Cybersecurity & Data Privacy', description: 'Data breaches, cyber threats, digital security, privacy regulation, and India\'s cybersecurity landscape.', stories: [story5, story27], entities: ['icmr', 'cert-in', 'uidai', 'resecurity'] },
     { slug: 'policy', name: 'Policy & Governance', description: 'Government policies, schemes, and public administration.', stories: [story1, story3, story5, story8, story14, story15, story27, story28, story31, story32], entities: ['ministry-of-rural-development', 'ministry-of-agriculture', 'cag', 'election-commission'] },
@@ -3108,9 +3537,9 @@ function seed(): DataStore {
     { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13, story30], entities: [] },
     { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23], entities: [] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
-    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, and health outcomes in India.', stories: [story8, story11, story31], entities: ['ministry-of-women-and-child-development'] },
+    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33], entities: ['who', 'ministry-of-women-and-child-development'] },
     { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, digital connectivity, and infrastructure projects driving India\'s economic growth.', stories: [story12, story29, story30], entities: ['ministry-of-finance'] },
-    { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
+    { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26, story34], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
   ];
 
   topicDefs.forEach((t) => {

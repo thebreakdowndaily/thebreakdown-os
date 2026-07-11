@@ -38,39 +38,50 @@ export class CanonicalFixService {
   }
 }
 
-function rowToFix(row: any): Fix {
+function rowToFix(row: import('@/supabase/client').TypedDatabase['public']['Tables']['fixes']['Row']): Fix {
   return {
     id: row.id,
-    title: row.title,
     slug: row.slug,
-    problem: row.problem || '',
-    rootCauses: row.root_causes || [],
-    existingSolutions: row.existing_solutions || [],
-    globalExamples: row.global_examples || [],
-    recommendedActions: row.recommended_actions || [],
-    citizenActions: row.citizen_actions || [],
-    governmentActions: row.government_actions || [],
-    metrics: row.metrics || [],
-    status: row.status || 'draft',
-    createdAt: row.created_at,
+    storySlug: row.slug,
+    headline: row.title,
+    summary: '',
+    publishedAt: row.created_at,
     updatedAt: row.updated_at,
+    readingTime: 5,
+    author: { name: 'The Breakdown', role: 'Editorial Team', bio: '' },
+    evidenceScore: 80,
+    tags: row.tags || [],
+    problem: { title: 'Problem', content: row.problem || '' },
+    whoIsAffected: { title: 'Who is Affected', content: '' },
+    rootCauses: { title: 'Root Causes', content: (row.root_causes || []).join(', ') },
+    evidence: { title: 'Evidence', content: '' },
+    stakeholders: [],
+    existingSolutions: (row.existing_solutions?.map(s => typeof s === 'string' ? JSON.parse(s) : s) as import('@/types/canonical').ExistingSolution[]) || [],
+    globalExamples: (row.global_examples?.map(g => typeof g === 'string' ? JSON.parse(g) : g) as import('@/types/canonical').GlobalExample[]) || [],
+    recommendedActions: (row.recommended_actions?.map(r => typeof r === 'string' ? JSON.parse(r) : r) as import('@/types/canonical').FixAction[]) || [],
+    citizenActions: (row.citizen_actions?.map(c => typeof c === 'string' ? JSON.parse(c) : { title: c, description: '', priority: 'medium', timeframe: 'medium-term', actors: [] }) as import('@/types/canonical').FixAction[]) || [],
+    governmentActions: (row.government_actions?.map(g => typeof g === 'string' ? JSON.parse(g) : { title: g, description: '', priority: 'medium', timeframe: 'medium-term', actors: [] }) as import('@/types/canonical').FixAction[]) || [],
+    metricsToTrack: (row.metrics as import('@/types/canonical').FixMetric[]) || [],
+    relatedStories: [],
+    relatedEntities: [],
+    sources: [],
   };
 }
 
-function rowFromFix(f: Fix): any {
+function rowFromFix(f: Fix): import('@/supabase/client').TypedDatabase['public']['Tables']['fixes']['Insert'] {
   return {
     id: f.id,
     slug: f.slug,
-    title: f.title,
-    problem: f.problem,
-    root_causes: f.rootCauses,
-    existing_solutions: f.existingSolutions,
-    global_examples: f.globalExamples,
-    recommended_actions: f.recommendedActions,
-    citizen_actions: f.citizenActions,
-    government_actions: f.governmentActions,
-    metrics: f.metrics,
-    status: f.status,
+    title: f.headline,
+    problem: f.problem.content,
+    root_causes: [f.rootCauses.content],
+    existing_solutions: f.existingSolutions.map(s => JSON.stringify(s)),
+    global_examples: f.globalExamples.map(g => JSON.stringify(g)), 
+    recommended_actions: f.recommendedActions.map(r => JSON.stringify(r)),
+    citizen_actions: f.citizenActions.map(c => JSON.stringify(c)),
+    government_actions: f.governmentActions.map(g => JSON.stringify(g)),
+    metrics: f.metricsToTrack,
+    status: 'draft',
     updated_at: new Date().toISOString(),
   };
 }

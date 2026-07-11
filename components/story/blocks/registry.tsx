@@ -15,6 +15,10 @@ import ChapterHeadingBlock from './ChapterHeadingBlock';
 import ImageBlock from './ImageBlock';
 import EvidenceInlineBlock from './EvidenceInlineBlock';
 import TextBlockClient from './TextBlockClient';
+import HeroBlock from './HeroBlock';
+import AuthorBoxBlock from './AuthorBoxBlock';
+import StorySnapshotBlock from './StorySnapshotBlock';
+import ConfidenceMeterBlock from './ConfidenceMeterBlock';
 
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
   'executive-summary': ExecutiveSummaryBlock,
@@ -42,6 +46,10 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
       </blockquote>
     </section>
   ),
+  'hero': HeroBlock,
+  'author-box': AuthorBoxBlock,
+  'story-snapshot': StorySnapshotBlock,
+  'confidence-meter': ConfidenceMeterBlock,
 };
 
 export function getBlockComponent(type: string): React.ComponentType<any> | null {

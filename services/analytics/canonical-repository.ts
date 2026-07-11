@@ -22,8 +22,15 @@ export class CanonicalAnalyticsService {
       db().from('activity_log').select('*').order('created_at', { ascending: false }).limit(20),
     ]);
 
-    const stories: any[] = storiesRes.data || [];
-    const activity: any[] = activityRes.data || [];
+    const stories = (storiesRes.data || []) as { id: string; status: string }[];
+    const activity = (activityRes.data || []) as {
+      id: string;
+      event_type: string;
+      entity_slug?: string;
+      entity_id?: string;
+      created_at: string;
+      user_id?: string;
+    }[];
 
     return {
       totalStories: storiesRes.count || 0,
@@ -37,7 +44,7 @@ export class CanonicalAnalyticsService {
       review: stories.filter(s => s.status === 'review').length,
       scheduled: stories.filter(s => s.status === 'scheduled').length,
       published: stories.filter(s => s.status === 'published').length,
-      recentActivity: activity.map((e: any) => ({
+      recentActivity: activity.map(e => ({
         id: e.id,
         type: e.event_type,
         label: `${e.event_type}: ${e.entity_slug || e.entity_id}`,

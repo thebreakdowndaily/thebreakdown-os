@@ -5,7 +5,7 @@ import GlobeRenderer from '@/components/globe/GlobeRenderer';
 import SVGRenderer from '@/components/svg/SVGRenderer';
 import AnimationRenderer from '@/components/animations/AnimationRenderer';
 import InfographicRenderer from '@/components/infographics/InfographicRenderer';
-import type { GlobeSpec, SVGSpec, AnimationSpec, InfographicSpec } from '@/utils/types';
+import type { GlobeSpec, SVGSpec, AnimationSpec, InfographicSpec } from '@/types/canonical';
 
 export interface StoryVisuals {
   globes?: GlobeSpec[];

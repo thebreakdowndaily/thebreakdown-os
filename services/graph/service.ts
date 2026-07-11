@@ -451,7 +451,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
 
     // ── Fixes ──
     for (const fix of fixes) {
-      this.addNode(nodes, { id: fix.id, type: 'fix', title: fix.title, slug: fix.slug, subtitle: fix.problem });
+      this.addNode(nodes, { id: fix.id, type: 'fix', title: fix.headline, slug: fix.slug, subtitle: fix.problem.content });
     }
 
     // ── Datasets ──

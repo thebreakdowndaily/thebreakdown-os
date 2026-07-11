@@ -76,9 +76,9 @@ function rowToEntity(row: EntityRow): Entity {
     relatedEntityIds: row.related_entity_ids ?? [],
     relatedStoryIds: row.related_story_ids ?? [],
     relatedTopicIds: row.related_topic_ids ?? [],
-    statistics: (row.statistics as any[]) ?? [],
-    timeline: (row.timeline as any[]) ?? [],
-    faq: (row.faq as any[]) ?? [],
+    statistics: (row.statistics as import('@/types/canonical').StatItem[]) ?? [],
+    timeline: (row.timeline as import('@/types/canonical').TimelineEvent[]) ?? [],
+    faq: (row.faq as import('@/types/canonical').FAQItem[]) ?? [],
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
-import type { MapSpec } from '@/utils/types';
+import type { MapSpec } from '@/types/canonical';
 import * as d3Geo from 'd3-geo';
 import * as d3Scale from 'd3-scale';
 import * as d3ScaleChromatic from 'd3-scale-chromatic';
@@ -334,7 +334,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
       if (map.data) {
         let regions: RegionData[] = [];
 
-        // Path 1: data.source contains JSON-encoded regions (bridge from StoryJSON via geoDataToSpec)
+        // Path 1: data.source contains JSON-encoded regions (bridge from Story via geoDataToSpec)
         if (map.data.source) {
           try {
             const parsed: unknown = JSON.parse(map.data.source);

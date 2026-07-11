@@ -1,10 +1,9 @@
 import React from 'react';
-import type { FixJSON, PageSpec, Stakeholder, ExistingSolution, GlobalExample, FixAction, Metric, FixSection } from '@/utils/types';
+import type { Fix, Stakeholder, ExistingSolution, GlobalExample, FixAction, FixMetric, FixSection } from '@/types/canonical';
 import Link from 'next/link';
 
 interface FixRendererProps {
-  fix: FixJSON;
-  pageSpec: PageSpec;
+  fix: Fix;
 }
 
 /* ── Reusable section wrapper ──────────────────────────────────────────── */
@@ -39,7 +38,7 @@ function FixSectionContent({ section }: { section: FixSection }) {
 
 /* ── Framework Section Components ──────────────────────────────────────── */
 
-function FixHeader({ fix }: { fix: FixJSON }) {
+function FixHeader({ fix }: { fix: Fix }) {
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-3">
@@ -259,7 +258,7 @@ function FixActionList({ actions, title }: { actions: FixAction[]; title: string
   );
 }
 
-function FixMetrics({ metrics }: { metrics: Metric[] }) {
+function FixMetrics({ metrics }: { metrics: FixMetric[] }) {
   return (
     <SectionCard id="fix-metrics" title="Metrics to Track">
       <div className="overflow-x-auto">
@@ -292,18 +291,24 @@ function FixMetrics({ metrics }: { metrics: Metric[] }) {
 
 /* ── Main Renderer ────────────────────────────────────────────────────── */
 
-export default function FixRenderer({ fix, pageSpec }: FixRendererProps) {
+export default function FixRenderer({ fix }: FixRendererProps) {
   return (
     <div>
       <FixHeader fix={fix} />
 
       <div className="sticky top-0 z-10 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800 py-2 mb-6 overflow-x-auto">
         <nav className="flex gap-4 text-sm whitespace-nowrap">
-          {pageSpec.sections.filter(s => s.id !== 'fix-header').map((s) => (
-            <a key={s.id} href={`#${s.id}`} className="text-gray-400 hover:text-amber-400 transition-colors">
-              {s.component.replace('Fix', '')}
-            </a>
-          ))}
+          <a href="#fix-problem" className="text-gray-400 hover:text-amber-400 transition-colors">Problem</a>
+          <a href="#fix-affected" className="text-gray-400 hover:text-amber-400 transition-colors">Affected</a>
+          <a href="#fix-root-causes" className="text-gray-400 hover:text-amber-400 transition-colors">Root Causes</a>
+          <a href="#fix-evidence" className="text-gray-400 hover:text-amber-400 transition-colors">Evidence</a>
+          <a href="#fix-stakeholders" className="text-gray-400 hover:text-amber-400 transition-colors">Stakeholders</a>
+          <a href="#fix-existing" className="text-gray-400 hover:text-amber-400 transition-colors">Existing Solutions</a>
+          <a href="#fix-global" className="text-gray-400 hover:text-amber-400 transition-colors">Global Examples</a>
+          <a href="#recommended-actions" className="text-gray-400 hover:text-amber-400 transition-colors">Recommended</a>
+          <a href="#what-citizens-can-do" className="text-gray-400 hover:text-amber-400 transition-colors">Citizens</a>
+          <a href="#what-governments-can-do" className="text-gray-400 hover:text-amber-400 transition-colors">Governments</a>
+          <a href="#fix-metrics" className="text-gray-400 hover:text-amber-400 transition-colors">Metrics</a>
         </nav>
       </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import InteractiveTimelineBlock from '@/components/story/blocks/InteractiveTimelineBlock';
-import type { TimelineEvent } from '@/utils/types';
+import type { TimelineEvent } from '@/types/canonical';
 
 interface EntityTimelineProps {
   events: TimelineEvent[];

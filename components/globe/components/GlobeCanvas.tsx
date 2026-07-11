@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
-import type { GlobeSpec } from '@/utils/types';
+import type { GlobeSpec } from '@/types/canonical';
 import { useGlobeTheme } from '../hooks/useGlobeTheme';
 import { useResizeObserver } from '../hooks/useResizeObserver';
 import { GlobeLayerRegistry } from '../registries/GlobeLayerRegistry';

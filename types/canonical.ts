@@ -117,22 +117,6 @@ export interface Timeline {
   updatedAt: string;
 }
 
-export interface Fix {
-  id: string;
-  title: string;
-  slug: string;
-  problem: string;
-  rootCauses: string[];
-  existingSolutions: FixSolution[];
-  globalExamples: GlobalExample[];
-  recommendedActions: FixAction[];
-  citizenActions: string[];
-  governmentActions: string[];
-  metrics: FixMetric[];
-  status: StoryStatus;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export type ImageCategory = 'PHOTO' | 'ILLUSTRATION' | 'INFOGRAPHIC' | 'MAP' | 'CHART' | 'DIAGRAM' | 'DOCUMENT' | 'SCREENSHOT' | 'SATELLITE' | 'LOGO';
 export type EditorialPriority = 'PRIMARY' | 'SECONDARY' | 'SUPPORTING' | 'THUMBNAIL' | 'HERO';
@@ -246,6 +230,7 @@ export interface Follow {
 export interface StoryBlock {
   id: string;
   type: string;
+  region?: 'hero' | 'header' | 'main' | 'footer' | 'sidebar' | 'metadata';
   data: Record<string, unknown>;
   collapsed?: boolean;
 }
@@ -280,10 +265,15 @@ export interface FAQItem {
 }
 
 export interface ChartDef {
-  chartType: string;
+  type: string;
+  chartType?: string; // For backward compatibility if needed
   title: string;
-  data: Array<{ label: string; value: number }>;
-  caption: string;
+  description?: string;
+  data: any[];
+  xKey: string;
+  yKey: string;
+  color?: string;
+  caption?: string;
 }
 
 export interface StatItem {
@@ -292,31 +282,9 @@ export interface StatItem {
   change?: string;
 }
 
-export interface FixSolution {
-  title: string;
-  description: string;
-  link?: string;
-}
 
-export interface GlobalExample {
-  country: string;
-  approach: string;
-  outcome: string;
-  link?: string;
-}
 
-export interface FixAction {
-  action: string;
-  responsible: string;
-  timeline: string;
-}
 
-export interface FixMetric {
-  metric: string;
-  currentValue: string;
-  targetValue: string;
-  source?: string;
-}
 
 // ─── Graph ──────────────────────────────────────────────────────────────────
 
@@ -684,4 +652,268 @@ export interface MonitorSummary {
   criticalAlerts: number;
   watcherStatuses: WatcherStatus[];
   recentAlerts: MonitorAlert[];
+}
+
+// ── The Fix Types ─────────────────────────────────────────────────────────
+
+export interface Fix {
+  id: string;
+  slug: string;
+  storySlug: string;
+  headline: string;
+  summary: string;
+  heroImage?: string;
+  publishedAt: string;
+  updatedAt: string;
+  readingTime: number;
+  author: { name: string; role: string; bio?: string };
+  evidenceScore: number;
+  tags: string[];
+
+  problem: FixSection;
+  whoIsAffected: FixSection;
+  rootCauses: FixSection;
+  evidence: FixSection;
+  stakeholders: Stakeholder[];
+  existingSolutions: ExistingSolution[];
+  globalExamples: GlobalExample[];
+  recommendedActions: FixAction[];
+  citizenActions: FixAction[];
+  governmentActions: FixAction[];
+  metricsToTrack: FixMetric[];
+
+  relatedStories: Story[];
+  relatedEntities: Entity[];
+  sources: Source[];
+}
+
+export interface FixSection {
+  title: string;
+  content: string;
+  supportingData?: Array<{ label: string; value: string }>;
+}
+
+export interface Stakeholder {
+  name: string;
+  type: 'government' | 'citizen' | 'private-sector' | 'civil-society' | 'international';
+  role: string;
+  interest: string;
+  stance?: 'supports' | 'opposes' | 'neutral' | 'mixed';
+}
+
+export interface ExistingSolution {
+  name: string;
+  description: string;
+  status: 'active' | 'proposed' | 'expired' | 'failed';
+  effectiveness?: 'high' | 'medium' | 'low' | 'unknown';
+  source?: string;
+}
+
+export interface GlobalExample {
+  country: string;
+  policy: string;
+  description: string;
+  outcome: string;
+  source?: string;
+  applicableToIndia?: boolean;
+}
+
+export interface FixAction {
+  title: string;
+  description: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  timeframe: 'immediate' | 'short-term' | 'medium-term' | 'long-term';
+  actors: string[];
+}
+
+export interface FixMetric {
+  name: string;
+  currentValue: string;
+  targetValue: string;
+  dataSource: string;
+  updateFrequency: string;
+}
+
+
+// ─── Visual Intelligence ───────────────────────────────────────────────────────────
+
+export type ChartType =
+  | 'line' | 'bar' | 'horizontal-bar' | 'pie' | 'area' | 'scatter' | 'bubble'
+  | 'treemap' | 'sankey' | 'network' | 'radar' | 'heatmap' | 'sunburst' | 'table'
+  | 'waterfall' | 'histogram' | 'box-plot' | 'violin' | 'slope' | 'calendar'
+  | 'dot-plot' | 'lollipop' | 'ridgeline' | 'chord';
+
+export interface ChartSpec {
+  chartId: string;
+  type: ChartType;
+  purpose: string;
+  question?: string;
+  xAxis: { label: string; field: string; type: 'category' | 'numeric' | 'time' | 'ordinal' };
+  yAxis: { label: string; field: string; type: 'category' | 'numeric' | 'ordinal' };
+  dataset: { source: string; fields: string[]; filters?: Record<string, unknown>; transformations?: string[] };
+  colorField?: string;
+  sizeField?: string;
+  facetField?: string;
+  interactive?: boolean;
+  caption: string;
+  altText: string;
+  annotations?: Array<{ label: string; description: string }>;
+  sortOrder?: 'ascending' | 'descending' | 'none';
+  zeroBaseline?: boolean;
+  theme?: string;
+  responsive?: boolean;
+  lazyLoad?: boolean;
+}
+
+export type MapType = 'india-state' | 'india-district' | 'world-choropleth' | 'trade-routes' | 'migration' | 'conflict' | 'infrastructure' | 'river-basin' | 'rail-network' | 'air-routes' | 'heatmap';
+
+export interface MapSpec {
+  mapId: string;
+  type: MapType;
+  purpose: string;
+  geography: { scope: string; projection?: string; center?: [number, number]; zoom?: number };
+  data?: { source?: string; valueField?: string; joinKey?: string; colorScale?: { type: 'sequential' | 'diverging' | 'categorical'; steps?: number } };
+  interaction?: { hover?: string; click?: string };
+  caption: string;
+  altText: string;
+  theme?: string;
+  responsive?: boolean;
+  lazyLoad?: boolean;
+  accessible?: AccessibilitySpec;
+}
+
+export interface AccessibilitySpec {
+  altText: string;
+  longDescription?: string;
+  keyboardNavigation?: boolean;
+  focusable?: boolean;
+  ariaLabel?: string;
+  highContrast?: boolean;
+  reducedMotion?: boolean;
+  colorBlindSafe?: boolean;
+  textZoom?: string;
+}
+
+export interface VisualPlan {
+  storySlug: string;
+  gateResult: 'visual_required' | 'text_only';
+  gateReason?: string;
+  primaryVisual?: { type: string; purpose: string; reason: string };
+  secondaryVisuals?: Array<{ type: string; purpose: string; reason: string }>;
+  heroVisual?: { type: 'hero'; heroImage?: string; caption?: string; altText?: string };
+  charts?: ChartSpec[];
+  maps?: MapSpec[];
+  globes?: GlobeSpec[];
+  svgs?: SVGSpec[];
+  animations?: AnimationSpec[];
+  infographics?: InfographicSpec[];
+  cards?: CardSpec[];
+  storyFlow?: Array<{ position: number; type: string; visualId: string }>;
+  assets?: Array<{ id: string; type: string; lazyLoad: boolean }>;
+  captions?: Array<{ visualId: string; caption: string; altText: string; longDescription?: string }>;
+}
+
+export interface GlobeSpec {
+  globeId: string;
+  type: string;
+  purpose: string;
+  features: Record<string, unknown>;
+  technologies?: string[];
+  autoRotate?: boolean;
+  autoRotateSpeed?: number;
+  pov?: { lat: number; lng: number; altitude: number };
+  caption: string;
+  altText: string;
+  theme?: string;
+  lazyLoad?: boolean;
+  accessible?: AccessibilitySpec;
+}
+
+export interface SVGSpec {
+  svgId: string;
+  type: 'org-tree' | 'flowchart' | 'decision-tree' | 'sankey' | 'treemap' | 'timeline' | 'comparison-matrix';
+  purpose: string;
+  question?: string;
+  structure: {
+    layout: 'top-to-bottom' | 'left-to-right' | 'radial' | 'nested';
+    nodes: Array<{ id: string; label: string; type?: string; children?: string[] }>;
+    edges?: Array<{ from: string; to: string; label?: string; value?: number }>;
+    levels?: number;
+    orientation?: 'vertical' | 'horizontal';
+  };
+  styling?: Record<string, string | number>;
+  caption: string;
+  altText: string;
+  interactive?: boolean;
+  responsive?: boolean;
+  theme?: string;
+  lazyLoad?: boolean;
+  accessible?: AccessibilitySpec;
+}
+
+export interface AnimationSpec {
+  animationId: string;
+  type: 'cascade' | 'progressive-reveal' | 'data-animation' | 'map-animation';
+  purpose: string;
+  duration: number;
+  steps: Array<{
+    step: number; time: number; duration: number; action: string;
+    target?: string; description: string; easing?: string; transition?: string;
+  }>;
+  controls?: { autoplay?: boolean; loop?: boolean; showTimeline?: boolean; playPauseButton?: boolean; speedControl?: number[] };
+  caption: string;
+  altText: string;
+  theme?: string;
+  lazyLoad?: boolean;
+  accessible?: AccessibilitySpec;
+}
+
+export interface InfographicSpec {
+  infographicId: string;
+  purpose?: string;
+  cards: CardSpec[];
+  theme?: string;
+  responsive?: boolean;
+  lazyLoad?: boolean;
+}
+
+export type CardSpec =
+  | FactCard | ComparisonCard | TimelineCard | StatisticsCard | CountryCard | QuoteCard | ExplainerCard;
+
+export interface FactCard {
+  cardId: string; type: 'fact'; value: string; label: string;
+  context?: string; icon?: string; caption?: string; altText?: string;
+}
+
+export interface ComparisonCard {
+  cardId: string; type: 'comparison'; purpose: string;
+  items: Array<{ label: string; color?: string; metrics: Array<{ label: string; value: string }> }>;
+  caption?: string; altText?: string;
+}
+
+export interface TimelineCard {
+  cardId: string; type: 'timeline'; purpose: string;
+  events: Array<{ date: string; title: string; description?: string }>;
+  orientation?: 'vertical' | 'horizontal';
+}
+
+export interface StatisticsCard {
+  cardId: string; type: 'statistics'; purpose: string;
+  stats: Array<{ value: string; label: string; change?: string }>;
+  columns?: number; caption?: string;
+}
+
+export interface CountryCard {
+  cardId: string; type: 'country'; purpose: string;
+  country: { name: string; iso?: string; stats?: Array<{ label: string; value: string }>; highlight?: string };
+}
+
+export interface QuoteCard {
+  cardId: string; type: 'quote'; quote: string; attribution: string; source?: string;
+}
+
+export interface ExplainerCard {
+  cardId: string; type: 'explainer'; purpose: string;
+  steps: Array<{ number: number; title: string; description: string }>;
+  showConnector?: boolean;
 }

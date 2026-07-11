@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
     const tier = searchParams.get('tier') || '';
 
-    let query = (db().from('sources') as any).select('*', { count: 'exact' });
+    let query = db().from('sources').select('*', { count: 'exact' });
     if (tier) query = query.eq('tier', tier);
 
     const { data, count, error } = await query
@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: any = await request.json();
-    const { data, error } = await (db().from('sources') as any).insert(body).select().single();
+    const body = await request.json();
+    const { data, error } = await db().from('sources').insert(body).select().single();
     if (error) throw error;
     return created(data);
   } catch (e) { return serverError(e); }

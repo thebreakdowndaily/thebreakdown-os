@@ -64,10 +64,10 @@ export class CanonicalSearchService {
   }
 }
 
-function rowToEntry(row: any): SearchIndexEntry {
+function rowToEntry(row: import('@/supabase/client').TypedDatabase['public']['Tables']['index_entries']['Row']): SearchIndexEntry {
   return {
     id: row.ref_id,
-    type: row.ref_type,
+    type: row.ref_type as SearchIndexEntry['type'],
     title: row.title,
     slug: row.ref_slug,
     description: row.description || '',

@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { slug } = await context.params;
-    const { data, error } = await db().from('timelines').select('*').eq('slug', slug).single();
+    const { data, error } = await db().from('timelines').select('*').eq('id', slug).single();
     if (error) throw error;
     if (!data) return notFound('Timeline');
     return ok(data);
@@ -20,8 +20,8 @@ export async function PUT(
 ) {
   try {
     const { slug } = await context.params;
-    const body: any = await request.json();
-    const { data, error } = await (db().from('timelines') as any).update(body).eq('slug', slug).select().single();
+    const body = await request.json();
+    const { data, error } = await db().from('timelines').update(body as import('@/supabase/schema').Database['public']['Tables']['timelines']['Update']).eq('id', slug).select().single();
     if (error) throw error;
     if (!data) return notFound('Timeline');
     return ok(data);
@@ -34,7 +34,7 @@ export async function DELETE(
 ) {
   try {
     const { slug } = await context.params;
-    const { error } = await db().from('timelines').delete().eq('slug', slug);
+    const { error } = await db().from('timelines').delete().eq('id', slug);
     if (error) throw error;
     return new Response(null, { status: 204 });
   } catch (e) { return serverError(e); }

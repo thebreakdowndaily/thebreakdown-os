@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
-import type { ChartSpec } from '@/utils/types';
+import type { ChartSpec } from '@/types/canonical';
 import * as d3 from 'd3';
 
 /**

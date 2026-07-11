@@ -1,4 +1,4 @@
-import type { MapSpec } from '@/utils/types';
+import type { MapSpec } from '@/types/canonical';
 
 interface MapControlsProps {
   interaction?: MapSpec['interaction'];
