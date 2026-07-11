@@ -96,8 +96,8 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India', summary: 'UPI\'s role in rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development', type: 'organization', description: 'Nodal ministry for MGNREGA implementation.' },
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development',image: '/images/entities/ministry-of-rural-development.jpg',  type: 'organization', description: 'Nodal ministry for MGNREGA implementation.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -273,8 +273,8 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development', type: 'organization', description: 'Nodal ministry.' },
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development',image: '/images/entities/ministry-of-rural-development.jpg',  type: 'organization', description: 'Nodal ministry.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -330,7 +330,7 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -387,8 +387,8 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India', type: 'organization', description: 'India\'s central bank.' },
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India',image: '/images/entities/rbi.jpg',  type: 'organization', description: 'India\'s central bank.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -449,7 +449,7 @@ function seed(): DataStore {
       { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment', summary: 'Two decades of India\'s flagship rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -502,7 +502,7 @@ function seed(): DataStore {
       { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment', summary: 'Two decades of India\'s flagship rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -560,8 +560,8 @@ function seed(): DataStore {
       { slug: 'climate-finance', headline: 'India\'s ₹11 Lakh Crore Climate Finance Challenge', summary: 'Climate finance gap threatens renewable transition.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 13, evidenceScore: 87, category: 'environment' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-agriculture', slug: 'ministry-of-agriculture', name: 'Ministry of Agriculture and Farmers Welfare', type: 'organization', description: 'Nodal ministry.' },
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-agriculture', slug: 'ministry-of-agriculture', name: 'Ministry of Agriculture and Farmers Welfare',image: '/images/entities/ministry-of-agriculture.jpg',  type: 'organization', description: 'Nodal ministry.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -618,8 +618,8 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development', type: 'organization', description: 'Nodal ministry.' },
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development',image: '/images/entities/ministry-of-rural-development.jpg',  type: 'organization', description: 'Nodal ministry.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -684,8 +684,8 @@ function seed(): DataStore {
       { slug: 'ration-digitization', headline: 'Digitizing PDS', summary: 'Aadhaar and ePoS impact on food security.', publishedAt: '2026-07-22T06:00:00Z', readingTime: 10, evidenceScore: 86, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-women-and-child-development', slug: 'ministry-of-women-and-child-development', name: 'Ministry of Women and Child Development', type: 'organization', description: 'Nodal ministry for ICDS implementation.' },
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-women-and-child-development', slug: 'ministry-of-women-and-child-development', name: 'Ministry of Women and Child Development',image: '/images/entities/ministry-of-women-and-child-development.jpg',  type: 'organization', description: 'Nodal ministry for ICDS implementation.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -755,7 +755,7 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India', summary: 'UPI\'s role in financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization', description: 'Nodal ministry for PLI schemes and FDI policy.' },
+      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance',image: '/images/entities/ministry-of-finance.jpg',  type: 'organization', description: 'Nodal ministry for PLI schemes and FDI policy.' },
       { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India', type: 'organization', description: 'India\'s central bank regulating FDI inflows.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
@@ -967,7 +967,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'un', slug: 'un', name: 'United Nations', type: 'organization', description: 'International organization.' },
+      { id: 'un', slug: 'un', name: 'United Nations',image: '/images/entities/un.jpg',  type: 'organization', description: 'International organization.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
@@ -1039,7 +1039,7 @@ function seed(): DataStore {
       { slug: 'ews-quota', headline: 'EWS Quota: Economic Reservation Debate', summary: 'Supreme Court upholds 10% EWS quota.', publishedAt: '2026-07-16T06:00:00Z', readingTime: 11, evidenceScore: 87, category: 'policy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
       { id: 'un', slug: 'un', name: 'United Nations', type: 'organization', description: 'UN agencies track SDG 4 education indicators.' },
     ],
   };
@@ -1114,7 +1114,7 @@ function seed(): DataStore {
       { slug: 'ration-digitization', headline: 'Digitizing PDS', summary: 'Aadhaar and ePoS impact on food security.', publishedAt: '2026-07-22T06:00:00Z', readingTime: 10, evidenceScore: 86, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
       { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India', type: 'organization', description: 'India\'s central bank.' },
       { id: 'imf', slug: 'imf', name: 'International Monetary Fund', type: 'organization', description: 'International financial institution.' },
     ],
@@ -1186,7 +1186,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity in manufacturing.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
       { id: 'un', slug: 'un', name: 'United Nations', type: 'organization', description: 'International organization.' },
     ],
   };
@@ -1264,7 +1264,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
       { id: 'un', slug: 'un', name: 'United Nations', type: 'organization', description: 'International organization.' },
       { id: 'g20', slug: 'g20', name: 'G20', type: 'organization', description: 'Group of Twenty.' },
       { id: 'brics', slug: 'brics', name: 'BRICS', type: 'organization', description: 'Brazil-Russia-India-China-South Africa grouping.' },
@@ -1501,7 +1501,7 @@ function seed(): DataStore {
       { slug: 'india-china-relations', headline: 'India-China Relations', summary: 'Border tensions and rivalry.', publishedAt: '2026-08-20T10:00:00Z', readingTime: 17, evidenceScore: 93, category: 'geopolitics' },
     ],
     relatedEntities: [
-      { id: 'bimstec', slug: 'bimstec', name: 'BIMSTEC', type: 'organization', description: 'Bay of Bengal Initiative.' },
+      { id: 'bimstec', slug: 'bimstec', name: 'BIMSTEC',image: '/images/entities/bimstec.jpg',  type: 'organization', description: 'Bay of Bengal Initiative.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
@@ -1576,7 +1576,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'China+1 opportunity for India.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'sco', slug: 'sco', name: 'SCO', type: 'organization', description: 'Shanghai Cooperation Organisation.' },
+      { id: 'sco', slug: 'sco', name: 'SCO',image: '/images/entities/sco.jpg',  type: 'organization', description: 'Shanghai Cooperation Organisation.' },
       { id: 'brics', slug: 'brics', name: 'BRICS', type: 'organization', description: 'BRICS grouping.' },
       { id: 'quad', slug: 'quad', name: 'Quad', type: 'organization', description: 'Quadrilateral Security Dialogue.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
@@ -1649,7 +1649,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'India\'s China+1 opportunity.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'imf', slug: 'imf', name: 'IMF', type: 'organization', description: 'International Monetary Fund.' },
+      { id: 'imf', slug: 'imf', name: 'IMF',image: '/images/entities/imf.jpg',  type: 'organization', description: 'International Monetary Fund.' },
       { id: 'wto', slug: 'wto', name: 'WTO', type: 'organization', description: 'World Trade Organization.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
@@ -1720,7 +1720,7 @@ function seed(): DataStore {
       { slug: 'india-us-relations', headline: 'India-US Relations', summary: 'From nuclear deal to iCET.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
     ],
     relatedEntities: [
-      { id: 'commonwealth', slug: 'commonwealth', name: 'Commonwealth of Nations', type: 'organization', description: 'Commonwealth of Nations.' },
+      { id: 'commonwealth', slug: 'commonwealth', name: 'Commonwealth of Nations',image: '/images/entities/commonwealth.jpg',  type: 'organization', description: 'Commonwealth of Nations.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
@@ -1796,7 +1796,7 @@ function seed(): DataStore {
       { slug: 'india-us-relations', headline: 'India-US Relations', summary: 'Strategic partnership deepening.', publishedAt: '2026-08-15T10:00:00Z', readingTime: 16, evidenceScore: 91, category: 'geopolitics' },
     ],
     relatedEntities: [
-      { id: 'brics', slug: 'brics', name: 'BRICS', type: 'organization', description: 'BRICS grouping.' },
+      { id: 'brics', slug: 'brics', name: 'BRICS',image: '/images/entities/brics.jpg',  type: 'organization', description: 'BRICS grouping.' },
       { id: 'sco', slug: 'sco', name: 'SCO', type: 'organization', description: 'Shanghai Cooperation Organisation.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
@@ -2091,7 +2091,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'India\'s manufacturing opportunity amid global supply chain diversification.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India — the world\'s second-largest telecommunications market.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India — the world\'s second-largest telecommunications market.' },
       { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India', type: 'organization', description: 'India\'s central bank, regulates telecom payment systems and spectrum payment terms for telecom operators.' },
     ],
   };
@@ -2188,7 +2188,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Battery supply chain as a critical component of India\'s manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
       { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization', description: 'Nodal ministry for PLI schemes and customs duty policy on battery imports.' },
     ],
   };
@@ -2382,7 +2382,7 @@ function seed(): DataStore {
       { slug: 'income-inequality-india', headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth', summary: 'Structural drivers behind India\'s growing wealth concentration.', publishedAt: '2026-07-26T06:00:00Z', readingTime: 15, evidenceScore: 94, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'election-commission', slug: 'election-commission', name: 'Election Commission of India', type: 'organization', description: 'Constitutional body that published electoral bond donor data after Supreme Court order.' },
+      { id: 'election-commission', slug: 'election-commission', name: 'Election Commission of India',image: '/images/entities/election-commission.jpg',  type: 'organization', description: 'Constitutional body that published electoral bond donor data after Supreme Court order.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
@@ -2551,7 +2551,7 @@ function seed(): DataStore {
       { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out', summary: 'Malnutrition and its link to non-communicable disease risk in India.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
     ],
     relatedEntities: [
-      { id: 'who', slug: 'who', name: 'World Health Organization', type: 'organization', description: 'Publisher of the Global Status Report on Cancer 2026.' },
+      { id: 'who', slug: 'who', name: 'World Health Organization',image: '/images/entities/who.jpg',  type: 'organization', description: 'Publisher of the Global Status Report on Cancer 2026.' },
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
@@ -2688,7 +2688,7 @@ function seed(): DataStore {
       { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift', summary: 'How the Hormuz crisis is accelerating India\'s energy diversification and China+1 manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India — disproportionately exposed to Hormuz disruption.' },
+      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India — disproportionately exposed to Hormuz disruption.' },
       { id: 'un', slug: 'un', name: 'United Nations', type: 'organization', description: 'IMO called for protection of mariners; UN Security Council deadlocked.' },
     ],
   };
@@ -3178,7 +3178,7 @@ function seed(): DataStore {
     // ── International Organizations ──────────────────────────────────
     const intlEntities: APIEntity[] = [
       {
-        id: 'un', slug: 'un', name: 'United Nations',
+        id: 'un', slug: 'un', name: 'United Nations',image: '/images/entities/un.jpg', 
         type: 'organization', description: 'India is a founding member of the United Nations (1945) and has served as a non-permanent member of the Security Council eight times. India is the largest contributor to UN peacekeeping missions, with over 2,50,000 troops deployed across 49 missions since 1948.',
         aliases: ['UN', 'United Nations Organization', 'UNO'], storyCount: 5, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3199,7 +3199,7 @@ function seed(): DataStore {
         sources: [{ name: 'UN India Website', url: 'https://un.org.in', type: 'international', description: 'UN India official portal.' }],
       },
       {
-        id: 'wto', slug: 'wto', name: 'World Trade Organization',
+        id: 'wto', slug: 'wto', name: 'World Trade Organization',image: '/images/entities/wto.jpg', 
         type: 'organization', description: 'India is a founding member of the WTO (1995) and its predecessor GATT (1947). India is one of the most active users of the WTO dispute settlement mechanism and has been both complainant and respondent in numerous trade disputes. India\'s trade policy at the WTO focuses on protecting agricultural subsidies, special and differential treatment for developing countries, and resisting expanded mandates on investment and e-commerce.',
         aliases: ['WTO', 'World Trade Organisation'], storyCount: 3, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3219,7 +3219,7 @@ function seed(): DataStore {
         sources: [{ name: 'WTO Disputes Database', url: 'https://wto.org/disputes', type: 'international', description: 'WTO dispute settlement gateway.' }],
       },
       {
-        id: 'imf', slug: 'imf', name: 'International Monetary Fund',
+        id: 'imf', slug: 'imf', name: 'International Monetary Fund',image: '/images/entities/imf.jpg', 
         type: 'organization', description: 'India is a founding member of the IMF (1945) and holds a 2.63% quota share and 2.34% voting power. India has taken IMF assistance during balance of payments crises in 1981, 1991, and the 1990s IMF programme catalysed India\'s landmark economic liberalisation. India\'s 16th Quota Review position advocates for increased voice for dynamic emerging economies.',
         aliases: ['IMF', 'International Monetary Fund'], storyCount: 4, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3239,7 +3239,7 @@ function seed(): DataStore {
         sources: [{ name: 'IMF India Country Page', url: 'https://imf.org/en/Countries/IND', type: 'international', description: 'IMF country data for India.' }],
       },
       {
-        id: 'world-bank', slug: 'world-bank', name: 'World Bank',
+        id: 'world-bank', slug: 'world-bank', name: 'World Bank',image: '/images/entities/world-bank.jpg', 
         type: 'organization', description: 'India is a founding member of the World Bank (IBRD: 1945, IDA: 1960) and is the largest recipient of IDA (International Development Association) funds historically. The World Bank lends $3-5 billion annually to India across sectors including rural development, health, education, infrastructure, and water. The World Bank\'s Logistics Performance Index and Ease of Doing Business reports are key benchmarks for Indian policy.',
         aliases: ['World Bank', 'IBRD', 'IDA', 'World Bank Group'], storyCount: 6, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3259,7 +3259,7 @@ function seed(): DataStore {
         sources: [{ name: 'World Bank India Overview', url: 'https://worldbank.org/en/country/india', type: 'international', description: 'World Bank India country page.' }],
       },
       {
-        id: 'who', slug: 'who', name: 'World Health Organization',
+        id: 'who', slug: 'who', name: 'World Health Organization',image: '/images/entities/who.jpg', 
         type: 'organization', description: 'India is a founding member of WHO (1948) and hosts the WHO South-East Asia Regional Office (SEARO) in New Delhi. India has been a major beneficiary of WHO technical assistance for polio eradication (certified polio-free in 2014), tuberculosis control, maternal health, and pandemic preparedness. India\'s Central Drugs Standard Control Organization (CDSCO) aligns with WHO prequalification standards for pharmaceutical exports.',
         aliases: ['WHO', 'World Health Organisation'], storyCount: 4, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3300,7 +3300,7 @@ function seed(): DataStore {
         sources: [{ name: 'ILO India Decent Work', url: 'https://ilo.org/newdelhi', type: 'international', description: 'ILO India country office.' }],
       },
       {
-        id: 'brics', slug: 'brics', name: 'BRICS',
+        id: 'brics', slug: 'brics', name: 'BRICS',image: '/images/entities/brics.jpg', 
         type: 'organization', description: 'India is a founding member of BRICS (2009), the grouping of major emerging economies. BRICS has evolved from an economic cooperation forum to a platform for reforming global governance institutions. India uses BRICS to advance its positions on UNSC reform, counter-terrorism, multilateral development bank reform, and the creation of alternative payment systems.',
         aliases: ['BRICS', 'BRICS Nations'], storyCount: 2, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3321,7 +3321,7 @@ function seed(): DataStore {
         sources: [{ name: 'Ministry of External Affairs — BRICS', url: 'https://mea.gov.in/brics', type: 'government', description: 'India\'s official BRICS portal.' }],
       },
       {
-        id: 'sco', slug: 'sco', name: 'Shanghai Cooperation Organisation',
+        id: 'sco', slug: 'sco', name: 'Shanghai Cooperation Organisation',image: '/images/entities/sco.jpg', 
         type: 'organization', description: 'India became a full member of the SCO in 2017, elevating its role in Eurasian security and economic cooperation. India\'s SCO membership provides a platform to engage with Central Asian republics on energy security, counter-terrorism, connectivity (INSTC), and Afghanistan stability. India hosted the SCO Heads of Government meeting in 2020.',
         aliases: ['SCO', 'Shanghai Cooperation Organization', 'Shanghai Pact'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3341,7 +3341,7 @@ function seed(): DataStore {
         sources: [{ name: 'Ministry of External Affairs — SCO', url: 'https://mea.gov.in/sco', type: 'government', description: 'India\'s official SCO portal.' }],
       },
       {
-        id: 'g20', slug: 'g20', name: 'G20',
+        id: 'g20', slug: 'g20', name: 'G20',image: '/images/entities/g20.jpg', 
         type: 'organization', description: 'India is a founding member of the G20 (1999) and held a landmark Presidency in 2023, hosting the New Delhi Leaders\' Summit. Under India\'s presidency, the G20 focused on climate finance, digital public infrastructure, women-led development, and Global South representation. India\'s push for the African Union\'s permanent G20 membership was a key diplomatic achievement.',
         aliases: ['G20', 'Group of Twenty', 'G20 Nations'], storyCount: 2, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3362,7 +3362,7 @@ function seed(): DataStore {
         sources: [{ name: 'G20 India Presidency Website', url: 'https://g20.org', type: 'international', description: 'Official G20 portal.' }],
       },
       {
-        id: 'saarc', slug: 'saarc', name: 'South Asian Association for Regional Cooperation',
+        id: 'saarc', slug: 'saarc', name: 'South Asian Association for Regional Cooperation',image: '/images/entities/saarc.jpg', 
         type: 'organization', description: 'India is a founding member of SAARC (1985), the primary regional cooperation forum in South Asia. SAARC has been largely paralysed due to India-Pakistan tensions, with the 19th SAARC Summit (scheduled for 2016 in Islamabad) indefinitely postponed. India has shifted focus to sub-regional initiatives like BBIN (Bangladesh-Bhutan-India-Nepal) and BIMSTEC as functional alternatives.',
         aliases: ['SAARC', 'South Asian Association for Regional Co-operation'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3382,7 +3382,7 @@ function seed(): DataStore {
         sources: [{ name: 'SAARC Secretariat', url: 'https://saarc-sec.org', type: 'international', description: 'Official SAARC secretariat.' }],
       },
       {
-        id: 'commonwealth', slug: 'commonwealth', name: 'Commonwealth of Nations',
+        id: 'commonwealth', slug: 'commonwealth', name: 'Commonwealth of Nations',image: '/images/entities/commonwealth.jpg', 
         type: 'organization', description: 'India joined the Commonwealth in 1947 as a republic, the first Asian member. India is the largest member by population and one of the largest financial contributors. The Commonwealth provides India with a platform for development cooperation, technical assistance, and promoting Commonwealth values among 56 member states. India hosts the Commonwealth of Learning headquarters in New Delhi.',
         aliases: ['Commonwealth', 'Commonwealth of Nations', 'British Commonwealth'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3401,7 +3401,7 @@ function seed(): DataStore {
         sources: [{ name: 'Commonwealth Secretariat', url: 'https://commonwealth.int', type: 'international', description: 'Official Commonwealth secretariat.' }],
       },
       {
-        id: 'adb', slug: 'adb', name: 'Asian Development Bank',
+        id: 'adb', slug: 'adb', name: 'Asian Development Bank',image: '/images/entities/adb.jpg', 
         type: 'organization', description: 'India is a founding member of the Asian Development Bank (1966) and its fourth-largest shareholder. ADB lends $3-4 billion annually to India for infrastructure, transport, energy, urban development, and financial sector projects. India-hosted ADB projects include the Delhi Metro, national highway corridors, and the Assam electricity grid strengthening.',
         aliases: ['ADB', 'Asian Development Bank'], storyCount: 2, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3421,7 +3421,7 @@ function seed(): DataStore {
         sources: [{ name: 'ADB India', url: 'https://adb.org/countries/india', type: 'international', description: 'ADB India country page.' }],
       },
       {
-        id: 'aiib', slug: 'aiib', name: 'Asian Infrastructure Investment Bank',
+        id: 'aiib', slug: 'aiib', name: 'Asian Infrastructure Investment Bank',image: '/images/entities/aiib.jpg', 
         type: 'organization', description: 'India is the second-largest shareholder in AIIB (founding member, 2015) after China, with 8.52% voting power. India is AIIB\'s largest borrower, having received over $5 billion in loans for infrastructure projects including rural roads (PMGSY), power transmission, water supply, and renewable energy. AIIB has financed over 20 projects in India.',
         aliases: ['AIIB', 'Asian Infrastructure Investment Bank'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3441,7 +3441,7 @@ function seed(): DataStore {
         sources: [{ name: 'AIIB India Page', url: 'https://aiib.org/en/countries/india', type: 'international', description: 'AIIB country page for India.' }],
       },
       {
-        id: 'bimstec', slug: 'bimstec', name: 'Bay of Bengal Initiative for Multi-Sectoral Technical and Economic Cooperation',
+        id: 'bimstec', slug: 'bimstec', name: 'Bay of Bengal Initiative for Multi-Sectoral Technical and Economic Cooperation',image: '/images/entities/bimstec.jpg', 
         type: 'organization', description: 'India is a founding member of BIMSTEC (1997), a regional grouping connecting South and Southeast Asia through the Bay of Bengal. BIMSTEC has emerged as India\'s preferred regional platform after SAARC\'s paralysis, with progress on free trade agreements, connectivity (India-Myanmar-Thailand trilateral highway), counter-terrorism, and energy cooperation.',
         aliases: ['BIMSTEC', 'Bay of Bengal Initiative'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3460,7 +3460,7 @@ function seed(): DataStore {
         sources: [{ name: 'BIMSTEC Secretariat', url: 'https://bimstec.org', type: 'international', description: 'Official BIMSTEC secretariat.' }],
       },
       {
-        id: 'quad', slug: 'quad', name: 'Quadrilateral Security Dialogue',
+        id: 'quad', slug: 'quad', name: 'Quadrilateral Security Dialogue',image: '/images/entities/quad.jpg', 
         type: 'organization', description: 'The Quad (Quadrilateral Security Dialogue) is a strategic forum comprising India, Australia, Japan, and the United States. Revived in 2017, the Quad focuses on a free and open Indo-Pacific, maritime security, critical and emerging technology cooperation, climate action, and infrastructure investment through the Quad Infrastructure Fellowship.',
         aliases: ['Quad', 'Quadrilateral Security Dialogue', 'Quad Grouping'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3481,7 +3481,7 @@ function seed(): DataStore {
         sources: [{ name: 'MEA — Quad', url: 'https://mea.gov.in/quad', type: 'government', description: 'Indian MEA page on Quad.' }],
       },
       {
-        id: 'nam', slug: 'nam', name: 'Non-Aligned Movement',
+        id: 'nam', slug: 'nam', name: 'Non-Aligned Movement',image: '/images/entities/nam.jpg', 
         type: 'organization', description: 'India is a founding member of the Non-Aligned Movement (1961), established during the Cold War to provide an alternative to US and Soviet blocs. India was a leading force in NAM under Prime Ministers Nehru, Indira Gandhi, and Rao. While NAM\'s relevance declined after the Cold War, India continues to use it as a platform for South-South cooperation, multilateralism, and developing country solidarity.',
         aliases: ['NAM', 'Non-Aligned Movement'], storyCount: 0, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3538,7 +3538,7 @@ function seed(): DataStore {
         sources: [{ name: 'FATF Official Website', url: 'https://fatf-gafi.org', type: 'international', description: 'Official FATF website.' }],
       },
       {
-        id: 'isa', slug: 'isa', name: 'International Solar Alliance',
+        id: 'isa', slug: 'isa', name: 'International Solar Alliance',image: '/images/entities/isa.jpg', 
         type: 'organization', description: 'India co-founded the International Solar Alliance (ISA) with France at the COP21 in Paris (2015). Headquartered in Gurugram, India, the ISA is a treaty-based intergovernmental organisation with 120+ member countries focused on mobilising $1 trillion in solar energy investments by 2030. The ISA demonstrates India\'s leadership in climate action and renewable energy diplomacy.',
         aliases: ['ISA', 'International Solar Alliance'], storyCount: 1, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3557,7 +3557,7 @@ function seed(): DataStore {
         sources: [{ name: 'International Solar Alliance', url: 'https://isolaralliance.org', type: 'international', description: 'Official ISA website.' }],
       },
       {
-        id: 'iora', slug: 'iora', name: 'Indian Ocean Rim Association',
+        id: 'iora', slug: 'iora', name: 'Indian Ocean Rim Association',image: '/images/entities/iora.jpg', 
         type: 'organization', description: 'India is a founding member of the Indian Ocean Rim Association (IORA, 1997), the primary regional organisation for the Indian Ocean region. IORA focuses on maritime safety, blue economy, fisheries management, disaster risk reduction, and connectivity. India has used IORA to advance its SAGAR (Security and Growth for All in the Region) policy for Indian Ocean maritime governance.',
         aliases: ['IORA', 'Indian Ocean Rim Association', 'IOR-ARC'], storyCount: 0, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3576,7 +3576,7 @@ function seed(): DataStore {
         sources: [{ name: 'IORA Official Website', url: 'https://iora.int', type: 'international', description: 'Official IORA secretariat.' }],
       },
       {
-        id: 'cdri', slug: 'cdri', name: 'Coalition for Disaster Resilient Infrastructure',
+        id: 'cdri', slug: 'cdri', name: 'Coalition for Disaster Resilient Infrastructure',image: '/images/entities/cdri.jpg', 
         type: 'organization', description: 'India co-founded and hosts the Coalition for Disaster Resilient Infrastructure (CDRI, 2019), a global partnership of 40+ countries and organisations to promote climate and disaster-resilient infrastructure systems. CDRI, headquartered in New Delhi, is a flagship Indian initiative demonstrating leadership in climate adaptation, complementing India\'s Infrastructure for Resilient Island States (IRIS) for small island nations.',
         aliases: ['CDRI', 'Coalition for Disaster Resilient Infrastructure'], storyCount: 0, updatedAt: '2026-07-01T00:00:00Z',
         timeline: [
@@ -3982,7 +3982,7 @@ function seed(): DataStore {
       { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: 'Rural employment assessment.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-agriculture', slug: 'ministry-of-agriculture', name: 'Ministry of Agriculture and Farmers Welfare', type: 'organization' },
+      { id: 'ministry-of-agriculture', slug: 'ministry-of-agriculture', name: 'Ministry of Agriculture and Farmers Welfare',image: '/images/entities/ministry-of-agriculture.jpg',  type: 'organization' },
       { id: 'india', slug: 'india', name: 'India', type: 'country' },
     ],
   };
@@ -4047,7 +4047,7 @@ function seed(): DataStore {
       { slug: 'dpdp-bill', headline: 'Digital Personal Data Protection Bill', summary: 'India\'s privacy law journey.', publishedAt: '2026-08-01T10:00:00Z', readingTime: 10, evidenceScore: 90, category: 'policy' },
     ],
     relatedEntities: [
-      { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General', type: 'organization' },
+      { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General',image: '/images/entities/cag.jpg',  type: 'organization' },
       { id: 'india', slug: 'india', name: 'India', type: 'country' },
     ],
   };
@@ -4121,7 +4121,7 @@ function seed(): DataStore {
     ],
     relatedStories: [{ slug: 'anganwadi-icds', headline: 'Anganwadi Centres: Frontline Workers Burning Out', summary: 'India\'s ICDS programme at a crossroads.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' }],
     relatedEntities: [
-      { id: 'ministry-of-women-and-child-development', slug: 'ministry-of-women-and-child-development', name: 'Ministry of Women and Child Development', type: 'organization' },
+      { id: 'ministry-of-women-and-child-development', slug: 'ministry-of-women-and-child-development', name: 'Ministry of Women and Child Development',image: '/images/entities/ministry-of-women-and-child-development.jpg',  type: 'organization' },
       { id: 'india', slug: 'india', name: 'India', type: 'country' },
     ],
   };

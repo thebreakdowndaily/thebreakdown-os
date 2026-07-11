@@ -19,6 +19,7 @@ import { CanonicalTimelineService } from './timelines/canonical-repository';
 import { CanonicalFixService } from './fixes/canonical-repository';
 import { CanonicalSearchService } from './search/canonical-repository';
 import { CanonicalAnalyticsService } from './analytics/canonical-repository';
+import { DefaultImageIntelligenceService } from './media/intelligence';
 
 function createMonitorService(): MemoryMonitorService {
   const svc = new MemoryMonitorService();
@@ -58,6 +59,7 @@ export function initDefaultServices(
     media: new MemoryMediaService(seedMedia),
     search: new MemorySearchService(),
     analytics: new PluginAnalyticsService(),
+    intelligence: new DefaultImageIntelligenceService(),
   });
 }
 
@@ -74,5 +76,6 @@ export function initCanonicalServices(): Services {
     media: new MemoryMediaService([]) as unknown as Services['media'],
     search: new CanonicalSearchService() as unknown as Services['search'],
     analytics: new CanonicalAnalyticsService() as unknown as Services['analytics'],
+    intelligence: new DefaultImageIntelligenceService(),
   });
 }
