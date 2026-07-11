@@ -116,6 +116,8 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
   return ld;
 }
 
+export const dynamicParams = true;
+
 export function generateStaticParams() {
   const services = bootstrapServices();
   return services.stories.getStories().data.map((s) => ({ slug: s.slug }));

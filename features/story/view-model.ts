@@ -1,5 +1,7 @@
 import type { Story, Topic, Entity, StoryTerminalViewModel, TOCItem } from '@/types/canonical';
 import type { Services } from '@/services/registry';
+import { SupabaseStoryRepository } from '@/services/stories/repository';
+import { syncStory } from '@/lib/data-sync';
 import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { EntityBuilder } from '@/services/stories/pipeline/entities';
@@ -34,7 +36,21 @@ function buildTOC(story: Story): TOCItem[] {
 }
 
 export async function buildStoryPage(services: Services, slug: string): Promise<StoryTerminalViewModel | null> {
-  const rawStory = services.stories.getStoryBySlug(slug);
+  let rawStory = services.stories.getStoryBySlug(slug);
+
+  if (!rawStory) {
+    try {
+      const repo = new SupabaseStoryRepository();
+      const fromDb = await repo.findBySlug(slug);
+      if (fromDb) {
+        syncStory(fromDb);
+        rawStory = fromDb;
+      }
+    } catch {
+      rawStory = undefined;
+    }
+  }
+
   if (!rawStory) return null;
 
   // Initialize pipeline

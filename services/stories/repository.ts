@@ -61,29 +61,37 @@ export class SupabaseStoryRepository implements StoryRepository {
 }
 
 function rowToStory(row: StoryRow): Story {
-  const content = row.content as { blocks?: import('@/types/canonical').StoryBlock[] } | null;
-  return {
-    id: row.id, slug: row.slug, title: row.title, headline: row.title, summary: row.summary,
-    heroImage: row.hero_image || '', author: row.author_id || '', category: row.category || '',
+  const blocks = (row.blocks as import('@/types/canonical').StoryBlock[]) || [];
+  const sources = (row.sources as import('@/types/canonical').Source[]) || [];
+  const claims = (row.claims as import('@/types/canonical').Claim[]) || [];
+  const timeline = (row.timeline as import('@/types/canonical').TimelineEvent[]) || [];
+  const faq = (row.faq as import('@/types/canonical').FAQItem[]) || [];
+  const charts = (row.charts as import('@/types/canonical').ChartDef[]) || [];
+  const story: Story = {
+    id: row.id, slug: row.slug, title: row.title, headline: row.headline || row.title, summary: row.summary,
+    heroImage: row.hero_image || '', author: row.author || '', category: row.category || '',
     status: (row.status as Story['status']) || 'draft',
-    evidenceScore: 0, readingTime: 0, publishedAt: row.published_at || '',
-    createdAt: row.created_at, updatedAt: row.updated_at,
-    tags: row.tags || [], blocks: content?.blocks || [],
-    sources: [], claims: [], timeline: [], faq: [], charts: [],
-    relatedStoryIds: row.related_story_ids || [], relatedEntityIds: row.related_entity_ids || [],
+    evidenceScore: row.evidence_score || 0, readingTime: row.reading_time || 0, publishedAt: row.published_at || '',
+    createdAt: row.created_at, updatedAt: row.updated_at, updatedBy: row.updated_by || undefined,
+    tags: row.tags || [], blocks,
+    sources, claims, timeline, faq, charts,
+    relatedStoryIds: row.related_story_ids || [],
+    relatedEntityIds: row.related_entity_ids || [],
     relatedTopicIds: row.related_topic_ids || [],
   };
+  return story;
 }
 
 function rowFromStory(story: Story): StoryInsert {
   return {
-    id: story.id, slug: story.slug, title: story.title, summary: story.summary,
-    content: { blocks: story.blocks || [] },
-    author_id: story.author, category: story.category, status: story.status,
-    tags: story.tags || [], published_at: story.publishedAt || null,
-    hero_image: story.heroImage || null,
-    related_story_ids: story.relatedStoryIds || null,
-    related_entity_ids: story.relatedEntityIds || null,
-    related_topic_ids: story.relatedTopicIds || null,
+    id: story.id, slug: story.slug, title: story.title, headline: story.headline || story.title, summary: story.summary,
+    blocks: story.blocks || [], sources: story.sources || [], claims: story.claims || [], timeline: story.timeline || [],
+    faq: story.faq || [], charts: story.charts || [],
+    hero_image: story.heroImage || '', author: story.author || '', category: story.category || '', status: story.status,
+    evidence_score: story.evidenceScore || 0, reading_time: story.readingTime || 0,
+    related_story_ids: story.relatedStoryIds || [],
+    related_entity_ids: story.relatedEntityIds || [],
+    related_topic_ids: story.relatedTopicIds || [],
+    tags: story.tags || [], published_at: story.publishedAt || null, updated_by: story.updatedBy,
   };
 }
