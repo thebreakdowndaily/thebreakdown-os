@@ -2835,56 +2835,6 @@ function seed(): DataStore {
 
   stories.set(story35.slug, story35);
 
-  /* ── Generate tier content for all stories ────────────────────────── */
-
-  function summarizeQuick(text: string): string {
-    const sentences = text.match(/[^.!?\n]+[.!?]+/g);
-    if (!sentences || sentences.length === 0) return text.slice(0, 150);
-    const brief = sentences.slice(0, 2).join(' ').trim();
-    return brief.length > 200 ? brief.slice(0, 197) + '...' : brief;
-  }
-
-  function generateMethodology(s: APIStory): string {
-    const sourceTiers = (s.sources || []).reduce((acc, src) => {
-      acc[src.tier] = (acc[src.tier] || 0) + 1;
-      return acc;
-    }, {} as Record<number, number>);
-    const t1 = sourceTiers[1] || 0;
-    const t2 = sourceTiers[2] || 0;
-    const t3 = sourceTiers[3] || 0;
-    const parts: string[] = [];
-    parts.push(`This analysis draws on ${s.sources?.length || 0} sources.`);
-    if (t1 > 0) parts.push(`${t1} primary source${t1 > 1 ? 's' : ''} (Tier 1).`);
-    if (t2 > 0) parts.push(`${t2} secondary source${t2 > 1 ? 's' : ''} (Tier 2).`);
-    if (t3 > 0) parts.push(`${t3} tertiary source${t3 > 1 ? 's' : ''} (Tier 3).`);
-    parts.push(`Each of ${s.claims?.length || 0} claims has been verified against its originating source.`);
-    parts.push(`Data visualisations are based on the underlying datasets cited in each source.`);
-    if (s.faq && s.faq.length > 0) parts.push(`The FAQ section addresses ${s.faq.length} common questions with answers drawn from the cited evidence.`);
-    return parts.join(' ');
-  }
-
-  for (const story of stories.values()) {
-    if (!story.quickBrief) {
-      story.quickBrief = {
-        summary: summarizeQuick(story.summary),
-        keyPoints: story.keyPoints.slice(0, 3),
-      };
-    }
-    if (!story.deepResearch) {
-      story.deepResearch = {
-        summary: story.summary,
-        methodology: generateMethodology(story),
-        expandedSources: (story.sources || []).map(s => ({
-          name: s.name,
-          url: s.url,
-          description: `${s.type.charAt(0).toUpperCase() + s.type.slice(1)} source (Tier ${s.tier})${s.tier === 1 ? ' — primary' : s.tier === 2 ? ' — secondary' : ''}.`
-        })),
-      };
-    }
-    story.quickReadTime = Math.max(1, Math.round(story.keyPoints.length * 0.3));
-    story.deepReadTime = story.readingTime + (story.sources?.length || 0) + (story.claims?.length || 0);
-  }
-
   // ── Entities ──────────────────────────────────────────────────────
 
   const entityData: APIEntity[] = [

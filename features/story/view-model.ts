@@ -1,5 +1,6 @@
 import type { Story, Topic, Entity, StoryPageViewModel, TOCItem } from '@/types/canonical';
 import type { Services } from '@/services/registry';
+import { buildQuickView, buildDeepView } from '@/lib/view-models/story-builders';
 
 function buildTOC(story: Story): TOCItem[] {
   const items: TOCItem[] = [{ id: 'executive-brief', label: 'Executive Brief', level: 1 }];
@@ -34,9 +35,8 @@ export function buildStoryPage(services: Services, slug: string): StoryPageViewM
   const relatedTopics = story.relatedTopicIds.map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];
   const relatedEntities = story.relatedEntityIds.map(id => services.entities.getEntity(id)).filter(Boolean) as Entity[];
   
-  // Calculate evidence summary
   const verified = story.claims.filter(c => c.status === 'verified' || c.status === 'strong').length;
-  const misleading = story.claims.filter(c => c.status === 'unverified').length; // approximation
+  const misleading = story.claims.filter(c => c.status === 'unverified').length;
   const unverifiable = story.claims.length - verified - misleading;
   const sourceTierBreakdown = story.sources.reduce((acc, src) => {
     acc[src.tier] = (acc[src.tier] || 0) + 1;
@@ -81,6 +81,8 @@ export function buildStoryPage(services: Services, slug: string): StoryPageViewM
       misleading,
       unverifiable,
       sourceTierBreakdown,
-    }
+    },
+    quickView: buildQuickView(story),
+    deepView: buildDeepView(story),
   };
 }

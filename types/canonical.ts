@@ -22,17 +22,6 @@ export type UserRole = 'admin' | 'editor' | 'writer' | 'researcher' | 'designer'
 
 // ─── Content Models ─────────────────────────────────────────────────────────
 
-export interface QuickBriefContent {
-  summary: string;
-  keyPoints: string[];
-}
-
-export interface DeepResearchContent {
-  summary: string;
-  methodology: string;
-  expandedSources?: Array<{ name: string; url: string; description: string }>;
-}
-
 export interface Story {
   id: string;
   title: string;
@@ -45,10 +34,6 @@ export interface Story {
   status: StoryStatus;
   evidenceScore: number;
   readingTime: number;
-  quickReadTime?: number;
-  deepReadTime?: number;
-  quickBrief?: QuickBriefContent;
-  deepResearch?: DeepResearchContent;
   publishedAt: string;
   createdAt: string;
   updatedAt: string;
@@ -447,6 +432,30 @@ export interface HomepageViewModel {
   sections: PageSection[];
 }
 
+// ─── Reading Mode View Models (derived, never stored) ──────────────────
+
+export interface QuickStoryViewModel {
+  summary: string;
+  keyPoints: string[];
+  readingTime: number;
+}
+
+export interface DeepStoryViewModel {
+  methodology: string;
+  expandedSources: ExpandedSource[];
+  readingTime: number;
+  sourceCount: number;
+  claimCount: number;
+  faqCount: number;
+}
+
+export interface ExpandedSource {
+  name: string;
+  url: string;
+  description: string;
+  tier: number;
+}
+
 export interface StoryPageViewModel {
   story: Story;
   relatedStories: Story[];
@@ -458,6 +467,8 @@ export interface StoryPageViewModel {
   snapshot?: StorySnapshot;
   executiveBrief?: ExecutiveBrief;
   evidenceSummary?: EvidenceSummary;
+  quickView: QuickStoryViewModel;
+  deepView: DeepStoryViewModel;
 }
 
 export interface StorySnapshot {

@@ -170,7 +170,7 @@ export default async function StoryPage({
   const services = bootstrapServices();
   const vm = buildStoryPage(services, slug);
   if (!vm) notFound();
-  const { story, relatedStories, relatedEntities } = vm;
+  const { story, relatedStories, relatedEntities, quickView, deepView } = vm;
 
   const heroBlocks = story.blocks?.filter(b => b.region === 'hero') || [];
   const footerBlocks = story.blocks?.filter(b => b.region === 'footer') || [];
@@ -184,24 +184,20 @@ export default async function StoryPage({
     mainBlocks = story.blocks?.filter(b => b.type === 'timeline') || [];
     sidebarBlocks = [];
   } else if (mode === 'quick') {
-    if (story.quickBrief) {
-      heroBlocks.forEach(b => { if (b.data) b.data.summary = story.quickBrief!.summary; });
-    }
+    heroBlocks.forEach(b => { if (b.data) b.data.summary = quickView.summary; });
     mainBlocks = mainBlocks.filter(b => b.type === 'executive-summary' || b.type === 'key-numbers');
     mainBlocks = mainBlocks.map(b => {
-      if (b.type === 'executive-summary' && story.quickBrief) {
-        return { ...b, data: { ...b.data, summary: story.quickBrief!.summary, keyPoints: story.quickBrief!.keyPoints } };
+      if (b.type === 'executive-summary') {
+        return { ...b, data: { ...b.data, summary: quickView.summary, keyPoints: quickView.keyPoints } };
       }
       return b;
     });
-  } else if (mode === 'deep') {
-    mainBlocks = mainBlocks.filter(b => b.type !== 'research-methodology');
   }
 
   const currentTier: Tier = (mode === 'quick' || mode === 'deep') ? mode : 'standard';
-  const quickTime = story.quickReadTime || 1;
+  const quickTime = quickView.readingTime;
   const standardTime = story.readingTime;
-  const deepTime = story.deepReadTime || story.readingTime + 5;
+  const deepTime = deepView.readingTime;
 
   return (
     <>
@@ -238,34 +234,25 @@ export default async function StoryPage({
               <h2 className="text-xl font-bold mb-4">Full Source Index</h2>
               <SourcesList sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} />
             </div>
-            {(story.claims && story.claims.length > 0) && (
-              <div className="mt-10 pt-8 border-t border-border">
-                <h2 className="text-xl font-bold mb-4">Research Methodology</h2>
-                <p className="text-sm text-muted leading-relaxed">
-                  {story.deepResearch?.methodology || (
-                    <>This story was researched using {story.sources?.length || 0} sources across {story.claims?.length || 0} verified claims.
-                    Each claim is rated on a 5-tier confidence scale. Primary sources (Tier 1–2) include government data,
-                    original reports, and official statements. Tier 3 sources are reputable secondary analyses.
-                    All claims are linked to their originating source for independent verification.</>
-                  )}
-                </p>
-                {story.deepResearch?.expandedSources && story.deepResearch.expandedSources.length > 0 && (
-                  <div className="mt-6">
-                    <h3 className="text-lg font-semibold mb-3">Source Details</h3>
-                    <div className="space-y-3">
-                      {story.deepResearch.expandedSources.map((src, i) => (
-                        <div key={i} className="text-sm border-b border-border pb-2">
-                          <a href={src.url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">
-                            {src.name}
-                          </a>
-                          <p className="text-muted mt-0.5">{src.description}</p>
-                        </div>
-                      ))}
-                    </div>
+            <div className="mt-10 pt-8 border-t border-border">
+              <h2 className="text-xl font-bold mb-4">Research Methodology</h2>
+              <p className="text-sm text-muted leading-relaxed">{deepView.methodology}</p>
+              {deepView.expandedSources.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold mb-3">Source Details</h3>
+                  <div className="space-y-3">
+                    {deepView.expandedSources.map((src, i) => (
+                      <div key={i} className="text-sm border-b border-border pb-2">
+                        <a href={src.url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">
+                          {src.name}
+                        </a>
+                        <p className="text-muted mt-0.5">{src.description}</p>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </>
         )}
       </StoryLayout>
