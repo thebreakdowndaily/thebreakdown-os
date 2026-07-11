@@ -7,9 +7,6 @@
     "dev": "next dev",
     "prebuild": "node scripts/generate-sitemap.js",
     "build": "next build",
-    "precf:build": "node scripts/generate-sitemap.js",
-    "cf:build": "npx @opennextjs/cloudflare build",
-    "cf:deploy": "npx opennextjs-cloudflare deploy",
     "start": "next start",
     "lint": "eslint .",
     "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts",
@@ -18,7 +15,6 @@
     "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e"
   },
   "dependencies": {
-    "@opennextjs/cloudflare": "^1.20.1",
     "@sentry/nextjs": "^10.63.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.0",
@@ -39,8 +35,8 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260702.1",
     "@next/bundle-analyzer": "^16.2.10",
+    "@opennextjs/cloudflare": "^1.20.1",
     "@types/d3": "^7.4.0",
     "@types/node": "^20.14.0",
     "@types/react": "^19.1.0",
@@ -53,7 +49,6 @@
     "globals": "^17.7.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.5.0",
-    "wrangler": "^4.107.0"
+    "typescript": "^5.5.0"
   }
 }
