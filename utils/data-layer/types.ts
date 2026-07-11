@@ -120,6 +120,7 @@ export interface APIRelatedEntity {
   type: string;
   description?: string;
   relationship?: string;
+  image?: string;
 }
 
 export interface APIEntity {

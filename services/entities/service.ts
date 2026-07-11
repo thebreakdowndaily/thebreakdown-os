@@ -1,16 +1,18 @@
-import type { Entity, EntityKind, APIListParams, APIResponse } from '@/types/canonical';
+import type { Entity, EntityKind, APIListParams, APIResponse, KnowledgeEntity, EntityBase } from '@/types/canonical';
+import { LegacyEntityAdapter } from './legacy-adapter';
+import { KnowledgeEntityPipeline } from './pipeline';
 
-export interface EntityService {
+// The Repository Interface (Fetch only)
+export interface EntityRepository {
   getEntities(params?: APIListParams): APIResponse<Entity[]>;
   getEntity(id: string): Entity | undefined;
   getEntityBySlug(slug: string): Entity | undefined;
   getEntitiesByType(type: EntityKind): Entity[];
   findByAlias(alias: string): Entity | undefined;
-  saveEntity(entity: Entity): Entity;
-  deleteEntity(id: string): void;
 }
 
-export class MemoryEntityService implements EntityService {
+// The raw in-memory store
+export class MemoryEntityRepository implements EntityRepository {
   private entities: Map<string, Entity>;
 
   constructor(entities: Entity[]) {
@@ -31,28 +33,51 @@ export class MemoryEntityService implements EntityService {
     return { data: list, meta: { total, page: params?.page || 1, pageSize: params?.pageSize || list.length } };
   }
 
-  getEntity(id: string) {
-    return this.entities.get(id);
+  getEntity(id: string) { return this.entities.get(id); }
+  getEntityBySlug(slug: string) { return Array.from(this.entities.values()).find(e => e.slug === slug); }
+  getEntitiesByType(type: EntityKind) { return Array.from(this.entities.values()).filter(e => e.type === type); }
+  findByAlias(alias: string) { return Array.from(this.entities.values()).find(e => e.aliases.some(a => a.toLowerCase() === alias.toLowerCase())); }
+}
+
+// The core Service that exposes the Pipeline to the rest of the application
+export interface EntityService {
+  getEntities(params?: APIListParams): APIResponse<EntityBase[]>;
+  getEntity(id: string): EntityBase | undefined;
+  getEntityBySlug(slug: string): EntityBase | undefined;
+  getEntitiesByType(type: EntityKind): EntityBase[];
+  findByAlias(alias: string): EntityBase | undefined;
+}
+
+export class KnowledgeEntityService implements EntityService {
+  constructor(
+    private repository: EntityRepository,
+    private pipeline: KnowledgeEntityPipeline
+  ) {}
+
+  getEntities(params?: APIListParams): APIResponse<EntityBase[]> {
+    const res = this.repository.getEntities(params);
+    return {
+      data: res.data.map(e => this.pipeline.execute(e)),
+      meta: res.meta
+    };
   }
 
-  getEntityBySlug(slug: string) {
-    return Array.from(this.entities.values()).find(e => e.slug === slug);
+  getEntity(id: string): EntityBase | undefined {
+    const raw = this.repository.getEntity(id);
+    return raw ? this.pipeline.execute(raw) : undefined;
   }
 
-  getEntitiesByType(type: EntityKind) {
-    return Array.from(this.entities.values()).filter(e => e.type === type);
+  getEntityBySlug(slug: string): EntityBase | undefined {
+    const raw = this.repository.getEntityBySlug(slug);
+    return raw ? this.pipeline.execute(raw) : undefined;
   }
 
-  findByAlias(alias: string) {
-    return Array.from(this.entities.values()).find(e => e.aliases.some(a => a.toLowerCase() === alias.toLowerCase()));
+  getEntitiesByType(type: EntityKind): EntityBase[] {
+    return this.repository.getEntitiesByType(type).map(e => this.pipeline.execute(e));
   }
 
-  saveEntity(entity: Entity) {
-    this.entities.set(entity.id, { ...entity, updatedAt: new Date().toISOString() });
-    return this.entities.get(entity.id)!;
-  }
-
-  deleteEntity(id: string) {
-    this.entities.delete(id);
+  findByAlias(alias: string): EntityBase | undefined {
+    const raw = this.repository.findByAlias(alias);
+    return raw ? this.pipeline.execute(raw) : undefined;
   }
 }

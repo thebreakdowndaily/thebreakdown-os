@@ -1,33 +1,12 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
-import { buildEntityPage } from '@/features/entity/view-model';
-import Container from '@/components/ui/Container';
-import SectionHeader from '@/components/ui/SectionHeader';
-import StoryCard from '@/components/ui/StoryCard';
-import EntityCard from '@/components/ui/EntityCard';
-import Divider from '@/components/ui/Divider';
+import { buildEntityTerminalViewModel } from '@/features/entity/view-model';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
-import InteractiveTimelineBlock from '@/components/story/blocks/InteractiveTimelineBlock';
-import FAQ from '@/components/story/FAQ';
-import { EntityGraphSection } from '@/features/graph/components/EntityGraphSection';
-import EntityData from '@/components/entity/EntityData';
-import EntitySources from '@/components/entity/EntitySources';
-import EntityHero from '@/components/entity/EntityHero';
 
-const typeBadgeColor: Record<string, string> = {
-  person: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  organization: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  policy: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  scheme: 'bg-green-500/20 text-green-400 border-green-500/30',
-  budget: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  report: 'bg-red-500/20 text-red-400 border-red-500/30',
-  country: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
-  dataset: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-  source: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
-};
+// Terminal Orchestrator
+import EntityTerminal from '@/components/entity/EntityTerminal';
 
 function createJsonLd(entity: { name: string; description: string; slug: string; type: string }) {
   const schemaType =
@@ -62,43 +41,35 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const services = bootstrapServices();
-  const vm = buildEntityPage(services, slug);
+  const vm = buildEntityTerminalViewModel(services, slug);
   if (!vm) return { title: 'Entity Not Found - The Breakdown' };
-  const { entity } = vm;
+  
   return {
-    title: entity.name,
-    description: entity.description,
-    keywords: entity.aliases?.join(', ') || '',
-    alternates: { canonical: `https://thebreakdown.in/entity/${entity.slug}` },
+    title: `${vm.name} - Knowledge Terminal`,
+    description: vm.description,
+    keywords: vm.aliases?.join(', ') || '',
+    alternates: { canonical: `https://thebreakdown.in/entity/${vm.slug}` },
     openGraph: {
-      title: entity.name,
-      description: entity.description,
+      title: vm.name,
+      description: vm.description,
       type: 'article',
-      url: `https://thebreakdown.in/entity/${entity.slug}`,
-      images: entity.image ? [{ url: entity.image, width: 1200, height: 630, alt: entity.name }] : [],
+      url: `https://thebreakdown.in/entity/${vm.slug}`,
+      images: vm.hero?.optimization?.cdnUrl ? [{ url: vm.hero.optimization.cdnUrl, width: 1200, height: 630, alt: vm.name }] : [],
     },
-    twitter: { card: 'summary_large_image', title: entity.name, description: entity.description },
+    twitter: { card: 'summary_large_image', title: vm.name, description: vm.description },
   };
 }
 
 export default async function EntityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const services = bootstrapServices();
-  const vm = buildEntityPage(services, slug);
-  if (!vm) notFound();
-  const { entity, stories, relatedEntities } = vm;
-
-  const statsRecord: Record<string, number | string> = {};
-  entity.statistics.forEach((s) => { statsRecord[s.label] = s.value; });
-
-  const hasTimeline = entity.timeline.length > 0;
-  const hasData = Object.keys(statsRecord).length > 0 || (entity as any).datasets?.length > 0;
-  const hasSources = (entity as any).sources?.length > 0;
-  const hasFaq = entity.faq.length > 0;
+  const viewModel = buildEntityTerminalViewModel(services, slug);
+  
+  if (!viewModel) notFound();
 
   return (
     <>
-      {createJsonLd(entity).map((ld, i) => (
+      {createJsonLd(viewModel).map((ld, i) => (
         <Script key={`sc-${i}`} id={`schema-${i}`} type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(ld)}
         </Script>
@@ -107,129 +78,12 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Entities', href: '/entities' },
-          { label: entity.name, href: `/entity/${entity.slug}` },
+          { label: 'Intelligence Terminal', href: '/entities' },
+          { label: viewModel.name, href: `/entity/${viewModel.slug}` },
         ]}
       />
 
-      <main className="flex-1 w-full" role="main">
-        <EntityHero
-          name={entity.name}
-          type={entity.type}
-          description={entity.description}
-          image={entity.image}
-          aliases={entity.aliases}
-          storyCount={stories.length}
-          evidenceScore={0} // Or calculate from stories if needed
-          updatedAt={entity.updatedAt}
-        />
-
-        <div className="sticky top-0 z-20 bg-neutral-950/95 backdrop-blur-sm border-b border-neutral-900">
-          <Container>
-            <nav className="flex items-center gap-1 overflow-x-auto py-3" aria-label="Dossier sections">
-              {[
-                { id: 'overview', label: 'Overview' },
-                ...(hasTimeline ? [{ id: 'timeline', label: 'Timeline' }] : []),
-                ...(hasData ? [{ id: 'data', label: 'Data' }] : []),
-                ...(hasSources ? [{ id: 'sources', label: 'Sources' }] : []),
-                { id: 'graph', label: 'Connections' },
-                ...(hasFaq ? [{ id: 'faq', label: 'FAQ' }] : []),
-                { id: 'stories', label: 'Stories' },
-              ].map((section) => (
-                <a
-                  key={section.id}
-                  href={`#${section.id}`}
-                  className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-neutral-500 hover:text-amber-400 hover:bg-neutral-900 rounded-lg transition-colors"
-                >
-                  {section.label}
-                </a>
-              ))}
-            </nav>
-          </Container>
-        </div>
-
-        <Container className="py-8">
-          {hasTimeline && (
-            <section id="timeline" className="mb-12 scroll-mt-20">
-              <SectionHeader eyebrow="History" title="Timeline" />
-              <InteractiveTimelineBlock events={entity.timeline} />
-            </section>
-          )}
-
-          {hasData && (
-            <>
-              <Divider className="mb-12" />
-              <section id="data" className="mb-12 scroll-mt-20">
-                <SectionHeader eyebrow="Statistics" title="Data & Metrics" />
-                <EntityData
-                  datasets={(entity as any).datasets || []}
-                  statistics={statsRecord}
-                />
-              </section>
-            </>
-          )}
-
-          {hasSources && (
-            <>
-              <Divider className="mb-12" />
-              <section id="sources" className="mb-12 scroll-mt-20">
-                <SectionHeader eyebrow="References" title="Sources" />
-                <EntitySources sources={(entity as any).sources || []} />
-              </section>
-            </>
-          )}
-
-          <Divider className="mb-12" />
-          <section id="graph" className="mb-12 scroll-mt-20">
-            <SectionHeader
-              eyebrow="Connections"
-              title="Knowledge Graph"
-              description="Related entities, stories, and topics"
-            />
-            <div className="bg-[#151515] rounded-2xl border border-[#2A2A2A] p-4 min-h-[300px]">
-              <EntityGraphSection entitySlug={slug} />
-            </div>
-          </section>
-
-          {hasFaq && (
-            <>
-              <Divider className="mb-12" />
-              <section id="faq" className="mb-12 scroll-mt-20">
-                <SectionHeader eyebrow="Explainer" title="Frequently Asked Questions" />
-                <FAQ questions={entity.faq} />
-              </section>
-            </>
-          )}
-
-          {relatedEntities.length > 0 && (
-            <>
-              <Divider className="mb-12" />
-              <section id="related" className="mb-12 scroll-mt-20">
-                <SectionHeader eyebrow="Network" title="Related Entities" description={`${relatedEntities.length} entities connected to ${entity.name}`} />
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {relatedEntities.map((e) => (
-                    <EntityCard key={e.slug} entity={e} size="sm" />
-                  ))}
-                </div>
-              </section>
-            </>
-          )}
-
-          {stories.length > 0 && (
-            <>
-              <Divider className="mb-12" />
-              <section id="stories" className="scroll-mt-20">
-                <SectionHeader eyebrow="Coverage" title="Related Stories" description={`${stories.length} stories referencing ${entity.name}`} />
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {stories.map((s) => (
-                    <StoryCard key={s.slug} story={s} variant="compact" />
-                  ))}
-                </div>
-              </section>
-            </>
-          )}
-        </Container>
-      </main>
+      <EntityTerminal viewModel={viewModel} />
     </>
   );
 }

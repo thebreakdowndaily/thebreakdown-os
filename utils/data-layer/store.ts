@@ -2851,7 +2851,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'health',
     tags: ['mental health', 'teen suicide', 'adolescent mental health', 'NCRB', 'education policy', 'public health', 'depression', 'bullying', 'India health crisis'],
-    relatedTopicIds: ['health', 'education', 'policy'],
+    relatedTopicIds: ['mental-health', 'education', 'policy', 'governance'],
     keyPoints: [
       'India reported 13,044 student suicides in 2023 — the highest ever recorded, a 36% rise from 2019',
       '1 in 7 Indian adolescents meets criteria for depression; only 12% of schools have a counsellor',
@@ -3729,7 +3729,9 @@ function seed(): DataStore {
     { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13, story30], entities: [] },
     { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23, story36], entities: ['ministry-of-education'] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
-    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33, story36], entities: ['who', 'ministry-of-women-and-child-development', 'icmr'] },
+    { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33], entities: ['who', 'ministry-of-women-and-child-development'] },
+    { slug: 'mental-health', name: 'Mental Health', description: 'Mental health policy, adolescent mental health, suicide prevention, counselling infrastructure, and psychological wellbeing in India.', stories: [story36], entities: ['icmr', 'ministry-of-education', 'who'] },
+    { slug: 'governance', name: 'Governance & Institutions', description: 'Constitutional bodies, public accountability, parliamentary oversight, audit institutions (CAG), elections, and the functioning of India\'s democratic infrastructure.', stories: [story3, story11, story31, story36], entities: ['cag', 'election-commission'] },
     { slug: 'infrastructure', name: 'Infrastructure & Logistics', description: 'Transport, logistics, urban infrastructure, digital connectivity, and infrastructure projects driving India\'s economic growth.', stories: [story12, story29, story30], entities: ['ministry-of-finance'] },
     { slug: 'geopolitics', name: 'Geopolitics & International Relations', description: 'India\'s foreign policy, bilateral relations, international organisations, trade agreements, and global diplomatic engagements.', stories: [story4, story7, story12, story16, story17, story18, story19, story20, story21, story22, story25, story26, story34], entities: ['un', 'wto', 'imf', 'world-bank', 'who', 'ilo', 'brics', 'sco', 'g20', 'saarc', 'commonwealth', 'adb', 'aiib', 'bimstec', 'quad', 'nam', 'g77', 'fatf', 'isa', 'iora', 'cdri', 'india'] },
   ];

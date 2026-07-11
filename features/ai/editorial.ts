@@ -31,7 +31,7 @@ export class EditorialAI {
     const suggestions: HeadlineSuggestion[] = [];
     const entities = story.relatedEntityIds
       .map(id => this.services.entities.getEntity(id))
-      .filter((e): e is Entity => e !== undefined);
+      .filter((e): e is import('@/types/canonical').EntityBase => e !== undefined);
     const topics = story.relatedTopicIds
       .map(id => this.services.topics.getTopic(id))
       .filter((t): t is Topic => t !== undefined);

@@ -100,9 +100,78 @@ export interface Entity {
   statistics: StatItem[];
   timeline: TimelineEvent[];
   faq: FAQItem[];
+  assets?: AssetReference[];
+  claims?: Claim[];
   createdAt: string;
   updatedAt: string;
 }
+
+// ─── Entity Models (Phase 1) ────────────────────────────────────────────────────────────
+
+export interface EntityRelationship {
+  targetId: string;
+  role: string; // e.g., 'founder', 'subsidiary', 'critic', 'supporter'
+  confidence?: number;
+  metadata?: Record<string, unknown>;
+}
+
+export interface EntityUsageGraph {
+  stories: string[];
+  topics: string[];
+  collections: string[];
+}
+
+export interface EntityBase {
+  id: string;
+  slug: string;
+  type: EntityKind;
+  name: string;
+  description: string;
+  aliases: string[];
+  
+  // Richer Asset Integration
+  assets: AssetReference[]; 
+  
+  // Knowledge Graph Relationships
+  relationships: EntityRelationship[];
+  
+  // Metadata & Analytics
+  evidenceScore: number;
+  statistics: StatItem[];
+  timeline: TimelineEvent[];
+  faq: FAQItem[];
+  claims: Claim[];
+  
+  // --- Legacy Compatibility ---
+  /** @deprecated use AssetResolver and ImageAsset instead */
+  image?: string;
+  /** @deprecated use usageGraph.stories length or Pipeline instead */
+  storyCount: number;
+  /** @deprecated use relationships instead */
+  relatedEntityIds: string[];
+  /** @deprecated use relationships instead */
+  relatedStoryIds: string[];
+  /** @deprecated use relationships instead */
+  relatedTopicIds: string[];
+
+  version: number;
+  usageGraph: EntityUsageGraph;
+  
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PersonEntity extends EntityBase { type: 'person'; }
+export interface OrganizationEntity extends EntityBase { type: 'organization'; }
+export interface PolicyEntity extends EntityBase { type: 'policy'; }
+export interface SchemeEntity extends EntityBase { type: 'scheme'; }
+export interface BudgetEntity extends EntityBase { type: 'budget'; }
+export interface ReportEntity extends EntityBase { type: 'report'; }
+export interface DatasetEntity extends EntityBase { type: 'dataset'; }
+export interface SourceEntity extends EntityBase { type: 'source'; }
+export interface CountryEntity extends EntityBase { type: 'country'; }
+
+export type KnowledgeEntity = PersonEntity | OrganizationEntity | PolicyEntity | SchemeEntity | BudgetEntity | ReportEntity | DatasetEntity | SourceEntity | CountryEntity;
 
 export interface Timeline {
   id: string;
@@ -172,6 +241,117 @@ export interface MediaItem {
   lens?: string;
   iso?: string;
   gps?: string;
+}
+
+// ─── Asset Models (Phase 1) ─────────────────────────────────────────────────────────────
+
+export interface EntityRef { id: string; role?: string; confidence?: number; }
+export interface TopicRef { id: string; role?: string; confidence?: number; }
+export interface StoryRef { id: string; role?: string; confidence?: number; }
+export interface CollectionRef { id: string; role?: string; confidence?: number; }
+
+export interface AssetRelationships {
+  entities: EntityRef[];
+  topics: TopicRef[];
+  stories: StoryRef[];
+  collections: CollectionRef[];
+}
+
+export interface AssetAttribution {
+  caption?: string;
+  credit?: string;
+  license: string;
+  copyright?: string;
+  displayText?: string;
+  citation?: string;
+}
+
+export interface AssetOptimization {
+  cdnUrl: string;
+  webpUrl?: string;
+  avifUrl?: string;
+  thumbnailUrl?: string;
+  cacheKey?: string;
+}
+
+export interface AssetMetadata {
+  width?: number;
+  height?: number;
+  aspectRatio?: number;
+  mimeType: string;
+  fileSize?: number;
+  sha256?: string;
+  perceptualHash?: string;
+  dominantColor?: string;
+  blurHash?: string;
+  focusPoint?: { x: number; y: number };
+  aiGenerated: boolean;
+}
+
+export interface AssetVersion {
+  id: string;
+  assetId: string;
+  versionNumber: number;
+  metadata: AssetMetadata;
+  optimization: AssetOptimization;
+  createdAt: string;
+  createdBy: string;
+  reason?: string;
+}
+
+export interface AssetUsageGraph {
+  stories: string[];
+  topics: string[];
+  entities: string[];
+  homepages: string[];
+  newsletters: string[];
+  collections: string[];
+}
+
+export interface AssetBase {
+  id: string;
+  slug: string;
+  type: string;
+  title: string;
+  altText: string;
+  longDescription?: string;
+  metadata: AssetMetadata;
+  attribution: AssetAttribution;
+  optimization: AssetOptimization;
+  relationships: AssetRelationships;
+  
+  // Versioning
+  currentVersion: number;
+  versions: AssetVersion[];
+  
+  // CMS Usage Graph
+  usageGraph: AssetUsageGraph;
+  
+  // Analytics & State
+  priority: 'hero' | 'editorial' | 'commons' | 'ai' | 'placeholder';
+  confidence: number;
+  usageCount: number;
+  verificationStatus: 'verified' | 'unverified' | 'flagged';
+  uploadedAt: string;
+}
+
+export interface ImageAsset extends AssetBase { type: 'image'; }
+export interface LogoAsset extends AssetBase { type: 'logo'; }
+export interface ChartAsset extends AssetBase { type: 'chart'; }
+export interface MapAsset extends AssetBase { type: 'map'; }
+export interface DocumentAsset extends AssetBase { type: 'document'; }
+export interface VideoAsset extends AssetBase { type: 'video'; }
+export interface AudioAsset extends AssetBase { type: 'audio'; }
+export interface DatasetPreviewAsset extends AssetBase { type: 'dataset_preview'; }
+
+export type KnowledgeAsset = ImageAsset | LogoAsset | ChartAsset | MapAsset | DocumentAsset | VideoAsset | AudioAsset | DatasetPreviewAsset;
+
+export interface AssetReference {
+  assetId: string;
+  role?: string;
+  resolvedAsset?: AssetBase;
+  crop?: string;
+  priority?: 'hero' | 'editorial' | 'thumbnail' | 'social';
 }
 
 export interface User {
@@ -254,9 +434,14 @@ export interface Claim {
 }
 
 export interface TimelineEvent {
+  id?: string;
   date: string;
   title: string;
   description: string;
+  storyId?: string;       // Linked story
+  evidenceId?: string;    // Specific claim/evidence node
+  sourceUrl?: string;     // Raw source
+  confidence?: number;    // Git-style confidence node
 }
 
 export interface FAQItem {
@@ -279,6 +464,7 @@ export interface ChartDef {
 export interface StatItem {
   label: string;
   value: string;
+  trend?: string;
   change?: string;
 }
 
@@ -508,21 +694,194 @@ export interface TOCItem {
   level: number;
 }
 
-export interface TopicPageViewModel {
+export interface TopicTerminalViewModel {
   topic: Topic;
+  storyGroups: {
+    latest: Story[];
+    important: Story[];
+    highestEvidence: Story[];
+    trending: Story[];
+    historical: Story[];
+    recommended: Story[];
+  };
+  rankedEntities: {
+    entity: Entity;
+    score: number;
+    importance: 'Critical' | 'High' | 'Medium' | 'Low';
+  }[];
+  unifiedTimeline: TimelineEvent[];
+  statistics: {
+    coverageTrend: number;
+    evidenceGrowth: number;
+    averageConfidence: number;
+    totalEntities: number;
+    totalClaims: number;
+    totalMediaAssets: number;
+    totalSources: number;
+    totalCountries: number;
+    totalOrganizations: number;
+    totalPeople: number;
+  };
+  qualityScore: {
+    score: number;
+    status: 'Excellent' | 'Good' | 'Needs Review';
+    coverageCompleteness: number;
+    missingStories: string[];
+    weakEvidence: string[];
+    missingTimeline: string[];
+    missingMedia: string[];
+    brokenLinks: string[];
+  };
+  seo: SEOData;
+  breadcrumbs: { label: string; href: string }[];
+}
+
+export interface EntitySignals {
+  lastMentioned: string;
+  mentionVelocity: number; // e.g. +14
+  coverageTrend: 'up' | 'down' | 'flat';
+  rank: number;
+}
+
+export interface EntityPageViewModel {
+  entity: EntityBase;
   stories: Story[];
-  entities: Entity[];
+  relatedEntities: EntityBase[];
+  relatedTopics: Topic[];
+  signals: EntitySignals;
   seo: SEOData;
   breadcrumbs: Breadcrumb[];
 }
 
-export interface EntityPageViewModel {
-  entity: Entity;
-  stories: Story[];
-  relatedEntities: Entity[];
-  relatedTopics: Topic[];
+export interface ResolvedRelationship {
+  entity: EntityBase;
+  confidence: number;
+  role: string;
+  evidence: number;
+  stories: string[];
+  latestMention: string;
+  sharedTopics: string[];
+}
+
+export interface EntityTerminalViewModel {
+  id: string;
+  slug: string;
+  name: string;
+  type: string;
+  aliases: string[];
+  description: string;
+  
+  // Flattened Media
+  hero?: AssetBase;
+  logo?: AssetBase;
+  media: AssetBase[];
+  documents: AssetBase[];
+  
+  // Flattened Data
+  signals: EntitySignals;
+  statistics: StatItem[];
+  timeline: TimelineEvent[];
+  claims: Claim[];
+  relationships: ResolvedRelationship[];
+  
+  // Health/Trust Metrics
+  evidenceScore: number;
+  health: {
+    confidence: number;
+    evidenceCount: number;
+    sourceCount: number;
+    relationshipCount: number;
+    mediaCount: number;
+    claimCount: number;
+    coverageTrend: string;
+  };
+  
   seo: SEOData;
-  breadcrumbs: Breadcrumb[];
+}
+
+export interface EntityCopilotContext {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  aliases: string[];
+  timeline: TimelineEvent[];
+  relationships: {
+    targetName: string;
+    role: string;
+    confidence: number;
+    evidenceCount: number;
+  }[];
+  claims: Claim[];
+  statistics: StatItem[];
+  signals: EntitySignals;
+  health: {
+    confidence: number;
+    evidenceCount: number;
+  };
+}
+
+export interface StoryQualityScore {
+  score: number;
+  issues: string[];
+  status: 'Excellent' | 'Good' | 'Needs Review';
+}
+
+export interface StoryTerminalViewModel {
+  story: Story;
+  relatedStories: Story[];
+  relatedTopics: Topic[];
+  relatedEntities: Entity[];
+  seo: SEOData;
+  breadcrumbs: { label: string; href: string }[];
+  tableOfContents: TOCItem[];
+  snapshot: any;
+  executiveBrief: any;
+  evidenceSummary: any;
+  quickView: any;
+  deepView: any;
+  visualAssets: {
+    hero?: AssetReference;
+    primary: AssetReference[];
+    supporting: AssetReference[];
+    gallery: AssetReference[];
+    logos: AssetReference[];
+    portraits: AssetReference[];
+    maps: AssetReference[];
+    charts: AssetReference[];
+    documents: AssetReference[];
+  };
+  unifiedTimeline: TimelineEvent[];
+  qualityScore: any;
+}
+
+export interface SearchTerminalViewModel {
+  query: string;
+  intent: {
+    primaryType: string;
+    confidence: number;
+  };
+  spotlight: any; // Knowledge Card for direct match
+  results: SearchIndexEntry[];
+  grouped: {
+    latestStories: SearchIndexEntry[];
+    entities: SearchIndexEntry[];
+    topics: SearchIndexEntry[];
+    documents: SearchIndexEntry[];
+    media: SearchIndexEntry[];
+  };
+  suggestions: {
+    relatedSearches: string[];
+    relatedTopics: string[];
+    relatedEntities: string[];
+  };
+  quality: {
+    exactMatch: boolean;
+    confidence: number;
+    coverage: number;
+    reason: string;
+  };
+  total: number;
 }
 
 export interface DatasetPageViewModel {

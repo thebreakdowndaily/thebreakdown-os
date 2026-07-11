@@ -400,21 +400,21 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     // ── Entities ──
     for (const entity of entities) {
       this.addNode(nodes, { id: entity.id, type: entity.type, title: entity.name, slug: entity.slug, subtitle: entity.description });
-      for (const relatedId of entity.relatedEntityIds) {
+      for (const relatedId of (entity.relatedEntityIds || [])) {
         const related = entities.find(e => e.id === relatedId);
         if (related) {
           this.addNodeIfMissing(nodes, related);
           rawEdges.push({ from: entity.id, to: related.id, relation: 'related_to', baseConfidence: 0.8, sourceType: 'entity', sourceId: entity.id });
         }
       }
-      for (const storyId of entity.relatedStoryIds) {
+      for (const storyId of (entity.relatedStoryIds || [])) {
         const story = stories.find(s => s.id === storyId || s.slug === storyId);
         if (story) {
           this.addNodeIfMissing(nodes, story);
           rawEdges.push({ from: story.id, to: entity.id, relation: 'mentions', baseConfidence: 0.9, sourceType: 'entity', sourceId: entity.id });
         }
       }
-      for (const topicId of entity.relatedTopicIds) {
+      for (const topicId of (entity.relatedTopicIds || [])) {
         const topic = topics.find(t => t.id === topicId);
         if (topic) {
           this.addNodeIfMissing(nodes, topic, 'topic');

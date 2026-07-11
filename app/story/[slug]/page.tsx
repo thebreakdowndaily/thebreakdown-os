@@ -124,7 +124,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const services = bootstrapServices();
-  const vm = buildStoryPage(services, slug);
+  const vm = await buildStoryPage(services, slug);
   if (!vm) return { title: 'Story Not Found — The Breakdown' };
   const { story } = vm;
 
@@ -168,36 +168,16 @@ export default async function StoryPage({
   const resolvedSearchParams = await searchParams;
   const mode = (resolvedSearchParams?.mode as string) || 'standard';
   const services = bootstrapServices();
-  const vm = buildStoryPage(services, slug);
+  const vm = await buildStoryPage(services, slug);
   if (!vm) notFound();
-  const { story, relatedStories, relatedEntities, quickView, deepView } = vm;
-
-  const heroBlocks = story.blocks?.filter(b => b.region === 'hero') || [];
-  const footerBlocks = story.blocks?.filter(b => b.region === 'footer') || [];
-  let mainBlocks = story.blocks?.filter(b => !b.region || b.region === 'main') || [];
-  let sidebarBlocks = story.blocks?.filter(b => b.region === 'sidebar') || [];
-
-  if (mode === 'data') {
-    mainBlocks = story.blocks?.filter(b => b.type === 'chart' || b.type === 'key-numbers' || b.type === 'dataset-reference') || [];
-    sidebarBlocks = [];
-  } else if (mode === 'timeline') {
-    mainBlocks = story.blocks?.filter(b => b.type === 'timeline') || [];
-    sidebarBlocks = [];
-  } else if (mode === 'quick') {
-    heroBlocks.forEach(b => { if (b.data) b.data.summary = quickView.summary; });
-    mainBlocks = mainBlocks.filter(b => b.type === 'executive-summary' || b.type === 'key-numbers');
-    mainBlocks = mainBlocks.map(b => {
-      if (b.type === 'executive-summary') {
-        return { ...b, data: { ...b.data, summary: quickView.summary, keyPoints: quickView.keyPoints } };
-      }
-      return b;
-    });
-  }
+  
+  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm as any;
+  const heroImage = visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || story.heroImage;
 
   const currentTier: Tier = (mode === 'quick' || mode === 'deep') ? mode : 'standard';
-  const quickTime = quickView.readingTime;
-  const standardTime = story.readingTime;
-  const deepTime = deepView.readingTime;
+  const quickTime = quickView?.readingTime || 2;
+  const standardTime = story.readingTime || 5;
+  const deepTime = deepView?.readingTime || 10;
 
   return (
     <>
@@ -208,63 +188,208 @@ export default async function StoryPage({
       ))}
 
       <Breadcrumbs items={vm.breadcrumbs} />
-      <BlocksRenderer blocks={heroBlocks} />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <Suspense fallback={<div className="h-12" />}>
-          <TierSelector
-            currentTier={currentTier}
-            quickTime={quickTime}
-            standardTime={standardTime}
-            deepTime={deepTime}
-          />
-        </Suspense>
-      </div>
-
-      <StoryLayout story={story} tableOfContents={vm.tableOfContents} sidebarBlocks={sidebarBlocks}>
-        <div className="lg:hidden mt-8 mb-8">
-          <BlocksRenderer blocks={sidebarBlocks} />
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <BlocksRenderer blocks={mainBlocks} />
-
-        {mode === 'deep' && (
-          <>
-            <div className="mt-10 pt-8 border-t border-border">
-              <h2 className="text-xl font-bold mb-4">Full Source Index</h2>
-              <SourcesList sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} />
+        {/* Main Article Column */}
+        <div className="col-span-1 lg:col-span-8 space-y-8">
+          
+          {/* Hero Section */}
+          <header className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">
+              {story.headline}
+            </h1>
+            
+            <div className="flex items-center gap-4 text-sm text-neutral-400">
+              <span className="text-emerald-400 font-mono">{story.author}</span>
+              <span>•</span>
+              <time dateTime={story.publishedAt}>
+                {new Date(story.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                {qualityScore.score}% Quality Score
+              </span>
             </div>
-            <div className="mt-10 pt-8 border-t border-border">
-              <h2 className="text-xl font-bold mb-4">Research Methodology</h2>
-              <p className="text-sm text-muted leading-relaxed">{deepView.methodology}</p>
-              {deepView.expandedSources.length > 0 && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold mb-3">Source Details</h3>
-                  <div className="space-y-3">
-                    {deepView.expandedSources.map((src, i) => (
-                      <div key={i} className="text-sm border-b border-border pb-2">
-                        <a href={src.url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">
-                          {src.name}
-                        </a>
-                        <p className="text-muted mt-0.5">{src.description}</p>
+
+            {heroImage && (
+              <div className="w-full aspect-video rounded-xl overflow-hidden border border-neutral-800 my-6 relative">
+                <img src={heroImage} alt={story.headline} className="w-full h-full object-cover" />
+              </div>
+            )}
+            
+            <p className="text-xl text-neutral-300 leading-relaxed font-medium">
+              {story.summary}
+            </p>
+          </header>
+
+          {/* Tier Selector */}
+          <Suspense fallback={<div className="h-12" />}>
+            <TierSelector
+              currentTier={currentTier}
+              quickTime={quickTime}
+              standardTime={standardTime}
+              deepTime={deepTime}
+            />
+          </Suspense>
+
+          {/* Article Content */}
+          <article className="prose prose-invert prose-lg max-w-none prose-a:text-emerald-400 hover:prose-a:text-emerald-300">
+            {mode === 'quick' && quickView?.keyPoints && (
+              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6 mb-8">
+                <h3 className="text-emerald-400 font-mono text-sm tracking-widest uppercase mb-4 mt-0">Executive Brief</h3>
+                <ul className="space-y-2 mb-0">
+                  {quickView.keyPoints.map((point: string, i: number) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Render traditional blocks for standard/deep modes */}
+            {mode !== 'quick' && (
+              <BlocksRenderer blocks={story.blocks?.filter((b) => !b.region || b.region === 'main')} />
+            )}
+
+            {mode === 'deep' && deepView && (
+              <div className="mt-12 pt-8 border-t border-neutral-800">
+                <h3 className="text-xl font-bold mb-4">Research Methodology</h3>
+                <p className="text-sm text-neutral-400 leading-relaxed">{deepView.methodology}</p>
+              </div>
+            )}
+
+            {/* Visual Intelligence Gallery */}
+            {visualAssets?.gallery && visualAssets.gallery.length > 0 && (
+              <div className="mt-12 pt-8 border-t border-neutral-800">
+                <h3 className="text-xl font-bold mb-6">Visual Evidence & Context</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {visualAssets.gallery.map((ref: any, i: number) => (
+                    <div key={i} className="aspect-square rounded-lg overflow-hidden border border-neutral-800 relative group bg-neutral-900">
+                      <img src={ref.resolvedAsset?.optimization.cdnUrl} alt={ref.resolvedAsset?.altText} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+                         <span className="text-xs text-white font-medium line-clamp-2 mb-1">{ref.resolvedAsset?.attribution.caption || ref.resolvedAsset?.title}</span>
+                         <span className="text-[9px] text-emerald-400 uppercase tracking-widest">{ref.resolvedAsset?.attribution.credit}</span>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
-          </>
-        )}
-      </StoryLayout>
+              </div>
+            )}
+          </article>
+        </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <BlocksRenderer blocks={footerBlocks} />
+        {/* Knowledge Terminal Sidebar */}
+        <div className="col-span-1 lg:col-span-4 space-y-6">
+          <div className="sticky top-6 space-y-6">
+            
+            {/* Unified Timeline */}
+            {unifiedTimeline.length > 0 && (
+              <section className="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-5 shadow-2xl">
+                <h3 className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-4">Unified Timeline</h3>
+                <div className="space-y-4">
+                  {unifiedTimeline.slice(0, 5).map((event: any, i: number) => (
+                    <div key={i} className="pl-4 border-l border-neutral-800 relative">
+                      <div className="absolute w-2 h-2 rounded-full bg-emerald-500 -left-[4.5px] top-1.5" />
+                      <time className="text-[10px] text-emerald-500 font-mono mb-1 block">
+                        {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </time>
+                      <p className="text-sm text-neutral-300 leading-snug">{event.title || event.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Related Entities */}
+            {relatedEntities.length > 0 && (
+              <section className="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-5 shadow-2xl">
+                <h3 className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-4">Entities</h3>
+                <div className="flex flex-wrap gap-2">
+                  {relatedEntities.map((entity: any, i: number) => (
+                    <a key={i} href={`/entity/${entity.slug}`} className="text-xs font-medium text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1.5 rounded-md border border-emerald-500/20 transition-colors">
+                      {entity.name}
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Visual Intelligence Sidebar */}
+            {visualAssets && (visualAssets.portraits?.length > 0 || visualAssets.logos?.length > 0) && (
+              <section className="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-5 shadow-2xl">
+                <h3 className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-4 flex items-center gap-2">
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Visual Intelligence
+                </h3>
+                
+                <div className="space-y-5">
+                  {visualAssets.portraits.length > 0 && (
+                    <div>
+                      <h4 className="text-[10px] uppercase text-neutral-600 font-medium mb-3">Key Figures</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {visualAssets.portraits.map((ref: any, i: number) => (
+                          <div key={i} className="group relative">
+                            <img src={ref.resolvedAsset?.optimization.cdnUrl} alt={ref.resolvedAsset?.altText} className="w-12 h-12 rounded-full object-cover border-2 border-neutral-800 group-hover:border-emerald-500 transition-colors" />
+                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-neutral-800 text-xs text-white px-2 py-1 rounded whitespace-nowrap z-10 pointer-events-none">
+                              {ref.resolvedAsset?.title}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {visualAssets.logos.length > 0 && (
+                    <div>
+                      <h4 className="text-[10px] uppercase text-neutral-600 font-medium mb-3">Organizations</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {visualAssets.logos.map((ref: any, i: number) => (
+                          <div key={i} className="group relative">
+                            <div className="w-12 h-12 bg-white rounded-lg p-1.5 border-2 border-neutral-800 group-hover:border-emerald-500 transition-colors flex items-center justify-center">
+                              <img src={ref.resolvedAsset?.optimization.cdnUrl} alt={ref.resolvedAsset?.altText} className="max-w-full max-h-full object-contain" />
+                            </div>
+                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-neutral-800 text-xs text-white px-2 py-1 rounded whitespace-nowrap z-10 pointer-events-none">
+                              {ref.resolvedAsset?.title}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* Sources & Evidence Summary */}
+            <section className="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-5 shadow-2xl">
+              <h3 className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-4">Evidence & Sources</h3>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="bg-neutral-900 rounded p-3 text-center border border-neutral-800">
+                  <span className="block text-2xl font-mono text-white mb-1">{story.sources?.length || 0}</span>
+                  <span className="block text-[10px] uppercase tracking-widest text-neutral-500">Sources</span>
+                </div>
+                <div className="bg-neutral-900 rounded p-3 text-center border border-neutral-800">
+                  <span className="block text-2xl font-mono text-emerald-400 mb-1">{story.claims?.length || 0}</span>
+                  <span className="block text-[10px] uppercase tracking-widest text-neutral-500">Claims</span>
+                </div>
+              </div>
+              <SourcesList sources={story.sources?.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
+            </section>
+
+          </div>
+        </div>
+
       </div>
 
-      <KnowledgeLayer story={story} relatedEntities={relatedEntities} />
-      
       {relatedStories.length > 0 && (
-        <NextExploration stories={relatedStories} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-12">
+          <NextExploration stories={relatedStories} />
+        </div>
       )}
     </>
   );

@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getServices } from '@/services/registry';
-import { bootstrapCore } from '@/lib/bootstrap';
+import { bootstrapServices } from '@/lib/bootstrap';
 
 export async function POST(req: Request) {
   try {
     // Ensure services are initialized
-    bootstrapCore();
+    bootstrapServices();
     
     const body = await req.json();
     const { storyId } = body;
@@ -15,12 +15,10 @@ export async function POST(req: Request) {
     }
     
     // Fetch the story
-    const storyResponse = getServices().stories.getStory(storyId);
-    if (!storyResponse || !storyResponse.data) {
+    const story = getServices().stories.getStory(storyId);
+    if (!story) {
       return NextResponse.json({ error: 'Story not found' }, { status: 404 });
     }
-    
-    const story = storyResponse.data;
     
     // Resolve the image using the hierarchy
     const mediaItem = await getServices().intelligence.resolveImageForStory(story);

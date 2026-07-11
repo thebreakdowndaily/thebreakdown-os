@@ -3,7 +3,6 @@ import type { Services } from './registry';
 import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem } from '@/types/canonical';
 import { MemoryStoryService } from './stories/service';
 import { MemoryTopicService } from './topics/service';
-import { MemoryEntityService } from './entities/service';
 import { MemoryTimelineService } from './timelines/service';
 import { MemoryFixService } from './fixes/service';
 import { MemoryDatasetService } from './datasets/service';
@@ -14,18 +13,37 @@ import { MemoryGraphProjectionService } from './graph/service';
 import { MemoryMonitorService, registerAllWatchers } from './monitoring/service';
 import { CanonicalStoryService } from './stories/canonical-repository';
 import { CanonicalTopicService } from './topics/canonical-repository';
-import { CanonicalEntityService } from './entities/canonical-repository';
+import { CanonicalEntityRepository } from './entities/canonical-repository';
 import { CanonicalTimelineService } from './timelines/canonical-repository';
 import { CanonicalFixService } from './fixes/canonical-repository';
 import { CanonicalSearchService } from './search/canonical-repository';
 import { CanonicalAnalyticsService } from './analytics/canonical-repository';
 import { DefaultImageIntelligenceService } from './media/intelligence';
 
+import { MemoryEntityRepository, KnowledgeEntityService } from './entities/service';
+import { KnowledgeEntityPipeline } from './entities/pipeline';
+import { AssetResolver } from './media/resolver';
+import { RelationshipBuilder } from './entities/builders/relationship';
+import { TimelineBuilder } from './entities/builders/timeline';
+import { ClaimBuilder } from './entities/builders/claims';
+import { SignalBuilder } from './entities/builders/signals';
+import { StatisticsBuilder } from './entities/builders/statistics';
+
 function createMonitorService(): MemoryMonitorService {
   const svc = new MemoryMonitorService();
   registerAllWatchers(svc);
   svc.runAllChecks();
   return svc;
+}
+
+function createEntityPipeline(): KnowledgeEntityPipeline {
+  return new KnowledgeEntityPipeline()
+    .addBuilder(new AssetResolver())
+    .addBuilder(new RelationshipBuilder())
+    .addBuilder(new TimelineBuilder())
+    .addBuilder(new ClaimBuilder())
+    .addBuilder(new SignalBuilder())
+    .addBuilder(new StatisticsBuilder());
 }
 
 function buildWithGraph(base: Omit<Services, 'graph' | 'monitoring'>): Services {
@@ -52,7 +70,7 @@ export function initDefaultServices(
   return buildWithGraph({
     stories: new MemoryStoryService(seedStories),
     topics: new MemoryTopicService(seedTopics),
-    entities: new MemoryEntityService(seedEntities),
+    entities: new KnowledgeEntityService(new MemoryEntityRepository(seedEntities), createEntityPipeline()),
     timelines: new MemoryTimelineService(seedTimelines),
     fixes: new MemoryFixService(seedFixes),
     datasets: new MemoryDatasetService(seedDatasets),
@@ -69,7 +87,7 @@ export function initCanonicalServices(): Services {
   return buildWithGraph({
     stories: new CanonicalStoryService() as unknown as Services['stories'],
     topics: new CanonicalTopicService() as unknown as Services['topics'],
-    entities: new CanonicalEntityService() as unknown as Services['entities'],
+    entities: new KnowledgeEntityService(new CanonicalEntityRepository() as any, createEntityPipeline()) as unknown as Services['entities'],
     timelines: new CanonicalTimelineService() as unknown as Services['timelines'],
     fixes: new CanonicalFixService() as unknown as Services['fixes'],
     datasets: new MemoryDatasetService() as unknown as Services['datasets'],

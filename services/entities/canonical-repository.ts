@@ -1,7 +1,7 @@
 import type { Entity, EntityKind, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
 
-export class CanonicalEntityService {
+export class CanonicalEntityRepository {
   async findAll(params?: APIListParams): Promise<APIResponse<Entity[]>> {
     let query = db().from('entities').select('*', { count: 'exact' });
     if (params?.search) query = query.or(`name.ilike.%${params.search}%,description.ilike.%${params.search}%`);

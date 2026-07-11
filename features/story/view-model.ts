@@ -1,6 +1,11 @@
-import type { Story, Topic, Entity, StoryPageViewModel, TOCItem } from '@/types/canonical';
+import type { Story, Topic, Entity, StoryTerminalViewModel, TOCItem } from '@/types/canonical';
 import type { Services } from '@/services/registry';
-import { buildQuickView, buildDeepView } from '@/lib/view-models/story-builders';
+import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
+import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
+import { EntityBuilder } from '@/services/stories/pipeline/entities';
+import { TimelineBuilder } from '@/services/stories/pipeline/timeline';
+import { ReadingBuilder } from '@/services/stories/pipeline/reading';
+import { QualityBuilder } from '@/services/stories/pipeline/quality';
 
 function buildTOC(story: Story): TOCItem[] {
   const items: TOCItem[] = [{ id: 'executive-brief', label: 'Executive Brief', level: 1 }];
@@ -28,61 +33,91 @@ function buildTOC(story: Story): TOCItem[] {
   return items;
 }
 
-export function buildStoryPage(services: Services, slug: string): StoryPageViewModel | null {
-  const story = services.stories.getStoryBySlug(slug);
-  if (!story) return null;
-  const relatedStories = story.relatedStoryIds.map(id => services.stories.getStory(id)).filter(Boolean) as Story[];
-  const relatedTopics = story.relatedTopicIds.map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];
-  const relatedEntities = story.relatedEntityIds.map(id => services.entities.getEntity(id)).filter(Boolean) as Entity[];
+export async function buildStoryPage(services: Services, slug: string): Promise<StoryTerminalViewModel | null> {
+  const rawStory = services.stories.getStoryBySlug(slug);
+  if (!rawStory) return null;
+
+  // Initialize pipeline
+  const pipeline = new KnowledgeStoryPipeline()
+    .add(new EntityBuilder())
+    .add(new VisualIntelligenceBuilder())
+    .add(new TimelineBuilder())
+    .add(new ReadingBuilder())
+    .add(new QualityBuilder());
+
+  const knowledgeStory = await pipeline.execute(rawStory);
+
+  const relatedStories = rawStory.relatedStoryIds.map(id => services.stories.getStory(id)).filter(Boolean) as Story[];
+  const relatedTopics = rawStory.relatedTopicIds.map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];
   
-  const verified = story.claims.filter(c => c.status === 'verified' || c.status === 'strong').length;
-  const misleading = story.claims.filter(c => c.status === 'unverified').length;
-  const unverifiable = story.claims.length - verified - misleading;
-  const sourceTierBreakdown = story.sources.reduce((acc, src) => {
+  // Entities are now pre-resolved by the EntityBuilder
+  const relatedEntities = [
+    ...(knowledgeStory.resolvedEntities?.primary ? [knowledgeStory.resolvedEntities.primary] : []),
+    ...(knowledgeStory.resolvedEntities?.supporting || [])
+  ];
+  
+  const verified = rawStory.claims.filter(c => c.status === 'verified' || c.status === 'strong').length;
+  const misleading = rawStory.claims.filter(c => c.status === 'unverified').length;
+  const unverifiable = rawStory.claims.length - verified - misleading;
+  const sourceTierBreakdown = rawStory.sources.reduce((acc, src) => {
     acc[src.tier] = (acc[src.tier] || 0) + 1;
     return acc;
   }, {} as Record<number, number>);
 
   return {
-    story,
+    story: rawStory,
     relatedStories,
     relatedTopics,
     relatedEntities,
-    seo: { title: story.headline, description: story.summary },
+    seo: { title: rawStory.headline, description: rawStory.summary },
     breadcrumbs: [
       { label: 'Home', href: '/' },
-      { label: story.title, href: `/story/${story.slug}` },
+      { label: rawStory.title, href: `/story/${rawStory.slug}` },
     ],
-    tableOfContents: buildTOC(story),
+    tableOfContents: buildTOC(rawStory),
     snapshot: {
-      status: story.status || 'published',
-      category: story.category,
-      location: story.location,
-      stakeholders: story.stakeholderNames || [],
-      costValue: story.costValue,
-      impactLevel: story.impactLevel,
-      legislation: story.legislation,
-      lastUpdated: story.updatedAt,
+      status: rawStory.status || 'published',
+      category: rawStory.category,
+      location: rawStory.location,
+      stakeholders: rawStory.stakeholderNames || [],
+      costValue: rawStory.costValue,
+      impactLevel: rawStory.impactLevel,
+      legislation: rawStory.legislation,
+      lastUpdated: rawStory.updatedAt,
     },
     executiveBrief: {
-      takeaway: story.takeaway || story.summary,
-      keyPoints: story.blocks.find(b => b.type === 'executive-summary')?.data['keyPoints'] as string[] || [],
-      whoIsAffected: story.whoIsAffected,
-      impactLevel: story.impactLevel,
+      takeaway: rawStory.takeaway || rawStory.summary,
+      keyPoints: rawStory.blocks.find(b => b.type === 'executive-summary')?.data['keyPoints'] as string[] || [],
+      whoIsAffected: rawStory.whoIsAffected,
+      impactLevel: rawStory.impactLevel,
     },
     evidenceSummary: {
-      overallScore: story.confidenceBreakdown?.overallScore || story.evidenceScore,
-      sourceQuality: story.confidenceBreakdown?.sourceQuality || 0,
-      confirmations: story.confidenceBreakdown?.confirmations || 0,
-      dataAvailability: story.confidenceBreakdown?.dataAvailability || 0,
-      verificationStatus: story.confidenceBreakdown?.verificationStatus || 0,
-      totalClaims: story.claims.length,
+      overallScore: rawStory.confidenceBreakdown?.overallScore || rawStory.evidenceScore,
+      sourceQuality: rawStory.confidenceBreakdown?.sourceQuality || 0,
+      confirmations: rawStory.confidenceBreakdown?.confirmations || 0,
+      dataAvailability: rawStory.confidenceBreakdown?.dataAvailability || 0,
+      verificationStatus: rawStory.confidenceBreakdown?.verificationStatus || 0,
+      totalClaims: rawStory.claims.length,
       verified,
       misleading,
       unverifiable,
       sourceTierBreakdown,
     },
-    quickView: buildQuickView(story),
-    deepView: buildDeepView(story),
+    
+    // Properties from Pipeline Builders
+    quickView: knowledgeStory.readingViews?.quick,
+    deepView: knowledgeStory.readingViews?.deep,
+    visualAssets: knowledgeStory.visualAssets || {
+      primary: [],
+      supporting: [],
+      gallery: [],
+      logos: [],
+      portraits: [],
+      maps: [],
+      charts: [],
+      documents: []
+    },
+    unifiedTimeline: knowledgeStory.unifiedTimeline || [],
+    qualityScore: knowledgeStory.qualityScore || { score: 0, issues: ['Failed pipeline'], status: 'Needs Review' }
   };
 }

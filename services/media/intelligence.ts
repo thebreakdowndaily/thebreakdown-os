@@ -73,7 +73,12 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
         imageCategory: 'PHOTO',
         editorialPriority: 'PRIMARY',
         verificationStatus: 'SOURCE_VERIFIED',
-        isAiGenerated: false
+        isAiGenerated: false,
+        width: page.thumbnail.width || 800,
+        height: page.thumbnail.height || 600,
+        sourceUrl: `https://en.wikipedia.org/wiki/${encodeURIComponent(firstResult.title)}`,
+        dominantColor: '#e0e0e0', // Placeholder
+        blurHash: 'LEHLk~WB2yk8pyo0adR*.7kCMdnj' // Placeholder
       };
 
       return mediaItem;
