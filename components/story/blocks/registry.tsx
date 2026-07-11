@@ -14,6 +14,7 @@ import CalloutBlock from './CalloutBlock';
 import ChapterHeadingBlock from './ChapterHeadingBlock';
 import ImageBlock from './ImageBlock';
 import EvidenceInlineBlock from './EvidenceInlineBlock';
+import TextBlockClient from './TextBlockClient';
 
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
   'executive-summary': ExecutiveSummaryBlock,
@@ -28,14 +29,7 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'chapter-heading': ChapterHeadingBlock,
   'image': ImageBlock,
   'evidence-inline': EvidenceInlineBlock,
-  'text': ({ content }: BlockMap['text']) => (
-    <section className="py-6 sm:py-8">
-      <div 
-        className="text-[1.05rem] sm:text-[1.125rem] text-text-primary leading-relaxed sm:leading-loose font-serif [&>p]:mb-6 [&>h3]:text-xl [&>h3]:font-bold [&>h3]:mt-10 [&>h3]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-6 [&>ul>li]:mb-2 [&>a]:text-brand-400 [&>a]:underline [&>a:hover]:text-brand-500 [&_cite]:not-italic [&_cite]:text-[0.65em] [&_cite]:align-super [&_cite]:text-brand-400 [&_cite]:font-bold [&_cite]:ml-0.5 [&_cite]:cursor-pointer hover:[&_cite]:text-brand-500 transition-colors" 
-        dangerouslySetInnerHTML={{ __html: content }} 
-      />
-    </section>
-  ),
+  'text': ({ content }: BlockMap['text']) => <TextBlockClient content={content} />,
   'chart': (props: BlockMap['chart']) => <ChartBlock {...props} />,
   'dataset-reference': (props: BlockMap['dataset-reference']) => <DatasetReferenceBlock {...props} />,
   'quote': ({ text, attribution }: BlockMap['quote']) => (
@@ -55,7 +49,7 @@ export function getBlockComponent(type: string): React.ComponentType<any> | null
 }
 
 export function BlockRenderer({ block }: { block: StoryBlock }) {
-  const Component = getBlockComponent(block.type);
+  const Component = blockComponents[block.type as BlockType];
   if (!Component) {
     console.warn(`[BlockRenderer] Unknown block type: "${block.type}"`);
     return null;

@@ -12,6 +12,7 @@
 @import '../design-system/tokens.css';
 
 @tailwind base;
+@import './print.css';
 @tailwind components;
 @tailwind utilities;
 

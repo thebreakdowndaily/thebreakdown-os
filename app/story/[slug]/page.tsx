@@ -8,13 +8,15 @@ import StoryLayout from '@/layouts/StoryLayout';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import Hero from '@/components/story/Hero';
 import { BlockRenderer } from '@/components/story/blocks/registry';
-import RelatedStories from '@/components/story/RelatedStories';
-import RelatedEntities from '@/components/story/RelatedEntities';
 import AuthorBox from '@/components/story/AuthorBox';
 import ExecutiveSummary from '@/components/story/ExecutiveSummary';
 import Timeline from '@/components/story/Timeline';
 import Evidence from '@/components/story/Evidence';
 import SourcesList from '@/components/story/SourcesList';
+import StorySnapshot from '@/components/story/StorySnapshot';
+import KnowledgeLayer from '@/components/story/KnowledgeLayer';
+import NextExploration from '@/components/story/NextExploration';
+import ConfidenceMeter from '@/components/story/ConfidenceMeter';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
@@ -30,7 +32,7 @@ function deriveKeyPoints(story: Story): string[] {
 
 function createJsonLd(story: Story): Record<string, unknown>[] {
   const breadcrumbs = story.slug.split('-').slice(0, 2).join(' ').toUpperCase();
-  return [
+  const ld: Record<string, unknown>[] = [
     {
       '@context': 'https://schema.org',
       '@type': 'NewsArticle',
@@ -67,6 +69,62 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
       ],
     },
   ];
+
+  const faqBlocks = story.blocks?.filter((b) => b.type === 'faq') || [];
+  if (faqBlocks.length > 0) {
+    const mainEntity: Record<string, unknown>[] = [];
+    faqBlocks.forEach((block) => {
+      const data = block.data as any;
+      if (data.questions && Array.isArray(data.questions)) {
+        data.questions.forEach((q: any) => {
+          mainEntity.push({
+            '@type': 'Question',
+            name: q.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: q.answer,
+            },
+          });
+        });
+      }
+    });
+
+    if (mainEntity.length > 0) {
+      ld.push({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity,
+      });
+    }
+  }
+
+  ld.push({
+    '@context': 'https://thebreakdown.in/schema',
+    '@type': 'TheBreakdownKnowledgeStory',
+    headline: story.headline,
+    summary: story.summary,
+    entities: story.tags || [],
+    topics: story.category ? [story.category] : [],
+    claims: story.claims?.map(c => ({
+      claim: c.claim,
+      source: c.source,
+      verification: c.status,
+      confidence: c.confidence
+    })) || [],
+    sources: story.sources?.map(s => ({
+      title: s.title,
+      url: s.url,
+      tier: s.tier
+    })) || [],
+    timeline: story.timeline?.map(t => ({
+      date: t.date,
+      title: t.title,
+      description: t.description
+    })) || [],
+    relationships: story.stakeholderNames || [],
+  });
+
+  return ld;
 }
 
 export function generateStaticParams() {
@@ -125,6 +183,14 @@ export default async function StoryPage({
   if (!vm) notFound();
   const { story, relatedStories, relatedEntities } = vm;
 
+  const verified = story.claims?.filter(c => c.status === 'verified' || c.status === 'strong').length || 0;
+  const misleading = story.claims?.filter(c => c.status === 'moderate').length || 0;
+  const unverifiable = story.claims?.filter(c => c.status === 'unverified').length || 0;
+  const totalClaims = story.claims?.length || 0;
+  const t1t2 = story.sources?.filter(s => s.tier <= 2).length || 0;
+  const sourceQuality = story.sources?.length > 0 ? Math.round((t1t2 / story.sources.length) * 100) : 0;
+  const verificationStatus = totalClaims > 0 ? Math.round((verified / totalClaims) * 100) : 0;
+
   return (
     <>
       {createJsonLd(story).map((ld, i) => (
@@ -138,24 +204,58 @@ export default async function StoryPage({
 
       <StoryLayout story={story} tableOfContents={vm.tableOfContents}>
         {mode !== 'timeline' && mode !== 'data' && (
-          <ExecutiveSummary
-            summary={story.summary}
-            keyPoints={deriveKeyPoints(story)}
-            takeaway={story.takeaway}
-            whoIsAffected={story.whoIsAffected}
-            impactLevel={story.impactLevel}
-          />
+          <>
+            <ExecutiveSummary
+              summary={story.summary}
+              keyPoints={deriveKeyPoints(story)}
+              takeaway={story.takeaway}
+              whoIsAffected={story.whoIsAffected}
+              impactLevel={story.impactLevel}
+            />
+            {/* Mobile Story Snapshot (hidden on large screens) */}
+            <div className="lg:hidden mt-8 mb-8">
+              <StorySnapshot
+                status={story.status}
+                category={story.category}
+                location={story.location}
+                stakeholderNames={story.stakeholderNames}
+                impactLevel={story.impactLevel}
+                legislation={story.legislation}
+                costValue={story.costValue}
+                updatedAt={story.updatedAt}
+                evidenceScore={story.evidenceScore}
+                sourceCount={story.sources?.length}
+              />
+            </div>
+          </>
         )}
         {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
           <BlocksRenderer blocks={story.blocks} />
         )}
+        
+        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
+          <div className="mt-12 mb-8 border-t border-[#2A2A2A] pt-10">
+            <h2 className="text-xl font-bold text-text-primary mb-6">Evidence & Confidence Summary</h2>
+            <ConfidenceMeter
+              overallScore={story.evidenceScore}
+              sourceQuality={sourceQuality}
+              confirmations={80}
+              dataAvailability={70}
+              verificationStatus={verificationStatus}
+              totalClaims={totalClaims}
+              verified={verified}
+              misleading={misleading}
+              unverifiable={unverifiable}
+            />
+          </div>
+        )}
         {mode === 'data' && (
           <BlocksRenderer blocks={story.blocks.filter(b => b.type === 'chart' || b.type === 'key-numbers' || b.type === 'dataset-reference')} />
         )}
-        {mode !== 'quick' && mode !== 'data' && (
+        {(mode === 'deep' || mode === 'timeline') && (
           <Timeline events={story.timeline} />
         )}
-        {mode !== 'quick' && mode !== 'timeline' && (
+        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
           <Evidence 
             claims={story.claims?.map(c => ({
               claim: c.claim,
@@ -168,39 +268,20 @@ export default async function StoryPage({
             verificationScore={story.evidenceScore} 
           />
         )}
-        {mode !== 'quick' && mode !== 'timeline' && mode !== 'data' && (
+        {mode === 'deep' && (
           <SourcesList sources={story.sources.map(s => ({ name: s.title, url: s.url, type: 'News', tier: s.tier }))} />
         )}
       </StoryLayout>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {relatedStories.length > 0 && (
-          <RelatedStories
-            stories={relatedStories.map((s) => ({
-              slug: s.slug,
-              headline: s.headline,
-              summary: s.summary,
-              heroImage: s.heroImage,
-              publishedAt: s.publishedAt,
-              readingTime: s.readingTime,
-              evidenceScore: s.evidenceScore,
-              category: s.category,
-            }))}
-          />
-        )}
-        {relatedEntities.length > 0 && (
-          <RelatedEntities
-            entities={relatedEntities.map((e) => ({
-              id: e.id,
-              slug: e.slug,
-              name: e.name,
-              type: e.type,
-              description: e.description,
-            }))}
-          />
-        )}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <AuthorBox author={{ name: story.author }} />
       </div>
+
+      <KnowledgeLayer story={story} relatedEntities={relatedEntities} />
+      
+      {relatedStories.length > 0 && (
+        <NextExploration stories={relatedStories} />
+      )}
     </>
   );
 }

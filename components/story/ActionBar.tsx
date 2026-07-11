@@ -1,6 +1,8 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import ListenButton from './ListenButton';
+import SaveButton from './SaveButton';
 
 interface ActionBarProps {
   slug: string;
@@ -25,6 +27,8 @@ export default function ActionBar({ slug }: ActionBarProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-2" role="toolbar" aria-label="Story actions">
+      <ListenButton />
+      <SaveButton slug={slug} />
       <button
         onClick={() => { navigator.clipboard.writeText(url); }}
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface-secondary text-text-muted hover:text-text-primary hover:border-text-muted text-xs font-medium transition-colors"
@@ -62,9 +66,9 @@ export default function ActionBar({ slug }: ActionBarProps) {
           className="bg-surface-secondary border border-border text-text-primary text-xs rounded-lg focus:ring-brand-400 focus:border-brand-400 block px-2.5 py-1.5 appearance-none cursor-pointer"
           aria-label="Reading Mode"
         >
-          <option value="standard">Standard Article</option>
-          <option value="quick">Quick Brief</option>
-          <option value="deep">Deep Research</option>
+          <option value="quick">Quick Brief (30 seconds)</option>
+          <option value="standard">Standard Article (5-7 minutes)</option>
+          <option value="deep">Deep Research (15-20 minutes)</option>
           <option value="data">Data Only</option>
           <option value="timeline">Timeline Only</option>
         </select>

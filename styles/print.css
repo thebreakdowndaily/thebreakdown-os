@@ -1,0 +1,61 @@
+@media print {
+  /* Hide non-essential UI elements */
+  nav,
+  header,
+  footer,
+  aside,
+  .print-hidden,
+  button,
+  [role="toolbar"],
+  #table-of-contents,
+  .reading-progress {
+    display: none !important;
+  }
+
+  /* Reset layout for print */
+  body {
+    background-color: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Typography adjustments for print */
+  h1, h2, h3, h4, h5, h6 {
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Links should not be styled like buttons or have underlines if possible,
+     but we can append URLs for external links. */
+  a {
+    color: black !important;
+    text-decoration: none !important;
+  }
+
+  /* Ensure main content takes full width */
+  main, article, section {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* Avoid breaking images and charts across pages */
+  img, svg, figure, .recharts-wrapper {
+    page-break-inside: avoid;
+    max-width: 100% !important;
+  }
+
+  /* Backgrounds in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
