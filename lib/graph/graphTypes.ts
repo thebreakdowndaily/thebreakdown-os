@@ -11,9 +11,9 @@ export type RelationType =
 
 export interface GraphNode {
   id: string;
+  slug: string;
   type: NodeType;
   title: string;
-  slug: string;
   subtitle?: string;
   image?: string;
   evidenceScore?: number;

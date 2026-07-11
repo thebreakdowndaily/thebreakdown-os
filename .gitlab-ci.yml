@@ -105,7 +105,7 @@ deploy_production:
     - playwright
     - accessibility
   script:
-    - npx wrangler pages deploy .open-next --project-name=thebreakdown-website --branch=main
+    - npx wrangler deploy --name thebreakdown-website-worker
   environment:
     name: production
     url: https://thebreakdown.in

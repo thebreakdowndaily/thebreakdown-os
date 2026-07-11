@@ -87,6 +87,41 @@ export interface CMSMediaItem {
   version: number;
   createdAt: string;
   updatedAt: string;
+  
+  // Editorial & Copyright
+  agency?: string;
+  copyrightOwner?: string;
+  photographer?: string;
+  capturedAt?: string;
+  sourceUrl?: string;
+  licenseType?: string;
+  
+  // Taxonomy & Accessibility
+  imageCategory?: string;
+  editorialPriority?: string;
+  longDescription?: string;
+  
+  // Technical & Automation
+  sha256Hash?: string;
+  blurHash?: string;
+  focusPointX?: number;
+  focusPointY?: number;
+  dominantColor?: string;
+  verificationStatus?: string;
+  
+  // AI Provenance
+  isAiGenerated?: boolean;
+  aiModel?: string;
+  aiPrompt?: string;
+  aiProvider?: string;
+  generatedAt?: string;
+  
+  // EXIF
+  orientation?: string;
+  camera?: string;
+  lens?: string;
+  iso?: string;
+  gps?: string;
 }
 
 export interface CMSUser {

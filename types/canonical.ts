@@ -134,6 +134,11 @@ export interface Fix {
   updatedAt: string;
 }
 
+export type ImageCategory = 'PHOTO' | 'ILLUSTRATION' | 'INFOGRAPHIC' | 'MAP' | 'CHART' | 'DIAGRAM' | 'DOCUMENT' | 'SCREENSHOT' | 'SATELLITE' | 'LOGO';
+export type EditorialPriority = 'PRIMARY' | 'SECONDARY' | 'SUPPORTING' | 'THUMBNAIL' | 'HERO';
+export type VerificationStatus = 'PENDING' | 'EDITOR_VERIFIED' | 'SOURCE_VERIFIED' | 'AI_REVIEWED' | 'REJECTED' | 'ARCHIVED';
+export type LicenseType = 'EDITORIAL' | 'OFFICIAL' | 'PUBLIC_DOMAIN' | 'CC0' | 'CC-BY' | 'CC-BY-SA' | 'COMMERCIAL' | 'LICENSED' | 'FAIR_USE' | 'AI';
+
 export interface MediaItem {
   id: string;
   type: 'image' | 'video' | 'chart' | 'document' | 'svg' | 'map';
@@ -148,6 +153,41 @@ export interface MediaItem {
   version: number;
   createdAt: string;
   updatedAt: string;
+  
+  // Editorial & Copyright
+  agency?: string;
+  copyrightOwner?: string;
+  photographer?: string;
+  capturedAt?: string;
+  sourceUrl?: string;
+  licenseType?: LicenseType;
+  
+  // Taxonomy & Accessibility
+  imageCategory?: ImageCategory;
+  editorialPriority?: EditorialPriority;
+  longDescription?: string;
+  
+  // Technical & Automation
+  sha256Hash?: string;
+  blurHash?: string;
+  focusPointX?: number;
+  focusPointY?: number;
+  dominantColor?: string;
+  verificationStatus?: VerificationStatus;
+  
+  // AI Provenance
+  isAiGenerated?: boolean;
+  aiModel?: string;
+  aiPrompt?: string;
+  aiProvider?: string;
+  generatedAt?: string;
+  
+  // EXIF
+  orientation?: string;
+  camera?: string;
+  lens?: string;
+  iso?: string;
+  gps?: string;
 }
 
 export interface User {
