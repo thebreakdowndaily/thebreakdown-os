@@ -552,14 +552,14 @@ Wire the CMS so a story created through it publishes to the live site, via a `Re
 - **Entities** — async EntityService/RawEntityRepository interfaces + MemoryEntityRepository + SupabaseEntityRepository + factory + init + all callers (14 files). KnowledgeEntityService updated. API v1 routes updated.
 - **Timelines** — async TimelineService interface + MemoryTimelineRepository + SupabaseTimelineRepository + factory + init + all callers + API v1 routes. All 3 stale files deleted.
 - **Fixes** — async FixService interface + MemoryFixRepository + SupabaseFixRepository + factory + init + all callers (6 files) + API v1 routes. All 3 stale files deleted.
+- **Media** — async MediaService interface + MemoryMediaRepository + SupabaseMediaRepository + factory + init + 1 caller + API v1 routes. Stale files deleted.
+- **Datasets** — async DatasetService interface + MemoryDatasetRepository + SupabaseDatasetRepository + factory + init + all 25+ callers + 6 API v1 routes. Cache/validator/csv-importer kept as utilities. Stale files deleted.
 - `npx tsc --noEmit` — clean. `npm run build` — passes (225 pages).
+- `RepositoryFactory` has all 7 types: getStoryRepository, getTopicRepository, getEntityRepository, getTimelineRepository, getFixRepository, getMediaRepository, getDatasetRepository, getDataProvider.
 
-### Remaining (unmigrated, still using old sync pattern)
-- **Datasets** — 25+ callers, complex API (getDatasets, getDatasetBySlug, saveDataset, getSeries, getHistory, createVersion, getChartData, importCsv, importJson, validate). Largest remaining migration.
-- **Media** — 1 caller (`features/cms/view-model.ts`). Low complexity, small scope.
-- **Search** — used across the app, but separate concern.
-- **Graph, Monitoring, Analytics, Intelligence** — app-level services, not data-store repos.
+### Status
+All priority-5 data-store entity types fully migrated to async/factory/repository pattern. No remaining data-store types on the old sync pattern.
 
-### Next Moves
-1. Migrate datasets (complex — needs async interface + mem repo + supabase repo + factory + init + all callers + API routes)
-2. Migrate media (simple — async interface + mem repo + supabase repo + factory + init)
+### Next Moves (future)
+1. Fix pre-existing test failures (Cannot read properties of undefined (reading 'title') in tests/homepage.test.ts)
+2. Migrate remaining app-level services: Search, Graph, Monitoring, Analytics, Intelligence (not data-store repos, separate concern)
