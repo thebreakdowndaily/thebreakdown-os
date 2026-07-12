@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseEntityRepository } from '@/services/entities/repository';
+import { SupabaseEntityRepository } from '@/services/repositories/supabase/entity';
 import type { Entity, APIResponse } from '@/types/canonical';
 import { syncEntity, deleteEntity } from '@/lib/data-sync';
 
@@ -10,7 +10,7 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const entity = await repo.findBySlug(slug);
+  const entity = await repo.getEntityBySlug(slug);
 
   if (!entity) {
     return NextResponse.json({ error: `Entity not found: ${slug}` }, { status: 404 });
@@ -25,7 +25,7 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const existing = await repo.findBySlug(slug);
+  const existing = await repo.getEntityBySlug(slug);
 
   if (!existing) {
     return NextResponse.json({ error: `Entity not found: ${slug}` }, { status: 404 });
@@ -44,7 +44,7 @@ export async function DELETE(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const entity = await repo.findBySlug(slug);
+  const entity = await repo.getEntityBySlug(slug);
 
   if (!entity) {
     return NextResponse.json({ error: `Entity not found: ${slug}` }, { status: 404 });

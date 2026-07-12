@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Stories — The Breakdown', url: 'https://thebreakdown.in/stories' },
 };
 
+export const revalidate = 60;
+
 export default function StoriesPage() {
   const { data: stories } = getStories({ pageSize: 50, sort: 'publishedAt', order: 'desc' });
   return (

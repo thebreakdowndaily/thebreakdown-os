@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseEntityRepository } from '@/services/entities/repository';
+import { SupabaseEntityRepository } from '@/services/repositories/supabase/entity';
 import type { Entity, EntityKind, APIResponse, APIListParams } from '@/types/canonical';
 import { syncEntity } from '@/lib/data-sync';
 
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const typeParam = searchParams.get('type') as EntityKind | null;
 
   if (typeParam) {
-    const entities: Entity[] = await repo.findByType(typeParam);
+    const entities: Entity[] = await repo.getEntitiesByType(typeParam);
     const search = searchParams.get('search')?.toLowerCase();
     let filtered = entities;
     if (search) {
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.findAll(params);
+  const result = await repo.getEntities(params);
   return NextResponse.json(result);
 }
 

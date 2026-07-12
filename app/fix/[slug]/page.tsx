@@ -6,9 +6,9 @@ import FixLayout from '@/layouts/FixLayout';
 import FixRenderer from '@/components/fix/FixRenderer';
 import type { Fix, ExistingSolution } from '@/types/canonical';
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const services = bootstrapServices();
-  return services.fixes.getFixes({ pageSize: 100 }).data.map((f) => ({ slug: f.slug }));
+  return (await services.fixes.getFixes({ pageSize: 100 })).data.map((f) => ({ slug: f.slug }));
 }
 
 function toFixJSON(fix: Record<string, unknown>): Fix {
@@ -52,7 +52,7 @@ function toFixJSON(fix: Record<string, unknown>): Fix {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const services = bootstrapServices();
-  const fix = services.fixes.getFixBySlug(slug);
+  const fix = await services.fixes.getFixBySlug(slug);
   if (!fix) return { title: 'Fix Not Found — The Breakdown' };
   const f = fix as unknown as Record<string, unknown>;
   return {
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function FixPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const services = bootstrapServices();
-  const fix = services.fixes.getFixBySlug(slug);
+  const fix = await services.fixes.getFixBySlug(slug);
   if (!fix) notFound();
 
   const f = fix as unknown as Record<string, unknown>;

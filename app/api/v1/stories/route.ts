@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseStoryRepository } from '@/services/stories/repository';
+import { RepositoryFactory } from '@/services/factory/repository';
 import type { Story, APIResponse, APIListParams } from '@/types/canonical';
 import { syncStory } from '@/lib/data-sync';
 
-const repo = new SupabaseStoryRepository();
+const repo = RepositoryFactory.getStoryRepository();
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.findAll(params);
+  const result = await repo.getStories(params);
   return NextResponse.json(result);
 }
 
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     updatedBy: body.updatedBy,
   };
 
-  const saved = await repo.save(story);
+  const saved = await repo.saveStory(story);
   syncStory(saved);
   const res: APIResponse<Story> = { data: saved };
   return NextResponse.json(res, { status: 201 });

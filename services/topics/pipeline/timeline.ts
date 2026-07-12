@@ -4,9 +4,9 @@ import { getServices } from '@/services/registry';
 
 export class TimelineAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
-    const stories = topic.storyIds
-      .map(id => getServices().stories.getStory(id))
-      .filter((s): s is Story => s !== null);
+    const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
+    const storiesResult = await Promise.all(storyPromises);
+    const stories = storiesResult.filter((s): s is Story => !!s);
 
     const eventsMap = new Map<string, TimelineEvent>();
 
@@ -23,12 +23,12 @@ export class TimelineAggregator implements TopicAggregator {
     });
 
     // 3. Entity timelines (from directly related entities on the topic)
-    topic.relatedEntityIds.forEach(eid => {
-      const entity = getServices().entities.getEntity(eid);
+    for (const eid of topic.relatedEntityIds) {
+      const entity = await getServices().entities.getEntity(eid);
       if (entity && entity.timeline) {
         entity.timeline.forEach(event => eventsMap.set(event.date + event.title, event));
       }
-    });
+    }
 
     const unifiedTimeline = Array.from(eventsMap.values())
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

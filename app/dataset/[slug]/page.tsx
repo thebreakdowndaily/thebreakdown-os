@@ -14,8 +14,8 @@ export function generateStaticParams() {
 export default async function DatasetPage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   const services = bootstrapServices();
-  const vm = buildDatasetPage(services, slug);
-  if (!vm) notFound();
+  const vm = await buildDatasetPage(services, slug);
+  if (!vm) return notFound();
   const { dataset, relatedStories } = vm;
 
   return (

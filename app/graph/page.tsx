@@ -10,16 +10,20 @@ import type { GraphPageViewModel } from '@/features/graph/view-model';
 export default function GraphExplorerPage() {
   const [vm, setVm] = useState<GraphPageViewModel | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
 
   const init = useCallback(() => {
     bootstrapServices();
-    return buildGraphPage(getServices());
+    buildGraphPage(getServices()).then((result) => {
+      setVm(result);
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
-        setVm(init());
+        init();
       } catch (e) {
         console.error('GraphPage init error:', e);
         setError(e instanceof Error ? e.message : String(e));

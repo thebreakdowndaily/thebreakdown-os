@@ -1,26 +1,15 @@
 import { initServices } from './registry';
 import type { Services } from './registry';
 import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem } from '@/types/canonical';
-import { MemoryStoryService } from './stories/service';
-import { MemoryTopicService } from './topics/service';
-import { MemoryTimelineService } from './timelines/service';
-import { MemoryFixService } from './fixes/service';
-import { MemoryDatasetService } from './datasets/service';
-import { MemoryMediaService } from './media/service';
+
 import { MemorySearchService } from './search/service';
 import { PluginAnalyticsService } from './analytics/service';
 import { MemoryGraphProjectionService } from './graph/service';
 import { MemoryMonitorService, registerAllWatchers } from './monitoring/service';
-import { CanonicalStoryService } from './stories/canonical-repository';
-import { CanonicalTopicService } from './topics/canonical-repository';
-import { CanonicalEntityRepository } from './entities/canonical-repository';
-import { CanonicalTimelineService } from './timelines/canonical-repository';
-import { CanonicalFixService } from './fixes/canonical-repository';
-import { CanonicalSearchService } from './search/canonical-repository';
-import { CanonicalAnalyticsService } from './analytics/canonical-repository';
+import { RepositoryFactory } from './factory/repository';
 import { DefaultImageIntelligenceService } from './media/intelligence';
 
-import { MemoryEntityRepository, KnowledgeEntityService } from './entities/service';
+import { KnowledgeEntityService } from './entities/service';
 import { KnowledgeEntityPipeline } from './entities/pipeline';
 import { AssetResolver } from './media/resolver';
 import { RelationshipBuilder } from './entities/builders/relationship';
@@ -68,13 +57,13 @@ export function initDefaultServices(
   seedMedia: MediaItem[],
 ): Services {
   return buildWithGraph({
-    stories: new MemoryStoryService(seedStories),
-    topics: new MemoryTopicService(seedTopics),
-    entities: new KnowledgeEntityService(new MemoryEntityRepository(seedEntities), createEntityPipeline()),
-    timelines: new MemoryTimelineService(seedTimelines),
-    fixes: new MemoryFixService(seedFixes),
-    datasets: new MemoryDatasetService(seedDatasets),
-    media: new MemoryMediaService(seedMedia),
+    stories: RepositoryFactory.getStoryRepository(seedStories),
+    topics: RepositoryFactory.getTopicRepository(seedTopics),
+    entities: new KnowledgeEntityService(RepositoryFactory.getEntityRepository(seedEntities), createEntityPipeline()),
+    timelines: RepositoryFactory.getTimelineRepository(seedTimelines),
+    fixes: RepositoryFactory.getFixRepository(seedFixes),
+    datasets: RepositoryFactory.getDatasetRepository(seedDatasets),
+    media: RepositoryFactory.getMediaRepository(seedMedia),
     search: new MemorySearchService(),
     analytics: new PluginAnalyticsService(),
     intelligence: new DefaultImageIntelligenceService(),
@@ -85,15 +74,15 @@ export function initDefaultServices(
 
 export function initCanonicalServices(): Services {
   return buildWithGraph({
-    stories: new CanonicalStoryService() as unknown as Services['stories'],
-    topics: new CanonicalTopicService() as unknown as Services['topics'],
-    entities: new KnowledgeEntityService(new CanonicalEntityRepository() as any, createEntityPipeline()) as unknown as Services['entities'],
-    timelines: new CanonicalTimelineService() as unknown as Services['timelines'],
-    fixes: new CanonicalFixService() as unknown as Services['fixes'],
-    datasets: new MemoryDatasetService() as unknown as Services['datasets'],
-    media: new MemoryMediaService([]) as unknown as Services['media'],
-    search: new CanonicalSearchService() as unknown as Services['search'],
-    analytics: new CanonicalAnalyticsService() as unknown as Services['analytics'],
+    stories: RepositoryFactory.getStoryRepository(),
+    topics: RepositoryFactory.getTopicRepository([]),
+    entities: new KnowledgeEntityService(RepositoryFactory.getEntityRepository([]), createEntityPipeline()),
+    timelines: RepositoryFactory.getTimelineRepository([]),
+    fixes: RepositoryFactory.getFixRepository([]),
+    datasets: RepositoryFactory.getDatasetRepository([]),
+    media: RepositoryFactory.getMediaRepository([]),
+    search: new MemorySearchService(),
+    analytics: new PluginAnalyticsService(),
     intelligence: new DefaultImageIntelligenceService(),
   });
 }

@@ -1,7 +1,5 @@
 import type { Story, Topic, Entity, StoryTerminalViewModel, TOCItem } from '@/types/canonical';
 import type { Services } from '@/services/registry';
-import { SupabaseStoryRepository } from '@/services/stories/repository';
-import { syncStory } from '@/lib/data-sync';
 import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { EntityBuilder } from '@/services/stories/pipeline/entities';
@@ -36,20 +34,7 @@ function buildTOC(story: Story): TOCItem[] {
 }
 
 export async function buildStoryPage(services: Services, slug: string): Promise<StoryTerminalViewModel | null> {
-  let rawStory = services.stories.getStoryBySlug(slug);
-
-  if (!rawStory) {
-    try {
-      const repo = new SupabaseStoryRepository();
-      const fromDb = await repo.findBySlug(slug);
-      if (fromDb) {
-        syncStory(fromDb);
-        rawStory = fromDb;
-      }
-    } catch {
-      rawStory = undefined;
-    }
-  }
+  const rawStory = await services.stories.getStoryBySlug(slug);
 
   if (!rawStory) return null;
 
@@ -63,8 +48,11 @@ export async function buildStoryPage(services: Services, slug: string): Promise<
 
   const knowledgeStory = await pipeline.execute(rawStory);
 
-  const relatedStories = rawStory.relatedStoryIds.map(id => services.stories.getStory(id)).filter(Boolean) as Story[];
-  const relatedTopics = rawStory.relatedTopicIds.map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];
+  const relatedStoriesPromises = rawStory.relatedStoryIds.map(id => services.stories.getStory(id));
+  const relatedStoriesResult = await Promise.all(relatedStoriesPromises);
+  const relatedStories = relatedStoriesResult.filter((s): s is Story => !!s);
+  const relatedTopicsPromises = rawStory.relatedTopicIds.map(id => services.topics.getTopic(id));
+  const relatedTopics = (await Promise.all(relatedTopicsPromises)).filter((t): t is Topic => !!t);
   
   // Entities are now pre-resolved by the EntityBuilder
   const relatedEntities = [

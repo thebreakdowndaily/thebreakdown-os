@@ -18,32 +18,32 @@ export class GraphService {
     this.services = services;
   }
 
-  build(): Graph {
+  async build(): Promise<Graph> {
     return this.services.graph.build();
   }
 
-  getNode(id: string): GraphNode | undefined {
+  async getNode(id: string): Promise<GraphNode | undefined> {
     return this.services.graph.getNode(id);
   }
 
-  getConnections(nodeId: string, options?: { maxDepth?: number; relation?: RelationType }): ConnectionResult[] {
+  async getConnections(nodeId: string, options?: { maxDepth?: number; relation?: RelationType }): Promise<ConnectionResult[]> {
     return this.services.graph.getConnections(nodeId, options);
   }
 
-  getPath(from: string, to: string): GraphEdge[] {
+  async getPath(from: string, to: string): Promise<GraphEdge[]> {
     return this.services.graph.getPath(from, to);
   }
 
-  getTrending(limit: number): Array<{ from: GraphNode; to: GraphNode }> {
-    const results = this.services.graph.getTrending(limit);
-    return results.map(r => ({ from: r.from, to: r.to }));
+  async getTrending(limit: number): Promise<Array<{ from: GraphNode; to: GraphNode }>> {
+    const results = await this.services.graph.getTrending(limit);
+    return results.map((r: any) => ({ from: r.from, to: r.to }));
   }
 
-  getStats() {
+  async getStats() {
     return this.services.graph.getStats();
   }
 
-  project(options?: { types?: GraphNode['type'][]; relations?: RelationType[]; minConfidence?: number; maxNodes?: number }) {
+  async project(options?: { types?: GraphNode['type'][]; relations?: RelationType[]; minConfidence?: number; maxNodes?: number }) {
     return this.services.graph.project(options);
   }
 }

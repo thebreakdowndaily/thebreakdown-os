@@ -1,13 +1,17 @@
 import type { Story, Topic, Entity, EntityPageViewModel, Dataset, EntityBase } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 
-export function buildEntityPage(services: Services, slug: string): EntityPageViewModel | null {
-  const entity = services.entities.getEntityBySlug(slug);
+export async function buildEntityPage(services: Services, slug: string): Promise<EntityPageViewModel | null> {
+  const entity = await services.entities.getEntityBySlug(slug);
   if (!entity) return null;
-  const stories = (entity as any).relatedStoryIds?.map((id: string) => services.stories.getStory(id)).filter(Boolean) as Story[] || [];
-  const relatedEntities = (entity.relationships || []).map(r => services.entities.getEntity(r.targetId)).filter(Boolean) as EntityBase[];
+  const relatedStoriesPromises = (entity as any).relatedStoryIds?.map((id: string) => services.stories.getStory(id)) || [];
+  const relatedStoriesResult = await Promise.all(relatedStoriesPromises);
+  const stories = relatedStoriesResult.filter(Boolean) as Story[];
+  const relatedEntitiesPromises = (entity.relationships || []).map(r => services.entities.getEntity(r.targetId));
+  const relatedEntities = (await Promise.all(relatedEntitiesPromises)).filter((e): e is EntityBase => !!e);
   // Fallback to legacy relatedTopicIds if relationships don't map topics yet
-  const relatedTopics = (entity as any).relatedTopicIds?.map((id: string) => services.topics.getTopic(id)).filter(Boolean) as Topic[] || [];
+  const relatedTopicsPromises = (entity as any).relatedTopicIds?.map((id: string) => services.topics.getTopic(id)) || [];
+  const relatedTopics = (await Promise.all(relatedTopicsPromises)).filter((t): t is Topic => !!t);
   
   // The pipeline attaches signals. If missing, provide a safe fallback.
   const signals = (entity as any).signals || {
@@ -31,11 +35,13 @@ export function buildEntityPage(services: Services, slug: string): EntityPageVie
   };
 }
 
-export function buildEntityTerminalViewModel(services: Services, slug: string): import('@/types/canonical').EntityTerminalViewModel | null {
-  const entity = services.entities.getEntityBySlug(slug);
+export async function buildEntityTerminalViewModel(services: Services, slug: string): Promise<import('@/types/canonical').EntityTerminalViewModel | null> {
+  const entity = await services.entities.getEntityBySlug(slug);
   if (!entity) return null;
   
-  const stories = (entity.usageGraph?.stories || []).map(id => services.stories.getStory(id)).filter(Boolean) as Story[];
+  const terminalStoriesPromises = (entity.usageGraph?.stories || []).map(id => services.stories.getStory(id));
+  const terminalStoriesResult = await Promise.all(terminalStoriesPromises);
+  const stories = terminalStoriesResult.filter(Boolean) as Story[];
   
   // Flatten Assets
   const resolvedAssets = entity.assets?.map(a => a.resolvedAsset).filter(Boolean) as import('@/types/canonical').AssetBase[] || [];
@@ -45,8 +51,11 @@ export function buildEntityTerminalViewModel(services: Services, slug: string): 
   const documents = resolvedAssets.filter(a => ['document', 'report', 'dataset'].includes(entity.assets?.find(ref => ref.assetId === a.id)?.role || ''));
   
   // Map Relationships
-  const relationships: import('@/types/canonical').ResolvedRelationship[] = (entity.relationships || []).map(rel => {
-    const target = services.entities.getEntity(rel.targetId);
+  const relationshipTargets = await Promise.all(
+    (entity.relationships || []).map(rel => services.entities.getEntity(rel.targetId))
+  );
+  const relationships: import('@/types/canonical').ResolvedRelationship[] = (entity.relationships || []).map((rel, i) => {
+    const target = relationshipTargets[i];
     if (!target) return null;
     return {
       entity: target,
@@ -105,17 +114,17 @@ export function buildEntityTerminalViewModel(services: Services, slug: string): 
   };
 }
 
-export function getDatasetsForEntity(services: Services, entityId: string): Dataset[] {
-  const allDatasets = services.datasets.getDatasets().data;
+export async function getDatasetsForEntity(services: Services, entityId: string): Promise<Dataset[]> {
+  const allDatasets = (await services.datasets.getDatasets()).data;
   return allDatasets.filter(d => d.relatedEntityIds.includes(entityId));
 }
 
-export function getDatasetsForStory(services: Services, storyId: string): Dataset[] {
-  const allDatasets = services.datasets.getDatasets().data;
+export async function getDatasetsForStory(services: Services, storyId: string): Promise<Dataset[]> {
+  const allDatasets = (await services.datasets.getDatasets()).data;
   return allDatasets.filter(d => d.relatedStoryIds.includes(storyId));
 }
 
-export function getDatasetsForTopic(services: Services, topicId: string): Dataset[] {
-  const allDatasets = services.datasets.getDatasets().data;
+export async function getDatasetsForTopic(services: Services, topicId: string): Promise<Dataset[]> {
+  const allDatasets = (await services.datasets.getDatasets()).data;
   return allDatasets.filter(d => d.relatedTopicIds.includes(topicId));
 }

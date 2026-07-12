@@ -4,7 +4,7 @@ import { getServices } from '@/services/registry';
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const services = getServices();
   const slug = (await params).slug;
-  const dataset = services.datasets.getDatasetBySlug(slug);
+  const dataset = await services.datasets.getDatasetBySlug(slug);
   if (!dataset) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const { searchParams } = new URL(request.url);
   const format = searchParams.get('format') || 'csv';

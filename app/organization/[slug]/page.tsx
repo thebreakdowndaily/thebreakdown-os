@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const services = bootstrapServices();
-  const orgs = services.entities.getEntitiesByType('organization');
+  const orgs = await services.entities.getEntitiesByType('organization');
   return orgs.map((org) => ({ slug: org.slug }));
 }
 

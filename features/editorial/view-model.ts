@@ -77,9 +77,9 @@ export interface EditorialDashboardData {
 }
 
 export async function buildEditorialDashboard(services: Services): Promise<EditorialDashboardData> {
-  const rawStories = services.stories.getStories({ pageSize: 100 }).data;
-  const entities = services.entities.getEntities().data;
-  const topics = services.topics.getTopics().data;
+  const rawStories = (await services.stories.getStories({ pageSize: 100 })).data;
+  const entities = (await services.entities.getEntities()).data;
+  const topics = (await services.topics.getTopics()).data;
 
   const pipeline = new KnowledgeStoryPipeline()
     .add(new EntityBuilder())

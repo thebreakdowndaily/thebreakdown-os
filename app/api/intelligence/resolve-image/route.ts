@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServices } from '@/services/registry';
+import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
+import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { bootstrapServices } from '@/lib/bootstrap';
 
 export async function POST(req: Request) {
@@ -8,14 +10,19 @@ export async function POST(req: Request) {
     bootstrapServices();
     
     const body = await req.json();
-    const { storyId } = body;
+    const { storyId, slug } = body;
     
     if (!storyId) {
       return NextResponse.json({ error: 'Missing storyId' }, { status: 400 });
     }
     
     // Fetch the story
-    const story = getServices().stories.getStory(storyId);
+    const services = getServices();
+    const story = await services.stories.getStoryBySlug(slug);
+    if (!story) {
+      return NextResponse.json({ error: 'Story not found' }, { status: 404 });
+    }
+    const knowledgeStory = await (new KnowledgeStoryPipeline().add(new VisualIntelligenceBuilder()).execute(story));
     if (!story) {
       return NextResponse.json({ error: 'Story not found' }, { status: 404 });
     }

@@ -1,3 +1,6 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { GraphPreview } from './GraphPreview';
 import { buildTopicGraphPreview } from '@/features/graph/view-model';
 import { bootstrapServices } from '@/lib/bootstrap';
@@ -9,7 +12,12 @@ interface TopicGraphSectionProps {
 
 export function TopicGraphSection({ topicSlug }: TopicGraphSectionProps) {
   bootstrapServices();
-  const vm = buildTopicGraphPreview(getServices(), topicSlug);
+  const services = getServices();
+  const [vm, setVm] = useState<any>(null);
+
+  useEffect(() => {
+    buildTopicGraphPreview(services, topicSlug).then(setVm);
+  }, [services, topicSlug]);
 
   if (!vm) return null;
 

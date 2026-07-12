@@ -1,14 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/ui/Container';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { DatasetMultiView } from '@/components/dataset/DatasetMultiView';
+import type { Dataset } from '@/types/canonical';
 
 export default function DatasetsPage() {
-  const services = bootstrapServices();
-  const result = services.datasets.getDatasets({ pageSize: 50 });
+  const [datasets, setDatasets] = useState<Dataset[]>([]);
+
+  useEffect(() => {
+    const services = bootstrapServices();
+    services.datasets.getDatasets({ pageSize: 50 }).then(r => setDatasets(r.data));
+  }, []);
 
   return (
     <>
@@ -26,7 +31,7 @@ export default function DatasetsPage() {
             Explore curated datasets powering The Breakdown&apos;s intelligence reports.
           </p>
 
-          <DatasetMultiView datasets={result.data} />
+          <DatasetMultiView datasets={datasets} />
         </Container>
       </main>
     </>

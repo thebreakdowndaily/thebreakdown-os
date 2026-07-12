@@ -57,9 +57,8 @@ Always optimize for:
 2. Maintainability
 3. Performance
 4. Accessibility
-5. Scalability
-6. Type Safety
-7. Testability
+5. Type Safety
+6. Testability
 
 Never optimize only for fewer lines of code.
 
@@ -532,3 +531,35 @@ Optimize for the codebase that will still be understandable in 2045.
 The Breakdown is intended to become one of the world's most trusted knowledge platforms.
 
 Every engineering decision should move the repository toward that goal.
+
+---
+
+## Working Summary
+
+### Objective
+Wire the CMS so a story created through it publishes to the live site, via a `RepositoryFactory` toggling between memory and Supabase through `DATA_PROVIDER` env var. Migrate all data-store entity types to async/factory/repository pattern.
+
+### Important Details
+- `DATA_PROVIDER=memory` (default, static seed data) or `DATA_PROVIDER=supabase` (live database).
+- Singleton caching in `registry.ts` — env var, same for all requests.
+- Story pages use ISR (`revalidate=60`) + `dynamicParams=true`; CMS pages use `dynamic='force-dynamic'`.
+- Callers now `await` async returns; `.map(getService(id))` wrapped in `Promise.all()`.
+- Stale files deleted once no imports reference them.
+
+### Completed
+- **Stories** — async StoryService interface + MemoryStoryService + SupabaseStoryRepository + factory + init + all callers.
+- **Topics** — async TopicService interface + MemoryTopicRepository + SupabaseTopicRepository + factory + init + all callers (18 files).
+- **Entities** — async EntityService/RawEntityRepository interfaces + MemoryEntityRepository + SupabaseEntityRepository + factory + init + all callers (14 files). KnowledgeEntityService updated. API v1 routes updated.
+- **Timelines** — async TimelineService interface + MemoryTimelineRepository + SupabaseTimelineRepository + factory + init + all callers + API v1 routes. All 3 stale files deleted.
+- **Fixes** — async FixService interface + MemoryFixRepository + SupabaseFixRepository + factory + init + all callers (6 files) + API v1 routes. All 3 stale files deleted.
+- `npx tsc --noEmit` — clean. `npm run build` — passes (225 pages).
+
+### Remaining (unmigrated, still using old sync pattern)
+- **Datasets** — 25+ callers, complex API (getDatasets, getDatasetBySlug, saveDataset, getSeries, getHistory, createVersion, getChartData, importCsv, importJson, validate). Largest remaining migration.
+- **Media** — 1 caller (`features/cms/view-model.ts`). Low complexity, small scope.
+- **Search** — used across the app, but separate concern.
+- **Graph, Monitoring, Analytics, Intelligence** — app-level services, not data-store repos.
+
+### Next Moves
+1. Migrate datasets (complex — needs async interface + mem repo + supabase repo + factory + init + all callers + API routes)
+2. Migrate media (simple — async interface + mem repo + supabase repo + factory + init)

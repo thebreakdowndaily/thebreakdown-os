@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServices } from '@/services/registry';
 import type { Dataset, APIResponse, APIListParams } from '@/types/canonical';
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const services = getServices();
 
@@ -12,7 +12,7 @@ export function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = services.datasets.getDatasets(params);
+  const result = await services.datasets.getDatasets(params);
   return NextResponse.json(result);
 }
 
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = services.datasets.saveDataset(dataset);
+  const saved = await services.datasets.saveDataset(dataset);
   const res: APIResponse<Dataset> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

@@ -23,9 +23,9 @@ export class DatasetAnalyticsService {
     this.downloads.set(slug, (this.downloads.get(slug) || 0) + 1);
   }
 
-  getAnalytics(): DatasetAnalytics {
+  async getAnalytics(): Promise<DatasetAnalytics> {
     const services = getServices();
-    const datasets = services.datasets.getDatasets().data;
+    const datasets = (await services.datasets.getDatasets()).data;
     const now = new Date();
 
     const categoryCount = new Map<string, number>();

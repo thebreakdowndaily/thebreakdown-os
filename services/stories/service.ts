@@ -1,12 +1,12 @@
 import type { Story, APIListParams, APIResponse } from '@/types/canonical';
 
 export interface StoryService {
-  getStories(params?: APIListParams): APIResponse<Story[]>;
-  getStory(id: string): Story | undefined;
-  getStoryBySlug(slug: string): Story | undefined;
-  saveStory(story: Story): Story;
-  deleteStory(id: string): void;
-  publishStory(id: string): Story | undefined;
+  getStories(params?: APIListParams): Promise<APIResponse<Story[]>>;
+  getStory(id: string): Promise<Story | undefined>;
+  getStoryBySlug(slug: string): Promise<Story | undefined>;
+  saveStory(story: Story): Promise<Story>;
+  deleteStory(id: string): Promise<void>;
+  publishStory(id: string): Promise<Story | undefined>;
 }
 
 export class MemoryStoryService implements StoryService {
@@ -16,7 +16,7 @@ export class MemoryStoryService implements StoryService {
     this.stories = new Map(stories.map(s => [s.id, s]));
   }
 
-  getStories(params?: APIListParams): APIResponse<Story[]> {
+  async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
     let list = Array.from(this.stories.values());
     if (params?.search) {
       const q = params.search.toLowerCase();
@@ -30,24 +30,24 @@ export class MemoryStoryService implements StoryService {
     return { data: list, meta: { total, page: params?.page || 1, pageSize: params?.pageSize || list.length } };
   }
 
-  getStory(id: string) {
+  async getStory(id: string) {
     return this.stories.get(id);
   }
 
-  getStoryBySlug(slug: string) {
+  async getStoryBySlug(slug: string) {
     return Array.from(this.stories.values()).find(s => s.slug === slug);
   }
 
-  saveStory(story: Story) {
+  async saveStory(story: Story) {
     this.stories.set(story.id, { ...story, updatedAt: new Date().toISOString() });
     return this.stories.get(story.id)!;
   }
 
-  deleteStory(id: string) {
+  async deleteStory(id: string) {
     this.stories.delete(id);
   }
 
-  publishStory(id: string) {
+  async publishStory(id: string) {
     const s = this.stories.get(id);
     if (!s) return;
     const updated = { ...s, status: 'published' as const, publishedAt: new Date().toISOString(), updatedAt: new Date().toISOString() };

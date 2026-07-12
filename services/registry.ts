@@ -1,10 +1,10 @@
-import type { StoryService } from './stories/service';
-import type { TopicService } from './topics/service';
-import type { EntityService } from './entities/service';
-import type { TimelineService } from './timelines/service';
-import type { FixService } from './fixes/service';
-import type { DatasetService } from './datasets/service';
-import type { MediaService } from './media/service';
+import type { StoryService } from './interfaces/story';
+import type { TopicService } from './interfaces/topic';
+import type { EntityService } from './interfaces/entity';
+import type { TimelineService } from './interfaces/timeline';
+import type { FixService } from './interfaces/fix';
+import type { DatasetService } from './interfaces/dataset';
+import type { MediaService } from './interfaces/media';
 import type { SearchService } from './search/service';
 import type { AnalyticsService } from './analytics/service';
 import type { GraphProjectionService } from './graph/service';

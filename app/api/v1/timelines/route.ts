@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseTimelineRepository } from '@/services/timelines/repository';
+import { SupabaseTimelineRepository } from '@/services/repositories/supabase/timeline';
 import type { Timeline, APIResponse, APIListParams } from '@/types/canonical';
 import { syncTimeline } from '@/lib/data-sync';
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.findAll(params);
+  const result = await repo.getTimelines(params);
   return NextResponse.json(result);
 }
 
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.save(timeline);
+  const saved = await repo.saveTimeline(timeline);
   syncTimeline(saved);
   const res: APIResponse<Timeline> = { data: saved };
   return NextResponse.json(res, { status: 201 });

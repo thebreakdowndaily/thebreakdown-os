@@ -44,16 +44,16 @@ export interface GraphStats {
 
 export interface GraphProjectionService {
   setServices(s: Services): void;
-  build(): Graph;
+  build(): Promise<Graph>;
   invalidate(): void;
-  getNode(id: string): GraphNode | undefined;
-  getConnections(nodeId: string, options?: ConnectionOptions): ConnectionResult[];
-  getPath(from: string, to: string): GraphEdge[];
-  getTrending(limit?: number): TrendingResult[];
-  project(options?: ProjectionOptions): Graph;
-  getSubgraph(nodeIds: string[]): Graph;
-  projectOnto(type: GraphNode['type']): Graph;
-  getStats(): GraphStats;
+  getNode(id: string): Promise<GraphNode | undefined>;
+  getConnections(nodeId: string, options?: ConnectionOptions): Promise<ConnectionResult[]>;
+  getPath(from: string, to: string): Promise<GraphEdge[]>;
+  getTrending(limit?: number): Promise<TrendingResult[]>;
+  project(options?: ProjectionOptions): Promise<Graph>;
+  getSubgraph(nodeIds: string[]): Promise<Graph>;
+  projectOnto(type: GraphNode['type']): Promise<Graph>;
+  getStats(): Promise<GraphStats>;
   subscribeToEvents(): () => void;
 }
 
@@ -96,13 +96,13 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
 
   // ── Core ──
 
-  build(): Graph {
+  async build(): Promise<Graph> {
     if (this.cache && this.cache.version === this.version) {
       return this.cache.graph;
     }
 
-    const { nodes, rawEdges } = this.buildRaw();
-    const edges = this.scoreEdges(rawEdges, nodes);
+    const { nodes, rawEdges } = await this.buildRaw();
+    const edges = await this.scoreEdges(rawEdges, nodes);
 
     const graph: Graph = { nodes, edges };
     this.cache = { graph, version: this.version };
@@ -141,14 +141,14 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
 
   // ── Node Queries ──
 
-  getNode(id: string): GraphNode | undefined {
-    return this.build().nodes.get(id);
+  async getNode(id: string): Promise<GraphNode | undefined> {
+    return (await this.build()).nodes.get(id);
   }
 
   // ── Traversal ──
 
-  getConnections(nodeId: string, options?: ConnectionOptions): ConnectionResult[] {
-    const graph = this.build();
+  async getConnections(nodeId: string, options?: ConnectionOptions): Promise<ConnectionResult[]> {
+    const graph = await this.build();
     const maxDepth = options?.maxDepth ?? 2;
     const minConfidence = options?.minConfidence ?? 0;
     const visited = new Set<string>();
@@ -183,10 +183,10 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     return results;
   }
 
-  getPath(from: string, to: string): GraphEdge[] {
+  async getPath(from: string, to: string): Promise<GraphEdge[]> {
     if (from === to) return [];
 
-    const graph = this.build();
+    const graph = await this.build();
     const visited = new Set<string>();
     const parent = new Map<string, { node: string; edge: GraphEdge } | null>();
     const queue: string[] = [from];
@@ -226,8 +226,8 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     return [];
   }
 
-  getTrending(limit = 5): TrendingResult[] {
-    const graph = this.build();
+  async getTrending(limit = 5): Promise<TrendingResult[]> {
+    const graph = await this.build();
 
     const pairMultiplicity = new Map<string, number>();
     for (const edge of graph.edges) {
@@ -251,8 +251,8 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
 
   // ── Projections ──
 
-  project(options?: ProjectionOptions): Graph {
-    const graph = this.build();
+  async project(options?: ProjectionOptions): Promise<Graph> {
+    const graph = await this.build();
     let nodes = Array.from(graph.nodes.values());
     let edges = graph.edges;
 
@@ -291,8 +291,8 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     return { nodes: new Map(nodes.map(n => [n.id, n])), edges };
   }
 
-  getSubgraph(nodeIds: string[]): Graph {
-    const graph = this.build();
+  async getSubgraph(nodeIds: string[]): Promise<Graph> {
+    const graph = await this.build();
     const idSet = new Set(nodeIds);
     const nodes = new Map(
       Array.from(graph.nodes.entries()).filter(([id]) => idSet.has(id))
@@ -301,14 +301,14 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     return { nodes, edges };
   }
 
-  projectOnto(type: GraphNode['type']): Graph {
+  async projectOnto(type: GraphNode['type']): Promise<Graph> {
     return this.project({ types: [type] });
   }
 
   // ── Statistics ──
 
-  getStats(): GraphStats {
-    const graph = this.build();
+  async getStats(): Promise<GraphStats> {
+    const graph = await this.build();
     const nodes = Array.from(graph.nodes.values());
     const edges = graph.edges;
 
@@ -348,16 +348,16 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
 
   // ── Private: Raw Build ──
 
-  private buildRaw(): { nodes: Map<string, GraphNode>; rawEdges: RawEdge[] } {
+  private async buildRaw(): Promise<{ nodes: Map<string, GraphNode>; rawEdges: RawEdge[] }> {
     const nodes = new Map<string, GraphNode>();
     const rawEdges: RawEdge[] = [];
 
-    const stories = this.services.stories.getStories().data;
-    const topics = this.services.topics.getTopics().data;
-    const entities = this.services.entities.getEntities().data;
-    const timelines = this.services.timelines.getTimelines().data;
-    const fixes = this.services.fixes.getFixes().data;
-    const datasets = this.services.datasets.getDatasets().data;
+    const stories = (await this.services.stories.getStories()).data;
+    const topics = (await this.services.topics.getTopics()).data;
+    const entities = (await this.services.entities.getEntities()).data;
+    const timelines = (await this.services.timelines.getTimelines()).data;
+    const fixes = (await this.services.fixes.getFixes()).data;
+    const datasets = (await this.services.datasets.getDatasets()).data;
 
     // ── Stories ──
     for (const story of stories) {
@@ -485,7 +485,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
 
   // ── Private: Dynamic Confidence Scoring ──
 
-  private scoreEdges(rawEdges: RawEdge[], nodes: Map<string, GraphNode>): GraphEdge[] {
+  private async scoreEdges(rawEdges: RawEdge[], nodes: Map<string, GraphNode>): Promise<GraphEdge[]> {
     const groups = new Map<string, EdgeGroup>();
 
     for (const re of rawEdges) {
@@ -516,7 +516,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
         .map(r => r.sourceId);
       let recencyBonus = 0;
       if (recentIds.length > 0) {
-        const allStories = this.services.stories.getStories().data;
+        const allStories = (await this.services.stories.getStories()).data;
         const now = Date.now();
         const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
         for (const sid of recentIds) {

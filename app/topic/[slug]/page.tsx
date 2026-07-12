@@ -48,9 +48,9 @@ const entityTypeLabel: Record<string, string> = {
   country: 'Countries',
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const services = bootstrapServices();
-  return services.topics.getTopics({ pageSize: 100 }).data.map((t) => ({ slug: t.slug }));
+  return (await services.topics.getTopics({ pageSize: 100 })).data.map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

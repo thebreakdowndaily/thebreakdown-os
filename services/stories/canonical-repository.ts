@@ -1,8 +1,9 @@
 import type { Story, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
+import type { StoryService } from '@/services/interfaces/story';
 
-export class CanonicalStoryService {
-  async findAll(params?: APIListParams): Promise<APIResponse<Story[]>> {
+export class CanonicalStoryService implements StoryService {
+  async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
     let query = db().from('stories').select('*', { count: 'exact' });
     if (params?.search) query = query.or(`title.ilike.%${params.search}%,summary.ilike.%${params.search}%`);
     if (params?.page && params?.pageSize) {
@@ -13,28 +14,48 @@ export class CanonicalStoryService {
     return { data: (data || []).map(rowToStory), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
   }
 
-  async findById(id: string) {
+  async getStory(id: string): Promise<Story | undefined> {
     const { data, error } = await db().from('stories').select('*').eq('id', id).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToStory(data) : undefined;
   }
 
-  async findBySlug(slug: string) {
+  async getStoryBySlug(slug: string): Promise<Story | undefined> {
     const { data, error } = await db().from('stories').select('*').eq('slug', slug).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToStory(data) : undefined;
   }
 
-  async save(story: Story) {
+  async saveStory(story: Story): Promise<Story> {
     const { data, error } = await db().from('stories').upsert(rowFromStory(story)).select().single();
     if (error) throw error;
     return rowToStory(data);
   }
 
-  async delete(id: string) {
+  async deleteStory(id: string): Promise<void> {
     const { error } = await db().from('stories').delete().eq('id', id);
     if (error) throw error;
-    return true;
+  }
+
+  async publishStory(id: string): Promise<Story | undefined> {
+    const story = await this.getStory(id);
+    if (!story) return undefined;
+    const updated = { ...story, status: 'published' as const, publishedAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    return this.saveStory(updated);
+  }
+
+  async count(): Promise<number> {
+    const { count, error } = await db().from('stories').select('*', { count: 'exact', head: true });
+    if (error) throw error;
+    return count || 0;
+  }
+
+  async refresh(id?: string): Promise<void> {
+    // No-op for Supabase - data is always fresh
+  }
+
+  async invalidate(id?: string): Promise<void> {
+    // No-op for Supabase - data is always fresh
   }
 }
 

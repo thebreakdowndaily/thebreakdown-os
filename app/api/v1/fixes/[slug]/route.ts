@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseFixRepository } from '@/services/fixes/repository';
+import { SupabaseFixRepository } from '@/services/repositories/supabase/fix';
 import type { Fix, APIResponse } from '@/types/canonical';
 import { syncFix, deleteFix } from '@/lib/data-sync';
 
@@ -10,7 +10,7 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const fix = await repo.findBySlug(slug);
+  const fix = await repo.getFixBySlug(slug);
 
   if (!fix) {
     return NextResponse.json({ error: `Fix not found: ${slug}` }, { status: 404 });
@@ -25,7 +25,7 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const existing = await repo.findBySlug(slug);
+  const existing = await repo.getFixBySlug(slug);
 
   if (!existing) {
     return NextResponse.json({ error: `Fix not found: ${slug}` }, { status: 404 });
@@ -33,7 +33,7 @@ export async function PUT(
 
   const body = (await request.json()) as Partial<Fix>;
   const updated: Fix = { ...existing, ...body, slug: existing.slug, id: existing.id, updatedAt: new Date().toISOString() };
-  const saved = await repo.save(updated);
+  const saved = await repo.saveFix(updated);
   syncFix(saved);
   const res: APIResponse<Fix> = { data: saved };
   return NextResponse.json(res);
@@ -44,13 +44,13 @@ export async function DELETE(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const fix = await repo.findBySlug(slug);
+  const fix = await repo.getFixBySlug(slug);
 
   if (!fix) {
     return NextResponse.json({ error: `Fix not found: ${slug}` }, { status: 404 });
   }
 
-  await repo.delete(fix.id);
+  await repo.deleteFix(fix.id);
   deleteFix(slug);
   return new NextResponse(null, { status: 204 });
 }

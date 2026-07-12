@@ -1,6 +1,6 @@
 import { bootstrapServices } from '@/lib/bootstrap';
 import { DatasetExplorer } from '@/features/dataset/components/DatasetExplorer';
-import type { Dataset } from '@/types/canonical';
+import type { Dataset, Story, Topic, EntityBase } from '@/types/canonical';
 import { seedDatasets } from '@/lib/datasets/seed-data';
 
 export function generateStaticParams() {
@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export default async function DatasetPage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   const services = bootstrapServices();
-  const dataset = services.datasets.getDatasetBySlug(slug) as Dataset | undefined;
+  const dataset = await services.datasets.getDatasetBySlug(slug);
   if (!dataset) {
     return (
       <main className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
@@ -22,9 +22,12 @@ export default async function DatasetPage({ params }: { params: Promise<{ slug: 
       </main>
     );
   }
-  const relatedStories = dataset.relatedStoryIds.map(id => services.stories.getStory(id)).filter(Boolean);
-  const relatedTopics = dataset.relatedTopicIds.map(id => services.topics.getTopic(id)).filter(Boolean);
-  const relatedEntities = dataset.relatedEntityIds.map(id => services.entities.getEntity(id)).filter(Boolean);
+  const relatedStoryPromises = dataset.relatedStoryIds.map(id => services.stories.getStory(id));
+  const relatedStories = (await Promise.all(relatedStoryPromises)).filter(Boolean) as Story[];
+  const relatedTopicsPromises = dataset.relatedTopicIds.map(id => services.topics.getTopic(id));
+  const relatedTopics = (await Promise.all(relatedTopicsPromises)).filter((t): t is Topic => !!t);
+  const relatedEntitiesPromises = dataset.relatedEntityIds.map(id => services.entities.getEntity(id));
+  const relatedEntities = (await Promise.all(relatedEntitiesPromises)).filter(Boolean) as EntityBase[];
   return (
     <main className="min-h-screen bg-[#0A0A0A]">
       <div className="max-w-5xl mx-auto px-4 py-12">

@@ -1,5 +1,4 @@
 import type { Story, APIListParams, APIResponse } from '@/types/canonical';
-import { getSupabaseClient, type TypedDatabase } from '@/supabase/client';
 
 export interface StoryRepository {
   findAll(params?: APIListParams): Promise<APIResponse<Story[]>>;
@@ -10,11 +9,6 @@ export interface StoryRepository {
   delete(id: string): Promise<boolean>;
   count(): Promise<number>;
 }
-
-type StoryRow = TypedDatabase['public']['Tables']['stories']['Row'];
-type StoryInsert = TypedDatabase['public']['Tables']['stories']['Insert'];
-
-function sb() { return getSupabaseClient().from('stories'); }
 
 export class MemoryStoryRepository implements StoryRepository {
   private store = new Map<string, Story>();
@@ -35,63 +29,4 @@ export class MemoryStoryRepository implements StoryRepository {
   async update(id: string, updates: Partial<Story>) { const existing = this.store.get(id); if (!existing) throw new Error(`Story ${id} not found`); const updated = { ...existing, ...updates, updatedAt: new Date().toISOString() }; this.store.set(id, updated); return updated; }
   async delete(id: string) { return this.store.delete(id); }
   async count() { return this.store.size; }
-}
-
-export class SupabaseStoryRepository implements StoryRepository {
-  async findAll(params?: APIListParams): Promise<APIResponse<Story[]>> {
-    let query = sb().select('*', { count: 'exact' });
-    if (params?.search) query = query.or(`title.ilike.%${params.search}%,summary.ilike.%${params.search}%`);
-    if (params?.page && params?.pageSize) query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
-    query = query.order('created_at', { ascending: false });
-    const { data, count, error } = await query;
-    if (error) throw error;
-    return { data: (data || []).map(rowToStory), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
-  }
-
-  async findById(id: string) { const { data, error } = await sb().select('*').eq('id', id).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToStory(data) : undefined; }
-  async findBySlug(slug: string) { const { data, error } = await sb().select('*').eq('slug', slug).single(); if (error && error.code !== 'PGRST116') throw error; return data ? rowToStory(data) : undefined; }
-  async save(story: Story) { const { data, error } = await sb().upsert(rowFromStory(story)).select().single(); if (error) throw error; return rowToStory(data); }
-  async update(id: string, updates: Partial<Story>) {
-    const { data, error } = await sb().update({ ...rowFromStory(updates as Story), updated_at: new Date().toISOString() }).eq('id', id).select().single();
-    if (error) throw error;
-    return rowToStory(data);
-  }
-  async delete(id: string) { const { error } = await sb().delete().eq('id', id); if (error) throw error; return true; }
-  async count() { const { count, error } = await sb().select('*', { count: 'exact', head: true }); if (error) throw error; return count || 0; }
-}
-
-function rowToStory(row: StoryRow): Story {
-  const blocks = (row.blocks as import('@/types/canonical').StoryBlock[]) || [];
-  const sources = (row.sources as import('@/types/canonical').Source[]) || [];
-  const claims = (row.claims as import('@/types/canonical').Claim[]) || [];
-  const timeline = (row.timeline as import('@/types/canonical').TimelineEvent[]) || [];
-  const faq = (row.faq as import('@/types/canonical').FAQItem[]) || [];
-  const charts = (row.charts as import('@/types/canonical').ChartDef[]) || [];
-  const story: Story = {
-    id: row.id, slug: row.slug, title: row.title, headline: row.headline || row.title, summary: row.summary,
-    heroImage: row.hero_image || '', author: row.author || '', category: row.category || '',
-    status: (row.status as Story['status']) || 'draft',
-    evidenceScore: row.evidence_score || 0, readingTime: row.reading_time || 0, publishedAt: row.published_at || '',
-    createdAt: row.created_at, updatedAt: row.updated_at, updatedBy: row.updated_by || undefined,
-    tags: row.tags || [], blocks,
-    sources, claims, timeline, faq, charts,
-    relatedStoryIds: row.related_story_ids || [],
-    relatedEntityIds: row.related_entity_ids || [],
-    relatedTopicIds: row.related_topic_ids || [],
-  };
-  return story;
-}
-
-function rowFromStory(story: Story): StoryInsert {
-  return {
-    id: story.id, slug: story.slug, title: story.title, headline: story.headline || story.title, summary: story.summary,
-    blocks: story.blocks || [], sources: story.sources || [], claims: story.claims || [], timeline: story.timeline || [],
-    faq: story.faq || [], charts: story.charts || [],
-    hero_image: story.heroImage || '', author: story.author || '', category: story.category || '', status: story.status,
-    evidence_score: story.evidenceScore || 0, reading_time: story.readingTime || 0,
-    related_story_ids: story.relatedStoryIds || [],
-    related_entity_ids: story.relatedEntityIds || [],
-    related_topic_ids: story.relatedTopicIds || [],
-    tags: story.tags || [], published_at: story.publishedAt || null, updated_by: story.updatedBy,
-  };
 }

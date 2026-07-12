@@ -4,9 +4,9 @@ import { getServices } from '@/services/registry';
 
 export class StoryAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
-    const stories = topic.storyIds
-      .map(id => getServices().stories.getStory(id))
-      .filter((s): s is Story => s !== null);
+    const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
+    const storiesResult = await Promise.all(storyPromises);
+    const stories = storiesResult.filter((s): s is Story => !!s);
 
     // Latest: chronologically recent
     const latest = [...stories].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());

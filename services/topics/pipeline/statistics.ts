@@ -4,9 +4,9 @@ import { getServices } from '@/services/registry';
 
 export class StatisticsAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
-    const stories = topic.storyIds
-      .map(id => getServices().stories.getStory(id))
-      .filter((s): s is Story => s !== null);
+    const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
+    const storiesResult = await Promise.all(storyPromises);
+    const stories = storiesResult.filter((s): s is Story => !!s);
 
     let totalClaims = 0;
     let totalSources = 0;
@@ -34,14 +34,14 @@ export class StatisticsAggregator implements TopicAggregator {
     let totalOrganizations = 0;
     let totalPeople = 0;
 
-    entityIds.forEach(eid => {
-      const e = getServices().entities.getEntity(eid);
+    for (const eid of entityIds) {
+      const e = await getServices().entities.getEntity(eid);
       if (e) {
         if (e.type === 'country') totalCountries++;
         if (e.type === 'organization') totalOrganizations++;
         if (e.type === 'person') totalPeople++;
       }
-    });
+    }
 
     return {
       topic,

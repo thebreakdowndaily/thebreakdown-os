@@ -117,10 +117,11 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
 }
 
 export const dynamicParams = true;
+export const revalidate = 60;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const services = bootstrapServices();
-  return services.stories.getStories().data.map((s) => ({ slug: s.slug }));
+  return (await services.stories.getStories()).data.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

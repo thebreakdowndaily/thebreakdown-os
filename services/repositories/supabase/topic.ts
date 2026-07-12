@@ -1,8 +1,13 @@
 import type { Topic, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
+import type { TypedDatabase } from '@/supabase/client';
+import type { TopicService } from '../../interfaces/topic';
 
-export class CanonicalTopicService {
-  async findAll(params?: APIListParams): Promise<APIResponse<Topic[]>> {
+type TopicRow = TypedDatabase['public']['Tables']['topics']['Row'];
+type TopicInsert = TypedDatabase['public']['Tables']['topics']['Insert'];
+
+export class SupabaseTopicRepository implements TopicService {
+  async getTopics(params?: APIListParams): Promise<APIResponse<Topic[]>> {
     let query = db().from('topics').select('*', { count: 'exact' });
     if (params?.search) query = query.or(`name.ilike.%${params.search}%,description.ilike.%${params.search}%`);
     if (params?.page && params?.pageSize) {
@@ -13,32 +18,37 @@ export class CanonicalTopicService {
     return { data: (data || []).map(rowToTopic), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
   }
 
-  async findById(id: string) {
+  async getTopic(id: string) {
     const { data, error } = await db().from('topics').select('*').eq('id', id).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToTopic(data) : undefined;
   }
 
-  async findBySlug(slug: string) {
+  async getTopicBySlug(slug: string) {
     const { data, error } = await db().from('topics').select('*').eq('slug', slug).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToTopic(data) : undefined;
   }
 
-  async save(topic: Topic) {
+  async saveTopic(topic: Topic) {
     const { data, error } = await db().from('topics').upsert(rowFromTopic(topic)).select().single();
     if (error) throw error;
     return rowToTopic(data);
   }
 
-  async delete(id: string) {
+  async deleteTopic(id: string) {
     const { error } = await db().from('topics').delete().eq('id', id);
     if (error) throw error;
-    return true;
+  }
+
+  async count() {
+    const { count, error } = await db().from('topics').select('*', { count: 'exact', head: true });
+    if (error) throw error;
+    return count || 0;
   }
 }
 
-function rowToTopic(row: import('@/supabase/client').TypedDatabase['public']['Tables']['topics']['Row']): Topic {
+function rowToTopic(row: TopicRow): Topic {
   return {
     id: row.id,
     slug: row.slug,
@@ -58,14 +68,14 @@ function rowToTopic(row: import('@/supabase/client').TypedDatabase['public']['Ta
   };
 }
 
-function rowFromTopic(t: Topic): import('@/supabase/client').TypedDatabase['public']['Tables']['topics']['Insert'] {
+function rowFromTopic(t: Topic): TopicInsert {
   return {
     id: t.id,
     slug: t.slug,
     name: t.name,
     description: t.description,
-    category: '', // Missing in canonical
-    tags: [],     // Missing in canonical
+    category: '',
+    tags: [],
     related_entity_ids: t.relatedEntityIds,
     related_story_ids: [],
     story_ids: t.storyIds,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseTopicRepository } from '@/services/topics/repository';
+import { SupabaseTopicRepository } from '@/services/repositories/supabase/topic';
 import type { Topic, APIResponse } from '@/types/canonical';
 import { syncTopic, deleteTopic } from '@/lib/data-sync';
 
@@ -10,7 +10,7 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const topic = await repo.findBySlug(slug);
+  const topic = await repo.getTopicBySlug(slug);
 
   if (!topic) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
@@ -25,7 +25,7 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const existing = await repo.findBySlug(slug);
+  const existing = await repo.getTopicBySlug(slug);
 
   if (!existing) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
@@ -33,7 +33,7 @@ export async function PUT(
 
   const body = (await request.json()) as Partial<Topic>;
   const updated: Topic = { ...existing, ...body, slug: existing.slug, id: existing.id, updatedAt: new Date().toISOString() };
-  const saved = await repo.save(updated);
+  const saved = await repo.saveTopic(updated);
   syncTopic(saved);
   const res: APIResponse<Topic> = { data: saved };
   return NextResponse.json(res);
@@ -44,13 +44,13 @@ export async function DELETE(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const topic = await repo.findBySlug(slug);
+  const topic = await repo.getTopicBySlug(slug);
 
   if (!topic) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
   }
 
-  await repo.delete(topic.id);
+  await repo.deleteTopic(topic.id);
   deleteTopic(slug);
   return new NextResponse(null, { status: 204 });
 }

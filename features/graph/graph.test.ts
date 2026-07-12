@@ -4,7 +4,7 @@ import { bootstrapServices } from '@/lib/bootstrap';
 import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
 
-function runTests() {
+async function runTests() {
   let passed = 0;
   let failed = 0;
 
@@ -92,7 +92,7 @@ function runTests() {
   }
 
   try {
-    const graphPage = buildGraphPage(services);
+    const graphPage = await buildGraphPage(services);
     assert(Array.isArray(graphPage.allNodes), 'graphPage.allNodes is array');
     assert(Array.isArray(graphPage.allEdges), 'graphPage.allEdges is array');
     assert(typeof graphPage.nodeCount === 'number', 'graphPage.nodeCount is number');
@@ -105,7 +105,7 @@ function runTests() {
   }
 
   try {
-    const entityPreview = buildEntityGraphPreview(services, 'mgnrega');
+    const entityPreview = await buildEntityGraphPreview(services, 'mgnrega');
     assert(entityPreview !== null, 'buildEntityGraphPreview(mgnrega) returns non-null');
     if (entityPreview) {
       assert(Array.isArray(entityPreview.connections), 'entity preview connections is array');
@@ -116,7 +116,7 @@ function runTests() {
   }
 
   try {
-    const unknown = buildEntityGraphPreview(services, 'nonexistent-entity');
+    const unknown = await buildEntityGraphPreview(services, 'nonexistent-entity');
     assert(unknown === null, 'buildEntityGraphPreview(nonexistent) returns null');
   } catch (e) {
     console.error('  FAIL: buildEntityGraphPreview(nonexistent) threw exception', e);
@@ -124,7 +124,7 @@ function runTests() {
   }
 
   try {
-    const topicPreview = buildTopicGraphPreview(services, 'agriculture');
+    const topicPreview = await buildTopicGraphPreview(services, 'agriculture');
     assert(topicPreview !== null, 'buildTopicGraphPreview(agriculture) returns non-null');
     if (topicPreview) {
       assert(Array.isArray(topicPreview.connections), 'topic preview connections is array');
@@ -135,7 +135,7 @@ function runTests() {
   }
 
   try {
-    const unknown = buildTopicGraphPreview(services, 'nonexistent-topic');
+    const unknown = await buildTopicGraphPreview(services, 'nonexistent-topic');
     assert(unknown === null, 'buildTopicGraphPreview(nonexistent) returns null');
   } catch (e) {
     console.error('  FAIL: buildTopicGraphPreview(nonexistent) threw exception', e);
@@ -146,4 +146,4 @@ function runTests() {
   process.exit(failed > 0 ? 1 : 0);
 }
 
-runTests();
+runTests().catch(console.error);

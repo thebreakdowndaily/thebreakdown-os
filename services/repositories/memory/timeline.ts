@@ -1,20 +1,14 @@
 import type { Timeline, APIListParams, APIResponse } from '@/types/canonical';
+import type { TimelineService } from '../../interfaces/timeline';
 
-export interface TimelineService {
-  getTimelines(params?: APIListParams): APIResponse<Timeline[]>;
-  getTimeline(id: string): Timeline | undefined;
-  saveTimeline(timeline: Timeline): Timeline;
-  deleteTimeline(id: string): void;
-}
-
-export class MemoryTimelineService implements TimelineService {
+export class MemoryTimelineRepository implements TimelineService {
   private timelines: Map<string, Timeline>;
 
-  constructor(timelines: Timeline[]) {
+  constructor(timelines: Timeline[] = []) {
     this.timelines = new Map(timelines.map(t => [t.id, t]));
   }
 
-  getTimelines(params?: APIListParams): APIResponse<Timeline[]> {
+  async getTimelines(params?: APIListParams): Promise<APIResponse<Timeline[]>> {
     let list = Array.from(this.timelines.values());
     if (params?.search) {
       const q = params.search.toLowerCase();
@@ -28,16 +22,20 @@ export class MemoryTimelineService implements TimelineService {
     return { data: list, meta: { total, page: params?.page || 1, pageSize: params?.pageSize || list.length } };
   }
 
-  getTimeline(id: string) {
+  async getTimeline(id: string) {
     return this.timelines.get(id);
   }
 
-  saveTimeline(timeline: Timeline) {
+  async saveTimeline(timeline: Timeline) {
     this.timelines.set(timeline.id, { ...timeline, updatedAt: new Date().toISOString() });
     return this.timelines.get(timeline.id)!;
   }
 
-  deleteTimeline(id: string) {
+  async deleteTimeline(id: string) {
     this.timelines.delete(id);
+  }
+
+  async count() {
+    return this.timelines.size;
   }
 }

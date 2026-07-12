@@ -1,3 +1,6 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { GraphPreview } from './GraphPreview';
 import { buildEntityGraphPreview } from '@/features/graph/view-model';
 import { bootstrapServices } from '@/lib/bootstrap';
@@ -9,7 +12,12 @@ interface EntityGraphSectionProps {
 
 export function EntityGraphSection({ entitySlug }: EntityGraphSectionProps) {
   bootstrapServices();
-  const vm = buildEntityGraphPreview(getServices(), entitySlug);
+  const services = getServices();
+  const [vm, setVm] = useState<any>(null);
+
+  useEffect(() => {
+    buildEntityGraphPreview(services, entitySlug).then(setVm);
+  }, [services, entitySlug]);
 
   if (!vm) return null;
 

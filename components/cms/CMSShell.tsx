@@ -1,20 +1,22 @@
 'use client';
 
 import React from 'react';
-import { mockCMSStories, type StoryStatus } from '@/utils/cms-data';
+import type { Story, StoryBlock } from '@/types/canonical';
 
 interface CMSShellProps {
   children: React.ReactNode;
   selectedId?: string;
+  stories?: Pick<Story, 'id' | 'title' | 'status' | 'updatedAt' | 'blocks'>[];
 }
 
-const statusColors: Record<StoryStatus, string> = {
+const statusColors: Record<string, string> = {
   draft: 'var(--color-text-tertiary)',
   review: 'var(--color-amber-500)',
   published: 'var(--color-emerald-500)',
 };
 
 function timeAgo(dateStr: string): string {
+  if (!dateStr) return 'just now';
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
   if (diff < 1) return 'just now';
   if (diff < 60) return `${String(diff)}m ago`;
@@ -23,7 +25,7 @@ function timeAgo(dateStr: string): string {
   return `${String(Math.floor(h / 24))}d ago`;
 }
 
-export default function CMSShell({ children, selectedId }: CMSShellProps) {
+export default function CMSShell({ children, selectedId, stories = [] }: CMSShellProps) {
   const [showNewMenu, setShowNewMenu] = React.useState(false);
 
   return (
@@ -181,7 +183,7 @@ export default function CMSShell({ children, selectedId }: CMSShellProps) {
             ))}
           </div>
 
-          {mockCMSStories.map((story) => (
+          {stories.map((story) => (
             <a
               key={story.id}
               href={`/cms/story/${story.id}`}
@@ -228,13 +230,13 @@ export default function CMSShell({ children, selectedId }: CMSShellProps) {
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: statusColors[story.status],
+                    background: statusColors[story.status] || 'var(--color-text-tertiary)',
                     display: 'inline-block',
                   }}
                 />
                 <span style={{ textTransform: 'capitalize' }}>{story.status}</span>
                 <span>·</span>
-                <span>{story.blocks.length} blocks</span>
+                <span>{story.blocks?.length || 0} blocks</span>
                 <span>·</span>
                 <span>{timeAgo(story.updatedAt)}</span>
               </div>
@@ -253,8 +255,8 @@ export default function CMSShell({ children, selectedId }: CMSShellProps) {
             justifyContent: 'space-between',
           }}
         >
-          <span>{mockCMSStories.length} stories</span>
-          <span>{mockCMSStories.filter((s) => s.status === 'draft').length} drafts</span>
+          <span>{stories.length} stories</span>
+          <span>{stories.filter((s) => s.status === 'draft').length} drafts</span>
         </div>
       </aside>
 
@@ -265,3 +267,4 @@ export default function CMSShell({ children, selectedId }: CMSShellProps) {
     </div>
   );
 }
+

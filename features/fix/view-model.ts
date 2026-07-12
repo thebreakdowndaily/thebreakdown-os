@@ -1,22 +1,21 @@
 import type { FixPageViewModel, Story, Entity } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 
-export function buildFixPage(services: Services, slug: string): FixPageViewModel | null {
-  const fix = services.fixes.getFixBySlug(slug);
+export async function buildFixPage(services: Services, slug: string): Promise<FixPageViewModel | null> {
+  const fix = await services.fixes.getFixBySlug(slug);
   if (!fix) return null;
 
   const f = fix as unknown as Record<string, unknown>;
   const raw = (f._raw || f) as Record<string, unknown>;
-  const relatedStorySlugs = (raw.relatedStories || []) as Array<Record<string, unknown>>;
   const relatedEntityIds = (raw.relatedEntities || []) as Array<Record<string, unknown>>;
 
-  const relatedStories = relatedStorySlugs
-    .map((rs) => services.stories.getStoryBySlug(rs.slug as string))
-    .filter(Boolean) as Story[];
+  const relatedStoriesPromises = (fix as any).relatedStoryIds.map((id: string) => services.stories.getStory(id));
+  const relatedStoriesResult = await Promise.all(relatedStoriesPromises);
+  const relatedStories = relatedStoriesResult.filter(Boolean) as Story[];
 
-  const relatedEntities = relatedEntityIds
-    .map((re) => services.entities.getEntity(re.id as string))
-    .filter(Boolean) as Entity[];
+  const relatedEntitiesPromises = relatedEntityIds
+    .map((re) => services.entities.getEntity(re.id as string));
+  const relatedEntities = (await Promise.all(relatedEntitiesPromises)).filter(Boolean) as Entity[];
 
   const headline = f.headline as string || f.title as string;
 

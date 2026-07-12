@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseMediaRepository } from '@/services/media/repository';
+import { SupabaseMediaRepository } from '@/services/repositories/supabase/media';
 import type { MediaItem, APIResponse, APIListParams } from '@/types/canonical';
 
 const repo = new SupabaseMediaRepository();
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const typeFilter = searchParams.get('type');
 
   if (typeFilter) {
-    const result = await repo.findAll();
+    const result = await repo.getMedia();
     const filtered = result.data.filter(item => item.type === typeFilter);
     const res: APIResponse<MediaItem[]> = { data: filtered, meta: { total: filtered.length, page: 1, pageSize: filtered.length } };
     return NextResponse.json(res);
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.findAll(params);
+  const result = await repo.getMedia(params);
   return NextResponse.json(result);
 }
 
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.save(item);
+  const saved = await repo.saveMediaItem(item);
   const res: APIResponse<MediaItem> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

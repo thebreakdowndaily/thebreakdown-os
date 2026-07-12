@@ -33,15 +33,15 @@ function createJsonLd(entity: { name: string; description: string; slug: string;
   ];
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const services = bootstrapServices();
-  return services.entities.getEntities({ pageSize: 100 }).data.map((e) => ({ slug: e.slug }));
+  return (await services.entities.getEntities({ pageSize: 100 })).data.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const services = bootstrapServices();
-  const vm = buildEntityTerminalViewModel(services, slug);
+  const vm = await buildEntityTerminalViewModel(services, slug);
   if (!vm) return { title: 'Entity Not Found - The Breakdown' };
   
   return {
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function EntityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const services = bootstrapServices();
-  const viewModel = buildEntityTerminalViewModel(services, slug);
+  const viewModel = await buildEntityTerminalViewModel(services, slug);
   
   if (!viewModel) notFound();
 

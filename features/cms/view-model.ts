@@ -1,14 +1,14 @@
 import type { Story, DashboardStats, ActivityEntry } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 
-export function buildCMSDashboard(services: Services): DashboardStats {
-  const stories = services.stories.getStories().data;
-  const topics = services.topics.getTopics().data;
-  const entities = services.entities.getEntities().data;
-  const timelines = services.timelines.getTimelines().data;
-  const fixes = services.fixes.getFixes().data;
-  const media = services.media.getMedia().data;
-  const datasets = services.datasets.getDatasets().data;
+export async function buildCMSDashboard(services: Services): Promise<DashboardStats> {
+  const stories = (await services.stories.getStories({ pageSize: 100 })).data;
+  const topics = (await services.topics.getTopics()).data;
+  const entities = (await services.entities.getEntities()).data;
+  const timelines = (await services.timelines.getTimelines()).data;
+  const fixes = (await services.fixes.getFixes()).data;
+  const media = (await services.media.getMedia()).data;
+  const datasets = (await services.datasets.getDatasets()).data;
 
   const drafts = stories.filter(s => s.status === 'draft').length;
   const review = stories.filter(s => s.status === 'review' || s.status === 'fact_check').length;

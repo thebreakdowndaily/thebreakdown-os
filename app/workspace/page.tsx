@@ -91,6 +91,7 @@ export default function WorkspacePage() {
   const [services, setServices] = useState<Services | null>(null);
   const [slug, setSlug] = useState('');
   const [searchValue, setSearchValue] = useState('');
+  const [localStories, setLocalStories] = useState<any[]>([]);
 
   useEffect(() => {
     const s = bootstrapServices();
@@ -101,17 +102,25 @@ export default function WorkspacePage() {
     return () => { clearTimeout(timer); };
   }, []);
 
+  useEffect(() => {
+    services?.stories.getStories({ pageSize: 100 }).then(res => {
+      setLocalStories(res.data);
+    });
+  }, [services]);
+
   const defaultSlug = useMemo(() => {
     if (!services) return '';
-    const stories = services.stories.getStories().data;
+    const stories = localStories;
     return stories.length > 0 ? stories[0].slug : '';
-  }, [services]);
+  }, [services, localStories]);
 
   const effectiveSlug = slug || defaultSlug;
 
-  const vm = useMemo(() => {
-    if (!services || !effectiveSlug) return null;
-    return buildWorkspace(services, effectiveSlug);
+  const [vm, setVm] = useState<any>(null);
+
+  useEffect(() => {
+    if (!services || !effectiveSlug) return;
+    buildWorkspace(services, effectiveSlug).then(setVm);
   }, [services, effectiveSlug]);
 
   const handleSearch = useCallback((e: React.SyntheticEvent) => {
@@ -160,7 +169,7 @@ export default function WorkspacePage() {
               <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: 'var(--spacing-4)' }}>{vm.story.summary}</p>
               {vm.story.tags.length > 0 && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-1)', marginBottom: 'var(--spacing-4)' }}>
-                  {vm.story.tags.map(t => (
+                  {vm.story.tags.map((t: string) => (
                     <span key={t} style={{ padding: '2px var(--spacing-2)', background: 'var(--color-bg-tertiary)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>{t}</span>
                   ))}
                 </div>
@@ -169,7 +178,7 @@ export default function WorkspacePage() {
 
             <CollapsibleCard title="Key Points">
               <ul style={{ margin: 0, paddingLeft: 'var(--spacing-4)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-                {vm.story.claims.slice(0, 5).map((c, i) => (
+                {vm.story.claims.slice(0, 5).map((c: any, i: number) => (
                   <li key={c.id || i} style={{ lineHeight: 1.5 }}>{c.claim}</li>
                 ))}
                 {vm.story.claims.length === 0 && <li style={{ color: 'var(--color-text-muted)' }}>No claims recorded.</li>}
@@ -178,7 +187,7 @@ export default function WorkspacePage() {
 
             <CollapsibleCard title={`Claims (${String(vm.story.claims.length)})`}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-                {vm.story.claims.map((c, i) => (
+                {vm.story.claims.map((c: any, i: number) => (
                   <div key={c.id || i} style={{ background: 'var(--color-bg-tertiary)', borderRadius: 'var(--radius-md)', padding: 'var(--spacing-2) var(--spacing-3)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-1)' }}>
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-primary)', fontWeight: 'var(--font-weight-medium)', flex: 1 }}>{c.claim}</span>
@@ -193,7 +202,7 @@ export default function WorkspacePage() {
 
             <CollapsibleCard title={`Sources (${String(vm.story.sources.length)})`}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1-5)' }}>
-                {vm.story.sources.map((s, i) => (
+                {vm.story.sources.map((s: any, i: number) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', padding: 'var(--spacing-1) 0' }}>
                     <span style={{ padding: '1px var(--spacing-2)', borderRadius: 'var(--radius-sm)', fontSize: '10px', fontWeight: 'var(--font-weight-semibold)', background: tierColor(s.tier), color: s.tier <= 1 ? '#000' : '#fff' }}>{tierLabel(s.tier)}</span>
                     <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.title}</span>
@@ -232,7 +241,7 @@ export default function WorkspacePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 'var(--spacing-3)' }}>
             <AICard label="Headlines" accent="#D4A843">
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1-5)' }}>
-                {vm.ai.headlines.map((h, i) => (
+                {vm.ai.headlines.map((h: any, i: number) => (
                   <li key={i}>
                     <div style={{ fontWeight: 'var(--font-weight-medium)', color: 'var(--color-text-primary)', marginBottom: 2 }}>{h.headline}</div>
                     <div style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}>{h.rationale}</div>
@@ -244,7 +253,7 @@ export default function WorkspacePage() {
             <AICard label="Entity Suggestions" accent="#A855F7">
               {vm.ai.missingEntities.length > 0 ? (
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1-5)' }}>
-                  {vm.ai.missingEntities.map((e, i) => (
+                  {vm.ai.missingEntities.map((e: any, i: number) => (
                     <li key={i}>
                       <div style={{ fontWeight: 'var(--font-weight-medium)', color: 'var(--color-text-primary)' }}>{e.name}</div>
                       <div style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}>{e.reason}</div>
@@ -259,7 +268,7 @@ export default function WorkspacePage() {
             <AICard label="Source Gaps" accent="#F43F5E">
               {vm.ai.sourceGaps.length > 0 ? (
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1-5)' }}>
-                  {vm.ai.sourceGaps.map((g, i) => (
+                  {vm.ai.sourceGaps.map((g: any, i: number) => (
                     <li key={i}>
                       <div style={{ fontWeight: 'var(--font-weight-medium)', color: 'var(--color-text-primary)' }}>{g.missingType}</div>
                       <div style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}>{g.suggestion}</div>
@@ -274,7 +283,7 @@ export default function WorkspacePage() {
             <AICard label="FAQs" accent="#3B82F6">
               {vm.ai.faqs.length > 0 ? (
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1-5)' }}>
-                  {vm.ai.faqs.map((f, i) => (
+                  {vm.ai.faqs.map((f: any, i: number) => (
                     <li key={i}>
                       <div style={{ fontWeight: 'var(--font-weight-medium)', color: 'var(--color-text-primary)', marginBottom: 2 }}>{f.question}</div>
                       <div style={{ color: 'var(--color-text-muted)', fontSize: '10px', lineHeight: 1.4 }}>{f.answer}</div>
@@ -291,7 +300,7 @@ export default function WorkspacePage() {
               <p style={{ lineHeight: 1.5, marginBottom: 'var(--spacing-2)' }}>{vm.ai.simplified.summary}</p>
               {vm.ai.simplified.keyPoints.length > 0 && (
                 <ul style={{ margin: 0, paddingLeft: 'var(--spacing-3)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1)' }}>
-                  {vm.ai.simplified.keyPoints.map((kp, i) => (
+                  {vm.ai.simplified.keyPoints.map((kp: string, i: number) => (
                     <li key={i} style={{ lineHeight: 1.4 }}>{kp}</li>
                   ))}
                 </ul>

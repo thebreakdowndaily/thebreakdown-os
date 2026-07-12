@@ -1,21 +1,14 @@
 import type { Topic, APIListParams, APIResponse } from '@/types/canonical';
+import type { TopicService } from '../../interfaces/topic';
 
-export interface TopicService {
-  getTopics(params?: APIListParams): APIResponse<Topic[]>;
-  getTopic(id: string): Topic | undefined;
-  getTopicBySlug(slug: string): Topic | undefined;
-  saveTopic(topic: Topic): Topic;
-  deleteTopic(id: string): void;
-}
-
-export class MemoryTopicService implements TopicService {
+export class MemoryTopicRepository implements TopicService {
   private topics: Map<string, Topic>;
 
-  constructor(topics: Topic[]) {
+  constructor(topics: Topic[] = []) {
     this.topics = new Map(topics.map(t => [t.id, t]));
   }
 
-  getTopics(params?: APIListParams): APIResponse<Topic[]> {
+  async getTopics(params?: APIListParams): Promise<APIResponse<Topic[]>> {
     let list = Array.from(this.topics.values());
     if (params?.search) {
       const q = params.search.toLowerCase();
@@ -29,20 +22,24 @@ export class MemoryTopicService implements TopicService {
     return { data: list, meta: { total, page: params?.page || 1, pageSize: params?.pageSize || list.length } };
   }
 
-  getTopic(id: string) {
+  async getTopic(id: string) {
     return this.topics.get(id);
   }
 
-  getTopicBySlug(slug: string) {
+  async getTopicBySlug(slug: string) {
     return Array.from(this.topics.values()).find(t => t.slug === slug);
   }
 
-  saveTopic(topic: Topic) {
+  async saveTopic(topic: Topic) {
     this.topics.set(topic.id, { ...topic, updatedAt: new Date().toISOString() });
     return this.topics.get(topic.id)!;
   }
 
-  deleteTopic(id: string) {
+  async deleteTopic(id: string) {
     this.topics.delete(id);
+  }
+
+  async count() {
+    return this.topics.size;
   }
 }

@@ -8,7 +8,7 @@ import { StatisticsAggregator } from '@/services/topics/pipeline/statistics';
 import { TopicQualityAggregator } from '@/services/topics/pipeline/quality';
 
 export async function buildTopicPage(services: Services, slug: string): Promise<TopicTerminalViewModel | null> {
-  const topic = services.topics.getTopicBySlug(slug);
+  const topic = await services.topics.getTopicBySlug(slug);
   if (!topic) return null;
 
   const pipeline = new KnowledgeTopicPipeline()

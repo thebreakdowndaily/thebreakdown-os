@@ -25,7 +25,7 @@ export interface HomepageData {
 }
 
 export async function buildHomepage(services: Services): Promise<HomepageData> {
-  const allStoriesRaw = [...services.stories.getStories({ pageSize: 100 }).data]
+  const allStoriesRaw = [...(await services.stories.getStories({ pageSize: 100 })).data]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
   
   const topStoryCanonical = allStoriesRaw[0];
@@ -41,7 +41,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   const topStory = topStoryCanonical ? await pipeline.execute(topStoryCanonical) : null;
   const stories = await Promise.all(storiesCanonical.map(s => pipeline.execute(s)));
   
-  const topicsData = services.topics.getTopics().data;
+  const topicsData = (await services.topics.getTopics()).data;
   const trendingTopics = topicsData.slice(0, 5);
   
   // Computations for new sections
@@ -51,7 +51,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
     href: `/story/${s.slug}`
   }));
   
-  const entitiesData = services.entities.getEntities().data;
+  const entitiesData = (await services.entities.getEntities()).data;
   // Spotlighting 3 entities (Today, This Week, Trending)
   const entitySpotlights = entitiesData.slice(0, 3);
   

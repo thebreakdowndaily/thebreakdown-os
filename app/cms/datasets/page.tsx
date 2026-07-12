@@ -1,8 +1,8 @@
 import { bootstrapServices } from '@/lib/bootstrap';
 
-export default function CmsDatasetsPage() {
+export default async function CmsDatasetsPage() {
   const services = bootstrapServices();
-  const result = services.datasets.getDatasets({ pageSize: 100 });
+  const result = await services.datasets.getDatasets({ pageSize: 100 });
   return (
     <main className="min-h-screen bg-[#0A0A0A]">
       <div className="max-w-6xl mx-auto px-4 py-12">

@@ -1,21 +1,14 @@
 import type { MediaItem, APIListParams, APIResponse } from '@/types/canonical';
+import type { MediaService } from '../../interfaces/media';
 
-export interface MediaService {
-  getMedia(params?: APIListParams): APIResponse<MediaItem[]>;
-  getMediaItem(id: string): MediaItem | undefined;
-  getMediaByTags(tags: string[]): MediaItem[];
-  saveMediaItem(item: MediaItem): MediaItem;
-  deleteMediaItem(id: string): void;
-}
-
-export class MemoryMediaService implements MediaService {
+export class MemoryMediaRepository implements MediaService {
   private items: Map<string, MediaItem>;
 
-  constructor(items: MediaItem[]) {
+  constructor(items: MediaItem[] = []) {
     this.items = new Map(items.map(m => [m.id, m]));
   }
 
-  getMedia(params?: APIListParams): APIResponse<MediaItem[]> {
+  async getMedia(params?: APIListParams): Promise<APIResponse<MediaItem[]>> {
     let list = Array.from(this.items.values());
     if (params?.search) {
       const q = params.search.toLowerCase();
@@ -29,20 +22,20 @@ export class MemoryMediaService implements MediaService {
     return { data: list, meta: { total, page: params?.page || 1, pageSize: params?.pageSize || list.length } };
   }
 
-  getMediaItem(id: string) {
+  async getMediaItem(id: string) {
     return this.items.get(id);
   }
 
-  getMediaByTags(tags: string[]) {
+  async getMediaByTags(tags: string[]) {
     return Array.from(this.items.values()).filter(m => tags.some(t => m.tags.includes(t)));
   }
 
-  saveMediaItem(item: MediaItem) {
+  async saveMediaItem(item: MediaItem) {
     this.items.set(item.id, { ...item, updatedAt: new Date().toISOString() });
     return this.items.get(item.id)!;
   }
 
-  deleteMediaItem(id: string) {
+  async deleteMediaItem(id: string) {
     this.items.delete(id);
   }
 }

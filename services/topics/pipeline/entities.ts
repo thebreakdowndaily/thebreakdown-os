@@ -4,15 +4,15 @@ import { getServices } from '@/services/registry';
 
 export class EntityAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
-    const stories = topic.storyIds
-      .map(id => getServices().stories.getStory(id))
-      .filter((s): s is Story => s !== null);
+    const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
+    const storiesResult = await Promise.all(storyPromises);
+    const stories = storiesResult.filter((s): s is Story => !!s);
 
     const entityMap = new Map<string, { entity: Entity, frequency: number, maxEvidence: number }>();
 
-    stories.forEach(story => {
-      story.relatedEntityIds.forEach((eid: string) => {
-        const entity = getServices().entities.getEntity(eid);
+    for (const story of stories) {
+      for (const eid of story.relatedEntityIds) {
+        const entity = await getServices().entities.getEntity(eid);
         if (entity) {
           const existing = entityMap.get(eid);
           if (existing) {
@@ -22,8 +22,8 @@ export class EntityAggregator implements TopicAggregator {
             entityMap.set(eid, { entity, frequency: 1, maxEvidence: story.evidenceScore });
           }
         }
-      });
-    });
+      }
+    }
 
     const maxFreq = Math.max(1, ...Array.from(entityMap.values()).map(v => v.frequency));
 

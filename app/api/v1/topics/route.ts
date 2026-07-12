@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseTopicRepository } from '@/services/topics/repository';
+import { SupabaseTopicRepository } from '@/services/repositories/supabase/topic';
 import type { Topic, APIResponse, APIListParams } from '@/types/canonical';
 import { syncTopic } from '@/lib/data-sync';
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.findAll(params);
+  const result = await repo.getTopics(params);
   return NextResponse.json(result);
 }
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.save(topic);
+  const saved = await repo.saveTopic(topic);
   syncTopic(saved);
   const res: APIResponse<Topic> = { data: saved };
   return NextResponse.json(res, { status: 201 });

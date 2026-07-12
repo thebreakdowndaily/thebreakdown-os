@@ -1,11 +1,11 @@
-import type { Story, Entity, Topic, GraphNode, GraphEdge } from '@/types/canonical';
+import type { Story, EntityBase, Topic, GraphNode, GraphEdge } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 import { EditorialAI, type HeadlineSuggestion, type EntitySuggestion, type SourceGap, type FAQSuggestion } from '@/features/ai/editorial';
 import { ReaderAI, type SimplifiedStory } from '@/features/ai/reader';
 
 export interface WorkspaceViewModel {
   story: Story;
-  relatedEntities: Entity[];
+  relatedEntities: EntityBase[];
   relatedTopics: Topic[];
   graphNodes: GraphNode[];
   graphEdges: GraphEdge[];
@@ -19,18 +19,20 @@ export interface WorkspaceViewModel {
   };
 }
 
-export function buildWorkspace(services: Services, storySlug: string): WorkspaceViewModel | null {
-  const story = services.stories.getStoryBySlug(storySlug);
+export async function buildWorkspace(services: Services, storySlug: string): Promise<WorkspaceViewModel | null> {
+  const story = await services.stories.getStoryBySlug(storySlug);
   if (!story) return null;
 
   const editorialAI = new EditorialAI(services);
   const readerAI = new ReaderAI();
 
-  const fullGraph = services.graph.build();
-  const conns = services.graph.getConnections(story.id, { maxDepth: 1 });
+  const fullGraph = await services.graph.build();
+  const conns = await services.graph.getConnections(story.id, { maxDepth: 1 });
 
-  const relatedEntities = (story.relatedEntityIds || []).map(id => services.entities.getEntity(id)).filter(Boolean) as Entity[];
-  const relatedTopics = (story.relatedTopicIds || []).map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];
+  const relatedEntitiesPromises = (story.relatedEntityIds || []).map(id => services.entities.getEntity(id));
+  const relatedEntities = (await Promise.all(relatedEntitiesPromises)).filter(Boolean) as EntityBase[];
+  const relatedTopicsPromises = (story.relatedTopicIds || []).map(id => services.topics.getTopic(id));
+  const relatedTopics = (await Promise.all(relatedTopicsPromises)).filter((t): t is Topic => !!t);
 
   return {
     story,
@@ -39,10 +41,10 @@ export function buildWorkspace(services: Services, storySlug: string): Workspace
     graphNodes: Array.from(fullGraph.nodes.values()),
     graphEdges: conns.map(c => c.edge),
     ai: {
-      headlines: editorialAI.suggestHeadlines(story),
-      missingEntities: editorialAI.suggestMissingEntities(story).slice(0, 5),
+      headlines: await editorialAI.suggestHeadlines(story),
+      missingEntities: (await editorialAI.suggestMissingEntities(story)).slice(0, 5),
       sourceGaps: editorialAI.detectSourceGaps(story),
-      faqs: editorialAI.suggestFAQs(story).slice(0, 3),
+      faqs: (await editorialAI.suggestFAQs(story)).slice(0, 3),
       simplified: readerAI.simplify(story, 'general'),
       timelineText: readerAI.timelineSummary(story),
     },

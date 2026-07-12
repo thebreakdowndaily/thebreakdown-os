@@ -7,7 +7,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { searchParams } = new URL(request.url);
   const vizId = searchParams.get('vizId') || '';
   if (!vizId) return NextResponse.json({ error: 'vizId query parameter is required' }, { status: 400 });
-  const chartData = services.datasets.getChartData(slug, vizId);
-  if (!chartData) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  const chartData = await services.datasets.getChartData(slug, vizId);
   return NextResponse.json({ data: chartData });
 }

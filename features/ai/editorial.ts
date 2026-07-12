@@ -27,14 +27,16 @@ export class EditorialAI {
     this.services = services;
   }
 
-  suggestHeadlines(story: Story): HeadlineSuggestion[] {
+  async suggestHeadlines(story: Story): Promise<HeadlineSuggestion[]> {
     const suggestions: HeadlineSuggestion[] = [];
-    const entities = story.relatedEntityIds
-      .map(id => this.services.entities.getEntity(id))
-      .filter((e): e is import('@/types/canonical').EntityBase => e !== undefined);
-    const topics = story.relatedTopicIds
-      .map(id => this.services.topics.getTopic(id))
-      .filter((t): t is Topic => t !== undefined);
+    const entitiesResults = await Promise.all(
+      story.relatedEntityIds.map(id => this.services.entities.getEntity(id))
+    );
+    const entities = entitiesResults.filter((e): e is import('@/types/canonical').EntityBase => e !== undefined);
+    const topicsResults = await Promise.all(
+      story.relatedTopicIds.map(id => this.services.topics.getTopic(id))
+    );
+    const topics = topicsResults.filter((t): t is Topic => t !== undefined);
 
     const entityNames = entities.map(e => e.name);
     const topicNames = topics.map(t => t.name);
@@ -98,13 +100,13 @@ export class EditorialAI {
     return suggestions.slice(0, 5);
   }
 
-  suggestMissingEntities(story: Story): EntitySuggestion[] {
+  async suggestMissingEntities(story: Story): Promise<EntitySuggestion[]> {
     const linkedEntityIds = new Set(story.relatedEntityIds);
     const suggestions: EntitySuggestion[] = [];
     const seen = new Set<string>();
 
     for (const topicId of story.relatedTopicIds) {
-      const topic = this.services.topics.getTopic(topicId);
+      const topic = await this.services.topics.getTopic(topicId);
       if (!topic) continue;
 
       for (const entityId of topic.relatedEntityIds) {
@@ -112,7 +114,7 @@ export class EditorialAI {
         if (seen.has(entityId)) continue;
         seen.add(entityId);
 
-        const entity = this.services.entities.getEntity(entityId);
+        const entity = await this.services.entities.getEntity(entityId);
         if (!entity) continue;
 
         suggestions.push({
@@ -177,7 +179,7 @@ export class EditorialAI {
     return gaps;
   }
 
-  suggestFAQs(story: Story): FAQSuggestion[] {
+  async suggestFAQs(story: Story): Promise<FAQSuggestion[]> {
     const faqs: FAQSuggestion[] = [];
     const seenQuestions = new Set<string>();
 
@@ -198,7 +200,7 @@ export class EditorialAI {
     }
 
     for (const entityId of story.relatedEntityIds) {
-      const entity = this.services.entities.getEntity(entityId);
+      const entity = await this.services.entities.getEntity(entityId);
       if (!entity) continue;
 
       if (entity.faq) {
@@ -216,7 +218,7 @@ export class EditorialAI {
     }
 
     for (const topicId of story.relatedTopicIds) {
-      const topic = this.services.topics.getTopic(topicId);
+      const topic = await this.services.topics.getTopic(topicId);
       if (!topic) continue;
 
       if (topic.faq) {
@@ -263,13 +265,13 @@ export class EditorialAI {
     return flags;
   }
 
-  suggestTimelineEvents(story: Story): Array<{ date: string; title: string; description: string }> {
+  async suggestTimelineEvents(story: Story): Promise<Array<{ date: string; title: string; description: string }>> {
     const existingDates = new Set(story.timeline?.map(e => e.date + '|' + e.title) || []);
     const suggestions: Array<{ date: string; title: string; description: string }> = [];
     const seen = new Set<string>();
 
     for (const entityId of story.relatedEntityIds) {
-      const entity = this.services.entities.getEntity(entityId);
+      const entity = await this.services.entities.getEntity(entityId);
       if (!entity) continue;
 
       for (const event of entity.timeline || []) {
@@ -282,7 +284,7 @@ export class EditorialAI {
     }
 
     for (const topicId of story.relatedTopicIds) {
-      const topic = this.services.topics.getTopic(topicId);
+      const topic = await this.services.topics.getTopic(topicId);
       if (!topic) continue;
 
       for (const event of topic.timeline || []) {
@@ -299,14 +301,14 @@ export class EditorialAI {
     return suggestions;
   }
 
-  suggestDatasets(story: Story): DatasetSuggestion[] {
+  async suggestDatasets(story: Story): Promise<DatasetSuggestion[]> {
     const suggestions: DatasetSuggestion[] = [];
     const seenIds = new Set<string>();
 
-    const allDatasets = this.services.datasets.getDatasets({ pageSize: 50 }).data;
+    const allDatasets = (await this.services.datasets.getDatasets({ pageSize: 50 })).data;
 
     for (const topicId of story.relatedTopicIds) {
-      const topic = this.services.topics.getTopic(topicId);
+      const topic = await this.services.topics.getTopic(topicId);
       if (!topic) continue;
       for (const dataset of allDatasets) {
         if (seenIds.has(dataset.id)) continue;
@@ -318,7 +320,7 @@ export class EditorialAI {
     }
 
     for (const entityId of story.relatedEntityIds) {
-      const entity = this.services.entities.getEntity(entityId);
+      const entity = await this.services.entities.getEntity(entityId);
       if (!entity) continue;
       for (const dataset of allDatasets) {
         if (seenIds.has(dataset.id)) continue;

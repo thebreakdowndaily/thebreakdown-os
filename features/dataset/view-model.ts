@@ -1,12 +1,16 @@
 import type { Story, Topic, Entity, Dataset, DatasetPageViewModel, DatasetVersion } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 
-export function buildDatasetPage(services: Services, slug: string): DatasetPageViewModel | null {
-  const dataset = services.datasets.getDatasetBySlug(slug);
+export async function buildDatasetPage(services: Services, slug: string): Promise<DatasetPageViewModel | null> {
+  const dataset = await services.datasets.getDatasetBySlug(slug);
   if (!dataset) return null;
-  const relatedStories = dataset.relatedStoryIds.map(id => services.stories.getStory(id)).filter(Boolean) as Story[];
-  const relatedTopics = dataset.relatedTopicIds.map(id => services.topics.getTopic(id)).filter(Boolean) as Topic[];
-  const relatedEntities = dataset.relatedEntityIds.map(id => services.entities.getEntity(id)).filter(Boolean) as Entity[];
+  const relatedStoriesPromises = dataset.relatedStoryIds.map(id => services.stories.getStory(id));
+  const relatedStoriesResult = await Promise.all(relatedStoriesPromises);
+  const relatedStories = relatedStoriesResult.filter(Boolean) as Story[];
+  const relatedTopicsPromises = dataset.relatedTopicIds.map(id => services.topics.getTopic(id));
+  const relatedTopics = (await Promise.all(relatedTopicsPromises)).filter((t): t is Topic => !!t);
+  const relatedEntitiesPromises = dataset.relatedEntityIds.map(id => services.entities.getEntity(id));
+  const relatedEntities = (await Promise.all(relatedEntitiesPromises)).filter(Boolean) as Entity[];
   return {
     dataset,
     relatedStories,

@@ -206,7 +206,7 @@ export function apiStoryToCanonical(s: APIStory): Story {
   } as unknown as Story;
 }
 
-function apiTopicToCanonical(t: APITopic): Topic {
+export function apiTopicToCanonical(t: APITopic): Topic {
   return {
     ...t as unknown as Topic,
     overview: t.description,
@@ -219,7 +219,7 @@ function apiTopicToCanonical(t: APITopic): Topic {
   } as unknown as Topic;
 }
 
-function apiEntityToCanonical(e: APIEntity): Entity {
+export function apiEntityToCanonical(e: APIEntity): Entity {
   const entity = {
     ...e as unknown as Entity,
     evidenceScore: e.evidenceScore || 85,
@@ -234,7 +234,7 @@ function apiEntityToCanonical(e: APIEntity): Entity {
   return entity as unknown as Entity;
 }
 
-function apiTimelineToCanonical(t: APITimeline): Timeline {
+export function apiTimelineToCanonical(t: APITimeline): Timeline {
   return {
     ...t as unknown as Timeline,
     storyIds: t.storySlugs || [],
@@ -245,7 +245,7 @@ function apiTimelineToCanonical(t: APITimeline): Timeline {
   } as unknown as Timeline;
 }
 
-function apiFixToCanonical(f: APIFix): Fix {
+export function apiFixToCanonical(f: APIFix): Fix {
   const fix = {
     ...f as unknown as Fix,
     title: f.headline,

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/ui/Container';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
+import { EntityBuilder } from '@/services/stories/pipeline/entities';
 import { GlobalTimelineExplorer } from '@/components/timeline/GlobalTimelineExplorer';
 
 export const metadata: Metadata = {
@@ -14,18 +16,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TimelinePage() {
+export default async function TimelinePage() {
   const services = bootstrapServices();
 
-  const allStories = services.stories.getStories({ pageSize: 100 }).data;
-  const allTimelines = services.timelines.getTimelines({ pageSize: 50 }).data;
-  const allTopics = services.topics.getTopics({ pageSize: 100 }).data;
+  const allStories = (await services.stories.getStories({ pageSize: 100 })).data;
+  
+  // Use pipeline instead of view models for proper server-side execution
+  const pipeline = new KnowledgeStoryPipeline()
+    .add(new EntityBuilder());
+    
+  const knowledgeStories = await Promise.all(allStories.map((s: any) => pipeline.execute(s)));
+  const allTimelines = (await services.timelines.getTimelines({ pageSize: 50 })).data;
+  const allTopics = (await services.topics.getTopics({ pageSize: 100 })).data;
 
-  const storyEvents = allStories.flatMap((s) =>
-    (s.timeline || []).map((e) => ({
+  const storyEvents = knowledgeStories.flatMap((s) =>
+    (s.unifiedTimeline || []).map((e: any) => ({
       ...e,
-      source: s.title,
-      sourceSlug: `/story/${s.slug}`,
+      source: s.raw.title,
+      sourceSlug: `/story/${s.raw.slug}`,
       category: 'story',
     }))
   );

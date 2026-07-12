@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SupabaseFixRepository } from '@/services/fixes/repository';
+import { SupabaseFixRepository } from '@/services/repositories/supabase/fix';
 import type { Fix, APIResponse, APIListParams } from '@/types/canonical';
 import { syncFix } from '@/lib/data-sync';
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.findAll(params);
+  const result = await repo.getFixes(params);
   return NextResponse.json(result);
 }
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     sources: body.sources || [],
   };
 
-  const saved = await repo.save(fix);
+  const saved = await repo.saveFix(fix);
   syncFix(saved);
   const res: APIResponse<Fix> = { data: saved };
   return NextResponse.json(res, { status: 201 });

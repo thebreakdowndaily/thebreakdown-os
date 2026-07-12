@@ -1,104 +1,49 @@
-'use client';
-
-import { useParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { bootstrapServices } from '@/services/bootstrap';
+import { redirect } from 'next/navigation';
 import CMSShell from '@/components/cms/CMSShell';
-import StoryEditor from '@/components/cms/StoryEditor';
-import { mockCMSStories, type CMSStory } from '@/utils/cms-data';
+import StoryEditorWrapper from './StoryEditorWrapper';
+import type { CMSStory } from '@/utils/cms-data';
 
-export default function StoryEditorPage() {
-  const params = useParams();
-  const router = useRouter();
-  const id = params.id as string;
+export const dynamic = 'force-dynamic';
 
-  const [story, setStory] = useState<CMSStory | null>(null);
-  const [loading, setLoading] = useState(true);
+export default async function StoryEditorPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
 
-  useEffect(() => {
-    if (!id) return;
-
-    setTimeout(() => {
-      const found = mockCMSStories.find((s) => s.id === id);
-      if (found) {
-        setStory(found);
-      } else {
-        router.replace('/cms');
-      }
-      setLoading(false);
-    }, 100);
-  }, [id, router]);
-
-  const handleSave = async (updated: CMSStory) => {
-    const idx = mockCMSStories.findIndex((s) => s.id === updated.id);
-    if (idx >= 0) {
-      mockCMSStories[idx] = updated;
-    }
-    // Sync to canonical store via API v1
-    try {
-      await fetch(`/api/v1/stories/${updated.slug}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated),
-      });
-    } catch {
-      // Story may not exist in canonical store yet; create it
-      try {
-        await fetch('/api/v1/stories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updated),
-        });
-      } catch (e) {
-        console.error('Failed to sync story to API:', e);
-      }
-    }
-  };
-
-  if (loading) {
-    return (
-      <CMSShell selectedId={id}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            color: 'var(--color-text-tertiary)',
-            fontSize: '14px',
-          }}
-        >
-          Loading story...
-        </div>
-      </CMSShell>
-    );
+  const services = await bootstrapServices();
+  const story = await services.stories.getStory(id);
+  
+  if (!story && id !== 'new') {
+    redirect('/cms/stories');
   }
 
-  if (!story) {
-    return (
-      <CMSShell selectedId={id}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            color: 'var(--color-text-tertiary)',
-            fontSize: '14px',
-          }}
-        >
-          Story not found
-        </div>
-      </CMSShell>
-    );
+  const allStoriesRes = await services.stories.getStories({ pageSize: 100 });
+  const stories = allStoriesRes.data;
+
+  // For a new story, we'll let the wrapper/editor handle the default structure, 
+  // or we could construct it here. For simplicity, we just pass what we found.
+  let cmsStory: CMSStory;
+
+  if (!story && id === 'new') {
+    cmsStory = {
+      id: `story-new-${Date.now()}`,
+      title: 'Untitled Story',
+      slug: 'untitled-story',
+      status: 'draft',
+      blocks: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  } else {
+    cmsStory = {
+      ...story,
+      blocks: story!.blocks || [],
+    } as any;
   }
 
   return (
-    <CMSShell selectedId={id}>
-      <StoryEditor
-        key={story.id + story.updatedAt}
-        story={story}
-        onSave={handleSave}
-      />
+    <CMSShell selectedId={id} stories={stories}>
+      <StoryEditorWrapper initialStory={cmsStory} />
     </CMSShell>
   );
 }

@@ -10,9 +10,9 @@ export class TopicQualityAggregator implements TopicAggregator {
     const missingMedia: string[] = [];
     const brokenLinks: string[] = [];
 
-    const stories = topic.storyIds
-      .map(id => getServices().stories.getStory(id))
-      .filter((s): s is Story => s !== null);
+    const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
+    const storiesResult = await Promise.all(storyPromises);
+    const stories = storiesResult.filter((s): s is Story => !!s);
 
     if (stories.length === 0) missingStories.push('No stories associated with topic.');
     
