@@ -8,14 +8,12 @@ export interface ImageIntelligenceService {
 }
 
 export class DefaultImageIntelligenceService implements ImageIntelligenceService {
-  
+  private imageCache = new Map<string, MediaItem | null>();
+
   async resolveImageForStory(story: Story): Promise<MediaItem | null> {
-    // 1. Try to fetch from authentic source first
-    // We will construct a query based on the story's main entities
     const query = story.relatedEntityIds.length > 0 ? story.relatedEntityIds[0] : story.title;
     let image = await this.fetchOfficialImage(query);
     
-    // 2. If no official image found, fall back to AI generation
     if (!image) {
       console.log(`[ImageIntelligence] No authentic image found for '${query}'. Falling back to AI generation.`);
       const prompt = `Editorial illustration for a news story titled "${story.title}". Context: ${story.summary}`;
@@ -23,7 +21,6 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
     }
     
     if (image) {
-      // Save the resolved image to our media service
       getServices().media.saveMediaItem(image);
     }
     
@@ -31,35 +28,46 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
   }
 
   async fetchOfficialImage(query: string): Promise<MediaItem | null> {
+    const cacheKey = `official:${query}`;
+    if (this.imageCache.has(cacheKey)) {
+      return this.imageCache.get(cacheKey) || null;
+    }
+
     try {
-      // Clean query (e.g., if it's an ID like "rbi", use that, otherwise search)
       const cleanQuery = query.replace(/-/g, ' ');
       
       console.log(`[ImageIntelligence] Fetching official image from Wikimedia for: ${cleanQuery}`);
       
       const headers = { 'User-Agent': 'TheBreakdownBot/1.0 (contact@thebreakdown.in)' };
       
-      // Step 1: Search Wikipedia for the page
       const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQuery)}&utf8=&format=json&origin=*`, { headers });
       const searchData = await searchRes.json();
       const firstResult = searchData.query?.search?.[0];
       
-      if (!firstResult) return null;
+      if (!firstResult) {
+        this.imageCache.set(cacheKey, null);
+        return null;
+      }
       
-      // Step 2: Get page images
       const pageRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&titles=${encodeURIComponent(firstResult.title)}&pithumbsize=1000&format=json&origin=*`, { headers });
       const pageData = await pageRes.json();
       
       const pages = pageData.query?.pages;
-      if (!pages) return null;
+      if (!pages) {
+        this.imageCache.set(cacheKey, null);
+        return null;
+      }
       
       const pageId = Object.keys(pages)[0];
       const page = pages[pageId];
       
-      if (!page.thumbnail?.source) return null;
+      if (!page.thumbnail?.source) {
+        this.imageCache.set(cacheKey, null);
+        return null;
+      }
 
       const mediaItem: MediaItem = {
-        id: `wiki-${Date.now()}`,
+        id: `wiki-${query}-${pageId}`,
         type: 'image',
         src: page.thumbnail.source,
         alt: `Official image for ${firstResult.title}`,
@@ -69,7 +77,7 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
         version: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        licenseType: 'PUBLIC_DOMAIN', // Assume public domain/fair use for wiki thumbnails
+        licenseType: 'PUBLIC_DOMAIN',
         imageCategory: 'PHOTO',
         editorialPriority: 'PRIMARY',
         verificationStatus: 'SOURCE_VERIFIED',
@@ -77,13 +85,15 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
         width: page.thumbnail.width || 800,
         height: page.thumbnail.height || 600,
         sourceUrl: `https://en.wikipedia.org/wiki/${encodeURIComponent(firstResult.title)}`,
-        dominantColor: '#e0e0e0', // Placeholder
-        blurHash: 'LEHLk~WB2yk8pyo0adR*.7kCMdnj' // Placeholder
+        dominantColor: '#e0e0e0',
+        blurHash: 'LEHLk~WB2yk8pyo0adR*.7kCMdnj'
       };
 
+      this.imageCache.set(cacheKey, mediaItem);
       return mediaItem;
     } catch (e) {
       console.error('[ImageIntelligence] Error fetching from Wikimedia:', e);
+      this.imageCache.set(cacheKey, null);
       return null;
     }
   }

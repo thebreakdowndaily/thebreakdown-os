@@ -1,43 +1,7 @@
 import React from 'react';
-import IntelligentImage from '@/lib/media/components/IntelligentImage';
 import EntityConfidencePanel from './EntityConfidencePanel';
 import CoverageHeatmap from './CoverageHeatmap';
-import { Entity } from '@/types/canonical'; // or KnowledgeEntity if fully migrated
-
-// We stub KnowledgeAsset generation since Entity still uses raw `image` strings
-// In a full migration, this component will take `entity.assets` directly.
-const createMockAsset = (url: string | undefined, type: 'logo' | 'hero') => {
-  if (!url) return undefined;
-  return {
-    id: `mock-${type}-1`,
-    slug: `mock-${type}-1`,
-    type: 'image',
-    title: `Entity ${type}`,
-    altText: `Entity ${type}`,
-    metadata: { width: 1200, height: 630, format: 'jpg', sizeBytes: 1000 },
-    attribution: { caption: '', credit: '', sourceUrl: '', license: 'proprietary' },
-    optimization: {
-      cdnUrl: url,
-      blurhash: '',
-      responsiveUrls: {
-        thumbnail: url,
-        sm: url,
-        md: url,
-        lg: url,
-        xl: url
-      }
-    },
-    relationships: { entities: [], topics: [], stories: [], collections: [] },
-    version: 1,
-    currentVersion: 'v1',
-    versions: [],
-    priority: 'hero',
-    confidence: 1,
-    usageGraph: { stories: [], topics: [], entities: [], homepages: [], newsletters: [], collections: [] },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  } as any; // Cast as any because it's just a mock until Phase 4 completes
-};
+import { Entity } from '@/types/canonical';
 
 interface EntityIntelligenceHeaderProps {
   entity: Entity;
@@ -45,17 +9,16 @@ interface EntityIntelligenceHeaderProps {
 }
 
 export default function EntityIntelligenceHeader({ entity, storyCount }: EntityIntelligenceHeaderProps) {
-  // Try to use entity.image as hero. In a real system, we look into entity.assets array.
-  const heroAsset = createMockAsset(entity.image, 'hero');
+  const hasImage = !!entity.image;
 
   return (
     <div className="relative border-b border-neutral-800 bg-[#0c0c0c] overflow-hidden">
       {/* Background Hero Layer */}
-      {heroAsset && (
+      {hasImage && (
         <div className="absolute inset-0 z-0 opacity-20 mask-image-gradient-b">
-          <IntelligentImage
-            asset={heroAsset}
-            priority={true}
+          <img
+            src={entity.image}
+            alt=""
             className="w-full h-full object-cover grayscale"
           />
         </div>
@@ -67,10 +30,10 @@ export default function EntityIntelligenceHeader({ entity, storyCount }: EntityI
           <div className="flex items-start gap-6">
             {/* Entity Logo / Portrait Slot */}
             <div className="w-24 h-24 sm:w-32 sm:h-32 bg-neutral-900 border-2 border-neutral-800 rounded-xl flex items-center justify-center shrink-0 shadow-2xl overflow-hidden relative">
-               {heroAsset ? (
-                 <IntelligentImage
-                  asset={heroAsset}
-                  priority={true}
+               {hasImage ? (
+                 <img
+                  src={entity.image}
+                  alt={entity.name}
                   className="w-full h-full object-cover"
                 />
                ) : (

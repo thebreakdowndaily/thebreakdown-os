@@ -1,11 +1,12 @@
-import { AssetBase, AssetReference, EntityBase } from '@/types/canonical';
+import { AssetBase, AssetReference, EntityBase, Story } from '@/types/canonical';
 import { getServices } from '@/services/registry';
 
 export interface ResolverContext {
   storySlug: string;
   primaryEntities: EntityBase[];
   supportingEntities: EntityBase[];
-  topics: any[]; // Topic interface
+  topics: any[];
+  story?: Story;
 }
 
 export interface ResolverResult {
@@ -34,64 +35,89 @@ export class AssetResolverChain {
     };
 
     // 1. Resolve Primary Entities
+    const primaryRefs: AssetReference[] = [];
     for (const entity of context.primaryEntities) {
       const asset = await this.resolveEntityAsset(entity, 'primary');
       if (asset) {
         const ref = this.createReference(asset, 'primary');
-        result.primary.push(ref);
+        primaryRefs.push(ref);
         this.categorizeAsset(ref, entity, result);
-        
-        // The first primary asset is a good candidate for Hero if none exists
-        if (!result.hero) {
-            result.hero = { ...ref, role: 'hero', priority: 'hero' };
+      }
+    }
+
+    // 2. Hero selection from primary entities
+    if (primaryRefs.length > 0) {
+      result.hero = { ...primaryRefs[0], role: 'hero', priority: 'hero' };
+      result.primary = primaryRefs;
+    }
+
+    // 3. If no hero from primary, try supporting entities
+    if (!result.hero) {
+      const supportingRefs: AssetReference[] = [];
+      for (const entity of context.supportingEntities) {
+        const asset = await this.resolveEntityAsset(entity, 'supporting');
+        if (asset) {
+          const ref = this.createReference(asset, 'supporting');
+          supportingRefs.push(ref);
+          this.categorizeAsset(ref, entity, result);
+        }
+      }
+      result.supporting = supportingRefs;
+      if (supportingRefs.length > 0) {
+        result.hero = { ...supportingRefs[0], role: 'hero', priority: 'hero' };
+      }
+    } else {
+      // Still resolve supporting entities for gallery
+      for (const entity of context.supportingEntities) {
+        const asset = await this.resolveEntityAsset(entity, 'supporting');
+        if (asset) {
+          const ref = this.createReference(asset, 'supporting');
+          result.supporting.push(ref);
+          this.categorizeAsset(ref, entity, result);
         }
       }
     }
 
-    // 2. Resolve Supporting Entities
-    for (const entity of context.supportingEntities) {
-      const asset = await this.resolveEntityAsset(entity, 'supporting');
-      if (asset) {
-        const ref = this.createReference(asset, 'supporting');
-        result.supporting.push(ref);
-        this.categorizeAsset(ref, entity, result);
+    // 4. Story-level fallback if no hero from entities
+    if (!result.hero && context.story) {
+      const intelligence = getServices().intelligence;
+      const mediaItem = await intelligence.resolveImageForStory(context.story);
+      if (mediaItem) {
+        const asset = this.mediaItemToAsset(mediaItem, 'story-fallback', 'hero');
+        const ref = this.createReference(asset, 'hero');
+        result.hero = { ...ref, role: 'hero', priority: 'hero' };
       }
     }
 
-    // 3. Deduplicate
+    // 5. Deduplicate
     this.deduplicate(result);
 
-    // 4. Build Gallery
+    // 6. Build Gallery — hero excluded to avoid double injection
     result.gallery = [
-        ...(result.hero ? [result.hero] : []),
         ...result.primary,
         ...result.supporting
     ];
-    // Deduplicate gallery again just in case
     result.gallery = this.deduplicateList(result.gallery);
 
     return result;
   }
 
   private async resolveEntityAsset(entity: EntityBase, role: string): Promise<AssetBase | null> {
-    // Check if we have an intelligence service
     const intelligence = getServices().intelligence;
-    
-    // Convert entity to a query. We use the name or slug.
     const query = entity.name || entity.slug;
-    
-    // Here we'd call the ranking engine. For now, we fallback to fetchOfficialImage.
-    // fetchOfficialImage currently returns MediaItem. Let's adapt it or assume it returns MediaItem that we map to AssetBase.
     const mediaItem = await intelligence.fetchOfficialImage(query);
     if (!mediaItem) return null;
+    return this.mediaItemToAsset(mediaItem, entity.id, role);
+  }
 
-    // Map MediaItem to AssetBase
-    const asset: AssetBase = {
-      id: mediaItem.id,
-      slug: mediaItem.id,
-      type: entity.type === 'organization' ? 'logo' : (entity.type === 'person' ? 'image' : 'image'),
-      title: mediaItem.caption || entity.name,
-      altText: mediaItem.alt || entity.name,
+  private mediaItemToAsset(mediaItem: import('@/types/canonical').MediaItem, entityId: string, role: string): AssetBase {
+    const type = role === 'hero' ? 'image' : 'image';
+    return {
+      id: `${entityId}-${role}`,
+      slug: `${entityId}-${role}`,
+      type,
+      title: mediaItem.caption || entityId,
+      altText: mediaItem.alt || entityId,
       metadata: {
         mimeType: 'image/jpeg',
         aiGenerated: mediaItem.isAiGenerated || false,
@@ -106,7 +132,7 @@ export class AssetResolverChain {
       optimization: {
         cdnUrl: mediaItem.src
       },
-      relationships: { entities: [{ id: entity.id, role }], topics: [], stories: [], collections: [] },
+      relationships: { entities: [{ id: entityId, role }], topics: [], stories: [], collections: [] },
       currentVersion: 1,
       versions: [],
       usageGraph: { stories: [], topics: [], entities: [], homepages: [], newsletters: [], collections: [] },
@@ -116,8 +142,6 @@ export class AssetResolverChain {
       verificationStatus: 'verified',
       uploadedAt: new Date().toISOString()
     };
-
-    return asset;
   }
 
   private createReference(asset: AssetBase, role: string): AssetReference {
@@ -135,7 +159,7 @@ export class AssetResolverChain {
     } else if (entity.type === 'person') {
       result.portraits.push(ref);
     } else if (entity.type === 'country') {
-      result.maps.push(ref); // Naive mapping for now
+      result.maps.push(ref);
     }
   }
 
@@ -151,9 +175,10 @@ export class AssetResolverChain {
     const seen = new Set<string>();
     return list.filter(ref => {
       const url = ref.resolvedAsset?.optimization.cdnUrl;
-      if (!url) return false;
-      if (seen.has(url)) return false;
-      seen.add(url);
+      if (!url) return true;
+      const key = `${ref.role}:${url}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
       return true;
     });
   }

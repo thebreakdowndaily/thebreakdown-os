@@ -26,7 +26,7 @@ const nextConfig = {
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://thebreakdown.in https://www.googletagmanager.com https://static.cloudflareinsights.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https://thebreakdown.in https://placehold.co https://*.supabase.co",
+      "img-src 'self' data: https://thebreakdown.in https://placehold.co https://upload.wikimedia.org https://*.supabase.co",
       "font-src 'self' data:",
       "connect-src 'self' https://thebreakdown.in https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://*.ingest.sentry.io https://*.supabase.co https://*.supabase.in",
       "worker-src 'self' blob:",

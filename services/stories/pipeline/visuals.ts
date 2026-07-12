@@ -15,7 +15,8 @@ export class VisualIntelligenceBuilder implements StoryBuilder {
       storySlug: story.raw.slug,
       primaryEntities,
       supportingEntities,
-      topics
+      topics,
+      story: story.raw
     };
 
     const visualAssets = await this.resolverChain.resolve(context);

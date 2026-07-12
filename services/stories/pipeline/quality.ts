@@ -7,7 +7,7 @@ export class QualityBuilder implements StoryBuilder {
     
     // Checklists
     const checklist = {
-      heroImage: !!visuals?.hero && !visuals.hero.resolvedAsset?.optimization.cdnUrl.includes('/placeholders/'),
+      heroImage: !!visuals?.hero && !visuals.hero.resolvedAsset?.optimization.cdnUrl.includes('placehold.co'),
       summary: !!raw.summary && raw.summary.length > 10,
       timeline: !!story.unifiedTimeline && story.unifiedTimeline.length > 0,
       evidence: !!raw.claims && raw.claims.length > 0,
