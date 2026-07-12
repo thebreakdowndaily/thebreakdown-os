@@ -3,7 +3,7 @@ import type { MediaItem, Story } from '@/types/canonical';
 
 export interface ImageIntelligenceService {
   resolveImageForStory(story: Story): Promise<MediaItem | null>;
-  fetchOfficialImage(query: string): Promise<MediaItem | null>;
+  fetchOfficialImage(query: string, context?: string[]): Promise<MediaItem | null>;
   generateAIImage(prompt: string): Promise<MediaItem | null>;
 }
 
@@ -11,8 +11,10 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
   private imageCache = new Map<string, MediaItem | null>();
 
   async resolveImageForStory(story: Story): Promise<MediaItem | null> {
+    const context = story.tags?.length ? story.tags : undefined;
+    // Use entity as primary query + tags as context for story-aware Wikipedia search
     const query = story.relatedEntityIds.length > 0 ? story.relatedEntityIds[0] : story.title;
-    let image = await this.fetchOfficialImage(query);
+    let image = await this.fetchOfficialImage(query, context);
     
     if (!image) {
       console.log(`[ImageIntelligence] No authentic image found for '${query}'. Falling back to AI generation.`);
@@ -27,14 +29,18 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
     return image;
   }
 
-  async fetchOfficialImage(query: string): Promise<MediaItem | null> {
-    const cacheKey = `official:${query}`;
+  async fetchOfficialImage(query: string, context?: string[]): Promise<MediaItem | null> {
+    // Form a story-aware search query: use the first relevant tag as context
+    const searchTerms = context?.length
+      ? `${query} ${context[0]}`
+      : query;
+    const cacheKey = `official:${searchTerms}`;
     if (this.imageCache.has(cacheKey)) {
       return this.imageCache.get(cacheKey) || null;
     }
 
     try {
-      const cleanQuery = query.replace(/-/g, ' ');
+      const cleanQuery = searchTerms.replace(/-/g, ' ');
       
       console.log(`[ImageIntelligence] Fetching official image from Wikimedia for: ${cleanQuery}`);
       
@@ -67,7 +73,7 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
       }
 
       const mediaItem: MediaItem = {
-        id: `wiki-${query}-${pageId}`,
+        id: `wiki-${searchTerms}-${pageId}`,
         type: 'image',
         src: page.thumbnail.source,
         alt: `Official image for ${firstResult.title}`,

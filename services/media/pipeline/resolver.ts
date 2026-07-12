@@ -7,6 +7,7 @@ export interface ResolverContext {
   supportingEntities: EntityBase[];
   topics: any[];
   story?: Story;
+  storyContext?: string[];
 }
 
 export interface ResolverResult {
@@ -37,7 +38,7 @@ export class AssetResolverChain {
     // 1. Resolve Primary Entities
     const primaryRefs: AssetReference[] = [];
     for (const entity of context.primaryEntities) {
-      const asset = await this.resolveEntityAsset(entity, 'primary');
+      const asset = await this.resolveEntityAsset(entity, 'primary', context.storyContext);
       if (asset) {
         const ref = this.createReference(asset, 'primary');
         primaryRefs.push(ref);
@@ -55,7 +56,7 @@ export class AssetResolverChain {
     if (!result.hero) {
       const supportingRefs: AssetReference[] = [];
       for (const entity of context.supportingEntities) {
-        const asset = await this.resolveEntityAsset(entity, 'supporting');
+        const asset = await this.resolveEntityAsset(entity, 'supporting', context.storyContext);
         if (asset) {
           const ref = this.createReference(asset, 'supporting');
           supportingRefs.push(ref);
@@ -69,7 +70,7 @@ export class AssetResolverChain {
     } else {
       // Still resolve supporting entities for gallery
       for (const entity of context.supportingEntities) {
-        const asset = await this.resolveEntityAsset(entity, 'supporting');
+        const asset = await this.resolveEntityAsset(entity, 'supporting', context.storyContext);
         if (asset) {
           const ref = this.createReference(asset, 'supporting');
           result.supporting.push(ref);
@@ -102,10 +103,13 @@ export class AssetResolverChain {
     return result;
   }
 
-  private async resolveEntityAsset(entity: EntityBase, role: string): Promise<AssetBase | null> {
+  private async resolveEntityAsset(entity: EntityBase, role: string, context?: string[]): Promise<AssetBase | null> {
     const intelligence = getServices().intelligence;
     const query = entity.name || entity.slug;
-    const mediaItem = await intelligence.fetchOfficialImage(query);
+    // Pass story context for more specific Wikipedia search
+    const mediaItem = context?.length
+      ? await intelligence.fetchOfficialImage(query, context)
+      : await intelligence.fetchOfficialImage(query);
     if (!mediaItem) return null;
     return this.mediaItemToAsset(mediaItem, entity.id, role);
   }

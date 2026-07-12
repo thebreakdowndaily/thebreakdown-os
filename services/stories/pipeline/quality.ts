@@ -1,13 +1,25 @@
 import { KnowledgeStory, StoryBuilder } from './builder';
 
+type ImageQualityTier = 'authentic_entity' | 'story_fallback' | 'placeholder' | 'none';
+
+function getImageTier(asset: any): ImageQualityTier {
+  if (!asset?.resolvedAsset) return 'none';
+  const src = asset.resolvedAsset.optimization?.cdnUrl || asset.resolvedAsset.src || '';
+  if (src.includes('placehold.co')) return 'placeholder';
+  if (asset.resolvedAsset.id?.startsWith('story-fallback')) return 'story_fallback';
+  return 'authentic_entity';
+}
+
 export class QualityBuilder implements StoryBuilder {
   async build(story: KnowledgeStory): Promise<KnowledgeStory> {
     const raw = story.raw;
     const visuals = story.visualAssets;
+    const heroTier = getImageTier(visuals?.hero);
     
     // Checklists
     const checklist = {
-      heroImage: !!visuals?.hero && !visuals.hero.resolvedAsset?.optimization.cdnUrl.includes('placehold.co'),
+      heroImage: heroTier !== 'none' && heroTier !== 'placeholder',
+      heroImageQuality: heroTier,
       summary: !!raw.summary && raw.summary.length > 10,
       timeline: !!story.unifiedTimeline && story.unifiedTimeline.length > 0,
       evidence: !!raw.claims && raw.claims.length > 0,
@@ -17,13 +29,14 @@ export class QualityBuilder implements StoryBuilder {
       relatedEntities: !!raw.relatedEntityIds && raw.relatedEntityIds.length > 0,
       gallery: !!visuals?.gallery && visuals.gallery.length > 0,
       metadata: !!raw.tags && raw.tags.length > 0,
-      schema: true, // Assuming SEO/Schema is injected if published
-      socialImage: !!visuals?.hero // Assume hero is social image for now
+      schema: true,
+      socialImage: !!visuals?.hero
     };
 
     // Sub-scores
     let visualScore = 100;
-    if (!checklist.heroImage) visualScore -= 50;
+    if (heroTier === 'none' || heroTier === 'placeholder') visualScore -= 50;
+    else if (heroTier === 'story_fallback') visualScore -= 15;
     if (!checklist.gallery) visualScore -= 20;
     if (!visuals?.portraits?.length) visualScore -= 10;
     
@@ -41,10 +54,8 @@ export class QualityBuilder implements StoryBuilder {
     if (!checklist.metadata) seoScore -= 10;
     
     let accessibilityScore = 100;
-    // Mock accessibility check for image alt text presence
     if (visuals?.hero && !visuals.hero.resolvedAsset?.altText) accessibilityScore -= 30;
 
-    // Averages and bounds
     const clamp = (val: number) => Math.max(0, Math.min(100, val));
     visualScore = clamp(visualScore);
     evidenceScore = clamp(evidenceScore);
@@ -56,7 +67,8 @@ export class QualityBuilder implements StoryBuilder {
     const overallScore = Math.round((visualScore + evidenceScore + sourcesScore + timelineScore + seoScore + accessibilityScore) / 6);
 
     const issues = [];
-    if (!checklist.heroImage) issues.push({ level: 'Critical', message: 'Missing Hero Image' });
+    if (heroTier === 'none' || heroTier === 'placeholder') issues.push({ level: 'Critical', message: 'Missing Hero Image' });
+    else if (heroTier === 'story_fallback') issues.push({ level: 'Minor', message: 'Hero image sourced from story-level fallback, not primary entity' });
     if (!checklist.timeline) issues.push({ level: 'Important', message: 'Missing Timeline' });
     if (!checklist.sources) issues.push({ level: 'Critical', message: 'Missing Sources' });
     if (!checklist.faq) issues.push({ level: 'Minor', message: 'Missing FAQ' });
