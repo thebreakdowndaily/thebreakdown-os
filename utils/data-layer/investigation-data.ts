@@ -36,6 +36,7 @@ function chapterStory(slug: string, ch: typeof ngChapters[0], extra: Partial<API
     evidenceScore: 88,
     category: 'environment',
     tags: ['Namami Gange', 'river pollution', 'Ganga', 'water governance', 'investigation'],
+    primaryEntityId: 'nmcg',
     relatedTopicIds: ['environment', 'governance', 'policy', 'infrastructure'],
     keyPoints: [],
     timeline: [],

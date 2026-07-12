@@ -30,6 +30,14 @@ export class EntityBuilder implements StoryBuilder {
     );
     const relatedEntities = entityResults.filter((e): e is EntityBase => !!e);
 
+    // If primaryEntityId is set, use it as primary; rest are supporting
+    if (s.primaryEntityId) {
+      const primary = relatedEntities.find(e => e.id === s.primaryEntityId || e.slug === s.primaryEntityId) || null;
+      const supporting = relatedEntities.filter(e => e !== primary);
+      story.resolvedEntities = { primary, supporting };
+      return story;
+    }
+
     // Rank entities: prefer persons, high-evidence, headline-matched
     const headlineTokens = new Set(s.headline.toLowerCase().split(/\s+/));
     const ranked = [...relatedEntities].sort(

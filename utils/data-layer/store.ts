@@ -56,6 +56,7 @@ function seed(): DataStore {
     evidenceScore: 92,
     category: 'economy',
     tags: ['MGNREGA', 'rural employment', 'policy analysis', 'social schemes', 'NREGA'],
+    primaryEntityId: 'ministry-of-rural-development',
     relatedTopicIds: ['economy', 'policy', 'agriculture', 'employment'],
     keyPoints: [
       'MGNREGA completed 20 years of operation in 2026',
@@ -117,6 +118,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'technology',
     tags: ['UPI', 'digital payments', 'rural India', 'fintech', 'NPCI'],
+    primaryEntityId: 'npci',
     relatedTopicIds: ['economy', 'technology', 'digital-payments', 'agriculture'],
     keyPoints: [
       'UPI transactions in rural areas grew 400% since 2023',
@@ -167,6 +169,7 @@ function seed(): DataStore {
     evidenceScore: 97,
     category: 'policy',
     tags: ['crop insurance', 'agriculture', 'farmer welfare', 'PMFBY'],
+    primaryEntityId: 'ministry-of-agriculture',
     relatedTopicIds: ['policy', 'agriculture'],
     keyPoints: [
       'Over 40% of claims delayed beyond 60 days in 4 states',
@@ -233,6 +236,7 @@ function seed(): DataStore {
     evidenceScore: 85,
     category: 'technology',
     tags: ['semiconductor', 'PLI', 'manufacturing', 'electronics', 'Make in India'],
+    primaryEntityId: 'ministry-of-finance',
     relatedTopicIds: ['technology', 'employment', 'semiconductor', 'geopolitics'],
     keyPoints: [
       '₹1.2 lakh crore expanded PLI scheme covers full semiconductor value chain',
@@ -276,8 +280,8 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development',image: '/images/entities/ministry-of-rural-development.jpg',  type: 'organization', description: 'Nodal ministry.' },
-      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization', description: 'Nodal ministry for PLI schemes.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -297,6 +301,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'policy',
     tags: ['data protection', 'privacy', 'DPDP Act', 'technology regulation', 'digital rights'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['technology', 'cybersecurity', 'policy'],
     keyPoints: [
       'Supreme Court declared right to privacy a fundamental right in 2017',
@@ -353,6 +358,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'economy',
     tags: ['RBI', 'repo rate', 'monetary policy', 'inflation', 'interest rates'],
+    primaryEntityId: 'rbi',
     relatedTopicIds: ['economy'],
     keyPoints: [
       'Repo rate at 6.50% after cumulative 250 bps hike since May 2022',
@@ -411,6 +417,7 @@ function seed(): DataStore {
     evidenceScore: 87,
     category: 'environment',
     tags: ['climate change', 'renewable energy', 'climate finance', 'net zero', 'COP'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['environment', 'geopolitics'],
     keyPoints: [
       'India requires ₹11 lakh crore annually to meet climate goals by 2030',
@@ -472,6 +479,7 @@ function seed(): DataStore {
     evidenceScore: 83,
     category: 'policy',
     tags: ['education', 'budget', 'NEP 2020', 'learning outcomes', 'policy analysis'],
+    primaryEntityId: 'ministry-of-education',
     relatedTopicIds: ['policy', 'education', 'health'],
     keyPoints: [
       'Education budget increased 40% over 5 years to ₹1.48 lakh crore',
@@ -505,7 +513,8 @@ function seed(): DataStore {
       { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment', summary: 'Two decades of India\'s flagship rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
+      { id: 'ministry-of-education', slug: 'ministry-of-education', name: 'Ministry of Education', type: 'organization', description: 'Nodal ministry for education policy.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -525,6 +534,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'environment',
     tags: ['groundwater', 'water crisis', 'agriculture', 'irrigation', 'water policy'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['environment', 'agriculture'],
     keyPoints: [
       '62% of districts report critical or over-exploited groundwater levels',
@@ -584,6 +594,7 @@ function seed(): DataStore {
     evidenceScore: 86,
     category: 'economy',
     tags: ['PDS', 'digitization', 'Aadhaar', 'food security', 'One Nation One Ration Card'],
+    primaryEntityId: 'ministry-of-rural-development',
     relatedTopicIds: ['economy', 'policy', 'agriculture'],
     keyPoints: [
       'PDS leakage rate reduced from 40% to under 10% through digitization',
@@ -642,6 +653,7 @@ function seed(): DataStore {
     evidenceScore: 84,
     category: 'health',
     tags: ['ICDS', 'anganwadi', 'nutrition', 'child development', 'women empowerment', 'health policy'],
+    primaryEntityId: 'ministry-of-women-and-child-development',
     relatedTopicIds: ['health', 'policy'],
     keyPoints: [
       'India operates 14 lakh anganwadi centres serving 10 crore beneficiaries',
@@ -708,6 +720,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'economy',
     tags: ['supply chain', 'China+1', 'manufacturing', 'FDI', 'infrastructure', 'Make in India'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['economy', 'semiconductor', 'infrastructure', 'geopolitics'],
     keyPoints: [
       'India attracted $85 billion in FDI between 2023 and 2026 from supply chain relocation',
@@ -780,6 +793,7 @@ function seed(): DataStore {
     evidenceScore: 89,
     category: 'environment',
     tags: ['ethanol', 'E20', 'biofuel', 'energy policy', 'consumer rights', 'food security', 'greenlash'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['environment', 'agriculture'],
     keyPoints: [
       'India achieved 20% ethanol blending target by April 2025, five years ahead of the 2030 deadline',
@@ -854,6 +868,7 @@ function seed(): DataStore {
     evidenceScore: 94,
     category: 'policy',
     tags: ['EWS quota', 'UPSC', 'reservation', 'civil services', 'constitutional law', 'social justice'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['policy', 'education'],
     keyPoints: [
       '104 candidates selected under EWS quota in Civil Services 2025 — 10.9% of total 958 selections',
@@ -926,6 +941,7 @@ function seed(): DataStore {
     evidenceScore: 89,
     category: 'politics',
     tags: ['US-Iran', 'nuclear deal', 'JCPOA', 'Middle East', 'sanctions', 'geopolitics'],
+    primaryEntityId: 'un',
     relatedTopicIds: ['geopolitics', 'policy'],
     keyPoints: [
       '2026 Vienna talks aim to restore JCPOA with enhanced verification protocols',
@@ -993,6 +1009,7 @@ function seed(): DataStore {
     evidenceScore: 93,
     category: 'policy',
     tags: ['education', 'learning outcomes', 'ASER', 'NEP 2020', 'school education', 'teacher training'],
+    primaryEntityId: 'un',
     relatedTopicIds: ['policy', 'education'],
     keyPoints: [
       'Near-universal enrolment (97%) at primary level masks a learning crisis',
@@ -1066,6 +1083,7 @@ function seed(): DataStore {
     evidenceScore: 94,
     category: 'economy',
     tags: ['inequality', 'wealth gap', 'Gini coefficient', 'economic policy', 'income distribution', 'taxation'],
+    primaryEntityId: 'rbi',
     relatedTopicIds: ['economy', 'policy'],
     keyPoints: [
       'Top 1% owns 40.1% of national wealth, among the highest globally',
@@ -1143,6 +1161,7 @@ function seed(): DataStore {
     evidenceScore: 92,
     category: 'politics',
     tags: ['India-China', 'border dispute', 'Galwan', 'LAC', 'military standoff', 'geopolitics', 'Asia'],
+    primaryEntityId: 'un',
     relatedTopicIds: ['geopolitics', 'policy'],
     keyPoints: [
       '60,000 troops deployed on each side of LAC, highest since 1962 war',
@@ -1215,6 +1234,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'politics',
     tags: ['foreign policy', 'multi-alignment', 'India-US', 'India-Russia', 'Global South', 'UNSC', 'neighbourhood first'],
+    primaryEntityId: 'un',
     relatedTopicIds: ['geopolitics', 'policy'],
     keyPoints: [
       'India\'s foreign policy evolved from non-alignment to multi-alignment and strategic autonomy',
@@ -1315,6 +1335,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'policy',
     tags: ['Satluj', 'Diljit Dosanjh', 'Jaswant Singh Khalra', 'CBFC', 'censorship', 'freedom of speech', 'OTT regulation', 'Punjab militancy', 'human rights'],
+    primaryEntityId: 'india',
     keyPoints: [
       'Satluj was released on ZEE5 on July 3, 2026 and removed within 48 hours after I&B Ministry cited security concerns under IT Rules 2021',
       'The film faced 127 CBFC-demanded cuts, including removing Jaswant Singh Khalra\'s name and renaming "Punjab Police" to just "Police"',
@@ -1392,6 +1413,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'geopolitics',
     tags: ['India-US relations', 'defence partnership', 'iCET', 'QUAD', 'H1B', 'trade', 'Indo-Pacific'],
+    primaryEntityId: 'quad',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India-US bilateral trade crossed $200 billion in 2025, making the US India\'s largest trading partner',
@@ -1466,6 +1488,7 @@ function seed(): DataStore {
     evidenceScore: 87,
     category: 'geopolitics',
     tags: ['India-Indonesia', 'maritime security', 'ASEAN', 'Indo-Pacific', 'trade', 'Act East'],
+    primaryEntityId: 'bimstec',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India and Indonesia upgraded ties to Comprehensive Strategic Partnership during PM Modi\'s Jakarta visit in 2025',
@@ -1535,6 +1558,7 @@ function seed(): DataStore {
     evidenceScore: 93,
     category: 'geopolitics',
     tags: ['India-China', 'LAC', 'Galwan', 'border dispute', 'trade deficit', 'South China Sea', 'BRI', 'Quad'],
+    primaryEntityId: 'sco',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'Since the Galwan Valley clash in June 2020, over 60,000 additional Chinese troops are deployed along the LAC in Eastern Ladakh',
@@ -1613,6 +1637,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'geopolitics',
     tags: ['India-EU', 'FTA', 'CBAM', 'trade', 'technology', 'strategic partnership', 'Russia-Ukraine'],
+    primaryEntityId: 'imf',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India-EU bilateral trade reached $135 billion in 2025, making the EU India\'s second-largest trading partner',
@@ -1686,6 +1711,7 @@ function seed(): DataStore {
     evidenceScore: 86,
     category: 'geopolitics',
     tags: ['India-UK', 'FTA', 'diaspora', 'Commonwealth', 'defence', 'migration', 'colonial history'],
+    primaryEntityId: 'commonwealth',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'India-UK bilateral trade reached $50 billion in 2025, with an FTA aimed at doubling this by 2030',
@@ -1757,6 +1783,7 @@ function seed(): DataStore {
     evidenceScore: 90,
     category: 'geopolitics',
     tags: ['India-Russia', 'defence', 'oil imports', 'Ukraine war', 'S-400', 'Kudankulam', 'BRICS', 'SCO'],
+    primaryEntityId: 'brics',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
       'Russia supplied 60-65% of India\'s military equipment historically, though this has declined to ~45% as India diversifies to US, France, and Israel',
@@ -1834,6 +1861,7 @@ function seed(): DataStore {
     evidenceScore: 94,
     category: 'technology',
     tags: ['data breach', 'Aadhaar', 'cybersecurity', 'ICMR', 'data privacy', 'DPDP Act', 'identity theft', 'dark web'],
+    primaryEntityId: 'cert-in',
     keyPoints: [
       '815 million (81.5 crore) Indian citizen records posted for sale on Breach Forums on October 9, 2023',
       'Data includes Aadhaar numbers, passport details, names, phone numbers, and addresses',
@@ -1933,6 +1961,7 @@ function seed(): DataStore {
     evidenceScore: 93,
     category: 'politics',
     tags: ['Mission 360', 'BJP', 'delimitation', 'women reservation', 'One Nation One Election', 'constitutional amendment', 'NDA', 'Lok Sabha', 'West Bengal', 'TMC', 'Suvendu Adhikari'],
+    primaryEntityId: 'election-commission',
     keyPoints: [
       'BJP\'s Mission 360 aims to secure a two-thirds Lok Sabha majority to pass constitutional amendments on delimitation, women\'s reservation, and One Nation One Election',
       'The Constitution (131st Amendment) Bill was defeated on April 17, 2026 — 298 for, 230 against, 54 short of the required 352 votes',
@@ -2034,6 +2063,7 @@ function seed(): DataStore {
     evidenceScore: 89,
     category: 'technology',
     tags: ['5G', 'telecom', 'Jio', 'Airtel', 'spectrum', 'digital India', 'broadband'],
+    primaryEntityId: 'india',
     keyPoints: [
       'India crossed 40 crore (400 million) 5G subscribers by mid-2026, the fastest 5G rollout by volume globally, achieving in 3.5 years what took China 5 years',
       'Average 5G download speed measured at 280 Mbps (Ookla), but average revenue per user remains below ₹200/month — the classic "more data, same revenue" trap',
@@ -2107,8 +2137,7 @@ function seed(): DataStore {
     headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'India\'s manufacturing opportunity amid global supply chain diversification.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India — the world\'s second-largest telecommunications market.' },
-      { id: 'rbi', slug: 'rbi', name: 'Reserve Bank of India', type: 'organization', description: 'India\'s central bank, regulates telecom payment systems and spectrum payment terms for telecom operators.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India — the world\'s second-largest telecommunications market.' },
     ],
   };
 
@@ -2130,6 +2159,7 @@ function seed(): DataStore {
     evidenceScore: 88,
     category: 'environment',
     tags: ['EV', 'electric vehicles', 'FAME', 'batteries', 'charging infrastructure', 'PLI', 'sustainable transport', 'lithium-ion', 'import dependency'],
+    primaryEntityId: 'ministry-of-finance',
     keyPoints: [
       'EV sales in India grew 4x in three years from 4.2 lakh units in 2021-22 to an estimated 38.4 lakh units in 2025-26',
       'Only 12,000 public charging stations operational against the FAME-II target of 46,000 — a gap of 74%',
@@ -2205,8 +2235,8 @@ function seed(): DataStore {
     headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'Battery supply chain as a critical component of India\'s manufacturing strategy.', publishedAt: '2026-08-01T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
     ],
     relatedEntities: [
-      { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
-      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization', description: 'Nodal ministry for PLI schemes and customs duty policy on battery imports.' },
+      { id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance', type: 'organization', description: 'Nodal ministry for FAME scheme and EV policy incentives.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
     ],
   };
 
@@ -2228,6 +2258,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'health',
     tags: ['Ayushman Bharat', 'PM-JAY', 'health insurance', 'universal health coverage', 'AB-PMJAY', 'NHPM', 'public health', 'health policy'],
+    primaryEntityId: 'who',
     keyPoints: [
       'AB-PMJAY covers 12.5 crore families (approximately 55 crore individuals) with ₹5 lakh annual health cover per family',
       'Over 6.2 crore hospitalizations recorded since September 2018 across 33 states and union territories',
@@ -2306,6 +2337,7 @@ function seed(): DataStore {
     evidenceScore: 95,
     category: 'policy',
     tags: ['electoral bonds', 'political funding', 'Supreme Court', 'Election Commission', 'BJP', 'campaign finance', 'corruption', 'anonymous donations', 'SBI', 'transparency'],
+    primaryEntityId: 'election-commission',
     keyPoints: [
       'Total electoral bonds worth ₹12,769 crore sold between April 2019 and February 2024 across 29 tranches',
       'BJP received ₹6,060 crore (47.5% of total) — more than all other parties combined',
@@ -2423,6 +2455,7 @@ function seed(): DataStore {
     evidenceScore: 93,
     category: 'health',
     tags: ['WHO', 'cancer', 'global health', 'IARC', 'oncology', 'public health', 'health inequality', 'non-communicable diseases', 'cancer prevention', 'universal health coverage'],
+    primaryEntityId: 'who',
     relatedTopicIds: ['health', 'geopolitics'],
     keyPoints: [
       '20.6 million people were diagnosed with cancer in 2024 — 19.5 million excluding non-melanoma skin cancer — and nearly 10 million died',
@@ -2592,6 +2625,7 @@ function seed(): DataStore {
     evidenceScore: 92,
     category: 'geopolitics',
     tags: ['US-Iran War', 'Strait of Hormuz', 'oil prices', 'energy security', 'Middle East', 'India energy', 'geopolitics', 'supply chain', 'Brent crude', 'modi diplomacy'],
+    primaryEntityId: 'un',
     relatedTopicIds: ['geopolitics', 'economy'],
     keyPoints: [
       'War began February 28 when Israel killed Supreme Leader Khamenei with US intelligence support, triggering a two-month air war and Iran\'s seizure of the Strait of Hormuz',
@@ -2730,6 +2764,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'economy',
     tags: ['EPF', 'EPS', 'EDLI', 'Social Security Code', 'retirement', 'labour code', 'EPFO', 'pension', 'India economy', 'provident fund'],
+    primaryEntityId: 'india',
     relatedTopicIds: ['economy', 'policy'],
     keyPoints: [
       'EPF Scheme 2026 replaces the 1952 scheme under the Code on Social Security, 2020 — the most consequential legal overhaul of India\'s retirement framework in 74 years',
@@ -2854,6 +2889,7 @@ function seed(): DataStore {
     evidenceScore: 91,
     category: 'health',
     tags: ['mental health', 'teen suicide', 'adolescent mental health', 'NCRB', 'education policy', 'public health', 'depression', 'bullying', 'India health crisis'],
+    primaryEntityId: 'who',
     relatedTopicIds: ['mental-health', 'education', 'policy', 'governance'],
     keyPoints: [
       'India reported 13,044 student suicides in 2023 — the highest ever recorded, a 36% rise from 2019',
@@ -2963,6 +2999,7 @@ function seed(): DataStore {
     evidenceScore: 89,
     category: 'employment',
     tags: ['gig workers', 'platform economy', 'gig worker rights', 'Karnataka Gig Workers Act', 'Code on Social Security', 'e-Shram', 'labour rights', 'unorganised sector', 'algorithmic management', 'India employment'],
+    primaryEntityId: 'ministry-of-labour',
     relatedTopicIds: ['employment', 'policy', 'governance'],
     keyPoints: [
       'India\'s gig workforce was 77 lakh in 2020-21 and is projected to reach 2.35 crore by 2029-30 (NITI Aayog)',
@@ -3068,6 +3105,7 @@ function seed(): DataStore {
     evidenceScore: 94,
     category: 'environment',
     tags: ['Namami Gange', 'river pollution', 'Ganga', 'water governance', 'CAG', 'sewage treatment', 'environment', 'NMCG', 'displacement', 'sand mining'],
+    primaryEntityId: 'nmcg',
     relatedTopicIds: ['environment', 'governance', 'policy', 'infrastructure'],
     keyPoints: [
       '524 projects sanctioned, 355 completed — but only 57% of sanctioned projects are fully operational',

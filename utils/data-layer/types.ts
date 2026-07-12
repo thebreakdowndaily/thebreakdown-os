@@ -29,6 +29,7 @@ export interface APIStory {
   charts: APIChart[];
   geoData?: APIGeoData;
   faq: APIFAQItem[];
+  primaryEntityId?: string;
   relatedTopicIds?: string[];
   relatedEntityIds?: string[];
   relatedStories: APIRelatedStory[];

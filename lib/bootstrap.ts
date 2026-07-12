@@ -202,6 +202,7 @@ export function apiStoryToCanonical(s: APIStory): Story {
     sources: mappedSources,
     claims: mappedClaims,
     author: typeof s.author === 'string' ? s.author : (s.author?.name || ''),
+    primaryEntityId: s.primaryEntityId,
     relatedStoryIds: (s.relatedStories || []).map((rs) => rs.slug),
     relatedEntityIds: (s.relatedEntities || []).map((re) => re.id || re.slug),
     relatedTopicIds: s.relatedTopicIds || [],

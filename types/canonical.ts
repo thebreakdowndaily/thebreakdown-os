@@ -106,6 +106,7 @@ export interface Story {
   timeline: TimelineEvent[];
   faq: FAQItem[];
   charts: ChartDef[];
+  primaryEntityId?: string;
   relatedStoryIds: string[];
   relatedEntityIds: string[];
   relatedTopicIds: string[];
