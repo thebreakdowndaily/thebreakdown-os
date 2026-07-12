@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
     author,
     category,
     status: body.status || 'draft',
+    storyType: body.storyType || 'standard',
     evidenceScore: body.evidenceScore || 0,
     readingTime: body.readingTime || 0,
     publishedAt,

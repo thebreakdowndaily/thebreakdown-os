@@ -13,6 +13,7 @@ export async function saveStoryAction(cmsStory: CMSStory) {
   
   const updatedStory: Story = {
     ...existing,
+    storyType: existing?.storyType || 'standard',
     id: cmsStory.id,
     title: cmsStory.title,
     slug: cmsStory.slug,

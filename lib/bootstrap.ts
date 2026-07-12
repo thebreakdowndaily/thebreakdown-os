@@ -1,10 +1,10 @@
-import { getStories, getTopics, getEntities, getTimelines, getFixes } from '@/utils/data-layer/store';
+import { getStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
 import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
-import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, StoryBlock, Source, Claim, TimelineEvent, FAQItem, ChartDef, ExistingSolution, GlobalExample, FixAction, FixMetric } from '@/types/canonical';
+import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, StoryBlock, Source, Claim, TimelineEvent, FAQItem, ChartDef, ExistingSolution, GlobalExample, FixAction, FixMetric, Investigation } from '@/types/canonical';
 import { seedDatasets } from '@/lib/datasets/seed-data';
-import type { APIStory, APITopic, APIEntity, APITimeline, APIFix } from '@/utils/data-layer/types';
+import type { APIStory, APITopic, APIEntity, APITimeline, APIFix, APIInvestigation } from '@/utils/data-layer/types';
 
 export function bootstrapServices(): Services {
   try { return getServices(); } catch {}
@@ -14,15 +14,17 @@ export function bootstrapServices(): Services {
   const apiEntities = getEntities({ pageSize: 100 }).data;
   const apiTimelines = getTimelines({ pageSize: 100 }).data;
   const apiFixes = getFixes({ pageSize: 100 }).data;
+  const apiInvestigations = getInvestigations();
 
   const stories = apiStories.map(apiStoryToCanonical);
   const topics = apiTopics.map(apiTopicToCanonical);
   const entities = apiEntities.map(apiEntityToCanonical);
   const timelines = apiTimelines.map(apiTimelineToCanonical);
   const fixes = apiFixes.map(apiFixToCanonical);
+  const investigations = apiInvestigations.map(apiInvestigationToCanonical);
   const media: MediaItem[] = [];
 
-  const services = initDefaultServices(stories, topics, entities, timelines, fixes, seedDatasets, media);
+  const services = initDefaultServices(stories, topics, entities, timelines, fixes, seedDatasets, media, investigations);
   services.search.rebuild(stories, topics, entities, timelines, fixes, seedDatasets);
   return services;
 }
@@ -195,6 +197,7 @@ export function apiStoryToCanonical(s: APIStory): Story {
     title: s.headline,
     createdAt: s.publishedAt,
     status: 'published',
+    storyType: s.storyType || 'standard',
     blocks,
     sources: mappedSources,
     claims: mappedClaims,
@@ -243,6 +246,37 @@ export function apiTimelineToCanonical(t: APITimeline): Timeline {
     createdAt: '',
     repo: undefined,
   } as unknown as Timeline;
+}
+
+export function apiInvestigationToCanonical(i: APIInvestigation): Investigation {
+  return {
+    id: i.id,
+    slug: i.slug,
+    title: i.title,
+    subtitle: i.subtitle,
+    summary: i.summary,
+    heroImage: i.heroImage || '',
+    publishedAt: i.publishedAt,
+    updatedAt: i.updatedAt,
+    status: 'published',
+    chapters: (i.chapters || []).map((ch) => ({
+      id: ch.id,
+      slug: ch.slug,
+      storySlug: ch.storySlug,
+      title: ch.title,
+      subtitle: ch.subtitle,
+      summary: ch.summary,
+      order: ch.order,
+    })),
+    keyFindings: i.keyFindings || [],
+    tags: i.tags || [],
+    relatedEntityIds: [],
+    relatedTopicIds: [],
+    sources: (i.sources || []).map((src): Source => ({ title: src.name, url: src.url, accessedAt: '', tier: src.tier as any })),
+    faq: (i.faq || []).map((q): FAQItem => ({ question: q.question, answer: q.answer })),
+    timeline: (i.timeline || []).map((e): TimelineEvent => ({ date: e.date, title: e.title, description: e.description, sourceUrl: e.source })),
+    statistics: (i.facts || []).map((f) => ({ label: f.label, value: f.value })),
+  } as Investigation;
 }
 
 export function apiFixToCanonical(f: APIFix): Fix {

@@ -2,8 +2,8 @@ import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
 import { initDefaultServices } from '@/services/init';
 import { RepositoryFactory } from '@/services/factory/repository';
-import { getStories, getTopics, getEntities, getTimelines, getFixes } from '@/utils/data-layer/store';
-import { apiStoryToCanonical, apiTopicToCanonical, apiEntityToCanonical, apiTimelineToCanonical, apiFixToCanonical } from '@/lib/bootstrap';
+import { getStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
+import { apiStoryToCanonical, apiTopicToCanonical, apiEntityToCanonical, apiTimelineToCanonical, apiFixToCanonical, apiInvestigationToCanonical } from '@/lib/bootstrap';
 import { seedDatasets } from '@/lib/datasets/seed-data';
 
 export async function bootstrapServices(): Promise<Services> {
@@ -14,17 +14,19 @@ export async function bootstrapServices(): Promise<Services> {
   const apiEntities = getEntities({ pageSize: 100 }).data;
   const apiTimelines = getTimelines({ pageSize: 100 }).data;
   const apiFixes = getFixes({ pageSize: 100 }).data;
+  const apiInvestigations = getInvestigations();
 
   const topics = apiTopics.map(apiTopicToCanonical);
   const entities = apiEntities.map(apiEntityToCanonical);
   const timelines = apiTimelines.map(apiTimelineToCanonical);
   const fixes = apiFixes.map(apiFixToCanonical);
+  const investigations = apiInvestigations.map(apiInvestigationToCanonical);
 
   // Stories from store.ts used for SSG path gen; at runtime,
   // RepositoryFactory will return SupabaseStoryRepository if DATA_PROVIDER=supabase
   const stories = apiStories.map(apiStoryToCanonical);
 
-  const services = initDefaultServices(stories, topics, entities, timelines, fixes, seedDatasets, []);
+  const services = initDefaultServices(stories, topics, entities, timelines, fixes, seedDatasets, [], investigations);
   services.search.rebuild(stories, topics, entities, timelines, fixes, seedDatasets);
   return services;
 }

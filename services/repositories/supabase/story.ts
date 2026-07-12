@@ -70,6 +70,7 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
     author: row.author || '',
     category: row.category || '',
     status: (row.status as import('@/types/canonical').StoryStatus) || 'draft',
+    storyType: 'standard' as import('@/types/canonical').StoryType,
     evidenceScore: row.evidence_score || 0,
     readingTime: row.reading_time || 0,
     publishedAt: row.published_at || '',

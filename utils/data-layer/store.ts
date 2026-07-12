@@ -7,10 +7,11 @@
  */
 
 import type {
-  APIStory, APIEntity, APITopic, APITimeline, APICountry, APIOrganization, APIFix,
+  APIStory, APIEntity, APITopic, APITimeline, APICountry, APIOrganization, APIFix, APIInvestigation,
   APIGraphQuery, APIGraphNode, APIGraphLink, APIStatistics,
   APIListResponse, APIRelatedEntity,
 } from './types';
+import { investigationChapterStories, namamiGangeInvestigation } from './investigation-data';
 
 /* ── Internal Store ────────────────────────────────────────────────── */
 
@@ -22,6 +23,7 @@ interface DataStore {
   organizations: Map<string, APIOrganization>;
   timelines: Map<string, APITimeline>;
   fixes: Map<string, APIFix>;
+  investigations: Map<string, APIInvestigation>;
 }
 
 let store: DataStore | null = null;
@@ -36,6 +38,7 @@ function seed(): DataStore {
   const organizations = new Map<string, APIOrganization>();
   const timelines = new Map<string, APITimeline>();
   const fixes = new Map<string, APIFix>();
+  const investigations = new Map<string, APIInvestigation>();
 
   // ── Stories ───────────────────────────────────────────────────────
 
@@ -3051,7 +3054,154 @@ function seed(): DataStore {
     ],
   };
 
+  const story38: APIStory = {
+    id: 'namami-gange-under-fire',
+    slug: 'namami-gange-under-fire',
+    headline: 'Namami Gange: Inside India\'s ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind',
+    summary: 'Twelve years and ₹26,824 crore into the government\'s flagship river rejuvenation programme, the Ganga is cleaner in stretches but remains biologically dead in 37. Sewage treatment plants that took a decade to build now discharge untreated waste. And the riverbank communities the programme was meant to serve have been displaced by the very infrastructure built in their name.',
+    heroImage: '/images/stories/namami-gange.jpg',
+    publishedAt: '2026-07-14T06:00:00Z',
+    updatedAt: '2026-07-14T06:00:00Z',
+    readingTime: 22,
+    wordCount: 7800,
+    author: { name: 'The Breakdown Investigations', bio: 'The Breakdown investigative desk.' },
+    evidenceScore: 94,
+    category: 'environment',
+    tags: ['Namami Gange', 'river pollution', 'Ganga', 'water governance', 'CAG', 'sewage treatment', 'environment', 'NMCG', 'displacement', 'sand mining'],
+    relatedTopicIds: ['environment', 'governance', 'policy', 'infrastructure'],
+    keyPoints: [
+      '524 projects sanctioned, 355 completed — but only 57% of sanctioned projects are fully operational',
+      'CAG audit (2025) found only 3-5 of 44 STPs inspected compliant with NGT norms; 12 STPs discharge untreated sewage directly',
+      '₹26,824 crore allocated since 2014, but fund utilisation remains at 53-82% depending on the metric',
+      'Mahakumbh 2025: faecal coliform at Sangam hit 49,000 MPN/100ml (safe: 2,500) — government did not inform pilgrims',
+      'Nishad, Mallah, and Kewat communities displaced by riverfront development; 8,000 boatmen threatened by luxury cruise vessels',
+      'Dolphin populations doubled to 6,324, but 37 river stretches remain biologically dead',
+    ],
+    timeline: [
+      { date: '1985-04-01', title: 'Ganga Action Plan Launched', description: 'First government effort to clean the Ganga, spending ₹1,700 crore over a decade with limited results.', source: 'MoEF' },
+      { date: '2009-07-01', title: 'World Bank Assessment', description: 'World Bank report finds GAP failed to achieve its objectives; only 30% of treatment capacity utilised.', source: 'World Bank' },
+      { date: '2014-06-07', title: 'Namami Gange Announced', description: 'PM Modi announces flagship programme from Varanasi with Rs. 20,000 crore outlay. "It is my destiny to serve Maa Ganga."', source: 'PIB' },
+      { date: '2015-05-13', title: 'Union Cabinet Approval', description: 'Cabinet approves Namami Gange as a flagship programme with Rs. 20,000 crore budget for five years.', source: 'PIB' },
+      { date: '2017-12-15', title: 'First CAG Report', description: 'CAG finds only 25% of allocated funds spent; water quality declined at most monitoring sites; faecal coliform far exceeds limits.', source: 'CAG Report No. 1 of 2018' },
+      { date: '2020-07-01', title: 'Phase II Extended to 2026', description: 'Namami Gange Mission-II approved with additional Rs. 22,500 crore, extending the programme to March 2026.', source: 'PIB' },
+      { date: '2022-12-14', title: 'UN Recognition', description: 'UNEP names Namami Gange one of 10 World Restoration Flagships at COP15 in Montreal.', source: 'UNEP' },
+      { date: '2023-07-15', title: 'Chamoli STP Accident', description: '16 workers die from electric shock at a Chamoli STP. CAG later finds mandatory safety audits were never conducted.', source: 'CAG Report 2025' },
+      { date: '2024-09-01', title: 'NGT Documents Sand Mining Scam', description: 'NGT joint committee documents politically protected mechanised sand mining operating in violation of orders across 7 UP districts.', source: 'NGT Orders' },
+      { date: '2025-01-15', title: 'Mahakumbh Faecal Coliform Crisis', description: 'CPCB finds faecal coliform at Sangam at 49,000 MPN/100ml — 20x safe limit. Government does not publicise the data.', source: 'CPCB Report to NGT' },
+      { date: '2025-03-13', title: 'CAG Report: Uttarakhand Failures', description: 'CAG reports Namami Gange failed in Uttarakhand: 44 STPs non-compliant, 12 discharging untreated waste, 18 not handed over.', source: 'CAG Report No. 2 of 2025' },
+      { date: '2026-03-23', title: 'Government Claims Progress', description: 'PIB announces 355 of 524 projects complete, 3,446 MLD capacity created, 33,024 hectares afforested, dolphin count at 6,324.', source: 'PIB' },
+    ],
+    facts: [
+      { label: 'Total Allocation (2014-2026)', value: '₹26,824.86 crore', source: 'PIB/Lok Sabha' },
+      { label: 'Sewage Treatment Capacity Created', value: '3,446 MLD', source: 'NMCG' },
+      { label: 'Projects Completed', value: '355 of 524 (68%)', source: 'PIB March 2026' },
+      { label: 'STPs Compliant with NGT Norms', value: '3-5 of 44 inspected', source: 'CAG Report 2025' },
+      { label: 'STPs Discharging Untreated Sewage', value: '12 of 44', source: 'CAG Report 2025' },
+      { label: 'Gangetic Dolphin Population', value: '6,324', source: 'WII Nationwide Survey 2021-23' },
+      { label: 'Faecal Coliform at Sangam (Jan 2025)', value: '49,000 MPN/100ml', source: 'CPCB Report to NGT' },
+      { label: 'Safe Bathing Limit', value: '2,500 MPN/100ml', source: 'CPCB Standards' },
+      { label: 'Biologically Dead Stretches (Priority I)', value: '37', source: 'CPCB 2025' },
+      { label: 'Traditional Boatmen Affected in Varanasi', value: '8,000', source: 'Frontline/Community Surveys' },
+      { label: 'Fund Utilisation (Forestry Interventions)', value: '16%', source: 'CAG Report 2025' },
+    ],
+    claims: [
+      { claim: 'Namami Gange has significantly improved water quality across the Ganga\'s main stem.', source: 'Government of India/PIB', verification: 'misleading', explanation: 'While BOD levels have improved at some stretches (e.g., Kannauj-Varanasi moved from PRS III to PRS V), 37 stretches remain in Priority I (biologically dead). Faecal coliform at Prayagraj during Mahakumbh 2025 was 20x the safe limit. CPCB itself stated water quality "was not conforming with primary water quality criteria for bathing at all monitored locations."', confidence: 0.9 },
+      { claim: 'Sewage treatment capacity has increased 30-fold since pre-2014 levels.', source: 'NMCG/PIB March 2025', verification: 'verified', explanation: 'NMCG has created 3,446 MLD of sewage treatment capacity, compared to approximately 100 MLD before 2014. However, only 60% of approved STP capacity is actually operational, and the CAG found 12 of 44 inspected STPs discharging untreated sewage directly into the river.', confidence: 0.85 },
+      { claim: 'The programme has successfully involved local communities in river conservation.', source: 'Government of India', verification: 'false', explanation: 'CAG Report 2025 found state government officials "failed to engage local residents, leading to improper utilisation (or complete non-utilisation) of sewage infrastructure." Frontline (May 2026) documented displacement of Nishad, Mallah, Kewat, and Bind communities. District Ganga Plans were not formulated in any district within the basin.', confidence: 0.92 },
+      { claim: 'The Ganga riverfront development benefits local river-dependent communities.', source: 'Government of India', verification: 'false', explanation: 'Luxury cruise vessels in Varanasi threaten 8,000 traditional boatmen and 50,000 Nishad dependents. Beautified ghats displaced informal settlements. Cremation ghats in Chamoli, Rudraprayag, Tehri, and Uttarkashi were built "without assessing local needs or cultural practices" and remain unused.', confidence: 0.9 },
+      { claim: 'Gangetic dolphin populations have more than doubled, indicating ecological recovery.', source: 'Wildlife Institute of India', verification: 'verified', explanation: 'Nationwide survey (2021-23) found 6,324 dolphins, up from an estimated 2,500-3,000 in 2009 and ~3,500 in 2015. Dolphin presence was confirmed in 10 tributaries where previously unrecorded. However, conservationists caution that dolphins concentrate in remaining clean stretches, masking continued degradation elsewhere.', confidence: 0.88 },
+      { claim: 'Funds under Namami Gange have been efficiently utilised.', source: 'Government of India', verification: 'false', explanation: 'The 2017 CAG found only 25% of funds spent. The 2025 CAG report on Uttarakhand found 16% utilisation for forestry interventions (Rs. 144 cr of Rs. 885 cr). Overall fund utilisation is estimated at 53-82% depending on metric. The PAC (2024) noted "overall expenditure was low compared to the allocated budget."', confidence: 0.93 },
+    ],
+    sources: [
+      // ── Government Audit Reports ───────────────────────────────
+      { name: 'CAG Report No. 2 of 2025: Performance Audit of Namami Gange in Uttarakhand', url: 'https://cag.gov.in/uploads/download_audit_report/2025/Report-No.-2-of-2025_Namami-Gange_UK_English-(04-07-2025)-069b020170bd314.74984302.pdf', type: 'government', tier: 1 },
+      { name: 'CAG Report No. 39 of 2017: Performance Audit of Rejuvenation of River Ganga (Namami Gange)', url: 'https://cag.gov.in/uploads/download_audit_report/2017/Report_No.39_of_2017_-_Performance_Audit_on_Ministry_of_Water_Resources,_River_Development_&_Ganga_Rejuvenation_Union_Government.pdf', type: 'government', tier: 1 },
+      { name: 'PAC 125th Report: Rejuvenation of River Ganga (Lok Sabha, Feb 2024)', url: 'https://loksabha.nic.in', type: 'government', tier: 1 },
+
+      // ── Government Press Releases & Official Data ──────────────
+      { name: 'PIB: Status of Namami Gange Programme (Mar 2026)', url: 'https://pib.gov.in/PressReleasePage.aspx?PRID=2244007', type: 'government', tier: 1 },
+      { name: 'PIB: Restoring the Divine Glory of River Ganga (Mar 2025)', url: 'https://www.pib.gov.in/PressReleasePage.aspx?PRID=2109118', type: 'government', tier: 1 },
+      { name: 'PIB: Allocation of Funds Under NMCG (Jul 2025)', url: 'https://pib.gov.in/PressReleasePage.aspx?PRID=2150722', type: 'government', tier: 1 },
+      { name: 'Ministry of Jal Shakti: Pollution in Ganga River (Dec 2025)', url: 'https://www.jalshakti-dowr.gov.in/static/uploads/2025/12/9f19eeb5c327c523bb9af86a310a45d8.pdf', type: 'government', tier: 1 },
+
+      // ── CPCB Water Quality Reports ─────────────────────────────
+      { name: 'CPCB: Polluted River Stretches for Restoration of Water Quality (Sep 2025)', url: 'https://avantiscdnprodstorage.blob.core.windows.net/legalupdatedocs/47384/CPCB-issued-a-Report-on-Polluted-River-Stretches-for-Restoration-of-Water-Quality-2025-SEP292025.pdf', type: 'government', tier: 1 },
+      { name: 'CPCB Report to NGT: Water Quality at Mahakumbh 2025 — Faecal Coliform at 49,000 MPN/100ml', url: 'https://cpcb.nic.in', type: 'government', tier: 1 },
+      { name: 'CPCB: National Water Quality Monitoring Programme Data 2025', url: 'https://cpcb.gov.in/nwmp-data-2025', type: 'government', tier: 2 },
+
+      // ── Newspaper Investigations ──────────────────────────────
+      { name: 'Frontline/Ankit Mishra: Namami Gange\'s Hidden Cost — Displacing Riverbank Communities (May 12, 2026)', url: 'https://frontline.thehindu.com/environment/namami-gange-displacement-riverbank-cleaning-up-river-restoration/article70955264.ece', type: 'news', tier: 1 },
+      { name: 'Frontline/Akshay Deshmane: Murky Waters — CAG Report Analysis (Apr 26, 2018)', url: 'https://frontline.thehindu.com/the-nation/murky-waters/article10008438.ece', type: 'news', tier: 1 },
+      { name: 'Economic Times/PTI: Namami Gange Failed to Deliver Results in Uttarakhand — CAG (Mar 13, 2026)', url: 'https://economictimes.indiatimes.com/news/india/namami-gange-failed-to-deliver-expected-results-in-uttarakhand-cag-report/articleshow/129558284.cms', type: 'news', tier: 2 },
+      { name: 'National Herald/Dhairya Maheshwari: Namami Gange — Why It Is a Failure (Oct 21, 2018)', url: 'https://www.nationalheraldindia.com/india/namami-gange-why-it-is-a-failure', type: 'news', tier: 2 },
+      { name: 'Times of India: Complete Failure in Cleaning Up Ganga — Congress Slams Govt (May 31, 2024)', url: 'https://timesofindia.indiatimes.com/india/complete-failure-in-cleaning-up-ganga-cong-slams-govt/articleshow/110584892.cms', type: 'news', tier: 2 },
+      { name: 'Down To Earth/DTE Staff: Namami Gange Plans Developed for 3 UP Districts — NGT Order (Jul 29, 2024)', url: 'https://www.downtoearth.org.in/governance/daily-court-digest-major-environment-orders-july-26-2024', type: 'news', tier: 2 },
+      { name: 'Down To Earth/DTE Staff: NGT Orders NMCG Director to Define Active Floodplain (Jan 14, 2025)', url: 'https://www.downtoearth.org.in/governance/daily-court-digest-major-environment-orders-january-13-2025', type: 'news', tier: 2 },
+      { name: 'Down To Earth: NGT Orders on Kanpur Tanneries Polluting Ganga (Sep 5, 2024)', url: 'https://www.downtoearth.org.in/environment/daily-court-digest-major-environment-orders-september-5-2024', type: 'news', tier: 2 },
+      { name: 'Bhaskar English: Ganga Water Quality Drops — CAG Flags Sewage in Assembly (Mar 11, 2026)', url: 'https://www.bhaskarenglish.in/local/uttarakhand/news/uttarakhand-assembly-water-quality-drops-ganga-cag-report-137405153.html', type: 'news', tier: 2 },
+      { name: 'ThePrint/PTI: Namami Gange Failed to Deliver in Uttarakhand — CAG (Mar 13, 2026)', url: 'https://theprint.in/india/namami-gange-failed-to-deliver-expected-results-in-uttarakhand-cag-report/2878404/', type: 'news', tier: 2 },
+
+      // ── International Recognition & Reports ────────────────────
+      { name: 'UNEP: World Restoration Flagships 2022 — Namami Gange Recognised at COP15', url: 'https://www.unep.org', type: 'international', tier: 1 },
+      { name: 'ResGov: Namami Gange Programme Performance Analysis (2025)', url: 'https://www.resgov.org/contents/reports/130_Namami%20Gange%20Programme.pdf', type: 'research', tier: 2 },
+      { name: 'cGanga/IIT Kanpur: Sewage Treatment Projects Under Namami Gange & GRBMP Perspective (Jul 2019)', url: 'https://cganga.org/wp-content/uploads/2025/10/cGanga-Report_STPs-under-NGP-GRBMP-Perspective_July-2019.pdf', type: 'research', tier: 2 },
+      { name: 'Wikipedia: Namami Gange Programme — Comprehensive References', url: 'https://en.wikipedia.org/wiki/Namami_Gange_Programme', type: 'reference', tier: 2 },
+
+      // ── Video / Visual Evidence ───────────────────────────────
+      { name: 'NMCG Official YouTube Channel — Namami Gange Documentaries & STP Footage', url: 'https://www.youtube.com/channel/UCdslrfFfeUDBQHNPDK6q8YQ', type: 'video', tier: 2 },
+      { name: 'PIB Photo Gallery — Ganga Rejuvenation: Before/After Images of Ghats & STPs', url: 'https://pib.gov.in', type: 'photo', tier: 2 },
+      { name: 'Down To Earth YouTube: Ganga Pollution Ground Reports', url: 'https://www.youtube.com/user/downtoearthindia', type: 'video', tier: 2 },
+
+      // ── NGO & Activist Sources ─────────────────────────────────
+      { name: 'SANDRP/Himanshu Thakkar: Ganga Governance Critiques & Research', url: 'https://sandrp.in', type: 'ngo', tier: 2 },
+      { name: 'cGanga: Centre for Ganga River Basin Management and Studies — IIT Kanpur', url: 'https://cganga.org', type: 'research', tier: 2 },
+    ],
+    charts: [
+      { type: 'bar', title: 'Budget Allocation vs Utilisation Under Namami Gange (₹ crore)', data: [
+        { category: 'Allocation (2014-2026)', amount: 26824.86 },
+        { category: 'Disbursed by NMCG', amount: 21340 },
+        { category: 'Sewage Treatment Projects', amount: 16025.97 },
+        { category: 'Forestry (Allocated)', amount: 885.91 },
+        { category: 'Forestry (Utilised)', amount: 144.27 },
+      ], xKey: 'category', yKey: 'amount' },
+      { type: 'bar', title: 'State-wise STP Completion (%)', data: [
+        { state: 'Haryana', pct: 100 }, { state: 'Delhi', pct: 100 },
+        { state: 'Himachal Pradesh', pct: 100 }, { state: 'Rajasthan', pct: 100 },
+        { state: 'Uttarakhand', pct: 80 }, { state: 'West Bengal', pct: 67 },
+        { state: 'Uttar Pradesh', pct: 50 }, { state: 'Bihar', pct: 46 },
+        { state: 'Jharkhand', pct: 6 }, { state: 'Madhya Pradesh', pct: 0 },
+      ], xKey: 'state', yKey: 'pct' },
+    ],
+    faq: [
+      { question: 'What is the Namami Gange Programme?', answer: 'Launched in June 2014 by PM Modi, it is the Government of India\'s flagship programme to clean and rejuvenate the Ganga river. Its eight pillars are: sewerage treatment infrastructure, river-front development, river-surface cleaning, biodiversity conservation, afforestation, public awareness, industrial effluent monitoring, and Ganga Gram (village sanitation).' },
+      { question: 'What is the total budget and how much has been spent?', answer: 'The total budgetary allocation from 2014-15 to 2025-26 is ₹26,824.86 crore, with an additional ₹3,400 crore budgeted for 2025-26. The total programme outlay (including future commitments under the Hybrid Annuity Model) is ₹42,500 crore. NMCG has disbursed ₹21,340 crore to implementing agencies as of March 2026.' },
+      { question: 'Has the water quality of the Ganga improved?', answer: 'Partially and unevenly. Dissolved oxygen levels are acceptable along most stretches. BOD has improved in certain sections (e.g., Kannauj-Varanasi improved from "Priority III" to "Priority V"). However, faecal coliform remains alarmingly high — at Prayagraj during Mahakumbh 2025 it reached 49,000 MPN/100ml (safe: 2,500). CPCB reports 37 stretches remain in Priority I (biologically dead). As of 2025, 75% of domestic and industrial waste is still dumped untreated.' },
+      { question: 'What did the CAG reports find?', answer: 'Two major CAG reports (2018 and 2025) found: only 25% of initial funds spent; water quality declined in early years; of 44 STPs inspected, only 3-5 met NGT norms; 12 STPs discharged untreated sewage directly; 18 STPs never handed over for maintenance; cremation ghats built without community consultation and left unused; District Ganga Plans never formulated; local communities not involved in planning.' },
+      { question: 'What happened to riverbank communities?', answer: 'Frontline (May 2026) documented displacement of Nishad, Mallah, Kewat, and Bind communities. Luxury cruise vessels in Varanasi threaten 8,000 traditional boatmen and 50,000 dependents. Sand mining bans criminalise small operators while politically connected mafia operates freely with mechanised equipment. The programme\'s Arth Ganga model prioritises tourism infrastructure over traditional livelihoods.' },
+      { question: 'Has the dolphin population really increased?', answer: 'Yes — the nationwide survey (2021-23) found 6,324 Gangetic dolphins, up from ~3,500 in 2015 and ~2,500 in 2009. Dolphin presence was confirmed in 10 tributaries where previously unrecorded. However, conservationists note dolphins concentrate in remaining clean stretches, which can mask overall degradation.' },
+    ],
+    relatedStories: [
+      { slug: 'groundwater-depletion', headline: 'India\'s Groundwater Crisis', summary: 'Water-intensive farming and policy gaps.', publishedAt: '2026-07-18T06:00:00Z', readingTime: 11, evidenceScore: 88, category: 'environment' },
+      { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: 'Flagship social scheme assessed.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
+      { slug: 'pm-fasal-bima-claims', headline: 'PM Fasal Bima Yojana: Claims That Never Reached Farmers', summary: 'Insurance scheme delivery gaps.', publishedAt: '2026-06-05T06:00:00Z', readingTime: 15, evidenceScore: 97, category: 'policy' },
+    ],
+    relatedEntities: [
+      { id: 'nmcg', slug: 'nmcg', name: 'National Mission for Clean Ganga', type: 'organization', description: 'Nodal agency implementing the Namami Gange Programme under the Ministry of Jal Shakti.' },
+      { id: 'ministry-of-jal-shakti', slug: 'ministry-of-jal-shakti', name: 'Ministry of Jal Shakti', type: 'organization', description: 'Union ministry responsible for water resources, river development, and Ganga rejuvenation.' },
+      { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General of India', type: 'organization', description: 'Constitutional audit authority that found systemic failures in Namami Gange implementation.' },
+      { id: 'cpcb', slug: 'cpcb', name: 'Central Pollution Control Board', type: 'organization', description: 'Statutory pollution regulator under the Ministry of Environment, Forest and Climate Change.' },
+      { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
+    ],
+  };
+
   stories.set(story37.slug, story37);
+  stories.set(story38.slug, story38);
+
+  // ── Investigation Chapter Stories ─────────────────────────────────
+  investigationChapterStories.forEach((ch) => stories.set(ch.slug, ch));
+
+  // ── Investigations ────────────────────────────────────────────────
+  investigations.set(namamiGangeInvestigation.slug, namamiGangeInvestigation);
 
   // ── Entities ──────────────────────────────────────────────────────
 
@@ -3134,6 +3284,70 @@ function seed(): DataStore {
       relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
       faq: [
         { question: 'What is the budget of the Ministry?', answer: 'The Ministry\'s annual budget is approximately ₹1.2 lakh crore.' },
+      ],
+    },
+    {
+      id: 'nmcg', slug: 'nmcg', name: 'National Mission for Clean Ganga',
+      type: 'organization', description: 'Nodal implementing agency of the Namami Gange Programme under the Ministry of Jal Shakti. Responsible for sewage treatment infrastructure, riverfront development, afforestation, biodiversity conservation, and industrial effluent monitoring across the Ganga basin.',
+      aliases: ['NMCG', 'Clean Ganga Mission', 'National Mission for Clean Ganga'], storyCount: 12, updatedAt: '2026-07-14T06:00:00Z',
+      image: '/images/entities/nmcg.jpg', evidenceScore: 65,
+      timeline: [
+        { date: '2011-08-12', title: 'NMCG Registered as Society', description: 'National Mission for Clean Ganga registered under Societies Registration Act as implementation arm of NGRBA.' },
+        { date: '2014-06-07', title: 'Namami Gange Launched', description: 'NMCG designated as nodal implementing agency for the flagship programme.' },
+        { date: '2016-10-07', title: 'NMCG Under National Ganga Council', description: 'NGRBA dissolved; NMCG placed under newly constituted National Ganga Council chaired by PM.' },
+        { date: '2022-12-14', title: 'UN World Restoration Flagship', description: 'Namami Gange recognised by UNEP as one of top 10 World Restoration Flagships at COP15.' },
+        { date: '2025-03-13', title: 'CAG Report Flags NMCG Implementation Failures', description: 'CAG finds NMCG projects in Uttarakhand non-compliant; 44 STPs inspected, only 3-5 meet NGT norms.' },
+      ],
+      datasets: [],
+      sources: [{ name: 'NMCG Official Website', url: 'https://nmcg.nic.in', type: 'government', description: 'Official portal with project dashboards and progress reports.' }],
+      statistics: { 'Projects Sanctioned': '524', 'Projects Completed': '355', 'STP Capacity Created': '3,446 MLD', 'Budget Allocated': '₹26,824 cr', 'Dolphin Population': '6,324' },
+      relatedStories: [{ slug: 'namami-gange-under-fire', headline: 'Namami Gange: Inside India\'s ₹27,000 Crore Fight to Clean the Ganga', summary: 'Investigative story on the programme\'s successes, failures, and unseen costs.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 22, evidenceScore: 94, category: 'environment' }],
+      relatedEntities: [{ id: 'ministry-of-jal-shakti', slug: 'ministry-of-jal-shakti', name: 'Ministry of Jal Shakti', type: 'organization' }, { id: 'cpcb', slug: 'cpcb', name: 'Central Pollution Control Board', type: 'organization' }],
+      faq: [
+        { question: 'How many projects has NMCG sanctioned under Namami Gange?', answer: 'As of March 2026, 524 projects have been sanctioned, of which 355 (68%) have been completed.' },
+        { question: 'What is the total budget handled by NMCG?', answer: 'Total budgetary allocation since 2014-15 is ₹26,824.86 crore, with total programme outlay of ₹42,500 crore including future commitments.' },
+        { question: 'What did the CAG find about NMCG\'s implementation?', answer: 'The 2025 CAG report found that of 44 STPs inspected, only 3-5 met NGT norms, 12 discharged untreated sewage directly, and 18 were never handed over for maintenance.' },
+      ],
+    },
+    {
+      id: 'ministry-of-jal-shakti', slug: 'ministry-of-jal-shakti', name: 'Ministry of Jal Shakti',
+      type: 'organization', description: 'Union ministry of Government of India responsible for water resources, river development, Ganga rejuvenation, drinking water supply, and sanitation. Overseeing ministry for NMCG and the Namami Gange Programme.',
+      aliases: ['MoJS', 'Jal Shakti Ministry', 'Ministry of Jal Shakti'], storyCount: 15, updatedAt: '2026-07-14T06:00:00Z',
+      image: '/images/entities/jal-shakti.jpg', evidenceScore: 70,
+      timeline: [
+        { date: '2019-05-31', title: 'Ministry of Jal Shakti Created', description: 'Merger of Ministry of Water Resources, River Development & Ganga Rejuvenation with Ministry of Drinking Water & Sanitation.' },
+        { date: '2019-07-01', title: 'Jal Jeevan Mission Launched', description: 'Rs. 3.6 lakh crore mission to provide piped water to all rural households by 2024.' },
+        { date: '2020-04-01', title: 'Namami Gange Extended', description: 'Ministry extends Namami Gange Phase II to March 2026 with Rs. 22,500 crore outlay.' },
+      ],
+      datasets: [],
+      sources: [{ name: 'MoJS Official Website', url: 'https://www.jalshakti-dowr.gov.in', type: 'government', description: 'Official ministry portal.' }],
+      statistics: { 'Departments': '2', 'Key Schemes': 'Namami Gange, JJM, NMCG', 'Annual Budget (2025-26)': '₹3,400 cr (NGP only)' },
+      relatedStories: [{ slug: 'namami-gange-under-fire', headline: 'Namami Gange Investigation', summary: 'Ministry oversight of the flagship programme examined.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 22, evidenceScore: 94, category: 'environment' }],
+      relatedEntities: [{ id: 'nmcg', slug: 'nmcg', name: 'National Mission for Clean Ganga', type: 'organization' }, { id: 'cpcb', slug: 'cpcb', name: 'Central Pollution Control Board', type: 'organization' }],
+      faq: [
+        { question: 'What departments function under Jal Shakti?', answer: 'Two departments: Department of Water Resources, River Development & Ganga Rejuvenation (DoWR, RD&GR) and Department of Drinking Water & Sanitation (DDWS).' },
+      ],
+    },
+    {
+      id: 'cpcb', slug: 'cpcb', name: 'Central Pollution Control Board',
+      type: 'organization', description: 'Statutory pollution regulatory body under the Ministry of Environment, Forest and Climate Change. Responsible for water quality monitoring, industrial effluent regulation, and identifying polluted river stretches across India.',
+      aliases: ['CPCB', 'Central Pollution Control Board'], storyCount: 25, updatedAt: '2026-07-14T06:00:00Z',
+      image: '/images/entities/cpcb.jpg', evidenceScore: 78,
+      timeline: [
+        { date: '1974-01-01', title: 'CPCB Established', description: 'Constituted under the Water (Prevention and Control of Pollution) Act, 1974.' },
+        { date: '2015-01-01', title: 'First Polluted River Stretches Report', description: 'CPCB identifies 302 polluted river stretches across 275 rivers.' },
+        { date: '2018-01-01', title: 'PRS Report 2018', description: '351 polluted stretches on 323 rivers identified, including Ganga stretches.' },
+        { date: '2025-01-15', title: 'Mahakumbh Water Quality Crisis', description: 'CPCB reports faecal coliform at Triveni Sangam at 49,000 MPN/100ml; government does not publicise findings.' },
+        { date: '2025-09-01', title: 'PRS Report 2025', description: '296 polluted stretches across 271 rivers; 37 remain in Priority I (biologically dead). Ganga shows marginal improvement.' },
+      ],
+      datasets: [],
+      sources: [{ name: 'CPCB Official Website', url: 'https://cpcb.nic.in', type: 'government', description: 'Official portal with water quality monitoring data.' }],
+      statistics: { 'Monitoring Stations on Ganga': '112', 'Polluted River Stretches (2025)': '296', 'Priority I Stretches': '37', 'Ganga DO Compliance': '100%' },
+      relatedStories: [{ slug: 'namami-gange-under-fire', headline: 'Namami Gange Investigation', summary: 'CPCB data on water quality trends examined.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 22, evidenceScore: 94, category: 'environment' }],
+      relatedEntities: [{ id: 'nmcg', slug: 'nmcg', name: 'National Mission for Clean Ganga', type: 'organization' }],
+      faq: [
+        { question: 'What is the safe faecal coliform level for bathing?', answer: 'The primary water quality criteria for outdoor bathing sets the safe limit at 2,500 MPN (Most Probable Number) per 100 ml. During Mahakumbh 2025, levels at Prayagraj reached 49,000 MPN/100ml.' },
+        { question: 'How many monitoring stations does CPCB operate on the Ganga?', answer: 'CPCB monitors water quality at 112 locations across the five Ganga main-stem states: Uttarakhand (19), Uttar Pradesh (41), Bihar (33), Jharkhand (4), and West Bengal (15).' },
       ],
     },
     {
@@ -3854,7 +4068,7 @@ function seed(): DataStore {
     { slug: 'agriculture', name: 'Agriculture & Rural Development', description: 'Agriculture policy, crop insurance, rural employment, and farmer welfare.', stories: [story1, story3, story10, story13], entities: ['ministry-of-agriculture', 'mgnrega', 'india'] },
     { slug: 'digital-payments', name: 'Digital Payments & Fintech', description: 'UPI, digital banking, financial inclusion, payment systems, and digital infrastructure.', stories: [story2, story29], entities: ['npci', 'rbi'] },
     { slug: 'employment', name: 'Employment & Labour', description: 'Employment trends, job creation, skilling, and labour market analysis.', stories: [story1, story4, story37], entities: ['ministry-of-labour'] },
-    { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, and sustainability in India.', stories: [story7, story9, story13, story30], entities: [] },
+    { slug: 'environment', name: 'Environment & Climate', description: 'Climate policy, environmental regulation, renewable energy, water conservation, wildlife, and sustainability in India.', stories: [story7, story9, story13, story30, story38], entities: ['nmcg', 'ministry-of-jal-shakti', 'cpcb', 'india'] },
     { slug: 'education', name: 'Education & Skill Development', description: 'Education policy, learning outcomes, NEP implementation, and skill development programmes.', stories: [story8, story14, story23, story36], entities: ['ministry-of-education'] },
     { slug: 'semiconductor', name: 'Semiconductor & Electronics', description: 'Semiconductor manufacturing, electronics PLI, and technology hardware policy.', stories: [story4, story12], entities: [] },
     { slug: 'health', name: 'Health & Nutrition', description: 'Healthcare policy, nutrition programmes, public health infrastructure, cancer care, and health outcomes in India and globally.', stories: [story8, story11, story31, story33], entities: ['who', 'ministry-of-women-and-child-development'] },
@@ -4373,7 +4587,7 @@ function seed(): DataStore {
   fixes.set(fix5.slug, fix5);
   fixes.set(fix6.slug, fix6);
 
-  return { stories, entities, topics, countries, organizations, timelines, fixes };
+  return { stories, entities, topics, countries, organizations, timelines, fixes, investigations };
 }
 
 /* ── Store Initialization ───────────────────────────────────────────── */
@@ -4498,6 +4712,14 @@ export function getTimelines(params: QueryParams = {}): APIListResponse<APITimel
 
 export function getTimeline(id: string): APITimeline | null {
   return getStore().timelines.get(id) || null;
+}
+
+export function getInvestigations(): APIInvestigation[] {
+  return Array.from(getStore().investigations.values());
+}
+
+export function getInvestigation(slug: string): APIInvestigation | null {
+  return getStore().investigations.get(slug) || null;
 }
 
 export function getCountries(params: QueryParams = {}): APIListResponse<APICountry> {
@@ -4690,4 +4912,12 @@ export function upsertFix(slug: string, fix: APIFix): void {
 
 export function removeFix(slug: string): void {
   getStore().fixes.delete(slug);
+}
+
+export function upsertInvestigation(slug: string, inv: APIInvestigation): void {
+  getStore().investigations.set(slug, inv);
+}
+
+export function removeInvestigation(slug: string): void {
+  getStore().investigations.delete(slug);
 }

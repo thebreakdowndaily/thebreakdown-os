@@ -4,6 +4,8 @@
  * Public-facing API response types (enriched versions of internal types).
  */
 
+export type APIStoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
+
 export interface APIStory {
   id: string;
   slug: string;
@@ -17,6 +19,7 @@ export interface APIStory {
   author: APIAuthor;
   evidenceScore: number;
   category: string;
+  storyType?: APIStoryType;
   tags: string[];
   keyPoints: string[];
   timeline: APITimelineEvent[];
@@ -168,6 +171,32 @@ export interface APITimeline {
   events: APITimelineEvent[];
   storySlugs: string[];
   dateRange: { start: string; end: string };
+}
+
+export interface APIInvestigation {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  heroImage?: string;
+  publishedAt: string;
+  updatedAt: string;
+  chapters: Array<{
+    id: string;
+    slug: string;
+    storySlug: string;
+    title: string;
+    subtitle?: string;
+    summary: string;
+    order: number;
+  }>;
+  keyFindings: string[];
+  tags: string[];
+  timeline: APITimelineEvent[];
+  faq: APIFAQItem[];
+  sources: APISource[];
+  facts: APIFact[];
 }
 
 export type APICountry = APIEntity;

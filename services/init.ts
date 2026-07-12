@@ -1,6 +1,6 @@
 import { initServices } from './registry';
 import type { Services } from './registry';
-import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem } from '@/types/canonical';
+import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, Investigation } from '@/types/canonical';
 
 import { MemorySearchService } from './search/service';
 import { PluginAnalyticsService } from './analytics/service';
@@ -55,6 +55,7 @@ export function initDefaultServices(
   seedFixes: Fix[],
   seedDatasets: Dataset[],
   seedMedia: MediaItem[],
+  seedInvestigations?: Investigation[],
 ): Services {
   return buildWithGraph({
     stories: RepositoryFactory.getStoryRepository(seedStories),
@@ -64,6 +65,7 @@ export function initDefaultServices(
     fixes: RepositoryFactory.getFixRepository(seedFixes),
     datasets: RepositoryFactory.getDatasetRepository(seedDatasets),
     media: RepositoryFactory.getMediaRepository(seedMedia),
+    investigations: RepositoryFactory.getInvestigationRepository(seedInvestigations || []),
     search: new MemorySearchService(),
     analytics: new PluginAnalyticsService(),
     intelligence: new DefaultImageIntelligenceService(),
@@ -81,6 +83,7 @@ export function initCanonicalServices(): Services {
     fixes: RepositoryFactory.getFixRepository([]),
     datasets: RepositoryFactory.getDatasetRepository([]),
     media: RepositoryFactory.getMediaRepository([]),
+    investigations: RepositoryFactory.getInvestigationRepository([]),
     search: new MemorySearchService(),
     analytics: new PluginAnalyticsService(),
     intelligence: new DefaultImageIntelligenceService(),

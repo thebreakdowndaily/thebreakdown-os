@@ -10,6 +10,55 @@ export type EntityKind =
 
 export type StoryStatus = 'draft' | 'review' | 'fact_check' | 'scheduled' | 'published' | 'updated';
 
+export type StoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
+
+export type EvidenceTier =
+  | 'official_document' | 'audit_finding' | 'court_record'
+  | 'scientific_study' | 'government_response' | 'rti_response'
+  | 'parliament_record' | 'field_reporting' | 'verified_dataset';
+
+export interface EvidenceBadge {
+  tier: EvidenceTier;
+  confidence: number;
+  verifiedAt: string;
+  sourceCount: number;
+}
+
+export interface InvestigationChapter {
+  id: string;
+  slug: string;
+  storySlug: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  order: number;
+  estimatedReadingTime?: number;
+  evidenceScore?: number;
+  icon?: string;
+}
+
+export interface Investigation {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  heroImage: string;
+  publishedAt: string;
+  updatedAt: string;
+  status: StoryStatus;
+  chapters: InvestigationChapter[];
+  keyFindings: string[];
+  tags: string[];
+  relatedEntityIds: string[];
+  relatedTopicIds: string[];
+  sources: Source[];
+  faq: FAQItem[];
+  timeline: TimelineEvent[];
+  statistics: StatItem[];
+  freshness?: FreshnessMetadata;
+}
+
 export type RelationType =
   | 'mentions' | 'belongs_to' | 'implemented_by' | 'announced_by'
   | 'funded_by' | 'affects' | 'related_to' | 'part_of' | 'located_in'
@@ -44,6 +93,7 @@ export interface Story {
   author: string;
   category: string;
   status: StoryStatus;
+  storyType: StoryType;
   evidenceScore: number;
   readingTime: number;
   publishedAt: string;
@@ -444,10 +494,12 @@ export interface Claim {
   source: string;
   sourceUrl: string;
   tier: ConfidenceTier;
+  evidenceTier?: EvidenceTier;
   confidence: number;
   status: 'verified' | 'strong' | 'moderate' | 'unverified';
   verificationLevel?: 'primary' | 'secondary';
   verifiedAt?: string;
+  sourceCount?: number;
 }
 
 export interface TimelineEvent {

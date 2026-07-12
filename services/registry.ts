@@ -5,6 +5,7 @@ import type { TimelineService } from './interfaces/timeline';
 import type { FixService } from './interfaces/fix';
 import type { DatasetService } from './interfaces/dataset';
 import type { MediaService } from './interfaces/media';
+import type { InvestigationService } from './interfaces/investigation';
 import type { SearchService } from './search/service';
 import type { AnalyticsService } from './analytics/service';
 import type { GraphProjectionService } from './graph/service';
@@ -19,6 +20,7 @@ export interface Services {
   fixes: FixService;
   datasets: DatasetService;
   media: MediaService;
+  investigations: InvestigationService;
   search: SearchService;
   analytics: AnalyticsService;
   graph: GraphProjectionService;

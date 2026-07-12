@@ -5,6 +5,7 @@ import type { TimelineService } from '../interfaces/timeline';
 import type { FixService } from '../interfaces/fix';
 import type { MediaService } from '../interfaces/media';
 import type { DatasetService } from '../interfaces/dataset';
+import type { InvestigationService } from '../interfaces/investigation';
 import { MemoryStoryService } from '../repositories/memory/story';
 import { SupabaseStoryRepository } from '../repositories/supabase/story';
 import { MemoryTopicRepository } from '../repositories/memory/topic';
@@ -19,6 +20,7 @@ import { MemoryMediaRepository } from '../repositories/memory/media';
 import { SupabaseMediaRepository } from '../repositories/supabase/media';
 import { MemoryDatasetRepository } from '../repositories/memory/dataset';
 import { SupabaseDatasetRepository } from '../repositories/supabase/dataset';
+import { MemoryInvestigationRepository } from '../repositories/memory/investigation';
 
 function getProvider(): 'memory' | 'supabase' {
   const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
@@ -66,6 +68,10 @@ export class RepositoryFactory {
     const provider = getProvider();
     if (provider === 'supabase') return new SupabaseDatasetRepository();
     return new MemoryDatasetRepository(initialData);
+  }
+
+  static getInvestigationRepository(initialData: any[] = []): InvestigationService {
+    return new MemoryInvestigationRepository(initialData as any[]);
   }
 
   static getDataProvider(): 'memory' | 'supabase' {
