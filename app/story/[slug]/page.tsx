@@ -13,6 +13,10 @@ import KnowledgeLayer from '@/components/story/KnowledgeLayer';
 import NextExploration from '@/components/story/NextExploration';
 import TierSelector from '@/components/story/TierSelector';
 import type { Tier } from '@/components/story/TierSelector';
+import { StoryShell } from '@/components/rxs/StoryShell';
+import { seedAll, enrichClaimLazy, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
+import { RepositoryFactory } from '@/services/factory/repository';
+import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
@@ -121,11 +125,53 @@ export const revalidate = 60;
 
 export async function generateStaticParams() {
   const services = bootstrapServices();
-  return (await services.stories.getStories()).data.map((s) => ({ slug: s.slug }));
+  const storySlugs = (await services.stories.getStories()).data.map((s) => ({ slug: s.slug }));
+  const chapterSlugs: { slug: string }[] = [];
+  try {
+    seedAll();
+    const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+    const library = await repo.getLibrary('india-and-the-world');
+    if (library) {
+      for (const c of library.collections) {
+        for (const v of c.volumes) {
+          for (const ch of v.chapters) {
+            chapterSlugs.push({ slug: ch.slug });
+          }
+        }
+      }
+    }
+  } catch {}
+  return [...storySlugs, ...chapterSlugs];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+
+  const chapterData = await tryLoadChapter(slug);
+  if (chapterData) {
+    const { chapter } = chapterData;
+    const versionStr = `${chapter.version.major}.${chapter.version.minor}.${chapter.version.patch}`;
+    return {
+      title: `${chapter.title} — The Breakdown Knowledge Library`,
+      description: chapter.summary,
+      alternates: { canonical: `https://thebreakdown.in/story/${slug}` },
+      openGraph: {
+        title: chapter.title,
+        description: chapter.summary,
+        url: `https://thebreakdown.in/story/${slug}`,
+        type: 'article',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: chapter.title,
+        description: chapter.summary,
+      },
+      other: {
+        'article:version': versionStr,
+      },
+    };
+  }
+
   const services = bootstrapServices();
   const vm = await buildStoryPage(services, slug);
   if (!vm) return { title: 'Story Not Found — The Breakdown' };
@@ -160,6 +206,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+async function tryLoadChapter(slug: string) {
+  try {
+    seedAll();
+    const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+    const library = await repo.getLibrary('india-and-the-world');
+    if (!library) return null;
+    for (const c of library.collections) {
+      for (const v of c.volumes) {
+        const ch = v.chapters.find(ch => ch.slug === slug);
+        if (ch) return { chapter: ch, collectionSlug: c.slug, volumeSlug: v.slug };
+      }
+    }
+  } catch {}
+  return null;
+}
+
 export default async function StoryPage({ 
   params,
   searchParams,
@@ -169,6 +231,36 @@ export default async function StoryPage({
 }) {
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
+
+  const chapterData = await tryLoadChapter(slug);
+  if (chapterData) {
+    const { chapter, collectionSlug, volumeSlug } = chapterData;
+    const core = getKnowledgeCore();
+    const chapterClaimIds = chapter.relatedConceptIds?.flatMap(
+      cid => core.claims.byConcept(cid)
+    ).map(c => c.id) || [];
+    const enrichedClaims = chapterClaimIds
+      .map(id => enrichClaimLazy(id))
+      .filter(Boolean) as NonNullable<ReturnType<typeof enrichClaimLazy>>[];
+
+    const claimCount = chapter.content.filter(b => b.type === 'claim').length;
+    const evidenceCount = chapter.content.filter(b => b.type === 'evidence-summary').length;
+    const thinkerCount = chapter.content.filter(b => b.type === 'thinker').length;
+    const documentCount = chapter.content.filter(b => b.type === 'document').length;
+
+    return (
+      <StoryShell
+        chapter={chapter}
+        collectionSlug={collectionSlug}
+        volumeSlug={volumeSlug}
+        enrichedClaims={enrichedClaims}
+        claimCount={claimCount}
+        evidenceCount={evidenceCount}
+        thinkerCount={thinkerCount}
+        documentCount={documentCount}
+      />
+    );
+  }
   const mode = (resolvedSearchParams?.mode as string) || 'standard';
   const services = bootstrapServices();
   const vm = await buildStoryPage(services, slug);

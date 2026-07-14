@@ -1,12 +1,16 @@
 # AGENTS.md
 
-# THE BREAKDOWN OS
+# THE BREAKDOWN OS — Platform Beta
 
 Version: 1.0
 
-Status: Living Document — Editorial Operating Doctrine
+Status: Living Document — Editorial Operating Doctrine — Platform Beta
 
-Last Updated: 2026
+Last Updated: 14 Jul 2026
+
+**All architectural documents are frozen.** No further architectural work unless a bug forces it. Every future commit must answer: "Can a reader notice this?"
+
+**Platform Beta**: The infrastructure phase is complete. All future engineering must produce improvements a first-time reader can notice within five minutes. No new generic infrastructure.
 
 ---
 
@@ -407,21 +411,14 @@ Never merge failing builds.
 A feature is complete only if:
 
 ✓ Build passes
-
 ✓ Lint passes
-
 ✓ TypeScript passes
-
+✓ Product Quality Standard gates pass (docs/product-quality.md)
 ✓ Accessibility preserved
-
 ✓ Performance unchanged or improved
-
 ✓ Documentation updated
-
 ✓ ADR updated if architecture changed
-
 ✓ Public APIs unchanged
-
 ✓ Tests added or updated
 
 ---
@@ -557,6 +554,68 @@ What future work becomes easier?
 
 ---
 
+# Implementation Traceability
+
+No implementation may be merged unless it references the governing document that justifies it.
+
+Every component, route, service, and feature must include a comment or metadata tag identifying the specific governing document (Editorial Constitution, RXS, or Engineering Architecture) that defines its requirements.
+
+Examples:
+- `StoryShell` → `docs/rxs/screens/story.md`
+- `Knowledge Library` → `docs/rxs/screens/knowledge-library.md`
+- `Claim Card` → `docs/rxs/component-philosophy.md`
+- `Evidence Panel` → `Editorial Constitution v1.1`
+
+This creates traceability from vision to specification to code. As the project grows and more contributors join, this discipline ensures every implementation decision can be traced to its governing rationale.
+
+If code cannot reference a governing document, either the governing documents are incomplete or the implementation is out of scope.
+
+---
+
+# Platform Beta Rules (v1.0)
+
+## Infrastructure Ban
+
+No new generic infrastructure:
+
+❌ No new registries
+❌ No new abstractions
+❌ No new service layers
+❌ No new rendering engines
+❌ No new repository implementations
+
+Every sprint must improve something a reader can actually experience. Speculative infrastructure is permanently out of scope.
+
+The platform is mature enough that additional engineering produces diminishing returns. The bottleneck is now editorial, not technical.
+
+## Experience Rule
+
+Every sprint must produce at least **one improvement that a first-time reader can notice within five minutes** of using the product.
+
+This is a forcing function against invisible infrastructure. If the improvement cannot be seen, felt, or interacted with, it is not the highest-priority thing to build next.
+
+## One New Capability Per Sprint
+
+Each sprint delivers exactly one new reader-facing capability. If a sprint accumulates unrelated improvements, split it.
+
+This prevents "while I'm here..." scope creep that erodes architecture focus. A sticky TOC sprint adds a sticky TOC — it does not also refactor the footer, add keyboard shortcuts, or touch unrelated components.
+
+## Understanding Metrics
+
+Technical events measure clicks. Understanding metrics measure learning journeys.
+
+Track the canonical reader journey:
+
+```
+Reader starts → Opens Evidence → Returns to Narrative → Completes Story → Clicks Continue Learning
+```
+
+Each step in this sequence is a stronger signal than a page view. A reader who completes this journey understood something. A reader who bounced did not.
+
+These metrics should appear alongside technical events in analytics dashboards. They define product success, not engagement.
+
+---
+
 # Final Principle
 
 Optimize for the codebase that will still be understandable in 2045.
@@ -613,6 +672,16 @@ PRDs, blueprints, roadmaps, sprint plans, and implementation plans.
 ## Level 4 — Code
 
 Canonical models, services, and UI components.
+
+## Level 5 — Product Quality Standard
+
+**`docs/product-quality.md`**
+
+Defines measurable quality gates every feature must satisfy before shipping: navigation, trust, performance, accessibility, mobile, learning, SEO, and analytics requirements.
+
+Every PR must pass applicable gates from the Product Quality Standard before merging.
+
+The Product Quality Standard is the lowest governance level. It may not contradict any higher-level document. Higher-level documents that lack measurable quality criteria defer to this standard for verification.
 
 ---
 
@@ -1280,7 +1349,7 @@ Founding Architecture Program closed. Future engineering is reactive to demonstr
 ## Build Status
 
 - `npx tsc --noEmit` — clean
-- `npm run build` — passes (248 pages)
+- `npm run build` — passes (253 pages)
 - No failing tests (pre-existing test fixture issues quarantined)
 
 ---
