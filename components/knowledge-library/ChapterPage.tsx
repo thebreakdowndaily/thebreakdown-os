@@ -222,13 +222,16 @@ function ChapterPageInner({
 
       <section className="mt-12 pt-8 border-t">
         <div className="bg-amber-50 rounded-lg p-5">
-          <h3 className="text-sm font-semibold text-amber-800 mb-2">Help improve this Knowledge Monograph</h3>
-          <p className="text-sm text-amber-700 mb-3">
-            This is a Version 1.0 publication — a living document, not a finished product. Your feedback makes it better.
+          <h3 className="text-sm font-semibold text-amber-800 mb-2">Living Knowledge</h3>
+          <p className="text-sm text-amber-700 mb-1">
+            This publication is versioned. Historical understanding improves through evidence, debate, and correction.
+            If you find an error, identify a stronger primary source, or believe an interpretation should be
+            reconsidered, we invite you to tell us. Every substantive correction will be reviewed and, where
+            appropriate, incorporated into future versions with a public revision history.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 mt-3">
             <a href="/methodology#corrections" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
-              Report an issue
+              Report a correction
             </a>
             <a href="/methodology" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
               View methodology
