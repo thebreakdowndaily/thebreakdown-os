@@ -1238,6 +1238,464 @@ export interface FixMetric {
 }
 
 
+// ─── Knowledge Library (Sprint 2 — Knowledge Rendering Engine) ────────────────────
+
+export type ReadingDepth = 'explorer' | 'scholar' | 'researcher';
+
+export interface KnowledgeLibrary {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  heroImage: string;
+  collections: KnowledgeCollection[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeCollection {
+  id: string;
+  librarySlug: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  order: number;
+  dateRange: { start: string; end?: string };
+  volumes: Volume[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Volume {
+  id: string;
+  collectionSlug: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  order: number;
+  dateRange: { start: string; end?: string };
+  chapters: Chapter[];
+  estimatedReadingTime?: Record<ReadingDepth, number>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Chapter ─────────────────────────────────────────────────────────────────────────
+
+export interface Chapter {
+  id: string;
+  collectionSlug: string;
+  volumeSlug: string;
+  slug: string;
+  title: string;
+  summary: string;
+  order: number;
+  content: KnowledgeBlock[];
+  metadata: ChapterMetadata;
+  keyQuestions: KeyQuestion[];
+  misconceptions: Misconception[];
+  keyTerms: GlossaryTerm[];
+  sources: Source[];
+  claims: Claim[];
+  version: ChapterVersion;
+  relatedEntityIds: string[];
+  relatedConceptIds: string[];
+  relatedSourceIds: string[];
+  status: ChapterStatus;
+  readingTime: Record<ReadingDepth, number>;
+  studyTime: Record<ReadingDepth, number>;
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  prerequisites: string[];
+  learningObjectives: string[];
+  recommendedNext: string[];
+  createdAt: string;
+  updatedAt: string;
+  lastVerifiedAt?: string;
+}
+
+export interface ChapterVersion {
+  major: number;
+  minor: number;
+  patch: number;
+  label?: string;
+}
+
+export interface ChapterMetadata {
+  editor?: string;
+  reviewer?: string;
+  wordCount?: number;
+  sourceCount?: number;
+}
+
+export type ChapterStatus =
+  | 'draft' | 'review' | 'published' | 'verified' | 'updated' | 'archived';
+
+// ── Knowledge Blocks ────────────────────────────────────────────────────────────────
+
+export type BlockType =
+  | 'heading' | 'paragraph' | 'claim' | 'quote' | 'callout'
+  | 'table' | 'image' | 'video' | 'document' | 'timeline'
+  | 'map' | 'chart' | 'thinker' | 'decision-matrix'
+  | 'counterfactual' | 'primary-source' | 'faq' | 'glossary'
+  | 'summary' | 'list' | 'evidence-summary'
+  | 'relationship-card' | 'learning' | 'historiography';
+
+export interface KnowledgeBlock {
+  id: string;
+  type: BlockType;
+  data: Record<string, unknown>;
+  depth?: ReadingDepth[];
+}
+
+// ── Block Data Shapes ───────────────────────────────────────────────────────────────
+
+export interface HeadingBlockData {
+  text: string;
+  level: 1 | 2 | 3;
+}
+
+export interface ParagraphBlockData {
+  text: string;
+  citations: string[];
+}
+
+export interface ClaimBlockData {
+  statement: string;
+  confidence: 'established' | 'debated' | 'contested';
+  evidence: EvidenceRef[];
+}
+
+export interface QuoteBlockData {
+  text: string;
+  attribution: string;
+  source?: string;
+}
+
+export interface CalloutBlockData {
+  variant: 'info' | 'warning' | 'question' | 'definition';
+  text: string;
+}
+
+export interface ListBlockData {
+  items: string[];
+  ordered: boolean;
+}
+
+export interface EvidenceSummaryBlockData {
+  claim: string;
+  evidenceSummary: string;
+  confidence: 'established' | 'debated' | 'contested';
+  primarySources: EvidenceRef[];
+  secondarySources: EvidenceRef[];
+  academicPapers: EvidenceRef[];
+  datasets: EvidenceRef[];
+  verificationDate: string;
+  contradictions: EvidenceRef[];
+  editorNotes: string;
+}
+
+export interface DocumentBlockData {
+  title: string;
+  documentType: 'treaty' | 'speech' | 'resolution' | 'letter' | 'report' | 'constitution' | 'memorandum' | 'transcript';
+  date: string;
+  parties?: string[];
+  sections: DocumentSection[];
+  annotations: DocumentAnnotation[];
+  linkedClaims: string[];
+  linkedEntities: string[];
+  sourceId: string;
+  pdfUrl?: string;
+}
+
+export interface DocumentSection {
+  id: string;
+  heading: string;
+  content: string;
+  annotationIds: string[];
+}
+
+export interface DocumentAnnotation {
+  id: string;
+  sectionId: string;
+  text: string;
+  type: 'explanation' | 'context' | 'critique' | 'definition';
+}
+
+export interface TimelineBlockData {
+  title: string;
+  description?: string;
+  events: KLEvent[];
+}
+
+export interface KLEvent {
+  id: string;
+  date: string;
+  title: string;
+  description: string;
+  categories: string[];
+  sources: string[];
+  entities: string[];
+  documents: string[];
+  significance: number;
+}
+
+export interface ThinkerBlockData {
+  name: string;
+  school: string;
+  birthYear?: number;
+  deathYear?: number;
+  corePrinciples: string[];
+  arguments: ThinkerArgument[];
+  criticism: ThinkerCriticism[];
+  furtherReading: string[];
+}
+
+export interface ThinkerArgument {
+  title: string;
+  summary: string;
+  supportingEvidence: EvidenceRef[];
+}
+
+export interface ThinkerCriticism {
+  title: string;
+  summary: string;
+  counterarguments: EvidenceRef[];
+}
+
+export interface RelationshipCardData {
+  mainEntity: string;
+  mainEntitySlug: string;
+  relationships: Relationship[];
+}
+
+export interface Relationship {
+  entity: string;
+  entitySlug: string;
+  relationshipType: string;
+  description: string;
+}
+
+export interface LearningBlockData {
+  variant: 'key-takeaways' | 'quiz' | 'flashcards' | 'research-questions' | 'recommended-reading';
+  items: LearningItem[];
+}
+
+export interface LearningItem {
+  text: string;
+  answer?: string;
+  sources?: string[];
+}
+
+// ── New Block Data Shapes ───────────────────────────────────────────────────────────
+
+export interface DecisionMatrixBlockData {
+  title: string;
+  context: string;
+  options: DecisionOption[];
+}
+
+export interface DecisionOption {
+  label: string;
+  description: string;
+  proponents: string[];
+  opponents: string[];
+  outcome: string;
+  counterfactual: string;
+}
+
+export interface CounterfactualBlockData {
+  question: string;
+  scenario: string;
+  historicalContext: string;
+  analysis: string;
+  probability: string;
+  sources: string[];
+}
+
+export interface HistoriographyBlockData {
+  title: string;
+  approaches: HistoriographyApproach[];
+}
+
+export interface HistoriographyApproach {
+  school: string;
+  summary: string;
+  keyHistorians: string[];
+  keyWorks: string[];
+  strengths: string;
+  limitations: string;
+}
+
+// ── Concept Registry ────────────────────────────────────────────────────────────────
+
+export interface KnowledgeConcept {
+  id: string;
+  slug: string;
+  term: string;
+  definition: string;
+  category: ConceptCategory;
+  relatedConceptIds: string[];
+  relatedEntityIds: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ConceptCategory =
+  | 'doctrine' | 'theory' | 'event' | 'movement' | 'policy'
+  | 'institution' | 'agreement' | 'idea' | 'strategy' | 'period';
+
+// ── Shared Sub-types ────────────────────────────────────────────────────────────────
+
+export interface EvidenceRef {
+  sourceId: string;
+  relevance: 'direct' | 'supporting' | 'contextual';
+  excerpt: string;
+}
+
+export interface KeyQuestion {
+  question: string;
+  answer: string;
+  sources: string[];
+}
+
+export interface Misconception {
+  misconception: string;
+  correction: string;
+  explanation: string;
+}
+
+export interface GlossaryTerm {
+  term: string;
+  definition: string;
+}
+
+// ── Canonical Knowledge Layer ────────────────────────────────────────────────────────
+
+export interface CanonicalClaim {
+  id: string;
+  statement: string;
+  confidence: 'established' | 'debated' | 'contested';
+  evidence: EvidenceRef[];
+  counterArguments: string[];
+  sourceIds: string[];
+  documentIds: string[];
+  entityIds: string[];
+  conceptIds: string[];
+  appearsIn: ClaimAppearance[];
+  createdAt: string;
+  updatedAt: string;
+  lastVerifiedAt?: string;
+}
+
+export interface ClaimAppearance {
+  contentType: 'chapter' | 'story' | 'timeline' | 'thinkpiece';
+  contentId: string;
+  contentTitle: string;
+}
+
+export interface CanonicalSource {
+  id: string;
+  title: string;
+  url?: string;
+  tier: number;
+  accessedAt: string;
+  claimIds: string[];
+  documentIds: string[];
+  chapterIds: string[];
+  thinkerIds: string[];
+  storyIds: string[];
+  datasetIds: string[];
+}
+
+export interface CanonicalDocument {
+  id: string;
+  title: string;
+  documentType: string;
+  date: string;
+  parties?: string[];
+  paragraphs: DocParagraph[];
+  claimIds: string[];
+  entityIds: string[];
+  treatyIds: string[];
+  mapIds: string[];
+  chapterIds: string[];
+  sourceId: string;
+  pdfUrl?: string;
+}
+
+export interface DocParagraph {
+  id: string;
+  text: string;
+  claimIds: string[];
+}
+
+export interface CanonicalTimelineEvent {
+  id: string;
+  date: string;
+  title: string;
+  description: string;
+  categories: string[];
+  claimIds: string[];
+  documentIds: string[];
+  countryIds: string[];
+  organizationIds: string[];
+  thinkerIds: string[];
+  evidenceIds: string[];
+  storyIds: string[];
+}
+
+export interface CanonicalThinker {
+  id: string;
+  name: string;
+  school: string;
+  birthYear?: number;
+  deathYear?: number;
+  corePrinciples: string[];
+  arguments: ThinkerArgument[];
+  criticism: ThinkerCriticism[];
+  quoteIds: string[];
+  bookIds: string[];
+  chapterIds: string[];
+  conceptIds: string[];
+}
+
+export interface CanonicalRelationship {
+  id: string;
+  sourceEntityId: string;
+  targetEntityId: string;
+  relationType: string;
+  evidence: EvidenceRef[];
+  confidence: number;
+  documentIds: string[];
+  storyIds: string[];
+  timelineIds: string[];
+}
+
+export interface CanonicalEvidence {
+  id: string;
+  claimId: string;
+  sourceId: string;
+  relevance: 'direct' | 'supporting' | 'contextual';
+  excerpt: string;
+  documentId?: string;
+  paragraphId?: string;
+  verifiedAt?: string;
+  confidence: number;
+}
+
+// ── Repository ──────────────────────────────────────────────────────────────────────
+
+export interface KnowledgeLibraryRepository {
+  getLibrary(slug: string): Promise<KnowledgeLibrary | null>;
+  getCollection(librarySlug: string, collectionSlug: string): Promise<KnowledgeCollection | null>;
+  getVolume(librarySlug: string, collectionSlug: string, volumeSlug: string): Promise<Volume | null>;
+  getChapter(librarySlug: string, collectionSlug: string, volumeSlug: string, chapterSlug: string): Promise<Chapter | null>;
+  getAllLibraries(): Promise<KnowledgeLibrary[]>;
+}
+
 // ─── Visual Intelligence ───────────────────────────────────────────────────────────
 
 export type ChartType =

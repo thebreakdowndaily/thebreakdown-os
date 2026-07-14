@@ -1,0 +1,179 @@
+{
+  "chapter": "kl-ch-1",
+  "chapterTitle": "India's Inheritance: The Partition and Its Legacies",
+  "assets": {
+    "A-01": {
+      "id": "A-01",
+      "title": "Mountbatten & Muhammad Ali Jinnah, Viceroy's House, 1947",
+      "filename": "a-01-mountbatten-jinnah-viceroys-house-1947.jpg",
+      "url": "/images/library/photos/a-01-mountbatten-jinnah-viceroys-house-1947.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Imperial War Museums (IND 5302)",
+      "evidenceLevel": "A",
+      "rights": "Public Domain / IWM terms",
+      "blockId": "b-vis-img-1",
+      "note": "Canonical local asset from IWM direct download"
+    },
+    "A-03": {
+      "id": "A-03",
+      "title": "Great Calcutta Killing aftermath, August 1946",
+      "filename": "photo-calcutta-killing-1946-life-115813922.tif",
+      "type": "image",
+      "status": "archived",
+      "source": "LIFE Picture Collection / Getty Images (50694119)",
+      "evidenceLevel": "B",
+      "rights": "Rights Managed (Time Inc. / Getty Images)",
+      "blockId": "b-vis-img-3"
+    },
+    "A-07": {
+      "id": "A-07",
+      "title": "Nehru at UN General Assembly, November 1948",
+      "filename": "photo-nehru-unga-paris-1948-unphoto.tif",
+      "type": "image",
+      "status": "archived",
+      "source": "UN Photo Archive",
+      "evidenceLevel": "D",
+      "rights": "UN Public Domain / Editorial Use",
+      "blockId": "b-vis-img-7"
+    },
+    "A-08": {
+      "id": "A-08",
+      "title": "Sir Cyril Radcliffe, 1957 (substitute)",
+      "filename": "photo-cyril-radcliffe-1957-npg-x88321.tif",
+      "type": "image",
+      "status": "archived",
+      "source": "National Portrait Gallery, London (NPG x88321)",
+      "evidenceLevel": "B",
+      "rights": "Rights Managed (NPG)",
+      "blockId": "b-vis-img-8",
+      "note": "Substitute asset — no photo of Radcliffe at work in India exists"
+    },
+    "A-09": {
+      "id": "A-09",
+      "title": "Jinnah and Gandhi in conversation, Bombay 1944",
+      "filename": "photo-gandhi-jinnah-bombay-1944-dinodia-mkg33469.jpg",
+      "url": "/images/library/chapter-1/photos/photo-gandhi-jinnah-bombay-1944-dinodia-mkg33469.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Dinodia Photos / ullstein bild via Getty Images (542347429)",
+      "evidenceLevel": "B",
+      "rights": "Public Domain in India (Section 25, Copyright Act 1957) / Rights Managed (International)",
+      "blockId": "b-vis-img-9"
+    }
+  },
+  "supplementary": {
+    "SUP-01": {
+      "id": "SUP-01",
+      "theme": "partition",
+      "title": "Muslim refugees on train engine, Delhi 1947",
+      "filename": "sup-01-muslim-refugees-train-engine-delhi-1947-daily-herald.jpg",
+      "url": "/images/library/supplementary/partition/sup-01-muslim-refugees-train-engine-delhi-1947-daily-herald.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Daily Herald Archive / SSPL via Getty Images (1360179719)",
+      "rights": "Rights Managed",
+      "blockId": "b-vis-sup-01",
+      "note": "PROVISIONAL — partition theme"
+    },
+    "SUP-02": {
+      "id": "SUP-02",
+      "theme": "partition",
+      "title": "Muslims boarding train at New Delhi Station, 7 Aug 1947",
+      "filename": "sup-02-muslims-boarding-train-new-delhi-1947-keystone.jpg",
+      "url": "/images/library/supplementary/partition/sup-02-muslims-boarding-train-new-delhi-1947-keystone.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Keystone Features / Getty Images (3336843)",
+      "rights": "Rights Managed",
+      "blockId": "b-vis-sup-02",
+      "note": "PROVISIONAL — partition theme"
+    },
+    "SUP-03": {
+      "id": "SUP-03",
+      "theme": "gandhi",
+      "title": "Gandhi & Nehru addressing refugees, Hardwar June 1947",
+      "filename": "sup-03-gandhi-nehru-refugees-hardwar-1947.jpg",
+      "url": "/images/library/supplementary/gandhi/sup-03-gandhi-nehru-refugees-hardwar-1947.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Universal History Archive / Getty Images (973199382)",
+      "rights": "Rights Managed",
+      "blockId": "b-vis-sup-03",
+      "note": "PROVISIONAL — gandhi theme"
+    },
+    "SUP-04": {
+      "id": "SUP-04",
+      "theme": "partition",
+      "title": "Soldiers and refugees on vehicle trek, 5 Sep 1947",
+      "filename": "sup-04-soldiers-refugees-vehicle-trek-1947-bettmann.jpg",
+      "url": "/images/library/supplementary/partition/sup-04-soldiers-refugees-vehicle-trek-1947-bettmann.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Bettmann / Getty Images (515214340)",
+      "rights": "Rights Managed",
+      "blockId": "b-vis-sup-04",
+      "note": "PROVISIONAL — partition theme"
+    },
+    "SUP-05": {
+      "id": "SUP-05",
+      "theme": "partition",
+      "title": "Refugees trekking on foot with belongings, Sep 1947",
+      "filename": "sup-05-refugees-trekking-foot-belongings-1947-bettmann.jpg",
+      "url": "/images/library/supplementary/partition/sup-05-refugees-trekking-foot-belongings-1947-bettmann.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Bettmann / Getty Images (701041686)",
+      "rights": "Rights Managed",
+      "blockId": "b-vis-sup-05",
+      "note": "PROVISIONAL — partition theme"
+    },
+    "SUP-06": {
+      "id": "SUP-06",
+      "theme": "accession",
+      "title": "Junagadh volunteers arriving by train, 25 Sep 1947",
+      "filename": "sup-06-junagadh-volunteers-train-1947.jpg",
+      "url": "/images/library/supplementary/accession/sup-06-junagadh-volunteers-train-1947.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Getty Images (1971029537)",
+      "rights": "Rights Managed",
+      "blockId": "b-vis-sup-06",
+      "note": "PROVISIONAL — accession theme"
+    },
+    "SUP-07": {
+      "id": "SUP-07",
+      "theme": "gandhi",
+      "title": "Mahatma Gandhi with Abha Gandhi and Kanu Gandhi",
+      "filename": "sup-07-gandhi-abha-kanu-gandhi.jpg",
+      "url": "/images/library/supplementary/gandhi/sup-07-gandhi-abha-kanu-gandhi.jpg",
+      "type": "image",
+      "status": "archived",
+      "source": "Unknown (preview, source unconfirmed)",
+      "rights": "Unknown",
+      "blockId": "b-vis-sup-07",
+      "note": "PROVISIONAL — gandhi theme. Unmapped."
+    }
+  },
+  "maps": {
+    "B-01": { "id": "B-01", "title": "British India, 1939", "filename": "map-british-india-1939-v1.svg", "url": "/images/library/chapter-1/maps/map-british-india-1939.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-1" },
+    "B-02": { "id": "B-02", "title": "Cabinet Mission Plan, 1946", "filename": "map-cabinet-mission-plan-1946-v1.svg", "url": "/images/library/chapter-1/maps/map-cabinet-mission-1946.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-2" },
+    "B-03": { "id": "B-03", "title": "Radcliffe Line, 1947", "filename": "map-radcliffe-line-v1.svg", "url": "/images/library/chapter-1/maps/map-radcliffe-line.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-3" },
+    "B-04": { "id": "B-04", "title": "Partition Migration Flows, 1947-48", "filename": "map-partition-migration-flows-v1.svg", "url": "/images/library/chapter-1/maps/map-migration-flows-1947.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-4" },
+    "B-05": { "id": "B-05", "title": "Kashmir Conflict, 1947-48", "filename": "map-kashmir-conflict-1947-v1.svg", "url": "/images/library/chapter-1/maps/map-kashmir-1947.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-5" },
+    "B-06": { "id": "B-06", "title": "Religious Demography, 1941", "filename": "map-religious-demography-1941-v1.svg", "url": "/images/library/chapter-1/maps/map-demography-1941.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-6" },
+    "B-07": { "id": "B-07", "title": "Princely States Accession", "filename": "map-princely-states-accession-v1.svg", "url": "/images/library/chapter-1/maps/map-princely-states.svg", "type": "map", "status": "recreated", "blockId": "b-vis-map-7" }
+  },
+  "documents": {
+    "C-01": { "id": "C-01", "title": "Indian Independence Act, 1947", "filename": "doc-independence-act-1947.jpg", "url": "/images/library/chapter-1/documents/doc-independence-act-1947.jpg", "type": "image", "status": "archived", "blockId": "b-vis-doc-1" },
+    "C-03": { "id": "C-03", "title": "UN Security Council Resolution 47", "filename": "doc-unsc-resolution-47-1948.pdf", "type": "image", "status": "archived", "blockId": "b-vis-doc-3" },
+    "C-05": { "id": "C-05", "title": "Cabinet Mission Plan Memorandum", "filename": "doc-cabinet-mission-cmd6821.pdf", "type": "image", "status": "archived", "blockId": "b-vis-doc-5" }
+  },
+  "charts": {
+    "D-01": { "id": "D-01", "title": "Partition Death Toll Estimates", "filename": "chart-partition-death-toll-v1.svg", "url": "/images/library/chapter-1/charts/chart-death-toll-estimates.svg", "type": "chart", "status": "recreated", "blockId": "b-vis-chart-1" },
+    "D-02": { "id": "D-02", "title": "Refugee Flows, 1947-48", "filename": "chart-refugee-flows-v1.svg", "url": "/images/library/chapter-1/charts/chart-refugee-flows.svg", "type": "chart", "status": "recreated", "blockId": "b-vis-chart-2" },
+    "D-03": { "id": "D-03", "title": "Timeline, 1945-1948", "filename": "chart-timeline-1945-1948-v1.svg", "url": "/images/library/chapter-1/charts/chart-timeline-1945-1948.svg", "type": "chart", "status": "recreated", "blockId": "b-vis-chart-3" },
+    "D-04": { "id": "D-04", "title": "Religious Composition, 1941 vs 1951", "filename": "chart-religious-composition-v1.svg", "url": "/images/library/chapter-1/charts/chart-demography-1941-1951.svg", "type": "chart", "status": "recreated", "blockId": "b-vis-chart-4" },
+    "D-05": { "id": "D-05", "title": "Military Balance, 1947", "filename": "chart-military-balance-1947-v1.svg", "url": "/images/library/chapter-1/charts/chart-military-balance-1947.svg", "type": "chart", "status": "recreated", "blockId": "b-vis-chart-5" }
+  }
+}

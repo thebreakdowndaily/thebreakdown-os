@@ -275,7 +275,7 @@ export function apiInvestigationToCanonical(i: APIInvestigation): Investigation 
     relatedTopicIds: [],
     sources: (i.sources || []).map((src): Source => ({ title: src.name, url: src.url, accessedAt: '', tier: src.tier as any })),
     faq: (i.faq || []).map((q): FAQItem => ({ question: q.question, answer: q.answer })),
-    timeline: (i.timeline || []).map((e): TimelineEvent => ({ date: e.date, title: e.title, description: e.description, sourceUrl: e.source })),
+    timeline: (i.timeline || []).map((e) => ({ date: e.date, title: e.title, description: e.description, sourceUrl: e.source })),
     statistics: (i.facts || []).map((f) => ({ label: f.label, value: f.value })),
   } as Investigation;
 }

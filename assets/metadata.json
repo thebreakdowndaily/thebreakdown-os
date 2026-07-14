@@ -1,0 +1,204 @@
+{
+  "A-01": {
+    "id": "A-01",
+    "blockId": "b-vis-img-1",
+    "title": "Mountbatten & Muhammad Ali Jinnah, Viceroy's House, 1947",
+    "creator": "No. 9 Army Film & Photographic Unit",
+    "source": "Imperial War Museums",
+    "reference": "IWM IND 5302",
+    "date": "1947-04",
+    "rights": "Public Domain (Crown Copyright expired) / IWM terms",
+    "credit": "© IWM (IND 5302)",
+    "evidenceLevel": "A",
+    "provenance": {
+      "archiveHierarchy": "IWM → Photograph Archive → No. 9 Army Film & Photographic Unit → IND Series",
+      "iiifUrl": "https://www.iwm.org.uk/collections/item/object/205125304",
+      "commercialId": "Getty 629584203",
+      "citationChicago": "No. 9 Army Film & Photographic Unit. Admiral of the Fleet Earl Mountbatten of Burma. April 1947. Photograph. Imperial War Museums, IND 5302."
+    },
+    "archivalProvenance": {
+      "acquiredFrom": "IWM direct download",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/photos/a-01-mountbatten-jinnah-viceroys-house-1947.jpg",
+      "localDimensions": "800 × 616 px",
+      "localFormat": "JPEG",
+      "localDpi": 72
+    }
+  },
+  "A-09": {
+    "id": "A-09",
+    "blockId": "b-vis-img-9",
+    "title": "Jinnah and Gandhi in conversation, Bombay 1944",
+    "creator": "ullstein bild",
+    "source": "Getty Images / Dinodia Photos",
+    "reference": "542347429",
+    "date": "1944-09",
+    "rights": "Public Domain in India (Section 25, Copyright Act 1957) / Rights Managed (International)",
+    "credit": "Dinodia Photos / Rühe/ullstein bild via Getty Images",
+    "evidenceLevel": "B",
+    "provenance": {
+      "archiveHierarchy": "Dinodia Photos Archive / ullstein bild → 1944 Bombay Talks",
+      "iiifUrl": "https://commons.wikimedia.org/wiki/File:Gandhi_Jinnah_Sept_1944.jpg",
+      "commercialId": "Getty 542347429",
+      "citationChicago": "Jinnah & Gandhi, 1944. September 9, 1944. Photograph. ullstein bild / Getty Images, 542347429.",
+      "note": "Public domain in India. Free via Wikimedia Commons."
+    },
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/chapter-1/photos/photo-gandhi-jinnah-bombay-1944-dinodia-mkg33469.jpg",
+      "localDimensions": "2048 × 2048 px",
+      "localFormat": "JPEG"
+    }
+  },
+  "C-01": {
+    "id": "C-01",
+    "blockId": "b-vis-doc-1",
+    "title": "Indian Independence Act, 1947 — cover and key clauses",
+    "creator": "UK Parliament",
+    "source": "UK Parliamentary Archives",
+    "reference": "HL/PO/PU/1/1947/10&11G6c30",
+    "date": "1947",
+    "rights": "Public Record (UK Parliament)",
+    "credit": "UK National Archives",
+    "evidenceLevel": "B",
+    "provenance": {
+      "iiifUrl": "https://www.parliament.uk/about/living-heritage/evolutionofparliament/legislativescrutiny/parliament-and-empire/collections1/collections2/1947-indian-independence-act/"
+    },
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Parliamentary Archives JPG)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/chapter-1/documents/doc-independence-act-1947.jpg",
+      "localFormat": "JPEG"
+    }
+  },
+  "SUP-01": {
+    "id": "SUP-01",
+    "blockId": "b-vis-sup-01",
+    "theme": "partition",
+    "title": "Muslim refugees on train engine, Delhi 1947",
+    "creator": "Daily Herald Archive",
+    "source": "National Science & Media Museum / SSPL via Getty Images",
+    "reference": "1360179719",
+    "date": "1947",
+    "rights": "Rights Managed",
+    "credit": "Daily Herald Archive / Contributor via Getty Images",
+    "note": "PROVISIONAL — partition theme",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localDimensions": "2864 × 1848 px (300 dpi)",
+      "localPath": "/images/library/supplementary/partition/sup-01-muslim-refugees-train-engine-delhi-1947-daily-herald.jpg"
+    }
+  },
+  "SUP-02": {
+    "id": "SUP-02",
+    "blockId": "b-vis-sup-02",
+    "theme": "partition",
+    "title": "Muslims boarding train at New Delhi Station, 7 Aug 1947",
+    "creator": "Keystone Features",
+    "source": "Getty Images",
+    "reference": "3336843",
+    "date": "1947-08-07",
+    "rights": "Rights Managed",
+    "credit": "Keystone Features / Getty Images",
+    "note": "PROVISIONAL — partition theme",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/supplementary/partition/sup-02-muslims-boarding-train-new-delhi-1947-keystone.jpg"
+    }
+  },
+  "SUP-03": {
+    "id": "SUP-03",
+    "blockId": "b-vis-sup-03",
+    "theme": "gandhi",
+    "title": "Gandhi & Nehru addressing refugees, Hardwar June 1947",
+    "creator": "Universal History Archive",
+    "source": "Getty Images",
+    "reference": "973199382",
+    "date": "1947-06",
+    "rights": "Rights Managed",
+    "credit": "Universal History Archive / Getty Images",
+    "note": "PROVISIONAL — gandhi theme",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/supplementary/gandhi/sup-03-gandhi-nehru-refugees-hardwar-1947.jpg"
+    }
+  },
+  "SUP-04": {
+    "id": "SUP-04",
+    "blockId": "b-vis-sup-04",
+    "theme": "partition",
+    "title": "Soldiers and refugees on vehicle trek, 5 Sep 1947",
+    "creator": "Bettmann",
+    "source": "Getty Images",
+    "reference": "515214340",
+    "date": "1947-09-05",
+    "rights": "Rights Managed",
+    "credit": "Bettmann / Getty Images",
+    "note": "PROVISIONAL — partition theme",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/supplementary/partition/sup-04-soldiers-refugees-vehicle-trek-1947-bettmann.jpg"
+    }
+  },
+  "SUP-05": {
+    "id": "SUP-05",
+    "blockId": "b-vis-sup-05",
+    "theme": "partition",
+    "title": "Refugees trekking on foot with belongings, Sep 1947",
+    "creator": "Bettmann",
+    "source": "Getty Images",
+    "reference": "701041686",
+    "date": "1947-09-05",
+    "rights": "Rights Managed",
+    "credit": "Bettmann / Getty Images",
+    "note": "PROVISIONAL — partition theme",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/supplementary/partition/sup-05-refugees-trekking-foot-belongings-1947-bettmann.jpg"
+    }
+  },
+  "SUP-06": {
+    "id": "SUP-06",
+    "blockId": "b-vis-sup-06",
+    "theme": "accession",
+    "title": "Junagadh volunteers arriving by train, 25 Sep 1947",
+    "creator": "Unknown",
+    "source": "Getty Images",
+    "reference": "1971029537",
+    "date": "1947-09-25",
+    "rights": "Rights Managed",
+    "credit": "Getty Images",
+    "note": "PROVISIONAL — accession theme",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (Getty preview)",
+      "acquiredAt": "2026-07-13",
+      "localPath": "/images/library/supplementary/accession/sup-06-junagadh-volunteers-train-1947.jpg"
+    }
+  },
+  "SUP-07": {
+    "id": "SUP-07",
+    "blockId": "b-vis-sup-07",
+    "theme": "gandhi",
+    "title": "Mahatma Gandhi with Abha Gandhi and Kanu Gandhi",
+    "creator": "Unknown (possibly Kanu Gandhi or Ruhe/ullstein bild collection)",
+    "source": "Unknown",
+    "reference": "1711791173",
+    "date": "Unknown (EXIF: 2014-04-18 processing date)",
+    "rights": "Unknown",
+    "credit": "Source unconfirmed",
+    "note": "PROVISIONAL — gandhi theme. Unmapped.",
+    "archivalProvenance": {
+      "acquiredFrom": "User download (source unconfirmed)",
+      "acquiredAt": "2026-07-13",
+      "localDimensions": "289 × 400 px (72 dpi, 8-bit grayscale)",
+      "localPath": "/images/library/supplementary/gandhi/sup-07-gandhi-abha-kanu-gandhi.jpg",
+      "exifSoftware": "Adobe Photoshop CS6 (Windows)"
+    }
+  }
+}

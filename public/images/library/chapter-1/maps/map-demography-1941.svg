@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+      text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+    <linearGradient id="muslimGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#1A3A2A"/>
+      <stop offset="20%" stop-color="#2A5A3A"/>
+      <stop offset="40%" stop-color="#3A7A4A"/>
+      <stop offset="60%" stop-color="#4A9A5A"/>
+      <stop offset="80%" stop-color="#5ABB6A"/>
+      <stop offset="100%" stop-color="#6ADD7A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#0A0A0A"/>
+  <rect width="1600" height="900" fill="#1A2A3A" opacity="0.35"/>
+
+  <!-- Grid lines -->
+  <g opacity="0.12" stroke="#1A1A2A" stroke-width="0.5" fill="none">
+    <line x1="44" y1="0" x2="44" y2="900"/><line x1="267" y1="0" x2="267" y2="900"/>
+    <line x1="489" y1="0" x2="489" y2="900"/><line x1="711" y1="0" x2="711" y2="900"/>
+    <line x1="933" y1="0" x2="933" y2="900"/><line x1="1156" y1="0" x2="1156" y2="900"/>
+    <line x1="1378" y1="0" x2="1378" y2="900"/>
+    <line x1="0" y1="783" x2="1600" y2="783"/><line x1="0" y1="642" x2="1600" y2="642"/>
+    <line x1="0" y1="500" x2="1600" y2="500"/><line x1="0" y1="359" x2="1600" y2="359"/>
+    <line x1="0" y1="218" x2="1600" y2="218"/><line x1="0" y1="76" x2="1600" y2="76"/>
+  </g>
+
+  <!-- Subcontinent outline -->
+  <path d="M 0 366 C 15 350 40 340 67 358 C 90 372 115 372 133 372 C 148 372 160 368 170 370 L 178 394 C 195 400 215 406 230 408 C 245 408 258 406 267 403 C 245 420 218 445 200 458 C 192 468 200 480 222 486 C 244 492 267 486 290 478 C 312 470 335 458 350 448 C 356 440 356 455 356 472 C 356 480 360 488 368 494 C 380 500 389 518 391 537 C 395 550 400 562 411 582 C 422 600 433 618 444 636 C 450 652 458 664 467 678 C 478 696 489 716 496 735 C 502 754 511 772 524 790 C 535 806 550 824 570 836 L 578 839 L 600 839 C 618 835 632 826 644 814 C 658 800 672 782 689 762 C 700 744 711 727 720 712 C 724 702 725 694 730 682 C 740 662 750 642 762 620 C 772 600 783 578 800 557 C 815 537 830 522 845 510 C 860 500 878 494 895 490 C 912 492 932 496 952 498 C 968 496 980 492 995 484 C 1012 474 1022 464 1035 454 C 1052 448 1068 446 1082 446 C 1098 448 1112 454 1126 460 C 1142 470 1156 480 1172 482 C 1186 478 1196 470 1206 460 C 1216 450 1226 440 1240 432 C 1250 438 1260 450 1270 462 C 1280 450 1290 434 1302 420 C 1320 400 1338 382 1356 364 C 1372 350 1392 330 1412 312 C 1428 302 1448 292 1466 284 C 1462 274 1448 266 1430 260 C 1412 254 1394 252 1380 254 C 1358 260 1338 268 1318 276 C 1298 282 1278 284 1258 284 C 1238 284 1218 282 1200 280 C 1180 278 1160 278 1140 280 C 1120 282 1100 284 1080 284 C 1060 284 1040 282 1020 282 C 1000 282 980 284 960 284 C 940 284 920 284 900 284 C 880 284 860 284 840 284 C 820 284 800 284 780 284 C 760 284 740 282 720 280 C 702 276 684 270 668 262 C 652 252 636 240 620 228 C 608 216 598 202 590 188 C 582 172 570 154 558 140 C 544 124 530 114 514 108 C 498 102 482 100 462 96 C 442 90 422 82 400 74 C 380 66 358 60 337 58 C 317 58 297 62 277 68 C 258 74 238 80 218 88 C 198 96 180 102 160 110 C 140 128 120 152 100 176 C 80 202 62 230 44 258 C 30 278 18 292 10 308 C 6 322 4 340 2 356 L 0 366 Z" fill="#2A2A3A" stroke="#555555" stroke-width="1"/>
+  <path d="M 720 795 C 735 790 760 798 778 815 C 790 828 790 845 780 860 C 770 878 750 892 730 898 C 715 900 705 890 700 875 C 695 855 698 835 705 818 C 710 805 715 798 720 795 Z" fill="#2A2A3A" stroke="#555555" stroke-width="0.8"/>
+
+  <!-- Choropleth regions (Muslim % by province, 1941 census) -->
+  <!-- NWFP: 89% Muslim -->
+  <path d="M 330 180 C 350 160 380 145 410 135 C 440 128 470 128 500 135 C 520 140 535 150 545 165 C 550 175 550 185 545 195 C 540 205 530 210 518 212 C 506 214 494 212 482 206 C 470 200 460 192 452 182 C 444 172 438 162 430 155 C 422 148 412 145 402 148 C 392 151 382 158 374 168 C 366 178 360 190 355 200 C 350 210 346 218 340 222 C 334 226 326 225 320 220 C 314 215 312 208 315 200 C 318 192 324 185 330 180 Z" fill="#5ABB6A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="430" y="180" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">NWFP</text>
+  <text x="430" y="192" font-size="8" fill="#6ADD7A" text-anchor="middle">89%</text>
+
+  <!-- Punjab: ~53% Muslim (west) / ~43% east -->
+  <path d="M 430 200 C 460 190 495 185 530 185 C 565 185 600 192 630 205 C 660 218 685 235 705 256 C 718 270 725 282 728 292 C 730 300 730 308 725 315 C 720 322 712 326 702 328 C 692 330 682 328 672 322 C 662 316 654 308 648 298 C 642 288 638 278 632 270 C 626 262 618 258 608 258 C 598 258 588 262 578 268 C 568 274 558 280 548 284 C 538 288 528 288 518 284 C 508 280 498 272 490 262 C 482 252 476 242 472 230 C 468 218 466 208 460 200 C 454 192 445 188 436 190 C 427 192 420 198 430 200 Z" fill="#4A9A5A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="580" y="250" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Punjab</text>
+  <text x="580" y="262" font-size="8" fill="#5ABB6A" text-anchor="middle">53% (West)</text>
+
+  <!-- Sindh: 72% Muslim -->
+  <path d="M 200 320 C 220 310 250 305 280 305 C 310 305 340 312 365 325 C 390 338 410 355 425 376 C 430 383 432 390 430 396 C 428 402 422 406 414 408 C 406 410 398 408 390 402 C 382 396 374 388 368 378 C 362 368 358 358 352 350 C 346 342 338 338 328 338 C 318 338 308 342 298 348 C 288 354 278 360 268 364 C 258 368 248 368 238 364 C 228 360 218 352 212 342 C 206 332 204 322 200 320 Z" fill="#3A7A4A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="320" y="360" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Sindh</text>
+  <text x="320" y="372" font-size="8" fill="#4A9A5A" text-anchor="middle">72%</text>
+
+  <!-- Balochistan: ~91% Muslim -->
+  <path d="M 100 240 C 120 230 150 222 180 218 C 210 214 240 218 265 228 C 285 236 298 248 305 262 C 310 272 310 282 305 290 C 300 298 292 302 282 302 C 272 302 262 298 252 290 C 242 282 234 272 228 262 C 222 252 218 242 212 235 C 206 228 198 225 190 228 C 182 231 174 238 168 248 C 162 258 158 268 152 275 C 146 282 138 285 130 282 C 122 279 116 272 114 262 C 112 252 110 244 100 240 Z" fill="#5ABB6A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="210" y="262" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Balochistan</text>
+  <text x="210" y="274" font-size="8" fill="#6ADD7A" text-anchor="middle">91%</text>
+
+  <!-- Bengal: ~44% Muslim (varied) -->
+  <path d="M 1020 340 C 1040 330 1065 325 1090 325 C 1115 325 1140 332 1160 345 C 1178 358 1190 375 1198 396 C 1202 408 1202 418 1196 428 C 1190 438 1180 445 1168 448 C 1156 451 1144 450 1132 445 C 1120 440 1110 432 1102 422 C 1094 412 1090 402 1088 392 C 1086 382 1086 372 1090 364 C 1094 356 1102 352 1112 352 C 1122 352 1132 358 1140 368 C 1148 378 1154 390 1158 404 C 1162 418 1162 432 1156 444 C 1150 456 1140 464 1128 468 C 1116 472 1104 470 1094 464 C 1084 458 1078 448 1076 436 C 1074 424 1078 414 1086 408 C 1094 402 1106 402 1116 408 C 1126 414 1134 426 1138 440 C 1142 454 1140 468 1132 480 C 1124 492 1112 498 1098 498 C 1084 498 1072 492 1064 482 C 1056 472 1052 460 1052 446 C 1052 432 1058 422 1070 416 C 1082 410 1096 412 1108 420 C 1120 428 1128 442 1132 458" fill="#3A7A4A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="1110" y="400" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Bengal</text>
+  <text x="1110" y="412" font-size="8" fill="#4A9A5A" text-anchor="middle">44%</text>
+
+  <!-- Bihar: ~12% Muslim (low, stayed in India) -->
+  <path d="M 850 340 C 870 332 895 328 920 330 C 945 332 968 340 985 354 C 1000 368 1008 385 1010 406 C 1012 420 1008 432 998 440 C 988 448 976 450 964 446 C 952 442 942 434 936 422 C 930 410 928 398 926 386 C 924 374 924 362 926 352 C 928 342 934 336 942 334 C 950 332 958 336 966 344 C 974 352 980 364 984 378 C 988 392 988 406 984 418 C 980 430 972 440 962 444 C 952 448 942 446 934 440 C 926 434 922 424 920 412 C 918 400 922 390 930 384" fill="#2A5A3A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="960" y="390" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Bihar</text>
+  <text x="960" y="402" font-size="8" fill="#3A7A4A" text-anchor="middle">12%</text>
+
+  <!-- Bombay Presidency: ~20% Muslim -->
+  <path d="M 320 380 C 340 372 365 368 390 370 C 415 372 440 380 460 394 C 478 408 490 426 496 448 C 500 462 500 476 494 488 C 488 500 478 508 466 512 C 454 516 442 514 430 508 C 418 502 408 492 402 480 C 396 468 392 456 388 444 C 384 432 380 422 374 416 C 368 410 360 408 352 412 C 344 416 338 424 334 434 C 330 444 328 454 324 460 C 320 466 314 468 308 464 C 302 460 298 452 300 442 C 302 432 310 424 322 420 C 334 416 348 418 360 424" fill="#2A5A3A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="410" y="450" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Bombay</text>
+  <text x="410" y="462" font-size="8" fill="#3A7A4A" text-anchor="middle">20%</text>
+
+  <!-- Madras: ~8% Muslim (very low) -->
+  <path d="M 680 540 C 700 530 725 525 750 528 C 775 531 798 542 815 558 C 832 574 842 595 846 620 C 850 640 848 658 840 674 C 832 690 820 700 806 706 C 792 712 778 712 764 706 C 750 700 740 690 734 676 C 728 662 726 648 724 634 C 722 620 722 608 726 598 C 730 588 738 582 748 580 C 758 578 768 582 776 590 C 784 598 790 610 792 624 C 794 638 792 652 786 664 C 780 676 770 684 758 686 C 746 688 736 684 730 676 C 724 668 722 656 724 644 C 726 632 734 624 746 620" fill="#1A3A2A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="780" y="620" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Madras</text>
+  <text x="780" y="632" font-size="8" fill="#2A5A3A" text-anchor="middle">8%</text>
+
+  <!-- Assam: ~25% Muslim -->
+  <path d="M 1160 300 C 1178 292 1200 288 1222 290 C 1244 292 1264 300 1280 314 C 1294 328 1302 346 1304 368 C 1306 384 1302 398 1292 408 C 1282 418 1270 422 1258 420 C 1246 418 1236 412 1228 402 C 1220 392 1216 382 1214 370 C 1212 358 1214 348 1220 340 C 1226 332 1236 328 1246 330 C 1256 332 1266 340 1272 352 C 1278 364 1280 378 1276 390 C 1272 402 1262 410 1250 412 C 1238 414 1228 408 1222 398 C 1216 388 1214 376 1218 366" fill="#2A5A3A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="1250" y="370" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Assam</text>
+  <text x="1250" y="382" font-size="8" fill="#3A7A4A" text-anchor="middle">25%</text>
+
+  <!-- Orissa: ~5% Muslim -->
+  <path d="M 860 420 C 878 412 900 408 922 410 C 944 412 964 420 978 434 C 992 448 1000 466 1002 488 C 1004 504 1000 518 990 528 C 980 538 968 542 956 540 C 944 538 934 530 928 518 C 922 506 920 494 918 482 C 916 470 916 458 920 450 C 924 442 932 438 942 438 C 952 438 962 444 970 454 C 978 464 984 478 986 494 C 988 510 984 524 976 534 C 968 544 956 548 944 546 C 932 544 924 536 920 524 C 916 512 918 500 924 492" fill="#1A3A2A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="950" y="480" font-size="7" fill="#FFFFFF" font-weight="600" text-anchor="middle">Orissa</text>
+  <text x="950" y="490" font-size="7" fill="#2A5A3A" text-anchor="middle">5%</text>
+
+  <!-- United Provinces: ~14% Muslim -->
+  <path d="M 620 210 C 645 200 675 195 705 198 C 735 201 764 212 788 230 C 810 248 826 270 834 298 C 840 320 840 340 832 358 C 824 376 810 388 792 394 C 774 400 758 398 742 390 C 726 382 714 370 706 354 C 698 338 694 322 692 306 C 690 290 692 274 698 262 C 704 250 714 242 726 240 C 738 238 750 242 760 250 C 770 258 778 270 782 284 C 786 298 786 312 780 324 C 774 336 764 344 752 346 C 740 348 730 344 722 336 C 714 328 710 318 710 306 C 710 294 716 284 726 280 C 736 276 748 278 758 286 C 768 294 776 308 780 324 C 784 340 782 356 774 368 C 766 380 754 386 742 386" fill="#2A5A3A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="760" y="300" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">UP</text>
+  <text x="760" y="312" font-size="8" fill="#3A7A4A" text-anchor="middle">14%</text>
+
+  <!-- Central Provinces: ~5% Muslim -->
+  <path d="M 720 380 C 740 372 765 368 790 370 C 815 372 838 380 856 394 C 872 408 882 426 886 448 C 890 466 888 482 878 494 C 868 506 854 512 840 512 C 826 512 814 506 804 496 C 794 486 788 474 784 460 C 780 446 780 432 782 422 C 784 412 790 406 798 404 C 806 402 814 406 822 414 C 830 422 836 434 838 448 C 840 462 836 474 828 482 C 820 490 810 492 800 488 C 790 484 784 476 782 466 C 780 456 784 448 792 444" fill="#1A3A2A" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+  <text x="830" y="448" font-size="7" fill="#FFFFFF" font-weight="600" text-anchor="middle">CP</text>
+  <text x="830" y="458" font-size="7" fill="#2A5A3A" text-anchor="middle">5%</text>
+
+  <!-- EVENTUAL PAKISTAN BOUNDARY (1947) -->
+  <path d="M 330 180 C 350 160 380 145 410 135 C 440 128 470 128 500 135 C 520 140 535 150 545 165 C 550 175 550 185 545 195 C 540 205 530 210 518 212 C 506 214 494 212 482 206 C 470 200 460 192 452 182 C 444 172 438 162 430 155 C 422 148 412 145 402 148 C 392 151 382 158 374 168 C 366 178 360 190 355 200 C 350 210 346 218 340 222 C 334 226 326 225 320 220 C 314 215 312 208 315 200 C 318 192 324 185 330 180 Z M 430 200 C 460 190 495 185 530 185 C 565 185 600 192 630 205 C 660 218 685 235 705 256 C 718 270 725 282 728 292 C 730 300 730 308 725 315 C 720 322 712 326 702 328 C 692 330 682 328 672 322 C 662 316 654 308 648 298 C 642 288 638 278 632 270 C 626 262 618 258 608 258 C 598 258 588 262 578 268 C 568 274 558 280 548 284 C 538 288 528 288 518 284 C 508 280 498 272 490 262 C 482 252 476 242 472 230 C 468 218 466 208 460 200 C 454 192 445 188 436 190 C 427 192 420 198 430 200 Z M 200 320 C 220 310 250 305 280 305 C 310 305 340 312 365 325 C 390 338 410 355 425 376 C 430 383 432 390 430 396 C 428 402 422 406 414 408 C 406 410 398 408 390 402 C 382 396 374 388 368 378 C 362 368 358 358 352 350 C 346 342 338 338 328 338 C 318 338 308 342 298 348 C 288 354 278 360 268 364 C 258 368 248 368 238 364 C 228 360 218 352 212 342 C 206 332 204 322 200 320 Z" fill="none" stroke="#FF4444" stroke-width="3" stroke-dasharray="15,8" opacity="0.8"/>
+
+  <!-- Labels for Pakistan -->
+  <text x="350" y="155" font-size="10" fill="#FF4444" font-weight="700" opacity="0.9">N.W. PAKISTAN</text>
+  <text x="350" y="370" font-size="10" fill="#FF4444" font-weight="700" opacity="0.9">SINDH / W. PAKISTAN</text>
+  <text x="1100" y="365" font-size="10" fill="#FF4444" font-weight="700" opacity="0.9">E. PAKISTAN</text>
+  <text x="560" y="225" font-size="9" fill="#FF6666" font-weight="600" opacity="0.7">PUNJAB BORDER</text>
+
+  <!-- Cities -->
+  <circle cx="587" cy="264" r="4" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+  <circle cx="391" cy="537" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <circle cx="1084" cy="433" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <circle cx="133" cy="371" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <g font-size="8" fill="#BBBBBB">
+    <text x="597" y="260">Delhi</text><text x="365" y="534">Bombay</text>
+    <text x="1094" y="429">Calcutta</text><text x="105" y="368">Karachi</text>
+  </g>
+
+  <!-- Gradient legend -->
+  <g transform="translate(50, 620)">
+    <rect x="0" y="0" width="20" height="200" fill="url(#muslimGrad)" stroke="#333" stroke-width="0.5"/>
+    <text x="28" y="8" font-size="8" fill="#CCCCCC">100%</text>
+    <text x="28" y="48" font-size="8" fill="#CCCCCC">80%</text>
+    <text x="28" y="88" font-size="8" fill="#CCCCCC">60%</text>
+    <text x="28" y="128" font-size="8" fill="#CCCCCC">40%</text>
+    <text x="28" y="168" font-size="8" fill="#CCCCCC">20%</text>
+    <text x="28" y="200" font-size="8" fill="#CCCCCC">0%</text>
+    <text x="-5" y="-10" font-size="9" fill="#CCCCCC" font-weight="600">Muslim Population %</text>
+    <text x="-5" y="220" font-size="7" fill="#888888">1941 Census</text>
+  </g>
+
+  <!-- Stats panel -->
+  <g transform="translate(40, 80)">
+    <rect x="0" y="0" width="300" height="55" fill="#0A0A0A" opacity="0.85" stroke="#333333" stroke-width="0.5" rx="4"/>
+    <text x="12" y="18" font-size="10" fill="#CCCCCC" font-weight="600">Muslim Demography, British India, 1941</text>
+    <text x="12" y="34" font-size="8" fill="#AAAAAA">Total Muslim population: ~94 million (24.3% of British India)</text>
+    <text x="12" y="48" font-size="7" fill="#888888">Dashed red line = eventual Pakistan boundary (Aug 1947)</text>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(50, 850)">
+    <rect x="0" y="0" width="120" height="1" fill="#888888"/>
+    <line x1="0" y1="-4" x2="0" y2="4" stroke="#888888" stroke-width="1"/>
+    <line x1="60" y1="-3" x2="60" y2="3" stroke="#888888" stroke-width="0.8"/>
+    <line x1="120" y1="-4" x2="120" y2="4" stroke="#888888" stroke-width="1"/>
+    <text x="60" y="12" font-size="7" fill="#888888" text-anchor="middle">0 — 300 — 600 km</text>
+  </g>
+  <g transform="translate(1520, 60)">
+    <circle cx="0" cy="0" r="22" fill="none" stroke="#555555" stroke-width="0.5"/>
+    <polygon points="0,-30 -4,-20 4,-20" fill="#C4A34E"/>
+    <polygon points="0,30 -4,20 4,20" fill="#555555"/>
+    <text x="0" y="-34" font-size="9" fill="#C4A34E" text-anchor="middle" font-weight="600">N</text>
+  </g>
+
+  <text x="40" y="40" font-size="28" font-weight="700" fill="#FFFFFF">Muslim Demography, British India, 1941</text>
+  <text x="40" y="62" font-size="14" fill="#999999">Census Data with Eventual Pakistan Boundary</text>
+  <text x="1590" y="890" font-size="7" fill="#555555" text-anchor="end">© The Breakdown Knowledge Platform. Data from 1941 Census of India.</text>
+</svg>

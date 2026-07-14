@@ -1,0 +1,239 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Demographic transformation of religious composition from 1941 to 1951 due to Partition">
+  <title>Demographic Transformation — Religious Composition, 1941 vs 1951</title>
+  <desc>Grouped bar chart comparing Hindu, Muslim, Sikh, and Other religious populations across regions before and after Partition.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+    text { font-family: 'Inter', system-ui, sans-serif; }
+    .title { fill: #FFFFFF; font-size: 28px; font-weight: 700; }
+    .subtitle { fill: #A0A0A0; font-size: 16px; font-weight: 400; }
+    .axis-label { fill: #B0B0B0; font-size: 12px; font-weight: 400; }
+    .region-label { fill: #FFFFFF; font-size: 14px; font-weight: 600; text-anchor: middle; }
+    .region-sublabel { fill: #888888; font-size: 11px; text-anchor: middle; }
+    .year-label { fill: #FFFFFF; font-size: 12px; font-weight: 600; }
+    .percent-label { fill: #FFFFFF; font-size: 10px; font-weight: 600; }
+    .legend-text { fill: #B0B0B0; font-size: 12px; font-weight: 400; }
+    .source-citation { fill: #666666; font-size: 10px; font-weight: 400; }
+    .grid-line { stroke: #222222; stroke-width: 1; }
+    .grid-line-major { stroke: #333333; stroke-width: 1; }
+    .annotation { fill: #FFD700; font-size: 11px; font-weight: 600; }
+    .annotation-line { stroke: #FFD700; stroke-width: 1; stroke-dasharray: 3 3; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0A0A0A"/>
+
+  <!-- Title -->
+  <text x="60" y="48" class="title">How Partition Reshaped Religious Demography</text>
+  <text x="60" y="74" class="subtitle">Comparing religious composition across regions, 1941 vs 1951 — Census data</text>
+
+  <!-- CHART LAYOUT -->
+  <!-- 4 region groups: All-India, Punjab, Bengal, Each split into 1941/1951 -->
+  <!-- Each region group = 220px wide, with gap between -->
+  <!-- x=80 to x=1140, total=1060px -->
+  <!-- 4 groups with ~40px gaps -->
+  <!-- Group 1: x=80-280 (All-India) -->
+  <!-- Group 2: x=340-540 (Punjab) -->
+  <!-- Group 3: x=600-800 (Bengal) -->
+  <!-- Group 4: x=860-1060 (note: actually 3 region comparisons) -->
+  <!-- Actually: 3 regions, each with 2 sub-comparisons = 6 bar groups -->
+  <!-- Simplified: 3 main regions with before/after pairs -->
+
+  <!-- Y-axis: 0-100% scale -->
+  <!-- Chart area: y=120 to y=680 (560px), 100% = 560px -->
+  <!-- Gridlines at 25%, 50%, 75%, 100% -->
+
+  <line x1="80" y1="680" x2="1140" y2="680" class="grid-line-major"/>
+  <line x1="80" y1="540" x2="1140" y2="540" class="grid-line"/>
+  <text x="72" y="544" text-anchor="end" class="axis-label">25%</text>
+
+  <line x1="80" y1="400" x2="1140" y2="400" class="grid-line"/>
+  <text x="72" y="404" text-anchor="end" class="axis-label">50%</text>
+
+  <line x1="80" y1="260" x2="1140" y2="260" class="grid-line"/>
+  <text x="72" y="264" text-anchor="end" class="axis-label">75%</text>
+
+  <line x1="80" y1="120" x2="1140" y2="120" class="grid-line"/>
+  <text x="72" y="124" text-anchor="end" class="axis-label">100%</text>
+
+  <text x="72" y="684" text-anchor="end" class="axis-label">0%</text>
+
+  <!-- Color scheme: Hindu=#E74C3C, Muslim=#2980B9, Sikh=#27AE60, Other=#888888 -->
+
+  <!-- ===================== GROUP 1: ALL-INDIA (x=80-310) ===================== -->
+  <!-- 1941 bar set: x=80-195 -->
+  <!-- 1951 bar set: x=205-320 -->
+
+  <!-- Region label -->
+  <text x="200" y="105" class="region-label">ALL-INDIA</text>
+
+  <!-- 1941: Hindu 66%, Muslim 24%, Sikh 2%, Other 8% -->
+  <!-- Stacked bar: Hindu 66% = 370px, Muslim 24% = 134px, Sikh 2% = 11px, Other 8% = 45px = 560px total -->
+  <text x="138" y="90" text-anchor="middle" class="year-label">1941</text>
+
+  <!-- Hindu 66% -->
+  <rect x="80" y="680" width="115" height="-370" fill="#E74C3C"/>
+  <text x="138" y="480" text-anchor="middle" class="percent-label">66%</text>
+  <text x="138" y="466" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Hindu</text>
+
+  <!-- Muslim 24% -->
+  <rect x="80" y="310" width="115" height="-134" fill="#2980B9"/>
+  <text x="138" y="248" text-anchor="middle" class="percent-label">24%</text>
+
+  <!-- Sikh 2% -->
+  <rect x="80" y="176" width="115" height="-11" fill="#27AE60"/>
+  <text x="138" y="173" text-anchor="middle" style="fill:#27AE60; font-size:9px;">2%</text>
+
+  <!-- Other 8% -->
+  <rect x="80" y="165" width="115" height="-45" fill="#666666"/>
+  <text x="138" y="155" text-anchor="middle" style="fill:#FFFFFF; font-size:9px;">8%</text>
+
+  <!-- 1951: Hindu 85%, Muslim 9.9%, Sikh 1.7%, Other 3.4% -->
+  <!-- Hindu 85% = 476px, Muslim 9.9% = 55px, Sikh 1.7% = 10px, Other 3.4% = 19px -->
+  <text x="263" y="90" text-anchor="middle" class="year-label">1951</text>
+
+  <rect x="205" y="680" width="115" height="-476" fill="#E74C3C" opacity="0.7"/>
+  <text x="263" y="420" text-anchor="middle" class="percent-label">85%</text>
+  <text x="263" y="406" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Hindu</text>
+
+  <rect x="205" y="204" width="115" height="-55" fill="#2980B9" opacity="0.7"/>
+  <text x="263" y="180" text-anchor="middle" class="percent-label">9.9%</text>
+
+  <rect x="205" y="149" width="115" height="-10" fill="#27AE60" opacity="0.7"/>
+  <text x="263" y="145" text-anchor="middle" style="fill:#27AE60; font-size:9px;">1.7%</text>
+
+  <rect x="205" y="139" width="115" height="-19" fill="#666666" opacity="0.7"/>
+  <text x="263" y="133" text-anchor="middle" style="fill:#FFFFFF; font-size:9px;">3.4%</text>
+
+  <!-- Annotation -->
+  <line x1="325" y1="310" x2="325" y2="204" class="annotation-line"/>
+  <text x="330" y="258" class="annotation">Muslim pop. fell from 24% to 9.9%</text>
+
+  <!-- ===================== GROUP 2: PUNJAB (x=340-620) ===================== -->
+  <!-- 1941 Punjab: Muslim 53%, Hindu 30%, Sikh 14%, Other ~3% -->
+  <!-- 1951 Indian Punjab: Hindu 62%, Sikh 33%, Muslim &lt;2%, Other ~3% -->
+  <!-- 1951 Pakistani Punjab: Muslim 98%, Other 2% -->
+
+  <text x="480" y="105" class="region-label">PUNJAB</text>
+
+  <!-- 1941: x=340-455 -->
+  <text x="398" y="90" text-anchor="middle" class="year-label">1941</text>
+
+  <!-- Muslim 53% -->
+  <rect x="340" y="680" width="115" height="-297" fill="#2980B9"/>
+  <text x="398" y="520" text-anchor="middle" class="percent-label">53%</text>
+  <text x="398" y="506" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Muslim</text>
+
+  <!-- Hindu 30% -->
+  <rect x="340" y="383" width="115" height="-168" fill="#E74C3C"/>
+  <text x="398" y="305" text-anchor="middle" class="percent-label">30%</text>
+
+  <!-- Sikh 14% -->
+  <rect x="340" y="215" width="115" height="-78" fill="#27AE60"/>
+  <text x="398" y="180" text-anchor="middle" class="percent-label">14%</text>
+
+  <!-- Other 3% -->
+  <rect x="340" y="137" width="115" height="-17" fill="#666666"/>
+  <text x="398" y="130" text-anchor="middle" style="fill:#FFFFFF; font-size:9px;">3%</text>
+
+  <!-- 1951 Indian Punjab: x=465-580 -->
+  <!-- Hindu 62%, Sikh 33%, Muslim &lt;2% -->
+  <text x="523" y="90" text-anchor="middle" class="year-label">Indian Punjab</text>
+  <text x="523" y="78" text-anchor="middle" style="fill:#888; font-size:10px;">1951</text>
+
+  <rect x="465" y="680" width="115" height="-347" fill="#E74C3C" opacity="0.7"/>
+  <text x="523" y="500" text-anchor="middle" class="percent-label">62%</text>
+  <text x="523" y="486" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Hindu</text>
+
+  <rect x="465" y="333" width="115" height="-185" fill="#27AE60" opacity="0.7"/>
+  <text x="523" y="245" text-anchor="middle" class="percent-label">33%</text>
+  <text x="523" y="231" text-anchor="middle" style="fill:#27AE60; font-size:10px;">Sikh</text>
+
+  <rect x="465" y="148" width="115" height="-11" fill="#2980B9" opacity="0.7"/>
+  <text x="523" y="140" text-anchor="middle" style="fill:#2980B9; font-size:9px;">&lt;2%</text>
+
+  <!-- Pakistani Punjab label -->
+  <text x="600" y="90" text-anchor="middle" class="year-label" style="fill:#888;">Pakistani Punjab</text>
+  <text x="600" y="78" text-anchor="middle" style="fill:#666; font-size:10px;">1951</text>
+
+  <!-- Pakistani Punjab: Muslim 98%, Other 2% -->
+  <rect x="590" y="680" width="30" height="-549" fill="#2980B9" opacity="0.7"/>
+  <text x="605" y="140" text-anchor="middle" class="percent-label">98%</text>
+  <text x="605" y="126" text-anchor="middle" style="fill:#2980B9; font-size:9px;">Muslim</text>
+
+  <rect x="590" y="131" width="30" height="-11" fill="#666666" opacity="0.7"/>
+  <text x="605" y="119" text-anchor="middle" style="fill:#FFFFFF; font-size:8px;">2%</text>
+
+  <!-- Punjab annotation -->
+  <line x1="585" y1="383" x2="585" y2="148" class="annotation-line"/>
+  <text x="588" y="268" class="annotation">Complete demographic</text>
+  <text x="588" y="282" class="annotation">inversion in Punjab</text>
+
+  <!-- ===================== GROUP 3: BENGAL (x=680-960) ===================== -->
+  <!-- 1941 Bengal: Muslim 55%, Hindu 42%, Other 3% -->
+  <!-- 1951 West Bengal: Hindu 78%, Muslim 20%, Other 2% -->
+  <!-- 1951 East Bengal/Pakistan: Muslim 97%, Other 3% -->
+
+  <text x="820" y="105" class="region-label">BENGAL</text>
+
+  <!-- 1941: x=680-795 -->
+  <text x="738" y="90" text-anchor="middle" class="year-label">1941</text>
+
+  <rect x="680" y="680" width="115" height="-308" fill="#2980B9"/>
+  <text x="738" y="530" text-anchor="middle" class="percent-label">55%</text>
+  <text x="738" y="516" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Muslim</text>
+
+  <rect x="680" y="372" width="115" height="-235" fill="#E74C3C"/>
+  <text x="738" y="260" text-anchor="middle" class="percent-label">42%</text>
+  <text x="738" y="246" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Hindu</text>
+
+  <rect x="680" y="137" width="115" height="-17" fill="#666666"/>
+  <text x="738" y="130" text-anchor="middle" style="fill:#FFFFFF; font-size:9px;">3%</text>
+
+  <!-- 1951 West Bengal: x=805-920 -->
+  <text x="863" y="90" text-anchor="middle" class="year-label">West Bengal</text>
+  <text x="863" y="78" text-anchor="middle" style="fill:#888; font-size:10px;">1951</text>
+
+  <rect x="805" y="680" width="115" height="-437" fill="#E74C3C" opacity="0.7"/>
+  <text x="863" y="450" text-anchor="middle" class="percent-label">78%</text>
+  <text x="863" y="436" text-anchor="middle" style="fill:#FFFFFF; font-size:10px; font-weight:500;">Hindu</text>
+
+  <rect x="805" y="243" width="115" height="-112" fill="#2980B9" opacity="0.7"/>
+  <text x="863" y="192" text-anchor="middle" class="percent-label">20%</text>
+
+  <rect x="805" y="131" width="115" height="-11" fill="#666666" opacity="0.7"/>
+  <text x="863" y="124" text-anchor="middle" style="fill:#FFFFFF; font-size:9px;">2%</text>
+
+  <!-- East Bengal/Pakistan: x=925-1060 -->
+  <text x="993" y="90" text-anchor="middle" class="year-label" style="fill:#888;">East Pakistan</text>
+  <text x="993" y="78" text-anchor="middle" style="fill:#666; font-size:10px;">1951</text>
+
+  <rect x="925" y="680" width="135" height="-543" fill="#2980B9" opacity="0.7"/>
+  <text x="993" y="148" text-anchor="middle" class="percent-label">97%</text>
+  <text x="993" y="134" text-anchor="middle" style="fill:#2980B9; font-size:9px;">Muslim</text>
+
+  <rect x="925" y="137" width="135" height="-17" fill="#666666" opacity="0.7"/>
+  <text x="993" y="130" text-anchor="middle" style="fill:#FFFFFF; font-size:8px;">3%</text>
+
+  <!-- ===================== KEY INSIGHT BOX ===================== -->
+  <rect x="60" y="700" width="1080" height="50" rx="4" fill="#1A1A1A" stroke="#FFD700" stroke-width="1"/>
+  <text x="600" y="720" text-anchor="middle" style="fill:#FFD700; font-size:13px; font-weight:700;">KEY FINDING</text>
+  <text x="600" y="738" text-anchor="middle" style="fill:#D0D0D0; font-size:12px;">Partition transformed religiously diverse regions into near-homogeneous populations — Punjab and Bengal went from 50-55% minority to &lt;3% minority in just one decade.</text>
+
+  <!-- ===================== LEGEND ===================== -->
+  <rect x="80" y="764" width="12" height="12" rx="2" fill="#E74C3C"/>
+  <text x="98" y="775" class="legend-text">Hindu</text>
+
+  <rect x="160" y="764" width="12" height="12" rx="2" fill="#2980B9"/>
+  <text x="178" y="775" class="legend-text">Muslim</text>
+
+  <rect x="240" y="764" width="12" height="12" rx="2" fill="#27AE60"/>
+  <text x="258" y="775" class="legend-text">Sikh</text>
+
+  <rect x="310" y="764" width="12" height="12" rx="2" fill="#666666"/>
+  <text x="328" y="775" class="legend-text">Other</text>
+
+  <text x="420" y="775" class="legend-text">Solid = 1941 · Opacity reduced = 1951</text>
+
+  <!-- Sources -->
+  <text x="60" y="795" class="source-citation">Sources: Census of India 1941, Vol. I; Census of Pakistan 1951; Census of India 1951, Vol. I, Part I-A; T. Bose, Dead Reckoning (2015).</text>
+</svg>

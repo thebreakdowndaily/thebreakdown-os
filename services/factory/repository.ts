@@ -1,3 +1,4 @@
+import type { KnowledgeLibraryService } from '../interfaces/knowledge-library';
 import type { StoryService } from '../interfaces/story';
 import type { TopicService } from '../interfaces/topic';
 import type { RawEntityRepository } from '../interfaces/entity';
@@ -21,6 +22,7 @@ import { SupabaseMediaRepository } from '../repositories/supabase/media';
 import { MemoryDatasetRepository } from '../repositories/memory/dataset';
 import { SupabaseDatasetRepository } from '../repositories/supabase/dataset';
 import { MemoryInvestigationRepository } from '../repositories/memory/investigation';
+import { MemoryKnowledgeLibraryRepository } from '../repositories/memory/knowledge-library';
 
 function getProvider(): 'memory' | 'supabase' {
   const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
@@ -72,6 +74,10 @@ export class RepositoryFactory {
 
   static getInvestigationRepository(initialData: any[] = []): InvestigationService {
     return new MemoryInvestigationRepository(initialData as any[]);
+  }
+
+  static getKnowledgeLibraryRepository(initialData: any[] = []): KnowledgeLibraryService {
+    return new MemoryKnowledgeLibraryRepository(initialData);
   }
 
   static getDataProvider(): 'memory' | 'supabase' {

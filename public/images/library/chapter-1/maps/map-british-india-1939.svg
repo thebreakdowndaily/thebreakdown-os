@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+      text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#0A0A0A"/>
+  <rect width="1600" height="900" fill="#1A2A3A" opacity="0.35"/>
+  <g opacity="0.12" stroke="#1A1A2A" stroke-width="0.5" fill="none">
+    <line x1="44" y1="0" x2="44" y2="900"/><line x1="267" y1="0" x2="267" y2="900"/>
+    <line x1="489" y1="0" x2="489" y2="900"/><line x1="711" y1="0" x2="711" y2="900"/>
+    <line x1="933" y1="0" x2="933" y2="900"/><line x1="1156" y1="0" x2="1156" y2="900"/>
+    <line x1="1378" y1="0" x2="1378" y2="900"/>
+    <line x1="0" y1="783" x2="1600" y2="783"/><line x1="0" y1="642" x2="1600" y2="642"/>
+    <line x1="0" y1="500" x2="1600" y2="500"/><line x1="0" y1="359" x2="1600" y2="359"/>
+    <line x1="0" y1="218" x2="1600" y2="218"/><line x1="0" y1="76" x2="1600" y2="76"/>
+  </g>
+  <g font-size="7" fill="#555555" font-weight="400">
+    <text x="48" y="896">65°E</text><text x="271" y="896">70°E</text><text x="493" y="896">75°E</text>
+    <text x="715" y="896">80°E</text><text x="937" y="896">85°E</text><text x="1160" y="896">90°E</text>
+    <text x="1382" y="896">95°E</text>
+    <text x="4" y="779">10°N</text><text x="4" y="638">15°N</text><text x="4" y="496">20°N</text>
+    <text x="4" y="355">25°N</text><text x="4" y="214">30°N</text><text x="4" y="72">35°N</text>
+  </g>
+
+  <path d="M 0 366 C 15 350 40 340 67 358 C 90 372 115 372 133 372 C 148 372 160 368 170 370 L 178 394 C 195 400 215 406 230 408 C 245 408 258 406 267 403 C 245 420 218 445 200 458 C 192 468 200 480 222 486 C 244 492 267 486 290 478 C 312 470 335 458 350 448 C 356 440 356 455 356 472 C 356 480 360 488 368 494 C 380 500 389 518 391 537 C 395 550 400 562 411 582 C 422 600 433 618 444 636 C 450 652 458 664 467 678 C 478 696 489 716 496 735 C 502 754 511 772 524 790 C 535 806 550 824 570 836 L 578 839 L 600 839 C 618 835 632 826 644 814 C 658 800 672 782 689 762 C 700 744 711 727 720 712 C 724 702 725 694 730 682 C 740 662 750 642 762 620 C 772 600 783 578 800 557 C 815 537 830 522 845 510 C 860 500 878 494 895 490 C 912 492 932 496 952 498 C 968 496 980 492 995 484 C 1012 474 1022 464 1035 454 C 1052 448 1068 446 1082 446 C 1098 448 1112 454 1126 460 C 1142 470 1156 480 1172 482 C 1186 478 1196 470 1206 460 C 1216 450 1226 440 1240 432 C 1250 438 1260 450 1270 462 C 1280 450 1290 434 1302 420 C 1320 400 1338 382 1356 364 C 1372 350 1392 330 1412 312 C 1428 302 1448 292 1466 284 C 1462 274 1448 266 1430 260 C 1412 254 1394 252 1380 254 C 1358 260 1338 268 1318 276 C 1298 282 1278 284 1258 284 C 1238 284 1218 282 1200 280 C 1180 278 1160 278 1140 280 C 1120 282 1100 284 1080 284 C 1060 284 1040 282 1020 282 C 1000 282 980 284 960 284 C 940 284 920 284 900 284 C 880 284 860 284 840 284 C 820 284 800 284 780 284 C 760 284 740 282 720 280 C 702 276 684 270 668 262 C 652 252 636 240 620 228 C 608 216 598 202 590 188 C 582 172 570 154 558 140 C 544 124 530 114 514 108 C 498 102 482 100 462 96 C 442 90 422 82 400 74 C 380 66 358 60 337 58 C 317 58 297 62 277 68 C 258 74 238 80 218 88 C 198 96 180 102 160 110 C 140 128 120 152 100 176 C 80 202 62 230 44 258 C 30 278 18 292 10 308 C 6 322 4 340 2 356 L 0 366 Z" fill="#2A2A3A" stroke="#555555" stroke-width="1"/>
+  <path d="M 720 795 C 735 790 760 798 778 815 C 790 828 790 845 780 860 C 770 878 750 892 730 898 C 715 900 705 890 700 875 C 695 855 698 835 705 818 C 710 805 715 798 720 795 Z" fill="#2A2A3A" stroke="#555555" stroke-width="0.8"/>
+
+  <!-- Province overlays -->
+  <path d="M 358 58 L 520 106 590 188 668 262 720 280 720 340 640 375 560 394 400 406 320 360 240 242 210 96 Z" fill="#4A6A8A" stroke="#6A8AAA" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 200 130 L 240 76 320 62 340 120 325 240 290 280 252 260 228 220 216 172 Z" fill="#3A7A6A" stroke="#5A9A8A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 133 372 L 267 403 400 380 548 328 548 438 468 452 360 452 200 404 Z" fill="#3A6A7A" stroke="#5A8A9A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 0 366 L 0 72 160 110 220 196 252 260 290 280 290 360 200 404 133 372 67 358 22 352 Z" fill="#4A5A6A" stroke="#6A7A8A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 720 280 L 900 284 950 496 845 510 762 620 668 678 578 839 496 735 444 636 411 582 391 537 356 472 350 448 Z" fill="#6A4A7A" stroke="#8A6A9A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 840 284 L 1080 284 1080 484 950 496 Z" fill="#7A4A6A" stroke="#9A6A8A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 990 280 L 1300 282 1466 284 1466 460 1240 432 1080 484 950 496 Z" fill="#7A4A4A" stroke="#9A6A6A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 1080 280 L 1466 284 1466 460 1300 420 Z" fill="#7A5A4A" stroke="#9A7A6A" stroke-width="0.5" opacity="0.18"/>
+  <path d="M 178 394 L 391 537 496 735 444 636 411 582 350 448 200 404 Z" fill="#7A6A3A" stroke="#9A8A5A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 444 636 L 578 839 720 712 895 490 950 496 845 510 762 620 Z" fill="#7A3A3A" stroke="#9A5A5A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 560 394 L 720 280 900 284 950 496 845 510 762 620 578 839 496 735 444 636 391 537 368 494 Z" fill="#5A7A3A" stroke="#7A9A5A" stroke-width="0.5" opacity="0.22"/>
+  <path d="M 840 284 L 995 484 895 490 762 620 Z" fill="#3A7A3A" stroke="#5A9A5A" stroke-width="0.5" opacity="0.22"/>
+
+  <!-- Princely states in gold -->
+  <path d="M 462 96 L 520 76 570 88 620 110 668 140 720 180 720 280 668 262 590 188 520 106 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.3"/>
+  <path d="M 620 540 L 700 530 760 550 780 590 760 640 700 660 640 650 600 610 600 570 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.3"/>
+  <path d="M 520 690 L 580 680 620 710 620 750 580 780 520 780 490 750 490 720 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.3"/>
+  <path d="M 400 410 L 440 405 460 425 460 450 440 470 400 470 380 450 380 425 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.25"/>
+  <path d="M 580 310 L 620 305 640 325 640 350 620 370 580 370 560 350 560 325 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.25"/>
+  <path d="M 490 300 L 530 295 550 315 550 340 530 360 490 360 470 340 470 315 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.25"/>
+  <path d="M 510 820 L 550 815 570 830 570 845 550 855 510 855 495 845 495 830 Z" fill="#C4A34E" stroke="#D4B35E" stroke-width="0.6" opacity="0.25"/>
+
+  <!-- Rivers -->
+  <g stroke="#4A8AB5" stroke-width="1.2" fill="none" opacity="0.5">
+    <path d="M 480 110 C 460 130 440 160 420 200 C 400 240 380 280 360 320 C 340 360 280 380 200 404 C 170 372 140 372 133 372"/>
+    <path d="M 711 280 C 730 300 750 320 770 340 C 790 360 810 380 840 400 C 870 420 900 440 940 460 C 980 480 1020 490 1067 448"/>
+    <path d="M 1378 254 C 1360 270 1340 290 1320 310 C 1300 330 1280 350 1260 370 C 1240 390 1220 410 1200 430 C 1180 450 1160 460 1140 468"/>
+    <path d="M 711 500 C 730 520 750 540 780 557 C 810 570 850 560 895 490"/>
+    <path d="M 644 475 C 660 500 680 530 700 557 C 720 580 750 600 800 557"/>
+    <path d="M 600 706 C 610 730 620 760 600 800"/>
+    <path d="M 548 360 C 560 380 580 400 600 420 C 620 440 650 460 671 475"/>
+    <path d="M 671 475 C 690 490 710 510 730 530 C 750 550 770 560 800 557"/>
+  </g>
+
+  <!-- Railways -->
+  <g stroke="#999999" stroke-width="0.8" fill="none" opacity="0.35" stroke-dasharray="6,4">
+    <path d="M 133 371 L 458 183"/>
+    <path d="M 458 183 L 587 264"/>
+    <path d="M 587 264 L 750 315"/>
+    <path d="M 750 315 L 937 349"/>
+    <path d="M 937 349 L 1084 433"/>
+    <path d="M 587 264 L 391 537"/>
+    <path d="M 391 537 L 604 706"/>
+    <path d="M 1084 433 L 1231 332"/>
+    <path d="M 587 264 L 484 180"/>
+    <path d="M 484 180 L 480 110"/>
+    <path d="M 587 264 L 524 312"/>
+    <path d="M 391 537 L 724 700"/>
+    <path d="M 724 700 L 578 830"/>
+  </g>
+
+  <!-- Cities -->
+  <g>
+    <circle cx="587" cy="264" r="4" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+    <circle cx="391" cy="537" r="4" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+    <circle cx="1084" cy="433" r="4" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+    <circle cx="724" cy="700" r="4" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+    <circle cx="458" cy="183" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="133" cy="371" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="644" cy="579" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="604" cy="706" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="480" cy="110" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="382" cy="422" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="750" cy="315" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="937" cy="349" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="484" cy="180" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="524" cy="312" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="595" cy="413" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="671" cy="475" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="1231" cy="332" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="973" cy="492" r="2.5" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <circle cx="400" cy="329" r="2.5" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  </g>
+
+  <!-- City labels -->
+  <g font-size="9" fill="#FFFFFF" font-weight="600">
+    <text x="597" y="260">Delhi</text>
+    <text x="401" y="533">Bombay</text>
+    <text x="1094" y="429">Calcutta</text>
+    <text x="734" y="696">Madras</text>
+  </g>
+  <g font-size="8" fill="#BBBBBB" font-weight="400">
+    <text x="468" y="179">Lahore</text>
+    <text x="137" y="385">Karachi</text>
+    <text x="654" y="575">Hyderabad</text>
+    <text x="614" y="702">Bangalore</text>
+    <text x="490" y="106">Srinagar</text>
+    <text x="392" y="418">Ahmedabad</text>
+    <text x="760" y="311">Lucknow</text>
+    <text x="947" y="345">Patna</text>
+    <text x="494" y="176">Amritsar</text>
+    <text x="534" y="308">Jaipur</text>
+    <text x="605" y="409">Bhopal</text>
+    <text x="681" y="471">Nagpur</text>
+    <text x="1241" y="328">Guwahati</text>
+    <text x="983" y="488">Cuttack</text>
+    <text x="410" y="325">Jodhpur</text>
+  </g>
+  <g font-size="7" fill="#C4A34E" font-weight="500" font-style="italic">
+    <text x="530" y="140">Kashmir</text>
+    <text x="660" y="595">Hyderabad</text>
+    <text x="535" y="740">Mysore</text>
+    <text x="590" y="340">Gwalior</text>
+    <text x="500" y="335">Jaipur</text>
+  </g>
+
+  <!-- Province labels -->
+  <g font-size="10" fill="#888888" font-weight="600" letter-spacing="2" text-anchor="middle">
+    <text x="520" y="200">PUNJAB</text>
+    <text x="280" y="180">NWFP</text>
+    <text x="340" y="420">SIND</text>
+    <text x="120" y="240">BALOCHISTAN</text>
+    <text x="780" y="370">UNITED PROVINCES</text>
+    <text x="960" y="400">BIHAR</text>
+    <text x="1200" y="360">BENGAL</text>
+    <text x="1350" y="380">ASSAM</text>
+    <text x="350" y="600">BOMBAY</text>
+    <text x="780" y="660">MADRAS</text>
+    <text x="700" y="440">CENTRAL PROVINCES</text>
+    <text x="900" y="510">ORISSA</text>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(50, 850)">
+    <rect x="0" y="0" width="120" height="1" fill="#888888"/>
+    <line x1="0" y1="-4" x2="0" y2="4" stroke="#888888" stroke-width="1"/>
+    <line x1="60" y1="-3" x2="60" y2="3" stroke="#888888" stroke-width="0.8"/>
+    <line x1="120" y1="-4" x2="120" y2="4" stroke="#888888" stroke-width="1"/>
+    <text x="0" y="12" font-size="7" fill="#888888" text-anchor="middle">0</text>
+    <text x="60" y="12" font-size="7" fill="#888888" text-anchor="middle">300 km</text>
+    <text x="120" y="12" font-size="7" fill="#888888" text-anchor="middle">600 km</text>
+  </g>
+
+  <!-- Compass rose -->
+  <g transform="translate(1520, 60)">
+    <circle cx="0" cy="0" r="22" fill="none" stroke="#555555" stroke-width="0.5"/>
+    <line x1="0" y1="-28" x2="0" y2="28" stroke="#888888" stroke-width="0.5"/>
+    <line x1="-28" y1="0" x2="28" y2="0" stroke="#888888" stroke-width="0.5"/>
+    <polygon points="0,-30 -4,-20 4,-20" fill="#C4A34E"/>
+    <polygon points="0,30 -4,20 4,20" fill="#555555"/>
+    <text x="0" y="-34" font-size="9" fill="#C4A34E" text-anchor="middle" font-weight="600">N</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(1340, 680)">
+    <rect x="0" y="0" width="240" height="180" fill="#0A0A0A" opacity="0.85" stroke="#333333" stroke-width="0.5" rx="4"/>
+    <text x="12" y="20" font-size="10" fill="#CCCCCC" font-weight="600">Legend</text>
+    <rect x="12" y="32" width="14" height="10" fill="#4A6A8A" opacity="0.5" stroke="#6A8AAA" stroke-width="0.5"/>
+    <text x="32" y="41" font-size="8" fill="#AAAAAA">British Province</text>
+    <rect x="12" y="50" width="14" height="10" fill="#C4A34E" opacity="0.4" stroke="#D4B35E" stroke-width="0.5"/>
+    <text x="32" y="59" font-size="8" fill="#AAAAAA">Princely State</text>
+    <circle cx="19" cy="75" r="3" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+    <text x="32" y="78" font-size="8" fill="#AAAAAA">Provincial Capital</text>
+    <circle cx="19" cy="93" r="2.5" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="32" y="96" font-size="8" fill="#AAAAAA">Major City</text>
+    <line x1="12" y1="110" x2="80" y2="110" stroke="#4A8AB5" stroke-width="1.2" opacity="0.6"/>
+    <text x="90" y="113" font-size="8" fill="#AAAAAA">Major River</text>
+    <line x1="12" y1="126" x2="80" y2="126" stroke="#999" stroke-width="0.8" stroke-dasharray="6,4" opacity="0.5"/>
+    <text x="90" y="129" font-size="8" fill="#AAAAAA">Railway</text>
+    <line x1="12" y1="142" x2="80" y2="142" stroke="#1A1A2A" stroke-width="0.5" opacity="0.3"/>
+    <text x="90" y="145" font-size="8" fill="#AAAAAA">Grid (5° intervals)</text>
+    <rect x="12" y="155" width="14" height="10" fill="none" stroke="#555555" stroke-width="0.5"/>
+    <text x="32" y="164" font-size="8" fill="#AAAAAA">Land mass</text>
+  </g>
+
+  <!-- Title -->
+  <text x="40" y="40" font-size="28" font-weight="700" fill="#FFFFFF">British India, 1939</text>
+  <text x="40" y="62" font-size="14" fill="#999999" font-weight="400">Administrative Divisions and Princely States</text>
+
+  <!-- Attribution -->
+  <text x="1590" y="890" font-size="7" fill="#555555" text-anchor="end">© The Breakdown Knowledge Platform. Cartography: GIS vector reconstruction from Imperial Gazetteer (IOR/X Maps) baseline data.</text>
+</svg>

@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+      text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#0A0A0A"/>
+  <rect width="1600" height="900" fill="#1A2A3A" opacity="0.35"/>
+
+  <!-- Grid lines -->
+  <g opacity="0.12" stroke="#1A1A2A" stroke-width="0.5" fill="none">
+    <line x1="44" y1="0" x2="44" y2="900"/><line x1="267" y1="0" x2="267" y2="900"/>
+    <line x1="489" y1="0" x2="489" y2="900"/><line x1="711" y1="0" x2="711" y2="900"/>
+    <line x1="933" y1="0" x2="933" y2="900"/><line x1="1156" y1="0" x2="1156" y2="900"/>
+    <line x1="1378" y1="0" x2="1378" y2="900"/>
+    <line x1="0" y1="783" x2="1600" y2="783"/><line x1="0" y1="642" x2="1600" y2="642"/>
+    <line x1="0" y1="500" x2="1600" y2="500"/><line x1="0" y1="359" x2="1600" y2="359"/>
+    <line x1="0" y1="218" x2="1600" y2="218"/><line x1="0" y1="76" x2="1600" y2="76"/>
+  </g>
+
+  <!-- Subcontinent outline -->
+  <path d="M 0 366 C 15 350 40 340 67 358 C 90 372 115 372 133 372 C 148 372 160 368 170 370 L 178 394 C 195 400 215 406 230 408 C 245 408 258 406 267 403 C 245 420 218 445 200 458 C 192 468 200 480 222 486 C 244 492 267 486 290 478 C 312 470 335 458 350 448 C 356 440 356 455 356 472 C 356 480 360 488 368 494 C 380 500 389 518 391 537 C 395 550 400 562 411 582 C 422 600 433 618 444 636 C 450 652 458 664 467 678 C 478 696 489 716 496 735 C 502 754 511 772 524 790 C 535 806 550 824 570 836 L 578 839 L 600 839 C 618 835 632 826 644 814 C 658 800 672 782 689 762 C 700 744 711 727 720 712 C 724 702 725 694 730 682 C 740 662 750 642 762 620 C 772 600 783 578 800 557 C 815 537 830 522 845 510 C 860 500 878 494 895 490 C 912 492 932 496 952 498 C 968 496 980 492 995 484 C 1012 474 1022 464 1035 454 C 1052 448 1068 446 1082 446 C 1098 448 1112 454 1126 460 C 1142 470 1156 480 1172 482 C 1186 478 1196 470 1206 460 C 1216 450 1226 440 1240 432 C 1250 438 1260 450 1270 462 C 1280 450 1290 434 1302 420 C 1320 400 1338 382 1356 364 C 1372 350 1392 330 1412 312 C 1428 302 1448 292 1466 284 C 1462 274 1448 266 1430 260 C 1412 254 1394 252 1380 254 C 1358 260 1338 268 1318 276 C 1298 282 1278 284 1258 284 C 1238 284 1218 282 1200 280 C 1180 278 1160 278 1140 280 C 1120 282 1100 284 1080 284 C 1060 284 1040 282 1020 282 C 1000 282 980 284 960 284 C 940 284 920 284 900 284 C 880 284 860 284 840 284 C 820 284 800 284 780 284 C 760 284 740 282 720 280 C 702 276 684 270 668 262 C 652 252 636 240 620 228 C 608 216 598 202 590 188 C 582 172 570 154 558 140 C 544 124 530 114 514 108 C 498 102 482 100 462 96 C 442 90 422 82 400 74 C 380 66 358 60 337 58 C 317 58 297 62 277 68 C 258 74 238 80 218 88 C 198 96 180 102 160 110 C 140 128 120 152 100 176 C 80 202 62 230 44 258 C 30 278 18 292 10 308 C 6 322 4 340 2 356 L 0 366 Z" fill="#3A3A4A" stroke="#555555" stroke-width="1"/>
+  <path d="M 720 795 C 735 790 760 798 778 815 C 790 828 790 845 780 860 C 770 878 750 892 730 898 C 715 900 705 890 700 875 C 695 855 698 835 705 818 C 710 805 715 798 720 795 Z" fill="#3A3A4A" stroke="#555555" stroke-width="0.8"/>
+
+  <!-- PRINCELY STATES ACCESSED TO INDIA (gold fill with green border) -->
+  <!-- Hyderabad (largest, contested) -->
+  <path d="M 700 460 C 720 448 748 442 776 444 C 804 446 830 456 852 472 C 874 488 888 510 896 536 C 904 562 904 590 896 614 C 888 638 872 656 852 668 C 832 680 808 686 784 684 C 760 682 738 674 720 660 C 702 646 692 628 688 606 C 684 584 688 562 700 544 C 712 526 732 514 756 510 C 780 506 804 510 826 522 C 848 534 864 554 872 578 C 880 602 880 628 872 650 C 864 672 848 688 828 696 C 808 704 788 704 770 696 C 752 688 738 674 730 656 C 722 638 720 618 726 600 C 732 582 746 570 766 566 C 786 562 806 568 822 582 C 838 596 848 616 852 640 C 856 664 852 686 840 702 C 828 718 812 726 794 726 C 776 726 760 718 748 704 C 736 690 730 672 732 652 C 734 632 744 618 762 612 C 780 606 798 610 814 622 C 830 634 840 652 844 674" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="800" y="570" font-size="10" fill="#FFFFFF" font-weight="700" text-anchor="middle">HYDERABAD</text>
+  <text x="800" y="584" font-size="8" fill="#C4A34E" text-anchor="middle">Annexed Sept 1948</text>
+
+  <!-- Jammu & Kashmir (disputed) -->
+  <path d="M 450 120 C 480 105 520 95 560 95 C 600 95 640 108 675 128 C 710 148 740 175 765 208 C 790 241 808 278 818 320 C 828 362 828 405 818 444 C 808 483 790 516 765 540 C 740 564 710 578 678 582 C 646 586 616 580 590 566 C 564 552 546 530 536 504 C 526 478 526 450 536 426 C 546 402 566 386 590 378 C 614 370 640 372 664 384 C 688 396 706 418 716 446 C 726 474 728 506 720 534 C 712 562 696 584 674 598 C 652 612 626 618 600 616 C 574 614 552 604 536 588 C 520 572 512 550 512 526 C 512 502 520 482 538 468 C 556 454 580 450 606 456 C 632 462 656 478 672 502 C 688 526 696 556 696 588 C 696 620 686 648 670 668 C 654 688 632 700 608 704 C 584 708 562 700 546 686 C 530 672 522 652 522 630 C 522 608 530 590 548 580 C 566 570 590 570 612 580" fill="#C4A34E" stroke="#FF4444" stroke-width="2" opacity="0.6" stroke-dasharray="none"/>
+  <text x="620" y="360" font-size="10" fill="#FFFFFF" font-weight="700" text-anchor="middle">JAMMU &amp; KASHMIR</text>
+  <text x="620" y="374" font-size="8" fill="#FF4444" text-anchor="middle">DISPUTED</text>
+
+  <!-- Junagadh (disputed) -->
+  <path d="M 200 440 C 215 432 235 428 255 430 C 275 432 294 440 308 454 C 322 468 330 486 332 508 C 334 524 328 538 318 548 C 308 558 296 562 284 560 C 272 558 262 550 256 538 C 250 526 248 514 248 502 C 248 490 252 480 260 474 C 268 468 278 468 288 474 C 298 480 306 490 310 504 C 314 518 314 532 308 542 C 302 552 292 558 282 556 C 272 554 264 548 260 538" fill="#C4A34E" stroke="#FF4444" stroke-width="2" opacity="0.6" stroke-dasharray="none"/>
+  <text x="270" y="468" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">JUNAGADH</text>
+  <text x="270" y="478" font-size="7" fill="#FF4444" text-anchor="middle">DISPUTED</text>
+
+  <!-- Other princely states that acceded to India (scattered, shown as patches) -->
+  <!-- Baroda -->
+  <circle cx="430" cy="480" r="22" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="430" y="483" font-size="7" fill="#FFFFFF" text-anchor="middle">Baroda</text>
+  <!-- Gwalior -->
+  <circle cx="520" cy="340" r="18" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="520" y="343" font-size="7" fill="#FFFFFF" text-anchor="middle">Gwalior</text>
+  <!-- Indore -->
+  <circle cx="490" cy="390" r="15" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="490" y="393" font-size="6" fill="#FFFFFF" text-anchor="middle">Indore</text>
+  <!-- Bhopal -->
+  <circle cx="540" cy="395" r="14" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="540" y="398" font-size="6" fill="#FFFFFF" text-anchor="middle">Bhopal</text>
+  <!-- Jodhpur -->
+  <circle cx="370" cy="310" r="20" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="370" y="313" font-size="7" fill="#FFFFFF" text-anchor="middle">Jodhpur</text>
+  <!-- Jaipur -->
+  <circle cx="420" cy="280" r="18" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="420" y="283" font-size="7" fill="#FFFFFF" text-anchor="middle">Jaipur</text>
+  <!-- Udaipur -->
+  <circle cx="400" cy="340" r="14" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="400" y="343" font-size="6" fill="#FFFFFF" text-anchor="middle">Udaipur</text>
+  <!-- Travancore -->
+  <circle cx="590" cy="730" r="18" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="590" y="733" font-size="7" fill="#FFFFFF" text-anchor="middle">Travancore</text>
+  <!-- Cochin -->
+  <circle cx="570" cy="700" r="12" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="570" y="703" font-size="6" fill="#FFFFFF" text-anchor="middle">Cochin</text>
+  <!-- Mysore -->
+  <circle cx="620" cy="660" r="20" fill="#C4A34E" stroke="#333" stroke-width="0.8" opacity="0.5"/>
+  <text x="620" y="663" font-size="7" fill="#FFFFFF" text-anchor="middle">Mysore</text>
+
+  <!-- PRINCELY STATES ACCESSED TO PAKISTAN (green fill) -->
+  <!-- Kalat -->
+  <path d="M 120 280 C 140 270 165 264 190 266 C 215 268 238 278 256 294 C 274 310 284 332 288 358 C 292 378 288 396 278 410 C 268 424 254 432 238 434 C 222 436 208 430 198 420 C 188 410 184 396 182 380 C 180 364 184 350 194 340 C 204 330 218 326 234 330 C 250 334 264 344 274 360 C 284 376 288 396 286 414" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="210" y="350" font-size="8" fill="#FFFFFF" font-weight="600" text-anchor="middle">Kalat</text>
+
+  <!-- Swat -->
+  <circle cx="400" cy="155" r="12" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="400" y="158" font-size="6" fill="#FFFFFF" text-anchor="middle">Swat</text>
+
+  <!-- Chitral -->
+  <circle cx="420" cy="130" r="10" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="420" y="133" font-size="6" fill="#FFFFFF" text-anchor="middle">Chitral</text>
+
+  <!-- Dir -->
+  <circle cx="440" cy="145" r="8" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="440" y="148" font-size="5" fill="#FFFFFF" text-anchor="middle">Dir</text>
+
+  <!-- Bahawalpur -->
+  <circle cx="350" cy="280" r="18" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="350" y="283" font-size="7" fill="#FFFFFF" text-anchor="middle">Bahawalpur</text>
+
+  <!-- Khairpur -->
+  <circle cx="260" cy="340" r="10" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="260" y="343" font-size="6" fill="#FFFFFF" text-anchor="middle">Khairpur</text>
+
+  <!-- Rampur -->
+  <circle cx="580" cy="260" r="10" fill="#2D5A2D" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+  <text x="580" y="263" font-size="6" fill="#FFFFFF" text-anchor="middle">Rampur</text>
+
+  <!-- British Provinces (grey, for reference) -->
+  <text x="620" y="440" font-size="9" fill="#888888" text-anchor="middle" opacity="0.6">BRITISH PROVINCES</text>
+  <text x="620" y="452" font-size="7" fill="#666666" text-anchor="middle" opacity="0.5">(grey, for context)</text>
+
+  <!-- Key cities -->
+  <circle cx="587" cy="264" r="4" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <circle cx="391" cy="537" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <circle cx="1084" cy="433" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <circle cx="133" cy="371" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+  <g font-size="8" fill="#BBBBBB">
+    <text x="597" y="260">Delhi</text><text x="365" y="534">Bombay</text>
+    <text x="1094" y="429">Calcutta</text><text x="105" y="368">Karachi</text>
+  </g>
+
+  <!-- Accession timeline panel -->
+  <g transform="translate(40, 80)">
+    <rect x="0" y="0" width="310" height="200" fill="#0A0A0A" opacity="0.9" stroke="#333333" stroke-width="0.5" rx="4"/>
+    <text x="12" y="20" font-size="11" fill="#CCCCCC" font-weight="700">Accession Timeline</text>
+
+    <rect x="12" y="30" width="8" height="8" fill="#C4A34E"/>
+    <text x="26" y="39" font-size="8" fill="#AAAAAA">Acceded to India (562 states)</text>
+    <rect x="12" y="46" width="8" height="8" fill="#2D5A2D"/>
+    <text x="26" y="55" font-size="8" fill="#AAAAAA">Acceded to Pakistan</text>
+    <rect x="12" y="62" width="8" height="8" fill="#C4A34E" stroke="#FF4444" stroke-width="1.5"/>
+    <text x="26" y="71" font-size="8" fill="#AAAAAA">Disputed / Annexed</text>
+
+    <line x1="12" y1="82" x2="298" y2="82" stroke="#333" stroke-width="0.5"/>
+
+    <text x="12" y="98" font-size="8" fill="#FFFFFF" font-weight="600">13 June 1947</text>
+    <text x="130" y="98" font-size="8" fill="#AAAAAA">Mountbatten Plan: princely states choose</text>
+
+    <text x="12" y="116" font-size="8" fill="#FFFFFF" font-weight="600">15 Aug 1947</text>
+    <text x="130" y="116" font-size="8" fill="#AAAAAA">Most states accede to India/Pakistan</text>
+
+    <text x="12" y="134" font-size="8" fill="#FFFFFF" font-weight="600">26 Oct 1947</text>
+    <text x="130" y="134" font-size="8" fill="#FF4444">Maharaja of J&amp;K signs Instrument</text>
+    <text x="130" y="146" font-size="8" fill="#FF4444">of Accession to India</text>
+
+    <text x="12" y="164" font-size="8" fill="#FFFFFF" font-weight="600">15 Sep 1948</text>
+    <text x="130" y="164" font-size="8" fill="#FF4444">Hyderabad: Indian military Operation</text>
+    <text x="130" y="176" font-size="8" fill="#FF4444">Polo annexes the state</text>
+
+    <text x="12" y="194" font-size="8" fill="#FFFFFF" font-weight="600">Feb 1948</text>
+    <text x="130" y="194" font-size="8" fill="#FF4444">Junagadh: India intervenes after</text>
+    <text x="130" y="206" font-size="7" fill="#FF4444">Nawab's accession to Pakistan</text>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(50, 850)">
+    <rect x="0" y="0" width="120" height="1" fill="#888888"/>
+    <line x1="0" y1="-4" x2="0" y2="4" stroke="#888888" stroke-width="1"/>
+    <line x1="60" y1="-3" x2="60" y2="3" stroke="#888888" stroke-width="0.8"/>
+    <line x1="120" y1="-4" x2="120" y2="4" stroke="#888888" stroke-width="1"/>
+    <text x="60" y="12" font-size="7" fill="#888888" text-anchor="middle">0 — 300 — 600 km</text>
+  </g>
+  <g transform="translate(1520, 60)">
+    <circle cx="0" cy="0" r="22" fill="none" stroke="#555555" stroke-width="0.5"/>
+    <polygon points="0,-30 -4,-20 4,-20" fill="#C4A34E"/>
+    <polygon points="0,30 -4,20 4,20" fill="#555555"/>
+    <text x="0" y="-34" font-size="9" fill="#C4A34E" text-anchor="middle" font-weight="600">N</text>
+  </g>
+
+  <text x="40" y="40" font-size="28" font-weight="700" fill="#FFFFFF">Princely States: Accession, 1947–48</text>
+  <text x="40" y="62" font-size="14" fill="#999999">562 States Choose India or Pakistan</text>
+  <text x="1590" y="890" font-size="7" fill="#555555" text-anchor="end">© The Breakdown Knowledge Platform. Accession data from R Şeal (2019), Menon (2009).</text>
+</svg>

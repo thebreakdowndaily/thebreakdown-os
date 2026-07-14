@@ -1,0 +1,290 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Timeline of key events from 1945 to 1948 during Indian Partition">
+  <title>Partition Timeline — 1945 to 1948</title>
+  <desc>Vertical multi-column timeline of political, violence, diplomatic, and military events from June 1945 to January 1949.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+    text { font-family: 'Inter', system-ui, sans-serif; }
+    .title { fill: #FFFFFF; font-size: 28px; font-weight: 700; }
+    .subtitle { fill: #A0A0A0; font-size: 16px; font-weight: 400; }
+    .col-header { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .event-text { fill: #D0D0D0; font-size: 11px; font-weight: 400; }
+    .event-date { font-size: 10px; font-weight: 600; }
+    .year-label { fill: #666666; font-size: 14px; font-weight: 700; }
+    .month-tick { stroke: #222222; stroke-width: 1; }
+    .source-citation { fill: #666666; font-size: 10px; font-weight: 400; }
+    .event-dot { stroke-width: 2; }
+    .category-line { stroke-width: 2; opacity: 0.3; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0A0A0A"/>
+
+  <!-- Title -->
+  <text x="60" y="45" class="title">The Road to Partition — 1945 to 1949</text>
+  <text x="60" y="70" class="subtitle">Key events across political, violent, diplomatic, and military dimensions</text>
+
+  <!-- Column headers (4 categories) -->
+  <!-- Timeline area: y=90 to y=750 (660px total height) -->
+  <!-- X positions for 4 columns: Political=100, Violence=370, Diplomatic=640, Military=910 -->
+
+  <text x="100" y="106" class="col-header" fill="#27AE60">POLITICAL</text>
+  <line x1="100" y1="114" x2="280" y2="114" stroke="#27AE60" stroke-width="2" opacity="0.5"/>
+
+  <text x="370" y="106" class="col-header" fill="#E74C3C">VIOLENCE</text>
+  <line x1="370" y1="114" x2="520" y2="114" stroke="#E74C3C" stroke-width="2" opacity="0.5"/>
+
+  <text x="640" y="106" class="col-header" fill="#3498DB">DIPLOMATIC</text>
+  <line x1="640" y1="114" x2="830" y2="114" stroke="#3498DB" stroke-width="2" opacity="0.5"/>
+
+  <text x="910" y="106" class="col-header" fill="#F39C12">MILITARY</text>
+  <line x1="910" y1="114" x2="1070" y2="114" stroke="#F39C12" stroke-width="2" opacity="0.5"/>
+
+  <!-- Time axis (vertical) -->
+  <!-- Range: June 1945 (y=120) to January 1949 (y=740) = 620px -->
+  <!-- 43 months = 620px → 14.4px per month -->
+
+  <!-- Year markers -->
+  <line x1="40" y1="120" x2="1160" y2="120" stroke="#333" stroke-width="1"/>
+  <text x="30" y="124" text-anchor="end" class="year-label">1945</text>
+
+  <line x1="40" y1="294" x2="1160" y2="294" stroke="#333" stroke-width="1"/>
+  <text x="30" y="298" text-anchor="end" class="year-label">1946</text>
+
+  <line x1="40" y1="467" x2="1160" y2="467" stroke="#333" stroke-width="1"/>
+  <text x="30" y="471" text-anchor="end" class="year-label">1947</text>
+
+  <line x1="40" y1="641" x2="1160" y2="641" stroke="#333" stroke-width="1"/>
+  <text x="30" y="645" text-anchor="end" class="year-label">1948</text>
+
+  <line x1="40" y1="740" x2="1160" y2="740" stroke="#333" stroke-width="1"/>
+  <text x="30" y="744" text-anchor="end" class="year-label">1949</text>
+
+  <!-- Month ticks (small marks on left axis) -->
+  <!-- 1945: Jun(120) Jul(134) Aug(149) Sep(163) Oct(178) Nov(192) Dec(207) -->
+  <!-- 1946: Jan(221) Feb(236) Mar(250) Apr(265) May(279) Jun(294) Jul(308) Aug(323) Sep(337) Oct(352) Nov(366) Dec(381) -->
+  <!-- 1947: Jan(395) Feb(410) Mar(424) Apr(439) May(453) Jun(467) Jul(482) Aug(496) Sep(510) Oct(525) Nov(539) Dec(554) -->
+  <!-- 1948: Jan(568) Feb(582) Mar(597) Apr(611) May(626) Jun(640) Jul(654) Aug(669) Sep(683) Oct(698) Nov(712) Dec(727) -->
+
+  <!-- Minor month ticks -->
+  <line x1="40" y1="134" x2="50" y2="134" class="month-tick"/>
+  <line x1="40" y1="149" x2="50" y2="149" class="month-tick"/>
+  <line x1="40" y1="163" x2="50" y2="163" class="month-tick"/>
+  <line x1="40" y1="178" x2="50" y2="178" class="month-tick"/>
+  <line x1="40" y1="192" x2="50" y2="192" class="month-tick"/>
+  <line x1="40" y1="207" x2="50" y2="207" class="month-tick"/>
+
+  <line x1="40" y1="221" x2="50" y2="221" class="month-tick"/>
+  <line x1="40" y1="236" x2="50" y2="236" class="month-tick"/>
+  <line x1="40" y1="250" x2="50" y2="250" class="month-tick"/>
+  <line x1="40" y1="265" x2="50" y2="265" class="month-tick"/>
+  <line x1="40" y1="279" x2="50" y2="279" class="month-tick"/>
+  <line x1="40" y1="308" x2="50" y2="308" class="month-tick"/>
+  <line x1="40" y1="323" x2="50" y2="323" class="month-tick"/>
+  <line x1="40" y1="337" x2="50" y2="337" class="month-tick"/>
+  <line x1="40" y1="352" x2="50" y2="352" class="month-tick"/>
+  <line x1="40" y1="366" x2="50" y2="366" class="month-tick"/>
+  <line x1="40" y1="381" x2="50" y2="381" class="month-tick"/>
+
+  <line x1="40" y1="395" x2="50" y2="395" class="month-tick"/>
+  <line x1="40" y1="410" x2="50" y2="410" class="month-tick"/>
+  <line x1="40" y1="424" x2="50" y2="424" class="month-tick"/>
+  <line x1="40" y1="439" x2="50" y2="439" class="month-tick"/>
+  <line x1="40" y1="453" x2="50" y2="453" class="month-tick"/>
+  <line x1="40" y1="482" x2="50" y2="482" class="month-tick"/>
+  <line x1="40" y1="496" x2="50" y2="496" class="month-tick"/>
+  <line x1="40" y1="510" x2="50" y2="510" class="month-tick"/>
+  <line x1="40" y1="525" x2="50" y2="525" class="month-tick"/>
+  <line x1="40" y1="539" x2="50" y2="539" class="month-tick"/>
+  <line x1="40" y1="554" x2="50" y2="554" class="month-tick"/>
+
+  <line x1="40" y1="568" x2="50" y2="568" class="month-tick"/>
+  <line x1="40" y1="582" x2="50" y2="582" class="month-tick"/>
+  <line x1="40" y1="597" x2="50" y2="597" class="month-tick"/>
+  <line x1="40" y1="611" x2="50" y2="611" class="month-tick"/>
+  <line x1="40" y1="626" x2="50" y2="626" class="month-tick"/>
+  <line x1="40" y1="654" x2="50" y2="654" class="month-tick"/>
+  <line x1="40" y1="669" x2="50" y2="669" class="month-tick"/>
+  <line x1="40" y1="683" x2="50" y2="683" class="month-tick"/>
+  <line x1="40" y1="698" x2="50" y2="698" class="month-tick"/>
+  <line x1="40" y1="712" x2="50" y2="712" class="month-tick"/>
+  <line x1="40" y1="727" x2="50" y2="727" class="month-tick"/>
+
+  <!-- ===================== POLITICAL EVENTS (Column 1: x=100-280) ===================== -->
+
+  <!-- Jun 1945: Simla Conference — y=120 -->
+  <line x1="190" y1="120" x2="280" y2="120" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="120" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="116" text-anchor="end" class="event-date" fill="#27AE60">Jun 1945</text>
+  <text x="290" y="124" class="event-text">Simla Conference fails; Wavell unable to form interim govt</text>
+
+  <!-- Mar 1946: Cabinet Mission arrives — y=250 -->
+  <line x1="190" y1="250" x2="280" y2="250" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="250" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="246" text-anchor="end" class="event-date" fill="#27AE60">Mar 1946</text>
+  <text x="290" y="254" class="event-text">Cabinet Mission arrives in Delhi</text>
+
+  <!-- May 1946: Cabinet Mission Plan — y=279 -->
+  <line x1="190" y1="279" x2="280" y2="279" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="279" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="275" text-anchor="end" class="event-date" fill="#27AE60">May 1946</text>
+  <text x="290" y="283" class="event-text">Cabinet Mission Plan published — united India with grouped provinces</text>
+
+  <!-- Jul 1946: Direct Action Day announced — y=308 -->
+  <line x1="190" y1="308" x2="280" y2="308" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="308" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="304" text-anchor="end" class="event-date" fill="#27AE60">Jul 1946</text>
+  <text x="290" y="312" class="event-text">Muslim League rejects Cabinet Mission; announces Direct Action</text>
+
+  <!-- Feb 1947: Mountbatten replaces Wavell — y=410 -->
+  <line x1="190" y1="410" x2="280" y2="410" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="410" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="406" text-anchor="end" class="event-date" fill="#27AE60">Feb 1947</text>
+  <text x="290" y="414" class="event-text">Mountbatten replaces Wavell as Viceroy; mandate: transfer power by Jun 1948</text>
+
+  <!-- Jun 1947: Mountbatten Plan — y=467 -->
+  <line x1="190" y1="467" x2="280" y2="467" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="467" r="5" fill="#27AE60" stroke="#FFFFFF" stroke-width="2" class="event-dot"/>
+  <text x="185" y="463" text-anchor="end" class="event-date" fill="#27AE60">Jun 1947</text>
+  <text x="290" y="463" class="event-text" style="fill:#FFFFFF; font-weight:600;">3 June Plan announced — Partition accepted</text>
+  <text x="290" y="478" class="event-text">Boundary Commission, Radcliffe Line, princely states question</text>
+
+  <!-- Jul 1947: Indian Independence Act — y=482 -->
+  <line x1="190" y1="482" x2="280" y2="482" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="482" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="478" text-anchor="end" class="event-date" fill="#27AE60">Jul 1947</text>
+  <text x="290" y="486" class="event-text">Indian Independence Act passed by British Parliament</text>
+
+  <!-- Aug 14-15 1947: Independence/Partition — y=496 -->
+  <line x1="190" y1="496" x2="280" y2="496" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="496" r="6" fill="#27AE60" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="185" y="492" text-anchor="end" class="event-date" fill="#FFFFFF">Aug 14-15</text>
+  <text x="290" y="492" class="event-text" style="fill:#FFFFFF; font-weight:700; font-size:12px;">INDEPENDENCE &amp; PARTITION</text>
+  <text x="290" y="508" class="event-text">India and Pakistan created; Radcliffe Line announced Aug 17</text>
+
+  <!-- Oct 1947: Kashmir accession — y=525 -->
+  <line x1="190" y1="525" x2="280" y2="525" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="525" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="521" text-anchor="end" class="event-date" fill="#27AE60">Oct 1947</text>
+  <text x="290" y="529" class="event-text">Kashmir accedes to India under duress</text>
+
+  <!-- Jan 1948: Gandhi assassinated — y=568 -->
+  <line x1="190" y1="568" x2="280" y2="568" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="568" r="5" fill="#27AE60" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="185" y="564" text-anchor="end" class="event-date" fill="#FFFFFF">Jan 30, 1948</text>
+  <text x="290" y="564" class="event-text" style="fill:#FFFFFF; font-weight:600;">Gandhi assassinated by Nathuram Godse</text>
+  <text x="290" y="580" class="event-text">India pauses; communal tensions intensify</text>
+
+  <!-- Jun 1948: Mountbatten leaves — y=640 -->
+  <line x1="190" y1="640" x2="280" y2="640" stroke="#27AE60" stroke-width="1" opacity="0.3"/>
+  <circle cx="190" cy="640" r="4" fill="#27AE60" class="event-dot"/>
+  <text x="185" y="636" text-anchor="end" class="event-date" fill="#27AE60">Jun 1948</text>
+  <text x="290" y="644" class="event-text">Mountbatten departs; Lord Radcliffe leaves without publishing final boundary awards</text>
+
+  <!-- ===================== VIOLENCE EVENTS (Column 2: x=370-520) ===================== -->
+
+  <!-- Aug 16 1946: Great Calcutta Killing — y=323 -->
+  <line x1="460" y1="323" x2="520" y2="323" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+  <circle cx="460" cy="323" r="5" fill="#E74C3C" class="event-dot"/>
+  <text x="455" y="319" text-anchor="end" class="event-date" fill="#E74C3C">Aug 16</text>
+  <text x="530" y="319" class="event-text" style="fill:#FF6666; font-weight:600;">Great Calcutta Killing</text>
+  <text x="530" y="335" class="event-text">~4,000 dead; Direct Action Day triggers mass violence</text>
+
+  <!-- Oct 1946: Noakhali riots — y=352 -->
+  <line x1="460" y1="352" x2="520" y2="352" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+  <circle cx="460" cy="352" r="4" fill="#E74C3C" class="event-dot"/>
+  <text x="455" y="348" text-anchor="end" class="event-date" fill="#E74C3C">Oct 1946</text>
+  <text x="530" y="352" class="event-text">Noakhali riots (Bengal); Hindu persecution; Gandhi's peace march</text>
+
+  <!-- Mar 1947: Rawalpindi massacres — y=424 -->
+  <line x1="460" y1="424" x2="520" y2="424" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+  <circle cx="460" cy="424" r="4" fill="#E74C3C" class="event-dot"/>
+  <text x="455" y="420" text-anchor="end" class="event-date" fill="#E74C3C">Mar 1947</text>
+  <text x="530" y="424" class="event-text">Rawalpindi massacres; Punjab communal violence begins</text>
+
+  <!-- Aug 1947: Punjab communal violence — y=510 -->
+  <line x1="460" y1="510" x2="520" y2="510" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+  <circle cx="460" cy="510" r="6" fill="#E74C3C" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="455" y="506" text-anchor="end" class="event-date" fill="#FFFFFF">Aug 1947</text>
+  <text x="530" y="506" class="event-text" style="fill:#FF6666; font-weight:700; font-size:12px;">PUNJAB CARNAGE</text>
+  <text x="530" y="522" class="event-text">Worst communal violence in recorded history; trains of corpses; Amritsar, Lahore, Rawalpindi</text>
+
+  <!-- Sep 1947: Delhi riots — y=539 -->
+  <line x1="460" y1="539" x2="520" y2="539" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+  <circle cx="460" cy="539" r="4" fill="#E74C3C" class="event-dot"/>
+  <text x="455" y="535" text-anchor="end" class="event-date" fill="#E74C3C">Sep 1947</text>
+  <text x="530" y="539" class="event-text">Delhi riots; ~5,000 dead; Muslims targeted in refugee crisis</text>
+
+  <!-- Jan 1948: Gandhi assassination violence — y=568 (cross-listed) -->
+  <!-- Already shown in Political column -->
+
+  <!-- ===================== DIPLOMATIC EVENTS (Column 3: x=640-830) ===================== -->
+
+  <!-- Feb 1946: Royal Indian Navy mutiny — y=236 -->
+  <line x1="730" y1="236" x2="830" y2="236" stroke="#3498DB" stroke-width="1" opacity="0.3"/>
+  <circle cx="730" cy="236" r="4" fill="#3498DB" class="event-dot"/>
+  <text x="725" y="232" text-anchor="end" class="event-date" fill="#3498DB">Feb 1946</text>
+  <text x="840" y="236" class="event-text">RIN Mutiny; British realize India ungovernable without Indian cooperation</text>
+
+  <!-- Apr 1947: UN India-Pakistan question — y=439 -->
+  <line x1="730" y1="439" x2="830" y2="439" stroke="#3498DB" stroke-width="1" opacity="0.3"/>
+  <circle cx="730" cy="439" r="4" fill="#3498DB" class="event-dot"/>
+  <text x="725" y="435" text-anchor="end" class="event-date" fill="#3498DB">Apr 1947</text>
+  <text x="840" y="439" class="event-text">India raises Jammu &amp; Kashmir question at UN</text>
+
+  <!-- Jan 1948: India takes Kashmir to UN — y=582 -->
+  <line x1="730" y1="582" x2="830" y2="582" stroke="#3498DB" stroke-width="1" opacity="0.3"/>
+  <circle cx="730" cy="582" r="4" fill="#3498DB" class="event-dot"/>
+  <text x="725" y="578" text-anchor="end" class="event-date" fill="#3498DB">Jan 1, 1948</text>
+  <text x="840" y="582" class="event-text">India refers Kashmir to UN Security Council</text>
+
+  <!-- Apr 1948: UNSCR 47 — y=611 -->
+  <line x1="730" y1="611" x2="830" y2="611" stroke="#3498DB" stroke-width="1" opacity="0.3"/>
+  <circle cx="730" cy="611" r="4" fill="#3498DB" class="event-dot"/>
+  <text x="725" y="607" text-anchor="end" class="event-date" fill="#3498DB">Apr 21, 1948</text>
+  <text x="840" y="611" class="event-text">UNSCR 47: plebiscite called; Pakistan must withdraw first</text>
+
+  <!-- Aug 1948: UNCIP resolutions — y=669 -->
+  <line x1="730" y1="669" x2="830" y2="669" stroke="#3498DB" stroke-width="1" opacity="0.3"/>
+  <circle cx="730" cy="669" r="4" fill="#3498DB" class="event-dot"/>
+  <text x="725" y="665" text-anchor="end" class="event-date" fill="#3498DB">Aug 1948</text>
+  <text x="840" y="669" class="event-text">UNCIP resolutions: ceasefire proposed</text>
+
+  <!-- ===================== MILITARY EVENTS (Column 4: x=910-1070) ===================== -->
+
+  <!-- Oct 22 1947: Tribal invasion of Kashmir — y=525 -->
+  <line x1="1000" y1="525" x2="1070" y2="525" stroke="#F39C12" stroke-width="1" opacity="0.3"/>
+  <circle cx="1000" cy="525" r="5" fill="#F39C12" class="event-dot"/>
+  <text x="995" y="521" text-anchor="end" class="event-date" fill="#F39C12">Oct 22</text>
+  <text x="1080" y="521" class="event-text" style="fill:#F5C542; font-weight:600;">Tribal invasion of Kashmir</text>
+  <text x="1080" y="537" class="event-text">Pashtun tribesmen + Pakistani army push toward Srinagar</text>
+
+  <!-- Oct 27 1947: Indian airlift — y=539 -->
+  <line x1="1000" y1="539" x2="1070" y2="539" stroke="#F39C12" stroke-width="1" opacity="0.3"/>
+  <circle cx="1000" cy="539" r="5" fill="#F39C12" class="event-dot"/>
+  <text x="995" y="535" text-anchor="end" class="event-date" fill="#F39C12">Oct 27</text>
+  <text x="1080" y="535" class="event-text" style="fill:#F5C542; font-weight:600;">Indian troops airlifted to Srinagar</text>
+  <text x="1080" y="551" class="event-text">First Indian military operation post-Independence</text>
+
+  <!-- Nov 1947: Indian forces push back — y=554 -->
+  <line x1="1000" y1="554" x2="1070" y2="554" stroke="#F39C12" stroke-width="1" opacity="0.3"/>
+  <circle cx="1000" cy="554" r="4" fill="#F39C12" class="event-dot"/>
+  <text x="995" y="550" text-anchor="end" class="event-date" fill="#F39C12">Nov 1947</text>
+  <text x="1080" y="554" class="event-text">Indian forces recapture Baramulla; push invaders back</text>
+
+  <!-- May 1948: Pakistani regulars enter Kashmir — y=626 -->
+  <line x1="1000" y1="626" x2="1070" y2="626" stroke="#F39C12" stroke-width="1" opacity="0.3"/>
+  <circle cx="1000" cy="626" r="4" fill="#F39C12" class="event-dot"/>
+  <text x="995" y="622" text-anchor="end" class="event-date" fill="#F39C12">May 1948</text>
+  <text x="1080" y="626" class="event-text">Pakistani regular army enters Kashmir; war escalates</text>
+
+  <!-- Jan 1 1949: Ceasefire — y=740 -->
+  <line x1="1000" y1="740" x2="1070" y2="740" stroke="#F39C12" stroke-width="1" opacity="0.3"/>
+  <circle cx="1000" cy="740" r="5" fill="#F39C12" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="995" y="736" text-anchor="end" class="event-date" fill="#FFFFFF">Jan 1, 1949</text>
+  <text x="1080" y="736" class="event-text" style="fill:#F5C542; font-weight:600;">Ceasefire; Line of Control established</text>
+  <text x="1080" y="752" class="event-text">~1,500 dead in Kashmir war; conflict unresolved</text>
+
+  <!-- ===================== DATA SOURCES ===================== -->
+  <text x="60" y="778" class="source-citation">Sources: B. Jalal, The Sole Spokesman (1985); Y. Khan, The Great Partition (2007); S. Wolpert, Jinnah of Pakistan (1984);</text>
+  <text x="60" y="792" class="source-citation">M. Mountbatten, Freedom at Midnight (1975); I. Talbot &amp; G. Singh, The Partition of India (2009); UN Security Council Resolutions.</text>
+</svg>

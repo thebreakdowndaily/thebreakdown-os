@@ -1,26 +1,30 @@
 ---
 title: Editorial Guides
-status: draft
+status: active
 owner: editorial
-last_updated: 2026-07-09
+last_updated: 2026-07-13
 ---
 
 # Editorial
 
-Editorial standards, style guides, story templates, and playbooks for The Breakdown.
+Editorial standards, style guides, review tools, and constitutional documents for The Breakdown Knowledge Platform.
 
-## Index
+## Governing Documents
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| _(none yet)_ | — | — |
+| `editorial-constitution.md` | Supreme governing document — 16 Articles defining evidence, claims, neutrality, language, visuals, workflow, and Gold Standard Review. | ✅ v1.1 Ratified (Locked) |
+| `editorial-review-checklist.md` | Companion to the Constitution — concrete yes/no criteria and scoring for each Gold Standard Review phase. | ✅ v1.0 Active |
 
-## Suggested Documents
+## Institutional Memory
 
-- `style-guide.md` — Voice, tone, grammar conventions
-- `story-structure.md` — How a Breakdown story is structured (blocks, evidence, claims)
-- `evidence-standards.md` — Source tiers, claim verification, confidence scoring
-- `investigative-playbook.md` — Process for running an investigation
-- `fact-checking.md` — Fact-check workflows and claim lifecycle
-- `headline-standards.md` — Writing headlines that are accurate and clear
-- `sensitivity-review.md` — Review process for sensitive topics
+| Document | Description | Status |
+|----------|-------------|--------|
+| `book-of-record.md` | Editorial decision register — every significant decision, with reasoning and alternatives. | ✅ Active (15 entries) |
+| `known-disagreements.md` | Scholarly disagreements the platform does not attempt to resolve, surfaced with positions and evidence. | ✅ Active (8 disagreements) |
+| `confidence-register.md` | Global claim confidence tracking — every claim in the registry with score, evidence, and next review date. | ✅ Active (18 claims) |
+| `editorial-calendar.md` | Verification and review schedule across all collections — not a publishing calendar. | ⬜ Draft |
+
+## Reference
+
+- `knowledge-library-style-guide.md` — Architecture and rendering patterns for the Knowledge Library system

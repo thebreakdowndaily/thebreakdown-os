@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+      text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+    <marker id="arrowInv" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#CC4444"/></marker>
+    <marker id="arrowInd" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4488CC"/></marker>
+  </defs>
+  <rect width="1600" height="900" fill="#0A0A0A"/>
+
+  <!-- Kashmir region background -->
+  <rect x="200" y="40" width="1200" height="820" fill="#111822"/>
+
+  <!-- Kashmir region outline (simplified) -->
+  <path d="M 380 120 C 400 100 440 85 480 80 C 520 78 560 85 600 95 C 640 108 680 125 720 145 C 760 165 800 185 840 200 C 880 215 920 225 960 230 C 1000 232 1040 228 1080 220 C 1100 215 1110 205 1110 195 C 1108 180 1095 170 1080 165 C 1060 158 1035 158 1010 165 C 985 172 965 185 950 200 C 935 215 920 230 900 240 C 880 250 855 255 830 255 C 805 255 780 250 760 240 C 740 230 725 215 715 200 C 705 185 700 170 700 155 C 700 140 705 125 715 115 C 725 105 740 100 760 100 C 780 100 800 105 820 115 C 840 125 855 140 865 158 C 875 175 880 195 878 215 C 876 235 868 255 855 270 C 842 285 825 295 805 300 C 785 305 765 305 745 300 C 725 295 710 285 700 270 C 690 255 685 238 685 220 C 685 202 690 185 700 170 C 710 155 725 145 742 140 C 760 135 778 135 795 140 C 812 145 828 155 840 168 C 852 181 860 198 862 216 C 864 234 860 252 850 268 C 840 284 825 296 808 303 C 791 310 772 312 754 308 C 736 304 720 295 708 282 C 696 269 688 253 686 235 C 684 217 688 200 698 185 C 708 170 722 160 738 155 C 755 150 772 150 788 155 C 805 160 820 170 832 184 C 844 198 852 215 854 234 C 856 253 852 272 842 288 C 832 304 818 316 800 322 C 782 328 764 328 746 322 C 728 316 714 305 704 290 C 694 275 688 257 688 238 C 688 219 694 201 706 187 C 718 173 734 164 752 160 C 770 156 788 158 804 166 C 820 174 834 187 844 204 C 854 221 858 241 856 261 C 854 281 846 299 834 313 C 822 327 806 336 788 340 C 770 344 752 342 736 335 C 720 328 708 316 700 301 C 692 286 688 268 690 250 C 692 232 700 216 714 204 C 728 192 745 186 764 186 C 783 186 802 194 816 208 C 830 222 840 240 844 260 C 848 280 846 300 838 318 C 830 336 816 350 798 358 C 780 366 762 368 744 364 C 726 360 712 350 702 336 C 692 322 688 305 690 287 C 692 269 700 253 714 242 C 728 231 746 226 765 228 C 784 230 802 240 816 256 C 830 272 838 292 840 314 C 842 336 836 356 824 372 C 812 388 796 398 778 402 C 760 406 742 404 726 396 C 710 388 698 375 692 358 C 686 341 686 322 692 305 C 698 288 710 276 726 270 C 742 264 760 264 776 272 C 792 280 806 294 814 312 C 822 330 824 350 820 370 C 816 390 806 406 792 418 C 778 430 760 436 742 436 C 724 436 708 428 696 416 C 684 404 678 388 678 370 C 678 352 684 336 696 324 C 708 312 724 306 742 306 C 760 306 778 314 792 328 C 806 342 814 362 816 384 C 818 406 812 426 800 442 C 788 458 772 468 754 472 C 736 476 718 472 704 462 C 690 452 682 438 678 420 C 674 402 678 384 688 370 C 698 356 714 348 732 346 C 750 344 768 350 782 362 C 796 374 806 392 808 412 C 810 432 804 450 792 464 C 780 478 764 486 746 488 C 728 490 712 484 700 474 C 688 464 682 450 680 432 C 678 414 684 398 696 386 C 708 374 724 368 742 368 C 760 368 778 376 790 390 C 802 404 810 422 812 442 C 814 462 808 480 796 494 C 784 508 768 516 750 518 C 732 520 716 514 704 502 C 692 490 686 474 686 456" fill="none" stroke="#445566" stroke-width="1" opacity="0.5"/>
+
+  <!-- Actual Kashmir region (simplified recognizable shape) -->
+  <path d="M 420 120 C 460 100 510 90 560 90 C 610 92 660 105 710 125 C 760 145 800 170 830 200 C 860 230 880 265 890 300 C 900 335 900 370 890 400 C 880 430 860 455 835 472 C 810 490 780 498 750 498 C 720 498 692 490 670 475 C 648 460 632 438 624 412 C 616 386 616 358 624 332 C 632 306 648 284 670 268 C 692 252 718 244 746 244 C 774 244 802 254 824 272 C 846 290 860 316 866 346 C 872 376 870 408 860 436 C 850 464 832 486 808 500 C 784 514 756 520 728 518 C 700 516 674 506 654 490 C 634 474 622 452 618 426 C 614 400 618 374 630 352 C 642 330 660 314 682 306 C 704 298 728 298 750 306 C 772 314 790 330 802 352 C 814 374 820 400 818 428 C 816 456 806 480 790 498 C 774 516 754 526 732 528 C 710 530 690 524 674 512 C 658 500 650 482 648 462 C 646 442 652 424 666 410 C 680 396 698 390 718 390 C 738 390 758 400 772 416 C 786 432 794 454 796 478 C 798 502 790 522 776 536 C 762 550 744 558 724 558 C 704 558 686 550 674 536 C 662 522 656 504 656 484 C 656 464 664 448 680 438 C 696 428 716 426 736 432 C 756 438 772 452 782 472 C 792 492 794 516 788 536 C 782 556 770 572 754 582 C 738 592 720 596 702 592 C 684 588 670 578 660 564 C 650 550 648 532 652 514 C 656 496 668 482 686 474 C 704 466 724 466 742 474 C 760 482 774 498 782 518 C 790 538 790 560 782 578 C 774 596 760 608 742 614 C 724 620 706 618 690 608 C 674 598 664 584 660 566 C 656 548 662 532 676 522 C 690 512 708 510 726 516 C 744 522 758 536 766 556 C 774 576 774 598 766 616 C 758 634 744 646 726 650 C 708 654 692 648 680 636 C 668 624 662 608 662 590 C 662 572 670 558 686 550 C 702 542 720 542 736 550 C 752 558 764 574 770 594 C 776 614 774 636 766 654" fill="none" stroke="#334455" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Indian-administered territory (current approximate) -->
+  <path d="M 560 200 C 600 180 650 170 700 175 C 750 180 790 200 820 230 C 850 260 870 300 880 340 C 890 380 890 420 880 455 C 870 490 850 520 825 542 C 800 564 770 578 740 582 C 710 586 682 580 660 566 C 638 552 624 530 618 504 C 612 478 616 450 630 428 C 644 406 666 392 692 386 C 718 380 746 384 770 398 C 794 412 812 436 820 464 C 828 492 826 522 816 548 C 806 574 788 594 766 606 C 744 618 720 622 696 618 C 672 614 652 602 640 584 C 628 566 624 544 628 522 C 632 500 646 484 668 476 C 690 468 714 468 736 478 C 758 488 774 506 782 530 C 790 554 788 580 778 600 C 768 620 752 634 732 640 C 712 646 694 642 680 630 C 666 618 658 602 658 582 C 658 562 668 548 686 542 C 704 536 724 538 742 548 C 760 558 774 576 780 598 C 786 620 784 644 774 662 C 764 680 748 692 728 696 C 708 700 690 694 678 682 C 666 670 660 654 660 634" fill="#3A5A7A" stroke="#5A7A9A" stroke-width="1.5" opacity="0.25" stroke-dasharray="none"/>
+
+  <!-- Ceasefire Line (Jan 1, 1949) / LoC -->
+  <path d="M 520 180 C 540 200 555 225 565 250 C 575 275 580 300 580 325 C 580 350 575 375 565 395 C 555 415 540 430 520 440 C 500 450 478 455 458 452 C 438 449 420 440 408 426 C 396 412 390 394 392 375" stroke="#FFD700" stroke-width="3" fill="none" opacity="0.8" stroke-dasharray="12,6"/>
+  <text x="420" y="460" font-size="9" fill="#FFD700" font-weight="600">CEASEFIRE LINE (1949)</text>
+  <text x="420" y="472" font-size="7" fill="#CCAA44">= Line of Control (post-1972)</text>
+
+  <!-- Tribal invasion route from Pakistan (Sept-Oct 1947) -->
+  <path d="M 420 280 C 440 270 460 265 480 265 C 500 265 520 270 535 280 C 550 290 558 305 558 320" stroke="#CC4444" stroke-width="3" fill="none" opacity="0.7" marker-end="url(#arrowInv)"/>
+  <text x="400" y="275" font-size="8" fill="#CC4444" font-weight="600">Tribal Invasion</text>
+  <text x="400" y="287" font-size="7" fill="#AA3333">Sept-Oct 1947</text>
+
+  <!-- Indian airlift to Srinagar (Oct 27, 1947) -->
+  <path d="M 660 580 C 650 540 640 500 635 460 C 630 420 630 380 635 340 C 640 300 650 270 665 250" stroke="#4488CC" stroke-width="2.5" fill="none" opacity="0.7" stroke-dasharray="6,4" marker-end="url(#arrowInd)"/>
+  <text x="670" y="560" font-size="8" fill="#4488CC" font-weight="600">Indian Airlift</text>
+  <text x="670" y="572" font-size="7" fill="#336699">Oct 27, 1947</text>
+
+  <!-- Indian military advances -->
+  <path d="M 660 400 C 640 380 620 360 600 345" stroke="#4488CC" stroke-width="2" fill="none" opacity="0.5" marker-end="url(#arrowInd)"/>
+  <path d="M 700 350 C 680 330 660 315 640 305" stroke="#4488CC" stroke-width="2" fill="none" opacity="0.5" marker-end="url(#arrowInd)"/>
+  <path d="M 750 380 C 730 360 710 345 690 335" stroke="#4488CC" stroke-width="1.5" fill="none" opacity="0.4" marker-end="url(#arrowInd)"/>
+
+  <!-- Towns -->
+  <g>
+    <circle cx="640" cy="260" r="5" fill="#C4A34E" stroke="#FFF" stroke-width="1"/>
+    <text x="652" y="256" font-size="10" fill="#FFFFFF" font-weight="700">Srinagar</text>
+    <text x="652" y="268" font-size="7" fill="#CCCCCC">Summer capital</text>
+
+    <circle cx="580" cy="420" r="4" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="590" y="416" font-size="9" fill="#FFFFFF" font-weight="600">Jammu</text>
+    <text x="590" y="428" font-size="7" fill="#CCCCCC">Winter capital</text>
+
+    <circle cx="500" cy="300" r="3.5" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="510" y="296" font-size="8" fill="#BBBBBB">Muzaffarabad</text>
+
+    <circle cx="440" cy="220" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="450" y="216" font-size="8" fill="#BBBBBB">Gilgit</text>
+
+    <circle cx="490" cy="180" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="500" y="176" font-size="8" fill="#BBBBBB">Skardu</text>
+
+    <circle cx="720" cy="340" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="730" y="336" font-size="8" fill="#BBBBBB">Kargil</text>
+
+    <circle cx="800" cy="320" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="810" y="316" font-size="8" fill="#BBBBBB">Leh</text>
+
+    <circle cx="540" cy="370" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="550" y="366" font-size="8" fill="#BBBBBB">Poonch</text>
+
+    <circle cx="520" cy="350" r="3" fill="#FFFFFF" stroke="#333" stroke-width="0.5"/>
+    <text x="530" y="346" font-size="8" fill="#BBBBBB">Mirpur</text>
+
+    <!-- UNMOGIP observation posts -->
+    <circle cx="560" cy="290" r="2" fill="none" stroke="#00CC66" stroke-width="1.5"/>
+    <circle cx="540" cy="320" r="2" fill="none" stroke="#00CC66" stroke-width="1.5"/>
+    <circle cx="550" cy="350" r="2" fill="none" stroke="#00CC66" stroke-width="1.5"/>
+  </g>
+
+  <!-- Military phase labels -->
+  <g font-size="7" fill="#4488CC" opacity="0.6">
+    <text x="620" y="370">Oct-Nov 1947</text>
+    <text x="620" y="382">Winter 1947-48</text>
+    <text x="620" y="394">Spring 1948</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40, 600)">
+    <rect x="0" y="0" width="260" height="200" fill="#0A0A0A" opacity="0.9" stroke="#333333" stroke-width="0.5" rx="4"/>
+    <text x="12" y="20" font-size="10" fill="#CCCCCC" font-weight="600">Kashmir, 1947-48</text>
+    <line x1="12" y1="36" x2="60" y2="36" stroke="#CC4444" stroke-width="3" opacity="0.7" marker-end="url(#arrowInv)"/>
+    <text x="70" y="39" font-size="8" fill="#AAAAAA">Tribal invasion route</text>
+    <line x1="12" y1="54" x2="60" y2="54" stroke="#4488CC" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.7"/>
+    <text x="70" y="57" font-size="8" fill="#AAAAAA">Indian airlift</text>
+    <line x1="12" y1="72" x2="60" y2="72" stroke="#4488CC" stroke-width="2" opacity="0.5" marker-end="url(#arrowInd)"/>
+    <text x="70" y="75" font-size="8" fill="#AAAAAA">Indian military advance</text>
+    <line x1="12" y1="90" x2="60" y2="90" stroke="#FFD700" stroke-width="3" stroke-dasharray="12,6" opacity="0.8"/>
+    <text x="70" y="93" font-size="8" fill="#AAAAAA">Ceasefire Line (1949)</text>
+    <circle cx="19" cy="110" r="2" fill="none" stroke="#00CC66" stroke-width="1.5"/>
+    <text x="32" y="113" font-size="8" fill="#AAAAAA">UNMOGIP observation post</text>
+    <circle cx="19" cy="128" r="4" fill="#C4A34E" stroke="#FFF" stroke-width="0.5"/>
+    <text x="32" y="131" font-size="8" fill="#AAAAAA">State capital</text>
+    <circle cx="19" cy="146" r="3" fill="#FFF" stroke="#333" stroke-width="0.5"/>
+    <text x="32" y="149" font-size="8" fill="#AAAAAA">Major town</text>
+    <text x="12" y="170" font-size="7" fill="#888888">First India-Pakistan War</text>
+    <text x="12" y="182" font-size="7" fill="#888888">Oct 1947 — Jan 1949</text>
+    <text x="12" y="194" font-size="7" fill="#888888">Casualties: ~6,000 India, ~6,000 Pakistan</text>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(1340, 830)">
+    <rect x="0" y="0" width="100" height="1" fill="#888888"/>
+    <line x1="0" y1="-4" x2="0" y2="4" stroke="#888888" stroke-width="1"/>
+    <line x1="50" y1="-3" x2="50" y2="3" stroke="#888888" stroke-width="0.8"/>
+    <line x1="100" y1="-4" x2="100" y2="4" stroke="#888888" stroke-width="1"/>
+    <text x="50" y="12" font-size="7" fill="#888888" text-anchor="middle">0 — 100 — 200 km</text>
+  </g>
+  <g transform="translate(1520, 60)">
+    <circle cx="0" cy="0" r="22" fill="none" stroke="#555555" stroke-width="0.5"/>
+    <polygon points="0,-30 -4,-20 4,-20" fill="#C4A34E"/>
+    <polygon points="0,30 -4,20 4,20" fill="#555555"/>
+    <text x="0" y="-34" font-size="9" fill="#C4A34E" text-anchor="middle" font-weight="600">N</text>
+  </g>
+
+  <text x="40" y="40" font-size="28" font-weight="700" fill="#FFFFFF">Kashmir, 1947–48</text>
+  <text x="40" y="62" font-size="14" fill="#999999">Tribal Invasion, Indian Response, and Ceasefire Line</text>
+  <text x="1590" y="890" font-size="7" fill="#555555" text-anchor="end">© The Breakdown Knowledge Platform. Military movements from Nawaz (1996), Prins (2020).</text>
+</svg>

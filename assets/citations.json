@@ -1,0 +1,55 @@
+{
+  "A-01": {
+    "assetId": "A-01",
+    "chicago": "No. 9 Army Film & Photographic Unit. Admiral of the Fleet Earl Mountbatten of Burma. April 1947. Photograph. Imperial War Museums, IND 5302.",
+    "mla": "No. 9 Army Film & Photographic Unit. Admiral of the Fleet Earl Mountbatten of Burma. Imperial War Museums, IND 5302, Apr. 1947.",
+    "apa": "No. 9 Army Film & Photographic Unit. (1947, April). Admiral of the Fleet Earl Mountbatten of Burma [Photograph]. Imperial War Museums, IND 5302.",
+    "short": "IWM IND 5302",
+    "rights": "Public Domain (Crown Copyright expired)",
+    "credit": "© IWM (IND 5302)"
+  },
+  "A-03": {
+    "assetId": "A-03",
+    "chicago": "Bourke-White, Margaret. Aftermath of Calcutta Riots. August 1946. B/W Negative. LIFE Picture Collection / Getty Images, 50694119.",
+    "mla": "Bourke-White, Margaret. Aftermath of Calcutta Riots. LIFE Picture Collection / Getty Images, 50694119, Aug. 1946.",
+    "short": "LIFE 50694119",
+    "rights": "Rights Managed (Time Inc. / Getty Images)",
+    "credit": "Margaret Bourke-White — The LIFE Picture Collection/Getty Images"
+  },
+  "A-07": {
+    "assetId": "A-07",
+    "chicago": "United Nations Photo. Jawaharlal Nehru Addressing the General Assembly. November 1948. Photograph. UN Photo Library.",
+    "short": "UN Photo (1948)",
+    "rights": "UN Public Domain / Editorial Use",
+    "credit": "UN Photo"
+  },
+  "A-08": {
+    "assetId": "A-08",
+    "chicago": "Elliott & Fry. Cyril John Radcliffe, 1st Viscount Radcliffe. 1957. Half-plate negative. National Portrait Gallery, London, NPG x88321.",
+    "short": "NPG x88321",
+    "rights": "Rights Managed (NPG)",
+    "credit": "© National Portrait Gallery, London"
+  },
+  "A-09": {
+    "assetId": "A-09",
+    "chicago": "Jinnah & Gandhi, 1944. September 9, 1944. Photograph. ullstein bild / Getty Images, 542347429.",
+    "mla": "Jinnah & Gandhi, 1944. ullstein bild / Getty Images, 542347429, 9 Sept. 1944.",
+    "short": "Getty 542347429",
+    "rights": "Public Domain in India / Rights Managed (International)",
+    "credit": "Dinodia Photos / Rühe/ullstein bild via Getty Images"
+  },
+  "C-01": {
+    "assetId": "C-01",
+    "chicago": "Indian Independence Act, 1947. 10 & 11 Geo. 6. c. 30. UK Parliamentary Archives, HL/PO/PU/1/1947/10&11G6c30.",
+    "short": "10 & 11 Geo. 6. c. 30",
+    "rights": "Public Record (UK Parliament)",
+    "credit": "UK National Archives"
+  },
+  "C-03": {
+    "assetId": "C-03",
+    "chicago": "UN Security Council Resolution 47 (1948). S/RES/47(1948). 21 April 1948. UN Digital Library.",
+    "short": "S/RES/47(1948)",
+    "rights": "UN Public Domain",
+    "credit": "UN Archives"
+  }
+}

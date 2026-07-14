@@ -1,0 +1,210 @@
+import type { CanonicalTimelineEvent } from '@/types/canonical';
+
+const events = new Map<string, CanonicalTimelineEvent>();
+
+export function getTimelineEvent(id: string): CanonicalTimelineEvent | undefined {
+  return events.get(id);
+}
+
+export function getAllTimelineEvents(): CanonicalTimelineEvent[] {
+  return Array.from(events.values());
+}
+
+export function getEventsByEntity(entityId: string): CanonicalTimelineEvent[] {
+  return Array.from(events.values()).filter(
+    e => e.countryIds.includes(entityId) || e.organizationIds.includes(entityId)
+  );
+}
+
+export function registerTimelineEvent(event: CanonicalTimelineEvent): void {
+  events.set(event.id, event);
+}
+
+export function seedTimelineEvents(): void {
+  const seed: CanonicalTimelineEvent[] = [
+    {
+      id: 'evt.independence',
+      date: '15 Aug 1947',
+      title: 'India Gains Independence',
+      description: 'India becomes an independent dominion within the British Commonwealth. Jawaharlal Nehru becomes Prime Minister.',
+      categories: ['political'],
+      claimIds: ['claim.secular-nationalism.foreign-policy'],
+      documentIds: ['doc-nehru-tryst'],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.kashmir-accession',
+      date: '26 Oct 1947',
+      title: 'Kashmir Accedes to India',
+      description: 'Maharaja Hari Singh signs the Instrument of Accession. Indian troops are airlifted to Srinagar.',
+      categories: ['political', 'military'],
+      claimIds: ['claim.kashmir.un-referral'],
+      documentIds: [],
+      countryIds: ['india', 'kashmir'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.un-referral',
+      date: '1 Jan 1948',
+      title: 'India Takes Kashmir to the UN',
+      description: 'Nehru refers the Kashmir dispute to the United Nations Security Council under Article 35.',
+      categories: ['diplomatic'],
+      claimIds: ['claim.kashmir.un-referral'],
+      documentIds: ['doc-un-res-47'],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: ['un'],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.3-june-plan',
+      date: '3 Jun 1947',
+      title: 'Mountbatten Announces Partition Plan',
+      description: 'Lord Mountbatten announces the British decision to partition India and transfer power by August 1947. The plan is accepted by both Congress and the Muslim League.',
+      categories: ['political'],
+      claimIds: ['claim.partition.founding-trauma'],
+      documentIds: ['doc-mountbatten-plan'],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.radcliffe-award',
+      date: '17 Aug 1947',
+      title: 'Radcliffe Award Published',
+      description: 'Sir Cyril Radcliffe\'s Boundary Commissions publish the final borders between India and Pakistan, dividing Punjab and Bengal. The borders are announced two days after independence.',
+      categories: ['political'],
+      claimIds: ['claim.partition.founding-trauma', 'claim.partition.division-of-assets'],
+      documentIds: ['doc-radcliffe-award'],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.partition-violence-peak',
+      date: 'Aug–Sep 1947',
+      title: 'Partition Violence Peaks',
+      description: 'Mass communal violence erupts across Punjab and Bengal. Entire villages are destroyed, trains carrying refugees are attacked, and an estimated 200,000 to 2 million people are killed.',
+      categories: ['conflict', 'social'],
+      claimIds: ['claim.partition.violence-civil-society', 'claim.partition.demographic-impact'],
+      documentIds: [],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.division-assets',
+      date: 'Aug–Dec 1947',
+      title: 'Division of Military and Financial Assets',
+      description: 'The British Indian Army, Indian Civil Service, railways, and treasury are divided between India and Pakistan. India withholds Pakistan\'s share of cash balances over the Kashmir dispute.',
+      categories: ['political', 'military', 'economic'],
+      claimIds: ['claim.partition.division-of-assets'],
+      documentIds: ['doc-independence-act'],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.princely-states-accession',
+      date: 'Aug 1947 – May 1948',
+      title: 'Integration of Princely States',
+      description: 'Sardar Patel and V.P. Menon begin the process of integrating 565 princely states into India. Most accede peacefully, but Junagadh, Hyderabad, and Kashmir require military or diplomatic intervention.',
+      categories: ['political', 'diplomatic'],
+      claimIds: ['claim.partition.princely-states'],
+      documentIds: [],
+      countryIds: ['india', 'hyderabad', 'junagadh'],
+      organizationIds: [],
+      thinkerIds: ['thinker.patel', 'thinker.vp-menon'],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.refugee-crisis',
+      date: 'Aug 1947 – 1951',
+      title: 'Refugee Crisis and Rehabilitation',
+      description: 'Approximately 14.5 million refugees cross the new borders. India establishes refugee camps and rehabilitation programs in Delhi, Punjab, and West Bengal that operate for years.',
+      categories: ['social', 'economic'],
+      claimIds: ['claim.partition.refugee-crisis'],
+      documentIds: [],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.gandhi-assassinated',
+      date: '30 Jan 1948',
+      title: 'Mahatma Gandhi Assassinated',
+      description: 'Nathuram Godse, a Hindu nationalist, assassinates Mahatma Gandhi in New Delhi. Gandhi had been fasting and campaigning against communal violence and for minority rights.',
+      categories: ['political', 'social'],
+      claimIds: ['claim.partition.violence-civil-society'],
+      documentIds: [],
+      countryIds: ['india'],
+      organizationIds: [],
+      thinkerIds: ['thinker.gandhi'],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.integration-hyderabad',
+      date: '13 Sep 1948',
+      title: 'Police Action in Hyderabad',
+      description: 'India launches Operation Polo, a military intervention to integrate the princely state of Hyderabad after its Nizam attempts to remain independent. The operation takes five days.',
+      categories: ['military', 'political'],
+      claimIds: ['claim.partition.princely-states'],
+      documentIds: [],
+      countryIds: ['india', 'hyderabad'],
+      organizationIds: [],
+      thinkerIds: ['thinker.patel'],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.kashmir-ceasefire',
+      date: '1 Jan 1949',
+      title: 'UN Ceasefire in Kashmir',
+      description: 'A UN-mediated ceasefire ends the first India-Pakistan war. Kashmir is divided along a line that becomes the Line of Control. The UN calls for a plebiscite that is never held.',
+      categories: ['diplomatic', 'military'],
+      claimIds: ['claim.kashmir.un-referral', 'claim.partition.kashmir-unfinished'],
+      documentIds: ['doc-un-res-47'],
+      countryIds: ['india', 'pakistan', 'kashmir'],
+      organizationIds: ['un'],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+    {
+      id: 'evt.liaquat-nehru-pact',
+      date: '8 Apr 1950',
+      title: 'Liaquat-Nehru Pact Signed',
+      description: 'India and Pakistan sign a pact guaranteeing minority rights and establishing Minority Commissions in both countries. The pact helps stabilize cross-border tensions.',
+      categories: ['diplomatic'],
+      claimIds: ['claim.partition.minorities'],
+      documentIds: ['doc-liaquat-nehru-pact'],
+      countryIds: ['india', 'pakistan'],
+      organizationIds: [],
+      thinkerIds: [],
+      evidenceIds: [],
+      storyIds: [],
+    },
+  ];
+
+  for (const e of seed) events.set(e.id, e);
+}

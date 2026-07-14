@@ -1,0 +1,40 @@
+import { registerBlock } from '../core/block-registry';
+import { HeadingBlock } from './HeadingBlock';
+import { ParagraphBlock } from './ParagraphBlock';
+import { ClaimBlock } from './ClaimBlock';
+import { QuoteBlock } from './QuoteBlock';
+import { CalloutBlock } from './CalloutBlock';
+import { ListBlock } from './ListBlock';
+import { EvidenceSummaryBlock } from './EvidenceSummaryBlock';
+import { DocumentBlock } from './DocumentBlock';
+import { TimelineBlock } from './TimelineBlock';
+import { ThinkerBlock } from './ThinkerBlock';
+import { RelationshipCardBlock } from './RelationshipCardBlock';
+import { LearningBlock } from './LearningBlock';
+import { DecisionMatrixBlock } from './DecisionMatrixBlock';
+import { CounterfactualBlock } from './CounterfactualBlock';
+import { HistoriographyBlock } from './HistoriographyBlock';
+import { ImageBlock } from './ImageBlock';
+import { MapBlock } from './MapBlock';
+import { ChartBlock } from './ChartBlock';
+
+export function registerAllBlocks(): void {
+  registerBlock('heading', HeadingBlock);
+  registerBlock('paragraph', ParagraphBlock);
+  registerBlock('claim', ClaimBlock);
+  registerBlock('quote', QuoteBlock);
+  registerBlock('callout', CalloutBlock);
+  registerBlock('list', ListBlock);
+  registerBlock('evidence-summary', EvidenceSummaryBlock);
+  registerBlock('document', DocumentBlock);
+  registerBlock('timeline', TimelineBlock);
+  registerBlock('thinker', ThinkerBlock);
+  registerBlock('relationship-card', RelationshipCardBlock);
+  registerBlock('learning', LearningBlock);
+  registerBlock('decision-matrix', DecisionMatrixBlock);
+  registerBlock('counterfactual', CounterfactualBlock);
+  registerBlock('historiography', HistoriographyBlock);
+  registerBlock('image', ImageBlock);
+  registerBlock('map', MapBlock);
+  registerBlock('chart', ChartBlock);
+}

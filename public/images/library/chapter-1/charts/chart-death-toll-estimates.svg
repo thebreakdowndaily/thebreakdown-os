@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Death Toll Estimates for the Partition of India from various sources">
+  <title>Partition of India — Death Toll Estimates by Source</title>
+  <desc>Horizontal bar chart comparing death toll estimates from official, Indian government, and scholarly sources, ranging from 200,000 to over 2 million.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+    text { font-family: 'Inter', system-ui, sans-serif; }
+    .title { fill: #FFFFFF; font-size: 28px; font-weight: 700; }
+    .subtitle { fill: #A0A0A0; font-size: 16px; font-weight: 400; }
+    .axis-label { fill: #B0B0B0; font-size: 13px; font-weight: 400; }
+    .source-label { fill: #D0D0D0; font-size: 14px; font-weight: 500; }
+    .value-label { fill: #FFFFFF; font-size: 13px; font-weight: 600; }
+    .grid-line { stroke: #2A2A2A; stroke-width: 1; }
+    .grid-line-major { stroke: #333333; stroke-width: 1; }
+    .category-label { fill: #888888; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; }
+    .legend-text { fill: #B0B0B0; font-size: 12px; font-weight: 400; }
+    .source-citation { fill: #666666; font-size: 10px; font-weight: 400; }
+    .consensus-zone { fill: #FFD700; opacity: 0.08; }
+    .consensus-line { stroke: #FFD700; stroke-width: 2; stroke-dasharray: 6 4; }
+    .consensus-label { fill: #FFD700; font-size: 11px; font-weight: 600; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0A0A0A"/>
+
+  <!-- Title Block -->
+  <text x="60" y="50" class="title">Partition of India — Death Toll Estimates</text>
+  <text x="60" y="76" class="subtitle">How different sources estimate the number killed during Partition (1947–48)</text>
+
+  <!-- Chart area: x=180 to x=1060 (880px wide), y=120 to y=680 (560px for 9 bars + spacing) -->
+  <!-- Scale: 0 to 2,200,000. 880px / 2.2M = 0.0004px per person -->
+
+  <!-- Grid lines -->
+  <line x1="180" y1="120" x2="180" y2="680" class="grid-line-major"/>
+  <line x1="180" y1="680" x2="1060" y2="680" class="grid-line-major"/>
+
+  <!-- Vertical gridlines at 500K intervals -->
+  <line x1="380" y1="120" x2="380" y2="680" class="grid-line"/>
+  <text x="380" y="698" text-anchor="middle" class="axis-label">500K</text>
+
+  <line x1="580" y1="120" x2="580" y2="680" class="grid-line"/>
+  <text x="580" y="698" text-anchor="middle" class="axis-label">1.0M</text>
+
+  <line x1="780" y1="120" x2="780" y2="680" class="grid-line"/>
+  <text x="780" y="698" text-anchor="middle" class="axis-label">1.5M</text>
+
+  <line x1="980" y1="120" x2="980" y2="680" class="grid-line"/>
+  <text x="980" y="698" text-anchor="middle" class="axis-label">2.0M</text>
+
+  <!-- 0 axis label -->
+  <text x="180" y="698" text-anchor="middle" class="axis-label">0</text>
+
+  <!-- Consensus range highlight (800K–1M) -->
+  <!-- 800K = 180 + (800000/2200000)*880 = 180 + 320 = 500 -->
+  <!-- 1M = 180 + (1000000/2200000)*880 = 180 + 400 = 580 -->
+  <rect x="500" y="120" width="80" height="560" class="consensus-zone"/>
+  <line x1="500" y1="120" x2="500" y2="680" class="consensus-line"/>
+  <line x1="580" y1="120" x2="580" y2="680" class="consensus-line"/>
+  <text x="540" y="136" text-anchor="middle" class="consensus-label">SCHOLARLY CONSENSUS</text>
+  <text x="540" y="150" text-anchor="middle" class="consensus-label">800K – 1M</text>
+
+  <!-- Category bracket labels on left -->
+  <text x="30" y="175" class="category-label" transform="rotate(-90,30,175)">OFFICIAL</text>
+  <text x="30" y="345" class="category-label" transform="rotate(-90,30,345)">GOVERNMENT</text>
+  <text x="30" y="485" class="category-label" transform="rotate(-90,30,485)">SCHOLARLY</text>
+
+  <!-- Category brackets -->
+  <line x1="170" y1="140" x2="170" y2="215" stroke="#555" stroke-width="1"/>
+  <line x1="170" y1="215" x2="173" y2="215" stroke="#555" stroke-width="1"/>
+  <line x1="170" y1="140" x2="173" y2="140" stroke="#555" stroke-width="1"/>
+
+  <line x1="170" y1="225" x2="170" y2="285" stroke="#555" stroke-width="1"/>
+  <line x1="170" y1="285" x2="173" y2="285" stroke="#555" stroke-width="1"/>
+  <line x1="170" y1="225" x2="173" y2="225" stroke="#555" stroke-width="1"/>
+
+  <line x1="170" y1="305" x2="170" y2="660" stroke="#555" stroke-width="1"/>
+  <line x1="170" y1="660" x2="173" y2="660" stroke="#555" stroke-width="1"/>
+  <line x1="170" y1="305" x2="173" y2="305" stroke="#555" stroke-width="1"/>
+
+  <!-- BAR 1: Official British (1948): 200,000 — Color: #4A90D9 (blue) -->
+  <!-- width = (200000/2200000)*880 = 80px -->
+  <rect x="180" y="150" width="80" height="42" rx="3" fill="#4A90D9"/>
+  <text x="175" y="174" text-anchor="end" class="source-label">Official British (1948)</text>
+  <text x="268" y="174" text-anchor="start" class="value-label">200,000</text>
+
+  <!-- BAR 2: Indian Government (1951): 500,000 -->
+  <!-- width = (500000/2200000)*880 = 200px -->
+  <rect x="180" y="230" width="200" height="42" rx="3" fill="#5BA0E0"/>
+  <text x="175" y="254" text-anchor="end" class="source-label">Indian Government (1951)</text>
+  <text x="388" y="254" text-anchor="start" class="value-label">500,000</text>
+
+  <!-- BAR 3: Mountbatten's estimate: 1,000,000 -->
+  <!-- width = (1000000/2200000)*880 = 400px -->
+  <rect x="180" y="315" width="400" height="42" rx="3" fill="#2ECC71"/>
+  <text x="175" y="339" text-anchor="end" class="source-label">Mountbatten</text>
+  <text x="588" y="339" text-anchor="start" class="value-label">1,000,000</text>
+
+  <!-- BAR 4: G.D. Khosla: 800,000 -->
+  <!-- width = (800000/2200000)*880 = 320px -->
+  <rect x="180" y="385" width="320" height="42" rx="3" fill="#27AE60"/>
+  <text x="175" y="409" text-anchor="end" class="source-label">G.D. Khosla</text>
+  <text x="508" y="409" text-anchor="start" class="value-label">800,000</text>
+
+  <!-- BAR 5: Percival Spear: 1,000,000 -->
+  <!-- width = 400px -->
+  <rect x="180" y="445" width="400" height="42" rx="3" fill="#27AE60"/>
+  <text x="175" y="469" text-anchor="end" class="source-label">Percival Spear</text>
+  <text x="588" y="469" text-anchor="start" class="value-label">1,000,000</text>
+
+  <!-- BAR 6: Patrick French (1997): 1,000,000+ -->
+  <!-- width = ~420px (representing 1M+) -->
+  <rect x="180" y="505" width="420" height="42" rx="3" fill="#27AE60"/>
+  <text x="175" y="529" text-anchor="end" class="source-label">Patrick French (1997)</text>
+  <text x="608" y="529" text-anchor="start" class="value-label">1,000,000+</text>
+
+  <!-- BAR 7: Ian Talbot (2006): 800K–1M (shown at midpoint 900K) -->
+  <!-- width = (900000/2200000)*880 = 360px -->
+  <rect x="180" y="565" width="360" height="42" rx="3" fill="#27AE60"/>
+  <text x="175" y="589" text-anchor="end" class="source-label">Ian Talbot (2006)</text>
+  <text x="548" y="589" text-anchor="start" class="value-label">800K – 1M</text>
+
+  <!-- BAR 8: Yasmin Khan (2007): 1M–2M (shown at midpoint 1.5M) -->
+  <!-- width = (1500000/2200000)*880 = 600px -->
+  <rect x="180" y="625" width="600" height="42" rx="3" fill="#27AE60"/>
+  <text x="175" y="649" text-anchor="end" class="source-label">Yasmin Khan (2007)</text>
+  <text x="788" y="649" text-anchor="start" class="value-label">1M – 2M</text>
+
+  <!-- Legend -->
+  <rect x="60" y="730" width="14" height="14" rx="2" fill="#4A90D9"/>
+  <text x="80" y="742" class="legend-text">Official British Record</text>
+
+  <rect x="240" y="730" width="14" height="14" rx="2" fill="#5BA0E0"/>
+  <text x="260" y="742" class="legend-text">Indian Government</text>
+
+  <rect x="420" y="730" width="14" height="14" rx="2" fill="#2ECC71"/>
+  <text x="440" y="742" class="legend-text">Political Estimate</text>
+
+  <rect x="580" y="730" width="14" height="14" rx="2" fill="#27AE60"/>
+  <text x="600" y="742" class="legend-text">Scholarly Estimate</text>
+
+  <!-- Data Sources -->
+  <text x="60" y="775" class="source-citation">Sources: Government of India, Census of India 1951; P. Spear, The Oxford History of Modern India (1958); G.D. Khosla,</text>
+  <text x="60" y="789" class="source-citation">Stern Reckoning (1989); P. French, Liberty or Death (1997); I. Talbot &amp; G. Singh, The Partition of India (2009); Y. Khan, The Great Partition (2007).</text>
+</svg>
