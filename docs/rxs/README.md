@@ -1,5 +1,19 @@
 # Reader Experience System (RXS)
 
+> **Version 1.0 (Frozen)** — July 2026
+>
+> The five founding documents of RXS are frozen as of this date. Subsequent changes follow the same governance as the Editorial Constitution: proposals, review, approval, and version increment. No silent evolution.
+>
+| Document | Status |
+|----------|--------|
+| `README.md` | What RXS is |
+| `principles.md` | How it should behave |
+| `information-architecture.md` | How knowledge is organised |
+| `story-experience.md` | How readers learn |
+| `component-philosophy.md` | How building blocks relate to knowledge |
+
+
+
 ## 1. Mission
 
 Design how readers move from curiosity to understanding. Every surface, interaction, and feedback loop serves one purpose: making complex knowledge accessible, trustworthy, and memorable. The Editorial Constitution guarantees what knowledge is; RXS guarantees what knowing feels like.
