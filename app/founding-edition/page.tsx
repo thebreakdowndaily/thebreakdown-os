@@ -13,7 +13,7 @@ const included = [
   { label: 'Methodology', href: '/methodology', desc: 'Research process, evidence hierarchy, confidence scores, corrections policy, AI usage, versioning.' },
   { label: 'Editorial Constitution', href: '/editorial-constitution', desc: 'The principles governing every editorial decision — evidence standard, ethics, quality gates.' },
   { label: 'Trust Dashboard', href: '/trust', desc: 'Transparency metrics: published monographs, claims, sources, evidence, review status.' },
-  { label: 'Founding Monograph 001', href: '/series/india-and-the-world/volume/foundations/chapter/partition-and-its-legacies', desc: 'India\'s Inheritance — Partition and the Strategic Foundations of Independent India (1947). 18 claims, 31 sources, 36 evidence entries.' },
+  { label: 'Founding Monograph 001', href: '/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance', desc: 'India\'s Inheritance — Partition and the Strategic Foundations of Independent India (1947). 18 claims, 31 sources, 36 evidence entries.' },
   { label: 'Corrections Policy', href: '/methodology#corrections', desc: 'Every correction is public, versioned, and triggers review of related knowledge objects.' },
   { label: 'Transparency Statement', href: '/trust', desc: 'Live dashboard, open scholarly disagreements, version history, evidence debt tracking.' },
 ];
@@ -40,7 +40,7 @@ const jsonLd = {
     { '@type': 'Article', name: 'Methodology', url: 'https://thebreakdown.in/methodology' },
     { '@type': 'Article', name: 'Editorial Constitution', url: 'https://thebreakdown.in/editorial-constitution' },
     { '@type': 'Dataset', name: 'Trust Dashboard', url: 'https://thebreakdown.in/trust' },
-    { '@type': 'Article', name: 'Founding Monograph 001: India\'s Inheritance — Partition and the Strategic Foundations of Independent India (1947)', url: 'https://thebreakdown.in/series/india-and-the-world/volume/foundations/chapter/partition-and-its-legacies' },
+    { '@type': 'Article', name: 'Founding Monograph 001: India\'s Inheritance — Partition and the Strategic Foundations of Independent India (1947)', url: 'https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance' },
   ],
 };
 
