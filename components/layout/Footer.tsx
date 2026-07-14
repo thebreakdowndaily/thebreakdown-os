@@ -21,12 +21,13 @@ const footerSections = [
     ],
   },
   {
-    title: 'About',
+    title: 'Knowledge Library',
     links: [
-      { label: 'Mission', href: '/about' },
-      { label: 'Methodology', href: '/about/methodology' },
-      { label: 'Team', href: '/about/team' },
-      { label: 'Contact', href: '/about/contact' },
+      { label: 'Founding Edition', href: '/founding-edition' },
+      { label: 'Chapter 1', href: '/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance' },
+      { label: 'Methodology', href: '/methodology' },
+      { label: 'Editorial Constitution', href: '/editorial-constitution' },
+      { label: 'Trust Dashboard', href: '/trust' },
     ],
   },
 ];

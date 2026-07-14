@@ -13,7 +13,8 @@ const navLinks = [
   { label: "Investigations", href: "/investigations" },
   { label: "Data", href: "/data" },
   { label: "The Fix", href: "/fix" },
-  { label: "Topics", href: "/topics" }
+  { label: "Topics", href: "/topics" },
+  { label: "Library", href: "/series" }
 ];
 
 /* ── Inline SVG icons (no icon system dependency) ──────────────────────── */
