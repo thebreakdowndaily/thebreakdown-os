@@ -1,0 +1,202 @@
+# Timeline — India's Inheritance: The Partition and Its Legacies
+
+events:
+  - date: 1940-03-23
+    title: "Lahore Resolution"
+    description: "The All-India Muslim League, meeting in Lahore, passed the resolution demanding 'independent states' for Muslim-majority areas of northwestern and eastern India. The term 'Pakistan' was not used in the resolution but became its popular label."
+    claim_links:
+      - partition-011
+    source: transfer-of-power-vol-1
+
+  - date: 1942-08-08
+    title: "Quit India Movement launched"
+    description: "The Congress Working Committee passed the Quit India resolution demanding an end to British rule. Gandhi launched the movement with a 'do or die' call. The British responded with mass arrests."
+    claim_links: []
+    source: transfer-of-power-vol-2
+
+  - date: 1945-06-25
+    title: "Simla Conference fails"
+    description: "Viceroy Wavell's conference to form an interim government at the centre failed when Jinnah insisted that the Muslim League must have the right to nominate all Muslim members. Congress rejected this."
+    claim_links:
+      - partition-001
+    source: transfer-of-power-vol-5
+
+  - date: 1945-07-26
+    title: "Attlee becomes Prime Minister"
+    description: "Clement Attlee's Labour government won the British general election. The new government was committed to Indian independence but faced severe economic pressures at home."
+    claim_links:
+      - partition-001
+    source: transfer-of-power-vol-5
+
+  - date: 1945-12-01
+    title: "Central Legislative Assembly elections"
+    description: "Elections to the Central Legislative Assembly were held. The Muslim League won all 30 Muslim-reserved seats, establishing its claim to represent Indian Muslims. Congress won the general seats."
+    claim_links:
+      - partition-002
+    source: transfer-of-power-vol-6
+
+  - date: 1946-03-24
+    title: "Cabinet Mission arrives in India"
+    description: "Three British Cabinet ministers — Pethick-Lawrence, Cripps, and Alexander — arrived in India to negotiate a constitutional framework for independence."
+    claim_links:
+      - partition-002
+    source: transfer-of-power-vol-6
+
+  - date: 1946-05-16
+    title: "Cabinet Mission Plan announced"
+    description: "The Cabinet Mission proposed a three-tier federal structure: provincial unions, a central government handling defence/foreign affairs/communications, and a right of provinces to opt out after 10 years."
+    claim_links:
+      - partition-002
+    source: transfer-of-power-vol-6
+
+  - date: 1946-06-06
+    title: "Muslim League accepts Cabinet Mission Plan"
+    description: "The Muslim League accepted the plan on 6 June. Jinnah expressed reservations but described the acceptance as 'a step forward.'"
+    claim_links:
+      - partition-002
+    source: transfer-of-power-vol-6
+
+  - date: 1946-07-10
+    title: "Nehru's press conference — 'completely unfettered'"
+    description: "In a critical press conference, Nehru stated that Congress would enter the Constituent Assembly 'completely unfettered by agreements.' Jinnah saw this as evidence Congress would not honour the plan."
+    claim_links:
+      - partition-003
+    source: transfer-of-power-vol-7
+
+  - date: 1946-07-27
+    title: "Muslim League withdraws acceptance of Cabinet Mission Plan"
+    description: "The Muslim League Working Committee withdrew acceptance and called for 'direct action' to achieve Pakistan."
+    claim_links:
+      - partition-003
+      - partition-004
+    source: transfer-of-power-vol-7
+
+  - date: 1946-08-16
+    title: "Direct Action Day / Great Calcutta Killing"
+    description: "The League's call for direct action led to 72 hours of communal violence in Calcutta. Estimates range from 4,000 to 10,000 dead. Violence was concentrated in Hindu-majority areas, suggesting organised elements."
+    claim_links:
+      - partition-004
+    source: transfer-of-power-vol-8
+
+  - date: 1946-09-02
+    title: "Interim government formed under Nehru"
+    description: "Congress formed an interim government, but the Muslim League initially refused to join. The League joined in October 1946."
+    claim_links: []
+    source: transfer-of-power-vol-8
+
+  - date: 1946-10-01
+    title: "Jinnah's conditional acceptance/rejection"
+    description: "Jinnah announced the League would join the interim government but continued demands for Pakistan, rejecting the Cabinet Mission framework entirely."
+    claim_links: []
+    source: transfer-of-power-vol-8
+
+  - date: 1946-10-15
+    title: "Violence spreads to Bihar"
+    description: "Communal violence spread to Bihar, where Hindu-majority areas attacked Muslim communities. Estimates of deaths range from 5,000 to 30,000."
+    claim_links:
+      - partition-004
+    source: transfer-of-power-vol-8
+
+  - date: 1947-02-20
+    title: "Attlee announces independence by June 1948"
+    description: "British Prime Minister Attlee announced in Parliament that Britain would withdraw from India by June 1948. Mountbatten would replace Wavell as Viceroy."
+    claim_links:
+      - partition-001
+      - partition-006
+    source: transfer-of-power-vol-9
+
+  - date: 1947-03-22
+    title: "Mountbatten arrives in India"
+    description: "Lord Mountbatten arrived as Viceroy with instructions to achieve a unified India if possible but not to delay British withdrawal."
+    claim_links:
+      - partition-006
+    source: mountbatten-papers
+
+  - date: 1947-04-17
+    title: "Mountbatten concludes partition is unavoidable"
+    description: "After a month of consultations with political leaders, Mountbatten concluded that a united India was not achievable and began planning for partition."
+    claim_links:
+      - partition-005
+      - partition-006
+    source: mountbatten-papers
+
+  - date: 1947-05-08
+    title: "Congress accepts partition in principle"
+    description: "Nehru and Patel, having concluded that a united India was impossible under the circumstances, agreed to partition in principle."
+    claim_links:
+      - partition-005
+    source: transfer-of-power-vol-10
+
+  - date: 1947-06-03
+    title: "Partition plan announced (3 June Plan)"
+    description: "Mountbatten announced the plan for partition and independence. The plan was accepted by Congress, Muslim League, and Sikh representatives."
+    claim_links:
+      - partition-006
+    source: transfer-of-power-vol-10
+
+  - date: 1947-07-04
+    title: "Indian Independence Act introduced in Parliament"
+    description: "The Indian Independence Bill was introduced in the House of Commons. It passed rapidly and received royal assent on 18 July."
+    claim_links: []
+    source: transfer-of-power-vol-11
+
+  - date: 1947-07-07
+    title: "Boundary Commission begins work"
+    description: "Sir Cyril Radcliffe chaired the Punjab and Bengal Boundary Commissions. He had never visited India before arriving for this task. The commissions had 5 weeks to determine the border."
+    claim_links:
+      - partition-007
+    source: boundary-commission-records
+
+  - date: 1947-07-17
+    title: "Partition Council established"
+    description: "The Partition Council, consisting of Congress and League representatives under Mountbatten's chairmanship, was established to oversee the division of assets."
+    claim_links:
+      - partition-010
+    source: transfer-of-power-vol-11
+
+  - date: 1947-08-14
+    title: "Pakistan becomes independent"
+    description: "Pakistan was created as a dominion within the British Commonwealth. Jinnah became Governor-General. The ceremony took place in Karachi."
+    claim_links: []
+    source: multiple
+
+  - date: 1947-08-15
+    title: "India becomes independent"
+    description: "India became an independent dominion. Nehru delivered the 'Tryst with Destiny' speech. Mass celebrations mixed with the first reports of large-scale violence in Punjab."
+    claim_links: []
+    source: multiple
+
+  - date: 1947-08-17
+    title: "Radcliffe Award published"
+    description: "The Radcliffe boundary award was published — two days after independence. The border awarded Muslim-majority areas to Pakistan but created immediate refugee flows as populations found themselves on the wrong side."
+    claim_links:
+      - partition-007
+    source: boundary-commission-records
+
+  - date: 1947-08-17
+    title: "Mass migration begins in earnest"
+    description: "Once the boundary was known, an estimated 10–15 million people began crossing borders in both directions — Sikhs and Hindus moving to India, Muslims moving to Pakistan. Punjab experienced the largest population exchange."
+    claim_links:
+      - partition-008
+      - partition-009
+    source: khan-2007
+
+  - date: 1947-10-22
+    title: "Kashmir conflict begins"
+    description: "Tribal militias from Pakistan's North-West Frontier Province invaded Kashmir. Maharaja Hari Singh acceded to India on 26 October. Indian troops were airlifted to Srinagar."
+    claim_links:
+      - partition-011
+    source: multiple
+
+  - date: 1947-11-30
+    title: "Peak of partition violence begins to subside"
+    description: "By late November, the worst of the communal violence had subsided, though refugee flows continued for months. The final death toll from partition-related violence remains contested."
+    claim_links:
+      - partition-009
+    source: khan-2007
+
+  - date: 1948-01-30
+    title: "Gandhi assassinated"
+    description: "Mahatma Gandhi was assassinated in Delhi by Nathuram Godse, a Hindu nationalist who believed Gandhi was too accommodating to Muslims. The assassination was itself a legacy of partition."
+    claim_links: []
+    source: multiple

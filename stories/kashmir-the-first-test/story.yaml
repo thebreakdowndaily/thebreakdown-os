@@ -1,0 +1,20 @@
+id: kashmir-the-first-test
+title: "Kashmir: The First Test"
+season: 1
+position: 2
+status:
+  idea: complete
+  research: pending
+  verification: pending
+  knowledge: pending
+  architecture: pending
+  narrative: pending
+  editorial: pending
+  learning: pending
+  review: pending
+  publication: pending
+version: v0.1
+theme: "The first India-Pakistan war over Kashmir established the terms of a conflict that remains unresolved 75 years later."
+concept: "The partition framework left princely states to choose their allegiance. Kashmir was the case this framework could not handle — a Muslim-majority state with a Hindu ruler, bordering both India and Pakistan. The tribal invasion of October 1947, the Maharaja's accession to India, the military campaign, and the UN ceasefire produced an unresolved division that has caused four wars and an insurgency."
+lead_from: "India's Inheritance: The Partition and Its Legacies"
+lead_into: "Panchsheel and Non-Alignment"

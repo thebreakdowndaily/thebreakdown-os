@@ -12,6 +12,8 @@ Central knowledge hub for The Breakdown OS.
 | [`editorial/`](./editorial/) | Editorial standards, style guides, and playbooks |
 | [`operations/`](./operations/) | Deployment, monitoring, and incident response |
 | [`innovation/`](./innovation/) | Research spikes, experiments, and future thinking |
+| [`vxs/`](./vxs/) | Visual Experience System — turns visuals from decoration into knowledge objects |
+| [`rxs/`](./rxs/) | Reader Experience System — how readers move from curiosity to understanding |
 
 ---
 

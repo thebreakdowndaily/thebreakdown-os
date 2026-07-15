@@ -97,7 +97,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   };
 
   return {
-    seo: { title: 'The Breakdown — India Explained', description: 'Independent, data-driven journalism on Indian policy, politics, and society.', canonical: 'https://thebreakdown.in', ogType: 'website' },
+    seo: { title: 'The Breakdown Knowledge Platform', description: 'A digital knowledge institution producing evidence-based libraries on Indian policy, history, and society. Every claim verified. Every source cited.', canonical: 'https://thebreakdown.in', ogType: 'website' },
     topStory,
     stories,
     trendingTopics,

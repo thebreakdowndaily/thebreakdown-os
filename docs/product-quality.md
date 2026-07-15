@@ -117,8 +117,23 @@ Every PR must satisfy all applicable gates above before merging.
 
 ---
 
+## Investigation Accessibility
+
+Every investigation interaction must satisfy:
+
+| # | Requirement | Verification |
+|---|-------------|-------------|
+| 35 | Focus enters the panel when opened | Test: Tab order after opening |
+| 36 | Escape closes the panel | Test: press Escape, verify closed |
+| 37 | Focus returns to the originating control | Test: close panel, Tab reveals origin |
+| 38 | Keyboard users can reach every section | Test: Tab through full panel |
+| 39 | Screen readers announce panel title | Test: NVDA/JAWS, verify on open |
+
+---
+
 ## Revision History
 
 | Date | Change | Author |
 |------|--------|--------|
 | 14 Jul 2026 | Initial standard — 34 quality gates across 8 categories | Architecture Review |
+| 15 Jul 2026 | Investigation Accessibility section — 5 gates (35–39) for investigation overlay focus management | Release Engineer |

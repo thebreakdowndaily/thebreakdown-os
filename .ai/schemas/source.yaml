@@ -1,0 +1,39 @@
+# Source schema — canonical handoff from Source Verifier to Knowledge Modeler
+# Every source is registered once with provenance and reliability assessment.
+
+source:
+  id: string                  # canonical source ID
+  title: string
+  type: string                # primary | secondary | tertiary | document | archival
+  status: string              # identified | verified | quarantined | archived
+
+  provenance:
+    author: string
+    publication: string
+    date: date
+    publisher: string
+    archive: string
+    shelfmark: string
+    url: string
+    iiif_url: string          # IIIF manifest if available
+
+  verification:
+    verifier: string          # person/agent who verified
+    date: date
+    authenticity: string      # confirmed | questionable | rejected
+    confidence_tier: number   # 1–5
+    method: string            # how verification was performed
+    notes: string
+
+  reliability:
+    source_type_weight: string    # eye-witness | official | journalistic | scholarly
+    proximity_to_event: string    # contemporaneous | near-contemporary | retrospective
+    potential_bias: string[]
+    corroboration_count: number
+    assessment: string            # summary judgment
+
+  quarantine:
+    status: string            # active | cleared | permanent
+    reason: string
+    date: date
+    documentation: string     # link to verification record

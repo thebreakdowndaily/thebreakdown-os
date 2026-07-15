@@ -1,5 +1,7 @@
 # Story Experience
 
+> **RXS v1.0 (Frozen)** — Part of the Reader Experience System. Do not modify outside the governance process defined in `README.md`.
+
 ## Purpose
 
 The Story Experience transforms a chapter from a collection of claims into a cognitive journey. It exists to make complex knowledge navigable, verifiable, and memorable — ensuring a reader progresses from not knowing to being able to explain, regardless of their starting depth.

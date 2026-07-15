@@ -1338,7 +1338,7 @@ export type ChapterStatus =
 export type BlockType =
   | 'heading' | 'paragraph' | 'claim' | 'quote' | 'callout'
   | 'table' | 'image' | 'video' | 'document' | 'timeline'
-  | 'map' | 'chart' | 'thinker' | 'decision-matrix'
+  | 'map' | 'chart' | 'diagram' | 'thinker' | 'decision-matrix'
   | 'counterfactual' | 'primary-source' | 'faq' | 'glossary'
   | 'summary' | 'list' | 'evidence-summary'
   | 'relationship-card' | 'learning' | 'historiography';

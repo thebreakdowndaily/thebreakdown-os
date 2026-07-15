@@ -1,5 +1,7 @@
 # Information Architecture
 
+> **RXS v1.0 (Frozen)** — Part of the Reader Experience System. Do not modify outside the governance process defined in `README.md`.
+
 ## Philosophy
 
 The Breakdown does not create pages. It creates knowledge objects. A page is a temporary projection of one or more objects — a moment in time rendered for a specific reader type. The same claim appears in a chapter, a timeline, and a scholar's evidence review, but it exists once in the registry. This separation of content from presentation is the fundamental architectural decision. It means that information is never duplicated, never inconsistent across surfaces, and never locked into a single layout. The reader experiences coherence because the authoring system enforces it at the data layer.

@@ -36,6 +36,14 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
   const [activeCategories, setActiveCategories] = useState<Set<string>>(new Set());
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
+  const scrollToDocument = (docSlug: string) => {
+    const blockId = `b-doc-${docSlug}`;
+    const el = document.getElementById(`document-${blockId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   const allCategories = Array.from(new Set(events.flatMap(e => e.categories)));
   const filteredEvents = activeCategories.size === 0
     ? events
@@ -53,7 +61,12 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
   const significanceWidth = (sig: number) => `${Math.max(20, sig * 20)}%`;
 
   return (
-    <div className="border-2 border-gray-200 rounded-xl overflow-hidden my-6">
+    <div
+      className="border-2 border-gray-200 rounded-xl overflow-hidden my-6"
+      role="region"
+      aria-label={`Timeline: ${title}`}
+      data-visual-block="timeline"
+    >
       <div className="px-5 py-4 bg-gray-50 border-b border-gray-200">
         <span className="text-xs uppercase tracking-wider font-semibold text-gray-500">Timeline</span>
         <h3 className="text-lg font-semibold text-gray-900 mt-1">{title}</h3>
@@ -61,7 +74,7 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
       </div>
 
       {allCategories.length > 0 && (
-        <div className="px-5 py-3 flex flex-wrap gap-2 border-b border-gray-200">
+        <div className="px-5 py-3 flex flex-wrap gap-2 border-b border-gray-200" role="group" aria-label="Filter by category">
           {allCategories.map(cat => (
             <button
               key={cat}
@@ -71,6 +84,7 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
                   ? 'ring-2 ring-offset-1 ring-blue-400 ' + (categoryColors[cat] || 'bg-gray-200 text-gray-700')
                   : categoryColors[cat] || 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
+              aria-pressed={activeCategories.has(cat)}
             >
               {cat}
             </button>
@@ -85,18 +99,23 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
               <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">{decade}</span>
             </div>
             <div className="relative">
-              <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-gray-200" />
-              <div className="space-y-4">
-                {decadeEvents.map((event, i) => (
-                  <div key={event.id} className="relative pl-10">
-                    <div className={`absolute left-2.5 top-1.5 w-3 h-3 rounded-full border-2 border-white ${
-                      event.significance >= 4 ? 'bg-red-500' :
-                      event.significance >= 3 ? 'bg-amber-500' :
-                      'bg-blue-500'
-                    }`} />
+              <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-gray-200" aria-hidden="true" />
+              <div className="space-y-4" role="list">
+                {decadeEvents.map((event) => (
+                  <div key={event.id} className="relative pl-10" role="listitem">
+                    <div
+                      className={`absolute left-2.5 top-1.5 w-3 h-3 rounded-full border-2 border-white ${
+                        event.significance >= 4 ? 'bg-red-500' :
+                        event.significance >= 3 ? 'bg-amber-500' :
+                        'bg-blue-500'
+                      }`}
+                      aria-hidden="true"
+                    />
                     <button
                       onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
                       className="w-full text-left"
+                      aria-expanded={expandedEvent === event.id}
+                      aria-controls={`event-detail-${event.id}`}
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-mono text-gray-400">{event.date}</span>
@@ -111,13 +130,13 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
                           }`} style={{ width: significanceWidth(event.significance) }} />
                         </div>
                         <span className="text-xs text-gray-400">
-                          Significance: {event.significance}/5
+                          {event.significance}/5
                         </span>
                       </div>
                     </button>
 
                     {expandedEvent === event.id && depth !== 'explorer' && (
-                      <div className="mt-2 ml-0 p-3 bg-gray-50 rounded-lg space-y-2">
+                      <div id={`event-detail-${event.id}`} className="mt-2 ml-0 p-3 bg-gray-50 rounded-lg space-y-2">
                         <p className="text-sm text-gray-700">{event.description}</p>
                         <div className="flex flex-wrap gap-2">
                           {event.categories.map(cat => (
@@ -134,6 +153,21 @@ export const TimelineBlock: FC<BlockComponentProps> = ({ data, depth }) => {
                           )}
                           {event.entities.length > 0 && (
                             <span className="text-purple-600">Entities: {event.entities.join(', ')}</span>
+                          )}
+                          {event.documents.length > 0 && (
+                            <span className="flex flex-wrap items-center gap-1">
+                              <span className="text-gray-500">Docs:</span>
+                              {event.documents.map((doc) => (
+                                <button
+                                  key={doc}
+                                  onClick={() => scrollToDocument(doc)}
+                                  className="px-2 py-0.5 rounded bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors"
+                                  title={doc}
+                                >
+                                  {doc.replace(/^doc-/, '').replace(/-/g, ' ')}
+                                </button>
+                              ))}
+                            </span>
                           )}
                         </div>
                       </div>

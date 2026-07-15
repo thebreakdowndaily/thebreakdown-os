@@ -9,16 +9,17 @@ export function ContextRegion({ chapter }: { chapter: Chapter }) {
 
   return (
     <section data-region="context">
-      {depth === 'researcher' && chapter.learningObjectives.length > 0 && (
+      {chapter.learningObjectives.length > 0 && (
         <div className="bg-gray-50 rounded-lg p-4 mb-8">
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Learning Objectives</h3>
+          <p className="text-xs text-gray-500 mb-2">By the end of this chapter, you will be able to:</p>
           <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
             {chapter.learningObjectives.map((o, i) => <li key={i}>{o}</li>)}
           </ul>
         </div>
       )}
 
-      {depth === 'researcher' && chapter.prerequisites.length > 0 && (
+      {chapter.prerequisites.length > 0 && (
         <div className="text-xs text-gray-400 mb-6">
           <strong>Prerequisites:</strong> {chapter.prerequisites.join(' · ')}
         </div>

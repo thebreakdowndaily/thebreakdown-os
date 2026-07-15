@@ -9,27 +9,37 @@ const variantConfig = {
   'key-takeaways': {
     label: 'Key Takeaways',
     icon: '✦',
-    color: 'green',
+    border: 'border-green-200',
+    bg: 'bg-green-50',
+    borderB: 'border-green-200',
   },
   'quiz': {
     label: 'Quiz',
     icon: '?',
-    color: 'blue',
+    border: 'border-blue-200',
+    bg: 'bg-blue-50',
+    borderB: 'border-blue-200',
   },
   'flashcards': {
     label: 'Flashcards',
     icon: '⬡',
-    color: 'purple',
+    border: 'border-purple-200',
+    bg: 'bg-purple-50',
+    borderB: 'border-purple-200',
   },
   'research-questions': {
     label: 'Research Questions',
     icon: '◎',
-    color: 'amber',
+    border: 'border-amber-200',
+    bg: 'bg-amber-50',
+    borderB: 'border-amber-200',
   },
   'recommended-reading': {
     label: 'Recommended Reading',
     icon: '📖',
-    color: 'indigo',
+    border: 'border-indigo-200',
+    bg: 'bg-indigo-50',
+    borderB: 'border-indigo-200',
   },
 };
 
@@ -40,8 +50,8 @@ export const LearningBlock: FC<BlockComponentProps> = ({ data, depth }) => {
   const isScholar = depth === 'scholar' || depth === 'researcher';
 
   return (
-    <div className={`border-2 border-${config.color}-200 rounded-xl overflow-hidden my-8`}>
-      <div className={`px-5 py-3 bg-${config.color}-50 border-b border-${config.color}-200`}>
+    <div className={`border-2 ${config.border} rounded-xl overflow-hidden my-8`}>
+      <div className={`px-5 py-3 ${config.bg} border-b ${config.borderB}`}>
         <div className="flex items-center gap-2">
           <span className="text-lg">{config.icon}</span>
           <span className="text-sm uppercase tracking-wider font-semibold text-gray-600">{config.label}</span>

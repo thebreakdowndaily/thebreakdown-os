@@ -21,8 +21,8 @@ export const ClaimRegistrySection: FC<{ claims: EnrichedClaim[] }> = ({ claims }
       <div className="space-y-3">
         {claims.map((claim) => {
           const isExpanded = expandedClaim === claim.id;
-          const confidenceColor = claim.confidence === 'established' ? 'green' :
-            claim.confidence === 'debated' ? 'amber' : 'red';
+          const confidenceStyle = claim.confidence === 'established' ? 'bg-green-100 text-green-700' :
+            claim.confidence === 'debated' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
 
           return (
             <div key={claim.id} className="border border-gray-200 rounded-lg overflow-hidden">
@@ -32,7 +32,7 @@ export const ClaimRegistrySection: FC<{ claims: EnrichedClaim[] }> = ({ claims }
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className={`px-1.5 py-0.5 text-xs rounded-full font-medium bg-${confidenceColor}-100 text-${confidenceColor}-700`}>
+                    <span className={`px-1.5 py-0.5 text-xs rounded-full font-medium ${confidenceStyle}`}>
                       {claim.confidence}
                     </span>
                     <span className="text-xs font-mono text-gray-400">{claim.id}</span>

@@ -1,0 +1,81 @@
+# Story schema — canonical handoff format from Narrative Editor to Editorial Review
+# Every chapter produces exactly one story object at Stage 5 completion.
+
+story:
+  metadata:
+    id: string                # unique identifier
+    title: string              # chapter title
+    collection: string         # collection slug
+    volume: string             # volume slug
+    slug: string               # URL slug
+    version: string            # major.minor.patch (assigned at publication)
+    status: string             # draft | review | approved | published
+    created: date
+    updated: date
+
+  hero:
+    image: string              # URL or asset reference
+    caption: string
+    credit: string
+    provenance: string
+    pedagogical_purpose: string
+
+  executive_summary:
+    paragraphs: string[]       # 3–5 paragraphs answering Six Questions
+
+  sections:
+    - id: string
+      title: string
+      governing_question: string  # one reader question this section answers
+      blocks:                    # narrative, evidence, claims, documents, etc.
+        - type: string           # narrative | claim | evidence | document | thinker | map | counterargument
+          data: object
+      transitions:
+        entry: string            # first paragraph — why this section is here
+        exit: string             # last paragraph — why next section is necessary
+
+  claims:
+    - id: string                 # canonical claim registry ID
+      registry_id: string
+      confidence: number         # 1–5
+      evidence_link: string
+      counterarguments:
+        - interpretation: string
+          attributed_to: string
+          evidence_link: string
+
+  evidence:
+    - claim_id: string
+      source_id: string
+      excerpt: string
+      confidence: number
+
+  thinkers:
+    - id: string
+      name: string
+      role: string
+      position: string
+      chapter_appearance: string[]   # sections where this thinker appears
+
+  timeline:
+    events:
+      - date: string
+        title: string
+        description: string
+        claim_link: string
+        source: string
+
+  learning:
+    objectives: string[]         # specific, verifiable
+    glossary:
+      - term: string
+        definition: string
+    further_reading:
+      - title: string
+        explanation: string
+        link: string
+    reflection_prompts: string[]
+    continue_learning:
+      - type: string             # chapter | entity | collection
+        slug: string
+        reason: string

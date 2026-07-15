@@ -1,0 +1,214 @@
+# Claims Registry — India's Inheritance: The Partition and Its Legacies
+
+claims:
+  - id: partition-001
+    statement: "The British decision to accelerate decolonisation after World War II made partition significantly more likely by compressing the timeline for political negotiations."
+    confidence: 4
+    status: registered
+    evidence:
+      - source_id: transfer-of-power-vol-1
+        excerpt: "Attlee's government, facing economic crisis at home and demobilisation pressures, determined by early 1947 that British withdrawal must occur by June 1948 at the latest."
+        page: "Introduction, pp. xii–xviii"
+        weight: direct
+      - source_id: sarila-2005
+        excerpt: "Sarila argues that the Attlee government's accelerated timetable was driven by geopolitical calculations about preserving British strategic interests in the region."
+        weight: corroborating
+    counterarguments:
+      - interpretation: "Partition was already inevitable by 1945 regardless of the timeline."
+        attributed_to: "Hodson (1969)"
+        strength: moderate
+    tags:
+      - british-decision-making
+      - timeline
+
+  - id: partition-002
+    statement: "The Cabinet Mission Plan of 1946 proposed a three-tier federal structure that both Congress and the Muslim League initially accepted but subsequently abandoned."
+    confidence: 5
+    status: registered
+    evidence:
+      - source_id: transfer-of-power-vol-6
+        excerpt: "The Cabinet Mission announced its plan on 16 May 1946. Congress accepted on 24 May. The Muslim League accepted on 6 June."
+        page: "Documents 89, 112, 135"
+        weight: direct
+      - source_id: jalal-1985
+        excerpt: "Jalal argues that the League's acceptance was tactical, not genuine."
+        weight: contextual
+    tags:
+      - cabinet-mission
+      - constitutional-negotiations
+
+  - id: partition-003
+    statement: "The Congress leadership, particularly Nehru's remarks in July 1946 interpreting the Cabinet Mission Plan, contributed to the plan's collapse by signalling that Congress would not accept the limitations the plan placed on central power."
+    confidence: 4
+    status: disputed
+    evidence:
+      - source_id: transfer-of-power-vol-7
+        excerpt: "Nehru at a press conference on 10 July 1946 stated that Congress would enter the Constituent Assembly 'completely unfettered by agreements' and free to make its own decisions."
+        page: "Document 42"
+        weight: direct
+      - source_id: jalal-1985
+        excerpt: "Jalal argues this was a fatal misstep that convinced Jinnah Congress would not honour the agreement and triggered the League's withdrawal."
+        weight: direct
+    counterarguments:
+      - interpretation: "Jinnah was looking for an excuse to withdraw and would have found one regardless."
+        attributed_to: "Aziz (1976); Singh (2009)"
+        strength: strong
+      - interpretation: "Nehru's statement was a negotiating position, not a rejection."
+        attributed_to: "Chandra Shekhar (2009)"
+        strength: moderate
+    tags:
+      - nehru
+      - cabinet-mission
+      - contingency
+
+  - id: partition-004
+    statement: "The Great Calcutta Killing of 16 August 1946 was the first episode of large-scale communal violence that broke the possibility of a negotiated settlement for a united India."
+    confidence: 4
+    status: registered
+    evidence:
+      - source_id: transfer-of-power-vol-8
+        excerpt: "Over 4,000 people were killed and 15,000 injured in 72 hours of communal violence in Calcutta."
+        page: "Documents 89–95"
+        weight: direct
+      - source_id: khan-2007
+        excerpt: "Khan argues that Calcutta eroded the remaining confidence among political leaders that communal harmony could be preserved in a united India."
+        weight: corroborating
+    counterarguments:
+      - interpretation: "Calcutta was a symptom of already-existing communal polarisation, not a cause of partition."
+        attributed_to: "Tan & Kudaisya (2000)"
+        strength: moderate
+    tags:
+      - communal-violence
+      - direct-action-day
+
+  - id: partition-005
+    statement: "Sardar Patel was the first senior Congress leader to conclude that partition was unavoidable, and his pragmatism was decisive in shifting Congress policy."
+    confidence: 4
+    status: registered
+    evidence:
+      - source_id: patel-correspondence
+        excerpt: "Patel wrote to Nehru in November 1946 expressing his view that 'the League must be accepted as the representative of Muslims' and that continued negotiations were futile."
+        weight: direct
+      - source_id: khan-2007
+        excerpt: "Khan identifies Patel's shift as the critical moment when Congress moved from opposing to accepting partition."
+        weight: corroborating
+    counterarguments:
+      - interpretation: "Patel's position has been overstated; Nehru's acceptance was equally decisive."
+        attributed_to: "Chandra Shekhar (2009)"
+        strength: moderate
+    tags:
+      - patel
+      - congress-decision-making
+
+  - id: partition-006
+    statement: "Lord Mountbatten advanced the British withdrawal date from June 1948 to August 1947, compressing the partition process into approximately 10 weeks."
+    confidence: 5
+    status: registered
+    evidence:
+      - source_id: transfer-of-power-vol-9
+        excerpt: "Mountbatten concluded by April 1947 that partition was unavoidable and that a rapid transfer of power was necessary to prevent the collapse of the administrative machinery."
+        weight: direct
+      - source_id: mountbatten-papers
+        excerpt: "Mountbatten's personal notes record his reasoning for accelerating the timetable, including concerns about the reliability of the Indian Army and civil service."
+        weight: direct
+    tags:
+      - mountbatten
+      - timeline
+
+  - id: partition-007
+    statement: "The Radcliffe Boundary Award was produced hastily, with inadequate demographic data and without the commissioners reaching agreement, resulting in borders that created immediate refugee crises."
+    confidence: 5
+    status: registered
+    evidence:
+      - source_id: boundary-commission-records
+        excerpt: "Radcliffe submitted his award on 12 August but publication was delayed until 17 August — after independence day. The award was produced in five weeks."
+        weight: direct
+      - source_id: khan-2007
+        excerpt: "Khan documents how the boundary line split villages, irrigation systems, and railway lines, creating immediate humanitarian crises."
+        weight: corroborating
+    counterarguments:
+      - interpretation: "Given the constraints, Radcliffe produced as fair a boundary as possible."
+        attributed_to: "Hodson (1969)"
+        strength: moderate
+    tags:
+      - radcliffe
+      - boundary
+
+  - id: partition-008
+    statement: "An estimated 10–15 million people were displaced during partition migrations, making it one of the largest mass migrations in human history."
+    confidence: 5
+    status: registered
+    evidence:
+      - source_id: census-1951
+        excerpt: "The 1951 Census of India recorded 7.2 million displaced persons in India alone."
+        weight: direct
+      - source_id: khan-2007
+        excerpt: "Khan estimates total displacement at 10–15 million when including Pakistan and undocumented crossings."
+        weight: corroborating
+    tags:
+      - migration
+      - human-impact
+
+  - id: partition-009
+    statement: "Violence during partition resulted in between 200,000 and 2 million deaths, with scholarly consensus converging around the range of 500,000 to 1 million."
+    confidence: 3
+    status: registered
+    evidence:
+      - source_id: khan-2007
+        excerpt: "Khan notes that precise figures are impossible to establish because many deaths went unrecorded and estimates vary widely."
+        weight: direct
+      - source_id: oral-histories
+        excerpt: "Oral history accounts consistently describe mass violence, though precise numbers are absent."
+        weight: contextual
+    counterarguments:
+      - interpretation: "The higher estimates (2 million) lack documentary support."
+        attributed_to: "Hodson (1969)"
+        strength: moderate
+    tags:
+      - violence
+      - human-impact
+
+  - id: partition-010
+    statement: "The partition's institutional division — military, civil services, financial assets, and physical infrastructure — was conducted rapidly but established patterns that shaped both states' development."
+    confidence: 4
+    status: registered
+    evidence:
+      - source_id: transfer-of-power-vol-12
+        excerpt: "The Partition Council, established on 7 June 1947, oversaw the division of assets including the army, navy, air force, civil service, railways, and treasury."
+        weight: direct
+      - source_id: tan-kudaisya-2000
+        excerpt: "Tan and Kudaisya argue that the institutional inheritance determined the different developmental trajectories of India and Pakistan."
+        weight: corroborating
+    tags:
+      - institutional-legacy
+      - partition-council
+
+  - id: partition-011
+    statement: "The Kashmir conflict, which began in October 1947 with tribal invasion and Maharaja Hari Singh's accession to India, was a direct consequence of the partition framework that left princely states to choose their allegiance."
+    confidence: 5
+    status: registered
+    evidence:
+      - source_id: transfer-of-power-vol-12
+        excerpt: "The Indian Independence Act left princely states legally independent, with accession based on contiguity, demographic composition, and ruler's choice."
+        weight: direct
+      - source_id: sarila-2005
+        excerpt: "Sarila argues British officials influenced the Kashmir outcome to preserve strategic interests."
+        weight: corroborating
+    tags:
+      - kashmir
+      - princely-states
+
+  - id: partition-012
+    statement: "The partition created a structural asymmetry between India's secular democracy and Pakistan's Islamic identity that has persisted and shaped both states' domestic politics."
+    confidence: 4
+    status: registered
+    evidence:
+      - source_id: tan-kudaisya-2000
+        excerpt: "Tan and Kudaisya examine how partition created different state-building imperatives: India's need to prove secularism viable, Pakistan's need to define Islamic identity."
+        weight: direct
+      - source_id: khan-2007
+        excerpt: "Khan traces how the refugee crisis on both sides reinforced communal identities and shaped electoral politics."
+        weight: corroborating
+    tags:
+      - state-identity
+      - long-term-legacy

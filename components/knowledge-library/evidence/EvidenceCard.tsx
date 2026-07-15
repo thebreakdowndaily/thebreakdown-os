@@ -11,6 +11,14 @@ interface EvidenceCardProps {
   defaultOpen?: boolean;
 }
 
+const evColorMap: Record<string, string> = {
+  green: 'bg-green-50 text-green-800 hover:bg-green-100',
+  blue: 'bg-blue-50 text-blue-800 hover:bg-blue-100',
+  purple: 'bg-purple-50 text-purple-800 hover:bg-purple-100',
+  cyan: 'bg-cyan-50 text-cyan-800 hover:bg-cyan-100',
+  red: 'bg-red-50 text-red-800 hover:bg-red-100',
+};
+
 export const EvidenceCard: FC<EvidenceCardProps> = ({ label, items, color, defaultOpen = false }) => {
   const [open, setOpen] = useState(defaultOpen);
   if (items.length === 0) return null;
@@ -19,7 +27,7 @@ export const EvidenceCard: FC<EvidenceCardProps> = ({ label, items, color, defau
     <div className="border rounded-lg overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className={`w-full flex items-center justify-between px-4 py-2 text-sm font-medium bg-${color}-50 text-${color}-800 hover:bg-${color}-100 transition-colors`}
+        className={`w-full flex items-center justify-between px-4 py-2 text-sm font-medium transition-colors ${evColorMap[color] || 'bg-gray-50 text-gray-800 hover:bg-gray-100'}`}
       >
         <span>{label} ({items.length})</span>
         <span className={`transform transition-transform ${open ? 'rotate-180' : ''}`}>▾</span>

@@ -1,0 +1,41 @@
+# Claims Registry — India–China Border
+
+## Registered claims
+
+| ID | Claim | Evidence | Counterargument | Confidence | Phase |
+|----|-------|----------|-----------------|------------|-------|
+| C01 | The border dispute originates in competing territorial claims inherited from the British colonial period | Simla Convention (1914); British boundary commissions; Chinese historical claims | The dispute is not merely colonial — it reflects the geopolitical reality of two major powers sharing a Himalayan border | High | All |
+| C02 | The McMahon Line was agreed between Britain and Tibet but China never accepted it | Simla Convention; Indian White Papers; Chinese official statements | China argues Tibet lacked treaty-making capacity; the 1914 convention is therefore void | High | Origin |
+| C03 | China built a strategic road through Aksai Chin (1954–1957) without Indian knowledge, establishing de facto control | Chinese official maps; Indian intelligence reports (declassified); Maxwell (1970) | India should have known — intelligence failures contributed to India's surprise | High | Escalation |
+| C04 | The 1954 Panchsheel Agreement was a deferral strategy that allowed China to consolidate control over Tibet | Text of 1954 Agreement; Nehru's correspondence; Raghavan (2019) | Nehru genuinely believed in the Five Principles; deferral was a sincere effort to build trust | Medium | Early phase |
+| C05 | The 1959 Tibetan uprising and Dalai Lama's asylum in India caused irreversible deterioration in relations | Nehru-Zhou correspondence (1959–1960); MEA Annual Reports 1959–1960 | The Tibetan factor is overstated — the border dispute existed independently of Tibet | High | Escalation |
+| C06 | The 1960 officials' talks produced agreement on factual positions but no political resolution | Officials' Report (1961); Gupta (2004) | The officials' report actually sharpened the disagreement by documenting irreconcilable positions | High | Escalation |
+| C07 | China's 1962 offensive was limited — "teach India a lesson" — not conquest of territory | Maxwell (1970); Henderson-Brooks Report; Chinese unilateral withdrawal to pre-war positions | China's limited aims were a function of logistical constraints, not restraint | Medium | Crisis |
+| C08 | India's 1962 defeat was caused by military unpreparedness, faulty strategy, and political constraints | Henderson-Brooks Report; Malone (2015); contemporary accounts | India's defeat was primarily numerical and technological — China had superior forces at the point of contact | High | Crisis |
+| C09 | The post-1962 cold peace is maintained through bilateral agreements that manage but do not resolve the dispute | 1993 Peace Agreement; 1996 CBM Agreement; 2013 BDCA; 2020 disengagement agreements | The agreements represent genuine confidence-building and have reduced (but not eliminated) crisis risk | High | Stalemate |
+| C10 | Periodic border crises follow an escalation pattern: Chinese action → Indian response → standoff → de-escalation | MEA records; media analysis; Jacob (2025) | India also initiates actions (infrastructure building, patrolling) that China treats as provocations | High | Crisis-recurrence |
+| C11 | Galwan (2020) was the first fatal conflict since 1967 and represents structural escalation | MEA statements; Chinese MOFA statements; independent casualty estimates | Galwan was an escalation but did not change the stalemate — the border returned to status quo ante | High | Present |
+| C12 | Chinese control of Tibet is the geopolitical foundation of the border dispute | Maxwell (1970); Lamb (2012); Jacob (2025) | The border dispute would exist even without Tibet — China claims territory in both sectors | High | Origin |
+
+## Claim status map
+
+```
+C01 (Origin) ──→ C02 (McMahon Line)
+                 C12 (Tibet)
+                      │
+                      ├──→ C04 (Panchsheel deferral)
+                      ├──→ C03 (Aksai Chin road)
+                      │
+                      ├──→ C05 (Tibetan uprising → deterioration)
+                      │         │
+                      │         └──→ C06 (Officials' talks)
+                      │
+                      ├──→ C07 (1962 — limited aims)
+                      ├──→ C08 (1962 — Indian unpreparedness)
+                      │
+                      └──→ C09 (Cold peace / CBMs)
+                                │
+                                └──→ C10 (Crisis pattern)
+                                         │
+                                         └──→ C11 (Galwan)
+```

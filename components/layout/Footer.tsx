@@ -30,6 +30,16 @@ const footerSections = [
       { label: 'Trust Dashboard', href: '/trust' },
     ],
   },
+  {
+    title: 'Governance',
+    links: [
+      { label: 'Corrections Policy', href: '/methodology#corrections' },
+      { label: 'Sources Policy', href: '/methodology#sources' },
+      { label: 'Transparency Statement', href: '/trust' },
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/about/contact' },
+    ],
+  },
 ];
 
 const socialLinks = [

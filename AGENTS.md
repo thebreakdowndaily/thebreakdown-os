@@ -628,7 +628,7 @@ Every engineering decision should move the repository toward that goal.
 
 # Governance Hierarchy
 
-The Breakdown Knowledge Platform is governed by a four-level hierarchy. No lower-level document may contradict a higher-level one.
+The Breakdown Knowledge Platform is governed by a five-level hierarchy. No lower-level document may contradict a higher-level one.
 
 ## Level 1 — Constitution
 
@@ -665,23 +665,41 @@ Defines engineering workflows, execution rules, CTO directives, repository stand
 
 If AGENTS.md conflicts with the Editorial Constitution, the Editorial Constitution takes precedence for editorial matters.
 
-## Level 3 — Project Documents
+## Level 3 — Experience Systems
 
-PRDs, blueprints, roadmaps, sprint plans, and implementation plans.
+Three peer experience systems define how readers encounter, understand, and learn from knowledge:
 
-## Level 4 — Code
+**RXS (Reader Experience System)** — `docs/rxs/`
 
-Canonical models, services, and UI components.
+Defines the reader's journey through narrative surfaces: screen layouts, information architecture, navigation patterns, reading modes, and the overall sensory experience of knowledge.
 
-## Level 5 — Product Quality Standard
+**VXS (Visual Experience System)** — `docs/vxs/`
+
+Defines how visuals teach: the Visual Spine, visual taxonomy, placement rules, interaction patterns, production standards, and reusable visual patterns per story type.
+
+**LXS (Learning Experience System)** — *future*
+
+Defines structured learning paths, knowledge scaffolding, and progressive understanding across collections. Not yet defined.
+
+These three systems are peers. They define how readers experience knowledge, not what is true or how the institution is governed. Each operates autonomously within its domain. None overrides another — they are complementary.
+
+## Level 4 — Project Documents
+
+PRDs, blueprints, roadmaps, sprint plans, and implementation plans. Project documents operate within the constraints defined by Levels 1–3.
+
+## Level 5 — Implementation
+
+Code — canonical models, services, UI components, and the rendering engine. Implementation must conform to all higher levels.
+
+## Supporting Standard — Product Quality Standard
 
 **`docs/product-quality.md`**
 
 Defines measurable quality gates every feature must satisfy before shipping: navigation, trust, performance, accessibility, mobile, learning, SEO, and analytics requirements.
 
-Every PR must pass applicable gates from the Product Quality Standard before merging.
+The Product Quality Standard is not a governance level — it is a verification layer that applies horizontally across all levels. It distils governance requirements into measurable criteria.
 
-The Product Quality Standard is the lowest governance level. It may not contradict any higher-level document. Higher-level documents that lack measurable quality criteria defer to this standard for verification.
+Every PR must pass applicable gates from the Product Quality Standard before merging. It may not contradict any higher-level document.
 
 ---
 

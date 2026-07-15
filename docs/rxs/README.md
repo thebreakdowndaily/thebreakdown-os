@@ -11,6 +11,14 @@
 | `information-architecture.md` | How knowledge is organised |
 | `story-experience.md` | How readers learn |
 | `component-philosophy.md` | How building blocks relate to knowledge |
+| `screens/story.md` | Canonical Story screen specification |
+| `screens/knowledge-library.md` | Knowledge Library browsing experience |
+| `screens/investigation.md` | Investigation case-file experience |
+| `screens/homepage.md` | Front door learning-launch experience |
+| `screens/search.md` | Knowledge Explorer discovery system |
+| `screens/workspace.md` | Reader workspace experience |
+
+**Next Phase: Product Design Sprint**
 
 
 
@@ -122,7 +130,7 @@ Design implication: Every feedback submission must trigger an acknowledgement an
 - Story
 - Investigation
 - Knowledge Library (series, volume, chapter)
-- Search
+- Knowledge Explorer (search, discovery, cross-referencing)
 - Reader Workspace (highlights, notes, collections, export, citations, flashcards)
 - Entity pages (country, organisation, person, topic)
 - Trust Dashboard
@@ -153,7 +161,7 @@ The Reader Experience System does not:
 - RXS Navigation Model
 - RXS Reading Mode Spec
 - RXS Evidence Proximity Patterns
-- RXS Search Index Blueprint
+- RXS Knowledge Explorer Index Blueprint
 - RXS Reader State Model
 - RXS Notification Framework
 - RXS Accessibility Audit Checklist
@@ -173,7 +181,7 @@ The Reader Experience System does not:
 **Sprint 2.** Design the reading mode selector and progressive disclosure patterns for Explorer/Scholar/Researcher.
 **Sprint 3.** Implement evidence proximity across all knowledge objects with inline source access and confidence display.
 **Sprint 4.** Build the corrections, changelog, and version transparency surfaces.
-**Sprint 5.** Design and implement search returning claims, sources, entities, and chapters with confidence indicators.
+**Sprint 5.** Design and implement Knowledge Explorer returning claims, sources, entities, and chapters with confidence indicators.
 **Sprint 6.** Deliver Reader Workspace v1: highlights, notes, and persistent reading state.
 
 ## 12. Success Metrics
@@ -185,7 +193,7 @@ The Reader Experience System does not:
 - Source interaction rate (clicks on evidence, primary sources, documents)
 - Claim verification rate (clicks from a claim to its supporting evidence)
 - Mode switch rate (Explorer to Scholar, Scholar to Researcher)
-- Search success rate (result clicked and content engaged)
+- Knowledge Explorer success rate (result clicked and content engaged)
 - Corrections submitted vs corrections actioned
 - Reader satisfaction score (post-reading survey, sampled)
 - Time-to-orientation (seconds to identify what the page is about)

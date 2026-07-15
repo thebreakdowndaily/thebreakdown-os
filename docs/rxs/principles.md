@@ -1,5 +1,7 @@
 # Reader Experience Principles
 
+> **RXS v1.0 (Frozen)** — Part of the Reader Experience System. Do not modify outside the governance process defined in `README.md`.
+
 ## 1. Progressive Disclosure
 
 ### Why

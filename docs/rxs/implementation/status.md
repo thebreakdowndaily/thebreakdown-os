@@ -42,7 +42,8 @@ The "VS-2A/2B" naming is retired. All work is organized by reader problem, not s
 | Backlog | In Design | In Review | Shipped |
 |---------|-----------|-----------|---------|
 | Knowledge Navigation | Evidence Exploration | — | Reader Orientation v1.0 |
-| Reader Workspace | — | — | StoryShell + Controller |
+| Reader Workspace | — | — | Unified Reading Experience |
+| Right Rail (PDR-003) | — | — | StoryShell + Controller |
 | — | — | — | Analytics v2 |
 
 ### Qualifying Questions
@@ -67,11 +68,24 @@ Product Decision Records (PDRs) at `docs/pdr/` capture the answers.
 
 **CTO review score: 9.8/10**
 
+### Shipped — Unified Reading Experience (15 Jul 2026)
+
+**Reader problem:** Two separate chapter-reading experiences diverge; no consistent reading journey.
+**PDR:** Implicit — unification of `/story/[slug]` and `/series/.../chapter/...` routes.
+**Deliverable:** Single `StoryShell` with 5-stage composition (Context → Read → Claims & Evidence → Reference → Continue Learning), numbered stage markers, inline reference sections, Living Knowledge CTA.
+**Deliberately deferred:** Right Rail composition (PDR-003), Evidence Exploration interactions.
+
+### StoryShell API — Frozen
+
+`StoryShell` is now stable. No new props without an approved PDR. No new layout regions. No alternate shells. Improvements happen inside existing regions or through a future Right Rail.
+
+**Product maturity — Reading Experience:** 8.7/10 (was 6.5/10). Consistency matters more than fancy interactions.
+
 ### Next — Evidence Exploration
 
 **Reader problem:** "I see a claim. How do I inspect it?"
 **PDR:** Pending
-**Path:** Claim → Evidence → Documents → Counterarguments → Return
+**Path:** Claim → Investigate → Return → Continue
 **Deliberately deferred:** Sidebar redesign, timeline navigation, knowledge graph explorer.
 
 ---

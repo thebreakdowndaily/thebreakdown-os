@@ -1,0 +1,78 @@
+# Story State — Canonical Schema
+
+Every story session produces one `story.yaml` file in `runtime/sessions/<slug>/story.yaml`. This file is the single source of truth for execution state. The Conductor reads it before every command and writes it after every stage transition.
+
+```yaml
+story:
+  slug: <string>               # unique identifier, matches directory name
+  title: <string>              # display title (e.g., "India-China Border: The Cold Peace Along the LAC")
+  created: <iso8601>           # session creation timestamp
+  updated: <iso8601>           # last state change timestamp
+
+status:
+  research: <status>           # pending | running | complete | failed | blocked | skipped
+  verification: <status>
+  knowledge: <status>
+  architecture: <status>
+  narrative: <status>
+  editorial: <status>
+  learning: <status>
+  publication: <status>        # waiting_human | publishing | live | held
+
+current_job: <string>          # which job is currently executing (null if idle)
+current_agent: <string>        # which agent is assigned to current job (null if idle)
+
+version: <string>              # e.g., draft-v0.4, v1.0.0
+
+workflow: <string>             # which workflow created this session (create-story | review | publish | update-story | living-update)
+
+history:                       # ordered list of every transition
+  - job: <string>
+    from: <status>
+    to: <status>
+    agent: <string>
+    timestamp: <iso8601>
+    reason: <string>           # optional: why this transition happened
+
+artifacts:                     # known artifacts (canonical list lives in manifest.yaml)
+  research: <filename>
+  verification: <filename>
+  claims: <filename>
+  timeline: <filename>
+  blueprint: <filename>
+  draft: <filename>
+  review: <filename>
+  learning: <filename>
+  publish: <filename>
+```
+
+## Status values
+
+| Status | Meaning |
+|--------|---------|
+| pending | Not started. Ready to execute when dependencies met. |
+| running | Actively being worked by the assigned agent. |
+| complete | Finished. Quality gate passed. Artifact produced. |
+| failed | Finished. Quality gate not passed. Artifact may be partial. |
+| blocked | Cannot proceed. Dependency not met. Escalated. |
+| skipped | Bypassed by authorised exception. |
+
+## Status transition rules
+
+- `pending` → `running` : Conductor assigns job to agent
+- `running` → `complete` : Agent signals success, gate passes, artifact saved
+- `running` → `failed` : Agent signals failure or gate fails
+- `running` → `blocked` : Job cannot proceed due to external dependency
+- `complete` → `skipped` : Never. Once complete, always complete.
+- `failed` → `running` : Retry (after remediation)
+- `blocked` → `pending` : Dependency resolved
+- `pending` → `skipped` : Authorised exception only
+
+## Publication status values
+
+| Status | Meaning |
+|--------|---------|
+| waiting_human | Publication package ready. Waiting for human editor to approve. |
+| publishing | Human approved. Release in progress. |
+| live | Chapter is published. |
+| held | Publication blocked. Human withheld approval or dependency unresolved. |

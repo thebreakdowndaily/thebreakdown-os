@@ -17,6 +17,7 @@ import { HistoriographyBlock } from './HistoriographyBlock';
 import { ImageBlock } from './ImageBlock';
 import { MapBlock } from './MapBlock';
 import { ChartBlock } from './ChartBlock';
+import { DiagramBlock } from './DiagramBlock';
 
 export function registerAllBlocks(): void {
   registerBlock('heading', HeadingBlock);
@@ -37,4 +38,5 @@ export function registerAllBlocks(): void {
   registerBlock('image', ImageBlock);
   registerBlock('map', MapBlock);
   registerBlock('chart', ChartBlock);
+  registerBlock('diagram', DiagramBlock);
 }

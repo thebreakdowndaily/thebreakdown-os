@@ -8,7 +8,10 @@ This changelog records every significant change to frozen artifacts of The Break
 |----------|---------|--------|
 | Editorial Constitution | v1.1 | Locked |
 | AGENTS.md | v1.0 | Active |
-| Knowledge Platform | v1.0 | Production Ready |
+| Knowledge Platform | v1.0 | Frozen |
+| RXS (Reader Experience System) | v1.0 | Frozen |
+| VXS (Visual Experience System) | v1.0 | Frozen |
+| KIS (Knowledge Investigation System) | v1.0.1 | Frozen |
 | Founding Publication | v1.0 | In progress (Chapter 1) |
 
 ---
@@ -80,6 +83,27 @@ This changelog records every significant change to frozen artifacts of The Break
 
 ---
 
+### 2026-07-15 — KIS v0.9 (Initial Implementation)
+
+- **Author:** Editorial Engineering
+- **Change:** Knowledge Investigation System v0.9 implemented. `InvestigationPanel.tsx` (framer-motion slide-over), `InvestigationContent.tsx` (six sections: Claim Statement, Evidence, Primary Documents, Timeline, Counterarguments, Thinkers, Sources). `ClaimBlock.tsx` adds "Investigate" button dispatching `open-investigation` custom event. `KnowledgeRenderer.tsx` passes `block.id` to all renderers. `block-registry.tsx` adds `id: string` to `BlockComponentProps`. `StoryShell.tsx` mounts panel at layout root.
+- **Justification:** Every claim needed a non-linear investigation entry point within the reading flow — reusing existing canonical knowledge objects and the StoryShell overlay pattern rather than creating new architecture.
+
+### 2026-07-15 — KIS v1.0 (Reader Investigation)
+
+- **Author:** Editorial Bureau (Review) + Editorial Engineering
+- **Change:** KIS upgraded to v1.0 following editorial review. Reordered sections (Timeline before Counterarguments). Added Editorial Question section ("Why do historians disagree?") with context-sensitive content based on claim confidence. Added Related Claims section (up to 5 claims sharing entities/concepts). Added breadcrumb showing chapter title from `appearsIn[0].contentTitle`. Renamed close button "Close" → "Continue Reading".
+- **Justification:** Editorial review identified that the initial implementation didn't surface scholarly disagreement clearly enough. The reorder and Editorial Question section ensure every investigation answers "Where do historians disagree?" before presenting further reading. The breadcrumb and Continue Reading label maintain reader orientation and encourage return to narrative.
+
+### 2026-07-15 — KIS v1.0.1 (Accessibility — Focus Management)
+
+- **Author:** Release Engineer
+- **Change:** Added `triggerRef`/`panelRef` focus management to `InvestigationPanel.tsx`. Saves `document.activeElement` on panel open. `useEffect` on `isOpen` moves focus to panel container on open, returns focus to trigger element on close. Panel container gets `tabIndex={-1}`, `ref={panelRef}`, `outline-none`.
+- **Justification:** Release Engineer audit identified WCAG AA violation — keyboard users lost focus context after closing the panel. Product Quality Gate 17 requires focus management on modals, drawers, and overlays. This is a standards-compliance fix, not a feature addition.
+- **Status:** KIS v1.0.1 frozen.
+
+---
+
 ## Upcoming
 
 - Chapter 1 external peer review (Operational Cycle 1)
@@ -122,3 +146,14 @@ This changelog records every significant change to frozen artifacts of The Break
 - **Change:** Drafted 33 planned visuals for Chapter 1 as structured `image`/`map`/`chart` blocks in a deferred-render registry at the end of `chapter1Blocks`. Each carries provenance (creator/source/reference/date), license, credit, caption, status (`planned`), and linked claim IDs. Explanatory diagrams flagged `aiGenerated: true`. The paragraph-based Visual Asset Acquisition List is retained as the human-readable plan.
 - **Justification:** The block renderer registry supports only 13 block types; there are no map/chart/image/table renderers (`KnowledgeRenderer.tsx:15` returns null for unregistered types). Building renderers is new platform feature work, forbidden by the Founding Publication freeze until Chapter 1 is published and externally reviewed. Drafting the data now makes the chapter render-ready and lets the Knowledge Density Audit count planned assets. Real archival assets must still be acquired and provenance-cleared in Phase 5 (Visual Audit).
 - **Status:** Visual data drafted and deferred. Phase 5 (Visual Audit) outstanding; renderers outstanding (post-publication). Recorded in Book of Record #0017.
+
+---
+
+### 2026-07-15 — Visual Experience System v1.0 (Frozen)
+
+- **Author:** Editorial Engineering
+- **Change:** VXS v1.0 completed and frozen. Visual Spine implemented — 13 key narrative visuals (maps, photos, charts, diagrams, document facsimiles) placed inline at their narrative positions. Each visual answers the specific question raised by the preceding paragraph, creating a parallel reading path. Visual Archive retained as a 27-block reference index. PDF detection added to ImageBlock — `.pdf` URLs automatically render as document preview cards with an iframe viewer. Proximity Quality Gate added to `docs/vxs/visual-spine.md`: no major narrative section may introduce a new concept if its primary explanatory visual appears more than one screen later.
+- **Justification:** VXS transitions the chapter from text-first-with-appendix to a guided narrative where visuals participate in teaching. This is the first sprint that materially changes what a first-time reader notices within five minutes — satisfying the Platform Beta Experience Rule. The system is frozen because the bottleneck is now editorial (content quality, not rendering capability.) No new visual types, viewers, or transitions will be added unless readers genuinely need them.
+- **Capabilities:** Visual Spine (inline placement, maps, photos, charts, documents, diagrams, Visual Archive, PDF viewer, Proximity Quality Gate)
+- **Future:** Evidence Exploration, interactive maps, visual comparison, document annotation, dataset explorer
+- **Status:** VXS v1.0 frozen. Visual Storytelling complete. Next milestone is Evidence Exploration v1.0.

@@ -15,7 +15,7 @@ export const EvidenceSummaryBlock: FC<BlockComponentProps> = ({ data }) => {
 
   const [expanded, setExpanded] = useState(false);
 
-  const confidenceColor = confidence === 'established' ? 'green' : confidence === 'debated' ? 'amber' : 'red';
+  const confidenceStyle = confidence === 'established' ? 'bg-green-100 text-green-700' : confidence === 'debated' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
   const confidenceLabel = confidence === 'established' ? 'Established' : confidence === 'debated' ? 'Debated' : 'Contested';
 
   return (
@@ -23,13 +23,14 @@ export const EvidenceSummaryBlock: FC<BlockComponentProps> = ({ data }) => {
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+        aria-expanded={expanded}
       >
         <div>
           <span className="text-xs uppercase tracking-wider font-semibold text-gray-500">Evidence Summary</span>
           <p className="mt-1 text-sm font-medium text-gray-800">{claim}</p>
         </div>
         <div className="flex items-center gap-3 shrink-0">
-          <span className={`px-2 py-1 text-xs rounded-full font-medium bg-${confidenceColor}-100 text-${confidenceColor}-700`}>
+          <span className={`px-2 py-1 text-xs rounded-full font-medium ${confidenceStyle}`}>
             {confidenceLabel}
           </span>
           <span className={`transform transition-transform ${expanded ? 'rotate-180' : ''} text-gray-400`}>▾</span>

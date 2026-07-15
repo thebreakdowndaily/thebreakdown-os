@@ -2,6 +2,7 @@ import type { BlockType, ReadingDepth } from '@/types/canonical';
 import type { FC } from 'react';
 
 export interface BlockComponentProps {
+  id: string;
   data: Record<string, unknown>;
   depth: ReadingDepth;
 }

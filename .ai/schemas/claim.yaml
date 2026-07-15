@@ -1,0 +1,29 @@
+# Claim schema — canonical handoff from Knowledge Modeler to Story Architect
+# Every claim is registered exactly once and referenced by ID across all downstream objects.
+
+claim:
+  id: string                  # canonical registry ID
+  statement: string           # single-sentence factual assertion
+  confidence: number          # 1–5 (assigned by Knowledge Modeler)
+  status: string              # registered | verified | disputed | superseded
+  created: date
+  updated: date
+
+  evidence:
+    - source_id: string
+      excerpt: string
+      page: string            # page number or range
+      confidence: number      # how well this evidence supports the claim
+      weight: string          # direct | corroborating | contextual
+
+  counterarguments:
+    - interpretation: string  # the alternative claim
+      attributed_to: string   # named scholar or school
+      evidence_link: string
+      strength: string        # strong | moderate | weak
+
+  superseded_by: string       # claim ID if status = superseded
+  supersedes: string[]        # claim IDs this replaces
+
+  tags:
+    - string                  # entity IDs, thinker IDs, collection IDs

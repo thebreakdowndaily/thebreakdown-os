@@ -9,7 +9,7 @@ interface ThreeLayerData {
   counterArguments?: Array<{ viewpoint: string; argument: string; proponents?: string }>;
 }
 
-export const ClaimBlock: FC<BlockComponentProps> = ({ data }) => {
+export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
   const { statement, confidence, evidence } = data as unknown as ClaimBlockData;
   const threeLayer = data as unknown as ThreeLayerData;
   const hasThreeLayer = Array.isArray(threeLayer.documentedFacts) && threeLayer.documentedFacts.length > 0;
@@ -30,6 +30,13 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ data }) => {
         <div className="flex items-center gap-2 mt-2 text-xs">
           <span className={`px-2 py-0.5 rounded-full font-medium ${badgeColor}`}>{badgeLabel}</span>
           <span className="text-gray-400">{evidence?.length || 0} evidence source{(evidence?.length || 0) !== 1 ? 's' : ''}</span>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-investigation', { detail: id }))}
+            className="ml-auto px-2 py-0.5 rounded text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 transition-colors"
+            aria-label={`Investigate claim: ${statement.slice(0, 60)}...`}
+          >
+            Investigate
+          </button>
         </div>
         {evidence && evidence.length > 0 && (
           <div className="mt-2 space-y-1">
@@ -57,7 +64,7 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ data }) => {
         {threeLayer.documentedFacts && threeLayer.documentedFacts.length > 0 && (
           <div className="px-5 py-4">
             <div className="flex items-center gap-2 mb-3">
-              <span className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-xs text-emerald-700 font-bold">&#10003;</span>
+              <span className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-xs text-emerald-700 font-bold">✓</span>
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Documented Fact</p>
             </div>
             <div className="space-y-3">
@@ -78,7 +85,7 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ data }) => {
         {threeLayer.interpretations && threeLayer.interpretations.length > 0 && (
           <div className="px-5 py-4">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm text-amber-700 font-semibold">&#128218;</span>
+              <span className="text-sm text-amber-700 font-semibold">📚</span>
               <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">Historical Interpretation</p>
             </div>
             <div className="space-y-3">
@@ -98,7 +105,7 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ data }) => {
         {threeLayer.editorialSynthesis && (
           <div className="px-5 py-4 bg-violet-50">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm text-violet-700 font-semibold">&#9878;</span>
+              <span className="text-sm text-violet-700 font-semibold">⚖</span>
               <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">Editorial Synthesis</p>
             </div>
             <p className="text-sm text-gray-800 leading-relaxed">{threeLayer.editorialSynthesis}</p>
@@ -146,6 +153,13 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ data }) => {
         <span className="text-xs text-gray-400">{evidence?.length || 0} evidence source{(evidence?.length || 0) !== 1 ? 's' : ''}</span>
         {threeLayer.documentedFacts && <span className="text-xs text-gray-400">{threeLayer.documentedFacts.length} documented fact{threeLayer.documentedFacts.length !== 1 ? 's' : ''}</span>}
         {threeLayer.interpretations && <span className="text-xs text-gray-400">{threeLayer.interpretations.length} scholarly interpretation{threeLayer.interpretations.length !== 1 ? 's' : ''}</span>}
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('open-investigation', { detail: id }))}
+          className="ml-auto px-2 py-0.5 rounded text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 transition-colors"
+          aria-label={`Investigate claim: ${statement.slice(0, 60)}...`}
+        >
+          Investigate
+        </button>
       </div>
     </div>
   );

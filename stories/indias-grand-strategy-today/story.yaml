@@ -1,0 +1,43 @@
+story:
+  slug: indias-grand-strategy-today
+  title: "India's Grand Strategy Today"
+  season: 1
+  week: 8
+  collection: india-and-the-world
+  volume: 1
+  chapter: 8
+
+status:
+  idea: complete
+  research: pending
+  verification: pending
+  knowledge: pending
+  architecture: pending
+  narrative: pending
+  review: pending
+  learning: pending
+  publication: pending
+  observation: pending
+  first_correction_cycle: pending
+
+version: v0.1
+
+current_phase: idea
+
+health:
+  trust: —
+  evidence: 0/36
+  primary_documents: 0
+  claims: 0
+  corrections: 0
+  open_questions: 0
+  freshness: —
+  last_updated: 2026-07-15
+
+next_action: "Begin research after Week 7 publishes"
+
+history:
+  - phase: idea
+    action: approved
+    date: 2026-07-15
+    note: "Selected as Season 1, Week 8 story"

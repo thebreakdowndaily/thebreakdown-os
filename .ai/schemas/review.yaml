@@ -1,0 +1,45 @@
+# Review schema — canonical handoff from Editorial Conductor throughout pipeline
+# Every pipeline stage produces a review record that the Conductor uses for routing.
+
+review:
+  id: string
+  stage: string             # which pipeline stage produced this review
+  status: string            # passed | failed | revision_required | blocked | skipped
+  created: date
+  reviewer: string          # role or agent that conducted review
+
+  findings:
+    - severity: string      # critical | moderate | minor | enhancement
+      category: string      # accuracy | evidence | neutrality | clarity | structure | completeness | accessibility
+      description: string
+      location: string      # section or claim ID
+      recommendation: string
+
+  revisions:
+    required:
+      - description: string
+        target_stage: string     # which stage must address this revision
+        priority: string         # high | medium | low
+        deadline: string         # optional deadline for revision completion
+    completed:
+      - revision_id: string
+        date: date
+        resolution: string
+
+  decision:
+    outcome: string          # advance | return | hold | escalate | skip
+    target_stage: string     # stage to advance to or return to
+    conditions: string[]
+    authority: string        # which role made this decision
+
+  metrics:
+    claims_checked: number
+    evidence_verified: number
+    sources_cited: number
+    errors_found: number
+    severity_breakdown:
+      critical: number
+      moderate: number
+      minor: number
+    revision_count: number
+    cycle_count: number

@@ -1,5 +1,7 @@
 # Component Philosophy
 
+> **RXS v1.0 (Frozen)** — Part of the Reader Experience System. Do not modify outside the governance process defined in `README.md`.
+
 ## Why Components Exist
 
 Components translate canonical knowledge objects into intelligible reader experiences. They are the rendering surface of the knowledge layer — nothing more, nothing less. A component does not originate knowledge, does not decide what to show, and does not interpret evidence. It receives a validated knowledge object and renders it with the appropriate depth, trust signals, and accessibility for the reader's active mode.

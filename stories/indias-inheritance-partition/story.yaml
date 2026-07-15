@@ -1,0 +1,76 @@
+story:
+  slug: indias-inheritance-partition
+  title: "India's Inheritance — The Partition and Its Legacies"
+  season: 1
+  week: 1
+  collection: india-and-the-world
+  volume: 1
+  chapter: 1
+
+status:
+  idea: complete
+  research: complete
+  verification: complete
+  knowledge: complete
+  architecture: complete
+  narrative: complete
+  editorial: complete
+  learning: complete
+  review: pending
+  publication: pending
+  observation: pending
+  first_correction_cycle: pending
+
+version: v0.5
+
+current_phase: review
+
+health:
+  trust: —
+  evidence: 12/36
+  primary_documents: 15
+  claims: 12
+  corrections: 0
+  open_questions: 2
+  freshness: —
+  last_updated: 2026-07-15
+
+next_action: "Editorial review complete — awaiting human approval for publication"
+
+history:
+  - phase: idea
+    action: approved
+    date: 2026-07-15
+    note: "Selected as Season 1, Week 1 story"
+  - phase: research
+    action: complete
+    date: 2026-07-15
+    note: "Six Questions answered, 25 sources annotated, 12 preliminary claims"
+  - phase: verification
+    action: complete
+    date: 2026-07-15
+    note: "Source verification report completed with confidence tiers"
+  - phase: knowledge
+    action: complete
+    date: 2026-07-15
+    note: "12 claims registered, 28 timeline events created"
+  - phase: architecture
+    action: complete
+    date: 2026-07-15
+    note: "Story blueprint with Crisis pattern, 6-phase narrative arc, competing interpretations table"
+  - phase: narrative
+    action: complete
+    date: 2026-07-15
+    note: "Chapter draft completed at 2,800 words"
+  - phase: editorial
+    action: complete
+    date: 2026-07-15
+    note: "Editorial review passed — Evidence Spine, Four Layers, Knowledge Completeness checks green"
+  - phase: learning
+    action: complete
+    date: 2026-07-15
+    note: "13 learning objectives and 10 glossary terms created"
+  - phase: thinkers
+    action: complete
+    date: 2026-07-15
+    note: "4 thinker profiles created (Nehru, Jinnah, Patel, Mountbatten)"
