@@ -25,7 +25,7 @@ export default function DataDashboard({ data }: DataDashboardProps) {
     <section className="py-24 bg-[#050505] border-t border-neutral-900" aria-labelledby="dashboard-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between gap-4 mb-12 border-b border-neutral-800 pb-4">
-          <h2 id="dashboard-heading" className="text-3xl font-serif text-white">Editorial Intelligence</h2>
+          <h2 id="dashboard-heading" className="text-3xl font-serif text-white">Platform Overview</h2>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">

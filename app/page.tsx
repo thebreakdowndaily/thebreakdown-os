@@ -86,42 +86,52 @@ export default async function HomePage() {
       {/* 3. Primary Path — Start with Volume I */}
       <PrimaryPath />
       
-      {/* 4. Knowledge Collections */}
+      {/* 4. Continue Learning — after Volume I */}
       {libraries.length > 0 && <CollectionsPreview libraries={libraries} />}
       
-      {/* 5. Knowledge Today */}
+      {/* Transition: Library → Active Research */}
+      <div className="py-8 text-center" role="note">
+        <p className="text-xs uppercase tracking-widest text-neutral-400">Active Research</p>
+      </div>
+      
+      {/* 5. Knowledge Today — evidence of active maintenance */}
       <AnimatedSection as="div" delay={100}>
         <KnowledgeToday metrics={vm.knowledgeToday} />
       </AnimatedSection>
       
-      {/* 7. In the News */}
+      {/* 6. Further Reading */}
       {vm.stories.length > 0 && (
         <AnimatedSection as="div" delay={200}>
           <LatestStories stories={vm.stories} />
         </AnimatedSection>
       )}
       
-      {/* 8. Explore by Topic */}
+      {/* Transition: Reading → Discovery */}
+      <div className="py-8 text-center bg-neutral-950" role="note">
+        <p className="text-xs uppercase tracking-widest text-neutral-500">Explore Knowledge</p>
+      </div>
+      
+      {/* 7. Explore by Topic */}
       <AnimatedSection as="div" delay={300}>
         <TrendingTopics topics={vm.trendingTopics} />
       </AnimatedSection>
       
-      {/* 9. Featured Entities */}
+      {/* 8. Featured Entities */}
       <AnimatedSection as="div" delay={400}>
         <EntitySpotlight entities={vm.entitySpotlights} />
       </AnimatedSection>
       
-      {/* 10. Knowledge Graph Preview */}
+      {/* 9. Knowledge Graph Preview */}
       <AnimatedSection as="div" delay={500}>
         <KnowledgeGraphPreview />
       </AnimatedSection>
       
-      {/* 11. Platform Dashboard */}
+      {/* 10. Platform Overview */}
       <AnimatedSection as="div" delay={600}>
         <DataDashboard data={vm.dataDashboard} />
       </AnimatedSection>
       
-      {/* 12. Newsletter */}
+      {/* 11. Stay Connected */}
       <AnimatedSection as="div" delay={700}>
         <Newsletter />
       </AnimatedSection>

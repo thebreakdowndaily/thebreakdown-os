@@ -15,7 +15,7 @@ export default function TrendingTopics({ topics }: TrendingTopicsProps) {
     <section className="py-24 bg-[#0a0a0a] border-t border-neutral-900" aria-labelledby="topics-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between gap-4 mb-12 border-b border-neutral-800 pb-4">
-          <h2 id="topics-heading" className="text-3xl font-serif text-white">Trending Topics</h2>
+          <h2 id="topics-heading" className="text-3xl font-serif text-white">Explore by Topic</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -4,8 +4,8 @@ export default function Newsletter() {
   return (
     <section className="py-24 bg-neutral-950 border-t border-neutral-900">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl font-serif text-white mb-6">Receive the Executive Brief</h2>
-        <p className="text-neutral-400 mb-8">One email per week. No noise. Just intelligence.</p>
+        <h2 className="text-3xl font-serif text-white mb-6">Weekly Briefing</h2>
+        <p className="text-neutral-400 mb-8">One email per week. Research, analysis, and institutional updates.</p>
         
         <form className="flex flex-col sm:flex-row max-w-md mx-auto gap-4" onSubmit={(e) => e.preventDefault()}>
           <input 

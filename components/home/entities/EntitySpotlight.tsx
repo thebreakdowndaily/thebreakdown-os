@@ -17,7 +17,7 @@ export default function EntitySpotlight({ entities }: EntitySpotlightProps) {
     <section className="py-24 bg-neutral-950 border-t border-neutral-900" aria-labelledby="spotlight-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between gap-4 mb-12 border-b border-neutral-800 pb-4">
-          <h2 id="spotlight-heading" className="text-3xl font-serif text-white">Entity Spotlight</h2>
+          <h2 id="spotlight-heading" className="text-3xl font-serif text-white">Key Thinkers and Organizations</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
