@@ -102,13 +102,27 @@ export const InvestigationContent: FC<InvestigationContentProps> = ({
             {claim._documents.map((doc) => (
               <div key={doc.id} className="border border-gray-200 rounded-lg p-3">
                 <p className="font-medium text-sm text-gray-900">{doc.title}</p>
-                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                  <span>{doc.documentType}</span>
-                  <span> · </span>
-                  <span>{doc.date}</span>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-xs text-gray-500">
+                  {doc.documentType && (
+                    <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 capitalize">
+                      {doc.documentType}
+                    </span>
+                  )}
+                  {doc.date && (
+                    <>
+                      <span>·</span>
+                      <time dateTime={doc.date}>{doc.date}</time>
+                    </>
+                  )}
+                  {doc.sourceId && (
+                    <>
+                      <span>·</span>
+                      <span>Source: {doc.sourceId}</span>
+                    </>
+                  )}
                   {doc.parties && doc.parties.length > 0 && (
                     <>
-                      <span> · </span>
+                      <span>·</span>
                       <span>Parties: {doc.parties.join(', ')}</span>
                     </>
                   )}
@@ -201,7 +215,14 @@ export const InvestigationContent: FC<InvestigationContentProps> = ({
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-gray-800 truncate">{s.title}</p>
                 </div>
-                <span className="flex-shrink-0 text-xs text-gray-400 ml-2">Tier {s.tier}</span>
+                {s.tier !== undefined && (
+                  <span className={`flex-shrink-0 text-xs px-2 py-0.5 rounded font-mono ml-2 ${
+                    s.tier === 1 ? 'bg-green-100 text-green-700' :
+                    s.tier === 2 ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {s.tier === 1 ? 'Primary • Tier 1' : s.tier === 2 ? 'Secondary • Tier 2' : `Supporting • Tier ${s.tier}`}
+                  </span>
+                )}
                 {s.url && (
                   <a href={s.url} target="_blank" rel="noopener noreferrer"
                      className="flex-shrink-0 ml-2 text-blue-600 hover:underline text-xs">

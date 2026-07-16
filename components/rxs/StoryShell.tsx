@@ -18,7 +18,7 @@ import { extractTocItems } from '@/lib/toc';
 import { useReadingDepth } from '@/components/knowledge-library/reader/ReadingModeContext';
 import { VisualNavigation } from '@/components/knowledge-library/visual/VisualNavigation';
 import { VisualGallery } from '@/components/knowledge-library/visual/VisualGallery';
-import type { Chapter } from '@/types/canonical';
+import type { Chapter, EvidenceSummaryBlockData } from '@/types/canonical';
 import type { EnrichedClaim } from '@/lib/knowledge/knowledge-core';
 import type { ChapterGraph } from '@/lib/knowledge/knowledge-graph';
 
@@ -161,6 +161,60 @@ export function StoryShell({
 
         {/* Stage 2 — Narrative */}
         <StoryStage number={2} title="Narrative">
+          {(() => {
+            const canonicalSummaryBlock = chapter.content.find(b => b.type === 'evidence-summary');
+            if (canonicalSummaryBlock) {
+              const summaryData = canonicalSummaryBlock.data as unknown as EvidenceSummaryBlockData;
+              return (
+                <div className="mb-6 p-5 rounded-xl bg-neutral-900/50 border border-neutral-800 backdrop-blur-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-400">
+                      State of the Evidence
+                    </span>
+                    <span className={`px-2 py-0.5 text-[10px] rounded font-semibold uppercase tracking-wider ${
+                      summaryData.confidence === 'established' ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-800/30' :
+                      summaryData.confidence === 'debated' ? 'bg-amber-950/40 text-amber-400 border border-amber-800/30' :
+                      'bg-red-950/40 text-red-400 border border-red-800/30'
+                    }`}>
+                      {summaryData.confidence}
+                    </span>
+                  </div>
+                  <p className="text-sm text-neutral-300 leading-relaxed">{summaryData.evidenceSummary}</p>
+                </div>
+              );
+            }
+            
+            // Fallback to claim aggregation
+            if (enrichedClaims && enrichedClaims.length > 0) {
+              const establishedCount = enrichedClaims.filter(c => c.confidence === 'established').length;
+              const debatedCount = enrichedClaims.filter(c => c.confidence === 'debated').length;
+              const contestedCount = enrichedClaims.filter(c => c.confidence === 'contested').length;
+              return (
+                <div className="mb-6 p-4 rounded-xl bg-neutral-900/50 border border-neutral-800 backdrop-blur-sm">
+                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-400 mb-2.5">
+                    State of the Evidence (Aggregate)
+                  </h4>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-300">
+                    <span className="flex items-center gap-1.5 font-medium text-emerald-400">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      Consensus: {establishedCount} Established
+                    </span>
+                    <span className="flex items-center gap-1.5 font-medium text-amber-400">
+                      <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                      Debated: {debatedCount}
+                    </span>
+                    <span className="flex items-center gap-1.5 font-medium text-red-400">
+                      <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+                      Contested: {contestedCount}
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+            
+            return null;
+          })()}
+
           <div className="prose prose-slate max-w-none dark:prose-invert font-sans text-base md:text-lg leading-relaxed text-gray-900 [&>p]:mb-6">
             <KnowledgeRenderer blocks={chapter.content} />
           </div>

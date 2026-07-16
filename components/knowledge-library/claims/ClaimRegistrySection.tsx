@@ -32,7 +32,7 @@ export const ClaimRegistrySection: FC<{ claims: EnrichedClaim[] }> = ({ claims }
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className={`px-1.5 py-0.5 text-xs rounded-full font-medium ${confidenceStyle}`}>
+                    <span className={`px-1.5 py-0.5 text-xs rounded-full font-medium capitalize ${confidenceStyle}`}>
                       {claim.confidence}
                     </span>
                     <span className="text-xs font-mono text-gray-400">{claim.id}</span>

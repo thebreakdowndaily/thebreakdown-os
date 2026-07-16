@@ -65,13 +65,13 @@ export const DocumentBlock: FC<BlockComponentProps> = ({ id, data }) => {
           </span>
         </div>
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-sm text-gray-500">
-          <time dateTime={date}>{date}</time>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-gray-500">
+          {date && <time dateTime={date}>{date}</time>}
           {parties && parties.length > 0 && <span>Parties: {parties.join(', ')}</span>}
           {sourceId && (
             <span>
-              Archive:{' '}
-              <span className="font-medium">Source {sourceId.replace('s', '')}</span>
+              Source:{' '}
+              <span className="font-medium">{sourceId}</span>
             </span>
           )}
         </div>
