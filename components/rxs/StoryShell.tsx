@@ -32,11 +32,11 @@ interface StoryShellProps {
   thinkerCount: number;
   documentCount: number;
   graph?: ChapterGraph;
+  nextChapter?: { title: string; slug: string } | null;
+  relatedInvestigation?: { title: string; slug: string } | null;
 }
 
-function ReferenceSection({ chapter }: { chapter: Chapter }) {
-  const depth = useReadingDepth();
-
+function ReflectionSection({ chapter }: { chapter: Chapter }) {
   return (
     <div className="space-y-10">
       {chapter.keyQuestions.length > 0 && (
@@ -45,7 +45,7 @@ function ReferenceSection({ chapter }: { chapter: Chapter }) {
           <div className="space-y-4">
             {chapter.keyQuestions.map((kq, i) => (
               <div key={i} className="bg-gray-50 rounded-lg p-4">
-                <p className="font-medium mb-1">{kq.question}</p>
+                <p className="font-medium mb-1 text-gray-900">{kq.question}</p>
                 <p className="text-gray-700 text-sm">{kq.answer}</p>
               </div>
             ))}
@@ -59,7 +59,7 @@ function ReferenceSection({ chapter }: { chapter: Chapter }) {
           <div className="space-y-4">
             {chapter.misconceptions.map((m, i) => (
               <details key={i} className="bg-amber-50 rounded-lg p-4">
-                <summary className="font-medium cursor-pointer">{m.misconception}</summary>
+                <summary className="font-medium cursor-pointer text-gray-900">{m.misconception}</summary>
                 <div className="mt-2 pl-4 border-l-2 border-amber-300">
                   <p className="font-medium text-green-800">{m.correction}</p>
                   <p className="text-gray-700 text-sm mt-1">{m.explanation}</p>
@@ -69,14 +69,22 @@ function ReferenceSection({ chapter }: { chapter: Chapter }) {
           </div>
         </section>
       )}
+    </div>
+  );
+}
 
+function ReferenceSection({ chapter }: { chapter: Chapter }) {
+  const depth = useReadingDepth();
+
+  return (
+    <div className="space-y-10">
       {chapter.keyTerms.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Key Terms</h3>
           <dl className="space-y-3">
             {chapter.keyTerms.map((t, i) => (
               <div key={i}>
-                <dt className="font-medium">{t.term}</dt>
+                <dt className="font-medium text-gray-900">{t.term}</dt>
                 <dd className="text-gray-700 text-sm pl-4">{t.definition}</dd>
               </div>
             ))}
@@ -114,6 +122,8 @@ export function StoryShell({
   thinkerCount,
   documentCount,
   graph,
+  nextChapter,
+  relatedInvestigation,
 }: StoryShellProps) {
   const tocItems = extractTocItems(chapter.content);
 
@@ -150,27 +160,42 @@ export function StoryShell({
         </StoryStage>
 
         {/* Stage 2 — Narrative */}
-        <StoryStage number={2} title="Read">
-          <KnowledgeRenderer blocks={chapter.content} />
+        <StoryStage number={2} title="Narrative">
+          <div className="prose prose-slate max-w-none dark:prose-invert font-sans text-base md:text-lg leading-relaxed text-gray-900 [&>p]:mb-6">
+            <KnowledgeRenderer blocks={chapter.content} />
+          </div>
         </StoryStage>
 
-        {/* Stage 3 — Claims & Evidence */}
+        {/* Stage 3 — Evidence */}
         {enrichedClaims && enrichedClaims.length > 0 && (
-          <StoryStage number={3} title="Claims & Evidence">
+          <StoryStage number={3} title="Evidence">
             <ClaimRegistrySection claims={enrichedClaims} />
           </StoryStage>
         )}
 
-        {/* Stage 4 — Reference */}
-        {(chapter.keyTerms.length > 0 || chapter.sources.length > 0 || chapter.keyQuestions.length > 0 || chapter.misconceptions.length > 0) && (
-          <StoryStage number={4} title="Reference">
+        {/* Stage 4 — Reflection */}
+        {(chapter.keyQuestions.length > 0 || chapter.misconceptions.length > 0) && (
+          <StoryStage number={4} title="Reflection">
+            <ReflectionSection chapter={chapter} />
+          </StoryStage>
+        )}
+
+        {/* Stage 5 — Reference */}
+        {(chapter.keyTerms.length > 0 || chapter.sources.length > 0) && (
+          <StoryStage number={5} title="Reference">
             <ReferenceSection chapter={chapter} />
           </StoryStage>
         )}
 
-        {/* Stage 5 — Next Steps */}
-        <StoryStage number={5} title="Continue Learning">
-          <CompletionRegion chapter={chapter} collectionSlug={collectionSlug} volumeSlug={volumeSlug} />
+        {/* Stage 6 — Continue Learning */}
+        <StoryStage number={6} title="Continue Learning">
+          <CompletionRegion
+            chapter={chapter}
+            collectionSlug={collectionSlug}
+            volumeSlug={volumeSlug}
+            nextChapter={nextChapter}
+            relatedInvestigation={relatedInvestigation}
+          />
         </StoryStage>
 
         {/* Living Knowledge CTA */}

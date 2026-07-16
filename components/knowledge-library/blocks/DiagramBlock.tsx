@@ -29,7 +29,7 @@ export const DiagramBlock: FC<BlockComponentProps> = ({ data }) => {
 
   if (!canRender) {
     return (
-      <figure className="my-8">
+      <figure className="my-12 md:my-16 p-4 md:p-6 bg-gray-50/40 rounded-xl border border-gray-200/50">
         <div className="w-full rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-amber-700">Diagram Pending Recreation</p>
           <p className="mt-2 text-sm text-gray-700 font-medium">{title}</p>
@@ -40,7 +40,7 @@ export const DiagramBlock: FC<BlockComponentProps> = ({ data }) => {
   }
 
   return (
-    <figure className="my-8" data-visual-block="diagram">
+    <figure className="my-12 md:my-16 p-4 md:p-6 bg-gray-50/40 rounded-xl border border-gray-200/50" data-visual-block="diagram">
       <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white p-2">
         <img
           src={url}

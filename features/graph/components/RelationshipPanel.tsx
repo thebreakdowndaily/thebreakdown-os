@@ -12,6 +12,27 @@ interface RelationshipPanelProps {
   onClose: () => void;
 }
 
+function getNodeHref(type: string, slug: string): string | null {
+  if (!slug) return null;
+  switch (type) {
+    case 'story': return `/story/${slug}`;
+    case 'topic': return `/topic/${slug}`;
+    case 'entity': return `/entity/${slug}`;
+    case 'organization': return `/organization/${slug}`;
+    case 'country': return `/country/${slug}`;
+    case 'person':
+    case 'policy':
+    case 'scheme':
+    case 'budget':
+    case 'report':
+      return `/entity/${slug}`;
+    case 'dataset': return `/dataset/${slug}`;
+    case 'fix': return `/fix/${slug}`;
+    case 'timeline': return `/timeline/${slug}`;
+    default: return `/entity/${slug}`;
+  }
+}
+
 export const RelationshipPanel = memo(function RelationshipPanel({
   node, connections, nodeMap, onNodeClick, onClose,
 }: RelationshipPanelProps) {
@@ -60,6 +81,24 @@ export const RelationshipPanel = memo(function RelationshipPanel({
       <div style={{ padding: 'var(--spacing-2) var(--spacing-3)', fontSize: '10px', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-border-default)' }}>
         {NODE_TYPE_LABELS[node.type] || node.type} · {node.slug}
       </div>
+
+      {getNodeHref(node.type, node.slug) && (
+        <div style={{ padding: 'var(--spacing-2) var(--spacing-3)', borderBottom: '1px solid var(--color-border-default)' }}>
+          <a
+            href={getNodeHref(node.type, node.slug)!}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--spacing-1)',
+              width: '100%', padding: 'var(--spacing-2)',
+              background: 'var(--color-bg-tertiary)', border: '1px solid var(--color-border-default)',
+              borderRadius: 'var(--radius-md)', cursor: 'pointer', color: '#10B981',
+              fontSize: '12px', fontWeight: 600, textDecoration: 'none', textAlign: 'center',
+              transition: 'background 0.15s, border-color 0.15s',
+            }}
+          >
+            Explore Canonical Page ↗
+          </a>
+        </div>
+      )}
 
       <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--spacing-2)' }}>
         <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-secondary)', padding: 'var(--spacing-1) var(--spacing-2)', marginBottom: 'var(--spacing-1)' }}>

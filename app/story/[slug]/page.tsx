@@ -215,7 +215,34 @@ async function tryLoadChapter(slug: string) {
     for (const c of library.collections) {
       for (const v of c.volumes) {
         const ch = v.chapters.find(ch => ch.slug === slug);
-        if (ch) return { chapter: ch, collectionSlug: c.slug, volumeSlug: v.slug };
+        if (ch) {
+          // Resolve next chapter: look for recommendedNext match in the same volume, fallback to order + 1
+          let nextChapter = null;
+          if (ch.recommendedNext && ch.recommendedNext.length > 0) {
+            nextChapter = v.chapters.find(item =>
+              ch.recommendedNext.includes(item.slug) ||
+              ch.recommendedNext.includes(item.title)
+            );
+          }
+          if (!nextChapter) {
+            nextChapter = v.chapters.find(item => item.order === ch.order + 1);
+          }
+
+          // Resolve related investigation if a canonical relationship exists in the registry
+          const services = bootstrapServices();
+          const { data: investigations } = await services.investigations.getInvestigations();
+          const relatedInvestigation = investigations.find(inv =>
+            inv.chapters.some(ich => ich.storySlug === slug)
+          ) || null;
+
+          return {
+            chapter: ch,
+            collectionSlug: c.slug,
+            volumeSlug: v.slug,
+            nextChapter: nextChapter ? { title: nextChapter.title, slug: nextChapter.slug } : null,
+            relatedInvestigation: relatedInvestigation ? { title: relatedInvestigation.title, slug: relatedInvestigation.slug } : null,
+          };
+        }
       }
     }
   } catch {}
@@ -234,7 +261,7 @@ export default async function StoryPage({
 
   const chapterData = await tryLoadChapter(slug);
   if (chapterData) {
-    const { chapter, collectionSlug, volumeSlug } = chapterData;
+    const { chapter, collectionSlug, volumeSlug, nextChapter, relatedInvestigation } = chapterData;
     const core = getKnowledgeCore();
     const chapterClaimIds = chapter.relatedConceptIds?.flatMap(
       cid => core.claims.byConcept(cid)
@@ -258,6 +285,8 @@ export default async function StoryPage({
         evidenceCount={evidenceCount}
         thinkerCount={thinkerCount}
         documentCount={documentCount}
+        nextChapter={nextChapter}
+        relatedInvestigation={relatedInvestigation}
       />
     );
   }

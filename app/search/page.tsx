@@ -5,6 +5,8 @@ import type { SearchIndexEntry } from '@/types/canonical';
 import SearchLayout from '@/layouts/SearchLayout';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
+import { RepositoryFactory } from '@/services/factory/repository';
+import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; type?: string; page?: string }>;
@@ -37,13 +39,43 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     ogType: 'website' as const,
   };
 
+  const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+  const library = await repo.getLibrary('india-and-the-world');
+  
+  const matchingCollections = [];
+  const matchingChapters = [];
+  
+  if (query.trim() && library) {
+    const q = query.toLowerCase();
+    for (const c of library.collections) {
+      if (c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)) {
+        matchingCollections.push(c);
+      }
+      for (const v of c.volumes) {
+        for (const ch of v.chapters) {
+          if (ch.title.toLowerCase().includes(q) || ch.summary.toLowerCase().includes(q)) {
+            matchingChapters.push({
+              slug: ch.slug,
+              title: ch.title,
+              summary: ch.summary,
+              collectionSlug: c.slug,
+              volumeSlug: v.slug
+            });
+          }
+        }
+      }
+    }
+  }
+
   return (
     <SearchLayout seo={seo} query={query}>
       <div className="max-w-5xl mx-auto space-y-12 pb-24">
         
         {/* Search Header Info */}
         <p className="text-sm text-neutral-400">
-          {total > 0 ? `Found ${total} knowledge nodes for "${query}"` : query ? `No results found for "${query}"` : 'Enter a search term'}
+          {total > 0 || matchingCollections.length > 0 || matchingChapters.length > 0 
+            ? `Found search matches for "${query}"` 
+            : query ? `No results found for "${query}"` : 'Enter a search term'}
         </p>
 
         {/* Knowledge Spotlight */}
@@ -132,6 +164,36 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             )}
 
           </div>
+        )}
+
+        {/* Canonical Collections Group */}
+        {matchingCollections.length > 0 && (
+          <section className="space-y-4">
+            <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Matching Collections</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {matchingCollections.map((c) => (
+                <a key={c.slug} href={`/series/${c.slug}`} className="block p-4 rounded-xl bg-[#151515] border border-[#2A2A2A] hover:border-emerald-500/50 transition-colors">
+                  <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
+                  <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Canonical Chapters Group */}
+        {matchingChapters.length > 0 && (
+          <section className="space-y-4">
+            <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Matching Chapters</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {matchingChapters.map((ch) => (
+                <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block p-4 rounded-xl bg-[#151515] border border-[#2A2A2A] hover:border-emerald-500/50 transition-colors">
+                  <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
+                  <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
+                </a>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* Suggestions */}

@@ -60,6 +60,134 @@ Readers do not understand the platform vocabulary. Terms like "Story," "Chapter,
 - Taxonomy implementation deferred to subsequent Wave 2 sprints.
 - Six open questions require editorial input before final convergence.
 
+## Sprint W2-S2B — Continue Learning
+
+**Status:** Completed
+**Product Review:** Accepted
+
+### Reader Problem
+
+"What should I do next?"
+
+**Result:** Canonical continuation established using existing editorial relationships.
+
+### Platform Score
+
+**Before:** 3.8 / 5
+**After:** 4.0 / 5
+
+### Key Deliverables
+
+- Next Chapter routing
+- Related Investigation links
+- Primary Documents continuation
+- Return to Collection fallback
+
+### Lessons Learned
+
+Editorial learning paths are more valuable than recommendation systems.
+
+### Architecture
+
+**Unchanged.**
+
+## Sprint W2-S3 — Reading Focus
+
+**Status:** Completed
+**Product Review:** Accepted
+
+### Reader Problem
+
+"What should I pay attention to while reading?"
+
+**Result:** Reading flow clarified through stage separation, improved hierarchy, and reduced cognitive load.
+
+### Platform Score
+
+**Before:** 4.0 / 5
+**After:** 4.2 / 5
+
+### Key Deliverables
+
+- Six-stage progression flow (Context → Narrative → Evidence → Reflection → Reference → Continue Learning)
+- Scoped typography for Narrative to improve readability
+- Stronger section heading margins and weights in HeadingBlock
+- Visual blocks (Image, Map, Chart, Diagram) framed cleanly with spacing to avoid text flow interruptions
+
+### Lessons Learned
+
+Clean layout spacing and visual structure prevent cognitive fatigue. Scoped typography wrapper in StoryShell is safer than styling elements globally.
+
+### Architecture
+
+**Unchanged.**
+
 ---
 
-*Next sprint: W2-S2 — Reader Orientation*
+### Wave 2 Status
+
+| Sprint | Status |
+|--------|--------|
+| W2-S1 — Canonical Taxonomy | ✅ |
+| W2-S2A — Universal Wayfinding | ✅ |
+| W2-S2B — Continue Learning | ✅ |
+| W2-S3 — Reading Focus | ✅ |
+| W2-S4 — Knowledge Discovery | ✅ |
+
+---
+
+## Sprint W2-S4 — Knowledge Discovery
+
+**Status:** Completed
+**Product Review:** Accepted
+
+### Reader Problem
+
+"Where should I explore after this?"
+
+**Result:** Discovery unified through existing canonical relationships.
+
+### Platform Score
+
+**Before:** 4.2 / 5
+**After:** 4.5 / 5
+
+### Key Deliverables
+
+- Entity pages expose related Chapters and Investigations.
+- Search surfaces Collections and Chapters after standard search results.
+- Topic pages provide a unified Continue Exploring section containing Collections and Chapters.
+- Knowledge Graph nodes map directly to valid canonical pages, hiding navigation options when no destination exists.
+
+### Lessons Learned
+
+Exposing paths using existing canonical relationships connects independent views into a coherent graph-like system without building complex personalization or discovery services.
+
+### Architecture
+
+**Unchanged.**
+
+---
+
+## Wave 2 Summary
+
+**Objective:** Reader Comprehension
+
+**Platform Score:** 3.6 → 4.5
+
+**Completed Sprints:**
+- W2-S1 Canonical Taxonomy
+- W2-S2A Universal Wayfinding
+- W2-S2B Continue Learning
+- W2-S3 Reading Focus
+- W2-S4 Knowledge Discovery
+
+**Major Outcomes:**
+- Canonical vocabulary established
+- Universal wayfinding implemented
+- Structured continuation paths added
+- Reading flow improved
+- Discovery unified across Search, Graph, Topics, Entities and Chapters
+
+**Architecture:** Unchanged.
+**Wave Status:** Accepted.

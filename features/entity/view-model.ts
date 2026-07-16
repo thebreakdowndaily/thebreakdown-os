@@ -1,4 +1,4 @@
-import type { Story, Topic, Entity, EntityPageViewModel, Dataset, EntityBase } from '@/types/canonical';
+import type { Story, Topic, Entity, EntityPageViewModel, Dataset, EntityBase, EntityTerminalViewModel } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 
 export async function buildEntityPage(services: Services, slug: string): Promise<EntityPageViewModel | null> {
@@ -35,7 +35,16 @@ export async function buildEntityPage(services: Services, slug: string): Promise
   };
 }
 
-export async function buildEntityTerminalViewModel(services: Services, slug: string): Promise<import('@/types/canonical').EntityTerminalViewModel | null> {
+import { RepositoryFactory } from '@/services/factory/repository';
+import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import type { Investigation } from '@/types/canonical';
+
+export interface EntityTerminalExtendedViewModel extends EntityTerminalViewModel {
+  relatedChapters: Array<{ slug: string; title: string; summary: string; collectionSlug: string; volumeSlug: string }>;
+  relatedInvestigations: Investigation[];
+}
+
+export async function buildEntityTerminalViewModel(services: Services, slug: string): Promise<EntityTerminalExtendedViewModel | null> {
   const entity = await services.entities.getEntityBySlug(slug);
   if (!entity) return null;
   
@@ -79,6 +88,39 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
   const claims = entity.claims || [];
   const statistics = entity.statistics || [];
   const timeline = entity.timeline || [];
+
+  // Query seed library for related chapters
+  const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+  const library = await repo.getLibrary('india-and-the-world');
+  const relatedChapters: Array<{ slug: string; title: string; summary: string; collectionSlug: string; volumeSlug: string }> = [];
+  
+  if (library) {
+    for (const c of library.collections) {
+      for (const v of c.volumes) {
+        for (const ch of v.chapters) {
+          const entityIds = ch.relatedEntityIds || [];
+          if (entityIds.includes(entity.id) || entityIds.includes(entity.slug) || ch.slug === entity.slug) {
+            relatedChapters.push({
+              slug: ch.slug,
+              title: ch.title,
+              summary: ch.summary,
+              collectionSlug: c.slug,
+              volumeSlug: v.slug,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Resolve related investigations
+  const allInvestigationsRes = services.investigations ? await services.investigations.getInvestigations() : { data: [] };
+  const allInvestigations = allInvestigationsRes?.data || [];
+  const relatedInvestigations = allInvestigations.filter((inv: any) =>
+    inv.relatedEntityIds?.includes(entity.id) ||
+    inv.relatedEntityIds?.includes(entity.slug) ||
+    inv.chapters?.some((ch: any) => entity.usageGraph?.stories?.includes(ch.storySlug))
+  );
   
   return {
     id: entity.id,
@@ -109,6 +151,9 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
       claimCount: claims.length,
       coverageTrend: signals.coverageTrend
     },
+    
+    relatedChapters,
+    relatedInvestigations,
     
     seo: { title: `${entity.name} - Knowledge Terminal`, description: entity.description }
   };

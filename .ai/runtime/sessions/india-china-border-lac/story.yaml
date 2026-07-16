@@ -1,0 +1,33 @@
+story:
+  metadata:
+    id: india-china-border-lac
+    slug: india-china-border-lac
+    title: "India–China Border: The Cold Peace Along the LAC"
+    collection: india-and-the-world
+    volume: foundations-1947-1962
+    version: v0.3
+    status: review
+    created: 2026-07-15
+    updated: 2026-07-15
+
+pipeline:
+  research: complete
+  verification: complete
+  knowledge: complete
+  architecture: complete
+  narrative: complete
+  editorial: complete
+  learning: complete
+  publication: complete
+
+health:
+  trust: —
+  evidence: 12/36
+  primary_documents: 11
+  claims: 12
+  corrections: 0
+  open_questions: 3
+  freshness: —
+  last_updated: 2026-07-15
+
+next_action: "Publication package — Stage 8"

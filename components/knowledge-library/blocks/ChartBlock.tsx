@@ -49,7 +49,7 @@ export const ChartBlock: FC<BlockComponentProps> = ({ data }) => {
 
   if (!canRender) {
     return (
-      <figure className="my-8" data-visual-block="chart">
+      <figure className="my-12 md:my-16 p-4 md:p-6 bg-gray-50/40 rounded-xl border border-gray-200/50" data-visual-block="chart">
         <LicensingPlaceholder
           type="chart"
           title={title}
@@ -88,7 +88,7 @@ export const ChartBlock: FC<BlockComponentProps> = ({ data }) => {
   }
 
   return (
-    <figure className="my-8" data-visual-block="chart">
+    <figure className="my-12 md:my-16 p-4 md:p-6 bg-gray-50/40 rounded-xl border border-gray-200/50" data-visual-block="chart">
       <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white p-2">
         <img
           src={url}

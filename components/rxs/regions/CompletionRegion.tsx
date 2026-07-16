@@ -6,14 +6,24 @@ export function CompletionRegion({
   chapter,
   collectionSlug,
   volumeSlug,
+  nextChapter,
+  relatedInvestigation,
 }: {
   chapter: Chapter;
   collectionSlug: string;
   volumeSlug: string;
+  nextChapter?: { title: string; slug: string } | null;
+  relatedInvestigation?: { title: string; slug: string } | null;
 }) {
   return (
     <footer data-region="completion">
-      <LearningFooter chapter={chapter} collectionSlug={collectionSlug} volumeSlug={volumeSlug} />
+      <LearningFooter
+        chapter={chapter}
+        collectionSlug={collectionSlug}
+        volumeSlug={volumeSlug}
+        nextChapter={nextChapter}
+        relatedInvestigation={relatedInvestigation}
+      />
     </footer>
   );
 }

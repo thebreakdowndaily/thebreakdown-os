@@ -1,0 +1,188 @@
+claims:
+  - id: claim.kashmir.001
+    claim: "The partition framework left princely states to choose their allegiance, but Kashmir's unique demography made this framework unworkable."
+    confidence: High
+    phase: Origin
+    evidence: "The 3 June 1947 Plan gave princely states the option of accession to India or Pakistan. Kashmir had a Muslim-majority population (77%), a Hindu ruler (Maharaja Hari Singh), and strategic geography bordering both dominions — three factors pulling in different directions. The framework provided no mechanism for states where demographics, ruler preference, and geography conflicted."
+    source: "S02 (Jha); S03 (Lamb); S05 (Schofield); S12 (White Paper on Indian States)"
+    counterarguments:
+      - interpretation: "The framework was adequate and the crisis resulted from Pakistani adventurism, not structural failure. The princely state system worked for over 500 other states."
+        attributed_to: "Indian official position; some scholars (S05)"
+      - interpretation: "The framework was deliberately ambiguous to allow British strategic flexibility, not because it was structurally flawed."
+        attributed_to: "Post-colonial historians"
+
+  - id: claim.kashmir.002
+    claim: "The tribal invasion of October 1947 was not a spontaneous tribal uprising but was planned and supported by Pakistan's political and military leadership."
+    confidence: High
+    phase: Invasion
+    evidence: "Approximately 5,000–6,000 Pashtun tribal fighters crossed into Kashmir from the North-West Frontier Province on 22 October 1947, accompanied by Pakistani military personnel. The invasion involved logistical coordination including arms supply, transport, and recruitment of tribal fighters through Pakistan's political agents in the Frontier. Lamb's research using British and Pakistani sources established official Pakistani involvement. Jha's reconstruction from multiple perspectives corroborates this. The UN Commission and subsequent resolutions treated the invasion as Pakistani-sponsored aggression."
+    source: "S03 (Lamb); S05 (Schofield); S02 (Jha); S10 (UN resolutions)"
+    counterarguments:
+      - interpretation: "Pakistan officially denied involvement until the 1940s. Some tribal participants claimed spontaneous agency driven by religious solidarity and the desire to liberate fellow Muslims."
+        attributed_to: "Pakistan's official position (pre-1990s)"
+      - interpretation: "The documentary evidence of official coordination is strong but not absolute. Pakistani internal archives remain closed, preventing independent verification."
+        attributed_to: "Cautious scholars; archival gap acknowledged in verification report"
+      - interpretation: "Tribal fighters had their own agency and motivations; reducing them to Pakistani instruments ignores Pashtun political culture and the tradition of tribal raiding."
+        attributed_to: "Tribal participant accounts; Schofield's fieldwork"
+
+  - id: claim.kashmir.003
+    claim: "Maharaja Hari Singh signed the Instrument of Accession under extreme military pressure, raising questions about the voluntariness of the accession."
+    confidence: High
+    phase: Accession
+    evidence: "On 26 October 1947, tribal forces were approximately 50 miles from Srinagar and the state's army was disintegrating. V.P. Menon flew to Srinagar with the Instrument of Accession. The Maharaja signed under conditions of extreme military pressure. The document (held by the Government of India) bears the Maharaja's signature and Menon's countersignature. India argues the accession was legally valid under the Indian Independence Act. Pakistan argues the Maharaja had no legitimacy and the population opposed accession."
+    source: "S09 (Instrument of Accession); S13 (Menon); S02 (Jha); S07 (Gandhi on Patel)"
+    counterarguments:
+      - interpretation: "The accession was legally valid regardless of the circumstances. The Indian Independence Act gave princely states the right to accede, and the Maharaja exercised that right. International law does not require consent to be given free of pressure."
+        attributed_to: "Indian legal position"
+      - interpretation: "The Maharaja had no democratic legitimacy. A Hindu ruler of a Muslim-majority state could not legitimately decide the state's political future without consulting the population."
+        attributed_to: "Pakistan's position; Sheikh Abdullah's initial demand for a plebiscite"
+      - interpretation: "The original Instrument of Accession may not be the document held by India. Alastair Lamb questioned the physical document's authenticity."
+        attributed_to: "Alastair Lamb (S03) — flagged in verification report as unsubstantiated by subsequent scholarship"
+
+  - id: claim.kashmir.004
+    claim: "Mountbatten proposed a joint Indian-Pakistani occupation of Kashmir in September 1947, but both Nehru and Jinnah rejected the proposal."
+    confidence: Medium
+    phase: Diplomacy
+    evidence: "In September 1947, Lord Mountbatten proposed that Indian and Pakistani troops jointly occupy Kashmir to maintain order while a political solution was negotiated. The proposal is documented in Mountbatten's Personal File (S14) and discussed by Raghavan (S01) and Schofield (S05). Nehru rejected the proposal on sovereignty grounds. Jinnah was unwilling to accept conditions that would have given India effective control given the existing military balance."
+    source: "S14 (Mountbatten Personal File); S01 (Raghavan); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "Jinnah was willing to negotiate but Nehru's insistence on conditions made it impossible. The failure was Nehru's, not Jinnah's."
+        attributed_to: "Pakistan's position"
+      - interpretation: "Mountbatten's proposal was impractical and would have created more problems than it solved. Joint occupation arrangements rarely work."
+        attributed_to: "Some Indian scholars"
+
+  - id: claim.kashmir.005
+    claim: "The Indian Air Force airlift of troops to Srinagar on 27 October 1947 prevented the fall of the Kashmir Valley and decided the war's outcome."
+    confidence: High
+    phase: Military
+    evidence: "Within 24 hours of the accession, Indian troops were airlifted to Srinagar by the Indian Air Force. Tribal forces were approaching Srinagar and would have captured the Valley without the airlift. The airlift is documented in the Official History of the Indian Armed Forces (S16), Menon's account (S13), Raghavan (S01), and Schofield (S05). Without the airlift, Srinagar would have fallen and the military facts on the ground would have been entirely different."
+    source: "S16 (Official History); S13 (Menon); S01 (Raghavan); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "The airlift was an aggressive military act that violated the princely state framework. India had no legal authority to deploy troops in Kashmir before the accession was formalized and accepted."
+        attributed_to: "Pakistan's position"
+      - interpretation: "The airlift was technically possible only because of the pre-existing Indian military presence and infrastructure in the region, suggesting prior planning."
+        attributed_to: "Critical Indian scholars"
+
+  - id: claim.kashmir.006
+    claim: "Patel was pragmatic and Nehru was idealistic about Kashmir, creating conflicting Indian strategies."
+    confidence: Medium-High
+    phase: Leadership
+    evidence: "Sardar Patel viewed Kashmir through the lens of national security and was prepared to accept a pragmatic solution, including partition of the state along roughly communal lines. Nehru viewed Kashmir through the lens of democratic self-determination and his personal bond with Sheikh Abdullah. Patel's correspondence (documented in Gandhi's biography, S07) shows scepticism about Kashmir's strategic value and willingness to compromise. Nehru's letters (S11) show commitment to Abdullah and democratic principles. Raghavan (S01) and Akbar (S08) document this tension."
+    source: "S07 (Gandhi); S01 (Raghavan); S08 (Akbar); S11 (Nehru-Abdullah correspondence)"
+    counterarguments:
+      - interpretation: "The pragmatist/idealist binary oversimplifies. Nehru's 'idealism' was also strategic — he needed Abdullah to hold the Valley. Patel's 'pragmatism' was also ideological — he distrusted Abdullah's nationalist credentials."
+        attributed_to: "Raghavan (S01)"
+      - interpretation: "Nehru's position was not idealistic but realistic — he understood that abandoning the plebiscite commitment would undermine India's democratic credibility internationally."
+        attributed_to: "Some Indian scholars"
+
+  - id: claim.kashmir.007
+    claim: "India's referral of Kashmir to the UN Security Council on 1 January 1948 was a strategic error that internationalised the conflict and created a permanent diplomatic liability."
+    confidence: High
+    phase: Diplomacy
+    evidence: "Nehru referred the Kashmir dispute to the UN Security Council under Article 35 of the UN Charter, alleging Pakistani aggression. Nehru believed India's case was unanswerable — Pakistan had sponsored the invasion, India had been invited by the lawful ruler, and the UN would validate India's position. He underestimated Pakistan's diplomatic skill, particularly Sir Zafarullah Khan's advocacy, and the UN's tendency toward compromise rather than vindication. The referral gave Pakistan a seat at the table and produced a framework of UN resolutions (S10) that India later refused to implement."
+    source: "S01 (Raghavan); S10 (UN resolutions); S08 (Akbar); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "The referral was not an error but a rational calculation. At the time, India had more leverage than it would later. The UN would have eventually become involved regardless."
+        attributed_to: "Raghavan (S01) — argues the 'error' framing is retrospective"
+      - interpretation: "India referred the case because it genuinely believed in international law and the UN system. Calling this an 'error' implies India should have acted as a realist power, which contradicts its founding principles."
+        attributed_to: "Nehruvian scholars"
+      - interpretation: "The referral was necessary because India could not afford a prolonged military engagement with Pakistan in 1948, when the military balance was uncertain."
+        attributed_to: "Indian strategic historians"
+
+  - id: claim.kashmir.008
+    claim: "The UN plebiscite was never implemented because neither side fulfilled the demilitarisation conditions required by UNSC Resolution 47."
+    confidence: High
+    phase: Diplomacy
+    evidence: "UNSC Resolution 47 (21 April 1948) called for ceasefire, demilitarisation by both India and Pakistan, and a plebiscite under UN supervision as a precondition. Neither side demilitarised. Pakistan refused to withdraw tribal forces and regular troops from Azad Kashmir and the Northern Areas. India refused to reduce its military presence in the Valley. The UNCIP report (March 1949) confirmed both sides bore responsibility. The plebiscite framework remains technically operative but practically impossible."
+    source: "S10 (UN resolutions); S01 (Raghavan); S05 (Schofield); S15 (Bogra/UN speeches)"
+    counterarguments:
+      - interpretation: "Pakistan never fulfilled the first condition (withdrawal of tribal forces and regular troops). India was not required to demilitarise until Pakistan withdrew. The primary responsibility lies with Pakistan."
+        attributed_to: "India's position"
+      - interpretation: "India was required to demilitarise first. The sequence of demilitarisation was disputed, but India's progressive military buildup made demilitarisation increasingly impossible."
+        attributed_to: "Pakistan's position"
+      - interpretation: "The plebiscite conditions were deliberately designed to be impossible to fulfil, allowing both sides to blame the other for the failure."
+        attributed_to: "Cynical scholars; some Western analysts"
+
+  - id: claim.kashmir.009
+    claim: "Sheikh Abdullah's position was central and contradictory — he supported accession to India but demanded a plebiscite, creating a paradox that India could not resolve."
+    confidence: High
+    phase: Politics
+    evidence: "Sheikh Abdullah, the dominant political leader of the Kashmir Valley and head of the National Conference, supported accession to India but also demanded a plebiscite to confirm the people's will. India needed Abdullah to legitimise the accession — without his support, the Valley's Muslim-majority population would not have accepted Indian sovereignty. But Abdullah's democratic commitment required a vote that India did not want to hold. The Nehru-Abdullah correspondence (S11) shows this tension evolving from cooperation to confrontation. By 1953, Abdullah was demanding greater autonomy and was dismissed and imprisoned."
+    source: "S11 (Nehru-Abdullah correspondence); S02 (Jha); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "Abdullah's position was not contradictory but consistent — he believed in democratic self-determination and expected a plebiscite would confirm accession to India. The contradiction was India's, not his."
+        attributed_to: "Kashmiri scholars; Abdullah's supporters"
+      - interpretation: "Abdullah's position evolved — by 1953 he was openly demanding greater autonomy, suggesting his initial support for accession was tactical rather than principled."
+        attributed_to: "Indian government position after 1953"
+
+  - id: claim.kashmir.010
+    claim: "The ceasefire of 1 January 1949 produced a de facto partition of Kashmir along military lines, creating a division that neither side accepted as legitimate."
+    confidence: High
+    phase: Ceasefire
+    evidence: "The ceasefire line, supervised by UN military observers, divided Kashmir into Indian-administered zones (Kashmir Valley, Jammu, Ladakh) and Pakistani-administered zones (Azad Kashmir, Northern Areas/Gilgit-Baltistan). The line followed the military position at the time of ceasefire, not any political or demographic boundary. Neither India nor Pakistan accepted this as a permanent border. The line has persisted with only minor modifications (Siachen, Kargil) for 75+ years."
+    source: "S05 (Schofield); S10 (UN resolutions); S16 (Official History)"
+    counterarguments:
+      - interpretation: "The ceasefire line reflects the reality of the military situation and should be treated as a de facto border. India's 2019 revocation of Article 370 effectively asserted permanent sovereignty."
+        attributed_to: "Indian government position (post-2019)"
+      - interpretation: "The ceasefire line reflects aggression and should not be treated as a border. The line was imposed by military force, not by democratic choice."
+        attributed_to: "Pakistan's position"
+
+  - id: claim.kashmir.011
+    claim: "The 1947 war established the recurring pattern of India-Pakistan conflict: proxy or limited war, international mediation, ceasefire without resolution, and escalation in subsequent decades."
+    confidence: High
+    phase: Legacy
+    evidence: "The first Kashmir war produced a pattern that repeated in 1965 (Operation Gibraltar), 1971 (Bangladesh liberation, which did not resolve Kashmir), and 1999 (Kargil). Each conflict involved limited military engagement, international mediation attempts, and ceasefire without political resolution. Ganguly's 'protracted conflict' framework (S20) describes this pattern. Raghavan (S01) and Schofield (S05) document the recurrence."
+    source: "S20 (Ganguly); S01 (Raghavan); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "Each subsequent war had distinct causes and contexts. The pattern is real but the causal mechanism is complex — reducing it to a 'pattern' oversimplifies."
+        attributed_to: "Historians of individual wars"
+      - interpretation: "The pattern reflects structural factors (nuclear deterrence, international pressure) that change over time, not a simple repetition of 1947."
+        attributed_to: "IR scholars"
+
+  - id: claim.kashmir.012
+    claim: "The 1947 war displaced approximately 500,000–1,000,000 people in Kashmir, dividing families across the ceasefire line and producing a humanitarian crisis that has never been fully resolved."
+    confidence: Medium-High
+    phase: Humanitarian
+    evidence: "The war produced massive displacement across the ceasefire line. Estimates vary from 500,000 to 1,000,000 people. Families were divided across the line. The communal violence in Jammu (August–October 1947) — involving attacks on Muslim populations, with estimates of 200,000–500,000 killed or displaced — preceded and contributed to the displacement. Schofield (S05) provides the most reliable synthesis of Indian and Pakistani sources. Jha (S02) documents the Jammu violence. Burki (S19) addresses the economic consequences."
+    source: "S05 (Schofield); S02 (Jha); S19 (Burki)"
+    counterarguments:
+      - interpretation: "Displacement figures are disputed and may be overstated. The exact numbers depend on which communities are counted and from which areas."
+        attributed_to: "Some scholars"
+      - interpretation: "The humanitarian consequences of Kashmir are significant but should be viewed in the context of the broader Partition displacement of 10–15 million people. Kashmir's displacement, while severe, was a fraction of the total."
+        attributed_to: "Partition historians"
+
+  - id: claim.kashmir.013
+    claim: "Pakistan's strategic geography made Kashmir essential to its viability — the state's rivers flowed through Pakistan, its territory connected Pakistan's northern and southern regions, and its Muslim-majority population made it, in Pakistan's view, naturally part of the new Muslim homeland."
+    confidence: High
+    phase: Origin
+    evidence: "Kashmir's geography gave it outsized strategic importance. The Indus river system — the basis of Pakistan's agriculture — flowed through Kashmir before entering Pakistan. Kashmir's territory connected Pakistan's northern regions (via the Karakoram Pass) to its heartland. The state's Muslim-majority population (77%) made it, in the Two-Nation Theory's logic, naturally part of Pakistan. Pakistan could not accept Indian sovereignty over Kashmir without undermining its own geographic and ideological coherence."
+    source: "S05 (Schofield); S20 (Ganguly); S01 (Raghavan)"
+    counterarguments:
+      - interpretation: "Kashmir's geography was important to India as well — its northern border security depended on controlling the high ground. The strategic argument applies to both sides."
+        attributed_to: "Indian strategic scholars"
+      - interpretation: "The Two-Nation Theory's application to princely states was selective. Pakistan did not claim Junagadh (a Hindu-majority state with a Muslim ruler) on the same geographic logic."
+        attributed_to: "Indian scholars"
+
+  - id: claim.kashmir.014
+    claim: "The Jammu violence of August–October 1947 — involving attacks on Muslim populations by Hindu and Sikh mobs, allegedly with state support — inflamed communal tensions and contributed to the conditions for invasion."
+    confidence: Medium-High
+    phase: Violence
+    evidence: "Communal violence in Jammu province during August–October 1947 targeted Muslim populations. Estimates of those killed or displaced range from 200,000 to 500,000. The violence was perpetrated by Hindu and Sikh mobs, with allegations of state complicity. Jha (S02) provides the most detailed account. Schofield (S05) corroborates. The violence inflamed communal tensions across the princely state and contributed to the conditions that made the tribal invasion possible and, in some accounts, justifiable from the Pakistani perspective."
+    source: "S02 (Jha); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "Communal violence occurred across Partition, not uniquely in Jammu. The Jammu violence should be seen in the context of widespread Partition violence, not as a special case."
+        attributed_to: "Partition historians"
+      - interpretation: "The violence was spontaneous communal conflict, not state-sponsored. The allegation of state complicity is not well-documented."
+        attributed_to: "Indian government position"
+
+  - id: claim.kashmir.015
+    claim: "India's progressive abandonment of the plebiscite commitment — from initial willingness (1948) to refusal (1950s onward) — represented a shift from democratic promise to strategic control."
+    confidence: High
+    phase: Legacy
+    evidence: "In 1948, India committed to a plebiscite as part of the UN framework. By 1950, India's position had hardened to refusal. The dismissal and imprisonment of Sheikh Abdullah in 1953 — for demanding greater autonomy and self-determination — signaled the abandonment of the democratic commitment that justified India's intervention. India's subsequent actions (constituent assembly, Article 370 erosion, 2019 revocation) followed a trajectory from democratic promise to authoritarian control. The Nehru-Abdullah correspondence (S11) and Raghavan (S01) document this evolution."
+    source: "S11 (Nehru-Abdullah correspondence); S01 (Raghavan); S05 (Schofield)"
+    counterarguments:
+      - interpretation: "India's position evolved because Pakistan never fulfilled the first condition of demilitarisation. India was not obligated to hold a plebiscite while Pakistan maintained forces in Azad Kashmir."
+        attributed_to: "Indian government position"
+      - interpretation: "The plebiscite commitment was always contingent on conditions that both sides were unable or unwilling to meet. India's 'abandonment' is overstated."
+        attributed_to: "Indian scholars"

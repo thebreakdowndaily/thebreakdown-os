@@ -1,0 +1,186 @@
+events:
+  - date: "1946-03"
+    title: "Muslim League demands plebiscite in princely states"
+    description: "The Muslim League begins framing the princely state question in terms of religious demographics, demanding that the population of each princely state determine whether to accede to India or Pakistan. This sets the ideological framework Pakistan will apply to Kashmir."
+    claim_link: claim.kashmir.001
+    source: "S05 (Schofield); S20 (Ganguly)"
+
+  - date: "1947-06-03"
+    title: "Mountbatten Plan (3 June Plan) announced"
+    description: "Lord Mountbatten announces the British plan for the partition of India. British India will be divided into two dominions — India and Pakistan. Princely states are given the option of accession to India or Pakistan, or (theoretically) independence. The plan provides no mechanism for states where demographics, ruler preference, and geography conflict."
+    claim_link: claim.kashmir.001
+    source: "S12 (White Paper on Indian States); S05 (Schofield)"
+
+  - date: "1947-07-18"
+    title: "Indian Independence Act receives Royal Assent"
+    description: "The British Parliament passes the Indian Independence Act 1947, providing the legal framework for the creation of India and Pakistan and the accession of princely states. The Act gives princely states the right to accede to either dominion but does not address the case of states where the ruler's preference conflicts with the population's demographic composition."
+    claim_link: claim.kashmir.001
+    source: "S12 (White Paper on Indian States)"
+
+  - date: "1947-08-15"
+    title: "Indian and Pakistani independence"
+    description: "Both dominions come into existence. Kashmir remains independent — Maharaja Hari Singh has not acceded to either side. The Maharaja hopes to maintain independence or negotiate better terms from a position of neutrality."
+    claim_link: claim.kashmir.003
+    source: "S05 (Schofield); S13 (Menon)"
+
+  - date: "1947-08"
+    title: "Communal violence erupts in Jammu"
+    description: "Hindu and Sikh mobs, allegedly with state support, attack Muslim populations in Jammu province. Estimated 200,000–500,000 Muslims are killed or displaced. The violence inflames communal tensions across the princely state and drives the Muslim population toward Pakistan-aligned positions, contributing to the conditions for invasion."
+    claim_link: claim.kashmir.014
+    source: "S02 (Jha); S05 (Schofield)"
+
+  - date: "1947-08-12"
+    title: "Maharaja Hari Singh proposes Standstill Agreement"
+    description: "The Maharaja sends identical letters to India and Pakistan proposing Standstill Agreements — arrangements to maintain existing administrative relationships until the accession question is resolved. Pakistan accepts; India does not respond definitively. The Maharaja's strategy of delay and neutrality begins to unravel."
+    claim_link: claim.kashmir.003
+    source: "S02 (Jha); S13 (Menon)"
+
+  - date: "1947-08-15"
+    title: "Pakistan accepts Standstill Agreement with Kashmir"
+    description: "Pakistan accepts the Maharaja's Standstill Agreement proposal, maintaining existing trade and communication links. India's response is ambiguous. The asymmetry in responses reflects each dominion's confidence about Kashmir's eventual accession."
+    claim_link: claim.kashmir.003
+    source: "S02 (Jha); S05 (Schofield)"
+
+  - date: "1947-09"
+    title: "Mountbatten proposes joint Indian-Pakistani occupation of Kashmir"
+    description: "Lord Mountbatten proposes that Indian and Pakistani troops jointly occupy Kashmir to maintain order while a political solution is negotiated. Nehru rejects the proposal on sovereignty grounds. Jinnah rejects it because it would give India effective control given the existing military balance. The last serious attempt at a negotiated solution before the invasion."
+    claim_link: claim.kashmir.004
+    source: "S14 (Mountbatten Personal File); S01 (Raghavan); S05 (Schofield)"
+
+  - date: "1947-10-12"
+    title: "Liaquat Ali Khan and Nehru meet in Lahore"
+    description: "The Prime Ministers of Pakistan and India meet in Lahore for diplomatic discussions on Kashmir, Junagadh, and Hyderabad. The discussions fail to reach agreement on any of the contested princely states. Diplomatic options are effectively exhausted; both sides begin preparing for the possibility of conflict."
+    claim_link: claim.kashmir.002
+    source: "S02 (Jha); S05 (Schofield)"
+
+  - date: "1947-10-22"
+    title: "Tribal invasion of Kashmir begins"
+    description: "Approximately 5,000–6,000 Pashtun tribal fighters, accompanied by Pakistani military personnel, cross into Kashmir from the North-West Frontier Province. The invasion is planned and supported by Pakistan's political and military leadership, with logistical coordination including arms supply, transport, and recruitment through Pakistan's political agents. The fighters advance toward Srinagar along the main road."
+    claim_link: claim.kashmir.002
+    source: "S03 (Lamb); S05 (Schofield); S02 (Jha)"
+
+  - date: "1947-10-24"
+    title: "Tribal forces capture Baramulla"
+    description: "Tribal forces capture the town of Baramulla, approximately 50 miles from Srinagar. Mass looting, killing, and abduction of women follow. The fall of Baramulla demonstrates the nature of the invasion and horrifies Indian public opinion. The tribal forces pause in Baramulla rather than advancing immediately on Srinagar — a delay that proves decisive."
+    claim_link: claim.kashmir.002
+    source: "S05 (Schofield); S02 (Jha); S16 (Official History)"
+
+  - date: "1947-10-25"
+    title: "Maharaja Hari Singh flees Srinagar for Jammu"
+    description: "The Maharaja, facing the collapse of his state's defence capacity, flees Srinagar for Jammu. The state government is in disarray. The departure signals the failure of the princely state's ability to defend itself and forces the accession question to a crisis point."
+    claim_link: claim.kashmir.003
+    source: "S13 (Menon); S02 (Jha)"
+
+  - date: "1947-10-26"
+    title: "Maharaja Hari Singh signs the Instrument of Accession"
+    description: "Maharaja Hari Singh signs the Instrument of Accession, acceding Jammu and Kashmir to India. V.P. Menon carries the document to Delhi. The document restricts accession to defence, foreign affairs, and communications (Article 7). India accepts the accession. The legal foundation of India's claim to Kashmir is established."
+    claim_link: claim.kashmir.003
+    source: "S09 (Instrument of Accession); S13 (Menon); S12 (White Paper on Indian States)"
+
+  - date: "1947-10-27"
+    title: "Indian airlift to Srinagar"
+    description: "The Indian Air Force airlifts troops to Srinagar within 24 hours of the accession. First Indian troops arrive by air; the Kashmir Valley is saved from tribal capture. Without the airlift, Srinagar would have fallen. The military decision that determines the war's outcome."
+    claim_link: claim.kashmir.005
+    source: "S16 (Official History); S13 (Menon); S01 (Raghavan)"
+
+  - date: "1947-10-27"
+    title: "Patel broadcasts India's intervention"
+    description: "Sardar Patel announces India's intervention in Kashmir on All India Radio, framing it as defence of a legitimate government that has acceded to India. The broadcast establishes the Indian public narrative: India was invited to defend a sovereign state against aggression."
+    claim_link: claim.kashmir.006
+    source: "S07 (Gandhi); S01 (Raghavan)"
+
+  - date: "1947-10-27"
+    title: "Lord Mountbatten flies to Srinagar"
+    description: "Mountbatten flies to Srinagar to assess the situation personally. He meets with Indian military commanders and the Maharaja's representatives. His visit underscores the British involvement in the crisis and his personal investment in a resolution."
+    claim_link: claim.kashmir.004
+    source: "S14 (Mountbatten Personal File); S05 (Schofield)"
+
+  - date: "1947-11-01"
+    title: "Indian ground advance from Jammu begins"
+    description: "Indian forces push north along the Jammu-Srinagar road. Tribal forces are driven back from the Kashmir Valley. The ground campaign, combined with the airlift, secures the Valley for India. Heavy fighting continues along the Jammu-Srinagar axis."
+    claim_link: claim.kashmir.005
+    source: "S16 (Official History); S05 (Schofield)"
+
+  - date: "1947-11-01"
+    title: "Gilgit Scouts revolt against the Maharaja"
+    description: "The Gilgit Scouts, a paramilitary force under the Maharaja's authority, revolt against the state government. The region comes under Pakistani control. The revolt is coordinated with Pakistan's political agents. Northern Areas (Gilgit-Baltistan) are lost to Indian control permanently."
+    claim_link: claim.kashmir.010
+    source: "S05 (Schofield); S03 (Lamb)"
+
+  - date: "1947-12-31"
+    title: "Military stalemate along the Jammu-Srinagar axis"
+    description: "By the end of 1947, Indian forces have secured the Kashmir Valley and much of the Jammu-Srinagar road. Tribal forces and Pakistani-backed fighters hold Azad Kashmir and the Northern Areas. The front lines begin to solidify along what will become the ceasefire line."
+    claim_link: claim.kashmir.010
+    source: "S16 (Official History); S05 (Schofield)"
+
+  - date: "1948-01-01"
+    title: "India refers Kashmir to the UN Security Council"
+    description: "Under Article 35 of the UN Charter, India refers the Kashmir dispute to the Security Council, alleging Pakistani aggression. Nehru believes India's case is unanswerable — Pakistan sponsored the invasion, India was invited by the lawful ruler, and the UN will validate India's position. The referral internationalises the conflict and gives Pakistan a seat at the table."
+    claim_link: claim.kashmir.007
+    source: "S10 (UN resolutions); S01 (Raghavan)"
+
+  - date: "1948-01-15"
+    title: "Pakistan submits its case to the UN"
+    description: "Pakistan counter-alleges Indian aggression and demands a plebiscite. Both sides are now before the international community. Sir Zafarullah Khan articulates Pakistan's legal and moral case with exceptional skill before the Security Council."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions); S15 (Bogra/UN speeches)"
+
+  - date: "1948-01-20"
+    title: "UNSC Resolution 39 — UNCIP established"
+    description: "The Security Council establishes the UN Commission for India and Pakistan (UNCIP) to investigate the dispute and mediate between the parties. The Commission is tasked with examining the facts and making recommendations. The UN machinery is set in motion."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions)"
+
+  - date: "1948-03-08"
+    title: "UNCIP arrives in the subcontinent"
+    description: "The UN Commission begins hearings in Delhi, Karachi, and Srinagar. The Commission hears testimony from both sides and visits the conflict zone. First on-the-ground international mediation."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions); S05 (Schofield)"
+
+  - date: "1948-04-21"
+    title: "UNSC Resolution 47 — Plebiscite framework established"
+    description: "The Security Council calls for ceasefire, demilitarisation by both India and Pakistan, and a plebiscite under UN supervision. This resolution forms the framework that still governs the international legal position. Neither side fulfils the demilitarisation conditions."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions)"
+
+  - date: "1948-05"
+    title: "Spring Indian ground offensive"
+    description: "Indian forces launch major operations to push the ceasefire line westward. Heavy fighting around the Poonch-Jhangar axis. This is the last major Indian offensive before the ceasefire. The military facts on the ground continue to evolve."
+    claim_link: claim.kashmir.010
+    source: "S16 (Official History); S05 (Schofield)"
+
+  - date: "1948-06-03"
+    title: "UNSC Resolution 51 — Mediator appointed"
+    description: "The Security Council appoints a mediator for the Kashmir dispute. The appointment reflects the international community's growing concern about the conflict's escalation and the need for a more active mediation role."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions)"
+
+  - date: "1948-08"
+    title: "UNCIP mediator arrives in the subcontinent"
+    description: "The Commission begins hearings in Delhi, Karachi, and Srinagar. Both sides present their cases. The Commission attempts to negotiate a demilitarisation framework but fails to bridge the gap between the parties."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions); S05 (Schofield)"
+
+  - date: "1949-01-01"
+    title: "Ceasefire takes effect"
+    description: "A ceasefire takes effect, supervised by UN military observers. The ceasefire line is established along the military line of control, dividing Kashmir roughly in two — Indian-administered Kashmir Valley, Jammu, and Ladakh in the east; Pakistani-administered Azad Kashmir and Northern Areas in the west. The de facto partition line that persists to this day."
+    claim_link: claim.kashmir.010
+    source: "S05 (Schofield); S10 (UN resolutions); S16 (Official History)"
+
+  - date: "1949-03"
+    title: "UNCIP report issued"
+    description: "The UN Commission reports that both sides bear responsibility for the conflict and recommends a plebiscite after demilitarisation. The report confirms the plebiscite framework but neither side demilitarises, making the plebiscite impossible."
+    claim_link: claim.kashmir.008
+    source: "S10 (UN resolutions); S01 (Raghavan)"
+
+  - date: "1949-1950"
+    title: "Refugee flows across the ceasefire line"
+    description: "Approximately 500,000–1,000,000 people are displaced across the ceasefire line. Families are divided. The humanitarian aftermath of the war produces a displacement crisis that has never been fully resolved."
+    claim_link: claim.kashmir.012
+    source: "S05 (Schofield); S02 (Jha); S19 (Burki)"
+
+  - date: "1949-10"
+    title: "Instrument of Accession ratified and Constituent Assembly of J&K formed"
+    description: "The Constituent Assembly of Jammu and Kashmir is formed to ratify the accession and draft a state constitution. India presents the Assembly's proceedings as democratic confirmation of the accession. Pakistan and Kashmiri critics argue the Assembly does not represent the will of the whole population."
+    claim_link: claim.kashmir.009
+    source: "S05 (Schofield); S11 (Nehru-Abdullah correspondence)"

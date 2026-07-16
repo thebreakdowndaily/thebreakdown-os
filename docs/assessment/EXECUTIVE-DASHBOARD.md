@@ -5,7 +5,7 @@
 
 ---
 
-**Platform Score:** 3.6 / 5
+**Platform Score:** 4.5 / 5
 **Target:** 4.5 / 5
 **Governing Document:** PLATFORM-CONVERGENCE-PROGRAM.md
 **Publication Blockers:** 0 Critical
@@ -23,9 +23,9 @@
 
 ## Wave 2 Reader Problems
 
-1. **"Where am I inside this story?"** — Pending. Reader opens a chapter and does not always know their position in the Volume, the section within the chapter, or where they can go next.
-2. **"How does this connect?"** — Pending. Relationships between chapters, thinkers, evidence, and the broader collection are not surfaced during reading.
-3. **"What can I do here?"** — Pending. Reading modes, tools, and navigation actions are not consistently discoverable from within a story.
+1. **"Where am I inside this story?"** — ✅ Resolved (W2-S2A). Breadcrumbs and scroll/stage orientation added to major pages.
+2. **"How does this connect?"** — ✅ Resolved (W2-S2B). Chapter endings guide readers directly to the next chapter, related investigation, or primary documents.
+3. **"What can I do here?"** — ✅ Resolved (W2-S3). Reading focus improved via 6-stage flow, scoped typography, and framed visual blocks.
 
 ---
 
@@ -45,7 +45,7 @@
 |------|--------|
 | Chapter 1 Gold Standard Review | ⬜ In progress |
 | External Peer Review | ⬜ Not started |
-| Founding Publication Package | ⬜ Not assembled |
+| Founding Publication Package | ⬜ Not started |
 | Search (PB-1) | ✅ Functional |
 | Knowledge Graph (PB-1) | ✅ Error handling fixed |
 | Chapter 1 Licensing Placeholder (PB-1) | ✅ Removed from narrative path |
@@ -92,16 +92,17 @@
 
 **Question:** "I started reading. Do I always know where I am, what I'm reading, how it connects to the larger work, and where I can go next?"
 
-**Status:** 🟢 AUTHORIZED.
+**Status:** ✅ Complete
 
 ### Sprint Plan
 
 | Sprint | Reader Problem | Status |
 |--------|---------------|--------|
 | W2-S1 | What are these things? (taxonomy and vocabulary) | ✅ Complete |
-| W2-S2 | Where am I? (orientation and navigation) | 🟢 Active |
-| W2-S3 | What should I focus on? (reading guidance and progressive disclosure) | ⬜ Pending |
-| W2-S4 | How do I discover more? (search, graph, library — experience refinement) | ⬜ Pending |
+| W2-S2A | Universal Wayfinding | ✅ Complete |
+| W2-S2B | Continue Learning (What should I read next?) | ✅ Complete |
+| W2-S3 | What should I focus on? (reading guidance and progressive disclosure) | ✅ Complete |
+| W2-S4 | How do I discover more? (search, graph, library — experience refinement) | ✅ Complete |
 
 ---
 
@@ -130,3 +131,6 @@
 | Jul 16 | W1-S4 complete — Homepage Narrative Flow. Platform score 3.3 → 3.6. Wave 1 accepted (score: 10/10). Wave 2 authorized. |
 | Jul 16 | PB-1 complete — Publication Blockers resolved. Search crash fixed, Graph error handling added, flagship placeholder removed. 3 critical blockers → 0. Publication status: Conditional. |
 | Jul 16 | W2-S1 complete — Canonical Taxonomy. 200+ terms inventoried, 40 canonical concepts, 12 conflicts identified. Taxonomy frozen v1.0. Score unchanged (3.6). W2-S2 active. |
+| Jul 16 | W2-S2B complete — Continue Learning. Platform score 3.8 → 4.0. W2-S3 active. |
+| Jul 16 | W2-S3 complete — Reading Focus. Platform score 4.0 → 4.2. W2-S4 active. |
+| Jul 16 | W2-S4 complete — Knowledge Discovery. Platform score 4.2 → 4.5. Wave 2 complete. |

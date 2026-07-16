@@ -15,6 +15,8 @@ import { TopicGraphSection } from '@/features/graph/components/TopicGraphSection
 import Image from 'next/image';
 import TopicHero from '@/components/topic/TopicHero';
 import TopicStats from '@/components/topic/TopicStats';
+import { RepositoryFactory } from '@/services/factory/repository';
+import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 function createJsonLd(topic: { name: string; description: string; slug: string }) {
   return [
@@ -82,6 +84,35 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
   
   const { topic, storyGroups, rankedEntities, unifiedTimeline, statistics, qualityScore } = vm;
 
+  const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+  const library = await repo.getLibrary('india-and-the-world');
+  
+  const relatedCollections = [];
+  const relatedChapters = [];
+  
+  if (library) {
+    for (const c of library.collections) {
+      let isCollectionRelated = false;
+      for (const v of c.volumes) {
+        for (const ch of v.chapters) {
+          if (ch.relatedConceptIds?.includes(topic.id) || ch.relatedConceptIds?.includes(topic.slug) || ch.slug === slug) {
+            relatedChapters.push({
+              slug: ch.slug,
+              title: ch.title,
+              summary: ch.summary,
+              collectionSlug: c.slug,
+              volumeSlug: v.slug
+            });
+            isCollectionRelated = true;
+          }
+        }
+      }
+      if (isCollectionRelated) {
+        relatedCollections.push(c);
+      }
+    }
+  }
+
   return (
     <>
       {createJsonLd(topic).map((ld, i) => (
@@ -147,6 +178,41 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             <section className="space-y-6">
               <h2 className="text-2xl font-bold border-b border-neutral-800 pb-2">Unified Timeline</h2>
               <InteractiveTimelineBlock events={unifiedTimeline} />
+            </section>
+          )}
+
+          {/* Continue Exploring Section */}
+          {(relatedCollections.length > 0 || relatedChapters.length > 0) && (
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold border-b border-neutral-800 pb-2">Continue Exploring</h2>
+              <div className="space-y-6">
+                {relatedCollections.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">In This Collection</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {relatedCollections.map((c) => (
+                        <a key={c.slug} href={`/series/${c.slug}`} className="block p-4 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-emerald-500/50 transition-colors">
+                          <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
+                          <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {relatedChapters.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">Related Chapters</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {relatedChapters.map((ch) => (
+                        <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block p-4 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-emerald-500/50 transition-colors">
+                          <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
+                          <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </section>
           )}
 

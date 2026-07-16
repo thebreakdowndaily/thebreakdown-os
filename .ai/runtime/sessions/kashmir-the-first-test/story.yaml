@@ -1,0 +1,33 @@
+story:
+  metadata:
+    id: kashmir-the-first-test
+    slug: kashmir-the-first-test
+    title: "Kashmir: The First Test"
+    collection: india-and-the-world
+    volume: foundations-1947-1962
+    version: v0.1
+    status: draft
+    created: 2026-07-15
+    updated: 2026-07-15
+
+pipeline:
+  research: complete
+  verification: complete
+  knowledge: complete
+  architecture: complete
+  narrative: complete
+  editorial: complete
+  learning: complete
+  publication: complete
+
+health:
+  trust: —
+  evidence: 0/36
+  primary_documents: 0
+  claims: 0
+  corrections: 0
+  open_questions: 0
+  freshness: —
+  last_updated: 2026-07-15
+
+next_action: "Pipeline execution started — Stage 1 Research"

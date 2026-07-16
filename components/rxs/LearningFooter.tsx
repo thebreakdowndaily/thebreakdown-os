@@ -45,11 +45,17 @@ export function LearningFooter({
   chapter,
   collectionSlug,
   volumeSlug,
+  nextChapter,
+  relatedInvestigation,
 }: {
   chapter: Chapter;
   collectionSlug: string;
   volumeSlug: string;
+  nextChapter?: { title: string; slug: string } | null;
+  relatedInvestigation?: { title: string; slug: string } | null;
 }) {
+  const hasDocuments = chapter.content.some(b => b.type === 'document');
+
   return (
     <footer className="mt-16 border-t border-gray-200 pt-8">
       <ReviewSection chapter={chapter} />
@@ -59,21 +65,38 @@ export function LearningFooter({
         <div>
           <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Continue Learning</h4>
           <ul className="space-y-2">
-            {chapter.recommendedNext.length > 0 && (
+            {nextChapter && (
               <li>
-                <Link href={`/series/${collectionSlug}/volume/${volumeSlug}`} className="text-sm text-blue-600 hover:underline">
-                  Next chapter →
+                <Link href={`/series/${collectionSlug}/volume/${volumeSlug}/chapter/${nextChapter.slug}`} className="text-sm font-semibold text-emerald-600 hover:underline">
+                  Next Chapter: {nextChapter.title} →
                 </Link>
               </li>
             )}
+            
+            {relatedInvestigation && (
+              <li>
+                <Link href={`/investigation/${relatedInvestigation.slug}`} className="text-sm text-blue-600 hover:underline">
+                  Related Investigation: {relatedInvestigation.title} →
+                </Link>
+              </li>
+            )}
+
+            {hasDocuments && (
+              <li>
+                <Link href={`/series/${collectionSlug}/volume/${volumeSlug}/chapter/${chapter.slug}#documents`} className="text-sm text-blue-600 hover:underline">
+                  Primary Documents
+                </Link>
+              </li>
+            )}
+
             <li>
               <Link href={`/series/${collectionSlug}/volume/${volumeSlug}`} className="text-sm text-blue-600 hover:underline">
-                All chapters in this volume
+                Return to Volume: All Chapters
               </Link>
             </li>
             <li>
               <Link href={`/series/${collectionSlug}`} className="text-sm text-blue-600 hover:underline">
-                Browse collection
+                Browse Collection
               </Link>
             </li>
           </ul>
@@ -87,11 +110,13 @@ export function LearningFooter({
                 Timeline
               </Link>
             </li>
-            <li>
-              <Link href={`/series/${collectionSlug}/volume/${volumeSlug}/chapter/${chapter.slug}#documents`} className="text-sm text-blue-600 hover:underline">
-                Primary Documents
-              </Link>
-            </li>
+            {hasDocuments && (
+              <li>
+                <Link href={`/series/${collectionSlug}/volume/${volumeSlug}/chapter/${chapter.slug}#documents`} className="text-sm text-blue-600 hover:underline">
+                  Primary Documents
+                </Link>
+              </li>
+            )}
             <li>
               <Link href="/series" className="text-sm text-blue-600 hover:underline">
                 Knowledge Library
