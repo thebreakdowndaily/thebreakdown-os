@@ -117,6 +117,13 @@ export function LearningFooter({
                 </Link>
               </li>
             )}
+            {chapter.sources && chapter.sources.length > 0 && (
+              <li>
+                <Link href={`/series/${collectionSlug}/volume/${volumeSlug}/chapter/${chapter.slug}#sources`} className="text-sm text-blue-600 hover:underline">
+                  View all sources
+                </Link>
+              </li>
+            )}
             <li>
               <Link href="/series" className="text-sm text-blue-600 hover:underline">
                 Knowledge Library

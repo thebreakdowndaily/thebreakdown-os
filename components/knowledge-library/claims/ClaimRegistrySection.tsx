@@ -75,12 +75,19 @@ export const ClaimRegistrySection: FC<{ claims: EnrichedClaim[] }> = ({ claims }
                       <h4 className="text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Sources</h4>
                       <div className="space-y-1">
                         {claim._sources.map((s, i) => (
-                          <div key={i} className="text-xs flex items-center gap-2">
+                          <div key={i} className="text-xs flex items-center gap-2 flex-wrap">
                             <span className={`px-1 py-0.5 rounded ${
-                              s.tier <= 2 ? 'bg-green-100 text-green-700' :
-                              s.tier <= 3 ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-                            }`}>Tier {s.tier}</span>
+                              s.tier === 1 ? 'bg-green-100 text-green-700' :
+                              s.tier === 2 ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              {s.tier === 1 ? 'Primary • Tier 1' : s.tier === 2 ? 'Secondary • Tier 2' : `Supporting • Tier ${s.tier}`}
+                            </span>
                             <span className="text-gray-700">{s.title}</span>
+                            {s.url && (
+                              <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                ({s.tier === 1 ? 'View Original Document →' : s.tier === 2 ? 'View Secondary Analysis →' : 'View Source →'})
+                              </a>
+                            )}
                           </div>
                         ))}
                       </div>

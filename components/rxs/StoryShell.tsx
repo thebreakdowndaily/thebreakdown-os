@@ -236,9 +236,11 @@ export function StoryShell({
 
         {/* Stage 5 — Reference */}
         {(chapter.keyTerms.length > 0 || chapter.sources.length > 0) && (
-          <StoryStage number={5} title="Reference">
-            <ReferenceSection chapter={chapter} />
-          </StoryStage>
+          <div id="sources">
+            <StoryStage number={5} title="Reference">
+              <ReferenceSection chapter={chapter} />
+            </StoryStage>
+          </div>
         )}
 
         {/* Stage 6 — Continue Learning */}

@@ -206,34 +206,89 @@ export const InvestigationContent: FC<InvestigationContentProps> = ({
       )}
 
       {/* Sources — Where can I read more? */}
-      {claim._sources.length > 0 && (
-        <section>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Sources</h3>
-          <div className="space-y-2">
-            {claim._sources.map((s) => (
-              <div key={s.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-800 truncate">{s.title}</p>
+      {claim._sources.length > 0 && (() => {
+        const primary = claim._sources.filter(s => s.tier === 1);
+        const secondary = claim._sources.filter(s => s.tier === 2);
+        const supporting = claim._sources.filter(s => s.tier !== 1 && s.tier !== 2);
+
+        return (
+          <section className="space-y-4">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">Sources</h3>
+            
+            {primary.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wide">Primary Sources</h4>
+                <div className="space-y-1.5 pl-3 border-l-2 border-emerald-100">
+                  {primary.map((s) => (
+                    <div key={s.id} className="flex items-center justify-between py-1 border-b border-gray-50/50 last:border-b-0">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-800 truncate">{s.title}</p>
+                      </div>
+                      <span className="flex-shrink-0 text-xs px-2 py-0.5 rounded font-mono ml-2 bg-green-100 text-green-700">
+                        Primary • Tier 1
+                      </span>
+                      {s.url && (
+                        <a href={s.url} target="_blank" rel="noopener noreferrer"
+                           className="flex-shrink-0 ml-2 text-blue-600 hover:underline text-xs font-medium">
+                          View Original Document →
+                        </a>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                {s.tier !== undefined && (
-                  <span className={`flex-shrink-0 text-xs px-2 py-0.5 rounded font-mono ml-2 ${
-                    s.tier === 1 ? 'bg-green-100 text-green-700' :
-                    s.tier === 2 ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    {s.tier === 1 ? 'Primary • Tier 1' : s.tier === 2 ? 'Secondary • Tier 2' : `Supporting • Tier ${s.tier}`}
-                  </span>
-                )}
-                {s.url && (
-                  <a href={s.url} target="_blank" rel="noopener noreferrer"
-                     className="flex-shrink-0 ml-2 text-blue-600 hover:underline text-xs">
-                    Visit →
-                  </a>
-                )}
               </div>
-            ))}
-          </div>
-        </section>
-      )}
+            )}
+
+            {secondary.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-blue-700 uppercase tracking-wide">Secondary Sources</h4>
+                <div className="space-y-1.5 pl-3 border-l-2 border-blue-100">
+                  {secondary.map((s) => (
+                    <div key={s.id} className="flex items-center justify-between py-1 border-b border-gray-50/50 last:border-b-0">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-800 truncate">{s.title}</p>
+                      </div>
+                      <span className="flex-shrink-0 text-xs px-2 py-0.5 rounded font-mono ml-2 bg-blue-100 text-blue-700">
+                        Secondary • Tier 2
+                      </span>
+                      {s.url && (
+                        <a href={s.url} target="_blank" rel="noopener noreferrer"
+                           className="flex-shrink-0 ml-2 text-blue-600 hover:underline text-xs font-medium">
+                          View Secondary Analysis →
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {supporting.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wide">Supporting Sources</h4>
+                <div className="space-y-1.5 pl-3 border-l-2 border-gray-100">
+                  {supporting.map((s) => (
+                    <div key={s.id} className="flex items-center justify-between py-1 border-b border-gray-50/50 last:border-b-0">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-800 truncate">{s.title}</p>
+                      </div>
+                      <span className="flex-shrink-0 text-xs px-2 py-0.5 rounded font-mono ml-2 bg-gray-100 text-gray-600">
+                        Supporting • Tier {s.tier}
+                      </span>
+                      {s.url && (
+                        <a href={s.url} target="_blank" rel="noopener noreferrer"
+                           className="flex-shrink-0 ml-2 text-blue-600 hover:underline text-xs font-medium">
+                          View Source →
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+        );
+      })()}
 
       {/* Related Claims */}
       {relatedClaims.length > 0 && (

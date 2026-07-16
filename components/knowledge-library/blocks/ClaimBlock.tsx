@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import type { BlockComponentProps } from '../core/block-registry';
 import type { ClaimBlockData, EvidenceRef } from '@/types/canonical';
+import { getSource } from '@/lib/knowledge/source-registry';
 
 interface ThreeLayerData {
   documentedFacts?: Array<{ fact: string; sources: string[] }>;
@@ -40,13 +41,18 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
         </div>
         {evidence && evidence.length > 0 && (
           <div className="mt-2 space-y-1">
-            {evidence.map((e: EvidenceRef, i: number) => (
-              <p key={i} className="text-sm text-gray-600 pl-3 border-l-2 border-blue-300">
-                <span className="text-xs uppercase font-medium text-blue-500">{e.relevance}</span>
-                : {e.excerpt}
-                <span className="text-gray-400 ml-1">[Source {e.sourceId.replace('s', '')}]</span>
-              </p>
-            ))}
+            {evidence.map((e: EvidenceRef, i: number) => {
+              const src = getSource(e.sourceId);
+              return (
+                <p key={i} className="text-sm text-gray-600 pl-3 border-l-2 border-blue-300">
+                  <span className="text-xs uppercase font-medium text-blue-500">{e.relevance}</span>
+                  : {e.excerpt}
+                  <span className="text-gray-400 ml-1">
+                    — {src ? src.title : 'Unknown Source'}
+                  </span>
+                </p>
+              );
+            })}
           </div>
         )}
       </div>
@@ -73,7 +79,10 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
                   <p className="text-sm text-gray-800">{f.fact}</p>
                   {f.sources && f.sources.length > 0 && (
                     <p className="text-xs text-gray-400 mt-0.5">
-                      Sources: {f.sources.map(s => s.replace('s', '')).join(', ')}
+                      Sources: {f.sources.map(s => {
+                        const src = getSource(s);
+                        return src ? src.title : 'Unknown Source';
+                      }).join(', ')}
                     </p>
                   )}
                 </div>
@@ -116,16 +125,21 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
           <div className="px-5 py-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Evidence</p>
             <div className="space-y-2">
-              {evidence.map((e: EvidenceRef, i: number) => (
-                <p key={i} className="text-sm text-gray-600 pl-3 border-l-2 border-slate-300">
-                  <span className={`text-xs uppercase font-medium ${
-                    e.relevance === 'direct' ? 'text-blue-500' :
-                    e.relevance === 'supporting' ? 'text-teal-500' : 'text-slate-400'
-                  }`}>{e.relevance}</span>
-                  : {e.excerpt}
-                  <span className="text-gray-400 ml-1">[Source {e.sourceId.replace('s', '')}]</span>
-                </p>
-              ))}
+              {evidence.map((e: EvidenceRef, i: number) => {
+                const src = getSource(e.sourceId);
+                return (
+                  <p key={i} className="text-sm text-gray-600 pl-3 border-l-2 border-slate-300">
+                    <span className={`text-xs uppercase font-medium ${
+                      e.relevance === 'direct' ? 'text-blue-500' :
+                      e.relevance === 'supporting' ? 'text-teal-500' : 'text-slate-400'
+                    }`}>{e.relevance}</span>
+                    : {e.excerpt}
+                    <span className="text-gray-400 ml-1">
+                      — {src ? src.title : 'Unknown Source'}
+                    </span>
+                  </p>
+                );
+              })}
             </div>
           </div>
         )}
