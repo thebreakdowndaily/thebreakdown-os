@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Investigations — The Breakdown',
@@ -15,6 +16,11 @@ export default async function InvestigationsPage() {
   const { data: investigations } = await services.investigations.getInvestigations();
 
   return (
+    <>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Investigations', href: '/investigations' },
+      ]} />
     <Container>
       <div className="py-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Investigations</h1>
@@ -39,5 +45,6 @@ export default async function InvestigationsPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

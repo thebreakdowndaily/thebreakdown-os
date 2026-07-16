@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getStories } from '@/utils/data-layer/store';
 import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Stories — The Breakdown',
@@ -15,6 +16,11 @@ export const revalidate = 60;
 export default function StoriesPage() {
   const { data: stories } = getStories({ pageSize: 50, sort: 'publishedAt', order: 'desc' });
   return (
+    <>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Stories', href: '/stories' },
+      ]} />
     <Container>
       <div className="py-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Stories</h1>
@@ -37,5 +43,6 @@ export default function StoriesPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

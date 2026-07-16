@@ -10,5 +10,7 @@ export default async function VolumeRoute({ params }: { params: Promise<{ collec
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
   const volume = await repo.getVolume('india-and-the-world', collectionSlug, volumeSlug);
   if (!volume) notFound();
-  return <VolumePage volume={volume} collectionSlug={collectionSlug} />;
+  const collection = await repo.getCollection('india-and-the-world', collectionSlug);
+  const collectionTitle = collection?.title || collectionSlug;
+  return <VolumePage volume={volume} collectionSlug={collectionSlug} collectionTitle={collectionTitle} />;
 }

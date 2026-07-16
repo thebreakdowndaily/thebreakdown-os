@@ -3,6 +3,7 @@ import { __TEST__ } from '@/utils/data-layer/types';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getFixes } from '@/utils/data-layer/store';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'The Fix — Solutions That Work — The Breakdown',
@@ -15,6 +16,10 @@ export default function FixLandingPage() {
   console.log(__TEST__);
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'The Fix', href: '/fix' },
+      ]} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">

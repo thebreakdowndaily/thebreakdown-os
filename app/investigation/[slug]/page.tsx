@@ -7,6 +7,7 @@ import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
 import Link from 'next/link';
 import SourcesList from '@/components/story/SourcesList';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -56,6 +57,11 @@ export default async function InvestigationPage({ params }: Props) {
         }}
       />
 
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Investigations', href: '/investigations' },
+        { label: inv.title, href: `/investigation/${inv.slug}` },
+      ]} />
       {/* Hero */}
       <section className="relative bg-gradient-to-b from-[#0A0A0A] via-[#111] to-[#0A0A0A] border-b border-[#2A2A2A]">
         <Container>

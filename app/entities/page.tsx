@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getEntities } from '@/utils/data-layer/store';
 import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Entities — The Breakdown',
@@ -13,6 +14,11 @@ export const metadata: Metadata = {
 export default function EntitiesPage() {
   const { data: entities } = getEntities({ pageSize: 50 });
   return (
+    <>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Intelligence Terminal', href: '/entities' },
+      ]} />
     <Container>
       <div className="py-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Entities</h1>
@@ -31,5 +37,6 @@ export default function EntitiesPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

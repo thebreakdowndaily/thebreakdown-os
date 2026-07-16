@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { KnowledgeGraph } from '@/features/graph/components/KnowledgeGraph';
 import { buildGraphPage } from '@/features/graph/view-model';
 import { getServices } from '@/services/registry';
@@ -44,6 +45,11 @@ export default function GraphExplorerPage() {
         <p style={{ fontSize: 'var(--text-sm)', color: '#EF4444', marginTop: 'var(--spacing-1)' }}>
           Failed to load: {error}
         </p>
+        <p style={{ marginTop: 'var(--spacing-4)' }}>
+          <a href="/" style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}>← Back to Home</a>
+          <span style={{ margin: '0 8px', color: 'var(--color-text-muted)' }}>·</span>
+          <a href="/series" style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}>Browse the Library</a>
+        </p>
       </div>
     );
   }
@@ -67,6 +73,11 @@ export default function GraphExplorerPage() {
             height={700}
           />
         )}
+      </div>
+      <div style={{ marginTop: 'var(--spacing-4)', textAlign: 'center' }}>
+        <a href="/series" style={{ color: 'var(--color-accent)', textDecoration: 'underline', fontSize: 'var(--text-sm)' }}>
+          ← Browse the Knowledge Library
+        </a>
       </div>
     </div>
   );
