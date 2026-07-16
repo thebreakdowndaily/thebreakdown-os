@@ -154,4 +154,88 @@ Institutional trust is now visible before readers engage with content.
 
 ---
 
-*Next sprint: W1-S4 — Homepage Narrative Flow*
+## Sprint W1-S4 — Homepage Narrative Flow
+
+**Status:** Completed
+**Product Review:** Accepted (Score: 10/10)
+
+### Reader Problem
+
+The homepage sections feel like a disconnected list rather than a guided flow. The reader finishes one section and is dropped into the next without understanding why it follows.
+
+**Result:** Solved. The homepage functions as a guided institutional narrative. Sections no longer appear as independent features — they answer the next natural reader question.
+
+### Platform Score
+
+**Before:** 3.3 / 5
+**After:** 3.6 / 5
+
+**Rationale:** The homepage now reads as a coherent orientation experience rather than a collection of features. Every section answers the reader's implicit question before they have to ask.
+
+### Key Improvement
+
+The homepage has become a story — not because storytelling was added, but because every section answers the next reader question.
+
+### Deliverables
+
+- `app/page.tsx` — added two transition labels ("Active Research", "Explore Knowledge") at narrative gaps between sections; updated section comments for sequential numbering
+- `components/home/topics/TrendingTopics.tsx` — "Trending Topics" → "Explore by Topic"
+- `components/home/entities/EntitySpotlight.tsx` — "Entity Spotlight" → "Key Thinkers and Organizations"
+- `components/home/newsletter/Newsletter.tsx` — "Receive the Executive Brief" → "Weekly Briefing"; subtitle from "Just intelligence" to "Research, analysis, and institutional updates"
+- `components/home/dashboard/DataDashboard.tsx` — "Editorial Intelligence" → "Platform Overview"
+
+### Lessons Learned
+
+- Narrative transitions improve reader orientation more effectively than adding new content.
+- Institutional language reinforces product identity more reliably than generic labels.
+- Copy changes are architecture changes in disguise — they reshape the reader's mental model without touching a service layer.
+- The first sprint described as "institutional rather than functional."
+
+### Scope
+
+**Maintained.** No new architecture, services, styling systems, or routes.
+
+### Architecture
+
+**Unchanged.** No architectural drift.
+
+### Remaining Gaps
+
+- Root layout metadata still says "journalism" (deferred, cross-page scope)
+
+---
+
+## Wave 1 Summary
+
+**Objective:** Reader Arrival — answer "what does this institution do?" within 30 seconds.
+
+**Platform Score:** 2.5 → 3.6 (+1.1)
+
+**Completed Sprints:**
+
+| Sprint | Problem | Outcome |
+|--------|---------|---------|
+| W1-S1 | Homepage doesn't explain the institution | Institutional identity established. Hero communicates purpose, value, and action. |
+| W1-S2 | No obvious place to start | Single canonical learning path established. Competing entry points subordinated. |
+| W1-S3 | Trust not visible immediately | Transparency documents surfaced in hero. TrustBar reframed as process signals. |
+| W1-S4 | Homepage feels like disconnected sections | Narrative transitions bridge sections. Copy language shifted from media to institution. |
+
+**Major Outcomes:**
+
+- Homepage is now a guided orientation experience, not a feature listing.
+- One canonical starting path established through Volume I.
+- Institutional trust visible before content engagement.
+- All labels communicate an institution, not a media site.
+
+**Architecture:** Zero changes. All improvements through existing components and copy.
+
+**Remaining Risks:**
+
+- Legacy metadata ("journalism") in root layout — cannot fix without cross-page audit
+- Site-wide navigation still follows functional taxonomy, not reader orientation
+- Story and Library pages remain at ~2.0 maturity — well below homepage standard
+- Two story systems (StoryShell vs `/story/[slug]`) create duplicated maintenance burden
+
+**Recommendation:** Proceed to Wave 2 — Reader Orientation.
+
+---

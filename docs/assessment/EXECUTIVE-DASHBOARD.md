@@ -5,7 +5,7 @@
 
 ---
 
-**Platform Score:** 3.3 / 5
+**Platform Score:** 3.6 / 5
 **Target:** 4.5 / 5
 **Governing Document:** PLATFORM-CONVERGENCE-PROGRAM.md
 
@@ -16,7 +16,15 @@
 1. **"What is this institution?"** — ✅ Resolved (W1-S1). Homepage hero now communicates institutional identity, value proposition, and reader experience in first viewport.
 2. **"Where should I begin?"** — ✅ Resolved (W1-S2). Homepage now provides a single, unmistakable guided entry path through Volume I.
 3. **"How do you know this?"** — ✅ Resolved (W1-S3). Institutional trust is visible before readers engage with content. Transparency documents surfaced in first viewport; TrustBar communicates process, not just statistics.
-4. **"What comes next?"** — Active (W1-S4). Homepage sections feel like a disconnected list rather than a guided flow. Reader finishes one section and is dropped into the next without transitions.
+4. **"What comes next?"** — ✅ Resolved (W1-S4). Homepage sections now form a guided narrative with transition labels explaining why each section exists.
+
+---
+
+## Wave 2 Reader Problems
+
+1. **"Where am I inside this story?"** — Pending. Reader opens a chapter and does not always know their position in the Volume, the section within the chapter, or where they can go next.
+2. **"How does this connect?"** — Pending. Relationships between chapters, thinkers, evidence, and the broader collection are not surfaced during reading.
+3. **"What can I do here?"** — Pending. Reading modes, tools, and navigation actions are not consistently discoverable from within a story.
 
 ---
 
@@ -61,7 +69,9 @@
 
 **Target:** A visitor understands The Breakdown within 30 seconds.
 
-**Progress:** 75% (3 of 4 sprints complete)
+**Progress:** 100% (4 of 4 sprints complete)
+
+**Status:** 🟢 ACCEPTED. Wave 2 authorized.
 
 ### Sprint Status
 
@@ -70,7 +80,15 @@
 | W1-S1 | Homepage doesn't explain the institution | ✅ Complete |
 | W1-S2 | No obvious place to start | ✅ Complete |
 | W1-S3 | Trust is not visible immediately | ✅ Complete |
-| W1-S4 | Homepage feels like disconnected sections | 🟢 Active |
+| W1-S4 | Homepage feels like disconnected sections | ✅ Complete |
+
+---
+
+## Next Wave — Wave 2: Reader Orientation
+
+**Question:** "I started reading. Do I always know where I am, what I'm reading, how it connects to the larger work, and where I can go next?"
+
+**Status:** 🟢 AUTHORIZED. Sprint planning begins.
 
 ---
 
@@ -78,7 +96,7 @@
 
 | Stream | Focus | Current | Target |
 |--------|-------|---------|--------|
-| A — Arrival | Homepage, Identity, Navigation, Trust, Start Here | 3.3 | 4.5 |
+| A — Arrival | Homepage, Identity, Navigation, Trust, Start Here | 3.6 | 4.5 |
 | B — Reading | Story, Visual Spine, Reading Modes, Progress, Learning | 2.0 | 4.5 |
 | C — Verification | Investigation, Evidence, Documents, Counterarguments, Timeline | 1.3 | 4.5 |
 | D — Knowledge | Collections, Volumes, Library, Search, Topics, Thinkers | 1.5 | 4.5 |
@@ -96,3 +114,4 @@
 | Jul 16 | W1-S1 complete — Institutional Identity. Platform score 2.5 → 2.8. W1-S2 active. |
 | Jul 16 | W1-S2 complete — Guided Entry. Platform score 2.8 → 3.0. W1-S3 active. |
 | Jul 16 | W1-S3 complete — Trust in the First Viewport. Platform score 3.0 → 3.3. W1-S4 active. |
+| Jul 16 | W1-S4 complete — Homepage Narrative Flow. Platform score 3.3 → 3.6. Wave 1 accepted (score: 10/10). Wave 2 authorized. |
