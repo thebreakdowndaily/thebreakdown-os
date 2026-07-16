@@ -4,7 +4,7 @@ import { buildHomepage } from '@/features/home/view-model';
 import HomepageLayout from '@/layouts/HomepageLayout';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
-import Hero from '@/components/home/hero/Hero';
+import InstitutionHero from '@/components/home/hero/InstitutionHero';
 import LatestStories from '@/components/home/latest/LatestStories';
 import TrendingTopics from '@/components/home/topics/TrendingTopics';
 import EntitySpotlight from '@/components/home/entities/EntitySpotlight';
@@ -67,7 +67,13 @@ export default async function HomePage() {
 
   return (
     <HomepageLayout seo={vm.seo}>
-      {/* 1. Institution Introduction — via header */}
+      {/* 1. Institution Identity */}
+      <InstitutionHero
+        chaptersPublished={chapters.length}
+        claimsRegistered={totalClaims}
+        primarySources={primarySources}
+        lastVerified={lastVerified}
+      />
       
       {/* 2. Trust Bar */}
       <TrustBar
@@ -83,10 +89,7 @@ export default async function HomePage() {
       {/* 4. Knowledge Collections */}
       {libraries.length > 0 && <CollectionsPreview libraries={libraries} />}
       
-      {/* 5. Latest Research */}
-      {vm.topStory && <Hero story={vm.topStory} />}
-      
-      {/* 6. Knowledge Today */}
+      {/* 5. Knowledge Today */}
       <AnimatedSection as="div" delay={100}>
         <KnowledgeToday metrics={vm.knowledgeToday} />
       </AnimatedSection>

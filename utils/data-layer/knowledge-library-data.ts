@@ -3033,6 +3033,226 @@ const chapter1Blocks: KnowledgeBlock[] = [
   { id: 'b-vis-flow-3', type: 'map', data: { title: 'Total subcontinental migration, 1947-1950', caption: 'Synthesised overview of all major Partition-era flows. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Comprehensive flow map', dataSource: 'Census of India 1941 and 1951', url: '/images/library/chapter-1/flows/flow-subcontinent.svg', provenance: { source: 'Original cartography based on Census of India data' }, disputedBoundaries: true, license: 'Original cartography', status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.refugee-crisis'], archivalProvenance: { cartographicStrategy: 'RECREATE from Census of India data — supplementary to B-04' } } },
 ];
 
+const chapter2Blocks: KnowledgeBlock[] = [
+  // ── Kashmir: Archival Photographs ──
+  {
+    id: 'b-vis-img-k1', type: 'image',
+    data: { title: 'Maharaja Hari Singh in Dover during World War II', caption: 'Maharaja Hari Singh, the last ruling monarch of Jammu and Kashmir, whose decision to accede to India in October 1947 shaped the subcontinent\'s most enduring conflict.', altText: 'Hari Singh in military uniform, 1940s.', url: '/images/library/chapter-2/photos/photo-hari-singh-dover-1940s.jpg', provenance: { creator: 'UK Government', source: 'Wikimedia Commons / UK National Archives', reference: 'Hari Singh Maharaja of Jammu Kashmir in Dover during World War II', date: '1940s' }, license: 'Public Domain (UK Government, pre-1957)', credit: 'UK Government / Wikimedia Commons', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.003'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'UK National Archives → Photographic Collection → World War II', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Hari_Singh_Maharaja_of_Jammu_Kashmir_in_Dover_during_World_War_II.jpg', citationChicago: 'Hari Singh, Maharaja of Jammu and Kashmir. 1940s. Photograph. UK National Archives.' } },
+  },
+  {
+    id: 'b-vis-img-k2', type: 'image',
+    data: { title: 'Sheikh Abdullah and Jawaharlal Nehru at Kashmir University convocation, 24 September 1949', caption: 'Sheikh Abdullah, who became Prime Minister of Jammu and Kashmir after the accession, with Jawaharlal Nehru. Their close relationship shaped India\'s Kashmir policy for two decades.', altText: 'Nehru and Sheikh Abdullah at a formal ceremony, 1949.', url: '/images/library/chapter-2/photos/photo-nehru-abdullah-convocation-1949.jpg', provenance: { creator: 'Photo Division, Government of India', source: 'Wikimedia Commons / Photo Division India', reference: 'Nehru and Sheikh Abdullah at Kashmir University convocation', date: '1949-09-24' }, license: 'Public Domain (Government of India, pre-1966)', credit: 'Photo Division, Government of India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.006'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Photo Division, Ministry of Information and Broadcasting → Kashmir Coverage', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Nehru_and_Sheikh_Abdullah_at_Kashmir_University_convocation.jpg', citationChicago: 'Photo Division. Nehru and Sheikh Abdullah at Kashmir University Convocation. 24 September 1949. Photograph. Government of India.' } },
+  },
+  {
+    id: 'b-vis-img-k3', type: 'image',
+    data: { title: 'Lord Mountbatten meets Nehru, Jinnah and other leaders to plan Partition, 1947', caption: 'The final negotiations that produced the partition framework — a framework that could not accommodate Kashmir\'s unique demography.', altText: 'Group of Indian and British leaders at a conference table, 1947.', url: '/images/library/chapter-2/photos/photo-mountbatten-nehru-jinnah-partition-1947.jpg', provenance: { creator: 'Government of India', source: 'Wikimedia Commons', reference: 'Lord Mountbatten meets Nehru, Jinnah and other Leaders', date: '1947' }, license: 'Public Domain (Government of India, pre-1966)', credit: 'Government of India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.001'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Government of India → Press Information Bureau', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Lord_Mountbatten_meets_Nehru,_Jinnah_and_other_Leaders_to_plan_Partition_of_India.jpg', citationChicago: 'Lord Mountbatten Meeting with Indian Leaders. 1947. Photograph. Government of India.' } },
+  },
+  {
+    id: 'b-vis-img-k4', type: 'image',
+    data: { title: 'Muhammad Ali Jinnah, founder of Pakistan', caption: 'Jinnah, whose vision of Pakistan required Kashmir\'s accession — a Muslim-majority state that bordered the new dominion.', altText: 'Jinnah in formal dress, 1940s.', url: '/images/library/chapter-2/photos/photo-jinnah-portrait-1940s.jpg', provenance: { creator: 'Unknown', source: 'Wikimedia Commons', reference: 'Muhammad Ali Jinnah portrait', date: '1940s' }, license: 'Public Domain (pre-1966 Pakistan/India)', credit: 'Public domain', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.002'], archivalProvenance: { evidenceLevel: 'B', iiifUrl: 'https://commons.wikimedia.org/wiki/Category:Muhammad_Ali_Jinnah', citationChicago: 'Muhammad Ali Jinnah. 1940s. Photograph. Public domain.' } },
+  },
+  {
+    id: 'b-vis-img-k5', type: 'image',
+    data: { title: 'Pashtun tribal fighters bound for Kashmir, 1947', caption: 'Pashtun tribal fighters from the North-West Frontier Province who crossed into Kashmir on 22 October 1947, sparking the first India-Pakistan war.', altText: 'Tribal fighters gathered with weapons, 1947.', url: '/images/library/chapter-2/photos/photo-tribal-fighters-nwfp-1947.jpg', provenance: { creator: 'Lt Frank Leeson', source: 'National Army Museum, London', reference: 'NAM 2006-09-9-88', date: '1947' }, license: 'Research — contact NAM for publication clearance', credit: 'National Army Museum, London', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.002'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'National Army Museum → Photographic Collection → Lt Frank Leeson Album', iiifUrl: 'https://collection.nam.ac.uk/detail.php?acc=2006-09-9-88', citationChicago: 'Leeson, Frank. Pashtun Tribal Fighters. 1947. Photograph. National Army Museum, 2006-09-9-88.' } },
+  },
+  {
+    id: 'b-vis-img-k6', type: 'image',
+    data: { title: 'Indian troops landing at Srinagar airfield, October 1947', caption: 'The Indian Air Force airlift of troops to Srinagar on 27 October 1947 — within 24 hours of the accession — prevented the fall of the Kashmir Valley.', altText: 'Indian soldiers disembarking from aircraft at an airfield.', url: '/images/library/chapter-2/photos/photo-srinagar-airlift-1947.jpg', provenance: { creator: 'Indian Air Force', source: 'Bharat-Rakshak / Indian Army Official Records', reference: 'Kashmir Operations 1947-48', date: '1947-10-27' }, license: 'Public Domain (Government of India)', credit: 'Indian Air Force / Bharat-Rakshak', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.005'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Indian Army → Official History Records → Kashmir Operations', citationChicago: 'Indian Air Force. Troops Landing at Srinagar. 27 October 1947. Photograph. Indian Army Official Records.' } },
+  },
+  {
+    id: 'b-vis-img-k7', type: 'image',
+    data: { title: 'Kashmiri refugees at Mansar, western Kashmir, 1 September 1948', caption: 'The conflict displaced hundreds of thousands of civilians on both sides of the ceasefire line.', altText: 'Group of refugees, 1948.', url: '/images/library/chapter-2/photos/photo-kashmir-refugees-1948.jpg', provenance: { creator: 'UN Photo', source: 'United Nations Photo Archive', reference: 'UN7703348', date: '1948-09-01' }, license: 'Free for news and educational purposes — credit UN Photo', credit: 'UN Photo', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.002'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'United Nations Archives → UN Photo Library → Kashmir (1948)', iiifUrl: 'https://media.un.org/photo/en/asset/oun7/oun7703348', citationChicago: 'United Nations Photo. Kashmir Refugees at Mansar. 1 September 1948. Photograph. UN Photo Library.' } },
+  },
+  {
+    id: 'b-vis-img-k8', type: 'image',
+    data: { title: 'Nehru addressing the UN General Assembly on Kashmir, Paris, November 1948', caption: 'Nehru\'s address to the UN General Assembly defending India\'s position on Kashmir — the decision to internationalise the dispute he later called a mistake.', altText: 'Nehru at a UN podium, 1948.', url: '/images/library/chapter-1/photos/a-07-nehru-unga-1948.jpg', provenance: { creator: 'UN Photo', source: 'UN Photo Archive', reference: 'GA 3rd Session 1948', date: '1948-11' }, license: 'UN Public Domain / Editorial Use', credit: 'UN Photo', status: 'archived', aiGenerated: false, linkedClaims: ['claim.kashmir.007'], archivalProvenance: { evidenceLevel: 'D', archiveHierarchy: 'United Nations Archives → UN Photo Library → General Assembly', iiifUrl: 'https://media.un.org/photo/en/', citationChicago: 'United Nations Photo. Jawaharlal Nehru Addressing the General Assembly. November 1948. Photograph. UN Photo Library.' } },
+  },
+  {
+    id: 'b-vis-img-k9', type: 'image',
+    data: { title: 'UNCIP delegation touring Baramula, 1948', caption: 'The United Nations Commission for India and Pakistan (UNCIP) investigating the situation in Baramula, July 1948.', altText: 'UN officials walking through a damaged town, 1948.', url: '/images/library/chapter-2/photos/photo-uncip-baramula-1948.jpg', provenance: { creator: 'UN Photo', source: 'United Nations Photo Archive', reference: 'Baramula ruins commission', date: '1948-07' }, license: 'Free for news and educational purposes — credit UN Photo', credit: 'UN Photo', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.007'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'United Nations Archives → UN Photo Library → UNCIP Kashmir', iiifUrl: 'https://media.un.org/photo/en/asset/oun7/oun7703343', citationChicago: 'United Nations Photo. UNCIP Delegation in Baramula. July 1948. Photograph. UN Photo Library.' } },
+  },
+  {
+    id: 'b-vis-img-k10', type: 'image',
+    data: { title: 'Nehru shown Zoji La by Lt Col Sukhdev Singh, November 1948', caption: 'Nehru visiting the Zoji La front after Indian forces captured the pass in one of the war\'s most remarkable operations.', altText: 'Nehru with military officers in a snowy mountain pass, 1948.', url: '/images/library/chapter-2/photos/photo-zoji-la-nehru-1948.jpg', provenance: { creator: 'Indian Army', source: 'Indian Army Official Records / WorthView', reference: 'Zoji La operations November 1948', date: '1948-11' }, license: 'Public Domain (Government of India)', credit: 'Indian Army', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.005'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Indian Army → Official History Records → Kashmir Operations', citationChicago: 'Indian Army. Nehru at Zoji La. November 1948. Photograph. Indian Army Official Records.' } },
+  },
+
+  // ── Kashmir: Maps ──
+  {
+    id: 'b-vis-map-k1', type: 'map',
+    data: { title: 'Jammu and Kashmir princely state — geographic and demographic overview, 1947', caption: 'The geography and demography of the princely state of Jammu and Kashmir at Partition. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Reference with demographic overlay', dataSource: 'Census of India 1941; Imperial Gazetteer', url: '/images/library/chapter-2/maps/map-kashmir-overview-1947.svg', provenance: { source: 'Original cartography based on Census 1941 and Imperial Gazetteer' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.001'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE via GIS vector workflows from Census of India 1941 and Imperial Gazetteer data' } },
+  },
+  {
+    id: 'b-vis-map-k2', type: 'map',
+    data: { title: 'Tribal invasion route — October-November 1947', caption: 'The route taken by approximately 5,000-6,000 Pashtun tribal fighters from the North-West Frontier Province into Kashmir. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Military campaign map', dataSource: 'Lamb (1989); Jha (1996); Schofield (2003)', url: '/images/library/chapter-2/maps/map-tribal-invasion-route.svg', provenance: { source: 'Original cartography based on Lamb, Jha, Schofield' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.002'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE via GIS from published scholarly accounts' } },
+  },
+  {
+    id: 'b-vis-map-k3', type: 'map',
+    data: { title: 'Military campaign — key battles of the first Kashmir war, 1947-48', caption: 'The key battles: Shalateng, Zoji La, Poonch, Jhanger, and Uri. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Military campaign map with timeline', dataSource: 'Official History of the Indian Armed Forces; Raghavan (2010)', url: '/images/library/chapter-2/maps/map-kashmir-campaign-1947-48.svg', provenance: { source: 'Original cartography based on Official History and Raghavan' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.005'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from Official History of the Indian Armed Forces' } },
+  },
+  {
+    id: 'b-vis-map-k4', type: 'map',
+    data: { title: 'Ceasefire line, January 1949 — today\'s Line of Control', caption: 'The ceasefire line established by the UN-brokered Karachi Agreement of January 1949, which became the Line of Control after the Simla Agreement 1972. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Reference with historical overlay', dataSource: 'UN Digital Library (UNMOGIP Cartography); UN Map to Karachi Agreement 1949', url: '/images/library/chapter-2/maps/map-ceasefire-line-1949.svg', provenance: { source: 'Original cartography based on UNMOGIP maps and Karachi Agreement' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.009'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from UN Digital Library UNMOGIP Cartography and Karachi Agreement 1949' } },
+  },
+  {
+    id: 'b-vis-map-k5', type: 'map',
+    data: { title: 'Kashmir territorial division after the 1949 ceasefire', caption: 'The territorial outcome of the first war: India holds approximately 65% (including Jammu, Ladakh, and the Kashmir Valley), Pakistan holds 35% (Azad Kashmir and Gilgit-Baltistan).', mapType: 'Reference', dataSource: 'UNCIP Report; UN Commission on India and Pakistan', url: '/images/library/chapter-2/maps/map-territorial-division-1949.svg', provenance: { source: 'Original cartography based on UNCIP Report' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.009'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from UNCIP territorial assessment' } },
+  },
+  {
+    id: 'b-vis-map-k6', type: 'map',
+    data: { title: 'Kashmir within the partition framework — princely states of India, 1947', caption: 'How Kashmir\'s position at the intersection of India and Pakistan made the partition framework unworkable. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Reference', dataSource: 'National Archives of India (Ministry of States files)', url: '/images/library/chapter-2/maps/map-princely-states-kashmir-context.svg', provenance: { source: 'Original cartography based on NAI Ministry of States files' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.001'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from NAI Ministry of States files' } },
+  },
+
+  // ── Kashmir: Document Facsimiles ──
+  {
+    id: 'b-vis-doc-k1', type: 'image',
+    data: { title: 'Instrument of Accession of Jammu and Kashmir, 26 October 1947', caption: 'The Instrument of Accession executed by Maharaja Hari Singh on 26 October 1947. No photograph of the signing exists due to the secrecy and urgency of the midnight ceremony.', altText: 'Facsimile of the Instrument of Accession document.', url: '/images/library/chapter-1/documents/doc-instrument-of-accession.pdf', provenance: { creator: 'J&K State', source: 'National Archives of India', reference: 'J&K Instrument of Accession, Register No. R.R. 271', date: '1947-10-26' }, license: 'Public Record (Government of India)', credit: 'National Archives of India', status: 'archived', aiGenerated: false, linkedClaims: ['claim.kashmir.003'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'National Archives of India → Ministry of States / Home Affairs → Accession Documents', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Instrument_of_Accession_and_Standstill_Agreement_of_Jammu_and_Kashmir_to_Dominion_of_India.pdf', note: 'PHOTOGRAPH of signing does not exist. Document facsimile substituted per archival research. Reused from chapter 1.' } },
+  },
+  {
+    id: 'b-vis-doc-k2', type: 'image',
+    data: { title: 'Standstill Agreement between Jammu and Kashmir and Pakistan, August 1947', caption: 'The Standstill Agreement accepted by Pakistan on 15 August 1947, maintaining existing trade and communication links. India\'s failure to respond to the parallel offer left diplomatic space for Pakistan.', altText: 'Facsimile of the Standstill Agreement.', url: '/images/library/chapter-2/documents/doc-standstill-agreement-1947.pdf', provenance: { creator: 'J&K State', source: 'National Archives of India', reference: 'J&K Standstill Agreement documents', date: '1947-08' }, license: 'Public Record (Government of India)', credit: 'National Archives of India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.003'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'National Archives of India → Ministry of States → Accession Documents', note: 'Bound with the Instrument of Accession in the same PDF file from NAI.' } },
+  },
+  {
+    id: 'b-vis-doc-k3', type: 'image',
+    data: { title: 'UN Security Council Resolution 47, 21 April 1948', caption: 'The Security Council resolution establishing the UN Commission for India and Pakistan (UNCIP) and calling for a ceasefire, demilitarisation, and a plebiscite.', altText: 'United Nations Security Council Resolution 47.', url: '/images/library/chapter-1/documents/doc-unscr-47.pdf', provenance: { creator: 'United Nations Security Council', source: 'UN Digital Library', reference: 'S/RES/47(1948)', date: '1948-04-21' }, license: 'UN Public Domain', credit: 'UN Archives', status: 'archived', aiGenerated: false, linkedClaims: ['claim.kashmir.007', 'claim.kashmir.009'], archivalProvenance: { evidenceLevel: 'A', iiifUrl: 'https://undocs.org/S/RES/47(1948)', citationChicago: 'United Nations Security Council Resolution 47. 21 April 1948. S/RES/47(1948).' } },
+  },
+  {
+    id: 'b-vis-doc-k4', type: 'image',
+    data: { title: 'Nehru-Mountbatten correspondence on Kashmir, October 1947', caption: 'Nehru\'s letter to Mountbatten on 26 October 1947, setting out the strategic case for accepting Kashmir\'s accession.', altText: 'Letter from Nehru to Mountbatten, October 1947.', url: '/images/library/chapter-2/documents/doc-nehru-mountbatten-1947.pdf', provenance: { creator: 'Jawaharlal Nehru', source: 'Nehru Memorial Museum and Library (NMML)', reference: 'Nehru-Mountbatten Correspondence, Vol. I', date: '1947-10-26' }, license: 'Public Record (NMML)', credit: 'Nehru Memorial Museum and Library', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.003'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'Nehru Memorial Museum and Library → Selected Works of Jawaharlal Nehru', citationChicago: 'Nehru, Jawaharlal. Letter to Lord Mountbatten. 26 October 1947. Selected Works, Vol. 4.' } },
+  },
+  {
+    id: 'b-vis-doc-k5', type: 'image',
+    data: { title: 'UNCIP Demilitarisation Resolution, 13 August 1948', caption: 'The UNCIP resolution outlining the three-part process: ceasefire, demilitarisation, and plebiscite.', altText: 'UNCIP resolution document.', url: '/images/library/chapter-2/documents/doc-uncip-resolution-1948.pdf', provenance: { creator: 'United Nations Commission for India and Pakistan', source: 'UN Digital Library', reference: 'UNCIP Resolution 13 August 1948', date: '1948-08-13' }, license: 'UN Public Domain', credit: 'UN Archives', status: 'requested', aiGenerated: false, linkedClaims: ['claim.kashmir.009'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'United Nations Archives → UNCIP Records', iiifUrl: 'https://digitallibrary.un.org/record/111955/', citationChicago: 'UNCIP Resolution. 13 August 1948. United Nations Commission for India and Pakistan.' } },
+  },
+
+  // ── Kashmir: Charts ──
+  {
+    id: 'b-vis-chart-k1', type: 'chart',
+    data: { title: 'Territorial division of Kashmir after the 1949 ceasefire', caption: 'India holds 65% of the former princely state; Pakistan holds 35%. The division has remained substantially unchanged despite four subsequent wars.', chartType: 'pie', dataSource: 'UNCIP Report; UN Commission on India and Pakistan', url: '/images/library/chapter-2/charts/chart-territorial-division.svg', provenance: { source: 'UNCIP Report data' }, status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.009'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — pie chart from UNCIP territorial assessment' } },
+  },
+  {
+    id: 'b-vis-chart-k2', type: 'chart',
+    data: { title: 'Timeline of key events in the first Kashmir war, August 1947 – January 1949', caption: 'The 17-month conflict from Partition to the UN ceasefire.', chartType: 'timeline', dataSource: 'Multiple sources (Raghavan, Schofield, Jha, Lamb)', url: '/images/library/chapter-2/charts/chart-timeline-1947-1949.svg', provenance: { source: 'Synthesis of Raghavan, Schofield, Jha, Lamb' }, status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.002', 'claim.kashmir.005', 'claim.kashmir.009'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — vertical timeline from multiple sources' } },
+  },
+  {
+    id: 'b-vis-chart-k3', type: 'chart',
+    data: { title: 'India-Pakistan military balance, 1947-48', caption: 'Comparative military capabilities at the time of the first Kashmir war.', chartType: 'comparison', dataSource: 'Auchinleck partition committee; Raghavan; Cohen', url: '/images/library/chapter-2/charts/chart-military-balance-1947.svg', provenance: { source: 'Auchinleck partition committee; Raghavan; Cohen' }, status: 'draft', aiGenerated: false, linkedClaims: ['claim.kashmir.005'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — comparative bar chart from published sources' } },
+  },
+];
+
+const chapter3Blocks: KnowledgeBlock[] = [
+  // ── India-China Border: Archival Photographs ──
+  {
+    id: 'b-vis-img-l1', type: 'image',
+    data: { title: 'Sir Henry McMahon — portrait by John Collier, c.1915', caption: 'Sir Henry McMahon, British Foreign Secretary who brokered the Simla Convention (1914) defining the India-Tibet boundary that bears his name.', altText: 'Portrait of Sir Henry McMahon in formal dress.', url: '/images/library/chapter-3/photos/photo-henry-mcmahon-portrait.jpg', provenance: { creator: 'John Collier', source: 'LIFE Photo Archive / Wikimedia Commons', reference: 'Henry McMahon portrait', date: '1915' }, license: 'Public Domain (PD-Art, PD-US)', credit: 'John Collier / Wikimedia Commons', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.002'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'LIFE Photo Archive → Portrait Collection', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Henry_McMahon.jpeg', citationChicago: 'Collier, John. Sir Arthur Henry McMahon. c.1915. Oil on canvas. LIFE Photo Archive.' } },
+  },
+  {
+    id: 'b-vis-img-l2', type: 'image',
+    data: { title: 'Nehru and Zhou Enlai at the UNESCO Buddhist Conference, New Delhi, 1956', caption: 'The era of "Hindi-Chini bhai bhai" — Nehru and Zhou Enlai together during what appeared to be a golden age of India-China friendship.', altText: 'Nehru and Zhou Enlai in conversation, 1956.', url: '/images/library/chapter-3/photos/photo-nehru-zhou-1956.jpg', provenance: { creator: 'Homai Vyarawalla', source: 'Wikimedia Commons', reference: 'Dalai Lama, Nehru and Zhou Enlai in 1956', date: '1956' }, license: 'Public Domain (Government of India, pre-1966)', credit: 'Homai Vyarawalla', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.003'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Photo Division, Government of India → Diplomatic Events 1956', iiifUrl: 'https://commons.wikimedia.org/wiki/File:The_Dalai_Lama,_Nehru_and_Zhou_Enlai_in_1956_in_India.jpg', citationChicago: 'Vyarawalla, Homai. The Dalai Lama, Nehru and Zhou Enlai. 1956. Photograph. Photo Division, Government of India.' } },
+  },
+  {
+    id: 'b-vis-img-l3', type: 'image',
+    data: { title: 'Dalai Lama with P.N. Menon on arrival in India, 18 April 1959', caption: 'The Dalai Lama arriving in India after fleeing Tibet following the failed 1959 uprising — a turning point in India-China relations.', altText: 'Dalai Lama with Indian officials, 1959.', url: '/images/library/chapter-3/photos/photo-dalai-lama-india-1959.jpg', provenance: { creator: 'John Topham / Svenskt Pressfoto', source: 'Wikimedia Commons', reference: 'Dalai-Lama-in-India-with-PN-Menon', date: '1959-04-18' }, license: 'Public Domain (India, pre-1966)', credit: 'John Topham / Svenskt Pressfoto', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.005'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'IMS Vintage Photos → Svenskt Pressfoto Collection', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Dalai-Lama-in-India-with-PN-Menon-391846271914.jpg', citationChicago: 'Topham, John. Dalai Lama in India with P.N. Menon. 18 April 1959. Photograph. Svenskt Pressfoto.' } },
+  },
+  {
+    id: 'b-vis-img-l4', type: 'image',
+    data: { title: 'Indian soldiers on patrol during the 1962 Sino-Indian war', caption: 'Indian troops patrolling in the harsh Himalayan terrain during the 1962 war — a conflict that shattered India\'s strategic assumptions.', altText: 'Indian soldiers with rifles in a snowy mountain landscape, 1962.', url: '/images/library/chapter-3/photos/photo-indian-soldiers-1962.jpg', provenance: { creator: 'Unknown', source: 'Wikimedia Commons', reference: 'Indian soldiers on patrol during the 1962 Sino-Indian border war', date: '1962' }, license: 'Public Domain (pre-1962 publication)', credit: 'Public domain', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.008'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Various press archives', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Indian_soldiers_on_patrol_during_the_1962_Sino-Indian_border_war.jpg', note: 'Date discrepancy on Commons description — verify actual date of publication.' } },
+  },
+  {
+    id: 'b-vis-img-l5', type: 'image',
+    data: { title: 'Chinese troops in Aksai Chin during road construction, 1950s', caption: 'Chinese construction of the Xinjiang-Tibet Highway through Aksai Chin (1954-1957), discovered by Indian patrols in 1958.', altText: 'Chinese soldiers in a desert mountain landscape, 1950s.', url: '/images/library/chapter-3/photos/photo-chinese-aksai-chin-1950s.jpg', provenance: { creator: 'Chinese Government / Xinhua', source: 'Chinese state archives', reference: 'Aksai Chin Road Construction', date: '1950s' }, license: 'Public Domain (Chinese state media, pre-1962)', credit: 'Xinhua / Chinese Government', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.003'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'Chinese Government → Xinhua News Agency Archive', citationChicago: 'Chinese Government. Xinjiang-Tibet Highway Construction. 1950s. Photograph. Xinhua.' } },
+  },
+  {
+    id: 'b-vis-img-l6', type: 'image',
+    data: { title: 'Zhou Enlai at the Bandung Conference, 1955', caption: 'Zhou Enlai at Bandung, where he and Nehru helped shape the Afro-Asian movement — the diplomatic high point before the border dispute tore the relationship apart.', altText: 'Zhou Enlai at a podium, 1955.', url: '/images/library/chapter-3/photos/photo-zhou-bandung-1955.jpg', provenance: { creator: 'UN Photo / AFP', source: 'Getty Images / Wikimedia Commons', reference: 'Bandung Conference 1955', date: '1955-04' }, license: 'Rights Managed (AFP/Getty)', credit: 'AFP/Getty Images', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.003'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'AFP Archive → Bandung Conference 1955', citationChicago: 'Zhou Enlai at Bandung. April 1955. Photograph. AFP.' } },
+  },
+  {
+    id: 'b-vis-img-l7', type: 'image',
+    data: { title: 'Nathu La pass, Sikkim border, c.1938', caption: 'Nathu La, the mountain pass that was the site of the 1967 India-China clashes — the first major border confrontation after the 1962 war.', altText: 'Mountain pass with a figure standing on the crest.', url: '/images/library/chapter-3/photos/photo-nathu-la-1938.jpg', provenance: { creator: 'Shepheard Collection', source: 'Cambridge Museum of Archaeology and Anthropology', reference: 'Archie Jack on top of Nathu La Pass', date: '1938-08-10' }, license: 'Research — contact MAA Cambridge for clearance', credit: 'Cambridge MAA (Shepheard Collection)', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.009'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Cambridge MAA → Shepheard Collection → Tibet Photographs', iiifUrl: 'https://collections.maa.cam.ac.uk/photographs/438106/', citationChicago: 'Shepheard Collection. Archie Jack on Nathu La Pass. 10 August 1938. Photograph. Cambridge MAA.' } },
+  },
+  {
+    id: 'b-vis-img-l8', type: 'image',
+    data: { title: 'Indian Army patrol in Ladakh, 1950s', caption: 'Indian patrols in the high-altitude desert of Ladakh — a region that became the most intractable dimension of the border dispute.', altText: 'Soldiers on horseback in a desert mountain valley.', url: '/images/library/chapter-3/photos/photo-ladakh-patrol-1950s.jpg', provenance: { creator: 'Indian Army', source: 'Indian Army Official Records', reference: 'Ladakh Scouts patrol archive', date: '1950s' }, license: 'Public Domain (Government of India)', credit: 'Indian Army', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.004'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'Indian Army → Ladakh Scouts → Historical Records', citationChicago: 'Indian Army. Patrol in Ladakh. 1950s. Photograph. Indian Army Official Records.' } },
+  },
+  {
+    id: 'b-vis-img-l9', type: 'image',
+    data: { title: 'Indian Express archive — Galwan Valley headlines, 1962 and 2020', caption: 'The Galwan Valley appears in Indian Express archives in both 1962 and 2020 — testimony to the enduring nature of the border dispute.', altText: 'Newspaper headlines about Galwan.', url: '/images/library/chapter-3/photos/photo-galwan-express-archives.jpg', provenance: { creator: 'Indian Express', source: 'Indian Express Archives', reference: 'Galwan Valley coverage 1962 and 2020', date: '1962-2020' }, license: 'Rights Managed (Indian Express)', credit: 'Indian Express', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.011'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Indian Express → Digital Archives', iiifUrl: 'https://indianexpress.com/article/explained/india-china-lac-border-dispute-galwan-valley-clashes-6498462/', citationChicago: 'Indian Express. Galwan Valley Coverage. 1962/2020. Newspaper. Indian Express Archives.' } },
+  },
+  {
+    id: 'b-vis-img-l10', type: 'image',
+    data: { title: 'Nehru\'s letter to Zhou Enlai, 1959', caption: 'The beginning of the Nehru-Zhou correspondence (1959-1962), one of the most remarkable diplomatic exchanges of the twentieth century, laying out irreconcilable positions.', altText: 'Text of a diplomatic letter, 1959.', url: '/images/library/chapter-3/documents/doc-nehru-letter-zhou-1959.pdf', provenance: { creator: 'Jawaharlal Nehru', source: 'Nehru Memorial Museum and Library', reference: 'Selected Works of Jawaharlal Nehru, Vol. 46', date: '1959-11' }, license: 'Public Record (NMML)', credit: 'Nehru Memorial Museum and Library', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.005'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Nehru Memorial Museum and Library → Selected Works of Jawaharlal Nehru', citationChicago: 'Nehru, Jawaharlal. Letter to Zhou Enlai. November 1959. Selected Works, Vol. 46.' } },
+  },
+
+  // ── India-China Border: Maps ──
+  {
+    id: 'b-vis-map-l1', type: 'map',
+    data: { title: 'Three sectors of the India-China border', caption: 'The eastern (McMahon Line), middle, and western (Aksai Chin) sectors — each with its own history and dispute characteristics. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Reference', dataSource: 'Indian MEA; Chinese MOFA; Simla Convention maps', url: '/images/library/chapter-3/maps/map-three-sectors.svg', provenance: { source: 'Original cartography based on MEA/MOFA positions' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.001'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE via GIS from published boundary descriptions' } },
+  },
+  {
+    id: 'b-vis-map-l2', type: 'map',
+    data: { title: 'The McMahon Line, 1914 — Simla Convention boundary', caption: 'The boundary agreed between Britain and Tibet at the 1914 Simla Convention. China rejects the line as a colonial imposition.', mapType: 'Reference with historical overlay', dataSource: 'Simla Convention 1914 maps; Wikimedia Commons', url: '/images/library/chapter-3/maps/map-mcmahon-line-1914.svg', provenance: { source: 'Original cartography based on Simla Convention treaty maps' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.002'], archivalProvenance: { evidenceLevel: 'A', cartographicStrategy: 'RECREATE from Simla Convention treaty maps (PD 1914 documents)' } },
+  },
+  {
+    id: 'b-vis-map-l3', type: 'map',
+    data: { title: 'Aksai Chin and the Xinjiang-Tibet Highway', caption: 'The Chinese-built highway (1954-1957) through the Aksai Chin region, connecting Xinjiang to western Tibet across territory claimed by India.', mapType: 'Reference with infrastructure overlay', dataSource: 'Maxwell (1970); Lamb (2012); Chinese official maps', url: '/images/library/chapter-3/maps/map-aksai-chin-highway.svg', provenance: { source: 'Original cartography based on Maxwell, Lamb, and Chinese maps' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.003'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from published accounts and official maps' } },
+  },
+  {
+    id: 'b-vis-map-l4', type: 'map',
+    data: { title: 'The 1962 war — Chinese offensives and Indian positions', caption: 'Chinese offensives across both the eastern (NEFA) and western (Ladakh) sectors, October-November 1962. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Military campaign map', dataSource: 'Henderson-Brooks Report; Maxwell (1970)', url: '/images/library/chapter-3/maps/map-1962-war-offensives.svg', provenance: { source: 'Original cartography based on Henderson-Brooks and Maxwell' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.007', 'claim.lac.008'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from Henderson-Brooks Report' } },
+  },
+  {
+    id: 'b-vis-map-l5', type: 'map',
+    data: { title: 'Line of Actual Control — current de facto border', caption: 'The LAC as it stands today, approximately 3,488 km from Ladakh to Arunachal Pradesh. The de facto border remains un-demarcated and contested. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Reference', dataSource: 'Indian MEA; CIA Factbook; expert analyses', url: '/images/library/chapter-3/maps/map-line-of-actual-control.svg', provenance: { source: 'Original cartography based on MEA and CIA data' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.009'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from official and expert sources' } },
+  },
+  {
+    id: 'b-vis-map-l6', type: 'map',
+    data: { title: 'Galwan Valley and LAC friction points, 2020', caption: 'The Galwan Valley and surrounding friction points where Indian and Chinese forces clashed in June 2020. Dashed lines indicate disputed boundaries per cartographic policy.', mapType: 'Detail map with incident overlay', dataSource: 'Indian MEA statements; expert reporting (Swami, Singh)', url: '/images/library/chapter-3/maps/map-galwan-friction-points.svg', provenance: { source: 'Original cartography based on MEA and expert reporting' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.011'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from published reporting and satellite imagery analysis' } },
+  },
+  {
+    id: 'b-vis-map-l7', type: 'map',
+    data: { title: 'Tibet as buffer — geopolitical transformation, 1914-1959', caption: 'How the transformation of Tibet from British buffer to Chinese province eliminated the Himalayan strategic depth that had separated India from China.', mapType: 'Geopolitical transformation', dataSource: 'Lamb (2012); Jacob (2025); Maxwell (1970)', url: '/images/library/chapter-3/maps/map-tibet-buffer.svg', provenance: { source: 'Original cartography based on Lamb, Jacob, Maxwell' }, disputedBoundaries: true, license: 'Original cartography', status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.012'], archivalProvenance: { evidenceLevel: 'B', cartographicStrategy: 'RECREATE from published scholarly accounts' } },
+  },
+
+  // ── India-China Border: Document Facsimiles ──
+  {
+    id: 'b-vis-doc-l1', type: 'image',
+    data: { title: 'Simla Convention, 1914 — map with McMahon Line', caption: 'The map attached to the Simla Convention showing the McMahon Line as the India-Tibet boundary. China\'s representative initialled but did not sign.', altText: 'Map of the 1914 Simla Convention showing the McMahon Line.', url: '/images/library/chapter-3/documents/doc-simla-convention-map-1914.pdf', provenance: { creator: 'Simla Convention', source: 'Wikimedia Commons / British Library (IOR/X Maps)', reference: 'Simla Accord Treaty 1914 Map', date: '1914' }, license: 'Public Domain (document of 1914)', credit: 'British Library / Wikimedia Commons', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.002'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'British Library → India Office Records → Simla Convention Maps', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Simla_Accord_Treaty_1914_Map1.jpg', citationChicago: 'Simla Convention. Boundary Between Tibet and India. 1914. Map. British Library, IOR/X Maps.' } },
+  },
+  {
+    id: 'b-vis-doc-l2', type: 'image',
+    data: { title: 'Sino-Indian Agreement on Tibet (Panchsheel Agreement), 29 April 1954', caption: 'The agreement establishing the Five Principles of Peaceful Coexistence and deferring the border question — a strategic choice India would later regret.', altText: 'Title page of the 1954 Agreement.', url: '/images/library/chapter-3/documents/doc-panchsheel-agreement-1954.pdf', provenance: { creator: 'Government of India and People\'s Republic of China', source: 'Ministry of External Affairs, India', reference: 'MEA bilateral documents', date: '1954-04-29' }, license: 'Public Record (Government of India)', credit: 'Ministry of External Affairs, India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.004'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Ministry of External Affairs → Bilateral Documents → China', iiifUrl: 'https://www.mea.gov.in/bilateral-documents.htm?dtl/7807/', citationChicago: 'Sino-Indian Agreement on Tibet. 29 April 1954. Ministry of External Affairs, India.' } },
+  },
+  {
+    id: 'b-vis-doc-l3', type: 'image',
+    data: { title: 'Report of the Officials (1961) — cover and key findings', caption: 'The joint report from the 1960 officials\' talks — a model of clarity that documented irreconcilable positions.', altText: 'Cover page of the 1961 officials\' report.', url: '/images/library/chapter-3/documents/doc-officials-report-1961.pdf', provenance: { creator: 'Government of India and People\'s Republic of China', source: 'Ministry of External Affairs, India', reference: 'Report of the Officials on the Boundary Question', date: '1961' }, license: 'Public Record (Government of India)', credit: 'Ministry of External Affairs, India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.006'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Ministry of External Affairs → Boundary Question → Officials\' Report', citationChicago: 'Report of the Officials of the Governments of India and China on the Boundary Question. 1961. MEA, India.' } },
+  },
+  {
+    id: 'b-vis-doc-l4', type: 'image',
+    data: { title: 'Agreement on Maintenance of Peace and Tranquillity Along the LAC, 1993', caption: 'The first major confidence-building measure after the 1962 war, establishing mechanisms to manage the disputed border.', altText: 'Title page of the 1993 LAC agreement.', url: '/images/library/chapter-3/documents/doc-lac-agreement-1993.pdf', provenance: { creator: 'Government of India and People\'s Republic of China', source: 'Ministry of External Affairs, India', reference: 'MEA bilateral treaties', date: '1993-09-07' }, license: 'Public Record (Government of India)', credit: 'Ministry of External Affairs, India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.009'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Ministry of External Affairs → Bilateral Treaties → China', iiifUrl: 'https://www.mea.gov.in/bilateral-documents.htm', citationChicago: 'Agreement on Peace and Tranquillity Along the LAC. 7 September 1993. MEA, India.' } },
+  },
+  {
+    id: 'b-vis-doc-l5', type: 'image',
+    data: { title: 'Border Defence Cooperation Agreement, 2013', caption: 'The 2013 BDCA — the most recent agreement establishing mechanisms to manage border incidents between India and China.', altText: 'Title page of the 2013 BDCA.', url: '/images/library/chapter-3/documents/doc-bdca-2013.pdf', provenance: { creator: 'Government of India and People\'s Republic of China', source: 'Ministry of External Affairs, India', reference: 'BDCA 2013', date: '2013-10-23' }, license: 'Public Record (Government of India)', credit: 'Ministry of External Affairs, India', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.010'], archivalProvenance: { evidenceLevel: 'A', archiveHierarchy: 'Ministry of External Affairs → Bilateral Treaties → China', citationChicago: 'Border Defence Cooperation Agreement. 23 October 2013. MEA, India.' } },
+  },
+  {
+    id: 'b-vis-doc-l6', type: 'image',
+    data: { title: 'Nehru\'s letter to Zhou Enlai, September 1959', caption: 'Nehru\'s first letter in the historic exchange of 1959-1962, laying out India\'s position on the McMahon Line.', altText: 'Diplomatic letter from Nehru to Zhou, 1959.', url: '/images/library/chapter-3/documents/doc-nehru-letter-zhou-1959-sep.pdf', provenance: { creator: 'Jawaharlal Nehru', source: 'Selected Works of Jawaharlal Nehru / NMML', reference: 'SWJN Vol. 46', date: '1959-09' }, license: 'Public Record (NMML)', credit: 'Nehru Memorial Museum and Library', status: 'requested', aiGenerated: false, linkedClaims: ['claim.lac.005'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Nehru Memorial Museum and Library → Selected Works', citationChicago: 'Nehru, Jawaharlal. Letter to Zhou Enlai. September 1959. Selected Works, Vol. 46.' } },
+  },
+
+  // ── India-China Border: Charts ──
+  {
+    id: 'b-vis-chart-l1', type: 'chart',
+    data: { title: 'Territorial claims comparison — claimed vs controlled', caption: 'India claims ~38,000 sq km held by China (Aksai Chin). China claims ~90,000 sq km held by India (Arunachal Pradesh).', chartType: 'bar', dataSource: 'Indian MEA; Chinese MOFA', url: '/images/library/chapter-3/charts/chart-territorial-claims.svg', provenance: { source: 'Indian MEA and Chinese MOFA official positions' }, status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.001'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — comparative bar chart from official claim figures' } },
+  },
+  {
+    id: 'b-vis-chart-l2', type: 'chart',
+    data: { title: 'Timeline of major India-China border crises, 1914-2024', caption: 'A timeline charting the major crises from the Simla Convention through Galwan, showing the escalation pattern.', chartType: 'timeline', dataSource: 'Multiple sources (Maxwell, Jacob, official documents)', url: '/images/library/chapter-3/charts/chart-border-crises-timeline.svg', provenance: { source: 'Synthesis of Maxwell, Jacob, MEA documents' }, status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.010'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — chronological timeline from multiple sources' } },
+  },
+  {
+    id: 'b-vis-chart-l3', type: 'chart',
+    data: { title: 'Military deployments along the LAC, 1962-2024', caption: 'The dramatic increase in military deployments on both sides, especially after Galwan 2020.', chartType: 'line', dataSource: 'IISS Military Balance; SIPRI; expert estimates', url: '/images/library/chapter-3/charts/chart-military-deployments.svg', provenance: { source: 'IISS Military Balance, SIPRI, expert estimates' }, status: 'draft', aiGenerated: false, linkedClaims: ['claim.lac.011'], archivalProvenance: { evidenceLevel: 'C', chartStrategy: 'RECREATE — line chart from IISS/SIPRI data and expert estimates' } },
+  },
+];
+
 const indiaAndTheWorld: KnowledgeLibrary = {
   id: 'kl-1',
   slug: 'india-and-the-world',
@@ -3263,6 +3483,134 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 { term: 'Neighbourhood Policy', definition: 'A state\'s strategy for managing relationships with adjacent countries, a particular challenge for India given its complex regional geography and rivalries.' },
                 { term: 'Irredentism', definition: 'A political claim to territory based on ethnic or historical ties to a population living across a border, relevant to Pakistan\'s claim on Kashmir and India\'s claim on Junagadh.' },
                 { term: 'Decolonisation', definition: 'The process by which colonies achieved independence from European empires, peaking in the two decades after World War II and profoundly reshaping global politics.' },
+              ],
+              sources,
+              claims: [],
+            },
+            {
+              id: 'kl-ch-2',
+              collectionSlug: 'foundations-1947-1962',
+              volumeSlug: 'the-nehruvian-era',
+              slug: 'kashmir-the-first-test',
+              title: 'Kashmir: The First Test — How the 1947–48 War Established a Conflict That Remains Unresolved',
+              summary: 'The partition framework left princely states to choose their allegiance. Kashmir was the case this framework could not handle — a Muslim-majority state with a Hindu ruler, bordering both India and Pakistan. The tribal invasion of October 1947, the Maharaja\'s accession to India, the military campaign, and the UN ceasefire produced an unresolved division that has caused four wars and an insurgency.',
+              order: 2,
+              difficulty: 2,
+              version: { major: 0, minor: 1, patch: 0, label: 'draft' },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 5300, sourceCount: 20 },
+              readingTime: { explorer: 25, scholar: 60, researcher: 180 },
+              studyTime: { explorer: 40, scholar: 100, researcher: 420 },
+              content: chapter2Blocks,
+              status: 'draft',
+              lastVerifiedAt: '2026-07-15T00:00:00Z',
+              createdAt: '2026-07-15T00:00:00Z',
+              updatedAt: '2026-07-15T00:00:00Z',
+              relatedEntityIds: ['jawaharlal-nehru', 'mahatma-gandhi', 'mohammad-ali-jinnah', 'kashmir', 'partition'],
+              relatedConceptIds: ['con-kashmir', 'con-partition', 'con-UN', 'con-plebiscite', 'con-loc'],
+              relatedSourceIds: ['s1', 's3', 's6', 's9'],
+              prerequisites: ['Partition and Its Legacies', 'Princely States Framework'],
+              learningObjectives: [
+                'Understand how the partition framework created an unworkable situation for Kashmir\'s unique demography',
+                'Analyse the competing positions of Hari Singh, Nehru, Jinnah, and Mountbatten during the accession crisis',
+                'Evaluate the evidence for and against official Pakistani involvement in the tribal invasion',
+                'Explain the strategic significance of the Indian airlift to Srinagar on 27 October 1947',
+                'Assess Nehru\'s decision to refer Kashmir to the UN — why he believed it would help and why he later called it a mistake',
+                'Trace the military campaign and identify the decisive battles (Shalateng, Zoji La)',
+                'Analyse the ceasefire line of January 1949 as the foundation of today\'s Line of Control',
+                'Evaluate the historiographical debate over the Instrument of Accession\'s validity and circumstances',
+                'Explain why the UN-supervised plebiscite never took place',
+                'Connect the first Kashmir war to subsequent conflicts (1965, 1971, 1999) and the current insurgency',
+              ],
+              recommendedNext: ['The Making of the India–China Border', 'Panchsheel and Non-Alignment'],
+              keyQuestions: [
+                { question: 'Could the Kashmir conflict have been avoided at Partition?', answer: 'The partition framework provided no mechanism for states where demographics, ruler preference, and geography conflicted. A joint occupation or independence might have been alternatives, but both were rejected before the invasion.', sources: ['s1', 's3'] },
+                { question: 'Was the tribal invasion entirely spontaneous?', answer: 'The evidence strongly suggests official Pakistani involvement. Lamb, Jha, and UN sources document logistical coordination and Pakistani military personnel accompanying tribal fighters.', sources: ['s3', 's2', 's6'] },
+                { question: 'Was India\'s accession of Kashmir legal?', answer: 'The Instrument of Accession was legal under the Indian Independence Act. The UN accepted India\'s right to request Pakistani withdrawal before any plebiscite. The debate centres on the voluntariness of the Maharaja\'s signature under military pressure.', sources: ['s9', 's3'] },
+                { question: 'Should India have gone to the UN?', answer: 'Nehru expected the UN to condemn Pakistan\'s aggression. Instead, the UN proposed a plebiscite conditioned on Pakistan\'s withdrawal — a condition never met. Most scholars consider it a strategic error.', sources: ['s1', 's6'] },
+                { question: 'Why did the plebiscite never happen?', answer: 'India insisted on Pakistan\'s withdrawal first (never completed). Pakistan insisted on the plebiscite first. India later argued conditions had changed — Pakistan\'s alignment with US military pacts invalidated the original terms.', sources: ['s1', 's5', 's6'] },
+              ],
+              misconceptions: [
+                { misconception: 'The tribal invasion was a spontaneous uprising of Pathan tribesmen acting alone.', correction: 'The invasion was planned and supported by Pakistan\'s political and military leadership.', explanation: 'Lamb and Jha\'s research demonstrates logistical coordination, arms supply, and the presence of Pakistani military personnel with the tribal forces.' },
+                { misconception: 'The Instrument of Accession was signed under duress and is therefore invalid.', correction: 'While signed under extreme military pressure, the accession was legally valid under the Indian Independence Act. The question is political, not strictly legal.', explanation: 'International law does not require accession to be free of pressure. The UN itself accepted India\'s right to administer Kashmir pending a plebiscite.' },
+                { misconception: 'India prevented the plebiscite because it knew it would lose.', correction: 'India\'s position was that Pakistan had not fulfilled the preconditions (withdrawal of forces) that the UN itself had established.', explanation: 'UNSCR 47 required Pakistan\'s withdrawal before the plebiscite. Pakistan never withdrew. India\'s objection was consistent with the UN resolution.' },
+                { misconception: 'The Line of Control is a temporary ceasefire line.', correction: 'The 1949 ceasefire line became the de facto permanent border, formalised as the LoC in the 1972 Simla Agreement.', explanation: 'What began as a temporary ceasefire line has been the border for 75+ years and has survived four wars and an insurgency.' },
+                { misconception: 'Sheikh Abdullah was an Indian puppet.', correction: 'Abdullah had his own vision for Kashmir\'s autonomy and was imprisoned by India for 11 years (1953-1964) when he pursued independence.', explanation: 'Abdullah\'s relationship with India was complex — he chose accession to India but consistently demanded the autonomy guaranteed by Article 370 of the Indian Constitution.' },
+              ],
+              keyTerms: [
+                { term: 'Instrument of Accession', definition: 'The legal document by which Maharaja Hari Singh acceded Jammu and Kashmir to India on 26 October 1947, initially valid only for defence, foreign affairs, and communications.' },
+                { term: 'Standstill Agreement', definition: 'A temporary arrangement maintaining existing administrative relationships between a princely state and a dominion pending final accession negotiations.' },
+                { term: 'Line of Control (LoC)', definition: 'The de facto border in Kashmir established by the 1949 UN ceasefire and formalised by the Simla Agreement of 1972, dividing the former princely state between India and Pakistan.' },
+                { term: 'UNCIP', definition: 'United Nations Commission for India and Pakistan — the UN body established by Security Council Resolution 39 (1948) to mediate the Kashmir dispute.' },
+                { term: 'Plebiscite Front', definition: 'A political movement in Kashmir advocating for a UN-supervised plebiscite on the state\'s accession, active from the 1950s onward.' },
+                { term: 'Azad Kashmir', definition: 'The Pakistan-administered portion of the former princely state of Jammu and Kashmir, established as a self-governing territory in 1947.' },
+                { term: 'Gilgit-Baltistan', definition: 'The northern region of the former J&K princely state that came under Pakistani control in 1947-48 through the local uprising of the Gilgit Scouts.' },
+                { term: 'Operation Bison', definition: 'The Indian military operation (1 November 1948) that captured the Zoji La pass, enabling the relief of Leh and the securing of Ladakh.' },
+                { term: 'Article 370', definition: 'The Indian constitutional provision granting special autonomous status to Jammu and Kashmir, abrogated by the Indian Parliament in August 2019.' },
+                { term: 'First Kashmir War', definition: 'The 1947-48 conflict between India and Pakistan over the princely state of Jammu and Kashmir, ending with the UN-brokered ceasefire of January 1949.' },
+              ],
+              sources,
+              claims: [],
+            },
+            {
+              id: 'kl-ch-3',
+              collectionSlug: 'foundations-1947-1962',
+              volumeSlug: 'the-nehruvian-era',
+              slug: 'india-china-border-lac',
+              title: 'The Cold Peace Along the LAC: Why the India–China Border Remains Unsettled After 75 Years',
+              summary: 'The India-China border dispute is a 75-year-old territorial conflict rooted in the colonial legacy of the McMahon Line (1914), competing maps of Aksai Chin, and the unresolved status of approximately 90,000 square kilometres of territory claimed by both sides. The dispute escalated to a full-scale war in 1962, and has since produced a "cold peace" punctuated by periodic crises.',
+              order: 3,
+              difficulty: 2,
+              version: { major: 0, minor: 1, patch: 0, label: 'draft' },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 6500, sourceCount: 21 },
+              readingTime: { explorer: 30, scholar: 70, researcher: 200 },
+              studyTime: { explorer: 45, scholar: 120, researcher: 480 },
+              content: chapter3Blocks,
+              status: 'draft',
+              lastVerifiedAt: '2026-07-15T00:00:00Z',
+              createdAt: '2026-07-15T00:00:00Z',
+              updatedAt: '2026-07-15T00:00:00Z',
+              relatedEntityIds: ['jawaharlal-nehru', 'china', 'tibet', 'india'],
+              relatedConceptIds: ['con-mcmahon-line', 'con-aksai-chin', 'con-panchsheel', 'con-lac', 'con-cold-peace'],
+              relatedSourceIds: ['s1', 's3', 's6', 's9'],
+              prerequisites: ['Modern Indian History', 'British Empire in Asia'],
+              learningObjectives: [
+                'Explain the origin of the India-China border dispute in the colonial McMahon Line (1914)',
+                'Identify the three sectors of the border and the different dispute status in each',
+                'Describe Nehru\'s policy of "friendship first, border later" and analyse why it failed',
+                'Explain how the 1954 Panchsheel Agreement and China\'s secret Aksai Chin road created a trust deficit',
+                'Analyse competing interpretations of the 1962 war: Maxwell thesis vs Indian official position',
+                'Evaluate why China withdrew after its 1962 victory — strategic restraint, logistical necessity, or both',
+                'Summarise the post-1962 "cold peace" system and the 1993/1996 CBMs',
+                'Identify the pattern of periodic crises (1967, 1987, 2013, 2017) and explain what changed at Galwan 2020',
+                'Articulate three structural reasons the border remains unsettled: territorial, strategic, and historical',
+                'Assess the risk of future conflict and the mechanisms that could prevent or escalate it',
+              ],
+              recommendedNext: ['Non-Alignment and Its Contradictions', 'The 1971 War and the Birth of Bangladesh'],
+              keyQuestions: [
+                { question: 'Why is the India-China border still unsettled after 75 years?', answer: 'Three structural reasons: irreconcilable territorial claims, strategic utility to both sides, and incompatible historical narratives. India sees the McMahon Line as a settled treaty; China sees it as a colonial imposition.', sources: ['s1', 's3'] },
+                { question: 'Could the 1962 war have been avoided?', answer: 'Scholars disagree. Maxwell argues India\'s Forward Policy provoked Chinese retaliation. The Indian official position holds that China planned to attack regardless. The evidence supports both interpretations.', sources: ['s12', 's1'] },
+                { question: 'Why did China withdraw in 1962?', answer: 'Two explanations: strategic (China demonstrated dominance without provoking wider war) and logistical (Chinese supply lines were overstretched). The evidence supports both.', sources: ['s12', 's5'] },
+                { question: 'Has the dispute management system worked?', answer: 'The 1993/1996 CBMs reduced crisis frequency for decades. But Galwan 2020 demonstrated the system\'s limits — the old model of managed conflict is no longer sufficient.', sources: ['s9', 's10'] },
+                { question: 'Will the border ever be settled?', answer: 'A final settlement appears unlikely in the foreseeable future. Both sides\' positions are deeply entrenched, and neither can politically afford the concessions a settlement would require.', sources: ['s1', 's3', 's14'] },
+              ],
+              misconceptions: [
+                { misconception: 'The McMahon Line was a clear, agreed boundary.', correction: 'China never accepted the Simla Convention, and the line itself was drawn onto maps without ground survey.', explanation: 'The McMahon Line was defined by British surveyors following watersheds on maps of a landscape none had visited. China\'s representative initialled but did not sign.' },
+                { misconception: 'India was the victim of unprovoked Chinese aggression in 1962.', correction: 'While China\'s attack was disproportionate, India\'s Forward Policy of establishing military posts in disputed territory was seen by China as a provocation.', explanation: 'Maxwell\'s revisionist account argues the Forward Policy was the proximate cause. The Indian official position disagrees. The evidence supports both narratives partially.' },
+                { misconception: 'The Line of Actual Control is a legally agreed border.', correction: 'The LAC is a de facto line where both armies stopped in 1962, not a legally agreed international boundary.', explanation: 'No legal agreement defines the LAC. It is simply the position where the fighting stopped, tacitly accepted by both sides.' },
+                { misconception: 'Galwan 2020 was an isolated incident.', correction: 'Galwan followed a pattern of periodic escalation that has characterised the border since 1962. It was different because it produced the first fatalities since 1967.', explanation: 'The 2020 clashes were the most serious since 1967 but followed the established cycle: Chinese action, Indian response, standoff, de-escalation.' },
+                { misconception: 'The border dispute is only about territory.', correction: 'The dispute is also about sovereignty, national prestige, historical narrative, and strategic positioning in Asia.', explanation: 'For both countries, the border is a test of national resolve. Concessions would have domestic political costs that outweigh territorial gains.' },
+              ],
+              keyTerms: [
+                { term: 'McMahon Line', definition: 'The boundary between India and Tibet agreed at the 1914 Simla Convention between Britain and Tibet, which China rejects as a colonial imposition.' },
+                { term: 'Line of Actual Control (LAC)', definition: 'The de facto border between India and China established after the 1962 war, not legally agreed but mutually recognised.' },
+                { term: 'Aksai Chin', definition: 'The disputed territory in the western sector (Ladakh), under Chinese control since the 1950s, claimed by India.' },
+                { term: 'Panchsheel Agreement', definition: 'The 1954 Sino-Indian Agreement on Tibet establishing the Five Principles of Peaceful Coexistence.' },
+                { term: 'Forward Policy', definition: 'India\'s 1961-1962 strategy of establishing military posts in disputed territory, which China cited as provocation for the 1962 war.' },
+                { term: 'Galwan Valley', definition: 'The site of the June 2020 clashes where 20 Indian soldiers died — the first fatal border conflict since 1967.' },
+                { term: 'Simla Convention', definition: 'The 1914 agreement between Britain, Tibet, and China that defined the McMahon Line.' },
+                { term: 'Nathu La', definition: 'A mountain pass on the Sikkim border, site of major clashes in 1967.' },
+                { term: 'Doklam', definition: 'A disputed tri-junction area where India, China, and Bhutan meet, site of a 73-day standoff in 2017.' },
+                { term: 'Confidence-Building Measure (CBM)', definition: 'Agreements designed to reduce conflict risk through transparency, communication, and mutual restraint.' },
               ],
               sources,
               claims: [],

@@ -6,7 +6,7 @@ Version: 1.0
 
 Status: Living Document — Editorial Operating Doctrine — Platform Beta
 
-Last Updated: 14 Jul 2026
+Last Updated: 16 Jul 2026
 
 **All architectural documents are frozen.** No further architectural work unless a bug forces it. Every future commit must answer: "Can a reader notice this?"
 
@@ -420,6 +420,18 @@ A feature is complete only if:
 ✓ ADR updated if architecture changed
 ✓ Public APIs unchanged
 ✓ Tests added or updated
+
+---
+
+# Sprint Completion Principle
+
+Every sprint must be independently demonstrable.
+
+If you finish a sprint, you must be able to show someone the website and say:
+
+"This is what changed."
+
+If the change requires explaining internal architecture, registries, or refactoring, then it isn't a completed sprint from the reader's perspective.
 
 ---
 
