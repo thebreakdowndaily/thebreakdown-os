@@ -96,12 +96,12 @@
 
 ### Sprint Plan
 
-| Sprint | Reader Problem |
-|--------|---------------|
-| W2-S1 | What are these things? (taxonomy and vocabulary) |
-| W2-S2 | Where am I? (orientation and navigation) |
-| W2-S3 | What should I focus on? (reading guidance and progressive disclosure) |
-| W2-S4 | How do I discover more? (search, graph, library — experience refinement) |
+| Sprint | Reader Problem | Status |
+|--------|---------------|--------|
+| W2-S1 | What are these things? (taxonomy and vocabulary) | ✅ Complete |
+| W2-S2 | Where am I? (orientation and navigation) | 🟢 Active |
+| W2-S3 | What should I focus on? (reading guidance and progressive disclosure) | ⬜ Pending |
+| W2-S4 | How do I discover more? (search, graph, library — experience refinement) | ⬜ Pending |
 
 ---
 
@@ -129,3 +129,4 @@
 | Jul 16 | W1-S3 complete — Trust in the First Viewport. Platform score 3.0 → 3.3. W1-S4 active. |
 | Jul 16 | W1-S4 complete — Homepage Narrative Flow. Platform score 3.3 → 3.6. Wave 1 accepted (score: 10/10). Wave 2 authorized. |
 | Jul 16 | PB-1 complete — Publication Blockers resolved. Search crash fixed, Graph error handling added, flagship placeholder removed. 3 critical blockers → 0. Publication status: Conditional. |
+| Jul 16 | W2-S1 complete — Canonical Taxonomy. 200+ terms inventoried, 40 canonical concepts, 12 conflicts identified. Taxonomy frozen v1.0. Score unchanged (3.6). W2-S2 active. |
