@@ -17,6 +17,9 @@ export default function GraphExplorerPage() {
     buildGraphPage(getServices()).then((result) => {
       setVm(result);
       setReady(true);
+    }).catch((e) => {
+      console.error('GraphPage build error:', e);
+      setError(e instanceof Error ? e.message : String(e));
     });
   }, []);
 

@@ -228,8 +228,6 @@ const chapter1Blocks: KnowledgeBlock[] = [
       citations: ['s1', 's5', 's16', 's26'],
     },
   },
-  // Visual: the Great Calcutta Killing — the violence that made Partition inevitable
-  { id: 'b-vis-img-3', type: 'image', data: { title: 'Great Calcutta Killing aftermath, August 1946', caption: 'Bodies in the streets of Calcutta after the Great Calcutta Killing of 16-19 August 1946, marking the start of the communal violence spiral.', altText: 'Street scene with casualties after the Great Calcutta Killing.', provenance: { creator: 'Margaret Bourke-White', source: 'LIFE Picture Collection / Getty Images', reference: '50694119', date: '1946-08' }, license: 'Rights Managed (Time Inc. / Getty Images)', credit: 'Margaret Bourke-White — The LIFE Picture Collection/Getty Images', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.direct-action-day', 'claim.partition.violence-civil-society'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Time Inc. Archive → LIFE Picture Collection → Margaret Bourke-White Archive → 1946 India Assignment', iiifUrl: 'https://artsandculture.google.com/asset/aftermath-of-calcutta-riots/1gGRuYlIprChSg', citationChicago: 'Bourke-White, Margaret. Aftermath of Calcutta Riots. August 1946. B/W Negative. LIFE Picture Collection / Getty Images, 50694119.' } } },
   {
     id: 'b-p-empire-8', type: 'paragraph',
     data: {
