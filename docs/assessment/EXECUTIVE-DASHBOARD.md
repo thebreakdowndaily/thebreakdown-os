@@ -8,6 +8,7 @@
 **Platform Score:** 3.6 / 5
 **Target:** 4.5 / 5
 **Governing Document:** PLATFORM-CONVERGENCE-PROGRAM.md
+**Publication Blockers:** 0 Critical
 
 ---
 
@@ -32,19 +33,22 @@
 
 1. **Two story systems** — Legacy `/story/[slug]` bypasses the canonical StoryShell architecture. All layout and rendering logic is duplicated. Every reader-facing improvement must land in two places or leave one path behind.
 2. **No Trust computation engine** — Institutional Trust Score is hardcoded (87/100). Evidence debt is hardcoded ("—"). Trust Dashboard cannot be trusted until scores are computed dynamically from canonical data.
-3. **Search is a prototype** — Keyword-only against a 12-mode Knowledge Explorer spec. Most surfaces lack search integration entirely.
+3. **Search is a prototype** — Keyword-only against a 12-mode Knowledge Explorer spec. Most surfaces lack search integration entirely. (PB-1: critical crash fixed; search now functional)
 
 ---
 
 ## Publication Status
 
-**Not Ready**
+**Conditional — Publication blockers resolved. Experience work remains.**
 
 | Gate | Status |
 |------|--------|
 | Chapter 1 Gold Standard Review | ⬜ In progress |
 | External Peer Review | ⬜ Not started |
 | Founding Publication Package | ⬜ Not assembled |
+| Search (PB-1) | ✅ Functional |
+| Knowledge Graph (PB-1) | ✅ Error handling fixed |
+| Chapter 1 Licensing Placeholder (PB-1) | ✅ Removed from narrative path |
 | Trust Dashboard (live) | 🟡 Hardcoded values |
 | Methodology | ✅ Complete |
 | Editorial Constitution | ✅ Complete |
@@ -88,7 +92,16 @@
 
 **Question:** "I started reading. Do I always know where I am, what I'm reading, how it connects to the larger work, and where I can go next?"
 
-**Status:** 🟢 AUTHORIZED. Sprint planning begins.
+**Status:** 🟢 AUTHORIZED.
+
+### Sprint Plan
+
+| Sprint | Reader Problem |
+|--------|---------------|
+| W2-S1 | What are these things? (taxonomy and vocabulary) |
+| W2-S2 | Where am I? (orientation and navigation) |
+| W2-S3 | What should I focus on? (reading guidance and progressive disclosure) |
+| W2-S4 | How do I discover more? (search, graph, library — experience refinement) |
 
 ---
 
@@ -115,3 +128,4 @@
 | Jul 16 | W1-S2 complete — Guided Entry. Platform score 2.8 → 3.0. W1-S3 active. |
 | Jul 16 | W1-S3 complete — Trust in the First Viewport. Platform score 3.0 → 3.3. W1-S4 active. |
 | Jul 16 | W1-S4 complete — Homepage Narrative Flow. Platform score 3.3 → 3.6. Wave 1 accepted (score: 10/10). Wave 2 authorized. |
+| Jul 16 | PB-1 complete — Publication Blockers resolved. Search crash fixed, Graph error handling added, flagship placeholder removed. 3 critical blockers → 0. Publication status: Conditional. |

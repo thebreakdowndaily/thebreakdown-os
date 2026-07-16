@@ -286,6 +286,23 @@ If unanswered, task rejected.
 
 ---
 
+# Publication Blocker Principle
+
+Any issue that breaks institutional trust for a first-time reader immediately supersedes the planned roadmap until resolved.
+
+Examples:
+- Broken search
+- Broken graph
+- Infinite loading
+- Placeholder in flagship content
+- Broken methodology links
+- Missing evidence
+- Dead navigation
+
+These are not UX bugs. They are institutional failures.
+
+---
+
 # Exit Criteria
 
 The program ends when:
