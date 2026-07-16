@@ -21,19 +21,19 @@ function ReviewSection({ chapter }: { chapter: Chapter }) {
   );
 }
 
-function FeedbackSection() {
+export function FeedbackSection({ className }: { className?: string }) {
   return (
-    <section className="bg-amber-50 rounded-lg p-5 mb-10">
-      <h3 className="text-sm font-semibold text-amber-800 mb-2">Help us improve</h3>
-      <p className="text-sm text-amber-700 mb-3">
+    <section className={`bg-amber-50 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-900/30 rounded-lg p-5 mb-10 ${className || ''}`}>
+      <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-400 mb-2">Help us improve</h3>
+      <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
         Did you find an error? Is something unclear? Do you have a source that challenges an interpretation?
         Your feedback helps this chapter evolve.
       </p>
       <div className="flex flex-wrap gap-2">
-        <a href="/methodology#corrections" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
+        <a href="/methodology#corrections" className="text-xs px-3 py-1.5 rounded bg-amber-200 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 hover:bg-amber-300 dark:hover:bg-amber-900/70 border border-amber-300/30 dark:border-amber-800/40">
           Report a correction
         </a>
-        <a href="/methodology" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
+        <a href="/methodology" className="text-xs px-3 py-1.5 rounded bg-amber-200 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 hover:bg-amber-300 dark:hover:bg-amber-900/70 border border-amber-300/30 dark:border-amber-800/40">
           View methodology
         </a>
       </div>

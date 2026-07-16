@@ -22,6 +22,16 @@ export function StoryHero({
       </Link>
 
       <div className="flex flex-wrap items-center gap-2 mb-4">
+        {(chapter.metadata as any)?.classification && (
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 uppercase tracking-wider">
+            {String((chapter.metadata as any).classification)}
+          </span>
+        )}
+        {!(chapter.metadata as any)?.classification && (chapter.metadata as any)?.type && (
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 uppercase tracking-wider">
+            {String((chapter.metadata as any).type)}
+          </span>
+        )}
         <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
           The Breakdown · Founding Monograph 001
         </span>

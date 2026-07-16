@@ -15,6 +15,8 @@ import KnowledgeCopilotSidebar from '@/components/copilot/KnowledgeCopilotSideba
 import { buildCopilotContext } from '@/features/ai/entity-context';
 import { copilot } from '@/services/ai/copilot';
 
+import { FeedbackSection } from '@/components/rxs/LearningFooter';
+
 interface EntityTerminalProps {
   viewModel: EntityTerminalExtendedViewModel;
 }
@@ -94,6 +96,7 @@ export default function EntityTerminal({ viewModel }: EntityTerminalProps) {
             <TerminalStats viewModel={viewModel} />
             <TerminalDocuments viewModel={viewModel} />
             <TerminalRelatedContent viewModel={viewModel} />
+            <FeedbackSection className="mb-0" />
           </div>
 
           {/* RIGHT COLUMN: Graph, Timeline, Evidence */}

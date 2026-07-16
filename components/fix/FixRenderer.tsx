@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Fix, Stakeholder, ExistingSolution, GlobalExample, FixAction, FixMetric, FixSection } from '@/types/canonical';
 import Link from 'next/link';
+import { FeedbackSection } from '@/components/rxs/LearningFooter';
 
 interface FixRendererProps {
   fix: Fix;
@@ -41,12 +42,16 @@ function FixSectionContent({ section }: { section: FixSection }) {
 function FixHeader({ fix }: { fix: Fix }) {
   return (
     <div className="mb-8">
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
         <span className="bg-emerald-900/60 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-700">
           The Fix
         </span>
         <span className="text-xs text-gray-500">
           Evidence Score: {fix.evidenceScore}/100 · {fix.readingTime} min read
+        </span>
+        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px]">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          Verified {new Date(fix.updatedAt).toLocaleDateString('en-IN')}
         </span>
       </div>
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-100 mb-4 leading-tight">{fix.headline}</h1>
@@ -323,6 +328,7 @@ export default function FixRenderer({ fix }: FixRendererProps) {
       <FixActionList actions={fix.citizenActions} title="What Citizens Can Do" />
       <FixActionList actions={fix.governmentActions} title="What Governments Can Do" />
       <FixMetrics metrics={fix.metricsToTrack} />
+      <FeedbackSection className="mt-8" />
     </div>
   );
 }

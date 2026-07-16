@@ -5,7 +5,7 @@
 
 ---
 
-**Platform Score:** 4.5 / 5
+**Platform Score:** 4.7 / 5
 **Target:** 4.5 / 5
 **Governing Document:** PLATFORM-CONVERGENCE-PROGRAM.md
 **Publication Blockers:** 0 Critical
@@ -106,6 +106,22 @@
 
 ---
 
+## Wave 3 — Trust Enforcement
+
+**Question:** "Why should I believe this page?"
+
+**Status:** 🟢 Active
+
+### Sprint Plan
+
+| Sprint | Reader Problem | Status |
+|--------|---------------|--------|
+| W3-A1 | Trust Audit | ✅ Complete |
+| W3-S1 | Trust Signals | ✅ Complete |
+| W3-S2 | (Next Sprint) | 🟢 Active |
+
+---
+
 ## Work Streams
 
 | Stream | Focus | Current | Target |
@@ -134,3 +150,4 @@
 | Jul 16 | W2-S2B complete — Continue Learning. Platform score 3.8 → 4.0. W2-S3 active. |
 | Jul 16 | W2-S3 complete — Reading Focus. Platform score 4.0 → 4.2. W2-S4 active. |
 | Jul 16 | W2-S4 complete — Knowledge Discovery. Platform score 4.2 → 4.5. Wave 2 complete. |
+| Jul 16 | W3-S1 complete — Trust Signals. Platform score 4.5 → 4.7. Wave 3 active. |

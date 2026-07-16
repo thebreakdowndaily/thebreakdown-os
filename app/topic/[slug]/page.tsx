@@ -17,6 +17,7 @@ import TopicHero from '@/components/topic/TopicHero';
 import TopicStats from '@/components/topic/TopicStats';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { FeedbackSection } from '@/components/rxs/LearningFooter';
 
 function createJsonLd(topic: { name: string; description: string; slug: string }) {
   return [
@@ -216,6 +217,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             </section>
           )}
 
+          <FeedbackSection className="mt-8" />
         </div>
 
         {/* Knowledge Terminal Sidebar */}

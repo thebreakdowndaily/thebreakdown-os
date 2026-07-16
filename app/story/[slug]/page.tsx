@@ -325,6 +325,16 @@ export default async function StoryPage({
             </h1>
             
             <div className="flex items-center gap-4 text-sm text-neutral-400 flex-wrap">
+              {(story as any).metadata?.classification && (
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
+                  {String((story as any).metadata.classification)}
+                </span>
+              )}
+              {!(story as any).metadata?.classification && (story as any).metadata?.type && (
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
+                  {String((story as any).metadata.type)}
+                </span>
+              )}
               <span className="text-emerald-400 font-mono">{story.author}</span>
               <span>•</span>
               <time dateTime={story.publishedAt}>
