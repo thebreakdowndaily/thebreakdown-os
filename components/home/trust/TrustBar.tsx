@@ -7,25 +7,25 @@ interface TrustBarProps {
   lastVerified: string;
 }
 
-export function TrustBar({ chaptersPublished, claimsRegistered, primarySources, lastVerified }: TrustBarProps) {
+export function TrustBar({ lastVerified }: TrustBarProps) {
   return (
     <section className="bg-gray-50 border-y" aria-label="Trust signals">
       <div className="max-w-6xl mx-auto px-4 py-4">
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-600">
           <div className="flex items-center gap-1.5">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true" />
-            <span className="font-semibold text-emerald-700">
-              {chaptersPublished} {chaptersPublished === 1 ? 'Chapter' : 'Chapters'} Published
-            </span>
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
+            <span className="font-semibold text-emerald-700">Editorially Reviewed</span>
           </div>
           <span className="text-gray-300" aria-hidden="true">·</span>
-          <span>{claimsRegistered} Claims Registered</span>
+          <span>Evidence-based Research</span>
           <span className="text-gray-300" aria-hidden="true">·</span>
-          <span>{primarySources} Primary Sources Cited</span>
+          <span>Transparent Methodology</span>
           <span className="text-gray-300" aria-hidden="true">·</span>
-          <span>Last verified: {lastVerified}</span>
-          <Link href="/trust" className="text-blue-600 hover:underline ml-1">
-            Trust Dashboard ↗
+          <span>Corrections on Record</span>
+          <span className="text-gray-300" aria-hidden="true">·</span>
+          <span>Last Review: {lastVerified}</span>
+          <Link href="/trust" className="text-blue-600 hover:underline ml-1 font-medium">
+            Trust ↗
           </Link>
         </div>
       </div>

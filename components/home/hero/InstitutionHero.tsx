@@ -80,6 +80,15 @@ export default function InstitutionHero({
               How We Work
             </Link>
           </div>
+
+          <div className="mt-10 pt-8 border-t border-neutral-800">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-neutral-500">
+              <Link href="/methodology" className="hover:text-emerald-400 transition-colors">Methodology</Link>
+              <Link href="/editorial-constitution" className="hover:text-emerald-400 transition-colors">Editorial Constitution</Link>
+              <Link href="/methodology#corrections" className="hover:text-emerald-400 transition-colors">Corrections Policy</Link>
+              <Link href="/trust" className="hover:text-emerald-400 transition-colors">Trust Dashboard</Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
