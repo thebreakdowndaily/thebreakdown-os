@@ -108,4 +108,50 @@ Hierarchy is more important than adding content. Reducing competing entry points
 
 ---
 
-*Next sprint: W1-S3 — Trust in the First Viewport*
+## Sprint W1-S3 — Trust in the First Viewport
+
+**Status:** Completed
+**Product Review:** Accepted
+
+### Reader Problem
+
+A visitor understands what The Breakdown is and where to begin, but does not know why they should trust it.
+
+**Result:** Solved. Institutional trust is now visible before readers engage with content.
+
+### Platform Score
+
+**Before:** 3.0 / 5
+**After:** 3.3 / 5
+
+**Rationale:** Readers can now identify at least three institutional trust signals without scrolling — transparency documents in the hero, process-focused TrustBar, and evidence metrics — all using existing infrastructure.
+
+### Key Improvement
+
+Institutional trust is now visible before readers engage with content.
+
+### Deliverables
+
+- `components/home/hero/InstitutionHero.tsx` — added trust-document link row (Methodology, Editorial Constitution, Corrections Policy, Trust Dashboard) below CTAs. Each answers: Where can I inspect your process?
+- `components/home/trust/TrustBar.tsx` — reframed from generic statistics to process signals: Editorially Reviewed · Evidence-based Research · Transparent Methodology · Corrections on Record · Last Review. Each answers: Who reviewed it? How is this verified? Where to inspect? What happens when wrong? How current?
+
+### Lessons Learned
+
+- Readers trust transparent editorial processes more than generic trust claims.
+- Separating evidence metrics (hero) from governance commitments (TrustBar) creates a clearer mental model of institutional credibility.
+
+### Scope
+
+**Maintained.** No new architecture, services, styling systems, or routes.
+
+### Architecture
+
+**Unchanged.** No architectural drift.
+
+### Remaining Gaps
+
+- Root layout metadata still says "journalism" (deferred, cross-page scope)
+
+---
+
+*Next sprint: W1-S4 — Homepage Narrative Flow*
