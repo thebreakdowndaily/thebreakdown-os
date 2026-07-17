@@ -3,6 +3,7 @@ interface CardProps {
   className?: string;
   hover?: boolean;
   variant?: 'neutral' | 'gold' | 'green' | 'none';
+  accent?: 'neutral' | 'gold' | 'green' | 'none';
   as?: 'article' | 'div';
 }
 
@@ -31,9 +32,11 @@ export default function Card({
   children,
   className = '',
   hover = true,
-  variant = 'neutral',
+  variant: propVariant,
+  accent,
   as: Tag = 'article',
 }: CardProps) {
+  const variant = propVariant || accent || 'neutral';
   const baseClasses = 'rounded-2xl transition-all duration-300';
   const variantBg = variantBackgrounds[variant];
   const variantBorder = variantBorders[variant];

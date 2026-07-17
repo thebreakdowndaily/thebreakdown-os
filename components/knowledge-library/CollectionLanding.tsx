@@ -38,8 +38,8 @@ export function CollectionLanding({ collection }: { collection: KnowledgeCollect
             Trust {trust.score}/100 ({trust.grade})
           </span>
           <div className="flex gap-3 text-xs mt-2">
-            <a href="/methodology" className="text-blue-600 hover:underline">Methodology</a>
-            <a href="/editorial-constitution" className="text-blue-600 hover:underline">Editorial Constitution</a>
+            <Link href="/methodology" className="text-blue-600 hover:underline">Methodology</Link>
+            <Link href="/editorial-constitution" className="text-blue-600 hover:underline">Editorial Constitution</Link>
           </div>
         </div>
       </div>
@@ -56,16 +56,16 @@ export function CollectionLanding({ collection }: { collection: KnowledgeCollect
         {collection.volumes.map((v) => (
           <Link
             key={v.id}
-            href={`/series/${collection.librarySlug}/volume/${v.slug}`}
+            href={`/series/${collection.slug}/volume/${v.slug}`}
             className="block border rounded-lg p-6 hover:border-blue-500 transition-colors"
           >
             <h2 className="text-xl font-semibold mb-1">{v.title}</h2>
             {v.subtitle && <p className="text-gray-500 mb-2">{v.subtitle}</p>}
             <p className="text-gray-700 mb-3">{v.summary}</p>
             <div className="flex gap-4 text-sm text-gray-400">
-              <span>{v.chapters.length} {v.chapters.length === 1 ? 'chapter' : 'chapters'}</span>
-              <span>{v.chapters.filter(ch => ch.status === 'verified').length} verified</span>
-              <span>{v.dateRange.start}–{v.dateRange.end || 'Present'}</span>
+               <span>{v.chapters.length} {v.chapters.length === 1 ? 'chapter' : 'chapters'}</span>
+               <span>{v.chapters.filter(ch => ch.status === 'verified').length} verified</span>
+               <span>{v.dateRange.start}–{v.dateRange.end || 'Present'}</span>
             </div>
           </Link>
         ))}

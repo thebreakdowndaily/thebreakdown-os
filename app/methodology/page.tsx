@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Container from '@/components/layout/Container';
 
 export const metadata: Metadata = {
@@ -104,9 +105,9 @@ export default function MethodologyPage() {
         </div>
 
         <div className="border-t border-gray-800 pt-6 mt-8 flex gap-4 text-sm">
-          <a href="/editorial-constitution" className="text-amber-400 hover:underline">Editorial Constitution</a>
-          <a href="/trust" className="text-amber-400 hover:underline">Trust Dashboard</a>
-          <a href="/founding-edition" className="text-amber-400 hover:underline">Founding Edition</a>
+          <Link href="/editorial-constitution" className="text-amber-400 hover:underline">Editorial Constitution</Link>
+          <Link href="/trust" className="text-amber-400 hover:underline">Trust Dashboard</Link>
+          <Link href="/founding-edition" className="text-amber-400 hover:underline">Founding Edition</Link>
         </div>
       </div>
     </Container>

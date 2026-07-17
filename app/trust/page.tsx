@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Container from '@/components/layout/Container';
 
 export const metadata: Metadata = {
@@ -166,9 +167,9 @@ export default function TrustPage() {
         <div className="border-t border-gray-800 pt-6 mt-8">
           <p className="text-gray-500 text-xs mb-3">This dashboard is updated automatically from the canonical data layer. All values reflect the current state of the editorial infrastructure. Individual chapter-level transparency metadata is available within each chapter.</p>
           <div className="flex gap-4 text-sm">
-            <a href="/methodology" className="text-amber-400 hover:underline">Methodology</a>
-            <a href="/editorial-constitution" className="text-amber-400 hover:underline">Editorial Constitution</a>
-            <a href="/founding-edition" className="text-amber-400 hover:underline">Founding Edition</a>
+            <Link href="/methodology" className="text-amber-400 hover:underline">Methodology</Link>
+            <Link href="/editorial-constitution" className="text-amber-400 hover:underline">Editorial Constitution</Link>
+            <Link href="/founding-edition" className="text-amber-400 hover:underline">Founding Edition</Link>
           </div>
         </div>
       </div>

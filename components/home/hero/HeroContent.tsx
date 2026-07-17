@@ -29,7 +29,7 @@ export default function HeroContent({
         <span className="text-xs text-[#A1A1AA] font-medium uppercase tracking-wider">{category}</span>
       </div>
 
-      <Heading level="display" as="h1">
+      <Heading level="h0" as="h1">
         {headline}
       </Heading>
 

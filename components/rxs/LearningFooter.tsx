@@ -30,12 +30,12 @@ export function FeedbackSection({ className }: { className?: string }) {
         Your feedback helps this chapter evolve.
       </p>
       <div className="flex flex-wrap gap-2">
-        <a href="/methodology#corrections" className="text-xs px-3 py-1.5 rounded bg-amber-200 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 hover:bg-amber-300 dark:hover:bg-amber-900/70 border border-amber-300/30 dark:border-amber-800/40">
+        <Link href="/methodology#corrections" className="text-xs px-3 py-1.5 rounded bg-amber-200 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 hover:bg-amber-300 dark:hover:bg-amber-900/70 border border-amber-300/30 dark:border-amber-800/40">
           Report a correction
-        </a>
-        <a href="/methodology" className="text-xs px-3 py-1.5 rounded bg-amber-200 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 hover:bg-amber-300 dark:hover:bg-amber-900/70 border border-amber-300/30 dark:border-amber-800/40">
+        </Link>
+        <Link href="/methodology" className="text-xs px-3 py-1.5 rounded bg-amber-200 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 hover:bg-amber-300 dark:hover:bg-amber-900/70 border border-amber-300/30 dark:border-amber-800/40">
           View methodology
-        </a>
+        </Link>
       </div>
     </section>
   );

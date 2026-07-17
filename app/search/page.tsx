@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildSearchPage } from '@/features/search/view-model';
 import type { SearchIndexEntry } from '@/types/canonical';
@@ -43,38 +45,35 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
   const library = await repo.getLibrary('india-and-the-world');
   
-  const matchingCollections = [];
-  const matchingChapters = [];
-  
-  if (query.trim() && library) {
-    const q = query.toLowerCase();
-    for (const c of library.collections) {
-      if (c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)) {
-        matchingCollections.push(c);
-      }
-      for (const v of c.volumes) {
-        for (const ch of v.chapters) {
-          if (ch.title.toLowerCase().includes(q) || ch.summary.toLowerCase().includes(q)) {
-            matchingChapters.push({
-              slug: ch.slug,
-              title: ch.title,
-              summary: ch.summary,
-              collectionSlug: c.slug,
-              volumeSlug: v.slug
-            });
-          }
-        }
-      }
-    }
-  }
+  const matchingCollections = library ? library.collections.filter(
+    (c) =>
+      c.title.toLowerCase().includes(query.toLowerCase()) ||
+      c.summary.toLowerCase().includes(query.toLowerCase())
+  ) : [];
+
+  const matchingChapters = library ? library.collections.flatMap((c) =>
+    c.volumes.flatMap((v) =>
+      v.chapters.filter(
+        (ch) =>
+          ch.title.toLowerCase().includes(query.toLowerCase()) ||
+          ch.summary.toLowerCase().includes(query.toLowerCase())
+      ).map((ch) => ({
+        ...ch,
+        collectionSlug: c.slug,
+        volumeSlug: v.slug,
+      }))
+    )
+  ) : [];
+
+  const hasResults = total > 0 || matchingCollections.length > 0 || matchingChapters.length > 0;
 
   return (
-    <SearchLayout seo={seo} query={query}>
-      <div className="max-w-5xl mx-auto space-y-12 pb-24">
+    <SearchLayout query={query} seo={seo}>
+      <div className="space-y-8">
         
         {/* Search Header Info */}
         <p className="text-sm text-neutral-400">
-          {total > 0 || matchingCollections.length > 0 || matchingChapters.length > 0 
+          {hasResults 
             ? `Found search matches for "${query}"` 
             : query ? `No results found for "${query}"` : 'Enter a search term'}
         </p>
@@ -89,24 +88,40 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </h2>
             <div className="flex flex-col sm:flex-row gap-6">
               {spotlight.type === 'Entity' && spotlight.data.image && (
-                <img src={spotlight.data.image} alt={spotlight.data.name} className="w-24 h-24 rounded-full object-cover border-2 border-neutral-800" />
+                <div className="relative w-24 h-24 flex-shrink-0">
+                  <Image
+                    src={spotlight.data.image}
+                    alt={spotlight.data.name}
+                    width={96}
+                    height={96}
+                    className="rounded-full object-cover border-2 border-neutral-800"
+                  />
+                </div>
               )}
               {spotlight.type === 'Topic' && spotlight.data.image && (
-                <img src={spotlight.data.image} alt={spotlight.data.name} className="w-32 h-24 rounded-lg object-cover border border-neutral-800" />
+                <div className="relative w-32 h-24 flex-shrink-0">
+                  <Image
+                    src={spotlight.data.image}
+                    alt={spotlight.data.name}
+                    width={128}
+                    height={96}
+                    className="rounded-lg object-cover border border-neutral-800"
+                  />
+                </div>
               )}
               <div>
                 <h3 className="text-3xl font-black text-white mb-2">
-                  <a href={`/${spotlight.type.toLowerCase()}/${spotlight.data.slug}`} className="hover:underline">
+                  <Link href={`/${spotlight.type.toLowerCase()}/${spotlight.data.slug}`} className="hover:underline">
                     {spotlight.data.name}
-                  </a>
+                  </Link>
                 </h3>
                 <p className="text-neutral-300 leading-relaxed max-w-2xl">
                   {spotlight.data.description}
                 </p>
                 <div className="mt-4 flex gap-3">
-                  <a href={`/${spotlight.type.toLowerCase()}/${spotlight.data.slug}`} className="inline-flex items-center gap-1 text-sm font-medium bg-white text-black px-4 py-2 rounded-lg hover:bg-neutral-200 transition-colors">
+                  <Link href={`/${spotlight.type.toLowerCase()}/${spotlight.data.slug}`} className="inline-flex items-center gap-1 text-sm font-medium bg-white text-black px-4 py-2 rounded-lg hover:bg-neutral-200 transition-colors">
                     Open Terminal
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -139,12 +154,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Topics</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {grouped.topics.map((t: any) => (
-                    <a key={t.id} href={`/topic/${t.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                    <Link key={t.id} href={`/topic/${t.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
                       <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
                         <h4 className="font-bold text-white mb-1">{t.title}</h4>
                         <p className="text-sm text-neutral-400 line-clamp-2">{t.description}</p>
                       </Card>
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </section>
@@ -175,12 +190,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Matching Collections</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {matchingCollections.map((c) => (
-                <a key={c.slug} href={`/series/${c.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                <Link key={c.slug} href={`/series/${c.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
                   <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
                     <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
                     <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
                   </Card>
-                </a>
+                </Link>
               ))}
             </div>
           </section>
@@ -192,15 +207,34 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Matching Chapters</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {matchingChapters.map((ch) => (
-                <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                <Link key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
                   <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
                     <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
                     <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
                   </Card>
-                </a>
+                </Link>
               ))}
             </div>
           </section>
+        )}
+
+        {/* Empty Search States */}
+        {query && !hasResults && (
+          <div className="py-12 px-4 text-center border border-neutral-800 rounded-2xl bg-neutral-900/30">
+            <p className="text-lg font-serif text-neutral-300">No results found for &quot;{query}&quot;</p>
+            <p className="text-xs text-neutral-500 mt-2 max-w-md mx-auto">
+              Try searching for broader topics, specific historical figures, or check spelling.
+            </p>
+          </div>
+        )}
+
+        {!query && (
+          <div className="py-12 px-4 text-center border border-neutral-800 rounded-2xl bg-neutral-900/30">
+            <p className="text-lg font-serif text-neutral-300">Search The Breakdown Registry</p>
+            <p className="text-xs text-neutral-500 mt-2 max-w-md mx-auto">
+              Enter a search query to browse related collections, chapters, claims, or entities.
+            </p>
+          </div>
         )}
 
         {/* Suggestions */}
@@ -209,9 +243,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <h3 className="text-sm font-bold text-neutral-500 mb-4 uppercase tracking-widest">Knowledge Graph Suggestions</h3>
             <div className="flex flex-wrap gap-2">
               {[...suggestions.relatedSearches, ...suggestions.relatedEntities, ...suggestions.relatedTopics].map((sug, i) => (
-                <a key={i} href={`/search?q=${encodeURIComponent(sug)}`} className="px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-sm text-neutral-300 hover:bg-neutral-800 transition-colors">
+                <Link key={i} href={`/search?q=${encodeURIComponent(sug)}`} className="px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-sm text-neutral-300 hover:bg-neutral-800 transition-colors">
                   {sug}
-                </a>
+                </Link>
               ))}
             </div>
           </section>

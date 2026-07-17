@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildDatasetPage } from '@/features/dataset/view-model';
 import { DatasetViewTabs } from '@/components/dataset/DatasetViewTabs';
@@ -37,10 +38,10 @@ export default async function DatasetPage({ params }: { params: Promise<{ slug: 
               <SectionHeader eyebrow="Coverage" title="Related Stories" description={`${relatedStories.length} stories referencing this dataset`} />
               <div className="grid gap-3">
                 {relatedStories.map(story => (
-                  <a key={story.id} href={`/story/${story.slug}`} className="block p-4 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-[#D4A843] transition-colors">
+                  <Link key={story.id} href={`/story/${story.slug}`} className="block p-4 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-[#D4A843] transition-colors">
                     <h3 className="text-sm font-medium text-[#F5F5F5]">{story.title}</h3>
                     <p className="text-xs text-[#A1A1AA] mt-1">{story.summary.slice(0, 120)}...</p>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildTopicPage } from '@/features/topic/view-model';
 import Container from '@/components/ui/Container';
@@ -188,17 +189,17 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             <section className="space-y-6">
               <h2 className="text-2xl font-bold border-b border-neutral-800 pb-2">Continue Exploring</h2>
               <div className="space-y-6">
-                {relatedCollections.length > 0 && (
+                 {relatedCollections.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">In This Collection</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {relatedCollections.map((c) => (
-                        <a key={c.slug} href={`/series/${c.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                        <Link key={c.slug} href={`/series/${c.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
                           <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-neutral-900" hover={true} accent="green">
                             <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
                             <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
                           </Card>
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -208,12 +209,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                     <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">Related Chapters</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {relatedChapters.map((ch) => (
-                        <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                        <Link key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
                           <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-neutral-900" hover={true} accent="green">
                             <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
                             <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
                           </Card>
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -259,9 +260,9 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                 <div className="space-y-3">
                   {rankedEntities.slice(0, 5).map((re, i) => (
                     <div key={i} className="flex items-center justify-between">
-                      <a href={`/entity/${re.entity.slug}`} className="text-sm font-medium text-emerald-400 hover:underline">
+                      <Link href={`/entity/${re.entity.slug}`} className="text-sm font-medium text-emerald-400 hover:underline">
                         {re.entity.name}
-                      </a>
+                      </Link>
                       <span className="text-xs text-neutral-500 border border-neutral-700 px-2 py-0.5 rounded">
                         {re.importance}
                       </span>

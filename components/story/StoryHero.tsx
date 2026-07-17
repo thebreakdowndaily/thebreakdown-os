@@ -28,7 +28,7 @@ export default function StoryHero({
           <Badge variant="category">{category}</Badge>
         </div>
 
-        <Heading level="display" as="h1" className="mb-4">
+        <Heading level="h0" as="h1" className="mb-4">
           {headline}
         </Heading>
 
