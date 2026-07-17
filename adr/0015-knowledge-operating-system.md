@@ -39,7 +39,7 @@ The current implementation of "The Fix" pages behaves as standard long-form vert
 | BUILD-TIME RESPONSIBILITIES                                                             |
 | - Ingestion (KComp compiler parsing markdown)                                            |
 | - Manifest Generation & Schema Validation                                               |
-| - Entity Extraction (laws, datasets, people)                                            |
+| - Entity Extraction (linking laws, datasets, and people)                                            |
 | - Knowledge Graph assembly & Search Indexing updates                                    |
 +-----------------------------------------------------------------------------------------+
 | RUNTIME RESPONSIBILITIES                                                                |
@@ -53,7 +53,33 @@ The current implementation of "The Fix" pages behaves as standard long-form vert
 
 ---
 
-## 4. Platform Specifications & Contracts
+## 4. Repository & Dependency Rules
+
+### A. Repository Directory Structure
+KOS components are separated into clean workspaces:
+```
+/packages
+    ├── compiler/    - Ingestion parser and manifest generator (KComp)
+    ├── graph/       - Semantic relations and node link storage
+    ├── engine/      - Runtime journey handlers and policy validation
+    ├── evidence/    - Provenance and citation confidence calculators
+    ├── kxe/         - Experience orchestration and controllers
+    ├── plugins/     - Reusable capabilities (Timeline, Simulator)
+    └── analytics/   - Analytics Bus and telemetry providers
+/apps
+    └── website/     - Next.js 15 site runner
+/content             - Structured Markdown files (Fix, Stories)
+```
+
+### B. Strict Direct Dependency Path
+To prevent circular loops, dependencies follow a strict one-way path. Reverse imports are prohibited:
+```
+KComp ➔ Graph ➔ Engine ➔ KXE ➔ Plugins
+```
+
+---
+
+## 5. Platform Specifications & Contracts
 
 ### A. Versioned Manifest Schema
 ```typescript
@@ -108,13 +134,13 @@ export interface KXEPlugin {
 
 ### D. Security & Trust Requirements
 - **Traceability:** Every claim card must link to a valid source in the Evidence Engine.
-- **Explainability:** Recommended nodes must display the recommendation reasoning.
+- **Explainability Standard:** Every recommendation, simulation, or score displayed must explain its path (e.g., *"Why am I seeing this? ➔ Graph relationship ➔ Related budget tag"*).
 - **Historical Access:** Deprecated source versions must remain accessible for citation integrity audits.
 - **Read-Only Engine:** KXE plugins are prohibited from modifying evidence status or database schemas.
 
 ---
 
-## 5. Lifecycles & Analytics
+## 6. Lifecycles & Analytics
 
 ### A. Plugin Lifecycle
 ```
@@ -138,7 +164,21 @@ Events published to the Analytics Bus use a versioned, controlled vocabulary:
 
 ---
 
-## 6. Pilot Validation Path & Success Metrics
+## 7. Quality & Testing Strategy by Layer
+
+| Layer | Primary Test Standard |
+| :--- | :--- |
+| **KComp Compiler** | Ingestion snapshot tests & syntax parsing checks. |
+| **Manifest Validator** | Structural JSON-schema contract validations. |
+| **Knowledge Graph** | Edge integrity checks and circular-reference validations. |
+| **Knowledge Engine** | Journey stage resolution and routing simulation. |
+| **Policy Layer** | Rule evaluation tests (e.g. verify simulator hides on incomplete inputs). |
+| **KXE Subsystem** | UI interaction tests, focus management, and accessibility checks. |
+| **Plugins** | Plugin contract verification and rendering fallbacks. |
+
+---
+
+## 8. Pilot Validation Path & Success Metrics
 Before platform-wide rollout, we implement a vertical slice on `fix-mgnrega-reform` to validate:
 - **Journey Completion Rate:** Target > 65% of sessions traversing at least 3 stages.
 - **Evidence Audited Rate:** Target > 20% of readers opening confidence parameters.
