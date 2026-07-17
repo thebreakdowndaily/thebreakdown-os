@@ -5,7 +5,7 @@
 
 ---
 
-**Platform Score:** 5.0 / 5
+**Platform Score:** 5.1 / 5
 **Target:** 4.5 / 5
 **Governing Document:** PLATFORM-CONVERGENCE-PROGRAM.md
 **Publication Blockers:** 0 Critical
@@ -123,6 +123,22 @@
 
 ---
 
+## Wave 4 — Institutional Polish
+
+**Question:** "Does this feel like one cohesive institution?"
+
+**Status:** 🟢 Active
+
+### Sprint Plan
+
+| Sprint | Reader Problem | Status |
+|--------|---------------|--------|
+| W4-S1 | Visual Consistency | ✅ Complete |
+| W4-S2 | Interaction Consistency | ✅ Complete |
+| W4-S3 | Institutional Finish | 🟢 Active |
+
+---
+
 ## Work Streams
 
 | Stream | Focus | Current | Target |
@@ -154,3 +170,4 @@
 | Jul 16 | W3-S1 complete — Trust Signals. Platform score 4.5 → 4.7. Wave 3 active. |
 | Jul 16 | W3-S2 complete — Evidence Transparency. Platform score 4.7 → 4.9. W3-S3 active. |
 | Jul 16 | W3-S3 complete — Source Transparency. Platform score 4.9 → 5.0. Wave 3 complete. |
+| Jul 17 | W4-S1 & W4-S2 complete — Visual and Interaction Consistency. Platform score 5.0 → 5.1. W4-S3 active. |
