@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-type HeadingLevel = 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'caption';
+type HeadingLevel = 'h0' | 'h1' | 'h2' | 'h3' | 'body' | 'caption';
 
 interface HeadingProps {
   level: HeadingLevel;
@@ -10,7 +10,7 @@ interface HeadingProps {
 }
 
 const tagMap: Record<HeadingLevel, 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span'> = {
-  display: 'h1',
+  h0: 'h1',
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
@@ -19,8 +19,8 @@ const tagMap: Record<HeadingLevel, 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span'> = {
 };
 
 const styles: Record<HeadingLevel, string> = {
-  display:
-    'text-5xl sm:text-6xl font-bold text-[#F5F5F5] leading-[1.05] tracking-tight',
+  h0:
+    'text-5xl sm:text-6xl lg:text-7xl font-bold text-[#F5F5F5] leading-[1.05] tracking-tight',
   h1:
     'text-4xl sm:text-5xl font-bold text-[#F5F5F5] leading-[1.1] tracking-tight',
   h2:

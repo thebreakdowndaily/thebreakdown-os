@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildTopicPage } from '@/features/topic/view-model';
 import Container from '@/components/ui/Container';
+import Card from '@/components/ui/Card';
 import SectionHeader from '@/components/ui/SectionHeader';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
@@ -192,9 +193,11 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                     <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">In This Collection</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {relatedCollections.map((c) => (
-                        <a key={c.slug} href={`/series/${c.slug}`} className="block p-4 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-emerald-500/50 transition-colors">
-                          <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
-                          <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
+                        <a key={c.slug} href={`/series/${c.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                          <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-neutral-900" hover={true} accent="green">
+                            <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
+                            <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
+                          </Card>
                         </a>
                       ))}
                     </div>
@@ -205,9 +208,11 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                     <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">Related Chapters</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {relatedChapters.map((ch) => (
-                        <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block p-4 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-emerald-500/50 transition-colors">
-                          <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
-                          <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
+                        <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                          <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-neutral-900" hover={true} accent="green">
+                            <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
+                            <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
+                          </Card>
                         </a>
                       ))}
                     </div>

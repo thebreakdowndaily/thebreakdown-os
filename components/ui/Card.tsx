@@ -2,19 +2,28 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   hover?: boolean;
-  accent?: 'gold' | 'green' | 'none';
+  variant?: 'neutral' | 'gold' | 'green' | 'none';
   as?: 'article' | 'div';
 }
 
-const accentBorders: Record<string, string> = {
-  gold: 'hover:border-[#D4A843]/30',
-  green: 'hover:border-[#22C55E]/30',
+const variantBackgrounds: Record<string, string> = {
+  neutral: 'bg-[#151515]',
+  gold: 'bg-[#D4A843]/10',
+  green: 'bg-[#22C55E]/10',
   none: '',
 };
 
-const accentShadows: Record<string, string> = {
-  gold: 'hover:shadow-lg hover:shadow-[#D4A843]/5',
-  green: 'hover:shadow-lg hover:shadow-[#22C55E]/5',
+const variantBorders: Record<string, string> = {
+  neutral: 'border-[#2A2A2A]/50 hover:border-[#D4A843]/30',
+  gold: 'border-[#D4A843]/20 hover:border-[#D4A843]/40',
+  green: 'border-[#22C55E]/20 hover:border-[#22C55E]/40',
+  none: '',
+};
+
+const variantShadows: Record<string, string> = {
+  neutral: 'hover:shadow-sm hover:shadow-black/20',
+  gold: 'hover:shadow-md hover:shadow-[#D4A843]/10',
+  green: 'hover:shadow-md hover:shadow-[#22C55E]/10',
   none: '',
 };
 
@@ -22,16 +31,20 @@ export default function Card({
   children,
   className = '',
   hover = true,
-  accent = 'gold',
+  variant = 'neutral',
   as: Tag = 'article',
 }: CardProps) {
-  const baseClasses = 'rounded-2xl bg-[#151515] transition-all duration-300';
+  const baseClasses = 'rounded-2xl transition-all duration-300';
+  const variantBg = variantBackgrounds[variant];
+  const variantBorder = variantBorders[variant];
+  const variantShadow = variantShadows[variant];
+  
   const hoverClasses = hover
-    ? `hover:-translate-y-1 ${accentBorders[accent]} ${accentShadows[accent]} group-hover:animate-accent-pulse`
+    ? `hover:-translate-y-1 ${variantBorder} ${variantShadow}`
     : '';
 
   return (
-    <Tag className={`${baseClasses} ${hoverClasses} ${className}`}>
+    <Tag className={`${baseClasses} ${variantBg} ${hoverClasses} ${className}`}>
       {children}
     </Tag>
   );

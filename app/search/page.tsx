@@ -5,6 +5,7 @@ import type { SearchIndexEntry } from '@/types/canonical';
 import SearchLayout from '@/layouts/SearchLayout';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
+import Card from '@/components/ui/Card';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
@@ -138,9 +139,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Topics</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {grouped.topics.map((t: any) => (
-                    <a key={t.id} href={`/topic/${t.slug}`} className="block p-4 rounded-xl bg-[#151515] border border-[#2A2A2A] hover:border-emerald-500/50 transition-colors">
-                      <h4 className="font-bold text-white mb-1">{t.title}</h4>
-                      <p className="text-sm text-neutral-400 line-clamp-2">{t.description}</p>
+                    <a key={t.id} href={`/topic/${t.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                      <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
+                        <h4 className="font-bold text-white mb-1">{t.title}</h4>
+                        <p className="text-sm text-neutral-400 line-clamp-2">{t.description}</p>
+                      </Card>
                     </a>
                   ))}
                 </div>
@@ -172,9 +175,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Matching Collections</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {matchingCollections.map((c) => (
-                <a key={c.slug} href={`/series/${c.slug}`} className="block p-4 rounded-xl bg-[#151515] border border-[#2A2A2A] hover:border-emerald-500/50 transition-colors">
-                  <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
-                  <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
+                <a key={c.slug} href={`/series/${c.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                  <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
+                    <h4 className="font-bold text-emerald-400 mb-1">{c.title}</h4>
+                    <p className="text-sm text-neutral-400 line-clamp-2">{c.summary}</p>
+                  </Card>
                 </a>
               ))}
             </div>
@@ -187,9 +192,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Matching Chapters</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {matchingChapters.map((ch) => (
-                <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block p-4 rounded-xl bg-[#151515] border border-[#2A2A2A] hover:border-emerald-500/50 transition-colors">
-                  <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
-                  <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
+                <a key={ch.slug} href={`/series/${ch.collectionSlug}/volume/${ch.volumeSlug}/chapter/${ch.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                  <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
+                    <h4 className="font-bold text-emerald-400 mb-1">{ch.title}</h4>
+                    <p className="text-sm text-neutral-400 line-clamp-2">{ch.summary}</p>
+                  </Card>
                 </a>
               ))}
             </div>

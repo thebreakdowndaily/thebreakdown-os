@@ -28,7 +28,7 @@ export const ClaimRegistrySection: FC<{ claims: EnrichedClaim[] }> = ({ claims }
             <div key={claim.id} className="border border-gray-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => setExpandedClaim(isExpanded ? null : claim.id)}
-                className="w-full flex items-start justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors"
+                className="w-full flex items-start justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-inset outline-none"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">

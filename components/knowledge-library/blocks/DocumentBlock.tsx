@@ -82,7 +82,7 @@ export const DocumentBlock: FC<BlockComponentProps> = ({ id, data }) => {
           <div className="px-5 py-3 bg-gray-50/50">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Facsimile</p>
             <div
-              className="relative rounded-lg border border-gray-200 bg-white overflow-hidden cursor-pointer group"
+              className="relative rounded-lg border border-gray-200 bg-white overflow-hidden cursor-pointer group focus-visible:ring-2 focus-visible:ring-emerald-500 outline-none"
               onClick={() => setFacsimileOpen(true)}
               role="button"
               tabIndex={0}
