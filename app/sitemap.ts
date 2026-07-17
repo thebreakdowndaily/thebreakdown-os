@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
+import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = 'https://thebreakdown.in';
@@ -32,8 +33,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const libraryData = getKnowledgeLibrarySeedData();
+  const canonicalEntries: MetadataRoute.Sitemap = [];
+
+  for (const library of libraryData) {
+    for (const collection of library.collections) {
+      canonicalEntries.push({
+        url: `${siteUrl}/series/${collection.slug}`,
+        lastModified: new Date(collection.updatedAt || collection.createdAt),
+        changeFrequency: 'weekly',
+        priority: 1.0,
+      });
+
+      for (const volume of collection.volumes) {
+        canonicalEntries.push({
+          url: `${siteUrl}/series/${collection.slug}/volume/${volume.slug}`,
+          lastModified: new Date(volume.updatedAt || volume.createdAt),
+          changeFrequency: 'monthly',
+          priority: 0.9,
+        });
+
+        for (const chapter of volume.chapters) {
+          if (chapter.status === 'published' || chapter.status === 'verified') {
+            canonicalEntries.push({
+              url: `${siteUrl}/series/${collection.slug}/volume/${volume.slug}/chapter/${chapter.slug}`,
+              lastModified: new Date(chapter.lastVerifiedAt ?? chapter.updatedAt ?? chapter.createdAt),
+              changeFrequency: 'monthly',
+              priority: 0.8,
+            });
+          }
+        }
+      }
+    }
+  }
+
   const staticPages: MetadataRoute.Sitemap = [
     { url: siteUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+    { url: `${siteUrl}/series`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
     { url: `${siteUrl}/stories`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${siteUrl}/topics`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${siteUrl}/entities`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
@@ -43,5 +79,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/workspace`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.3 },
   ];
 
-  return [...staticPages, ...stories, ...entities, ...topics, ...fixes];
+  return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];
 }
+

@@ -5,7 +5,14 @@ import { createContext, useContext, useState, useCallback, useEffect, useRef, ty
 import { ReadingModeProvider, useSetReadingDepth, useReadingDepth } from '@/components/knowledge-library/reader/ReadingModeContext';
 import { SourcesProvider } from '@/components/knowledge-library/sources/SourcesContext';
 import { useStoryAnalytics } from '@/components/rxs/hooks/useStoryAnalytics';
-import type { Chapter, ReadingDepth } from '@/types/canonical';
+import type { ReadingDepth, Source } from '@/types/canonical';
+
+export interface ChapterMetadata {
+  slug: string;
+  title: string;
+  claimCount: number;
+  evidenceCount: number;
+}
 
 export interface StoryExperienceState {
   readingMode: ReadingDepth;
@@ -14,7 +21,7 @@ export interface StoryExperienceState {
   currentSection: string | null;
   activeTocItem: string | null;
   track: ReturnType<typeof useStoryAnalytics>['track'];
-  chapter: Chapter;
+  chapterMetadata: ChapterMetadata;
 }
 
 const StoryExperienceContext = createContext<StoryExperienceState | null>(null);
@@ -25,8 +32,8 @@ export function useStoryExperience(): StoryExperienceState {
   return ctx;
 }
 
-function ControllerInner({ chapter, children }: { chapter: Chapter; children: ReactNode }) {
-  const { track } = useStoryAnalytics(chapter.slug);
+function ControllerInner({ chapterMetadata, children }: { chapterMetadata: ChapterMetadata; children: ReactNode }) {
+  const { track } = useStoryAnalytics(chapterMetadata.slug);
   const currentMode = useReadingDepth();
   const setDepth = useSetReadingDepth();
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -84,9 +91,9 @@ function ControllerInner({ chapter, children }: { chapter: Chapter; children: Re
 
   useEffect(() => {
     track('story_started', {
-      title: chapter.title,
-      claimCount: chapter.content.filter(b => b.type === 'claim').length,
-      evidenceCount: chapter.content.filter(b => b.type === 'evidence-summary').length,
+      title: chapterMetadata.title,
+      claimCount: chapterMetadata.claimCount,
+      evidenceCount: chapterMetadata.evidenceCount,
     });
     const hash = window.location.hash.slice(1);
     if (hash) {
@@ -104,7 +111,7 @@ function ControllerInner({ chapter, children }: { chapter: Chapter; children: Re
     currentSection,
     activeTocItem,
     track,
-    chapter,
+    chapterMetadata,
   };
 
   return (
@@ -114,11 +121,11 @@ function ControllerInner({ chapter, children }: { chapter: Chapter; children: Re
   );
 }
 
-export function StoryExperienceController({ chapter, children }: { chapter: Chapter; children: ReactNode }) {
+export function StoryExperienceController({ chapterMetadata, sources, children }: { chapterMetadata: ChapterMetadata; sources: Source[]; children: ReactNode }) {
   return (
     <ReadingModeProvider initial="explorer">
-      <SourcesProvider sources={chapter.sources}>
-        <ControllerInner chapter={chapter}>
+      <SourcesProvider sources={sources}>
+        <ControllerInner chapterMetadata={chapterMetadata}>
           {children}
         </ControllerInner>
       </SourcesProvider>

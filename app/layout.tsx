@@ -57,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://thebreakdown.in/?q={search_term_string}',
+        urlTemplate: 'https://thebreakdown.in/search?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },

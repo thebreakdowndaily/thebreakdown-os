@@ -23,71 +23,47 @@ function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   return blocks.map((block) => <BlockRenderer key={block.id} block={block as any} />);
 }
 
+import { createArticleSchema, createBreadcrumbSchema, createFAQSchema } from '@/lib/seo/jsonld';
+
 function createJsonLd(story: Story): Record<string, unknown>[] {
   const breadcrumbs = story.slug.split('-').slice(0, 2).join(' ').toUpperCase();
+  
   const ld: Record<string, unknown>[] = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'NewsArticle',
+    createArticleSchema({
       headline: story.headline,
-      description: story.summary,
-      image: story.heroImage ? {
-        '@type': 'ImageObject',
-        url: story.heroImage,
-        width: 1200,
-        height: 630,
-      } : undefined,
-      datePublished: story.publishedAt,
-      dateModified: story.updatedAt,
-      author: { '@type': 'Person', name: story.author },
-      publisher: {
-        '@type': 'Organization',
-        name: 'The Breakdown',
-        logo: { '@type': 'ImageObject', url: 'https://thebreakdown.in/logo.svg' },
-      },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': `https://thebreakdown.in/story/${story.slug}` },
+      summary: story.summary,
+      url: `https://thebreakdown.in/story/${story.slug}`,
+      image: story.heroImage,
+      publishedAt: story.publishedAt,
+      updatedAt: story.updatedAt,
+      authorName: story.author,
       wordCount: story.blocks?.reduce((sum, b) => sum + (JSON.stringify(b).length / 5), 0) || 0,
-      articleSection: story.category,
-      keywords: story.tags?.join(', '),
-      inLanguage: 'en-IN',
-      isAccessibleForFree: true,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://thebreakdown.in/' },
-        { '@type': 'ListItem', position: 2, name: breadcrumbs, item: 'https://thebreakdown.in/stories' },
-        { '@type': 'ListItem', position: 3, name: story.headline.slice(0, 60), item: `https://thebreakdown.in/story/${story.slug}` },
-      ],
-    },
+      category: story.category,
+      tags: story.tags,
+      isNews: true, // Legacy stories act as NewsArticle
+    }),
+    createBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: breadcrumbs, url: '/stories' },
+      { name: story.headline.slice(0, 60), url: `/story/${story.slug}` },
+    ]),
   ];
 
   const faqBlocks = story.blocks?.filter((b) => b.type === 'faq') || [];
   if (faqBlocks.length > 0) {
-    const mainEntity: Record<string, unknown>[] = [];
+    const questions: { question: string; answer: string }[] = [];
     faqBlocks.forEach((block) => {
       const data = block.data as any;
       if (data.questions && Array.isArray(data.questions)) {
         data.questions.forEach((q: any) => {
-          mainEntity.push({
-            '@type': 'Question',
-            name: q.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: q.answer,
-            },
-          });
+          questions.push({ question: q.question, answer: q.answer });
         });
       }
     });
 
-    if (mainEntity.length > 0) {
-      ld.push({
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity,
-      });
+    const faqSchema = createFAQSchema(questions);
+    if (faqSchema) {
+      ld.push(faqSchema);
     }
   }
 

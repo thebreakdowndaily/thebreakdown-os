@@ -22,14 +22,21 @@ async function runTests() {
   }
 
   const services = bootstrapServices();
+  const allEntities = await services.entities.getEntities({ pageSize: 1 });
+  const testEntity = allEntities.data[0];
+
+  if (!testEntity) {
+    console.error('  FAIL: No entities found in data layer to test');
+    process.exit(1);
+  }
   
   // Test 1: buildEntityPage returns valid EntityPageData
   try {
-    const page = buildEntityPage(services, 'adani-group');
+    const page = await buildEntityPage(services, testEntity.slug);
     if (page) {
-      assert(page.entity.type === 'organization', 'Entity type is correct');
-      assert(page.entity.slug === 'adani-group', 'Entity slug is correct');
-      assert(Array.isArray(page.relatedStories), 'Related stories is an array');
+      assert(page.entity.type === testEntity.type, 'Entity type is correct');
+      assert(page.entity.slug === testEntity.slug, 'Entity slug is correct');
+      assert(Array.isArray(page.stories), 'Related stories is an array');
       assert(Array.isArray(page.relatedEntities), 'Related entities is an array');
     } else {
       console.error('  FAIL: Entity page not found');
@@ -42,7 +49,7 @@ async function runTests() {
 
   // Test 2: SEO properties
   try {
-    const page = buildEntityPage(services, 'adani-group');
+    const page = await buildEntityPage(services, testEntity.slug);
     if (page) {
       assert(typeof page.seo.title === 'string', 'SEO title is a string');
       assert(typeof page.seo.description === 'string', 'SEO description is a string');

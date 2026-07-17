@@ -189,7 +189,7 @@ async function runTests() {
     assert(body.success === true, 'Delete returns success: true');
 
     // Verify deletion
-    const exists = getServices().datasets.getDatasetBySlug('e2e-test');
+    const exists = await getServices().datasets.getDatasetBySlug('e2e-test');
     assert(exists === undefined, 'Dataset no longer exists after delete');
   } catch (e) {
     console.error('  FAIL: DELETE /api/v1/datasets/{slug} threw exception', e);

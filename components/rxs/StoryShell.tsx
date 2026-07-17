@@ -1,4 +1,3 @@
-'use client';
 // @rxs/implementation: contracts/story-shell.md — StoryShell orchestrator, composes reading journey via StoryExperienceController
 
 import { StoryLayout } from '@/components/rxs/StoryLayout';
@@ -12,15 +11,17 @@ import { StoryExperienceController } from '@/components/rxs/StoryExperienceContr
 import { ReaderOrientation } from '@/components/rxs/ReaderOrientation';
 import { KnowledgeRenderer } from '@/components/knowledge-library/core/KnowledgeRenderer';
 import { ClaimRegistrySection } from '@/components/knowledge-library/claims/ClaimRegistrySection';
-import { GraphSidebar } from '@/components/knowledge-library/graph/GraphSidebar';
 import { InvestigationPanel } from '@/components/knowledge-library/investigation/InvestigationPanel';
+import dynamic from 'next/dynamic';
+
+const GraphSidebar = dynamic(() => import('@/components/knowledge-library/graph/GraphSidebar').then(mod => mod.GraphSidebar));
 import { extractTocItems } from '@/lib/toc';
-import { useReadingDepth } from '@/components/knowledge-library/reader/ReadingModeContext';
 import { VisualNavigation } from '@/components/knowledge-library/visual/VisualNavigation';
 import { VisualGallery } from '@/components/knowledge-library/visual/VisualGallery';
 import type { Chapter, EvidenceSummaryBlockData } from '@/types/canonical';
 import type { EnrichedClaim } from '@/lib/knowledge/knowledge-core';
 import type { ChapterGraph } from '@/lib/knowledge/knowledge-graph';
+import { ReferenceSources } from '@/components/rxs/regions/ReferenceSources';
 
 interface StoryShellProps {
   chapter: Chapter;
@@ -74,8 +75,6 @@ function ReflectionSection({ chapter }: { chapter: Chapter }) {
 }
 
 function ReferenceSection({ chapter }: { chapter: Chapter }) {
-  const depth = useReadingDepth();
-
   return (
     <div className="space-y-10">
       {chapter.keyTerms.length > 0 && (
@@ -92,21 +91,8 @@ function ReferenceSection({ chapter }: { chapter: Chapter }) {
         </section>
       )}
 
-      {depth !== 'explorer' && chapter.sources.length > 0 && (
-        <section>
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Sources</h3>
-          <ol className="space-y-2 text-sm">
-            {chapter.sources.map((s, i) => (
-              <li key={i}>
-                <span className="font-mono text-gray-400">[{i + 1}]</span>{' '}
-                <span className="text-gray-700">{s.title}</span>
-                <span className="ml-2 text-xs text-gray-400">(Tier {s.tier})</span>
-                <a href={s.url} target="_blank" rel="noopener noreferrer"
-                   className="ml-2 text-blue-600 hover:underline text-xs">↗</a>
-              </li>
-            ))}
-          </ol>
-        </section>
+      {chapter.sources.length > 0 && (
+        <ReferenceSources sources={chapter.sources} />
       )}
     </div>
   );
@@ -128,7 +114,15 @@ export function StoryShell({
   const tocItems = extractTocItems(chapter.content);
 
   return (
-    <StoryExperienceController chapter={chapter}>
+    <StoryExperienceController 
+      chapterMetadata={{ 
+        slug: chapter.slug, 
+        title: chapter.title, 
+        claimCount, 
+        evidenceCount 
+      }}
+      sources={chapter.sources}
+    >
       <StoryLayout
         toc={<><ReaderOrientation items={tocItems} /><VisualGallery /></>}
         sidebar={

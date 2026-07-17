@@ -1,12 +1,8 @@
-'use client';
 // @rxs/implementation: screens/story.md — ContextRegion (learning objectives, prerequisites)
 
-import { useReadingDepth } from '@/components/knowledge-library/reader/ReadingModeContext';
 import type { Chapter } from '@/types/canonical';
 
 export function ContextRegion({ chapter }: { chapter: Chapter }) {
-  const depth = useReadingDepth();
-
   return (
     <section data-region="context">
       {chapter.learningObjectives.length > 0 && (

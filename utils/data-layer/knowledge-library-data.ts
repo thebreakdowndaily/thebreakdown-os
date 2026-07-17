@@ -1,8 +1,9 @@
+import { cache } from 'react';
 import type { KnowledgeLibrary, KnowledgeBlock, Source } from '@/types/canonical';
 
-export function getKnowledgeLibrarySeedData(): KnowledgeLibrary[] {
+export const getKnowledgeLibrarySeedData = cache((): KnowledgeLibrary[] => {
   return [indiaAndTheWorld];
-}
+});
 
 const sources: Source[] = [
   { title: 'India After Gandhi: The History of the World\'s Largest Democracy', url: 'https://www.harpercollins.com/products/india-after-gandhi-ramachandra-guha', accessedAt: '2026-06-15', tier: 3 },
