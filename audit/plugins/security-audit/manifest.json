@@ -1,0 +1,8 @@
+{
+  "name": "security-audit",
+  "description": "Repository-centric security baseline enforcement (secrets, configuration, CSP).",
+  "version": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "capabilities": ["security", "secrets", "configuration"],
+  "dependsOn": ["operations-audit"]
+}

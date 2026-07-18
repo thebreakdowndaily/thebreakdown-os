@@ -253,8 +253,10 @@ export async function run(context: AuditContext): Promise<AuditResult> {
     pluginName: name,
     state: finalState,
     data: {
+      score: metrics.operationsComplianceScore,
+      coverage: 100, // Policy defines the surface area completely
+      findings,
       metrics,
-      findings
     }
   };
 }

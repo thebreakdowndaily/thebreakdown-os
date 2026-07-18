@@ -10,7 +10,12 @@ export async function run(context: AuditContext): Promise<AuditResult> {
     pluginName: name,
     state: LifecycleState.PASSED,
     data: {
-      message: 'Success'
+      score: 100,
+      coverage: 100,
+      findings: [],
+      metrics: {
+        message: 'Success'
+      }
     }
   };
 }

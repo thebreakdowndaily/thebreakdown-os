@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 describe("Plugin manifest schema validation", () => {
-  const schemaPath = path.resolve(__dirname, "../schema/plugin-manifest.schema.json");
+  const schemaPath = path.resolve(__dirname, "../policy/schema/manifest.schema.json");
   const schema = JSON.parse(fs.readFileSync(schemaPath, "utf-8"));
   const ajv = new Ajv({ allErrors: true, strict: false });
   const validate = ajv.compile(schema);
@@ -21,8 +21,7 @@ describe("Plugin manifest schema validation", () => {
       name: "bad-plugin",
       // version omitted
       description: "Missing version",
-      sdkVersion: "1.0.0",
-      schemaVersion: "2.0"
+      sdkVersion: "1.0.0"
     };
     const valid = validate(invalidManifest);
     expect(valid).toBe(false);

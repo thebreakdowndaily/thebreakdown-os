@@ -11,4 +11,6 @@ export interface PluginMetadata {
   capabilities: string[];
   /** Execution timeout in ms */
   timeout?: number;
+  /** List of plugins this plugin depends on */
+  dependsOn?: string[];
 }

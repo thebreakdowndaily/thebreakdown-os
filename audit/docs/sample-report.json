@@ -1,0 +1,325 @@
+{
+  "frameworkVersion": "1.0.0",
+  "schemaVersion": "2.0",
+  "reportVersion": "1.0",
+  "policyVersion": "1.0",
+  "platformHealthScore": 77.93650793650794,
+  "weightedPlatformHealthScore": 77.93650793650794,
+  "coverage": 100,
+  "pluginCount": 11,
+  "successfulPlugins": 6,
+  "failedPlugins": 5,
+  "skippedPlugins": 0,
+  "execution": {
+    "totalDurationMs": 263,
+    "generatedAt": "2026-07-18T17:00:46.585Z",
+    "nodeVersion": "v24.18.0",
+    "os": "win32"
+  },
+  "results": [
+    {
+      "pluginName": "accessibility-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 20,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "high",
+            "message": "Missing accessibility linting plugin (e.g. eslint-plugin-jsx-a11y) in package.json"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing automated accessibility testing tool (e.g. @axe-core/react or axe-core or cypress-axe) in package.json"
+          }
+        ],
+        "metrics": {
+          "lintingScore": 0,
+          "automationScore": 0,
+          "stylingScore": 100,
+          "accessibilityReadinessScore": 20
+        }
+      },
+      "execution": {
+        "durationMs": 1,
+        "startedAt": "2026-07-18T17:00:46.250Z",
+        "finishedAt": "2026-07-18T17:00:46.251Z"
+      }
+    },
+    {
+      "pluginName": "architecture-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 91.42857142857143,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "low",
+            "message": "Plugin accessibility-audit is missing README.md"
+          },
+          {
+            "severity": "low",
+            "message": "Plugin editorial-audit is missing README.md"
+          },
+          {
+            "severity": "low",
+            "message": "Plugin knowledge-graph-audit is missing README.md"
+          },
+          {
+            "severity": "low",
+            "message": "Plugin performance-audit is missing README.md"
+          },
+          {
+            "severity": "low",
+            "message": "Plugin security-audit is missing README.md"
+          },
+          {
+            "severity": "low",
+            "message": "Plugin seo-audit is missing README.md"
+          }
+        ],
+        "metrics": {
+          "policyVersion": "1.1.0",
+          "requiredDirectoriesCoverage": 100,
+          "requiredFilesCoverage": 100,
+          "pluginManifestCoverage": 100,
+          "pluginReadmeCoverage": 45.45454545454545,
+          "policyCompliance": 92.20779220779221,
+          "architectureComplianceScore": 91.42857142857143,
+          "requiredDirectories": {
+            "present": 10,
+            "missing": 0
+          },
+          "forbiddenImports": 0,
+          "unknownDirectories": 0
+        }
+      },
+      "execution": {
+        "durationMs": 109,
+        "startedAt": "2026-07-18T17:00:46.256Z",
+        "finishedAt": "2026-07-18T17:00:46.365Z"
+      }
+    },
+    {
+      "pluginName": "hello-world",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [],
+        "metrics": {
+          "message": "Hello World",
+          "repoRoot": "C:\\newsjack-content\\thebreakdown-os"
+        }
+      },
+      "execution": {
+        "durationMs": 0,
+        "startedAt": "2026-07-18T17:00:46.368Z",
+        "finishedAt": "2026-07-18T17:00:46.368Z"
+      }
+    },
+    {
+      "pluginName": "knowledge-graph-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 70,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/claims"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/sources"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/thinkers"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/documents"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/events"
+          }
+        ],
+        "metrics": {
+          "registriesScore": 0,
+          "schemasScore": 100,
+          "integrityScore": 100,
+          "knowledgeGraphHealthScore": 70
+        }
+      },
+      "execution": {
+        "durationMs": 2,
+        "startedAt": "2026-07-18T17:00:46.371Z",
+        "finishedAt": "2026-07-18T17:00:46.373Z"
+      }
+    },
+    {
+      "pluginName": "editorial-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [],
+        "metrics": {
+          "constitutionScore": 100,
+          "structureScore": 100,
+          "metadataScore": 100,
+          "evidenceScore": 100,
+          "editorialQualityScore": 100,
+          "scannedObjects": 3
+        }
+      },
+      "execution": {
+        "durationMs": 2,
+        "startedAt": "2026-07-18T17:00:46.377Z",
+        "finishedAt": "2026-07-18T17:00:46.379Z"
+      }
+    },
+    {
+      "pluginName": "mock-crash",
+      "state": "FAILED",
+      "data": {
+        "score": 0,
+        "coverage": 0,
+        "findings": [
+          {
+            "severity": "critical",
+            "message": "Simulated plugin failure"
+          }
+        ],
+        "metrics": {}
+      },
+      "execution": {
+        "durationMs": 1,
+        "startedAt": "2026-07-18T17:00:46.380Z",
+        "finishedAt": "2026-07-18T17:00:46.381Z"
+      },
+      "error": "Simulated plugin failure"
+    },
+    {
+      "pluginName": "mock-success",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [],
+        "metrics": {
+          "message": "Success"
+        }
+      },
+      "execution": {
+        "durationMs": 0,
+        "startedAt": "2026-07-18T17:00:46.383Z",
+        "finishedAt": "2026-07-18T17:00:46.383Z"
+      }
+    },
+    {
+      "pluginName": "operations-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [],
+        "metrics": {
+          "repositoryCoverage": 100,
+          "workflowCoverage": 100,
+          "releaseCoverage": 100,
+          "configIntegrity": 100,
+          "auditFrameworkHealth": 100,
+          "operationsComplianceScore": 100
+        }
+      },
+      "execution": {
+        "durationMs": 7,
+        "startedAt": "2026-07-18T17:00:46.428Z",
+        "finishedAt": "2026-07-18T17:00:46.435Z"
+      }
+    },
+    {
+      "pluginName": "performance-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 60,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "high",
+            "message": "Missing lighthouse configuration file (e.g. .lighthouserc.json, .lighthouserc.js, lighthouserc.json) or @lhci/cli dependency"
+          }
+        ],
+        "metrics": {
+          "lighthouseScore": 0,
+          "bundleScore": 100,
+          "nextConfigScore": 100,
+          "performanceReadinessScore": 60
+        }
+      },
+      "execution": {
+        "durationMs": 1,
+        "startedAt": "2026-07-18T17:00:46.438Z",
+        "finishedAt": "2026-07-18T17:00:46.439Z"
+      }
+    },
+    {
+      "pluginName": "security-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 60,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "critical",
+            "message": "Exposed secret file found: .env.local"
+          },
+          {
+            "severity": "critical",
+            "message": "Exposed secret file found: .vercel\\.env.production.local"
+          }
+        ],
+        "metrics": {
+          "secretCoverage": 0,
+          "cspCoverage": 100,
+          "manifestIntegrity": 100,
+          "dependencyHealth": 100,
+          "securityComplianceScore": 60
+        }
+      },
+      "execution": {
+        "durationMs": 139,
+        "startedAt": "2026-07-18T17:00:46.442Z",
+        "finishedAt": "2026-07-18T17:00:46.581Z"
+      }
+    },
+    {
+      "pluginName": "seo-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "low",
+            "message": "Root layout app/layout.tsx does not appear to configure canonical URLs"
+          }
+        ],
+        "metrics": {
+          "robotsScore": 100,
+          "sitemapScore": 100,
+          "metadataScore": 100,
+          "seoReadinessScore": 100
+        }
+      },
+      "execution": {
+        "durationMs": 1,
+        "startedAt": "2026-07-18T17:00:46.584Z",
+        "finishedAt": "2026-07-18T17:00:46.585Z"
+      }
+    }
+  ]
+}

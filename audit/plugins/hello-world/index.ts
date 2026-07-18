@@ -11,8 +11,13 @@ export async function run(context: AuditContext): Promise<AuditResult> {
     pluginName: name,
     state: LifecycleState.PASSED,
     data: {
-      message: 'Hello World',
-      repoRoot: context.repoRoot
+      score: 100,
+      coverage: 100,
+      findings: [],
+      metrics: {
+        message: 'Hello World',
+        repoRoot: context.repoRoot
+      }
     }
   };
 }

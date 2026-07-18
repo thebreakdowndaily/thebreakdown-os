@@ -1,0 +1,20 @@
+{
+  "secretScanning": {
+    "disallowedExtensions": [".env"],
+    "ignoredDirectories": ["node_modules", ".git", ".next", "dist", "audit-report.json"],
+    "severity": "critical"
+  },
+  "csp": {
+    "required": true,
+    "severity": "high",
+    "files": ["next.config.js", "next.config.mjs"]
+  },
+  "manifestConsistency": {
+    "requiredEngines": ["node"],
+    "severity": "medium"
+  },
+  "vulnerabilityGate": {
+    "enabled": false,
+    "failOn": ["critical", "high"]
+  }
+}

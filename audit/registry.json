@@ -1,0 +1,200 @@
+{
+  "registryVersion": "1.0",
+  "generatedAt": "2026-07-18T16:58:58.355Z",
+  "pluginCount": 11,
+  "plugins": [
+    {
+      "id": "accessibility-audit",
+      "name": "Accessibility Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "accessibility",
+        "configuration",
+        "reporting"
+      ],
+      "dependsOn": [],
+      "description": "Verifies accessibility readiness through repository configuration.",
+      "entryPoint": "audit/plugins/accessibility-audit/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "architecture-audit",
+      "name": "Architecture Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.1.0",
+      "capabilities": [
+        "structure",
+        "conventions",
+        "architecture"
+      ],
+      "dependsOn": [],
+      "description": "Verifies repository structure and architectural conventions",
+      "entryPoint": "audit/plugins/architecture/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "editorial-audit",
+      "name": "Editorial Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "editorial",
+        "knowledge-graph",
+        "analysis",
+        "reporting"
+      ],
+      "dependsOn": [
+        "knowledge-graph-audit"
+      ],
+      "description": "Verifies editorial completeness and alignment with the Editorial Constitution.",
+      "entryPoint": "audit/plugins/editorial-audit/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "hello-world",
+      "name": "Hello World",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "metrics",
+        "logging"
+      ],
+      "dependsOn": [],
+      "description": "Reference hello-world plugin",
+      "entryPoint": "audit/plugins/hello-world/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "knowledge-graph-audit",
+      "name": "Knowledge Graph Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "knowledge-graph",
+        "architecture",
+        "analysis",
+        "reporting"
+      ],
+      "dependsOn": [
+        "architecture-audit"
+      ],
+      "description": "Verifies the structural integrity of the canonical knowledge graph.",
+      "entryPoint": "audit/plugins/knowledge-graph-audit/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "mock-crash",
+      "name": "Mock Crash",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "diagnostics"
+      ],
+      "dependsOn": [],
+      "description": "A plugin that deliberately crashes to test framework resilience",
+      "entryPoint": "audit/plugins/mock-crash/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "mock-success",
+      "name": "Mock Success",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "mock"
+      ],
+      "dependsOn": [],
+      "description": "Mock plugin for testing",
+      "entryPoint": "audit/plugins/mock-success/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "operations-audit",
+      "name": "Operations Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0.0",
+      "capabilities": [
+        "operations",
+        "delivery"
+      ],
+      "dependsOn": [
+        "architecture-audit"
+      ],
+      "description": "Verifies repository operations and delivery readiness",
+      "entryPoint": "audit/plugins/operations/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "performance-audit",
+      "name": "Performance Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "performance",
+        "configuration",
+        "reporting"
+      ],
+      "dependsOn": [],
+      "description": "Verifies performance readiness through repository configuration.",
+      "entryPoint": "audit/plugins/performance-audit/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "security-audit",
+      "name": "Security Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "security",
+        "secrets",
+        "configuration"
+      ],
+      "dependsOn": [
+        "operations-audit"
+      ],
+      "description": "Repository-centric security baseline enforcement (secrets, configuration, CSP).",
+      "entryPoint": "audit/plugins/security-audit/index.ts",
+      "enabled": true
+    },
+    {
+      "id": "seo-audit",
+      "name": "Seo Audit",
+      "version": "1.0.0",
+      "sdkVersion": "1.0.0",
+      "schemaVersion": "2.0",
+      "policyVersion": "1.0",
+      "capabilities": [
+        "seo",
+        "architecture",
+        "reporting"
+      ],
+      "dependsOn": [
+        "architecture-audit"
+      ],
+      "description": "Verifies structural SEO readiness.",
+      "entryPoint": "audit/plugins/seo-audit/index.ts",
+      "enabled": true
+    }
+  ]
+}

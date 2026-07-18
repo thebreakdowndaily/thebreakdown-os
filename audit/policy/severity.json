@@ -1,0 +1,25 @@
+{
+  "definitions": {
+    "critical": {
+      "level": 5,
+      "description": "Immediate action required. Blocks release, compilation, or introduces severe security/architectural flaws."
+    },
+    "high": {
+      "level": 4,
+      "description": "Significant issue that should be addressed before release. High impact on maintainability, performance, or security."
+    },
+    "medium": {
+      "level": 3,
+      "description": "Violation of standard practices or policies. Should be addressed but does not immediately block progress."
+    },
+    "low": {
+      "level": 2,
+      "description": "Minor issue. Does not significantly impact the system but violates conventions."
+    },
+    "informational": {
+      "level": 1,
+      "description": "FYI. Observations or generated configurations that don't represent a violation."
+    }
+  },
+  "defaultFailGate": ["critical", "high"]
+}

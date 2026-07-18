@@ -297,8 +297,10 @@ export async function run(context: AuditContext): Promise<AuditResult> {
     pluginName: name,
     state: finalState,
     data: {
+      score: metrics.architectureComplianceScore,
+      coverage: 100, // Evaluates all configured structures
+      findings,
       metrics,
-      findings
     }
   };
 }

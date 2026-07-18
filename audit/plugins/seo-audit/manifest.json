@@ -1,0 +1,8 @@
+{
+  "name": "seo-audit",
+  "description": "Verifies structural SEO readiness.",
+  "version": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "capabilities": ["seo", "architecture", "reporting"],
+  "dependsOn": ["architecture-audit"]
+}

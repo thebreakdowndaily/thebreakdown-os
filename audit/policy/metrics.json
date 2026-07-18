@@ -1,0 +1,48 @@
+{
+  "complianceScores": {
+    "ACS": {
+      "name": "Architecture Compliance Score",
+      "plugin": "architecture-audit",
+      "description": "Measures adherence to architectural invariants and directory structure."
+    },
+    "OCS": {
+      "name": "Operations Compliance Score",
+      "plugin": "operations-audit",
+      "description": "Measures operational readiness, CI health, and repository configuration."
+    },
+    "SCS": {
+      "name": "Security Compliance Score",
+      "plugin": "security-audit",
+      "description": "Measures repository secret coverage, secure defaults, and dependency health."
+    },
+    "A11Y": {
+      "name": "Accessibility Score",
+      "plugin": "accessibility-audit",
+      "description": "Measures adherence to WCAG accessibility guidelines."
+    },
+    "PCS": {
+      "name": "Performance Compliance Score",
+      "plugin": "performance-audit",
+      "description": "Measures web performance and bundle size."
+    },
+    "SES": {
+      "name": "SEO Score",
+      "plugin": "seo-audit",
+      "description": "Measures search engine optimization readiness."
+    },
+    "KGHS": {
+      "name": "Knowledge Graph Health Score",
+      "plugin": "knowledge-graph-audit",
+      "description": "Measures the structural integrity of the canonical knowledge graph."
+    },
+    "EQS": {
+      "name": "Editorial Quality Score",
+      "plugin": "editorial-audit",
+      "description": "Measures the editorial completeness and alignment with the Editorial Constitution."
+    }
+  },
+  "scoreScale": {
+    "min": 0,
+    "max": 100
+  }
+}

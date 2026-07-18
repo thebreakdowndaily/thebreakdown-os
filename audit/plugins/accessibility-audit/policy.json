@@ -1,0 +1,25 @@
+{
+  "policyVersion": "1.0",
+  "accessibility": {
+    "linting": {
+      "eslint": {
+        "plugins": ["eslint-plugin-jsx-a11y"],
+        "severity": "high"
+      },
+      "semanticHtml": {
+        "enabled": true,
+        "severity": "medium"
+      }
+    },
+    "automatedTests": {
+      "tools": ["@axe-core/react", "axe-core", "cypress-axe"],
+      "severity": "critical"
+    },
+    "styling": {
+      "focusVisible": {
+        "required": true,
+        "severity": "high"
+      }
+    }
+  }
+}

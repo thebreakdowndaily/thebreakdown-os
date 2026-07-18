@@ -1,0 +1,20 @@
+{
+  "policyVersion": "1.0",
+  "seo": {
+    "robots": {
+      "required": true,
+      "severity": "high",
+      "files": ["public/robots.txt", "app/robots.ts", "app/robots.js"]
+    },
+    "sitemap": {
+      "required": true,
+      "severity": "high",
+      "files": ["public/sitemap.xml", "app/sitemap.ts", "app/sitemap.js"]
+    },
+    "metadata": {
+      "required": true,
+      "severity": "medium",
+      "rootLayout": ["app/layout.tsx", "app/layout.js"]
+    }
+  }
+}
