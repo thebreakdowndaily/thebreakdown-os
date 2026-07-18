@@ -1,0 +1,29 @@
+{
+  "frameworkVersion": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "schemaVersion": "2.0",
+  "timestamp": "2026-07-18T10:16:42.548Z",
+  "nodeVersion": "v24.18.0",
+  "os": "win32",
+  "results": [
+    {
+      "pluginName": "hello-world",
+      "state": "PASSED",
+      "data": {
+        "pluginName": "hello-world",
+        "state": "PASSED",
+        "data": {
+          "message": "Hello World",
+          "repoRoot": "C:\\newsjack-content\\thebreakdown-os"
+        }
+      }
+    },
+    {
+      "pluginName": "mock-crash",
+      "state": "FAILED",
+      "data": {
+        "error": "Simulated plugin failure"
+      }
+    }
+  ]
+}

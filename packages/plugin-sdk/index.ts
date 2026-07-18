@@ -10,4 +10,4 @@ export * from "./registry";
 export { Capability, RelationshipType, NodeType, EvidenceConfidence, KnowledgeManifest } from "../compiler/types";
 export { GraphNode, GraphEdge, GraphStore } from "../graph/types";
 export { EngineContext, ResolvedKnowledgeSession, SessionExtension } from "../engine/types";
-export { ExperienceState, KXEAction } from "../kxe/types";
+export { ExperienceState, ExperienceAction } from "../kxe/types";
