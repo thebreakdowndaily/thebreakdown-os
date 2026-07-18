@@ -1,7 +1,10 @@
 {
-  "name": "@thebreakdown/website",
-  "version": "1.0.0",
+  "name": "thebreakdown-os",
+  "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "description": "The Breakdown — India Explained, Website Engine",
   "scripts": {
     "dev": "next dev",
@@ -9,9 +12,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "audit": "tsx audit/scripts/audit.ts",
     "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts",
     "test:dataset": "npx tsx tests/dataset.test.ts",
-
     "test:dataset:e2e": "npx tsx tests/dataset-e2e.test.ts",
     "test:compiler": "npx tsx packages/compiler/tests/compiler.test.ts",
     "test:graph": "npx tsx packages/graph/tests/graph.test.ts",
@@ -47,6 +50,7 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^16.2.10",
     "@types/d3": "^7.4.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.14.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
@@ -56,6 +60,7 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.10",
     "globals": "^17.7.0",
+    "js-yaml": "^5.2.1",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.5.0"
