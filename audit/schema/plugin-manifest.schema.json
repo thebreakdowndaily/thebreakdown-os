@@ -9,6 +9,7 @@
     "version": { "type": "string" },
     "description": { "type": "string" },
     "capabilities": { "type": "array", "items": { "type": "string" } },
+    "dependsOn": { "type": "array", "items": { "type": "string" } },
     "timeoutMs": { "type": "integer", "minimum": 0 },
     "sdkVersion": { "type": "string" },
     "schemaVersion": { "type": "string" }

@@ -1,0 +1,8 @@
+{
+  "name": "mock-success",
+  "version": "1.0.0",
+  "description": "Mock plugin for testing",
+  "capabilities": ["mock"],
+  "sdkVersion": "1.0.0",
+  "schemaVersion": "1.0.0"
+}
