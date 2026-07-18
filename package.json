@@ -19,8 +19,9 @@
     "test:renderer": "npx tsx packages/renderer/tests/renderer.test.tsx",
     "test:timeline": "npx tsx plugins/timeline/tests/timeline.test.tsx",
     "test:citations": "npx tsx plugins/citations/tests/citations.test.ts",
+    "test:relationship-graph": "npx tsx plugins/relationship-graph/tests/relationship-graph.test.tsx",
     "test:plugin-sdk": "npx tsx packages/plugin-sdk/tests/compatibility.test.ts",
-    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e && npm run test:compiler && npm run test:graph && npm run test:engine && npm run test:kxe && npm run test:renderer && npm run test:plugin-sdk && npm run test:timeline && npm run test:citations"
+    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e && npm run test:compiler && npm run test:graph && npm run test:engine && npm run test:kxe && npm run test:renderer && npm run test:plugin-sdk && npm run test:timeline && npm run test:citations && npm run test:relationship-graph"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.63.0",

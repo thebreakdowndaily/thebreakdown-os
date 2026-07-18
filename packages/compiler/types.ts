@@ -8,15 +8,6 @@ export const Capability = {
   Citations: "citations",
   RelationshipGraph: "relationshipGraph",
 } as const;
-  Simulation: "simulation",
-  Debate: "debate",
-  Metrics: "metrics",
-  Map: "map",
-  Citations: "citations",
-  RelationshipGraph: "relationshipGraph",
-  Map: "map",
-  Citations: "citations",
-} as const;
 export type Capability = typeof Capability[keyof typeof Capability];
 
 export const RelationshipType = {

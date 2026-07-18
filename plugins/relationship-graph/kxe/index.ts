@@ -1,8 +1,8 @@
 // plugins/relationship-graph/kxe/index.ts
 
-import { createKxePlugin, KxePluginContext } from "../../packages/plugin-sdk";
+import { createKXEPlugin } from "../../../packages/plugin-sdk";
 import { relationshipGraphManifest } from "../manifest";
-import { TraversalPolicy, RankingStrategy } from "../../packages/graph/policy";
+import { TraversalPolicy, RankingStrategy } from "../../../packages/graph/policy";
 
 /**
  * The KXE state for the Relationship Graph plugin.
@@ -17,6 +17,8 @@ export interface RelationshipGraphKxeState {
   expandedNodeIds: Set<string>;
   /** Layout mode requested by the UI (hierarchical, radial, force‑directed). */
   layout: "hierarchical" | "radial" | "force";
+  /** Currently highlighted path. */
+  highlightedPath?: string[];
 }
 
 const defaultKxeState: RelationshipGraphKxeState = {
@@ -31,51 +33,67 @@ const defaultKxeState: RelationshipGraphKxeState = {
   layout: "hierarchical",
 };
 
-export const RelationshipGraphKxePlugin = createKxePlugin<RelationshipGraphKxeState>({
+export const RelationshipGraphKxePlugin = createKXEPlugin<RelationshipGraphKxeState>({
   manifest: relationshipGraphManifest,
   initialState: defaultKxeState,
-  reducers: {
-    // Action: relationshipGraph/focusNode
-    focusNode(state, action: { type: "relationshipGraph/focusNode"; payload: { nodeId: string } }) {
-      return { ...state, focusNodeId: action.payload.nodeId };
-    },
-    // Action: relationshipGraph/expandNode
-    expandNode(state, action: { type: "relationshipGraph/expandNode"; payload: { nodeId: string } }) {
-      const newSet = new Set(state.expandedNodeIds);
-      newSet.add(action.payload.nodeId);
-      return { ...state, expandedNodeIds: newSet };
-    },
-    // Action: relationshipGraph/collapseNode
-    collapseNode(state, action: { type: "relationshipGraph/collapseNode"; payload: { nodeId: string } }) {
-      const newSet = new Set(state.expandedNodeIds);
-      newSet.delete(action.payload.nodeId);
-      return { ...state, expandedNodeIds: newSet };
-    },
-    // Action: relationshipGraph/setDepth
-    setDepth(state, action: { type: "relationshipGraph/setDepth"; payload: { maxDepth: number } }) {
-      return { ...state, traversalPolicy: { ...state.traversalPolicy, maxDepth: action.payload.maxDepth } };
-    },
-    // Action: relationshipGraph/setRelationshipFilter
-    setRelationshipFilter(state, action: { type: "relationshipGraph/setRelationshipFilter"; payload: { types: string[] } }) {
-      return { ...state, traversalPolicy: { ...state.traversalPolicy, relationshipTypes: action.payload.types } };
-    },
-    // Action: relationshipGraph/setLayout
-    setLayout(state, action: { type: "relationshipGraph/setLayout"; payload: { layout: "hierarchical" | "radial" | "force" } }) {
-      return { ...state, layout: action.payload.layout };
-    },
-    // Action: relationshipGraph/highlightPath
-    highlightPath(state, action: { type: "relationshipGraph/highlightPath"; payload: { path: string[] } }) {
-      // For simplicity we store the last highlighted path in a temporary field
-      return { ...state, highlightedPath: action.payload.path } as any;
-    },
-    // Action: relationshipGraph/clearHighlight
-    clearHighlight(state) {
-      const { highlightedPath, ...rest } = state as any;
-      return rest as RelationshipGraphKxeState;
-    },
-    // Action: relationshipGraph/setPolicy – allows full policy replacement
-    setPolicy(state, action: { type: "relationshipGraph/setPolicy"; payload: { policy: TraversalPolicy } }) {
-      return { ...state, traversalPolicy: action.payload.policy };
-    },
+  onActivate: (state, extension) => {
+    // If engine output traversalPolicy exists, initialize KXE state with it
+    const extData = extension?.data as any;
+    return {
+      ...defaultKxeState,
+      traversalPolicy: extData?.policy ?? defaultKxeState.traversalPolicy,
+    };
+  },
+  onUpdate: (state, action, pluginState) => {
+    switch (action.type) {
+      case "relationship-graph/focusNode": {
+        const payload = action.payload as { nodeId: string };
+        return { ...pluginState, focusNodeId: payload.nodeId };
+      }
+      case "relationship-graph/expandNode": {
+        const payload = action.payload as { nodeId: string };
+        const newSet = new Set(pluginState.expandedNodeIds);
+        newSet.add(payload.nodeId);
+        return { ...pluginState, expandedNodeIds: newSet };
+      }
+      case "relationship-graph/collapseNode": {
+        const payload = action.payload as { nodeId: string };
+        const newSet = new Set(pluginState.expandedNodeIds);
+        newSet.delete(payload.nodeId);
+        return { ...pluginState, expandedNodeIds: newSet };
+      }
+      case "relationship-graph/setDepth": {
+        const payload = action.payload as { maxDepth: number };
+        return {
+          ...pluginState,
+          traversalPolicy: { ...pluginState.traversalPolicy, maxDepth: payload.maxDepth },
+        };
+      }
+      case "relationship-graph/setRelationshipFilter": {
+        const payload = action.payload as { types: string[] };
+        return {
+          ...pluginState,
+          traversalPolicy: { ...pluginState.traversalPolicy, relationshipTypes: payload.types },
+        };
+      }
+      case "relationship-graph/setLayout": {
+        const payload = action.payload as { layout: "hierarchical" | "radial" | "force" };
+        return { ...pluginState, layout: payload.layout };
+      }
+      case "relationship-graph/highlightPath": {
+        const payload = action.payload as { path: string[] };
+        return { ...pluginState, highlightedPath: payload.path };
+      }
+      case "relationship-graph/clearHighlight": {
+        const { highlightedPath, ...rest } = pluginState;
+        return rest;
+      }
+      case "relationship-graph/setPolicy": {
+        const payload = action.payload as { policy: TraversalPolicy };
+        return { ...pluginState, traversalPolicy: payload.policy };
+      }
+      default:
+        return pluginState;
+    }
   },
 });

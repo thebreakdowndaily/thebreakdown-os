@@ -1,8 +1,8 @@
 // plugins/relationship-graph/renderer/index.tsx
 
 import React from "react";
-import { createRenderer } from "../../packages/plugin-sdk";
-import { useDispatch } from "../../packages/renderer/hooks";
+import { createRenderer } from "../../../packages/plugin-sdk";
+import { useDispatch } from "../../../packages/renderer/hooks";
 import { RelationshipGraphExtension } from "../engine";
 import { RelationshipGraphKxeState } from "../kxe";
 import { relationshipGraphManifest } from "../manifest";
@@ -22,13 +22,13 @@ export const RelationshipGraphRenderer = createRenderer<RelationshipGraphKxeStat
         <h2>Relationship Graph</h2>
         <div style={{ marginBottom: "12px" }}>
           <button
-            onClick={() => dispatch({ type: "relationshipGraph/focusNode", payload: { nodeId: extensionData.rootNode.id } })}
+            onClick={() => dispatch({ type: "relationship-graph/focusNode", payload: { nodeId: extensionData.rootNode.id } })}
             style={{ marginRight: "8px" }}
           >
             Focus Root
           </button>
           <button
-            onClick={() => dispatch({ type: "relationshipGraph/setDepth", payload: { maxDepth: pluginState.traversalPolicy.maxDepth + 1 } })}
+            onClick={() => dispatch({ type: "relationship-graph/setDepth", payload: { maxDepth: pluginState.traversalPolicy.maxDepth + 1 } })}
           >
             Increase Depth
           </button>
