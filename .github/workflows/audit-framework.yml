@@ -1,0 +1,48 @@
+name: Audit Framework Verification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: npm ci
+        run: |
+          npm ci
+          cd audit && npm ci
+
+      - name: TypeScript Compile
+        working-directory: ./audit
+        run: npx tsc --noEmit
+
+      - name: Jest
+        working-directory: ./audit
+        run: npx jest --preset ts-jest tests/loader.test.ts
+
+      - name: Audit CLI
+        run: npx tsx audit/scripts/audit.ts
+
+      - name: validate-report.ts
+        run: npx tsx audit/scripts/validate-report.ts
+
+      - name: git diff --exit-code
+        run: git diff --exit-code
+
+      - name: Upload audit-report.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report
+          path: audit-report.json
+          if-no-files-found: error
