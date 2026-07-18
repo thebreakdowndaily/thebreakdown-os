@@ -1,0 +1,13 @@
+{
+  "name": "@thebreakdown/plugin-sdk",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "dependencies": {
+    "@thebreakdown/compiler": "workspace:*",
+    "@thebreakdown/graph": "workspace:*",
+    "@thebreakdown/engine": "workspace:*",
+    "@thebreakdown/kxe": "workspace:*",
+    "@thebreakdown/renderer": "workspace:*"
+  }
+}

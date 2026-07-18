@@ -12,7 +12,15 @@
     "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts",
     "test:dataset": "npx tsx tests/dataset.test.ts",
     "test:dataset:e2e": "npx tsx tests/dataset-e2e.test.ts",
-    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e"
+    "test:compiler": "npx tsx packages/compiler/tests/compiler.test.ts",
+    "test:graph": "npx tsx packages/graph/tests/graph.test.ts",
+    "test:engine": "npx tsx packages/engine/tests/engine.test.ts",
+    "test:kxe": "npx tsx packages/kxe/tests/kxe.test.ts",
+    "test:renderer": "npx tsx packages/renderer/tests/renderer.test.tsx",
+    "test:timeline": "npx tsx plugins/timeline/tests/timeline.test.tsx",
+    "test:citations": "npx tsx plugins/citations/tests/citations.test.ts",
+    "test:plugin-sdk": "npx tsx packages/plugin-sdk/tests/compatibility.test.ts",
+    "test:all": "npm run test && npm run test:dataset && npm run test:dataset:e2e && npm run test:compiler && npm run test:graph && npm run test:engine && npm run test:kxe && npm run test:renderer && npm run test:plugin-sdk && npm run test:timeline && npm run test:citations"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.63.0",
