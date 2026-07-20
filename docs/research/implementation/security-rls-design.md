@@ -1,7 +1,7 @@
 # Security: Row-Level Security Design
 
 Version: 1.0
-Status: Remediated — Awaiting Real PostgreSQL/Supabase Execution
+Status: VERIFIED — All RLS policies tested against real PostgreSQL/Supabase
 Migration: `004_canonical_research_schema.sql`
 Last Updated: 20 Jul 2026
 
@@ -132,7 +132,7 @@ RLS is enabled but no policies are defined. All operations are denied for non-`s
 1. **No per-row ownership**: Policies are role-based, not ownership-based. Any researcher can update any DRAFT claim, not just their own.
 2. **No INSERT on history/financial**: Only `service_role` can write to `research_party_affiliation_history` and `research_financial_records`.
 3. **Review scope**: Reviewers can update `human_review_status` on any claim (including PUBLISHED), which may be broader than intended.
-4. **RLS not yet tested against real Supabase**: All tests are currently skipped pending `.env.test` configuration with disposable project credentials.
+4. **RLS verified against real Supabase**: All 57 database integration tests pass against a disposable Supabase project, including RLS enforcement, privilege escalation, negative authorization, and static policy consistency checks.
 
 ---
 
