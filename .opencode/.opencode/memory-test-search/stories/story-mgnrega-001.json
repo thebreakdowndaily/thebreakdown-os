@@ -1,0 +1,76 @@
+{
+  "storyId": "story-mgnrega-001",
+  "headline": "MGNREGA Budget 2026 Analysis",
+  "summary": "Analysis of MGNREGA allocation in Union Budget 2026-27 and its impact on rural employment.",
+  "publishedAt": "2026-02-01T10:00:00Z",
+  "entities": [
+    {
+      "id": "scheme-mgnrega",
+      "type": "scheme",
+      "name": "MGNREGA",
+      "aliases": [
+        "NREGA",
+        "Rural Job Scheme"
+      ],
+      "version": 0
+    },
+    {
+      "id": "org-finance-ministry",
+      "type": "organization",
+      "name": "Ministry of Finance",
+      "aliases": [
+        "Finance Ministry"
+      ],
+      "version": 0
+    },
+    {
+      "id": "org-rural-development",
+      "type": "organization",
+      "name": "Ministry of Rural Development",
+      "aliases": [
+        "MoRD"
+      ],
+      "version": 0
+    },
+    {
+      "id": "person-nirmala-sitharaman",
+      "type": "person",
+      "name": "Nirmala Sitharaman",
+      "aliases": [
+        "Nirmala"
+      ],
+      "version": 0
+    },
+    {
+      "id": "budget-2026",
+      "type": "budget",
+      "name": "Union Budget 2026-27",
+      "aliases": [
+        "Budget 2026"
+      ],
+      "version": 0
+    }
+  ],
+  "relationships": [
+    {
+      "from": "government-of-india",
+      "relationship": "implements",
+      "to": "scheme-mgnrega",
+      "confidence": 0.97
+    },
+    {
+      "from": "scheme-mgnrega",
+      "relationship": "managed-by",
+      "to": "org-rural-development",
+      "confidence": 0.95
+    }
+  ],
+  "topics": [
+    "rural employment",
+    "budget",
+    "MGNREGA",
+    "government scheme"
+  ],
+  "storedAt": "2026-07-18T16:37:55.985Z",
+  "version": 1
+}

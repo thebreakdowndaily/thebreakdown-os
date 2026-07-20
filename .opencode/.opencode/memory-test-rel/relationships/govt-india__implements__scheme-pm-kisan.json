@@ -1,0 +1,21 @@
+{
+  "from": "govt-india",
+  "relationship": "implements",
+  "to": "scheme-pm-kisan",
+  "confidence": 0.96,
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.994Z",
+  "lastObserved": "2026-07-18T16:37:55.994Z",
+  "firstObserved": "2026-07-18T16:37:55.994Z",
+  "active": true,
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.994Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-created"
+      ]
+    }
+  ]
+}

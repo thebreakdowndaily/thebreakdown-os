@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "theme": "semantic",
+  "tokenSystem": "v1",
+  "layoutEngine": "v1",
+  "typography": "v1",
+  "storybook": true,
+  "tailwind": true
+}

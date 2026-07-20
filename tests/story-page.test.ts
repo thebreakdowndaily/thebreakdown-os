@@ -6,9 +6,8 @@
 
 import { buildStoryPage } from '../features/story/view-model';
 import { bootstrapServices } from '../lib/bootstrap';
-import { mockStory } from './mock-data';
 import type { Services } from '../services/registry';
-import type { Story, Topic, Entity } from '../types/canonical';
+import type { Story, Topic, Entity, StoryBlock } from '../types/canonical';
 
 async function runTests() {
   let passed = 0;
@@ -49,8 +48,8 @@ async function runTests() {
   try {
     const vm = await buildStoryPage(services, testStory.slug);
     const blocks = vm!.story.blocks;
-    const heroBlock = blocks.find(b => b.region === 'hero');
-    const footerBlocks = blocks.filter(b => b.region === 'footer');
+    const heroBlock = blocks.find((b: StoryBlock) => b.region === 'hero');
+    const footerBlocks = blocks.filter((b: StoryBlock) => b.region === 'footer');
     assert(!!heroBlock, 'Hero block is assigned to hero region');
     assert(footerBlocks.length > 0, 'Footer blocks generated');
   } catch (e) {

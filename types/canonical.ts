@@ -10,6 +10,9 @@ export type EntityKind =
 
 export type StoryStatus = 'draft' | 'review' | 'fact_check' | 'scheduled' | 'published' | 'updated';
 
+/** Publication lifecycle — controls public visibility. Separate from editorial status. */
+export type PublicationStatus = 'draft' | 'review' | 'scheduled' | 'published' | 'archived';
+
 export type StoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
 
 export type EvidenceTier =
@@ -93,6 +96,8 @@ export interface Story {
   author: string;
   category: string;
   status: StoryStatus;
+  /** Publication lifecycle — controls public visibility. Missing = draft (fail-closed). */
+  publicationStatus?: PublicationStatus;
   storyType: StoryType;
   evidenceScore: number;
   readingTime: number;

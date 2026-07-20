@@ -1,0 +1,21 @@
+{
+  "from": "scheme-mgnrega",
+  "relationship": "managed-by",
+  "to": "org-rural-development",
+  "confidence": 0.95,
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.984Z",
+  "lastObserved": "2026-07-18T16:37:55.984Z",
+  "firstObserved": "2026-07-18T16:37:55.984Z",
+  "active": true,
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.984Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-created"
+      ]
+    }
+  ]
+}

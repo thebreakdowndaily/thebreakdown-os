@@ -1,0 +1,21 @@
+{
+  "from": "org-rural-dev",
+  "relationship": "reports-to",
+  "to": "govt-india",
+  "confidence": 0.99,
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.999Z",
+  "lastObserved": "2026-07-18T16:37:55.999Z",
+  "firstObserved": "2026-07-18T16:37:55.999Z",
+  "active": true,
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.999Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-created"
+      ]
+    }
+  ]
+}

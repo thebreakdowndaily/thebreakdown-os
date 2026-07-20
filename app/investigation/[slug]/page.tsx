@@ -14,14 +14,14 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const { data: investigations } = await services.investigations.getInvestigations();
   return investigations.map((inv) => ({ slug: inv.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const inv = await services.investigations.getInvestigationBySlug(slug);
   if (!inv) return {};
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function InvestigationPage({ params }: Props) {
   const { slug } = await params;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const inv = await services.investigations.getInvestigationBySlug(slug);
   if (!inv) notFound();
 

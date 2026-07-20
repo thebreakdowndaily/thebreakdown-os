@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getStories } from '@/utils/data-layer/store';
+import { getPublicStories } from '@/utils/data-layer/store';
 import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default function StoriesPage() {
-  const { data: stories } = getStories({ pageSize: 50, sort: 'publishedAt', order: 'desc' });
+  const { data: stories } = getPublicStories({ pageSize: 50 });
   return (
     <>
       <Breadcrumbs items={[

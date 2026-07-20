@@ -7,7 +7,7 @@ export function GET(request: NextRequest) {
   const typeFilter = searchParams.get('type') || '';
   const pageStr = searchParams.get('page');
   const limitStr = searchParams.get('limit');
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
 
   const params = {
     page: pageStr ? parseInt(pageStr, 10) : undefined,

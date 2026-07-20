@@ -1,4 +1,4 @@
-import { getStories } from '@/utils/data-layer/store';
+import { getPublicStories } from '@/utils/data-layer/store';
 
 export const dynamic = 'force-static';
 
@@ -7,7 +7,7 @@ function escapeXml(s: string): string {
 }
 
 export async function GET() {
-  const { data: stories } = getStories({ pageSize: 20, sort: 'publishedAt', order: 'desc' });
+  const { data: stories } = getPublicStories({ pageSize: 20 });
   const items = stories.map((s) => `
     <item>
       <title>${escapeXml(s.headline)}</title>

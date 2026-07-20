@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
-import SearchBar from '../ui/SearchBar';
+import SearchBar from '@/components/ui/SearchBar';
 
 interface SearchDialogProps {
   open: boolean;

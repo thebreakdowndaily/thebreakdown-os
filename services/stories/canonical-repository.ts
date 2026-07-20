@@ -1,6 +1,7 @@
 import type { Story, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
 import type { StoryService } from '@/services/interfaces/story';
+import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 
 export class CanonicalStoryService implements StoryService {
   async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
@@ -56,6 +57,27 @@ export class CanonicalStoryService implements StoryService {
 
   async invalidate(id?: string): Promise<void> {
     // No-op for Supabase - data is always fresh
+  }
+
+  async getPublicStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
+    let query = db().from('stories').select('*', { count: 'exact' });
+    const now = new Date().toISOString();
+    query = query
+      .eq('status', 'published')
+      .lte('published_at', now);
+    if (params?.search) query = query.or(`title.ilike.%${params.search}%,summary.ilike.%${params.search}%`);
+    if (params?.page && params?.pageSize) {
+      query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
+    }
+    const { data, count, error } = await query.order('published_at', { ascending: false });
+    if (error) throw error;
+    return { data: (data || []).map(rowToStory), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
+  }
+
+  async getPublicStoryBySlug(slug: string): Promise<Story | undefined> {
+    const story = await this.getStoryBySlug(slug);
+    if (!story) return undefined;
+    return isPubliclyPublished(storyPublicationContext(story)) ? story : undefined;
   }
 }
 

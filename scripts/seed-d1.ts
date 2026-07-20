@@ -26,20 +26,30 @@ async function main() {
 
   // Stories
   for (const s of stories) {
+    const heroBlock = s.blocks.find(b => b.type === 'hero');
+    const heroData = heroBlock ? (heroBlock.data as any) : null;
+
+    const excerpt = heroData?.summary || '';
+    const category = heroData?.category || '';
+    const author = heroData?.author || '';
+    const heroImage = heroData?.heroImage || '';
+    const tags: string[] = [];
+    const publishedAt = heroData?.publishedAt || null;
+
     sql.push(`INSERT OR REPLACE INTO cms_stories (id,title,slug,excerpt,status,category,author,hero_image,tags,blocks_json,created_at,updated_at,published_at) VALUES (
       '${s.id}',
       '${escape(s.title)}',
       '${escape(s.slug)}',
-      '${escape(s.excerpt || '')}',
+      '${escape(excerpt)}',
       '${s.status || 'draft'}',
-      '${escape(s.category || '')}',
-      '${escape(s.author || '')}',
-      '${escape(s.heroImage || '')}',
-      '${jsonEscape(JSON.stringify(s.tags || []))}',
+      '${escape(category)}',
+      '${escape(author)}',
+      '${escape(heroImage)}',
+      '${jsonEscape(JSON.stringify(tags))}',
       '${jsonEscape(JSON.stringify(s.blocks || []))}',
       '${s.createdAt || new Date().toISOString()}',
       '${s.updatedAt || new Date().toISOString()}',
-      ${s.publishedAt ? `'${s.publishedAt}'` : 'NULL'}
+      ${publishedAt ? `'${publishedAt}'` : 'NULL'}
     );`);
   }
 

@@ -1,4 +1,4 @@
-import { getStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
+import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
 import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
@@ -6,10 +6,12 @@ import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, StoryBloc
 import { seedDatasets } from '@/lib/datasets/seed-data';
 import type { APIStory, APITopic, APIEntity, APITimeline, APIFix, APIInvestigation } from '@/utils/data-layer/types';
 
-export function bootstrapServices(): Services {
+export function bootstrapServices(options?: { publicOnly?: boolean }): Services {
   try { return getServices(); } catch {}
 
-  const apiStories = getStories({ pageSize: 100 }).data;
+  const apiStories = options?.publicOnly
+    ? getPublicStories({ pageSize: 100 }).data
+    : getStories({ pageSize: 100 }).data;
   const apiTopics = getTopics({ pageSize: 100 }).data;
   const apiEntities = getEntities({ pageSize: 100 }).data;
   const apiTimelines = getTimelines({ pageSize: 100 }).data;
@@ -181,7 +183,7 @@ function createBlocksFromStory(s: APIStory): StoryBlock[] {
 
 export function apiStoryToCanonical(s: APIStory): Story {
   const blocks = createBlocksFromStory(s);
-  const mappedSources = (s.sources || []).map((src): Source => ({ title: src.name, url: src.url, accessedAt: '', tier: src.tier as import('@/types/canonical').ConfidenceTier }));
+  const mappedSources = (s.sources || []).map((src): Source => ({ title: src.name, url: s.url || '', accessedAt: '', tier: src.tier as import('@/types/canonical').ConfidenceTier }));
   const mappedClaims = (s.claims || []).map((c, i): Claim => ({
     id: `claim-${i}-${Math.random().toString(36).slice(2, 8)}`,
     claim: c.claim || '',
@@ -192,11 +194,19 @@ export function apiStoryToCanonical(s: APIStory): Story {
     confidence: c.confidence || 0.5,
     status: c.verification === 'true' ? 'verified' : (c.confidence || 0) >= 0.8 ? 'strong' : (c.confidence || 0) >= 0.6 ? 'moderate' : 'unverified',
   }));
+
+  const publicationStatus = s.publicationStatus || 'draft';
+  const canonicalStatus =
+    publicationStatus === 'published' ? 'published' as const :
+    publicationStatus === 'scheduled' ? 'scheduled' as const :
+    publicationStatus === 'review' ? 'review' as const :
+    'draft' as const;
+
   return {
     ...s as unknown as Story,
     title: s.headline,
     createdAt: s.publishedAt,
-    status: 'published',
+    status: canonicalStatus,
     storyType: s.storyType || 'standard',
     blocks,
     sources: mappedSources,
@@ -207,6 +217,7 @@ export function apiStoryToCanonical(s: APIStory): Story {
     relatedEntityIds: (s.relatedEntities || []).map((re) => re.id || re.slug),
     relatedTopicIds: s.relatedTopicIds || [],
     repo: undefined,
+    publicationStatus,
   } as unknown as Story;
 }
 

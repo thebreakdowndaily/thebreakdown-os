@@ -2,15 +2,13 @@
  * THE BREAKDOWN — Shared Mock Data for Tests
  */
 
-import type {
-  StoryJSON,
-  EntityJSON,
-  TopicJSON,
-  HomepageJSON,
-  SearchResult,
-  SEOData,
-  Breadcrumb,
-} from '../utils/types';
+type StoryJSON = any;
+type EntityJSON = any;
+type TopicJSON = any;
+type HomepageJSON = any;
+type SearchResult = any;
+type SEOData = any;
+type Breadcrumb = any;
 
 export const mockStory: StoryJSON = {
   id: 'story-001',

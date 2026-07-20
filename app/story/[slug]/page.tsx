@@ -100,8 +100,8 @@ export const dynamicParams = true;
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const services = bootstrapServices();
-  const storySlugs = (await services.stories.getStories()).data.map((s) => ({ slug: s.slug }));
+  const services = bootstrapServices({ publicOnly: true });
+  const storySlugs = (await services.stories.getPublicStories()).data.map((s) => ({ slug: s.slug }));
   const chapterSlugs: { slug: string }[] = [];
   try {
     seedAll();
@@ -148,7 +148,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildStoryPage(services, slug);
   if (!vm) return { title: 'Story Not Found — The Breakdown' };
   const { story } = vm;
@@ -205,7 +205,7 @@ async function tryLoadChapter(slug: string) {
           }
 
           // Resolve related investigation if a canonical relationship exists in the registry
-          const services = bootstrapServices();
+          const services = bootstrapServices({ publicOnly: true });
           const { data: investigations } = await services.investigations.getInvestigations();
           const relatedInvestigation = investigations.find(inv =>
             inv.chapters.some(ich => ich.storySlug === slug)
@@ -267,7 +267,7 @@ export default async function StoryPage({
     );
   }
   const mode = (resolvedSearchParams?.mode as string) || 'standard';
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildStoryPage(services, slug);
   if (!vm) notFound();
   

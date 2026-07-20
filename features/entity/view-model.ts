@@ -1,12 +1,13 @@
 import type { Story, Topic, Entity, EntityPageViewModel, Dataset, EntityBase, EntityTerminalViewModel } from '@/types/canonical';
 import type { Services } from '@/services/registry';
+import { canPubliclyViewStory, storyPublicationContext } from '@/lib/story/publication';
 
 export async function buildEntityPage(services: Services, slug: string): Promise<EntityPageViewModel | null> {
   const entity = await services.entities.getEntityBySlug(slug);
   if (!entity) return null;
   const relatedStoriesPromises = (entity as any).relatedStoryIds?.map((id: string) => services.stories.getStory(id)) || [];
   const relatedStoriesResult = await Promise.all(relatedStoriesPromises);
-  const stories = relatedStoriesResult.filter(Boolean) as Story[];
+  const stories = relatedStoriesResult.filter((s): s is Story => !!s && canPubliclyViewStory(storyPublicationContext(s)));
   const relatedEntitiesPromises = (entity.relationships || []).map(r => services.entities.getEntity(r.targetId));
   const relatedEntities = (await Promise.all(relatedEntitiesPromises)).filter((e): e is EntityBase => !!e);
   // Fallback to legacy relatedTopicIds if relationships don't map topics yet
@@ -50,7 +51,7 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
   
   const terminalStoriesPromises = (entity.usageGraph?.stories || []).map(id => services.stories.getStory(id));
   const terminalStoriesResult = await Promise.all(terminalStoriesPromises);
-  const stories = terminalStoriesResult.filter(Boolean) as Story[];
+  const stories = terminalStoriesResult.filter((s): s is Story => !!s && canPubliclyViewStory(storyPublicationContext(s)));
   
   // Flatten Assets
   const resolvedAssets = entity.assets?.map(a => a.resolvedAsset).filter(Boolean) as import('@/types/canonical').AssetBase[] || [];

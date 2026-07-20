@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildHomepage(services);
 
   const libraries = getKnowledgeLibrarySeedData();

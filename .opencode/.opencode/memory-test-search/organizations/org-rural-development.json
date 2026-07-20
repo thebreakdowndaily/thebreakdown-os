@@ -1,0 +1,25 @@
+{
+  "id": "org-rural-development",
+  "type": "organization",
+  "name": "Ministry of Rural Development",
+  "aliases": [
+    "MoRD"
+  ],
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.967Z",
+  "updatedAt": "2026-07-18T16:37:55.967Z",
+  "stories": [
+    "story-mgnrega-001"
+  ],
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.967Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "entity-created"
+      ]
+    }
+  ],
+  "active": true
+}

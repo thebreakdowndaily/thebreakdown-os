@@ -1,0 +1,25 @@
+{
+  "id": "budget-2026",
+  "type": "budget",
+  "name": "Union Budget 2026-27",
+  "aliases": [
+    "Budget 2026"
+  ],
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:56.006Z",
+  "updatedAt": "2026-07-18T16:37:56.006Z",
+  "stories": [
+    "story-003"
+  ],
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:56.006Z",
+      "updatedBy": "story-003",
+      "changes": [
+        "entity-created"
+      ]
+    }
+  ],
+  "active": true
+}

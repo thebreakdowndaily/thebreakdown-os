@@ -54,13 +54,13 @@ const entityTypeLabel: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   return (await services.topics.getTopics({ pageSize: 100 })).data.map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildTopicPage(services, slug);
   if (!vm) return { title: 'Topic Not Found — The Breakdown' };
   const { topic } = vm;
@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function TopicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildTopicPage(services, slug);
   if (!vm) notFound();
   

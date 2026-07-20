@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 
 export async function generateStaticParams() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const orgs = await services.entities.getEntitiesByType('organization');
   return orgs.map((org) => ({ slug: org.slug }));
 }

@@ -52,7 +52,7 @@ async function runTests() {
       { question: 'Q1', answer: 'A1' }
     ]);
     
-    assert(schema && schema['@type'] === 'FAQPage', 'FAQ schema type is FAQPage');
+    assert(schema !== null && schema['@type'] === 'FAQPage', 'FAQ schema type is FAQPage');
   } catch (e) {
     console.error('  FAIL: FAQ schema threw exception', e);
     failed++;

@@ -1,0 +1,25 @@
+{
+  "id": "person-nirmala-sitharaman",
+  "type": "person",
+  "name": "Nirmala Sitharaman",
+  "aliases": [
+    "Nirmala"
+  ],
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.973Z",
+  "updatedAt": "2026-07-18T16:37:55.973Z",
+  "stories": [
+    "story-mgnrega-001"
+  ],
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.973Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "entity-created"
+      ]
+    }
+  ],
+  "active": true
+}

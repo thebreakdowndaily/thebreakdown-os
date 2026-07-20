@@ -1,0 +1,21 @@
+{
+  "from": "government-of-india",
+  "relationship": "implements",
+  "to": "scheme-mgnrega",
+  "confidence": 0.97,
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.982Z",
+  "lastObserved": "2026-07-18T16:37:55.982Z",
+  "firstObserved": "2026-07-18T16:37:55.982Z",
+  "active": true,
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.982Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-created"
+      ]
+    }
+  ]
+}

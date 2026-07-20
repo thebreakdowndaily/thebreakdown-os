@@ -7,7 +7,7 @@ import FixRenderer from '@/components/fix/FixRenderer';
 import type { Fix, ExistingSolution } from '@/types/canonical';
 
 export async function generateStaticParams() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   return (await services.fixes.getFixes({ pageSize: 100 })).data.map((f) => ({ slug: f.slug }));
 }
 
@@ -51,7 +51,7 @@ function toFixJSON(fix: Record<string, unknown>): Fix {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const fix = await services.fixes.getFixBySlug(slug);
   if (!fix) return { title: 'Fix Not Found — The Breakdown' };
   const f = fix as unknown as Record<string, unknown>;
@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function FixPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const fix = await services.fixes.getFixBySlug(slug);
   if (!fix) notFound();
 

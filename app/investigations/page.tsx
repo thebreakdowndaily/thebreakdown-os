@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function InvestigationsPage() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const { data: investigations } = await services.investigations.getInvestigations();
 
   return (

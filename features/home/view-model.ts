@@ -25,7 +25,7 @@ export interface HomepageData {
 }
 
 export async function buildHomepage(services: Services): Promise<HomepageData> {
-  const allStoriesRaw = [...(await services.stories.getStories({ pageSize: 100 })).data]
+  const allStoriesRaw = [...(await services.stories.getPublicStories({ pageSize: 100 })).data]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
   
   const topStoryCanonical = allStoriesRaw[0];

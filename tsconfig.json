@@ -39,6 +39,7 @@
     "tests",
     ".open-next",
     "scripts",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    ".storybook"
   ]
 }

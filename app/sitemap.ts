@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next';
-import { getStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
+import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = 'https://thebreakdown.in';
 
-  const stories = getStories({ pageSize: 100 }).data.map((s) => ({
+  const stories = getPublicStories({ pageSize: 100 }).data.map((s) => ({
     url: `${siteUrl}/story/${s.slug}`,
     lastModified: new Date(s.updatedAt || s.publishedAt),
     changeFrequency: 'daily' as const,

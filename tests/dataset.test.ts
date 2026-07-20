@@ -1,5 +1,5 @@
 import { MemoryDatasetRepository } from '../services/repositories/memory/dataset';
-import type { Dataset, DatasetVersion, APIListParams } from '../types/canonical';
+import type { Dataset, DatasetVersion, APIListParams, Metric } from '../types/canonical';
 
 const mockDataset: Dataset = {
   id: 'ds-test',
@@ -219,7 +219,7 @@ async function runTests() {
     const service = new MemoryDatasetRepository([ds]);
     const result = await service.getDatasets();
     assert(result.data.length >= 1, 'API getDatasets returns data');
-    const found = result.data.find(d => d.slug === 'api-dataset');
+    const found = result.data.find((d: Dataset) => d.slug === 'api-dataset');
     assert(found !== undefined, 'API getDatasets includes seeded dataset');
   } catch (e) {
     console.error('  FAIL: API dataset listing threw exception', e);
@@ -288,7 +288,7 @@ async function runTests() {
   try {
     const service = new MemoryDatasetRepository([mockDataset]);
     const ds = await service.getDatasetBySlug('test-dataset')!;
-    const primary = ds.metrics.find(m => m.isPrimary);
+    const primary = ds.metrics.find((m: Metric) => m.isPrimary);
     assert(primary !== undefined, 'Dataset has primary metric');
     assert(primary!.id === 'm1', 'Primary metric is m1');
     assert(ds.metrics.length === 2, 'Dataset has correct metric count');
