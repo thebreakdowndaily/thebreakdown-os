@@ -1,109 +1,183 @@
-import type { Story, PageSection, Entity, Topic } from '@/types/canonical';
+/**
+ * Homepage View Model Builder — Release 1
+ * Governance: docs/rxs/screens/homepage.md & AGENTS.md Architectural Hierarchy
+ *
+ * Transforms canonical domain stories and datasets into presentation-ready view models
+ * for homepage sections. Keeps presentation rules out of UI components.
+ */
+
+import type { Topic } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { QualityBuilder } from '@/services/stories/pipeline/quality';
 import { TimelineBuilder } from '@/services/stories/pipeline/timeline';
 import { EntityBuilder } from '@/services/stories/pipeline/entities';
+import { getReaderTrustSignals, TrustSignal } from '@/lib/story/trust-signals';
+import { extractFinancialFeature, FinancialFeatureData } from '@/lib/story/financial-eligibility';
+
+export interface HomepageLeadStory {
+  slug: string;
+  category: string;
+  headline: string;
+  dek: string;
+  readingTime: number;
+  updatedAt: string;
+  byline: string;
+  trustSignals: TrustSignal[];
+  heroImage?: string;
+  actionText: string;
+}
+
+export interface HomepageBriefing {
+  slug: string;
+  headline: string;
+  summary: string;
+  category: string;
+  readingTime: number;
+  trustSignals: TrustSignal[];
+}
+
+export interface HomepageDeepDive {
+  slug: string;
+  category: string;
+  headline: string;
+  summary: string;
+  readingTime: number;
+  trustSignals: TrustSignal[];
+  heroImage?: string;
+}
+
+export interface HomepageTopic {
+  slug: string;
+  name: string;
+  description?: string;
+  storyCount?: number;
+}
+
+export interface HomepageUpdate {
+  slug: string;
+  headline: string;
+  category: string;
+  dateStr: string;
+  readingTime: number;
+}
 
 export interface HomepageData {
   seo: { title: string; description: string; canonical: string; ogType: string };
-  topStory: any | null;
-  stories: any[];
-  trendingTopics: Topic[];
-  breakingIntelligence: Array<{ category: string; title: string; href: string }>;
-  knowledgeToday: { stories: number; entities: number; topics: number; claimsVerified: number; datasetsUpdated: number };
-  entitySpotlights: Entity[];
-  dataDashboard: { 
-    evidenceGrowth: string; 
-    coverageTrend: string; 
-    countries: number; 
-    organizations: number; 
-    people: number; 
-    mediaAssets: number; 
-  };
+  leadStory: HomepageLeadStory | null;
+  briefings: HomepageBriefing[];
+  deepDives: HomepageDeepDive[];
+  financialFeature: FinancialFeatureData | null;
+  topics: HomepageTopic[];
+  recentlyUpdated: HomepageUpdate[];
 }
 
 export async function buildHomepage(services: Services): Promise<HomepageData> {
   const allStoriesRaw = [...(await services.stories.getPublicStories({ pageSize: 100 })).data]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  
-  const topStoryCanonical = allStoriesRaw[0];
-  const storiesCanonical = allStoriesRaw.slice(1, 7); // Latest 6 stories for the grid
-  
-  // We need to run the pipeline to get visual intelligence and quality scores
+
   const pipeline = new KnowledgeStoryPipeline()
     .add(new EntityBuilder())
     .add(new VisualIntelligenceBuilder())
     .add(new TimelineBuilder())
     .add(new QualityBuilder());
 
-  const topStory = topStoryCanonical ? await pipeline.execute(topStoryCanonical) : null;
-  const stories = await Promise.all(storiesCanonical.map(s => pipeline.execute(s)));
-  
-  const topicsData = (await services.topics.getTopics()).data;
-  const trendingTopics = topicsData.slice(0, 5);
-  
-  // Computations for new sections
-  const breakingIntelligence = allStoriesRaw.slice(1, 5).map(s => ({
-    category: s.category || 'News',
-    title: s.headline,
-    href: `/story/${s.slug}`
+  // 1. Lead Story — dominant editorial priority
+  const rawLead = allStoriesRaw[0];
+  let leadStory: HomepageLeadStory | null = null;
+  if (rawLead) {
+    const executedLead = await pipeline.execute(rawLead);
+    const heroImg = executedLead.visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || rawLead.heroImage;
+    leadStory = {
+      slug: rawLead.slug,
+      category: rawLead.category || 'policy',
+      headline: rawLead.headline,
+      dek: rawLead.summary,
+      readingTime: rawLead.readingTime || 10,
+      updatedAt: new Date(rawLead.updatedAt || rawLead.publishedAt).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }),
+      byline: rawLead.author || 'The Breakdown Desk',
+      trustSignals: getReaderTrustSignals(rawLead),
+      heroImage: heroImg,
+      actionText: 'Understand the story →',
+    };
+  }
+
+  // 2. The Short Version (Briefings 3–5 items)
+  const rawBriefings = allStoriesRaw.slice(1, 5);
+  const briefings: HomepageBriefing[] = rawBriefings.map((s) => ({
+    slug: s.slug,
+    headline: s.headline,
+    summary: s.summary,
+    category: s.category || 'policy',
+    readingTime: s.readingTime || 5,
+    trustSignals: getReaderTrustSignals(s),
   }));
-  
-  const entitiesData = (await services.entities.getEntities()).data;
-  // Spotlighting 3 entities (Today, This Week, Trending)
-  const entitySpotlights = entitiesData.slice(0, 3);
-  
-  let claimsVerified = 0;
-  let sourcesIndexed = 0;
-  let evidenceGrowth = 15; // mock +15%
-  let coverageTrend = 8; // mock +8%
-  let totalMediaAssets = 120; // mock count
-  let totalCountries = 0;
-  let totalOrganizations = 0;
-  let totalPeople = 0;
-  
-  allStoriesRaw.forEach(s => {
-    claimsVerified += (s.claims?.filter(c => c.status === 'verified').length || 0);
-    sourcesIndexed += (s.sources?.length || 0);
-  });
-  
-  entitiesData.forEach(e => {
-    if (e.type === 'country') totalCountries++;
-    if (e.type === 'organization') totalOrganizations++;
-    if (e.type === 'person') totalPeople++;
-  });
-  
-  // Calculate today's impact
-  const today = new Date(Date.now() - 86400000);
-  const storiesToday = allStoriesRaw.filter(s => new Date(s.publishedAt) >= today).length;
-  
-  const knowledgeToday = {
-    stories: storiesToday || 5, // Fallback if local data has no recent stories
-    entities: 12, // Mocked for demonstration
-    topics: 3,
-    claimsVerified: 18,
-    datasetsUpdated: 2
-  };
-  
-  const dataDashboard = {
-    evidenceGrowth: `+${evidenceGrowth}%`,
-    coverageTrend: `+${coverageTrend}%`,
-    countries: totalCountries || 12,
-    organizations: totalOrganizations || 45,
-    people: totalPeople || 89,
-    mediaAssets: totalMediaAssets || 342,
-  };
+
+  // 3. Deep Dives (2–4 items)
+  const rawDeepDives = allStoriesRaw.slice(5, 9);
+  const deepDives: HomepageDeepDive[] = await Promise.all(
+    rawDeepDives.map(async (s) => {
+      const executed = await pipeline.execute(s);
+      const heroImg = executed.visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || s.heroImage;
+      return {
+        slug: s.slug,
+        category: s.category || 'investigation',
+        headline: s.headline,
+        summary: s.summary,
+        readingTime: s.readingTime || 12,
+        trustSignals: getReaderTrustSignals(s),
+        heroImage: heroImg,
+      };
+    })
+  );
+
+  // 4. Follow the Money — eligible financial feature
+  let financialFeature: FinancialFeatureData | null = null;
+  for (const story of allStoriesRaw) {
+    const feat = extractFinancialFeature(story);
+    if (feat) {
+      financialFeature = feat;
+      break;
+    }
+  }
+
+  // 5. Topics
+  const rawTopics = (await services.topics.getTopics()).data;
+  const topics: HomepageTopic[] = rawTopics.slice(0, 10).map((t) => ({
+    slug: t.slug,
+    name: t.name,
+    description: t.description,
+  }));
+
+  // 6. Recently Updated Stories
+  const recentlyUpdated: HomepageUpdate[] = allStoriesRaw.slice(0, 6).map((s) => ({
+    slug: s.slug,
+    headline: s.headline,
+    category: s.category || 'policy',
+    dateStr: new Date(s.updatedAt || s.publishedAt).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+    }),
+    readingTime: s.readingTime || 8,
+  }));
 
   return {
-    seo: { title: 'The Breakdown Knowledge Platform', description: 'A digital knowledge institution producing evidence-based libraries on Indian policy, history, and society. Every claim verified. Every source cited.', canonical: 'https://thebreakdown.in', ogType: 'website' },
-    topStory,
-    stories,
-    trendingTopics,
-    breakingIntelligence,
-    knowledgeToday,
-    entitySpotlights,
-    dataDashboard
+    seo: {
+      title: 'The Breakdown — Evidence Before Conclusions',
+      description: 'An evidence-driven explanatory journalism and public-knowledge platform.',
+      canonical: 'https://thebreakdown.in',
+      ogType: 'website',
+    },
+    leadStory,
+    briefings,
+    deepDives,
+    financialFeature,
+    topics,
+    recentlyUpdated,
   };
 }
