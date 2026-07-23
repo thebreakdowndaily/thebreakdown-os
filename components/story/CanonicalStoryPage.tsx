@@ -1,4 +1,3 @@
-import Script from 'next/script';
 import { Suspense } from 'react';
 import type { StoryTerminalViewModel, StoryBlock } from '@/types/canonical';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
@@ -6,7 +5,6 @@ import { BlockRenderer } from '@/components/story/blocks/registry';
 import SourcesList from '@/components/story/SourcesList';
 import NextExploration from '@/components/story/NextExploration';
 import TierSelector, { type Tier } from '@/components/story/TierSelector';
-import { createStoryJsonLd } from '@/lib/seo/jsonld-story';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
@@ -19,7 +17,7 @@ interface CanonicalStoryPageProps {
 }
 
 export function CanonicalStoryPage({ vm, mode }: CanonicalStoryPageProps) {
-  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm as any;
+  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm;
   const heroImage = visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || story.heroImage;
 
   const currentTier: Tier = mode === 'quick' || mode === 'deep' ? mode : 'standard';
@@ -29,12 +27,6 @@ export function CanonicalStoryPage({ vm, mode }: CanonicalStoryPageProps) {
 
   return (
     <>
-      {createStoryJsonLd(story).map((ld, i) => (
-        <Script key={`sc-${i}`} id={`schema-${i}`} type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(ld)}
-        </Script>
-      ))}
-
       <Breadcrumbs items={vm.breadcrumbs} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -47,14 +39,14 @@ export function CanonicalStoryPage({ vm, mode }: CanonicalStoryPageProps) {
             </h1>
 
             <div className="flex items-center gap-4 text-sm text-neutral-400 flex-wrap">
-              {(story as any).metadata?.classification && (
+              {story.metadata?.classification && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
-                  {String((story as any).metadata.classification)}
+                  {String(story.metadata.classification)}
                 </span>
               )}
-              {!(story as any).metadata?.classification && (story as any).metadata?.type && (
+              {!story.metadata?.classification && story.metadata?.type && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
-                  {String((story as any).metadata.type)}
+                  {String(story.metadata.type)}
                 </span>
               )}
               <span className="text-emerald-400 font-mono">{story.author}</span>

@@ -1,13 +1,16 @@
+import { cache } from 'react';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildStoryPage } from '@/features/story/view-model';
-import type { Chapter, StoryTerminalViewModel } from '@/types/canonical';
+import type { Chapter, Story, StoryTerminalViewModel } from '@/types/canonical';
 import { seedAll, enrichClaimLazy, getKnowledgeCore, type EnrichedClaim } from '@/lib/knowledge/knowledge-core';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { chapterToCanonicalAdapter } from '@/lib/story/adapters';
 
 export interface ChapterResolution {
   type: 'chapter';
   chapter: Chapter;
+  canonicalStory: Story;
   collectionSlug: string;
   volumeSlug: string;
   enrichedClaims: EnrichedClaim[];
@@ -30,7 +33,7 @@ export interface NotFoundResolution {
 
 export type StoryResolution = ChapterResolution | LegacyStoryResolution | NotFoundResolution;
 
-export async function tryLoadChapter(slug: string): Promise<Omit<ChapterResolution, 'type' | 'enrichedClaims' | 'claimCount' | 'evidenceCount' | 'thinkerCount' | 'documentCount'> & { chapter: Chapter } | null> {
+export const tryLoadChapter = cache(async function tryLoadChapter(slug: string): Promise<Omit<ChapterResolution, 'type' | 'canonicalStory' | 'enrichedClaims' | 'claimCount' | 'evidenceCount' | 'thinkerCount' | 'documentCount'> & { chapter: Chapter } | null> {
   try {
     seedAll();
     const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
@@ -69,7 +72,7 @@ export async function tryLoadChapter(slug: string): Promise<Omit<ChapterResoluti
     }
   } catch {}
   return null;
-}
+});
 
 export async function resolveStory(slug: string): Promise<StoryResolution> {
   const chapterData = await tryLoadChapter(slug);
@@ -90,6 +93,7 @@ export async function resolveStory(slug: string): Promise<StoryResolution> {
     return {
       type: 'chapter',
       chapter,
+      canonicalStory: chapterToCanonicalAdapter(chapter),
       collectionSlug,
       volumeSlug,
       enrichedClaims,

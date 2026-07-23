@@ -89,7 +89,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   if (rawLead) {
     const executedLead: any = await pipeline.execute(rawLead);
     const heroImg: string | undefined = executedLead?.visualAssets?.hero?.resolvedAsset?.optimization?.cdnUrl || rawLead.heroImage;
-    const authorName = typeof rawLead.author === 'string' ? rawLead.author : rawLead.author?.name;
+    const authorName = rawLead.author;
 
     leadStory = {
       slug: rawLead.slug,
