@@ -6,7 +6,6 @@
  * for homepage sections. Keeps presentation rules out of UI components.
  */
 
-import type { Topic } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
@@ -86,9 +85,12 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   // 1. Lead Story — dominant editorial priority
   const rawLead = allStoriesRaw[0];
   let leadStory: HomepageLeadStory | null = null;
+
   if (rawLead) {
-    const executedLead = await pipeline.execute(rawLead);
-    const heroImg = executedLead.visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || rawLead.heroImage;
+    const executedLead: any = await pipeline.execute(rawLead);
+    const heroImg: string | undefined = executedLead?.visualAssets?.hero?.resolvedAsset?.optimization?.cdnUrl || rawLead.heroImage;
+    const authorName = typeof rawLead.author === 'string' ? rawLead.author : rawLead.author?.name;
+
     leadStory = {
       slug: rawLead.slug,
       category: rawLead.category || 'policy',
@@ -100,7 +102,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
         month: 'short',
         year: 'numeric',
       }),
-      byline: rawLead.author || 'The Breakdown Desk',
+      byline: authorName || 'The Breakdown Desk',
       trustSignals: getReaderTrustSignals(rawLead),
       heroImage: heroImg,
       actionText: 'Understand the story →',
@@ -122,8 +124,8 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   const rawDeepDives = allStoriesRaw.slice(5, 9);
   const deepDives: HomepageDeepDive[] = await Promise.all(
     rawDeepDives.map(async (s) => {
-      const executed = await pipeline.execute(s);
-      const heroImg = executed.visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || s.heroImage;
+      const executed: any = await pipeline.execute(s);
+      const heroImg: string | undefined = executed?.visualAssets?.hero?.resolvedAsset?.optimization?.cdnUrl || s.heroImage;
       return {
         slug: s.slug,
         category: s.category || 'investigation',

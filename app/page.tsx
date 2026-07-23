@@ -1,25 +1,29 @@
+/**
+ * The Breakdown — Evidence-Driven Homepage (Release 1)
+ * Governance: docs/rxs/screens/homepage.md & Editorial Constitution v1.1
+ *
+ * Primary public homepage projection of The Breakdown Knowledge Platform.
+ * Prioritizes editorial importance, explanatory depth, evidence, and clear navigation.
+ */
+
 import type { Metadata } from 'next';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildHomepage } from '@/features/home/view-model';
 import HomepageLayout from '@/layouts/HomepageLayout';
-import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
-import InstitutionHero from '@/components/home/hero/InstitutionHero';
-import LatestStories from '@/components/home/latest/LatestStories';
-import TrendingTopics from '@/components/home/topics/TrendingTopics';
-import EntitySpotlight from '@/components/home/entities/EntitySpotlight';
-import KnowledgeGraphPreview from '@/components/home/graph/KnowledgeGraphPreview';
-import DataDashboard from '@/components/home/dashboard/DataDashboard';
+import LeadStoryHero from '@/components/home/LeadStoryHero';
+import ShortVersionGrid from '@/components/home/ShortVersionGrid';
+import DeepDivesGrid from '@/components/home/DeepDivesGrid';
+import FollowTheMoneyModule from '@/components/home/FollowTheMoneyModule';
+import ExploreSearchSection from '@/components/home/ExploreSearchSection';
+import TopicTaxonomySection from '@/components/home/TopicTaxonomySection';
+import RecentlyUpdatedStream from '@/components/home/RecentlyUpdatedStream';
 import Newsletter from '@/components/home/newsletter/Newsletter';
-import KnowledgeToday from '@/components/home/breaking/KnowledgeToday';
 import AnimatedSection from '@/components/ui/AnimatedSection';
-import { TrustBar } from '@/components/home/trust/TrustBar';
-import { PrimaryPath } from '@/components/home/primary-path/PrimaryPath';
-import { CollectionsPreview } from '@/components/home/collections/CollectionsPreview';
 
 export const metadata: Metadata = {
   title: 'The Breakdown Knowledge Platform — Evidence Before Conclusions',
-  description: 'A digital knowledge institution producing evidence-based libraries on Indian policy, history, and society. Every claim verified. Every source cited. Every interpretation transparent.',
+  description: 'An evidence-driven explanatory journalism and public-knowledge platform. Every claim verified. Every source cited. Every interpretation transparent.',
   keywords: 'India, knowledge, evidence, history, policy, research, primary sources, verification, non-alignment, partition, constitution',
   openGraph: {
     title: 'The Breakdown Knowledge Platform',
@@ -47,95 +51,47 @@ export default async function HomePage() {
   const services = bootstrapServices({ publicOnly: true });
   const vm = await buildHomepage(services);
 
-  const libraries = getKnowledgeLibrarySeedData();
-  const chapters = libraries.flatMap(l =>
-    l.collections.flatMap(c =>
-      c.volumes.flatMap(v => v.chapters)
-    )
-  );
-  const totalClaims = chapters.reduce((sum, ch) =>
-    sum + ch.content.filter(b => b.type === 'claim').length, 0
-  );
-  const primarySources = libraries.flatMap(l =>
-    l.collections.flatMap(c =>
-      c.volumes.flatMap(v => v.chapters.flatMap(ch => ch.content)))
-  ).filter(b => b.type === 'document').length;
-
-  const lastVerified = chapters.length > 0
-    ? new Date(Math.max(...chapters.map(ch => new Date(ch.lastVerifiedAt || ch.updatedAt).getTime()))).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
-    : 'N/A';
-
   return (
     <HomepageLayout seo={vm.seo}>
-      {/* 1. Institution Identity */}
-      <InstitutionHero
-        chaptersPublished={chapters.length}
-        claimsRegistered={totalClaims}
-        primarySources={primarySources}
-        lastVerified={lastVerified}
-      />
-      
-      {/* 2. Trust Bar */}
-      <TrustBar
-        chaptersPublished={chapters.length}
-        claimsRegistered={totalClaims}
-        primarySources={primarySources}
-        lastVerified={lastVerified}
-      />
-      
-      {/* 3. Primary Path — Start with Volume I */}
-      <PrimaryPath />
-      
-      {/* 4. Continue Learning — after Volume I */}
-      {libraries.length > 0 && <CollectionsPreview libraries={libraries} />}
-      
-      {/* Transition: Library → Active Research */}
-      <div className="py-8 text-center" role="note">
-        <p className="text-xs uppercase tracking-widest text-neutral-400">Active Research</p>
-      </div>
-      
-      {/* 5. Knowledge Today — evidence of active maintenance */}
+      {/* 01 — Lead Story */}
+      <LeadStoryHero story={vm.leadStory} />
+
+      {/* 02 — The Short Version */}
       <AnimatedSection as="div" delay={100}>
-        <KnowledgeToday metrics={vm.knowledgeToday} />
+        <ShortVersionGrid briefings={vm.briefings} />
       </AnimatedSection>
-      
-      {/* 6. Further Reading */}
-      {vm.stories.length > 0 && (
-        <AnimatedSection as="div" delay={200}>
-          <LatestStories stories={vm.stories} />
+
+      {/* 03 — Deep Dives */}
+      <AnimatedSection as="div" delay={200}>
+        <DeepDivesGrid deepDives={vm.deepDives} />
+      </AnimatedSection>
+
+      {/* 04 — Follow the Money / Data */}
+      {vm.financialFeature && (
+        <AnimatedSection as="div" delay={300}>
+          <FollowTheMoneyModule financialData={vm.financialFeature} />
         </AnimatedSection>
       )}
-      
-      {/* Transition: Reading → Discovery */}
-      <div className="py-8 text-center bg-neutral-950" role="note">
-        <p className="text-xs uppercase tracking-widest text-neutral-500">Explore Knowledge</p>
-      </div>
-      
-      {/* 7. Explore by Topic */}
-      <AnimatedSection as="div" delay={300}>
-        <TrendingTopics topics={vm.trendingTopics} />
-      </AnimatedSection>
-      
-      {/* 8. Featured Entities */}
+
+      {/* 05 — Explore Knowledge & Search */}
       <AnimatedSection as="div" delay={400}>
-        <EntitySpotlight entities={vm.entitySpotlights} />
+        <ExploreSearchSection />
       </AnimatedSection>
-      
-      {/* 9. Knowledge Graph Preview */}
+
+      {/* 06 — Explore by Topic */}
       <AnimatedSection as="div" delay={500}>
-        <KnowledgeGraphPreview />
+        <TopicTaxonomySection topics={vm.topics} />
       </AnimatedSection>
-      
-      {/* 10. Platform Overview */}
+
+      {/* 07 — Recently Updated Stories */}
       <AnimatedSection as="div" delay={600}>
-        <DataDashboard data={vm.dataDashboard} />
+        <RecentlyUpdatedStream updates={vm.recentlyUpdated} />
       </AnimatedSection>
-      
-      {/* 11. Stay Connected */}
+
+      {/* 08 — Newsletter / Stay Connected */}
       <AnimatedSection as="div" delay={700}>
         <Newsletter />
       </AnimatedSection>
-      
     </HomepageLayout>
   );
 }

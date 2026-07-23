@@ -237,6 +237,51 @@ async function runTests() {
     r
   );
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 6. Phase 0/1 Regression Tests — Deterministic Claim IDs & Draft Isolation
+  // ═══════════════════════════════════════════════════════════════════════════
+  const { apiStoryToCanonical } = await import('../lib/bootstrap');
+
+  const draftAPIStory = {
+    id: 'test-draft-story',
+    slug: 'test-draft-story',
+    headline: 'Test Draft Story',
+    summary: 'Draft summary',
+    publishedAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-01-01T00:00:00Z',
+    readingTime: 5,
+    author: { name: 'Test Author' },
+    evidenceScore: 80,
+    category: 'policy',
+    tags: ['test'],
+    keyPoints: [],
+    timeline: [],
+    facts: [],
+    claims: [
+      { claim: 'Claim 1', source: 'Source 1', verification: 'true', explanation: 'Exp 1', confidence: 0.9 },
+      { claim: 'Claim 2', source: 'Source 2', verification: 'false', explanation: 'Exp 2', confidence: 0.5 },
+    ],
+    sources: [],
+    charts: [],
+    faq: [],
+    relatedStories: [],
+    relatedEntities: [],
+    publicationStatus: 'draft' as const,
+  };
+
+  const canonicalDraft = apiStoryToCanonical(draftAPIStory as any);
+  assert(canonicalDraft.status === 'draft', 'apiStoryToCanonical preserves draft status', r);
+  assert(isCanonicalStoryPublic(canonicalDraft, NOW) === false, 'canonicalDraft is not publicly viewable', r);
+
+  const canonicalDraft1 = apiStoryToCanonical(draftAPIStory as any);
+  const canonicalDraft2 = apiStoryToCanonical(draftAPIStory as any);
+  assert(
+    canonicalDraft1.claims[0].id === 'claim-test-draft-story-0' &&
+    canonicalDraft1.claims[0].id === canonicalDraft2.claims[0].id,
+    'apiStoryToCanonical generates deterministic claim IDs across calls',
+    r
+  );
+
   console.log(`\nPublication Policy Tests: ${r.passed} passed, ${r.failed} failed`);
   if (r.failed > 0) process.exit(1);
 }
