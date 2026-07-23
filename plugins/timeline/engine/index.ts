@@ -25,7 +25,7 @@ export const TimelineEnginePlugin = createEnginePlugin<TimelineExtensionData>({
     let maxYear = -Infinity;
 
     for (const node of nodes) {
-      const temporal = (node.metadata as any)?.temporal;
+      const temporal = (node.manifest.metadata as any)?.temporal;
       if (temporal && temporal.start) {
         const startMatch = String(temporal.start).match(/\d{4}/);
         if (startMatch) {
@@ -44,8 +44,8 @@ export const TimelineEnginePlugin = createEnginePlugin<TimelineExtensionData>({
 
           events.push({
             nodeId: node.id,
-            title: String(node.metadata?.title || "Untitled"),
-            summary: String(node.metadata?.summary || ""),
+            title: String(node.manifest.metadata?.title || "Untitled"),
+            summary: String(node.manifest.metadata?.summary || ""),
             startYear,
             endYear
           });
@@ -63,7 +63,7 @@ export const TimelineEnginePlugin = createEnginePlugin<TimelineExtensionData>({
 
     events.sort((a, b) => a.startYear - b.startYear);
 
-    const currentTemporal = (ctx.currentNode.metadata as any)?.temporal;
+    const currentTemporal = (ctx.currentNode.manifest.metadata as any)?.temporal;
     let activeStart = minYear;
     let activeEnd = maxYear;
 

@@ -22,6 +22,7 @@ export const RelationshipType = {
   Supports: "supports",
   Refutes: "refutes",
   Cites: "cites",
+  Next: "next",
 } as const;
 export type RelationshipType = typeof RelationshipType[keyof typeof RelationshipType];
 

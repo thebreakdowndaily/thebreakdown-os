@@ -3,6 +3,8 @@ import { PluginRegistry, KOSPlugin } from '../registry';
 import { PluginCompatibilityError } from '../compatibility';
 import { Capability } from '../../compiler/types';
 
+declare function it(name: string, fn: () => void): void;
+
 /**
  * Generic contract tests that any KOS plugin should satisfy.
  * Plugins should import this file in their own test suite and run the exported function

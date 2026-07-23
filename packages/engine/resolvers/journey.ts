@@ -1,4 +1,5 @@
 import { GraphNode, GraphStore } from "../../graph/types";
+import { RelationshipType } from "../../compiler/types";
 import { ActiveJourney, EngineContext } from "../types";
 
 export class JourneyResolver {
@@ -15,19 +16,16 @@ export class JourneyResolver {
 
     // 2. Next Steps (outgoing 'next' edges in this journey)
     const nextSteps = graph.getOutgoing(node.id)
-      .filter(edge => edge.type === "next")
-      // In a real system, we'd also filter by edge metadata matching the activeJourneyId,
-      // but since edges in our compiler don't yet have property maps, we'll just return 
-      // the adjacent nodes.
-      .map(edge => graph.getNode(edge.targetId)!)
-      .filter(Boolean)
+      .filter(edge => edge.type === RelationshipType.Next)
+      .map(edge => graph.getNode(edge.targetId))
+      .filter((n): n is GraphNode => n !== undefined)
       .sort((a, b) => a.id.localeCompare(b.id)); // deterministic
 
     // 3. Previous Steps (incoming 'next' edges)
     const previousSteps = graph.getIncoming(node.id)
-      .filter(edge => edge.type === "next")
-      .map(edge => graph.getNode(edge.sourceId)!)
-      .filter(Boolean)
+      .filter(edge => edge.type === RelationshipType.Next)
+      .map(edge => graph.getNode(edge.sourceId))
+      .filter((n): n is GraphNode => n !== undefined)
       .sort((a, b) => a.id.localeCompare(b.id)); // deterministic
 
     return {

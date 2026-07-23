@@ -5,19 +5,11 @@ import { relationshipGraphManifest } from "../manifest";
 import { TraversalPolicy, RankingStrategy } from "../../../packages/graph/policy";
 import { GraphStore, GraphNode, GraphEdge } from "../../../packages/graph/types";
 
-/**
- * Extension data returned by the Relationship Graph engine.
- */
 export interface RelationshipGraphExtension {
-  /** The root node from which traversal started. */
   rootNode: GraphNode;
-  /** All nodes reachable under the traversal policy (including root). */
   nodes: GraphNode[];
-  /** All edges traversed between the included nodes. */
   edges: GraphEdge[];
-  /** Deterministic paths from root to each node (array of node ids). */
   paths: Record<string, string[]>;
-  /** Simple statistics useful for UI and debugging. */
   statistics: {
     nodeCount: number;
     edgeCount: number;
@@ -26,9 +18,6 @@ export interface RelationshipGraphExtension {
   };
 }
 
-/**
- * Default traversal policy used when none is provided by the KXE.
- */
 const defaultPolicy: TraversalPolicy = {
   maxDepth: 3,
   maxNeighbors: 10,
@@ -37,10 +26,6 @@ const defaultPolicy: TraversalPolicy = {
   includeCycles: false,
 };
 
-/**
- * Performs a deterministic BFS traversal respecting the supplied TraversalPolicy.
- * The algorithm never mutates the underlying GraphStore or any node data.
- */
 function traverse(
   store: GraphStore,
   rootId: string,
@@ -73,12 +58,10 @@ function traverse(
 
     if (current.depth >= policy.maxDepth) continue;
 
-    // Determine outgoing edges respecting optional relationship type filter
     const outgoing = store.getOutgoing(current.id).filter(e =>
       !policy.relationshipTypes || policy.relationshipTypes.includes(e.type)
     );
 
-    // Apply neighbor limit
     const limited = outgoing.slice(0, policy.maxNeighbors);
     for (const edge of limited) {
       const neighborId = edge.targetId;
@@ -95,7 +78,6 @@ function traverse(
     }
   }
 
-  // Ensure deterministic ordering by sorting by node id
   resultNodes.sort((a, b) => a.id.localeCompare(b.id));
   resultEdges.sort((a, b) => a.sourceId.localeCompare(b.sourceId) || a.targetId.localeCompare(b.targetId));
 
@@ -116,23 +98,22 @@ function traverse(
 export const RelationshipGraphEnginePlugin = createEnginePlugin<RelationshipGraphExtension>({
   manifest: relationshipGraphManifest,
   resolve: (ctx: EnginePluginContext) => {
-    // Extract optional policy from the context (if provided)
     const policy: TraversalPolicy = (ctx.context as any).traversalPolicy ?? defaultPolicy;
 
-    // Emit diagnostics – structured object for later logging
-    ctx.diagnostics?.push({
+    ctx.context.diagnostics?.push({
       type: "traversalStart",
-      plugin: relationshipGraphManifest.id,
-      rootNodeId: ctx.currentNode.id,
-      policy,
+      message: `Traversal started for ${ctx.currentNode.id}`,
+      metadata: { plugin: relationshipGraphManifest.id, rootNodeId: ctx.currentNode.id, policy },
+      timestamp: new Date().toISOString(),
     });
 
     const extension = traverse(ctx.graph, ctx.currentNode.id, policy);
 
-    ctx.diagnostics?.push({
+    ctx.context.diagnostics?.push({
       type: "traversalComplete",
-      plugin: relationshipGraphManifest.id,
-      stats: extension.statistics,
+      message: `Traversal complete for ${ctx.currentNode.id}`,
+      metadata: { plugin: relationshipGraphManifest.id, stats: extension.statistics },
+      timestamp: new Date().toISOString(),
     });
 
     return extension;

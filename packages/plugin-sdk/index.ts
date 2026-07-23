@@ -6,8 +6,10 @@ export * from "./version";
 export * from "./compatibility";
 export * from "./registry";
 
-// Re-export core types commonly used by plugin authors
-export { Capability, RelationshipType, NodeType, EvidenceConfidence, KnowledgeManifest } from "../compiler/types";
-export { GraphNode, GraphEdge, GraphStore } from "../graph/types";
-export { EngineContext, ResolvedKnowledgeSession, SessionExtension } from "../engine/types";
-export { ExperienceState, ExperienceAction } from "../kxe/types";
+// Re-export core values (const objects) and types commonly used by plugin authors
+// Capability, RelationshipType, NodeType, EvidenceConfidence are dual: both const objects and types.
+export { Capability, RelationshipType, NodeType, EvidenceConfidence } from "../compiler/types";
+export type { KnowledgeManifest } from "../compiler/types";
+export type { GraphNode, GraphEdge, GraphStore } from "../graph/types";
+export type { EngineContext, EnginePluginContext, ResolvedKnowledgeSession, SessionExtension } from "../engine/types";
+export type { ExperienceState, ExperienceAction } from "../kxe/types";

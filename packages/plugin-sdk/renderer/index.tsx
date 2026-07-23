@@ -1,8 +1,10 @@
 import React from "react";
-import { Renderer } from "../../renderer/types";
+import type { Renderer } from "../../renderer/types";
 import { PluginManifest } from "../manifest";
 import { ExperienceState } from "../../kxe/types";
 import { SessionExtension } from "../../engine/types";
+
+export type { Renderer };
 
 export interface RendererProps<TState, TData> {
   state: Readonly<ExperienceState>;

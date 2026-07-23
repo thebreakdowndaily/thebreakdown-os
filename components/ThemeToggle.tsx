@@ -21,15 +21,16 @@ export const ThemeToggle: React.FC = () => {
     return null;
   }
 
-  const nextTheme = theme === 'system' ? systemTheme : theme;
+  const safeTheme = theme ?? 'system';
+  const nextTheme = safeTheme === 'system' ? systemTheme : safeTheme;
 
   const toggle = () => {
-    if (theme === 'light') setTheme('dark');
-    else if (theme === 'dark') setTheme('system');
+    if (safeTheme === 'light') setTheme('dark');
+    else if (safeTheme === 'dark') setTheme('system');
     else setTheme('light');
   };
 
-  const label = `Theme: ${theme} (effective ${nextTheme})`;
+  const label = `Theme: ${safeTheme} (effective ${nextTheme})`;
 
   return (
     <button
@@ -39,10 +40,10 @@ export const ThemeToggle: React.FC = () => {
       className="flex items-center gap-2 rounded px-3 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-400 focus-visible:outline-offset-2 bg-surface-primary text-text-primary transition-colors"
     >
       {/* Simple sun / moon / auto icons – using Unicode for brevity */}
-      {theme === 'light' && <span aria-hidden="true">☀️</span>}
-      {theme === 'dark' && <span aria-hidden="true">🌙</span>}
-      {theme === 'system' && <span aria-hidden="true">🖥️</span>}
-      <span>{theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
+      {safeTheme === 'light' && <span aria-hidden="true">☀️</span>}
+      {safeTheme === 'dark' && <span aria-hidden="true">🌙</span>}
+      {safeTheme === 'system' && <span aria-hidden="true">🖥️</span>}
+      <span>{safeTheme.charAt(0).toUpperCase() + safeTheme.slice(1)}</span>
     </button>
   );
 };

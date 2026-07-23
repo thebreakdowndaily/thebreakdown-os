@@ -7,13 +7,14 @@ import { StageGuard } from "../managers/stage";
 // Mock session
 const mockSession = {
   sessionMetadata: { engineVersion: "1.0", graphVersion: "1.0", policyVersion: "1.0", generatedAt: "", reasoningDurationMs: 0 },
-  currentNode: { id: "mockNode" } as any,
+  currentNode: { id: "mockNode", manifest: { nodeId: "mockNode", nodeType: "chapter" as any, metadata: { title: "Mock", summary: "", capabilities: [], evidenceConfidence: "low" as any }, relationships: [], journeys: { defaultJourneyId: "", alternativeJourneyIds: [] }, manifestVersion: "1.0" as const, schemaVersion: "1.0" as const, compilerVersion: "1.0" as const, generatedAt: "" } } as any,
   activeJourney: { id: "journey-1", nextSteps: [], previousSteps: [] },
   capabilities: [],
   relevantEvidence: [],
   prerequisites: [],
   recommendations: [],
-  diagnostics: []
+  diagnostics: [],
+  extensions: {}
 } as ResolvedKnowledgeSession;
 
 function runTests() {

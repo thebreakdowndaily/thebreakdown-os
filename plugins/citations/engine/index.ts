@@ -34,34 +34,30 @@ export const CitationEnginePlugin = createEnginePlugin<CitationExtensionData>({
     const claims: ResolvedClaim[] = [];
     const allNodes = ctx.graph.getAllNodes();
 
-    // Find all claim nodes
-    const claimNodes = allNodes.filter(n => n.type === NodeType.Claim);
+    const claimNodes = allNodes.filter(n => n.manifest.nodeType === NodeType.Claim);
 
     for (const claimNode of claimNodes) {
       const supportingEvidence: ResolvedEvidence[] = [];
       const refutingEvidence: ResolvedEvidence[] = [];
 
-      // Find evidence connected to this claim
-      const outgoingEdges = ctx.graph.getOutgoingEdges(claimNode.id);
+      const outgoingEdges = ctx.graph.getOutgoing(claimNode.id);
       
       for (const edge of outgoingEdges) {
         if (edge.type === RelationshipType.Supports || edge.type === RelationshipType.Refutes) {
           const evidenceNode = ctx.graph.getNode(edge.targetId);
-          if (evidenceNode && evidenceNode.type === NodeType.Evidence) {
-            
-            // Find sources connected to this evidence
+          if (evidenceNode && evidenceNode.manifest.nodeType === NodeType.Evidence) {
             const sources: ResolvedSource[] = [];
-            const evidenceOutEdges = ctx.graph.getOutgoingEdges(evidenceNode.id);
+            const evidenceOutEdges = ctx.graph.getOutgoing(evidenceNode.id);
             
             for (const evEdge of evidenceOutEdges) {
               if (evEdge.type === RelationshipType.Cites) {
                 const sourceNode = ctx.graph.getNode(evEdge.targetId);
-                if (sourceNode && sourceNode.type === NodeType.Source) {
+                if (sourceNode && sourceNode.manifest.nodeType === NodeType.Source) {
                   sources.push({
                     id: sourceNode.id,
-                    title: sourceNode.metadata?.title as string || "Unknown Source",
-                    url: (sourceNode.metadata as any)?.url,
-                    type: (sourceNode.metadata as any)?.sourceType || "document"
+                    title: sourceNode.manifest.metadata?.title || "Unknown Source",
+                    url: (sourceNode.manifest.metadata as any)?.url,
+                    type: (sourceNode.manifest.metadata as any)?.sourceType || "document"
                   });
                 }
               }
@@ -69,9 +65,9 @@ export const CitationEnginePlugin = createEnginePlugin<CitationExtensionData>({
 
             const resolvedEvidence: ResolvedEvidence = {
               id: evidenceNode.id,
-              title: evidenceNode.metadata?.title as string || "Untitled Evidence",
-              summary: evidenceNode.metadata?.summary as string || "",
-              confidence: (evidenceNode.metadata?.evidenceConfidence as EvidenceConfidence) || EvidenceConfidence.Medium,
+              title: evidenceNode.manifest.metadata?.title || "Untitled Evidence",
+              summary: evidenceNode.manifest.metadata?.summary || "",
+              confidence: (evidenceNode.manifest.metadata?.evidenceConfidence as EvidenceConfidence) || EvidenceConfidence.Medium,
               sources
             };
 
@@ -86,8 +82,8 @@ export const CitationEnginePlugin = createEnginePlugin<CitationExtensionData>({
 
       claims.push({
         id: claimNode.id,
-        title: claimNode.metadata?.title as string || "Untitled Claim",
-        summary: claimNode.metadata?.summary as string || "",
+        title: claimNode.manifest.metadata?.title || "Untitled Claim",
+        summary: claimNode.manifest.metadata?.summary || "",
         supportingEvidence,
         refutingEvidence
       });

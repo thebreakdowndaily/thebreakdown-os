@@ -5,7 +5,7 @@ import { Capability } from "../../compiler/types";
 import { KnowledgeExperienceEngine } from "../../kxe/kxe";
 import { RendererRegistry } from "../registry";
 import { Renderer } from "../types";
-import { ExperienceProvider, useExperience, usePlugins, useDispatch } from "../hooks";
+import { useExperience, usePlugins, useDispatch } from "../hooks";
 // We need to import the actual context and provider
 import { ExperienceProvider as Provider, useEngineContext } from "../provider";
 import { FallbackRenderer } from "../fallback";

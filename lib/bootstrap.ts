@@ -1,4 +1,4 @@
-import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
+import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations, LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
 import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
@@ -183,9 +183,9 @@ function createBlocksFromStory(s: APIStory): StoryBlock[] {
 
 export function apiStoryToCanonical(s: APIStory): Story {
   const blocks = createBlocksFromStory(s);
-  const mappedSources = (s.sources || []).map((src): Source => ({ title: src.name, url: s.url || '', accessedAt: '', tier: src.tier as import('@/types/canonical').ConfidenceTier }));
+  const mappedSources = (s.sources || []).map((src): Source => ({ title: src.name, url: src.url || '', accessedAt: '', tier: src.tier as import('@/types/canonical').ConfidenceTier }));
   const mappedClaims = (s.claims || []).map((c, i): Claim => ({
-    id: `claim-${i}-${Math.random().toString(36).slice(2, 8)}`,
+    id: `claim-${s.slug || 'story'}-${i}`,
     claim: c.claim || '',
     data: c.explanation || '',
     source: c.source || '',
@@ -195,7 +195,7 @@ export function apiStoryToCanonical(s: APIStory): Story {
     status: c.verification === 'true' ? 'verified' : (c.confidence || 0) >= 0.8 ? 'strong' : (c.confidence || 0) >= 0.6 ? 'moderate' : 'unverified',
   }));
 
-  const publicationStatus = s.publicationStatus || 'draft';
+  const publicationStatus = s.publicationStatus || (LEGACY_PUBLIC_SLUGS.has(s.slug) ? 'published' as const : 'draft' as const);
   const canonicalStatus =
     publicationStatus === 'published' ? 'published' as const :
     publicationStatus === 'scheduled' ? 'scheduled' as const :

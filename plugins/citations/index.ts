@@ -1,12 +1,12 @@
 import { KOSPlugin } from "../../packages/plugin-sdk/registry";
 import { citationsManifest } from "./manifest";
-import { CitationsEnginePlugin } from "./engine";
+import { CitationEnginePlugin } from "./engine";
 import { CitationsKXEPlugin } from "./kxe";
 import { CitationRenderer } from "./renderer";
 
 export const CitationsPlugin: KOSPlugin = {
   manifest: citationsManifest,
-  engine: CitationsEnginePlugin,
+  engine: CitationEnginePlugin,
   kxe: CitationsKXEPlugin,
   renderer: CitationRenderer,
 };

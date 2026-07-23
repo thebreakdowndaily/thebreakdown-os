@@ -14,6 +14,28 @@ import { PluginRegistry } from "../../../packages/plugin-sdk/registry";
 import { RelationshipGraphPlugin } from "../index";
 import { Capability } from "../../../packages/compiler/types";
 
+function createTestNode(id: string, nodeType: string, title: string): GraphNode {
+  return {
+    id,
+    manifest: {
+      manifestVersion: "1.0",
+      schemaVersion: "1.0",
+      compilerVersion: "1.0",
+      generatedAt: new Date().toISOString(),
+      nodeId: id,
+      nodeType: nodeType as any,
+      metadata: {
+        title,
+        summary: "",
+        capabilities: [Capability.RelationshipGraph],
+        evidenceConfidence: "medium" as any,
+      },
+      relationships: [],
+      journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] },
+    },
+  };
+}
+
 function runTests() {
   console.log("Running Relationship Graph Plugin Tests...\n");
   let passed = 0;
@@ -32,49 +54,26 @@ function runTests() {
     }
   }
 
-  // Mock Graph
   class MockGraph implements GraphStore {
     private nodes: GraphNode[] = [
-      {
-        id: "node-root",
-        type: "chapter" as any,
-        title: "Root Chapter",
-        metadata: { title: "Root Chapter", capabilities: [Capability.RelationshipGraph] },
-        manifest: { metadata: { title: "Root Chapter", capabilities: [Capability.RelationshipGraph] }, journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] } },
-        relationships: []
-      } as unknown as GraphNode,
-      {
-        id: "node-child-1",
-        type: "claim" as any,
-        title: "Child Claim 1",
-        metadata: { title: "Child Claim 1", capabilities: [] },
-        manifest: { metadata: { title: "Child Claim 1", capabilities: [] }, journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] } },
-        relationships: []
-      } as unknown as GraphNode,
-      {
-        id: "node-child-2",
-        type: "evidence" as any,
-        title: "Child Evidence 2",
-        metadata: { title: "Child Evidence 2", capabilities: [] },
-        manifest: { metadata: { title: "Child Evidence 2", capabilities: [] }, journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] } },
-        relationships: []
-      } as unknown as GraphNode,
+      createTestNode("node-root", "chapter", "Root Chapter"),
+      createTestNode("node-child-1", "claim", "Child Claim 1"),
+      createTestNode("node-child-2", "evidence", "Child Evidence 2"),
     ];
 
     private edges: GraphEdge[] = [
       { sourceId: "node-root", targetId: "node-child-1", type: "supports" as any },
       { sourceId: "node-root", targetId: "node-child-2", type: "cites" as any },
-      { sourceId: "node-child-1", targetId: "node-root", type: "causes" as any }, // cycle
+      { sourceId: "node-child-1", targetId: "node-root", type: "causes" as any },
     ];
 
     getAllNodes() { return this.nodes; }
     getNodes() { return this.nodes; }
-    getNode(id: string) { return this.nodes.find(n => n.id === id) || null; }
+    getNode(id: string) { return this.nodes.find(n => n.id === id); }
     getOutgoing(id: string) { return this.edges.filter(e => e.sourceId === id); }
     getIncoming(id: string) { return this.edges.filter(e => e.targetId === id); }
     getAllEdges() { return this.edges; }
     exists(id: string) { return !!this.getNode(id); }
-    hasNode(id: string) { return this.exists(id); }
   }
 
   const graph = new MockGraph();
@@ -90,13 +89,12 @@ function runTests() {
     assert.ok(resolvedSession.extensions["relationship-graph"]);
     const ext = resolvedSession.extensions["relationship-graph"].data as RelationshipGraphExtension;
     
-    // Deterministic sort order
     assert.strictEqual(ext.nodes.length, 3);
     assert.strictEqual(ext.nodes[0].id, "node-child-1");
     assert.strictEqual(ext.nodes[1].id, "node-child-2");
     assert.strictEqual(ext.nodes[2].id, "node-root");
 
-    assert.strictEqual(ext.edges.length, 2); // default BFS ignores cycles if includeCycles is false
+    assert.strictEqual(ext.edges.length, 2);
     assert.strictEqual(ext.edges[0].sourceId, "node-root");
     assert.strictEqual(ext.edges[0].targetId, "node-child-1");
   });
@@ -107,13 +105,13 @@ function runTests() {
     kxe.activatePlugin("relationship-graph");
 
     const state = kxe.getState();
-    assert.strictEqual(state.plugins.pluginState["relationship-graph"].layout, "hierarchical");
+    assert.strictEqual((state.plugins.pluginState["relationship-graph"] as any).layout, "hierarchical");
 
     kxe.dispatch({ type: "relationship-graph/setLayout", payload: { layout: "radial" } });
-    assert.strictEqual(kxe.getState().plugins.pluginState["relationship-graph"].layout, "radial");
+    assert.strictEqual((kxe.getState().plugins.pluginState["relationship-graph"] as any).layout, "radial");
 
     kxe.dispatch({ type: "relationship-graph/focusNode", payload: { nodeId: "node-child-1" } });
-    assert.strictEqual(kxe.getState().plugins.pluginState["relationship-graph"].focusNodeId, "node-child-1");
+    assert.strictEqual((kxe.getState().plugins.pluginState["relationship-graph"] as any).focusNodeId, "node-child-1");
   });
 
   runTest("Renderer successfully renders HTML visually", () => {

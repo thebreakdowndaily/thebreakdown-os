@@ -36,22 +36,28 @@ function runTests() {
       return [
         {
           id: "event-1",
-          metadata: { temporal: { start: "1947" }, title: "Independence" },
-          manifest: { metadata: { title: "Independence", capabilities: [] }, journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] } },
-          relationships: []
-        } as unknown as GraphNode,
+          manifest: {
+            metadata: { title: "Independence", summary: "Independence", capabilities: [], evidenceConfidence: "medium" as any, temporal: { start: "1947", precision: "year" as const } },
+            journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] },
+            nodeId: "event-1", nodeType: "chapter" as any, manifestVersion: "1.0" as const, schemaVersion: "1.0" as const, compilerVersion: "1.0" as const, generatedAt: "", relationships: [],
+          },
+        } as GraphNode,
         {
           id: "event-2",
-          metadata: { temporal: { start: "1950", end: "1950" }, title: "Republic" },
-          manifest: { metadata: { title: "Republic", capabilities: [] }, journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] } },
-          relationships: []
-        } as unknown as GraphNode,
+          manifest: {
+            metadata: { title: "Republic", summary: "Republic", capabilities: [], evidenceConfidence: "medium" as any, temporal: { start: "1950", end: "1950", precision: "year" as const } },
+            journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] },
+            nodeId: "event-2", nodeType: "chapter" as any, manifestVersion: "1.0" as const, schemaVersion: "1.0" as const, compilerVersion: "1.0" as const, generatedAt: "", relationships: [],
+          },
+        } as GraphNode,
         {
           id: "event-3",
-          metadata: { temporal: undefined, title: "No Date" },
-          manifest: { metadata: { title: "No Date", capabilities: [] }, journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] } },
-          relationships: []
-        } as unknown as GraphNode
+          manifest: {
+            metadata: { title: "No Date", summary: "No Date", capabilities: [], evidenceConfidence: "medium" as any },
+            journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] },
+            nodeId: "event-3", nodeType: "chapter" as any, manifestVersion: "1.0" as const, schemaVersion: "1.0" as const, compilerVersion: "1.0" as const, generatedAt: "", relationships: [],
+          },
+        } as GraphNode
       ];
     }
     getNodes() { return this.getAllNodes(); } // Alias for our timeline plugin implementation
@@ -89,13 +95,13 @@ function runTests() {
     kxe.activatePlugin("timeline");
 
     const state = kxe.getState();
-    assert.strictEqual(state.plugins.pluginState["timeline"].selectedYear, null);
+    assert.strictEqual((state.plugins.pluginState["timeline"] as any).selectedYear, null);
 
     kxe.dispatch({ type: "timeline/selectYear", payload: 1947 });
-    assert.strictEqual(kxe.getState().plugins.pluginState["timeline"].selectedYear, 1947);
+    assert.strictEqual((kxe.getState().plugins.pluginState["timeline"] as any).selectedYear, 1947);
 
     kxe.dispatch({ type: "timeline/play" });
-    assert.strictEqual(kxe.getState().plugins.pluginState["timeline"].isPlaying, true);
+    assert.strictEqual((kxe.getState().plugins.pluginState["timeline"] as any).isPlaying, true);
   });
 
   runTest("Renderer renders timeline visually", () => {

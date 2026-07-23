@@ -1,6 +1,9 @@
-import { KXEPlugin, ExperienceState, ExperienceAction } from "../../kxe/types";
+import { ExperienceState, ExperienceAction } from "../../kxe/types";
+import type { KXEPlugin } from "../../kxe/types";
 import { PluginManifest } from "../manifest";
 import { SessionExtension } from "../../engine/types";
+
+export type { KXEPlugin };
 
 export interface KXEPluginConfig<TState> {
   manifest: PluginManifest;

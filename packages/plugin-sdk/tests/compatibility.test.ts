@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { compareVersions, isCompatible, PluginCompatibilityError } from "../compatibility";
 import { PluginRegistry, KOSPlugin } from "../registry";
-import { Capability } from "../../../packages/compiler/types";
+import { Capability } from "../../compiler/types";
 
 function runTests() {
   console.log("Running Plugin Compatibility Tests...\n");
@@ -52,7 +52,7 @@ function runTests() {
     let caught = false;
     try {
       registry.register(badPlugin);
-    } catch (err) {
+    } catch (err: any) {
       caught = true;
       assert.ok(err instanceof PluginCompatibilityError);
       if (err instanceof PluginCompatibilityError) {

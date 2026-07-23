@@ -98,7 +98,8 @@ function runTests() {
         const recs = nodes.map(n => ({
           node: n,
           score: 1,
-          reason: "mock"
+          reason: "mock",
+          provenance: [] as { sourceId: string; targetId: string; type: string }[]
         }));
         return recs.slice(0, context.maxRecommendations ?? policy.maxRecommendations);
       }

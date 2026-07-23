@@ -1,11 +1,11 @@
-import { KnowledgeManifest } from "../../compiler/types";
+import { KnowledgeManifest, EvidenceConfidence } from "../../compiler/types";
 
 // Helper to create a dummy manifest
 export function createManifest(
   id: string, 
   rels: { type: any; targetNodeId: string }[] = [],
   capabilities: any[] = [],
-  evidenceConfidence: string = "low",
+  evidenceConfidence: EvidenceConfidence = "low" as EvidenceConfidence,
   defaultJourneyId: string = "journey-1",
   alternativeJourneyIds: string[] = []
 ): KnowledgeManifest {

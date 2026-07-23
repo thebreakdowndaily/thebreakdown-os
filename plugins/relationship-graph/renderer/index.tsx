@@ -37,7 +37,7 @@ export const RelationshipGraphRenderer = createRenderer<RelationshipGraphKxeStat
         <ul>
           {extensionData.nodes.map(node => (
             <li key={node.id}>
-              <strong>{node.id}</strong>: {node.title ?? "(no title)"}
+              <strong>{node.id}</strong>: {node.manifest.metadata?.title ?? "(no title)"}
             </li>
           ))}
         </ul>

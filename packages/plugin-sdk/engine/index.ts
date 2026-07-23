@@ -1,5 +1,8 @@
-import { EnginePlugin, EnginePluginContext, SessionExtension, ResolvedKnowledgeSession } from "../../engine/types";
+import { EnginePluginContext, SessionExtension, ResolvedKnowledgeSession } from "../../engine/types";
+import type { EnginePlugin } from "../../engine/types";
 import { PluginManifest } from "../manifest";
+
+export type { EnginePlugin };
 
 export interface EnginePluginConfig<TData> {
   manifest: PluginManifest;

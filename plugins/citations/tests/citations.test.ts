@@ -1,13 +1,13 @@
 import { CitationEnginePlugin } from "../engine";
-import { CitationsKXEPlugin } from "../kxe";
-import { GraphStore, GraphNode } from "../../../packages/graph/types";
+import { CitationsKXEPlugin, CitationsPluginState } from "../kxe";
+import { GraphStore, GraphNode, GraphEdge } from "../../../packages/graph/types";
 import { NodeType, RelationshipType, EvidenceConfidence, Capability } from "../../../packages/plugin-sdk";
 import { EnginePluginContext } from "../../../packages/engine/types";
 
 // Simple mock graph for testing
 class MockGraphStore implements GraphStore {
   private nodes = new Map<string, GraphNode>();
-  private edges: Array<{ sourceId: string; targetId: string; type: RelationshipType }> = [];
+  private edges: GraphEdge[] = [];
 
   addNode(node: GraphNode) {
     this.nodes.set(node.id, node);
@@ -17,86 +17,95 @@ class MockGraphStore implements GraphStore {
     this.edges.push({ sourceId, targetId, type });
   }
 
-  getNode(id: string): GraphNode | null {
-    return this.nodes.get(id) || null;
+  getNode(id: string): GraphNode | undefined {
+    return this.nodes.get(id);
   }
 
   exists(id: string): boolean {
     return this.nodes.has(id);
   }
 
-  getOutgoingEdges(id: string) {
+  getOutgoing(id: string) {
     return this.edges.filter(e => e.sourceId === id);
   }
 
-  getIncomingEdges(id: string) {
+  getIncoming(id: string) {
     return this.edges.filter(e => e.targetId === id);
   }
 
-  getNodes(): GraphNode[] {
-    return Array.from(this.nodes.values());
+  getAllEdges(): GraphEdge[] {
+    return this.edges;
   }
 
   getAllNodes(): GraphNode[] {
     return Array.from(this.nodes.values());
   }
-
-  // Not implemented for this mock
-  query() { return []; }
-  walk() { return []; }
-  getNodesByType() { return []; }
 }
 
-async function runTests() {
+function createTestNode(id: string, nodeType: string, metadata: Record<string, unknown> = {}): GraphNode {
+  return {
+    id,
+    manifest: {
+      manifestVersion: "1.0",
+      schemaVersion: "1.0",
+      compilerVersion: "1.0",
+      generatedAt: new Date().toISOString(),
+      nodeId: id,
+      nodeType: nodeType as any,
+      metadata: {
+        title: (metadata.title as string) || id,
+        summary: (metadata.summary as string) || "",
+        capabilities: (metadata.capabilities as any[]) || [],
+        evidenceConfidence: (metadata.evidenceConfidence as EvidenceConfidence) || EvidenceConfidence.Medium,
+      },
+      relationships: [],
+      journeys: { defaultJourneyId: "default", alternativeJourneyIds: [] },
+    },
+  };
+}
+
+function runTests() {
   console.log("Running Citations Plugin Tests...");
 
   const graph = new MockGraphStore();
 
-  const sourceNode: GraphNode = {
-    id: "source-1",
-    type: NodeType.Source as any,
-    metadata: { title: "Constituent Assembly Debates", url: "https://example.com" }
-  };
+  const sourceNode = createTestNode("source-1", NodeType.Source, {
+    title: "Constituent Assembly Debates",
+  });
 
-  const evidenceNode: GraphNode = {
-    id: "evidence-1",
-    type: NodeType.Evidence as any,
-    metadata: { title: "Nehru's Speech on Objective Resolution", summary: "Excerpt from speech", evidenceConfidence: EvidenceConfidence.High }
-  };
+  const evidenceNode = createTestNode("evidence-1", NodeType.Evidence, {
+    title: "Nehru's Speech on Objective Resolution",
+    summary: "Excerpt from speech",
+    evidenceConfidence: EvidenceConfidence.High,
+  });
 
-  const claimNode: GraphNode = {
-    id: "claim-1",
-    type: NodeType.Claim as any,
-    metadata: { title: "Nehru supported a strong centre.", summary: "The initial objective resolution hinted at centralized power." }
-  };
+  const claimNode = createTestNode("claim-1", NodeType.Claim, {
+    title: "Nehru supported a strong centre.",
+    summary: "The initial objective resolution hinted at centralized power.",
+  });
 
-  const rootNode: GraphNode = {
-    id: "chapter-1",
-    type: NodeType.Chapter as any,
-    metadata: { title: "Chapter 1", summary: "", capabilities: [Capability.Citations] as any, evidenceConfidence: EvidenceConfidence.High }
-  };
+  const rootNode = createTestNode("chapter-1", NodeType.Chapter, {
+    title: "Chapter 1",
+    capabilities: [Capability.Citations],
+    evidenceConfidence: EvidenceConfidence.High,
+  });
 
   graph.addNode(sourceNode);
   graph.addNode(evidenceNode);
   graph.addNode(claimNode);
   graph.addNode(rootNode);
 
-  // Edges
   graph.addEdge(claimNode.id, evidenceNode.id, RelationshipType.Supports);
   graph.addEdge(evidenceNode.id, sourceNode.id, RelationshipType.Cites);
 
-  // Test Engine
   const ctx: EnginePluginContext = {
     graph,
     currentNode: rootNode,
-    session: {
-      id: "session-1",
-      currentNodeId: "chapter-1",
-      capabilities: [Capability.Citations],
-      journey: { defaultPath: [], alternatives: [] },
-      prerequisites: { required: [], met: [], missing: [] },
-      extensions: {}
-    } as any
+    context: {
+      activeNodeId: "chapter-1",
+      enabledCapabilities: [Capability.Citations],
+      diagnostics: [],
+    },
   };
 
   const resolved = CitationEnginePlugin.resolve(ctx);
@@ -126,24 +135,28 @@ async function runTests() {
 
   console.log("✅ Engine resolution passed.");
 
-  // Test KXE State Updates
-  let state = CitationsKXEPlugin.initialState;
-  
-  state = CitationsKXEPlugin.update({} as any, { type: "citations/selectClaim", payload: "claim-1" }, state);
+  const initialState: CitationsPluginState = {
+    selectedClaimId: null,
+    expandedEvidenceIds: [],
+    confidenceFilter: "all",
+  };
+
+  let state = CitationsKXEPlugin.update!({} as any, { type: "citations/selectClaim", payload: "claim-1" }, initialState);
   if (state.selectedClaimId !== "claim-1") throw new Error("State update failed for selectClaim");
 
-  state = CitationsKXEPlugin.update({} as any, { type: "citations/expandEvidence", payload: "evidence-1" }, state);
+  state = CitationsKXEPlugin.update!({} as any, { type: "citations/expandEvidence", payload: "evidence-1" }, state);
   if (!state.expandedEvidenceIds.includes("evidence-1")) throw new Error("State update failed for expandEvidence");
 
-  state = CitationsKXEPlugin.update({} as any, { type: "citations/setConfidenceFilter", payload: EvidenceConfidence.High }, state);
+  state = CitationsKXEPlugin.update!({} as any, { type: "citations/setConfidenceFilter", payload: EvidenceConfidence.High }, state);
   if (state.confidenceFilter !== EvidenceConfidence.High) throw new Error("State update failed for setConfidenceFilter");
 
   console.log("✅ KXE state transitions passed.");
-
   console.log("All Citation tests passed!");
 }
 
-runTests().catch(err => {
+try {
+  runTests();
+} catch (err) {
   console.error("Test failed:", err);
   process.exit(1);
-});
+}
