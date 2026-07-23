@@ -82,6 +82,13 @@ export class CanonicalStoryService implements StoryService {
 }
 
 function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Tables']['stories']['Row']): Story {
+  const status = (row.status as import('@/types/canonical').StoryStatus) || 'draft';
+  const publicationStatus: import('@/types/canonical').PublicationStatus =
+    status === 'published' ? 'published'
+    : status === 'scheduled' ? 'scheduled'
+    : status === 'review' ? 'review'
+    : 'draft';
+
   return {
     id: row.id,
     slug: row.slug,
@@ -91,7 +98,8 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
     heroImage: row.hero_image || '',
     author: row.author || '',
     category: row.category || '',
-    status: (row.status as import('@/types/canonical').StoryStatus) || 'draft',
+    status,
+    publicationStatus,
     storyType: 'standard' as import('@/types/canonical').StoryType,
     evidenceScore: row.evidence_score || 0,
     readingTime: row.reading_time || 0,

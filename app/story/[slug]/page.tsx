@@ -1,15 +1,13 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildStoryPage } from '@/features/story/view-model';
 import type { Story, StoryBlock } from '@/types/canonical';
-import StoryLayout from '@/layouts/StoryLayout';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { BlockRenderer } from '@/components/story/blocks/registry';
 import SourcesList from '@/components/story/SourcesList';
-import KnowledgeLayer from '@/components/story/KnowledgeLayer';
 import NextExploration from '@/components/story/NextExploration';
 import TierSelector from '@/components/story/TierSelector';
 import type { Tier } from '@/components/story/TierSelector';
@@ -17,6 +15,7 @@ import { StoryShell } from '@/components/rxs/StoryShell';
 import { seedAll, enrichClaimLazy, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
@@ -80,7 +79,7 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
       verification: c.status,
       confidence: c.confidence
     })) || [],
-    sources: story.sources?.map((s: any) => ({
+    sources: story.sources?.map((s) => ({
       title: s.title,
       url: s.url,
       tier: s.tier
@@ -182,7 +181,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-async function tryLoadChapter(slug: string) {
+const tryLoadChapter = cache(async (slug: string) => {
   try {
     seedAll();
     const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
@@ -223,7 +222,7 @@ async function tryLoadChapter(slug: string) {
     }
   } catch {}
   return null;
-}
+});
 
 export default async function StoryPage({ 
   params,
@@ -270,8 +269,11 @@ export default async function StoryPage({
   const services = bootstrapServices({ publicOnly: true });
   const vm = await buildStoryPage(services, slug);
   if (!vm) notFound();
-  
-  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm as any;
+
+  // Publication visibility guard — reject non-public stories
+  if (!isCanonicalStoryPublic(vm.story)) notFound();
+
+  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm;
   const heroImage = visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || story.heroImage;
 
   const currentTier: Tier = (mode === 'quick' || mode === 'deep') ? mode : 'standard';
@@ -301,14 +303,14 @@ export default async function StoryPage({
             </h1>
             
             <div className="flex items-center gap-4 text-sm text-neutral-400 flex-wrap">
-              {(story as any).metadata?.classification && (
+              {story.metadata?.classification && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
-                  {String((story as any).metadata.classification)}
+                  {String(story.metadata.classification)}
                 </span>
               )}
-              {!(story as any).metadata?.classification && (story as any).metadata?.type && (
+              {!story.metadata?.classification && story.metadata?.type && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
-                  {String((story as any).metadata.type)}
+                  {String(story.metadata.type)}
                 </span>
               )}
               <span className="text-emerald-400 font-mono">{story.author}</span>
@@ -500,7 +502,7 @@ export default async function StoryPage({
                   <span className="block text-[10px] uppercase tracking-widest text-neutral-500">Claims</span>
                 </div>
               </div>
-              <SourcesList sources={story.sources?.map((s: any) => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
+              <SourcesList sources={story.sources?.map((s) => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
             </section>
 
           </div>
