@@ -1,0 +1,8 @@
+{
+  "name": "knowledge-graph-audit",
+  "description": "Verifies the structural integrity of the canonical knowledge graph.",
+  "version": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "capabilities": ["knowledge-graph", "architecture", "analysis", "reporting"],
+  "dependsOn": ["architecture-audit"]
+}

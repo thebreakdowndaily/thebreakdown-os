@@ -188,7 +188,7 @@ async function runTests() {
 
   const total = passed + failed;
   console.log(`\nAuth Tests: ${passed}/${total} passed, ${failed} failed`);
-  if (failed > 0) process.exit(1);
+  process.exit(failed > 0 ? 1 : 0);
 }
 
 runTests();

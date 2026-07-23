@@ -1,0 +1,21 @@
+{
+  "policyVersion": "1.0",
+  "performance": {
+    "lighthouse": {
+      "required": true,
+      "severity": "high",
+      "files": [".lighthouserc.json", ".lighthouserc.js", "lighthouserc.json"]
+    },
+    "bundleAnalyzer": {
+      "required": true,
+      "severity": "medium",
+      "plugin": "@next/bundle-analyzer"
+    },
+    "nextConfig": {
+      "imageOptimization": {
+        "required": true,
+        "severity": "medium"
+      }
+    }
+  }
+}

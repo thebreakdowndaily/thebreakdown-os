@@ -34,7 +34,7 @@ function buildTOC(story: Story): TOCItem[] {
 }
 
 export async function buildStoryPage(services: Services, slug: string): Promise<StoryTerminalViewModel | null> {
-  const rawStory = await services.stories.getStoryBySlug(slug);
+  const rawStory = await services.stories.getPublicStoryBySlug(slug);
 
   if (!rawStory) return null;
 

@@ -1,15 +1,13 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildStoryPage } from '@/features/story/view-model';
 import type { Story, StoryBlock } from '@/types/canonical';
-import StoryLayout from '@/layouts/StoryLayout';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { BlockRenderer } from '@/components/story/blocks/registry';
 import SourcesList from '@/components/story/SourcesList';
-import KnowledgeLayer from '@/components/story/KnowledgeLayer';
 import NextExploration from '@/components/story/NextExploration';
 import TierSelector from '@/components/story/TierSelector';
 import type { Tier } from '@/components/story/TierSelector';
@@ -17,77 +15,54 @@ import { StoryShell } from '@/components/rxs/StoryShell';
 import { seedAll, enrichClaimLazy, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
 
 function BlocksRenderer({ blocks }: { blocks?: StoryBlock[] }) {
   if (!blocks) return null;
   return blocks.map((block) => <BlockRenderer key={block.id} block={block as any} />);
 }
 
+import { createArticleSchema, createBreadcrumbSchema, createFAQSchema } from '@/lib/seo/jsonld';
+
 function createJsonLd(story: Story): Record<string, unknown>[] {
   const breadcrumbs = story.slug.split('-').slice(0, 2).join(' ').toUpperCase();
+  
   const ld: Record<string, unknown>[] = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'NewsArticle',
+    createArticleSchema({
       headline: story.headline,
-      description: story.summary,
-      image: story.heroImage ? {
-        '@type': 'ImageObject',
-        url: story.heroImage,
-        width: 1200,
-        height: 630,
-      } : undefined,
-      datePublished: story.publishedAt,
-      dateModified: story.updatedAt,
-      author: { '@type': 'Person', name: story.author },
-      publisher: {
-        '@type': 'Organization',
-        name: 'The Breakdown',
-        logo: { '@type': 'ImageObject', url: 'https://thebreakdown.in/logo.svg' },
-      },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': `https://thebreakdown.in/story/${story.slug}` },
+      summary: story.summary,
+      url: `https://thebreakdown.in/story/${story.slug}`,
+      image: story.heroImage,
+      publishedAt: story.publishedAt,
+      updatedAt: story.updatedAt,
+      authorName: story.author,
       wordCount: story.blocks?.reduce((sum, b) => sum + (JSON.stringify(b).length / 5), 0) || 0,
-      articleSection: story.category,
-      keywords: story.tags?.join(', '),
-      inLanguage: 'en-IN',
-      isAccessibleForFree: true,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://thebreakdown.in/' },
-        { '@type': 'ListItem', position: 2, name: breadcrumbs, item: 'https://thebreakdown.in/stories' },
-        { '@type': 'ListItem', position: 3, name: story.headline.slice(0, 60), item: `https://thebreakdown.in/story/${story.slug}` },
-      ],
-    },
+      category: story.category,
+      tags: story.tags,
+      isNews: true, // Legacy stories act as NewsArticle
+    }),
+    createBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: breadcrumbs, url: '/stories' },
+      { name: story.headline.slice(0, 60), url: `/story/${story.slug}` },
+    ]),
   ];
 
   const faqBlocks = story.blocks?.filter((b) => b.type === 'faq') || [];
   if (faqBlocks.length > 0) {
-    const mainEntity: Record<string, unknown>[] = [];
+    const questions: { question: string; answer: string }[] = [];
     faqBlocks.forEach((block) => {
       const data = block.data as any;
       if (data.questions && Array.isArray(data.questions)) {
         data.questions.forEach((q: any) => {
-          mainEntity.push({
-            '@type': 'Question',
-            name: q.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: q.answer,
-            },
-          });
+          questions.push({ question: q.question, answer: q.answer });
         });
       }
     });
 
-    if (mainEntity.length > 0) {
-      ld.push({
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity,
-      });
+    const faqSchema = createFAQSchema(questions);
+    if (faqSchema) {
+      ld.push(faqSchema);
     }
   }
 
@@ -104,7 +79,7 @@ function createJsonLd(story: Story): Record<string, unknown>[] {
       verification: c.status,
       confidence: c.confidence
     })) || [],
-    sources: story.sources?.map((s: any) => ({
+    sources: story.sources?.map((s) => ({
       title: s.title,
       url: s.url,
       tier: s.tier
@@ -124,8 +99,8 @@ export const dynamicParams = true;
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const services = bootstrapServices();
-  const storySlugs = (await services.stories.getStories()).data.map((s) => ({ slug: s.slug }));
+  const services = bootstrapServices({ publicOnly: true });
+  const storySlugs = (await services.stories.getPublicStories()).data.map((s) => ({ slug: s.slug }));
   const chapterSlugs: { slug: string }[] = [];
   try {
     seedAll();
@@ -172,7 +147,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildStoryPage(services, slug);
   if (!vm) return { title: 'Story Not Found — The Breakdown' };
   const { story } = vm;
@@ -206,7 +181,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-async function tryLoadChapter(slug: string) {
+const tryLoadChapter = cache(async (slug: string) => {
   try {
     seedAll();
     const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
@@ -229,7 +204,7 @@ async function tryLoadChapter(slug: string) {
           }
 
           // Resolve related investigation if a canonical relationship exists in the registry
-          const services = bootstrapServices();
+          const services = bootstrapServices({ publicOnly: true });
           const { data: investigations } = await services.investigations.getInvestigations();
           const relatedInvestigation = investigations.find(inv =>
             inv.chapters.some(ich => ich.storySlug === slug)
@@ -247,7 +222,7 @@ async function tryLoadChapter(slug: string) {
     }
   } catch {}
   return null;
-}
+});
 
 export default async function StoryPage({ 
   params,
@@ -291,11 +266,14 @@ export default async function StoryPage({
     );
   }
   const mode = (resolvedSearchParams?.mode as string) || 'standard';
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   const vm = await buildStoryPage(services, slug);
   if (!vm) notFound();
-  
-  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm as any;
+
+  // Publication visibility guard — reject non-public stories
+  if (!isCanonicalStoryPublic(vm.story)) notFound();
+
+  const { story, relatedStories, relatedEntities, quickView, deepView, visualAssets, unifiedTimeline, qualityScore } = vm;
   const heroImage = visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || story.heroImage;
 
   const currentTier: Tier = (mode === 'quick' || mode === 'deep') ? mode : 'standard';
@@ -325,14 +303,14 @@ export default async function StoryPage({
             </h1>
             
             <div className="flex items-center gap-4 text-sm text-neutral-400 flex-wrap">
-              {(story as any).metadata?.classification && (
+              {story.metadata?.classification && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
-                  {String((story as any).metadata.classification)}
+                  {String(story.metadata.classification)}
                 </span>
               )}
-              {!(story as any).metadata?.classification && (story as any).metadata?.type && (
+              {!story.metadata?.classification && story.metadata?.type && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-800 uppercase tracking-wider">
-                  {String((story as any).metadata.type)}
+                  {String(story.metadata.type)}
                 </span>
               )}
               <span className="text-emerald-400 font-mono">{story.author}</span>
@@ -524,7 +502,7 @@ export default async function StoryPage({
                   <span className="block text-[10px] uppercase tracking-widest text-neutral-500">Claims</span>
                 </div>
               </div>
-              <SourcesList sources={story.sources?.map((s: any) => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
+              <SourcesList sources={story.sources?.map((s) => ({ name: s.title, url: s.url, type: 'News', tier: s.tier })) || []} />
             </section>
 
           </div>

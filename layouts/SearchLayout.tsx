@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchBar from '../components/ui/SearchBar';
+import SearchBar from '@/components/ui/SearchBar';
 import Sidebar from '../components/layout/Sidebar';
 import Pagination from '../components/ui/Pagination';
 import Container from '../components/layout/Container';

@@ -25,10 +25,10 @@ async function runTests() {
   // Test 1: Search indexing works
   try {
     const results = services.search.search('adani');
-    assert(Array.isArray(results), 'Search returns an array');
-    if (results.length > 0) {
-      assert(typeof results[0].title === 'string', 'Search result has a title');
-      assert(typeof results[0].type === 'string', 'Search result has a type');
+    assert(Array.isArray(results.data), 'Search returns an array');
+    if (results.data.length > 0) {
+      assert(typeof results.data[0].title === 'string', 'Search result has a title');
+      assert(typeof results.data[0].type === 'string', 'Search result has a type');
     }
   } catch (e) {
     console.error('  FAIL: Search structure threw exception', e);
@@ -38,7 +38,7 @@ async function runTests() {
   // Test 2: Search handles empty queries
   try {
     const results = services.search.search('');
-    assert(Array.isArray(results), 'Empty search returns an array');
+    assert(Array.isArray(results.data), 'Empty search returns an array');
   } catch (e) {
     console.error('  FAIL: Empty search threw exception', e);
     failed++;

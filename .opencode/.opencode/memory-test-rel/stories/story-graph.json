@@ -1,0 +1,88 @@
+{
+  "storyId": "story-graph",
+  "headline": "Government Schemes Overview",
+  "entities": [
+    {
+      "id": "govt-india",
+      "type": "organization",
+      "name": "Government of India",
+      "version": 0
+    },
+    {
+      "id": "scheme-mgnrega",
+      "type": "scheme",
+      "name": "MGNREGA",
+      "version": 0
+    },
+    {
+      "id": "scheme-pm-kisan",
+      "type": "scheme",
+      "name": "PM-KISAN",
+      "version": 0
+    },
+    {
+      "id": "org-rural-dev",
+      "type": "organization",
+      "name": "Ministry of Rural Development",
+      "version": 0
+    },
+    {
+      "id": "org-agriculture",
+      "type": "organization",
+      "name": "Ministry of Agriculture",
+      "version": 0
+    },
+    {
+      "id": "budget-2026",
+      "type": "budget",
+      "name": "Union Budget 2026-27",
+      "version": 0
+    }
+  ],
+  "relationships": [
+    {
+      "from": "govt-india",
+      "relationship": "implements",
+      "to": "scheme-mgnrega",
+      "confidence": 0.97
+    },
+    {
+      "from": "govt-india",
+      "relationship": "implements",
+      "to": "scheme-pm-kisan",
+      "confidence": 0.96
+    },
+    {
+      "from": "scheme-mgnrega",
+      "relationship": "managed-by",
+      "to": "org-rural-dev",
+      "confidence": 0.95
+    },
+    {
+      "from": "scheme-pm-kisan",
+      "relationship": "managed-by",
+      "to": "org-agriculture",
+      "confidence": 0.94
+    },
+    {
+      "from": "org-rural-dev",
+      "relationship": "reports-to",
+      "to": "govt-india",
+      "confidence": 0.99
+    },
+    {
+      "from": "org-agriculture",
+      "relationship": "reports-to",
+      "to": "govt-india",
+      "confidence": 0.99
+    },
+    {
+      "from": "scheme-mgnrega",
+      "relationship": "covered-by",
+      "to": "budget-2026",
+      "confidence": 0.9
+    }
+  ],
+  "storedAt": "2026-07-18T16:37:56.004Z",
+  "version": 1
+}

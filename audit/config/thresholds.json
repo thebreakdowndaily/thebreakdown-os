@@ -1,0 +1,8 @@
+{
+  "defaultScoreThreshold": 80,
+  "pluginThresholds": {
+    "architecture": 90,
+    "security": 85,
+    "accessibility": 80
+  }
+}

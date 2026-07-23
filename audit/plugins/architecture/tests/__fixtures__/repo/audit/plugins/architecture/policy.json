@@ -1,0 +1,76 @@
+{
+  "policyVersion": "1.1.0",
+  "directories": {
+    "required": [
+      { "path": "app", "severity": "critical" },
+      { "path": "components", "severity": "high" },
+      { "path": "services", "severity": "critical" },
+      { "path": "lib", "severity": "critical" },
+      { "path": "types", "severity": "critical" },
+      { "path": "tests", "severity": "critical" },
+      { "path": "docs", "severity": "critical" },
+      { "path": "adr", "severity": "medium" },
+      { "path": "rfc", "severity": "medium" },
+      { "path": "prompts", "severity": "medium" }
+    ],
+    "optional": [
+      "scripts",
+      "plugins",
+      "packages",
+      "public",
+      ".github",
+      ".vscode",
+      ".gitlab"
+    ],
+    "generated": [
+      ".next",
+      ".open-next",
+      ".vercel",
+      ".wrangler",
+      "coverage",
+      "node_modules",
+      "dist",
+      "dist-static",
+      "output"
+    ],
+    "deprecated": [
+      "legacy_src"
+    ]
+  },
+  "canonical": [
+    {
+      "path": "types/canonical.ts",
+      "mustBeNonEmpty": true,
+      "mustBeDirectory": false
+    },
+    {
+      "path": "lib/events",
+      "mustBeNonEmpty": false,
+      "mustBeDirectory": true
+    },
+    {
+      "path": "lib/graph",
+      "mustBeNonEmpty": false,
+      "mustBeDirectory": true
+    }
+  ],
+  "requiredFiles": [
+    "README.md",
+    "AGENTS.md",
+    "docs/editorial/editorial-constitution.md"
+  ],
+  "forbiddenImports": [
+    {
+      "source": "components",
+      "targets": ["database", "filesystem", "orm", "drivers", "fs", "pg"]
+    }
+  ],
+  "pluginConventions": {
+    "requireReadme": true,
+    "requireManifest": true,
+    "preventDuplicateNames": true
+  },
+  "adr": {
+    "allowedFiles": ["README.md"]
+  }
+}

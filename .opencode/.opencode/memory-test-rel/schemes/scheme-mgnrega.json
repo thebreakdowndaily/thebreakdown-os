@@ -1,0 +1,22 @@
+{
+  "id": "scheme-mgnrega",
+  "type": "scheme",
+  "name": "MGNREGA",
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.983Z",
+  "updatedAt": "2026-07-18T16:37:55.983Z",
+  "stories": [
+    "story-graph"
+  ],
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.983Z",
+      "updatedBy": "story-graph",
+      "changes": [
+        "entity-created"
+      ]
+    }
+  ],
+  "active": true
+}

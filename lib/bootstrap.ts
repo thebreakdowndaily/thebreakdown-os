@@ -1,15 +1,18 @@
-import { getStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
+import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations, LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
 import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
 import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, StoryBlock, Source, Claim, TimelineEvent, FAQItem, ChartDef, ExistingSolution, GlobalExample, FixAction, FixMetric, Investigation } from '@/types/canonical';
 import { seedDatasets } from '@/lib/datasets/seed-data';
 import type { APIStory, APITopic, APIEntity, APITimeline, APIFix, APIInvestigation } from '@/utils/data-layer/types';
+import { positionalClaimId } from '@/lib/story/claim-identity';
 
-export function bootstrapServices(): Services {
+export function bootstrapServices(options?: { publicOnly?: boolean }): Services {
   try { return getServices(); } catch {}
 
-  const apiStories = getStories({ pageSize: 100 }).data;
+  const apiStories = options?.publicOnly
+    ? getPublicStories({ pageSize: 100 }).data
+    : getStories({ pageSize: 100 }).data;
   const apiTopics = getTopics({ pageSize: 100 }).data;
   const apiEntities = getEntities({ pageSize: 100 }).data;
   const apiTimelines = getTimelines({ pageSize: 100 }).data;
@@ -29,7 +32,7 @@ export function bootstrapServices(): Services {
   return services;
 }
 
-function createBlocksFromStory(s: APIStory): StoryBlock[] {
+export function createBlocksFromStory(s: APIStory): StoryBlock[] {
   const blocks: StoryBlock[] = [];
 
   const allSources = [
@@ -87,7 +90,7 @@ function createBlocksFromStory(s: APIStory): StoryBlock[] {
   }
 
   const evidenceClaims = (s.claims || []).map((c, i) => ({
-    id: `claim-${i}-${Math.random().toString(36).slice(2, 8)}`,
+    id: positionalClaimId(s.slug || 'story', i),
     text: c.claim || '',
     confidence: Math.round((c.confidence || 0.5) * 100),
     status: c.verification === 'true' ? 'verified' as const : c.verification === 'false' ? 'unverified' as const : (c.confidence || 0) >= 0.8 ? 'strong' as const : (c.confidence || 0) >= 0.6 ? 'moderate' as const : 'unverified' as const,
@@ -179,35 +182,10 @@ function createBlocksFromStory(s: APIStory): StoryBlock[] {
   return blocks;
 }
 
+import { apiStoryToCanonicalAdapter } from '@/lib/story/adapters';
+
 export function apiStoryToCanonical(s: APIStory): Story {
-  const blocks = createBlocksFromStory(s);
-  const mappedSources = (s.sources || []).map((src): Source => ({ title: src.name, url: src.url, accessedAt: '', tier: src.tier as import('@/types/canonical').ConfidenceTier }));
-  const mappedClaims = (s.claims || []).map((c, i): Claim => ({
-    id: `claim-${i}-${Math.random().toString(36).slice(2, 8)}`,
-    claim: c.claim || '',
-    data: c.explanation || '',
-    source: c.source || '',
-    sourceUrl: '',
-    tier: 3,
-    confidence: c.confidence || 0.5,
-    status: c.verification === 'true' ? 'verified' : (c.confidence || 0) >= 0.8 ? 'strong' : (c.confidence || 0) >= 0.6 ? 'moderate' : 'unverified',
-  }));
-  return {
-    ...s as unknown as Story,
-    title: s.headline,
-    createdAt: s.publishedAt,
-    status: 'published',
-    storyType: s.storyType || 'standard',
-    blocks,
-    sources: mappedSources,
-    claims: mappedClaims,
-    author: typeof s.author === 'string' ? s.author : (s.author?.name || ''),
-    primaryEntityId: s.primaryEntityId,
-    relatedStoryIds: (s.relatedStories || []).map((rs) => rs.slug),
-    relatedEntityIds: (s.relatedEntities || []).map((re) => re.id || re.slug),
-    relatedTopicIds: s.relatedTopicIds || [],
-    repo: undefined,
-  } as unknown as Story;
+  return apiStoryToCanonicalAdapter(s);
 }
 
 export function apiTopicToCanonical(t: APITopic): Topic {

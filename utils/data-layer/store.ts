@@ -588,6 +588,7 @@ function seed(): DataStore {
     heroImage: '/images/stories/ration-digitization.jpg',
     publishedAt: '2026-07-22T06:00:00Z',
     updatedAt: '2026-07-22T06:00:00Z',
+    publicationStatus: 'draft' as const,
     readingTime: 10,
     wordCount: 3500,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
@@ -647,6 +648,7 @@ function seed(): DataStore {
     heroImage: '/images/stories/anganwadi.jpg',
     publishedAt: '2026-07-28T06:00:00Z',
     updatedAt: '2026-07-28T06:00:00Z',
+    publicationStatus: 'draft' as const,
     readingTime: 11,
     wordCount: 3800,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
@@ -714,6 +716,7 @@ function seed(): DataStore {
     heroImage: '/images/stories/supply-chain-shift.jpg',
     publishedAt: '2026-08-01T06:00:00Z',
     updatedAt: '2026-08-01T06:00:00Z',
+    publicationStatus: 'draft' as const,
     readingTime: 13,
     wordCount: 4500,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
@@ -787,6 +790,7 @@ function seed(): DataStore {
     heroImage: '/images/stories/ethanol-backlash.jpg',
     publishedAt: '2026-08-05T06:00:00Z',
     updatedAt: '2026-08-05T06:00:00Z',
+    publicationStatus: 'draft' as const,
     readingTime: 14,
     wordCount: 4800,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
@@ -5138,4 +5142,129 @@ export function upsertInvestigation(slug: string, inv: APIInvestigation): void {
 
 export function removeInvestigation(slug: string): void {
   getStore().investigations.delete(slug);
+}
+
+/* ── Publication Lifecycle ────────────────────────────────────────────── */
+
+/**
+ * Legacy visibility manifest.
+ *
+ * All stories that were publicly visible BEFORE P1A publication safety
+ * was introduced. These slugs resolve as "legacy-resolved published"
+ * regardless of whether they carry an explicit `publicationStatus`.
+ *
+ * Every entry here has a valid past `publishedAt` date.
+ * Future-dated stories (ration-digitization, anganwadi-icds,
+ * supply-chain-shift, ethanol-backlash) carry `publicationStatus: 'draft'`
+ * and are intentionally NOT in this allowlist.
+ *
+ * To add a new public story: give it `publicationStatus: 'published'`
+ * and a valid past `publishedAt`. Do NOT add it to this list.
+ */
+export const LEGACY_PUBLIC_SLUGS: ReadonlySet<string> = new Set([
+  'mgnrega-reform',
+  'digital-payments-boom',
+  'pm-fasal-bima-claims',
+  'semiconductor-pli',
+  'dpdp-bill',
+  'rbi-repo-rate',
+  'climate-finance',
+  'education-budget',
+  'groundwater-depletion',
+  'ews-quota-upsc-investigation',
+  'us-iran-relations',
+  'indian-education-crisis',
+  'income-inequality-india',
+  'india-china-border-tensions',
+  'indias-foreign-policy',
+  'satluj-ban',
+  'india-us-relations',
+  'india-indonesia-relations',
+  'india-china-relations',
+  'india-europe-relations',
+  'india-uk-relations',
+  'india-russia-relations',
+  '81-crore-data-breach',
+  'bjp-mission-360',
+  'india-5g-rollout',
+  'india-ev-paradox',
+  'ayushman-bharat',
+  'electoral-bonds',
+  'who-cancer-report-2026',
+  'us-iran-war-strait-of-hormuz',
+  'epf-scheme-2026',
+  'youth-mental-health-crisis',
+  'gig-worker-rights',
+  'namami-gange-under-fire',
+  'india-china-border-lac',
+  'kashmir-the-first-test',
+  'fix-air-pollution',
+  'fix-farm-income',
+  'fix-judicial-pendency',
+]);
+
+import type { PublicationStatus } from './types';
+import {
+  isPubliclyPublished,
+  canPubliclyViewStory,
+  shouldIndexStory,
+  shouldIncludeInFeed,
+  shouldIncludeInDiscovery,
+  diagnosePublication,
+} from '@/lib/story/publication';
+
+function isLegacyPublic(story: APIStory, now: Date): boolean {
+  return (
+    LEGACY_PUBLIC_SLUGS.has(story.slug) &&
+    !!story.publishedAt &&
+    new Date(story.publishedAt).getTime() <= now.getTime()
+  );
+}
+
+function storyIsPublic(story: APIStory, now: Date = new Date()): boolean {
+  if (isPubliclyPublished({ publicationStatus: story.publicationStatus, publishedAt: story.publishedAt }, now)) {
+    return true;
+  }
+  if (isLegacyPublic(story, now)) {
+    return true;
+  }
+  return false;
+}
+
+export function getPublicStories(params: QueryParams = {}): APIListResponse<APIStory> {
+  const s = getStore();
+  const now = new Date();
+  let items = Array.from(s.stories.values()).filter((st) => storyIsPublic(st, now));
+
+  if (params.category) items = items.filter((st) => st.category === params.category);
+  const tagFilter = params.tag;
+  if (tagFilter) items = items.filter((st) => st.tags.includes(tagFilter));
+  const authorFilter = params.author;
+  if (authorFilter) items = items.filter((st) => st.author.name.toLowerCase().includes(authorFilter.toLowerCase()));
+  const searchQuery = params.search;
+  if (searchQuery) items = searchFilter(items, searchQuery, ['headline', 'summary', 'tags']);
+  if (params.sort) items = sortItems(items, params.sort, params.order);
+
+  return paginate(items, params);
+}
+
+export function getPublicStory(slug: string): APIStory | null {
+  const story = getStore().stories.get(slug);
+  if (!story) return null;
+  return storyIsPublic(story) ? story : null;
+}
+
+export function getPublicStoryDiagnostics(now: Date = new Date()) {
+  const s = getStore();
+  return Array.from(s.stories.values()).map((st) => {
+    const ps: { publicationStatus?: PublicationStatus; publishedAt?: string } = {
+      publicationStatus: st.publicationStatus,
+      publishedAt: st.publishedAt,
+    };
+    const diag = diagnosePublication(st.slug, ps, now);
+    if (!diag.isPublic && isLegacyPublic(st, now)) {
+      return { ...diag, isPublic: true, reason: `legacy-resolved published (slug in LEGACY_PUBLIC_SLUGS, valid past publishedAt)` };
+    }
+    return diag;
+  });
 }

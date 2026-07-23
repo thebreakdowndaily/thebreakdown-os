@@ -1,0 +1,27 @@
+{
+  "policyVersion": "1.0",
+  "knowledgeGraph": {
+    "registries": {
+      "required": true,
+      "severity": "critical",
+      "paths": [
+        "registry/claims",
+        "registry/sources",
+        "registry/thinkers",
+        "registry/documents",
+        "registry/events"
+      ]
+    },
+    "schemas": {
+      "required": true,
+      "severity": "high",
+      "paths": ["types/canonical.ts"]
+    },
+    "integrity": {
+      "uniqueIds": {
+        "required": true,
+        "severity": "critical"
+      }
+    }
+  }
+}

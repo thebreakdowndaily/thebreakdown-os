@@ -87,7 +87,7 @@ async function runTests() {
   try {
     const { GET } = await import('../app/api/v1/datasets/[slug]/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/gdp-growth');
-    const res = await GET(req, { params: { slug: 'gdp-growth' } });
+    const res = await GET(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 200, 'GET /api/v1/datasets/gdp-growth returns 200');
     const body = parsed.data as { data: Dataset };
@@ -102,7 +102,7 @@ async function runTests() {
   try {
     const { GET } = await import('../app/api/v1/datasets/[slug]/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/nonexistent');
-    const res = await GET(req, { params: { slug: 'nonexistent' } });
+    const res = await GET(req, { params: Promise.resolve({ slug: 'nonexistent' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 404, 'GET /api/v1/datasets/nonexistent returns 404');
     const body = parsed.data as { error: string };
@@ -152,7 +152,7 @@ async function runTests() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: 'Updated GDP Growth Title' }),
     });
-    const res = await PUT(req, { params: { slug: 'gdp-growth' } });
+    const res = await PUT(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 200, 'PUT /api/v1/datasets/gdp-growth returns 200');
     const body = parsed.data as { data: Dataset };
@@ -170,7 +170,7 @@ async function runTests() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: 'Nope' }),
     });
-    const res = await PUT(req, { params: { slug: 'nonexistent' } });
+    const res = await PUT(req, { params: Promise.resolve({ slug: 'nonexistent' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 404, 'PUT /api/v1/datasets/nonexistent returns 404');
   } catch (e) {
@@ -182,14 +182,14 @@ async function runTests() {
   try {
     const { DELETE } = await import('../app/api/v1/datasets/[slug]/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/e2e-test', { method: 'DELETE' });
-    const res = await DELETE(req, { params: { slug: 'e2e-test' } });
+    const res = await DELETE(req, { params: Promise.resolve({ slug: 'e2e-test' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 200, 'DELETE /api/v1/datasets/e2e-test returns 200');
     const body = parsed.data as { success: boolean };
     assert(body.success === true, 'Delete returns success: true');
 
     // Verify deletion
-    const exists = getServices().datasets.getDatasetBySlug('e2e-test');
+    const exists = await getServices().datasets.getDatasetBySlug('e2e-test');
     assert(exists === undefined, 'Dataset no longer exists after delete');
   } catch (e) {
     console.error('  FAIL: DELETE /api/v1/datasets/{slug} threw exception', e);
@@ -200,7 +200,7 @@ async function runTests() {
   try {
     const { DELETE } = await import('../app/api/v1/datasets/[slug]/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/nonexistent', { method: 'DELETE' });
-    const res = await DELETE(req, { params: { slug: 'nonexistent' } });
+    const res = await DELETE(req, { params: Promise.resolve({ slug: 'nonexistent' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 404, 'DELETE /api/v1/datasets/nonexistent returns 404');
   } catch (e) {
@@ -212,7 +212,7 @@ async function runTests() {
   try {
     const { GET: GetSeries } = await import('../app/api/v1/datasets/[slug]/series/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/gdp-growth/series?metricId=gdp-q-growth');
-    const res = await GetSeries(req, { params: { slug: 'gdp-growth' } });
+    const res = await GetSeries(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 200, 'GET series returns 200');
     const body = parsed.data as { data: unknown };
@@ -227,7 +227,7 @@ async function runTests() {
   try {
     const { GET: GetSeries } = await import('../app/api/v1/datasets/[slug]/series/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/gdp-growth/series');
-    const res = await GetSeries(req, { params: { slug: 'gdp-growth' } });
+    const res = await GetSeries(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 400, 'GET series without metricId returns 400');
     const body = parsed.data as { error: string };
@@ -241,7 +241,7 @@ async function runTests() {
   try {
     const { GET: GetSeries } = await import('../app/api/v1/datasets/[slug]/series/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/nonexistent/series?metricId=m1');
-    const res = await GetSeries(req, { params: { slug: 'nonexistent' } });
+    const res = await GetSeries(req, { params: Promise.resolve({ slug: 'nonexistent' }) });
     const parsed = await parseResponse(res);
     assert(parsed.status === 404, 'GET series for nonexistent dataset returns 404');
   } catch (e) {
@@ -253,7 +253,7 @@ async function runTests() {
   try {
     const { GET: GetDownload } = await import('../app/api/v1/datasets/[slug]/download/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/gdp-growth/download');
-    const res = await GetDownload(req, { params: { slug: 'gdp-growth' } });
+    const res = await GetDownload(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     assert(res.status === 200, 'GET download returns 200');
     const text = await res.text();
     assert(text.includes('Period'), 'CSV contains Period header');
@@ -271,7 +271,7 @@ async function runTests() {
   try {
     const { GET: GetDownload } = await import('../app/api/v1/datasets/[slug]/download/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/nonexistent/download');
-    const res = await GetDownload(req, { params: { slug: 'nonexistent' } });
+    const res = await GetDownload(req, { params: Promise.resolve({ slug: 'nonexistent' }) });
     assert(res.status === 404, 'GET download for nonexistent dataset returns 404');
   } catch (e) {
     console.error('  FAIL: GET download 404 threw exception', e);
@@ -282,7 +282,7 @@ async function runTests() {
   try {
     const { GET } = await import('../app/api/v1/datasets/[slug]/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/gdp-growth');
-    const res = await GET(req, { params: { slug: 'gdp-growth' } });
+    const res = await GET(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     const parsed = await parseResponse(res);
     const body = parsed.data as { data: Dataset };
     const ds = body.data;
@@ -333,7 +333,7 @@ async function runTests() {
   try {
     const { GET } = await import('../app/api/v1/datasets/[slug]/route');
     const req = new NextRequest('http://localhost:3000/api/v1/datasets/gdp-growth');
-    const res = await GET(req, { params: { slug: 'gdp-growth' } });
+    const res = await GET(req, { params: Promise.resolve({ slug: 'gdp-growth' }) });
     const parsed = await parseResponse(res);
     const body = parsed.data as { data: Dataset };
     const ds = body.data;

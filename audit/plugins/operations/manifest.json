@@ -1,0 +1,9 @@
+{
+  "name": "operations-audit",
+  "version": "1.0.0",
+  "description": "Verifies repository operations and delivery readiness",
+  "capabilities": ["operations", "delivery"],
+  "dependsOn": ["architecture-audit"],
+  "sdkVersion": "1.0.0",
+  "schemaVersion": "1.0.0"
+}

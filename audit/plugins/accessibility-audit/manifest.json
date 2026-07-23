@@ -1,0 +1,7 @@
+{
+  "name": "accessibility-audit",
+  "description": "Verifies accessibility readiness through repository configuration.",
+  "version": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "capabilities": ["accessibility", "configuration", "reporting"]
+}

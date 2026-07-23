@@ -1,0 +1,9 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "description": "Simple hello world plugin for audit framework",
+  "capabilities": [],
+  "timeoutMs": 5000,
+  "sdkVersion": "1.0.0",
+  "schemaVersion": "2.0"
+}

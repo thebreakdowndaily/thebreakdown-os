@@ -1,0 +1,22 @@
+{
+  "id": "govt-india",
+  "type": "organization",
+  "name": "Government of India",
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.980Z",
+  "updatedAt": "2026-07-18T16:37:55.980Z",
+  "stories": [
+    "story-graph"
+  ],
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.980Z",
+      "updatedBy": "story-graph",
+      "changes": [
+        "entity-created"
+      ]
+    }
+  ],
+  "active": true
+}

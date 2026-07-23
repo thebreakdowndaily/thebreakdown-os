@@ -1,0 +1,21 @@
+{
+  "from": "scheme-pm-kisan",
+  "relationship": "managed-by",
+  "to": "org-agriculture",
+  "confidence": 0.94,
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.998Z",
+  "lastObserved": "2026-07-18T16:37:55.998Z",
+  "firstObserved": "2026-07-18T16:37:55.998Z",
+  "active": true,
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.998Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-created"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import type { BlockComponentProps } from '../core/block-registry';
 import type { ClaimBlockData, EvidenceRef } from '@/types/canonical';

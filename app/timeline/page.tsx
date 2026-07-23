@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 };
 
 export default async function TimelinePage() {
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
 
-  const allStories = (await services.stories.getStories({ pageSize: 100 })).data;
+  const allStories = (await services.stories.getPublicStories({ pageSize: 100 })).data;
   
   // Use pipeline instead of view models for proper server-side execution
   const pipeline = new KnowledgeStoryPipeline()

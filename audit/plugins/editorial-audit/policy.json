@@ -1,0 +1,24 @@
+{
+  "policyVersion": "1.0",
+  "editorial": {
+    "constitution": {
+      "required": true,
+      "severity": "critical",
+      "paths": ["docs/editorial/editorial-constitution.md"]
+    },
+    "structure": {
+      "required": true,
+      "severity": "high"
+    },
+    "metadata": {
+      "required": true,
+      "severity": "high",
+      "fields": ["title", "slug", "status", "version"]
+    },
+    "evidenceSections": {
+      "required": true,
+      "severity": "medium",
+      "sections": ["sources", "claims"]
+    }
+  }
+}

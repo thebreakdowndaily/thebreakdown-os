@@ -1,12 +1,13 @@
 import type { Topic, Story } from '@/types/canonical';
 import type { KnowledgeTopic, TopicAggregator } from './builder';
 import { getServices } from '@/services/registry';
+import { canPubliclyViewStory, storyPublicationContext } from '@/lib/story/publication';
 
 export class StoryAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
     const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
     const storiesResult = await Promise.all(storyPromises);
-    const stories = storiesResult.filter((s): s is Story => !!s);
+    const stories = storiesResult.filter((s): s is Story => !!s && canPubliclyViewStory(storyPublicationContext(s)));
 
     // Latest: chronologically recent
     const latest = [...stories].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());

@@ -1,4 +1,4 @@
-'use client';
+
 
 import { StoryShell } from '@/components/rxs/StoryShell';
 import type { Chapter } from '@/types/canonical';

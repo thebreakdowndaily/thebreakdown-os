@@ -1,0 +1,8 @@
+{
+  "name": "editorial-audit",
+  "description": "Verifies editorial completeness and alignment with the Editorial Constitution.",
+  "version": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "capabilities": ["editorial", "knowledge-graph", "analysis", "reporting"],
+  "dependsOn": ["knowledge-graph-audit"]
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Container from '@/components/layout/Container';
-import { getStories } from '@/utils/data-layer/store';
+import { getPublicStories } from '@/utils/data-layer/store';
 
 export const metadata: Metadata = {
   title: 'Team — The Breakdown',
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function TeamPage() {
-  const { data: stories } = getStories({ pageSize: 50 });
+  const { data: stories } = getPublicStories({ pageSize: 50 });
   const authorMap = new Map<string, { name: string; stories: string[] }>();
   for (const s of stories) {
     const name = s.author.name;

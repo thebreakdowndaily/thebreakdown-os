@@ -6,6 +6,15 @@
 
 export type APIStoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
 
+/**
+ * Publication lifecycle — controls public visibility.
+ * Separate from the editorial/story status field.
+ *
+ *   draft/review/archived/scheduled → NOT public
+ *   published + valid past publishedAt → public
+ */
+export type PublicationStatus = 'draft' | 'review' | 'scheduled' | 'published' | 'archived';
+
 export interface APIStory {
   id: string;
   slug: string;
@@ -36,7 +45,11 @@ export interface APIStory {
   relatedEntities: APIRelatedEntity[];
   organisations?: APIRelatedEntity[];
   countries?: APIRelatedEntity[];
+  /** Editorial/story classification — NOT a publication gate. */
   status?: 'breaking' | 'developing' | 'verified' | 'explainer' | 'archive';
+  /** Publication lifecycle — controls public visibility. Missing = draft (fail-closed). */
+  publicationStatus?: PublicationStatus;
+  scheduledAt?: string;
   versionHistory?: Array<{ date: string; description: string }>;
   confidenceBreakdown?: {
     overallScore: number;

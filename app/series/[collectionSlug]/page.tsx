@@ -3,7 +3,21 @@ import { CollectionLanding } from '@/components/knowledge-library/CollectionLand
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+  const libraries = await repo.getAllLibraries();
+  const params = [];
+  
+  for (const lib of libraries) {
+    for (const col of lib.collections) {
+      params.push({ collectionSlug: col.slug });
+    }
+  }
+  
+  return params;
+}
 
 export default async function CollectionPage({ params }: { params: Promise<{ collectionSlug: string }> }) {
   const { collectionSlug } = await params;

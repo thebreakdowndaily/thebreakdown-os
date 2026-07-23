@@ -14,7 +14,7 @@ export default function GraphExplorerPage() {
   const [ready, setReady] = useState(false);
 
   const init = useCallback(() => {
-    bootstrapServices();
+    bootstrapServices({ publicOnly: true });
     buildGraphPage(getServices()).then((result) => {
       setVm(result);
       setReady(true);

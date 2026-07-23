@@ -1,0 +1,1 @@
+export const KNOWLEDGE_REVALIDATE = 3600;

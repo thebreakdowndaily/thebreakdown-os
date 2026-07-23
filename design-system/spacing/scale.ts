@@ -62,6 +62,7 @@ export const layout = {
     lg: '2rem',          // 32px
     xl: '3rem',          // 48px
   },
+  sidebarWidth: '16rem', // 256px
 } as const;
 
 export type SpacingKey = keyof typeof scale;

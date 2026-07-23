@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Audit Plugin Manifest Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "sdkVersion": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "filesystem",
+          "configuration",
+          "analysis",
+          "reporting",
+          "security",
+          "architecture",
+          "operations",
+          "accessibility",
+          "performance",
+          "seo",
+          "knowledge-graph",
+          "editorial"
+        ]
+      }
+    },
+    "dependsOn": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["name", "description", "version", "sdkVersion", "capabilities"]
+}

@@ -1,5 +1,5 @@
-import { MemoryDatasetService } from '../services/datasets/service';
-import type { Dataset, DatasetVersion, APIListParams } from '../types/canonical';
+import { MemoryDatasetRepository } from '../services/repositories/memory/dataset';
+import type { Dataset, DatasetVersion, APIListParams, Metric } from '../types/canonical';
 
 const mockDataset: Dataset = {
   id: 'ds-test',
@@ -76,8 +76,8 @@ async function runTests() {
 
   // Test 1: Constructor with datasets
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    assert(service.getDataset('ds-test') !== undefined, 'Constructor stores datasets');
+    const service = new MemoryDatasetRepository([mockDataset]);
+    assert(await service.getDataset('ds-test') !== undefined, 'Constructor stores datasets');
   } catch (e) {
     console.error('  FAIL: Constructor with datasets threw exception', e);
     failed++;
@@ -85,8 +85,8 @@ async function runTests() {
 
   // Test 2: getDatasets returns all
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const result = service.getDatasets();
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const result = await service.getDatasets();
     assert(result.data.length === 1, 'getDatasets returns all datasets');
     assert(result.meta!.total === 1, 'Meta total is correct');
   } catch (e) {
@@ -96,10 +96,10 @@ async function runTests() {
 
   // Test 3: getDatasets with search filter
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const result = service.getDatasets({ search: 'economy' } as APIListParams);
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const result = await service.getDatasets({ search: 'economy' } as APIListParams);
     assert(result.data.length === 1, 'Search by tag finds dataset');
-    const noResult = service.getDatasets({ search: 'nonexistent' } as APIListParams);
+    const noResult = await service.getDatasets({ search: 'nonexistent' } as APIListParams);
     assert(noResult.data.length === 0, 'Search with no match returns empty');
   } catch (e) {
     console.error('  FAIL: getDatasets search threw exception', e);
@@ -108,11 +108,11 @@ async function runTests() {
 
   // Test 4: getDatasets with pagination
   try {
-    const service = new MemoryDatasetService([mockDataset, { ...mockDataset, id: 'ds-2', slug: 'dataset-2', title: 'Dataset 2' }]);
-    const page1 = service.getDatasets({ page: 1, pageSize: 1 } as APIListParams);
+    const service = new MemoryDatasetRepository([mockDataset, { ...mockDataset, id: 'ds-2', slug: 'dataset-2', title: 'Dataset 2' }]);
+    const page1 = await service.getDatasets({ page: 1, pageSize: 1 } as APIListParams);
     assert(page1.data.length === 1, 'Pagination page 1 returns 1 item');
     assert(page1.meta!.total === 2, 'Pagination meta total is 2');
-    const page2 = service.getDatasets({ page: 2, pageSize: 1 } as APIListParams);
+    const page2 = await service.getDatasets({ page: 2, pageSize: 1 } as APIListParams);
     assert(page2.data.length === 1, 'Pagination page 2 returns 1 item');
   } catch (e) {
     console.error('  FAIL: getDatasets pagination threw exception', e);
@@ -121,11 +121,11 @@ async function runTests() {
 
   // Test 5: getDatasetBySlug
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const found = service.getDatasetBySlug('test-dataset');
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const found = await service.getDatasetBySlug('test-dataset');
     assert(found !== undefined, 'getDatasetBySlug finds dataset');
     assert(found!.title === 'Test Dataset', 'getDatasetBySlug returns correct dataset');
-    const notFound = service.getDatasetBySlug('nonexistent');
+    const notFound = await service.getDatasetBySlug('nonexistent');
     assert(notFound === undefined, 'getDatasetBySlug returns undefined for missing');
   } catch (e) {
     console.error('  FAIL: getDatasetBySlug threw exception', e);
@@ -134,10 +134,10 @@ async function runTests() {
 
   // Test 6: saveDataset
   try {
-    const service = new MemoryDatasetService([]);
-    const saved = service.saveDataset(mockDataset);
+    const service = new MemoryDatasetRepository([]);
+    const saved = await service.saveDataset(mockDataset);
     assert(saved.title === 'Test Dataset', 'saveDataset returns saved dataset');
-    assert(service.getDataset('ds-test') !== undefined, 'saveDataset persists dataset');
+    assert(await service.getDataset('ds-test') !== undefined, 'saveDataset persists dataset');
     assert(saved.updatedAt !== '2026-01-01T00:00:00Z', 'saveDataset updates updatedAt');
   } catch (e) {
     console.error('  FAIL: saveDataset threw exception', e);
@@ -146,9 +146,9 @@ async function runTests() {
 
   // Test 7: deleteDataset
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    service.deleteDataset('ds-test');
-    assert(service.getDataset('ds-test') === undefined, 'deleteDataset removes dataset');
+    const service = new MemoryDatasetRepository([mockDataset]);
+    await service.deleteDataset('ds-test');
+    assert(await service.getDataset('ds-test') === undefined, 'deleteDataset removes dataset');
   } catch (e) {
     console.error('  FAIL: deleteDataset threw exception', e);
     failed++;
@@ -156,14 +156,14 @@ async function runTests() {
 
   // Test 8: getSeries
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const series = service.getSeries('test-dataset', 'm1');
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const series = await service.getSeries('test-dataset', 'm1');
     assert(series !== undefined, 'getSeries returns series for existing metric');
     assert(series!.length === 1, 'getSeries returns one series for m1');
     assert(series![0].observations.length === 3, 'getSeries returns correct observations');
-    const noSeries = service.getSeries('test-dataset', 'nonexistent');
+    const noSeries = await service.getSeries('test-dataset', 'nonexistent');
     assert(noSeries!.length === 0, 'getSeries returns empty for nonexistent metric');
-    const noDataset = service.getSeries('nonexistent', 'm1');
+    const noDataset = await service.getSeries('nonexistent', 'm1');
     assert(noDataset === undefined, 'getSeries returns undefined for missing dataset');
   } catch (e) {
     console.error('  FAIL: getSeries threw exception', e);
@@ -172,12 +172,12 @@ async function runTests() {
 
   // Test 9: getVersions
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const versions = service.getVersions('test-dataset');
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const versions = await service.getVersions('test-dataset');
     assert(versions !== undefined, 'getVersions returns versions');
     assert(versions!.length === 1, 'getVersions returns correct count');
     assert(versions![0].version === '1.0', 'getVersions returns correct version');
-    const noVersions = service.getVersions('nonexistent');
+    const noVersions = await service.getVersions('nonexistent');
     assert(noVersions === undefined, 'getVersions returns undefined for missing');
   } catch (e) {
     console.error('  FAIL: getVersions threw exception', e);
@@ -216,10 +216,10 @@ async function runTests() {
   // Test 12: API dataset listing
   try {
     const ds = { ...mockDataset, id: 'ds-api', slug: 'api-dataset' };
-    const service = new MemoryDatasetService([ds]);
-    const result = service.getDatasets();
+    const service = new MemoryDatasetRepository([ds]);
+    const result = await service.getDatasets();
     assert(result.data.length >= 1, 'API getDatasets returns data');
-    const found = result.data.find(d => d.slug === 'api-dataset');
+    const found = result.data.find((d: Dataset) => d.slug === 'api-dataset');
     assert(found !== undefined, 'API getDatasets includes seeded dataset');
   } catch (e) {
     console.error('  FAIL: API dataset listing threw exception', e);
@@ -228,13 +228,13 @@ async function runTests() {
 
   // Test 13: API dataset CRUD
   try {
-    const service = new MemoryDatasetService([]);
-    const saved = service.saveDataset(mockDataset);
+    const service = new MemoryDatasetRepository([]);
+    const saved = await service.saveDataset(mockDataset);
     assert(saved.id === 'ds-test', 'API saveDataset returns with ID');
-    const fetched = service.getDataset('ds-test');
+    const fetched = await service.getDataset('ds-test');
     assert(fetched !== undefined, 'API getDataset retrieves saved dataset');
-    service.deleteDataset('ds-test');
-    assert(service.getDataset('ds-test') === undefined, 'API deleteDataset removes dataset');
+    await service.deleteDataset('ds-test');
+    assert(await service.getDataset('ds-test') === undefined, 'API deleteDataset removes dataset');
   } catch (e) {
     console.error('  FAIL: API dataset CRUD threw exception', e);
     failed++;
@@ -242,8 +242,8 @@ async function runTests() {
 
   // Test 14: Dataset integration — related entities/stories/topics
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const ds = service.getDatasetBySlug('test-dataset')!;
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const ds = await service.getDatasetBySlug('test-dataset')!;
     assert(ds.relatedEntityIds.includes('entity-1'), 'Dataset links to entities');
     assert(ds.relatedStoryIds.includes('story-1'), 'Dataset links to stories');
     assert(ds.relatedTopicIds.includes('topic-1'), 'Dataset links to topics');
@@ -264,8 +264,8 @@ async function runTests() {
         { id: 'v3', version: '3.0', publishedAt: '2026-01-01T00:00:00Z', notes: 'Third', series: [], metadata: {} },
       ],
     };
-    const service = new MemoryDatasetService([multiVersion]);
-    const versions = service.getVersions('multi-version');
+    const service = new MemoryDatasetRepository([multiVersion]);
+    const versions = await service.getVersions('multi-version');
     assert(versions!.length === 3, 'Multiple versions stored and retrieved');
   } catch (e) {
     console.error('  FAIL: Multiple versions threw exception', e);
@@ -274,8 +274,8 @@ async function runTests() {
 
   // Test 16: Visualization config
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const ds = service.getDatasetBySlug('test-dataset')!;
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const ds = await service.getDatasetBySlug('test-dataset')!;
     assert(ds.visualizations.length === 1, 'Dataset has visualizations');
     assert(ds.visualizations[0].type === 'line', 'Visualization type is correct');
     assert(ds.visualizations[0].metricIds.includes('m1'), 'Visualization links to metrics');
@@ -286,9 +286,9 @@ async function runTests() {
 
   // Test 17: Dataset metric metadata
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const ds = service.getDatasetBySlug('test-dataset')!;
-    const primary = ds.metrics.find(m => m.isPrimary);
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const ds = await service.getDatasetBySlug('test-dataset')!;
+    const primary = ds.metrics.find((m: Metric) => m.isPrimary);
     assert(primary !== undefined, 'Dataset has primary metric');
     assert(primary!.id === 'm1', 'Primary metric is m1');
     assert(ds.metrics.length === 2, 'Dataset has correct metric count');
@@ -299,11 +299,11 @@ async function runTests() {
 
   // Test 18: Empty dataset service
   try {
-    const service = new MemoryDatasetService([]);
-    const result = service.getDatasets();
+    const service = new MemoryDatasetRepository([]);
+    const result = await service.getDatasets();
     assert(result.data.length === 0, 'Empty service returns empty list');
     assert(result.meta!.total === 0, 'Empty service meta total is 0');
-    assert(service.getDatasetBySlug('anything') === undefined, 'Empty service returns undefined for slug');
+    assert(await service.getDatasetBySlug('anything') === undefined, 'Empty service returns undefined for slug');
   } catch (e) {
     console.error('  FAIL: Empty dataset service threw exception', e);
     failed++;
@@ -311,8 +311,8 @@ async function runTests() {
 
   // Test 19: Series without matching metric returns empty
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const series = service.getSeries('test-dataset', 'nonexistent-metric');
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const series = await service.getSeries('test-dataset', 'nonexistent-metric');
     assert(series !== undefined, 'getSeries returns array for nonexistent metric');
     assert(series!.length === 0, 'getSeries returns empty array for nonexistent metric');
   } catch (e) {
@@ -322,10 +322,10 @@ async function runTests() {
 
   // Test 20: saveDataset updates existing
   try {
-    const service = new MemoryDatasetService([mockDataset]);
-    const updated = service.saveDataset({ ...mockDataset, title: 'Updated Title' });
+    const service = new MemoryDatasetRepository([mockDataset]);
+    const updated = await service.saveDataset({ ...mockDataset, title: 'Updated Title' });
     assert(updated.title === 'Updated Title', 'saveDataset updates existing dataset title');
-    const fetched = service.getDataset('ds-test')!;
+    const fetched = await service.getDataset('ds-test')!;
     assert(fetched.title === 'Updated Title', 'Changes are persisted');
     assert(fetched.updatedAt !== mockDataset.updatedAt, 'updatedAt is refreshed');
   } catch (e) {

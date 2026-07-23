@@ -1,0 +1,4 @@
+{
+  "reportDir": "./audit/reports",
+  "defaultTimeoutMs": 30000
+}

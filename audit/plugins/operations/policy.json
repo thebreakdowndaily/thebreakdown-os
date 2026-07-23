@@ -1,0 +1,49 @@
+{
+  "policyVersion": "1.0.0",
+  "repository": {
+    "nodeVersion": {
+      "requireEnginesNode": "critical",
+      "recommendNvmrc": "medium"
+    },
+    "packageManager": {
+      "expected": "npm",
+      "lockfile": "package-lock.json",
+      "disallowAlternatives": ["yarn.lock", "pnpm-lock.yaml", "bun.lockb"]
+    },
+    "requiredFiles": [
+      { "path": ".gitignore", "severity": "critical" },
+      { "path": ".editorconfig", "severity": "medium" }
+    ],
+    "requiredScripts": ["build", "test"],
+    "recommendedScripts": ["lint", "audit"]
+  },
+  "releaseReadiness": {
+    "requiredFiles": [
+      { "path": "CHANGELOG.md", "severity": "high" },
+      { "path": "LICENSE", "severity": "high" },
+      { "path": "SECURITY.md", "severity": "high" },
+      { "path": "CONTRIBUTING.md", "severity": "high" }
+    ]
+  },
+  "ci": {
+    "requiredWorkflows": [
+      { "path": ".github/workflows/ci.yml", "severity": "critical", "requiredJobs": ["lint-and-build"] },
+      { "path": ".github/workflows/audit-framework.yml", "severity": "critical", "requiredJobs": ["verify"] }
+    ]
+  },
+  "configIntegrity": {
+    "json": [
+      "package.json",
+      "tsconfig.json",
+      "audit/config.json"
+    ],
+    "yaml": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/audit-framework.yml"
+    ]
+  },
+  "auditHealth": {
+    "requireUniformManifests": true,
+    "validateDependsOn": true
+  }
+}

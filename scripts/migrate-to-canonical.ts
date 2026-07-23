@@ -3,7 +3,7 @@
 // Usage: npx tsx scripts/migrate-to-canonical.ts <service-role-key>
 // Must run migration 002 first via Supabase SQL editor.
 
-import { getStories, getEntities, getTopics, getTimelines, getFixes, getMediaItems } from '../utils/data-layer/store';
+import { getStories, getEntities, getTopics, getTimelines, getFixes } from '../utils/data-layer/store';
 import type {
   APIStory, APIEntity, APITopic, APITimeline, APIFix,
   APIRelatedStory, APIRelatedEntity,

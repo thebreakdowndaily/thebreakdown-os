@@ -1,0 +1,59 @@
+{
+  "frameworkVersion": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "schemaVersion": "2.0",
+  "timestamp": "2026-07-18T16:02:24.598Z",
+  "nodeVersion": "v24.18.0",
+  "os": "win32",
+  "results": [
+    {
+      "pluginName": "architecture-audit",
+      "state": "PASSED",
+      "data": {
+        "metrics": {
+          "policyVersion": "1.1.0",
+          "requiredDirectoriesCoverage": 100,
+          "requiredFilesCoverage": 100,
+          "pluginManifestCoverage": 100,
+          "pluginReadmeCoverage": 100,
+          "policyCompliance": 100,
+          "architectureComplianceScore": 100,
+          "requiredDirectories": {
+            "present": 10,
+            "missing": 0
+          },
+          "forbiddenImports": 0,
+          "unknownDirectories": 1
+        },
+        "findings": [
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: .git/"
+          }
+        ]
+      }
+    },
+    {
+      "pluginName": "hello-world",
+      "state": "PASSED",
+      "data": {
+        "message": "Hello World",
+        "repoRoot": "C:\\newsjack-content\\thebreakdown-os"
+      }
+    },
+    {
+      "pluginName": "mock-crash",
+      "state": "FAILED",
+      "data": {
+        "error": "Simulated plugin failure"
+      }
+    },
+    {
+      "pluginName": "mock-success",
+      "state": "PASSED",
+      "data": {
+        "message": "Success"
+      }
+    }
+  ]
+}

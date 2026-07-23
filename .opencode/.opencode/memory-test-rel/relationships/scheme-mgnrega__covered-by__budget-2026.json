@@ -1,0 +1,21 @@
+{
+  "from": "scheme-mgnrega",
+  "relationship": "covered-by",
+  "to": "budget-2026",
+  "confidence": 0.9,
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:56.003Z",
+  "lastObserved": "2026-07-18T16:37:56.003Z",
+  "firstObserved": "2026-07-18T16:37:56.003Z",
+  "active": true,
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:56.003Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-created"
+      ]
+    }
+  ]
+}

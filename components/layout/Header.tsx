@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
-import SearchBar from '../ui/SearchBar';
+import SearchBar from '@/components/ui/SearchBar';
 
 interface HeaderProps {
   transparent?: boolean;

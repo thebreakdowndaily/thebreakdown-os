@@ -1,0 +1,8 @@
+{
+  "name": "mock-crash",
+  "description": "A plugin that deliberately crashes to test framework resilience",
+  "version": "1.0.0",
+  "sdkVersion": "1.0.0",
+  "capabilities": ["diagnostics"],
+  "timeout": 2000
+}

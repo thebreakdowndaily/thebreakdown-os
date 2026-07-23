@@ -25,7 +25,7 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q: query = '', type: typeFilter = '' } = await searchParams;
-  const services = bootstrapServices();
+  const services = bootstrapServices({ publicOnly: true });
   
   const vm = await buildSearchPage(services, query, typeFilter);
   const { spotlight, grouped, suggestions, total } = vm;

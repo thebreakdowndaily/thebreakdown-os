@@ -1,0 +1,25 @@
+{
+  "id": "org-finance-ministry",
+  "type": "organization",
+  "name": "Ministry of Finance",
+  "aliases": [
+    "Finance Ministry"
+  ],
+  "version": 1,
+  "createdAt": "2026-07-18T16:37:55.962Z",
+  "updatedAt": "2026-07-18T16:37:55.962Z",
+  "stories": [
+    "story-mgnrega-001"
+  ],
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-18T16:37:55.962Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "entity-created"
+      ]
+    }
+  ],
+  "active": true
+}

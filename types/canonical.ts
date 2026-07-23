@@ -10,6 +10,9 @@ export type EntityKind =
 
 export type StoryStatus = 'draft' | 'review' | 'fact_check' | 'scheduled' | 'published' | 'updated';
 
+/** Publication lifecycle — controls public visibility. Separate from editorial status. */
+export type PublicationStatus = 'draft' | 'review' | 'scheduled' | 'published' | 'archived';
+
 export type StoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
 
 export type EvidenceTier =
@@ -83,6 +86,28 @@ export interface FreshnessMetadata {
   pendingUpdates?: number;
 }
 
+/** Structural metadata attached to every Story — editorial classification, not content. */
+export interface StoryMetadata {
+  /** Editorial classification (e.g., 'infrastructure', 'governance', 'conflict') */
+  classification?: string;
+  /** Content type label used by legacy stories */
+  type?: string;
+  /** Geographic scope */
+  location?: string;
+  /** Impact level for quick orientation */
+  impactLevel?: 'low' | 'medium' | 'high' | 'critical';
+}
+
+/** Reader-facing verification state — avoids exposing multiple numeric scores. */
+export type VerificationState =
+  | 'evidence_reviewed'
+  | 'partially_verified'
+  | 'developing'
+  | 'unverified';
+
+/** Canonical reading mode — replaces both Tier (quick/standard/deep) and ReadingDepth (explorer/scholar/researcher). */
+export type ReadingMode = 'quick' | 'standard' | 'deep';
+
 export interface Story {
   id: string;
   title: string;
@@ -93,6 +118,8 @@ export interface Story {
   author: string;
   category: string;
   status: StoryStatus;
+  /** Publication lifecycle — controls public visibility. Missing = draft (fail-closed). */
+  publicationStatus?: PublicationStatus;
   storyType: StoryType;
   evidenceScore: number;
   readingTime: number;
@@ -110,6 +137,8 @@ export interface Story {
   relatedStoryIds: string[];
   relatedEntityIds: string[];
   relatedTopicIds: string[];
+  /** Editorial metadata — classification, type, location, impact. */
+  metadata?: StoryMetadata;
   notes?: string;
   updatedBy?: string;
   takeaway?: string;
@@ -953,11 +982,11 @@ export interface StoryTerminalViewModel {
   seo: SEOData;
   breadcrumbs: { label: string; href: string }[];
   tableOfContents: TOCItem[];
-  snapshot: any;
-  executiveBrief: any;
-  evidenceSummary: any;
-  quickView: any;
-  deepView: any;
+  snapshot?: StorySnapshot;
+  executiveBrief?: ExecutiveBrief;
+  evidenceSummary?: EvidenceSummary;
+  quickView: QuickStoryViewModel;
+  deepView: DeepStoryViewModel;
   visualAssets: {
     hero?: AssetReference;
     primary: AssetReference[];
@@ -970,7 +999,7 @@ export interface StoryTerminalViewModel {
     documents: AssetReference[];
   };
   unifiedTimeline: TimelineEvent[];
-  qualityScore: any;
+  qualityScore: StoryQualityScore;
 }
 
 export interface SearchTerminalViewModel {
