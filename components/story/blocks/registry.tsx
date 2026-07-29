@@ -1,3 +1,5 @@
+'use client';
+
 import type { BlockType, BlockMap, StoryBlock } from './types';
 
 import ExecutiveSummaryBlock from './ExecutiveSummaryBlock';
@@ -19,6 +21,10 @@ import HeroBlock from './HeroBlock';
 import AuthorBoxBlock from './AuthorBoxBlock';
 import StorySnapshotBlock from './StorySnapshotBlock';
 import ConfidenceMeterBlock from './ConfidenceMeterBlock';
+import SystemExplanationBlock from './SystemExplanationBlock';
+import StakeholdersBlock from './StakeholdersBlock';
+import PerspectivesBlock from './PerspectivesBlock';
+import FutureOutlookBlock from './FutureOutlookBlock';
 
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
   'executive-summary': ExecutiveSummaryBlock,
@@ -50,6 +56,10 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'author-box': AuthorBoxBlock,
   'story-snapshot': StorySnapshotBlock,
   'confidence-meter': ConfidenceMeterBlock,
+  'system-explanation': (props: BlockMap['system-explanation']) => <SystemExplanationBlock {...props} />,
+  'stakeholders': (props: BlockMap['stakeholders']) => <StakeholdersBlock {...props} />,
+  'perspectives': (props: BlockMap['perspectives']) => <PerspectivesBlock {...props} />,
+  'future-outlook': (props: BlockMap['future-outlook']) => <FutureOutlookBlock {...props} />,
 };
 
 export function getBlockComponent(type: string): React.ComponentType<any> | null {

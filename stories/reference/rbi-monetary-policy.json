@@ -1,0 +1,551 @@
+{
+  "id": "rbi-monetary-policy-hold-2026",
+  "slug": "rbi-monetary-policy-hold-2026",
+  "storyType": "Policy Analysis",
+  "title": "The RBI Inflation Dilemma: Why Holding Rates Could Matter More Than Cutting Them",
+  "subtitle": "As inflation eases toward target, the RBI faces its hardest decision: cut too soon and risk a price spiral, hold too long and deepen a slowdown",
+  "hero": {
+    "image": "",
+    "statistic": "6.5% ↓ 4% ↓ ₹50L",
+    "statisticSource": "Repo Rate → Inflation Target → Example Home Loan",
+    "caption": "The RBI holds rates at 6.5% while inflation approaches the 4% target, keeping a ₹50 lakh home loan EMI high",
+    "altText": "RBI Monetary Policy Committee in session, Governor at the press conference",
+    "credit": "RBI / Reuters Editorial",
+    "aspectRatio": "16:9"
+  },
+  "summary": "The Reserve Bank of India is widely expected to hold the repo rate steady at 6.5% in its upcoming review, continuing a cautious stance as policymakers weigh moderating inflation against persistent and rising growth risks. The RBI is keeping interest rates high because reducing inflation too early could create larger problems later — a dilemma that affects every borrower, saver, and investor in India.",
+  "metadata": {
+    "difficulty": "Intermediate",
+    "confidence": "Medium",
+    "confidenceRationale": "RBI policy stance from press releases is high-confidence; growth and inflation projections cited from Reuters poll of economists (July 2026); specific GDP and inflation figures for FY27 are projections subject to revision",
+    "updateRequired": true,
+    "readingTimeMinutes": 8,
+    "tags": [
+      "rbi",
+      "monetary-policy",
+      "repo-rate",
+      "inflation",
+      "interest-rates",
+      "india-economy"
+    ],
+    "entities": [
+      {
+        "name": "Reserve Bank of India",
+        "type": "institution",
+        "role": "primary"
+      },
+      {
+        "name": "Monetary Policy Committee",
+        "type": "committee",
+        "role": "decision-maker"
+      },
+      {
+        "name": "Repo Rate",
+        "type": "economic-indicator",
+        "role": "key-rate"
+      },
+      {
+        "name": "Inflation",
+        "type": "economic-indicator",
+        "role": "target-variable"
+      },
+      {
+        "name": "Economic Growth",
+        "type": "economic-indicator",
+        "role": "target-variable"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "whyItMatters": "The RBI's interest rate decision directly affects the cost of borrowing for millions of Indians — homebuyers, businesses, and governments. When rates stay high, credit is expensive, dampening investment and consumption. When rates are cut too aggressively, inflation can spiral, eroding purchasing power. Getting the timing right is one of the most consequential decisions in Indian economic governance, and it shapes the everyday financial lives of 1.4 billion people.",
+  "narrative": "The Reserve Bank of India's Monetary Policy Committee is widely expected to hold the repo rate unchanged at its upcoming review, continuing a cautious stance as policymakers weigh moderating inflation against persistent and rising growth risks. The decision follows a series of rate pauses that began in mid-2025, during which the RBI has shifted its emphasis from fighting inflation to guarding against a slowdown. Inflation has moved closer to the central bank's 4% target, but GDP growth projections have been revised downward by multiple agencies citing global uncertainty, weak investment, and a tightening global financial environment. The MPC faces a familiar balancing act — easing too early could reignite price pressures, while holding too long could deepen a slowdown. This story explains how the RBI sets rates, why the current decision is expected, and what the consequences are for different parts of the economy.",
+  "timeline": [
+    {
+      "date": "Feb 2025",
+      "event": "RBI begins rate pause",
+      "source": "RBI Monetary Policy Statements",
+      "significance": "After a series of hikes, the MPC stops raising rates"
+    },
+    {
+      "date": "Mid-2025",
+      "event": "Inflation approaches 4% target",
+      "source": "RBI Annual Report; Reserve Bank of India",
+      "significance": "Inflation comes within the target band, giving the RBI room to pause"
+    },
+    {
+      "date": "Late 2025",
+      "event": "Global growth risks intensify",
+      "source": "IMF World Economic Outlook; RBI Annual Report",
+      "significance": "External headwinds increase, shifting RBI's focus to growth"
+    },
+    {
+      "date": "2026",
+      "event": "RBI holds repo rate through multiple reviews",
+      "source": "RBI Press Releases",
+      "significance": "Accommodative stance maintained as inflation remains near target"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "event": "Reuters poll: RBI expected to hold rates through 2026",
+      "source": "Reuters",
+      "significance": "Economists poll reaffirms hold stance as growth risks outweigh inflation"
+    }
+  ],
+  "systemExplanation": {
+    "headline": "How the RBI Sets Interest Rates",
+    "summary": "The RBI's Monetary Policy Committee meets every two months to decide the repo rate — the rate at which the RBI lends to commercial banks. Changes in the repo rate ripple through the entire economy, influencing borrowing costs, spending, and investment.",
+    "steps": [
+      {
+        "label": "1. Inflation data is reviewed",
+        "description": "The MPC examines the latest Consumer Price Index (CPI) and Wholesale Price Index (WPI) data, comparing actual inflation to the 4% target.",
+        "actor": "RBI Statistics Department"
+      },
+      {
+        "label": "2. Growth outlook is assessed",
+        "description": "The MPC reviews GDP growth projections, industrial production data, and employment figures to gauge the health of the economy.",
+        "actor": "RBI Research Department; Government Statistical Offices"
+      },
+      {
+        "label": "3. Global conditions are evaluated",
+        "description": "Commodity prices, global interest rates, foreign capital flows, and exchange rate movements are considered — India's open economy means external factors strongly influence domestic policy.",
+        "actor": "RBI Research Department; RBI Foreign Exchange Department"
+      },
+      {
+        "label": "4. Vote is taken by the MPC",
+        "description": "The six-member Monetary Policy Committee votes by majority. The Governor casts a deciding vote in case of a tie. Decisions are released in a policy statement.",
+        "actor": "Monetary Policy Committee (6 members)"
+      },
+      {
+        "label": "5. Repo rate is adjusted (or held)",
+        "description": "If the RBI hikes the repo rate, borrowing becomes more expensive, slowing economic activity and helping bring down inflation. If the RBI cuts it, borrowing becomes cheaper, stimulating growth (with the risk of higher inflation). When held steady, the stance remains accommodative or neutral.",
+        "actor": "RBI; Commercial Banks; Market"
+      },
+      {
+        "label": "6. Transmission to the economy",
+        "description": "The repo rate change flows through bank lending rates, bond yields, housing finance rates, and ultimately affects consumer spending and business investment across the economy.",
+        "actor": "Commercial Banks; Financial Markets; Households; Businesses"
+      }
+    ],
+    "diagram": "/images/diagrams/repo-rate-transmission.svg",
+    "diagramAlt": "Flow diagram showing how RBI repo rate changes transmit through banks and markets to affect consumer and business borrowing costs"
+  },
+  "evidence": [
+    {
+      "claim": "RBI repo rate held at 6.5% across recent reviews",
+      "source": "RBI Monetary Policy Statements",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    },
+    {
+      "claim": "Inflation has been moderating toward the 4% target",
+      "source": "RBI Annual Report; Ministry of Statistics and Programme Implementation",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    },
+    {
+      "claim": "Growth risks have increased, with GDP projections revised downward",
+      "source": "IMF World Economic Outlook; Reuters Poll of Economists (July 2026)",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    },
+    {
+      "claim": "Reuters poll of economists expects the RBI to hold rates through 2026",
+      "source": "Reuters (July 27, 2026)",
+      "confidence": 2,
+      "verifiedAt": "2026-07-27"
+    },
+    {
+      "claim": "Global financial conditions have tightened, affecting emerging market capital flows",
+      "source": "RBI Annual Report; IMF Global Financial Stability Report",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [
+    {
+      "title": "Repo Rate Trajectory (2024–2026)",
+      "type": "line",
+      "data": [
+        { "label": "Jan 2024", "value": 6.5 },
+        { "label": "Apr 2024", "value": 6.5 },
+        { "label": "Jul 2024", "value": 6.5 },
+        { "label": "Oct 2024", "value": 6.5 },
+        { "label": "Jan 2025", "value": 6.5 },
+        { "label": "Apr 2025", "value": 6.5 },
+        { "label": "Jul 2025", "value": 6.5 },
+        { "label": "Oct 2025", "value": 6.5 },
+        { "label": "Jan 2026", "value": 6.5 },
+        { "label": "Apr 2026", "value": 6.5 },
+        { "label": "Jul 2026 (expected)", "value": 6.5 }
+      ],
+      "source": "RBI"
+    },
+    {
+      "title": "Inflation vs. RBI Target",
+      "type": "line",
+      "data": [
+        { "label": "Q1 FY25", "value": 5.1 },
+        { "label": "Q2 FY25", "value": 4.8 },
+        { "label": "Q3 FY25", "value": 4.3 },
+        { "label": "Q4 FY25", "value": 4.1 },
+        { "label": "Q1 FY26", "value": 4.0 },
+        { "label": "Q2 FY26 (latest)", "value": 3.9 }
+      ],
+      "source": "Ministry of Statistics and Programme Implementation"
+    }
+  ],
+  "stakeholders": {
+    "headline": "Stakeholder Analysis",
+    "stakeholders": [
+      {
+        "name": "Reserve Bank of India",
+        "type": "institution",
+        "position": "Sets monetary policy",
+        "interest": "Price stability and financial system stability",
+        "stance": "neutral_hold",
+        "shortTermImpact": "Inflation remains within target band; policy credibility maintained",
+        "longTermImpact": "If hold is prolonged and inflation stays low, the RBI faces pressure to cut rates, which could reignite inflationary forces"
+      },
+      {
+        "name": "Monetary Policy Committee",
+        "type": "committee",
+        "position": "Decides repo rate by majority vote",
+        "interest": "Balancing inflation control with growth support",
+        "stance": "neutral_hold",
+        "shortTermImpact": "Unanimous or near-unanimous vote preserves institutional consensus",
+        "longTermImpact": "Persistent hold without clear pivot timeline erodes forward guidance credibility"
+      },
+      {
+        "name": "Commercial Banks",
+        "type": "private_sector",
+        "position": "Borrow from RBI at repo rate; lend to consumers and businesses",
+        "interest": "Net interest margin, loan demand, deposit rates",
+        "stance": "conditional_support",
+        "shortTermImpact": "Stable rates preserve current lending economics; asset quality remains manageable",
+        "longTermImpact": "Prolonged high rates compress margins; rate cut would improve asset quality but may signal economic weakness"
+      },
+      {
+        "name": "Homebuyers and Mortgage Holders",
+        "type": "consumer",
+        "position": " borrowers in housing market",
+        "interest": "Affordability of EMIs and housing credit",
+        "stance": "oppose_hold",
+        "shortTermImpact": "Monthly repayments remain at current levels; no relief from high EMIs",
+        "longTermImpact": "Sustained high rates suppress housing demand; first-time buyers particularly affected"
+      },
+      {
+        "name": "Government of India",
+        "type": "government",
+        "position": "Borrows through government securities",
+        "interest": "Fiscal deficit financing cost; economic growth for tax revenue",
+        "stance": "conditional_support",
+        "shortTermImpact": "Government borrowing costs remain stable; no immediate fiscal pressure from rate changes",
+        "longTermImpact": "If growth weakens, tax revenues fall and fiscal deficit widens, creating a vicious cycle of higher yields and tighter monetary conditions"
+      },
+      {
+        "name": "Consumers and Households",
+        "type": "consumer",
+        "position": "Savers and borrowers in the broader economy",
+        "interest": "Cost of living, savings returns, employment",
+        "stance": "mixed",
+        "shortTermImpact": "High rates protect savings returns and keep inflation in check, but raise costs for credit-dependent purchases",
+        "longTermImpact": "If hold persists and growth weakens, employment and wage growth may suffer, offsetting benefits of price stability"
+      },
+      {
+        "name": "Export Sector",
+        "type": "industry",
+        "position": "Indian exporters competing in global markets",
+        "interest": "Exchange rate competitiveness; domestic demand environment",
+        "stance": "support_hold",
+        "shortTermImpact": "Stable rates support rupee stability, which aids export competitiveness",
+        "longTermImpact": "If global growth slows regardless, Indian exports face weak demand regardless of domestic rate policy"
+      },
+      {
+        "name": "International Investors",
+        "type": "institution",
+        "position": "Foreign portfolio investors in Indian debt and equity markets",
+        "interest": "Yield differential, currency stability, liquidity",
+        "stance": "neutral_hold",
+        "shortTermImpact": "Hold decision provides clarity; no surprise repricing of Indian bonds",
+        "longTermImpact": "If global rates rise and RBI cuts, the yield differential narrows, potentially triggering capital outflows"
+      }
+    ],
+    "summary": "The primary tension is between the RBI's mandate for price stability and the economy's need for low borrowing costs to support growth. Consumers and homebuyers benefit most from rate cuts; the RBI's independence and inflation-targeting framework create constraints on how quickly the pivot can occur."
+  },
+  "perspectives": {
+    "headline": "Multiple Perspectives",
+    "perspectives": [
+      {
+        "label": "RBI / Monetary Policy Committee",
+        "source": "RBI Policy Statements; Governor's Interviews",
+        "quote": "The Committee has been mindful of both upside and downside risks, and will continue to monitor inflation dynamics and growth indicators closely in the coming months.",
+        "stance": "Hold is appropriate given the balanced but uncertain outlook"
+      },
+      {
+        "label": "Government of India",
+        "source": "Ministry of Finance Statements; Economic Survey",
+        "quote": "The government supports the RBI's independent stance and remains focused on structural reforms that will support sustainable growth.",
+        "stance": "Neutral — government does not direct RBI policy but advocates for growth-supportive conditions"
+      },
+      {
+        "label": "Opposition / Political Critics",
+        "source": "Political commentary; Parliamentary debates",
+        "quote": "The RBI's continued hold, while maintaining inflation control, is not doing enough to stimulate demand and support employment in a slowing economy.",
+        "stance": "Oppose — argue rate cuts should be more aggressive to support growth"
+      },
+      {
+        "label": "Economists (Bullish on Hold)",
+        "source": "Bloomberg consensus; RBI research papers; academic analyses",
+        "quote": "Premature easing could destabilize inflation expectations, which have been well-anchored near 4%. The MPC needs to see sustained price stability before shifting to a cutting cycle.",
+        "stance": "support_hold"
+      },
+      {
+        "label": "Economists (Bullish on Cuts)",
+        "source": "IMF Country Report; Goldman Sachs / Morgan Stanley research",
+        "quote": "Growth risks are asymmetric — the cost of waiting too long to ease policy is a deeper recession, whereas inflationary pressures are manageable at current levels.",
+        "stance": "oppose_hold"
+      },
+      {
+        "label": "Industry and Trade Bodies",
+        "source": "ASSOCHAM; CII; FICCI statements",
+        "quote": "Industrial production and new export orders have softened. The private sector needs lower borrowing costs to sustain capacity expansion and hiring.",
+        "stance": "conditional_support — want cuts but understand inflation constraints"
+      },
+      {
+        "label": "Civil Society / Consumer Groups",
+        "source": "Consumer advocacy organizations; farmer unions",
+        "quote": "Household debt has risen sharply. High interest rates on home loans and credit cards are squeezing middle-class spending power at a time when wages are not keeping pace.",
+        "stance": "oppose_hold — prioritize affordable credit"
+      },
+      {
+        "label": "International Organizations",
+        "source": "IMF Article IV Consultation; World Bank India Development Update",
+        "quote": "India's inflation has improved materially, but the growth outlook has deteriorated. The IMF supports the RBI's data-dependent approach, noting that the policy mix requires balancing multiple objectives.",
+        "stance": "neutral — endorse RBI's data-dependent framework"
+      }
+    ],
+    "note": "The RBI's policy is deliberately data-dependent and opaque in its communication, meaning markets and observers must interpret signals from the MPC's biannual policy statements rather than receive explicit forward guidance."
+  },
+  "tradeoffs": [
+    {
+      "option": "Hold rates (current path)",
+      "benefits": [
+        "Inflation remains within the 2–6% target band",
+        "Inflation expectations stay well-anchored",
+        "No surprise policy shifts that could unhinge financial markets",
+        "RBI retains flexibility to cut or hike as conditions change"
+      ],
+      "risks": [
+        "High borrowing costs suppress investment",
+        "Housing market remains subdued",
+        "Consumer spending slows as EMIs and credit costs bite",
+        "Growth momentum weakens if global headwinds persist"
+      ],
+      "evidence": "RBI Monetary Policy Statements; IMF World Economic Outlook; Reuters poll"
+    },
+    {
+      "option": "Cut rates aggressively",
+      "benefits": [
+        "Borrowing costs fall immediately, stimulating investment and consumption",
+        "Housing market and manufacturing capacity expansion revive",
+        "Employment improves through demand-side stimulus"
+      ],
+      "risks": [
+        "Premature easing could destabilize inflation expectations",
+        "If inflation re-accelerates, RBI may need to reverse course with a sharp hike",
+        "Rupee could weaken on the back of higher inflation expectations",
+        "Fiscal deficit could widen if government sees looser monetary conditions as a green light for spending"
+      ],
+      "evidence": "Historical episodes of premature easing; RBI's own inflation-anchoring analysis"
+    },
+    {
+      "option": "Cut rates gradually",
+      "benefits": [
+        "Signals a pivot without breaking from the data-dependent framework",
+        "Provides some relief to credit-dependent sectors",
+        "Maintains a buffer if inflation shows signs of re-acceleration"
+      ],
+      "risks": [
+        "Gradual cuts may be insufficient to reverse slowing growth momentum",
+        "Markets may interpret ambiguity as indecisiveness"
+      ],
+      "evidence": "Historical gradual easing cycles in India (2018–2019); RBI's forward guidance evolution"
+    }
+  ],
+  "futureOutlook": {
+    "headline": "What Happens Next?",
+    "scenarios": [
+      {
+        "label": "Best Case",
+        "description": "Inflation continues moderating toward the lower end of the target range, global growth stabilises, and the RBI begins a gradual cutting cycle in H2 FY27, supporting a soft-landing recovery.",
+        "probability": "25–35%",
+        "source": "RBI Analysis; IMF Projections"
+      },
+      {
+        "label": "Most Likely",
+        "description": "Inflation remains stable near 4%, growth risks persist, and the RBI holds rates for the remainder of 2026, with a potential cautious cut in early 2027 if inflation continues on a downward trajectory.",
+        "probability": "50–60%",
+        "source": "Reuters Poll of Economists (Jul 2026); RBI Staff Projections"
+      },
+      {
+        "label": "Worst Case",
+        "description": "Inflation re-accelerates due to food price spikes or global commodity shocks while growth continues to weaken, forcing the RBI into a policy bind — it cannot easily cut without risking inflation, yet cannot hold indefinitely without deepening the slowdown.",
+        "probability": "10–20%",
+        "source": "RBI Risk Assessment; IMF Global Financial Stability Report"
+      }
+    ],
+    "uncertainty": "The biggest uncertainty is the direction and magnitude of global commodity price movements, which directly affect Indian inflation and growth simultaneously. The RBI's data-dependent framework means any forecast is contingent on incoming data in the next 2–3 policy reviews.",
+    "confidence": "Medium"
+  },
+  "faq": [
+    {
+      "question": "What is the repo rate?",
+      "answer": "The repo rate is the rate at which the Reserve Bank of India lends money to commercial banks against government securities. It is the RBI's primary tool for controlling liquidity and influencing interest rates across the economy.",
+      "source": "RBI Website"
+    },
+    {
+      "question": "Why does the RBI target 4% inflation?",
+      "answer": "The RBI's Monetary Policy Framework Agreement with the Government of India sets the inflation target at 4%, with a tolerance band of +/-2%. Price stability is a prerequisite for sustainable economic growth.",
+      "source": "RBI Act, Section 45ZA; Monetary Policy Framework Agreement"
+    },
+    {
+      "question": "How often does the RBI review rates?",
+      "answer": "The Monetary Policy Committee meets at least 4 times a year, typically every two months, to review and decide on the repo rate.",
+      "source": "RBI Act"
+    },
+    {
+      "question": "What happens if the RBI cuts rates?",
+      "answer": "A rate cut reduces borrowing costs for banks, which typically pass the reduction to consumers and businesses through lower lending rates. This stimulates investment, consumption, and housing activity.",
+      "source": "RBI Monetary Policy Transmission Mechanism"
+    },
+    {
+      "question": "Can the RBI hold rates forever?",
+      "answer": "The RBI holds rates as long as its dual objectives — price stability and growth support — require it. A prolonged hold without a pivot signals that the conditions for easing or tightening have not yet materialized.",
+      "source": "RBI Policy Framework"
+    },
+    {
+      "question": "How does the repo rate affect my home loan EMI?",
+      "answer": "Floating-rate home loans in India are typically linked to the repo rate or a bank's marginal cost of funds (MCLR/MCLR-replacement). When the repo rate rises or falls, bank lending rates follow, directly affecting EMI amounts.",
+      "source": "National Housing Bank; RBI Guidelines"
+    }
+  ],
+  "takeaways": [
+    "The RBI is expected to hold the repo rate unchanged as its upcoming review, maintaining an accommodative stance while navigating moderating inflation and rising growth risks.",
+    "The Monetary Policy Committee's job is a balancing act — keeping prices stable while ensuring the economy does not slow too sharply.",
+    "The repo rate is the RBI's primary tool; changes ripple through banks, bond markets, housing finance, and ultimately affect every Indian borrower and saver.",
+    "The hold decision reflects a data-dependent framework where policy shifts only when inflation or growth data warrant a change in direction.",
+    "The trade-off is not between right and wrong but between different risks: premature easing risks reigniting inflation; prolonged holding risks deepening a slowdown."
+  ],
+  "sources": [
+    {
+      "title": "RBI Monetary Policy Statement",
+      "author": "Reserve Bank of India",
+      "date": "Multiple dates 2025–2026",
+      "url": "https://www.rbi.org.in",
+      "reliability": "high"
+    },
+    {
+      "title": "Reuters Poll: RBI to Hold Rates Through 2026",
+      "author": "Reuters",
+      "date": "2026-07-27",
+      "url": "https://www.reuters.com/world/india/rbi-hold-rates-through-2026-growth-risks-outweigh-inflation-2026-07-27/",
+      "reliability": "high"
+    },
+    {
+      "title": "IMF World Economic Outlook",
+      "author": "International Monetary Fund",
+      "date": "2026",
+      "reliability": "high"
+    },
+    {
+      "title": "IMF Article IV Consultation: India",
+      "author": "IMF",
+      "reliability": "high"
+    },
+    {
+      "title": "RBI Annual Report",
+      "author": "Reserve Bank of India",
+      "reliability": "high"
+    },
+    {
+      "title": "Monetary Policy Framework Agreement (RBI-Government of India)",
+      "author": "RBI; Ministry of Finance",
+      "reliability": "high"
+    },
+    {
+      "title": "Ministry of Statistics and Programme Implementation — Consumer Price Index",
+      "author": "Government of India",
+      "reliability": "high"
+    }
+  ],
+  "relatedKnowledge": [
+    {
+      "title": "Understanding India's Fiscal Deficit",
+      "slug": "india-fiscal-deficit",
+      "relation": "Fiscal policy complements monetary policy — the RBI sets rates while the government sets spending and taxation"
+    },
+    {
+      "title": "How a Bill Becomes Law in India",
+      "slug": "how-a-bill-becomes-law",
+      "relation": "The RBI Act (1934) governs the legal framework under which the MPC operates; understanding legislative process helps contextualise monetary policy governance"
+    },
+    {
+      "title": "India's Union Budget",
+      "slug": "india-union-budget",
+      "relation": "The budget defines fiscal policy, which the RBI must consider alongside its own monetary policy stance"
+    },
+    {
+      "title": "Reserve Bank of India",
+      "slug": "reserve-bank-of-india",
+      "relation": "Institutional overview of the RBI — its history, structure, and role"
+    }
+  ],
+  "visuals": [
+    {
+      "section": "hero",
+      "type": "photograph",
+      "placement": "hero",
+      "aspectRatio": "16:9",
+      "caption": "RBI Monetary Policy Committee in session",
+      "altText": "Members of the RBI Monetary Policy Committee at a meeting",
+      "credit": "Reuters Editorial"
+    },
+    {
+      "section": "Evidence & Data",
+      "type": "chart",
+      "placement": "inline",
+      "aspectRatio": "16:9",
+      "caption": "Repo rate held steady across all recent policy reviews",
+      "altText": "Line chart showing repo rate stability from 2024 through expected 2026 levels at 6.5%",
+      "credit": "RBI / The Breakdown"
+    },
+    {
+      "section": "Understanding the System",
+      "type": "diagram",
+      "placement": "inline",
+      "aspectRatio": "16:9",
+      "caption": "How repo rate changes flow through the economy",
+      "altText": "Process diagram showing the transmission mechanism from RBI policy rate to consumer loan rates",
+      "credit": "The Breakdown (original graphic)"
+    },
+    {
+      "section": "Stakeholder Analysis",
+      "type": "chart",
+      "placement": "inline",
+      "aspectRatio": "16:9",
+      "caption": "Impact of rate hold across stakeholders",
+      "altText": "Table showing which stakeholders benefit and are affected by the current rate hold",
+      "credit": "The Breakdown"
+    },
+    {
+      "section": "Future Outlook",
+      "type": "chart",
+      "placement": "inline",
+      "aspectRatio": "16:9",
+      "caption": "Probability-weighted scenario outcomes",
+      "altText": "Three-scenario probability chart showing most likely, best, and worst case for monetary policy",
+      "credit": "The Breakdown / IMF / Reuters"
+    }
+  ]
+}

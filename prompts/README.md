@@ -12,7 +12,8 @@ Prompts are versioned, named templates. Each prompt file describes its intended 
 
 | Prompt | Description | Domain | Model |
 |--------|-------------|--------|-------|
-| _(none yet)_ | — | — | — |
+| story-engine-v1.1 | Editorial + visual story generation prompt for transforming news events into knowledge experiences | editorial | any |
+| story-production-engine-v1.0 | Complete production workflow from input to publication-ready editorial package following TBSS v1.0 | editorial | any |
 
 ---
 

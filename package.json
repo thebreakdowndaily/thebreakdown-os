@@ -13,7 +13,7 @@
     "start": "next start",
     "lint": "eslint app components providers styles hooks types features",
     "audit": "tsx audit/scripts/audit.ts",
-    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts",
+    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts && npx tsx tests/story/presentation-model.test.ts && npx tsx tests/story/representative-matrix.test.ts && npx tsx tests/golden-story.test.ts",
     "test:dataset": "npx tsx tests/dataset.test.ts",
     "test:dataset:e2e": "npx tsx tests/dataset-e2e.test.ts",
     "test:compiler": "npx tsx packages/compiler/tests/compiler.test.ts",
