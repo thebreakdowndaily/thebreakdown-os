@@ -16,9 +16,12 @@ test.describe('Homepage Critical Journey', () => {
     const nav = page.locator('nav').first();
     await expect(nav).toBeVisible();
 
-    // Contains links to key sections
-    await expect(nav.locator('a[href*="/topics"]')).toBeVisible();
-    await expect(nav.locator('a[href*="/stories"]')).toBeVisible();
+    // RC-1 editorial nav: Chapters / Explainers / Topics / Data / About
+    await expect(nav.locator('a[href="/series"]')).toBeVisible();
+    await expect(nav.locator('a[href="/fix"]')).toBeVisible();
+    await expect(nav.locator('a[href="/topics"]')).toBeVisible();
+    await expect(nav.locator('a[href="/data"]')).toBeVisible();
+    await expect(nav.locator('a[href="/about"]')).toBeVisible();
   });
 
   test('should render the hero section with featured content', async ({ page }) => {
@@ -28,11 +31,14 @@ test.describe('Homepage Critical Journey', () => {
   });
 
   test('should have a functional search input', async ({ page }) => {
-    // Check search form exists
-    const searchInput = page.locator('input[type="search"]').first();
-    await expect(searchInput).toBeVisible();
+    // RC-1 search opens a ⌘K dialog — trigger it from the header button
+    const searchButton = page.locator('button[aria-label^="Search"]').first();
+    await expect(searchButton).toBeVisible();
+    await searchButton.click();
 
-    // Typing should not crash
+    // The dialog input must be visible and focusable
+    const searchInput = page.locator('input[aria-label="Search input"]');
+    await expect(searchInput).toBeVisible();
     await searchInput.fill('economy');
     await expect(searchInput).toHaveValue('economy');
   });

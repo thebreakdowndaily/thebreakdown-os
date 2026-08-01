@@ -1,8 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
-import { loadData, getDataById } from '@/lib/up403/loader';
-import { toSlug } from '@/lib/up403/slug';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
@@ -69,34 +67,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  await loadData();
-  const up403Constituencies: MetadataRoute.Sitemap = [...getDataById().keys()].map(id => ({
-    url: `${siteUrl}/up403/${toSlug(id)}`,
-    lastModified: new Date('2026-07-30'),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
-
-  const up403Static: MetadataRoute.Sitemap = [
-    { url: `${siteUrl}/up403`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${siteUrl}/up403/map`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${siteUrl}/up403/compare`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.4 },
-    { url: `${siteUrl}/up403/search`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
-    { url: `${siteUrl}/up403/stories`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
-  ];
-
   const staticPages: MetadataRoute.Sitemap = [
     { url: siteUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
     { url: `${siteUrl}/series`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
-    { url: `${siteUrl}/stories`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${siteUrl}/topics`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${siteUrl}/entities`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${siteUrl}/organizations`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
     { url: `${siteUrl}/countries`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
-    { url: `${siteUrl}/graph`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.3 },
-    { url: `${siteUrl}/workspace`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.3 },
+    // Founding Edition public package (robots: allow) — trust & transparency pages
+    { url: `${siteUrl}/founding-edition`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${siteUrl}/methodology`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/trust`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/editorial-constitution`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/data`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
   ];
 
-  return [...staticPages, ...canonicalEntries, ...up403Static, ...up403Constituencies, ...stories, ...entities, ...topics, ...fixes];
+  return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];
 }
 

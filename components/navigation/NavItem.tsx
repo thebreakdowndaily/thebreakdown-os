@@ -18,7 +18,7 @@ export default function NavItem({ href, label, isActive }: NavItemProps) {
       href={href}
       className="relative flex items-center h-full px-3.5 text-xs font-medium transition-colors duration-150"
       style={{
-        color: isActive ? '#F5F5F5' : '#777',
+        color: isActive ? '#F5F5F5' : '#A1A1AA',
         letterSpacing: '0.06em',
         textTransform: 'uppercase',
         fontFamily: 'var(--font-inter), system-ui, sans-serif',

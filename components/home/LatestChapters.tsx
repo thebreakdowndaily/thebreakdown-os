@@ -24,6 +24,10 @@ const FOUNDING_CHAPTER = {
   status: 'Internal Gold Candidate',
 };
 
+// Publishing cadence — RC-1 review item 4 (Product & Publishing Review Board, 1 Aug 2026).
+// Editorial commitment: monthly flagship chapters. Next-drop date requires Editor-in-Chief sign-off before launch.
+const PUBLISHING_CADENCE = 'New chapter published monthly · Next drop Sept 1, 2026';
+
 // Upcoming chapters — signals editorial intent and builds anticipation
 const UPCOMING_CHAPTERS = [
   {
@@ -59,21 +63,26 @@ export default function LatestChapters() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-4">
-            <div className="h-px w-12" style={{ backgroundColor: '#C9A84C', opacity: 0.5 }} aria-hidden="true" />
-            <h2
-              id="chapters-heading"
-              className="text-xs font-mono uppercase tracking-[0.2em]"
-              style={{ color: '#C9A84C' }}
-            >
-              Knowledge Library
-            </h2>
+        <div className="flex items-start justify-between mb-10">
+          <div>
+            <div className="flex items-center gap-4">
+              <div className="h-px w-12" style={{ backgroundColor: '#C9A84C', opacity: 0.5 }} aria-hidden="true" />
+              <h2
+                id="chapters-heading"
+                className="text-xs font-mono uppercase tracking-[0.2em]"
+                style={{ color: '#C9A84C' }}
+              >
+                Knowledge Library
+              </h2>
+            </div>
+            <p className="mt-2 text-[11px] font-mono tracking-wide" style={{ color: '#9A9A9A' }}>
+              {PUBLISHING_CADENCE}
+            </p>
           </div>
           <Link
             href="/series"
             className="text-xs font-mono uppercase tracking-wider transition-colors duration-150"
-            style={{ color: '#555' }}
+            style={{ color: '#A1A1AA' }}
           >
             Browse All →
           </Link>
@@ -102,7 +111,7 @@ export default function LatestChapters() {
                   Published
                 </span>
                 <span style={{ color: '#2A2A2A' }} aria-hidden="true">·</span>
-                <span className="text-xs font-mono" style={{ color: '#444' }}>
+                <span className="text-xs font-mono" style={{ color: '#A1A1AA' }}>
                   {FOUNDING_CHAPTER.collection}
                 </span>
               </div>
@@ -115,13 +124,13 @@ export default function LatestChapters() {
                 >
                   {FOUNDING_CHAPTER.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#777', maxWidth: '55ch' }}>
+                <p className="text-sm leading-relaxed" style={{ color: '#A1A1AA', maxWidth: '55ch' }}>
                   {FOUNDING_CHAPTER.subtitle}
                 </p>
               </div>
 
               {/* Stats */}
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-mono" style={{ color: '#555' }}>
+              <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-mono" style={{ color: '#A1A1AA' }}>
                 <span>{FOUNDING_CHAPTER.claims} verified claims</span>
                 <span aria-hidden="true">·</span>
                 <span>{FOUNDING_CHAPTER.sources} primary sources</span>
@@ -162,7 +171,7 @@ export default function LatestChapters() {
                     className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded"
                     style={{
                       backgroundColor: '#1A1A1A',
-                      color: '#444',
+                      color: '#A1A1AA',
                       border: '1px solid #222',
                     }}
                   >
@@ -172,7 +181,7 @@ export default function LatestChapters() {
                 <h3 className="text-sm font-semibold text-white leading-snug" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
                   {chapter.title}
                 </h3>
-                <p className="text-xs leading-relaxed" style={{ color: '#555' }}>
+                <p className="text-xs leading-relaxed" style={{ color: '#A1A1AA' }}>
                   {chapter.subtitle}
                 </p>
               </div>

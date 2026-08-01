@@ -65,7 +65,7 @@ export default function NewsletterBand() {
         </h2>
 
         {/* Subtext */}
-        <p className="text-sm leading-relaxed" style={{ color: '#666' }}>
+        <p className="text-sm leading-relaxed" style={{ color: '#A1A1AA' }}>
           New chapters, policy explainers, and primary source discoveries.
           No noise. No takes. Just understanding.
           <br />
@@ -130,7 +130,7 @@ export default function NewsletterBand() {
         )}
 
         {/* Trust micro-copy */}
-        <p className="text-[11px] font-mono" style={{ color: '#444' }}>
+        <p className="text-[11px] font-mono" style={{ color: '#A1A1AA' }}>
           No spam. No marketing. Every email is a new chapter or an evidence summary.
         </p>
       </div>

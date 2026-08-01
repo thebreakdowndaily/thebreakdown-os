@@ -85,7 +85,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
             </p>
 
             {/* Trust signals row */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-mono" style={{ color: '#666' }}>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-mono" style={{ color: '#A1A1AA' }}>
               <span>{FOUNDING_CHAPTER_STATS.claims} verified claims</span>
               <span aria-hidden="true" style={{ color: '#2A2A2A' }}>·</span>
               <span>{FOUNDING_CHAPTER_STATS.sources} primary sources</span>
@@ -106,14 +106,6 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                 Read Chapter
                 <span aria-hidden="true">→</span>
               </Link>
-              <Link
-                href="/series"
-                className="inline-flex items-center gap-2 px-7 py-3 rounded text-sm font-semibold tracking-wide border transition-colors duration-150"
-                style={{ borderColor: '#2A2A2A', color: '#9A9A9A' }}
-                id="hero-browse-chapters-cta"
-              >
-                Browse All Chapters
-              </Link>
             </div>
           </div>
 
@@ -132,7 +124,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                 <p className="text-xs font-mono uppercase tracking-widest" style={{ color: '#C9A84C' }}>
                   Knowledge Metrics
                 </p>
-                <p className="text-sm" style={{ color: '#666' }}>
+                <p className="text-sm" style={{ color: '#A1A1AA' }}>
                   Foundations of Indian Foreign Policy · 1947–1962
                 </p>
               </div>
@@ -152,7 +144,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                     >
                       {stat.value}
                     </p>
-                    <p className="text-xs font-mono uppercase tracking-wider" style={{ color: '#555' }}>
+                    <p className="text-xs font-mono uppercase tracking-wider" style={{ color: '#A1A1AA' }}>
                       {stat.label}
                     </p>
                   </div>
@@ -161,7 +153,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
 
               {/* Timeline strip */}
               <div className="space-y-3">
-                <p className="text-xs font-mono uppercase tracking-widest" style={{ color: '#444' }}>
+                <p className="text-xs font-mono uppercase tracking-widest" style={{ color: '#A1A1AA' }}>
                   Period Covered
                 </p>
                 <div className="relative h-px" style={{ backgroundColor: '#1F1F1F' }}>
@@ -172,7 +164,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                     aria-hidden="true"
                   />
                 </div>
-                <div className="flex justify-between text-xs font-mono" style={{ color: '#555' }}>
+                <div className="flex justify-between text-xs font-mono" style={{ color: '#A1A1AA' }}>
                   <span>1947</span>
                   <span>Independence · Partition · NAM</span>
                   <span>1962</span>

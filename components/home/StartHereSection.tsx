@@ -19,6 +19,7 @@ const entryPoints = [
     description: 'Evidence-first explainers on Indian history, policy, and foreign relations.',
     href: '/about',
     icon: '◎',
+    featured: false,
   },
   {
     id: 'chapter-1',
@@ -34,6 +35,7 @@ const entryPoints = [
     description: 'Evidence-backed frameworks for India\'s systemic challenges. Searchable and filterable.',
     href: '/fix',
     icon: '⬡',
+    featured: false,
   },
   {
     id: 'topics',
@@ -41,6 +43,7 @@ const entryPoints = [
     description: 'Foreign policy, economy, constitution, climate, AI, elections — organised by domain.',
     href: '/topics',
     icon: '◈',
+    featured: false,
   },
 ] as const;
 
@@ -103,7 +106,7 @@ export default function StartHereSection() {
               </h3>
 
               {/* Description */}
-              <p className="text-xs leading-relaxed" style={{ color: '#666' }}>
+              <p className="text-xs leading-relaxed" style={{ color: '#A1A1AA' }}>
                 {entry.description}
               </p>
 

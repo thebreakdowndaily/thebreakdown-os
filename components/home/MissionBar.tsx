@@ -76,7 +76,7 @@ export default function MissionBar() {
                 <h3 className="text-sm font-semibold tracking-wide text-white">
                   {pillar.headline}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#666' }}>
+                <p className="text-sm leading-relaxed" style={{ color: '#A1A1AA' }}>
                   {pillar.body}
                 </p>
               </div>

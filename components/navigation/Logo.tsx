@@ -22,7 +22,7 @@ export default function Logo() {
       </span>
       <span
         className="hidden sm:inline-block ml-3 text-[10px] font-mono uppercase tracking-[0.2em] leading-none self-center pt-0.5"
-        style={{ color: '#444' }}
+        style={{ color: '#A1A1AA' }}
       >
         India Explained
       </span>

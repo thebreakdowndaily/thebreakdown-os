@@ -74,7 +74,7 @@ export default function TopicHubs({ topics }: TopicHubsProps) {
           <Link
             href="/topics"
             className="text-xs font-mono uppercase tracking-wider transition-colors duration-150"
-            style={{ color: '#555' }}
+            style={{ color: '#A1A1AA' }}
           >
             All Topics →
           </Link>
@@ -95,7 +95,7 @@ export default function TopicHubs({ topics }: TopicHubsProps) {
                     {topic.name}
                   </h3>
                   {(topic.description) && (
-                    <p className="text-[11px] leading-relaxed line-clamp-3" style={{ color: '#555' }}>
+                    <p className="text-[11px] leading-relaxed line-clamp-3" style={{ color: '#A1A1AA' }}>
                       {topic.description}
                     </p>
                   )}

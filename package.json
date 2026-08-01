@@ -8,7 +8,6 @@
   "description": "The Breakdown — India Explained, Website Engine",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/generate-sitemap.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint app components providers styles hooks types features",
