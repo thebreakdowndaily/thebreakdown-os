@@ -37,6 +37,7 @@
   "exclude": [
     "node_modules",
     "tests",
+    "audit",
     ".open-next",
     "scripts",
     "playwright.config.ts",

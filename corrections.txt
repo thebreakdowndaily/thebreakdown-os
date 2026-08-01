@@ -1,0 +1,7 @@
+CORRECTIONS DATA
+==================
+
+id | correction_type | rationale preview | previous_claim_id | successor_claim_id | created_at | ingestion_method
+--- | ---------------- | ----------------- | ---------------- | ----------------- | ---------- | ----------------
+d61b769d-68d5-46c7-840d-c42eae3d79d0 | EVIDENTIARY_CORRECTION | The case (Civil Appeal No. 14112/2024, Rajasthan HC vs Rajat Yadav) concerns JJA... | 4d41050d-90e9-4a98-b3ac-158d42a51e6f | 4d41050d-90e9-4a98-b3ac-158d42a51e6f | Wed Jul 22 2026 12:25:13 GMT+0530 (India Standard Time) | P1_RESOLUTION_JALORE
+de0ab20b-339b-4db6-80ab-f991c1194db8 | EVIDENTIARY_CORRECTION | Academic source (2024) was accurate at time of writing. Official government noti... | 996e57b9-a9b7-443d-b4f6-4b88156fdd54 | 996e57b9-a9b7-443d-b4f6-4b88156fdd54 | Wed Jul 22 2026 12:25:13 GMT+0530 (India Standard Time) | P1_RESOLUTION_KHUNTI

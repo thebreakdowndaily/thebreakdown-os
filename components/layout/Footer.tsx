@@ -9,6 +9,7 @@ const footerSections = [
       { label: 'Data Stories', href: '/data' },
       { label: 'Policy Tracker', href: '/topic/policy' },
       { label: 'The Fix', href: '/fix' },
+      { label: 'Problems', href: '/problems' },
     ],
   },
   {
@@ -36,6 +37,7 @@ const footerSections = [
       { label: 'Corrections Policy', href: '/methodology#corrections' },
       { label: 'Sources Policy', href: '/methodology#sources' },
       { label: 'Transparency Statement', href: '/trust' },
+      { label: 'Platform Operations', href: '/operations' },
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/about/contact' },
     ],
@@ -146,7 +148,7 @@ const Footer: React.FC = () => (
 
         {/* Link sections */}
         {footerSections.map((section) => (
-          <div key={section.title}>
+          <nav key={section.title} aria-label={section.title}>
             <h4
               style={{
                 fontSize: 'var(--text-sm)',
@@ -168,7 +170,7 @@ const Footer: React.FC = () => (
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         ))}
       </div>
 

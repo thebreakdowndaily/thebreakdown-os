@@ -1,0 +1,123 @@
+{
+  "dataset": "UP403 Constituency Intelligence Dataset",
+  "version": "1.1.0",
+  "baseline_version": "1.0.1",
+  "generated_at": "2026-07-30T18:20:28Z",
+  "description": "Enriched baseline with independent QA verification, administrative knowledge graph, demographic readiness assessment, and data dictionary.",
+  "governing_mission": "UP403-DATA-13",
+  "data_files": [
+    {
+      "file": "up403-master-dataset-v1.json",
+      "format": "JSON",
+      "description": "Core 403-record constituency intelligence dataset (v1.0.1, verified)",
+      "size_bytes": 3050151
+    },
+    {
+      "file": "up403-master-dataset-v1.csv",
+      "format": "CSV",
+      "description": "Flat CSV export of the master dataset",
+      "size_bytes": 1043005
+    }
+  ],
+  "enrichment_artifacts": [
+    {
+      "artifact": "up403-independent-qa-report.json",
+      "wp": "WP1",
+      "description": "Independent QA verification — 403/403 ACs pass, 4836 checks, 0 failures",
+      "verdict": "VERIFIED"
+    },
+    {
+      "artifact": "up403-conflict-log.json",
+      "wp": "WP1",
+      "description": "Cross-source conflict log (0 conflicts)",
+      "verdict": "CLEAN"
+    },
+    {
+      "artifact": "up403-data-corrections.json",
+      "wp": "WP1",
+      "description": "Corrections applied during QA (0 corrections needed)",
+      "verdict": "CLEAN"
+    },
+    {
+      "artifact": "up403-administrative-graph.json",
+      "wp": "WP3",
+      "description": "Administrative Knowledge Graph: 570 entities, 1446 relationships",
+      "verdict": "COMPLETE"
+    },
+    {
+      "artifact": "up403-demographic-enrichment.json",
+      "wp": "WP4",
+      "description": "Demographic enrichment readiness assessment",
+      "verdict": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    {
+      "artifact": "up403-data-dictionary.json",
+      "wp": "WP10",
+      "description": "Comprehensive data dictionary covering all 150 fields across 12 categories",
+      "verdict": "COMPLETE"
+    },
+    {
+      "artifact": "up403-data-dictionary.md",
+      "wp": "WP10",
+      "description": "Markdown version of the data dictionary",
+      "verdict": "COMPLETE"
+    }
+  ],
+  "governance": {
+    "editorial_constitution": "docs/editorial/editorial-constitution.md",
+    "data_principles": [
+      "No schema changes to the 150-field core record",
+      "Unavailable data remains NOT_AVAILABLE — never fabricated",
+      "All election data sourced from ECI official results",
+      "All provenance documented per DATA-08 standards"
+    ]
+  },
+  "dna_integrity": {
+    "algorithm": "SHA-256 of canonical JSON (sorted keys)",
+    "master_dataset_sha256": "7bdf9eb0419086bbc1811c84d9e4947970a99b114d138f5a4394ab5c988e02d3",
+    "master_dataset_md5": "d44c34f38645f8260fa077c2a96c6301",
+    "records": 403
+  },
+  "work_packages_status": {
+    "WP1_Independent_QA": {
+      "status": "COMPLETE",
+      "result": "VERIFIED — 403/403 ACs pass, 0 failures"
+    },
+    "WP3_Admin_Graph": {
+      "status": "COMPLETE",
+      "result": "570 entities, 1446 relationships, 18 divisions, 69 districts, 80 PCs, 403 ACs"
+    },
+    "WP4_Demographics": {
+      "status": "READINESS_ASSESSMENT",
+      "result": "All NOT_AVAILABLE — requires WP9 Geospatial pipeline"
+    },
+    "WP10_Data_Dictionary": {
+      "status": "COMPLETE",
+      "result": "150 fields, 12 categories, comprehensive documentation"
+    },
+    "WP2_Booth_Level": {
+      "status": "DEFERRED",
+      "note": "Requires ECI booth-level data access"
+    },
+    "WP5_Legislative": {
+      "status": "DEFERRED",
+      "note": "Requires legislative session data"
+    },
+    "WP6_Projects": {
+      "status": "DEFERRED",
+      "note": "Requires project database access"
+    },
+    "WP7_Economy": {
+      "status": "DEFERRED",
+      "note": "Requires economic data sources"
+    },
+    "WP8_Environment": {
+      "status": "DEFERRED",
+      "note": "Requires environmental data sources"
+    },
+    "WP9_Geospatial": {
+      "status": "DEFERRED",
+      "note": "Required by WP4; needs AC boundary GIS layer"
+    }
+  }
+}

@@ -53,6 +53,12 @@ const config: Config = {
           secondary: 'var(--color-text-secondary)',
           muted: 'var(--color-text-muted)',
           inverse: 'var(--color-text-inverse)',
+          success: 'var(--color-text-success)',
+          warning: 'var(--color-text-warning)',
+          error: 'var(--color-text-error)',
+          info: 'var(--color-text-info)',
+          link: 'var(--color-text-link)',
+          'link-hover': 'var(--color-text-link-hover)',
         },
         border: {
           DEFAULT: 'var(--color-border-default)',
@@ -78,6 +84,13 @@ const config: Config = {
           light: 'var(--color-info-light)',
           DEFAULT: 'var(--color-info)',
           dark: 'var(--color-info-dark)',
+        },
+        // WCAG AA contrast fix (AR-13D): default neutral-500 (#737373) fails
+        // 4.5:1 on dark surfaces (#0a0a0a → 4.18:1). #909090 passes on the
+        // app's darkest surfaces (neutral-800 #262626 → 4.74:1). No
+        // text-neutral-500 usage sits on a light surface (verified).
+        neutral: {
+          500: '#909090',
         },
       },
 

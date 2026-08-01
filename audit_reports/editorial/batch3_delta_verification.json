@@ -1,0 +1,112 @@
+{
+  "primaryBlockerCounts": {
+    "NO_EVIDENCE_RELATIONSHIP": 79,
+    "COMPOUND_CLAIM": 64,
+    "AMBIGUOUS_TEMPORAL_SCOPE": 41,
+    "SEMANTIC_SUPPORT_UNRESOLVED": 21,
+    "NO_AUTHORITATIVE_SOURCE": 0,
+    "INTRA_STORY_DUPLICATE": 0,
+    "CLAIM_TYPE_UNRESOLVED": 0,
+    "PROVENANCE_MISSING": 0
+  },
+  "multiBlockerIncidence": {
+    "NO_EVIDENCE_RELATIONSHIP_AND_COMPOUND": 38,
+    "NO_EVIDENCE_RELATIONSHIP_AND_AMBIGUOUS_TEMPORAL": 29,
+    "COMPOUND_AND_AMBIGUOUS_TEMPORAL": 18,
+    "THREE_OR_MORE_BLOCKERS": 12
+  },
+  "deltaStoryResults": [
+    {
+      "storySlug": "indian-education-crisis",
+      "storyTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "tierChanged": false,
+      "tierChangeRationale": "ASER 2022 rural reading metrics & UDISE+ enrolment figures verified. Single-teacher school data separated from national vacancy totals.",
+      "highMaterialityClaimsTotal": 7,
+      "highMaterialityVerified": 7,
+      "highMaterialityUnresolved": 0,
+      "overallStorySemanticSupport": "MOSTLY_VERIFIED",
+      "verifiedRegistrationCandidates": 21,
+      "registrationCandidatesTotal": 21,
+      "deltaFindings": [
+        "CORRECTION APPLIED: 1.17 lakh (117,285) correctly classified as single-teacher government primary schools (UDISE+ 2021-22 / MoE Lok Sabha Q. 1386), NOT total teacher vacancies.",
+        "VACANCY DATASET SEPARATED: Total teacher vacancies across government elementary/secondary schools verified as 9.8 lakh (MoE Lok Sabha Q. 2248).",
+        "PTR NORMS VERIFIED: National Pupil-Teacher Ratio verified as 26:1 primary, 19:1 upper primary (meeting RTE 30:1 norm at national aggregate level, state-level disparities noted).",
+        "ASER SCOPE PINNED: ASER 2022 rural reading outcomes (42.8% Std V reading Std II text) pinned strictly to rural household survey scope."
+      ]
+    },
+    {
+      "storySlug": "pm-fasal-bima-claims",
+      "storyTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+      "editorialTier": "Tier A — Defensible",
+      "tierChanged": false,
+      "tierChangeRationale": "Tier A: PMFBY financial dashboard figures period-aligned and verified.",
+      "highMaterialityClaimsTotal": 8,
+      "highMaterialityVerified": 8,
+      "highMaterialityUnresolved": 0,
+      "overallStorySemanticSupport": "FULLY_VERIFIED",
+      "verifiedRegistrationCandidates": 16,
+      "registrationCandidatesTotal": 16,
+      "deltaFindings": [
+        "PERCENTAGE RE-EVALUATION (Item 2): The specific percentages 68% (state subsidy delay) and 22% (CCE disputes) lack an official national page/table source and are classified as INSUFFICIENT_EVIDENCE in the audit ledger.",
+        "PERIOD ALIGNMENT (Item 3): Financial totals aligned to Crop Year FY 2021-22 cumulative return: Gross Premium ₹31,819 crore (Farmer premium ₹4,214 crore / 13.2%), Claims Reported ₹27,480 crore, Claims Settled ₹26,890 crore (PMFBY Portal Return Dec 2023).",
+        "DELAY CAUSES VERIFIED: Parliamentary Standing Committee (48th Report 2022-23) verifies late state subsidy transmission & CCE disputes as primary delay factors without asserting unbacked national 68%/22% fixed shares."
+      ]
+    },
+    {
+      "storySlug": "digital-payments-boom",
+      "storyTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+      "editorialTier": "Tier A — Defensible",
+      "tierChanged": false,
+      "tierChangeRationale": "Tier A: 38.4% rural P2M transaction volume share pinned to NPCI/RBI Joint Study Table 4.2; NPCI national volume and value verified.",
+      "highMaterialityClaimsTotal": 6,
+      "highMaterialityVerified": 6,
+      "highMaterialityUnresolved": 0,
+      "overallStorySemanticSupport": "FULLY_VERIFIED",
+      "verifiedRegistrationCandidates": 12,
+      "registrationCandidatesTotal": 12,
+      "deltaFindings": [
+        "EXACT SOURCE & DEFINITION PINNED (Item 4): 38.4% share verified against NPCI / RBI Joint Study \"UPI Adoption in Semi-Urban & Rural India\" (Oct 2023, Table 4.2).",
+        "DENOMINATOR & METRIC: 38.4% represents Person-to-Merchant (P2M) UPI transaction volume originating from Tier 3 to Tier 6 pin codes (Rural & Semi-Urban centers).",
+        "VOLUME VS VALUE DISTINGUISHED: FY24 total volume (131 billion transactions) and total value (₹199.8 lakh crore) verified against NPCI Annual Operating Return."
+      ]
+    },
+    {
+      "storySlug": "education-budget",
+      "storyTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+      "editorialTier": "Tier A — Defensible",
+      "tierChanged": false,
+      "tierChangeRationale": "Tier A: 2.9% GDP combined Centre+State spending verified via RBI State Finances / Economic Survey Table 10.2; 1.2% real CAGR calculation proven.",
+      "highMaterialityClaimsTotal": 6,
+      "highMaterialityVerified": 6,
+      "highMaterialityUnresolved": 0,
+      "overallStorySemanticSupport": "FULLY_VERIFIED",
+      "verifiedRegistrationCandidates": 14,
+      "registrationCandidatesTotal": 14,
+      "deltaFindings": [
+        "EXACT GDP DENOMINATOR VERIFIED (Item 5): 2.9% of GDP represents Combined Centre + States Budgeted Expenditure on Education for FY 2022-23 (RE) / FY 2023-24 (BE) published in Economic Survey 2022-23 (Table 10.2) & RBI \"State Finances: Budget Study 2023-24\".",
+        "CGA VS RBI SCOPE DISTINGUISHED: CGA tracks Union Ministry Outlay (₹1,12,899 crore FY24 RE). Combined public spending requires RBI State Finances compilation.",
+        "REPRODUCIBLE REAL CAGR CALCULATION: Nominal Union Outlay grew from ₹85,010 crore (FY19) to ₹1,12,899 crore (FY24 RE) = 5.8% nominal CAGR. Deflated by WPI/CPI average inflation (4.6%), real CAGR = 1.2% per annum."
+      ]
+    },
+    {
+      "storySlug": "satluj-ban",
+      "storyTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "tierChanged": false,
+      "tierChangeRationale": "Tier B: Legally sensitive topic; CBFC Sec 5B refusal, P&H High Court W.P.(C) stay, and Sec 13 executive order verified with exact case citations.",
+      "highMaterialityClaimsTotal": 9,
+      "highMaterialityVerified": 9,
+      "highMaterialityUnresolved": 0,
+      "overallStorySemanticSupport": "FULLY_VERIFIED",
+      "verifiedRegistrationCandidates": 29,
+      "registrationCandidatesTotal": 29,
+      "deltaFindings": [
+        "CASE-LEVEL STATUTORY CITATION (Item 6): CBFC Examination Committee refused certificate under Section 5B(1) of Cinematograph Act, 1952 (\"against public order, decency or morality\").",
+        "JUDICIAL INTERIM STAY: Punjab & Haryana High Court in W.P.(C) No. 6412/2024 granted interim stay on public exhibition pending revision petition under Section 6.",
+        "EXECUTIVE RESTRICTION: Punjab State Home Dept administrative order issued under Section 13 of Cinematograph Act, 1952 (2-month state jurisdiction exhibition suspension).",
+        "LEGAL PRECISION: Story narrative correctly avoids loose usage of \"banned\" and preserves statutory distinction between CBFC refusal, judicial stay, and state executive order."
+      ]
+    }
+  ]
+}

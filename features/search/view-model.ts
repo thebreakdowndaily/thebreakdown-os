@@ -34,7 +34,7 @@ export async function buildSearchPage(services: Services, query: string, typeFil
     spotlight: searchViewModel.spotlight,
     results,
     grouped: searchViewModel.groupedResults || {
-      latestStories: [], entities: [], topics: [], documents: [], media: []
+      latestStories: [], entities: [], topics: [], documents: [], media: [], problems: []
     },
     suggestions: searchViewModel.suggestions || {
       relatedSearches: [], relatedTopics: [], relatedEntities: []

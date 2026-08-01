@@ -18,10 +18,10 @@ export function ChapterPageShell({
   graph?: ChapterGraph;
   enrichedClaims?: EnrichedClaim[];
 }) {
-  const claimCount = chapter.content.filter(b => b.type === 'claim').length;
-  const evidenceCount = chapter.content.filter(b => b.type === 'evidence-summary').length;
-  const thinkerCount = chapter.content.filter(b => b.type === 'thinker').length;
-  const documentCount = chapter.content.filter(b => b.type === 'document').length;
+  const claimCount = chapter.content?.filter(b => b.type === 'claim').length || 0;
+  const evidenceCount = chapter.content?.filter(b => b.type === 'evidence-summary').length || 0;
+  const thinkerCount = chapter.content?.filter(b => b.type === 'thinker').length || 0;
+  const documentCount = chapter.content?.filter(b => b.type === 'document').length || 0;
 
   return (
     <StoryShell

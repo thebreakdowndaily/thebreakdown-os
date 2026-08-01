@@ -1,0 +1,60 @@
+{
+  "report_id": "RELEASE-2A-PERF-001",
+  "title": "RELEASE-2A Research API Performance Report",
+  "execution_date": "2026-07-30",
+  "api_version": "v1",
+  "dataset_version": "1.1.0",
+  "architecture": {
+    "pattern": "In-memory data loading at module scope",
+    "data_size": "~3MB (403 records, 150 fields each)",
+    "runtime": "Node.js (Next.js 15 server runtime)"
+  },
+  "performance_targets": {
+    "average_response_time": "<200ms",
+    "p95_response_time": "<500ms",
+    "p99_response_time": "<1000ms",
+    "throughput": "100+ req/s"
+  },
+  "optimizations": {
+    "in_memory_loading": "Dataset loaded once at module scope; no disk I/O on requests",
+    "prebuilt_indices": "Filter indices built at startup; O(1) lookup for filters",
+    "search_index": "In-memory scan with early termination at 50 results",
+    "etag_caching": "SHA-256 based ETags for conditional requests",
+    "cache_control": "public, max-age=300, stale-while-revalidate=60",
+    "compression": "Cloudflare / Next.js automatic gzip/brotli",
+    "stable_pagination": "Stable sort by ac_number; O(n log n) once at first request",
+    "lazy_indices": "Filter options, people index built lazily on first access"
+  },
+  "estimated_performance": {
+    "root_endpoint": "~1ms (static JSON)",
+    "list_constituencies_no_filter": "~5ms (sorted, paginated array slice)",
+    "list_constituencies_with_filter": "~10ms (filter + slice)",
+    "single_constituency": "~2ms (Map lookup)",
+    "search": "~15ms (weighted text scan of 403 records)",
+    "people_list": "~10ms (deduplication + record building)",
+    "election_overview": "~8ms (aggregate scan)",
+    "election_year_detail": "~5ms (projected fields)",
+    "full_graph": "~50ms (worst case: builds 570 nodes across 403 ACs)",
+    "per_constituency_graph": "~2ms (single sub-graph)",
+    "timeline": "~3ms (single record timeline)",
+    "filter_options": "~5ms (pre-built, lazy initialized)",
+    "compare_2": "~5ms (2 Map lookups + comparison)",
+    "compare_5_all_categories": "~20ms (5 records, 8 categories)",
+    "analytics": "~15ms (full dataset scan, 6 metrics)",
+    "with_provenance": "~1ms overhead (object spread)"
+  },
+  "caching_strategy": {
+    "endpoint": "Cache-Control",
+    "static_responses": "public, max-age=300, stale-while-revalidate=60",
+    "error_responses": "no-cache",
+    "search_responses": "public, max-age=60, stale-while-revalidate=30",
+    "analytic_responses": "public, max-age=600, stale-while-revalidate=120",
+    "etag": "SHA-256 hash of response body (first 16 hex chars)"
+  },
+  "bottleneck_analysis": [
+    { "bottleneck": "Full graph generation (50ms)", "risk": "LOW", "mitigation": "Cached for 5 minutes via Cache-Control" },
+    { "bottleneck": "Analytics full scan (15ms)", "risk": "LOW", "mitigation": "Cached for 10 minutes; always read-only" },
+    { "bottleneck": "Search full scan (15ms)", "risk": "LOW", "mitigation": "403 records only; trivial at this scale" }
+  ],
+  "verdict": "All endpoints expected to perform well under 200ms average. In-memory architecture eliminates all database latency."
+}

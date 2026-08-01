@@ -5,9 +5,9 @@
   "aliases": [
     "Nirmala"
   ],
-  "version": 1,
+  "version": 12,
   "createdAt": "2026-07-18T16:37:55.973Z",
-  "updatedAt": "2026-07-18T16:37:55.973Z",
+  "updatedAt": "2026-07-31T09:22:11.486Z",
   "stories": [
     "story-mgnrega-001"
   ],
@@ -19,7 +19,133 @@
       "changes": [
         "entity-created"
       ]
+    },
+    {
+      "version": 2,
+      "timestamp": "2026-07-23T06:08:43.405Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 3,
+      "timestamp": "2026-07-23T08:08:51.149Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 4,
+      "timestamp": "2026-07-25T06:21:26.922Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 5,
+      "timestamp": "2026-07-25T13:49:16.432Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 6,
+      "timestamp": "2026-07-26T07:28:19.869Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 7,
+      "timestamp": "2026-07-27T10:46:06.708Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 8,
+      "timestamp": "2026-07-28T11:31:00.501Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 9,
+      "timestamp": "2026-07-31T09:19:28.860Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 10,
+      "timestamp": "2026-07-31T09:20:40.394Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 11,
+      "timestamp": "2026-07-31T09:20:51.520Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
+    },
+    {
+      "version": 12,
+      "timestamp": "2026-07-31T09:22:11.486Z",
+      "updatedBy": "story-mgnrega-001",
+      "changes": [
+        "id",
+        "type",
+        "name",
+        "aliases"
+      ]
     }
   ],
-  "active": true
+  "active": true,
+  "roles": [],
+  "organizations": [],
+  "timeline": [],
+  "sources": [],
+  "metadata": {}
 }

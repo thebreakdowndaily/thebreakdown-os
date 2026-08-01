@@ -11,7 +11,7 @@ export type EntityKind =
 export type StoryStatus = 'draft' | 'review' | 'fact_check' | 'scheduled' | 'published' | 'updated';
 
 /** Publication lifecycle — controls public visibility. Separate from editorial status. */
-export type PublicationStatus = 'draft' | 'review' | 'scheduled' | 'published' | 'archived';
+export type PublicationStatus = 'draft' | 'review' | 'scheduled' | 'published' | 'archived' | 'superseded';
 
 export type StoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
 
@@ -20,8 +20,19 @@ export type EvidenceTier =
   | 'scientific_study' | 'government_response' | 'rti_response'
   | 'parliament_record' | 'field_reporting' | 'verified_dataset';
 
+/** The 8-tier Evidence Hierarchy defined in Constitution 3.2 */
+export type EvidenceHierarchyTier =
+  | 'tier_1_primary_archival'
+  | 'tier_2_government_record'
+  | 'tier_3_court_judgment'
+  | 'tier_4_peer_reviewed'
+  | 'tier_5_reputable_secondary'
+  | 'tier_6_eyewitness_account'
+  | 'tier_7_statistical_dataset'
+  | 'tier_8_expert_analysis';
+
 export interface EvidenceBadge {
-  tier: EvidenceTier;
+  tier: EvidenceTier | EvidenceHierarchyTier;
   confidence: number;
   verifiedAt: string;
   sourceCount: number;
@@ -137,6 +148,8 @@ export interface Story {
   relatedStoryIds: string[];
   relatedEntityIds: string[];
   relatedTopicIds: string[];
+  /** Slugs of related Fix knowledge objects. */
+  relatedFixSlugs?: string[];
   /** Editorial metadata — classification, type, location, impact. */
   metadata?: StoryMetadata;
   notes?: string;
@@ -157,6 +170,71 @@ export interface Story {
     dataAvailability: number;
     verificationStatus: number;
   };
+}
+
+export interface TBSStory {
+  id: string;
+  slug: string;
+  storyType: string;
+  title: string;
+  subtitle?: string;
+  metadata: {
+    difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+    confidence: 'High' | 'Medium' | 'Low' | 'Insufficient';
+    confidenceRationale: string;
+    updateRequired: boolean;
+    readingTimeMinutes: number;
+    tags: string[];
+    entities: Array<{ name: string; type: string; role: string }>;
+    lastVerified: string;
+    nextVerificationDue: string | null;
+  };
+  hero: {
+    image: string;
+    statistic?: string;
+    statisticSource?: string;
+    caption?: string;
+    altText?: string;
+    credit?: string;
+    aspectRatio?: string;
+  };
+  summary: string;
+  keyFacts: Array<{ claim: string; source: string; confidence: number }>;
+  whyItMatters: string;
+  narrative: string;
+  timeline: Array<{ date: string; event: string; source: string; significance: string }>;
+  systemExplanation?: {
+    headline: string;
+    summary: string;
+    steps: Array<{ label: string; description: string; actor?: string; input?: string; output?: string }>;
+    diagram?: string;
+    diagramAlt?: string;
+  };
+  evidence: Array<{ claim: string; source: string; confidence: number; verifiedAt: string }>;
+  charts: Array<{ title: string; type: string; data: Array<Record<string, unknown>>; source: string }>;
+  maps?: Array<{ title: string; type: string; data: Record<string, unknown>; source: string }>;
+  stakeholders?: {
+    headline: string;
+    stakeholders: Array<{ name: string; type: string; position: string; interest: string; stance: 'support' | 'oppose' | 'neutral' | 'conditional' }>;
+    summary?: string;
+  };
+  perspectives?: {
+    headline: string;
+    perspectives: Array<{ label: string; source: string; quote: string; stance: string }>;
+    note?: string;
+  };
+  tradeoffs?: Array<{ option: string; benefits: string[]; risks: string[]; evidence: string }>;
+  futureOutlook?: {
+    headline: string;
+    scenarios: Array<{ label: string; description: string; probability?: string; source?: string }>;
+    uncertainty?: string;
+    confidence: 'High' | 'Medium' | 'Low';
+  };
+  faq: Array<{ question: string; answer: string; source?: string }>;
+  takeaways: string[];
+  sources: Array<{ title: string; author?: string; date?: string; url?: string; reliability: string }>;
+  relatedKnowledge: Array<{ title: string; slug: string; relation: string }>;
+  visuals: Array<{ section: string; type: string; placement: string; aspectRatio: string; caption: string; altText: string; credit: string }>;
 }
 
 export interface Topic {
@@ -511,11 +589,80 @@ export interface StoryBlock {
 }
 
 export interface Source {
+  id?: string;
   title: string;
   url: string;
   accessedAt: string;
   tier: ConfidenceTier;
+  archiveHash?: string;
+  publisher?: string;
 }
+
+/** Step 2 in 7-Step Knowledge Pipeline: Entity -> KnowledgeObservation -> Claim -> Evidence -> Source -> Publication -> Projection */
+export interface KnowledgeObservation {
+  id: string;
+  entityId: string;
+  observedAt: string;
+  description: string;
+  rawData?: Record<string, unknown>;
+  sourceId?: string;
+  confidence: number;
+}
+
+/** Step 4 in 7-Step Knowledge Pipeline */
+export interface Evidence {
+  id: string;
+  claimId: string;
+  hierarchyTier: EvidenceHierarchyTier;
+  summary: string;
+  excerpt?: string;
+  sourceId: string;
+  sourceUrl?: string;
+  archiveHash?: string;
+  confidenceScore: number;
+  verifiedAt: string;
+  verifiedBy?: string;
+}
+
+export interface Publication {
+  id: string;
+  title: string;
+  authors: string[];
+  publisher?: string;
+  publishedDate: string;
+  doi?: string;
+  isbn?: string;
+  url?: string;
+  citationString: string;
+}
+
+export interface Judgment {
+  id: string;
+  caseName: string;
+  citation: string;
+  court: string;
+  judgmentDate: string;
+  bench?: string[];
+  keyRatio: string;
+  fullTextUrl?: string;
+}
+
+export interface Location {
+  id: string;
+  name: string;
+  country: string;
+  coordinates?: { lat: number; lng: number };
+  description?: string;
+}
+
+export type CounterArgument =
+  | string
+  | {
+      title?: string;
+      argument: string;
+      source?: string;
+      confidence?: 'high' | 'medium' | 'low';
+    };
 
 export interface Claim {
   id: string;
@@ -524,12 +671,14 @@ export interface Claim {
   source: string;
   sourceUrl: string;
   tier: ConfidenceTier;
-  evidenceTier?: EvidenceTier;
+  evidenceTier?: EvidenceTier | EvidenceHierarchyTier;
+  evidenceId?: string;
   confidence: number;
   status: 'verified' | 'strong' | 'moderate' | 'unverified';
   verificationLevel?: 'primary' | 'secondary';
   verifiedAt?: string;
   sourceCount?: number;
+  counterArguments?: CounterArgument[];
 }
 
 export interface TimelineEvent {
@@ -575,7 +724,7 @@ export interface StatItem {
 
 export interface GraphNode {
   id: string;
-  type: EntityKind | 'story' | 'topic' | 'timeline' | 'fix' | 'dataset';
+  type: EntityKind | 'story' | 'topic' | 'timeline' | 'fix' | 'dataset' | 'claim';
   title: string;
   slug: string;
   subtitle?: string;
@@ -680,7 +829,7 @@ export interface Visualization {
 
 export interface SearchIndexEntry {
   id: string;
-  type: 'story' | 'topic' | 'entity' | 'organization' | 'country' | 'timeline' | 'fix' | 'dataset';
+  type: 'story' | 'topic' | 'entity' | 'organization' | 'country' | 'timeline' | 'fix' | 'dataset' | 'problem';
   title: string;
   slug: string;
   description: string;
@@ -1016,6 +1165,7 @@ export interface SearchTerminalViewModel {
     topics: SearchIndexEntry[];
     documents: SearchIndexEntry[];
     media: SearchIndexEntry[];
+    problems: SearchIndexEntry[];
   };
   suggestions: {
     relatedSearches: string[];
@@ -1186,14 +1336,72 @@ export interface MonitorSummary {
   recentAlerts: MonitorAlert[];
 }
 
-// ── The Fix Types ─────────────────────────────────────────────────────────
+// ── The Fix Types (AR-13A.0 Specification Baseline) ───────────────────────
+
+export type InterventionType =
+  | 'statutory'
+  | 'administrative'
+  | 'institutional'
+  | 'fiscal'
+  | 'technological'
+  | 'behavioral'
+  | 'judicial';
+
+export type PolicyMaturity =
+  | 'idea'
+  | 'proposed'
+  | 'expert_reviewed'
+  | 'pilot'
+  | 'implemented'
+  | 'measured'
+  | 'updated'
+  | 'archived';
+
+export type EvidenceGrade = 'High' | 'Moderate' | 'Low' | 'Contested';
+
+export type TimeHorizon = 'immediate' | 'short-term' | 'medium-term' | 'long-term';
+
+export interface TradeOffItem {
+  dimension: string;
+  advantage: string;
+  disadvantage: string;
+  affectedParties: string[];
+}
+
+export interface RiskItem {
+  risk: string;
+  impact: 'critical' | 'high' | 'medium' | 'low';
+  mitigation: string;
+  unintendedConsequence?: string;
+}
+
+export interface CostEstimate {
+  amount: string;
+  currency: string;
+  timeframe: string;
+  fundingMechanism: string;
+  category: 'CapEx' | 'OpEx' | 'Budget-Neutral' | 'Revenue-Generating';
+}
+
+export interface LegalBasis {
+  statuteOrArticle: string;
+  enablingClause?: string;
+  jurisdiction: string;
+  gazetteReference?: string;
+}
+
+export interface UncertaintyNote {
+  category: 'missing_data' | 'contested_evidence' | 'context_dependency' | 'unmeasured_variable';
+  description: string;
+  mitigationOrGap: string;
+}
 
 export interface Fix {
   id: string;
   slug: string;
-  storySlug: string;
   headline: string;
   summary: string;
+  storySlug: string;
   heroImage?: string;
   publishedAt: string;
   updatedAt: string;
@@ -1202,9 +1410,10 @@ export interface Fix {
   evidenceScore: number;
   tags: string[];
 
+  // Legacy FixSection properties
   problem: FixSection;
   whoIsAffected: FixSection;
-  rootCauses: FixSection;
+  rootCauses: any;
   evidence: FixSection;
   stakeholders: Stakeholder[];
   existingSolutions: ExistingSolution[];
@@ -1214,9 +1423,39 @@ export interface Fix {
   governmentActions: FixAction[];
   metricsToTrack: FixMetric[];
 
-  relatedStories: Story[];
-  relatedEntities: Entity[];
-  sources: Source[];
+  // AR-13A.0 Canonical Domain Extensions
+  title?: string;
+  primaryCategory?: InterventionType;
+  secondaryCategories?: InterventionType[];
+  editorialStatus?: StoryStatus;
+  publicationStatus?: PublicationStatus;
+  maturityStatus?: PolicyMaturity;
+  problemStatement?: string;
+  responsibleActorIds?: string[];
+  beneficiaryGroups?: string[];
+  disadvantagedGroups?: string[];
+  fiscalCost?: CostEstimate;
+  timeToImpact?: TimeHorizon;
+  globalPrecedents?: GlobalExample[];
+  tradeOffs?: TradeOffItem[];
+  risksAndFailures?: RiskItem[];
+  constitutionalBasis?: LegalBasis;
+  evidenceGrade?: EvidenceGrade;
+  unknownsAndGaps?: UncertaintyNote[];
+  successMetrics?: FixMetric[];
+  sourceIds?: string[];
+  claimIds?: string[];
+  supersededByFixId?: string;
+  lastVerified?: string;
+  version?: string;
+
+  // Comparative Intelligence (ACP-001)
+  reversibility?: 'fully_reversible' | 'partially_reversible' | 'irreversible';
+  scalability?: 'local_only' | 'state_level' | 'national' | 'universal';
+
+  relatedStories?: Story[];
+  relatedEntities?: Entity[];
+  sources?: Source[];
 }
 
 export interface FixSection {
@@ -1254,7 +1493,7 @@ export interface FixAction {
   title: string;
   description: string;
   priority: 'critical' | 'high' | 'medium' | 'low';
-  timeframe: 'immediate' | 'short-term' | 'medium-term' | 'long-term';
+  timeframe: TimeHorizon;
   actors: string[];
 }
 
@@ -1265,6 +1504,7 @@ export interface FixMetric {
   dataSource: string;
   updateFrequency: string;
 }
+
 
 
 // ─── Knowledge Library (Sprint 2 — Knowledge Rendering Engine) ────────────────────
@@ -1608,7 +1848,7 @@ export interface CanonicalClaim {
   statement: string;
   confidence: 'established' | 'debated' | 'contested';
   evidence: EvidenceRef[];
-  counterArguments: string[];
+  counterArguments: CounterArgument[];
   sourceIds: string[];
   documentIds: string[];
   entityIds: string[];

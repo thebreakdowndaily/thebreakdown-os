@@ -1,0 +1,340 @@
+{
+  "anganwadi-icds": {
+    "storyProgress": true,
+    "emeraldCount": 48,
+    "blue600Count": 0,
+    "heroLazy": 1,
+    "heroEager": 0,
+    "heroNone": 2,
+    "interactiveTotal": 68,
+    "interactiveWithLabel": 68,
+    "skipLink": false,
+    "headings": [
+      "H4: On This Page",
+      "H1: Anganwadi Centres: India's Frontline Nutrition Workers Are B",
+      "H3: The Short Version",
+      "H4: Key Takeaways",
+      "H2: ▶Key Takeaways",
+      "H2: Evidence & Confidence Summary",
+      "H2: Evidence",
+      "H2: Key Numbers",
+      "H2: Timeline",
+      "H2: ICDS Budget Allocation Over Time (₹ Crore)",
+      "H2: Frequently Asked Questions",
+      "H2: Sources",
+      "H3: Government",
+      "H3: Relevant Chronology & Timeline",
+      "H4: ICDS Launched",
+      "H4: Universal Coverage",
+      "H4: POSHAN Abhiyaan Launched",
+      "H4: Anganwadi Worker Honorarium Revised",
+      "H4: ICDS Digitisation Push",
+      "H3: State of the Evidence & Uncertainty",
+      "H3: Research & Evidence Appendix",
+      "H4: Claims Assessed (2)",
+      "H4: Cited Sources (2)",
+      "H5: Ministry of Women and Child Development Annual Report",
+      "H5: CAG Report on ICDS 2024",
+      "H4: Frequently Asked Questions",
+      "H2: Continue Reading",
+      "H2: Related Stories",
+      "H3: MGNREGA & The 2026 Rural Employment Transition: From 100 Day",
+      "H3: Digitizing PDS: How Technology Plugged the Leakage in India'",
+      "H4: Sections",
+      "H4: Topics",
+      "H4: Knowledge Library",
+      "H4: Governance"
+    ],
+    "lowContrastCount": 5,
+    "reducedMotion": true,
+    "canvasTokens": 1,
+    "focusVisibleInCSS": true,
+    "landmarks": [
+      {
+        "tag": "HEADER",
+        "role": "banner",
+        "label": null
+      },
+      {
+        "tag": "NAV",
+        "role": null,
+        "label": "Main navigation"
+      },
+      {
+        "tag": "MAIN",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "MAIN",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "NAV",
+        "role": null,
+        "label": "Table of Contents"
+      },
+      {
+        "tag": "HEADER",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "FOOTER",
+        "role": "contentinfo",
+        "label": null
+      }
+    ],
+    "imgsWithoutAlt": 0,
+    "imgsWithAlt": 3,
+    "imgsEmptyAlt": 0,
+    "contrastIssues": [
+      {
+        "tag": "BUTTON",
+        "color": "rgb(113, 113, 122)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "Search...⌘K"
+      },
+      {
+        "tag": "SPAN",
+        "color": "rgb(113, 113, 122)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "Reading mode:"
+      },
+      {
+        "tag": "H4",
+        "color": "rgb(115, 115, 115)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "On This Page"
+      }
+    ]
+  },
+  "ethanol-backlash": {
+    "storyProgress": true,
+    "emeraldCount": 55,
+    "blue600Count": 0,
+    "heroLazy": 1,
+    "heroEager": 0,
+    "heroNone": 2,
+    "interactiveTotal": 72,
+    "interactiveWithLabel": 72,
+    "skipLink": false,
+    "headings": [
+      "H4: On This Page",
+      "H1: E20 Backlash: India's Ethanol Push and the Consumer Revolt T",
+      "H3: The Short Version",
+      "H4: Key Takeaways",
+      "H2: ▶Key Takeaways",
+      "H2: Evidence & Confidence Summary",
+      "H2: Evidence",
+      "H2: Key Numbers",
+      "H2: Timeline",
+      "H2: India's Ethanol Blending Rate (% of Petrol)",
+      "H2: Retail Sugar Price (₹/kg)",
+      "H2: Frequently Asked Questions",
+      "H2: Sources",
+      "H3: Government",
+      "H3: Research",
+      "H3: Relevant Chronology & Timeline",
+      "H4: EBP Programme Launched",
+      "H4: 20% Target Set",
+      "H4: 10% Blending Achieved",
+      "H4: Nationwide E20 Rollout",
+      "H4: SC Dismisses PIL",
+      "H4: Survey Flags Backlash",
+      "H3: State of the Evidence & Uncertainty",
+      "H3: Research & Evidence Appendix",
+      "H4: Claims Assessed (3)",
+      "H4: Cited Sources (3)",
+      "H5: MoPNG Ethanol Blending Dashboard",
+      "H5: LocalCircles Survey on E20 Impact",
+      "H5: ARAI Vehicle Compatibility Study",
+      "H4: Frequently Asked Questions",
+      "H2: Continue Reading",
+      "H2: Related Stories",
+      "H3: India's ₹11 Lakh Crore Climate Finance Challenge",
+      "H3: India's Groundwater Crisis: North-West Agricultural Belt Str",
+      "H4: Sections",
+      "H4: Topics",
+      "H4: Knowledge Library",
+      "H4: Governance"
+    ],
+    "lowContrastCount": 5,
+    "reducedMotion": true,
+    "canvasTokens": 1,
+    "focusVisibleInCSS": true,
+    "landmarks": [
+      {
+        "tag": "HEADER",
+        "role": "banner",
+        "label": null
+      },
+      {
+        "tag": "NAV",
+        "role": null,
+        "label": "Main navigation"
+      },
+      {
+        "tag": "MAIN",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "MAIN",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "NAV",
+        "role": null,
+        "label": "Table of Contents"
+      },
+      {
+        "tag": "HEADER",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "FOOTER",
+        "role": "contentinfo",
+        "label": null
+      }
+    ],
+    "imgsWithoutAlt": 0,
+    "imgsWithAlt": 3,
+    "imgsEmptyAlt": 0,
+    "contrastIssues": [
+      {
+        "tag": "BUTTON",
+        "color": "rgb(113, 113, 122)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "Search...⌘K"
+      },
+      {
+        "tag": "SPAN",
+        "color": "rgb(113, 113, 122)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "Reading mode:"
+      },
+      {
+        "tag": "H4",
+        "color": "rgb(115, 115, 115)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "On This Page"
+      }
+    ]
+  },
+  "ews-quota-upsc-investigation": {
+    "storyProgress": true,
+    "emeraldCount": 46,
+    "blue600Count": 0,
+    "heroLazy": 1,
+    "heroEager": 0,
+    "heroNone": 1,
+    "interactiveTotal": 68,
+    "interactiveWithLabel": 68,
+    "skipLink": false,
+    "headings": [
+      "H4: On This Page",
+      "H1: Who Really Gets the EWS Quota? An Investigation into UPSC's ",
+      "H3: The Short Version",
+      "H4: Key Takeaways",
+      "H2: ▶Key Takeaways",
+      "H2: Evidence & Confidence Summary",
+      "H2: Evidence",
+      "H2: Key Numbers",
+      "H2: Timeline",
+      "H2: EWS Candidates by Background Profile (%)",
+      "H2: UPSC CSE 2025 Selections by Category",
+      "H2: Frequently Asked Questions",
+      "H2: Sources",
+      "H3: News",
+      "H3: Government",
+      "H3: Relevant Chronology & Timeline",
+      "H4: 103rd Amendment Passed",
+      "H4: SC Upholds EWS Quota",
+      "H4: CSE 2025 Results Declared",
+      "H4: Investigation Published",
+      "H3: State of the Evidence & Uncertainty",
+      "H3: Research & Evidence Appendix",
+      "H4: Claims Assessed (2)",
+      "H4: Cited Sources (3)",
+      "H5: Indian Express Investigation (June 2026)",
+      "H5: UPSC CSE 2025 Final Result",
+      "H5: Supreme Court Judgment — Janhit Abhiyan 2022",
+      "H4: Frequently Asked Questions",
+      "H2: Continue Reading",
+      "H2: Related Stories",
+      "H3: Education Budget: Widening Gap Between Spending and Learning",
+      "H4: Sections",
+      "H4: Topics",
+      "H4: Knowledge Library",
+      "H4: Governance"
+    ],
+    "lowContrastCount": 4,
+    "reducedMotion": true,
+    "canvasTokens": 1,
+    "focusVisibleInCSS": true,
+    "landmarks": [
+      {
+        "tag": "HEADER",
+        "role": "banner",
+        "label": null
+      },
+      {
+        "tag": "NAV",
+        "role": null,
+        "label": "Main navigation"
+      },
+      {
+        "tag": "MAIN",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "MAIN",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "NAV",
+        "role": null,
+        "label": "Table of Contents"
+      },
+      {
+        "tag": "HEADER",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "FOOTER",
+        "role": "contentinfo",
+        "label": null
+      }
+    ],
+    "imgsWithoutAlt": 0,
+    "imgsWithAlt": 2,
+    "imgsEmptyAlt": 0,
+    "contrastIssues": [
+      {
+        "tag": "BUTTON",
+        "color": "rgb(113, 113, 122)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "Search...⌘K"
+      },
+      {
+        "tag": "SPAN",
+        "color": "rgb(113, 113, 122)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "Reading mode:"
+      },
+      {
+        "tag": "H4",
+        "color": "rgb(115, 115, 115)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "text": "On This Page"
+      }
+    ]
+  }
+}

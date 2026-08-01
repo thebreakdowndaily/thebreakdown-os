@@ -1,105 +1,67 @@
-import { bootstrapServices } from '@/lib/bootstrap';
-import { buildEditorialDashboard } from '@/features/editorial/view-model';
-import PlatformHealth from '@/components/editorial/PlatformHealth';
-import StoryTable from '@/components/editorial/StoryTable';
-import HealthMetricsGrid from '@/components/editorial/HealthMetricsGrid';
-import EditorialQueue from '@/components/editorial/EditorialQueue';
-import SourceMonitoring from '@/components/editorial/SourceMonitoring';
+import type { Metadata } from 'next';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import IntelligenceDashboardView from '@/components/editorial/IntelligenceDashboardView';
+import { EditorialDashboardProjection } from '@/services/intelligence/editorial-dashboard.service';
+import { ResearchSupportService } from '@/services/intelligence/research-support.service';
+import { GoldStandardAuditService } from '@/services/editorial/gold-standard-audit.service';
+import { CHAPTER_1_PACKAGE } from '@/lib/editorial/chapter-1-data';
+import { CHAPTER_1_FIX } from '@/lib/editorial/chapter-1-data';
+
+export const metadata: Metadata = {
+  title: 'Editorial Mission Control — The Breakdown Knowledge Platform',
+  description: 'Real-time newsroom intelligence dashboard for evidence health, knowledge gaps, conflicts, and publication reviews.',
+};
 
 export default async function EditorialDashboardPage() {
-  const services = bootstrapServices();
-  const vm = await buildEditorialDashboard(services);
+  const fixes = [CHAPTER_1_FIX];
 
-  const healthSections = [
-    {
-      title: 'Media Health',
-      metrics: [
-        { label: 'Missing Hero', value: vm.mediaHealth.missingHero },
-        { label: 'Missing Gallery', value: vm.mediaHealth.missingGallery },
-        { label: 'Broken Images', value: vm.mediaHealth.brokenImages },
-        { label: 'Duplicate Images', value: vm.mediaHealth.duplicateImages },
-        { label: 'Low Resolution', value: vm.mediaHealth.lowRes },
-        { label: 'Missing Attribution', value: vm.mediaHealth.missingAttribution },
-      ]
-    },
-    {
-      title: 'Knowledge Health',
-      metrics: [
-        { label: 'Broken Entity Links', value: vm.knowledgeHealth.brokenEntityLinks },
-        { label: 'Missing Topics', value: vm.knowledgeHealth.missingTopics },
-        { label: 'Weak Relationships', value: vm.knowledgeHealth.weakRelationships },
-        { label: 'Unverified Claims', value: vm.knowledgeHealth.unverifiedClaims },
-        { label: 'Missing Timeline Events', value: vm.knowledgeHealth.missingTimelineEvents },
-      ]
-    },
-    {
-      title: 'SEO Health',
-      metrics: [
-        { label: 'Missing Description', value: vm.seoHealth.missingDescription },
-        { label: 'Missing OG Image', value: vm.seoHealth.missingOgImage },
-        { label: 'Missing JSON-LD', value: vm.seoHealth.missingJsonLd },
-        { label: 'Duplicate Title', value: vm.seoHealth.duplicateTitle },
-        { label: 'Short Content', value: vm.seoHealth.shortContent },
-        { label: 'Broken Canonical', value: vm.seoHealth.brokenCanonical },
-      ]
-    },
-    {
-      title: 'Accessibility Health',
-      metrics: [
-        { label: 'Missing Alt Text', value: vm.accessibilityHealth.missingAltText },
-        { label: 'Heading Order Issues', value: vm.accessibilityHealth.headingOrder },
-        { label: 'Low Contrast', value: vm.accessibilityHealth.contrast },
-        { label: 'Keyboard Traps', value: vm.accessibilityHealth.keyboard },
-        { label: 'Missing ARIA', value: vm.accessibilityHealth.aria },
-        { label: 'Missing Captions', value: vm.accessibilityHealth.captions },
-      ]
-    }
-  ];
+  // 1. Project Real-Time Operational Intelligence
+  const dashboardData = EditorialDashboardProjection.projectDashboard(fixes);
+
+  // 2. Generate Research Copilot Suggestions
+  const researchRecommendations = ResearchSupportService.generateRecommendations(CHAPTER_1_FIX, fixes);
+
+  // 3. Conduct Gold Standard Audit Evaluation
+  const goldAuditCert = GoldStandardAuditService.auditChapter1(CHAPTER_1_PACKAGE);
 
   return (
-    <div className="min-h-screen bg-[#050505] font-sans selection:bg-emerald-500/30 text-white pb-24">
-      {/* Header */}
-      <header className="border-b border-neutral-900 bg-[#0a0a0a] sticky top-0 z-50">
-        <div className="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold tracking-tight">Newsroom <span className="text-emerald-500">Mission Control</span></h1>
-            <span className="bg-emerald-950/50 text-emerald-500 text-[10px] uppercase tracking-widest px-2 py-1 rounded font-bold border border-emerald-900/50">
-              Live
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-amber-500/30 pb-24">
+      {/* Top Navigation Header */}
+      <header className="border-b border-gray-800 bg-gray-950/80 sticky top-0 z-50 backdrop-blur-md">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-gray-100">
+              Newsroom <span className="text-amber-400">Mission Control</span>
+            </h1>
+            <span className="bg-amber-500/10 text-amber-300 text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded font-bold border border-amber-500/30">
+              Phase 15B Intelligence Engine Live
             </span>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex gap-4 text-xs font-mono text-neutral-500 uppercase tracking-widest">
-              <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> KB Synced</span>
-              <span>Pipelines Online</span>
-            </div>
+
+          <div className="flex items-center gap-6 text-xs text-gray-400 font-mono">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Canonical Intelligence Synced
+            </span>
+            <span className="hidden sm:inline">AR-13A.0 Locked Baseline</span>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-[1600px] mx-auto px-6 py-12">
-        <PlatformHealth data={vm.platformHealth} />
-        
-        <div className="mt-8">
-          <EditorialQueue tasks={vm.editorialQueue} />
-        </div>
+      {/* Main Container */}
+      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-8" id="main-content">
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Editorial Desk', href: '/editorial' },
+          { label: 'Mission Control Dashboard', href: '/editorial' },
+        ]} />
 
-        <SourceMonitoring data={vm.sourceMonitoring} systemStatus={vm.systemStatus} />
-        
-        <div className="mb-12">
-          <h2 className="text-xl font-bold tracking-tight text-white mb-6 flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-            System Diagnostics
-          </h2>
-          <HealthMetricsGrid sections={healthSections} />
-        </div>
-
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-white mb-6 flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Publishing Activity
-          </h2>
-          <StoryTable stories={vm.stories} />
+        <div className="mt-6">
+          <IntelligenceDashboardView
+            dashboardData={dashboardData}
+            researchRecommendations={researchRecommendations}
+            goldAuditCert={goldAuditCert}
+          />
         </div>
       </main>
     </div>

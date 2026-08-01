@@ -1,0 +1,56 @@
+{
+  "batchNumber": 4,
+  "storySlug": "semiconductor-pli",
+  "storyTitle": "India's ₹1.2 Lakh Crore Semiconductor Push: Can the Dream Take Silicon?",
+  "auditedAt": "2026-07-23T17:26:39.985Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "Semicon India programme outlay (₹76,000 cr) and approved private investment commitments (₹1.26 lakh cr across Micron, Tata-PSMC, CG Power) verified via Cabinet PIB release Feb 2024.",
+  "rawExtractedSurfaceItems": 18,
+  "confirmedMaterialClaims": 16,
+  "registrationCandidates": 16,
+  "verifiedRegistrationCandidates": 16,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsTotal": 7,
+  "highMaterialityVerified": 7,
+  "highMaterialityUnresolved": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "FULLY_VERIFIED",
+  "freshnessStatus": "CURRENT",
+  "domainCategory": "Financial",
+  "domainFactCheckDetails": "Semicon India Programme (Ministry of Electronics and Information Technology - MeitY): Government Outlay ₹76,000 crore ($10 billion). Total approved/proposed private project investment commitments: ₹1.2 lakh crore ($15.2 billion), including Micron ATMP Sanand (₹22,516 cr), Tata-PSMC Dholera Fab (₹91,000 cr), and CG Power Renesas ATMP Sanand (₹7,600 cr). Status: Sanand ATMP under construction; Dholera Fab approved.",
+  "authoritativeSources": [
+    {
+      "exactTitle": "Modified Programme for Development of Semiconductors and Display Fab Ecosystem in India",
+      "issuingAuthority": "Ministry of Electronics & IT (MeitY) / PIB",
+      "publicationDate": "2024-02-29",
+      "officialURLOrIdentifier": "https://pib.gov.in/PressReleasePage.aspx?PRID=2009890",
+      "pageOrTableOrSection": "Cabinet Approval Release 29 Feb 2024",
+      "retrievalDate": "2026-07-23",
+      "sourceStatus": "PRIMARY_SOURCE_LOCATED",
+      "relevantPassageOrDataCell": "Three semiconductor units approved under Semicon India with total investment of ₹1.26 lakh crore.",
+      "semanticRelationship": "EXACT_SUPPORT",
+      "temporalScope": "Cabinet Approval Feb 2024",
+      "geographicScope": "India (Gujarat & Assam Units)",
+      "denominator": "Combined Project Investment Cost in INR",
+      "caveats": "Distinguishes ₹76,000 crore government fiscal outlay from ₹1.2 lakh crore total combined project cost."
+    }
+  ],
+  "quickModeDefensible": true,
+  "standardModeDefensible": true,
+  "deepModeValueAdd": true,
+  "timelineQuality": "ESSENTIAL",
+  "visualsQuality": "PEDAGOGICAL",
+  "issues": [
+    {
+      "id": "ISS-B4-SEMICO",
+      "severity": "P2",
+      "category": "KNOWLEDGE_COVERAGE",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "16 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

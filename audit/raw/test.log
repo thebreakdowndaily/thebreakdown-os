@@ -1,0 +1,168 @@
+> thebreakdown-os@0.1.0 test
+> npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts && npx tsx tests/story/presentation-model.test.ts && npx tsx tests/story/representative-matrix.test.ts && npx tsx tests/golden-story.test.ts
+
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: india EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: india Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+  PASS: SEO title is correct
+  PASS: SEO description is correct
+  PASS: Canonical URL is correct
+  PASS: OG type is website
+  PASS: Homepage lead story check
+  PASS: Lead story has valid headline
+  PASS: Lead story has trust signals
+  PASS: Briefings is an array
+  PASS: Deep Dives is an array
+  PASS: Topics is an array
+  PASS: Recently Updated is an array
+
+Homepage Tests: 11 passed, 0 failed
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+  PASS: buildStoryPage returns a view model
+  PASS: Slug matches input
+  PASS: Breadcrumbs generated
+  PASS: Hero block is assigned to hero region
+  PASS: Footer blocks generated
+  PASS: SEO title includes headline
+  PASS: SEO description is a string
+
+Story Page Tests: 7 passed, 0 failed
+  PASS: Entity type is correct
+  PASS: Entity slug is correct
+  PASS: Related stories is an array
+  PASS: Related entities is an array
+  PASS: SEO title is a string
+  PASS: SEO description is a string
+
+Entity Tests: 6 passed, 0 failed
+  PASS: Search returns an array
+  PASS: Search result has a title
+  PASS: Search result has a type
+  PASS: Empty search returns an array
+
+Search Tests: 4 passed, 0 failed
+  PASS: Article schema type is Article
+  PASS: Article headline matches
+  PASS: Article url matches
+  PASS: Breadcrumb schema type is BreadcrumbList
+  PASS: Breadcrumb schema has itemListElement
+  PASS: FAQ schema type is FAQPage
+
+SEO Tests: 6 passed, 0 failed
+  PASS: Login URL matches
+  PASS: Register URL matches
+  PASS: Has 2 social providers
+  PASS: First provider is Google
+  PASS: Second provider is GitHub
+  PASS: Auth server initialized
+  PASS: Auth session function exists
+  PASS: Auth client initialized
+  PASS: LoginForm component is a function
+  PASS: RegisterForm component is a function
+  PASS: ForgotPassword component is a function
+  PASS: AuthGuard component is a function
+  PASS: ProfileDropdown component is a function
+  PASS: UserAvatar component is a function
+  PASS: ReaderDashboard component is a function
+  PASS: SessionProvider component is a function
+  PASS: useAuth hook is a function
+  PASS: Login API POST handler exists
+  PASS: Register API POST handler exists
+  PASS: Logout API POST handler exists
+  PASS: Me API GET handler exists
+  PASS: Canonical types module loads without error
+  PASS: UserRole type is valid (compile-time check)
+  PASS: Middleware function exported
+  PASS: Middleware config exported
+  PASS: /reader/:path* is protected by middleware
+
+Auth Tests: 26/26 passed, 0 failed
+  PASS: 1. Enforces strict timeline relevance and filters out entity-leaked UN events
+  PASS: 2. Filters out standalone UNESCO/UN logos as major Visual Intelligence
+  PASS: 3. Derives semantic trust signals without score thresholds or timestamp-only badges
+  PASS: 4. Differentiates claim-level conclusions and aggregate trust states
+  PASS: 5. Preserves authored chapter block order and does not reorder or fabricate content
+  PASS: 6. Applies progressive disclosure reading mode policy correctly
+
+Presentation Model & Predicate Tests: 6 passed, 0 failed
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations education
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+  PASS: Matrix 1: indian-education-crisis resolves, transforms, and passes all correctness checks
+    (Note: namami-gange-project not in mock store, tested via fallback model)
+  PASS: Matrix 2: Legacy story resolves and transforms cleanly without data loss
+  PASS: Matrix 3: Knowledge Library chapter resolves and adapts to universal presentation model
+  PASS: Matrix 4: Minimal story handles optional sections gracefully without fabricating content
+  PASS: Matrix 5: Draft/non-public story fails-closed to notFound/404
+
+Representative Story Matrix Tests: 5 passed, 0 failed
+Golden Story: RBI Monetary Policy
+
+  PASS: Story data is defined
+  PASS: Story data is not null
+  PASS: Has id
+  PASS: Has slug
+  PASS: Has title
+  PASS: Title is improved (not generic)
+  PASS: Has summary
+  PASS: Summary includes one-sentence takeaway
+  PASS: Has whyItMatters
+  PASS: Has narrative
+  PASS: Confidence is not Insufficient
+  PASS: Has reading time
+  PASS: Has tags
+  PASS: Has entities
+  PASS: Has lastVerified date
+  PASS: Has hero image field
+  PASS: Has hero statistic
+  PASS: Has at least 3 key facts
+  PASS: Has at least 3 timeline events
+  PASS: Has at least 3 evidence entries
+  PASS: Has at least 3 sources
+  PASS: Has at least 3 FAQ items
+  PASS: Has at least 3 takeaways
+  PASS: Has systemExplanation section
+  PASS: System explanation has headline
+  PASS: System explanation has at least 3 steps
+  PASS: Has stakeholders section
+  PASS: Has at least 5 stakeholders
+  PASS: Has perspectives section
+  PASS: Has at least 3 perspectives
+  PASS: Has at least 2 trade-offs
+  PASS: Has futureOutlook section
+  PASS: Has at least 3 scenarios
+  PASS: storyToBlocks produces blocks
+  PASS: Has executive-summary block
+  PASS: Has callout block
+  PASS: Has timeline block
+  PASS: Has system-explanation block
+  PASS: Has evidence block
+  PASS: Has stakeholders block
+  PASS: Has perspectives block
+  PASS: Has faq block
+  PASS: Has sources block
+  PASS: Validation has no errors
+  PASS: Evidence block exists
+  PASS: Evidence block has claims
+  PASS: Claim has text
+  PASS: Claim has confidence
+  PASS: Claim has status
+  PASS: Claim has sources array
+  PASS: Claim has supportingEvidence array
+  PASS: Has at least 3 visual specifications
+  PASS: Has at least 2 related knowledge links
+
+Results: 53 passed, 0 failed
+GOLDEN STORY TEST PASSED — the RBI story is intact
+
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.

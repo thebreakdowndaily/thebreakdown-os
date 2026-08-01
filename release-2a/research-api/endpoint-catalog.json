@@ -1,0 +1,16 @@
+[
+  { "endpoint": "GET /api/up403/v1", "module": "M1", "description": "API root — version, dataset info, endpoint index", "parameters": [], "response_type": "ApiRoot" },
+  { "endpoint": "GET /api/up403/v1/constituencies", "module": "M2", "description": "List all 403 constituencies with pagination and filters", "parameters": ["page", "limit", "search", "district", "division", "region", "reservation", "party", "political_dna", "competitiveness", "include"], "response_type": "ConstituencyList" },
+  { "endpoint": "GET /api/up403/v1/constituencies/{canonical_id}", "module": "M2", "description": "Single constituency profile (150 fields)", "parameters": ["canonical_id", "include"], "response_type": "ConstituencyDetail" },
+  { "endpoint": "GET /api/up403/v1/search", "module": "M3", "description": "Full-text search across 11 field categories", "parameters": ["q", "page", "limit", "include"], "response_type": "SearchResults" },
+  { "endpoint": "GET /api/up403/v1/people", "module": "M4", "description": "List all known MLAs and MPs", "parameters": ["page", "limit"], "response_type": "PeopleList" },
+  { "endpoint": "GET /api/up403/v1/people/{person_id}", "module": "M4", "description": "Person profile with election history and career", "parameters": ["person_id"], "response_type": "PersonDetail" },
+  { "endpoint": "GET /api/up403/v1/elections", "module": "M5", "description": "Election overviews for 2012, 2017, 2022, 2024", "parameters": ["constituency"], "response_type": "ElectionList" },
+  { "endpoint": "GET /api/up403/v1/elections/{year}", "module": "M5", "description": "Detailed results for a specific election year", "parameters": ["year", "include"], "response_type": "ElectionDetail" },
+  { "endpoint": "GET /api/up403/v1/graph", "module": "M6", "description": "Full administrative knowledge graph (570 nodes, 1446 edges)", "parameters": [], "response_type": "KnowledgeGraph" },
+  { "endpoint": "GET /api/up403/v1/graph/{canonical_id}", "module": "M6", "description": "Knowledge sub-graph for one constituency", "parameters": ["canonical_id"], "response_type": "KnowledgeGraph" },
+  { "endpoint": "GET /api/up403/v1/timeline/{canonical_id}", "module": "M7", "description": "Chronological timeline of events for a constituency", "parameters": ["canonical_id"], "response_type": "TimelineResponse" },
+  { "endpoint": "GET /api/up403/v1/filter/options", "module": "M8", "description": "Available filter values for all filterable fields", "parameters": [], "response_type": "FilterOptions" },
+  { "endpoint": "GET /api/up403/v1/compare", "module": "M9", "description": "Compare 2-5 constituencies across multiple categories", "parameters": ["ids", "categories"], "response_type": "CompareResponse" },
+  { "endpoint": "GET /api/up403/v1/analytics", "module": "M10", "description": "Read-only derived analytics metrics", "parameters": [], "response_type": "AnalyticsResponse" }
+]

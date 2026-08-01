@@ -1,0 +1,56 @@
+{
+  "batchNumber": 4,
+  "storySlug": "rbi-repo-rate",
+  "storyTitle": "RBI Repo Rate: Decoding Monetary Policy in a Changing Economy",
+  "auditedAt": "2026-07-23T17:26:39.980Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "RBI MPC Feb 2024 Policy Repo Rate (6.50%), SDF (6.25%), MSF (6.75%), and 5-1 vote split verified. Prominently tagged with DATA_CUTOFF_DATE: March 31, 2024.",
+  "rawExtractedSurfaceItems": 19,
+  "confirmedMaterialClaims": 15,
+  "registrationCandidates": 15,
+  "verifiedRegistrationCandidates": 15,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsTotal": 7,
+  "highMaterialityVerified": 7,
+  "highMaterialityUnresolved": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "FULLY_VERIFIED",
+  "freshnessStatus": "CURRENT",
+  "domainCategory": "Financial",
+  "domainFactCheckDetails": "RBI Monetary Policy Committee (MPC) Resolution Feb 2024: Policy Repo Rate kept unchanged at 6.50% (effective Feb 8, 2023). Standing Deposit Facility (SDF) rate: 6.25%. Marginal Standing Facility (MSF) & Bank Rate: 6.75%. MPC Vote Split: 5-1 majority. Stance: Focus on withdrawal of accommodation. Data Cutoff Date: March 31, 2024.",
+  "authoritativeSources": [
+    {
+      "exactTitle": "Monetary Policy Statement 2023-24 Resolution of the Monetary Policy Committee",
+      "issuingAuthority": "Reserve Bank of India (RBI)",
+      "publicationDate": "2024-02-08",
+      "officialURLOrIdentifier": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=57284",
+      "pageOrTableOrSection": "MPC Resolution Section 1-4",
+      "retrievalDate": "2026-07-23",
+      "sourceStatus": "PRIMARY_SOURCE_LOCATED",
+      "relevantPassageOrDataCell": "Policy repo rate under liquidity adjustment facility (LAF) remains unchanged at 6.50%.",
+      "semanticRelationship": "EXACT_SUPPORT",
+      "temporalScope": "Effective Feb 8, 2023 - March 2024 Cutoff",
+      "geographicScope": "India (Monetary Policy Jurisdiction)",
+      "denominator": "Policy Repo Rate Percentage",
+      "caveats": "Monetary data tagged with explicit DATA_CUTOFF_DATE: March 31, 2024."
+    }
+  ],
+  "quickModeDefensible": true,
+  "standardModeDefensible": true,
+  "deepModeValueAdd": true,
+  "timelineQuality": "ESSENTIAL",
+  "visualsQuality": "PEDAGOGICAL",
+  "issues": [
+    {
+      "id": "ISS-B4-RBI-RE",
+      "severity": "P2",
+      "category": "KNOWLEDGE_COVERAGE",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "15 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

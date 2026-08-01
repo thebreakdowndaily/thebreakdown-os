@@ -1,0 +1,95 @@
+{
+  "id": "ref-international",
+  "slug": "ref-international",
+  "storyType": "International Affairs",
+  "title": "Red Sea Shipping Crisis: Impact on India",
+  "metadata": {
+    "difficulty": "Intermediate",
+    "confidence": "Medium",
+    "confidenceRationale": "Based on shipping data and government statements",
+    "updateRequired": false,
+    "readingTimeMinutes": 6,
+    "tags": [
+      "trade",
+      "shipping"
+    ],
+    "entities": [
+      {
+        "name": "Ministry of External Affairs",
+        "type": "government",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/red-sea.jpg",
+    "statistic": "$9.6B",
+    "statisticSource": "Ministry of Shipping",
+    "caption": "Trade impact estimate",
+    "altText": "Red Sea shipping lanes",
+    "credit": "Reuters",
+    "aspectRatio": "16:9"
+  },
+  "summary": "Houthi attacks on Red Sea shipping are rerouting Indian trade, increasing costs and transit times.",
+  "keyFacts": [
+    {
+      "claim": "Trade rerouted via Cape of Good Hope",
+      "source": "Ministry of Shipping",
+      "confidence": 1
+    },
+    {
+      "claim": "Transit time increased by 10-14 days",
+      "source": "Shipping Industry Report",
+      "confidence": 0.8
+    }
+  ],
+  "whyItMatters": "India imports 60% of its oil through the Red Sea — disruptions affect energy prices and inflation.",
+  "narrative": "The crisis has forced India to reroute commercial shipping, adding costs and delay to a trade-dependent economy.",
+  "timeline": [
+    {
+      "date": "Nov 2023",
+      "event": "Houthi attacks begin",
+      "source": "Reuters",
+      "significance": "Start of disruptions"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "Trade impact of $9.6B",
+      "source": "Ministry of Shipping",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "Ministry of Shipping",
+        "type": "government",
+        "position": "Regulates maritime trade",
+        "interest": "Trade cost reduction",
+        "stance": "support"
+      },
+      {
+        "name": "Insurance Industry",
+        "type": "private_sector",
+        "position": "Risk assessor",
+        "interest": "Premium rates",
+        "stance": "neutral"
+      }
+    ],
+    "summary": "Government and private sector stakeholders."
+  },
+  "sources": [
+    {
+      "title": "Ministry of Shipping Report",
+      "author": "Government of India",
+      "reliability": "high"
+    }
+  ],
+  "visuals": []
+}

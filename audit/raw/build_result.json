@@ -1,0 +1,11 @@
+{
+  "id": "build",
+  "command": "npm run build",
+  "timestamp": "2026-08-01T09:39:02.241Z",
+  "startedAt": "2026-08-01T09:38:28.386Z",
+  "durationMs": 33854,
+  "exitCode": 0,
+  "passed": true,
+  "logFile": "audit/raw/build.log",
+  "outputTail": "+ First Load JS shared by all                                                             227 kB\n  ├ chunks/2432-b8fb5c110fb7f094.js                                                       130 kB\n  ├ chunks/4a7b0c69-c28b3c0d6d42b12c.js                                                  39.1 kB\n  ├ chunks/4bd1b696-ce2979bcee2ca415.js                                                  54.4 kB\n  └ other shared chunks (total)                                                          3.75 kB\n\n\nƒ Middleware                                                                              158 kB\n\n○  (Static)   prerendered as static content\n●  (SSG)      prerendered as static HTML (uses generateStaticParams)\nƒ  (Dynamic)  server-rendered on demand\n\n\n ⚠ Using edge runtime on a page currently disables static generation for that page\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback."
+}

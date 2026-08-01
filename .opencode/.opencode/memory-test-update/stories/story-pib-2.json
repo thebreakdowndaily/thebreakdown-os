@@ -1,0 +1,32 @@
+{
+  "storyId": "story-pib-2",
+  "headline": "PIB Release 2",
+  "sources": [
+    {
+      "publisher": "Press Information Bureau",
+      "credibility": 95,
+      "tier": 1,
+      "version": 0
+    }
+  ],
+  "entities": [
+    {
+      "id": "scheme-test",
+      "type": "scheme",
+      "name": "Test Scheme",
+      "version": 0
+    }
+  ],
+  "storedAt": "2026-07-31T09:22:11.557Z",
+  "version": 2,
+  "related": {
+    "stories": [],
+    "laws": [],
+    "budgets": [],
+    "organizations": [],
+    "people": [],
+    "countries": [],
+    "events": []
+  },
+  "updatedAt": "2026-07-31T09:22:11.559Z"
+}

@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-07-23T18:07:44.112Z",
+  "auditCutoffDate": "2026-07-23",
+  "readOnlyModeConfirmed": true,
+  "unrendered52Proof": {
+    "totalPersistedClaims": 142,
+    "renderedClaimsCount": 90,
+    "unrenderedClaimsCount": 52,
+    "primaryCause": "Story objects in utils/data-layer/store.ts do not reference the 52 Phase 5 claim IDs in their .claims arrays.",
+    "exactStopPoint": "utils/data-layer/store.ts -> Story.claims array binding stage",
+    "pipelineStageBreakdown": {
+      "inClaimRegistryMap": 52,
+      "inKnowledgeCoreAPI": 52,
+      "inStoryObjectClaimsArray": 0,
+      "inStoryShellViewModel": 0,
+      "renderedInClaimCardUI": 0
+    }
+  },
+  "identityMapCoverage": {
+    "auditedMaterialClaimUniverse": 524,
+    "persistedRegistryPhysicalRecords": 142,
+    "distinctOriginalMaterialClaimIdsMapped": 142,
+    "parentChildCollisionsCount": 0,
+    "exactCoveragePercentage": "27.10% (142 / 524 = 27.0992%)",
+    "mappingInvariantPassed": true
+  },
+  "runtimeTrace": {
+    "phase4Trace": {
+      "claimId": "clm-mgnrega-vbg-001",
+      "storySlug": "mgnrega-reform",
+      "step1ClaimRegistry": true,
+      "step2KnowledgeCoreAPI": true,
+      "step3StoreStoryObject": true,
+      "step4StoryShell": true,
+      "step5ClaimCardUI": true,
+      "finalStatus": "SUCCESS_RENDERED"
+    },
+    "phase5Trace": {
+      "claimId": "clm-p5-mgnrega-reform-001",
+      "storySlug": "mgnrega-reform",
+      "step1ClaimRegistry": true,
+      "step2KnowledgeCoreAPI": true,
+      "step3StoreStoryObject": false,
+      "step4StoryShell": false,
+      "step5ClaimCardUI": false,
+      "exactStopPoint": "utils/data-layer/store.ts (Story.claims array missing candidate ID)",
+      "finalStatus": "STOPPED_UNBOUND_IN_STORE"
+    }
+  },
+  "graphArchitectureAudit": {
+    "currentGraphNodeSeedingMethod": "MemoryGraphProjectionService reads raw edges from stories, topics, entities, and timelines.",
+    "hardcodedPrefixesSmell": true,
+    "recommendedGenericProjectionPattern": "Dynamically enumerate getKnowledgeCore().claims.all() to project claim nodes and relationship edges without hardcoded prefixes."
+  },
+  "phase7Blueprint": {
+    "primaryObjective": "Make ClaimRegistry the canonical knowledge source while keeping StoryPresentationModel as the canonical presentation boundary.",
+    "dataFlowPattern": "CanonicalStory (store.ts) -> StoryPresentationModel -> KnowledgeCore Hydration (ClaimRegistry) -> StoryShell -> UI Components",
+    "presentationBoundary": "StoryPresentationModel (Preserved Frozen Pipeline)",
+    "knowledgeSourceOfTruth": "ClaimRegistry (lib/knowledge/claim-registry.ts)",
+    "targetPlatformInvariant": "Every eligible persisted claim is discoverable -> correctly associated -> evidence/source hydrated -> freshness/supersession aware -> consumable without duplicate sources of truth."
+  },
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase65_architecture_proof_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase65_architecture_proof_report.md"
+  }
+}

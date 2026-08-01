@@ -1,0 +1,266 @@
+[
+  {
+    "slug": "mgnrega-reform",
+    "viewport": "mobile",
+    "file": "mgnrega-reform_mobile.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "72 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "mgnrega-reform",
+    "viewport": "tablet",
+    "file": "mgnrega-reform_tablet.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "72 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "mgnrega-reform",
+    "viewport": "desktop",
+    "file": "mgnrega-reform_desktop.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "72 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "ration-digitization",
+    "viewport": "mobile",
+    "file": "ration-digitization_mobile.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "67 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 5,
+      "goodContrast": 22
+    }
+  },
+  {
+    "slug": "ration-digitization",
+    "viewport": "tablet",
+    "file": "ration-digitization_tablet.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "67 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 5,
+      "goodContrast": 22
+    }
+  },
+  {
+    "slug": "ration-digitization",
+    "viewport": "desktop",
+    "file": "ration-digitization_desktop.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "67 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 5,
+      "goodContrast": 22
+    }
+  },
+  {
+    "slug": "dpdp-bill",
+    "viewport": "mobile",
+    "file": "dpdp-bill_mobile.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "67 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "dpdp-bill",
+    "viewport": "tablet",
+    "file": "dpdp-bill_tablet.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "67 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "dpdp-bill",
+    "viewport": "desktop",
+    "file": "dpdp-bill_desktop.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "67 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "climate-finance",
+    "viewport": "mobile",
+    "file": "climate-finance_mobile.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "66 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "climate-finance",
+    "viewport": "tablet",
+    "file": "climate-finance_tablet.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "66 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  },
+  {
+    "slug": "climate-finance",
+    "viewport": "desktop",
+    "file": "climate-finance_desktop.png",
+    "progress": {
+      "pass": false,
+      "detail": "no progressbar found"
+    },
+    "heroImg": {
+      "pass": true,
+      "detail": "loading=\"lazy\""
+    },
+    "anyHeroImg": "lazy",
+    "focusables": {
+      "pass": true,
+      "detail": "66 focusable elements"
+    },
+    "contrast": {
+      "lowContrast": 4,
+      "goodContrast": 20
+    }
+  }
+]

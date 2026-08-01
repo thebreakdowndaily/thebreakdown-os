@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 import Charts from '@/components/story/Charts';
 import DataCards from '@/components/story/DataCards';
+
 
 export const metadata: Metadata = {
   title: 'Data Hub — The Breakdown',
@@ -32,7 +34,18 @@ const downloadLinks = [
 export default function DataPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Data Explorer', href: '/data', current: true },
+          ]}
+          theme="dark"
+        />
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-100 mb-2">Data Hub</h1>
         <p className="text-gray-400 text-lg mb-8">
           Explore datasets, statistics, and data visualizations on Indian policy, economy, and society.
@@ -44,8 +57,9 @@ export default function DataPage() {
         </section>
 
         <section className="mb-12" aria-label="Charts and visualizations">
-          <h2 className="text-2xl font-bold text-gray-100 mb-6">Charts & Visualizations</h2>
-          <Charts charts={featuredCharts} />
+          <div className="w-full overflow-x-auto rounded-xl">
+            <Charts charts={featuredCharts} />
+          </div>
         </section>
 
         <section aria-label="Download data">

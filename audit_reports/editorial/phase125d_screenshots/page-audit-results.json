@@ -1,0 +1,7882 @@
+[
+  {
+    "slug": "homepage",
+    "url": "/",
+    "name": "Homepage",
+    "status": 500,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "founding-edition",
+    "url": "/founding-edition",
+    "name": "Founding Edition",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Founding Edition v1.0"
+      },
+      {
+        "level": 2,
+        "text": "Included in this Edition"
+      },
+      {
+        "level": 2,
+        "text": "Roadmap"
+      },
+      {
+        "level": 3,
+        "text": "v1.1"
+      },
+      {
+        "level": 3,
+        "text": "v1.2"
+      },
+      {
+        "level": 3,
+        "text": "v2.0"
+      },
+      {
+        "level": 2,
+        "text": "How to Provide Feedback"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 38,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "methodology",
+    "url": "/methodology",
+    "name": "Methodology",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 17,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Methodology"
+      },
+      {
+        "level": 2,
+        "text": "Our Approach"
+      },
+      {
+        "level": 2,
+        "text": "How Research Is Conducted"
+      },
+      {
+        "level": 2,
+        "text": "The Evidence Hierarchy"
+      },
+      {
+        "level": 2,
+        "text": "How Claims Are Verified"
+      },
+      {
+        "level": 2,
+        "text": "How Confidence Scores Are Assigned"
+      },
+      {
+        "level": 2,
+        "text": "Why Scholarly Disagreements Are Included"
+      },
+      {
+        "level": 2,
+        "text": "How Corrections Are Handled"
+      },
+      {
+        "level": 2,
+        "text": "How AI Is Used"
+      },
+      {
+        "level": 2,
+        "text": "How Chapters Evolve"
+      },
+      {
+        "level": 2,
+        "text": "Founding Edition v1.0 — Publication Status"
+      },
+      {
+        "level": 2,
+        "text": "The Three-Layer Claim Structure"
+      },
+      {
+        "level": 2,
+        "text": "How Visual Assets Are Selected"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "editorial-constitution",
+    "url": "/editorial-constitution",
+    "name": "Editorial Constitution",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 14,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Editorial Constitution"
+      },
+      {
+        "level": 2,
+        "text": "Preamble — Why We Exist"
+      },
+      {
+        "level": 3,
+        "text": "The Evidence Standard"
+      },
+      {
+        "level": 3,
+        "text": "The Cultural Principle"
+      },
+      {
+        "level": 2,
+        "text": "Core Principles"
+      },
+      {
+        "level": 2,
+        "text": "Evidence Hierarchy"
+      },
+      {
+        "level": 2,
+        "text": "Confidence Scores"
+      },
+      {
+        "level": 2,
+        "text": "Editorial Ethics"
+      },
+      {
+        "level": 2,
+        "text": "Language Rules"
+      },
+      {
+        "level": 2,
+        "text": "Quality Gates"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "trust",
+    "url": "/trust",
+    "name": "Trust Dashboard",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Trust Dashboard"
+      },
+      {
+        "level": 2,
+        "text": "Editorial Constitution"
+      },
+      {
+        "level": 2,
+        "text": "Platform Status"
+      },
+      {
+        "level": 2,
+        "text": "Knowledge Quality"
+      },
+      {
+        "level": 2,
+        "text": "Gold Standard Review — Founding Monograph 001"
+      },
+      {
+        "level": 2,
+        "text": "Institutional Memory"
+      },
+      {
+        "level": 2,
+        "text": "Verification"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "newsletter",
+    "url": "/newsletter",
+    "name": "Newsletter",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Newsletter"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 37,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "subscribe",
+    "url": "/subscribe",
+    "name": "Subscribe",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Subscribe"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about",
+    "url": "/about",
+    "name": "About",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "About The Breakdown"
+      },
+      {
+        "level": 2,
+        "text": "Our Mission"
+      },
+      {
+        "level": 2,
+        "text": "How We Work"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 37,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-team",
+    "url": "/about/team",
+    "name": "Team",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Our Team"
+      },
+      {
+        "level": 2,
+        "text": "The Breakdown Editorial"
+      },
+      {
+        "level": 2,
+        "text": "The Breakdown Investigations"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-methodology",
+    "url": "/about/methodology",
+    "name": "About Methodology",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 9,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Methodology"
+      },
+      {
+        "level": 2,
+        "text": "Evidence Scoring"
+      },
+      {
+        "level": 2,
+        "text": "Claim Verification"
+      },
+      {
+        "level": 2,
+        "text": "Source Tiers"
+      },
+      {
+        "level": 2,
+        "text": "Data Sources"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 36,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 31,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-contact",
+    "url": "/about/contact",
+    "name": "Contact",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Contact"
+      },
+      {
+        "level": 2,
+        "text": "Get in Touch"
+      },
+      {
+        "level": 2,
+        "text": "Submit a Tip"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "series",
+    "url": "/series",
+    "name": "Knowledge Library",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 2,
+        "text": "India and the World"
+      },
+      {
+        "level": 3,
+        "text": "The Nehruvian Era"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 5,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 34,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "stories",
+    "url": "/stories",
+    "name": "Stories Index",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 32,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Stories"
+      },
+      {
+        "level": 2,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 2,
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "level": 2,
+        "text": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers"
+      },
+      {
+        "level": 2,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 2,
+        "text": "Digital Personal Data Protection: India's Privacy Law Comes of Age"
+      },
+      {
+        "level": 2,
+        "text": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle"
+      },
+      {
+        "level": 2,
+        "text": "India's ₹11 Lakh Crore Climate Finance Challenge"
+      },
+      {
+        "level": 2,
+        "text": "Education Budget: Widening Gap Between Spending and Learning Outcomes"
+      },
+      {
+        "level": 2,
+        "text": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 A"
+      },
+      {
+        "level": 2,
+        "text": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net"
+      },
+      {
+        "level": 2,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?"
+      },
+      {
+        "level": 2,
+        "text": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed"
+      },
+      {
+        "level": 2,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 64,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "story-mgnrega",
+    "url": "/story/mgnrega-reform",
+    "name": "Story (MGNREGA)",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 37,
+    "headingHierarchy": [
+      {
+        "level": 4,
+        "text": "On This Page"
+      },
+      {
+        "level": 1,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 3,
+        "text": "The Short Version"
+      },
+      {
+        "level": 4,
+        "text": "Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "▶Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "level": 2,
+        "text": "Evidence"
+      },
+      {
+        "level": 2,
+        "text": "Key Numbers"
+      },
+      {
+        "level": 2,
+        "text": "Timeline"
+      },
+      {
+        "level": 2,
+        "text": "Rural Employment Budget Allocation Over Time (₹ Crore)"
+      },
+      {
+        "level": 2,
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "level": 2,
+        "text": "Sources"
+      },
+      {
+        "level": 3,
+        "text": "Government"
+      },
+      {
+        "level": 3,
+        "text": "Relevant Chronology & Timeline"
+      },
+      {
+        "level": 4,
+        "text": "MGNREGA 2005 Enacted"
+      }
+    ],
+    "imgsTotal": 2,
+    "imgsNoAlt": 0,
+    "focusableCount": 73,
+    "landmarks": {
+      "nav": 7,
+      "main": 2,
+      "banner": 2,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 7,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 62,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "story-ews",
+    "url": "/story/ews-quota-upsc-investigation",
+    "name": "Story (EWS Quota)",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 35,
+    "headingHierarchy": [
+      {
+        "level": 4,
+        "text": "On This Page"
+      },
+      {
+        "level": 1,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      },
+      {
+        "level": 3,
+        "text": "The Short Version"
+      },
+      {
+        "level": 4,
+        "text": "Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "▶Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "level": 2,
+        "text": "Evidence"
+      },
+      {
+        "level": 2,
+        "text": "Key Numbers"
+      },
+      {
+        "level": 2,
+        "text": "Timeline"
+      },
+      {
+        "level": 2,
+        "text": "EWS Candidates by Background Profile (%)"
+      },
+      {
+        "level": 2,
+        "text": "UPSC CSE 2025 Selections by Category"
+      },
+      {
+        "level": 2,
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "level": 2,
+        "text": "Sources"
+      },
+      {
+        "level": 3,
+        "text": "News"
+      },
+      {
+        "level": 3,
+        "text": "Government"
+      }
+    ],
+    "imgsTotal": 2,
+    "imgsNoAlt": 0,
+    "focusableCount": 69,
+    "landmarks": {
+      "nav": 7,
+      "main": 2,
+      "banner": 2,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 7,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 58,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "investigations",
+    "url": "/investigations",
+    "name": "Investigations",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 6,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Investigations"
+      },
+      {
+        "level": 2,
+        "text": "Namami Gange"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "topics",
+    "url": "/topics",
+    "name": "Topics Index",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 20,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Topics"
+      },
+      {
+        "level": 2,
+        "text": "Economy & Finance"
+      },
+      {
+        "level": 2,
+        "text": "Technology & Digital India"
+      },
+      {
+        "level": 2,
+        "text": "Cybersecurity & Data Privacy"
+      },
+      {
+        "level": 2,
+        "text": "Policy & Governance"
+      },
+      {
+        "level": 2,
+        "text": "Agriculture & Rural Development"
+      },
+      {
+        "level": 2,
+        "text": "Digital Payments & Fintech"
+      },
+      {
+        "level": 2,
+        "text": "Employment & Labour"
+      },
+      {
+        "level": 2,
+        "text": "Environment & Climate"
+      },
+      {
+        "level": 2,
+        "text": "Education & Skill Development"
+      },
+      {
+        "level": 2,
+        "text": "Semiconductor & Electronics"
+      },
+      {
+        "level": 2,
+        "text": "Health & Nutrition"
+      },
+      {
+        "level": 2,
+        "text": "Mental Health"
+      },
+      {
+        "level": 2,
+        "text": "Governance & Institutions"
+      },
+      {
+        "level": 2,
+        "text": "Infrastructure & Logistics"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 52,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "topic-india-pak",
+    "url": "/topic/india-pakistan-relations",
+    "name": "Topic (India-Pak)",
+    "status": 404,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "entities",
+    "url": "/entities",
+    "name": "Entities Index",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 46,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Entities"
+      },
+      {
+        "level": 2,
+        "text": "United Nations"
+      },
+      {
+        "level": 2,
+        "text": "World Trade Organization"
+      },
+      {
+        "level": 2,
+        "text": "International Monetary Fund"
+      },
+      {
+        "level": 2,
+        "text": "World Bank"
+      },
+      {
+        "level": 2,
+        "text": "World Health Organization"
+      },
+      {
+        "level": 2,
+        "text": "International Labour Organization"
+      },
+      {
+        "level": 2,
+        "text": "BRICS"
+      },
+      {
+        "level": 2,
+        "text": "Shanghai Cooperation Organisation"
+      },
+      {
+        "level": 2,
+        "text": "G20"
+      },
+      {
+        "level": 2,
+        "text": "South Asian Association for Regional Cooperation"
+      },
+      {
+        "level": 2,
+        "text": "Commonwealth of Nations"
+      },
+      {
+        "level": 2,
+        "text": "Asian Development Bank"
+      },
+      {
+        "level": 2,
+        "text": "Asian Infrastructure Investment Bank"
+      },
+      {
+        "level": 2,
+        "text": "Bay of Bengal Initiative for Multi-Sectoral Technical and Economic Cooperation"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 78,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "entity-rbi",
+    "url": "/entity/reserve-bank-of-india",
+    "name": "Entity (RBI)",
+    "status": 404,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "countries",
+    "url": "/countries",
+    "name": "Countries Index",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Countries"
+      },
+      {
+        "level": 2,
+        "text": "Bihar"
+      },
+      {
+        "level": 2,
+        "text": "India"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 31,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "fix",
+    "url": "/fix",
+    "name": "The Fix Index",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Not just what's wrong.What would fix it."
+      },
+      {
+        "level": 3,
+        "text": "Fixing MGNREGA: 5 Reforms to Make Rural Employment Work"
+      },
+      {
+        "level": 3,
+        "text": "The Fix: How to Fix Crop Insurance in India"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Air Pollution: A Multi-Sector Action Plan"
+      },
+      {
+        "level": 3,
+        "text": "Fixing Farm Income: Beyond MSP to a Comprehensive Support System"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Judicial Pendency: 5 Crore Cases and Counting"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Anganwadi System: From Nutrition to Empowerment"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "data",
+    "url": "/data",
+    "name": "Data Hub",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1464,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": true,
+    "headingCount": 13,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Data Hub"
+      },
+      {
+        "level": 2,
+        "text": "Featured Datasets"
+      },
+      {
+        "level": 2,
+        "text": "Data"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA Budget Allocation"
+      },
+      {
+        "level": 3,
+        "text": "GDP Growth Rate"
+      },
+      {
+        "level": 3,
+        "text": "UPI Transaction Volume"
+      },
+      {
+        "level": 2,
+        "text": "Charts & Visualizations"
+      },
+      {
+        "level": 2,
+        "text": "Charts & Visualizations"
+      },
+      {
+        "level": 2,
+        "text": "Download Data"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 42,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 34,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "datasets",
+    "url": "/datasets",
+    "name": "Datasets Index",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Datasets"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 36,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "graph",
+    "url": "/graph",
+    "name": "Knowledge Graph",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Knowledge Graph"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "timeline",
+    "url": "/timeline",
+    "name": "Global Timeline",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 73,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Timeline"
+      },
+      {
+        "level": 3,
+        "text": "What Changed on 1 July 2026?"
+      },
+      {
+        "level": 3,
+        "text": "Commencement Notification"
+      },
+      {
+        "level": 3,
+        "text": "Revised NDCs Submitted"
+      },
+      {
+        "level": 3,
+        "text": "FDI Crosses $85 Billion"
+      },
+      {
+        "level": 3,
+        "text": "PILOT_PRODUCTION: Micron ATMP Sanand"
+      },
+      {
+        "level": 3,
+        "text": "Investigation Published"
+      },
+      {
+        "level": 3,
+        "text": "2026 Amendments Pass Lok Sabha"
+      },
+      {
+        "level": 3,
+        "text": "Rural UPI at ₹12L Cr"
+      },
+      {
+        "level": 3,
+        "text": "COMMERCIAL_PRODUCTION: CG Semi OSAT"
+      },
+      {
+        "level": 3,
+        "text": "Third Rate Cut (5.25%)"
+      },
+      {
+        "level": 3,
+        "text": "20th Anniversary Milestone"
+      },
+      {
+        "level": 3,
+        "text": "VB-G RAM G Act Enacted"
+      },
+      {
+        "level": 3,
+        "text": "CGWB 2025 Assessment Released"
+      },
+      {
+        "level": 3,
+        "text": "ICDS Digitisation Push"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 108,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "search",
+    "url": "/search?q=MGNREGA",
+    "name": "Search",
+    "status": 200,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 16,
+    "headingHierarchy": [
+      {
+        "level": 3,
+        "text": "Filter by Type"
+      },
+      {
+        "level": 3,
+        "text": "Intelligence & Coverage"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 3,
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "level": 3,
+        "text": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers"
+      },
+      {
+        "level": 3,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 3,
+        "text": "India's ₹11 Lakh Crore Climate Finance Challenge"
+      },
+      {
+        "level": 3,
+        "text": "Education Budget: Widening Gap Between Spending and Learning Outcomes"
+      },
+      {
+        "level": 3,
+        "text": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net"
+      },
+      {
+        "level": 3,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 3,
+        "text": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy"
+      },
+      {
+        "level": 3,
+        "text": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Co"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 52,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 1
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "404",
+    "url": "/nonexistent-page",
+    "name": "404 Page",
+    "status": 404,
+    "vpName": "desktop",
+    "bodyWidth": 1424,
+    "viewportWidth": 1440,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "404"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 39,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 1
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 1424,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "homepage",
+    "url": "/",
+    "name": "Homepage",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 1280,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": true,
+    "headingCount": 37,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "What You Need to Understand Today"
+      },
+      {
+        "level": 3,
+        "text": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?"
+      },
+      {
+        "level": 3,
+        "text": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed"
+      },
+      {
+        "level": 3,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 2,
+        "text": "Investigations & Long-Form Analysis"
+      },
+      {
+        "level": 3,
+        "text": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality"
+      },
+      {
+        "level": 3,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 3,
+        "text": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle"
+      },
+      {
+        "level": 3,
+        "text": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 A"
+      },
+      {
+        "level": 2,
+        "text": "Public Expenditure & Fiscal Intelligence"
+      },
+      {
+        "level": 3,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "Explore Public Knowledge Across India"
+      },
+      {
+        "level": 2,
+        "text": "Explore by Subject & Policy Area"
+      }
+    ],
+    "imgsTotal": 5,
+    "imgsNoAlt": 5,
+    "focusableCount": 93,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [
+      {
+        "tag": "P",
+        "text": "Source: MWCD Dashboard",
+        "fontSize": 16
+      },
+      {
+        "tag": "P",
+        "text": "Source: ICDS Annual Report",
+        "fontSize": 16
+      },
+      {
+        "tag": "P",
+        "text": "Source: MWCD",
+        "fontSize": 16
+      },
+      {
+        "tag": "P",
+        "text": "Source: Union Budget",
+        "fontSize": 16
+      },
+      {
+        "tag": "SPAN",
+        "text": "Quick Explorer:",
+        "fontSize": 16
+      }
+    ],
+    "smallTouchTargetsCount": 70,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "founding-edition",
+    "url": "/founding-edition",
+    "name": "Founding Edition",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Founding Edition v1.0"
+      },
+      {
+        "level": 2,
+        "text": "Included in this Edition"
+      },
+      {
+        "level": 2,
+        "text": "Roadmap"
+      },
+      {
+        "level": 3,
+        "text": "v1.1"
+      },
+      {
+        "level": 3,
+        "text": "v1.2"
+      },
+      {
+        "level": 3,
+        "text": "v2.0"
+      },
+      {
+        "level": 2,
+        "text": "How to Provide Feedback"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 38,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "methodology",
+    "url": "/methodology",
+    "name": "Methodology",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 17,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Methodology"
+      },
+      {
+        "level": 2,
+        "text": "Our Approach"
+      },
+      {
+        "level": 2,
+        "text": "How Research Is Conducted"
+      },
+      {
+        "level": 2,
+        "text": "The Evidence Hierarchy"
+      },
+      {
+        "level": 2,
+        "text": "How Claims Are Verified"
+      },
+      {
+        "level": 2,
+        "text": "How Confidence Scores Are Assigned"
+      },
+      {
+        "level": 2,
+        "text": "Why Scholarly Disagreements Are Included"
+      },
+      {
+        "level": 2,
+        "text": "How Corrections Are Handled"
+      },
+      {
+        "level": 2,
+        "text": "How AI Is Used"
+      },
+      {
+        "level": 2,
+        "text": "How Chapters Evolve"
+      },
+      {
+        "level": 2,
+        "text": "Founding Edition v1.0 — Publication Status"
+      },
+      {
+        "level": 2,
+        "text": "The Three-Layer Claim Structure"
+      },
+      {
+        "level": 2,
+        "text": "How Visual Assets Are Selected"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "editorial-constitution",
+    "url": "/editorial-constitution",
+    "name": "Editorial Constitution",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 14,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Editorial Constitution"
+      },
+      {
+        "level": 2,
+        "text": "Preamble — Why We Exist"
+      },
+      {
+        "level": 3,
+        "text": "The Evidence Standard"
+      },
+      {
+        "level": 3,
+        "text": "The Cultural Principle"
+      },
+      {
+        "level": 2,
+        "text": "Core Principles"
+      },
+      {
+        "level": 2,
+        "text": "Evidence Hierarchy"
+      },
+      {
+        "level": 2,
+        "text": "Confidence Scores"
+      },
+      {
+        "level": 2,
+        "text": "Editorial Ethics"
+      },
+      {
+        "level": 2,
+        "text": "Language Rules"
+      },
+      {
+        "level": 2,
+        "text": "Quality Gates"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "trust",
+    "url": "/trust",
+    "name": "Trust Dashboard",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Trust Dashboard"
+      },
+      {
+        "level": 2,
+        "text": "Editorial Constitution"
+      },
+      {
+        "level": 2,
+        "text": "Platform Status"
+      },
+      {
+        "level": 2,
+        "text": "Knowledge Quality"
+      },
+      {
+        "level": 2,
+        "text": "Gold Standard Review — Founding Monograph 001"
+      },
+      {
+        "level": 2,
+        "text": "Institutional Memory"
+      },
+      {
+        "level": 2,
+        "text": "Verification"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "newsletter",
+    "url": "/newsletter",
+    "name": "Newsletter",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Newsletter"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 37,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "subscribe",
+    "url": "/subscribe",
+    "name": "Subscribe",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Subscribe"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about",
+    "url": "/about",
+    "name": "About",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "About The Breakdown"
+      },
+      {
+        "level": 2,
+        "text": "Our Mission"
+      },
+      {
+        "level": 2,
+        "text": "How We Work"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 37,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-team",
+    "url": "/about/team",
+    "name": "Team",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Our Team"
+      },
+      {
+        "level": 2,
+        "text": "The Breakdown Editorial"
+      },
+      {
+        "level": 2,
+        "text": "The Breakdown Investigations"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-methodology",
+    "url": "/about/methodology",
+    "name": "About Methodology",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 9,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Methodology"
+      },
+      {
+        "level": 2,
+        "text": "Evidence Scoring"
+      },
+      {
+        "level": 2,
+        "text": "Claim Verification"
+      },
+      {
+        "level": 2,
+        "text": "Source Tiers"
+      },
+      {
+        "level": 2,
+        "text": "Data Sources"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 36,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 31,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-contact",
+    "url": "/about/contact",
+    "name": "Contact",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Contact"
+      },
+      {
+        "level": 2,
+        "text": "Get in Touch"
+      },
+      {
+        "level": 2,
+        "text": "Submit a Tip"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "series",
+    "url": "/series",
+    "name": "Knowledge Library",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 2,
+        "text": "India and the World"
+      },
+      {
+        "level": 3,
+        "text": "The Nehruvian Era"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 5,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 34,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "stories",
+    "url": "/stories",
+    "name": "Stories Index",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 32,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Stories"
+      },
+      {
+        "level": 2,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 2,
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "level": 2,
+        "text": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers"
+      },
+      {
+        "level": 2,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 2,
+        "text": "Digital Personal Data Protection: India's Privacy Law Comes of Age"
+      },
+      {
+        "level": 2,
+        "text": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle"
+      },
+      {
+        "level": 2,
+        "text": "India's ₹11 Lakh Crore Climate Finance Challenge"
+      },
+      {
+        "level": 2,
+        "text": "Education Budget: Widening Gap Between Spending and Learning Outcomes"
+      },
+      {
+        "level": 2,
+        "text": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 A"
+      },
+      {
+        "level": 2,
+        "text": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net"
+      },
+      {
+        "level": 2,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?"
+      },
+      {
+        "level": 2,
+        "text": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed"
+      },
+      {
+        "level": 2,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 64,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "story-mgnrega",
+    "url": "/story/mgnrega-reform",
+    "name": "Story (MGNREGA)",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 1200,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": true,
+    "headingCount": 37,
+    "headingHierarchy": [
+      {
+        "level": 4,
+        "text": "On This Page"
+      },
+      {
+        "level": 1,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 3,
+        "text": "The Short Version"
+      },
+      {
+        "level": 4,
+        "text": "Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "▶Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "level": 2,
+        "text": "Evidence"
+      },
+      {
+        "level": 2,
+        "text": "Key Numbers"
+      },
+      {
+        "level": 2,
+        "text": "Timeline"
+      },
+      {
+        "level": 2,
+        "text": "Rural Employment Budget Allocation Over Time (₹ Crore)"
+      },
+      {
+        "level": 2,
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "level": 2,
+        "text": "Sources"
+      },
+      {
+        "level": 3,
+        "text": "Government"
+      },
+      {
+        "level": 3,
+        "text": "Relevant Chronology & Timeline"
+      },
+      {
+        "level": 4,
+        "text": "MGNREGA 2005 Enacted"
+      }
+    ],
+    "imgsTotal": 2,
+    "imgsNoAlt": 0,
+    "focusableCount": 73,
+    "landmarks": {
+      "nav": 7,
+      "main": 2,
+      "banner": 2,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 7,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 61,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "story-ews",
+    "url": "/story/ews-quota-upsc-investigation",
+    "name": "Story (EWS Quota)",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 35,
+    "headingHierarchy": [
+      {
+        "level": 4,
+        "text": "On This Page"
+      },
+      {
+        "level": 1,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      },
+      {
+        "level": 3,
+        "text": "The Short Version"
+      },
+      {
+        "level": 4,
+        "text": "Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "▶Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "level": 2,
+        "text": "Evidence"
+      },
+      {
+        "level": 2,
+        "text": "Key Numbers"
+      },
+      {
+        "level": 2,
+        "text": "Timeline"
+      },
+      {
+        "level": 2,
+        "text": "EWS Candidates by Background Profile (%)"
+      },
+      {
+        "level": 2,
+        "text": "UPSC CSE 2025 Selections by Category"
+      },
+      {
+        "level": 2,
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "level": 2,
+        "text": "Sources"
+      },
+      {
+        "level": 3,
+        "text": "News"
+      },
+      {
+        "level": 3,
+        "text": "Government"
+      }
+    ],
+    "imgsTotal": 2,
+    "imgsNoAlt": 0,
+    "focusableCount": 69,
+    "landmarks": {
+      "nav": 7,
+      "main": 2,
+      "banner": 2,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 7,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 58,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "investigations",
+    "url": "/investigations",
+    "name": "Investigations",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 6,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Investigations"
+      },
+      {
+        "level": 2,
+        "text": "Namami Gange"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "topics",
+    "url": "/topics",
+    "name": "Topics Index",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 20,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Topics"
+      },
+      {
+        "level": 2,
+        "text": "Economy & Finance"
+      },
+      {
+        "level": 2,
+        "text": "Technology & Digital India"
+      },
+      {
+        "level": 2,
+        "text": "Cybersecurity & Data Privacy"
+      },
+      {
+        "level": 2,
+        "text": "Policy & Governance"
+      },
+      {
+        "level": 2,
+        "text": "Agriculture & Rural Development"
+      },
+      {
+        "level": 2,
+        "text": "Digital Payments & Fintech"
+      },
+      {
+        "level": 2,
+        "text": "Employment & Labour"
+      },
+      {
+        "level": 2,
+        "text": "Environment & Climate"
+      },
+      {
+        "level": 2,
+        "text": "Education & Skill Development"
+      },
+      {
+        "level": 2,
+        "text": "Semiconductor & Electronics"
+      },
+      {
+        "level": 2,
+        "text": "Health & Nutrition"
+      },
+      {
+        "level": 2,
+        "text": "Mental Health"
+      },
+      {
+        "level": 2,
+        "text": "Governance & Institutions"
+      },
+      {
+        "level": 2,
+        "text": "Infrastructure & Logistics"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 52,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "topic-india-pak",
+    "url": "/topic/india-pakistan-relations",
+    "name": "Topic (India-Pak)",
+    "status": 404,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "entities",
+    "url": "/entities",
+    "name": "Entities Index",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 46,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Entities"
+      },
+      {
+        "level": 2,
+        "text": "United Nations"
+      },
+      {
+        "level": 2,
+        "text": "World Trade Organization"
+      },
+      {
+        "level": 2,
+        "text": "International Monetary Fund"
+      },
+      {
+        "level": 2,
+        "text": "World Bank"
+      },
+      {
+        "level": 2,
+        "text": "World Health Organization"
+      },
+      {
+        "level": 2,
+        "text": "International Labour Organization"
+      },
+      {
+        "level": 2,
+        "text": "BRICS"
+      },
+      {
+        "level": 2,
+        "text": "Shanghai Cooperation Organisation"
+      },
+      {
+        "level": 2,
+        "text": "G20"
+      },
+      {
+        "level": 2,
+        "text": "South Asian Association for Regional Cooperation"
+      },
+      {
+        "level": 2,
+        "text": "Commonwealth of Nations"
+      },
+      {
+        "level": 2,
+        "text": "Asian Development Bank"
+      },
+      {
+        "level": 2,
+        "text": "Asian Infrastructure Investment Bank"
+      },
+      {
+        "level": 2,
+        "text": "Bay of Bengal Initiative for Multi-Sectoral Technical and Economic Cooperation"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 78,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "entity-rbi",
+    "url": "/entity/reserve-bank-of-india",
+    "name": "Entity (RBI)",
+    "status": 404,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "countries",
+    "url": "/countries",
+    "name": "Countries Index",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Countries"
+      },
+      {
+        "level": 2,
+        "text": "Bihar"
+      },
+      {
+        "level": 2,
+        "text": "India"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 31,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "fix",
+    "url": "/fix",
+    "name": "The Fix Index",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Not just what's wrong.What would fix it."
+      },
+      {
+        "level": 3,
+        "text": "Fixing MGNREGA: 5 Reforms to Make Rural Employment Work"
+      },
+      {
+        "level": 3,
+        "text": "The Fix: How to Fix Crop Insurance in India"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Air Pollution: A Multi-Sector Action Plan"
+      },
+      {
+        "level": 3,
+        "text": "Fixing Farm Income: Beyond MSP to a Comprehensive Support System"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Judicial Pendency: 5 Crore Cases and Counting"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Anganwadi System: From Nutrition to Empowerment"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "data",
+    "url": "/data",
+    "name": "Data Hub",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 400,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": true,
+    "headingCount": 13,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Data Hub"
+      },
+      {
+        "level": 2,
+        "text": "Featured Datasets"
+      },
+      {
+        "level": 2,
+        "text": "Data"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA Budget Allocation"
+      },
+      {
+        "level": 3,
+        "text": "GDP Growth Rate"
+      },
+      {
+        "level": 3,
+        "text": "UPI Transaction Volume"
+      },
+      {
+        "level": 2,
+        "text": "Charts & Visualizations"
+      },
+      {
+        "level": 2,
+        "text": "Charts & Visualizations"
+      },
+      {
+        "level": 2,
+        "text": "Download Data"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 42,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 34,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "datasets",
+    "url": "/datasets",
+    "name": "Datasets Index",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Datasets"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 36,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "graph",
+    "url": "/graph",
+    "name": "Knowledge Graph",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Knowledge Graph"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "timeline",
+    "url": "/timeline",
+    "name": "Global Timeline",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 73,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Timeline"
+      },
+      {
+        "level": 3,
+        "text": "What Changed on 1 July 2026?"
+      },
+      {
+        "level": 3,
+        "text": "Commencement Notification"
+      },
+      {
+        "level": 3,
+        "text": "Revised NDCs Submitted"
+      },
+      {
+        "level": 3,
+        "text": "FDI Crosses $85 Billion"
+      },
+      {
+        "level": 3,
+        "text": "PILOT_PRODUCTION: Micron ATMP Sanand"
+      },
+      {
+        "level": 3,
+        "text": "Investigation Published"
+      },
+      {
+        "level": 3,
+        "text": "2026 Amendments Pass Lok Sabha"
+      },
+      {
+        "level": 3,
+        "text": "Rural UPI at ₹12L Cr"
+      },
+      {
+        "level": 3,
+        "text": "COMMERCIAL_PRODUCTION: CG Semi OSAT"
+      },
+      {
+        "level": 3,
+        "text": "Third Rate Cut (5.25%)"
+      },
+      {
+        "level": 3,
+        "text": "20th Anniversary Milestone"
+      },
+      {
+        "level": 3,
+        "text": "VB-G RAM G Act Enacted"
+      },
+      {
+        "level": 3,
+        "text": "CGWB 2025 Assessment Released"
+      },
+      {
+        "level": 3,
+        "text": "ICDS Digitisation Push"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 108,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "search",
+    "url": "/search?q=MGNREGA",
+    "name": "Search",
+    "status": 200,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 16,
+    "headingHierarchy": [
+      {
+        "level": 3,
+        "text": "Filter by Type"
+      },
+      {
+        "level": 3,
+        "text": "Intelligence & Coverage"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 3,
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "level": 3,
+        "text": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers"
+      },
+      {
+        "level": 3,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 3,
+        "text": "India's ₹11 Lakh Crore Climate Finance Challenge"
+      },
+      {
+        "level": 3,
+        "text": "Education Budget: Widening Gap Between Spending and Learning Outcomes"
+      },
+      {
+        "level": 3,
+        "text": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net"
+      },
+      {
+        "level": 3,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 3,
+        "text": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy"
+      },
+      {
+        "level": 3,
+        "text": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Co"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 52,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 1
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "404",
+    "url": "/nonexistent-page",
+    "name": "404 Page",
+    "status": 404,
+    "vpName": "mobile_375",
+    "bodyWidth": 359,
+    "viewportWidth": 375,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "404"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 39,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 1
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 359,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "homepage",
+    "url": "/",
+    "name": "Homepage",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 1280,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": true,
+    "headingCount": 37,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "What You Need to Understand Today"
+      },
+      {
+        "level": 3,
+        "text": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?"
+      },
+      {
+        "level": 3,
+        "text": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed"
+      },
+      {
+        "level": 3,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 2,
+        "text": "Investigations & Long-Form Analysis"
+      },
+      {
+        "level": 3,
+        "text": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality"
+      },
+      {
+        "level": 3,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 3,
+        "text": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle"
+      },
+      {
+        "level": 3,
+        "text": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 A"
+      },
+      {
+        "level": 2,
+        "text": "Public Expenditure & Fiscal Intelligence"
+      },
+      {
+        "level": 3,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "Explore Public Knowledge Across India"
+      },
+      {
+        "level": 2,
+        "text": "Explore by Subject & Policy Area"
+      }
+    ],
+    "imgsTotal": 5,
+    "imgsNoAlt": 5,
+    "focusableCount": 93,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [
+      {
+        "tag": "P",
+        "text": "Source: MWCD Dashboard",
+        "fontSize": 16
+      },
+      {
+        "tag": "P",
+        "text": "Source: ICDS Annual Report",
+        "fontSize": 16
+      },
+      {
+        "tag": "P",
+        "text": "Source: MWCD",
+        "fontSize": 16
+      },
+      {
+        "tag": "P",
+        "text": "Source: Union Budget",
+        "fontSize": 16
+      },
+      {
+        "tag": "SPAN",
+        "text": "Quick Explorer:",
+        "fontSize": 16
+      }
+    ],
+    "smallTouchTargetsCount": 74,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "founding-edition",
+    "url": "/founding-edition",
+    "name": "Founding Edition",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Founding Edition v1.0"
+      },
+      {
+        "level": 2,
+        "text": "Included in this Edition"
+      },
+      {
+        "level": 2,
+        "text": "Roadmap"
+      },
+      {
+        "level": 3,
+        "text": "v1.1"
+      },
+      {
+        "level": 3,
+        "text": "v1.2"
+      },
+      {
+        "level": 3,
+        "text": "v2.0"
+      },
+      {
+        "level": 2,
+        "text": "How to Provide Feedback"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 38,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "methodology",
+    "url": "/methodology",
+    "name": "Methodology",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 17,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Methodology"
+      },
+      {
+        "level": 2,
+        "text": "Our Approach"
+      },
+      {
+        "level": 2,
+        "text": "How Research Is Conducted"
+      },
+      {
+        "level": 2,
+        "text": "The Evidence Hierarchy"
+      },
+      {
+        "level": 2,
+        "text": "How Claims Are Verified"
+      },
+      {
+        "level": 2,
+        "text": "How Confidence Scores Are Assigned"
+      },
+      {
+        "level": 2,
+        "text": "Why Scholarly Disagreements Are Included"
+      },
+      {
+        "level": 2,
+        "text": "How Corrections Are Handled"
+      },
+      {
+        "level": 2,
+        "text": "How AI Is Used"
+      },
+      {
+        "level": 2,
+        "text": "How Chapters Evolve"
+      },
+      {
+        "level": 2,
+        "text": "Founding Edition v1.0 — Publication Status"
+      },
+      {
+        "level": 2,
+        "text": "The Three-Layer Claim Structure"
+      },
+      {
+        "level": 2,
+        "text": "How Visual Assets Are Selected"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "editorial-constitution",
+    "url": "/editorial-constitution",
+    "name": "Editorial Constitution",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 14,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Editorial Constitution"
+      },
+      {
+        "level": 2,
+        "text": "Preamble — Why We Exist"
+      },
+      {
+        "level": 3,
+        "text": "The Evidence Standard"
+      },
+      {
+        "level": 3,
+        "text": "The Cultural Principle"
+      },
+      {
+        "level": 2,
+        "text": "Core Principles"
+      },
+      {
+        "level": 2,
+        "text": "Evidence Hierarchy"
+      },
+      {
+        "level": 2,
+        "text": "Confidence Scores"
+      },
+      {
+        "level": 2,
+        "text": "Editorial Ethics"
+      },
+      {
+        "level": 2,
+        "text": "Language Rules"
+      },
+      {
+        "level": 2,
+        "text": "Quality Gates"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "trust",
+    "url": "/trust",
+    "name": "Trust Dashboard",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Trust Dashboard"
+      },
+      {
+        "level": 2,
+        "text": "Editorial Constitution"
+      },
+      {
+        "level": 2,
+        "text": "Platform Status"
+      },
+      {
+        "level": 2,
+        "text": "Knowledge Quality"
+      },
+      {
+        "level": 2,
+        "text": "Gold Standard Review — Founding Monograph 001"
+      },
+      {
+        "level": 2,
+        "text": "Institutional Memory"
+      },
+      {
+        "level": 2,
+        "text": "Verification"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "newsletter",
+    "url": "/newsletter",
+    "name": "Newsletter",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Newsletter"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 37,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "subscribe",
+    "url": "/subscribe",
+    "name": "Subscribe",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Subscribe"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about",
+    "url": "/about",
+    "name": "About",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "About The Breakdown"
+      },
+      {
+        "level": 2,
+        "text": "Our Mission"
+      },
+      {
+        "level": 2,
+        "text": "How We Work"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 37,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-team",
+    "url": "/about/team",
+    "name": "Team",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Our Team"
+      },
+      {
+        "level": 2,
+        "text": "The Breakdown Editorial"
+      },
+      {
+        "level": 2,
+        "text": "The Breakdown Investigations"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-methodology",
+    "url": "/about/methodology",
+    "name": "About Methodology",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 9,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Methodology"
+      },
+      {
+        "level": 2,
+        "text": "Evidence Scoring"
+      },
+      {
+        "level": 2,
+        "text": "Claim Verification"
+      },
+      {
+        "level": 2,
+        "text": "Source Tiers"
+      },
+      {
+        "level": 2,
+        "text": "Data Sources"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 36,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 31,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "about-contact",
+    "url": "/about/contact",
+    "name": "Contact",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Contact"
+      },
+      {
+        "level": 2,
+        "text": "Get in Touch"
+      },
+      {
+        "level": 2,
+        "text": "Submit a Tip"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "series",
+    "url": "/series",
+    "name": "Knowledge Library",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 2,
+        "text": "India and the World"
+      },
+      {
+        "level": 3,
+        "text": "The Nehruvian Era"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 40,
+    "landmarks": {
+      "nav": 5,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 34,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "stories",
+    "url": "/stories",
+    "name": "Stories Index",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 32,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Stories"
+      },
+      {
+        "level": 2,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 2,
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "level": 2,
+        "text": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers"
+      },
+      {
+        "level": 2,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 2,
+        "text": "Digital Personal Data Protection: India's Privacy Law Comes of Age"
+      },
+      {
+        "level": 2,
+        "text": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle"
+      },
+      {
+        "level": 2,
+        "text": "India's ₹11 Lakh Crore Climate Finance Challenge"
+      },
+      {
+        "level": 2,
+        "text": "Education Budget: Widening Gap Between Spending and Learning Outcomes"
+      },
+      {
+        "level": 2,
+        "text": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 A"
+      },
+      {
+        "level": 2,
+        "text": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net"
+      },
+      {
+        "level": 2,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 2,
+        "text": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?"
+      },
+      {
+        "level": 2,
+        "text": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed"
+      },
+      {
+        "level": 2,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 64,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "story-mgnrega",
+    "url": "/story/mgnrega-reform",
+    "name": "Story (MGNREGA)",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 1200,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": true,
+    "headingCount": 37,
+    "headingHierarchy": [
+      {
+        "level": 4,
+        "text": "On This Page"
+      },
+      {
+        "level": 1,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 3,
+        "text": "The Short Version"
+      },
+      {
+        "level": 4,
+        "text": "Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "▶Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "level": 2,
+        "text": "Evidence"
+      },
+      {
+        "level": 2,
+        "text": "Key Numbers"
+      },
+      {
+        "level": 2,
+        "text": "Timeline"
+      },
+      {
+        "level": 2,
+        "text": "Rural Employment Budget Allocation Over Time (₹ Crore)"
+      },
+      {
+        "level": 2,
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "level": 2,
+        "text": "Sources"
+      },
+      {
+        "level": 3,
+        "text": "Government"
+      },
+      {
+        "level": 3,
+        "text": "Relevant Chronology & Timeline"
+      },
+      {
+        "level": 4,
+        "text": "MGNREGA 2005 Enacted"
+      }
+    ],
+    "imgsTotal": 2,
+    "imgsNoAlt": 0,
+    "focusableCount": 73,
+    "landmarks": {
+      "nav": 7,
+      "main": 2,
+      "banner": 2,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 7,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 62,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "story-ews",
+    "url": "/story/ews-quota-upsc-investigation",
+    "name": "Story (EWS Quota)",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 35,
+    "headingHierarchy": [
+      {
+        "level": 4,
+        "text": "On This Page"
+      },
+      {
+        "level": 1,
+        "text": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections"
+      },
+      {
+        "level": 3,
+        "text": "The Short Version"
+      },
+      {
+        "level": 4,
+        "text": "Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "▶Key Takeaways"
+      },
+      {
+        "level": 2,
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "level": 2,
+        "text": "Evidence"
+      },
+      {
+        "level": 2,
+        "text": "Key Numbers"
+      },
+      {
+        "level": 2,
+        "text": "Timeline"
+      },
+      {
+        "level": 2,
+        "text": "EWS Candidates by Background Profile (%)"
+      },
+      {
+        "level": 2,
+        "text": "UPSC CSE 2025 Selections by Category"
+      },
+      {
+        "level": 2,
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "level": 2,
+        "text": "Sources"
+      },
+      {
+        "level": 3,
+        "text": "News"
+      },
+      {
+        "level": 3,
+        "text": "Government"
+      }
+    ],
+    "imgsTotal": 2,
+    "imgsNoAlt": 0,
+    "focusableCount": 69,
+    "landmarks": {
+      "nav": 7,
+      "main": 2,
+      "banner": 2,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 7,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 58,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "investigations",
+    "url": "/investigations",
+    "name": "Investigations",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 6,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Investigations"
+      },
+      {
+        "level": 2,
+        "text": "Namami Gange"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "topics",
+    "url": "/topics",
+    "name": "Topics Index",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 20,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Topics"
+      },
+      {
+        "level": 2,
+        "text": "Economy & Finance"
+      },
+      {
+        "level": 2,
+        "text": "Technology & Digital India"
+      },
+      {
+        "level": 2,
+        "text": "Cybersecurity & Data Privacy"
+      },
+      {
+        "level": 2,
+        "text": "Policy & Governance"
+      },
+      {
+        "level": 2,
+        "text": "Agriculture & Rural Development"
+      },
+      {
+        "level": 2,
+        "text": "Digital Payments & Fintech"
+      },
+      {
+        "level": 2,
+        "text": "Employment & Labour"
+      },
+      {
+        "level": 2,
+        "text": "Environment & Climate"
+      },
+      {
+        "level": 2,
+        "text": "Education & Skill Development"
+      },
+      {
+        "level": 2,
+        "text": "Semiconductor & Electronics"
+      },
+      {
+        "level": 2,
+        "text": "Health & Nutrition"
+      },
+      {
+        "level": 2,
+        "text": "Mental Health"
+      },
+      {
+        "level": 2,
+        "text": "Governance & Institutions"
+      },
+      {
+        "level": 2,
+        "text": "Infrastructure & Logistics"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 52,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "topic-india-pak",
+    "url": "/topic/india-pakistan-relations",
+    "name": "Topic (India-Pak)",
+    "status": 404,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "entities",
+    "url": "/entities",
+    "name": "Entities Index",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 46,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Entities"
+      },
+      {
+        "level": 2,
+        "text": "United Nations"
+      },
+      {
+        "level": 2,
+        "text": "World Trade Organization"
+      },
+      {
+        "level": 2,
+        "text": "International Monetary Fund"
+      },
+      {
+        "level": 2,
+        "text": "World Bank"
+      },
+      {
+        "level": 2,
+        "text": "World Health Organization"
+      },
+      {
+        "level": 2,
+        "text": "International Labour Organization"
+      },
+      {
+        "level": 2,
+        "text": "BRICS"
+      },
+      {
+        "level": 2,
+        "text": "Shanghai Cooperation Organisation"
+      },
+      {
+        "level": 2,
+        "text": "G20"
+      },
+      {
+        "level": 2,
+        "text": "South Asian Association for Regional Cooperation"
+      },
+      {
+        "level": 2,
+        "text": "Commonwealth of Nations"
+      },
+      {
+        "level": 2,
+        "text": "Asian Development Bank"
+      },
+      {
+        "level": 2,
+        "text": "Asian Infrastructure Investment Bank"
+      },
+      {
+        "level": 2,
+        "text": "Bay of Bengal Initiative for Multi-Sectoral Technical and Economic Cooperation"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 78,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "entity-rbi",
+    "url": "/entity/reserve-bank-of-india",
+    "name": "Entity (RBI)",
+    "status": 404,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 0,
+    "headingHierarchy": [],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 0,
+    "landmarks": {
+      "nav": 0,
+      "main": 0,
+      "banner": 0,
+      "contentinfo": 0,
+      "search": 0
+    },
+    "skipLinksCount": 0,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 0,
+    "smallTouchTargets": []
+  },
+  {
+    "slug": "countries",
+    "url": "/countries",
+    "name": "Countries Index",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 7,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Countries"
+      },
+      {
+        "level": 2,
+        "text": "Bihar"
+      },
+      {
+        "level": 2,
+        "text": "India"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 31,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "fix",
+    "url": "/fix",
+    "name": "The Fix Index",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 11,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Not just what's wrong.What would fix it."
+      },
+      {
+        "level": 3,
+        "text": "Fixing MGNREGA: 5 Reforms to Make Rural Employment Work"
+      },
+      {
+        "level": 3,
+        "text": "The Fix: How to Fix Crop Insurance in India"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Air Pollution: A Multi-Sector Action Plan"
+      },
+      {
+        "level": 3,
+        "text": "Fixing Farm Income: Beyond MSP to a Comprehensive Support System"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Judicial Pendency: 5 Crore Cases and Counting"
+      },
+      {
+        "level": 3,
+        "text": "Fixing India's Anganwadi System: From Nutrition to Empowerment"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "data",
+    "url": "/data",
+    "name": "Data Hub",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 792,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": true,
+    "headingCount": 13,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Data Hub"
+      },
+      {
+        "level": 2,
+        "text": "Featured Datasets"
+      },
+      {
+        "level": 2,
+        "text": "Data"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA Budget Allocation"
+      },
+      {
+        "level": 3,
+        "text": "GDP Growth Rate"
+      },
+      {
+        "level": 3,
+        "text": "UPI Transaction Volume"
+      },
+      {
+        "level": 2,
+        "text": "Charts & Visualizations"
+      },
+      {
+        "level": 2,
+        "text": "Charts & Visualizations"
+      },
+      {
+        "level": 2,
+        "text": "Download Data"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 42,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 34,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "datasets",
+    "url": "/datasets",
+    "name": "Datasets Index",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Datasets"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 43,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 36,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "graph",
+    "url": "/graph",
+    "name": "Knowledge Graph",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Knowledge Graph"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 38,
+    "landmarks": {
+      "nav": 6,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 33,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "timeline",
+    "url": "/timeline",
+    "name": "Global Timeline",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 73,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "Timeline"
+      },
+      {
+        "level": 3,
+        "text": "What Changed on 1 July 2026?"
+      },
+      {
+        "level": 3,
+        "text": "Commencement Notification"
+      },
+      {
+        "level": 3,
+        "text": "Revised NDCs Submitted"
+      },
+      {
+        "level": 3,
+        "text": "FDI Crosses $85 Billion"
+      },
+      {
+        "level": 3,
+        "text": "PILOT_PRODUCTION: Micron ATMP Sanand"
+      },
+      {
+        "level": 3,
+        "text": "Investigation Published"
+      },
+      {
+        "level": 3,
+        "text": "2026 Amendments Pass Lok Sabha"
+      },
+      {
+        "level": 3,
+        "text": "Rural UPI at ₹12L Cr"
+      },
+      {
+        "level": 3,
+        "text": "COMMERCIAL_PRODUCTION: CG Semi OSAT"
+      },
+      {
+        "level": 3,
+        "text": "Third Rate Cut (5.25%)"
+      },
+      {
+        "level": 3,
+        "text": "20th Anniversary Milestone"
+      },
+      {
+        "level": 3,
+        "text": "VB-G RAM G Act Enacted"
+      },
+      {
+        "level": 3,
+        "text": "CGWB 2025 Assessment Released"
+      },
+      {
+        "level": 3,
+        "text": "ICDS Digitisation Push"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 108,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 0
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "search",
+    "url": "/search?q=MGNREGA",
+    "name": "Search",
+    "status": 200,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 16,
+    "headingHierarchy": [
+      {
+        "level": 3,
+        "text": "Filter by Type"
+      },
+      {
+        "level": 3,
+        "text": "Intelligence & Coverage"
+      },
+      {
+        "level": 3,
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act"
+      },
+      {
+        "level": 3,
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "level": 3,
+        "text": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers"
+      },
+      {
+        "level": 3,
+        "text": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT"
+      },
+      {
+        "level": 3,
+        "text": "India's ₹11 Lakh Crore Climate Finance Challenge"
+      },
+      {
+        "level": 3,
+        "text": "Education Budget: Widening Gap Between Spending and Learning Outcomes"
+      },
+      {
+        "level": 3,
+        "text": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net"
+      },
+      {
+        "level": 3,
+        "text": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out"
+      },
+      {
+        "level": 3,
+        "text": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy"
+      },
+      {
+        "level": 3,
+        "text": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Co"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 52,
+    "landmarks": {
+      "nav": 6,
+      "main": 2,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 1
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 35,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  },
+  {
+    "slug": "404",
+    "url": "/nonexistent-page",
+    "name": "404 Page",
+    "status": 404,
+    "vpName": "mobile_768",
+    "bodyWidth": 752,
+    "viewportWidth": 768,
+    "hasHorizontalOverflow": false,
+    "headingCount": 5,
+    "headingHierarchy": [
+      {
+        "level": 1,
+        "text": "404"
+      },
+      {
+        "level": 4,
+        "text": "Sections"
+      },
+      {
+        "level": 4,
+        "text": "Topics"
+      },
+      {
+        "level": 4,
+        "text": "Knowledge Library"
+      },
+      {
+        "level": 4,
+        "text": "Governance"
+      }
+    ],
+    "imgsTotal": 0,
+    "imgsNoAlt": 0,
+    "focusableCount": 39,
+    "landmarks": {
+      "nav": 5,
+      "main": 1,
+      "banner": 1,
+      "contentinfo": 1,
+      "search": 1
+    },
+    "skipLinksCount": 1,
+    "neutral500Small": [],
+    "smallTouchTargetsCount": 32,
+    "smallTouchTargets": [
+      {
+        "tag": "A",
+        "text": "Skip to main content",
+        "width": 133,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "The BreakdownIndia Explained",
+        "width": 752,
+        "height": 18
+      },
+      {
+        "tag": "A",
+        "text": "Stories",
+        "width": 44,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Topics",
+        "width": 42,
+        "height": 17
+      },
+      {
+        "tag": "A",
+        "text": "Investigations",
+        "width": 90,
+        "height": 17
+      }
+    ]
+  }
+]

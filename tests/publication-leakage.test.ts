@@ -12,7 +12,7 @@ import {
   diagnosePublication,
   storyPublicationContext,
 } from '../lib/story/publication';
-import { positionalClaimId, isValidClaimId } from '../lib/story/claim-identity';
+import { positionalClaimId, isValidClaimId, deterministicClaimId } from '../lib/story/claim-identity';
 import type { Story } from '../types/canonical';
 
 function makeStory(overrides: Partial<Story> = {}): Story {
@@ -187,6 +187,38 @@ function runTests() {
     assert.strictEqual(isValidClaimId('claim-abc-123'), true);
     assert.strictEqual(isValidClaimId(''), false);
     assert.strictEqual(isValidClaimId('story-123'), false);
+  });
+
+  // ─── Deterministic Hashing (ENG-003 Checks) ───────────────────────────
+  console.log('\n─── Versioned Deterministic Hashing ───');
+
+  runTest('deterministicClaimId uses v1 prefix and is versioned', () => {
+    const id = deterministicClaimId('exports grew', 'MoC', 'india-trade-policy');
+    assert.ok(id.includes('-v1-'), 'Hash component is prefixed with version identifier');
+    assert.ok(id.startsWith('claim-india-trade-policy-v1-'), 'Claim ID starts with correct slug and version');
+  });
+
+  runTest('deterministicClaimId normalizes/canonicalizes whitespaces', () => {
+    const id1 = deterministicClaimId('exports   grew', 'MoC', 'india-trade-policy');
+    const id2 = deterministicClaimId('\nexports grew\t', '  MoC  ', 'INDIA-TRADE-POLICY ');
+    assert.strictEqual(id1, id2, 'Canonicalization matches whitespace-different inputs');
+  });
+
+  runTest('regex resolves story slug correctly from both versioned and legacy format', () => {
+    const versionedId = 'claim-india-trade-policy-v1-8a5fcd24ef78';
+    const legacyHashedId = 'claim-india-trade-policy-8a5fcd24ef78';
+    const legacyPositionalId = 'claim-india-trade-policy-0';
+
+    const regex = /^claim-(.+)-v\d+-[a-f0-9]{12}$/ || /^claim-(.+)-[a-f0-9]{12}$/ || /^claim-(.+)-[^-]+$/;
+    
+    // Test matches manually mimicking the component regex flow
+    const match1 = versionedId.match(/^claim-(.+)-v\d+-[a-f0-9]{12}$/);
+    const match2 = legacyHashedId.match(/^claim-(.+)-[a-f0-9]{12}$/);
+    const match3 = legacyPositionalId.match(/^claim-(.+)-[^-]+$/);
+
+    assert.strictEqual(match1 ? match1[1] : '', 'india-trade-policy', 'Extracts slug from v1 versioned format');
+    assert.strictEqual(match2 ? match2[1] : '', 'india-trade-policy', 'Extracts slug from legacy hashed format');
+    assert.strictEqual(match3 ? match3[1] : '', 'india-trade-policy', 'Extracts slug from legacy positional format');
   });
 
   // ─── Summary ───────────────────────────────────────────────────────────

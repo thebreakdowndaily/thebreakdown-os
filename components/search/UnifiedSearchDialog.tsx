@@ -83,7 +83,7 @@ export default function UnifiedSearchDialog({ open, onClose }: UnifiedSearchDial
     const seen = new Set<string>();
 
     // Order: stories, entities, topics
-    const typeOrder = ['story', 'entity', 'topic', 'organization', 'country', 'timeline', 'fix'];
+    const typeOrder = ['story', 'entity', 'topic', 'organization', 'country', 'timeline', 'fix', 'problem'];
     const typeLabels: Record<string, string> = {
       story: 'Stories',
       entity: 'Entities',
@@ -92,6 +92,7 @@ export default function UnifiedSearchDialog({ open, onClose }: UnifiedSearchDial
       country: 'Countries',
       timeline: 'Timeline',
       fix: 'The Fix',
+      problem: 'Problems',
     };
 
     for (const type of typeOrder) {

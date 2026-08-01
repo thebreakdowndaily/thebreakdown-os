@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/ui/Container';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { EntityBuilder } from '@/services/stories/pipeline/entities';
 import { GlobalTimelineExplorer } from '@/components/timeline/GlobalTimelineExplorer';
@@ -61,14 +61,18 @@ export default async function TimelinePage() {
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Timeline', href: '/timeline' },
-        ]}
-      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Timeline Explorer', href: '/timeline', current: true },
+          ]}
+          theme="dark"
+        />
+      </div>
 
       <main className="flex-1 w-full" role="main">
+
         <Container className="py-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-[#F5F5F5] mb-2">Timeline</h1>
           <p className="text-lg text-[#A1A1AA] mb-8">

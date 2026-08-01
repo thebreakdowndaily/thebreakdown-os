@@ -1,0 +1,120 @@
+{
+  "id": "ref-rbi-policy",
+  "slug": "ref-rbi-policy",
+  "storyType": "Policy Analysis",
+  "title": "RBI Monetary Policy Review",
+  "metadata": {
+    "difficulty": "Intermediate",
+    "confidence": "High",
+    "confidenceRationale": "Based on RBI policy statements",
+    "updateRequired": false,
+    "readingTimeMinutes": 5,
+    "tags": [
+      "rbi",
+      "monetary-policy"
+    ],
+    "entities": [
+      {
+        "name": "Reserve Bank of India",
+        "type": "institution",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/rbi.jpg",
+    "statistic": "6.5%",
+    "statisticSource": "RBI Repo Rate",
+    "caption": "Key rate unchanged",
+    "altText": "RBI Monetary Policy Committee",
+    "credit": "RBI",
+    "aspectRatio": "16:9"
+  },
+  "summary": "The RBI held the repo rate at 6.5%, maintaining an accommodative stance while monitoring inflation risks.",
+  "keyFacts": [
+    {
+      "claim": "Repo rate unchanged at 6.5%",
+      "source": "RBI Press Release",
+      "confidence": 1
+    }
+  ],
+  "whyItMatters": "Monetary policy decisions affect borrowing costs, investment, and economic growth for all Indians.",
+  "narrative": "The MPC voted unanimously to maintain the status quo, citing easing inflation but persistent growth risks.",
+  "timeline": [
+    {
+      "date": "Jun 6, 2026",
+      "event": "MPC meeting",
+      "source": "RBI",
+      "significance": "First review of 2026"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "Repo rate at 6.5%",
+      "source": "RBI Official Release",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [
+    {
+      "title": "Repo Rate Trajectory",
+      "type": "line",
+      "data": [
+        {
+          "label": "Jan",
+          "value": 6.5
+        },
+        {
+          "label": "Apr",
+          "value": 6.5
+        },
+        {
+          "label": "Jun",
+          "value": 6.5
+        }
+      ],
+      "source": "RBI"
+    }
+  ],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "RBI Monetary Policy Committee",
+        "type": "institution",
+        "position": "Sets policy rate",
+        "interest": "Price stability",
+        "stance": "support"
+      },
+      {
+        "name": "Commercial Banks",
+        "type": "private_sector",
+        "position": "Borrowers and lenders",
+        "interest": "Profit margins",
+        "stance": "conditional"
+      }
+    ],
+    "summary": "The RBI and banks are the primary stakeholders."
+  },
+  "sources": [
+    {
+      "title": "RBI Monetary Policy Statement",
+      "author": "Reserve Bank of India",
+      "reliability": "high"
+    }
+  ],
+  "visuals": [
+    {
+      "section": "hero",
+      "type": "photograph",
+      "placement": "hero",
+      "aspectRatio": "16:9",
+      "caption": "RBI MPC meeting",
+      "altText": "RBI headquarters",
+      "credit": "RBI"
+    }
+  ]
+}

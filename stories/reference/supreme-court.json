@@ -1,0 +1,113 @@
+{
+  "id": "ref-supreme-court",
+  "slug": "ref-supreme-court",
+  "storyType": "Court Judgment",
+  "title": "Supreme Court Rules on Digital Privacy",
+  "metadata": {
+    "difficulty": "Advanced",
+    "confidence": "High",
+    "confidenceRationale": "Based on judgment text and legal analysis",
+    "updateRequired": false,
+    "readingTimeMinutes": 7,
+    "tags": [
+      "supreme-court",
+      "privacy"
+    ],
+    "entities": [
+      {
+        "name": "Supreme Court of India",
+        "type": "institution",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/court.jpg",
+    "statistic": "Constitutional right",
+    "statisticSource": "Supreme Court Verdict",
+    "caption": "Judgment summary",
+    "altText": "Supreme Court building",
+    "credit": "Court media",
+    "aspectRatio": "16:9"
+  },
+  "summary": "The Supreme Court affirmed that privacy is a fundamental right under Article 21 of the Constitution.",
+  "keyFacts": [
+    {
+      "claim": "Privacy declared a fundamental right",
+      "source": "Supreme Court Judgment",
+      "confidence": 1
+    },
+    {
+      "claim": "Unanimous bench decision",
+      "source": "Supreme Court Judgment",
+      "confidence": 1
+    }
+  ],
+  "whyItMatters": "Privacy protections shape how government and corporations handle personal data.",
+  "narrative": "The nine-judge bench unanimously held that privacy is intrinsic to life and liberty.",
+  "timeline": [
+    {
+      "date": "Aug 24, 2017",
+      "event": "Judgment delivered",
+      "source": "Supreme Court",
+      "significance": "Landmark privacy ruling"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "Privacy is fundamental right",
+      "source": "Supreme Court Judgment, Para 30",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "Supreme Court",
+        "type": "institution",
+        "position": "Adjudicates constitutional matters",
+        "interest": "Rule of law",
+        "stance": "neutral"
+      },
+      {
+        "name": "Government of India",
+        "type": "government",
+        "position": "Implementer of policy",
+        "interest": "National security",
+        "stance": "conditional"
+      }
+    ],
+    "summary": "Multiple entities affected."
+  },
+  "perspectives": {
+    "headline": "Competing Views",
+    "perspectives": [
+      {
+        "label": "Privacy Advocate",
+        "source": "Justice K.S. Puttaswamy",
+        "quote": "Privacy is the foundation of freedom.",
+        "stance": "support"
+      },
+      {
+        "label": "State Security",
+        "source": "Government counsel",
+        "quote": "Some restrictions are necessary for national security.",
+        "stance": "oppose"
+      }
+    ],
+    "note": "Stances reflect the judgment, not editorial judgment."
+  },
+  "sources": [
+    {
+      "title": "Supreme Court Judgment",
+      "author": "Supreme Court of India",
+      "reliability": "high"
+    }
+  ],
+  "visuals": []
+}

@@ -1,0 +1,45 @@
+const fs = require('fs');
+const p = 'C:\\newsjack-content\\thebreakdown-os\\scripts\\test-005-migration.js';
+let c = fs.readFileSync(p, 'utf8');
+c = c.replace(
+  /DROP SCHEMA IF EXISTS public CASCADE;\s*CREATE SCHEMA public;\s*GRANT ALL ON SCHEMA public TO postgres;\s*GRANT ALL ON SCHEMA public TO public;/,
+  `DROP SCHEMA IF EXISTS editorial CASCADE;
+      DROP SCHEMA IF EXISTS graph CASCADE;
+      DROP SCHEMA IF EXISTS audit CASCADE;
+      DROP SCHEMA IF EXISTS identity CASCADE;
+      DROP SCHEMA IF EXISTS search CASCADE;
+      DROP TABLE IF EXISTS stories CASCADE;
+      DROP TABLE IF EXISTS topics CASCADE;
+      DROP TABLE IF EXISTS entities CASCADE;
+      DROP TABLE IF EXISTS timelines CASCADE;
+      DROP TABLE IF EXISTS fixes CASCADE;
+      DROP TABLE IF EXISTS media_items CASCADE;
+      DROP TABLE IF EXISTS datasets CASCADE;
+      DROP TABLE IF EXISTS users CASCADE;
+      DROP TABLE IF EXISTS bookmarks CASCADE;
+      DROP TABLE IF EXISTS research_constituencies CASCADE;
+      DROP TABLE IF EXISTS research_persons CASCADE;
+      DROP TABLE IF EXISTS research_political_parties CASCADE;
+      DROP TABLE IF EXISTS research_projects CASCADE;
+      DROP TABLE IF EXISTS research_party_affiliation_history CASCADE;
+      DROP TABLE IF EXISTS research_financial_records CASCADE;
+      DROP TABLE IF EXISTS research_sources CASCADE;
+      DROP TABLE IF EXISTS research_evidence_items CASCADE;
+      DROP TABLE IF EXISTS research_claims CASCADE;
+      DROP TABLE IF EXISTS research_claim_subject_relationships CASCADE;
+      DROP TABLE IF EXISTS research_corrections CASCADE;
+      DROP TABLE IF EXISTS research_search_protocols CASCADE;
+      DROP TABLE IF EXISTS research_gaps CASCADE;
+      DROP TYPE IF EXISTS publication_status_type CASCADE;
+      DROP TYPE IF EXISTS human_review_status_type CASCADE;
+      DROP TYPE IF EXISTS value_availability_status_type CASCADE;
+      DROP TYPE IF EXISTS affiliation_type_enum CASCADE;
+      DROP TYPE IF EXISTS affiliation_status_enum CASCADE;
+      DROP TYPE IF EXISTS claim_scope_type CASCADE;
+      DROP TYPE IF EXISTS research_confidence_type CASCADE;
+      DROP TYPE IF EXISTS financial_stage_type CASCADE;
+      DROP TYPE IF EXISTS correction_type_enum CASCADE;
+      DROP TYPE IF EXISTS research_gap_status_enum CASCADE;`
+);
+fs.writeFileSync(p, c);
+console.log("Updated test-005-migration.js with proper cleanup");

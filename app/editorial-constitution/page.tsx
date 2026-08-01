@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Container from '@/components/layout/Container';
 import Link from 'next/link';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'Editorial Constitution — The Breakdown',
@@ -11,6 +12,14 @@ export const metadata: Metadata = {
 
 export default function EditorialConstitutionPage() {
   return (
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Editorial Constitution', href: '/editorial-constitution', current: true },
+        ]} theme="dark" />
+      </div>
+
     <Container>
       <div className="py-8 max-w-3xl">
         <p className="text-sm text-amber-500 font-semibold uppercase tracking-wider mb-1">The Breakdown</p>
@@ -109,5 +118,6 @@ export default function EditorialConstitutionPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

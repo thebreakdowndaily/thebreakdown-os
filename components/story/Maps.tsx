@@ -83,7 +83,7 @@ const Maps: React.FC<MapsProps> = ({ geoData }) => {
         gap: 'var(--spacing-2)',
         marginTop: 'var(--spacing-4)',
       }}>
-        {geoData.regions.map((region: GeoRegion) => (
+        {geoData?.regions?.map((region: GeoRegion) => (
           <div
             key={region.id}
             style={{

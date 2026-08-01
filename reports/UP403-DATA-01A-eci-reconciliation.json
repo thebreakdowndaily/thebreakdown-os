@@ -1,0 +1,3629 @@
+[
+  {
+    "canonical_id": "UP-AC-001",
+    "ac_number": 1,
+    "official_name": "Behat",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-002",
+    "ac_number": 2,
+    "official_name": "Nakur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-003",
+    "ac_number": 3,
+    "official_name": "Saharanpur Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-004",
+    "ac_number": 4,
+    "official_name": "Saharanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-005",
+    "ac_number": 5,
+    "official_name": "Deoband",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-006",
+    "ac_number": 6,
+    "official_name": "Rampur Maniharan",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-007",
+    "ac_number": 7,
+    "official_name": "Gangoh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-008",
+    "ac_number": 8,
+    "official_name": "Kairana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-009",
+    "ac_number": 9,
+    "official_name": "Thana Bhawan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-010",
+    "ac_number": 10,
+    "official_name": "Shamli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-011",
+    "ac_number": 11,
+    "official_name": "Budhana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-012",
+    "ac_number": 12,
+    "official_name": "Charthawal",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-013",
+    "ac_number": 13,
+    "official_name": "Purqazi",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-014",
+    "ac_number": 14,
+    "official_name": "Muzaffarnagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-015",
+    "ac_number": 15,
+    "official_name": "Khatauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-016",
+    "ac_number": 16,
+    "official_name": "Meerapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-017",
+    "ac_number": 17,
+    "official_name": "Najibabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-018",
+    "ac_number": 18,
+    "official_name": "Nagina",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-019",
+    "ac_number": 19,
+    "official_name": "Barhapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-020",
+    "ac_number": 20,
+    "official_name": "Dhampur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-021",
+    "ac_number": 21,
+    "official_name": "Nehtaur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-022",
+    "ac_number": 22,
+    "official_name": "Bijnor",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-023",
+    "ac_number": 23,
+    "official_name": "Chandpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-024",
+    "ac_number": 24,
+    "official_name": "Noorpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-025",
+    "ac_number": 25,
+    "official_name": "Kanth",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-026",
+    "ac_number": 26,
+    "official_name": "Thakurdwara",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-027",
+    "ac_number": 27,
+    "official_name": "Moradabad Rural",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-028",
+    "ac_number": 28,
+    "official_name": "Moradabad Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-029",
+    "ac_number": 29,
+    "official_name": "Kundarki",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-030",
+    "ac_number": 30,
+    "official_name": "Bilari",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-031",
+    "ac_number": 31,
+    "official_name": "Chandausi",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-032",
+    "ac_number": 32,
+    "official_name": "Asmoli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-033",
+    "ac_number": 33,
+    "official_name": "Sambhal",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-034",
+    "ac_number": 34,
+    "official_name": "Suar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-035",
+    "ac_number": 35,
+    "official_name": "Chamraua",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-036",
+    "ac_number": 36,
+    "official_name": "Bilaspur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-037",
+    "ac_number": 37,
+    "official_name": "Rampur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-038",
+    "ac_number": 38,
+    "official_name": "Milak",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-039",
+    "ac_number": 39,
+    "official_name": "Dhanaura",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-040",
+    "ac_number": 40,
+    "official_name": "Naugawan Sadat",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-041",
+    "ac_number": 41,
+    "official_name": "Amroha",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-042",
+    "ac_number": 42,
+    "official_name": "Hasanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-043",
+    "ac_number": 43,
+    "official_name": "Siwalkhas",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-044",
+    "ac_number": 44,
+    "official_name": "Sardhana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-045",
+    "ac_number": 45,
+    "official_name": "Hastinapur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-046",
+    "ac_number": 46,
+    "official_name": "Kithore",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-047",
+    "ac_number": 47,
+    "official_name": "Meerut Cantt.",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-048",
+    "ac_number": 48,
+    "official_name": "Meerut",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-049",
+    "ac_number": 49,
+    "official_name": "Meerut South",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-050",
+    "ac_number": 50,
+    "official_name": "Chhaprauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-051",
+    "ac_number": 51,
+    "official_name": "Baraut",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-052",
+    "ac_number": 52,
+    "official_name": "Bagpat",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-053",
+    "ac_number": 53,
+    "official_name": "Loni",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-054",
+    "ac_number": 54,
+    "official_name": "Muradnagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-055",
+    "ac_number": 55,
+    "official_name": "Sahibabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-056",
+    "ac_number": 56,
+    "official_name": "Ghaziabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-057",
+    "ac_number": 57,
+    "official_name": "Modinagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-058",
+    "ac_number": 58,
+    "official_name": "Dhaulana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-059",
+    "ac_number": 59,
+    "official_name": "Hapur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-060",
+    "ac_number": 60,
+    "official_name": "Garhmukteshwar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-061",
+    "ac_number": 61,
+    "official_name": "Noida",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-062",
+    "ac_number": 62,
+    "official_name": "Dadri",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-063",
+    "ac_number": 63,
+    "official_name": "Jewar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-064",
+    "ac_number": 64,
+    "official_name": "Sikandrabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-065",
+    "ac_number": 65,
+    "official_name": "Bulandshahr",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-066",
+    "ac_number": 66,
+    "official_name": "Syana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-067",
+    "ac_number": 67,
+    "official_name": "Anupshahr",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-068",
+    "ac_number": 68,
+    "official_name": "Debai",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-069",
+    "ac_number": 69,
+    "official_name": "Shikarpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-070",
+    "ac_number": 70,
+    "official_name": "Khurja",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-071",
+    "ac_number": 71,
+    "official_name": "Khair",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-072",
+    "ac_number": 72,
+    "official_name": "Barauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-073",
+    "ac_number": 73,
+    "official_name": "Atrauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-074",
+    "ac_number": 74,
+    "official_name": "Chharra",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-075",
+    "ac_number": 75,
+    "official_name": "Koil",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-076",
+    "ac_number": 76,
+    "official_name": "Aligarh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-077",
+    "ac_number": 77,
+    "official_name": "Iglas",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-078",
+    "ac_number": 78,
+    "official_name": "Hathras",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-079",
+    "ac_number": 79,
+    "official_name": "Sadabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-080",
+    "ac_number": 80,
+    "official_name": "Sikandra Rao",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-081",
+    "ac_number": 81,
+    "official_name": "Chhata",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-082",
+    "ac_number": 82,
+    "official_name": "Mant",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-083",
+    "ac_number": 83,
+    "official_name": "Goverdhan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-084",
+    "ac_number": 84,
+    "official_name": "Mathura",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-085",
+    "ac_number": 85,
+    "official_name": "Baldev",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-086",
+    "ac_number": 86,
+    "official_name": "Etmadpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-087",
+    "ac_number": 87,
+    "official_name": "Agra Cantt.",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-088",
+    "ac_number": 88,
+    "official_name": "Agra South",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-089",
+    "ac_number": 89,
+    "official_name": "Agra North",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-090",
+    "ac_number": 90,
+    "official_name": "Agra Rural",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-091",
+    "ac_number": 91,
+    "official_name": "Fatehpur Sikri",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-092",
+    "ac_number": 92,
+    "official_name": "Kheragarh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-093",
+    "ac_number": 93,
+    "official_name": "Fatehabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-094",
+    "ac_number": 94,
+    "official_name": "Bah",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-095",
+    "ac_number": 95,
+    "official_name": "Tundla",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-096",
+    "ac_number": 96,
+    "official_name": "Jasrana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-097",
+    "ac_number": 97,
+    "official_name": "Firozabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-098",
+    "ac_number": 98,
+    "official_name": "Shikohabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-099",
+    "ac_number": 99,
+    "official_name": "Sirsaganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-100",
+    "ac_number": 100,
+    "official_name": "Kasganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-101",
+    "ac_number": 101,
+    "official_name": "Amanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-102",
+    "ac_number": 102,
+    "official_name": "Patiyali",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-103",
+    "ac_number": 103,
+    "official_name": "Aliganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-104",
+    "ac_number": 104,
+    "official_name": "Etah",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-105",
+    "ac_number": 105,
+    "official_name": "Marhara",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-106",
+    "ac_number": 106,
+    "official_name": "Jalesar",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-107",
+    "ac_number": 107,
+    "official_name": "Mainpuri",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-108",
+    "ac_number": 108,
+    "official_name": "Bhongaon",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-109",
+    "ac_number": 109,
+    "official_name": "Kishni",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-110",
+    "ac_number": 110,
+    "official_name": "Karhal",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-111",
+    "ac_number": 111,
+    "official_name": "Gunnaur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-112",
+    "ac_number": 112,
+    "official_name": "Bisauli",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-113",
+    "ac_number": 113,
+    "official_name": "Sahaswan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-114",
+    "ac_number": 114,
+    "official_name": "Bilsi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-115",
+    "ac_number": 115,
+    "official_name": "Badaun",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-116",
+    "ac_number": 116,
+    "official_name": "Shekhupur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-117",
+    "ac_number": 117,
+    "official_name": "Dataganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-118",
+    "ac_number": 118,
+    "official_name": "Baheri",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-119",
+    "ac_number": 119,
+    "official_name": "Meerganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-120",
+    "ac_number": 120,
+    "official_name": "Bhojipura",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-121",
+    "ac_number": 121,
+    "official_name": "Nawabganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-122",
+    "ac_number": 122,
+    "official_name": "Faridpur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-123",
+    "ac_number": 123,
+    "official_name": "Bithari Chainpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-124",
+    "ac_number": 124,
+    "official_name": "Bareilly",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-125",
+    "ac_number": 125,
+    "official_name": "Bareilly Cantt.",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-126",
+    "ac_number": 126,
+    "official_name": "Aonla",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-127",
+    "ac_number": 127,
+    "official_name": "Pilibhit",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-128",
+    "ac_number": 128,
+    "official_name": "Barkhera",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-129",
+    "ac_number": 129,
+    "official_name": "Puranpur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-130",
+    "ac_number": 130,
+    "official_name": "Bisalpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-131",
+    "ac_number": 131,
+    "official_name": "Katra",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-132",
+    "ac_number": 132,
+    "official_name": "Jalalabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-133",
+    "ac_number": 133,
+    "official_name": "Tilhar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-134",
+    "ac_number": 134,
+    "official_name": "Powayan",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-135",
+    "ac_number": 135,
+    "official_name": "Shahjahanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-136",
+    "ac_number": 136,
+    "official_name": "Dadraul",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-137",
+    "ac_number": 137,
+    "official_name": "Palia",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-138",
+    "ac_number": 138,
+    "official_name": "Nighasan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-139",
+    "ac_number": 139,
+    "official_name": "Gola Gokrannath",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-140",
+    "ac_number": 140,
+    "official_name": "Sri Nagar",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-141",
+    "ac_number": 141,
+    "official_name": "Dhaurahra",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-142",
+    "ac_number": 142,
+    "official_name": "Lakhimpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-143",
+    "ac_number": 143,
+    "official_name": "Kasta",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-144",
+    "ac_number": 144,
+    "official_name": "Mohammdi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-145",
+    "ac_number": 145,
+    "official_name": "Maholi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-146",
+    "ac_number": 146,
+    "official_name": "Sitapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-147",
+    "ac_number": 147,
+    "official_name": "Hargaon",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-148",
+    "ac_number": 148,
+    "official_name": "Laharpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-149",
+    "ac_number": 149,
+    "official_name": "Biswan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-150",
+    "ac_number": 150,
+    "official_name": "Sevata",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-151",
+    "ac_number": 151,
+    "official_name": "Mahmoodabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-152",
+    "ac_number": 152,
+    "official_name": "Sidhauli",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-153",
+    "ac_number": 153,
+    "official_name": "Misrikh",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-154",
+    "ac_number": 154,
+    "official_name": "Sawayazpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-155",
+    "ac_number": 155,
+    "official_name": "Shahabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-156",
+    "ac_number": 156,
+    "official_name": "Hardoi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-157",
+    "ac_number": 157,
+    "official_name": "Gopamau",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-158",
+    "ac_number": 158,
+    "official_name": "Sandi",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-159",
+    "ac_number": 159,
+    "official_name": "Bilgram-Mallanwan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-160",
+    "ac_number": 160,
+    "official_name": "Balamau",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-161",
+    "ac_number": 161,
+    "official_name": "Sandila",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-162",
+    "ac_number": 162,
+    "official_name": "Bangarmau",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-163",
+    "ac_number": 163,
+    "official_name": "Safipur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-164",
+    "ac_number": 164,
+    "official_name": "Mohan",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-165",
+    "ac_number": 165,
+    "official_name": "Unnao",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-166",
+    "ac_number": 166,
+    "official_name": "Bhagwantnagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-167",
+    "ac_number": 167,
+    "official_name": "Purwa",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-168",
+    "ac_number": 168,
+    "official_name": "Malihabad",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-169",
+    "ac_number": 169,
+    "official_name": "Bakshi Kaa Talab",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-170",
+    "ac_number": 170,
+    "official_name": "Sarojini Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-171",
+    "ac_number": 171,
+    "official_name": "Lucknow West",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-172",
+    "ac_number": 172,
+    "official_name": "Lucknow North",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-173",
+    "ac_number": 173,
+    "official_name": "Lucknow East",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-174",
+    "ac_number": 174,
+    "official_name": "Lucknow Central",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-175",
+    "ac_number": 175,
+    "official_name": "Lucknow Cantonment",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-176",
+    "ac_number": 176,
+    "official_name": "Mohanlalganj",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-177",
+    "ac_number": 177,
+    "official_name": "Bachhrawan",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-178",
+    "ac_number": 178,
+    "official_name": "Tiloi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-179",
+    "ac_number": 179,
+    "official_name": "Harchandpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-180",
+    "ac_number": 180,
+    "official_name": "Rae Bareli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-181",
+    "ac_number": 181,
+    "official_name": "Salon",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-182",
+    "ac_number": 182,
+    "official_name": "Sareni",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-183",
+    "ac_number": 183,
+    "official_name": "Unchahar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-184",
+    "ac_number": 184,
+    "official_name": "Jagdishpur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-185",
+    "ac_number": 185,
+    "official_name": "Gauriganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-186",
+    "ac_number": 186,
+    "official_name": "Amethi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-187",
+    "ac_number": 187,
+    "official_name": "Isauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-188",
+    "ac_number": 188,
+    "official_name": "Sultanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-189",
+    "ac_number": 189,
+    "official_name": "Sadar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-190",
+    "ac_number": 190,
+    "official_name": "Lambhua",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-191",
+    "ac_number": 191,
+    "official_name": "Kadipur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-192",
+    "ac_number": 192,
+    "official_name": "Kaimganj",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-193",
+    "ac_number": 193,
+    "official_name": "Amritpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-194",
+    "ac_number": 194,
+    "official_name": "Farrukhabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-195",
+    "ac_number": 195,
+    "official_name": "Bhojpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-196",
+    "ac_number": 196,
+    "official_name": "Chhibramau",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-197",
+    "ac_number": 197,
+    "official_name": "Tirwa",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-198",
+    "ac_number": 198,
+    "official_name": "Kannauj",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-199",
+    "ac_number": 199,
+    "official_name": "Jaswantnagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-200",
+    "ac_number": 200,
+    "official_name": "Etawah",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-201",
+    "ac_number": 201,
+    "official_name": "Bharthana",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-202",
+    "ac_number": 202,
+    "official_name": "Bidhuna",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-203",
+    "ac_number": 203,
+    "official_name": "Dibiyapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-204",
+    "ac_number": 204,
+    "official_name": "Auraiya",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-205",
+    "ac_number": 205,
+    "official_name": "Rasulabad",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-206",
+    "ac_number": 206,
+    "official_name": "Akbarpur-Raniya",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-207",
+    "ac_number": 207,
+    "official_name": "Sikandra",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-208",
+    "ac_number": 208,
+    "official_name": "Bhognipur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-209",
+    "ac_number": 209,
+    "official_name": "Bilhaur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-210",
+    "ac_number": 210,
+    "official_name": "Bithoor",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-211",
+    "ac_number": 211,
+    "official_name": "Kalyanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-212",
+    "ac_number": 212,
+    "official_name": "Govind Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-213",
+    "ac_number": 213,
+    "official_name": "Sishamau",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-214",
+    "ac_number": 214,
+    "official_name": "Arya Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-215",
+    "ac_number": 215,
+    "official_name": "Kidwai Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-216",
+    "ac_number": 216,
+    "official_name": "Kanpur Cantonment",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-217",
+    "ac_number": 217,
+    "official_name": "Maharajpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-218",
+    "ac_number": 218,
+    "official_name": "Ghatampur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-219",
+    "ac_number": 219,
+    "official_name": "Madhogarh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-220",
+    "ac_number": 220,
+    "official_name": "Kalpi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-221",
+    "ac_number": 221,
+    "official_name": "Orai",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-222",
+    "ac_number": 222,
+    "official_name": "Babina",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-223",
+    "ac_number": 223,
+    "official_name": "Jhansi Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-224",
+    "ac_number": 224,
+    "official_name": "Mauranipur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-225",
+    "ac_number": 225,
+    "official_name": "Garautha",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-226",
+    "ac_number": 226,
+    "official_name": "Lalitpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-227",
+    "ac_number": 227,
+    "official_name": "Mehroni",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-228",
+    "ac_number": 228,
+    "official_name": "Hamirpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-229",
+    "ac_number": 229,
+    "official_name": "Rath",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-230",
+    "ac_number": 230,
+    "official_name": "Mahoba",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-231",
+    "ac_number": 231,
+    "official_name": "Charkhari",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-232",
+    "ac_number": 232,
+    "official_name": "Tindwari",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-233",
+    "ac_number": 233,
+    "official_name": "Baberu",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-234",
+    "ac_number": 234,
+    "official_name": "Naraini",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-235",
+    "ac_number": 235,
+    "official_name": "Banda",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-236",
+    "ac_number": 236,
+    "official_name": "Chitrakoot",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-237",
+    "ac_number": 237,
+    "official_name": "Manikpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-238",
+    "ac_number": 238,
+    "official_name": "Jahanabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-239",
+    "ac_number": 239,
+    "official_name": "Bindki",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-240",
+    "ac_number": 240,
+    "official_name": "Fatehpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-241",
+    "ac_number": 241,
+    "official_name": "Ayah Shah",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-242",
+    "ac_number": 242,
+    "official_name": "Husainganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-243",
+    "ac_number": 243,
+    "official_name": "Khaga",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-244",
+    "ac_number": 244,
+    "official_name": "Rampur Khas",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-245",
+    "ac_number": 245,
+    "official_name": "Babaganj",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-246",
+    "ac_number": 246,
+    "official_name": "Kunda",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-247",
+    "ac_number": 247,
+    "official_name": "Vishwanathganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-248",
+    "ac_number": 248,
+    "official_name": "Pratapgarh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-249",
+    "ac_number": 249,
+    "official_name": "Patti",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-250",
+    "ac_number": 250,
+    "official_name": "Raniganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-251",
+    "ac_number": 251,
+    "official_name": "Sirathu",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-252",
+    "ac_number": 252,
+    "official_name": "Manjhanpur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-253",
+    "ac_number": 253,
+    "official_name": "Chail",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-254",
+    "ac_number": 254,
+    "official_name": "Phaphamau",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-255",
+    "ac_number": 255,
+    "official_name": "Soraon",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-256",
+    "ac_number": 256,
+    "official_name": "Phulpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-257",
+    "ac_number": 257,
+    "official_name": "Pratappur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-258",
+    "ac_number": 258,
+    "official_name": "Handia",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-259",
+    "ac_number": 259,
+    "official_name": "Meja",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-260",
+    "ac_number": 260,
+    "official_name": "Karachhana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-261",
+    "ac_number": 261,
+    "official_name": "Prayagraj West",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-262",
+    "ac_number": 262,
+    "official_name": "Prayagraj North",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-263",
+    "ac_number": 263,
+    "official_name": "Prayagraj South",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-264",
+    "ac_number": 264,
+    "official_name": "Bara",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-265",
+    "ac_number": 265,
+    "official_name": "Koraon",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-266",
+    "ac_number": 266,
+    "official_name": "Kursi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-267",
+    "ac_number": 267,
+    "official_name": "Ram Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-268",
+    "ac_number": 268,
+    "official_name": "Barabanki",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-269",
+    "ac_number": 269,
+    "official_name": "Zaidpur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-270",
+    "ac_number": 270,
+    "official_name": "Dariyabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-271",
+    "ac_number": 271,
+    "official_name": "Rudauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-272",
+    "ac_number": 272,
+    "official_name": "Haidergarh",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-273",
+    "ac_number": 273,
+    "official_name": "Milkipur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-274",
+    "ac_number": 274,
+    "official_name": "Bikapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-275",
+    "ac_number": 275,
+    "official_name": "Ayodhya",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-276",
+    "ac_number": 276,
+    "official_name": "Goshainganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-277",
+    "ac_number": 277,
+    "official_name": "Katehari",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-278",
+    "ac_number": 278,
+    "official_name": "Tanda",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-279",
+    "ac_number": 279,
+    "official_name": "Alapur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-280",
+    "ac_number": 280,
+    "official_name": "Jalalpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-281",
+    "ac_number": 281,
+    "official_name": "Akbarpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-282",
+    "ac_number": 282,
+    "official_name": "Balha",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-283",
+    "ac_number": 283,
+    "official_name": "Nanpara",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-284",
+    "ac_number": 284,
+    "official_name": "Matera",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-285",
+    "ac_number": 285,
+    "official_name": "Mahasi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-286",
+    "ac_number": 286,
+    "official_name": "Bahraich",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-287",
+    "ac_number": 287,
+    "official_name": "Payagpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-288",
+    "ac_number": 288,
+    "official_name": "Kaiserganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-289",
+    "ac_number": 289,
+    "official_name": "Bhinga",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-290",
+    "ac_number": 290,
+    "official_name": "Shrawasti",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-291",
+    "ac_number": 291,
+    "official_name": "Tulsipur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-292",
+    "ac_number": 292,
+    "official_name": "Gainsari",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-293",
+    "ac_number": 293,
+    "official_name": "Utraula",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-294",
+    "ac_number": 294,
+    "official_name": "Balrampur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-295",
+    "ac_number": 295,
+    "official_name": "Mehnaun",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-296",
+    "ac_number": 296,
+    "official_name": "Gonda",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-297",
+    "ac_number": 297,
+    "official_name": "Katra Bazar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-298",
+    "ac_number": 298,
+    "official_name": "Colonelganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-299",
+    "ac_number": 299,
+    "official_name": "Tarabganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-300",
+    "ac_number": 300,
+    "official_name": "Mankapur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-301",
+    "ac_number": 301,
+    "official_name": "Gaura",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-302",
+    "ac_number": 302,
+    "official_name": "Shohratgarh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-303",
+    "ac_number": 303,
+    "official_name": "Kapilvastu",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-304",
+    "ac_number": 304,
+    "official_name": "Bansi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-305",
+    "ac_number": 305,
+    "official_name": "Itwa",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-306",
+    "ac_number": 306,
+    "official_name": "Domariyaganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-307",
+    "ac_number": 307,
+    "official_name": "Harraiya",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-308",
+    "ac_number": 308,
+    "official_name": "Kaptanganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-309",
+    "ac_number": 309,
+    "official_name": "Rudhauli",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-310",
+    "ac_number": 310,
+    "official_name": "Basti Sadar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-311",
+    "ac_number": 311,
+    "official_name": "Mahadewa",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-312",
+    "ac_number": 312,
+    "official_name": "Menhdawal",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-313",
+    "ac_number": 313,
+    "official_name": "Khalilabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-314",
+    "ac_number": 314,
+    "official_name": "Dhanghata",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-315",
+    "ac_number": 315,
+    "official_name": "Pharenda",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-316",
+    "ac_number": 316,
+    "official_name": "Nautanwa",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-317",
+    "ac_number": 317,
+    "official_name": "Siswa",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-318",
+    "ac_number": 318,
+    "official_name": "Maharajganj",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-319",
+    "ac_number": 319,
+    "official_name": "Paniyara",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-320",
+    "ac_number": 320,
+    "official_name": "Caimpiyarganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-321",
+    "ac_number": 321,
+    "official_name": "Pipraich",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-322",
+    "ac_number": 322,
+    "official_name": "Gorakhpur Urban",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-323",
+    "ac_number": 323,
+    "official_name": "Gorakhpur Rural",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-324",
+    "ac_number": 324,
+    "official_name": "Sahajanwa",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-325",
+    "ac_number": 325,
+    "official_name": "Khajani",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-326",
+    "ac_number": 326,
+    "official_name": "Chauri-Chaura",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-327",
+    "ac_number": 327,
+    "official_name": "Bansgaon",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-328",
+    "ac_number": 328,
+    "official_name": "Chillupar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-329",
+    "ac_number": 329,
+    "official_name": "Khadda",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-330",
+    "ac_number": 330,
+    "official_name": "Padrauna",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-331",
+    "ac_number": 331,
+    "official_name": "Tamkuhi Raj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-332",
+    "ac_number": 332,
+    "official_name": "Fazilnagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-333",
+    "ac_number": 333,
+    "official_name": "Kushinagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-334",
+    "ac_number": 334,
+    "official_name": "Hata",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-335",
+    "ac_number": 335,
+    "official_name": "Ramkola",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-336",
+    "ac_number": 336,
+    "official_name": "Rudrapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-337",
+    "ac_number": 337,
+    "official_name": "Deoria",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-338",
+    "ac_number": 338,
+    "official_name": "Pathardeva",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-339",
+    "ac_number": 339,
+    "official_name": "Rampur Karkhana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-340",
+    "ac_number": 340,
+    "official_name": "Bhatpar Rani",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-341",
+    "ac_number": 341,
+    "official_name": "Salempur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-342",
+    "ac_number": 342,
+    "official_name": "Barhaj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-343",
+    "ac_number": 343,
+    "official_name": "Atrauliya",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-344",
+    "ac_number": 344,
+    "official_name": "Gopalpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-345",
+    "ac_number": 345,
+    "official_name": "Sagri",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-346",
+    "ac_number": 346,
+    "official_name": "Mubarakpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-347",
+    "ac_number": 347,
+    "official_name": "Azamgarh",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-348",
+    "ac_number": 348,
+    "official_name": "Nizamabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-349",
+    "ac_number": 349,
+    "official_name": "Phoolpur Pawai",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-350",
+    "ac_number": 350,
+    "official_name": "Didarganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-351",
+    "ac_number": 351,
+    "official_name": "Lalganj",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-352",
+    "ac_number": 352,
+    "official_name": "Mehnagar",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-353",
+    "ac_number": 353,
+    "official_name": "Madhuban",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-354",
+    "ac_number": 354,
+    "official_name": "Ghosi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-355",
+    "ac_number": 355,
+    "official_name": "Muhammadabad-Gohna",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-356",
+    "ac_number": 356,
+    "official_name": "Mau",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-357",
+    "ac_number": 357,
+    "official_name": "Belthara Road",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-358",
+    "ac_number": 358,
+    "official_name": "Rasara",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-359",
+    "ac_number": 359,
+    "official_name": "Sikanderpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-360",
+    "ac_number": 360,
+    "official_name": "Phephana",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-361",
+    "ac_number": 361,
+    "official_name": "Ballia Nagar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-362",
+    "ac_number": 362,
+    "official_name": "Bansdih",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-363",
+    "ac_number": 363,
+    "official_name": "Bairia",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-364",
+    "ac_number": 364,
+    "official_name": "Badlapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-365",
+    "ac_number": 365,
+    "official_name": "Shahganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-366",
+    "ac_number": 366,
+    "official_name": "Jaunpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-367",
+    "ac_number": 367,
+    "official_name": "Malhani",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-368",
+    "ac_number": 368,
+    "official_name": "Mungra Badshahpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-369",
+    "ac_number": 369,
+    "official_name": "Machhlishahr",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-370",
+    "ac_number": 370,
+    "official_name": "Mariyahu",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-371",
+    "ac_number": 371,
+    "official_name": "Zafrabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-372",
+    "ac_number": 372,
+    "official_name": "Kerakat",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-373",
+    "ac_number": 373,
+    "official_name": "Jakhanian",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-374",
+    "ac_number": 374,
+    "official_name": "Saidpur",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-375",
+    "ac_number": 375,
+    "official_name": "Ghazipur Sadar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-376",
+    "ac_number": 376,
+    "official_name": "Jangipur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-377",
+    "ac_number": 377,
+    "official_name": "Zahoorabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-378",
+    "ac_number": 378,
+    "official_name": "Mohammadabad",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-379",
+    "ac_number": 379,
+    "official_name": "Zamania",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-380",
+    "ac_number": 380,
+    "official_name": "Mughalsarai",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-381",
+    "ac_number": 381,
+    "official_name": "Sakaldiha",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-382",
+    "ac_number": 382,
+    "official_name": "Saiyadraja",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-383",
+    "ac_number": 383,
+    "official_name": "Chakia",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-384",
+    "ac_number": 384,
+    "official_name": "Pindra",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-385",
+    "ac_number": 385,
+    "official_name": "Ajagara",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-386",
+    "ac_number": 386,
+    "official_name": "Shivpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-387",
+    "ac_number": 387,
+    "official_name": "Rohaniya",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-388",
+    "ac_number": 388,
+    "official_name": "Varanasi North",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-389",
+    "ac_number": 389,
+    "official_name": "Varanasi South",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-390",
+    "ac_number": 390,
+    "official_name": "Varanasi Cantt.",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-391",
+    "ac_number": 391,
+    "official_name": "Sevapuri",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-392",
+    "ac_number": 392,
+    "official_name": "Bhadohi",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-393",
+    "ac_number": 393,
+    "official_name": "Gyanpur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-394",
+    "ac_number": 394,
+    "official_name": "Aurai",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-395",
+    "ac_number": 395,
+    "official_name": "Chhanbey",
+    "manifest_reservation": "SC",
+    "eci_reservation": "SC",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-396",
+    "ac_number": 396,
+    "official_name": "Mirzapur",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-397",
+    "ac_number": 397,
+    "official_name": "Majhawan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-398",
+    "ac_number": 398,
+    "official_name": "Chunar",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-399",
+    "ac_number": 399,
+    "official_name": "Marihan",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-400",
+    "ac_number": 400,
+    "official_name": "Ghorawal",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-401",
+    "ac_number": 401,
+    "official_name": "Robertsganj",
+    "manifest_reservation": "GENERAL",
+    "eci_reservation": "GENERAL",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-402",
+    "ac_number": 402,
+    "official_name": "Obra",
+    "manifest_reservation": "ST",
+    "eci_reservation": "ST",
+    "status": "MATCH",
+    "action": "NONE"
+  },
+  {
+    "canonical_id": "UP-AC-403",
+    "ac_number": 403,
+    "official_name": "Duddhi",
+    "manifest_reservation": "SC",
+    "eci_reservation": "ST",
+    "status": "CONFLICT",
+    "action": "CORRECTED_RESERVATION"
+  }
+]

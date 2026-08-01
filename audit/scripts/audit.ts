@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { runLoader } from '../loader.ts';
-import { writeReport } from '../report/writer.ts';
-import { aggregate } from '../report/aggregator.ts';
-import { logger } from '../plugins/utils/logger.ts';
+import { runLoader } from '../loader';
+import { writeReport } from '../report/writer';
+import { aggregate } from '../report/aggregator';
+import { logger } from '../plugins/utils/logger';
 
 /** Simple CLI argument parser */
 function parseArgs(argv: string[]) {

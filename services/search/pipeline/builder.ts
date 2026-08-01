@@ -17,6 +17,7 @@ export interface KnowledgeSearch {
     topics: SearchIndexEntry[];
     documents: SearchIndexEntry[];
     media: SearchIndexEntry[];
+    problems: SearchIndexEntry[];
   };
   suggestions?: {
     relatedSearches: string[];

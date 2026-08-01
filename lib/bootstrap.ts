@@ -4,8 +4,9 @@ import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
 import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, StoryBlock, Source, Claim, TimelineEvent, FAQItem, ChartDef, ExistingSolution, GlobalExample, FixAction, FixMetric, Investigation } from '@/types/canonical';
 import { seedDatasets } from '@/lib/datasets/seed-data';
+import { extractProblems } from '@/lib/problem-helpers';
 import type { APIStory, APITopic, APIEntity, APITimeline, APIFix, APIInvestigation } from '@/utils/data-layer/types';
-import { positionalClaimId } from '@/lib/story/claim-identity';
+import { positionalClaimId, deterministicClaimId } from '@/lib/story/claim-identity';
 
 export function bootstrapServices(options?: { publicOnly?: boolean }): Services {
   try { return getServices(); } catch {}
@@ -28,7 +29,8 @@ export function bootstrapServices(options?: { publicOnly?: boolean }): Services 
   const media: MediaItem[] = [];
 
   const services = initDefaultServices(stories, topics, entities, timelines, fixes, seedDatasets, media, investigations);
-  services.search.rebuild(stories, topics, entities, timelines, fixes, seedDatasets);
+  const problems = extractProblems(fixes);
+  services.search.rebuild(stories, topics, entities, timelines, fixes, seedDatasets, problems);
   return services;
 }
 
@@ -90,12 +92,13 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
   }
 
   const evidenceClaims = (s.claims || []).map((c, i) => ({
-    id: positionalClaimId(s.slug || 'story', i),
+    id: (c as any).id || deterministicClaimId(c.claim || '', c.source || '', s.slug || 'story'),
     text: c.claim || '',
     confidence: Math.round((c.confidence || 0.5) * 100),
     status: c.verification === 'true' ? 'verified' as const : c.verification === 'false' ? 'unverified' as const : (c.confidence || 0) >= 0.8 ? 'strong' as const : (c.confidence || 0) >= 0.6 ? 'moderate' as const : 'unverified' as const,
     sources: c.source ? [{ name: c.source || '', url: '', group: 'report' as const }] : [],
     supportingEvidence: c.explanation ? [c.explanation] : [],
+    counterArguments: (c as any).counterArguments || [],
   }));
 
   const verifiedCount = evidenceClaims.filter((c) => c.status === 'verified').length;
@@ -237,7 +240,7 @@ export function apiInvestigationToCanonical(i: APIInvestigation): Investigation 
     heroImage: i.heroImage || '',
     publishedAt: i.publishedAt,
     updatedAt: i.updatedAt,
-    status: 'published',
+    status: (i as any).status || 'published',
     chapters: (i.chapters || []).map((ch) => ({
       id: ch.id,
       slug: ch.slug,
@@ -259,21 +262,33 @@ export function apiInvestigationToCanonical(i: APIInvestigation): Investigation 
 }
 
 export function apiFixToCanonical(f: APIFix): Fix {
-  const fix = {
-    ...f as unknown as Fix,
-    title: f.headline,
-    problem: { title: f.problem?.title || '', content: f.problem?.content || '' },
-    rootCauses: { title: f.rootCauses?.title || '', content: f.rootCauses?.content || '' },
-    existingSolutions: (f.existingSolutions || []).map((s) => ({ title: s.name, description: s.description, link: s.source })),
-    globalExamples: (f.globalExamples || []).map((g) => ({ country: g.country, approach: g.policy, outcome: g.outcome, link: g.source })),
-    recommendedActions: (f.recommendedActions || []).map((a) => ({ title: a.title, description: a.description, priority: a.priority, timeframe: a.timeframe, actors: a.actors })),
-    citizenActions: (f.citizenActions || []).map((a) => a.title || a.description),
-    governmentActions: (f.governmentActions || []).map((a) => a.title || a.description),
-    metrics: (f.metricsToTrack || []).map((m) => ({ metric: m.name, currentValue: m.currentValue, targetValue: m.targetValue, source: m.dataSource })),
+  const { getFixtureBySlug } = require('../fixtures/fixes') as typeof import('../fixtures/fixes');
+  const fixture = getFixtureBySlug(f.slug);
+
+  const base: Record<string, unknown> = {
+    ...(f as unknown as Record<string, unknown>),
+    title: fixture?.title || f.headline,
     createdAt: f.publishedAt,
-    status: 'published',
+    status: (f as any).status || 'published',
     repo: undefined,
     _raw: f as unknown as Record<string, unknown>,
   };
-  return fix as unknown as Fix;
+
+  if (fixture) {
+    const AR13A_FIELDS = [
+      'primaryCategory', 'secondaryCategories', 'maturityStatus', 'publicationStatus',
+      'evidenceGrade', 'problemStatement', 'responsibleActorIds', 'beneficiaryGroups',
+      'disadvantagedGroups', 'fiscalCost', 'timeToImpact', 'globalPrecedents',
+      'tradeOffs', 'risksAndFailures', 'successMetrics', 'sourceIds', 'lastVerified',
+      'version', 'relatedStories', 'relatedEntities', 'sources',
+    ];
+    for (const key of AR13A_FIELDS) {
+      const val = (fixture as unknown as Record<string, unknown>)[key];
+      if (val !== undefined && val !== null && !(Array.isArray(val) && val.length === 0)) {
+        base[key] = val;
+      }
+    }
+  }
+
+  return base as unknown as Fix;
 }

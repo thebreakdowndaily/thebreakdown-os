@@ -141,7 +141,7 @@
 
   --color-text-primary: #18181b;
   --color-text-secondary: #52525b;
-  --color-text-muted: #a1a1aa;
+  --color-text-muted: #6b7280;
   --color-text-inverse: #ffffff;
 
   --color-border-default: #e4e4e7;
@@ -151,18 +151,31 @@
   --color-success-light: #d1fae5;
   --color-success: #10b981;
   --color-success-dark: #047857;
+  --color-text-success: #047857;
 
   --color-warning-light: #ffedd5;
   --color-warning: #f97316;
   --color-warning-dark: #c2410c;
+  --color-text-warning: #b45309;
 
   --color-error-light: #fee2e2;
   --color-error: #ef4444;
   --color-error-dark: #b91c1c;
+  --color-text-error: #b91c1c;
 
   --color-info-light: #dbeafe;
   --color-info: #3b82f6;
   --color-info-dark: #1d4ed8;
+  --color-text-info: #1d4ed8;
+
+  --color-text-link: #92400e;
+  --color-text-link-hover: #78350f;
+
+  /* ── Canvas (intentional editorial reading surface, deeper than bg-primary) */
+  --color-bg-canvas: #ffffff;  /* light canvas = white */
+
+  /* ── Focus ring (canonical interactive accent) */
+  --color-focus-ring: var(--color-brand-600);
 }
 
 [data-theme='dark'] {
@@ -172,7 +185,7 @@
 
   --color-text-primary: #f4f4f5;
   --color-text-secondary: #d4d4d8;
-  --color-text-muted: #71717a;
+  --color-text-muted: #a1a1aa;
   --color-text-inverse: #18181b;
 
   --color-border-default: #3f3f46;
@@ -182,18 +195,28 @@
   --color-success-light: #064e3b;
   --color-success: #34d399;
   --color-success-dark: #6ee7b7;
+  --color-text-success: #34d399;
 
   --color-warning-light: #7c2d12;
   --color-warning: #fb923c;
   --color-warning-dark: #fdba74;
+  --color-text-warning: #fb923c;
 
   --color-error-light: #7f1d1d;
   --color-error: #f87171;
   --color-error-dark: #fca5a5;
+  --color-text-error: #f87171;
 
   --color-info-light: #1e3a8a;
   --color-info: #60a5fa;
   --color-info-dark: #93c5fd;
+  --color-text-info: #60a5fa;
+
+  --color-text-link: #fcd34d;
+  --color-text-link-hover: #fde68a;
+
+  --color-bg-canvas: #0a0a0a;  /* same in dark — this is the story canvas */
+  --color-focus-ring: var(--color-brand-400);
 }
 
 /* ── Typography ───────────────────────────────────────────────────────── */

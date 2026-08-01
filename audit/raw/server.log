@@ -1,0 +1,28 @@
+
+> thebreakdown-os@0.1.0 start
+> next start
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.31.136:3000
+
+ ✓ Starting...
+ ✓ Ready in 916ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: India Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: india EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: india Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+
+C:\newsjack-content\thebreakdown-os>

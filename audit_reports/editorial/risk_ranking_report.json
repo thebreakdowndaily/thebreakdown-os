@@ -1,0 +1,1933 @@
+{
+  "generatedAt": "2026-07-23T10:03:17.764Z",
+  "totalPublicAudited": 21,
+  "methodology": "9-Factor Risk Engine (Freshness, Geopolitics, Health/Safety, Financial Complexity, Policy Consequence, Causal Density, Factual Burden, Structural Evidence Gap, Fast-Changing Facts). Composite score used strictly for audit triage priority.",
+  "batch1Selected": [
+    {
+      "slug": "who-cancer-report-2026",
+      "title": "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.9,
+      "rank": 1,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 9,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Direct public health, safety, or medical infrastructure implications"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 30 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #1) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Health / Safety Consequence, Financial / Budget Complexity, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.9."
+    },
+    {
+      "slug": "bjp-mission-360",
+      "title": "Mission 360: Inside BJP's Push for a Two-Thirds Majority and the Battle Over India's Constitutional Future",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.4,
+      "rank": 2,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 12 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #2) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Financial / Budget Complexity, Public Policy Consequence, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.4."
+    },
+    {
+      "slug": "epf-scheme-2026",
+      "title": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.4,
+      "rank": 3,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 23 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #3) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Financial / Budget Complexity, Public Policy Consequence, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.4."
+    },
+    {
+      "slug": "youth-mental-health-crisis",
+      "title": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.2,
+      "rank": 4,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 9,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Direct public health, safety, or medical infrastructure implications"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 17 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #4) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Health / Safety Consequence, Financial / Budget Complexity, Factual Burden / Verification Complexity. Composite triage score: 6.2."
+    },
+    {
+      "slug": "dpdp-bill",
+      "title": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.2,
+      "rank": 5,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 7.5,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 5 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #5) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Financial / Budget Complexity, Public Policy Consequence, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.2."
+    }
+  ],
+  "fullRanking": [
+    {
+      "slug": "who-cancer-report-2026",
+      "title": "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.9,
+      "rank": 1,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 9,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Direct public health, safety, or medical infrastructure implications"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 30 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #1) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Health / Safety Consequence, Financial / Budget Complexity, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.9."
+    },
+    {
+      "slug": "bjp-mission-360",
+      "title": "Mission 360: Inside BJP's Push for a Two-Thirds Majority and the Battle Over India's Constitutional Future",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.4,
+      "rank": 2,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 12 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #2) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Financial / Budget Complexity, Public Policy Consequence, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.4."
+    },
+    {
+      "slug": "epf-scheme-2026",
+      "title": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.4,
+      "rank": 3,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 23 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #3) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Financial / Budget Complexity, Public Policy Consequence, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.4."
+    },
+    {
+      "slug": "youth-mental-health-crisis",
+      "title": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.2,
+      "rank": 4,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 9,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Direct public health, safety, or medical infrastructure implications"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 17 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #4) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Health / Safety Consequence, Financial / Budget Complexity, Factual Burden / Verification Complexity. Composite triage score: 6.2."
+    },
+    {
+      "slug": "dpdp-bill",
+      "title": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 6.2,
+      "rank": 5,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 7.5,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 5 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "BATCH_1",
+      "selectionRationale": "Selected for Batch 1 (Rank #5) due to high-risk vectors: Freshness Volatility, Geopolitical / Conflict Impact, Financial / Budget Complexity, Public Policy Consequence, Factual Burden / Verification Complexity, Fast-Changing Underlying Facts. Composite triage score: 6.2."
+    },
+    {
+      "slug": "us-iran-war-strait-of-hormuz",
+      "title": "The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.9,
+      "rank": 6,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 22 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #6)."
+    },
+    {
+      "slug": "namami-gange-under-fire",
+      "title": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.8,
+      "rank": 7,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Substantial statutory, constitutional, or governance precedent"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 17 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #7)."
+    },
+    {
+      "slug": "us-iran-relations",
+      "title": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.8,
+      "rank": 8,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 9,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 6 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Active legal, electoral, or construction development"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #8)."
+    },
+    {
+      "slug": "81-crore-data-breach",
+      "title": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.2,
+      "rank": 9,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 10 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #9)."
+    },
+    {
+      "slug": "gig-worker-rights",
+      "title": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.2,
+      "rank": 10,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 17 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #10)."
+    },
+    {
+      "slug": "indian-education-crisis",
+      "title": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.2,
+      "rank": 11,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 8 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #11)."
+    },
+    {
+      "slug": "satluj-ban",
+      "title": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.2,
+      "rank": 12,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 10,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 8 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "HIGH_PRIORITY",
+      "selectionRationale": "High priority queue (Rank #12)."
+    },
+    {
+      "slug": "pm-fasal-bima-claims",
+      "title": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 5.1,
+      "rank": 13,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 9,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 6 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #13)."
+    },
+    {
+      "slug": "digital-payments-boom",
+      "title": "Digital Payments in Rural India: UPI's Unseen Revolution",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.8,
+      "rank": 14,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 6,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 4 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #14)."
+    },
+    {
+      "slug": "education-budget",
+      "title": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.8,
+      "rank": 15,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 6,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 4 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #15)."
+    },
+    {
+      "slug": "groundwater-depletion",
+      "title": "India's Groundwater Crisis: 62% of Districts Sound the Alarm",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.7,
+      "rank": 16,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 4.5,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 3 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #16)."
+    },
+    {
+      "slug": "mgnrega-reform",
+      "title": "MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.2,
+      "rank": 17,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 2,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Local or domestic policy context"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 9,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 6 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #17)."
+    },
+    {
+      "slug": "rbi-repo-rate",
+      "title": "RBI Repo Rate: Decoding Monetary Policy in a Changing Economy",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.2,
+      "rank": 18,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 2,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Local or domestic policy context"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 9,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 6 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #18)."
+    },
+    {
+      "slug": "climate-finance",
+      "title": "India's ₹11 Lakh Crore Climate Finance Challenge",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.1,
+      "rank": 19,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 2,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Local or domestic policy context"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 7.5,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 5 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #19)."
+    },
+    {
+      "slug": "semiconductor-pli",
+      "title": "India's ₹1.2 Lakh Crore Semiconductor Push: Can the Dream Take Silicon?",
+      "sourceType": "STANDALONE_STORY",
+      "compositeRiskScore": 4.1,
+      "rank": 20,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 2,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Local or domestic policy context"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 8,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Contains high-value monetary allocations, infrastructure costs, or multi-stage budget figures"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 7.5,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 5 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #20)."
+    },
+    {
+      "slug": "indias-inheritance",
+      "title": "India's Inheritance: The Partition and Its Legacies",
+      "sourceType": "KNOWLEDGE_LIBRARY_CHAPTER",
+      "compositeRiskScore": 3.9,
+      "rank": 21,
+      "factors": {
+        "freshnessRisk": {
+          "name": "Freshness Volatility",
+          "score": 8,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Recently updated story with active/evolving facts"
+        },
+        "geopoliticalRisk": {
+          "name": "Geopolitical / Conflict Impact",
+          "score": 9,
+          "weight": 1.5,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Involves national security, border dynamics, or foreign policy"
+        },
+        "healthSafetyRisk": {
+          "name": "Health / Safety Consequence",
+          "score": 1,
+          "weight": 1.4,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Standard institutional/policy domain"
+        },
+        "financialComplexityRisk": {
+          "name": "Financial / Budget Complexity",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Low financial data density"
+        },
+        "policyConsequenceRisk": {
+          "name": "Public Policy Consequence",
+          "score": 3,
+          "weight": 1.2,
+          "indicatorType": "IMPACT_BURDEN",
+          "rationale": "Narrow operational context"
+        },
+        "causalClaimDensityRisk": {
+          "name": "Causal Claim Density",
+          "score": 3,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Primarily descriptive content"
+        },
+        "factualBurdenRisk": {
+          "name": "Factual Burden / Verification Complexity",
+          "score": 2,
+          "weight": 1.1,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Carries 0 specific factual assertions and data points requiring source verification"
+        },
+        "structuralEvidenceGapRisk": {
+          "name": "Structural Evidence Gap Indicator",
+          "score": 3,
+          "weight": 1.3,
+          "indicatorType": "STRUCTURAL_INDICATOR",
+          "rationale": "Adequate structural source-to-claim ratio"
+        },
+        "fastChangingFactsRisk": {
+          "name": "Fast-Changing Underlying Facts",
+          "score": 2,
+          "weight": 1.2,
+          "indicatorType": "CONTENT_VOLATILITY",
+          "rationale": "Historical or settled subject matter"
+        }
+      },
+      "selectionCategory": "MEDIUM_PRIORITY",
+      "selectionRationale": "Medium priority queue (Rank #21)."
+    }
+  ]
+}

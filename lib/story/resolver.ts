@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildStoryPage } from '@/features/story/view-model';
-import type { Chapter, Story, StoryTerminalViewModel } from '@/types/canonical';
+import type { Chapter, Story, StoryTerminalViewModel, TimelineEvent } from '@/types/canonical';
 import { seedAll, enrichClaimLazy, getKnowledgeCore, type EnrichedClaim } from '@/lib/knowledge/knowledge-core';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
@@ -11,6 +11,8 @@ export interface ChapterResolution {
   type: 'chapter';
   chapter: Chapter;
   canonicalStory: Story;
+  candidateTimelineEvents: TimelineEvent[];
+  relatedStories: Story[];
   collectionSlug: string;
   volumeSlug: string;
   enrichedClaims: EnrichedClaim[];
@@ -24,6 +26,9 @@ export interface ChapterResolution {
 
 export interface LegacyStoryResolution {
   type: 'legacy_story';
+  canonicalStory: Story;
+  candidateTimelineEvents: TimelineEvent[];
+  relatedStories: Story[];
   vm: StoryTerminalViewModel;
 }
 
@@ -33,7 +38,7 @@ export interface NotFoundResolution {
 
 export type StoryResolution = ChapterResolution | LegacyStoryResolution | NotFoundResolution;
 
-export const tryLoadChapter = cache(async function tryLoadChapter(slug: string): Promise<Omit<ChapterResolution, 'type' | 'canonicalStory' | 'enrichedClaims' | 'claimCount' | 'evidenceCount' | 'thinkerCount' | 'documentCount'> & { chapter: Chapter } | null> {
+export const tryLoadChapter = cache(async function tryLoadChapter(slug: string): Promise<Omit<ChapterResolution, 'type' | 'canonicalStory' | 'candidateTimelineEvents' | 'relatedStories' | 'enrichedClaims' | 'claimCount' | 'evidenceCount' | 'thinkerCount' | 'documentCount'> & { chapter: Chapter } | null> {
   try {
     seedAll();
     const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
@@ -90,10 +95,14 @@ export async function resolveStory(slug: string): Promise<StoryResolution> {
     const thinkerCount = chapter.content.filter((b) => b.type === 'thinker').length;
     const documentCount = chapter.content.filter((b) => b.type === 'document').length;
 
+    const canonicalStory = chapterToCanonicalAdapter(chapter);
+
     return {
       type: 'chapter',
       chapter,
-      canonicalStory: chapterToCanonicalAdapter(chapter),
+      canonicalStory,
+      candidateTimelineEvents: chapter.sources ? [] : [],
+      relatedStories: [],
       collectionSlug,
       volumeSlug,
       enrichedClaims,
@@ -114,6 +123,9 @@ export async function resolveStory(slug: string): Promise<StoryResolution> {
 
   return {
     type: 'legacy_story',
+    canonicalStory: vm.story,
+    candidateTimelineEvents: vm.unifiedTimeline || [],
+    relatedStories: vm.relatedStories || [],
     vm,
   };
 }

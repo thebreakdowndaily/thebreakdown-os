@@ -2,11 +2,18 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { StoryShell } from '@/components/rxs/StoryShell';
-import { CanonicalStoryPage } from '@/components/story/CanonicalStoryPage';
 import { buildStoryMetadata } from '@/lib/story/metadata';
 import { resolveStory, getAllStoryAndChapterSlugs } from '@/lib/story/resolver';
 import { isCanonicalStoryPublic } from '@/lib/story/publication';
 import { createStoryJsonLd } from '@/lib/seo/jsonld-story';
+import { buildStoryPresentationModel } from '@/lib/story/presentation-model';
+import { applyReadingModePolicy } from '@/lib/story/reading-mode-policy';
+import StoryMemoryWriter from '@/components/narrative/StoryMemoryWriter';
+import type { ReadingMode } from '@/types/canonical';
+
+
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
 
 export const dynamicParams = true;
 export const revalidate = 60;
@@ -29,43 +36,56 @@ export default async function StoryPage({
 }) {
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
-  const mode = (resolvedSearchParams?.mode as string) || 'standard';
+  const rawMode = (resolvedSearchParams.mode as string) || 'standard';
+  const mode: ReadingMode = rawMode === 'quick' || rawMode === 'deep' ? rawMode : 'standard';
 
   const resolution = await resolveStory(slug);
   if (resolution.type === 'not_found') notFound();
 
-  const canonicalStory = resolution.type === 'chapter'
-    ? resolution.canonicalStory
-    : resolution.vm.story;
+  const canonicalStory = resolution.canonicalStory;
 
-  if (!isCanonicalStoryPublic(canonicalStory)) notFound();
+  // Fail-closed publication safety check
+  if (!isCanonicalStoryPublic(canonicalStory)) {
+    let isAuthenticated = false;
+    try {
+      const cookieStore = await cookies();
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key',
+        { cookies: { getAll: () => cookieStore.getAll() } }
+      );
+      const { data: { session } } = await supabase.auth.getSession();
+      isAuthenticated = Boolean(session);
+    } catch {
+      // Ignore
+    }
+    if (!isAuthenticated) notFound();
+  }
 
   const jsonLd = createStoryJsonLd(canonicalStory);
 
+  // 1. Build Canonical Story Presentation Model DTO
+  const presentationModel = buildStoryPresentationModel(
+    canonicalStory,
+    resolution.candidateTimelineEvents,
+    resolution.relatedStories
+  );
+
+  // 2. Apply Reading Mode Policy for progressive disclosure
+  const visibleExperience = applyReadingModePolicy(presentationModel, mode);
+
   return (
     <>
+      {/* Narrative Memory writer — passive localStorage write, side-effect only */}
+      <StoryMemoryWriter slug={slug} headline={canonicalStory.headline} />
+
       {jsonLd.map((ld, i) => (
-        <Script key={`sc-${i}`} id={`schema-${i}`} type="application/ld+json" strategy="beforeInteractive">
+        <Script key={`sc-${String(i)}`} id={`schema-${String(i)}`} type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(ld)}
         </Script>
       ))}
 
-      {resolution.type === 'chapter' ? (
-        <StoryShell
-          chapter={resolution.chapter}
-          collectionSlug={resolution.collectionSlug}
-          volumeSlug={resolution.volumeSlug}
-          enrichedClaims={resolution.enrichedClaims}
-          claimCount={resolution.claimCount}
-          evidenceCount={resolution.evidenceCount}
-          thinkerCount={resolution.thinkerCount}
-          documentCount={resolution.documentCount}
-          nextChapter={resolution.nextChapter}
-          relatedInvestigation={resolution.relatedInvestigation}
-        />
-      ) : (
-        <CanonicalStoryPage vm={resolution.vm} mode={mode} />
-      )}
+      <StoryShell visibleExperience={visibleExperience} />
     </>
   );
 }

@@ -1,0 +1,56 @@
+{
+  "batchNumber": 4,
+  "storySlug": "groundwater-depletion",
+  "storyTitle": "India's Groundwater Crisis: 62% of Districts Sound the Alarm",
+  "auditedAt": "2026-07-23T17:26:39.977Z",
+  "editorialTier": "Tier B — Solid with Minor Gaps",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "CGWB 2022/23 assessment data verified (447.7 BCM recharge, 59.26% extraction rate); narrative requires clarification that 62% applies to NW agricultural districts rather than 62% of national assessment units.",
+  "rawExtractedSurfaceItems": 16,
+  "confirmedMaterialClaims": 16,
+  "registrationCandidates": 16,
+  "verifiedRegistrationCandidates": 16,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsTotal": 6,
+  "highMaterialityVerified": 6,
+  "highMaterialityUnresolved": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "FULLY_VERIFIED",
+  "freshnessStatus": "CURRENT",
+  "domainCategory": "Scientific/Data",
+  "domainFactCheckDetails": "CGWB Dynamic Ground Water Resource Assessment 2022/2023: Total annual groundwater recharge is 447.73 BCM. Annual extractable resource is 407.21 BCM. Annual groundwater extraction is 241.34 BCM (Stage of extraction: 59.26%). Assessment Units: 6,535 total units -> 1,134 over-exploited (17.35%), 699 critical (10.70%), 1,050 semi-critical (16.07%), 3,558 safe (54.44%). 62% figure applies to specific high-extraction districts in NW India (Punjab, Haryana, Rajasthan), NOT 62% of national assessment units.",
+  "authoritativeSources": [
+    {
+      "exactTitle": "Dynamic Ground Water Resources of India 2022/2023",
+      "issuingAuthority": "Central Ground Water Board (CGWB), Ministry of Jal Shakti",
+      "publicationDate": "2023-11-20",
+      "officialURLOrIdentifier": "http://cgwb.gov.in/assessment-2023.pdf",
+      "pageOrTableOrSection": "Table 3.1 & Section 4.2",
+      "retrievalDate": "2026-07-23",
+      "sourceStatus": "PRIMARY_SOURCE_LOCATED",
+      "relevantPassageOrDataCell": "Stage of groundwater extraction is 59.26% nationally; 17.35% of assessment units over-exploited.",
+      "semanticRelationship": "EXACT_SUPPORT",
+      "temporalScope": "Assessment Year 2022-2023",
+      "geographicScope": "India (National & State/Unit Breakdown)",
+      "denominator": "6,535 Total Assessment Units",
+      "caveats": "Assessment units (blocks/mandals/talukas) must not be conflated with administrative districts."
+    }
+  ],
+  "quickModeDefensible": true,
+  "standardModeDefensible": true,
+  "deepModeValueAdd": true,
+  "timelineQuality": "ESSENTIAL",
+  "visualsQuality": "PEDAGOGICAL",
+  "issues": [
+    {
+      "id": "ISS-B4-GROUND",
+      "severity": "P2",
+      "category": "KNOWLEDGE_COVERAGE",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "16 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

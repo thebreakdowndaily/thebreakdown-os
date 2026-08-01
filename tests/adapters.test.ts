@@ -12,9 +12,10 @@ import {
   mapAPIStatusToCanonicalStatus,
 } from '../lib/story/adapters';
 import { isCanonicalStoryPublic, isPubliclyPublished, storyPublicationContext } from '../lib/story/publication';
-import { positionalClaimId, isValidClaimId } from '../lib/story/claim-identity';
+import { positionalClaimId, isValidClaimId, deterministicClaimId } from '../lib/story/claim-identity';
 import type { Chapter, Story } from '../types/canonical';
 import type { APIStory } from '../utils/data-layer/types';
+import { getKnowledgeLibrarySeedData } from '../utils/data-layer/knowledge-library-data';
 
 function assert(condition: boolean, name: string, results: { passed: number; failed: number }) {
   if (condition) {
@@ -92,7 +93,8 @@ async function runTests() {
 
   // ─── 3. apiStoryToCanonicalAdapter — deterministic claim IDs ─────────────
   console.log('\n── APIStory Adapter: Deterministic Claim IDs ──');
-  assertEqual(canonicalFromAPI.claims[0].id, 'claim-india-trade-policy-0', 'apiStory: deterministic claim ID', r);
+  const expectedHash = deterministicClaimId(mockApiStory.claims![0].claim, mockApiStory.claims![0].source, mockApiStory.slug);
+  assertEqual(canonicalFromAPI.claims[0].id, expectedHash, 'apiStory: deterministic claim ID', r);
   assert(isValidClaimId(canonicalFromAPI.claims[0].id), 'apiStory: claim ID passes validation', r);
 
   const call1 = apiStoryToCanonicalAdapter(mockApiStory);
@@ -337,6 +339,57 @@ async function runTests() {
   assert(!isValidClaimId('not-a-claim-id'), 'isValidClaimId: rejects malformed ID', r);
   const id3 = positionalClaimId('partition', 1);
   assert(id1 !== id3, 'positionalClaimId: different positions → different IDs', r);
+
+  // ─── 14. CounterArguments verification ───────────────────────────────────
+  console.log('\n── CounterArguments Verification ──');
+  const apiClaim: any = {
+    claim: 'UPI rural growth',
+    source: 'Report',
+    verification: 'true',
+    explanation: 'UPI is popular',
+    confidence: 0.95,
+    counterArguments: [
+      'Argument 1 string',
+      { title: 'Alt View', argument: 'Alternative viewpoint argument text', source: 'Proponent A', confidence: 'medium' }
+    ]
+  };
+
+  const adaptedStory = apiStoryToCanonicalAdapter({
+    id: 'test-story-ca',
+    slug: 'test-story-ca',
+    headline: 'UPI growth',
+    summary: 'Story summary',
+    publishedAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z',
+    readingTime: 5,
+    author: { name: 'Test' },
+    evidenceScore: 90,
+    category: 'economy',
+    tags: [],
+    keyPoints: [],
+    timeline: [],
+    facts: [],
+    claims: [apiClaim],
+    sources: [],
+    charts: [],
+    faq: [],
+    relatedStories: [],
+    relatedEntities: [],
+  });
+
+  const adaptedClaim = adaptedStory.claims[0];
+  assert(adaptedClaim.counterArguments && adaptedClaim.counterArguments.length === 2, 'CounterArguments are adapter-mapped', r);
+  assertEqual((adaptedClaim.counterArguments![0] as string), 'Argument 1 string', 'Allows string CounterArguments', r);
+  assertEqual((adaptedClaim.counterArguments![1] as any).argument, 'Alternative viewpoint argument text', 'Allows structured CounterArguments', r);
+
+  const libraryData = getKnowledgeLibrarySeedData();
+  const ch1 = libraryData[0].collections[0].volumes[0].chapters[0];
+  const claimBlocks = ch1.content.filter((b) => b.type === 'claim');
+  assertEqual(claimBlocks.length, 18, 'Chapter 1 has exactly 18 claim blocks', r);
+  claimBlocks.forEach((block) => {
+    const d = block.data as any;
+    assert(d.counterArguments && d.counterArguments.length >= 1, `Claim block ${block.id} has at least one counterargument`, r);
+  });
 
   // ─── Summary ─────────────────────────────────────────────────────────────
   console.log(`\nAdapter Tests: ${r.passed} passed, ${r.failed} failed`);

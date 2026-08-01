@@ -5,7 +5,7 @@ import { buildDatasetPage } from '@/features/dataset/view-model';
 import { DatasetViewTabs } from '@/components/dataset/DatasetViewTabs';
 import { seedDatasets } from '@/lib/datasets/seed-data';
 import Container from '@/components/ui/Container';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 import SectionHeader from '@/components/ui/SectionHeader';
 
 export function generateStaticParams() {
@@ -21,15 +21,19 @@ export default async function DatasetPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Datasets', href: '/datasets' },
-          { label: dataset.title, href: `/dataset/${dataset.slug}` },
-        ]}
-      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Data Explorer', href: '/data' },
+            { label: dataset.title, href: `/dataset/${dataset.slug}`, current: true },
+          ]}
+          theme="dark"
+        />
+      </div>
 
       <main className="flex-1 w-full" role="main">
+
         <Container className="py-8">
           <DatasetViewTabs dataset={dataset} />
 

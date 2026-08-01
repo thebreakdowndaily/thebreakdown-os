@@ -1,0 +1,12 @@
+BATCH 1 DATA SUMMARY
+======================
+
+Constituencies: 12 records
+Claims: 22 records
+Sources: 30 records
+Evidence Items: 30 records
+Financial Records: 14 records
+Corrections: 2 records
+
+All data is from batch PROD-12CONSTITUENCY-CONTROLLED.
+Files generated: constituencies.txt, claims.txt, sources.txt, evidence.txt, financial.txt, corrections.txt

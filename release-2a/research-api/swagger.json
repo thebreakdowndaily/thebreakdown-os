@@ -1,0 +1,46 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "UP403 Constituency Intelligence API",
+    "description": "Research API & Intelligence Query Engine for the UP403 Constituency Intelligence Dataset. Provides read-only access to all 403 Uttar Pradesh Assembly Constituencies.",
+    "version": "1.1.0",
+    "x-dataset-version": "v1.1.0",
+    "x-api-version": "v1",
+    "x-research-cutoff": "2026-07-30"
+  },
+  "servers": [
+    { "url": "https://thebreakdown.in/api/up403/v1", "description": "Production" },
+    { "url": "http://localhost:3000/api/up403/v1", "description": "Development" }
+  ],
+  "paths": {
+    "/": { "get": { "operationId": "getApiRoot", "summary": "API Root", "tags": ["Foundation"], "responses": { "200": { "description": "OK" } } } },
+    "/constituencies": { "get": { "operationId": "listConstituencies", "summary": "List Constituencies", "tags": ["Constituencies"], "parameters": [ { "$ref": "#/components/parameters/page" }, { "$ref": "#/components/parameters/limit" }, { "$ref": "#/components/parameters/search" }, { "$ref": "#/components/parameters/district" }, { "$ref": "#/components/parameters/division" }, { "$ref": "#/components/parameters/region" }, { "$ref": "#/components/parameters/reservation" }, { "$ref": "#/components/parameters/party" }, { "$ref": "#/components/parameters/politicalDna" }, { "$ref": "#/components/parameters/competitiveness" }, { "$ref": "#/components/parameters/include" } ], "responses": { "200": { "description": "Paginated list" } } } },
+    "/constituencies/{canonical_id}": { "get": { "operationId": "getConstituency", "summary": "Get Constituency", "tags": ["Constituencies"], "parameters": [ { "name": "canonical_id", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^UP-AC-\\d{3}$" } }, { "$ref": "#/components/parameters/include" } ], "responses": { "200": { "description": "Constituency record" }, "404": { "description": "Not found" } } } },
+    "/search": { "get": { "operationId": "searchConstituencies", "summary": "Search", "tags": ["Search"], "parameters": [ { "name": "q", "in": "query", "required": true, "schema": { "type": "string" } }, { "$ref": "#/components/parameters/page" }, { "$ref": "#/components/parameters/limit" }, { "$ref": "#/components/parameters/include" } ], "responses": { "200": { "description": "Search results" }, "400": { "description": "Missing q" } } } },
+    "/people": { "get": { "operationId": "listPeople", "summary": "List People", "tags": ["People"], "parameters": [ { "$ref": "#/components/parameters/page" }, { "$ref": "#/components/parameters/limit" } ], "responses": { "200": { "description": "People list" } } } },
+    "/people/{person_id}": { "get": { "operationId": "getPerson", "summary": "Get Person", "tags": ["People"], "parameters": [ { "name": "person_id", "in": "path", "required": true, "schema": { "type": "string" } } ], "responses": { "200": { "description": "Person profile" }, "404": { "description": "Not found" } } } },
+    "/elections": { "get": { "operationId": "listElections", "summary": "List Elections", "tags": ["Elections"], "parameters": [ { "name": "constituency", "in": "query", "schema": { "type": "string" } } ], "responses": { "200": { "description": "Election overviews" } } } },
+    "/elections/{year}": { "get": { "operationId": "getElectionYear", "summary": "Get Election Year", "tags": ["Elections"], "parameters": [ { "name": "year", "in": "path", "required": true, "schema": { "type": "string", "enum": ["2012", "2017", "2022", "2024-overlay"] } }, { "$ref": "#/components/parameters/include" } ], "responses": { "200": { "description": "Election results" }, "404": { "description": "Invalid year" } } } },
+    "/graph": { "get": { "operationId": "getFullGraph", "summary": "Full Knowledge Graph", "tags": ["Knowledge Graph"], "responses": { "200": { "description": "Full graph" } } } },
+    "/graph/{canonical_id}": { "get": { "operationId": "getConstituencyGraph", "summary": "Constituency Graph", "tags": ["Knowledge Graph"], "parameters": [ { "name": "canonical_id", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^UP-AC-\\d{3}$" } } ], "responses": { "200": { "description": "Sub-graph" }, "404": { "description": "Not found" } } } },
+    "/timeline/{canonical_id}": { "get": { "operationId": "getTimeline", "summary": "Constituency Timeline", "tags": ["Timeline"], "parameters": [ { "name": "canonical_id", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^UP-AC-\\d{3}$" } } ], "responses": { "200": { "description": "Timeline" }, "404": { "description": "Not found" } } } },
+    "/filter/options": { "get": { "operationId": "getFilterOptions", "summary": "Filter Options", "tags": ["Filters"], "responses": { "200": { "description": "Filter options" } } } },
+    "/compare": { "get": { "operationId": "compareConstituencies", "summary": "Compare", "tags": ["Comparison"], "parameters": [ { "name": "ids", "in": "query", "required": true, "schema": { "type": "string" } }, { "name": "categories", "in": "query", "schema": { "type": "string" } } ], "responses": { "200": { "description": "Comparison" }, "400": { "description": "Bad request" } } } },
+    "/analytics": { "get": { "operationId": "getAnalytics", "summary": "Analytics", "tags": ["Analytics"], "responses": { "200": { "description": "Analytics metrics" } } } }
+  },
+  "components": {
+    "parameters": {
+      "page": { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 1 }, "description": "Page number" },
+      "limit": { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }, "description": "Items per page" },
+      "search": { "name": "search", "in": "query", "schema": { "type": "string" }, "description": "Search query" },
+      "district": { "name": "district", "in": "query", "schema": { "type": "string" }, "description": "Filter by district" },
+      "division": { "name": "division", "in": "query", "schema": { "type": "string" }, "description": "Filter by division" },
+      "region": { "name": "region", "in": "query", "schema": { "type": "string" }, "description": "Filter by region" },
+      "reservation": { "name": "reservation", "in": "query", "schema": { "type": "string", "enum": ["GENERAL", "SC", "ST"] }, "description": "Filter by reservation" },
+      "party": { "name": "party", "in": "query", "schema": { "type": "string" }, "description": "Filter by party" },
+      "politicalDna": { "name": "political_dna", "in": "query", "schema": { "type": "string" }, "description": "Filter by DNA classification" },
+      "competitiveness": { "name": "competitiveness", "in": "query", "schema": { "type": "string" }, "description": "Filter by competitiveness class" },
+      "include": { "name": "include", "in": "query", "schema": { "type": "string" }, "description": "?include=provenance" }
+    }
+  }
+}

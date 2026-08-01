@@ -1,0 +1,127 @@
+{
+  "ConstituencyRecord": {
+    "description": "A single assembly constituency with all 150 fields",
+    "type": "object",
+    "required": ["canonical_constituency_id", "ac_number", "constituency_name"],
+    "properties": {
+      "canonical_constituency_id": { "type": "string", "pattern": "^UP-AC-\\d{3}$", "example": "UP-AC-001", "description": "Unique canonical identifier" },
+      "ac_number": { "type": "integer", "minimum": 1, "maximum": 403, "description": "Assembly constituency number per ECI Delimitation 2008" },
+      "constituency_name": { "type": "string", "description": "Official constituency name per ECI" },
+      "pc_number": { "type": "integer", "description": "Parliamentary constituency number" },
+      "pc_name": { "type": "string", "description": "Parliamentary constituency name" },
+      "district": { "type": "string", "description": "District name" },
+      "division": { "type": "string", "description": "Administrative division" },
+      "region": { "type": "string", "description": "Geographic region" },
+      "reservation_type": { "type": "string", "enum": ["GENERAL", "SC", "ST"], "description": "Reservation category" },
+      "winner_2022": { "type": "string", "description": "2022 Vidhan Sabha winner name" },
+      "winner_party_2022": { "type": "string", "description": "2022 winning party" },
+      "winner_votes_2022": { "type": "integer", "description": "2022 winner vote count" },
+      "winner_vote_share_2022": { "type": "number", "description": "2022 winner vote share percentage" },
+      "current_mla_name": { "type": "string", "description": "Current MLA name" },
+      "current_mla_party": { "type": "string" },
+      "current_mp_name": { "type": "string", "description": "Current Lok Sabha MP name" },
+      "current_mp_party": { "type": "string" },
+      "dna_classification": { "type": "string", "description": "Political DNA classification" },
+      "competitiveness_class": { "type": "string", "description": "Competitiveness classification" },
+      "master_dataset_version": { "type": "string", "description": "Dataset version identifier" }
+    }
+  },
+  "ApiRoot": {
+    "type": "object",
+    "properties": {
+      "success": { "type": "boolean", "enum": [true] },
+      "version": { "type": "string", "example": "v1" },
+      "dataset_version": { "type": "string", "example": "1.1.0" },
+      "data": { "type": "object" }
+    }
+  },
+  "PaginatedResponse": {
+    "type": "object",
+    "properties": {
+      "success": { "type": "boolean" },
+      "version": { "type": "string" },
+      "dataset_version": { "type": "string" },
+      "count": { "type": "integer", "description": "Items in this page" },
+      "page": { "type": "integer", "description": "Current page number" },
+      "limit": { "type": "integer", "description": "Items per page" },
+      "total": { "type": "integer", "description": "Total matching items" },
+      "data": { "type": "array" }
+    }
+  },
+  "Error": {
+    "type": "object",
+    "properties": {
+      "success": { "type": "boolean", "enum": [false] },
+      "version": { "type": "string" },
+      "error": { "type": "string" },
+      "message": { "type": "string" },
+      "documentation_url": { "type": "string" }
+    }
+  },
+  "KnowledgeGraph": {
+    "type": "object",
+    "properties": {
+      "node_count": { "type": "integer" },
+      "edge_count": { "type": "integer" },
+      "data": {
+        "type": "object",
+        "properties": {
+          "nodes": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "type": { "type": "string" }, "label": { "type": "string" } } } },
+          "edges": { "type": "array", "items": { "type": "object", "properties": { "source": { "type": "string" }, "target": { "type": "string" }, "relationship": { "type": "string" } } } }
+        }
+      }
+    }
+  },
+  "TimelineEvent": {
+    "type": "object",
+    "properties": {
+      "date": { "type": "string" },
+      "type": { "type": "string" },
+      "description": { "type": "string" },
+      "category": { "type": "string", "enum": ["election", "representation", "by_election", "vacancy", "project", "governance"] }
+    }
+  },
+  "AnalyticsMetrics": {
+    "type": "object",
+    "properties": {
+      "dna_distribution": { "type": "object", "additionalProperties": { "type": "integer" } },
+      "competitiveness_distribution": { "type": "object", "additionalProperties": { "type": "integer" } },
+      "party_hold_counts": { "type": "object", "additionalProperties": { "type": "integer" } },
+      "regional_party_dominance": { "type": "object" },
+      "volatility_summary": { "type": "object", "properties": { "avg_seat_volatility": { "type": "number" }, "avg_party_volatility": { "type": "number" }, "high_volatility_seats": { "type": "integer" }, "stable_seats": { "type": "integer" } } },
+      "reservation_summary": { "type": "object", "additionalProperties": { "type": "integer" } }
+    }
+  },
+  "FilterOptions": {
+    "type": "object",
+    "properties": {
+      "districts": { "type": "array", "items": { "type": "string" } },
+      "divisions": { "type": "array", "items": { "type": "string" } },
+      "regions": { "type": "array", "items": { "type": "string" } },
+      "reservation_types": { "type": "array", "items": { "type": "string", "enum": ["GENERAL", "SC", "ST"] } },
+      "dna_classifications": { "type": "array", "items": { "type": "string" } },
+      "competitiveness_classes": { "type": "array", "items": { "type": "string" } },
+      "parties": { "type": "array", "items": { "type": "string" } },
+      "election_years": { "type": "array", "items": { "type": "integer" } }
+    }
+  },
+  "PersonRecord": {
+    "type": "object",
+    "properties": {
+      "person_id": { "type": "string" },
+      "name": { "type": "string" },
+      "role": { "type": "string", "enum": ["MLA", "MP"] },
+      "party": { "type": "string" },
+      "constituencies": { "type": "array", "items": { "type": "object" } },
+      "election_history": { "type": "array", "items": { "type": "object", "properties": { "year": { "type": "integer" }, "constituency_id": { "type": "string" }, "position": { "type": "string", "enum": ["winner", "runner_up"] }, "party": { "type": "string" }, "votes": { "type": "integer" }, "vote_share": { "type": "number" } } } }
+    }
+  },
+  "SearchResult": {
+    "type": "object",
+    "properties": {
+      "score": { "type": "number", "description": "Relevance score" },
+      "matched_fields": { "type": "array", "items": { "type": "string" }, "description": "Fields that matched the query" },
+      "record": { "$ref": "#/ConstituencyRecord" }
+    }
+  }
+}

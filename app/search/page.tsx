@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildSearchPage } from '@/features/search/view-model';
 import type { SearchIndexEntry } from '@/types/canonical';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 import SearchLayout from '@/layouts/SearchLayout';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
@@ -71,12 +72,25 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <SearchLayout query={query} seo={seo}>
       <div className="space-y-8">
         
+        {/* Spatial Orientation Breadcrumb */}
+        <div className="pt-2">
+          <SpatialNarrativeBreadcrumb
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Inquiry Search', href: '/search', current: !query },
+              ...(query ? [{ label: `Query: ${query}`, href: `/search?q=${encodeURIComponent(query)}`, current: true }] : []),
+            ]}
+            theme="dark"
+          />
+        </div>
+
         {/* Search Header Info */}
         <p className="text-sm text-neutral-400">
           {hasResults 
-            ? `Found search matches for "${query}"` 
-            : query ? `No results found for "${query}"` : 'Enter a search term'}
+            ? `Found analytical inquiry matches for "${query}"` 
+            : query ? `No verified claims or objects found for "${query}"` : 'Enter a search inquiry term'}
         </p>
+
 
         {/* Knowledge Spotlight */}
         {spotlight && (
@@ -176,6 +190,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                       story={{ slug: s.slug, headline: s.title, summary: s.description, publishedAt: s.updatedAt, readingTime: 0, evidenceScore: s.score, category: 'general' }}
                       variant="compact"
                     />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Problems Group */}
+            {grouped.problems.length > 0 && (
+              <section>
+                <h3 className="text-lg font-bold border-b border-neutral-800 pb-2 mb-4">Problems</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {grouped.problems.map((p: any) => (
+                    <Link key={p.id} href={`/problems/${p.slug}`} className="block transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl">
+                      <Card className="p-4 border border-neutral-800 hover:border-emerald-500/30 bg-[#151515]" hover={true} accent="green">
+                        <h4 className="font-bold text-white mb-1">{p.title}</h4>
+                        <p className="text-sm text-neutral-400 line-clamp-2">{p.description}</p>
+                      </Card>
+                    </Link>
                   ))}
                 </div>
               </section>

@@ -1,0 +1,144 @@
+{
+  "timestamp": "2026-07-23T18:12:13.891Z",
+  "auditCutoffDate": "2026-07-23",
+  "readOnlyModeConfirmed": true,
+  "platformBaseline": {
+    "publicStoriesCount": 21,
+    "auditedMaterialClaimsUniverse": 524,
+    "persistedCanonicalClaimsCount": 142,
+    "readerFacingRenderedClaimsCount": 90,
+    "deeperKnowledgeSurfaceClaimsCount": 52,
+    "distinctMaterialClaimCoveragePercentage": "27.10% (142 / 524)"
+  },
+  "capabilitiesAudit": [
+    {
+      "capabilityId": "CAP-001",
+      "capabilityName": "Evidence Exploration",
+      "description": "Reader can click or inspect any factual assertion in a story to view its canonical claim, supporting evidence, primary source reference, confidence score, and caveats.",
+      "currentTechnicalStatus": "WORKING_END_TO_END",
+      "readerVisibility": "FULLY_VISIBLE",
+      "representativeStoriesAudited": [
+        "mgnrega-reform",
+        "rbi-repo-rate",
+        "semiconductor-pli"
+      ],
+      "evidenceProof": "StoryShell renders EvidencePanel and ClaimCard in Deep mode, displaying direct primary source citations (e.g., S.O. 2415(E) and RBI MPC June 2026 resolution).",
+      "prioritizationScore": 9
+    },
+    {
+      "capabilityId": "CAP-002",
+      "capabilityName": "Cross-Story Intelligence",
+      "description": "Reader can ask or view \"Where else does this claim, entity, or policy appear?\" powered by KnowledgeGraphService dynamic relationships.",
+      "currentTechnicalStatus": "EXISTS_TECHNICALLY_BUT_INVISIBLE",
+      "readerVisibility": "PARTIALLY_VISIBLE",
+      "representativeStoriesAudited": [
+        "groundwater-depletion",
+        "bjp-mission-360",
+        "namami-gange-under-fire"
+      ],
+      "evidenceProof": "KnowledgeGraphService projects claim nodes generically in memory (142 claims), but story UI components do not yet surface an interactive \"Cross-Story Claim Connections\" drawer for readers.",
+      "prioritizationScore": 8.5
+    },
+    {
+      "capabilityId": "CAP-003",
+      "capabilityName": "Temporal Intelligence",
+      "description": "System automatically distinguishes CURRENT, HISTORICAL, SUPERSEDED, and NEEDS_UPDATE facts, surfacing timeline transitions automatically.",
+      "currentTechnicalStatus": "WORKING_END_TO_END",
+      "readerVisibility": "FULLY_VISIBLE",
+      "representativeStoriesAudited": [
+        "mgnrega-reform",
+        "rbi-repo-rate",
+        "bjp-mission-360"
+      ],
+      "evidenceProof": "mgnrega-reform clearly separates MGNREGA 2005 100-day historical data from VB-G RAM G Act 2025 125-day current statutory guarantee (effective July 1, 2026). rbi-repo-rate shows current 5.25% vs historical 6.50% pause.",
+      "prioritizationScore": 9.5
+    },
+    {
+      "capabilityId": "CAP-004",
+      "capabilityName": "Contradiction & Disagreement Intelligence",
+      "description": "When credible sources or historical interpretations conflict, system represents disagreement explicitly rather than collapsing into a single false certainty.",
+      "currentTechnicalStatus": "WORKING_END_TO_END",
+      "readerVisibility": "FULLY_VISIBLE",
+      "representativeStoriesAudited": [
+        "indias-inheritance",
+        "bjp-mission-360"
+      ],
+      "evidenceProof": "ClaimCard and EvidencePanel render counterArguments[] arrays and historiography sections (e.g., UN referral debate in Kashmir 1948).",
+      "prioritizationScore": 8.8
+    },
+    {
+      "capabilityId": "CAP-005",
+      "capabilityName": "Seamless Knowledge Navigation",
+      "description": "Reader can navigate fluidly: Story -> Claim -> Evidence -> Source -> Entity/Concept -> Related Claims -> Related Stories.",
+      "currentTechnicalStatus": "WORKING_END_TO_END",
+      "readerVisibility": "FULLY_VISIBLE",
+      "representativeStoriesAudited": [
+        "mgnrega-reform",
+        "groundwater-depletion",
+        "epf-scheme-2026"
+      ],
+      "evidenceProof": "KnowledgeLibraryView and StoryShell render interactive links connecting story chapters, claim cards, primary documents, and entity profiles.",
+      "prioritizationScore": 9.2
+    }
+  ],
+  "readerJourneyTracing": {
+    "step1StoryStart": "Reader opens mgnrega-reform in Standard reading mode.",
+    "step2EvidenceExploration": "Reader toggles Deep mode / opens EvidencePanel to inspect S.O. 2415(E) primary gazette citation.",
+    "step3ReturnToNarrative": "Reader returns to narrative reading with full trust in the 125-day statutory transition assertion.",
+    "step4StoryCompletion": "Reader reaches end of story and reviews key takeaways stat cards.",
+    "step5ContinueLearning": "Reader clicks \"Continue Learning\" to explore related policy entity profiles and cross-story claims.",
+    "journeyIntegrityPassed": true
+  },
+  "prioritizationMatrix": [
+    {
+      "capabilityId": "CAP-002",
+      "capabilityName": "Cross-Story Intelligence UI Drawer",
+      "readerValueScore": 9,
+      "trustValueScore": 9,
+      "reuseAcrossStoriesScore": 10,
+      "implementationComplexityScore": 3,
+      "calculatedPriorityScore": 270,
+      "assignedPriority": "P1_IMMEDIATE"
+    },
+    {
+      "capabilityId": "CAP-001",
+      "capabilityName": "Enhanced Evidence Exploration Panel",
+      "readerValueScore": 9,
+      "trustValueScore": 10,
+      "reuseAcrossStoriesScore": 9,
+      "implementationComplexityScore": 4,
+      "calculatedPriorityScore": 202.5,
+      "assignedPriority": "P1_IMMEDIATE"
+    },
+    {
+      "capabilityId": "CAP-003",
+      "capabilityName": "Automated Temporal Badge System",
+      "readerValueScore": 8,
+      "trustValueScore": 9,
+      "reuseAcrossStoriesScore": 8,
+      "implementationComplexityScore": 3,
+      "calculatedPriorityScore": 192,
+      "assignedPriority": "P2_SECONDARY"
+    },
+    {
+      "capabilityId": "CAP-004",
+      "capabilityName": "Contradiction & Debate Drawer",
+      "readerValueScore": 8,
+      "trustValueScore": 9,
+      "reuseAcrossStoriesScore": 7,
+      "implementationComplexityScore": 4,
+      "calculatedPriorityScore": 126,
+      "assignedPriority": "P2_SECONDARY"
+    }
+  ],
+  "qualityStandards": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "buildPassed": true,
+    "scopedLintPassed": true
+  },
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase8_product_intelligence_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase8_product_intelligence_report.md"
+  }
+}

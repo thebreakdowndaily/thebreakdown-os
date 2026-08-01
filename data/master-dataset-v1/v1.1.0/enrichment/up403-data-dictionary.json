@@ -1,0 +1,1394 @@
+{
+  "document_id": "UP403-WP10-DATA-DICTIONARY-v1.0",
+  "title": "UP403 Constituency Intelligence Dataset — Data Dictionary & Schema Reference",
+  "dataset_version": "1.0.1",
+  "enrichment_version": "1.1.0",
+  "generated_at": "2026-07-30T18:00:00Z",
+  "total_fields": 150,
+  "categories": {
+    "IDENTIFICATION": "Canonical identifiers and official names from ECI Delimitation 2008",
+    "CLASSIFICATION": "Administrative classification: regions, zones, reservation categories",
+    "GEOGRAPHY": "Geographic attributes (area, terrain, rivers). Mostly NOT_AVAILABLE.",
+    "ELECTIONS": "Election results from ECI 2012, 2017, 2022 Vidhan Sabha + 2024 Lok Sabha",
+    "COMPETITIVENESS": "Electoral competitiveness indicators, DNA classification, derived scores",
+    "DEMOGRAPHICS": "Census 2011 data at AC level. Currently NOT_AVAILABLE — requires GIS pipeline.",
+    "ECONOMY": "Economic indicators. NOT_AVAILABLE at AC level.",
+    "INFRASTRUCTURE": "Infrastructure indicators. NOT_AVAILABLE at AC level.",
+    "DEVELOPMENT": "Flagshhip scheme data from UP403-DATA-11",
+    "GOVERNANCE": "Governance, environmental, and disaster risk data from UP403-DATA-10",
+    "DATA_QUALITY": "Availability status annotations for each data category",
+    "METADATA": "Dataset versioning, timestamps, and provenance tracking"
+  },
+  "field_summary_by_category": {
+    "CLASSIFICATION": 4,
+    "COMPETITIVENESS": 39,
+    "DATA_QUALITY": 4,
+    "DEMOGRAPHICS": 13,
+    "DEVELOPMENT": 6,
+    "ECONOMY": 11,
+    "ELECTIONS": 44,
+    "GEOGRAPHY": 8,
+    "GOVERNANCE": 4,
+    "IDENTIFICATION": 5,
+    "INFRASTRUCTURE": 7,
+    "METADATA": 5
+  },
+  "fields": [
+    {
+      "field_name": "district",
+      "field_type": "str",
+      "category": "CLASSIFICATION",
+      "definition": "District name per UP Revenue Department (ECI Delimitation 2008)",
+      "sample_value": "Saharanpur",
+      "source": "ECI Delimitation 2008, UP Revenue Dept",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "division",
+      "field_type": "str",
+      "category": "CLASSIFICATION",
+      "definition": "Administrative division name per UP Revenue Department",
+      "sample_value": "Saharanpur",
+      "source": "UP Revenue Dept",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "region",
+      "field_type": "str",
+      "category": "CLASSIFICATION",
+      "definition": "Geographic region classification (Western/Central/Eastern/Bundelkhand)",
+      "sample_value": "Western UP (NCR + Western)",
+      "source": "UP403-DATA-08",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "reservation_type",
+      "field_type": "str",
+      "category": "CLASSIFICATION",
+      "definition": "Reservation category per ECI Delimitation 2008 (SC/ST/GENERAL)",
+      "sample_value": "GENERAL",
+      "source": "ECI Delimitation 2008",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "competitiveness_avg_margin_pct",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Average victory margin across all elections",
+      "sample_value": "7.98",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "competitiveness_class",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Overall competitiveness classification",
+      "sample_value": "LEAN",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "competitiveness_thresholds",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Threshold definitions used for competitiveness classification",
+      "sample_value": "ULTRA_SAFE>20, SAFE>10, LEAN>5, COMPETITIVE>3, HIGHLY_COMPETITIVE>1, MARGINAL<=1",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "competitiveness_trend",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Competitiveness trend direction (WIDENING/NARROWING/STABLE)",
+      "sample_value": "WIDENING",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_bjp_competitiveness_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "BJP-specific competitiveness score (lower = BJP weaker)",
+      "sample_value": "24.54",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_development_coverage_index",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Development coverage index",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_electoral_competitiveness_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Composite electoral competitiveness score (0.0-1.0)",
+      "sample_value": "0.399",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_governance_issue_density",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Governance issue density score",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_party_persistence_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Party persistence score (higher = same party more often)",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_representation_continuity_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Representation continuity score",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_seat_volatility",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Scalar seat volatility score (higher = more volatile)",
+      "sample_value": "2.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_sp_competitiveness_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "SP-specific competitiveness score (lower = SP weaker)",
+      "sample_value": "23.14",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "derived_winner_persistence_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Winner persistence score (higher = same winner more often)",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "dna_algorithm_version",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Version of the DNA classification algorithm used",
+      "sample_value": "1.0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "dna_classification",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "DNA classification of the constituency (CONTENTED/SAFE/LEAN etc)",
+      "sample_value": "CONTESTED",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "dna_confidence",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Confidence level in the DNA classification (HIGH/MEDIUM/LOW)",
+      "sample_value": "HIGH",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "dna_reasoning",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Human-readable reasoning behind the DNA classification",
+      "sample_value": "Party changed INC -> SP with avg margin 7.98%",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "dna_sub_type",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "DNA sub-type describing the competitive dynamic",
+      "sample_value": "INC_vs_SP",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "most_persistent_party",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Party with most wins across all elections",
+      "sample_value": "INC",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "party_continuity_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Party continuity score (proportion of consecutive same-party wins)",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "party_turnover_count",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Number of party changes across consecutive elections",
+      "sample_value": "2",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "party_volatility_index",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Index measuring party-level volatility across elections",
+      "sample_value": "2",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "seat_volatility_index",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Index measuring seat-level volatility across elections",
+      "sample_value": "2",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "sociology_dominant_party_avg_vote_share",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Average vote share of the dominant party",
+      "sample_value": "25.39",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "sociology_dominant_party_by_avg_share",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Party with highest average vote share across elections",
+      "sample_value": "BSP",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "sociology_has_repeat_winner",
+      "field_type": "bool",
+      "category": "COMPETITIVENESS",
+      "definition": "Whether any candidate has won the seat multiple times",
+      "sample_value": "False",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "sociology_historical_behaviour_summary",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Narrative summary of historical voting behaviour",
+      "sample_value": "Trend: BSP (2012) -> INC (2017) -> SP (2022)",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "sociology_most_persistent_party",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Party with most appearances in election results",
+      "sample_value": "INC",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "sociology_party_persistent_consecutive_wins",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Consecutive wins by the most persistent party",
+      "sample_value": "0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "trajectory_formula",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Algorithm description used to compute trajectory",
+      "sample_value": "chronological sequence of winner parties across 2012, 2017, 2022 Assembly, 2024 ",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "trajectory_steps_compact",
+      "field_type": "str",
+      "category": "COMPETITIVENESS",
+      "definition": "Compact notation of electoral trajectory step by step",
+      "sample_value": "2012:BSP -> 2017 Assembly:INC -> 2022 Assembly:SP -> 2024 LS:INC -> Current MLA:",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "trajectory_total_shifts",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Total number of winner changes across all observed elections",
+      "sample_value": "4",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "trajectory_unique_parties",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Number of distinct parties that have won this seat",
+      "sample_value": "3",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "unique_parties_across_elections",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Number of unique parties that have won across all elections",
+      "sample_value": "3",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "unique_winners_across_elections",
+      "field_type": "int",
+      "category": "COMPETITIVENESS",
+      "definition": "Number of unique winning candidates across all elections",
+      "sample_value": "3",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "victory_margin_pct_2012",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Victory margin (percentage of valid votes between winner and runner-up) in 2012",
+      "sample_value": "0.23",
+      "source": "UP403-DATA-05 (computed)",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "victory_margin_pct_2017",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Victory margin percentage in 2017 election",
+      "sample_value": "10.19",
+      "source": "UP403-DATA-05 (computed)",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "victory_margin_pct_2022",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Victory margin percentage in 2022 election",
+      "sample_value": "13.52",
+      "source": "UP403-DATA-05 (computed)",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_continuity_score",
+      "field_type": "float",
+      "category": "COMPETITIVENESS",
+      "definition": "Winner continuity score (proportion of consecutive same-candidate wins)",
+      "sample_value": "0.0",
+      "source": "UP403-DATA-07",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "demographics_availability_status",
+      "field_type": "str",
+      "category": "DATA_QUALITY",
+      "definition": "Overall availability status for demographic data",
+      "sample_value": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL",
+      "source": "UP403-DATA-08",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "economy_availability_status",
+      "field_type": "str",
+      "category": "DATA_QUALITY",
+      "definition": "Overall availability status for economic data",
+      "sample_value": "NOT_AVAILABLE",
+      "source": "UP403-DATA-09",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "governance_availability_status",
+      "field_type": "str",
+      "category": "DATA_QUALITY",
+      "definition": "Availability status for governance data",
+      "sample_value": "PARTIALLY_AVAILABLE_FROM_DATA_09",
+      "source": "UP403-DATA-10",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "infrastructure_availability_status",
+      "field_type": "str",
+      "category": "DATA_QUALITY",
+      "definition": "Availability status for infrastructure data",
+      "sample_value": "",
+      "source": "UP403-DATA-09",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "female_literacy_rate",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Female literacy rate percentage",
+      "sample_value": "null",
+      "source": "Census 2011 Literacy PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "male_literacy_rate",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Male literacy rate percentage",
+      "sample_value": "null",
+      "source": "Census 2011 Literacy PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "overall_literacy_rate",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Overall literacy rate percentage",
+      "sample_value": "null",
+      "source": "Census 2011 Literacy PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "population_reference_year",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Reference year for population data",
+      "sample_value": "null",
+      "source": "Census 2011 PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "population_value",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Total population (Census 2011 projected to AC level)",
+      "sample_value": "null",
+      "source": "Census 2011 PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "rural_percentage",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Rural population percentage",
+      "sample_value": "null",
+      "source": "Census 2011 Rural PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "rural_population",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Rural population count",
+      "sample_value": "null",
+      "source": "Census 2011 Rural PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "sc_percentage",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Scheduled Caste population percentage",
+      "sample_value": "null",
+      "source": "Census 2011 SC PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "sc_population",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Scheduled Caste population count",
+      "sample_value": "null",
+      "source": "Census 2011 SC PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "st_percentage",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Scheduled Tribe population percentage",
+      "sample_value": "null",
+      "source": "Census 2011 ST PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "st_population",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Scheduled Tribe population count",
+      "sample_value": "null",
+      "source": "Census 2011 ST PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "urban_percentage",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Urban population percentage",
+      "sample_value": "null",
+      "source": "Census 2011 Urban PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "urban_population",
+      "field_type": "NoneType",
+      "category": "DEMOGRAPHICS",
+      "definition": "Urban population count",
+      "sample_value": "null",
+      "source": "Census 2011 Urban PCA",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "development_coverage_status",
+      "field_type": "str",
+      "category": "DEVELOPMENT",
+      "definition": "Overall development coverage status",
+      "sample_value": "",
+      "source": "UP403-DATA-11",
+      "status": "STRUCTURED"
+    },
+    {
+      "field_name": "flagship_scheme_presence",
+      "field_type": "str",
+      "category": "DEVELOPMENT",
+      "definition": "Presence of flagship government schemes",
+      "sample_value": "",
+      "source": "UP403-DATA-11",
+      "status": "STRUCTURED"
+    },
+    {
+      "field_name": "jal_jeevan_mission_info",
+      "field_type": "dict",
+      "category": "DEVELOPMENT",
+      "definition": "Jal Jeevan Mission projects information",
+      "sample_value": "{'project_name': 'Jal Jeevan Mission', 'status': 'not available at constituency ",
+      "source": "UP403-DATA-11",
+      "status": "STRUCTURED"
+    },
+    {
+      "field_name": "linked_projects_count",
+      "field_type": "int",
+      "category": "DEVELOPMENT",
+      "definition": "Count of linked development projects",
+      "sample_value": "4",
+      "source": "UP403-DATA-11",
+      "status": "STRUCTURED"
+    },
+    {
+      "field_name": "pmay_projects_info",
+      "field_type": "dict",
+      "category": "DEVELOPMENT",
+      "definition": "PM Awas Yojana projects information",
+      "sample_value": "{'project_name': 'PMAY (Pradhan Mantri Awas Yojana)', 'status': 'not available a",
+      "source": "UP403-DATA-11",
+      "status": "STRUCTURED"
+    },
+    {
+      "field_name": "pmgsy_projects_info",
+      "field_type": "dict",
+      "category": "DEVELOPMENT",
+      "definition": "PM Gram Sadak Yojana projects information",
+      "sample_value": "{'project_name': 'Pradhan Mantri Gram Sadak Yojana', 'status': 'not available at",
+      "source": "UP403-DATA-11",
+      "status": "STRUCTURED"
+    },
+    {
+      "field_name": "bank_branches_count",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Number of bank branches",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "financial_inclusion_status",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Financial inclusion status description",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "irrigation_coverage",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Irrigation coverage description",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "major_crops_summary",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Major crops grown in the constituency",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "major_industries_summary",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Major industries in the constituency",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "msme_units_count",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Number of MSME units",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "national_highways_count",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Number of national highways passing through",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "odop_cluster",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "ODOP cluster name",
+      "sample_value": "not identified",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "odop_export_orientation",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "ODOP export orientation classification",
+      "sample_value": "unknown",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "odop_product",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "One District One Product identified product",
+      "sample_value": "not identified",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "railway_stations_count",
+      "field_type": "str",
+      "category": "ECONOMY",
+      "definition": "Number of railway stations",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "current_mla_by_election_date",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Date of by-election if MLA elected via by-election",
+      "sample_value": "",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_elected_via",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "How current MLA was elected (GENERAL/BY_ELECTION)",
+      "sample_value": "2022_GENERAL",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_name",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Current MLA name (as of research cutoff date)",
+      "sample_value": "Umar Ali Khan",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_party",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Current MLA party affiliation",
+      "sample_value": "SP",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_previous_representative",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Name of previous representative if MLA changed mid-term",
+      "sample_value": "",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_representation_change_type",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Type of representation change (SAME_PARTY/PARTY_CHANGE)",
+      "sample_value": "SAME_PARTY",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_status",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "MLA status (SERVING/VACANT/SUSPENDED)",
+      "sample_value": "SERVING",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mla_vacancy_reason",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Reason for vacancy if MLA changed mid-term",
+      "sample_value": "",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mp_name",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Current Lok Sabha MP name for the parent PC",
+      "sample_value": "Imran Masood",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mp_party",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Current Lok Sabha MP party affiliation",
+      "sample_value": "INC",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mp_pc_name",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "PC name for current MP",
+      "sample_value": "",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mp_term_end",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "MP term end date (projected)",
+      "sample_value": "2029-06-01",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "current_mp_term_start",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "MP term start date",
+      "sample_value": "2024-06-04",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "ls2024_party_changed_flag",
+      "field_type": "bool",
+      "category": "ELECTIONS",
+      "definition": "Whether the winning party changed vs previous election",
+      "sample_value": "True",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "ls2024_pc_winner",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "2024 Lok Sabha election winner name",
+      "sample_value": "Imran Masood",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "ls2024_pc_winner_party",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "2024 Lok Sabha election winner party",
+      "sample_value": "INC",
+      "source": "ECI 2024 LS results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "ls2024_pc_winner_party_id",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Canonical party ID for 2024 LS winner",
+      "sample_value": "PARTY-INC",
+      "source": "UP403-DATA-08",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "ls2024_winner_changed_flag",
+      "field_type": "bool",
+      "category": "ELECTIONS",
+      "definition": "Whether the LS winner changed vs previous election",
+      "sample_value": "False",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "party_trajectory_compact",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Compact party trajectory notation across elections",
+      "sample_value": "",
+      "source": "UP403-DATA-06",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "runner_up_2012",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Runner-up name in 2012 UP Vidhan Sabha election",
+      "sample_value": "NARESH",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "runner_up_2017",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Runner-up name in 2017 UP Vidhan Sabha election",
+      "sample_value": "MAHAVEER SINGH RANA",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "runner_up_2022",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Runner-up name in 2022 UP Vidhan Sabha election",
+      "sample_value": "Naresh Saini",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "runner_up_party_2012",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Runner-up party in 2012 UP Vidhan Sabha election",
+      "sample_value": "INC",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "runner_up_party_2017",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Runner-up party in 2017 UP Vidhan Sabha election",
+      "sample_value": "BJP",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "runner_up_party_2022",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Runner-up party in 2022 UP Vidhan Sabha election",
+      "sample_value": "BJP",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "seat_history_summary",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Compact summary of winner-party across all three elections",
+      "sample_value": "2012→BSP 2017→INC 2022→SP",
+      "source": "UP403-DATA-06 (computed)",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "total_candidates_2012",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Total number of candidates contesting in 2012 election",
+      "sample_value": "13",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "total_candidates_2017",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Total candidates contesting in 2017 election",
+      "sample_value": "14",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "total_candidates_2022",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Total candidates contesting in 2022 election",
+      "sample_value": "9",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "total_valid_votes_2012",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Total valid votes cast in 2012 election",
+      "sample_value": "221122",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "total_valid_votes_2017",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Total valid votes cast in 2017 election",
+      "sample_value": "250983",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "total_valid_votes_2022",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Total valid votes cast in 2022 election",
+      "sample_value": "280256",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_2012",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Winner name in 2012 Uttar Pradesh Vidhan Sabha election",
+      "sample_value": "MAHAVEER SINGH RANA",
+      "source": "ECI 2012 Vidhan Sabha results",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_2017",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Winner name in 2017 Uttar Pradesh Vidhan Sabha election",
+      "sample_value": "NARESH SAINI",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_2022",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Winner name in 2022 Uttar Pradesh Vidhan Sabha election",
+      "sample_value": "Umar Ali Khan",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_party_2012",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Winner party in 2012 UP Vidhan Sabha election",
+      "sample_value": "BSP",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_party_2017",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Winner party in 2017 UP Vidhan Sabha election",
+      "sample_value": "INC",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_party_2022",
+      "field_type": "str",
+      "category": "ELECTIONS",
+      "definition": "Winner party in 2022 UP Vidhan Sabha election",
+      "sample_value": "SP",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_vote_share_2012",
+      "field_type": "float",
+      "category": "ELECTIONS",
+      "definition": "Winner vote share percentage in 2012 election",
+      "sample_value": "31.78",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_vote_share_2017",
+      "field_type": "float",
+      "category": "ELECTIONS",
+      "definition": "Winner vote share percentage in 2017 election",
+      "sample_value": "38.66",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_vote_share_2022",
+      "field_type": "float",
+      "category": "ELECTIONS",
+      "definition": "Winner vote share percentage in 2022 election",
+      "sample_value": "48.0",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_votes_2012",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Winner vote count in 2012 UP Vidhan Sabha election",
+      "sample_value": "70274",
+      "source": "ECI 2012",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_votes_2017",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Winner vote count in 2017 UP Vidhan Sabha election",
+      "sample_value": "97035",
+      "source": "ECI 2017",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "winner_votes_2022",
+      "field_type": "int",
+      "category": "ELECTIONS",
+      "definition": "Winner vote count in 2022 UP Vidhan Sabha election",
+      "sample_value": "134513",
+      "source": "ECI 2022",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "area_sq_km",
+      "field_type": "NoneType",
+      "category": "GEOGRAPHY",
+      "definition": "Geographic area in square kilometres",
+      "sample_value": "null",
+      "source": "UP403-DATA-08",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "development_blocks_count",
+      "field_type": "int",
+      "category": "GEOGRAPHY",
+      "definition": "Number of development blocks in the district",
+      "sample_value": "0",
+      "source": "UP403-DATA-08",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "forest_area",
+      "field_type": "str",
+      "category": "GEOGRAPHY",
+      "definition": "Forest cover description",
+      "sample_value": "",
+      "source": "UP403-DATA-08",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "major_rivers",
+      "field_type": "str",
+      "category": "GEOGRAPHY",
+      "definition": "Major river systems flowing through the constituency",
+      "sample_value": "",
+      "source": "UP403-DATA-08",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "municipal_bodies_count",
+      "field_type": "int",
+      "category": "GEOGRAPHY",
+      "definition": "Number of municipal bodies in the district",
+      "sample_value": "0",
+      "source": "UP403-DATA-08",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "sub_divisions_count",
+      "field_type": "int",
+      "category": "GEOGRAPHY",
+      "definition": "Number of sub-divisions in the district",
+      "sample_value": "0",
+      "source": "UP403-DATA-08",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "tehsils_count",
+      "field_type": "int",
+      "category": "GEOGRAPHY",
+      "definition": "Number of tehsils in the district",
+      "sample_value": "0",
+      "source": "UP403-DATA-08",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "terrain_type",
+      "field_type": "str",
+      "category": "GEOGRAPHY",
+      "definition": "Terrain classification (plain/plateau/hilly/riverine)",
+      "sample_value": "",
+      "source": "UP403-DATA-08",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "disaster_risks_summary",
+      "field_type": "str",
+      "category": "GOVERNANCE",
+      "definition": "Summary of disaster risks",
+      "sample_value": "",
+      "source": "UP403-DATA-10",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "environmental_issues_summary",
+      "field_type": "str",
+      "category": "GOVERNANCE",
+      "definition": "Summary of environmental issues",
+      "sample_value": "",
+      "source": "UP403-DATA-10",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "governance_issue_count",
+      "field_type": "int",
+      "category": "GOVERNANCE",
+      "definition": "Count of identified governance issues",
+      "sample_value": "0",
+      "source": "UP403-DATA-10",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "governance_issue_summary",
+      "field_type": "str",
+      "category": "GOVERNANCE",
+      "definition": "Summary of governance issues",
+      "sample_value": "",
+      "source": "UP403-DATA-10",
+      "status": "PARTIAL"
+    },
+    {
+      "field_name": "ac_number",
+      "field_type": "int",
+      "category": "IDENTIFICATION",
+      "definition": "Assembly constituency number per ECI Delimitation Order 2008",
+      "sample_value": "1",
+      "source": "ECI Delimitation 2008",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "canonical_constituency_id",
+      "field_type": "str",
+      "category": "IDENTIFICATION",
+      "definition": "Canonical knowledge-object identifier in The Breakdown platform",
+      "sample_value": "UP-AC-001",
+      "source": "UP403-DATA-01",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "constituency_name",
+      "field_type": "str",
+      "category": "IDENTIFICATION",
+      "definition": "Official assembly constituency name per ECI Delimitation Order 2008",
+      "sample_value": "Behat",
+      "source": "ECI Delimitation 2008",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "pc_name",
+      "field_type": "str",
+      "category": "IDENTIFICATION",
+      "definition": "Official parliamentary constituency name per ECI Delimitation 2008",
+      "sample_value": "Saharanpur",
+      "source": "ECI Delimitation 2008",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "pc_number",
+      "field_type": "int",
+      "category": "IDENTIFICATION",
+      "definition": "Parliamentary constituency number per ECI Delimitation 2008",
+      "sample_value": "1",
+      "source": "ECI Delimitation 2008",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "chc_count",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Number of Community Health Centres",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "degree_colleges_count",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Number of degree colleges",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "district_hospitals_count",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Number of district hospitals",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "government_schools_count",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Number of government schools",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "household_electrification_info",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Household electrification status",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "iti_count",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Number of Industrial Training Institutes",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "phc_count",
+      "field_type": "str",
+      "category": "INFRASTRUCTURE",
+      "definition": "Number of Primary Health Centres",
+      "sample_value": "not available at constituency level",
+      "source": "UP403-DATA-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "field_name": "computed_at",
+      "field_type": "str",
+      "category": "METADATA",
+      "definition": "Timestamp of data computation",
+      "sample_value": "2026-07-28",
+      "source": "UP403-DATA-12",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "master_dataset_version",
+      "field_type": "str",
+      "category": "METADATA",
+      "definition": "Master dataset version identifier",
+      "sample_value": "1.0.1",
+      "source": "UP403-DATA-12",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "research_cutoff_date",
+      "field_type": "str",
+      "category": "METADATA",
+      "definition": "Research cutoff date for data currency",
+      "sample_value": "2026-07-28",
+      "source": "UP403-DATA-12",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "source_datasets",
+      "field_type": "str",
+      "category": "METADATA",
+      "definition": "Source datasets used for this record",
+      "sample_value": "DATA-02A 2022 contests; DATA-03 2017 contests; DATA-04 2012 contests; DATA-05 Cu",
+      "source": "UP403-DATA-12",
+      "status": "ACTIVE"
+    },
+    {
+      "field_name": "verification_date",
+      "field_type": "str",
+      "category": "METADATA",
+      "definition": "Date of last verification",
+      "sample_value": "2026-07-28T00:00:00.000Z",
+      "source": "UP403-DATA-12",
+      "status": "ACTIVE"
+    }
+  ],
+  "enrichment_gaps": {
+    "demographics": "All 13 demographic fields are NOT_AVAILABLE — Census 2011 PCA requires GIS intersection",
+    "economy": "All 11 economic fields are NOT_AVAILABLE at AC level",
+    "infrastructure": "7 of 8 infrastructure fields NOT_AVAILABLE",
+    "geography": "4 of 8 geography fields NOT_AVAILABLE (area, terrain, rivers, forest)"
+  }
+}

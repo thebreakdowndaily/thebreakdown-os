@@ -1,0 +1,42 @@
+{
+  "batch": "UP403-DATA-01A",
+  "executed_at": "2026-07-28T11:57:44.895Z",
+  "gate_passed": true,
+  "gate_checks": {
+    "active_ac_count_is_403": true,
+    "unique_ac_numbers_is_403": true,
+    "unique_canonical_ids_is_403": true,
+    "eci_identity_verified_403": true,
+    "eci_reservation_verified_403": true,
+    "eci_pc_relationship_verified_403": true,
+    "unresolved_eci_conflicts_zero": true,
+    "unsupported_wikipedia_only_canonical_fields_zero": true,
+    "legacy_varanasi_cantt_wrong_id_references_zero": true,
+    "up_ac_390_is_varanasi_cantt": true,
+    "up_ac_395_is_chhanbey": true,
+    "current_district_relationships_verified_403": true,
+    "current_division_relationships_verified_403": true,
+    "all_canonical_records_have_direct_provenance": true
+  },
+  "counts": {
+    "total": 403,
+    "unique_ac_numbers": 403,
+    "unique_canonical_ids": 403,
+    "missing_district": 0,
+    "missing_division": 0,
+    "missing_pc": 0,
+    "sc_count": 84,
+    "st_count": 2,
+    "general_count": 317,
+    "cross_district_seats": 3,
+    "warnings": 0,
+    "notes": 14
+  },
+  "reservation_totals": {
+    "SC": 84,
+    "ST": 2,
+    "GENERAL": 317,
+    "total": 403,
+    "note": "Verified ECI 2014 Amended Status: 84 SC + 2 ST + 317 GENERAL = 403 total."
+  }
+}

@@ -65,6 +65,14 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
       }}
       role="banner"
     >
+      {/* Skip to main content link for keyboard & screen reader accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-4 focus:z-[var(--z-modal)] focus:px-4 focus:py-2 focus:bg-neutral-900 focus:text-[var(--color-brand-400)] focus:border focus:border-amber-500/60 focus:rounded-md focus:shadow-lg focus:outline-none focus:font-mono focus:text-xs"
+      >
+        Skip to main content
+      </a>
+
       <div
         style={{
           maxWidth: '80rem',

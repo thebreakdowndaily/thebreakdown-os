@@ -6,15 +6,15 @@
     "Budget 2026"
   ],
   "version": 1,
-  "createdAt": "2026-07-18T16:37:56.006Z",
-  "updatedAt": "2026-07-18T16:37:56.006Z",
+  "createdAt": "2026-07-31T09:22:11.544Z",
+  "updatedAt": "2026-07-31T09:22:11.544Z",
   "stories": [
     "story-003"
   ],
   "history": [
     {
       "version": 1,
-      "timestamp": "2026-07-18T16:37:56.006Z",
+      "timestamp": "2026-07-31T09:22:11.544Z",
       "updatedBy": "story-003",
       "changes": [
         "entity-created"

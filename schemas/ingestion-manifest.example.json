@@ -1,0 +1,218 @@
+{
+  "manifest_version": "1.0",
+  "batch_id": "BATCH-4CONSTITUENCY-VALIDATED",
+  "ingestion_version": "4.0.0",
+  "researcher": "automated_pilot_validation",
+  "created_at": "2026-07-20T18:00:00Z",
+  "source_scope": "CONSTITUENCY_LEVEL",
+  "target_publication_status": "DRAFT",
+  "notes": "Validated pilot batch — 4 constituencies, 9 claims, 13 evidence items, 13 sources, 4 financial records. Used to prove schema correctness.",
+  "constituencies": [
+    {
+      "constituency_id": "UP-AC-037",
+      "name": "Rampur",
+      "state": "UP",
+      "constituency_type": "AC",
+      "reserved_category": "GENERAL",
+      "sources": [
+        {
+          "source_id": "SRC-RAM-001",
+          "title": "Bye Election to 37-Rampur AC — Revision of bye election Schedule (PIB, PRID 1875030, Nov 10 2022)",
+          "source_type": "OFFICIAL_GOVERNMENT_DOCUMENT"
+        },
+        {
+          "source_id": "SRC-RAM-002",
+          "title": "By-election in Rampur: How Azam Khan disqualification has resulted in second Assembly election (Indian Express, Nov 13 2022)",
+          "source_type": "JOURNALISM"
+        },
+        {
+          "source_id": "SRC-RAM-003",
+          "title": "Azam Khan is no more an MLA, his Rampur Sadar seat declared vacant (Indian Express, Oct 28 2022)",
+          "source_type": "JOURNALISM"
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EVD-RAM-001",
+          "source_id": "SRC-RAM-001",
+          "extracted_text": "The vacancy in 37-Rampur AC of UP Legislative Assembly occurred on 27th October 2022 due to disqualification of Shri Mohammad Azam Khan. The Commission vide Press Note No. ECI/PN/83/2022 dated 5th November 2022 announced schedule for bye election."
+        },
+        {
+          "evidence_id": "EVD-RAM-002",
+          "source_id": "SRC-RAM-002",
+          "extracted_text": "On October 27, the Rampur MP-MLA court found Khan guilty of hate speech against CM Yogi Adityanath and DM of Rampur during 2019 Lok Sabha elections, sentenced to three years. On October 28, UP Legislative Assembly Secretariat disqualified him and declared seat vacant. ECI announced schedule Nov 5. Supreme Court directed pre-ponement of stay hearing to Nov 10. Court rejected stay application Nov 10. Bypoll held Dec 5, 2022."
+        },
+        {
+          "evidence_id": "EVD-RAM-003",
+          "source_id": "SRC-RAM-003",
+          "extracted_text": "Senior SP leader Azam Khan lost his state Assembly membership after his conviction Thursday in a hate speech case. On Friday evening, the Principal Secretary, Vidhan Sabha, issued a letter declaring his Rampur Sadar seat vacant. Khan automatically stood disqualified upon being sentenced for more than two years."
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "CLM-RAM-001-A",
+          "confidence": "C2",
+          "statement": "Azam Khan was convicted by the Rampur MP-MLA court on October 27, 2022 in a 2019 hate speech case and sentenced to three years imprisonment.",
+          "evidence_ids": ["EVD-RAM-002"],
+          "scope": "PRIMARY_SUBJECT"
+        },
+        {
+          "claim_id": "CLM-RAM-001-B",
+          "confidence": "C2",
+          "statement": "The UP Legislative Assembly Secretariat declared the Rampur seat vacant on October 28, 2022, one day after the conviction, under Section 8(3) of the Representation of the People Act 1951.",
+          "evidence_ids": ["EVD-RAM-002", "EVD-RAM-003"],
+          "scope": "PRIMARY_SUBJECT"
+        },
+        {
+          "claim_id": "CLM-RAM-002-A",
+          "confidence": "C1",
+          "statement": "The by-election to 37-Rampur AC was held on December 5, 2022 and won by BJP candidate Akash Saxena with 81,432 votes (62.06%), marking BJP first-ever victory in the seat.",
+          "evidence_ids": ["EVD-RAM-001"],
+          "scope": "PRIMARY_SUBJECT"
+        }
+      ],
+      "contradictions": [],
+      "human_flags": []
+    },
+    {
+      "constituency_id": "UP-AC-108",
+      "name": "Karhal",
+      "state": "UP",
+      "constituency_type": "AC",
+      "reserved_category": "GENERAL",
+      "sources": [
+        {
+          "source_id": "SRC-KAR-001",
+          "title": "Report No. 4 of 2017 — Performance Audit of Contract Management in Road Works, Government of Uttar Pradesh (CAG)",
+          "source_type": "CAG_REPORT"
+        },
+        {
+          "source_id": "SRC-KAR-002",
+          "title": "CAG Chapter 7 — Evaluation of Bids and Selection of Contractor (Report No. 4 of 2017, UP PWD)",
+          "source_type": "CAG_REPORT"
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EVD-KAR-001",
+          "source_id": "SRC-KAR-002",
+          "extracted_text": "During scrutiny of records of Construction division, Mainpuri, it was noticed that during 2015-16, for 12 works costing Rs 31.35 lakh, tenders were purchased by only two contractors — Girish Chandra Pandey and Bheekham Singh. In all 12 cases, bids of Girish Chandra Pandey were lower (rates quoted between 0.01 per cent to 0.25 per cent below estimated rate in 9 bids and at par in 3 bids) and all 12 contracts were awarded to Girish Chandra Pandey. This could be abnormal indicating a possible cartel formation and needs investigation."
+        },
+        {
+          "evidence_id": "EVD-KAR-002",
+          "source_id": "SRC-KAR-001",
+          "extracted_text": "Audit observed that tendering in road works was largely not competitive and the number of such tenders increased steeply from 63 per cent in 2011-12 to 77 per cent in 2015-16. 598 contracts (75 per cent) costing Rs 3,300.79 crore were awarded on the basis of one or two bids only during 2011-16, without resorting to retendering."
+        },
+        {
+          "evidence_id": "EVD-KAR-003",
+          "source_id": "SRC-KAR-001",
+          "extracted_text": "Test-check of estimates of 11 road works under 10 test-checked divisions revealed excess provision of crust thickness, crust design without traffic census, etc., in contravention of IRC specifications. This resulted in excess or avoidable expenditure of Rs 58.33 crore."
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "CLM-KAR-001-A",
+          "confidence": "C1",
+          "statement": "PWD Construction Division Mainpuri awarded 12 road works worth Rs 31.35 lakh during 2015-16 to a single contractor (Girish Chandra Pandey) in all cases, with bid rates within 0.25% of estimated rates, suggesting possible cartel formation.",
+          "evidence_ids": ["EVD-KAR-001"],
+          "scope": "GEOGRAPHIC_SCOPE"
+        },
+        {
+          "claim_id": "CLM-KAR-001-B",
+          "confidence": "C1",
+          "statement": "The CAG Performance Audit (Report No. 4 of 2017) found that 75% of PWD contracts across UP (598 contracts costing Rs 3,300.79 crore during 2011-16) were awarded on the basis of one or two bids only, with clear indications of collusive bidding in most districts.",
+          "evidence_ids": ["EVD-KAR-002"],
+          "scope": "GEOGRAPHIC_SCOPE"
+        }
+      ],
+      "contradictions": [
+        {
+          "claim_id_a": "CLM-KAR-001-A",
+          "claim_id_b": "CLM-KAR-001-B",
+          "description": "Local-level finding (12 contracts, Rs 31.35 lakh) vs statewide pattern (598 contracts, Rs 3,300.79 crore). Not a direct contradiction — the local finding supports the statewide pattern. Marked as contradiction pair for cross-validation.",
+          "resolution": "Both claims are valid at different scales. CLM-KAR-001-A is the micro-evidence; CLM-KAR-001-B is the macro-pattern. They are complementary, not contradictory.",
+          "requires_human_review": false
+        }
+      ],
+      "human_flags": []
+    },
+    {
+      "constituency_id": "UP-AC-110",
+      "name": "Kairana",
+      "state": "UP",
+      "constituency_type": "AC",
+      "reserved_category": "GENERAL",
+      "sources": [
+        {
+          "source_id": "SRC-KAI-001",
+          "title": "Kairana Assembly constituency (Wikipedia)",
+          "source_type": "JOURNALISM"
+        },
+        {
+          "source_id": "SRC-KAI-002",
+          "title": "Kairana Block — Kairana Block map (159.com)",
+          "source_type": "REFERENCE"
+        },
+        {
+          "source_id": "SRC-KAI-003",
+          "title": "Kairana Lok Sabha constituency (Wikipedia)",
+          "source_type": "JOURNALISM"
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EVD-KAI-001",
+          "source_id": "SRC-KAI-001",
+          "extracted_text": "Kairana Assembly constituency is constituency No. 8 in Uttar Pradesh Legislative Assembly. It is part of Shamli district (prior to 2012, Kairana was a tehsil of Muzaffarnagar district). Kairana Assembly constituency came into existence in 1955 as a result of the Final Order DC (1953-1955)."
+        },
+        {
+          "evidence_id": "EVD-KAI-002",
+          "source_id": "SRC-KAI-002",
+          "extracted_text": "Kairana Block is in Muzaffarnagar District. Kairana Block comes under multiple assembly constituencies — 2 assembly constituencies: Kairana and Thana Bhawan. Block elevation 238 meters."
+        },
+        {
+          "evidence_id": "EVD-KAI-003",
+          "source_id": "SRC-KAI-003",
+          "extracted_text": "Kairana Lok Sabha constituency comprises five Vidhan Sabha segments: Nakur, Gangoh, Kairana, Thana Bhawan, Shamli."
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "CLM-KAI-002-A",
+          "confidence": "C2",
+          "statement": "Kairana town, Kairana Assembly constituency, and Kairana Block are three distinct geographical units. The town is in Muzaffarnagar district, the Assembly constituency is in Shamli district, and the Block spans both.",
+          "evidence_ids": ["EVD-KAI-001", "EVD-KAI-002"],
+          "scope": "PRIMARY_SUBJECT"
+        }
+      ],
+      "contradictions": [],
+      "search_protocols": [
+        {
+          "canonical_id": "PROTO-KAI-FIN",
+          "research_question": "Constituency capital expenditure for Kairana",
+          "repositories_searched": ["CEO UP", "UP Finance Department", "UP Planning Department", "Kairana Block records"],
+          "queries_used": ["Kairana", "expenditure", "allocation", "MLA LAD", "capital works"],
+          "search_started_at": "2026-07-19T00:00:00Z",
+          "search_completed_at": "2026-07-20T00:00:00Z"
+        }
+      ],
+      "gaps": [
+        {
+          "canonical_id": "GAP-KAI-FIN-001",
+          "gap_description": "No constituency-level capital expenditure data found for Kairana. Systematic search across UP government databases yielded no results.",
+          "source_ids": [],
+          "gap_type": "MISSING_DATA",
+          "severity": "MEDIUM"
+        }
+      ],
+      "human_flags": [
+        {
+          "flag_type": "BOUNDARY_COMPLEXITY",
+          "description": "Kairana town, AC, and Block are distinct units across two districts. Geographic data may conflate them.",
+          "related_ids": ["CLM-KAI-002-A", "SRC-KAI-001", "SRC-KAI-002"],
+          "priority": "P2_MEDIUM"
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { loadData, getDataById } from '@/lib/up403/loader';
+import { toSlug } from '@/lib/up403/slug';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
 
   const stories = getPublicStories({ pageSize: 100 }).data.map((s) => ({
@@ -57,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
           if (chapter.status === 'published' || chapter.status === 'verified') {
             canonicalEntries.push({
               url: `${siteUrl}/series/${collection.slug}/volume/${volume.slug}/chapter/${chapter.slug}`,
-              lastModified: new Date(chapter.lastVerifiedAt ?? chapter.updatedAt ?? chapter.createdAt),
+              lastModified: new Date(chapter.updatedAt),
               changeFrequency: 'monthly',
               priority: 0.8,
             });
@@ -66,6 +68,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }
     }
   }
+
+  await loadData();
+  const up403Constituencies: MetadataRoute.Sitemap = [...getDataById().keys()].map(id => ({
+    url: `${siteUrl}/up403/${toSlug(id)}`,
+    lastModified: new Date('2026-07-30'),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  const up403Static: MetadataRoute.Sitemap = [
+    { url: `${siteUrl}/up403`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/up403/map`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${siteUrl}/up403/compare`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.4 },
+    { url: `${siteUrl}/up403/search`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${siteUrl}/up403/stories`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
+  ];
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: siteUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
@@ -79,6 +97,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/workspace`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.3 },
   ];
 
-  return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];
+  return [...staticPages, ...canonicalEntries, ...up403Static, ...up403Constituencies, ...stories, ...entities, ...topics, ...fixes];
 }
 

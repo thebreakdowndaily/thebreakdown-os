@@ -1,0 +1,482 @@
+{
+  "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+  "created_at": "2026-07-20T14:36:55.430Z",
+  "constituencies": {
+    "UP-AC-390": {
+      "started_at": "2026-07-20T14:36:56.200Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:36:56.200Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:36:57.348Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:36:58.508Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:00.033Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:00.808Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:01.372Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 2,
+          "review_flags": 0
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:01.372Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 2,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:01.372Z"
+    },
+    "GJ-AC-61": {
+      "started_at": "2026-07-20T14:37:01.949Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:01.949Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:03.087Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:04.249Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:06.518Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:07.691Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:08.256Z",
+          "claims": 5,
+          "evidence": 6,
+          "sources": 6,
+          "financial": 5,
+          "review_flags": 0
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:08.258Z",
+          "claims": 3,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 3,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:08.258Z"
+    },
+    "MH-AC-191": {
+      "started_at": "2026-07-20T14:37:08.836Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:08.836Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:09.992Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:11.141Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:12.677Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:13.643Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:14.236Z",
+          "claims": 7,
+          "evidence": 9,
+          "sources": 9,
+          "financial": 7,
+          "review_flags": 1
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:14.236Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 2,
+          "review_flags": 1
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:14.236Z"
+    },
+    "HP-AC-36": {
+      "started_at": "2026-07-20T14:37:14.813Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:14.813Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:15.593Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:16.377Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:17.157Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:17.927Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:18.489Z",
+          "claims": 9,
+          "evidence": 11,
+          "sources": 11,
+          "financial": 7,
+          "review_flags": 1
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:18.490Z",
+          "claims": 2,
+          "evidence": 2,
+          "sources": 2,
+          "financial": 0,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:18.490Z"
+    },
+    "ML-AC-16": {
+      "started_at": "2026-07-20T14:37:19.063Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:19.063Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:19.827Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:20.603Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:20.978Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:21.360Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:21.941Z",
+          "claims": 10,
+          "evidence": 13,
+          "sources": 13,
+          "financial": 7,
+          "review_flags": 1
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:21.941Z",
+          "claims": 1,
+          "evidence": 2,
+          "sources": 2,
+          "financial": 0,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:21.941Z"
+    },
+    "UK-AC-48": {
+      "started_at": "2026-07-20T14:37:22.513Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:22.513Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:23.278Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:24.048Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:25.589Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:26.383Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:26.968Z",
+          "claims": 12,
+          "evidence": 15,
+          "sources": 15,
+          "financial": 9,
+          "review_flags": 2
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:26.969Z",
+          "claims": 2,
+          "evidence": 2,
+          "sources": 2,
+          "financial": 2,
+          "review_flags": 1
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:26.969Z"
+    },
+    "AR-AC-22": {
+      "started_at": "2026-07-20T14:37:27.558Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:27.558Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:28.726Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:29.882Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:31.022Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:31.811Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:32.400Z",
+          "claims": 14,
+          "evidence": 18,
+          "sources": 18,
+          "financial": 10,
+          "review_flags": 3
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:32.401Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 1,
+          "review_flags": 1
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:32.401Z"
+    },
+    "UP-AC-351": {
+      "started_at": "2026-07-20T14:37:32.956Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:32.956Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:33.731Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:34.508Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:34.888Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:35.268Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:35.866Z",
+          "claims": 15,
+          "evidence": 20,
+          "sources": 20,
+          "financial": 10,
+          "review_flags": 3
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:35.866Z",
+          "claims": 1,
+          "evidence": 2,
+          "sources": 2,
+          "financial": 0,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:35.866Z"
+    },
+    "JH-AC-60": {
+      "started_at": "2026-07-20T14:37:36.432Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:36.432Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:37.188Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:38.146Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:38.922Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:39.682Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:40.259Z",
+          "claims": 17,
+          "evidence": 22,
+          "sources": 22,
+          "financial": 10,
+          "review_flags": 4
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:40.260Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 2,
+          "financial": 0,
+          "review_flags": 1
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:40.260Z"
+    },
+    "RJ-AC-144": {
+      "started_at": "2026-07-20T14:37:40.833Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:40.833Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:41.643Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:42.457Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:42.878Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:43.278Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:43.848Z",
+          "claims": 18,
+          "evidence": 24,
+          "sources": 24,
+          "financial": 10,
+          "review_flags": 5
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:43.848Z",
+          "claims": 1,
+          "evidence": 2,
+          "sources": 2,
+          "financial": 0,
+          "review_flags": 1
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:43.848Z"
+    },
+    "UP-AC-322": {
+      "started_at": "2026-07-20T14:37:44.420Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:44.420Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:45.566Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:46.710Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:48.257Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:49.205Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:49.765Z",
+          "claims": 20,
+          "evidence": 27,
+          "sources": 27,
+          "financial": 12,
+          "review_flags": 5
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:49.765Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 2,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:49.765Z"
+    },
+    "UP-AC-171": {
+      "started_at": "2026-07-20T14:37:50.343Z",
+      "stages": {
+        "DISCOVERED": {
+          "completed_at": "2026-07-20T14:37:50.343Z"
+        },
+        "ACQUIRED": {
+          "completed_at": "2026-07-20T14:37:51.487Z"
+        },
+        "EXTRACTED": {
+          "completed_at": "2026-07-20T14:37:52.707Z"
+        },
+        "CLAIMED": {
+          "completed_at": "2026-07-20T14:37:54.221Z"
+        },
+        "LINKED": {
+          "completed_at": "2026-07-20T14:37:55.191Z"
+        },
+        "VALIDATED": {
+          "completed_at": "2026-07-20T14:37:55.794Z",
+          "claims": 22,
+          "evidence": 30,
+          "sources": 30,
+          "financial": 14,
+          "review_flags": 5
+        },
+        "COMPLETED": {
+          "completed_at": "2026-07-20T14:37:55.795Z",
+          "claims": 2,
+          "evidence": 3,
+          "sources": 3,
+          "financial": 2,
+          "review_flags": 0
+        }
+      },
+      "stage": "COMPLETED",
+      "status": "COMPLETED",
+      "completed_at": "2026-07-20T14:37:55.795Z"
+    }
+  },
+  "totals": {
+    "claims": 22,
+    "evidence": 31,
+    "sources": 30,
+    "financial": 14,
+    "review_flags": 5
+  },
+  "updated_at": "2026-07-20T14:37:55.795Z"
+}

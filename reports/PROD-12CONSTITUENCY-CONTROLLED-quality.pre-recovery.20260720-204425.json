@@ -1,0 +1,13 @@
+{
+  "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+  "generated_at": "2026-07-20T14:38:31.325Z",
+  "total_flags": 0,
+  "by_priority": {
+    "P0_BLOCKING": 0,
+    "P1_HIGH": 0,
+    "P2_MEDIUM": 0,
+    "P3_LOW": 0
+  },
+  "by_type": {},
+  "flags": []
+}

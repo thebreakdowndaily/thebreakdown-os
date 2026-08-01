@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Container from '@/components/layout/Container';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Contact — The Breakdown',
@@ -8,6 +9,12 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
+    <>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/about/contact' },
+      ]} />
     <Container>
       <div className="py-8 max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-6">Contact</h1>
@@ -26,5 +33,6 @@ export default function ContactPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

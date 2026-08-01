@@ -1,0 +1,115 @@
+{
+  "timestamp": "2026-07-23T17:58:15.821Z",
+  "auditCutoffDate": "2026-07-23",
+  "gateVerdict": "READY_FOR_PHASE5_WRITE",
+  "reconciliation524": {
+    "totalMaterialClaims": 524,
+    "distinctMaterialClaimIdsCount": 524,
+    "dispositions": {
+      "PERSISTED_REGISTRY_CLAIM": 90,
+      "CANONICAL_STORY_CLAIM_ONLY": 176,
+      "BLOCKED_NO_EVIDENCE": 42,
+      "BLOCKED_COMPOUND": 38,
+      "BLOCKED_TEMPORAL_SCOPE": 28,
+      "BLOCKED_SEMANTIC_SUPPORT": 23,
+      "DUPLICATE": 20,
+      "NON_REGISTRATION_MATERIAL": 33,
+      "SUPERSEDED": 6,
+      "STORY_PROSE_MATERIAL_FACTS": 68
+    },
+    "dispositionSum": 524,
+    "dispositionInvariantPassed": true,
+    "registryOutsideAuditedUniverse": 0
+  },
+  "compoundCardinality": {
+    "originalBlockedParentCount": 38,
+    "remediatedParentsCount": 32,
+    "remainingBlockedParentsCount": 6,
+    "generatedAtomicChildCount": 64
+  },
+  "preDedupDerivation": {
+    "noEvidenceRemediatedCount": 28,
+    "compoundAtomicChildrenCount": 64,
+    "temporalScopeRemediatedCount": 22,
+    "semanticSupportRemediatedCount": 14,
+    "totalRawSubtotal": 128,
+    "deOverlappedUniqueCandidatesCount": 96
+  },
+  "funnel96To52": {
+    "readyNew": 52,
+    "duplicatePersistedRegistry": 32,
+    "duplicateWithinPhase5": 6,
+    "superseded": 4,
+    "needsUpdate": 2,
+    "stillBlocked": 0,
+    "otherRejected": 0,
+    "funnelSum": 96,
+    "funnelInvariantPassed": true
+  },
+  "storyDistribution52": {
+    "manifestLength": 52,
+    "uniqueClaimIds": 52,
+    "uniqueCanonicalHashes": 52,
+    "slugCounts": {
+      "mgnrega-reform": 4,
+      "rbi-repo-rate": 3,
+      "bjp-mission-360": 3,
+      "groundwater-depletion": 3,
+      "semiconductor-pli": 3,
+      "epf-scheme-2026": 3,
+      "dpdp-bill": 3,
+      "gig-worker-rights": 3,
+      "namami-gange-under-fire": 3,
+      "us-iran-relations": 2,
+      "pm-fasal-bima-claims": 2,
+      "digital-payments-boom": 2,
+      "education-budget": 2,
+      "climate-finance": 2,
+      "indias-inheritance": 2,
+      "who-cancer-report-2026": 2,
+      "youth-mental-health-crisis": 2,
+      "us-iran-war-strait-of-hormuz": 2,
+      "81-crore-data-breach": 2,
+      "indian-education-crisis": 2,
+      "satluj-ban": 2
+    },
+    "slugCountSum": 52,
+    "distributionInvariantPassed": true
+  },
+  "evidenceChainResolution": {
+    "candidatesChecked": 52,
+    "sourceResolutionCount": 52,
+    "evidenceResolutionCount": 52,
+    "semanticSupportCount": 52,
+    "resolutionPercentage": "100.0%",
+    "resolutionPassed": true
+  },
+  "manifestFreeze": {
+    "manifestPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_final_write_manifest.json",
+    "manifestSha256": "e8f4a322d313849393f7dc64428f13364bb685a097efa0aeb702e409629ed126",
+    "manifestLength": 52,
+    "uniqueIds": 52,
+    "uniqueHashes": 52
+  },
+  "writeSimulation": {
+    "currentPersistedCount": 90,
+    "simulatedRun1Inserts": 52,
+    "simulatedRun2Inserts": 0,
+    "projectedPostWriteCount": 142,
+    "idempotencyPassed": true
+  },
+  "coverageMetrics": {
+    "editorialVerificationCoverage": "100.0% (524 / 524 material claims verified)",
+    "canonicalStoryModelingCoverage": "50.76% (266 / 524 material claims modeled in story objects)",
+    "persistedRegistryCoverage": "17.18% (90 / 524 material claims persisted in ClaimRegistry)",
+    "evidenceLinkedPersistedCoverage": "100.0% (90 / 90 persisted claims evidence-linked)"
+  },
+  "zeroClaimRegistryWritesConfirmed": true,
+  "zeroStoryEditsConfirmed": true,
+  "artifactPaths": {
+    "reconciliationJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_final_reconciliation.json",
+    "reconciliationMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_final_reconciliation.md",
+    "finalWriteManifestJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_final_write_manifest.json",
+    "finalExecutionGateMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_final_execution_gate.md"
+  }
+}

@@ -5,6 +5,7 @@ import { RepositoryFactory } from '@/services/factory/repository';
 import { getStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
 import { apiStoryToCanonical, apiTopicToCanonical, apiEntityToCanonical, apiTimelineToCanonical, apiFixToCanonical, apiInvestigationToCanonical } from '@/lib/bootstrap';
 import { seedDatasets } from '@/lib/datasets/seed-data';
+import { extractProblems } from '@/lib/problem-helpers';
 
 export async function bootstrapServices(): Promise<Services> {
   try { return getServices(); } catch {}
@@ -27,6 +28,7 @@ export async function bootstrapServices(): Promise<Services> {
   const stories = apiStories.map(apiStoryToCanonical);
 
   const services = initDefaultServices(stories, topics, entities, timelines, fixes, seedDatasets, [], investigations);
-  services.search.rebuild(stories, topics, entities, timelines, fixes, seedDatasets);
+  const problems = extractProblems(fixes);
+  services.search.rebuild(stories, topics, entities, timelines, fixes, seedDatasets, problems);
   return services;
 }

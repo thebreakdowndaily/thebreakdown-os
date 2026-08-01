@@ -1,0 +1,150 @@
+{
+  "id": "ref-election-analysis",
+  "slug": "ref-election-analysis",
+  "storyType": "Election",
+  "title": "2024 Election: A Post-Mortem",
+  "metadata": {
+    "difficulty": "Intermediate",
+    "confidence": "High",
+    "confidenceRationale": "Based on election commission data",
+    "updateRequired": false,
+    "readingTimeMinutes": 8,
+    "tags": [
+      "election",
+      "democracy"
+    ],
+    "entities": [
+      {
+        "name": "Election Commission of India",
+        "type": "institution",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/ballot.jpg",
+    "statistic": "67.4%",
+    "statisticSource": "Election Commission",
+    "caption": "Turnout statistics",
+    "altText": "Voters at polling booth",
+    "credit": "ECI",
+    "aspectRatio": "16:9"
+  },
+  "summary": "The 2024 general election saw record turnout and a fragmented mandate, requiring coalition governance.",
+  "keyFacts": [
+    {
+      "claim": "Voter turnout was 67.4%",
+      "source": "ECI Data",
+      "confidence": 1
+    },
+    {
+      "claim": "No single party won a majority",
+      "source": "ECI Results",
+      "confidence": 1
+    }
+  ],
+  "whyItMatters": "Electoral outcomes shape policy for the next five years.",
+  "narrative": "The election produced a hung parliament with the largest party securing the most seats but falling short of a majority.",
+  "timeline": [
+    {
+      "date": "April 19, 2024",
+      "event": "Phase 1 voting",
+      "source": "ECI",
+      "significance": "First phase of polling"
+    },
+    {
+      "date": "June 4, 2024",
+      "event": "Results declared",
+      "source": "ECI",
+      "significance": "Mandate formed"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "Turnout 67.4%",
+      "source": "ECI Official",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [
+    {
+      "title": "Turnout by Phase",
+      "type": "bar",
+      "data": [
+        {
+          "label": "Phase 1",
+          "value": 65
+        },
+        {
+          "label": "Phase 2",
+          "value": 68
+        },
+        {
+          "label": "Phase 3",
+          "value": 67
+        }
+      ],
+      "source": "Election Commission"
+    }
+  ],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "Election Commission",
+        "type": "institution",
+        "position": "Conducts elections",
+        "interest": "Free and fair process",
+        "stance": "neutral"
+      },
+      {
+        "name": "Largest Party",
+        "type": "organization",
+        "position": "Largest seat holder",
+        "interest": "Government formation",
+        "stance": "support"
+      },
+      {
+        "name": "Opposition Coalition",
+        "type": "organization",
+        "position": "Challenges government",
+        "interest": "Alternative governance",
+        "stance": "oppose"
+      }
+    ],
+    "summary": "Multiple stakeholders shaped the outcome."
+  },
+  "tradeoffs": [
+    {
+      "option": "Coalition Government",
+      "benefits": [
+        "Broad representation"
+      ],
+      "risks": [
+        "Policy paralysis"
+      ],
+      "evidence": "Historical precedents"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Election Commission Results",
+      "author": "ECI",
+      "reliability": "high"
+    }
+  ],
+  "visuals": [
+    {
+      "section": "hero",
+      "type": "photograph",
+      "placement": "hero",
+      "aspectRatio": "16:9",
+      "caption": "Voting day",
+      "altText": "Voters",
+      "credit": "ECI"
+    }
+  ]
+}

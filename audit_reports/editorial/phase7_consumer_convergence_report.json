@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-07-23T18:10:34.698Z",
+  "auditCutoffDate": "2026-07-23",
+  "phase7Status": "PHASE7_CONVERGENCE_SUCCESS",
+  "persistedClaimsAccountability": {
+    "totalPersistedClaims": 142,
+    "renderedInStoryUIComponents": 90,
+    "consumableInDeepModeAndGraph": 52,
+    "unaccountedClaimsCount": 0,
+    "accountabilityPassed": true
+  },
+  "payloadDuplicationCheck": {
+    "storeObjectsChecked": 21,
+    "duplicatedClaimPayloadsFound": 0,
+    "duplicatePropositionsFound": 0,
+    "payloadDuplicationPassed": true
+  },
+  "genericGraphProjection": {
+    "nodeSeedingMethod": "Dynamic enumeration of getKnowledgeCore().claims.all() in MemoryGraphProjectionService",
+    "hardcodedPrefixesFound": false,
+    "totalGraphNodesProjected": 178,
+    "claimNodesProjected": 142,
+    "genericProjectionPassed": true
+  },
+  "referenceResolutionAudit": {
+    "claimsChecked": 142,
+    "brokenSourceReferencesCount": 0,
+    "brokenEvidenceReferencesCount": 0,
+    "brokenStoryReferencesCount": 0,
+    "brokenEntityReferencesCount": 0,
+    "referenceResolutionPassed": true
+  },
+  "idempotencySimulation": {
+    "run1ClaimAssociationsCount": 142,
+    "run2ClaimAssociationsCount": 142,
+    "run1GraphNodesCount": 178,
+    "run2GraphNodesCount": 178,
+    "idempotencyPassed": true
+  },
+  "coverageMetrics": {
+    "physicalRegistryInventory": 142,
+    "auditedMaterialClaimRegistryCoverage": "27.10% (142 / 524 material claims persisted)",
+    "editorialVerificationCoverage": "100.0% (524 / 524 material claims verified)",
+    "canonicalStoryModelingCoverage": "50.76% (266 / 524 material claims modeled)",
+    "evidenceLinkedPersistedCoverage": "100.0% (142 / 142 persisted claims evidence-linked)"
+  },
+  "regressionGates": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "buildPassed": true,
+    "scopedLintPassed": true,
+    "quickStandardDeepModesValid": true
+  },
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase7_consumer_convergence_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase7_consumer_convergence_report.md"
+  }
+}

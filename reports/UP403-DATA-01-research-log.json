@@ -1,0 +1,49 @@
+{
+  "batch": "UP403-DATA-01",
+  "mission": "Canonical 403 Constituency Geography",
+  "executed_at": "2026-07-28T11:39:15.807Z",
+  "sources_consulted": [
+    "Wikipedia — List of constituencies of the Uttar Pradesh Legislative Assembly (wikitext)",
+    "ECI Statistical Reports (cited in Wikipedia source)",
+    "CEO Uttar Pradesh (cited in Wikipedia source)"
+  ],
+  "sources_accepted": [
+    "SRC-UP403-WIKI-01",
+    "SRC-UP403-DIV-01"
+  ],
+  "sources_rejected": [],
+  "records_ingested": 403,
+  "conflicts_discovered": [
+    "CRITICAL: Existing controlled batch PROD-12CONSTITUENCY-CONTROLLED used UP-AC-395 for Varanasi Cantt — canonical ECI/Wikipedia data establishes Varanasi Cantt. = UP-AC-390 (Varanasi district, GENERAL, Varanasi PC). AC-395 is Chhanbey (SC, Mirzapur district, Mirzapur PC). The existing batch canonical ID is INCORRECT and must be corrected before both datasets are merged.",
+    "CROSS-DISTRICT: AC-030 Bilari (Moradabad/Sambhal), AC-058 Dhaulana (Ghaziabad/Hapur), AC-184 Jagdishpur (Amethi/Sultanpur) straddle district boundaries — primary district follows Wikipedia rowspan assignment pending ECI map confirmation.",
+    "NAMING: Bhadohi district official name is Sant Ravidas Nagar; manifest uses Bhadohi (Wikipedia usage). ECI delimitation order uses official name.",
+    "NAMING: Amethi district carved out of Sultanpur in 2010 — post-delimitation creation, pre-delimitation sources may not list it separately."
+  ],
+  "missing_data": [
+    "Electors count null for AC(s) where formatnum not parsed",
+    "Division data for cross-district constituencies requires manual confirmation"
+  ],
+  "methodological_problems": [
+    "Wikipedia is TIER_2 — ECI/CEO UP TIER_1 verification required before VERIFIED status",
+    "Sambhal district classification ambiguous (listed under both Bareilly and Moradabad divisions depending on source)",
+    "Cross-district ACs (AC-030 Bilari, AC-058 Dhaulana) district attribution follows Wikipedia primary assignment"
+  ],
+  "validation_results": {
+    "active_ac_count_is_403": true,
+    "unique_ac_numbers_is_403": true,
+    "unique_canonical_ids_is_403": true,
+    "no_unresolved_district": true,
+    "no_unresolved_division": true,
+    "no_unresolved_pc": true,
+    "all_records_have_provenance": true
+  },
+  "unresolved_questions": [
+    "PRIORITY 1 — Varanasi Cantt conflict: confirm UP-AC-390 is correct and update PROD-12CONSTITUENCY-CONTROLLED batch",
+    "PRIORITY 2 — ECI Tier 1 verification: cross-check sample (minimum 20) AC names + reservation status against ECI Delimitation Order 2008 PDF (https://eci.gov.in/files/file/13601-delimitation-of-parliamentary-and-assembly-constituencies-order-2008/)",
+    "PRIORITY 3 — Sambhal division: Moradabad confirmed by subagent research 2026-07-28. Note any source that lists it under Bareilly.",
+    "PRIORITY 4 — Bhadohi official name: confirm whether ECI uses Bhadohi or Sant Ravidas Nagar in delimitation order",
+    "PRIORITY 5 — Cross-district primary attribution: verify Bilari (AC-030), Dhaulana (AC-058), Jagdishpur (AC-184) primary district against ECI map",
+    "PRIORITY 6 — 5 PCs with non-standard seat count (4 or 6): confirm Amethi(6), Fatehpur(6), Shahjahanpur(6), Unnao(6), Rae Bareli(4) against ECI delimitation"
+  ],
+  "updated_at": "2026-07-28T11:51:07.308Z"
+}

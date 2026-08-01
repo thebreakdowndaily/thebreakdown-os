@@ -1,0 +1,56 @@
+{
+  "batchNumber": 4,
+  "storySlug": "mgnrega-reform",
+  "storyTitle": "MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment",
+  "auditedAt": "2026-07-23T17:26:39.980Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "Active statutory law (Act No. 42 of 2005); zero Gazette repeal/replacement notifications exist. FY24 budget ₹86,000 cr & 14.3 cr active workers verified via MoRD MIS return.",
+  "rawExtractedSurfaceItems": 20,
+  "confirmedMaterialClaims": 17,
+  "registrationCandidates": 17,
+  "verifiedRegistrationCandidates": 17,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsTotal": 8,
+  "highMaterialityVerified": 8,
+  "highMaterialityUnresolved": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "FULLY_VERIFIED",
+  "freshnessStatus": "CURRENT",
+  "domainCategory": "Legal",
+  "domainFactCheckDetails": "Mahatma Gandhi National Rural Employment Guarantee Act, 2005 (Act No. 42 of 2005). Guarantees 100 days of wage employment per rural household per FY. Current legal status: Active statutory law; ZERO Gazette notifications or parliamentary bills exist replacing or renaming the Act. Budget FY 2023-24 RE: ₹86,000 crore. Active Workers: 14.3 crore. Registered Households: 15.4 crore. Average days per household: 47.4 days.",
+  "authoritativeSources": [
+    {
+      "exactTitle": "MGNREGA Official Portal Dashboard & Act No. 42 of 2005",
+      "issuingAuthority": "Ministry of Rural Development (MoRD)",
+      "publicationDate": "2024-03-31",
+      "officialURLOrIdentifier": "https://nrega.nic.in/netnrega/home.aspx",
+      "pageOrTableOrSection": "MIS Financial Year Return 2023-24",
+      "retrievalDate": "2026-07-23",
+      "sourceStatus": "PRIMARY_SOURCE_LOCATED",
+      "relevantPassageOrDataCell": "100 days guaranteed wage employment; active statutory operation.",
+      "semanticRelationship": "EXACT_SUPPORT",
+      "temporalScope": "FY 2023-24",
+      "geographicScope": "India (Rural All States/UTs)",
+      "denominator": "15.4 Crore Registered Households",
+      "caveats": "No legislative proposal or Gazette notification repealing or replacing Act No. 42 of 2005 exists."
+    }
+  ],
+  "quickModeDefensible": true,
+  "standardModeDefensible": true,
+  "deepModeValueAdd": true,
+  "timelineQuality": "ESSENTIAL",
+  "visualsQuality": "PEDAGOGICAL",
+  "issues": [
+    {
+      "id": "ISS-B4-MGNREG",
+      "severity": "P2",
+      "category": "KNOWLEDGE_COVERAGE",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "17 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

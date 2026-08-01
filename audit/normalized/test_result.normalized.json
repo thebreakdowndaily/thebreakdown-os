@@ -1,0 +1,11 @@
+{
+  "id": "test",
+  "command": "npm test",
+  "timestamp": "2026-08-01T09:40:32.221Z",
+  "startedAt": "2026-08-01T09:40:02.386Z",
+  "durationMs": 29834,
+  "exitCode": 0,
+  "passed": true,
+  "logFile": "audit/raw/test.log",
+  "outputTail": "  PASS: Has executive-summary block\n  PASS: Has callout block\n  PASS: Has timeline block\n  PASS: Has system-explanation block\n  PASS: Has evidence block\n  PASS: Has stakeholders block\n  PASS: Has perspectives block\n  PASS: Has faq block\n  PASS: Has sources block\n  PASS: Validation has no errors\n  PASS: Evidence block exists\n  PASS: Evidence block has claims\n  PASS: Claim has text\n  PASS: Claim has confidence\n  PASS: Claim has status\n  PASS: Claim has sources array\n  PASS: Claim has supportingEvidence array\n  PASS: Has at least 3 visual specifications\n  PASS: Has at least 2 related knowledge links\n\nResults: 53 passed, 0 failed\nGOLDEN STORY TEST PASSED — the RBI story is intact\n\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.\n[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback."
+}

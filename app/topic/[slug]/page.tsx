@@ -10,7 +10,7 @@ import SectionHeader from '@/components/ui/SectionHeader';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
 import Divider from '@/components/ui/Divider';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 import InteractiveTimelineBlock from '@/components/story/blocks/InteractiveTimelineBlock';
 import FAQ from '@/components/story/FAQ';
 import { TopicGraphSection } from '@/features/graph/components/TopicGraphSection';
@@ -20,6 +20,7 @@ import TopicStats from '@/components/topic/TopicStats';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { FeedbackSection } from '@/components/rxs/LearningFooter';
+
 
 function createJsonLd(topic: { name: string; description: string; slug: string }) {
   return [
@@ -124,7 +125,16 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         </Script>
       ))}
 
-      <Breadcrumbs items={vm.breadcrumbs} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb
+          items={vm.breadcrumbs.map((b, idx) => ({
+            label: b.label,
+            href: b.href,
+            current: idx === vm.breadcrumbs.length - 1,
+          }))}
+          theme="dark"
+        />
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
         

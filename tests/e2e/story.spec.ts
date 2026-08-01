@@ -10,8 +10,8 @@ test.describe('Story Critical Journey', () => {
   });
 
   test('should render the story content', async ({ page }) => {
-    await expect(page.locator('article')).toBeVisible();
-    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('article').first()).toBeVisible();
+    await expect(page.locator('h1').first()).toBeVisible();
   });
 
   test('should render images', async ({ page }) => {
@@ -42,7 +42,8 @@ test.describe('Story Critical Journey', () => {
     const relatedSection = page.locator('text=/Related|More like this/i').first();
     // It's possible some stories lack related links, but generally they exist
     if (await relatedSection.isVisible()) {
-      await expect(page.locator('a[href*="/story/"]')).toHaveCount(1, { timeout: 1000 }); // at least 1 link
+      const relatedLinks = page.locator('a[href*="/story/"]');
+      expect(await relatedLinks.count()).toBeGreaterThanOrEqual(1); // at least 1 link
     }
   });
 });

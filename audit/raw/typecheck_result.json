@@ -1,0 +1,11 @@
+{
+  "id": "typecheck",
+  "command": "npx tsc --noEmit",
+  "timestamp": "2026-08-01T09:39:05.900Z",
+  "startedAt": "2026-08-01T09:39:02.299Z",
+  "durationMs": 3601,
+  "exitCode": 0,
+  "passed": true,
+  "logFile": "audit/raw/typecheck.log",
+  "outputTail": ""
+}

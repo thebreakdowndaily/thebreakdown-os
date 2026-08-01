@@ -15,8 +15,18 @@ import { createHash } from 'crypto';
 
 /**
  * Generate a stable, deterministic claim ID from content.
- * Uses a truncated SHA-256 hash of the claim statement + source context.
- *
+ * Uses a truncated SHA-256 hash of the normalized claim statement + source context.
+ * 
+ * Versioning: Prepend 'v1-' to the hash component to allow future algorithm updates.
+ * Canonicalization: Trims inputs and normalizes all internal whitespace sequences to a single space.
+ * 
+ * Collision Handling:
+ *   - The hash uses 12 hex characters (48 bits of entropy), yielding a collision probability
+ *     of < 10^-7 for up to 10,000 claims (well within the scale of Volume I).
+ *   - In the extremely rare event of a hash collision, the ingestion/build pipeline will throw
+ *     an error on duplicate IDs during registration. Editors can resolve this by slightly editing
+ *     the claim description or source text (which changes the hash input).
+ * 
  * This is the LAST RESORT — prefer persistent IDs from the research layer.
  */
 export function deterministicClaimId(
@@ -24,9 +34,13 @@ export function deterministicClaimId(
   sourceContext: string,
   storySlug: string,
 ): string {
-  const input = `${storySlug}::${statement}::${sourceContext}`;
+  const cleanStatement = (statement || '').trim().replace(/\s+/g, ' ');
+  const cleanSource = (sourceContext || '').trim().replace(/\s+/g, ' ');
+  const cleanSlug = (storySlug || '').trim().toLowerCase();
+  
+  const input = `${cleanSlug}::${cleanStatement}::${cleanSource}`;
   const hash = createHash('sha256').update(input).digest('hex').slice(0, 12);
-  return `claim-${storySlug}-${hash}`;
+  return `claim-${cleanSlug}-v1-${hash}`;
 }
 
 /**

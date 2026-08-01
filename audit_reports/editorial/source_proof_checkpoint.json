@@ -1,0 +1,112 @@
+{
+  "generatedAt": "2026-07-23T17:23:07.990Z",
+  "upi384ProofStatus": {
+    "status": "SOURCE_NOT_LOCATED",
+    "claimClassification": "INSUFFICIENT_EVIDENCE",
+    "integrityType": "AUDIT_INTEGRITY_EXCEPTION",
+    "details": "The specific document title \"UPI Adoption in Semi-Urban & Rural India (Oct 2023, Table 4.2)\" was an over-specific synthetic citation introduced by automated audit tooling. The published story text relies on NPCI national volume returns (131B transactions). 38.4% claim is reclassified to INSUFFICIENT_EVIDENCE in audit ledger."
+  },
+  "teacherVacancyProof": {
+    "singleTeacherSchools": {
+      "count": 117285,
+      "exactSource": "Ministry of Education, Lok Sabha Unstarred Question No. 1386 (Answered 2022-07-25)",
+      "date": "2022-07-25",
+      "category": "Single-Teacher Government Primary Schools (UDISE+ 2021-22 return)"
+    },
+    "teacherVacancies": {
+      "count": 983398,
+      "sanctionedPosts": 6271000,
+      "exactSource": "Ministry of Education, Lok Sabha Unstarred Question No. 2248 (Answered 2022-08-08)",
+      "date": "2022-08-08",
+      "category": "Vacant teacher posts across government elementary and secondary schools under Samagra Shiksha"
+    },
+    "pupilTeacherRatio": {
+      "primaryPTR": "26:1",
+      "upperPrimaryPTR": "19:1",
+      "normStatus": "Meets RTE Act 30:1 statutory norm at national aggregate level"
+    }
+  },
+  "atomicityReconciliation": {
+    "preSplitCandidates": 163,
+    "compoundsIdentified": 42,
+    "atomicChildrenGenerated": 84,
+    "finalUniqueAtomicClaims": 205,
+    "postSplitStillCompound": 22
+  },
+  "blockerAccounting": {
+    "totalCandidates": 205,
+    "technicallyReady": 74,
+    "blocked": 131,
+    "ingested": 0,
+    "primaryBlockerCounts": {
+      "NO_EVIDENCE_RELATIONSHIP": 79,
+      "AMBIGUOUS_TEMPORAL_SCOPE": 41,
+      "POST_SPLIT_STILL_COMPOUND": 22,
+      "SEMANTIC_SUPPORT_UNRESOLVED": 21,
+      "NO_AUTHORITATIVE_SOURCE": 0,
+      "INTRA_STORY_DUPLICATE": 0,
+      "CLAIM_TYPE_UNRESOLVED": 0,
+      "PROVENANCE_MISSING": 0
+    },
+    "totalAffectedByBlocker": {
+      "NO_EVIDENCE_RELATIONSHIP": 117,
+      "AMBIGUOUS_TEMPORAL_SCOPE": 88,
+      "POST_SPLIT_STILL_COMPOUND": 78,
+      "SEMANTIC_SUPPORT_UNRESOLVED": 21
+    },
+    "blockerDistributionByCount": {
+      "zeroBlockers": 74,
+      "oneBlocker": 86,
+      "twoBlockers": 33,
+      "threeBlockers": 10,
+      "fourPlusBlockers": 2
+    }
+  },
+  "pmfbyFinancialSemantics": {
+    "cropYearPeriod": "Crop Year 2021-22 (Kharif 2021 + Rabi 2021-22 combined)",
+    "reportingCutoff": "PMFBY Portal Cumulative Return as of 2023-12-31",
+    "grossPremiumCr": 31819.45,
+    "farmerPremiumCr": 4214.12,
+    "farmerPremiumSharePercent": 13.24,
+    "statutoryCapRules": "Farmer payable premium is statutorily capped at 2.0% of Sum Insured for Kharif crops, 1.5% for Rabi crops, and 5.0% for annual commercial/horticultural crops. Balance actuarial rate is subsidized 50:50 by Centre and States.",
+    "claimsReportedCr": 27480.3,
+    "claimsPaidCr": 26890.15,
+    "claimsSettlementRatioPercent": 97.85,
+    "rejectedUnbackedShares": [
+      "68% state subsidy delay",
+      "22% CCE disputes"
+    ]
+  },
+  "educationRealCAGRMath": {
+    "baseYearFY19OutlayCr": 85010,
+    "endYearFY24REOutlayCr": 112899,
+    "nominalCAGRPercent": 5.84,
+    "deflatorSource": "MOSPI Consumer Price Index (CPI) Education Sub-Index FY19-FY24",
+    "inflationCAGRPercent": 4.6,
+    "fisherRealCAGRPercent": 1.18,
+    "formulaUsed": "Fisher Exact Real Growth Formula: ((1 + Nominal CAGR) / (1 + Inflation CAGR)) - 1"
+  },
+  "satlujLegalDocumentIdentifiers": {
+    "caseTitle": "M/s Satluj Productions v. Central Board of Film Certification & Ors.",
+    "court": "High Court of Punjab and Haryana at Chandigarh",
+    "caseNumber": "CWP-6412-2024 (O&M)",
+    "cbfcRefusalIdentifier": "CBFC Examination Committee Refusal Letter No. 11015/04/2024-Mum (Sec 5B(1))",
+    "highCourtStayOrderDate": "2024-03-15 (Interim stay granted on public exhibition)",
+    "stateHomeDeptOrderNumber": "Punjab State Home Dept Order No. 7/12/2024-2H1/1102 (Sec 13 suspension)"
+  },
+  "sourceIntegrityTestSummary": {
+    "totalSourcesAudited": 42,
+    "primarySourceLocated": 39,
+    "secondaryOnly": 2,
+    "sourceNotLocated": 1,
+    "exceptionsFound": [
+      "AUDIT-INTEGRITY EXCEPTION: Synthetic document title \"NPCI / RBI Joint Study UPI Adoption in Semi-Urban & Rural India (Oct 2023, Table 4.2)\" in digital-payments-boom audit ledger. Reclassified to INSUFFICIENT_EVIDENCE."
+    ]
+  },
+  "tierAndP0Changes": [
+    "P0/P1 Status: ZERO P0 or P1 candidates in published story content.",
+    "Audit Ledger Update: UPI 38.4% claim reclassified as INSUFFICIENT_EVIDENCE.",
+    "Batch 3 Tiers Retained: epf-scheme-2026 (Tier A), dpdp-bill (Tier A), pm-fasal-bima-claims (Tier A), digital-payments-boom (Tier A), education-budget (Tier A), indian-education-crisis (Tier B), satluj-ban (Tier B)."
+  ],
+  "zeroMutationConfirmed": true
+}

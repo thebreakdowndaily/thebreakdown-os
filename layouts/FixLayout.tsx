@@ -1,6 +1,5 @@
 import React from 'react';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
-import Container from '../components/layout/Container';
 
 interface Breadcrumb { label: string; href: string; }
 interface SEOData { title: string; description: string; canonical: string; ogType: string; }
@@ -14,10 +13,8 @@ interface FixLayoutProps {
 const FixLayout: React.FC<FixLayoutProps> = ({ children, seo, breadcrumbs }) => (
   <>
     <Breadcrumbs items={breadcrumbs} />
-    <main className="flex-1 w-full" role="main">
-      <Container narrow className="py-8">
-        <article aria-label={seo.title}>{children}</article>
-      </Container>
+    <main className="flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
+      <article aria-label={seo.title}>{children}</article>
     </main>
   </>
 );

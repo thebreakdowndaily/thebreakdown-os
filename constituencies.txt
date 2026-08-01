@@ -1,0 +1,17 @@
+CONSTITUENCIES DATA
+===================
+
+canonical_id | name | created_at | ingestion_method
+------------- | ---- | ---------- | ----------------
+AR-AC-22 | Tawang | Wed Jul 22 2026 11:49:26 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+GJ-AC-61 | Ahmedabad West | Wed Jul 22 2026 11:49:02 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+HP-AC-36 | Hamirpur | Wed Jul 22 2026 11:49:14 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+JH-AC-60 | Khunti | Wed Jul 22 2026 11:49:34 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+MH-AC-191 | Mumbai South | Wed Jul 22 2026 11:49:09 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+ML-AC-16 | East Shillong | Wed Jul 22 2026 11:49:18 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+RJ-AC-144 | Jalore | Wed Jul 22 2026 11:49:38 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+UK-AC-48 | Pithoragarh | Wed Jul 22 2026 11:49:21 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+UP-AC-171 | Lucknow West | Wed Jul 22 2026 11:49:46 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+UP-AC-322 | Gorakhpur Urban | Wed Jul 22 2026 11:49:41 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+UP-AC-351 | Lalganj | Wed Jul 22 2026 11:49:31 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+UP-AC-390 | Varanasi Cantt | Wed Jul 22 2026 11:48:57 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED

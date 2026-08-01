@@ -7,7 +7,7 @@ import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
 import Link from 'next/link';
 import SourcesList from '@/components/story/SourcesList';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -57,11 +57,14 @@ export default async function InvestigationPage({ params }: Props) {
         }}
       />
 
-      <Breadcrumbs items={[
-        { label: 'Home', href: '/' },
-        { label: 'Investigations', href: '/investigations' },
-        { label: inv.title, href: `/investigation/${inv.slug}` },
-      ]} />
+      <div className="bg-neutral-950 px-4 pt-4">
+        <SpatialNarrativeBreadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Investigations', href: '/investigations' },
+          { label: inv.title, href: `/investigation/${inv.slug}`, current: true },
+        ]} theme="dark" />
+      </div>
+
       {/* Hero */}
       <section className="relative bg-gradient-to-b from-[#0A0A0A] via-[#111] to-[#0A0A0A] border-b border-[#2A2A2A]">
         <Container>
@@ -94,7 +97,7 @@ export default async function InvestigationPage({ params }: Props) {
             <ul className="space-y-3">
               {inv.keyFindings.map((kf, i) => (
                 <li key={i} className="flex gap-3 text-gray-200">
-                  <span className="text-amber-500 shrink-0 mt-1">◆</span>
+                  <span className="text-amber-500 shrink-0 mt-1" aria-hidden="true">◆</span>
                   <span>{kf}</span>
                 </li>
               ))}
@@ -205,20 +208,22 @@ export default async function InvestigationPage({ params }: Props) {
       )}
 
       {/* Read the Overview Story */}
-      <section className="py-8">
-        <Container>
-          <div className="bg-gradient-to-r from-amber-500/10 to-transparent rounded-lg p-6 border border-amber-500/20">
-            <h2 className="text-lg font-semibold text-white mb-2">Start with the Overview</h2>
-            <p className="text-sm text-gray-400 mb-4">Get the full picture in one 22-minute read before diving into the chapters.</p>
-            <Link
-              href="/story/namami-gange-under-fire"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-black font-medium rounded-md hover:bg-amber-400 transition-colors text-sm"
-            >
-              Read the Overview Story →
-            </Link>
-          </div>
-        </Container>
-      </section>
+      {inv.chapters.length > 0 && (
+        <section className="py-8">
+          <Container>
+            <div className="bg-gradient-to-r from-amber-500/10 to-transparent rounded-lg p-6 border border-amber-500/20">
+              <h2 className="text-lg font-semibold text-white mb-2">Start with the Overview</h2>
+              <p className="text-sm text-gray-400 mb-4">Get the full picture before diving into the chapters.</p>
+              <Link
+                href={`/story/${inv.chapters[0].storySlug}`}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-black font-medium rounded-md hover:bg-amber-400 transition-colors text-sm"
+              >
+                Read the Overview Story →
+              </Link>
+            </div>
+          </Container>
+        </section>
+      )}
     </>
   );
 }

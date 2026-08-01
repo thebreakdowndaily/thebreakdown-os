@@ -9,7 +9,7 @@ export default function ConfidenceBadge({ status, confidence }: { status: ClaimS
     >
       <span className={cn("w-1.5 h-1.5 rounded-full", cfg.dotClass)} />
       <span>{cfg.label}</span>
-      <span className="opacity-60 tabular-nums font-mono">{confidence}%</span>
+      <span className="tabular-nums font-mono">{confidence}%</span>
     </span>
   );
 }

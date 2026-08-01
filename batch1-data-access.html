@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Batch 1 Data Access - The Breakdown Knowledge Platform</title>
+    <style>
+        body { font-family: system-ui; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        .card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .header { background: #0d9488; color: white; padding: 20px; border-radius: 8px 8px 0 0; margin: -20px -20px 20px -20px; }
+        .code { background: #f5f5f5; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+        .badge { background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>📊 Batch 1 Data — PROD-12CONSTITUENCY-CONTROLLED</h1>
+            <p>12 constituencies, 22 claims, 30 sources, 30 evidence items, 14 financial records</p>
+        </div>
+        
+        <h2>🗄️ Data Location</h2>
+        <p><strong>Platform:</strong> Supabase Dashboard</p>
+        <p><strong>Project:</strong> <code>swektehukscmsgxdzymw</code></p>
+        <p><strong>URL:</strong> 
+            <a href="https://swektehukscmsgxdzymw.supabase.co" target="_blank">
+                https://swektehukscmsgxdzymw.supabase.co
+            </a>
+        </p>
+        
+        <h2>🔑 Access Credentials</h2>
+        <p><strong>Environment File:</strong> <code>.env.test</code></p>
+        <div class="code">
+ALLOW_RESEARCH_DB_INTEGRATION_TESTS=true<br>
+EXPECTED_PROJECT_REF=swektehukscmsgxdzymw<br>
+TEST_DATABASE_URL=postgresql://postgres:Ntn%40supabase403@db.swektehukscmsgxdzymw.supabase.co:5432/postgres<br>
+SUPABASE_URL=https://swektehukscmsgxdzymw.supabase.co<br>
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3ZWt0ZWh1a3NjbXNneGR6eW13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzQ3ODQsImV4cCI6MjEwMDA1MDc4NH0.nUuW161KEAIGG98sjbhpvX3J-P-fZxVCVJaMBpQQXNo<br>
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3ZWt0ZWh1a3NjbXNneGR6eW13Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDQ3NDc4NCwiZXhwIjoyMTAwMDUwNzg0fQ.2Yf2PnE8wIh4ynTWAq8jp0hUo3jpgqdnBMv3MDwC6K4
+        </div>
+        
+        <h2>📋 Key Tables</h2>
+        <ul>
+            <li><strong>research_constituencies:</strong> <span class="badge">12 rows</span></li>
+            <li><strong>research_claims:</strong> <span class="badge">22 batch</span> + <span class="badge">10 test</span> = 32 rows</li>
+            <li><strong>research_sources:</strong> <span class="badge">30 rows</span></li>
+            <li><strong>research_evidence_items:</strong> <span class="badge">30 rows</span></li>
+            <li><strong>research_financial_records:</strong> <span class="badge">14 batch</span> + <span class="badge">4 test</span> = 18 rows</li>
+        </ul>
+        
+        <h2>🔍 Access Options</h2>
+        <h3>Web Interface</h3>
+        <ol>
+            <li>Navigate to the Supabase dashboard URL above</li>
+            <li>Login to your account</li>
+            <li>Browse tables directly using the UI</li>
+        </ol>
+        
+        <h3>API Access</h3>
+        <div class="code">
+curl -H "Authorization: Bearer YOUR_ANON_KEY" \
+     "https://swektehukscmsgxdzymw.supabase.co/rest/v1/research_constituencies?select=*"
+        </div>
+        
+        <h2>⚠️ Important Notes</h2>
+        <ul>
+            <li><strong>No shareable link:</strong> You must log into Supabase directly</li>
+            <li><strong>SSL required:</strong> Use <code>ssl: { rejectUnauthorized: false }</code> for connections</li>
+            <li><strong>Free tier limitations:</strong> Data may be affected by Supabase's free tier policies</li>
+        </ul>
+    </div>
+    
+    <div class="card">
+        <h3>💡 Quick Start</h3>
+        <p>1. Go to <a href="https://swektehukscmsgxdzymw.supabase.co" target="_blank">https://swektehukscmsgxdzymw.supabase.co</a></p>
+        <p>2. Login with your Supabase credentials</p>
+        <p>3. Navigate to Table Browser → Select "research_constituencies"</p>
+        <p>4. Click "REFRESH" to load all 12 constituencies</p>
+    </div>
+</body>
+</html>

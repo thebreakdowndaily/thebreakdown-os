@@ -1,34 +1,52 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { getTopics } from '@/utils/data-layer/store';
-import Container from '@/components/layout/Container';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import PublicKnowledgePortalView from '@/components/public/PublicKnowledgePortalView';
+import { PublicPublicationService } from '@/services/public/public-publication.service';
+import { CHAPTER_1_FIX } from '@/lib/editorial/chapter-1-data';
 
 export const metadata: Metadata = {
-  title: 'Topics — The Breakdown',
-  description: 'Explore data-driven coverage of Indian policy, economy, technology, and more.',
-  openGraph: { title: 'Topics — The Breakdown', url: 'https://thebreakdown.in/topics' },
+  title: 'Public Knowledge Directory — The Breakdown',
+  description: 'Evidence-first thematic navigation across Volume I published chapters and primary historical sources.',
 };
 
 export default function TopicsPage() {
-  const { data: topics } = getTopics({ pageSize: 50 });
+  const chapters = PublicPublicationService.getPublicChapters();
+  const fixes = [CHAPTER_1_FIX];
+
   return (
-    <Container>
-      <div className="py-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Topics</h1>
-        <p className="text-gray-400 text-lg mb-8">Explore data-driven coverage across key areas.</p>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {topics.map((topic) => (
-            <Link key={topic.slug} href={`/topic/${topic.slug}`} className="group block p-6 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-amber-500/50 transition-colors">
-              <h2 className="text-xl font-semibold text-white group-hover:text-amber-400 transition-colors mb-2">{topic.name}</h2>
-              <p className="text-sm text-gray-400 mb-4 line-clamp-2">{topic.description}</p>
-              <div className="flex items-center gap-4 text-xs text-gray-500">
-                <span>{topic.storyCount} stories</span>
-                <span>{topic.entityCount} entities</span>
-              </div>
-            </Link>
-          ))}
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-amber-500/30 pb-24">
+      {/* Top Header */}
+      <header className="border-b border-gray-800 bg-gray-950/80 sticky top-0 z-50 backdrop-blur-md">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-gray-100">
+              The Breakdown <span className="text-amber-400">Public Portal</span>
+            </h1>
+            <span className="bg-amber-500/10 text-amber-300 text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded font-bold border border-amber-500/30">
+              Phase 17A Live
+            </span>
+          </div>
+
+          <div className="flex items-center gap-6 text-xs text-gray-400 font-mono">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Public Security Boundary Enforced
+            </span>
+          </div>
         </div>
-      </div>
-    </Container>
+      </header>
+
+      {/* Main Container */}
+      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-8" id="main-content">
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Public Portal', href: '/topics' },
+        ]} />
+
+        <div className="mt-6">
+          <PublicKnowledgePortalView chapters={chapters} fixes={fixes} />
+        </div>
+      </main>
+    </div>
   );
 }

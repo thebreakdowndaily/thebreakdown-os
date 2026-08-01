@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Container from '@/components/layout/Container';
 import { getPublicStories } from '@/utils/data-layer/store';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Team — The Breakdown',
@@ -17,6 +18,12 @@ export default function TeamPage() {
   }
   const authors = Array.from(authorMap.values());
   return (
+    <>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'About', href: '/about' },
+        { label: 'Team', href: '/about/team' },
+      ]} />
     <Container>
       <div className="py-8 max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-6">Our Team</h1>
@@ -24,7 +31,9 @@ export default function TeamPage() {
           {authors.map((author) => (
             <div key={author.name} className="p-6 bg-[#151515] rounded-lg border border-[#2A2A2A]">
               <h2 className="text-xl font-semibold text-white mb-2">{author.name}</h2>
-              <p className="text-sm text-gray-400 mb-3">Contributing journalist</p>
+              <p className="text-sm text-gray-400 mb-3">
+                {author.stories.length > 1 ? 'Lead Author' : 'Contributing Author'}
+              </p>
               <div className="text-xs text-gray-500">
                 <span className="text-amber-400/80">{author.stories.length} stories</span>
                 <ul className="mt-2 space-y-1">
@@ -38,5 +47,6 @@ export default function TeamPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

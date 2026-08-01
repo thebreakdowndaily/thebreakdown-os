@@ -26,7 +26,12 @@ export default async function InvestigationsPage() {
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Investigations</h1>
         <p className="text-gray-400 text-lg mb-8">In-depth data-driven investigations into Indian policy, governance, and society.</p>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {investigations.map((inv) => (
+          {investigations.length === 0 ? (
+            <div className="col-span-full text-center py-16">
+              <p className="text-gray-400 text-lg mb-4">No investigations published yet.</p>
+              <p className="text-gray-500 text-sm">Check back soon for in-depth data-driven investigations.</p>
+            </div>
+          ) : investigations.map((inv) => (
             <Link key={inv.slug} href={`/investigation/${inv.slug}`} className="group block p-6 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-amber-500/50 transition-colors">
               <div className="flex items-center gap-2 mb-3">
                 <Badge variant="category">Investigation</Badge>

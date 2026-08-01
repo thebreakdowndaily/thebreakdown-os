@@ -3,9 +3,9 @@
   "relationship": "managed-by",
   "to": "org-rural-development",
   "confidence": 0.95,
-  "version": 1,
+  "version": 12,
   "createdAt": "2026-07-18T16:37:55.984Z",
-  "lastObserved": "2026-07-18T16:37:55.984Z",
+  "lastObserved": "2026-07-31T09:22:11.492Z",
   "firstObserved": "2026-07-18T16:37:55.984Z",
   "active": true,
   "history": [
@@ -15,6 +15,94 @@
       "updatedBy": "memory-engine",
       "changes": [
         "relationship-created"
+      ]
+    },
+    {
+      "version": 2,
+      "timestamp": "2026-07-23T06:08:43.410Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 3,
+      "timestamp": "2026-07-23T08:08:51.153Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 4,
+      "timestamp": "2026-07-25T06:21:26.926Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 5,
+      "timestamp": "2026-07-25T13:49:16.439Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 6,
+      "timestamp": "2026-07-26T07:28:19.874Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 7,
+      "timestamp": "2026-07-27T10:46:06.715Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 8,
+      "timestamp": "2026-07-28T11:31:00.510Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 9,
+      "timestamp": "2026-07-31T09:19:28.865Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 10,
+      "timestamp": "2026-07-31T09:20:40.401Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 11,
+      "timestamp": "2026-07-31T09:20:51.530Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
+      ]
+    },
+    {
+      "version": 12,
+      "timestamp": "2026-07-31T09:22:11.492Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "relationship-updated"
       ]
     }
   ]

@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-07-23T17:47:55.886Z",
+  "auditCutoffDate": "2026-07-23",
+  "manifestArithmetic": {
+    "manifestLength": 68,
+    "storyGroupCounts": {
+      "mgnrega-reform": 5,
+      "rbi-repo-rate": 4,
+      "bjp-mission-360": 4,
+      "groundwater-depletion": 4,
+      "semiconductor-pli": 4,
+      "epf-scheme-2026": 4,
+      "dpdp-bill": 3,
+      "gig-worker-rights": 3,
+      "namami-gange-under-fire": 3,
+      "us-iran-relations": 3,
+      "pm-fasal-bima-claims": 3,
+      "digital-payments-boom": 3,
+      "education-budget": 3,
+      "climate-finance": 3,
+      "indias-inheritance": 3,
+      "who-cancer-report-2026": 3,
+      "youth-mental-health-crisis": 3,
+      "us-iran-war-strait-of-hormuz": 3,
+      "81-crore-data-breach": 3,
+      "indian-education-crisis": 2,
+      "satluj-ban": 2
+    },
+    "storyGroupSum": 68,
+    "uniqueClaimIds": 68,
+    "uniqueContentHashes": 68,
+    "arithmeticInvariantPassed": true
+  },
+  "claimReconciliation524": {
+    "totalMaterialClaims": 524,
+    "primaryDispositions": {
+      "READY_NEW": 68,
+      "ALREADY_IN_TARGET_REGISTRY": 22,
+      "CANONICAL_STORY_CLAIM_ALREADY_MODELED": 244,
+      "BLOCKED_NO_EVIDENCE": 42,
+      "BLOCKED_COMPOUND": 38,
+      "BLOCKED_TEMPORAL_SCOPE": 28,
+      "BLOCKED_SEMANTIC_SUPPORT": 23,
+      "DUPLICATE_EXISTING_REGISTRY": 18,
+      "DUPLICATE_WITHIN_STORY": 2,
+      "NON_REGISTRATION_MATERIAL": 33,
+      "SUPERSEDED": 6
+    },
+    "dispositionSum": 524,
+    "dispositionInvariantPassed": true
+  },
+  "targetSchemaIntrospection": {
+    "provider": "In-Memory / Canonical ClaimRegistry Engine (lib/knowledge/claim-registry.ts)",
+    "registryName": "CanonicalClaim Map",
+    "primaryKey": "id (string)",
+    "schemaFields": [
+      "id (PK)",
+      "statement (string)",
+      "confidence ('established' | 'probable' | 'contested')",
+      "evidence (array of {sourceId, relevance, excerpt})",
+      "sourceIds (string[])",
+      "documentIds (string[])",
+      "entityIds (string[])",
+      "conceptIds (string[])",
+      "appearsIn (array of {contentType, contentId, contentTitle})",
+      "createdAt (ISO string)",
+      "updatedAt (ISO string)",
+      "lastVerifiedAt (ISO string)"
+    ],
+    "sourceRelationshipSchema": "CanonicalClaim.sourceIds (string[]) & CanonicalClaim.evidence[].sourceId",
+    "evidenceRelationshipSchema": "CanonicalClaim.evidence (CanonicalEvidenceRef[])"
+  },
+  "preWriteDatabaseSnapshot": {
+    "actualPreWriteClaimCount": 22,
+    "uniquePreWriteClaimIds": 22,
+    "preWriteSourceLinks": 30,
+    "preWriteEvidenceLinks": 45
+  },
+  "foreignKeyResolution": {
+    "totalCandidatesChecked": 68,
+    "storyReferencesResolved": 68,
+    "sourceReferencesResolved": 68,
+    "evidenceReferencesResolved": 68,
+    "entityReferencesResolved": 68,
+    "resolutionPercentage": "100.0%",
+    "allFksPassed": true
+  },
+  "cardinalityDerivation": {
+    "claimsWithOneSource": 68,
+    "claimsWithMultipleSources": 0,
+    "claimsWithOneEvidence": 68,
+    "claimsWithMultipleEvidence": 0,
+    "expectedClaimSourceInserts": 68,
+    "expectedClaimEvidenceInserts": 68,
+    "totalRelationshipInserts": 136
+  },
+  "deterministicIdAudit": {
+    "hashMaterialFormula": "UUIDv5(namespace, canonicalProposition + '|' + temporalScope + '|' + geographicScope + '|' + subjectEntity)",
+    "uniqueIdsInManifest": 68,
+    "uniqueHashesInManifest": 68,
+    "collisionsWithExistingRegistry": 0,
+    "stableRerunIdentical": true
+  },
+  "idempotencySimulation": {
+    "run1ProjectedInserts": 68,
+    "run2ProjectedInserts": 0,
+    "idempotencyPassed": true
+  },
+  "conflictBehavior": {
+    "onConflictTarget": "content_hash / id",
+    "behavior": "DO_NOTHING / STRICT_VALIDATION_ERROR (No silent overwrites)",
+    "rollbackOnUnexpectedCollision": true
+  },
+  "postWriteInvariants": {
+    "actualPreWriteCount": 22,
+    "expectedNewInserts": 68,
+    "expectedPostWriteCount": 90
+  },
+  "authorizationGateStatus": "READY_FOR_WRITE",
+  "gateChecklist": {
+    "manifestArithmeticReconciled": true,
+    "dispositionSemanticsReconciled": true,
+    "targetSchemaVerified": true,
+    "preWriteCountsQueried": true,
+    "allRequiredFksResolved": true,
+    "relationshipCardinalitiesDerived": true,
+    "deterministicIdsValidated": true,
+    "semanticDeduplicationPassed": true,
+    "idempotencyDryRunPassed": true,
+    "rollbackConditionsDefined": true
+  },
+  "artifactPaths": {
+    "markdownReportPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase4_final_execution_gate.md",
+    "jsonReportPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase4_final_execution_gate.json",
+    "fullManifestJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\manifest_68_claims.json"
+  },
+  "zeroMutationConfirmed": true
+}

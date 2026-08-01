@@ -15,6 +15,7 @@ import { DatasetReferenceBlock } from './DatasetReferenceBlock';
 import CalloutBlock from './CalloutBlock';
 import ChapterHeadingBlock from './ChapterHeadingBlock';
 import ImageBlock from './ImageBlock';
+import MapBlock from './MapBlock';
 import EvidenceInlineBlock from './EvidenceInlineBlock';
 import TextBlockClient from './TextBlockClient';
 import HeroBlock from './HeroBlock';
@@ -41,6 +42,7 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'evidence-inline': EvidenceInlineBlock,
   'text': ({ content }: BlockMap['text']) => <TextBlockClient content={content} />,
   'chart': (props: BlockMap['chart']) => <ChartBlock {...props} />,
+  'map': MapBlock,
   'dataset-reference': (props: BlockMap['dataset-reference']) => <DatasetReferenceBlock {...props} />,
   'quote': ({ text, attribution }: BlockMap['quote']) => (
     <section className="py-8 sm:py-10">

@@ -76,6 +76,7 @@ export default function KnowledgeCopilotSidebar({ context, suggestedQuestions }:
     return (
       <button 
         onClick={() => setIsOpen(true)}
+        aria-label="Open Knowledge Copilot"
         className="fixed bottom-6 right-6 z-50 bg-neutral-900 border border-neutral-700 hover:border-emerald-500 hover:text-emerald-400 shadow-2xl rounded-full p-4 text-white transition-all duration-300 flex items-center justify-center group"
       >
         <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +97,7 @@ export default function KnowledgeCopilotSidebar({ context, suggestedQuestions }:
           </svg>
           <span className="font-bold uppercase tracking-widest text-xs text-neutral-300">Knowledge Copilot</span>
         </div>
-        <button onClick={() => setIsOpen(false)} className="text-neutral-500 hover:text-white transition-colors">
+        <button onClick={() => setIsOpen(false)} aria-label="Close Knowledge Copilot" className="text-neutral-500 hover:text-white transition-colors">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -159,6 +160,7 @@ export default function KnowledgeCopilotSidebar({ context, suggestedQuestions }:
           />
           <button 
             type="submit"
+            aria-label="Send message"
             disabled={isStreaming || !query.trim()}
             className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-neutral-800 disabled:text-neutral-600 text-white rounded-lg p-3 transition-colors"
           >

@@ -1,0 +1,135 @@
+{
+  "id": "ref-policy-explainer",
+  "slug": "ref-policy-explainer",
+  "storyType": "Explainer",
+  "title": "How India's GST Council Works",
+  "metadata": {
+    "difficulty": "Beginner",
+    "confidence": "High",
+    "confidenceRationale": "Based on official GST Council records",
+    "updateRequired": false,
+    "readingTimeMinutes": 6,
+    "tags": [
+      "gst",
+      "tax",
+      "governance"
+    ],
+    "entities": [
+      {
+        "name": "GST Council",
+        "type": "organization",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/gst.jpg",
+    "statistic": "28%",
+    "statisticSource": "GST Council",
+    "caption": "Central GST rate on most goods",
+    "altText": "GST Council meeting",
+    "credit": "PIB",
+    "aspectRatio": "16:9"
+  },
+  "summary": "The GST Council decides indirect tax rates and rules for India's goods and services tax regime through a voting mechanism.",
+  "keyFacts": [
+    {
+      "claim": "GST Council is a constitutional body under Article 279A",
+      "source": "Constitution Amendment",
+      "confidence": 1
+    },
+    {
+      "claim": "Decisions require 3/4th majority of voting members",
+      "source": "GST Council Rules",
+      "confidence": 1
+    }
+  ],
+  "whyItMatters": "GST rates affect every Indian consumer and business.",
+  "narrative": "The GST Council comprises the Centre and states, with each state having one vote regardless of population. The voting formula gives the Centre less than 1/3rd weight, ensuring states have a decisive voice.",
+  "timeline": [
+    {
+      "date": "Sep 2016",
+      "event": "GST Council established",
+      "source": "Constitution Amendment",
+      "significance": "First GST governing body"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "3/4th majority required",
+      "source": "GST Council Rules",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [],
+  "systemExplanation": {
+    "headline": "How the GST Council Works",
+    "summary": "A constitutional mechanism where Centre and states jointly decide GST rates and rules.",
+    "steps": [
+      {
+        "label": "Proposal",
+        "description": "A rate change or rule amendment is proposed by the Centre or any state.",
+        "actor": "Council member",
+        "input": "Proposal document",
+        "output": "Agenda item"
+      },
+      {
+        "label": "Deliberation",
+        "description": "Members discuss and negotiate the proposed change.",
+        "actor": "GST Council",
+        "input": "Agenda item",
+        "output": "Proposal amendment"
+      },
+      {
+        "label": "Voting",
+        "description": "Decision requires 3/4th of weighted votes. Centre's vote weight is 1/3rd; states' collectively 2/3rd.",
+        "actor": "GST Council members",
+        "input": "Proposal",
+        "output": "Decision"
+      }
+    ]
+  },
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "Union Finance Minister",
+        "type": "government",
+        "position": "Chair of GST Council",
+        "interest": "Revenue maximization",
+        "stance": "support"
+      },
+      {
+        "name": "State Finance Ministers",
+        "type": "government",
+        "position": "Voting members",
+        "interest": "State revenue protection",
+        "stance": "conditional"
+      },
+      {
+        "name": "Businesses",
+        "type": "private_sector",
+        "position": "Registered taxpayers",
+        "interest": "Simpler compliance",
+        "stance": "support"
+      }
+    ],
+    "summary": "Centres, states, and businesses interact through the Council."
+  },
+  "sources": [
+    {
+      "title": "GST Council Rules",
+      "author": "Ministry of Finance",
+      "reliability": "high"
+    },
+    {
+      "title": "Article 279A Constitution",
+      "author": "Constitution of India",
+      "reliability": "high"
+    }
+  ],
+  "visuals": []
+}

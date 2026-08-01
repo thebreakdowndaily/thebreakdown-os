@@ -1,0 +1,298 @@
+{
+  "capturedAt": "2026-08-01T09:38:28.323Z",
+  "source": "audit/scripts/audit.ts (Audit-as-Code framework)",
+  "frameworkVersion": "1.0.0",
+  "reportVersion": "1.0",
+  "platformHealthScore": 76.25,
+  "coverage": 100,
+  "successfulPlugins": 4,
+  "failedPlugins": 4,
+  "skippedPlugins": 0,
+  "results": [
+    {
+      "pluginName": "accessibility-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 20,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "high",
+            "message": "Missing accessibility linting plugin (e.g. eslint-plugin-jsx-a11y) in package.json"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing automated accessibility testing tool (e.g. @axe-core/react or axe-core or cypress-axe) in package.json"
+          }
+        ],
+        "metrics": {
+          "lintingScore": 0,
+          "automationScore": 0,
+          "stylingScore": 100,
+          "accessibilityReadinessScore": 20
+        }
+      },
+      "execution": {
+        "durationMs": 1,
+        "startedAt": "2026-08-01T08:58:32.036Z",
+        "finishedAt": "2026-08-01T08:58:32.037Z"
+      }
+    },
+    {
+      "pluginName": "architecture-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: .storybook/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: api/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: audit_reports/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: checkpoints/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: data/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: documents/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: fixtures/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: frontend/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: providers/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: release-2a/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: release-3/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: release-4/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: reports/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: schemas/"
+          }
+        ],
+        "metrics": {
+          "policyVersion": "1.1.0",
+          "requiredDirectoriesCoverage": 100,
+          "requiredFilesCoverage": 100,
+          "pluginManifestCoverage": 100,
+          "pluginReadmeCoverage": 100,
+          "policyCompliance": 100,
+          "architectureComplianceScore": 100,
+          "requiredDirectories": {
+            "present": 10,
+            "missing": 0
+          },
+          "forbiddenImports": 0,
+          "unknownDirectories": 14
+        }
+      },
+      "execution": {
+        "durationMs": 276,
+        "startedAt": "2026-08-01T08:58:32.043Z",
+        "finishedAt": "2026-08-01T08:58:32.319Z"
+      }
+    },
+    {
+      "pluginName": "knowledge-graph-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 70,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/claims"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/sources"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/thinkers"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/documents"
+          },
+          {
+            "severity": "critical",
+            "message": "Missing canonical knowledge registry: registry/events"
+          }
+        ],
+        "metrics": {
+          "registriesScore": 0,
+          "schemasScore": 100,
+          "integrityScore": 100,
+          "knowledgeGraphHealthScore": 70
+        }
+      },
+      "execution": {
+        "durationMs": 3,
+        "startedAt": "2026-08-01T08:58:32.326Z",
+        "finishedAt": "2026-08-01T08:58:32.329Z"
+      }
+    },
+    {
+      "pluginName": "editorial-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [],
+        "metrics": {
+          "constitutionScore": 100,
+          "structureScore": 100,
+          "metadataScore": 100,
+          "evidenceScore": 100,
+          "editorialQualityScore": 100,
+          "scannedObjects": 3
+        }
+      },
+      "execution": {
+        "durationMs": 2,
+        "startedAt": "2026-08-01T08:58:32.333Z",
+        "finishedAt": "2026-08-01T08:58:32.335Z"
+      }
+    },
+    {
+      "pluginName": "operations-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [],
+        "metrics": {
+          "repositoryCoverage": 100,
+          "workflowCoverage": 100,
+          "releaseCoverage": 100,
+          "configIntegrity": 100,
+          "auditFrameworkHealth": 100,
+          "operationsComplianceScore": 100
+        }
+      },
+      "execution": {
+        "durationMs": 9,
+        "startedAt": "2026-08-01T08:58:32.414Z",
+        "finishedAt": "2026-08-01T08:58:32.423Z"
+      }
+    },
+    {
+      "pluginName": "performance-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 60,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "high",
+            "message": "Missing lighthouse configuration file (e.g. .lighthouserc.json, .lighthouserc.js, lighthouserc.json) or @lhci/cli dependency"
+          }
+        ],
+        "metrics": {
+          "lighthouseScore": 0,
+          "bundleScore": 100,
+          "nextConfigScore": 100,
+          "performanceReadinessScore": 60
+        }
+      },
+      "execution": {
+        "durationMs": 2,
+        "startedAt": "2026-08-01T08:58:32.425Z",
+        "finishedAt": "2026-08-01T08:58:32.427Z"
+      }
+    },
+    {
+      "pluginName": "security-audit",
+      "state": "FAILED",
+      "data": {
+        "score": 60,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "critical",
+            "message": "Exposed secret file found: .env.local"
+          },
+          {
+            "severity": "critical",
+            "message": "Exposed secret file found: .env.test"
+          },
+          {
+            "severity": "critical",
+            "message": "Exposed secret file found: .vercel\\.env.production.local"
+          }
+        ],
+        "metrics": {
+          "secretCoverage": 0,
+          "cspCoverage": 100,
+          "manifestIntegrity": 100,
+          "dependencyHealth": 100,
+          "securityComplianceScore": 60
+        }
+      },
+      "execution": {
+        "durationMs": 299,
+        "startedAt": "2026-08-01T08:58:32.430Z",
+        "finishedAt": "2026-08-01T08:58:32.729Z"
+      }
+    },
+    {
+      "pluginName": "seo-audit",
+      "state": "PASSED",
+      "data": {
+        "score": 100,
+        "coverage": 100,
+        "findings": [
+          {
+            "severity": "low",
+            "message": "Root layout app/layout.tsx does not appear to configure canonical URLs"
+          }
+        ],
+        "metrics": {
+          "robotsScore": 100,
+          "sitemapScore": 100,
+          "metadataScore": 100,
+          "seoReadinessScore": 100
+        }
+      },
+      "execution": {
+        "durationMs": 1,
+        "startedAt": "2026-08-01T08:58:32.731Z",
+        "finishedAt": "2026-08-01T08:58:32.732Z"
+      }
+    }
+  ],
+  "frameworkExitCode": 1
+}

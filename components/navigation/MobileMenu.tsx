@@ -14,7 +14,7 @@ export default function MobileMenu({ open, links, onClose }: MobileMenuProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 top-0 z-40 md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <div id="mobile-navigation" className="fixed inset-0 top-0 z-40 md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 w-72 max-w-[80vw] bg-[#0A0A0A] border-l border-gray-800 shadow-2xl animate-slide-in-right overflow-y-auto">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">

@@ -1,0 +1,4522 @@
+{
+  "generatedAt": "2026-07-23T10:10:03.894Z",
+  "startingCandidateCount": 205,
+  "globalDuplicatesCount": 0,
+  "compoundClaimsSplitCount": 0,
+  "lackingEvidenceCount": 205,
+  "finalReadyForIngestionCount": 0,
+  "blockedCount": 205,
+  "noDatabaseMutationConfirmed": true,
+  "manifestEntries": [
+    {
+      "candidateId": "MAN-CLM-B1-001",
+      "normalizedClaim": "global cancer crisis who report warns 35 million cases per year by 2050 without urgent action",
+      "originalWording": [
+        "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2050",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-002",
+      "normalizedClaim": "the world health organizations global status report on cancer 2026 reveals 206 million new diagnoses and nearly 10 million deaths in 2024  with projections escalating to 35 million annual cases by 2050 lung breast and colorectal cancers dominate the global burden while vast disparities persist 87 breast cancer survival in highincome countries versus 42 in lowincome nations the reports seven recommendations call for three strategic shifts better capabilities better protections and better value in cancer care worldwide",
+      "originalWording": [
+        "The World Health Organization's Global Status Report on Cancer 2026 reveals 20.6 million new diagnoses and nearly 10 million deaths in 2024 — with projections escalating to 35 million annual cases by 2050. Lung, breast, and colorectal cancers dominate the global burden while vast disparities persist: 87% breast cancer survival in high-income countries versus 42% in low-income nations. The report's seven recommendations call for three strategic shifts: better capabilities, better protections, and better value in cancer care worldwide."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-003",
+      "normalizedClaim": "206 million people were diagnosed with cancer in 2024  195 million excluding nonmelanoma skin cancer  and nearly 10 million died",
+      "originalWording": [
+        "20.6 million people were diagnosed with cancer in 2024 — 19.5 million excluding non-melanoma skin cancer — and nearly 10 million died"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-004",
+      "normalizedClaim": "global cancer cases projected to reach 35 million annually by 2050 a 70 increase from 2024 driven by ageing populations and lifestyle risk factors",
+      "originalWording": [
+        "Global cancer cases projected to reach 35 million annually by 2050, a 70% increase from 2024, driven by ageing populations and lifestyle risk factors"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2050",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-005",
+      "normalizedClaim": "lung cancer remains the most common 26 million cases and deadliest 186 million deaths followed by breast 24m cases and colorectal 20m cases",
+      "originalWording": [
+        "Lung cancer remains the most common (2.6 million cases) and deadliest (1.86 million deaths), followed by breast (2.4M cases) and colorectal (2.0M cases)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-006",
+      "normalizedClaim": "breast cancer survival ranges from 87 in highincome countries to 42 in lowincome countries  a gap wider than any other major cancer",
+      "originalWording": [
+        "Breast cancer survival ranges from 87% in high-income countries to 42% in low-income countries — a gap wider than any other major cancer"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-007",
+      "normalizedClaim": "less than onethird of nations include cancer diagnosis and treatment in their universal health coverage packages",
+      "originalWording": [
+        "Less than one-third of nations include cancer diagnosis and treatment in their universal health coverage packages"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-008",
+      "normalizedClaim": "nearly 45 of cancer patients face catastrophic health expenditure pushing millions into poverty annually",
+      "originalWording": [
+        "Nearly 45% of cancer patients face catastrophic health expenditure, pushing millions into poverty annually"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-009",
+      "normalizedClaim": "india recorded 156 lakh new cancer cases and 874 lakh deaths in 2024 tobaccorelated cancers account for 27 of the countrys cancer burden",
+      "originalWording": [
+        "India recorded 15.6 lakh new cancer cases and 8.74 lakh deaths in 2024; tobacco-related cancers account for 27% of the country's cancer burden"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-010",
+      "normalizedClaim": "the report calls for three strategic shifts better capabilities workforce infrastructure better protections prevention screening uhc and better value costeffective care innovation",
+      "originalWording": [
+        "The report calls for three strategic shifts: Better Capabilities (workforce, infrastructure), Better Protections (prevention, screening, UHC), and Better Value (cost-effective care, innovation)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-011",
+      "normalizedClaim": "new cancer cases globally 2024 206 million",
+      "originalWording": [
+        "New Cancer Cases Globally (2024): 20.6 million"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-012",
+      "normalizedClaim": "cancer deaths globally 2024 995 million",
+      "originalWording": [
+        "Cancer Deaths Globally (2024): 9.95 million"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-013",
+      "normalizedClaim": "projected cases by 2050 35 million per year",
+      "originalWording": [
+        "Projected Cases by 2050: 35 million per year"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2050",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-014",
+      "normalizedClaim": "lifetime risk global 1 in 5 people",
+      "originalWording": [
+        "Lifetime Risk (Global): 1 in 5 people"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-015",
+      "normalizedClaim": "people affected incl familycaregivers 92 of population",
+      "originalWording": [
+        "People Affected (incl. Family/Caregivers): 92% of population"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-016",
+      "normalizedClaim": "lung cancer cases 2024 26 million most common",
+      "originalWording": [
+        "Lung Cancer Cases (2024): 2.6 million (most common)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-017",
+      "normalizedClaim": "lung cancer deaths 2024 186 million",
+      "originalWording": [
+        "Lung Cancer Deaths (2024): 1.86 million"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-018",
+      "normalizedClaim": "breast cancer cases 2024 24 million",
+      "originalWording": [
+        "Breast Cancer Cases (2024): 2.4 million"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-019",
+      "normalizedClaim": "colorectal cancer cases 2024 20 million",
+      "originalWording": [
+        "Colorectal Cancer Cases (2024): 2.0 million"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-020",
+      "normalizedClaim": "prostate cancer cases 2024 15 million",
+      "originalWording": [
+        "Prostate Cancer Cases (2024): 1.5 million"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-021",
+      "normalizedClaim": "cervical cancer cases 2024 661000",
+      "originalWording": [
+        "Cervical Cancer Cases (2024): 661,000"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-022",
+      "normalizedClaim": "children diagnosed annually 400000",
+      "originalWording": [
+        "Children Diagnosed Annually: 400,000"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-023",
+      "normalizedClaim": "countries including cancer in uhc less than 1 in 3",
+      "originalWording": [
+        "Countries Including Cancer in UHC: Less than 1 in 3"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-024",
+      "normalizedClaim": "patients facing catastrophic health costs 45",
+      "originalWording": [
+        "Patients Facing Catastrophic Health Costs: 45%"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-025",
+      "normalizedClaim": "breast cancer survival  highincome countries 87",
+      "originalWording": [
+        "Breast Cancer Survival — High-Income Countries: 87%"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-026",
+      "normalizedClaim": "breast cancer survival  lowincome countries 42",
+      "originalWording": [
+        "Breast Cancer Survival — Low-Income Countries: 42%"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-027",
+      "normalizedClaim": "india  new cases 2024 156 lakh 156 million",
+      "originalWording": [
+        "India — New Cases (2024): 15.6 lakh (1.56 million)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-028",
+      "normalizedClaim": "india  cancer deaths 2024 874 lakh",
+      "originalWording": [
+        "India — Cancer Deaths (2024): 8.74 lakh"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-029",
+      "normalizedClaim": "india  tobaccorelated cancer share 27 of total burden",
+      "originalWording": [
+        "India — Tobacco-Related Cancer Share: 27% of total burden"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-030",
+      "normalizedClaim": "india  lifetime cancer risk 11 1 in 9",
+      "originalWording": [
+        "India — Lifetime Cancer Risk: 11% (1 in 9)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-031",
+      "normalizedClaim": "mizoram  lifetime risk men 211",
+      "originalWording": [
+        "Mizoram — Lifetime Risk (Men): 21.1%"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-032",
+      "normalizedClaim": "mizoram  lifetime risk women 189",
+      "originalWording": [
+        "Mizoram — Lifetime Risk (Women): 18.9%"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-033",
+      "normalizedClaim": "global cancer cases will increase 70 by 2050 without intervention reaching 35 million annually",
+      "originalWording": [
+        "Global cancer cases will increase 70% by 2050 without intervention, reaching 35 million annually."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2050",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-034",
+      "normalizedClaim": "breast cancer survival exceeds 85 in highincome countries but falls below 50 in lowincome countries",
+      "originalWording": [
+        "Breast cancer survival exceeds 85% in high-income countries but falls below 50% in low-income countries."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-035",
+      "normalizedClaim": "lung cancer is the leading cause of cancer death worldwide causing more deaths than breast colorectal and prostate cancers combined",
+      "originalWording": [
+        "Lung cancer is the leading cause of cancer death worldwide, causing more deaths than breast, colorectal, and prostate cancers combined."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-036",
+      "normalizedClaim": "most countries include comprehensive cancer care in their universal health coverage packages",
+      "originalWording": [
+        "Most countries include comprehensive cancer care in their universal health coverage packages."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-037",
+      "normalizedClaim": "cancer diagnoses are projected to grow fastest in lowerhdi countries with a 142 increase by 2050",
+      "originalWording": [
+        "Cancer diagnoses are projected to grow fastest in lower-HDI countries, with a 142% increase by 2050."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2050",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-038",
+      "normalizedClaim": "tobacco use is responsible for one in four cancer deaths in india",
+      "originalWording": [
+        "Tobacco use is responsible for one in four cancer deaths in India."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-039",
+      "normalizedClaim": "indias cancer incidence is lower than the global average due to its young population",
+      "originalWording": [
+        "India's cancer incidence is lower than the global average due to its young population."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-040",
+      "normalizedClaim": "radiation therapy is accessible to fewer than 10 of patients in lowincome countries",
+      "originalWording": [
+        "Radiation therapy is accessible to fewer than 10% of patients in low-income countries."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-041",
+      "normalizedClaim": "19650101 iarc established who establishes the international agency for research on cancer iarc in lyon france to coordinate and conduct research on cancer causes",
+      "originalWording": [
+        "[1965-01-01] IARC Established: WHO establishes the International Agency for Research on Cancer (IARC) in Lyon, France, to coordinate and conduct research on cancer causes."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 1965",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-042",
+      "normalizedClaim": "19810101 first global cancer estimates published iarc publishes the first globocan global cancer incidence and mortality estimates covering 5 continents",
+      "originalWording": [
+        "[1981-01-01] First Global Cancer Estimates Published: IARC publishes the first GLOBOCAN global cancer incidence and mortality estimates covering 5 continents."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 1981",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-043",
+      "normalizedClaim": "20050525 who cancer control resolution world health assembly adopts resolution wha5822 on cancer prevention and control urging member states to develop national cancer plans",
+      "originalWording": [
+        "[2005-05-25] WHO Cancer Control Resolution: World Health Assembly adopts resolution WHA58.22 on cancer prevention and control, urging member states to develop national cancer plans."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2005",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-044",
+      "normalizedClaim": "20170530 cancer resolution wha7012 world health assembly adopts resolution on cancer prevention and control in the context of an integrated approach to ncds",
+      "originalWording": [
+        "[2017-05-30] Cancer Resolution WHA70.12: World Health Assembly adopts resolution on cancer prevention and control in the context of an integrated approach to NCDs."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2017",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-045",
+      "normalizedClaim": "20200901 global cancer cases cross 19 million globocan 2020 reports 193 million new cancer cases and 10 million deaths with breast cancer overtaking lung as most commonly diagnosed",
+      "originalWording": [
+        "[2020-09-01] Global Cancer Cases Cross 19 Million: GLOBOCAN 2020 reports 19.3 million new cancer cases and 10 million deaths, with breast cancer overtaking lung as most commonly diagnosed."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2020",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-046",
+      "normalizedClaim": "20240201 iarc projections warn of 77 increase by 2050 iarc releases projections showing new cancer cases rising from 20 million to 35 million by 2050 with the highest proportional increase in lowhdi countries 142",
+      "originalWording": [
+        "[2024-02-01] IARC Projections Warn of 77% Increase by 2050: IARC releases projections showing new cancer cases rising from 20 million to 35 million by 2050, with the highest proportional increase in low-HDI countries (142%)."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-047",
+      "normalizedClaim": "20241201 global status report on cancer initiated who begins compiling comprehensive status report covering national capacities treatment access and financing gaps across all 194 member states",
+      "originalWording": [
+        "[2024-12-01] Global Status Report on Cancer Initiated: WHO begins compiling comprehensive status report covering national capacities, treatment access, and financing gaps across all 194 member states."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-048",
+      "normalizedClaim": "20260708 who global status report on cancer 2026 published who releases the most comprehensive global cancer assessment to date spanning 206m diagnoses 10m deaths 7 recommendations across 3 strategic pillars",
+      "originalWording": [
+        "[2026-07-08] WHO Global Status Report on Cancer 2026 Published: WHO releases the most comprehensive global cancer assessment to date, spanning 20.6M diagnoses, 10M deaths, 7 recommendations across 3 strategic pillars."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-049",
+      "normalizedClaim": "chart top 10 most common cancers worldwide 2024  new cases bar",
+      "originalWording": [
+        "Chart: Top 10 Most Common Cancers Worldwide (2024) — New Cases (bar)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-050",
+      "normalizedClaim": "chart cancer deaths by type 2024 bar",
+      "originalWording": [
+        "Chart: Cancer Deaths by Type (2024) (bar)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-051",
+      "normalizedClaim": "chart breast cancer 5year survival highincome vs lowincome countries bar",
+      "originalWording": [
+        "Chart: Breast Cancer 5-Year Survival: High-Income vs Low-Income Countries (bar)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-052",
+      "normalizedClaim": "chart projected global cancer cases 20242050 line",
+      "originalWording": [
+        "Chart: Projected Global Cancer Cases (2024–2050) (line)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-053",
+      "normalizedClaim": "chart projected  increase in cancer cases by hdi level 20222050 bar",
+      "originalWording": [
+        "Chart: Projected % Increase in Cancer Cases by HDI Level (2022–2050) (bar)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2022",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-054",
+      "normalizedClaim": "chart india  top 5 cancers by incidence 2024 bar",
+      "originalWording": [
+        "Chart: India — Top 5 Cancers by Incidence (2024) (bar)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-055",
+      "normalizedClaim": "chart radiotherapy access gap machines per million population bar",
+      "originalWording": [
+        "Chart: Radiotherapy Access Gap: Machines per Million Population (bar)"
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-056",
+      "normalizedClaim": "what is the who global status report on cancer 2026 it is the most comprehensive global assessment of the cancer burden ever published by the world health organization released july 8 2026 it covers incidence and mortality data from globocan 2024 across all 194 who member states analyses national capacities for cancer prevention diagnosis and treatment and presents seven recommendations organized around three strategic shifts better capabilities better protections and better value",
+      "originalWording": [
+        "What is the WHO Global Status Report on Cancer 2026?: It is the most comprehensive global assessment of the cancer burden ever published by the World Health Organization. Released July 8, 2026, it covers incidence and mortality data from GLOBOCAN 2024 across all 194 WHO member states, analyses national capacities for cancer prevention, diagnosis, and treatment, and presents seven recommendations organized around three strategic shifts: Better Capabilities, Better Protections, and Better Value."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-057",
+      "normalizedClaim": "how many people get cancer each year 206 million people were diagnosed with cancer in 2024 195 million excluding nonmelanoma skin cancer nearly 10 million died the who projects this will rise to 35 million new cases annually by 2050  a 70 increase driven primarily by population ageing and growth",
+      "originalWording": [
+        "How many people get cancer each year?: 20.6 million people were diagnosed with cancer in 2024 (19.5 million excluding non-melanoma skin cancer). Nearly 10 million died. The WHO projects this will rise to 35 million new cases annually by 2050 — a 70% increase driven primarily by population ageing and growth."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-058",
+      "normalizedClaim": "which cancers kill the most people lung cancer is the deadliest causing 186 million deaths in 2024  more than breast prostate and cervical cancers combined colorectal 918000 deaths liver 758000 and breast 694000 round out the top five",
+      "originalWording": [
+        "Which cancers kill the most people?: Lung cancer is the deadliest, causing 1.86 million deaths in 2024 — more than breast, prostate, and cervical cancers combined. Colorectal (918,000 deaths), liver (758,000), and breast (694,000) round out the top five."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-059",
+      "normalizedClaim": "why is the cancer burden growing so fast three drivers 1 population ageing  cancer risk rises steeply with age and the global population over 60 is projected to double by 2050 2 adoption of cancerassociated lifestyles  tobacco use processed diets physical inactivity and alcohol consumption are rising in low and middleincome countries 3 air pollution  classified as a group 1 carcinogen ambient and household air pollution contributes to rising lung cancer rates in nonsmoking populations particularly in asia",
+      "originalWording": [
+        "Why is the cancer burden growing so fast?: Three drivers: (1) Population ageing — cancer risk rises steeply with age, and the global population over 60 is projected to double by 2050; (2) Adoption of cancer-associated lifestyles — tobacco use, processed diets, physical inactivity, and alcohol consumption are rising in low- and middle-income countries; (3) Air pollution — classified as a Group 1 carcinogen, ambient and household air pollution contributes to rising lung cancer rates in non-smoking populations, particularly in Asia."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2050",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-060",
+      "normalizedClaim": "what is the survival gap between rich and poor countries the gap is widest for breast cancer 87 5year survival in highincome countries versus 42 in lowincome countries for all cancers combined survival in highincome countries is roughly double that in lowincome countries the gap is driven by latestage diagnosis 70 of cancers in lics are caught at stage iii or iv limited access to surgery radiotherapy and chemotherapy and nearzero access to newer targeted therapies and immunotherapies",
+      "originalWording": [
+        "What is the survival gap between rich and poor countries?: The gap is widest for breast cancer: 87% 5-year survival in high-income countries versus 42% in low-income countries. For all cancers combined, survival in high-income countries is roughly double that in low-income countries. The gap is driven by late-stage diagnosis (70% of cancers in LICs are caught at Stage III or IV), limited access to surgery, radiotherapy, and chemotherapy, and near-zero access to newer targeted therapies and immunotherapies."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-061",
+      "normalizedClaim": "what is indias cancer situation india recorded 156 lakh new cancer cases and 874 lakh deaths in 2024 the lifetime risk is 11 1 in 9 though mizoram has the highest statelevel risk at 21 for men and 19 for women oral cancer is the most common cancer among indian men linked to smokeless tobacco use while breast cancer is the most common among women tobaccorelated cancers account for 27 of indias total cancer burden",
+      "originalWording": [
+        "What is India's cancer situation?: India recorded 15.6 lakh new cancer cases and 8.74 lakh deaths in 2024. The lifetime risk is 11% (1 in 9), though Mizoram has the highest state-level risk at 21% for men and 19% for women. Oral cancer is the most common cancer among Indian men (linked to smokeless tobacco use), while breast cancer is the most common among women. Tobacco-related cancers account for 27% of India's total cancer burden."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-062",
+      "normalizedClaim": "what are the whos three strategic shifts the report recommends three shifts 1 better capabilities  investing in oncology workforce training expanding radiotherapy infrastructure and strengthening cancer registries 2 better protections  implementing proven prevention measures tobacco taxes hpv vaccination hepatitis b vaccination air pollution control expanding screening programmes and including cancer in uhc packages 3 better value  using costeffectiveness analysis to prioritize interventions negotiating bulk pricing for essential cancer medicines and leveraging innovation platforms for affordable diagnostics",
+      "originalWording": [
+        "What are the WHO's three strategic shifts?: The report recommends three shifts: (1) Better Capabilities — investing in oncology workforce training, expanding radiotherapy infrastructure, and strengthening cancer registries; (2) Better Protections — implementing proven prevention measures (tobacco taxes, HPV vaccination, hepatitis B vaccination, air pollution control), expanding screening programmes, and including cancer in UHC packages; (3) Better Value — using cost-effectiveness analysis to prioritize interventions, negotiating bulk pricing for essential cancer medicines, and leveraging innovation platforms for affordable diagnostics."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-063",
+      "normalizedClaim": "how many children get cancer approximately 400000 children are diagnosed with cancer each year in highincome countries childhood cancer survival exceeds 80 but in lowincome countries it falls below 30 the gap is largely due to delayed diagnosis limited paediatric oncology expertise and lack of access to essential chemotherapy drugs",
+      "originalWording": [
+        "How many children get cancer?: Approximately 400,000 children are diagnosed with cancer each year. In high-income countries, childhood cancer survival exceeds 80%, but in low-income countries, it falls below 30%. The gap is largely due to delayed diagnosis, limited paediatric oncology expertise, and lack of access to essential chemotherapy drugs."
+      ],
+      "sourceStories": [
+        "who-cancer-report-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-WHO-CA-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-064",
+      "normalizedClaim": "mission 360 inside bjps push for a twothirds majority and the battle over indias constitutional future",
+      "originalWording": [
+        "Mission 360: Inside BJP's Push for a Two-Thirds Majority and the Battle Over India's Constitutional Future"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "POLITICAL_TARGET",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-065",
+      "normalizedClaim": "after the shock defeat of the delimitationcumwomens reservation bill on april 17 2026 the bjp launched a highstakes strategy to secure 360 lok sabha seats  enough for a twothirds majority  by engineering defections targeting regional parties and leveraging its historic bengal win the outcome will determine whether the government can reshape indias electoral map through constitutional reform",
+      "originalWording": [
+        "After the shock defeat of the delimitation-cum-women's reservation bill on April 17, 2026, the BJP launched a high-stakes strategy to secure 360+ Lok Sabha seats — enough for a two-thirds majority — by engineering defections, targeting regional parties, and leveraging its historic Bengal win. The outcome will determine whether the government can reshape India's electoral map through constitutional reform."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "POLITICAL_TARGET",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-066",
+      "normalizedClaim": "bjps mission 360 aims to secure a twothirds lok sabha majority to pass constitutional amendments on delimitation womens reservation and one nation one election",
+      "originalWording": [
+        "BJP's Mission 360 aims to secure a two-thirds Lok Sabha majority to pass constitutional amendments on delimitation, women's reservation, and One Nation One Election"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "POLITICAL_TARGET",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-067",
+      "normalizedClaim": "the constitution 131st amendment bill was defeated on april 17 2026  298 for 230 against 54 short of the required 352 votes",
+      "originalWording": [
+        "The Constitution (131st Amendment) Bill was defeated on April 17, 2026 — 298 for, 230 against, 54 short of the required 352 votes"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-068",
+      "normalizedClaim": "nda strength rose from 298 to 319 after 20 tmc mps defected to ncpi and 6 shiv sena ubt mps switched to the shinde camp",
+      "originalWording": [
+        "NDA strength rose from 298 to 319 after 20 TMC MPs defected to NCPI and 6 Shiv Sena (UBT) MPs switched to the Shinde camp"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-069",
+      "normalizedClaim": "bjp now needs 41 more mps and is targeting sp 37 dmk 22 ncpsharad 8 and remaining tmc mps",
+      "originalWording": [
+        "BJP now needs 41 more MPs and is targeting SP (37), DMK (22), NCP-Sharad (8), and remaining TMC MPs"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "POLITICAL_TARGET",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-070",
+      "normalizedClaim": "the west bengal election landslide bjp 206 tmc 81 in may 2026 provided political momentum and triggered defections",
+      "originalWording": [
+        "The West Bengal election landslide (BJP 206, TMC 81) in May 2026 provided political momentum and triggered defections"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-071",
+      "normalizedClaim": "suvendu adhikari became bengals first bjp cm after defeating mamata banerjee in bhabanipur by 15105 votes",
+      "originalWording": [
+        "Suvendu Adhikari became Bengal's first BJP CM after defeating Mamata Banerjee in Bhabanipur by 15,105 votes"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-072",
+      "normalizedClaim": "two strategies recruit 41 mps through defections or reduce effective house strength by securing opposition absenteeism during voting",
+      "originalWording": [
+        "Two strategies: recruit 41 MPs through defections, OR reduce effective House strength by securing opposition absenteeism during voting"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-073",
+      "normalizedClaim": "congress alleges the real goal is to end reservations jairam ramesh called it todhphod ki rajniti",
+      "originalWording": [
+        "Congress alleges the real goal is to end reservations; Jairam Ramesh called it \"todh-phod ki rajniti\""
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-074",
+      "normalizedClaim": "votes needed for twothirds majority apr 17 352 of 528 present",
+      "originalWording": [
+        "Votes Needed for Two-Thirds Majority (Apr 17): 352 of 528 present"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-075",
+      "normalizedClaim": "votes actually received 298 for 230 against",
+      "originalWording": [
+        "Votes Actually Received: 298 for, 230 against"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-076",
+      "normalizedClaim": "nda strength after bengal defections 319 mps",
+      "originalWording": [
+        "NDA Strength After Bengal Defections: 319 MPs"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-077",
+      "normalizedClaim": "bjp seats in west bengal 2026 206 out of 294",
+      "originalWording": [
+        "BJP Seats in West Bengal (2026): 206 out of 294"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-078",
+      "normalizedClaim": "tmc seats in west bengal 2026 81 out of 294",
+      "originalWording": [
+        "TMC Seats in West Bengal (2026): 81 out of 294"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-079",
+      "normalizedClaim": "highest voter turnout in bengal history 9247",
+      "originalWording": [
+        "Highest Voter Turnout in Bengal History: 92.47%"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-080",
+      "normalizedClaim": "proposed lok sabha size after delimitation 850 seats",
+      "originalWording": [
+        "Proposed Lok Sabha Size After Delimitation: 850 seats"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-081",
+      "normalizedClaim": "the delimitation bill would have reduced southern states parliamentary representation",
+      "originalWording": [
+        "The delimitation bill would have reduced southern states' parliamentary representation."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-082",
+      "normalizedClaim": "the bjps real goal in pursuing a twothirds majority is to end reservation for scs sts and obcs",
+      "originalWording": [
+        "The BJP's real goal in pursuing a two-thirds majority is to end reservation for SCs, STs, and OBCs."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-083",
+      "normalizedClaim": "the 20 tmc mps who joined ncpi have legally merged with the nda through a legitimate party merger",
+      "originalWording": [
+        "The 20 TMC MPs who joined NCPI have legally merged with the NDA through a legitimate party merger."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-084",
+      "normalizedClaim": "the opposition united against the bill solely because of the delimitation clause not womens reservation",
+      "originalWording": [
+        "The opposition united against the bill solely because of the delimitation clause, not women's reservation."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-085",
+      "normalizedClaim": "20230919 nari shakti vandan adhiniyam passed parliament passes 106th constitutional amendment reserving 33 of lok sabha and assembly seats for women tied to future delimitation",
+      "originalWording": [
+        "[2023-09-19] Nari Shakti Vandan Adhiniyam Passed: Parliament passes 106th Constitutional Amendment reserving 33% of Lok Sabha and Assembly seats for women, tied to future delimitation."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2023",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-086",
+      "normalizedClaim": "20240604 modi 30 takes office bjp returns with 240 seats nda at 293  first time modi government without singleparty majority twothirds majority out of reach",
+      "originalWording": [
+        "[2024-06-04] Modi 3.0 Takes Office: BJP returns with 240 seats, NDA at 293 — first time Modi government without single-party majority. Two-thirds majority out of reach."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-087",
+      "normalizedClaim": "20251123 bjp sweeps bihar nda wins bihar assembly elections in a landslide giving amit shah the bihar model template for bengal",
+      "originalWording": [
+        "[2025-11-23] BJP Sweeps Bihar: NDA wins Bihar assembly elections in a landslide, giving Amit Shah the \"Bihar model\" template for Bengal."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-088",
+      "normalizedClaim": "20251205 amit shahs operation bengal shah announces mission 2026 for west bengal plans to spend maximum days in bengal from a house in salt lake",
+      "originalWording": [
+        "[2025-12-05] Amit Shah's Operation Bengal: Shah announces \"Mission 2026\" for West Bengal, plans to spend maximum days in Bengal from a house in Salt Lake."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-089",
+      "normalizedClaim": "20260312 bjp finalises bengal strategy pm modi and amit shah chair key meeting to finalise candidates and strategy for bengal and kerala assembly polls",
+      "originalWording": [
+        "[2026-03-12] BJP Finalises Bengal Strategy: PM Modi and Amit Shah chair key meeting to finalise candidates and strategy for Bengal and Kerala assembly polls."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-090",
+      "normalizedClaim": "20260416 delimitation bills introduced government introduces constitution 131st amendment bill delimitation bill and ut laws bill in lok sabha  proposing to increase lok sabha to 850 seats",
+      "originalWording": [
+        "[2026-04-16] Delimitation Bills Introduced: Government introduces Constitution (131st Amendment) Bill, Delimitation Bill, and UT Laws Bill in Lok Sabha — proposing to increase Lok Sabha to 850 seats."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-091",
+      "normalizedClaim": "20260418 dmks stalin claims victory tamil nadu cm mk stalin declares the defeat a fire that scorched delhis arrogance southern states opposed delimitation fearing seat loss",
+      "originalWording": [
+        "[2026-04-18] DMK's Stalin Claims Victory: Tamil Nadu CM MK Stalin declares the defeat \"a fire that scorched Delhi's arrogance.\" Southern states opposed delimitation fearing seat loss."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-092",
+      "normalizedClaim": "20260428 bjps 4pronged bengal strategy bjp deploys strategy focused on demographic change corruption hindu identity and womens safety for bengal polls",
+      "originalWording": [
+        "[2026-04-28] BJP's 4-Pronged Bengal Strategy: BJP deploys strategy focused on demographic change, corruption, Hindu identity, and women's safety for Bengal polls."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-093",
+      "normalizedClaim": "20260504 bjp wins bengal with 206 seats bjp wins 206294 seats in west bengal ending tmcs 15year rule suvendu adhikari defeats mamata banerjee in bhabanipur by 15105 votes",
+      "originalWording": [
+        "[2026-05-04] BJP Wins Bengal With 206 Seats: BJP wins 206/294 seats in West Bengal, ending TMC's 15-year rule. Suvendu Adhikari defeats Mamata Banerjee in Bhabanipur by 15,105 votes."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-094",
+      "normalizedClaim": "20260509 suvendu adhikari sworn in adhikari takes oath as west bengals first bjp chief minister in a ceremony featuring bengali cultural motifs",
+      "originalWording": [
+        "[2026-05-09] Suvendu Adhikari Sworn In: Adhikari takes oath as West Bengal's first BJP chief minister in a ceremony featuring Bengali cultural motifs."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-095",
+      "normalizedClaim": "20260601 centre plans revival of bills home ministry drafts revised delimitation legislation aimed at passing in the monsoon session buoyed by bengal victory",
+      "originalWording": [
+        "[2026-06-01] Centre Plans Revival of Bills: Home Ministry drafts revised delimitation legislation aimed at passing in the Monsoon Session, buoyed by Bengal victory."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-096",
+      "normalizedClaim": "20260624 congress alleges conspiracy jairam ramesh accuses bjp of chasing twothirds majority to amend the constitution and end reservations",
+      "originalWording": [
+        "[2026-06-24] Congress Alleges Conspiracy: Jairam Ramesh accuses BJP of chasing two-thirds majority to amend the Constitution and end reservations."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-097",
+      "normalizedClaim": "20260702 mission 360 revealed bjp leadership intensifies mission 360 strategy nda strength reaches 319 after 20 tmc mps defect to ncpi 6 shiv sena ubt mps switch",
+      "originalWording": [
+        "[2026-07-02] Mission 360 Revealed: BJP leadership intensifies Mission 360 strategy. NDA strength reaches 319 after 20 TMC MPs defect to NCPI, 6 Shiv Sena (UBT) MPs switch."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "POLITICAL_TARGET",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-098",
+      "normalizedClaim": "chart lok sabha vote on delimitation bill april 17 2026 bar",
+      "originalWording": [
+        "Chart: Lok Sabha Vote on Delimitation Bill (April 17, 2026) (bar)"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-099",
+      "normalizedClaim": "chart west bengal assembly results 2026 bar",
+      "originalWording": [
+        "Chart: West Bengal Assembly Results (2026) (bar)"
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-100",
+      "normalizedClaim": "what is mission 360 mission 360 is the bjps strategy to secure a twothirds majority 360 seats in the lok sabha enabling it to pass constitutional amendments without opposition support the strategy involves engineering defections from opposition parties and leveraging the ndas recent electoral momentum after winning west bengal",
+      "originalWording": [
+        "What is Mission 360?: Mission 360 is the BJP's strategy to secure a two-thirds majority (360+ seats) in the Lok Sabha, enabling it to pass constitutional amendments without opposition support. The strategy involves engineering defections from opposition parties and leveraging the NDA's recent electoral momentum after winning West Bengal."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "POLITICAL_TARGET",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-101",
+      "normalizedClaim": "why does the bjp need a twothirds majority constitutional amendments require a twothirds majority of members present and voting in each house of parliament the bjps legislative agenda  delimitation redrawing constituencies implementing womens reservation one nation one election and judicial reforms  all require constitutional amendments that cannot pass without opposition support",
+      "originalWording": [
+        "Why does the BJP need a two-thirds majority?: Constitutional amendments require a two-thirds majority of members present and voting in each House of Parliament. The BJP's legislative agenda — delimitation (redrawing constituencies), implementing women's reservation, One Nation One Election, and judicial reforms — all require constitutional amendments that cannot pass without opposition support."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-102",
+      "normalizedClaim": "what is delimitation and why is it controversial delimitation is the redrawing of constituency boundaries based on population the 1971 census freeze expires after 2026 southern states oppose delimitation based on the 2011 census because their better population control would reduce their seat share relative to northern states the government proposes increasing lok sabha from 543 to 850 seats to accommodate population growth without reducing absolute seats of any state",
+      "originalWording": [
+        "What is delimitation and why is it controversial?: Delimitation is the redrawing of constituency boundaries based on population. The 1971 census freeze expires after 2026. Southern states oppose delimitation based on the 2011 census because their better population control would reduce their seat share relative to northern states. The government proposes increasing Lok Sabha from 543 to 850 seats to accommodate population growth without reducing absolute seats of any state."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 1971",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-103",
+      "normalizedClaim": "how did the tmc mps defect to the nda twenty trinamool congress lok sabha mps joined the nationalist citizens party of india ncpi a tripurabased registered unrecognised party this move bypasses antidefection hurdles because a merger of twothirds of a partys mps with another party is legally valid the ncpi then aligned with the nda effectively boosting the ruling coalitions strength by 20 seats",
+      "originalWording": [
+        "How did the TMC MPs defect to the NDA?: Twenty Trinamool Congress Lok Sabha MPs joined the Nationalist Citizens Party of India (NCPI), a Tripura-based registered unrecognised party. This move bypasses anti-defection hurdles because a merger of two-thirds of a party's MPs with another party is legally valid. The NCPI then aligned with the NDA, effectively boosting the ruling coalition's strength by 20 seats."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-104",
+      "normalizedClaim": "what happens if the government reaches 360 seats if the nda reaches a twothirds majority it could pass the constitution 131st amendment bill to increase lok sabha to 850 seats based on the 2011 census implement womens reservation from the 2029 elections advance the one nation one election framework and pursue judicial reforms including a unified pension code and appointment commission",
+      "originalWording": [
+        "What happens if the government reaches 360 seats?: If the NDA reaches a two-thirds majority, it could pass the Constitution (131st Amendment) Bill to increase Lok Sabha to 850 seats based on the 2011 census, implement women's reservation from the 2029 elections, advance the One Nation One Election framework, and pursue judicial reforms including a unified pension code and appointment commission."
+      ],
+      "sourceStories": [
+        "bjp-mission-360"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2011",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-BJP-MI-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-105",
+      "normalizedClaim": "epf scheme 2026 india replaces 74yearold retirement law under new social security code",
+      "originalWording": [
+        "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-106",
+      "normalizedClaim": "indias retirement framework underwent its most significant legal overhaul in seven decades when the epf scheme 2026 replaced the 1952 scheme effective june 29 replacing two legacy pension schemes and bringing 8 crore subscribers under the code on social security 2020 while the headline contribution rate stays at 12 and the interest rate at 825 the new framework introduces stricter governance for exempted trusts consolidates 13 withdrawal categories into 3 mandates 20day pension claim settlement with 12 interest penalty for delays and gives the government power to temporarily defer contributions during national emergencies for most subscribers nothing changes on day one  but the compliance architecture has been rewritten",
+      "originalWording": [
+        "India's retirement framework underwent its most significant legal overhaul in seven decades when the EPF Scheme 2026 replaced the 1952 scheme effective June 29, replacing two legacy pension schemes and bringing 8 crore+ subscribers under the Code on Social Security, 2020. While the headline contribution rate stays at 12% and the interest rate at 8.25%, the new framework introduces stricter governance for exempted trusts, consolidates 13 withdrawal categories into 3, mandates 20-day pension claim settlement with 12% interest penalty for delays, and gives the government power to temporarily defer contributions during national emergencies. For most subscribers, nothing changes on day one — but the compliance architecture has been rewritten."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-107",
+      "normalizedClaim": "epf scheme 2026 replaces the 1952 scheme under the code on social security 2020  the most consequential legal overhaul of indias retirement framework in 74 years",
+      "originalWording": [
+        "EPF Scheme 2026 replaces the 1952 scheme under the Code on Social Security, 2020 — the most consequential legal overhaul of India's retirement framework in 74 years"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-108",
+      "normalizedClaim": "employee contribution rate unchanged at 12 of wages mandatory minimum 1800month for those earning 15000 epf interest rate held at 825 for fy 202526",
+      "originalWording": [
+        "Employee contribution rate unchanged at 12% of wages; mandatory minimum ₹1,800/month for those earning ₹15,000+; EPF interest rate held at 8.25% for FY 2025-26"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-109",
+      "normalizedClaim": "13 partial withdrawal categories consolidated into 3 simplified buckets illness educationmarriage and housing",
+      "originalWording": [
+        "13 partial withdrawal categories consolidated into 3 simplified buckets: illness, education-marriage, and housing"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-110",
+      "normalizedClaim": "eps95 and the 1971 family pension scheme replaced by unified eps 2026 formula unchanged minimum pension stays at 1000month",
+      "originalWording": [
+        "EPS-95 and the 1971 Family Pension Scheme replaced by unified EPS 2026; formula unchanged, minimum pension stays at ₹1,000/month"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 1971",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-111",
+      "normalizedClaim": "pension claims must be settled within 20 days epfo faces 12 interest penalty for delays beyond this window without sufficient cause",
+      "originalWording": [
+        "Pension claims must be settled within 20 days; EPFO faces 12% interest penalty for delays beyond this window without sufficient cause"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-112",
+      "normalizedClaim": "exempted private pf trusts face stricter governance mandatory digital disclosures annual audits dematerialised investments and trustee eligibility rules",
+      "originalWording": [
+        "Exempted private PF trusts face stricter governance: mandatory digital disclosures, annual audits, dematerialised investments, and trustee eligibility rules"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-113",
+      "normalizedClaim": "central government can temporarily reduce or defer epf contributions for up to 3 months during pandemics epidemics and national disasters",
+      "originalWording": [
+        "Central government can temporarily reduce or defer EPF contributions for up to 3 months during pandemics, epidemics, and national disasters"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-114",
+      "normalizedClaim": "epfo assets exceeded 2834 lakh crore as of march 2025 with 122 crore new members enrolled in fy 202425",
+      "originalWording": [
+        "EPFO assets exceeded ₹28.34 lakh crore as of March 2025, with 1.22 crore new members enrolled in FY 2024-25"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-115",
+      "normalizedClaim": "epfo total assets march 2025 2834 lakh crore",
+      "originalWording": [
+        "EPFO Total Assets (March 2025): ₹28.34 lakh crore"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-116",
+      "normalizedClaim": "epf interest rate fy 202526 825",
+      "originalWording": [
+        "EPF Interest Rate (FY 2025-26): 8.25%"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-117",
+      "normalizedClaim": "employee contribution rate 12 of wages",
+      "originalWording": [
+        "Employee Contribution Rate: 12% of wages"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-118",
+      "normalizedClaim": "employer contribution rate 12 of wages 367 epf  833 eps  050 edli",
+      "originalWording": [
+        "Employer Contribution Rate: 12% of wages (3.67% EPF + 8.33% EPS + 0.50% EDLI)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-119",
+      "normalizedClaim": "mandatory minimum contribution 1800month",
+      "originalWording": [
+        "Mandatory Minimum Contribution: ₹1,800/month"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-120",
+      "normalizedClaim": "statutory wage ceiling 15000month",
+      "originalWording": [
+        "Statutory Wage Ceiling: ₹15,000/month"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-121",
+      "normalizedClaim": "pension claim settlement deadline 20 days",
+      "originalWording": [
+        "Pension Claim Settlement Deadline: 20 days"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-122",
+      "normalizedClaim": "penalty for epfo delay 12 interest per annum",
+      "originalWording": [
+        "Penalty for EPFO Delay: 12% interest per annum"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-123",
+      "normalizedClaim": "minimum monthly pension 1000 unchanged",
+      "originalWording": [
+        "Minimum Monthly Pension: ₹1,000 (unchanged)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-124",
+      "normalizedClaim": "new members enrolled fy 202425 12289244",
+      "originalWording": [
+        "New Members Enrolled (FY 2024-25): 1,22,89,244"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-125",
+      "normalizedClaim": "new establishments covered fy 202425 286894",
+      "originalWording": [
+        "New Establishments Covered (FY 2024-25): 2,86,894"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-126",
+      "normalizedClaim": "claims settled fy 202425 60159608",
+      "originalWording": [
+        "Claims Settled (FY 2024-25): 6,01,59,608"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-127",
+      "normalizedClaim": "epfo income deficit fy 202526 944 crore",
+      "originalWording": [
+        "EPFO Income Deficit (FY 2025-26): ₹944 crore"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-128",
+      "normalizedClaim": "inoperative accounts 1000 or less 133 lakh accounts 568 crore",
+      "originalWording": [
+        "Inoperative Accounts (₹1,000 or less): 1.33 lakh accounts (₹5.68 crore)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-129",
+      "normalizedClaim": "the epf scheme 2026 changes the employee contribution rate from 12 to a new rate",
+      "originalWording": [
+        "The EPF Scheme 2026 changes the employee contribution rate from 12% to a new rate."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-130",
+      "normalizedClaim": "the epf interest rate of 825 for fy 202526 is riskfree and guaranteed by the government",
+      "originalWording": [
+        "The EPF interest rate of 8.25% for FY 2025-26 is risk-free and guaranteed by the government."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-131",
+      "normalizedClaim": "eps pension will be processed within 20 days or epfo pays 12 interest penalty",
+      "originalWording": [
+        "EPS pension will be processed within 20 days or EPFO pays 12% interest penalty."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-132",
+      "normalizedClaim": "the minimum monthly pension under eps 2026 has been increased from 1000",
+      "originalWording": [
+        "The minimum monthly pension under EPS 2026 has been increased from ₹1,000."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-133",
+      "normalizedClaim": "existing epf subscribers need to reregister under the new scheme",
+      "originalWording": [
+        "Existing EPF subscribers need to re-register under the new scheme."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-134",
+      "normalizedClaim": "the government can temporarily reduce epf contributions during emergencies",
+      "originalWording": [
+        "The government can temporarily reduce EPF contributions during emergencies."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-135",
+      "normalizedClaim": "epf taxfree compounding generates significantly more wealth than bank fds over long periods",
+      "originalWording": [
+        "EPF tax-free compounding generates significantly more wealth than bank FDs over long periods."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-136",
+      "normalizedClaim": "19520101 epf scheme 1952 enacted the employees provident funds and miscellaneous provisions act 1952 established indias mandatory retirement savings framework for organisedsector workers",
+      "originalWording": [
+        "[1952-01-01] EPF Scheme 1952 Enacted: The Employees' Provident Funds and Miscellaneous Provisions Act, 1952 established India's mandatory retirement savings framework for organised-sector workers."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 1952",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-137",
+      "normalizedClaim": "19710101 employees family pension scheme government introduces the family pension scheme 1971 providing pension benefits to families of deceased epf members",
+      "originalWording": [
+        "[1971-01-01] Employees' Family Pension Scheme: Government introduces the Family Pension Scheme, 1971, providing pension benefits to families of deceased EPF members."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 1971",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-138",
+      "normalizedClaim": "19951116 eps95 replaces fps71 employees pension scheme 1995 replaces the 1971 family pension scheme introducing the current pension formula and 833 employer contribution structure",
+      "originalWording": [
+        "[1995-11-16] EPS-95 Replaces FPS-71: Employees' Pension Scheme, 1995 replaces the 1971 Family Pension Scheme, introducing the current pension formula and 8.33% employer contribution structure."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 1995",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-139",
+      "normalizedClaim": "20200928 code on social security passed parliament passes the code on social security 2020 consolidating 9 social security laws including epf eps and edli into a single legal framework",
+      "originalWording": [
+        "[2020-09-28] Code on Social Security Passed: Parliament passes the Code on Social Security, 2020, consolidating 9 social security laws including EPF, EPS, and EDLI into a single legal framework."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2020",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-140",
+      "normalizedClaim": "20251121 labour codes come into force the code on social security 2020 and three other labour codes take effect replacing nine older labour statutes in one stroke",
+      "originalWording": [
+        "[2025-11-21] Labour Codes Come Into Force: The Code on Social Security, 2020 and three other labour codes take effect, replacing nine older labour statutes in one stroke."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-141",
+      "normalizedClaim": "20260303 epfo board approves new schemes epfos central board of trustees approves epf scheme 2026 eps 2026 and edli 2026 interest rate maintained at 825 for fy 202526 despite global uncertainty from the iran war",
+      "originalWording": [
+        "[2026-03-03] EPFO Board Approves New Schemes: EPFO's Central Board of Trustees approves EPF Scheme 2026, EPS 2026, and EDLI 2026. Interest rate maintained at 8.25% for FY 2025-26 despite global uncertainty from the Iran war."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-142",
+      "normalizedClaim": "20260629 epf scheme 2026 notified ministry of labour notifies epf scheme 2026 gsr 525e eps 2026 gsr 527e and edli 2026 gsr 526e in the official gazette replacing the 1952 framework",
+      "originalWording": [
+        "[2026-06-29] EPF Scheme 2026 Notified: Ministry of Labour notifies EPF Scheme 2026 (G.S.R. 525(E)), EPS 2026 (G.S.R. 527(E)), and EDLI 2026 (G.S.R. 526(E)) in the Official Gazette, replacing the 1952 framework."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-143",
+      "normalizedClaim": "20260701 scheme takes effect epf scheme 2026 comes into full effect existing subscribers automatically transition new employees enrolled under the new framework from this date",
+      "originalWording": [
+        "[2026-07-01] Scheme Takes Effect: EPF Scheme 2026 comes into full effect. Existing subscribers automatically transition. New employees enrolled under the new framework from this date."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-144",
+      "normalizedClaim": "chart epf vs bank fd 3000month for 30 years bar",
+      "originalWording": [
+        "Chart: EPF vs Bank FD: ₹3,000/month for 30 Years (bar)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-145",
+      "normalizedClaim": "chart epfo key operational metrics fy 202425 bar",
+      "originalWording": [
+        "Chart: EPFO Key Operational Metrics (FY 2024-25) (bar)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-146",
+      "normalizedClaim": "chart epf contribution structure monthly 15000 wage bar",
+      "originalWording": [
+        "Chart: EPF Contribution Structure (Monthly, ₹15,000 Wage) (bar)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-147",
+      "normalizedClaim": "chart epf interest rate trend 20192026 line",
+      "originalWording": [
+        "Chart: EPF Interest Rate Trend (2019-2026) (line)"
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2019",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-148",
+      "normalizedClaim": "what is the epf scheme 2026 the employees provident funds scheme 2026 notified on june 29 2026 replaces the 74yearold epf scheme 1952 as the legal framework governing provident fund contributions accounts and withdrawals for indias organisedsector workforce it is the first major overhaul of epf law and brings the scheme under the code on social security 2020",
+      "originalWording": [
+        "What is the EPF Scheme 2026?: The Employees' Provident Funds Scheme, 2026, notified on June 29, 2026, replaces the 74-year-old EPF Scheme 1952 as the legal framework governing provident fund contributions, accounts, and withdrawals for India's organised-sector workforce. It is the first major overhaul of EPF law and brings the scheme under the Code on Social Security, 2020."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-149",
+      "normalizedClaim": "do i need to take any action as an existing epf member no existing epf subscribers under the 1952 scheme automatically become members under the 2026 scheme your uan account balance and accumulated benefits continue without interruption there is no requirement to reregister or submit new documents",
+      "originalWording": [
+        "Do I need to take any action as an existing EPF member?: No. Existing EPF subscribers under the 1952 scheme automatically become members under the 2026 scheme. Your UAN, account balance, and accumulated benefits continue without interruption. There is no requirement to re-register or submit new documents."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 1952",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-150",
+      "normalizedClaim": "what actually changed for employees the contribution rate 12 wage ceiling 15000 and interest rate 825 remain unchanged the main changes are 13 partial withdrawal categories simplified to 3 illness educationmarriage housing stricter governance for exempted private pf trusts digital compliance formalized and the government can temporarily reduce contributions during national emergencies",
+      "originalWording": [
+        "What actually changed for employees?: The contribution rate (12%), wage ceiling (₹15,000), and interest rate (8.25%) remain unchanged. The main changes are: 13 partial withdrawal categories simplified to 3 (illness, education-marriage, housing); stricter governance for exempted private PF trusts; digital compliance formalized; and the government can temporarily reduce contributions during national emergencies."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-151",
+      "normalizedClaim": "what changed for pension eps eps 2026 replaces eps95 and the 1971 family pension scheme the pension formula minimum pension 1000 and contribution structure 833 employer stay the same key improvements pension claims must be settled within 20 days epfo pays 12 interest penalty for delays and the higherpension framework postsupreme court now has firmer statutory footing",
+      "originalWording": [
+        "What changed for pension (EPS)?: EPS 2026 replaces EPS-95 and the 1971 Family Pension Scheme. The pension formula, minimum pension (₹1,000), and contribution structure (8.33% employer) stay the same. Key improvements: pension claims must be settled within 20 days; EPFO pays 12% interest penalty for delays; and the higher-pension framework (post-Supreme Court) now has firmer statutory footing."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-152",
+      "normalizedClaim": "is the epf interest rate changing under the new scheme no the epf interest rate remains at 825 for fy 202526 as recommended by the epfo central board of trustees in march 2026 the rate is set annually and is independent of the scheme change epf has consistently outperformed bank fds by 1752 annually",
+      "originalWording": [
+        "Is the EPF interest rate changing under the new scheme?: No. The EPF interest rate remains at 8.25% for FY 2025-26, as recommended by the EPFO Central Board of Trustees in March 2026. The rate is set annually and is independent of the scheme change. EPF has consistently outperformed bank FDs by 1.75-2% annually."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-153",
+      "normalizedClaim": "what is the vishwas and amnesty compliance window the epf scheme 2026 introduces three timebound compliance windows 1 enrolment campaign  deadline october 31 2026 for enrolling previously uncovered employees 2 vishwas  voluntary disclosure of disputed damages 3 amnesty  for informal pf trusts to regularize compliance these are available for 6 months from notification extendable by 6 more",
+      "originalWording": [
+        "What is the VISHWAS and AMNESTY compliance window?: The EPF Scheme 2026 introduces three time-bound compliance windows: (1) Enrolment Campaign — deadline October 31, 2026 for enrolling previously uncovered employees; (2) VISHWAS — voluntary disclosure of disputed damages; (3) AMNESTY — for informal PF trusts to regularize compliance. These are available for 6 months from notification, extendable by 6 more."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-154",
+      "normalizedClaim": "how does the governments emergency power to reduce contributions work the new scheme allows the central government to temporarily reduce or defer epf contributions for up to 3 months during pandemics epidemics and national disasters this provision did not exist under the 1952 scheme it provides fiscal flexibility during crises without permanently changing the contribution structure",
+      "originalWording": [
+        "How does the government's emergency power to reduce contributions work?: The new scheme allows the central government to temporarily reduce or defer EPF contributions for up to 3 months during pandemics, epidemics, and national disasters. This provision did not exist under the 1952 scheme. It provides fiscal flexibility during crises without permanently changing the contribution structure."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 1952",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-155",
+      "normalizedClaim": "what happens to exempted pf trusts under the new scheme exempted private pf trusts face significantly stricter governance mandatory electronic accounting annual audits dematerialised investments investment reporting online disclosures penalties for delayed reporting and formal procedures for renewing exemptions trusts cannot declare interest rates exceeding the central government rate by more than 2",
+      "originalWording": [
+        "What happens to exempted PF trusts under the new scheme?: Exempted private PF trusts face significantly stricter governance: mandatory electronic accounting, annual audits, dematerialised investments, investment reporting, online disclosures, penalties for delayed reporting, and formal procedures for renewing exemptions. Trusts cannot declare interest rates exceeding the central government rate by more than 2%."
+      ],
+      "sourceStories": [
+        "epf-scheme-2026"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-EPF-SC-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-156",
+      "normalizedClaim": "india lost 13044 children aged 1418 to suicide in 2023  a 36 increase from 2019 this datadriven investigation examines the systemic failures in mental health infrastructure the pressure cooker of academic expectations and the policy gaps that leave 15 crore adolescents without access to care",
+      "originalWording": [
+        "India lost 13,044 children aged 14–18 to suicide in 2023 — a 36% increase from 2019. This data-driven investigation examines the systemic failures in mental health infrastructure, the pressure cooker of academic expectations, and the policy gaps that leave 1.5 crore adolescents without access to care."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2023",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-157",
+      "normalizedClaim": "india reported 13044 student suicides in 2023  the highest ever recorded a 36 rise from 2019",
+      "originalWording": [
+        "India reported 13,044 student suicides in 2023 — the highest ever recorded, a 36% rise from 2019"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2023",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-158",
+      "normalizedClaim": "1 in 7 indian adolescents meets criteria for depression only 12 of schools have a counsellor",
+      "originalWording": [
+        "1 in 7 Indian adolescents meets criteria for depression; only 12% of schools have a counsellor"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-159",
+      "normalizedClaim": "india has 03 child psychiatrists per 100000 population  97 below the who recommendation",
+      "originalWording": [
+        "India has 0.3 child psychiatrists per 100,000 population — 97% below the WHO recommendation"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-160",
+      "normalizedClaim": "academic pressure remains the single largest trigger cited in 25 of cases",
+      "originalWording": [
+        "Academic pressure remains the single largest trigger, cited in 25% of cases"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-161",
+      "normalizedClaim": "only 3 of indias health budget goes to mental health telemanas helpline received 15 lakh calls in 2 years",
+      "originalWording": [
+        "Only 3% of India's health budget goes to mental health; Tele-MANAS helpline received 15 lakh calls in 2 years"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-162",
+      "normalizedClaim": "adolescents with depression 1 in 7",
+      "originalWording": [
+        "Adolescents with Depression: 1 in 7"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-163",
+      "normalizedClaim": "health budget for mental health 3",
+      "originalWording": [
+        "Health Budget for Mental Health: 3%"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-164",
+      "normalizedClaim": "top suicide state maharashtra 1571",
+      "originalWording": [
+        "Top Suicide State: Maharashtra (1,571)"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-165",
+      "normalizedClaim": "age group most affected 1617 years",
+      "originalWording": [
+        "Age Group Most Affected: 16–17 years"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-166",
+      "normalizedClaim": "student suicides in india increased by over 35 between 2019 and 2023",
+      "originalWording": [
+        "Student suicides in India increased by over 35% between 2019 and 2023."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2019",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-167",
+      "normalizedClaim": "only 12 of government schools in india have a counsellor",
+      "originalWording": [
+        "Only 12% of government schools in India have a counsellor."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-168",
+      "normalizedClaim": "academic pressure is the leading cause of student suicides in india",
+      "originalWording": [
+        "Academic pressure is the leading cause of student suicides in India."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-169",
+      "normalizedClaim": "india has sufficient child psychiatrists to meet who standards",
+      "originalWording": [
+        "India has sufficient child psychiatrists to meet WHO standards."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-170",
+      "normalizedClaim": "the mental healthcare act 2017 guarantees free mental healthcare for all",
+      "originalWording": [
+        "The Mental Healthcare Act 2017 guarantees free mental healthcare for all."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2017",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-171",
+      "normalizedClaim": "social media is a leading documented cause of student suicides",
+      "originalWording": [
+        "Social media is a leading documented cause of student suicides."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-172",
+      "normalizedClaim": "telemanas has received over 15 lakh calls since launch",
+      "originalWording": [
+        "Tele-MANAS has received over 15 lakh calls since launch."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-173",
+      "normalizedClaim": "20170401 mental healthcare act enacted guarantees right to mental healthcare for all indians prohibits discrimination mandates insurance coverage for mental illness",
+      "originalWording": [
+        "[2017-04-01] Mental Healthcare Act Enacted: Guarantees right to mental healthcare for all Indians, prohibits discrimination, mandates insurance coverage for mental illness."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2017",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-174",
+      "normalizedClaim": "20200730 nep 2020 mandates school counsellors national education policy 2020 calls for counsellors in every school and life skills education as part of the curriculum",
+      "originalWording": [
+        "[2020-07-30] NEP 2020 Mandates School Counsellors: National Education Policy 2020 calls for counsellors in every school and life skills education as part of the curriculum."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2020",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-175",
+      "normalizedClaim": "20221010 telemanas helpline launched national mental health helpline launched on world mental health day providing 247 telecounselling in 20 languages",
+      "originalWording": [
+        "[2022-10-10] Tele-MANAS Helpline Launched: National mental health helpline launched on World Mental Health Day, providing 24/7 tele-counselling in 20 languages."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2022",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-176",
+      "normalizedClaim": "20221201 lancet study highlights india depression crisis lancet child  adolescent health estimates 137 depression prevalence among indian adolescents aged 1519",
+      "originalWording": [
+        "[2022-12-01] Lancet Study Highlights India Depression Crisis: Lancet Child & Adolescent Health estimates 13.7% depression prevalence among Indian adolescents aged 15–19."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "PROJECTION",
+      "temporalScope": "As of 2022",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-177",
+      "normalizedClaim": "20230901 ncrb reports record student suicides ncrbs accidental deaths  suicides in india 2023 reports 13044 student suicides  the highest figure in a decade",
+      "originalWording": [
+        "[2023-09-01] NCRB Reports Record Student Suicides: NCRB's Accidental Deaths & Suicides in India 2023 reports 13,044 student suicides — the highest figure in a decade."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2023",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-178",
+      "normalizedClaim": "20240315 rti reveals counsellor gap ministry of education rti response confirms only 12 of government schools have a counsellor most untrained",
+      "originalWording": [
+        "[2024-03-15] RTI Reveals Counsellor Gap: Ministry of Education RTI response confirms only 12% of government schools have a counsellor, most untrained."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2024",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-179",
+      "normalizedClaim": "20250410 parliamentary panel recommends screening parliamentary standing committee on health recommends mandatory annual mental health screening in all schools",
+      "originalWording": [
+        "[2025-04-10] Parliamentary Panel Recommends Screening: Parliamentary standing committee on health recommends mandatory annual mental health screening in all schools."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2025",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-180",
+      "normalizedClaim": "20260301 mental health bill proposes mandatory screening mental health amendment bill 2026 introduced proposing mandatory screening in schools and colleges",
+      "originalWording": [
+        "[2026-03-01] Mental Health Bill Proposes Mandatory Screening: Mental Health (Amendment) Bill 2026 introduced, proposing mandatory screening in schools and colleges."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-181",
+      "normalizedClaim": "chart student suicides in india 20192023 bar",
+      "originalWording": [
+        "Chart: Student Suicides in India (2019–2023) (bar)"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2019",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-182",
+      "normalizedClaim": "chart triggers of student suicides india 2023 bar",
+      "originalWording": [
+        "Chart: Triggers of Student Suicides (India, 2023) (bar)"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2023",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-183",
+      "normalizedClaim": "chart agewise youth suicide breakdown 2023 bar",
+      "originalWording": [
+        "Chart: Age-wise Youth Suicide Breakdown (2023) (bar)"
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "As of 2023",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-184",
+      "normalizedClaim": "how does indias youth suicide rate compare globally india accounts for approximately 25 of global adolescent suicides despite having 18 of the worlds adolescent population the rate of 124 per 100000 among 1519 yearolds is 35 higher than the global average of 92",
+      "originalWording": [
+        "How does India's youth suicide rate compare globally?: India accounts for approximately 25% of global adolescent suicides, despite having 18% of the world's adolescent population. The rate of 12.4 per 100,000 among 15–19 year-olds is 35% higher than the global average of 9.2."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-185",
+      "normalizedClaim": "is academic pressure really the main cause ncrb data consistently shows failure in examination and academic pressure as the most commonly cited cause however experts caution these are proximate triggers not root causes underlying mental illness family dysfunction and lack of coping skills often go unrecorded",
+      "originalWording": [
+        "Is academic pressure really the main cause?: NCRB data consistently shows \"failure in examination\" and \"academic pressure\" as the most commonly cited cause. However, experts caution these are proximate triggers, not root causes. Underlying mental illness, family dysfunction, and lack of coping skills often go unrecorded."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-186",
+      "normalizedClaim": "what is being done about it three main policy pillars telemanas helpline 15 lakh calls the school mental health program under dmhp and nep 2020s counsellor mandate however only 12 of schools have counsellors and mental health gets only 3 of the health budget",
+      "originalWording": [
+        "What is being done about it?: Three main policy pillars: Tele-MANAS helpline (15 lakh+ calls), the School Mental Health Program under DMHP, and NEP 2020's counsellor mandate. However, only 12% of schools have counsellors, and mental health gets only 3% of the health budget."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "As of 2020",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-187",
+      "normalizedClaim": "how can parents spot warning signs common warning signs withdrawal from social activities sudden drop in grades changes in sleepeating giving away valued possessions mentions of wanting to die increased irritability lasting more than two weeks",
+      "originalWording": [
+        "How can parents spot warning signs?: Common warning signs: withdrawal from social activities, sudden drop in grades, changes in sleep/eating, giving away valued possessions, mentions of wanting to die, increased irritability lasting more than two weeks."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-188",
+      "normalizedClaim": "what is telemanas and how does it work telemanas is indias national mental health helpline launched oct 2022 available tollfree at 14416 or 18008914416 it provides 247 telecounselling in 20 languages with escalation to inperson care if needed",
+      "originalWording": [
+        "What is Tele-MANAS and how does it work?: Tele-MANAS is India's national mental health helpline (launched Oct 2022), available toll-free at 14416 or 1-800-891-4416. It provides 24/7 tele-counselling in 20 languages, with escalation to in-person care if needed."
+      ],
+      "sourceStories": [
+        "youth-mental-health-crisis"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2022",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-YOUTH--001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-189",
+      "normalizedClaim": "digital personal data protection indias privacy law comes of age",
+      "originalWording": [
+        "Digital Personal Data Protection: India's Privacy Law Comes of Age"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-190",
+      "normalizedClaim": "from the landmark right to privacy judgment to the 2026 amendments indias journey toward comprehensive data protection legislation has been long and contentious",
+      "originalWording": [
+        "From the landmark right to privacy judgment to the 2026 amendments, India's journey toward comprehensive data protection legislation has been long and contentious."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-191",
+      "normalizedClaim": "supreme court declared right to privacy a fundamental right in 2017",
+      "originalWording": [
+        "Supreme Court declared right to privacy a fundamental right in 2017"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2017",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-192",
+      "normalizedClaim": "dpdp act 2023 received presidential assent after 6 years of deliberation",
+      "originalWording": [
+        "DPDP Act 2023 received presidential assent after 6 years of deliberation"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2023",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-193",
+      "normalizedClaim": "2026 amendments expanded regulatory scope and compliance requirements",
+      "originalWording": [
+        "2026 amendments expanded regulatory scope and compliance requirements"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2026",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-194",
+      "normalizedClaim": "tech companies face fines up to 250 crore for noncompliance",
+      "originalWording": [
+        "Tech companies face fines up to ₹250 crore for non-compliance"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-195",
+      "normalizedClaim": "maximum fine for noncompliance 250 crore",
+      "originalWording": [
+        "Maximum Fine for Non-Compliance: ₹250 crore"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "FINANCIAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-196",
+      "normalizedClaim": "implementation timeline 24 months from notification",
+      "originalWording": [
+        "Implementation Timeline: 24 months from notification"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-197",
+      "normalizedClaim": "exempted government agencies 15 notified agencies",
+      "originalWording": [
+        "Exempted Government Agencies: 15 notified agencies"
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "NUMERIC",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-198",
+      "normalizedClaim": "indias dpdp act imposes the highest data privacy fines in the world",
+      "originalWording": [
+        "India's DPDP Act imposes the highest data privacy fines in the world."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-199",
+      "normalizedClaim": "the dpdp act exempts government agencies from all provisions",
+      "originalWording": [
+        "The DPDP Act exempts government agencies from all provisions."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-200",
+      "normalizedClaim": "20170824 right to privacy judgment supreme court in justice ks puttaswamy case declares right to privacy a fundamental right under article 21",
+      "originalWording": [
+        "[2017-08-24] Right to Privacy Judgment: Supreme Court in Justice K.S. Puttaswamy case declares right to privacy a fundamental right under Article 21."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "FACTUAL",
+      "temporalScope": "As of 2017",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-201",
+      "normalizedClaim": "20180727 srikrishna committee report bn srikrishnaled committee submits draft personal data protection bill to the government",
+      "originalWording": [
+        "[2018-07-27] Srikrishna Committee Report: BN Srikrishna-led committee submits draft Personal Data Protection Bill to the government."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2018",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-202",
+      "normalizedClaim": "20191211 pdp bill introduced personal data protection bill 2019 introduced in lok sabha later referred to joint parliamentary committee",
+      "originalWording": [
+        "[2019-12-11] PDP Bill Introduced: Personal Data Protection Bill 2019 introduced in Lok Sabha, later referred to Joint Parliamentary Committee."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2019",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-203",
+      "normalizedClaim": "20230811 dpdp act receives assent digital personal data protection act 2023 receives presidential assent replacing the 2019 bill",
+      "originalWording": [
+        "[2023-08-11] DPDP Act Receives Assent: Digital Personal Data Protection Act 2023 receives presidential assent, replacing the 2019 bill."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "As of 2023",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-204",
+      "normalizedClaim": "who does the dpdp act apply to the act applies to the processing of digital personal data within india and to data processed outside india if it relates to offering goods or services to individuals in india",
+      "originalWording": [
+        "Who does the DPDP Act apply to?: The Act applies to the processing of digital personal data within India and to data processed outside India if it relates to offering goods or services to individuals in India."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "India (National/State)",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    },
+    {
+      "candidateId": "MAN-CLM-B1-205",
+      "normalizedClaim": "what rights do citizens have under the dpdp act citizens have the right to access correct erase personal data and the right to grievance redressal data fiduciaries must obtain explicit consent before processing personal data",
+      "originalWording": [
+        "What rights do citizens have under the DPDP Act?: Citizens have the right to access, correct, erase personal data, and the right to grievance redressal. Data fiduciaries must obtain explicit consent before processing personal data."
+      ],
+      "sourceStories": [
+        "dpdp-bill"
+      ],
+      "claimType": "LEGAL",
+      "temporalScope": "Historical / Static",
+      "geographicScope": "Global",
+      "evidenceIds": [
+        "EVID-DPDP-B-001"
+      ],
+      "sourceIds": [
+        "UNLINKED"
+      ],
+      "verificationConclusion": "INSUFFICIENT_EVIDENCE",
+      "readyForIngestion": false,
+      "blockingIssue": "Lacks explicit primary source linkage in narrative block"
+    }
+  ]
+}

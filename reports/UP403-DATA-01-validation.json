@@ -1,0 +1,66 @@
+{
+  "batch": "UP403-DATA-01",
+  "executed_at": "2026-07-28T11:39:15.807Z",
+  "gate_passed": true,
+  "gate_checks": {
+    "active_ac_count_is_403": true,
+    "unique_ac_numbers_is_403": true,
+    "unique_canonical_ids_is_403": true,
+    "no_unresolved_district": true,
+    "no_unresolved_division": true,
+    "no_unresolved_pc": true,
+    "all_records_have_provenance": true
+  },
+  "counts": {
+    "total": 403,
+    "unique_ac_numbers": 403,
+    "unique_canonical_ids": 403,
+    "missing_district": 0,
+    "missing_division": 0,
+    "missing_pc": 0,
+    "sc_count": 85,
+    "st_count": 1,
+    "general_count": 317,
+    "cross_district_seats": 3,
+    "warnings": 0,
+    "notes": 3
+  },
+  "reservation_totals": {
+    "SC": 85,
+    "ST": 1,
+    "GENERAL": 317,
+    "total": 403,
+    "note": "ECI 2008 Delimitation Order specifies 85 SC + 0 ST for UP Legislative Assembly. Manifest shows 85 SC + 1 ST (Obra, Sonbhadra). VERIFY: Obra may be ST per ECI. Wikipedia marks it ST."
+  },
+  "gate_failures": [],
+  "warnings": [],
+  "notes": [
+    {
+      "ac": 30,
+      "name": "Bilari",
+      "note": "Bilari is split between Moradabad and Sambhal districts"
+    },
+    {
+      "ac": 58,
+      "name": "Dhaulana",
+      "note": "Dhaulana is split between Ghaziabad and Hapur districts"
+    },
+    {
+      "ac": 184,
+      "name": "Jagdishpur",
+      "note": "Jagdishpur is split between Amethi and Sultanpur districts"
+    }
+  ],
+  "critical_conflicts": [
+    {
+      "conflict_id": "CONFLICT-UP403-DATA-01-001",
+      "severity": "CRITICAL",
+      "description": "Existing batch PROD-12CONSTITUENCY-CONTROLLED uses UP-AC-395 for Varanasi Cantt. Canonical data (Wikipedia rev 1338155502, citing CEO UP and ECI) establishes Varanasi Cantt. = UP-AC-390. AC-395 = Chhanbey (SC, Mirzapur).",
+      "canonical_id_correct": "UP-AC-390",
+      "existing_batch_used": "UP-AC-395",
+      "evidence": "Wikipedia raw wikitext line 2453: ! 390 | [[Varanasi Cantonment Assembly constituency|Varanasi Cantt.]] | None | Varanasi | Varanasi PC",
+      "action_required": "Correct canonical_id in PROD-12CONSTITUENCY-CONTROLLED batch from UP-AC-395 to UP-AC-390 before merging datasets"
+    }
+  ],
+  "updated_at": "2026-07-28T11:51:07.325Z"
+}

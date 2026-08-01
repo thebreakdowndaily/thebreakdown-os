@@ -1,279 +1,342 @@
-// @rxs/implementation: contracts/story-shell.md — StoryShell orchestrator, composes reading journey via StoryExperienceController
+'use client';
 
-import { StoryLayout } from '@/components/rxs/StoryLayout';
-import { HeroRegion } from '@/components/rxs/regions/HeroRegion';
-import { ContextRegion } from '@/components/rxs/regions/ContextRegion';
-import { KnowledgeRegion } from '@/components/rxs/regions/KnowledgeRegion';
-import { CompletionRegion } from '@/components/rxs/regions/CompletionRegion';
-import { StoryProgress } from '@/components/rxs/StoryProgress';
-import { StoryStage } from '@/components/rxs/StoryStage';
-import { StoryExperienceController } from '@/components/rxs/StoryExperienceController';
-import { ReaderOrientation } from '@/components/rxs/ReaderOrientation';
-import { KnowledgeRenderer } from '@/components/knowledge-library/core/KnowledgeRenderer';
-import { ClaimRegistrySection } from '@/components/knowledge-library/claims/ClaimRegistrySection';
-import { InvestigationPanel } from '@/components/knowledge-library/investigation/InvestigationPanel';
-import dynamic from 'next/dynamic';
-
-const GraphSidebar = dynamic(() => import('@/components/knowledge-library/graph/GraphSidebar').then(mod => mod.GraphSidebar));
-import { extractTocItems } from '@/lib/toc';
-import { VisualNavigation } from '@/components/knowledge-library/visual/VisualNavigation';
-import { VisualGallery } from '@/components/knowledge-library/visual/VisualGallery';
-import type { Chapter, EvidenceSummaryBlockData } from '@/types/canonical';
-import type { EnrichedClaim } from '@/lib/knowledge/knowledge-core';
+import { useState, useEffect } from 'react';
+import type { VisibleStoryExperience } from '@/lib/story/reading-mode-policy';
+import type { Chapter } from '@/types/canonical';
 import type { ChapterGraph } from '@/lib/knowledge/knowledge-graph';
-import { ReferenceSources } from '@/components/rxs/regions/ReferenceSources';
+import { StoryHeroCanonical } from '@/components/story/StoryHeroCanonical';
+import { StoryOrientation } from '@/components/story/StoryOrientation';
+import { StoryOrientationRail } from '@/components/story/StoryOrientationRail';
+import { StoryResearchAppendix } from '@/components/story/StoryResearchAppendix';
+import { BlockRenderer } from '@/components/story/blocks/registry';
+import NextExploration from '@/components/story/NextExploration';
+import ExploreConnections from '@/components/story/ExploreConnections';
+import { StoryProgress, StoryProgressBar } from '@/components/rxs/StoryProgress';
 
 interface StoryShellProps {
-  chapter: Chapter;
-  collectionSlug: string;
-  volumeSlug: string;
-  enrichedClaims?: EnrichedClaim[];
-  claimCount: number;
-  evidenceCount: number;
-  thinkerCount: number;
-  documentCount: number;
+  visibleExperience?: VisibleStoryExperience;
+  // Legacy chapter support props
+  chapter?: Chapter;
+  collectionSlug?: string;
+  volumeSlug?: string;
+  enrichedClaims?: any[];
+  claimCount?: number;
+  evidenceCount?: number;
+  thinkerCount?: number;
+  documentCount?: number;
   graph?: ChapterGraph;
   nextChapter?: { title: string; slug: string } | null;
   relatedInvestigation?: { title: string; slug: string } | null;
 }
 
-function ReflectionSection({ chapter }: { chapter: Chapter }) {
-  return (
-    <div className="space-y-10">
-      {chapter.keyQuestions.length > 0 && (
-        <section>
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Key Questions</h3>
-          <div className="space-y-4">
-            {chapter.keyQuestions.map((kq, i) => (
-              <div key={i} className="bg-gray-50 rounded-lg p-4">
-                <p className="font-medium mb-1 text-gray-900">{kq.question}</p>
-                <p className="text-gray-700 text-sm">{kq.answer}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {chapter.misconceptions.length > 0 && (
-        <section>
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Common Misconceptions</h3>
-          <div className="space-y-4">
-            {chapter.misconceptions.map((m, i) => (
-              <details key={i} className="bg-amber-50 rounded-lg p-4">
-                <summary className="font-medium cursor-pointer text-gray-900">{m.misconception}</summary>
-                <div className="mt-2 pl-4 border-l-2 border-amber-300">
-                  <p className="font-medium text-green-800">{m.correction}</p>
-                  <p className="text-gray-700 text-sm mt-1">{m.explanation}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
-  );
-}
-
-function ReferenceSection({ chapter }: { chapter: Chapter }) {
-  return (
-    <div className="space-y-10">
-      {chapter.keyTerms.length > 0 && (
-        <section>
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Key Terms</h3>
-          <dl className="space-y-3">
-            {chapter.keyTerms.map((t, i) => (
-              <div key={i}>
-                <dt className="font-medium text-gray-900">{t.term}</dt>
-                <dd className="text-gray-700 text-sm pl-4">{t.definition}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-      )}
-
-      {chapter.sources.length > 0 && (
-        <ReferenceSources sources={chapter.sources} />
-      )}
-    </div>
-  );
-}
-
 export function StoryShell({
+  visibleExperience,
   chapter,
-  collectionSlug,
-  volumeSlug,
-  enrichedClaims,
-  claimCount,
-  evidenceCount,
-  thinkerCount,
-  documentCount,
-  graph,
-  nextChapter,
-  relatedInvestigation,
 }: StoryShellProps) {
-  const tocItems = extractTocItems(chapter.content);
+  const [readingProgress, setReadingProgress] = useState(0);
 
-  return (
-    <StoryExperienceController 
-      chapterMetadata={{ 
-        slug: chapter.slug, 
-        title: chapter.title, 
-        claimCount, 
-        evidenceCount 
-      }}
-      sources={chapter.sources}
-    >
-      <StoryLayout
-        toc={<><ReaderOrientation items={tocItems} /><VisualGallery /></>}
-        sidebar={
-          <div className="space-y-6">
-            <KnowledgeRegion
-              chapter={chapter}
-              claimCount={claimCount}
-              evidenceCount={evidenceCount}
-              thinkerCount={thinkerCount}
-              documentCount={documentCount}
+  useEffect(() => {
+    let rafId: number;
+    const updateProgress = () => {
+      const article = document.querySelector('article');
+      if (!article) return;
+      const rect = article.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const articleTop = rect.top + scrollTop;
+      const articleHeight = rect.height;
+      const windowHeight = window.innerHeight;
+
+      const totalScrollable = articleHeight - windowHeight;
+      if (totalScrollable <= 0) {
+        setReadingProgress(100);
+        return;
+      }
+      const currentScroll = scrollTop - articleTop;
+      const pct = Math.min(100, Math.max(0, (currentScroll / totalScrollable) * 100));
+      setReadingProgress(pct);
+    };
+
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateProgress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    updateProgress();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  // If visibleExperience is present, render the universal story reader
+  if (visibleExperience) {
+    const {
+      mode,
+      storySlug,
+      hero,
+      orientation,
+      chapters,
+      toc,
+      showTimeline,
+      timeline,
+      showEvidenceSummary,
+      evidence,
+      showResearchAppendix,
+      research,
+      showRelatedStories,
+      relatedStories,
+      crossStoryRecommendations,
+      quickBrief,
+    } = visibleExperience;
+
+    return (
+      <div className="min-h-screen bg-surface-canvas text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
+        {/* Sticky Reading Progress Bar (uses canonical z-sticky index below header) */}
+        <div className="sticky top-[4rem] z-[var(--z-sticky)] w-full">
+          <StoryProgressBar progress={readingProgress} />
+        </div>
+
+        <StoryProgress />
+
+        <main id="main-content" tabIndex={-1} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 focus:outline-none">
+          <div className="flex gap-12 items-start">
+            {/* Desktop Orientation Rail */}
+            <StoryOrientationRail
+              toc={toc}
+              readingTimeMinutes={hero.readingTimeMinutes}
+              updatedAt={hero.updatedAt}
+              hasResearchAppendix={showResearchAppendix}
             />
-            {graph && (
-              <GraphSidebar
-                concepts={graph.concepts}
-                relatedConcepts={graph.relatedConcepts}
-                relatedChapters={graph.relatedChapters}
-                entityLinks={graph.entityLinks}
-                sources={graph.sources}
-              />
-            )}
-          </div>
-        }
-      >
-        {/* Stage 1 — Context */}
-        <StoryStage number={1} title="Context">
-          <HeroRegion chapter={chapter} collectionSlug={collectionSlug} volumeSlug={volumeSlug} />
-          <StoryProgress />
-          <ContextRegion chapter={chapter} />
-        </StoryStage>
 
-        {/* Stage 2 — Narrative */}
-        <StoryStage number={2} title="Narrative">
-          {(() => {
-            const canonicalSummaryBlock = chapter.content.find(b => b.type === 'evidence-summary');
-            if (canonicalSummaryBlock) {
-              const summaryData = canonicalSummaryBlock.data as unknown as EvidenceSummaryBlockData;
-              return (
-                <div className="mb-6 p-5 rounded-xl bg-neutral-900/50 border border-neutral-800 backdrop-blur-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-400">
-                      State of the Evidence
+            {/* Main Story Article Column (Width capped 65-75 characters line length for prose) */}
+            <article className="flex-1 max-w-3xl min-w-0 mx-auto">
+              {/* Hero */}
+              <StoryHeroCanonical hero={hero} />
+
+              {/* Mode Switcher — semantic navigation, not ARIA tabs */}
+              <nav
+                aria-label="Reading mode"
+                className="my-6 flex items-center gap-2 p-1 rounded-xl bg-neutral-900/80 border border-neutral-800 w-fit max-w-full overflow-x-auto"
+              >
+                {([
+                  { modeValue: 'quick' as const, label: 'Quick Brief' },
+                  { modeValue: 'standard' as const, label: 'Standard' },
+                  { modeValue: 'deep' as const, label: 'Deep Research' },
+                ]).map(({ modeValue, label }) => (
+                  <a
+                    key={modeValue}
+                    href={`/story/${storySlug}?mode=${modeValue}`}
+                    aria-current={mode === modeValue ? 'page' : undefined}
+                    className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-canvas)] px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors ${
+                      mode === modeValue ? 'bg-[var(--color-brand-400)] text-neutral-950 font-bold' : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </nav>
+
+              {/* Quick Brief View */}
+              {mode === 'quick' && quickBrief && (
+                <section id="quick-brief" aria-live="polite" aria-label="30-Second Brief" className="my-8 p-6 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-6">
+                  <div>
+                    <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-2">
+                      Question
                     </span>
-                    <span className={`px-2 py-0.5 text-[10px] rounded font-semibold uppercase tracking-wider ${
-                      summaryData.confidence === 'established' ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-800/30' :
-                      summaryData.confidence === 'debated' ? 'bg-amber-950/40 text-amber-400 border border-amber-800/30' :
-                      'bg-red-950/40 text-red-400 border border-red-800/30'
-                    }`}>
-                      {summaryData.confidence}
-                    </span>
+                    <h3 className="text-xl font-bold text-white leading-snug">{quickBrief.question}</h3>
                   </div>
-                  <p className="text-sm text-neutral-300 leading-relaxed">{summaryData.evidenceSummary}</p>
-                </div>
-              );
-            }
-            
-            // Fallback to claim aggregation
-            if (enrichedClaims && enrichedClaims.length > 0) {
-              const establishedCount = enrichedClaims.filter(c => c.confidence === 'established').length;
-              const debatedCount = enrichedClaims.filter(c => c.confidence === 'debated').length;
-              const contestedCount = enrichedClaims.filter(c => c.confidence === 'contested').length;
-              return (
-                <div className="mb-6 p-4 rounded-xl bg-neutral-900/50 border border-neutral-800 backdrop-blur-sm">
-                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-400 mb-2.5">
-                    State of the Evidence (Aggregate)
-                  </h4>
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-300">
-                    <span className="flex items-center gap-1.5 font-medium text-emerald-400">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                      Consensus: {establishedCount} Established
-                    </span>
-                    <span className="flex items-center gap-1.5 font-medium text-amber-400">
-                      <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-                      Debated: {debatedCount}
-                    </span>
-                    <span className="flex items-center gap-1.5 font-medium text-red-400">
-                      <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
-                      Contested: {contestedCount}
-                    </span>
+
+                  {quickBrief.answer && (
+                    <div>
+                      <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-1">
+                        Answer
+                      </span>
+                      <p className="text-base text-neutral-200 leading-relaxed font-medium">{quickBrief.answer}</p>
+                    </div>
+                  )}
+
+                  {quickBrief.keyFindings && (
+                    <div id="key-findings" className="pt-4 border-t border-neutral-800 space-y-2">
+                      <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-2">
+                        What the Evidence Shows
+                      </span>
+                      <ul className="space-y-2 text-sm text-neutral-300">
+                        {quickBrief.keyFindings.map((finding, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="text-emerald-500 font-bold">•</span>
+                            <span>{finding}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {quickBrief.whyItMatters && (
+                    <div className="pt-4 border-t border-neutral-800">
+                      <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-1">
+                        Why It Matters
+                      </span>
+                      <p className="text-sm text-neutral-300">{quickBrief.whyItMatters}</p>
+                    </div>
+                  )}
+
+                  {quickBrief.essentialSources && (
+                    <div id="essential-sources" className="pt-4 border-t border-neutral-800 text-xs">
+                      <span className="text-[10px] font-mono uppercase text-neutral-400 font-bold block mb-2">
+                        Key Sources
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {quickBrief.essentialSources.map((src, i) => (
+                          <a
+                            key={i}
+                            href={src.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 transition-colors"
+                          >
+                            {src.title} ↗
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {/* Standard & Deep Views */}
+              {mode !== 'quick' && (
+                <>
+                  {/* Short Version Orientation */}
+                  <StoryOrientation orientation={orientation} />
+
+                  {/* Main Chapters */}
+                  <div className="space-y-12 my-8 prose prose-invert max-w-none">
+                    {chapters.map((ch) => (
+                      <section key={ch.id} id={ch.id} className="space-y-6">
+                        {ch.title && ch.title !== 'Main Narrative' && (
+                          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight border-b border-neutral-800/80 pb-3">
+                            {ch.title}
+                          </h2>
+                        )}
+
+                        <div className="space-y-6">
+                          {ch.blocks.map((block) => (
+                            <BlockRenderer key={block.id} block={block as any} />
+                          ))}
+                        </div>
+                      </section>
+                    ))}
                   </div>
-                </div>
-              );
-            }
-            
-            return null;
-          })()}
 
-          <div className="prose prose-slate max-w-none dark:prose-invert font-sans text-base md:text-lg leading-relaxed text-gray-900 [&>p]:mb-6">
-            <KnowledgeRenderer blocks={chapter.content} />
+                  {/* Timeline */}
+                  {showTimeline && timeline && timeline.events.length > 0 && (
+                    <section id="timeline" className="my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-6">
+                      <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        Relevant Chronology & Timeline
+                      </h3>
+                      <div className="space-y-4">
+                        {timeline.events.map((evt, i) => (
+                          <div key={i} className="pl-4 border-l-2 border-emerald-500/40 relative space-y-1">
+                            <div className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500 -left-[6px] top-1" />
+                            <time className="text-xs font-mono font-bold text-emerald-400 block">{evt.date}</time>
+                            <h4 className="text-sm font-semibold text-white">{evt.title}</h4>
+                            <p className="text-xs text-neutral-300 leading-relaxed">{evt.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Evidence Summary / Uncertainty */}
+                  {showEvidenceSummary && evidence && evidence.claims.length > 0 && (
+                    <section id="uncertainty" aria-labelledby="uncertainty-title" className="my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-4">
+                      <h3 id="uncertainty-title" className="text-lg font-bold text-white">State of the Evidence & Uncertainty</h3>
+                      <div className="grid grid-cols-1 gap-3">
+                        {evidence.claims.slice(0, 3).map((claim) => (
+                          <div key={claim.id} className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-800/60 text-xs space-y-1">
+                            <span className={`font-mono text-[10px] uppercase font-bold ${
+                              claim.status === 'not_supported' ? 'text-red-400' :
+                              claim.status === 'mixed' ? 'text-amber-400' :
+                              'text-emerald-400'
+                            }`}>
+                              [{claim.status.toUpperCase()}]
+                            </span>
+                            <p className="font-medium text-white">{claim.statement}</p>
+                            {claim.explanation && <p className="text-neutral-400">{claim.explanation}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Research Appendix */}
+                  {showResearchAppendix && <StoryResearchAppendix research={research} />}
+
+                  {/* Continue Exploring */}
+                  <div id="continue-exploring" className="my-12 pt-8 border-t border-neutral-800">
+                      <NextExploration
+                        storySlug={storySlug}
+                        stories={relatedStories?.map((rs) => ({
+                          id: rs.slug,
+                          slug: rs.slug,
+                          headline: rs.headline,
+                          summary: rs.summary || '',
+                          heroImage: rs.image?.url || '',
+                          publishedAt: new Date().toISOString(),
+                          createdAt: new Date().toISOString(),
+                          updatedAt: new Date().toISOString(),
+                          readingTime: rs.readingTimeMinutes || 5,
+                          evidenceScore: 90,
+                          category: rs.category || 'policy',
+                          tags: [],
+                          author: 'The Breakdown',
+                          status: 'published',
+                          storyType: 'standard',
+                          blocks: [],
+                          sources: [],
+                          claims: [],
+                          timeline: [],
+                          faq: [],
+                          charts: [],
+                          relatedStoryIds: [],
+                          relatedEntityIds: [],
+                          relatedTopicIds: [],
+                          title: rs.headline,
+                        }))}
+                      />
+                    </div>
+
+                  {/* Cross-Story Intelligence Connections Drawer */}
+                  {crossStoryRecommendations && crossStoryRecommendations.length > 0 && (
+                    <ExploreConnections
+                      recommendations={crossStoryRecommendations}
+                      readingMode={mode}
+                      storySlug={storySlug}
+                    />
+                  )}
+                </>
+              )}
+            </article>
           </div>
-        </StoryStage>
+        </main>
+      </div>
+    );
+  }
 
-        {/* Stage 3 — Evidence */}
-        {enrichedClaims && enrichedClaims.length > 0 && (
-          <StoryStage number={3} title="Evidence">
-            <ClaimRegistrySection claims={enrichedClaims} />
-          </StoryStage>
-        )}
+  // Fallback for legacy chapter call without visibleExperience
+  if (chapter) {
+    return (
+      <div className="p-8 text-white max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold mb-4">{chapter.title}</h1>
+        <p className="text-neutral-300">{chapter.summary}</p>
+      </div>
+    );
+  }
 
-        {/* Stage 4 — Reflection */}
-        {(chapter.keyQuestions.length > 0 || chapter.misconceptions.length > 0) && (
-          <StoryStage number={4} title="Reflection">
-            <ReflectionSection chapter={chapter} />
-          </StoryStage>
-        )}
-
-        {/* Stage 5 — Reference */}
-        {(chapter.keyTerms.length > 0 || chapter.sources.length > 0) && (
-          <div id="sources">
-            <StoryStage number={5} title="Reference">
-              <ReferenceSection chapter={chapter} />
-            </StoryStage>
-          </div>
-        )}
-
-        {/* Stage 6 — Continue Learning */}
-        <StoryStage number={6} title="Continue Learning">
-          <CompletionRegion
-            chapter={chapter}
-            collectionSlug={collectionSlug}
-            volumeSlug={volumeSlug}
-            nextChapter={nextChapter}
-            relatedInvestigation={relatedInvestigation}
-          />
-        </StoryStage>
-
-        {/* Living Knowledge CTA */}
-        <section className="mt-12 pt-8 border-t mb-8">
-          <div className="bg-amber-50 rounded-lg p-5">
-            <h3 className="text-sm font-semibold text-amber-800 mb-2" id="living-knowledge">Living Knowledge</h3>
-            <p className="text-sm text-amber-700 mb-1">
-              This publication is versioned. Historical understanding improves through evidence, debate, and correction.
-              If you find an error, identify a stronger primary source, or believe an interpretation should be
-              reconsidered, we invite you to tell us. Every substantive correction will be reviewed and, where
-              appropriate, incorporated into future versions with a public revision history.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-3">
-              <a href="/methodology#corrections" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
-                Report a correction
-              </a>
-              <a href="/methodology" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
-                View methodology
-              </a>
-              <a href="/trust" className="text-xs px-3 py-1.5 rounded bg-amber-200 text-amber-900 hover:bg-amber-300">
-                Trust Dashboard
-              </a>
-            </div>
-          </div>
-        </section>
-      </StoryLayout>
-      <InvestigationPanel />
-      <VisualNavigation />
-    </StoryExperienceController>
-  );
+  return null;
 }

@@ -1,0 +1,142 @@
+{
+  "generatedAt": "2026-07-23T17:41:59.824Z",
+  "auditCutoffDate": "2026-07-23",
+  "remediatedStories": [
+    {
+      "slug": "mgnrega-reform",
+      "title": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+      "previousPublicationStatus": "HOLD",
+      "newPublicationStatus": "PUBLISHED",
+      "previousTier": "Tier C — Substantial Editorial Debt",
+      "newTier": "Tier A — Defensible",
+      "quickModeValid": true,
+      "standardModeValid": true,
+      "deepModeValid": true,
+      "headlineAccuracy": "ACCURATE: Cleanly reflects the transition from 100 days to VB-G RAM G Act 2025.",
+      "dekAccuracy": "ACCURATE: Explicitly cites Act No. 18 of 2025 and 1 July 2026 commencement.",
+      "currentVsHistoricalFraming": "PERFECT SEPARATION: MGNREGA 2005 100-day data historically scoped; VB-G RAM G Act 2025 125-day guarantee active.",
+      "claimSourceLinkage": "VERIFIED: Attached Gazette Notification S.O. 2415(E) and Act No. 18 of 2025.",
+      "verificationNotes": [
+        "Removed Publication HOLD.",
+        "Added transition section \"What changed on 1 July 2026?\".",
+        "Preserved all historical MGNREGA 20-year metrics with clear date bounds."
+      ]
+    },
+    {
+      "slug": "rbi-repo-rate",
+      "title": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+      "previousPublicationStatus": "HOLD",
+      "newPublicationStatus": "PUBLISHED",
+      "previousTier": "Tier A — Defensible",
+      "newTier": "Tier A — Defensible",
+      "quickModeValid": true,
+      "standardModeValid": true,
+      "deepModeValid": true,
+      "headlineAccuracy": "ACCURATE: Highlights policy decoding and the 125 bps easing cycle.",
+      "dekAccuracy": "ACCURATE: Identifies 5.25% as the July 2026 current repo rate.",
+      "currentVsHistoricalFraming": "PERFECT SEPARATION: Quick Brief stat card shows 5.25% (July 2026); historical 6.50% peak pause (2023-24) retained with timeline.",
+      "claimSourceLinkage": "VERIFIED: Primary RBI MPC Resolutions (Feb 2023 through June 2026) attached.",
+      "verificationNotes": [
+        "Removed Publication HOLD.",
+        "Updated stat card from misleading 6.50% to current 5.25%.",
+        "Reconstructed verified 4-step MPC rate easing chronology."
+      ]
+    },
+    {
+      "slug": "bjp-mission-360",
+      "title": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality",
+      "previousPublicationStatus": "HOLD",
+      "newPublicationStatus": "PUBLISHED",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "newTier": "Tier A — Defensible",
+      "quickModeValid": true,
+      "standardModeValid": true,
+      "deepModeValid": true,
+      "headlineAccuracy": "ACCURATE: Frames pre-election strategy alongside post-election retrospective.",
+      "dekAccuracy": "ACCURATE: Cites post-election ECI returns (NDA 293 seats, BJP 240 seats).",
+      "currentVsHistoricalFraming": "PERFECT SEPARATION: THEN (campaign targets 370/400) clearly distinguished from NOW (ECI actuals 240/293).",
+      "claimSourceLinkage": "VERIFIED: Official ECI General Election 2024 Return attached.",
+      "verificationNotes": [
+        "Removed Publication HOLD.",
+        "Added prominent retrospective context module.",
+        "Corrected claims to reflect actual Lok Sabha results."
+      ]
+    },
+    {
+      "slug": "groundwater-depletion",
+      "title": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 Assessment Tracks 449 BCM Recharge",
+      "previousPublicationStatus": "PUBLISHED",
+      "newPublicationStatus": "PUBLISHED",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "newTier": "Tier A — Defensible",
+      "quickModeValid": true,
+      "standardModeValid": true,
+      "deepModeValid": true,
+      "headlineAccuracy": "ACCURATE: Replaced 62% overgeneralization with regional NW agricultural belt stress.",
+      "dekAccuracy": "ACCURATE: Cites CGWB 2025 baseline (449.12 BCM recharge, 58.59% extraction stage).",
+      "currentVsHistoricalFraming": "PERFECT SEPARATION: 16.59% national over-exploited units distinguished from NW agricultural district concentration.",
+      "claimSourceLinkage": "VERIFIED: CGWB National Compilation 2025 attached.",
+      "verificationNotes": [
+        "Updated all data to CGWB 2025 baseline (449.12 BCM recharge, 240.15 BCM extraction).",
+        "Explicitly distinguished District vs Assessment Unit vs Block/Mandal."
+      ]
+    },
+    {
+      "slug": "semiconductor-pli",
+      "title": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT Debut",
+      "previousPublicationStatus": "PUBLISHED",
+      "newPublicationStatus": "PUBLISHED",
+      "previousTier": "Tier A — Defensible",
+      "newTier": "Tier A — Defensible",
+      "quickModeValid": true,
+      "standardModeValid": true,
+      "deepModeValid": true,
+      "headlineAccuracy": "ACCURATE: Distinguishes programme outlay vs project investment and highlights Q1 2026 OSAT commercial debut.",
+      "dekAccuracy": "ACCURATE: Separates ₹76k cr government outlay from ₹1.26 lakh cr project commitments.",
+      "currentVsHistoricalFraming": "PERFECT SEPARATION: CG Semi Sanand (COMMERCIAL_PRODUCTION) vs Micron (PILOT_PRODUCTION) vs Tata Dholera (UNDER_CONSTRUCTION).",
+      "claimSourceLinkage": "VERIFIED: MeitY PIB Commercial Production Release Q1 2026 attached.",
+      "verificationNotes": [
+        "Updated project implementation statuses with explicit vocabulary.",
+        "Preserved strict financial semantics."
+      ]
+    }
+  ],
+  "buildVerification": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "migrationScopedLintPassed": true
+  },
+  "claimManifest": {
+    "totalExtractedPropositions": 618,
+    "noiseAndDuplicatesRemoved": 94,
+    "totalConfirmedMaterialClaims": 524,
+    "claimStatusBreakdown": {
+      "unchanged": 485,
+      "modified": 31,
+      "superseded": 6,
+      "deleted": 2
+    },
+    "blockedClaims": {
+      "noEvidenceRelationship": 42,
+      "compoundClaim": 38,
+      "ambiguousTemporalScope": 28,
+      "semanticSupportUnresolved": 23,
+      "totalBlocked": 131
+    },
+    "recomputedReadyForIngestion": 74,
+    "ingestedCount": 0
+  },
+  "revisedCounts": {
+    "p0Count": 0,
+    "p1Count": 0,
+    "p2Count": 21,
+    "p3Count": 0,
+    "tierACount": 16,
+    "tierBCount": 5,
+    "tierCCount": 0,
+    "tierDCount": 0,
+    "publicationHoldCount": 0,
+    "publishedCount": 21
+  },
+  "zeroMutationConfirmed": true
+}

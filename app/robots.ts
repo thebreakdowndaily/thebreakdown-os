@@ -24,6 +24,7 @@ export default function robots(): MetadataRoute.Robots {
           '/topics',
           '/investigation',
           '/investigations',
+          '/up403',
         ],
         disallow: [
           '/workspace',

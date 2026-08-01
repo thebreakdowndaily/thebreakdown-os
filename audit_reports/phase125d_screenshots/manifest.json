@@ -1,0 +1,26 @@
+[
+  {
+    "target": "story_mgnrega_standard",
+    "viewport": "desktop",
+    "file": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\phase125d_screenshots\\story_mgnrega_standard_desktop.png",
+    "url": "http://localhost:3000/story/mgnrega-reform?mode=standard"
+  },
+  {
+    "target": "homepage",
+    "viewport": "desktop",
+    "file": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\phase125d_screenshots\\homepage_desktop.png",
+    "url": "http://localhost:3000/"
+  },
+  {
+    "target": "homepage",
+    "viewport": "mobile",
+    "file": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\phase125d_screenshots\\homepage_mobile.png",
+    "url": "http://localhost:3000/"
+  },
+  {
+    "target": "series_index",
+    "viewport": "desktop",
+    "file": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\phase125d_screenshots\\series_index_desktop.png",
+    "url": "http://localhost:3000/series"
+  }
+]

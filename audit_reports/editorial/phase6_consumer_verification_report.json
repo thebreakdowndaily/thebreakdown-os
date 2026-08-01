@@ -1,0 +1,94 @@
+{
+  "timestamp": "2026-07-23T18:04:26.991Z",
+  "auditCutoffDate": "2026-07-23",
+  "readOnlyModeConfirmed": true,
+  "persistedRegistryBaseline": {
+    "totalPersistedClaims": 142,
+    "preExistingCount": 22,
+    "phase4IngestedCount": 68,
+    "phase5IngestedCount": 52,
+    "verificationPassed": true
+  },
+  "consumerPipeline": {
+    "serviceLayerProvider": "lib/knowledge/knowledge-core.ts -> getKnowledgeCore().claims",
+    "knowledgeGraphIntegration": "lib/graph/graph-service.ts (KnowledgeGraphService)",
+    "readerModeConsumption": {
+      "quickMode": "Renders Quick Brief stat cards & key factual claims from canonical story model.",
+      "standardMode": "Renders full narrative prose, inline claim badges, and source citation references.",
+      "deepMode": "Renders complete Evidence Spine, historiography, counterarguments, and ClaimRegistry links."
+    },
+    "uiComponentsConsumingClaims": [
+      "components/story/StoryShell.tsx",
+      "components/story/EvidencePanel.tsx",
+      "components/story/ClaimCard.tsx",
+      "components/story/SourceReferenceList.tsx",
+      "components/knowledge/KnowledgeLibraryView.tsx"
+    ],
+    "activeConsumerPathwaysCount": 5,
+    "inactiveConsumerPathwaysCount": 0
+  },
+  "identitySemanticCoverage": {
+    "auditedMaterialClaimUniverse": 524,
+    "persistedRegistryPhysicalCount": 142,
+    "distinctMaterialClaimIdsRepresented": 142,
+    "persistedMaterialClaimCoveragePercentage": "27.09% (142 / 524)",
+    "storyModeledMaterialClaimsCount": 266,
+    "storyModeledCoveragePercentage": "50.76% (266 / 524)",
+    "unmodeledMaterialClaimsCount": 116,
+    "unmodeledCoveragePercentage": "22.14% (116 / 524)"
+  },
+  "orphanAndUnconsumedAudit": {
+    "claimsAudited": 142,
+    "brokenSourceReferencesCount": 0,
+    "brokenEvidenceReferencesCount": 0,
+    "brokenStoryReferencesCount": 0,
+    "brokenEntityReferencesCount": 0,
+    "unrenderedRegistryClaimsCount": 52,
+    "activeRenderedRegistryClaimsCount": 90
+  },
+  "supersessionAudit": {
+    "historicalClaimsAudited": 12,
+    "supersededClaimsAudited": 6,
+    "contradictionHandlingPassed": true,
+    "auditNotes": [
+      "mgnrega-reform: Historical 100-day MGNREGA 2005 claims clearly distinguished from active 125-day VB-G RAM G Act 2025 claims.",
+      "rbi-repo-rate: Historical 6.50% peak pause clearly distinguished from active 5.25% policy rate.",
+      "bjp-mission-360: Pre-election 370/400 targets clearly distinguished from actual ECI 240/293 returns via retrospective module.",
+      "groundwater-depletion: Overgeneralized 62% headline replaced with regional NW agricultural stress and CGWB 2025 baseline.",
+      "semiconductor-pli: Program outlay (₹76k cr) separated from project commitments (₹1.26L cr) with explicit production statuses."
+    ]
+  },
+  "knowledgeSystemGapMatrix": [
+    {
+      "id": "GAP-001",
+      "category": "CONSUMPTION_GAP",
+      "priority": "P2_MEDIUM",
+      "affectedComponent": "components/story/ClaimCard.tsx",
+      "currentBehavior": "UI components query initial 90 story claims directly from story store objects rather than dynamically resolving all 142 persisted registry claims.",
+      "expectedBehavior": "Story UI components dynamically bind to getKnowledgeCore().claims, rendering both story-level and registry-persisted claim cards.",
+      "recommendedRemediation": "Connect ClaimCard and EvidencePanel to KnowledgeCoreAPI service layer to enable seamless end-to-end rendering of all 142 persisted claims."
+    },
+    {
+      "id": "GAP-002",
+      "category": "MODELING_GAP",
+      "priority": "P2_MEDIUM",
+      "affectedComponent": "lib/knowledge/claim-registry.ts",
+      "currentBehavior": "176 confirmed material claims are modeled inside story objects but not yet registered in canonical ClaimRegistry repository.",
+      "expectedBehavior": "Progressively migrate all 176 story-modeled claims into ClaimRegistry to reach 100% registry coverage across modeled content.",
+      "recommendedRemediation": "Schedule Phase 7 candidate extraction for the 176 story-modeled claims with automated evidence linking."
+    },
+    {
+      "id": "GAP-003",
+      "category": "REGISTRY_GAP",
+      "priority": "P3_LOW",
+      "affectedComponent": "lib/graph/graph-service.ts",
+      "currentBehavior": "KnowledgeGraphService builds relationship edges for pre-existing claims but needs auto-linking for Phase 4 and Phase 5 claim IDs.",
+      "expectedBehavior": "Knowledge graph automatically reflects relationships across all 142 persisted claims.",
+      "recommendedRemediation": "Update seedGraph() in KnowledgeGraphService to register relationship nodes for claims clm-mgnrega-*, clm-rbi-*, etc."
+    }
+  ],
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase6_consumer_verification_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase6_consumer_verification_report.md"
+  }
+}

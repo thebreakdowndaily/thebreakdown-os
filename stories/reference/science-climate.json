@@ -1,0 +1,137 @@
+{
+  "id": "ref-science-climate",
+  "slug": "ref-science-climate",
+  "storyType": "Science",
+  "title": "Monsoon Patterns: What the Models Say",
+  "metadata": {
+    "difficulty": "Advanced",
+    "confidence": "Medium",
+    "confidenceRationale": "Climate models carry inherent uncertainty",
+    "updateRequired": false,
+    "readingTimeMinutes": 7,
+    "tags": [
+      "science",
+      "climate"
+    ],
+    "entities": [
+      {
+        "name": "India Meteorological Department",
+        "type": "government",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/monsoon.jpg",
+    "statistic": "±15%",
+    "statisticSource": "IMD Forecast Accuracy",
+    "caption": "Forecast uncertainty range",
+    "altText": "Indian monsoon clouds",
+    "credit": "IMD",
+    "aspectRatio": "16:9"
+  },
+  "summary": "IMD monsoon forecasts carry a ±15% uncertainty range, reflecting inherent model limitations.",
+  "keyFacts": [
+    {
+      "claim": "IMD forecast accuracy improved by 3% over last decade",
+      "source": "IMD Annual Report",
+      "confidence": 1
+    },
+    {
+      "claim": "El Niño may reduce monsoon rainfall by 8%",
+      "source": "NIWE Study",
+      "confidence": 0.7
+    }
+  ],
+  "whyItMatters": "Monsoon accuracy affects agriculture, water management, and food security for 600M Indians.",
+  "narrative": "While monsoon models have improved, they remain probabilistic tools — not crystal balls.",
+  "timeline": [
+    {
+      "date": "Jun 1, 2026",
+      "event": "Monsoon onset",
+      "source": "IMD",
+      "significance": "Official monsoon arrival"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "±15% uncertainty range",
+      "source": "IMD Report",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [
+    {
+      "title": "Monsoon Forecast Accuracy Trend",
+      "type": "line",
+      "data": [
+        {
+          "label": "2015",
+          "value": 82
+        },
+        {
+          "label": "2018",
+          "value": 85
+        },
+        {
+          "label": "2021",
+          "value": 87
+        },
+        {
+          "label": "2024",
+          "value": 89
+        }
+      ],
+      "source": "IMD"
+    }
+  ],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "IMD",
+        "type": "government",
+        "position": "Monsoon forecasting",
+        "interest": "Accuracy and reliability",
+        "stance": "neutral"
+      },
+      {
+        "name": "Farmers",
+        "type": "community",
+        "position": "Primary users of forecasts",
+        "interest": "Seasonal planning",
+        "stance": "support"
+      }
+    ],
+    "summary": "Forecasters and farmers are the primary stakeholders."
+  },
+  "futureOutlook": {
+    "headline": "What Remains Uncertain",
+    "scenarios": [
+      {
+        "label": "Improved AI Models",
+        "description": "Machine learning could push accuracy beyond 90% in coming years.",
+        "probability": "Low",
+        "source": "Nature Climate Change"
+      }
+    ],
+    "uncertainty": "Climate variability and model limitations ensure that forecasts carry uncertainty.",
+    "confidence": "Medium"
+  },
+  "sources": [
+    {
+      "title": "IMD Annual Report 2025",
+      "author": "IMD",
+      "reliability": "high"
+    },
+    {
+      "title": "NIWE Monsoon Study",
+      "author": "National Institute of Water Economics",
+      "reliability": "high"
+    }
+  ],
+  "visuals": []
+}

@@ -1,0 +1,236 @@
+{
+  "mgnrega_reform": {
+    "storyProgress_renders": {
+      "pass": true,
+      "detail": "Reading depth fieldset found"
+    },
+    "emerald_semantics": {
+      "pass": true,
+      "detail": "55 elements with emerald classes",
+      "classes": [
+        "min-h-screen bg-surface-canvas text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text",
+        "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-focus-ring)] rounded",
+        "flex items-center gap-3 text-xs font-mono font-bold uppercase tracking-widest text-emerald-400",
+        "px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/40",
+        "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium border bg-em"
+      ]
+    },
+    "no_blue_600": {
+      "pass": true,
+      "detail": "0 elements with blue-600"
+    },
+    "hero_lazy": {
+      "pass": true,
+      "lazy": 1,
+      "eager": 0,
+      "none": 1
+    },
+    "aria_labels": {
+      "pass": true,
+      "total": 72,
+      "withLabel": 72
+    },
+    "focus_styles": {
+      "total": 72,
+      "withFocusStyles": 12
+    },
+    "skip_to_content": {
+      "pass": false,
+      "detail": "no skip-to-content link"
+    },
+    "headings": [
+      {
+        "tag": "H4",
+        "text": "On This Page"
+      },
+      {
+        "tag": "H1",
+        "text": "MGNREGA & The 2026 Rural Employment Transition: From 100 Day"
+      },
+      {
+        "tag": "H3",
+        "text": "The Short Version"
+      },
+      {
+        "tag": "H4",
+        "text": "Key Takeaways"
+      },
+      {
+        "tag": "H2",
+        "text": "▶Key Takeaways"
+      },
+      {
+        "tag": "H2",
+        "text": "Evidence & Confidence Summary"
+      },
+      {
+        "tag": "H2",
+        "text": "Evidence"
+      },
+      {
+        "tag": "H2",
+        "text": "Key Numbers"
+      },
+      {
+        "tag": "H2",
+        "text": "Timeline"
+      },
+      {
+        "tag": "H2",
+        "text": "Rural Employment Budget Allocation Over Time (₹ Crore)"
+      },
+      {
+        "tag": "H2",
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "tag": "H2",
+        "text": "Sources"
+      },
+      {
+        "tag": "H3",
+        "text": "Government"
+      },
+      {
+        "tag": "H3",
+        "text": "Relevant Chronology & Timeline"
+      },
+      {
+        "tag": "H4",
+        "text": "MGNREGA 2005 Enacted"
+      },
+      {
+        "tag": "H4",
+        "text": "Phase 1 Completion"
+      },
+      {
+        "tag": "H4",
+        "text": "Enhanced Wage Structure"
+      },
+      {
+        "tag": "H4",
+        "text": "COVID-19 Relief Surge"
+      },
+      {
+        "tag": "H4",
+        "text": "VB-G RAM G Act Enacted"
+      },
+      {
+        "tag": "H4",
+        "text": "20th Anniversary Milestone"
+      },
+      {
+        "tag": "H4",
+        "text": "Commencement Notification"
+      },
+      {
+        "tag": "H4",
+        "text": "What Changed on 1 July 2026?"
+      },
+      {
+        "tag": "H3",
+        "text": "State of the Evidence & Uncertainty"
+      },
+      {
+        "tag": "H3",
+        "text": "Research & Evidence Appendix"
+      },
+      {
+        "tag": "H4",
+        "text": "Claims Assessed (2)"
+      },
+      {
+        "tag": "H4",
+        "text": "Cited Sources (3)"
+      },
+      {
+        "tag": "H5",
+        "text": "Gazette of India Notification S.O. 2415(E) — VB-G RAM G Act "
+      },
+      {
+        "tag": "H5",
+        "text": "Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (G"
+      },
+      {
+        "tag": "H5",
+        "text": "Ministry of Rural Development Annual Report 2025-26"
+      },
+      {
+        "tag": "H4",
+        "text": "Frequently Asked Questions"
+      },
+      {
+        "tag": "H2",
+        "text": "Continue Reading"
+      },
+      {
+        "tag": "H2",
+        "text": "Related Stories"
+      },
+      {
+        "tag": "H3",
+        "text": "Digital Payments in Rural India: UPI's Unseen Revolution"
+      },
+      {
+        "tag": "H4",
+        "text": "Sections"
+      },
+      {
+        "tag": "H4",
+        "text": "Topics"
+      },
+      {
+        "tag": "H4",
+        "text": "Knowledge Library"
+      },
+      {
+        "tag": "H4",
+        "text": "Governance"
+      }
+    ],
+    "low_contrast": {
+      "count": 4,
+      "elements": [
+        {
+          "tag": "H4",
+          "text": "On This Page",
+          "className": "text-xs uppercase tracking-widest text-neutral-500 font-bold mb-3 font-mono"
+        },
+        {
+          "tag": "SPAN",
+          "text": "▼",
+          "className": "text-neutral-500 group-open:rotate-180 transition-transform font-mono text-xs"
+        },
+        {
+          "tag": "SPAN",
+          "text": "▼",
+          "className": "text-neutral-500 group-open:rotate-180 transition-transform font-mono text-xs"
+        },
+        {
+          "tag": "DIV",
+          "text": "Jul 24, 2026•8 min read",
+          "className": "flex items-center gap-2 text-xs text-neutral-500 font-mono pt-2 border-t border-"
+        }
+      ]
+    },
+    "canvas_token": {
+      "count": 1
+    },
+    "reduced_motion": {
+      "pass": true
+    }
+  },
+  "ration_digitization": {
+    "hero_lazy": {
+      "pass": true,
+      "lazy": 1
+    },
+    "emerald_semantics": {
+      "pass": true,
+      "detail": "44 elements with emerald classes"
+    },
+    "low_contrast": {
+      "count": 5
+    }
+  }
+}

@@ -1,0 +1,469 @@
+﻿
+> thebreakdown-os@0.1.0 dev
+> next dev
+
+   Γû▓ Next.js 15.5.18
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.31.136:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ┬╖ clientTraceMetadata
+     ┬╖ optimizePackageImports
+
+ Γ£ô Starting...
+ Γùï Compiling /instrumentation ...
+ Γ£ô Compiled /instrumentation in 1246ms (1151 modules)
+ Γ£ô Ready in 3.9s
+ Γùï Compiling / ...
+ Γ£ô Compiled / in 2.8s (4286 modules)
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India PDS
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations education
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations US Iran
+[ImageIntelligence] Fetching official image from Wikimedia for: India India China border
+[ImageIntelligence] Fetching official image from Wikimedia for: India US Iran
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+ GET / 200 in 7973ms
+ Γùï Compiling /story/[slug] ...
+ Γ£ô Compiled /story/[slug] in 812ms (4442 modules)
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+ GET /story/mgnrega-reform 200 in 4561ms
+[ImageIntelligence] Fetching official image from Wikimedia for: India PDS
+[ImageIntelligence] Fetching official image from Wikimedia for: India PDS
+ GET /story/ration-digitization 200 in 1147ms
+ GET /story/mgnrega-reform 200 in 139ms
+ GET /story/mgnrega-reform 200 in 148ms
+ GET /story/mgnrega-reform 200 in 141ms
+ GET /story/mgnrega-reform 200 in 143ms
+ GET /story/ration-digitization 200 in 139ms
+ GET /story/ration-digitization 200 in 145ms
+ GET /story/ration-digitization 200 in 145ms
+ GET /story/ethanol-backlash 404 in 101ms
+ GET /story/ethanol-backlash 404 in 96ms
+ GET /story/ethanol-backlash 404 in 89ms
+ GET /story/ews-quota-upsc-investigation 404 in 91ms
+ GET /story/ews-quota-upsc-investigation 404 in 93ms
+ GET /story/ews-quota-upsc-investigation 404 in 90ms
+[ImageIntelligence] Fetching official image from Wikimedia for: India data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: National Payments Corporation of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India climate change
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Education education
+[ImageIntelligence] Fetching official image from Wikimedia for: India groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: India data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: National Payments Corporation of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India climate change
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Education education
+[ImageIntelligence] Fetching official image from Wikimedia for: India groundwater
+ GET /story/ration-digitization 200 in 964ms
+ GET /story/mgnrega-reform 200 in 977ms
+ GET /story/ethanol-backlash 404 in 985ms
+ GET /story/ews-quota-upsc-investigation 404 in 991ms
+ GET /story/anganwadi-icds 404 in 999ms
+ GET /story/supply-chain-shift 404 in 1005ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+ GET /story/climate-finance 200 in 2036ms
+[ImageIntelligence] Fetching official image from Wikimedia for: india data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: india data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: India crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: India crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+[ImageIntelligence] Fetching official image from Wikimedia for: India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India UPI
+ GET /story/rbi-repo-rate 200 in 2777ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+node.exe : [ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([ImageIntellige...image fallback.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/dpdp-bill 200 in 2869ms
+[ImageIntelligence] Fetching official image from Wikimedia for: ministry of finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: ministry of finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Comptroller and Auditor General of India crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: Comptroller and Auditor General of India crop insurance
+ GET /story/groundwater-depletion 200 in 3036ms
+ GET /story/digital-payments-boom 200 in 3115ms
+ GET /story/education-budget 200 in 3352ms
+[ImageIntelligence] No authentic image found for 'ministry-of-finance'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'ministry-of-finance'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/semiconductor-pli 200 in 3484ms
+ GET /story/pm-fasal-bima-claims 200 in 4336ms
+ Γ£ô Compiled in 572ms (3202 modules)
+ Γ£ô Compiled in 359ms (3202 modules)
+ Γ£ô Compiled in 351ms (3202 modules)
+ Γ£ô Compiled in 325ms (3202 modules)
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: India ethanol
+[ImageIntelligence] Fetching official image from Wikimedia for: India EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: India supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Women and Child Development ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: National Payments Corporation of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India climate change
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Education education
+[ImageIntelligence] Fetching official image from Wikimedia for: India groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: India PDS
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: India ethanol
+[ImageIntelligence] Fetching official image from Wikimedia for: India EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: India supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Women and Child Development ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: National Payments Corporation of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India climate change
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Education education
+[ImageIntelligence] Fetching official image from Wikimedia for: India groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: India PDS
+ Γ¿» Failed to generate static paths for /story/[slug]:
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+[ImageIntelligence] Fetching official image from Wikimedia for: india EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: india EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+ GET /story/ration-digitization 200 in 2686ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: india ethanol
+[ImageIntelligence] Fetching official image from Wikimedia for: india ethanol
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: India ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: India ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: india data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: india data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: India crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: India crop insurance
+ GET /story/climate-finance 200 in 2791ms
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ews-quota-upsc-investigation 200 in 3048ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ethanol-backlash 200 in 3310ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India supply chain
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/rbi-repo-rate 200 in 3439ms
+ GET /story/dpdp-bill 200 in 3525ms
+ GET /story/mgnrega-reform 200 in 3614ms
+[ImageIntelligence] Fetching official image from Wikimedia for: ministry of finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: ministry of finance semiconductor
+ GET /story/anganwadi-icds 200 in 3816ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Comptroller and Auditor General of India crop insurance
+[ImageIntelligence] Fetching official image from Wikimedia for: Comptroller and Auditor General of India crop insurance
+ GET /story/digital-payments-boom 200 in 4025ms
+ GET /story/groundwater-depletion 200 in 4108ms
+ GET /story/education-budget 200 in 4134ms
+[ImageIntelligence] No authentic image found for 'ministry-of-finance'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'ministry-of-finance'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/semiconductor-pli 200 in 4459ms
+ GET /story/supply-chain-shift 200 in 4647ms
+ GET /story/pm-fasal-bima-claims 200 in 5170ms
+ GET /story/mgnrega-reform 200 in 146ms
+ GET /story/mgnrega-reform 200 in 168ms
+ GET /story/mgnrega-reform 200 in 144ms
+ GET /story/ration-digitization 200 in 136ms
+ GET /story/ration-digitization 200 in 130ms
+ GET /story/ration-digitization 200 in 134ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ethanol-backlash 200 in 154ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ethanol-backlash 200 in 148ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ethanol-backlash 200 in 152ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ews-quota-upsc-investigation 200 in 149ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ews-quota-upsc-investigation 200 in 154ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ews-quota-upsc-investigation 200 in 210ms
+ GET /story/anganwadi-icds 200 in 151ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ethanol-backlash 200 in 179ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET /story/ews-quota-upsc-investigation 200 in 169ms
+ Γ£ô Compiled in 6.7s (4437 modules)
+ Γ£ô Compiled in 956ms (4437 modules)
+ Γ£ô Compiled in 1086ms (4437 modules)
+ Γ£ô Compiled in 2.1s (4437 modules)
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+ GET /story/mgnrega-reform?mode=standard 200 in 2730ms
+ Γùï Compiling /countries ...
+ Γ£ô Compiled /countries in 2.1s (3223 modules)
+ Γ£ô Compiled in 1456ms (1220 modules)
+ GET / 200 in 4766ms
+ GET /investigations 200 in 4768ms
+ GET /topics 200 in 4769ms
+ GET /countries 200 in 4769ms
+ GET /stories 200 in 4770ms
+ Γùï Compiling /graph ...
+ Γ£ô Compiled /graph in 7.8s (5820 modules)
+ GET /fix 200 in 8328ms
+ GET /organizations 200 in 8331ms
+ GET /data 200 in 8330ms
+ GET /graph 200 in 8450ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Women and Child Development ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: India ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: India Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: india Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare groundwater
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] Fetching official image from Wikimedia for: ministry of finance semiconductor
+[ImageIntelligence] No authentic image found for 'ministry-of-finance'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET / 200 in 5724ms
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] No authentic image found for 'ministry-of-finance'. Falling back to AI generation.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+ GET / 200 in 274ms
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+ Γ¿» Failed to generate static paths for /story/[slug]:
+[Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+ GET /story/mgnrega-reform?mode=standard 200 in 2392ms
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ Γùï Compiling /_error ...
+ Γ£ô Compiled /_error in 2.8s (5875 modules)
+ GET /story/mgnrega-reform?mode=quick 500 in 3807ms
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ GET /story/mgnrega-reform?mode=standard 500 in 823ms
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ GET /story/mgnrega-reform?mode=deep 500 in 686ms
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ GET /story/mgnrega-reform?mode=quick 500 in 762ms
+ GET /story/mgnrega-reform?mode=standard 500 in 780ms
+ GET /story/mgnrega-reform?mode=deep 500 in 795ms
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ Γ¿» [Error: Cannot find module './vendor-chunks/@sentry.js'
+Require stack:
+- C:\newsjack-content\thebreakdown-os\.next\server\webpack-runtime.js
+- C:\newsjack-content\thebreakdown-os\.next\server\app\story\[slug]\page.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\require.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\load-components.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\build\utils.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\newsjack-content\thebreakdown-os\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/story/mgnrega-reform'
+}
+ GET /story/mgnrega-reform 500 in 715ms
+ GET /story/mgnrega-reform?mode=quick 500 in 725ms
+ GET /story/mgnrega-reform?mode=deep 500 in 737ms
+ GET /story/mgnrega-reform?mode=standard 500 in 748ms

@@ -1,0 +1,50 @@
+[
+  {
+    "file": "schemas/prod-12constituency-manifest.json",
+    "old_reference": "UP-AC-395",
+    "new_reference": "UP-AC-390",
+    "reason": "Varanasi Cantt is canonically UP-AC-390. UP-AC-395 is Chhanbey (SC).",
+    "records_affected": 3,
+    "verification_status": "REPAIRED"
+  },
+  {
+    "file": "checkpoints/PROD-12CONSTITUENCY-CONTROLLED.json",
+    "old_reference": "UP-AC-395",
+    "new_reference": "UP-AC-390",
+    "reason": "Varanasi Cantt is canonically UP-AC-390.",
+    "records_affected": 1,
+    "verification_status": "REPAIRED"
+  },
+  {
+    "file": "checkpoints/PROD-12CONSTITUENCY-CONTROLLED.pre-recovery.20260720-204425.json",
+    "old_reference": "UP-AC-395",
+    "new_reference": "UP-AC-390",
+    "reason": "Varanasi Cantt is canonically UP-AC-390.",
+    "records_affected": 1,
+    "verification_status": "REPAIRED"
+  },
+  {
+    "file": "constituencies.txt",
+    "old_reference": "UP-AC-395",
+    "new_reference": "UP-AC-390",
+    "reason": "Varanasi Cantt is canonically UP-AC-390.",
+    "records_affected": 1,
+    "verification_status": "REPAIRED"
+  },
+  {
+    "file": "docs/research/RESEARCH-SYSTEM-DOSSIER.md",
+    "old_reference": "UP-AC-395",
+    "new_reference": "UP-AC-390",
+    "reason": "Varanasi Cantt is canonically UP-AC-390.",
+    "records_affected": 3,
+    "verification_status": "REPAIRED"
+  },
+  {
+    "file": "docs/research/implementation/controlled-production-batch.md",
+    "old_reference": "UP-AC-395",
+    "new_reference": "UP-AC-390",
+    "reason": "Varanasi Cantt is canonically UP-AC-390.",
+    "records_affected": 1,
+    "verification_status": "REPAIRED"
+  }
+]

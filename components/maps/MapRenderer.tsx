@@ -548,6 +548,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({ map }) => {
             }}
           >
             {map.caption}
+            <div style={{ marginTop: 'var(--spacing-2)', fontSize: '10px', fontStyle: 'italic' }}>
+              Boundary representations shown on this map are for illustrative and editorial purposes only. They do not imply any official position regarding territorial boundaries. Where applicable, official boundary representations follow the relevant Government of India standards.
+            </div>
           </figcaption>
         </>
       )}

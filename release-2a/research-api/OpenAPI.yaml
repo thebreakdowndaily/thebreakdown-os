@@ -1,0 +1,732 @@
+openapi: "3.1.0"
+info:
+  title: UP403 Constituency Intelligence API
+  description: |
+    Research API & Intelligence Query Engine for the UP403 Constituency Intelligence Dataset.
+    Provides read-only access to all 403 Uttar Pradesh Assembly Constituencies with election history,
+    political DNA, administrative hierarchy, people profiles, and comparison capabilities.
+  version: "1.1.0"
+  x-dataset-version: "v1.1.0"
+  x-api-version: "v1"
+  x-research-cutoff: "2026-07-30"
+  contact:
+    name: The Breakdown Knowledge Platform
+    url: https://thebreakdown.in
+servers:
+  - url: https://thebreakdown.in/api/up403/v1
+    description: Production server
+  - url: http://localhost:3000/api/up403/v1
+    description: Local development
+paths:
+  /:
+    get:
+      operationId: getApiRoot
+      summary: API Root
+      description: Returns API metadata, version, dataset info, and available endpoints.
+      tags: [Foundation]
+      responses:
+        "200":
+          description: API metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiRoot"
+  /constituencies:
+    get:
+      operationId: listConstituencies
+      summary: List Constituencies
+      description: Returns all 403 constituencies with optional filtering and pagination.
+      tags: [Constituencies]
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/district"
+        - $ref: "#/components/parameters/division"
+        - $ref: "#/components/parameters/region"
+        - $ref: "#/components/parameters/reservation"
+        - $ref: "#/components/parameters/party"
+        - $ref: "#/components/parameters/politicalDna"
+        - $ref: "#/components/parameters/competitiveness"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: Paginated list of constituencies
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConstituencyList"
+  /constituencies/{canonical_id}:
+    get:
+      operationId: getConstituency
+      summary: Get Constituency Profile
+      description: Returns the complete intelligence object for a single constituency.
+      tags: [Constituencies]
+      parameters:
+        - name: canonical_id
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^UP-AC-\\d{3}$"
+          example: "UP-AC-001"
+          description: Canonical constituency ID (e.g., UP-AC-001)
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: Complete constituency intelligence record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConstituencyDetail"
+        "404":
+          description: Constituency not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /search:
+    get:
+      operationId: searchConstituencies
+      summary: Full-Text Search
+      description: |
+        Search across 11 field categories: Constituency, District, Division, Region,
+        MLA, MP, Political Party, Political DNA, ODOP, Issue, Project.
+      tags: [Search]
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query
+          example: "Saharanpur"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: Ranked search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResults"
+        "400":
+          description: Missing query parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /people:
+    get:
+      operationId: listPeople
+      summary: List People
+      description: Returns all known MLAs and MPs across the dataset.
+      tags: [People]
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        "200":
+          description: Paginated list of people
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PeopleList"
+  /people/{person_id}:
+    get:
+      operationId: getPerson
+      summary: Get Person Profile
+      description: Returns a person's election history, constituencies, and party affiliation.
+      tags: [People]
+      parameters:
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Person identifier (e.g., "NARESH SAINI" or "person:NARESH SAINI")
+      responses:
+        "200":
+          description: Person profile with election history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PersonDetail"
+        "404":
+          description: Person not found
+  /elections:
+    get:
+      operationId: listElections
+      summary: List Election Overviews
+      description: Returns aggregated election data for 2012, 2017, 2022, and 2024 Lok Sabha overlay.
+      tags: [Elections]
+      parameters:
+        - name: constituency
+          in: query
+          schema:
+            type: string
+          description: Filter elections by constituency ID or name
+      responses:
+        "200":
+          description: Election overviews
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionList"
+  /elections/{year}:
+    get:
+      operationId: getElectionYear
+      summary: Get Election Year Data
+      description: Returns detailed results for a specific election year.
+      tags: [Elections]
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: ["2012", "2017", "2022", "2024-overlay"]
+          description: Election year (2012, 2017, 2022) or 2024-overlay for Lok Sabha
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: Election results for the specified year
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionDetail"
+        "404":
+          description: Invalid year
+  /graph:
+    get:
+      operationId: getFullGraph
+      summary: Full Knowledge Graph
+      description: Returns the entire administrative knowledge graph (570 nodes, 1446 edges).
+      tags: [Knowledge Graph]
+      responses:
+        "200":
+          description: Full knowledge graph
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeGraph"
+  /graph/{canonical_id}:
+    get:
+      operationId: getConstituencyGraph
+      summary: Constituency Knowledge Graph
+      description: Returns the knowledge sub-graph for a single constituency.
+      tags: [Knowledge Graph]
+      parameters:
+        - name: canonical_id
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^UP-AC-\\d{3}$"
+      responses:
+        "200":
+          description: Constituency knowledge sub-graph
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeGraph"
+        "404":
+          description: Constituency not found
+  /timeline/{canonical_id}:
+    get:
+      operationId: getTimeline
+      summary: Constituency Timeline
+      description: Returns chronological events for a constituency.
+      tags: [Timeline]
+      parameters:
+        - name: canonical_id
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^UP-AC-\\d{3}$"
+      responses:
+        "200":
+          description: Chronological timeline events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimelineResponse"
+        "404":
+          description: Constituency not found
+  /filter/options:
+    get:
+      operationId: getFilterOptions
+      summary: Filter Options
+      description: Returns all available filter values for every filterable field.
+      tags: [Filters]
+      responses:
+        "200":
+          description: Available filter options
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FilterOptions"
+  /compare:
+    get:
+      operationId: compareConstituencies
+      summary: Compare Constituencies
+      description: Compare 2-5 constituencies across multiple categories.
+      tags: [Comparison]
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated list of constituency IDs (e.g., "UP-AC-001,UP-AC-002,UP-AC-003")
+          example: "UP-AC-001,UP-AC-050,UP-AC-100"
+        - name: categories
+          in: query
+          schema:
+            type: string
+          description: Comma-separated categories (election_history, current_representation, political_dna, economy, development, governance, issues, timeline)
+          example: "election_history,political_dna"
+      responses:
+        "200":
+          description: Comparison results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompareResponse"
+        "400":
+          description: Invalid parameters
+  /analytics:
+    get:
+      operationId: getAnalytics
+      summary: Analytics Metrics
+      description: Read-only derived metrics including DNA distribution, competitiveness, volatility, and party holds.
+      tags: [Analytics]
+      responses:
+        "200":
+          description: Analytics metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsResponse"
+components:
+  parameters:
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number (1-indexed)
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      description: Items per page
+    search:
+      name: search
+      in: query
+      schema:
+        type: string
+      description: Search across constituency name, district, division, MLA, MP
+    district:
+      name: district
+      in: query
+      schema:
+        type: string
+      description: Filter by district name
+    division:
+      name: division
+      in: query
+      schema:
+        type: string
+      description: Filter by division name
+    region:
+      name: region
+      in: query
+      schema:
+        type: string
+      description: Filter by region (e.g., "Western UP (NCR + Western)")
+    reservation:
+      name: reservation
+      in: query
+      schema:
+        type: string
+        enum: [GENERAL, SC, ST]
+      description: Filter by reservation type
+    party:
+      name: party
+      in: query
+      schema:
+        type: string
+      description: Filter by current winning party
+    politicalDna:
+      name: political_dna
+      in: query
+      schema:
+        type: string
+      description: Filter by DNA classification
+    competitiveness:
+      name: competitiveness
+      in: query
+      schema:
+        type: string
+      description: Filter by competitiveness class
+    include:
+      name: include
+      in: query
+      schema:
+        type: string
+      description: 'Set to "provenance" to include provenance metadata per field'
+  schemas:
+    ApiRoot:
+      type: object
+      properties:
+        success:
+          type: boolean
+        version:
+          type: string
+        dataset_version:
+          type: string
+        data:
+          type: object
+          properties:
+            api_version:
+              type: string
+            dataset_version:
+              type: string
+            research_cutoff:
+              type: string
+            total_constituencies:
+              type: integer
+            endpoints:
+              type: object
+    ConstituencyList:
+      type: object
+      properties:
+        success:
+          type: boolean
+        version:
+          type: string
+        count:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        filters_applied:
+          type: object
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConstituencyRecord"
+    ConstituencyDetail:
+      type: object
+      properties:
+        success:
+          type: boolean
+        version:
+          type: string
+        data:
+          $ref: "#/components/schemas/ConstituencyRecord"
+    ConstituencyRecord:
+      type: object
+      description: A single assembly constituency with all 150 fields
+      properties:
+        canonical_constituency_id:
+          type: string
+          example: "UP-AC-001"
+        ac_number:
+          type: integer
+        constituency_name:
+          type: string
+        district:
+          type: string
+        division:
+          type: string
+        region:
+          type: string
+        reservation_type:
+          type: string
+        winner_2022:
+          type: string
+        winner_party_2022:
+          type: string
+        dna_classification:
+          type: string
+        competitiveness_class:
+          type: string
+    SearchResults:
+      type: object
+      properties:
+        success:
+          type: boolean
+        query:
+          type: string
+        count:
+          type: integer
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              score:
+                type: number
+              matched_fields:
+                type: array
+                items:
+                  type: string
+              record:
+                $ref: "#/components/schemas/ConstituencyRecord"
+    PeopleList:
+      type: object
+      properties:
+        success:
+          type: boolean
+        count:
+          type: integer
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/PersonRecord"
+    PersonDetail:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/PersonRecord"
+    PersonRecord:
+      type: object
+      properties:
+        person_id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [MLA, MP]
+        party:
+          type: string
+        constituencies:
+          type: array
+          items:
+            type: object
+        election_history:
+          type: array
+          items:
+            type: object
+            properties:
+              year:
+                type: integer
+              constituency_id:
+                type: string
+              position:
+                type: string
+                enum: [winner, runner_up]
+              party:
+                type: string
+              votes:
+                type: integer
+              vote_share:
+                type: number
+    ElectionList:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ElectionOverview"
+    ElectionOverview:
+      type: object
+      properties:
+        year:
+          type: integer
+        label:
+          type: string
+        type:
+          type: string
+        constituencies_contested:
+          type: integer
+        total_valid_votes:
+          type: integer
+        winner_parties:
+          type: object
+          additionalProperties:
+            type: integer
+    ElectionDetail:
+      type: object
+      properties:
+        success:
+          type: boolean
+        count:
+          type: integer
+        year:
+          type: integer
+        type:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+    KnowledgeGraph:
+      type: object
+      properties:
+        node_count:
+          type: integer
+        edge_count:
+          type: integer
+        data:
+          type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                    enum: [constituency, district, division, pc, person, party]
+                  label:
+                    type: string
+            edges:
+              type: array
+              items:
+                type: object
+                properties:
+                  source:
+                    type: string
+                  target:
+                    type: string
+                  relationship:
+                    type: string
+    TimelineResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        constituency:
+          type: string
+        event_count:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+              type:
+                type: string
+              description:
+                type: string
+              category:
+                type: string
+                enum: [election, representation, by_election, vacancy, project, governance]
+    FilterOptions:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            districts:
+              type: array
+              items:
+                type: string
+            divisions:
+              type: array
+              items:
+                type: string
+            regions:
+              type: array
+              items:
+                type: string
+            reservation_types:
+              type: array
+              items:
+                type: string
+            dna_classifications:
+              type: array
+              items:
+                type: string
+            competitiveness_classes:
+              type: array
+              items:
+                type: string
+            parties:
+              type: array
+              items:
+                type: string
+            election_years:
+              type: array
+              items:
+                type: integer
+    CompareResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        constituencies_compared:
+          type: integer
+        ids:
+          type: array
+          items:
+            type: string
+        categories:
+          type: array
+          items:
+            type: string
+        data:
+          type: object
+    AnalyticsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            dna_distribution:
+              type: object
+            competitiveness_distribution:
+              type: object
+            party_hold_counts:
+              type: object
+            regional_party_dominance:
+              type: object
+            volatility_summary:
+              type: object
+            reservation_summary:
+              type: object
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        version:
+          type: string
+        error:
+          type: string
+        message:
+          type: string
+        documentation_url:
+          type: string

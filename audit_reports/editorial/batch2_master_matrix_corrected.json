@@ -1,0 +1,237 @@
+[
+  {
+    "storySlug": "namami-gange-under-fire",
+    "storyTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+    "auditedAt": "2026-07-23T17:15:56.508Z",
+    "editorialTier": "Tier A — Defensible",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "CAG Report No. 25/2017 & CPCB 2023 bulletin verification: ₹27,000 crore outlay vs 6,000 MLD STP capacity sanctioned strictly distinguished.",
+    "rawExtractedSurfaceItems": 45,
+    "confirmedMaterialClaims": 44,
+    "registrationCandidates": 44,
+    "existingCanonicalMatches": 6,
+    "externallyVerifiedMaterialClaims": 44,
+    "verifiedRegistrationCandidates": 44,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 16,
+    "highMaterialityVerifiedCount": 16,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "financialOrNumericStatus": "₹27,000 crore total outlay (NMCG) vs ₹13,000 crore actual STP expenditure distinguished.",
+      "authoritativeSourcesUsed": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-CORR-NAMAMI",
+        "severity": "P2",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "44 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "us-iran-relations",
+    "storyTitle": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+    "auditedAt": "2026-07-23T17:15:56.508Z",
+    "editorialTier": "Tier A — Defensible",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "JCPOA 2015 nuclear treaty timeline & IAEA time-bounded compliance reports verified against official UN/IAEA releases.",
+    "rawExtractedSurfaceItems": 21,
+    "confirmedMaterialClaims": 19,
+    "registrationCandidates": 19,
+    "existingCanonicalMatches": 2,
+    "externallyVerifiedMaterialClaims": 19,
+    "verifiedRegistrationCandidates": 19,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 7,
+    "highMaterialityVerifiedCount": 7,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "authoritativeSourcesUsed": [
+        null,
+        null
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-CORR-US-IRA",
+        "severity": "P2",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "19 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "gig-worker-rights",
+    "storyTitle": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy",
+    "auditedAt": "2026-07-23T17:15:56.510Z",
+    "editorialTier": "Tier A — Defensible",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "Code on Social Security 2020 (Act No. 36) Chapter IX provisions correctly distinguished as enacted statutory framework with pending rule notification.",
+    "rawExtractedSurfaceItems": 41,
+    "confirmedMaterialClaims": 34,
+    "registrationCandidates": 34,
+    "existingCanonicalMatches": 7,
+    "externallyVerifiedMaterialClaims": 34,
+    "verifiedRegistrationCandidates": 34,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 18,
+    "highMaterialityVerifiedCount": 18,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "legalStatus": "Code enacted (2020); rules notification pending across 28 states.",
+      "authoritativeSourcesUsed": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-CORR-GIG-WO",
+        "severity": "P2",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "34 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "us-iran-war-strait-of-hormuz",
+    "storyTitle": "The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets",
+    "auditedAt": "2026-07-23T17:15:56.512Z",
+    "editorialTier": "Tier B — Solid with Minor Gaps",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "Energy flow statistics (21 million bpd petroleum liquids, EIA 2022) verified; clear distinction between historical oil shocks and hypothetical conflict scenarios.",
+    "rawExtractedSurfaceItems": 55,
+    "confirmedMaterialClaims": 52,
+    "registrationCandidates": 52,
+    "existingCanonicalMatches": 7,
+    "externallyVerifiedMaterialClaims": 52,
+    "verifiedRegistrationCandidates": 52,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 27,
+    "highMaterialityVerifiedCount": 27,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "politicalStatus": "Hypothetical market disruption scenario distinguished from actual hostilities.",
+      "authoritativeSourcesUsed": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-CORR-US-IRA",
+        "severity": "P2",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "52 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "81-crore-data-breach",
+    "storyTitle": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+    "auditedAt": "2026-07-23T17:15:56.513Z",
+    "editorialTier": "Tier B — Solid with Minor Gaps",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "Data breach reported by Resecurity is attributed; story narrative clearly clarifies breach originated from ICMR COVID testing portal rather than core UIDAI vault.",
+    "rawExtractedSurfaceItems": 35,
+    "confirmedMaterialClaims": 32,
+    "registrationCandidates": 32,
+    "existingCanonicalMatches": 4,
+    "externallyVerifiedMaterialClaims": 32,
+    "verifiedRegistrationCandidates": 32,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 12,
+    "highMaterialityVerifiedCount": 12,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "healthOrScientificStatus": "ICMR testing portal breach attributed to Resecurity report; core UIDAI uncompromised.",
+      "authoritativeSourcesUsed": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-CORR-81-CRO",
+        "severity": "P2",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "32 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  }
+]

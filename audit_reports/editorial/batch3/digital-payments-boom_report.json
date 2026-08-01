@@ -1,0 +1,38 @@
+{
+  "storySlug": "digital-payments-boom",
+  "storyTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+  "auditedAt": "2026-07-23T17:15:56.515Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "NPCI 2024 annual statistics (131 billion transactions, ₹199.8 lakh crore value) verified; rural UPI transaction share (38.4%) accurately presented.",
+  "rawExtractedSurfaceItems": 15,
+  "confirmedMaterialClaims": 12,
+  "registrationCandidates": 12,
+  "existingCanonicalMatches": 1,
+  "externallyVerifiedMaterialClaims": 12,
+  "verifiedRegistrationCandidates": 12,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsCount": 6,
+  "highMaterialityVerifiedCount": 6,
+  "highMaterialityUnresolvedCount": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "VERIFIED_SUPPORT",
+  "domainFactCheckDetails": {
+    "financialOrNumericStatus": "UPI Annual Volume: 131 billion transactions. Total Value: ₹199.8 lakh crore. Rural & Semi-Urban UPI volume share: 38.4% (NPCI 2023 Study). Active UPI users: 350+ million.",
+    "authoritativeSourcesUsed": [
+      "National Payments Corporation of India (NPCI) & Reserve Bank of India (RBI)"
+    ]
+  },
+  "issues": [
+    {
+      "id": "ISS-B3-DIGITA",
+      "severity": "P2",
+      "category": "FACTUAL",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "12 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

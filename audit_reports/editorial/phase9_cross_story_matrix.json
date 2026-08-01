@@ -1,0 +1,2532 @@
+[
+  {
+    "sourceStorySlug": "mgnrega-reform",
+    "sourceStoryTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+    "topRecommendations": [
+      {
+        "targetSlug": "ration-digitization",
+        "targetTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+        "score": 6.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "income-inequality-india",
+        "targetTitle": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "epf-scheme-2026",
+        "targetTitle": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "rbi-repo-rate",
+        "targetTitle": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "supply-chain-shift",
+        "targetTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "digital-payments-boom",
+    "sourceStoryTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-5g-rollout",
+        "targetTitle": "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "semiconductor-pli",
+        "targetTitle": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT Debut",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "81-crore-data-breach",
+        "targetTitle": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "ration-digitization",
+        "targetTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "pm-fasal-bima-claims",
+    "sourceStoryTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+    "topRecommendations": [
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "satluj-ban",
+        "targetTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "semiconductor-pli",
+    "sourceStoryTitle": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT Debut",
+    "topRecommendations": [
+      {
+        "targetSlug": "digital-payments-boom",
+        "targetTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "81-crore-data-breach",
+        "targetTitle": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "india-5g-rollout",
+        "targetTitle": "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "supply-chain-shift",
+        "targetTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [semiconductor]",
+        "explanation": "Cross-referenced under shared theme semiconductor."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [employment]",
+        "explanation": "Cross-referenced under shared theme employment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "dpdp-bill",
+    "sourceStoryTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+    "topRecommendations": [
+      {
+        "targetSlug": "81-crore-data-breach",
+        "targetTitle": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+        "score": 4.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [cybersecurity]",
+        "explanation": "Cross-referenced under shared theme cybersecurity."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "rbi-repo-rate",
+    "sourceStoryTitle": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+    "topRecommendations": [
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "ration-digitization",
+        "targetTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "supply-chain-shift",
+        "targetTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "income-inequality-india",
+        "targetTitle": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "epf-scheme-2026",
+        "targetTitle": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "climate-finance",
+    "sourceStoryTitle": "India's ₹11 Lakh Crore Climate Finance Challenge",
+    "topRecommendations": [
+      {
+        "targetSlug": "groundwater-depletion",
+        "targetTitle": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 Assessment Tracks 449 BCM Recharge",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ethanol-backlash",
+        "targetTitle": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "india-ev-paradox",
+        "targetTitle": "India's EV Paradox: Rising Sales, Stalled Charging, and the ₹4 Lakh Crore Battery Import Bill",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "education-budget",
+    "sourceStoryTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+    "topRecommendations": [
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "satluj-ban",
+        "targetTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "groundwater-depletion",
+    "sourceStoryTitle": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 Assessment Tracks 449 BCM Recharge",
+    "topRecommendations": [
+      {
+        "targetSlug": "ethanol-backlash",
+        "targetTitle": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "climate-finance",
+        "targetTitle": "India's ₹11 Lakh Crore Climate Finance Challenge",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "india-ev-paradox",
+        "targetTitle": "India's EV Paradox: Rising Sales, Stalled Charging, and the ₹4 Lakh Crore Battery Import Bill",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ration-digitization",
+    "sourceStoryTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+    "topRecommendations": [
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 6.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "income-inequality-india",
+        "targetTitle": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "epf-scheme-2026",
+        "targetTitle": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "rbi-repo-rate",
+        "targetTitle": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "supply-chain-shift",
+        "targetTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "anganwadi-icds",
+    "sourceStoryTitle": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out",
+    "topRecommendations": [
+      {
+        "targetSlug": "ayushman-bharat",
+        "targetTitle": "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "who-cancer-report-2026",
+        "targetTitle": "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "youth-mental-health-crisis",
+        "targetTitle": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "supply-chain-shift",
+    "sourceStoryTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+    "topRecommendations": [
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "rbi-repo-rate",
+        "targetTitle": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "ration-digitization",
+        "targetTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "income-inequality-india",
+        "targetTitle": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "epf-scheme-2026",
+        "targetTitle": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ethanol-backlash",
+    "sourceStoryTitle": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed",
+    "topRecommendations": [
+      {
+        "targetSlug": "groundwater-depletion",
+        "targetTitle": "India's Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 Assessment Tracks 449 BCM Recharge",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "climate-finance",
+        "targetTitle": "India's ₹11 Lakh Crore Climate Finance Challenge",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "india-ev-paradox",
+        "targetTitle": "India's EV Paradox: Rising Sales, Stalled Charging, and the ₹4 Lakh Crore Battery Import Bill",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ews-quota-upsc-investigation",
+    "sourceStoryTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+    "topRecommendations": [
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "satluj-ban",
+        "targetTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "us-iran-relations",
+    "sourceStoryTitle": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-china-border-tensions",
+        "targetTitle": "India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "indias-foreign-policy",
+        "targetTitle": "India's Foreign Policy at 80: From Non-Alignment to Multi-Alignment",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "bjp-mission-360",
+        "targetTitle": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "indian-education-crisis",
+    "sourceStoryTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+    "topRecommendations": [
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "satluj-ban",
+        "targetTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "income-inequality-india",
+    "sourceStoryTitle": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+    "topRecommendations": [
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "ration-digitization",
+        "targetTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "epf-scheme-2026",
+        "targetTitle": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "rbi-repo-rate",
+        "targetTitle": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "supply-chain-shift",
+        "targetTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-china-border-tensions",
+    "sourceStoryTitle": "India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint",
+    "topRecommendations": [
+      {
+        "targetSlug": "us-iran-relations",
+        "targetTitle": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "indias-foreign-policy",
+        "targetTitle": "India's Foreign Policy at 80: From Non-Alignment to Multi-Alignment",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "bjp-mission-360",
+        "targetTitle": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "indias-foreign-policy",
+    "sourceStoryTitle": "India's Foreign Policy at 80: From Non-Alignment to Multi-Alignment",
+    "topRecommendations": [
+      {
+        "targetSlug": "us-iran-relations",
+        "targetTitle": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-border-tensions",
+        "targetTitle": "India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "bjp-mission-360",
+        "targetTitle": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "satluj-ban",
+    "sourceStoryTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+    "topRecommendations": [
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-us-relations",
+    "sourceStoryTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-uk-relations",
+        "targetTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-russia-relations",
+        "targetTitle": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-indonesia-relations",
+    "sourceStoryTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-uk-relations",
+        "targetTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-russia-relations",
+        "targetTitle": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-china-relations",
+    "sourceStoryTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-uk-relations",
+        "targetTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-russia-relations",
+        "targetTitle": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-europe-relations",
+    "sourceStoryTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-uk-relations",
+        "targetTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-russia-relations",
+        "targetTitle": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-uk-relations",
+    "sourceStoryTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-russia-relations",
+        "targetTitle": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-russia-relations",
+    "sourceStoryTitle": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-uk-relations",
+        "targetTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "81-crore-data-breach",
+    "sourceStoryTitle": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+    "topRecommendations": [
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 4.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "digital-payments-boom",
+        "targetTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "semiconductor-pli",
+        "targetTitle": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT Debut",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "india-5g-rollout",
+        "targetTitle": "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "bjp-mission-360",
+    "sourceStoryTitle": "Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality",
+    "topRecommendations": [
+      {
+        "targetSlug": "us-iran-relations",
+        "targetTitle": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "india-china-border-tensions",
+        "targetTitle": "India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indias-foreign-policy",
+        "targetTitle": "India's Foreign Policy at 80: From Non-Alignment to Multi-Alignment",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-5g-rollout",
+    "sourceStoryTitle": "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
+    "topRecommendations": [
+      {
+        "targetSlug": "digital-payments-boom",
+        "targetTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "semiconductor-pli",
+        "targetTitle": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT Debut",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "81-crore-data-breach",
+        "targetTitle": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      },
+      {
+        "targetSlug": "satluj-ban",
+        "targetTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares primary entity [india]",
+        "explanation": "Both stories analyze key strategic policy decisions involving india."
+      },
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [technology]",
+        "explanation": "Cross-referenced under shared theme technology."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-ev-paradox",
+    "sourceStoryTitle": "India's EV Paradox: Rising Sales, Stalled Charging, and the ₹4 Lakh Crore Battery Import Bill",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ayushman-bharat",
+    "sourceStoryTitle": "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
+    "topRecommendations": [
+      {
+        "targetSlug": "anganwadi-icds",
+        "targetTitle": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "who-cancer-report-2026",
+        "targetTitle": "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "youth-mental-health-crisis",
+        "targetTitle": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "electoral-bonds",
+    "sourceStoryTitle": "Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme the Supreme Court Struck Down",
+    "topRecommendations": [
+      {
+        "targetSlug": "pm-fasal-bima-claims",
+        "targetTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "dpdp-bill",
+        "targetTitle": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "who-cancer-report-2026",
+    "sourceStoryTitle": "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action",
+    "topRecommendations": [
+      {
+        "targetSlug": "anganwadi-icds",
+        "targetTitle": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "ayushman-bharat",
+        "targetTitle": "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "youth-mental-health-crisis",
+        "targetTitle": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+        "score": 2,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [health]",
+        "explanation": "Cross-referenced under shared theme health."
+      },
+      {
+        "targetSlug": "semiconductor-pli",
+        "targetTitle": "India's Semiconductor Push: Program Outlay, Project Investment & Commercial OSAT Debut",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "climate-finance",
+        "targetTitle": "India's ₹11 Lakh Crore Climate Finance Challenge",
+        "score": 1.5,
+        "qualityRating": "WEAK",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "us-iran-war-strait-of-hormuz",
+    "sourceStoryTitle": "The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-uk-relations",
+        "targetTitle": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "epf-scheme-2026",
+    "sourceStoryTitle": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+    "topRecommendations": [
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "ration-digitization",
+        "targetTitle": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "income-inequality-india",
+        "targetTitle": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+        "score": 5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "rbi-repo-rate",
+        "targetTitle": "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      },
+      {
+        "targetSlug": "supply-chain-shift",
+        "targetTitle": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [economy]",
+        "explanation": "Cross-referenced under shared theme economy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "youth-mental-health-crisis",
+    "sourceStoryTitle": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+    "topRecommendations": [
+      {
+        "targetSlug": "anganwadi-icds",
+        "targetTitle": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ayushman-bharat",
+        "targetTitle": "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "education-budget",
+        "targetTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "ews-quota-upsc-investigation",
+        "targetTitle": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "indian-education-crisis",
+        "targetTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "gig-worker-rights",
+    "sourceStoryTitle": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy",
+    "topRecommendations": [
+      {
+        "targetSlug": "mgnrega-reform",
+        "targetTitle": "MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "youth-mental-health-crisis",
+        "targetTitle": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [policy]",
+        "explanation": "Cross-referenced under shared theme policy."
+      },
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [governance]",
+        "explanation": "Cross-referenced under shared theme governance."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [governance]",
+        "explanation": "Cross-referenced under shared theme governance."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 3,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [governance]",
+        "explanation": "Cross-referenced under shared theme governance."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "namami-gange-under-fire",
+    "sourceStoryTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+    "topRecommendations": [
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-05-procurement-and-accountability",
+        "targetTitle": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "india-china-border-lac",
+    "sourceStoryTitle": "The Cold Peace Along the LAC: Why the India–China Border Remains Unsettled After 75 Years",
+    "topRecommendations": [
+      {
+        "targetSlug": "kashmir-the-first-test",
+        "targetTitle": "Kashmir: The First Test — How the 1947–48 War Established a Conflict That Remains Unresolved 75 Years Later",
+        "score": 6.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "kashmir-the-first-test",
+    "sourceStoryTitle": "Kashmir: The First Test — How the 1947–48 War Established a Conflict That Remains Unresolved 75 Years Later",
+    "topRecommendations": [
+      {
+        "targetSlug": "india-china-border-lac",
+        "targetTitle": "The Cold Peace Along the LAC: Why the India–China Border Remains Unsettled After 75 Years",
+        "score": 6.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-us-relations",
+        "targetTitle": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-indonesia-relations",
+        "targetTitle": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-china-relations",
+        "targetTitle": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      },
+      {
+        "targetSlug": "india-europe-relations",
+        "targetTitle": "India and Europe: A Strategic Partnership Searching for Substance",
+        "score": 3.5,
+        "qualityRating": "RELEVANT",
+        "relationshipBasis": "Shares topic area [geopolitics]",
+        "explanation": "Cross-referenced under shared theme geopolitics."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-01-the-promise",
+    "sourceStoryTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-05-procurement-and-accountability",
+        "targetTitle": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-02-follow-the-money",
+    "sourceStoryTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-05-procurement-and-accountability",
+        "targetTitle": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-03-the-sewage-problem",
+    "sourceStoryTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-05-procurement-and-accountability",
+        "targetTitle": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-04-the-audit-trail",
+    "sourceStoryTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-05-procurement-and-accountability",
+        "targetTitle": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-05-procurement-and-accountability",
+    "sourceStoryTitle": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-06-why-stps-dont-work",
+    "sourceStoryTitle": "Chapter 6: Why STPs Don't Work — The Engineering and Governance Failures",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-07-water-quality",
+    "sourceStoryTitle": "Chapter 7: Water Quality — What the Scientific Data Actually Shows",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-08-city-report-cards",
+    "sourceStoryTitle": "Chapter 8: City Report Cards — Haridwar, Kanpur, Prayagraj, Varanasi, Patna, Kolkata",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-09-contractors",
+    "sourceStoryTitle": "Chapter 9: The Contractor Network — EPC, HAM, O&M — Who Builds the STPs",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-10-timeline-of-delays",
+    "sourceStoryTitle": "Chapter 10: Timeline of Delays — Every Major Project from Approval to Commissioning",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-11-ecology",
+    "sourceStoryTitle": "Chapter 11: Ecological Outcomes — Dolphins, Wetlands, and River Flow",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-12-voices-from-the-river",
+    "sourceStoryTitle": "Chapter 12: Voices from the River — What Communities, Scientists, and Officials Say",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-13-government-response",
+    "sourceStoryTitle": "Chapter 13: Government Response — The Official Defence of Namami Gange",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-14-what-worked",
+    "sourceStoryTitle": "Chapter 14: What Actually Worked — Documented Successes",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  },
+  {
+    "sourceStorySlug": "ng-ch-15-recommendations",
+    "sourceStoryTitle": "Chapter 15: Recommendations — Evidence-Backed Fixes",
+    "topRecommendations": [
+      {
+        "targetSlug": "namami-gange-under-fire",
+        "targetTitle": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-01-the-promise",
+        "targetTitle": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-02-follow-the-money",
+        "targetTitle": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-03-the-sewage-problem",
+        "targetTitle": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      },
+      {
+        "targetSlug": "ng-ch-04-the-audit-trail",
+        "targetTitle": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+        "score": 8,
+        "qualityRating": "STRONG",
+        "relationshipBasis": "Shares topic area [environment]",
+        "explanation": "Cross-referenced under shared theme environment."
+      }
+    ]
+  }
+]

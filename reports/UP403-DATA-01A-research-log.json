@@ -1,0 +1,41 @@
+{
+  "batch": "UP403-DATA-01A",
+  "mission": "Tier-1 Canonical Geography Certification & Legacy ID Repair",
+  "executed_at": "2026-07-28T11:57:44.895Z",
+  "sources_consulted": [
+    "Delimitation of Parliamentary and Assembly Constituencies Order, 2008 — Schedule XXVIII (Uttar Pradesh)",
+    "Delimitation of Parliamentary and Assembly Constituencies Order, 2008 — Amendment of Schedule XXVIII (Uttar Pradesh ST reservation)",
+    "Uttar Pradesh State Administrative Structure, Districts & Divisions"
+  ],
+  "sources_accepted": [
+    "SRC-ECI-DELIM-2008-UP",
+    "SRC-ECI-DELIM-2014-AMEND-UP",
+    "SRC-UP-GOV-ADMIN-2026"
+  ],
+  "records_verified": 403,
+  "conflicts_discovered": [
+    "AC-403 Duddhi reservation status was incorrectly listed as SC (Scheduled Caste) in secondary sources. Amended to ST (Scheduled Tribe) per 2014 ECI notification.",
+    "Legacy reference Varanasi Cantt was incorrectly associated with UP-AC-395. Repaired to UP-AC-390 across all repository files."
+  ],
+  "temporal_geography_notes": [
+    "Amethi district carved out in 2010. AC-184, 185, 186 mapped historically to Sultanpur; AC-178 to Raebareli.",
+    "Sambhal district carved out in 2012 from Moradabad and Badaun.",
+    "Bhadohi officially named Sant Ravidas Nagar at delimitation date (2008), restored to Bhadohi in 2014."
+  ],
+  "validation_results": {
+    "active_ac_count_is_403": true,
+    "unique_ac_numbers_is_403": true,
+    "unique_canonical_ids_is_403": true,
+    "eci_identity_verified_403": true,
+    "eci_reservation_verified_403": true,
+    "eci_pc_relationship_verified_403": true,
+    "unresolved_eci_conflicts_zero": true,
+    "unsupported_wikipedia_only_canonical_fields_zero": true,
+    "legacy_varanasi_cantt_wrong_id_references_zero": true,
+    "up_ac_390_is_varanasi_cantt": true,
+    "up_ac_395_is_chhanbey": true,
+    "current_district_relationships_verified_403": true,
+    "current_division_relationships_verified_403": true,
+    "all_canonical_records_have_direct_provenance": true
+  }
+}

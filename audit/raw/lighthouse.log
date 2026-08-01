@@ -1,0 +1,8 @@
+Runtime error encountered: EPERM, Permission denied: \\?\C:\Users\nitin\AppData\Local\Temp\lighthouse.70987067 '\\?\C:\Users\nitin\AppData\Local\Temp\lighthouse.70987067'
+Error: EPERM, Permission denied: \\?\C:\Users\nitin\AppData\Local\Temp\lighthouse.70987067 '\\?\C:\Users\nitin\AppData\Local\Temp\lighthouse.70987067'
+    at rmSync (node:fs:1222:18)
+    at Launcher.destroyTmp (file:///C:/newsjack-content/thebreakdown-os/node_modules/chrome-launcher/dist/chrome-launcher.js:367:9)
+    at Launcher.kill (file:///C:/newsjack-content/thebreakdown-os/node_modules/chrome-launcher/dist/chrome-launcher.js:349:14)
+    at Object.kill (file:///C:/newsjack-content/thebreakdown-os/node_modules/chrome-launcher/dist/chrome-launcher.js:39:18)
+    at runLighthouse (file:///C:/newsjack-content/thebreakdown-os/node_modules/lighthouse/cli/run.js:217:21)
+    at async file:///C:/newsjack-content/thebreakdown-os/node_modules/lighthouse/cli/index.js:10:1

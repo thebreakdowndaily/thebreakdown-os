@@ -1,0 +1,39 @@
+{
+  "storySlug": "indian-education-crisis",
+  "storyTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+  "auditedAt": "2026-07-23T17:15:56.513Z",
+  "editorialTier": "Tier B — Solid with Minor Gaps",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "ASER 2022 rural reading outcomes (42.8% Std V) accurately cited; requires explicit distinction between Gross Enrolment Ratio (GER 103%) and retention/learning quality.",
+  "rawExtractedSurfaceItems": 24,
+  "confirmedMaterialClaims": 21,
+  "registrationCandidates": 21,
+  "existingCanonicalMatches": 3,
+  "externallyVerifiedMaterialClaims": 21,
+  "verifiedRegistrationCandidates": 21,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsCount": 7,
+  "highMaterialityVerifiedCount": 7,
+  "highMaterialityUnresolvedCount": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "VERIFIED_SUPPORT",
+  "domainFactCheckDetails": {
+    "healthOrScientificStatus": "ASER 2022 rural household reading metrics (42.8% Std V reading Std II text).",
+    "financialOrNumericStatus": "ASER 2022: Std V children able to read Std II text dropped to 42.8% (rural households). UDISE+ Gross Enrolment Ratio: Primary 103.4%, Secondary 79.6%. Teacher vacancies in single-teacher schools: 1.17 lakh.",
+    "authoritativeSourcesUsed": [
+      "Pratham Education Foundation ASER Centre & Ministry of Education (MoE)"
+    ]
+  },
+  "issues": [
+    {
+      "id": "ISS-B3-INDIAN",
+      "severity": "P2",
+      "category": "FACTUAL",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "21 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

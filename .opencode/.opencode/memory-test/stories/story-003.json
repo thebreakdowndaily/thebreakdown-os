@@ -1,0 +1,46 @@
+{
+  "storyId": "story-003",
+  "headline": "Budget 2026",
+  "entities": [
+    {
+      "id": "person-nirmala-sitharaman",
+      "type": "person",
+      "name": "Nirmala Sitharaman",
+      "aliases": [
+        "Nirmala"
+      ],
+      "version": 0
+    },
+    {
+      "id": "org-finance-ministry",
+      "type": "organization",
+      "name": "Ministry of Finance",
+      "aliases": [
+        "Finance Ministry",
+        "MoF"
+      ],
+      "version": 0
+    },
+    {
+      "id": "budget-2026",
+      "type": "budget",
+      "name": "Union Budget 2026-27",
+      "aliases": [
+        "Budget 2026"
+      ],
+      "version": 0
+    }
+  ],
+  "storedAt": "2026-07-31T09:22:11.545Z",
+  "version": 2,
+  "related": {
+    "stories": [],
+    "laws": [],
+    "budgets": [],
+    "organizations": [],
+    "people": [],
+    "countries": [],
+    "events": []
+  },
+  "updatedAt": "2026-07-31T09:22:11.547Z"
+}

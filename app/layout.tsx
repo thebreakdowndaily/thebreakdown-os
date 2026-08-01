@@ -91,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <AuthWrapper>
           <Navigation />
-          <main className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
+          <main id="main-content" className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
           <Footer />
         </AuthWrapper>
         {GA_MEASUREMENT_ID && <Suspense><GATracker gaId={GA_MEASUREMENT_ID} /></Suspense>}

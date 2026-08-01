@@ -1,0 +1,39 @@
+{
+  "storySlug": "education-budget",
+  "storyTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+  "auditedAt": "2026-07-23T17:15:56.515Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "Union Education Outlay (₹1.12 lakh crore) and combined public spending (2.9% GDP) verified against CGA expenditure volumes; inflation-adjusted growth presented.",
+  "rawExtractedSurfaceItems": 16,
+  "confirmedMaterialClaims": 14,
+  "registrationCandidates": 14,
+  "existingCanonicalMatches": 0,
+  "externallyVerifiedMaterialClaims": 14,
+  "verifiedRegistrationCandidates": 14,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsCount": 6,
+  "highMaterialityVerifiedCount": 6,
+  "highMaterialityUnresolvedCount": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "VERIFIED_SUPPORT",
+  "domainFactCheckDetails": {
+    "politicalStatus": "NEP 2020 target 6% GDP spending vs actual Centre+State 2.9% GDP spending.",
+    "financialOrNumericStatus": "Union Education Outlay: ₹1,12,899 crore (FY24 RE). Combined Public Education Spending (Centre + States): 2.9% of GDP (vs 6% NEP target). Real expenditure adjusted for WPI/CPI inflation shows 1.2% real CAGR over 5 years.",
+    "authoritativeSourcesUsed": [
+      "Ministry of Finance / Controller General of Accounts (CGA)"
+    ]
+  },
+  "issues": [
+    {
+      "id": "ISS-B3-EDUCAT",
+      "severity": "P2",
+      "category": "FACTUAL",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "14 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

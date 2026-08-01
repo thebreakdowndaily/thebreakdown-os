@@ -16,13 +16,12 @@ interface NavigationProps {
 
 const navLinks: NavLink[] = [
   { label: 'Stories', href: '/stories' },
+  { label: 'News', href: '/news' },
+  { label: 'Analysis', href: '/analysis' },
+  { label: 'Explainers', href: '/explainers' },
   { label: 'Topics', href: '/topics' },
-  { label: 'Investigations', href: '/investigations' },
-  { label: 'Countries', href: '/countries' },
-  { label: 'Organizations', href: '/organizations' },
-  { label: 'The Fix', href: '/fix' },
+  { label: 'Timelines', href: '/timelines' },
   { label: 'Data', href: '/data' },
-  { label: 'Graph', href: '/graph' },
 ];
 
 export default function Navigation({ currentPath = '', transparent = false }: NavigationProps) {
@@ -61,6 +60,13 @@ export default function Navigation({ currentPath = '', transparent = false }: Na
         }`}
         role="banner"
       >
+        {/* Skip to main content link for keyboard & screen reader accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-4 focus:z-[var(--z-modal)] focus:px-4 focus:py-2 focus:bg-neutral-900 focus:text-[var(--color-brand-400)] focus:border focus:border-amber-500/60 focus:rounded-md focus:shadow-lg focus:outline-none focus:font-mono focus:text-xs"
+        >
+          Skip to main content
+        </a>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-[72px]">
             {/* Left */}
@@ -83,19 +89,25 @@ export default function Navigation({ currentPath = '', transparent = false }: Na
                 <kbd className="hidden md:inline font-mono text-[10px] px-1.5 py-0.5 rounded border border-surface bg-surface-secondary">⌘K</kbd>
               </button>
 
-              <div className="hidden lg:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <SubscribeButton />
                 <ProfileDropdown />
               </div>
 
               {/* Mobile hamburger */}
               <button
-                onClick={() => setMobileOpen(true)}
+                onClick={() => setMobileOpen(!mobileOpen)}
                 className="md:hidden p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800/50"
-                aria-label="Open navigation menu"
+                aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  {mobileOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
                 </svg>
               </button>
             </div>

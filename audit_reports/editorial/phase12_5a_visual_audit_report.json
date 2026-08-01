@@ -1,0 +1,231 @@
+{
+  "timestamp": "2026-07-23T18:37:29.242Z",
+  "auditCutoffDate": "2026-07-24",
+  "readOnlyModeConfirmed": true,
+  "visualTokenInventory": [
+    {
+      "tokenCategory": "colors",
+      "tokenName": "--color-bg-primary",
+      "rawValue": "#0a0a0a / #18181b",
+      "semanticPurpose": "Primary dark background",
+      "hardcodedInstancesCount": 42
+    },
+    {
+      "tokenCategory": "colors",
+      "tokenName": "--color-text-primary",
+      "rawValue": "#ffffff / #f4f4f5",
+      "semanticPurpose": "Primary headline & prose text",
+      "hardcodedInstancesCount": 88
+    },
+    {
+      "tokenCategory": "colors",
+      "tokenName": "--color-brand-400",
+      "rawValue": "#f59e0b (Amber)",
+      "semanticPurpose": "Brand accent & primary focus ring",
+      "hardcodedInstancesCount": 19
+    },
+    {
+      "tokenCategory": "colors",
+      "tokenName": "--color-emerald-400",
+      "rawValue": "#34d399 (Emerald)",
+      "semanticPurpose": "Verified knowledge & claim confidence accent",
+      "hardcodedInstancesCount": 64
+    },
+    {
+      "tokenCategory": "surfaces",
+      "tokenName": "card-bg-dark",
+      "rawValue": "bg-neutral-900/70",
+      "semanticPurpose": "Card & panel surface background",
+      "hardcodedInstancesCount": 31
+    },
+    {
+      "tokenCategory": "borders",
+      "tokenName": "card-border-dark",
+      "rawValue": "border-neutral-800/80",
+      "semanticPurpose": "Card border divider",
+      "hardcodedInstancesCount": 37
+    }
+  ],
+  "componentIssueMatrix": [
+    {
+      "componentName": "StoryShell",
+      "filePath": "components/rxs/StoryShell.tsx",
+      "severity": "P2_MEDIUM",
+      "category": "DESIGN_DRIFT",
+      "observedIssue": "Hardcoded bg-[#0a0a0a] on container instead of semantic var(--color-bg-primary) token.",
+      "affectedReadingModes": [
+        "quick",
+        "standard",
+        "deep"
+      ],
+      "remediationRecommendation": "Replace bg-[#0a0a0a] with bg-surface-primary utility token to support system dark/light themes cleanly."
+    },
+    {
+      "componentName": "ExploreConnections",
+      "filePath": "components/story/ExploreConnections.tsx",
+      "severity": "P2_MEDIUM",
+      "category": "CONTRAST",
+      "observedIssue": "Secondary explanation text uses text-neutral-400 over bg-neutral-900/70.",
+      "affectedReadingModes": [
+        "standard",
+        "deep"
+      ],
+      "remediationRecommendation": "Upgrade text-neutral-400 to text-neutral-300 for secondary italicized explanations to ensure AAA contrast ratio >= 7:1."
+    },
+    {
+      "componentName": "ClaimCard",
+      "filePath": "components/story/ClaimCard.tsx",
+      "severity": "P3_LOW",
+      "category": "ACCESSIBILITY",
+      "observedIssue": "Focus outline offset missing explicit focus-visible ring on interactive claim cards.",
+      "affectedReadingModes": [
+        "deep"
+      ],
+      "remediationRecommendation": "Add focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none for keyboard navigation compliance."
+    },
+    {
+      "componentName": "StoryHeroCanonical",
+      "filePath": "components/story/StoryHeroCanonical.tsx",
+      "severity": "P3_LOW",
+      "category": "TYPOGRAPHY",
+      "observedIssue": "Dek subtitle text size varies between font-serif and font-sans across legacy vs canonical hero renders.",
+      "affectedReadingModes": [
+        "quick",
+        "standard",
+        "deep"
+      ],
+      "remediationRecommendation": "Normalize hero dek subtitle to var(--font-sans) with leading-relaxed line height across all hero components."
+    }
+  ],
+  "wcagContrastMatrix": [
+    {
+      "elementContext": "Headline Text on Dark Surface",
+      "foregroundHex": "#ffffff",
+      "backgroundHex": "#0a0a0a",
+      "contrastRatio": "21.0:1",
+      "wcagAaStatus": "PASS",
+      "wcagAaaStatus": "PASS",
+      "notes": "Exceptional AAA contrast clarity."
+    },
+    {
+      "elementContext": "Standard Prose Text on Dark Surface",
+      "foregroundHex": "#e4e4e7 (neutral-200)",
+      "backgroundHex": "#0a0a0a",
+      "contrastRatio": "17.4:1",
+      "wcagAaStatus": "PASS",
+      "wcagAaaStatus": "PASS",
+      "notes": "Optimal reading contrast for long-form narrative."
+    },
+    {
+      "elementContext": "Emerald Badge Text on Emerald Pill Surface",
+      "foregroundHex": "#34d399 (emerald-400)",
+      "backgroundHex": "#022c22 (emerald-950)",
+      "contrastRatio": "8.8:1",
+      "wcagAaStatus": "PASS",
+      "wcagAaaStatus": "PASS",
+      "notes": "High contrast badge typography."
+    },
+    {
+      "elementContext": "Muted Timestamp / Metadata Text on Dark Surface",
+      "foregroundHex": "#71717a (neutral-500)",
+      "backgroundHex": "#18181b (neutral-900)",
+      "contrastRatio": "3.9:1",
+      "wcagAaStatus": "FAIL",
+      "wcagAaaStatus": "FAIL",
+      "notes": "Muted micro metadata text <14pt requires elevation to neutral-400 (#a1a1aa) to achieve >= 4.5:1 AA threshold."
+    }
+  ],
+  "proposedSemanticTokens": {
+    "surfaces": {
+      "surface-primary": "var(--color-bg-primary) [#0a0a0a]",
+      "surface-secondary": "var(--color-bg-secondary) [#18181b]",
+      "surface-card": "rgba(24, 24, 27, 0.7)"
+    },
+    "text": {
+      "text-primary": "var(--color-text-primary) [#ffffff]",
+      "text-secondary": "var(--color-text-secondary) [#e4e4e7]",
+      "text-muted": "var(--color-text-muted) [#a1a1aa]"
+    },
+    "borders": {
+      "border-default": "var(--color-border-default) [#27272a]",
+      "border-accent": "var(--color-emerald-500) [#10b981]"
+    },
+    "accents": {
+      "accent-emerald": "#34d399",
+      "accent-amber": "#f59e0b"
+    }
+  },
+  "typographyScale": {
+    "fontFamilies": {
+      "sans": "Inter, system-ui, sans-serif",
+      "serif": "Merriweather, Georgia, serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scaleItems": [
+      {
+        "sizeName": "Display / Hero Title",
+        "fontSize": "2.5rem (40px)",
+        "lineHeight": "1.2",
+        "targetUsage": "Story Hero Headlines"
+      },
+      {
+        "sizeName": "Section Heading (H2)",
+        "fontSize": "1.75rem (28px)",
+        "lineHeight": "1.3",
+        "targetUsage": "Story Section Titles"
+      },
+      {
+        "sizeName": "Prose Body",
+        "fontSize": "1.125rem (18px)",
+        "lineHeight": "1.75",
+        "targetUsage": "Narrative Reading Prose"
+      },
+      {
+        "sizeName": "Badge / Micro Metadata",
+        "fontSize": "0.75rem (12px)",
+        "lineHeight": "1.4",
+        "targetUsage": "Timestamp & Tag Badges"
+      }
+    ]
+  },
+  "spacingLayoutSystem": {
+    "proseMaxLineWidth": "68-72 characters (max-w-3xl / 768px capped column width)",
+    "gridSystem": "12-column responsive fluid grid",
+    "containerBreakpoints": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px"
+    }
+  },
+  "responsiveFindings": {
+    "mobileBreakpoints": "< 768px: Single column prose, sticky bottom navigation drawer, auto-collapsing orientation rail.",
+    "tabletBreakpoints": "768px - 1023px: 2-column layout for stat cards and explore connections, hidden sidebar rail.",
+    "desktopBreakpoints": ">= 1024px: Capped 68-72 char reading column with sticky orientation rail and floating evidence inspector.",
+    "observedLayoutBehavior": "Clean responsive scaling across mobile, tablet, and desktop viewports."
+  },
+  "prioritizedRemediationPlan": [
+    {
+      "phase": "Phase 12.5B",
+      "priority": "P1_HIGH",
+      "scope": "Metadata Contrast Standardization",
+      "expectedOutcome": "Elevate muted text-neutral-500 timestamp classes to text-neutral-400 across cards to pass WCAG AA >= 4.5:1."
+    },
+    {
+      "phase": "Phase 12.5B",
+      "priority": "P2_MEDIUM",
+      "scope": "Tailwind Color Token Normalization",
+      "expectedOutcome": "Replace hardcoded bg-[#0a0a0a] with semantic bg-surface-primary token in StoryShell."
+    },
+    {
+      "phase": "Phase 12.5B",
+      "priority": "P3_LOW",
+      "scope": "Keyboard Focus State Normalization",
+      "expectedOutcome": "Standardize focus-visible ring styles across interactive ClaimCard and ExploreConnections cards."
+    }
+  ],
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase12_5a_visual_audit_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase12_5a_visual_audit_report.md"
+  }
+}

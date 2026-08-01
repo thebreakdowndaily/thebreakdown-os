@@ -1,0 +1,109 @@
+{
+  "id": "ref-technology-ai",
+  "slug": "ref-technology-ai",
+  "storyType": "Technology",
+  "title": "India AI Policy: A Framework for Regulation",
+  "metadata": {
+    "difficulty": "Intermediate",
+    "confidence": "Medium",
+    "confidenceRationale": "Based on government policy documents",
+    "updateRequired": false,
+    "readingTimeMinutes": 6,
+    "tags": [
+      "ai",
+      "technology",
+      "policy"
+    ],
+    "entities": [
+      {
+        "name": "Ministry of Electronics and IT",
+        "type": "government",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/ai-policy.jpg",
+    "statistic": "No dedicated AI law yet",
+    "statisticSource": "MeitY",
+    "caption": "AI regulation status",
+    "altText": "AI technology illustration",
+    "credit": "Official source",
+    "aspectRatio": "16:9"
+  },
+  "summary": "India does not yet have a comprehensive AI law, relying instead on existing frameworks and sectoral regulations.",
+  "keyFacts": [
+    {
+      "claim": "No comprehensive AI legislation",
+      "source": "MeitY",
+      "confidence": 1
+    },
+    {
+      "claim": "Digital India Act proposed as potential framework",
+      "source": "MeitY Consultation Paper",
+      "confidence": 0.7
+    }
+  ],
+  "whyItMatters": "AI regulation will shape India's innovation landscape, startup ecosystem, and governance.",
+  "narrative": "The government is exploring a Digital India Act as a comprehensive technology framework, while existing laws like IT Act 2000 provide partial coverage for AI-specific issues.",
+  "timeline": [
+    {
+      "date": "Jun 2024",
+      "event": "MeitY consultation paper released",
+      "source": "MeitY",
+      "significance": "First formal public consultation on AI regulation"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "No comprehensive AI law",
+      "source": "MeitY",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "MeitY",
+        "type": "government",
+        "position": "Policy formulation",
+        "interest": "Innovation and regulation balance",
+        "stance": "conditional"
+      },
+      {
+        "name": "Indian Tech Startups",
+        "type": "private_sector",
+        "position": "AI builders",
+        "interest": "Light-touch regulation",
+        "stance": "support"
+      }
+    ],
+    "summary": "Government and startups are primary stakeholders."
+  },
+  "futureOutlook": {
+    "headline": "What Comes Next",
+    "scenarios": [
+      {
+        "label": "Digital India Act Passage",
+        "description": "May pass within 2-3 legislative sessions if political support holds.",
+        "probability": "Medium",
+        "source": "PRS India"
+      }
+    ],
+    "uncertainty": "Political will for comprehensive technology legislation remains uncertain.",
+    "confidence": "Medium"
+  },
+  "sources": [
+    {
+      "title": "MeitY Consultation Paper on AI",
+      "author": "MeitY",
+      "reliability": "high"
+    }
+  ],
+  "visuals": []
+}

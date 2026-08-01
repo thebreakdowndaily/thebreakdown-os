@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Container from '@/components/layout/Container';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'Trust Dashboard — The Breakdown',
@@ -11,6 +12,14 @@ export const metadata: Metadata = {
 
 export default function TrustPage() {
   return (
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Trust Dashboard', href: '/trust', current: true },
+        ]} theme="dark" />
+      </div>
+
     <Container>
       <div className="py-8 max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Trust Dashboard</h1>
@@ -39,7 +48,7 @@ export default function TrustPage() {
         {/* Platform Status */}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 mb-6">
           <h2 className="text-lg font-semibold text-white mb-3">Platform Status</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Published monographs</p>
               <p className="text-green-400 text-2xl font-bold">1</p>
@@ -78,7 +87,7 @@ export default function TrustPage() {
         {/* Knowledge Quality */}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 mb-6">
           <h2 className="text-lg font-semibold text-white mb-3">Knowledge Quality</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Open scholarly disagreements</p>
               <p className="text-white text-2xl font-bold">18</p>
@@ -137,7 +146,7 @@ export default function TrustPage() {
         {/* Institutional Memory */}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 mb-6">
           <h2 className="text-lg font-semibold text-white mb-3">Institutional Memory</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Editorial decisions recorded</p>
               <p className="text-white text-2xl font-bold">15</p>
@@ -152,7 +161,7 @@ export default function TrustPage() {
         {/* Verification */}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 mb-6">
           <h2 className="text-lg font-semibold text-white mb-3">Verification</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Last platform-wide verification</p>
               <p className="text-white text-sm">July 2026</p>
@@ -165,7 +174,7 @@ export default function TrustPage() {
         </div>
 
         <div className="border-t border-gray-800 pt-6 mt-8">
-          <p className="text-gray-500 text-xs mb-3">This dashboard is updated automatically from the canonical data layer. All values reflect the current state of the editorial infrastructure. Individual chapter-level transparency metadata is available within each chapter.</p>
+          <p className="text-gray-500 text-xs mb-3">This dashboard reflects the current state of the editorial infrastructure. Individual chapter-level transparency metadata is available within each chapter. Data sourced from the canonical editorial registries.</p>
           <div className="flex gap-4 text-sm">
             <Link href="/methodology" className="text-amber-400 hover:underline">Methodology</Link>
             <Link href="/editorial-constitution" className="text-amber-400 hover:underline">Editorial Constitution</Link>
@@ -174,5 +183,6 @@ export default function TrustPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

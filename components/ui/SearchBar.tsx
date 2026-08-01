@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useState, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
+  onChange?: (query: string) => void;
   placeholder?: string;
   initialValue?: string;
+  debounceMs?: number;
 }
 
 const SearchIcon: React.FC = () => (
@@ -20,24 +23,46 @@ const CloseIcon: React.FC = () => (
   </svg>
 );
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search stories, topics, entities...', initialValue = '' }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onChange, placeholder = 'Search stories, topics, entities...', initialValue = '', debounceMs = 250 }) => {
   const [query, setQuery] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const router = useRouter();
 
   const handleSubmit = useCallback(
     (e: React.SyntheticEvent) => {
       e.preventDefault();
-      if (onSearch && query.trim()) {
-        onSearch(query.trim());
+      const q = query.trim();
+      if (!q) return;
+      if (onSearch) {
+        onSearch(q);
+      } else {
+        router.push(`/search?q=${encodeURIComponent(q)}`);
       }
     },
-    [onSearch, query],
+    [onSearch, query, router],
+  );
+
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setQuery(val);
+      if (onChange) {
+        if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = setTimeout(() => {
+          onChange(val.trim());
+        }, debounceMs);
+      }
+    },
+    [onChange, debounceMs],
   );
 
   const handleClear = useCallback(() => {
     setQuery('');
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    if (onChange) onChange('');
     inputRef.current?.focus();
-  }, []);
+  }, [onChange]);
 
   return (
     <form onSubmit={handleSubmit} role="search" className="w-full max-w-2xl">
@@ -49,7 +74,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search s
           ref={inputRef}
           type="search"
           value={query}
-          onChange={(e) => { setQuery(e.target.value); }}
+          onChange={handleChange}
           placeholder={placeholder}
           className="w-full bg-gray-800 border border-gray-700 text-gray-100 text-sm rounded-lg pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400 placeholder-gray-500 transition-colors"
           aria-label={placeholder}

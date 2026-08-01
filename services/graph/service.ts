@@ -1,6 +1,7 @@
 import type { Graph, GraphNode, GraphEdge, RelationType } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 import { EventBus } from '@/lib/events/event-bus';
+import { getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
 
 // ── Public Types ─────────────────────────────────────────────
 
@@ -478,6 +479,48 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
           rawEdges.push({ from: dataset.id, to: topic.id, relation: 'belongs_to', baseConfidence: 0.85, sourceType: 'dataset', sourceId: dataset.id });
         }
       }
+    }
+
+    // ── Canonical Claims (Generic Registry Enumeration) ──
+    try {
+      const canonicalClaims = getKnowledgeCore().claims.all();
+      for (const claim of canonicalClaims) {
+        this.addNode(nodes, {
+          id: claim.id,
+          type: 'claim',
+          title: claim.statement,
+          slug: claim.id,
+          subtitle: `Confidence: ${claim.confidence}`
+        });
+
+        for (const entityId of claim.entityIds) {
+          if (nodes.has(entityId)) {
+            rawEdges.push({
+              from: claim.id,
+              to: entityId,
+              relation: 'supports',
+              baseConfidence: 0.95,
+              sourceType: 'story',
+              sourceId: claim.id
+            });
+          }
+        }
+
+        for (const item of claim.appearsIn) {
+          if (item.contentId && nodes.has(item.contentId)) {
+            rawEdges.push({
+              from: claim.id,
+              to: item.contentId,
+              relation: 'belongs_to',
+              baseConfidence: 0.95,
+              sourceType: 'story',
+              sourceId: claim.id
+            });
+          }
+        }
+      }
+    } catch {
+      // Core fallback if unseeded
     }
 
     return { nodes, rawEdges };

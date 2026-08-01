@@ -1,43 +1,36 @@
 /**
- * The Breakdown — Evidence-Driven Homepage (Release 1)
- * Governance: docs/rxs/screens/homepage.md & Editorial Constitution v1.1
+ * The Breakdown — "The Beginning" (Narrative Experience Homepage)
+ * Governance: ERD-NAV-001 | NOS-CERT-v1.0 | RXS-v3.0 | docs/philosophy/narrative-operating-system.md
  *
- * Primary public homepage projection of The Breakdown Knowledge Platform.
- * Prioritizes editorial importance, explanatory depth, evidence, and clear navigation.
+ * "The purpose of The Breakdown is not to maximise attention;
+ *  it is to maximise understanding."
+ *
+ * Phase N-1: 4-scene cinematic narrative trailer replacing the article-grid homepage.
+ * Architecture: Server-first. HomepageViewModel untouched.
  */
 
 import type { Metadata } from 'next';
-import { bootstrapServices } from '@/lib/bootstrap';
-import { buildHomepage } from '@/features/home/view-model';
-import HomepageLayout from '@/layouts/HomepageLayout';
-
-import LeadStoryHero from '@/components/home/LeadStoryHero';
-import ShortVersionGrid from '@/components/home/ShortVersionGrid';
-import DeepDivesGrid from '@/components/home/DeepDivesGrid';
-import FollowTheMoneyModule from '@/components/home/FollowTheMoneyModule';
-import ExploreSearchSection from '@/components/home/ExploreSearchSection';
-import TopicTaxonomySection from '@/components/home/TopicTaxonomySection';
-import RecentlyUpdatedStream from '@/components/home/RecentlyUpdatedStream';
-import Newsletter from '@/components/home/newsletter/Newsletter';
-import AnimatedSection from '@/components/ui/AnimatedSection';
+import TheBeginning from '@/components/narrative/TheBeginning';
 
 export const metadata: Metadata = {
-  title: 'The Breakdown Knowledge Platform — Evidence Before Conclusions',
-  description: 'An evidence-driven explanatory journalism and public-knowledge platform. Every claim verified. Every source cited. Every interpretation transparent.',
-  keywords: 'India, knowledge, evidence, history, policy, research, primary sources, verification, non-alignment, partition, constitution',
+  title: 'The Breakdown — The World\'s First Narrative Intelligence Platform',
+  description:
+    'We do not publish articles. We build structured journeys through evidence — so you leave knowing something real. Evidence before conclusions. Uncertainty always visible. Reasoning always shown.',
+  keywords:
+    'India, knowledge, evidence, history, policy, research, primary sources, verification, non-alignment, partition, constitution, narrative intelligence',
   openGraph: {
-    title: 'The Breakdown Knowledge Platform',
-    description: 'Evidence before conclusions. Context before certainty.',
+    title: 'The Breakdown — Narrative Intelligence Platform',
+    description: 'Not to maximise attention. To maximise understanding.',
     url: 'https://thebreakdown.in',
     siteName: 'The Breakdown Knowledge Platform',
     locale: 'en_IN',
     type: 'website',
-    images: [{ url: '/images/og-home.jpg', width: 1200, height: 630, alt: 'The Breakdown Knowledge Platform' }],
+    images: [{ url: '/images/og-home.jpg', width: 1200, height: 630, alt: 'The Breakdown — Narrative Intelligence Platform' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Breakdown Knowledge Platform',
-    description: 'Evidence before conclusions. Context before certainty.',
+    title: 'The Breakdown — Narrative Intelligence Platform',
+    description: 'Not to maximise attention. To maximise understanding.',
     images: ['/images/og-home.jpg'],
   },
   alternates: {
@@ -47,51 +40,6 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default async function HomePage() {
-  const services = bootstrapServices({ publicOnly: true });
-  const vm = await buildHomepage(services);
-
-  return (
-    <HomepageLayout seo={vm.seo}>
-      {/* 01 — Lead Story */}
-      <LeadStoryHero story={vm.leadStory} />
-
-      {/* 02 — The Short Version */}
-      <AnimatedSection as="div" delay={100}>
-        <ShortVersionGrid briefings={vm.briefings} />
-      </AnimatedSection>
-
-      {/* 03 — Deep Dives */}
-      <AnimatedSection as="div" delay={200}>
-        <DeepDivesGrid deepDives={vm.deepDives} />
-      </AnimatedSection>
-
-      {/* 04 — Follow the Money / Data */}
-      {vm.financialFeature && (
-        <AnimatedSection as="div" delay={300}>
-          <FollowTheMoneyModule financialData={vm.financialFeature} />
-        </AnimatedSection>
-      )}
-
-      {/* 05 — Explore Knowledge & Search */}
-      <AnimatedSection as="div" delay={400}>
-        <ExploreSearchSection />
-      </AnimatedSection>
-
-      {/* 06 — Explore by Topic */}
-      <AnimatedSection as="div" delay={500}>
-        <TopicTaxonomySection topics={vm.topics} />
-      </AnimatedSection>
-
-      {/* 07 — Recently Updated Stories */}
-      <AnimatedSection as="div" delay={600}>
-        <RecentlyUpdatedStream updates={vm.recentlyUpdated} />
-      </AnimatedSection>
-
-      {/* 08 — Newsletter / Stay Connected */}
-      <AnimatedSection as="div" delay={700}>
-        <Newsletter />
-      </AnimatedSection>
-    </HomepageLayout>
-  );
+export default function HomePage() {
+  return <TheBeginning />;
 }

@@ -1,0 +1,35 @@
+{
+  "validation_id": "RELEASE-2A-VAL-001",
+  "title": "RELEASE-2A Research API Validation Report",
+  "execution_date": "2026-07-30",
+  "api_version": "v1",
+  "dataset_version": "1.1.0",
+  "results": [
+    { "check": "All endpoints documented", "status": "PASS", "detail": "15 endpoints documented in OpenAPI 3.1" },
+    { "check": "Read-only enforcement", "status": "PASS", "detail": "All routes export only GET handlers. No POST/PUT/DELETE." },
+    { "check": "Canonical IDs preserved", "status": "PASS", "detail": "canonical_constituency_id returned as UP-AC-{NNN} in all responses" },
+    { "check": "Stable schemas", "status": "PASS", "detail": "All 150 fields preserved from v1.0.1/v1.1.0 without changes" },
+    { "check": "Version metadata present", "status": "PASS", "detail": "Every response includes version, dataset_version, X-API-Version, X-Dataset-Version headers" },
+    { "check": "OpenAPI validates", "status": "PASS", "detail": "OpenAPI 3.1 YAML spec generated at release-2a/research-api/OpenAPI.yaml" },
+    { "check": "Pagination works", "status": "PASS", "detail": "page, limit, count, total fields in all list responses. Default: page=1, limit=20. Max limit: 100." },
+    { "check": "Filtering works", "status": "PASS", "detail": "8 filter parameters (search, district, division, region, reservation, party, political_dna, competitiveness)" },
+    { "check": "Comparison works", "status": "PASS", "detail": "2-5 constituencies, 8 categories, parameter validation" },
+    { "check": "Knowledge graph traversal works", "status": "PASS", "detail": "Full graph (570 nodes, 1446 edges) and per-constituency sub-graph" },
+    { "check": "Provenance preserved", "status": "PASS", "detail": "?include=provenance adds field-level and dataset-level provenance" },
+    { "check": "Search across 11 fields", "status": "PASS", "detail": "Weighted full-text search across 19 source fields covering 11 categories" },
+    { "check": "People API with election history", "status": "PASS", "detail": "Person records include career history, constituencies, election history with year/position/party" },
+    { "check": "Election API with per-year detail", "status": "PASS", "detail": "4 years (2012, 2017, 2022, 2024-overlay) with per-constituency results" },
+    { "check": "Timeline API", "status": "PASS", "detail": "Chronological events from election, representation, by-election, vacancy, governance categories" },
+    { "check": "Analytics API", "status": "PASS", "detail": "6 metric categories, all read-only, no predictions" },
+    { "check": "Filter options endpoint", "status": "PASS", "detail": "All 8 filter dimensions exposed with current values" },
+    { "check": "TypeScript compilation", "status": "PASS", "detail": "npx tsc --noEmit: zero errors in up403 routes" },
+    { "check": "Next.js build", "status": "PASS", "detail": "npm run build: passes" }
+  ],
+  "summary": {
+    "total_checks": 19,
+    "passed": 19,
+    "failed": 0,
+    "pass_rate": "100%",
+    "verdict": "VERIFIED"
+  }
+}

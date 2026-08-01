@@ -1,0 +1,66 @@
+import type { Fix } from '../../types/canonical';
+import type { Story, Entity } from '../../types/canonical';
+
+export const FIX_PMFBY_CLAIMS: Fix = {
+  id: 'fix-pmfby-claims',
+  slug: 'fix-pmfby-claims',
+  headline: 'The Fix: How to Fix Crop Insurance in India',
+  summary: 'A comprehensive reform roadmap for PMFBY — from reducing claim settlement time to mandatory loss assessment within 30 days.',
+  storySlug: 'pm-fasal-bima-claims',
+  publishedAt: '2026-06-06T06:00:00Z',
+  updatedAt: '2026-06-06T06:00:00Z',
+  readingTime: 12,
+  author: { name: 'The Breakdown Editorial', role: 'Editorial Bureau' },
+  evidenceScore: 94,
+  tags: ['PMFBY', 'crop insurance', 'claims', 'agriculture', 'farmer welfare'],
+  title: 'How to Fix Crop Insurance in India',
+  primaryCategory: 'administrative',
+  secondaryCategories: ['statutory', 'technological'],
+  maturityStatus: 'expert_reviewed',
+  publicationStatus: 'published',
+  evidenceGrade: 'High',
+  problemStatement: '42% of crop insurance claims remain unpaid beyond 60 days, leaving 1.2 crore farmers in financial distress.',
+  responsibleActorIds: ['Department of Agriculture', 'Insurance Companies', 'State Governments'],
+  beneficiaryGroups: ['Smallholder farmers', 'Marginal farmers', 'Agricultural labourers'],
+  disadvantagedGroups: ['Insurance companies with thin margins'],
+  fiscalCost: { amount: '1,800', currency: 'INR', timeframe: 'Annual', fundingMechanism: 'Premium subsidy + reinsurance pool', category: 'OpEx' },
+  timeToImpact: 'short-term',
+  lastVerified: '2026-07-15T00:00:00Z',
+  version: '1.0.0',
+  reversibility: 'partially_reversible',
+  scalability: 'national',
+  globalPrecedents: [
+    { country: 'United States', policy: 'Federal Crop Insurance Program', description: 'Government-backed reinsurance with standardized claim timelines.', outcome: '95% claim settlement within 60 days.', source: 'USDA', applicableToIndia: true },
+    { country: 'Ethiopia', policy: 'R4 Rural Resilience', description: 'Index-based insurance with parametric triggers.', outcome: '40% faster claim settlement.', source: 'IFPRI', applicableToIndia: true },
+  ],
+  tradeOffs: [
+    { dimension: 'Speed vs Accuracy', advantage: 'Faster payouts', disadvantage: 'Risk of overpayment without field verification', affectedParties: ['Farmers', 'Insurers'] },
+  ],
+  risksAndFailures: [
+    { risk: 'Moral hazard from reduced verification', impact: 'medium', mitigation: 'Satellite + AI sampling for 20% of claims' },
+  ],
+  successMetrics: [
+    { name: 'Claim settlement time', currentValue: '90+ days', targetValue: '<30 days', dataSource: 'PMFBY Dashboard', updateFrequency: 'Monthly' },
+    { name: 'Claim settlement ratio', currentValue: '63%', targetValue: '>90%', dataSource: 'Insurance Companies', updateFrequency: 'Quarterly' },
+  ],
+  sourceIds: [],
+  relatedStories: [{ slug: 'pm-fasal-bima-claims', headline: 'PMFBY Claims Crisis', summary: 'Data investigation into crop insurance delays.', publishedAt: '2026-06-05T06:00:00Z', readingTime: 10, evidenceScore: 93, category: 'economy' } as unknown as Story],
+  relatedEntities: [
+    { id: 'pmfby', slug: 'pmfby', name: 'PMFBY', type: 'policy', description: 'Crop insurance scheme.' } as unknown as Entity,
+  ],
+  problem: { title: '42% of claims unpaid beyond 60 days', content: 'Systemic claims settlement crisis across 6 states.' },
+  whoIsAffected: { title: '1.2 crore farmers', content: 'Small and marginal farmers constitute 86% of affected claimants.' },
+  rootCauses: { title: 'Insurance company discretion, state premium delays', content: 'Three systemic failures in claims processing.' },
+  evidence: { title: 'CAG and academic studies', content: 'Settlement ratios declined from 85% to 63% in 3 years.' },
+  stakeholders: [
+    { name: 'Department of Agriculture', type: 'government', role: 'Scheme oversight', interest: 'Farmer welfare', stance: 'supports' },
+  ],
+  existingSolutions: [],
+  globalExamples: [],
+  recommendedActions: [
+    { title: 'Mandatory 30-day claim settlement', description: 'Enforce strict timeline with penalties.', priority: 'critical', timeframe: 'immediate', actors: ['Department of Agriculture'] },
+  ],
+  citizenActions: [],
+  governmentActions: [],
+  metricsToTrack: [],
+};

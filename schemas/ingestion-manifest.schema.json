@@ -1,0 +1,412 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ingestion-manifest-v1",
+  "title": "Constituency Ingestion Manifest",
+  "description": "Canonical declaration for a batch of constituency data to be ingested into the research knowledge layer.",
+  "type": "object",
+  "required": ["manifest_version", "batch_id", "ingestion_version", "researcher", "created_at", "constituencies"],
+  "properties": {
+    "manifest_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version of this manifest format."
+    },
+    "batch_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_-]{4,64}$",
+      "description": "Unique batch identifier. Used as ingestion_method for all records."
+    },
+    "ingestion_version": {
+      "type": "string",
+      "description": "Version of the ingestion engine used to process this manifest."
+    },
+    "researcher": {
+      "type": "string",
+      "description": "Human or agent responsible for this batch."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 creation timestamp."
+    },
+    "source_scope": {
+      "type": "string",
+      "enum": ["CONSTITUENCY_LEVEL", "PROJECT_LEVEL", "REGIONAL", "NATIONAL"],
+      "description": "Scope of data sources in this batch."
+    },
+    "target_publication_status": {
+      "type": "string",
+      "enum": ["DRAFT", "UNDER_REVIEW", "PUBLISHED"],
+      "default": "DRAFT",
+      "description": "Publication status for all claims in this batch."
+    },
+    "checksum": {
+      "type": "string",
+      "description": "SHA-256 hash of the manifest content (excluding this field). Used for idempotency."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes about this batch."
+    },
+    "constituencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ConstituencyEntry"
+      }
+    }
+  },
+  "$defs": {
+    "ConstituencyEntry": {
+      "type": "object",
+      "required": ["constituency_id", "name", "state", "sources", "evidence", "claims"],
+      "properties": {
+        "constituency_id": {
+          "type": "string",
+          "description": "Canonical constituency identifier (e.g. UP-AC-037, DL-PC-01)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the constituency."
+        },
+        "state": {
+          "type": "string",
+          "description": "State/UT code (e.g. UP, DL, MH)."
+        },
+        "constituency_type": {
+          "type": "string",
+          "enum": ["AC", "PC", "LS"],
+          "default": "AC",
+          "description": "Assembly, Parliamentary, or Lok Sabha constituency."
+        },
+        "reserved_category": {
+          "type": "string",
+          "enum": ["GENERAL", "SC", "ST"],
+          "default": "GENERAL",
+          "description": "Reservation status."
+        },
+        "project_id": {
+          "type": "string",
+          "description": "Optional project association. If present, claims link to project_id instead of constituency_id."
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/SourceEntry" }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/EvidenceEntry" }
+        },
+        "claims": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ClaimEntry" }
+        },
+        "financial_records": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/FinancialRecordEntry" }
+        },
+        "search_protocols": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/SearchProtocolEntry" }
+        },
+        "gaps": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/GapEntry" }
+        },
+        "contradictions": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/ContradictionEntry" }
+        },
+        "human_flags": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/HumanFlagEntry" },
+          "description": "Items requiring human review before publication."
+        }
+      }
+    },
+    "SourceEntry": {
+      "type": "object",
+      "required": ["source_id", "title", "source_type"],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "description": "Stable source identifier within the batch (e.g. SRC-RAM-001)."
+        },
+        "title": {
+          "type": "string"
+        },
+        "source_type": {
+          "type": "string",
+          "enum": ["OFFICIAL_GOVERNMENT_DOCUMENT", "JOURNALISM", "ACADEMIC", "LEGAL_DOCUMENT", "REFERENCE", "PARLIAMENTARY_RECORD", "CAG_REPORT", "RTI_RESPONSE", "JUDGMENT", "OTHER"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Original source URL if available."
+        },
+        "access_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date the source was accessed."
+        },
+        "reliability_notes": {
+          "type": "string",
+          "description": "Assessment of source reliability."
+        }
+      }
+    },
+    "EvidenceEntry": {
+      "type": "object",
+      "required": ["evidence_id", "source_id", "extracted_text"],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "description": "Stable evidence identifier within the batch (e.g. EVD-RAM-001)."
+        },
+        "source_id": {
+          "type": "string",
+          "description": "Reference to a source_id in the same constituency entry."
+        },
+        "extracted_text": {
+          "type": "string",
+          "description": "Exact text excerpt from the source."
+        },
+        "evidence_type": {
+          "type": "string",
+          "enum": ["QUOTATION", "PARAPHRASE", "DATA_POINT", "EXCERPT"],
+          "default": "EXCERPT"
+        },
+        "page_reference": {
+          "type": "string",
+          "description": "Page or section reference in the source document."
+        }
+      }
+    },
+    "ClaimEntry": {
+      "type": "object",
+      "required": ["claim_id", "confidence", "statement", "evidence_ids"],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "description": "Stable claim identifier within the batch (e.g. CLM-RAM-001)."
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["C1", "C2", "C3", "C4", "C5"],
+          "description": "Confidence level. C1=strongest, C5=speculative."
+        },
+        "statement": {
+          "type": "string",
+          "description": "The factual assertion."
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "References to evidence_ids in the same constituency entry."
+        },
+        "publication_status": {
+          "type": "string",
+          "enum": ["DRAFT", "PUBLISHED"],
+          "default": "DRAFT"
+        },
+        "human_review_status": {
+          "type": "string",
+          "enum": ["UNREVIEWED", "APPROVED", "REJECTED"],
+          "default": "UNREVIEWED"
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["PRIMARY_SUBJECT", "RELATED_ENTITY", "GEOGRAPHIC_SCOPE"],
+          "default": "PRIMARY_SUBJECT"
+        },
+        "related_claims": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Claim IDs that this claim relates to (for contradiction pairs, etc.)."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "FinancialRecordEntry": {
+      "type": "object",
+      "required": ["canonical_id", "stage", "amount_status", "amount_value"],
+      "properties": {
+        "canonical_id": {
+          "type": "string",
+          "pattern": "^FIN-[A-Z0-9-]+$",
+          "description": "Unique financial record identifier."
+        },
+        "stage": {
+          "type": "string",
+          "enum": ["BUDGET_PROVISION", "ADMINISTRATIVE_SANCTION", "FINANCIAL_SANCTION", "REPORTED_EXPENDITURE", "REVENUE_REALISED"]
+        },
+        "amount_status": {
+          "type": "string",
+          "enum": ["REPORTED", "OFFICIAL", "ESTIMATED", "UNVERIFIED"]
+        },
+        "amount_operator": {
+          "type": "string",
+          "enum": ["EXACT", "GREATER_THAN", "LESS_THAN", "APPROXIMATE"],
+          "default": "EXACT"
+        },
+        "amount_value": {
+          "type": "number",
+          "description": "Amount in rupees."
+        },
+        "source_terminology": {
+          "type": "string",
+          "description": "Exact wording from the source about this amount."
+        },
+        "fiscal_year": {
+          "type": "string",
+          "description": "Fiscal year (e.g. 2023-2024)."
+        },
+        "reporting_source_id": {
+          "type": "string",
+          "description": "Reference to a source_id in the same constituency."
+        },
+        "target_geography": {
+          "type": "string"
+        },
+        "target_constituency_id": {
+          "type": "string",
+          "description": "Reference to constituency_id for constituency-level attribution."
+        },
+        "valid_from": {
+          "type": "string",
+          "format": "date"
+        },
+        "project_id_ref": {
+          "type": "string",
+          "description": "Reference to a project. If present, links financial record to project."
+        }
+      }
+    },
+    "SearchProtocolEntry": {
+      "type": "object",
+      "required": ["canonical_id", "research_question", "repositories_searched"],
+      "properties": {
+        "canonical_id": {
+          "type": "string",
+          "pattern": "^PROTO-[A-Z0-9-]+$"
+        },
+        "research_question": {
+          "type": "string"
+        },
+        "repositories_searched": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "queries_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "search_started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "search_completed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "GapEntry": {
+      "type": "object",
+      "required": ["canonical_id", "gap_description", "source_ids"],
+      "properties": {
+        "canonical_id": {
+          "type": "string",
+          "pattern": "^GAP-[A-Z0-9-]+$"
+        },
+        "gap_description": {
+          "type": "string"
+        },
+        "source_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Evidence that documents this gap."
+        },
+        "gap_type": {
+          "type": "string",
+          "enum": ["MISSING_DATA", "CONTRADICTION", "UNVERIFIED", "INACCESSIBLE_SOURCE", "AMBIGUOUS_GEOGRAPHY"]
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+          "default": "MEDIUM"
+        }
+      }
+    },
+    "ContradictionEntry": {
+      "type": "object",
+      "required": ["claim_id_a", "claim_id_b", "description"],
+      "properties": {
+        "claim_id_a": {
+          "type": "string",
+          "description": "First claim in the contradiction pair."
+        },
+        "claim_id_b": {
+          "type": "string",
+          "description": "Second claim in the contradiction pair."
+        },
+        "description": {
+          "type": "string",
+          "description": "Explanation of the contradiction."
+        },
+        "resolution": {
+          "type": "string",
+          "description": "How the contradiction was resolved or should be resolved."
+        },
+        "requires_human_review": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "HumanFlagEntry": {
+      "type": "object",
+      "required": ["flag_type", "description"],
+      "properties": {
+        "flag_type": {
+          "type": "string",
+          "enum": [
+            "AMBIGUOUS_GEOGRAPHY",
+            "CONTRADICTORY_EVIDENCE",
+            "SPECULATIVE_CANDIDACY",
+            "FINANCIAL_STAGE_EQUIVALENCE",
+            "SOURCE_CONFLICT",
+            "LOW_CONFIDENCE",
+            "BOUNDARY_COMPLEXITY",
+            "INACCESSIBLE_SOURCE",
+            "NEEDS_SECONDARY_REVIEW"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "related_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Claim, source, evidence, or financial record IDs related to this flag."
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["P0_BLOCKING", "P1_HIGH", "P2_MEDIUM", "P3_LOW"],
+          "default": "P2_MEDIUM"
+        }
+      }
+    }
+  }
+}

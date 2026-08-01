@@ -1,0 +1,90 @@
+{
+  "auditId": "AUD-2026-08-01-RC1",
+  "generatedAt": "2026-08-01T09:41:59.565Z",
+  "methodology": "Launch-gate evaluation against normalized evidence in audit/normalized.",
+  "launchGatePassed": false,
+  "requiredGateCount": 7,
+  "requiredGatesPassed": 6,
+  "gates": [
+    {
+      "id": "build",
+      "label": "Production build succeeds",
+      "source": "audit/raw/build.log",
+      "passed": true,
+      "required": true,
+      "detail": "exitCode=0 durationMs=33854"
+    },
+    {
+      "id": "typecheck",
+      "label": "TypeScript strict check clean",
+      "source": "audit/raw/typecheck.log",
+      "passed": true,
+      "required": true,
+      "detail": "exitCode=0"
+    },
+    {
+      "id": "lint",
+      "label": "ESLint passes",
+      "source": "audit/raw/lint.log",
+      "passed": false,
+      "required": true,
+      "detail": "exitCode=1"
+    },
+    {
+      "id": "tests",
+      "label": "Test suite passes",
+      "source": "audit/raw/test.log",
+      "passed": true,
+      "required": true,
+      "detail": "exitCode=0 durationMs=29834"
+    },
+    {
+      "id": "lighthouse_performance",
+      "label": "Lighthouse Performance ≥ 90",
+      "source": "audit/raw/lighthouse_result.json",
+      "passed": true,
+      "required": true,
+      "detail": "performance=90"
+    },
+    {
+      "id": "lighthouse_accessibility",
+      "label": "Lighthouse Accessibility ≥ 90",
+      "source": "audit/raw/lighthouse_result.json",
+      "passed": true,
+      "required": true,
+      "detail": "accessibility=100"
+    },
+    {
+      "id": "lighthouse_best_practices",
+      "label": "Lighthouse Best Practices ≥ 90",
+      "source": "audit/raw/lighthouse_result.json",
+      "passed": true,
+      "required": false,
+      "detail": "best-practices=100"
+    },
+    {
+      "id": "lighthouse_seo",
+      "label": "Lighthouse SEO ≥ 90",
+      "source": "audit/raw/lighthouse_result.json",
+      "passed": true,
+      "required": false,
+      "detail": "seo=100"
+    },
+    {
+      "id": "playwright",
+      "label": "Playwright e2e suite passes (chromium)",
+      "source": "audit/raw/playwright_result.json",
+      "passed": true,
+      "required": true,
+      "detail": "passed=49 failed=0 skipped=7"
+    },
+    {
+      "id": "platform_health",
+      "label": "Platform Health Score ≥ 80",
+      "source": "audit/raw/plugin_audit.json",
+      "passed": false,
+      "required": false,
+      "detail": "platformHealthScore=76.25"
+    }
+  ]
+}

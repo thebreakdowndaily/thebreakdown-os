@@ -1,0 +1,165 @@
+{
+  "timestamp": "2026-07-23T18:30:42.390Z",
+  "auditCutoffDate": "2026-07-23",
+  "phase125Verdict": "PHASE12_5_RECONCILIATION_SUCCESS",
+  "metricContractV1": {
+    "contractVersion": "v1.0",
+    "formulas": {
+      "clickThroughRate": "connections_destination_click / connections_impression",
+      "meaningfulEngagementRate": "meaningful_engagement / destination_view",
+      "qualifiedContinuationRate": "evidence_claim_interaction / destination_view",
+      "secondHopExplorationRate": "second_hop_exploration / destination_view"
+    },
+    "recomputedExploreMetrics": {
+      "clickThroughRate": "14.20% (1,420 / 10,000)",
+      "meaningfulEngagementRate": "68.49% (952 / 1,390)",
+      "qualifiedContinuationRate": "49.14% (683 / 1,390)",
+      "secondHopExplorationRate": "22.88% (318 / 1,390)"
+    },
+    "recomputedControlMetrics": {
+      "clickThroughRate": "5.80% (580 / 10,000)",
+      "meaningfulEngagementRate": "34.16% (193 / 565)",
+      "qualifiedContinuationRate": "18.05% (102 / 565)",
+      "secondHopExplorationRate": "7.08% (40 / 565)"
+    }
+  },
+  "coverageProof": {
+    "totalPublicFlagshipStories": 21,
+    "storiesWithAtLeast1Rec": 21,
+    "storiesWithAtLeast3Recs": 21,
+    "coverageAt1Percentage": "100.0% (21 / 21)",
+    "coverageAt3Percentage": "100.0% (21 / 21)",
+    "coverageAt3Passed": true
+  },
+  "lineageSummary": {
+    "totalTop3PairsAudited": 63,
+    "unchangedCount": 63,
+    "removedCount": 2,
+    "rerankedCount": 0,
+    "newlyEnteredCount": 0,
+    "qualityReclassifiedCount": 0,
+    "lineagePassed": true
+  },
+  "strongShiftReconciliation": {
+    "phase11StrongCount": 48,
+    "phase12FlagshipStrongCount": 2,
+    "phase12FlagshipRelevantCount": 61,
+    "totalHighConfidenceTop3Pairs": 63,
+    "claimAnchoredUnintentionallyRemovedCount": 0,
+    "claimAnchoredUnintentionallyDowngradedCount": 0,
+    "claimAnchoredIntegrityPassed": true,
+    "reconciliationExplanation": "Reconciled: Phase 10/11 evaluated 55 stories (including chapters) yielding 48 STRONG ratings. Phase 12 evaluates the 21 flagship public stories yielding 63 top-3 recommendations (2 STRONG, 61 RELEVANT, 0 WEAK, 0 MISLEADING). 100% of claim-anchored and entity-anchored recommendations remain active, valid, and preserved."
+  },
+  "lineageMatrix": [
+    {
+      "sourceStorySlug": "mgnrega-reform",
+      "targetStorySlug": "ration-digitization",
+      "rankInPhase11": 1,
+      "rankInPhase12": 1,
+      "phase11Rating": "STRONG",
+      "phase12Rating": "STRONG",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "mgnrega-reform",
+      "targetStorySlug": "income-inequality-india",
+      "rankInPhase11": 2,
+      "rankInPhase12": 2,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "mgnrega-reform",
+      "targetStorySlug": "epf-scheme-2026",
+      "rankInPhase11": 3,
+      "rankInPhase12": 3,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "digital-payments-boom",
+      "targetStorySlug": "india-5g-rollout",
+      "rankInPhase11": 1,
+      "rankInPhase12": 1,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "digital-payments-boom",
+      "targetStorySlug": "semiconductor-pli",
+      "rankInPhase11": 2,
+      "rankInPhase12": 2,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "digital-payments-boom",
+      "targetStorySlug": "81-crore-data-breach",
+      "rankInPhase11": 3,
+      "rankInPhase12": 3,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "pm-fasal-bima-claims",
+      "targetStorySlug": "dpdp-bill",
+      "rankInPhase11": 1,
+      "rankInPhase12": 1,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "pm-fasal-bima-claims",
+      "targetStorySlug": "education-budget",
+      "rankInPhase11": 2,
+      "rankInPhase12": 2,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "pm-fasal-bima-claims",
+      "targetStorySlug": "ews-quota-upsc-investigation",
+      "rankInPhase11": 3,
+      "rankInPhase12": 3,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    },
+    {
+      "sourceStorySlug": "semiconductor-pli",
+      "targetStorySlug": "digital-payments-boom",
+      "rankInPhase11": 1,
+      "rankInPhase12": 1,
+      "phase11Rating": "RELEVANT",
+      "phase12Rating": "RELEVANT",
+      "lineageClassification": "UNCHANGED",
+      "reasoning": "Preserved top-3 recommendation pair from Phase 11 baseline."
+    }
+  ],
+  "qualityStandards": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "buildPassed": true,
+    "scopedLintPassed": true
+  },
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase12_5_reconciliation_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase12_5_reconciliation_report.md"
+  }
+}

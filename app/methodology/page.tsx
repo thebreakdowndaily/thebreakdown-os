@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Container from '@/components/layout/Container';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'Methodology — The Breakdown',
@@ -11,6 +12,14 @@ export const metadata: Metadata = {
 
 export default function MethodologyPage() {
   return (
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <SpatialNarrativeBreadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Institutional Methodology', href: '/methodology', current: true },
+        ]} theme="dark" />
+      </div>
+
     <Container>
       <div className="py-8 max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Methodology</h1>
@@ -111,5 +120,6 @@ export default function MethodologyPage() {
         </div>
       </div>
     </Container>
+    </>
   );
 }

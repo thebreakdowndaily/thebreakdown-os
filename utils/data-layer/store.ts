@@ -673,8 +673,8 @@ function seed(): DataStore {
     headline: 'Anganwadi Centres: India\'s Frontline Nutrition Workers Are Burning Out',
     summary: 'India\'s Integrated Child Development Services (ICDS) runs 14 lakh anganwadi centres serving 10 crore beneficiaries, but frontline workers face wage delays, infrastructure gaps, and mounting workloads.',
     heroImage: '/images/stories/anganwadi.jpg',
-    publishedAt: '2026-07-28T06:00:00Z',
-    updatedAt: '2026-07-28T06:00:00Z',
+    publishedAt: '2026-07-24T06:00:00Z',
+    updatedAt: '2026-07-24T06:00:00Z',
     publicationStatus: 'published' as const,
     readingTime: 11,
     wordCount: 3800,
@@ -741,8 +741,8 @@ function seed(): DataStore {
     headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?',
     summary: 'As global companies diversify away from China, India has attracted $85 billion in FDI since 2023 — but infrastructure gaps and policy inconsistency threaten to squander the moment.',
     heroImage: '/images/stories/supply-chain-shift.jpg',
-    publishedAt: '2026-08-01T06:00:00Z',
-    updatedAt: '2026-08-01T06:00:00Z',
+    publishedAt: '2026-07-24T06:00:00Z',
+    updatedAt: '2026-07-24T06:00:00Z',
     publicationStatus: 'published' as const,
     readingTime: 13,
     wordCount: 4500,
@@ -815,8 +815,8 @@ function seed(): DataStore {
     headline: 'E20 Backlash: India\'s Ethanol Push and the Consumer Revolt That Followed',
     summary: 'India achieved 20% ethanol blending five years ahead of schedule, but motorists report mileage drops of up to 12%, the food-versus-fuel debate resurfaces, and a Supreme Court PIL challenges the rollout.',
     heroImage: '/images/stories/ethanol-backlash.jpg',
-    publishedAt: '2026-08-05T06:00:00Z',
-    updatedAt: '2026-08-05T06:00:00Z',
+    publishedAt: '2026-07-24T06:00:00Z',
+    updatedAt: '2026-07-24T06:00:00Z',
     publicationStatus: 'published' as const,
     readingTime: 14,
     wordCount: 4800,
@@ -891,8 +891,8 @@ function seed(): DataStore {
     headline: 'Who Really Gets the EWS Quota? An Investigation into UPSC\'s 104 Selections',
     summary: 'An investigation into all 104 candidates selected under the 10% EWS quota in Civil Services 2025 finds IIT graduates, private school alumni, and business family children — raising fundamental questions about targeting and due diligence.',
     heroImage: '/images/stories/ews-quota-upsc.jpg',
-    publishedAt: '2026-08-08T06:00:00Z',
-    updatedAt: '2026-08-08T06:00:00Z',
+    publishedAt: '2026-07-24T06:00:00Z',
+    updatedAt: '2026-07-24T06:00:00Z',
     readingTime: 12,
     wordCount: 4200,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
@@ -1088,9 +1088,7 @@ function seed(): DataStore {
       { question: 'What are the key reforms under NEP 2020?', answer: 'NEP 2020 introduces a 5+3+3+4 curriculum structure (replacing 10+2), early childhood education integration, vocational training from Class 6, mother tongue instruction until Class 5, and a multidisciplinary approach to higher education.' },
     ],
     relatedStories: [
-      { slug: 'education-budget',
-    headline: 'Education Budget: Spending vs Learning', summary: 'Gap between education spending and outcomes.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 9, evidenceScore: 83, category: 'policy' },
-      { slug: 'ews-quota', headline: 'EWS Quota: Economic Reservation Debate', summary: 'Supreme Court upholds 10% EWS quota.', publishedAt: '2026-07-16T06:00:00Z', readingTime: 11, evidenceScore: 87, category: 'policy' },
+      { slug: 'education-budget', headline: 'Education Budget: Spending vs Learning', summary: 'Gap between education spending and outcomes.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 9, evidenceScore: 83, category: 'policy' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
@@ -3323,8 +3321,6 @@ function seed(): DataStore {
     ],
     relatedStories: [
       { slug: 'kashmir-the-first-test', headline: 'Kashmir: The First Test', summary: 'How the first India-Pakistan war over Kashmir established a conflict that remains unresolved.', publishedAt: '2026-07-15T06:00:00Z', readingTime: 17, evidenceScore: 89, category: 'geopolitics' },
-      { slug: 'panchsheel-and-nonalignment', headline: 'Panchsheel and Non-Alignment', summary: 'India\'s foundational foreign policy doctrines.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 12, evidenceScore: 90, category: 'geopolitics' },
-      { slug: 'indias-inheritance', headline: 'India\'s Inheritance: The Partition and Its Legacies', summary: 'The partition framework and its enduring consequences.', publishedAt: '2026-07-08T06:00:00Z', readingTime: 14, evidenceScore: 92, category: 'history' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
@@ -3410,8 +3406,6 @@ function seed(): DataStore {
     ],
     relatedStories: [
       { slug: 'india-china-border-lac', headline: 'The Cold Peace Along the LAC', summary: 'Why the India-China border remains unsettled after 75 years.', publishedAt: '2026-07-15T06:00:00Z', readingTime: 18, evidenceScore: 91, category: 'geopolitics' },
-      { slug: 'indias-inheritance', headline: 'India\'s Inheritance: The Partition and Its Legacies', summary: 'The partition framework and its enduring consequences.', publishedAt: '2026-07-08T06:00:00Z', readingTime: 14, evidenceScore: 92, category: 'history' },
-      { slug: 'panchsheel-and-nonalignment', headline: 'Panchsheel and Non-Alignment', summary: 'India\'s foundational foreign policy doctrines.', publishedAt: '2026-07-10T06:00:00Z', readingTime: 12, evidenceScore: 90, category: 'geopolitics' },
     ],
     relatedEntities: [
       { id: 'india', slug: 'india', name: 'India', type: 'country', description: 'Republic of India.' },
@@ -5204,6 +5198,10 @@ export const LEGACY_PUBLIC_SLUGS: ReadonlySet<string> = new Set([
   'fix-air-pollution',
   'fix-farm-income',
   'fix-judicial-pendency',
+  'supply-chain-shift',
+  'anganwadi-icds',
+  'ration-digitization',
+  'ethanol-backlash',
 ]);
 
 import type { PublicationStatus } from './types';

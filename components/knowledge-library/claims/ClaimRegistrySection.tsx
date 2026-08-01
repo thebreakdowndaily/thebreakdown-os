@@ -136,7 +136,7 @@ export const ClaimRegistrySection: FC<{ claims: EnrichedClaim[] }> = ({ claims }
                       <h4 className="text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Counterarguments</h4>
                       <ul className="list-disc pl-4 space-y-1">
                         {claim.counterArguments.map((ca, i) => (
-                          <li key={i} className="text-xs text-gray-600">{ca}</li>
+                          <li key={i} className="text-xs text-gray-600">{typeof ca === 'string' ? ca : (ca as any).argument}</li>
                         ))}
                       </ul>
                     </div>

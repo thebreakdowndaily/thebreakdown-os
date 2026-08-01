@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-07-23T17:50:45.409Z",
+  "status": "INGESTION_SUCCESS",
+  "persistenceBackend": "FILE_PERSISTED",
+  "persistenceLocation": "C:\\newsjack-content\\thebreakdown-os\\lib\\knowledge\\claim-registry.ts",
+  "manifestSha256": "7745e0e39d4b273e549952664a2c7570535aecf49253dd741dff524a6022742e",
+  "manifestCandidateCount": 68,
+  "preWriteSnapshot": {
+    "preWriteClaimCount": 22,
+    "preWriteChecksum": "4b3c0ec93f378c144dbe25414cc653aab3888f4bdc817f73dc884ae85751dd18",
+    "snapshotBackupPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\snapshots\\pre_write_claim_registry_1784829045412.ts.bak"
+  },
+  "ingestionSummary": {
+    "insertedClaims": 68,
+    "updatedClaims": 0,
+    "skippedClaims": 0,
+    "sourceRelationshipsCreated": 68,
+    "evidenceRelationshipsCreated": 68,
+    "totalRelationshipsCreated": 136
+  },
+  "postWriteVerification": {
+    "freshProcessPostWriteCount": 90,
+    "manifestClaimsPresent": 68,
+    "duplicateIds": 0,
+    "duplicateHashes": 0,
+    "orphanSources": 0,
+    "orphanEvidence": 0,
+    "unexpectedModifiedClaims": 0
+  },
+  "idempotencyProof": {
+    "secondRunInserted": 0,
+    "secondRunModified": 0,
+    "secondRunDuplicateLinks": 0,
+    "idempotencyPassed": true
+  },
+  "regressionGates": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "buildPassed": true,
+    "scopedLintPassed": true
+  },
+  "rollbackTriggered": false,
+  "rollbackReason": null
+}

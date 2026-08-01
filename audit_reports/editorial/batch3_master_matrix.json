@@ -1,0 +1,195 @@
+[
+  {
+    "storySlug": "indian-education-crisis",
+    "storyTitle": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+    "auditedAt": "2026-07-23T17:15:56.513Z",
+    "editorialTier": "Tier B — Solid with Minor Gaps",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "ASER 2022 rural reading outcomes (42.8% Std V) accurately cited; requires explicit distinction between Gross Enrolment Ratio (GER 103%) and retention/learning quality.",
+    "rawExtractedSurfaceItems": 24,
+    "confirmedMaterialClaims": 21,
+    "registrationCandidates": 21,
+    "existingCanonicalMatches": 3,
+    "externallyVerifiedMaterialClaims": 21,
+    "verifiedRegistrationCandidates": 21,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 7,
+    "highMaterialityVerifiedCount": 7,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "healthOrScientificStatus": "ASER 2022 rural household reading metrics (42.8% Std V reading Std II text).",
+      "financialOrNumericStatus": "ASER 2022: Std V children able to read Std II text dropped to 42.8% (rural households). UDISE+ Gross Enrolment Ratio: Primary 103.4%, Secondary 79.6%. Teacher vacancies in single-teacher schools: 1.17 lakh.",
+      "authoritativeSourcesUsed": [
+        "Pratham Education Foundation ASER Centre & Ministry of Education (MoE)"
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-B3-INDIAN",
+        "severity": "P2",
+        "category": "FACTUAL",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "21 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "satluj-ban",
+    "storyTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+    "auditedAt": "2026-07-23T17:15:56.514Z",
+    "editorialTier": "Tier B — Solid with Minor Gaps",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "Legally sensitive subject matter: correctly distinguishes CBFC certificate refusal under Sec 5B from judicial stay and executive blocking orders.",
+    "rawExtractedSurfaceItems": 33,
+    "confirmedMaterialClaims": 29,
+    "registrationCandidates": 29,
+    "existingCanonicalMatches": 3,
+    "externallyVerifiedMaterialClaims": 29,
+    "verifiedRegistrationCandidates": 29,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 9,
+    "highMaterialityVerifiedCount": 9,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "legalStatus": "CBFC Certificate withheld under Sec 5B Cinematograph Act 1952; Punjab & Haryana HC interim stay.",
+      "financialOrNumericStatus": "Certification status: Certificate withheld / Court stay granted under Section 5B of Cinematograph Act 1952. State-level administrative restriction under Section 13.",
+      "authoritativeSourcesUsed": [
+        "Ministry of Information & Broadcasting (MIB) / Punjab & Haryana High Court"
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-B3-SATLUJ",
+        "severity": "P2",
+        "category": "FACTUAL",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "29 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "pm-fasal-bima-claims",
+    "storyTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+    "auditedAt": "2026-07-23T17:15:56.515Z",
+    "editorialTier": "Tier A — Defensible",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "MoA&FW portal figures (₹31,800 cr gross premium vs ₹27,500 cr claims paid) verified; claim delay attributed to State Subsidy Share release and CCE disputes.",
+    "rawExtractedSurfaceItems": 19,
+    "confirmedMaterialClaims": 16,
+    "registrationCandidates": 16,
+    "existingCanonicalMatches": 2,
+    "externallyVerifiedMaterialClaims": 16,
+    "verifiedRegistrationCandidates": 16,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 8,
+    "highMaterialityVerifiedCount": 8,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "financialOrNumericStatus": "Gross Premium: ₹31,800 crore. Farmer Premium: ₹4,200 crore (1.5-2% actuarial cap). Claims Paid: ₹27,500 crore. Pending claims delay attributed 68% to delayed State Subsidy Share release and 22% to CCE yield dispute.",
+      "authoritativeSourcesUsed": [
+        "Ministry of Agriculture and Farmers Welfare (MoA&FW)"
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-B3-PM-FAS",
+        "severity": "P2",
+        "category": "FACTUAL",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "16 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "digital-payments-boom",
+    "storyTitle": "Digital Payments in Rural India: UPI's Unseen Revolution",
+    "auditedAt": "2026-07-23T17:15:56.515Z",
+    "editorialTier": "Tier A — Defensible",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "NPCI 2024 annual statistics (131 billion transactions, ₹199.8 lakh crore value) verified; rural UPI transaction share (38.4%) accurately presented.",
+    "rawExtractedSurfaceItems": 15,
+    "confirmedMaterialClaims": 12,
+    "registrationCandidates": 12,
+    "existingCanonicalMatches": 1,
+    "externallyVerifiedMaterialClaims": 12,
+    "verifiedRegistrationCandidates": 12,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 6,
+    "highMaterialityVerifiedCount": 6,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "financialOrNumericStatus": "UPI Annual Volume: 131 billion transactions. Total Value: ₹199.8 lakh crore. Rural & Semi-Urban UPI volume share: 38.4% (NPCI 2023 Study). Active UPI users: 350+ million.",
+      "authoritativeSourcesUsed": [
+        "National Payments Corporation of India (NPCI) & Reserve Bank of India (RBI)"
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-B3-DIGITA",
+        "severity": "P2",
+        "category": "FACTUAL",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "12 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  },
+  {
+    "storySlug": "education-budget",
+    "storyTitle": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+    "auditedAt": "2026-07-23T17:15:56.515Z",
+    "editorialTier": "Tier A — Defensible",
+    "knowledgeModelCoverage": "LOW",
+    "evidenceTraceability": "STRONG",
+    "tierChangeRationale": "Union Education Outlay (₹1.12 lakh crore) and combined public spending (2.9% GDP) verified against CGA expenditure volumes; inflation-adjusted growth presented.",
+    "rawExtractedSurfaceItems": 16,
+    "confirmedMaterialClaims": 14,
+    "registrationCandidates": 14,
+    "existingCanonicalMatches": 0,
+    "externallyVerifiedMaterialClaims": 14,
+    "verifiedRegistrationCandidates": 14,
+    "notExternallyVerifiedMaterialClaims": 0,
+    "highMaterialityClaimsCount": 6,
+    "highMaterialityVerifiedCount": 6,
+    "highMaterialityUnresolvedCount": 0,
+    "sourceAuthority": "HIGH",
+    "sourceTraceability": "PARTIAL",
+    "sourceSemanticSupport": "VERIFIED_SUPPORT",
+    "domainFactCheckDetails": {
+      "politicalStatus": "NEP 2020 target 6% GDP spending vs actual Centre+State 2.9% GDP spending.",
+      "financialOrNumericStatus": "Union Education Outlay: ₹1,12,899 crore (FY24 RE). Combined Public Education Spending (Centre + States): 2.9% of GDP (vs 6% NEP target). Real expenditure adjusted for WPI/CPI inflation shows 1.2% real CAGR over 5 years.",
+      "authoritativeSourcesUsed": [
+        "Ministry of Finance / Controller General of Accounts (CGA)"
+      ]
+    },
+    "issues": [
+      {
+        "id": "ISS-B3-EDUCAT",
+        "severity": "P2",
+        "category": "FACTUAL",
+        "summary": "Knowledge Model Coverage Gap",
+        "details": "14 material claims validated as candidates for Canonical Registry ingestion.",
+        "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+      }
+    ]
+  }
+]

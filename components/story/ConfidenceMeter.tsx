@@ -109,8 +109,8 @@ export default function ConfidenceMeter({
               </span>
             )}
             {unverifiedClaims > 0 && (
-              <span className="flex items-center gap-1.5 text-[#71717A]">
-                <span className="w-2 h-2 rounded-full bg-[#71717A]" />
+              <span className="flex items-center gap-1.5 text-[#A1A1AA]">
+                <span className="w-2 h-2 rounded-full bg-[#A1A1AA]" />
                 {unverifiedClaims} Unchecked
               </span>
             )}

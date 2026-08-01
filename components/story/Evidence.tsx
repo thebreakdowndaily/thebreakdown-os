@@ -85,7 +85,7 @@ const Evidence: React.FC<EvidenceProps> = ({ claims, sources, verificationScore 
               </button>
             </div>
 
-            <div className="p-6 space-y-8 flex-1">
+            <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 flex-1">
               <ConfidenceMeter 
                 overallScore={verificationScore}
                 sourceQuality={sourceQuality}

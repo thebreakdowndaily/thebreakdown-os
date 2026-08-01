@@ -1,3 +1,5 @@
+import type { CounterArgument } from '@/types/canonical';
+
 export type ClaimStatus = 'verified' | 'strong' | 'moderate' | 'unverified';
 
 export interface StoryClaim {
@@ -7,6 +9,7 @@ export interface StoryClaim {
   status: ClaimStatus;
   sources: EvidenceSource[];
   supportingEvidence: string[];
+  counterArguments?: CounterArgument[];
 }
 
 export interface EvidenceSource {
@@ -31,10 +34,10 @@ export interface EvidencePanelData {
 }
 
 export const STATUS_CONFIG: Record<ClaimStatus, { label: string; wrapperClass: string; dotClass: string }> = {
-  verified: { label: 'Verified', wrapperClass: 'bg-green-500/10 text-green-500 border-green-500/20', dotClass: 'bg-green-500' },
-  strong: { label: 'Strong', wrapperClass: 'bg-blue-500/10 text-blue-500 border-blue-500/20', dotClass: 'bg-blue-500' },
-  moderate: { label: 'Moderate', wrapperClass: 'bg-brand-400/10 text-brand-400 border-brand-400/20', dotClass: 'bg-brand-400' },
-  unverified: { label: 'Unverified', wrapperClass: 'bg-red-500/10 text-red-500 border-red-500/20', dotClass: 'bg-red-500' },
+  verified: { label: 'Verified', wrapperClass: 'bg-success/10 text-success border-success/20', dotClass: 'bg-success' },
+  strong: { label: 'Strong', wrapperClass: 'bg-info/10 text-info border-info/20', dotClass: 'bg-info' },
+  moderate: { label: 'Moderate', wrapperClass: 'bg-warning/10 text-warning border-warning/20', dotClass: 'bg-warning' },
+  unverified: { label: 'Unverified', wrapperClass: 'bg-error/10 text-error border-error/20', dotClass: 'bg-error' },
 };
 
 export function getStatus(confidence: number): ClaimStatus {

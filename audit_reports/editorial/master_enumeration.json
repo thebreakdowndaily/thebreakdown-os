@@ -1,0 +1,462 @@
+{
+  "rawDiscovered": 58,
+  "uniqueDiscovered": 56,
+  "publicCount": 21,
+  "nonPublicCount": 35,
+  "resolutionFailuresCount": 0,
+  "duplicateSlugs": [
+    "india-china-border-lac",
+    "kashmir-the-first-test"
+  ],
+  "canonicalIdCollisions": [],
+  "records": [
+    {
+      "slug": "mgnrega-reform",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "mgnrega-reform",
+      "title": "MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "digital-payments-boom",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "digital-payments-boom",
+      "title": "Digital Payments in Rural India: UPI's Unseen Revolution",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "pm-fasal-bima-claims",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "pm-fasal-bima-claims",
+      "title": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "semiconductor-pli",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "semiconductor-pli",
+      "title": "India's ₹1.2 Lakh Crore Semiconductor Push: Can the Dream Take Silicon?",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "dpdp-bill",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "dpdp-bill",
+      "title": "Digital Personal Data Protection: India's Privacy Law Comes of Age",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "rbi-repo-rate",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "rbi-repo-rate",
+      "title": "RBI Repo Rate: Decoding Monetary Policy in a Changing Economy",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "climate-finance",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "climate-finance",
+      "title": "India's ₹11 Lakh Crore Climate Finance Challenge",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "education-budget",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "education-budget",
+      "title": "Education Budget: Widening Gap Between Spending and Learning Outcomes",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "groundwater-depletion",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "groundwater-depletion",
+      "title": "India's Groundwater Crisis: 62% of Districts Sound the Alarm",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "ration-digitization",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ration-digitization",
+      "title": "Digitizing PDS: How Technology Plugged the Leakage in India's Food Security Net",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "anganwadi-icds",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "anganwadi-icds",
+      "title": "Anganwadi Centres: India's Frontline Nutrition Workers Are Burning Out",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "supply-chain-shift",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "supply-chain-shift",
+      "title": "The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ethanol-backlash",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ethanol-backlash",
+      "title": "E20 Backlash: India's Ethanol Push and the Consumer Revolt That Followed",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ews-quota-upsc-investigation",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ews-quota-upsc-investigation",
+      "title": "Who Really Gets the EWS Quota? An Investigation into UPSC's 104 Selections",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "us-iran-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "us-iran-relations",
+      "title": "US-Iran Relations: From Maximum Pressure to Nuclear Negotiations",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "indian-education-crisis",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "indian-education-crisis",
+      "title": "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "income-inequality-india",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "income-inequality-india",
+      "title": "Income Inequality in India: The Top 1% Now Owns 40% of the Wealth",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-china-border-tensions",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-china-border-tensions",
+      "title": "India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "indias-foreign-policy",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "indias-foreign-policy",
+      "title": "India's Foreign Policy at 80: From Non-Alignment to Multi-Alignment",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "satluj-ban",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "satluj-ban",
+      "title": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "india-us-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-us-relations",
+      "title": "India-US Relations: From Nuclear Deal to Critical Technology Partnership",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-indonesia-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-indonesia-relations",
+      "title": "India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-china-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-china-relations",
+      "title": "India-China: Two Asian Giants in an Era of Mistrust and Strategic Rivalry",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-europe-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-europe-relations",
+      "title": "India and Europe: A Strategic Partnership Searching for Substance",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-uk-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-uk-relations",
+      "title": "India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-russia-relations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-russia-relations",
+      "title": "India-Russia: The Enduring Partnership Tested by War and Realignment",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "81-crore-data-breach",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "81-crore-data-breach",
+      "title": "81.5 Crore Aadhaar Records Exposed: Inside India's Biggest Data Breach",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "bjp-mission-360",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "bjp-mission-360",
+      "title": "Mission 360: Inside BJP's Push for a Two-Thirds Majority and the Battle Over India's Constitutional Future",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "india-5g-rollout",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-5g-rollout",
+      "title": "India's 5G Revolution: 400 Million Subscribers and Still Waiting for the Killer App",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "india-ev-paradox",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-ev-paradox",
+      "title": "India's EV Paradox: Rising Sales, Stalled Charging, and the ₹4 Lakh Crore Battery Import Bill",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ayushman-bharat",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ayushman-bharat",
+      "title": "Ayushman Bharat: India's ₹30,000 Crore Bet on Universal Health Coverage",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "electoral-bonds",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "electoral-bonds",
+      "title": "Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme the Supreme Court Struck Down",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "who-cancer-report-2026",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "who-cancer-report-2026",
+      "title": "Global Cancer Crisis: WHO Report Warns 35 Million Cases Per Year by 2050 Without Urgent Action",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "us-iran-war-strait-of-hormuz",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "us-iran-war-strait-of-hormuz",
+      "title": "The Strait of Hormuz War: How the US-Iran Conflict Broke Global Energy Markets",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "epf-scheme-2026",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "epf-scheme-2026",
+      "title": "EPF Scheme 2026: India Replaces 74-Year-Old Retirement Law Under New Social Security Code",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "youth-mental-health-crisis",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "youth-mental-health-crisis",
+      "title": "Youth Mental Health Crisis in India: Understanding Rising Suicide Rates",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "gig-worker-rights",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "gig-worker-rights",
+      "title": "Gig Worker Rights in India: The Fight for Dignity in the Platform Economy",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "namami-gange-under-fire",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "namami-gange-under-fire",
+      "title": "Namami Gange: Inside India's ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind",
+      "status": "PUBLIC",
+      "isPublic": true
+    },
+    {
+      "slug": "india-china-border-lac",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "india-china-border-lac",
+      "title": "The Cold Peace Along the LAC: Why the India–China Border Remains Unsettled After 75 Years",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "kashmir-the-first-test",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "kashmir-the-first-test",
+      "title": "Kashmir: The First Test — How the 1947–48 War Established a Conflict That Remains Unresolved 75 Years Later",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-01-the-promise",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-01",
+      "title": "The Promise: Why Namami Gange Was Launched and What It Set Out to Achieve",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-02-follow-the-money",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-02",
+      "title": "Follow the Money: Budget Sanctioned, Released, and Actually Spent",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-03-the-sewage-problem",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-03",
+      "title": "Chapter 3: The Sewage Problem — How Much Waste Enters the Ganga Every Day",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-04-the-audit-trail",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-04",
+      "title": "Chapter 4: The Audit Trail — Every Official Finding from 2017 to 2025",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-05-procurement-and-accountability",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-05",
+      "title": "Chapter 5: Procurement & Accountability — Where Audit Findings End and Corruption Cases Begin",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-06-why-stps-dont-work",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-06",
+      "title": "Chapter 6: Why STPs Don't Work — The Engineering and Governance Failures",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-07-water-quality",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-07",
+      "title": "Chapter 7: Water Quality — What the Scientific Data Actually Shows",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-08-city-report-cards",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-08",
+      "title": "Chapter 8: City Report Cards — Haridwar, Kanpur, Prayagraj, Varanasi, Patna, Kolkata",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-09-contractors",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-09",
+      "title": "Chapter 9: The Contractor Network — EPC, HAM, O&M — Who Builds the STPs",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-10-timeline-of-delays",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-10",
+      "title": "Chapter 10: Timeline of Delays — Every Major Project from Approval to Commissioning",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-11-ecology",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-11",
+      "title": "Chapter 11: Ecological Outcomes — Dolphins, Wetlands, and River Flow",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-12-voices-from-the-river",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-12",
+      "title": "Chapter 12: Voices from the River — What Communities, Scientists, and Officials Say",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-13-government-response",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-13",
+      "title": "Chapter 13: Government Response — The Official Defence of Namami Gange",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-14-what-worked",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-14",
+      "title": "Chapter 14: What Actually Worked — Documented Successes",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "ng-ch-15-recommendations",
+      "sourceType": "STANDALONE_STORY",
+      "canonicalId": "ng-ch-15",
+      "title": "Chapter 15: Recommendations — Evidence-Backed Fixes",
+      "status": "NON_PUBLIC",
+      "isPublic": false
+    },
+    {
+      "slug": "indias-inheritance",
+      "sourceType": "KNOWLEDGE_LIBRARY_CHAPTER",
+      "canonicalId": "kl-ch-1",
+      "title": "India's Inheritance: The Partition and Its Legacies",
+      "status": "PUBLIC",
+      "isPublic": true
+    }
+  ]
+}

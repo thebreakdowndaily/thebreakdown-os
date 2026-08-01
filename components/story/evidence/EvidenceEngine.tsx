@@ -6,8 +6,8 @@ import ClaimCard from './ClaimCard';
 export default function EvidenceEngine({ overallScore, verifiedClaims, claims }: EvidencePanelData) {
   return (
     <div className="space-y-4">
-      {claims.map((claim) => (
-        <ClaimCard key={claim.id} claim={claim} />
+      {claims.map((claim, index) => (
+        <ClaimCard key={claim.id} claim={claim} index={index} />
       ))}
     </div>
   );

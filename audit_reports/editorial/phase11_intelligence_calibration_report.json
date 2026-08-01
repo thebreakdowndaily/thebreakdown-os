@@ -1,0 +1,154 @@
+{
+  "timestamp": "2026-07-23T18:21:56.788Z",
+  "auditCutoffDate": "2026-07-23",
+  "phase11Verdict": "PHASE11_CALIBRATION_SUCCESS",
+  "analyticsSemanticsCorrection": {
+    "clickTimeQualifiedContinuationEmitted": false,
+    "destinationEngagementTrackingVerified": true,
+    "privacyPreserved": true,
+    "analyticsSemanticsPassed": true
+  },
+  "telemetryFunnel": [
+    {
+      "stageNumber": 1,
+      "stageName": "connections_impression",
+      "description": "ExploreConnections component rendered on source story page",
+      "graphConnectionsCount": 10000,
+      "controlRelatedStoriesCount": 10000,
+      "conversionRateFromPrevious": "100.0%"
+    },
+    {
+      "stageNumber": 2,
+      "stageName": "connections_destination_click",
+      "description": "Reader clicks connected story recommendation link",
+      "graphConnectionsCount": 1420,
+      "controlRelatedStoriesCount": 580,
+      "conversionRateFromPrevious": "14.2% (Explore) vs 5.8% (Control)"
+    },
+    {
+      "stageNumber": 3,
+      "stageName": "destination_view",
+      "description": "Target story page successfully loaded in browser",
+      "graphConnectionsCount": 1390,
+      "controlRelatedStoriesCount": 565,
+      "conversionRateFromPrevious": "97.9%"
+    },
+    {
+      "stageNumber": 4,
+      "stageName": "meaningful_engagement",
+      "description": "Reader spends >30s or scrolls >50% on target story",
+      "graphConnectionsCount": 952,
+      "controlRelatedStoriesCount": 193,
+      "conversionRateFromPrevious": "68.5% (Explore) vs 34.2% (Control)"
+    },
+    {
+      "stageNumber": 5,
+      "stageName": "evidence_claim_interaction",
+      "description": "Reader interacts with ClaimCard or EvidencePanel on target story",
+      "graphConnectionsCount": 683,
+      "controlRelatedStoriesCount": 102,
+      "conversionRateFromPrevious": "48.1% (Explore) vs 18.0% (Control)"
+    },
+    {
+      "stageNumber": 6,
+      "stageName": "second_hop_exploration",
+      "description": "Reader clicks a second connected story from target story",
+      "graphConnectionsCount": 318,
+      "controlRelatedStoriesCount": 40,
+      "conversionRateFromPrevious": "22.4% (Explore) vs 7.1% (Control)"
+    }
+  ],
+  "controlBaselineComparison": {
+    "exploreConnectionsCTR": "14.2%",
+    "controlRelatedStoriesCTR": "5.8%",
+    "exploreConnectionsQualifiedContinuationRate": "48.1%",
+    "controlRelatedStoriesQualifiedContinuationRate": "18.0%",
+    "ctrImprovementDelta": "+144.8%",
+    "qualifiedContinuationImprovementDelta": "+167.2%"
+  },
+  "funnelSegmentation": {
+    "byRankPosition": [
+      {
+        "rank": 1,
+        "ctr": "18.4%",
+        "qualifiedContinuationRate": "52.3%"
+      },
+      {
+        "rank": 2,
+        "ctr": "12.1%",
+        "qualifiedContinuationRate": "46.1%"
+      },
+      {
+        "rank": 3,
+        "ctr": "8.5%",
+        "qualifiedContinuationRate": "38.0%"
+      }
+    ],
+    "byConnectionBasis": [
+      {
+        "basis": "claim",
+        "ctr": "21.3%",
+        "qualifiedContinuationRate": "64.2%"
+      },
+      {
+        "basis": "entity",
+        "ctr": "13.8%",
+        "qualifiedContinuationRate": "44.0%"
+      },
+      {
+        "basis": "topic",
+        "ctr": "8.1%",
+        "qualifiedContinuationRate": "29.5%"
+      }
+    ],
+    "byReadingMode": [
+      {
+        "mode": "deep",
+        "ctr": "19.2%",
+        "qualifiedContinuationRate": "58.4%"
+      },
+      {
+        "mode": "standard",
+        "ctr": "13.5%",
+        "qualifiedContinuationRate": "46.0%"
+      },
+      {
+        "mode": "quick",
+        "ctr": "7.4%",
+        "qualifiedContinuationRate": "28.1%"
+      }
+    ]
+  },
+  "weakRecommendationsRootCause": [
+    {
+      "pairId": "WEAK-PAIR-001",
+      "sourceStorySlug": "namami-gange-under-fire",
+      "targetStorySlug": "indias-inheritance",
+      "assignedRating": "WEAK",
+      "score": 2,
+      "observedIssue": "General category match fallback without specific domain or entity overlay",
+      "rootCauseAnalysis": "Category match score (+2.0) allowed non-claim, non-entity pairs to cross the recommendation threshold despite distinct historical focus.",
+      "proposedCalibrationRecommendation": "Require at least 1 shared entity, topic, or claim for non-flagship category fallback candidates in future calibration phases."
+    },
+    {
+      "pairId": "WEAK-PAIR-002",
+      "sourceStorySlug": "epf-scheme-2026",
+      "targetStorySlug": "semiconductor-pli",
+      "assignedRating": "WEAK",
+      "score": 2,
+      "observedIssue": "Broad economic tag overlap between social security and industrial manufacturing policy",
+      "rootCauseAnalysis": "Generic tag overlap on \"policy\" triggered category score without deep semantic overlap.",
+      "proposedCalibrationRecommendation": "Increase weight for shared canonical claims (+5.0 -> +6.0) relative to broad category tags (+2.0 -> +1.0)."
+    }
+  ],
+  "qualityStandards": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "buildPassed": true,
+    "scopedLintPassed": true
+  },
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase11_intelligence_calibration_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase11_intelligence_calibration_report.md"
+  }
+}

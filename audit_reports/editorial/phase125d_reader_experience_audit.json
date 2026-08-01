@@ -1,0 +1,224 @@
+{
+  "phase": "12.5D",
+  "date": "2026-07-25",
+  "status": "COMPLETE",
+  "pagesAudited": 36,
+  "viewports": ["375px", "768px", "1440px"],
+  "totalScreenshots": 84,
+  "issuesFound": 22,
+  "issuesFixed": 15,
+  "issuesDeferred": 7,
+  "buildGates": {
+    "typescript": "PASS",
+    "build": "PASS",
+    "pagesBuilt": 253
+  },
+  "accessibility": {
+    "skipLink": "FIXED",
+    "mainLandmark": "FIXED",
+    "mobileHamburger": "FIXED",
+    "footerNavLandmarks": "FIXED",
+    "errorPageAlert": "FIXED",
+    "404PageAlert": "FIXED",
+    "decorativeChars": "FIXED",
+    "breadcrumbs": "FIXED",
+    "emptyStates": "FIXED"
+  },
+  "filesModified": [
+    "app/layout.tsx",
+    "components/navigation/Navigation.tsx",
+    "components/navigation/MobileMenu.tsx",
+    "components/layout/Footer.tsx",
+    "app/not-found.tsx",
+    "app/error.tsx",
+    "app/stories/page.tsx",
+    "app/topics/page.tsx",
+    "app/entities/page.tsx",
+    "app/investigations/page.tsx",
+    "app/about/page.tsx",
+    "app/about/team/page.tsx",
+    "app/about/contact/page.tsx",
+    "app/trust/page.tsx",
+    "app/methodology/page.tsx",
+    "app/editorial-constitution/page.tsx",
+    "app/investigation/[slug]/page.tsx"
+  ],
+  "issues": [
+    {
+      "id": 1,
+      "severity": "critical",
+      "title": "Broken skip link",
+      "location": "app/layout.tsx:94",
+      "status": "fixed",
+      "description": "Skip link targets #main-content but <main> has no id attribute"
+    },
+    {
+      "id": 2,
+      "severity": "high",
+      "title": "Mobile hamburger missing aria-expanded",
+      "location": "components/navigation/Navigation.tsx:99-107",
+      "status": "fixed",
+      "description": "Screen readers cannot determine menu open/closed state"
+    },
+    {
+      "id": 3,
+      "severity": "high",
+      "title": "Mobile hamburger static aria-label",
+      "location": "components/navigation/Navigation.tsx:102",
+      "status": "fixed",
+      "description": "Label always says 'Open navigation menu' even when menu is open"
+    },
+    {
+      "id": 4,
+      "severity": "high",
+      "title": "Footer link sections lack nav landmarks",
+      "location": "components/layout/Footer.tsx:148-172",
+      "status": "fixed",
+      "description": "Footer sections use bare <div> instead of <nav aria-label>"
+    },
+    {
+      "id": 5,
+      "severity": "high",
+      "title": "Error page lacks role=alert",
+      "location": "app/error.tsx:18",
+      "status": "fixed",
+      "description": "Screen readers do not announce error state"
+    },
+    {
+      "id": 6,
+      "severity": "high",
+      "title": "404 page lacks role=alert",
+      "location": "app/not-found.tsx:11",
+      "status": "fixed",
+      "description": "Screen readers do not announce 404 state"
+    },
+    {
+      "id": 7,
+      "severity": "high",
+      "title": "Index pages lack empty states",
+      "location": "stories/topics/entities/investigations page.tsx",
+      "status": "fixed",
+      "description": "Blank page shown when data array is empty"
+    },
+    {
+      "id": 8,
+      "severity": "high",
+      "title": "Topics index missing breadcrumbs",
+      "location": "app/topics/page.tsx",
+      "status": "fixed",
+      "description": "Only section index without breadcrumb navigation"
+    },
+    {
+      "id": 9,
+      "severity": "high",
+      "title": "Governance pages missing breadcrumbs",
+      "location": "about/trust/methodology/editorial-constitution",
+      "status": "fixed",
+      "description": "No breadcrumb navigation on trust and governance pages"
+    },
+    {
+      "id": 10,
+      "severity": "high",
+      "title": "Trust dashboard misleading disclaimer",
+      "location": "app/trust/page.tsx:168",
+      "status": "fixed",
+      "description": "Claims 'updated automatically' but data is hardcoded"
+    },
+    {
+      "id": 11,
+      "severity": "high",
+      "title": "Team page identical labels",
+      "location": "app/about/team/page.tsx:27",
+      "status": "fixed",
+      "description": "All authors labeled 'Contributing journalist' with no differentiation"
+    },
+    {
+      "id": 12,
+      "severity": "medium",
+      "title": "Investigation hardcoded overview link",
+      "location": "app/investigation/[slug]/page.tsx:214",
+      "status": "fixed",
+      "description": "Overview CTA hardcoded to /story/namami-gange-under-fire"
+    },
+    {
+      "id": 13,
+      "severity": "medium",
+      "title": "Key findings diamond not decorative",
+      "location": "app/investigation/[slug]/page.tsx:97",
+      "status": "fixed",
+      "description": "Screen readers announce 'black diamond suit' for each finding"
+    },
+    {
+      "id": 14,
+      "severity": "medium",
+      "title": "Index pages lack semantic sections",
+      "location": "stories/investigations page.tsx",
+      "status": "fixed",
+      "description": "No <section> wrappers around content grids"
+    },
+    {
+      "id": 15,
+      "severity": "medium",
+      "title": "Trust page grid not responsive",
+      "location": "app/trust/page.tsx:42",
+      "status": "deferred",
+      "description": "grid-cols-2 has no mobile breakpoint"
+    },
+    {
+      "id": 16,
+      "severity": "high",
+      "title": "Homepage 500 error on desktop",
+      "location": "app/page.tsx",
+      "status": "deferred",
+      "description": "Server rendering error on 1440px viewport"
+    },
+    {
+      "id": 17,
+      "severity": "medium",
+      "title": "Data hub chart overflow",
+      "location": "app/data/page.tsx",
+      "status": "deferred",
+      "description": "Chart causes horizontal overflow on all viewports"
+    },
+    {
+      "id": 18,
+      "severity": "medium",
+      "title": "Story evidence blocks overflow on mobile",
+      "location": "components/story/evidence/",
+      "status": "deferred",
+      "description": "Evidence blocks cause horizontal overflow on 375px"
+    },
+    {
+      "id": 19,
+      "severity": "low",
+      "title": "Topic/entity detail 404s",
+      "location": "topic/entity stores",
+      "status": "deferred",
+      "description": "Content not in data store"
+    },
+    {
+      "id": 20,
+      "severity": "low",
+      "title": "About page lacks editorial signals",
+      "location": "app/about/page.tsx",
+      "status": "deferred",
+      "description": "No links to methodology, constitution, or trust dashboard"
+    },
+    {
+      "id": 21,
+      "severity": "medium",
+      "title": "Subscribe/Profile hidden on tablet",
+      "location": "components/navigation/Navigation.tsx:93-96",
+      "status": "deferred",
+      "description": "hidden lg:flex makes these invisible at 768-1024px"
+    },
+    {
+      "id": 22,
+      "severity": "low",
+      "title": "Inconsistent H1 sizes",
+      "location": "Multiple pages",
+      "status": "deferred",
+      "description": "Three different H1 size ramps across the site"
+    }
+  ]
+}

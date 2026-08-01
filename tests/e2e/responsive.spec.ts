@@ -26,8 +26,12 @@ test.describe('Responsive Layout Verification', () => {
           await page.setViewportSize(vp);
           await page.goto(route);
           
-          // Wait for hydration and basic render
-          await page.waitForLoadState('networkidle');
+          // Wait for hydration and basic render.
+          // NOTE: waitForLoadState('networkidle') was removed — it never fires on
+          // these pages (persistent streaming/analytics requests), hanging every
+          // desktop/tablet viewport test at 30s. 'load' (goto default) is sufficient:
+          // the overflow check reads document.documentElement.scrollWidth post-SSR.
+          await page.waitForTimeout(500);
 
           // Check if document width exceeds viewport width (horizontal scroll / overflow)
           const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);

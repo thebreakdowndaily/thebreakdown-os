@@ -6,11 +6,42 @@ Version: 1.0
 
 Status: Living Document — Editorial Operating Doctrine — Platform Beta
 
-Last Updated: 16 Jul 2026
+Last Updated: 30 Jul 2026
 
-**All architectural documents are frozen.** No further architectural work unless a bug forces it. Every future commit must answer: "Can a reader notice this?"
+**The MVP scope is frozen.** Strategic changes require evidence from implementation, user research, analytics, legal review, or production operations. No strategic changes may be introduced without a formal change request and approval. Every future commit must answer: "Can a reader notice this?"
 
 **Platform Beta**: The infrastructure phase is complete. All future engineering must produce improvements a first-time reader can notice within five minutes. No new generic infrastructure.
+
+---
+
+# ADO Execution Patterns
+
+Every execution block must begin with the standard implementation header:
+
+```
+Current Ticket:
+[ID]
+
+Status:
+In Progress
+
+Objective:
+[Target Objective]
+
+Blocked By:
+[Blockers / None]
+
+Depends On:
+Frozen MVP Specification v1.1
+
+Acceptance Criteria:
+✓ [Criteria 1]
+✓ [Criteria 2]
+
+Definition of Done:
+All acceptance criteria satisfied.
+No scope expansion.
+```
 
 ---
 
@@ -1365,14 +1396,16 @@ This sequence establishes the institution's credibility before presenting its co
 | Reader Modes | ✅ Complete |
 | Service Layer | ✅ Complete |
 | Editorial Constitution | ✅ Ratified v1.1 (Locked) |
-| Gold Standard Review | ⬜ In progress (Chapter 1) |
+| Gold Standard Review | ✅ Chapter 1 Complete |
+| Reader Journey Audit (AR-13C) | ✅ Recovery Complete — all exit criteria PASS |
 | Institutional Memory | ✅ Active (4 artifacts) |
 | Founding Architecture Program | ✅ Closed (reactive engineering only) |
+| Chapter 1 Baseline | ✅ Tagged `v1.0.0-chapter1` |
 | Platform Foundation | ✅ Production Ready |
 
 **Engineering Completion: ~95%**
 
-Founding Architecture Program closed. Future engineering is reactive to demonstrated editorial needs, not speculative feature development. No new platform features until Chapter 1 is published, externally reviewed, and accepted as the reference standard.
+Chapter 1 published as `v1.0.0-chapter1`. Baseline governance established — frozen schemas, frozen navigation, frozen knowledge graph. See `docs/architecture/baseline-v1.0.0-chapter1.md`.
 
 ---
 
@@ -1380,7 +1413,83 @@ Founding Architecture Program closed. Future engineering is reactive to demonstr
 
 - `npx tsc --noEmit` — clean
 - `npm run build` — passes (253 pages)
-- No failing tests (pre-existing test fixture issues quarantined)
+- Tests: 106/106 passing
+
+---
+
+## Architecture Change Process
+
+All changes to the frozen baseline require an Architecture Change Proposal (ACP). Template at `docs/architecture/acp-template.md`.
+
+| Level | Name | What It Covers | Review Required |
+|-------|------|----------------|-----------------|
+| **A** | Additive | New components, pages, optional metadata | No |
+| **B** | Compatible Evolution | New relationships, extended search, new views | 1 reviewer |
+| **C** | Breaking | Schema changes, field removal, navigation restructuring | 2 reviewers + migration plan |
+
+Level A ships freely. Level B requires an ACP. Level C requires a new baseline version.
+
+### Version Semantics
+
+| Version | Meaning |
+|---------|---------|
+| Patch (`1.0.x`) | Bug fixes only. No architectural changes. |
+| Minor (`1.x.0`) | New reader capabilities compatible with current baseline. Level A or B. |
+| Major (`2.0.0`) | New baseline with breaking changes. Level C. Requires ACP + migration. |
+
+### Recurring Reviews
+
+| Review | When | What It Verifies |
+|--------|------|------------------|
+| Baseline Review | New baseline (e.g., Chapter 2) | Is a new baseline required? Is the old one still supported? What guarantees change? |
+| Graph Integrity Review | Before every release | No orphaned entities, no broken relationships, no duplicates, traversal complete |
+| Reader Journey Review | Before every release | Representative journeys pass, navigation integrates into reader experience |
+
+Baseline governance: `docs/architecture/baseline-v1.0.0-chapter1.md`
+
+---
+
+## Chapter Roadmap
+
+### Chapter 1 — Knowledge Foundation ✅
+
+**Status:** Published as `v1.0.0-chapter1`
+**Date:** 26 Jul 2026
+**Question:** Can readers reliably move from problems to evidence-backed solutions?
+
+Stories, The Fix Hub, Problem Intelligence Explorer, Search, Trust layer, canonical navigation.
+
+### Chapter 2 — Comparative Intelligence
+
+**Question:** Can readers compare competing solutions in a structured, evidence-based way?
+**Focus:** Compare Fixes, evidence synthesis, cross-Fix analysis.
+
+- Compare Fixes page (side-by-side policy comparison)
+- Evidence synthesis across related Fixes
+- KnowledgeConnections actor/beneficiary links
+- Fix dual-model cleanup (FixSection + domain fields)
+- Real sourceIds (editorial enrichment)
+- Search results page Fix grouping
+
+### Chapter 3 — Global Intelligence
+
+**Question:** Can readers understand how other jurisdictions approached the same problem?
+**Focus:** Global precedents, international comparisons, jurisdictional insights.
+
+- Global precedents deep dive (country-by-country analysis)
+- International policy comparison framework
+- Jurisdictional insight cards
+- Cross-border evidence trails
+
+### Chapter 4 — Measured Outcomes
+
+**Question:** Can readers evaluate whether a solution actually worked over time?
+**Focus:** Metrics, outcome tracking, version history, longitudinal analysis.
+
+- Outcome tracking dashboard
+- Version history and changelogs
+- Longitudinal analysis (trends over time)
+- Trust Score computation and display
 
 ---
 

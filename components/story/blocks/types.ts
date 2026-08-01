@@ -115,6 +115,105 @@ export interface HeroBlockData {
   versionHistory?: Array<{ date: string; description: string }>;
 }
 
+export interface StakeholderItem {
+  name: string;
+  type: 'government' | 'institution' | 'individual' | 'community' | 'private_sector';
+  position: string;
+  interest: string;
+  stance: 'support' | 'oppose' | 'neutral' | 'conditional';
+}
+
+export interface StakeholdersData {
+  headline: string;
+  stakeholders: StakeholderItem[];
+  summary?: string;
+}
+
+export interface PerspectiveItem {
+  label: string;
+  source: string;
+  quote: string;
+  stance: string;
+}
+
+export interface PerspectivesData {
+  headline: string;
+  perspectives: PerspectiveItem[];
+  note?: string;
+}
+
+export interface FutureOutlookData {
+  headline: string;
+  scenarios: Array<{
+    label: string;
+    description: string;
+    probability?: string;
+    source?: string;
+  }>;
+  uncertainty?: string;
+  confidence: 'High' | 'Medium' | 'Low';
+}
+
+export interface SystemExplanationData {
+  headline: string;
+  summary: string;
+  steps: Array<{
+    label: string;
+    description: string;
+    actor?: string;
+    input?: string;
+    output?: string;
+  }>;
+  diagram?: string;
+  diagramAlt?: string;
+}
+
+export interface TBSStory {
+  id: string;
+  slug: string;
+  storyType: string;
+  title: string;
+  subtitle?: string;
+  hero: {
+    image: string;
+    statistic?: string;
+    statisticSource?: string;
+    caption?: string;
+    altText?: string;
+    credit?: string;
+    aspectRatio?: string;
+  };
+  metadata: {
+    difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+    confidence: 'High' | 'Medium' | 'Low' | 'Insufficient';
+    confidenceRationale: string;
+    updateRequired: boolean;
+    readingTimeMinutes: number;
+    tags: string[];
+    entities: Array<{ name: string; type: string; role: string }>;
+    lastVerified: string;
+    nextVerificationDue: string | null;
+  };
+  summary: string;
+  keyFacts: Array<{ claim: string; source: string; confidence: number }>;
+  whyItMatters: string;
+  narrative: string;
+  timeline: Array<{ date: string; event: string; source: string; significance: string }>;
+  systemExplanation?: SystemExplanationData;
+  evidence: Array<{ claim: string; source: string; confidence: number; verifiedAt: string }>;
+  charts: Array<{ title: string; type: string; data: Array<Record<string, unknown>>; source: string }>;
+  maps?: Array<{ title: string; type: string; data: Record<string, unknown>; source: string }>;
+  stakeholders?: StakeholdersData;
+  perspectives?: PerspectivesData;
+  tradeoffs?: Array<{ option: string; benefits: string[]; risks: string[]; evidence: string }>;
+  futureOutlook?: FutureOutlookData;
+  faq: Array<{ question: string; answer: string; source?: string }>;
+  takeaways: string[];
+  sources: Array<{ title: string; author?: string; date?: string; url?: string; reliability: string }>;
+  relatedKnowledge: Array<{ title: string; slug: string; relation: string }>;
+  visuals: Array<{ section: string; type: string; placement: string; aspectRatio: string; caption: string; altText: string; credit: string }>;
+}
+
 export interface AuthorBoxBlockData {
   author: { name: string; avatar?: string; bio?: string; url?: string };
 }
@@ -144,6 +243,39 @@ export interface ConfidenceMeterBlockData {
   unverifiable: number;
 }
 
+export interface LegendItem {
+  label: string;
+  color: string;
+  type?: 'solid' | 'dashed' | 'dotted';
+}
+
+export interface MapProvenance {
+  creator?: string;
+  source: string;
+  reference?: string;
+  date?: string;
+}
+
+export interface MapBlockData {
+  title: string;
+  caption: string;
+  altText?: string;
+  url?: string;
+  mapType: string;
+  dataSource: string;
+  disputedBoundaries?: boolean;
+  legend?: LegendItem[];
+  scale?: string;
+  projection?: string;
+  linkedTimelineId?: string;
+  linkedDocuments?: string[];
+  license?: string;
+  credit?: string;
+  status: 'archived' | 'requested' | 'draft' | 'recreated';
+  provenance?: MapProvenance;
+  linkedClaims?: string[];
+}
+
 export interface BlockMap {
   'executive-summary': ExecutiveSummaryData;
   'evidence': EvidencePanelData;
@@ -166,12 +298,17 @@ export interface BlockMap {
     xKey: string;
     yKey: string;
   };
+  'map': MapBlockData;
   'quote': { text: string; attribution?: string };
   'dataset-reference': import('./DatasetReferenceBlock').DatasetReferenceData;
   'hero': HeroBlockData;
   'author-box': AuthorBoxBlockData;
   'story-snapshot': StorySnapshotBlockData;
   'confidence-meter': ConfidenceMeterBlockData;
+  'system-explanation': SystemExplanationData;
+  'stakeholders': StakeholdersData;
+  'perspectives': PerspectivesData;
+  'future-outlook': FutureOutlookData;
 }
 
 export type BlockType = keyof BlockMap;

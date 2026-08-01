@@ -6,6 +6,7 @@ import { KnowledgeGraph } from '@/features/graph/components/KnowledgeGraph';
 import { buildGraphPage } from '@/features/graph/view-model';
 import { getServices } from '@/services/registry';
 import { bootstrapServices } from '@/lib/bootstrap';
+import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 import type { GraphPageViewModel } from '@/features/graph/view-model';
 
 export default function GraphExplorerPage() {
@@ -57,6 +58,15 @@ export default function GraphExplorerPage() {
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: 'var(--spacing-6) var(--spacing-4)' }}>
       <div style={{ marginBottom: 'var(--spacing-4)' }}>
+        <SpatialNarrativeBreadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Knowledge Graph', href: '/graph', current: true },
+          ]}
+          theme="dark"
+        />
+      </div>
+      <div style={{ marginBottom: 'var(--spacing-4)' }}>
         <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, color: 'var(--color-text-primary)', margin: 0 }}>
           Knowledge Graph
         </h1>
@@ -64,6 +74,7 @@ export default function GraphExplorerPage() {
           {vm ? `${String(vm.nodeCount)} nodes · ${String(vm.edgeCount)} connections` : 'Loading...'}
         </p>
       </div>
+
       <div style={{ height: 'calc(100vh - 220px)', minHeight: 500 }}>
         {vm && (
           <KnowledgeGraph

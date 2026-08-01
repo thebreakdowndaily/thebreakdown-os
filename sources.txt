@@ -1,0 +1,35 @@
+SOURCES DATA
+==============
+
+id | title | source_type | created_at | ingestion_method
+--- | ----- | ----------- | ---------- | ----------------
+0f4c2606-d832-45e0-8d69-763d1241aec3 | East Shillong Assembly constituency — Wikipedia | REFERENCE | Wed Jul 22 2026 11:49:18 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+1ec49d41-ddad-4b80-9257-f65807673602 | Mumbai coastal road inaugurated today: All you need to know — Indian Express (Mar 11 2024) | JOURNALISM | Wed Jul 22 2026 11:49:09 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+20bef86c-7ed9-4372-85f5-f7ccf8557162 | Ahmedabad Metro Phase 1 Project Information — Metro Rail Today | REFERENCE | Wed Jul 22 2026 11:49:03 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+229d637a-dd66-467c-8131-4c483c8d4197 | Infrastructure development to facilitate inter-valley movement in Arunachal Pradesh — The Hindu (Feb 13 2024) | JOURNALISM | Wed Jul 22 2026 11:49:27 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+27a6a555-fbb5-464d-8391-397dcec68306 | Mumbai Coastal Road: Opening delayed to October 2024 — Times of India (May 29 2024) | JOURNALISM | Wed Jul 22 2026 11:49:09 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+29823f12-43d8-4c46-9ca4-68f303e84473 | Assessing the Compliance of the Local Self-Governance Act for PESA in Jharkhand — Journal of Rural Development (2024) | ACADEMIC | Wed Jul 22 2026 11:49:35 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+42a0c43d-1739-4288-8806-8a073d8151ac | Cabinet approves establishment of new AIIMS at Gorakhpur — PM India (Oct 2015) | OFFICIAL_GOVERNMENT_DOCUMENT | Wed Jul 22 2026 11:49:41 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+46d99be4-1e16-4b84-bcce-f364037429ef | Union Cabinet Approves Ahmedabad Metro Rail Project Phase-1 — Business Standard (Oct 20 2014) | JOURNALISM | Wed Jul 22 2026 11:49:03 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+503fe624-68ee-48e2-9cd3-dc9bcc4c4586 | Shri Kashi Vishwanath Corridor — PIB Press Release PRID 2122058 (Apr 16 2025) | OFFICIAL_GOVERNMENT_DOCUMENT | Wed Jul 22 2026 11:48:58 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+50f51b0a-8248-4442-a9b6-8a15ece64297 | Hamirpur Himachal Pradesh election result 2022: Independent candidate Ashish Sharma beat BJP, Congress — CNBC TV18 (Dec 7 2022) | JOURNALISM | Wed Jul 22 2026 11:49:15 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+5164102e-863f-4c48-b595-827b4207d059 | Coastal road inauguration: CM Eknath Shinde inaugurates first phase — Economic Times (Mar 11 2024) | JOURNALISM | Wed Jul 22 2026 11:49:10 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+5a49c5b7-7b5c-4bec-9ac1-9b9efbee5fd2 | Lalganj Election Result 2022 — News18 | JOURNALISM | Wed Jul 22 2026 11:49:31 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+5e57b808-26a9-4a9f-9a91-a58dbecfc37a | Rajasthan High Court v Rajat Yadav — Supreme Court Observer (Dec 19 2025) | LEGAL_DOCUMENT | Wed Jul 22 2026 11:49:38 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+78ad259c-6306-4652-a1e2-9b98c00fe8ee | Lucknow gets its much-awaited Metro Rail — The Hindu (Sep 5 2017) | JOURNALISM | Wed Jul 22 2026 11:49:48 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+79d80f2a-602d-4cbb-a489-d11529f984de | PM lays foundation stone and dedicates to nation multiple development projects worth about Rs 4200 crore in Pithoragarh — PMO (Oct 12 2023) | OFFICIAL_GOVERNMENT_DOCUMENT | Wed Jul 22 2026 11:49:22 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+80f0b321-b97c-4eca-b03c-4d01e1f29900 | PM Modi to Inaugurate AIIMS Gorakhpur on Tuesday — News18 (Dec 6 2021) | JOURNALISM | Wed Jul 22 2026 11:49:42 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+8139e974-9d2a-4838-9720-ac568b0cc469 | Centre sanctions over Rs 28,000 crore to build highway along LAC in Arunachal — Times of India (Nov 27 2024) | JOURNALISM | Wed Jul 22 2026 11:49:26 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+8d591ac8-08c9-4794-a452-dfc4f9ddd32d | Approval for Lucknow Metro Rail Project Phase-1A — PIB (Dec 22 2015) | OFFICIAL_GOVERNMENT_DOCUMENT | Wed Jul 22 2026 11:49:47 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+982bb449-e212-4f16-899e-54766095cdf7 | Khunti Assembly constituency — Wikipedia | REFERENCE | Wed Jul 22 2026 11:49:34 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+9bc1cbcc-b6fc-4dc1-ba29-7f062e659b6b | Ahmedabad Metro Rail Budget Allocation Expenditure — Gujarat Metro Rail RTI | OFFICIAL_GOVERNMENT_DOCUMENT | Wed Jul 22 2026 11:49:04 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+9cefb537-106c-4465-8047-3d109fa552d4 | Lucknow Metro opens to public — Business Standard (Sep 5 2017) | JOURNALISM | Wed Jul 22 2026 11:49:47 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+c20eed57-b6fc-4edf-906f-71b8ec5654fa | Hamirpur Bypoll Result 2024: Ashish Sharma of BJP Wins By Over 1,500 Votes — News18 (Jul 13 2024) | JOURNALISM | Wed Jul 22 2026 11:49:15 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+c2a33323-a060-4cfc-b1ad-7fec2d564fc8 | Supreme Court on Rajasthan JJA Recruitment: Reservation Functions as Inclusion — The Mook Nayak (Dec 30 2025) | JOURNALISM | Wed Jul 22 2026 11:49:39 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+c55662a9-c0a1-4b08-8668-c2c520ba7bac | Lalganj, Uttar Pradesh Assembly constituency — Wikipedia | REFERENCE | Wed Jul 22 2026 11:49:31 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+cce0a022-6aae-4690-9b98-a9235a81eb6a | Kashi Vishwanath Corridor: PM Modi inaugurates first phase — Economic Times (Dec 13 2021) | JOURNALISM | Wed Jul 22 2026 11:48:58 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+cda7f02a-f24e-4467-9208-3eb1ba7b593c | Projects worth over Rs 62 crores initiated in Pithoragarh — Garhwal Post (Aug 30 2025) | JOURNALISM | Wed Jul 22 2026 11:49:22 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+cebe32fa-687b-4474-836a-d2232bfc8192 | Kashi Corridor: A passage of faith — The Hindu (Dec 18 2021) | JOURNALISM | Wed Jul 22 2026 11:48:58 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+ef440830-68db-4408-b5c1-014759e725ab | UP: PM Modi inaugurates AIIMS, 2 other projects in Gorakhpur — Times of India (Dec 7 2021) | JOURNALISM | Wed Jul 22 2026 11:49:42 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+f5d79377-4f30-4fde-9d93-0613020a4535 | Strategic Highway along China Border: Rs 6k crore allocation — Times of India (Feb 12 2024) | JOURNALISM | Wed Jul 22 2026 11:49:27 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED
+fded9f08-1c25-44c3-9c06-ffd08691efdf | East Shillong Election Result 2023 — News18 | JOURNALISM | Wed Jul 22 2026 11:49:19 GMT+0530 (India Standard Time) | PROD-12CONSTITUENCY-CONTROLLED

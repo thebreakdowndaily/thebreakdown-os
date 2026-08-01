@@ -1,0 +1,1731 @@
+{
+  "mission": "UP403-DATA-13 — Demographic Enrichment Readiness Assessment",
+  "dataset_baseline": "UP403 Constituency Intelligence Dataset v1.0.1",
+  "execution_date": "2026-07-30T18:00:00Z",
+  "research_cutoff_date": "2026-07-30",
+  "summary": {
+    "current_status": "ALL_DEMOGRAPHICS_NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL",
+    "total_ac_with_data": 0,
+    "ac_density_gap": "39 fields affected (14 demographics + 25 geography/infrastructure)",
+    "enrichment_readiness": "NOT_READY — requires WP9 Geospatial pipeline"
+  },
+  "current_state": {
+    "demographics_object_exists": true,
+    "all_acs_have_structure": true,
+    "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL",
+    "reason": "Census 2011 PCA data is published at village/tehsil/district level, not pre-mapped to assembly constituencies"
+  },
+  "enrichment_requirements": {
+    "population": {
+      "fields": [
+        "population_value",
+        "population_reference_year"
+      ],
+      "sources": [
+        "Census of India 2011 PCA",
+        "Census 2011 AC-level estimates"
+      ],
+      "method": "GIS intersection of AC boundaries with Census 2011 village-level PCA data",
+      "availability": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL",
+      "estimated_effort": "Requires WP9 (Geospatial) — AC boundary GIS layer + Census village points",
+      "provenance_required": [
+        "Original Authority: Registrar General of India",
+        "Dataset: Census 2011 Primary Census Abstract",
+        "Method: GIS intersection (QGIS/PostGIS)",
+        "Limitation: Based on 2011 data, projected values would need separate methodology"
+      ]
+    },
+    "sc_st_population": {
+      "fields": [
+        "sc_population",
+        "sc_percentage",
+        "st_population",
+        "st_percentage"
+      ],
+      "sources": [
+        "Census of India 2011 SC/ST PCA"
+      ],
+      "method": "Same GIS intersection method as population",
+      "availability": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL",
+      "estimated_effort": "Same as population — derived from same Census PCA dataset"
+    },
+    "literacy": {
+      "fields": [
+        "overall_literacy_rate",
+        "male_literacy_rate",
+        "female_literacy_rate"
+      ],
+      "sources": [
+        "Census of India 2011 Literacy PCA"
+      ],
+      "method": "Same GIS intersection method",
+      "availability": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "urban_rural": {
+      "fields": [
+        "urban_population",
+        "rural_population",
+        "urban_percentage",
+        "rural_percentage"
+      ],
+      "sources": [
+        "Census of India 2011 Urban/Rural PCA"
+      ],
+      "method": "Same GIS intersection method",
+      "availability": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "area_geography": {
+      "fields": [
+        "area_sq_km",
+        "terrain_type",
+        "major_rivers",
+        "forest_area"
+      ],
+      "sources": [
+        "Survey of India topographical maps",
+        "UP Remote Sensing Centre",
+        "Forest Survey of India"
+      ],
+      "method": "GIS computation from AC boundary layer",
+      "availability": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    }
+  },
+  "available_scratch_assets": {
+    "census_files": [
+      "census-pca-up-ac-2011.csv",
+      "census-up-sc-st-ac.csv",
+      "data-gov-census-search.json"
+    ],
+    "notes": [
+      "census-pca-up-ac-2011.csv appears to contain HTML, not CSV data",
+      "census-up-sc-st-ac.csv also appears malformed",
+      "No pre-processed AC-level demographic datasets found in scratch"
+    ]
+  },
+  "recommended_approach": {
+    "phase_1": "Acquire AC boundary GeoJSON from ECI or UP Government",
+    "phase_2": "Download Census 2011 village-level PCA for UP (~100K villages)",
+    "phase_3": "Perform GIS intersection to assign villages to ACs",
+    "phase_4": "Aggregate village-level demographics to AC level",
+    "phase_5": "Validate against known district totals",
+    "estimated_data_sources": [
+      "ECI Delimitation 2008 AC boundaries (PDF/GeoJSON)",
+      "Census 2011 Village PCA (https://censusindia.gov.in)",
+      "UP State GIS portal (https://upgov.up.nic.in)"
+    ]
+  },
+  "constituency_level_data": {
+    "UP-AC-001": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-002": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-003": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-004": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-005": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-006": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-007": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-008": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-009": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-010": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-011": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-012": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-013": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-014": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-015": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-016": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-017": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-018": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-019": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-020": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-021": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-022": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-023": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-024": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-025": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-026": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-027": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-028": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-029": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-030": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-031": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-032": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-033": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-034": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-035": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-036": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-037": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-038": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-039": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-040": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-041": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-042": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-043": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-044": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-045": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-046": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-047": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-048": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-049": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-050": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-051": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-052": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-053": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-054": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-055": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-056": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-057": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-058": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-059": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-060": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-061": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-062": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-063": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-064": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-065": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-066": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-067": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-068": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-069": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-070": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-071": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-072": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-073": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-074": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-075": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-076": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-077": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-078": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-079": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-080": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-081": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-082": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-083": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-084": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-085": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-086": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-087": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-088": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-089": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-090": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-091": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-092": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-093": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-094": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-095": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-096": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-097": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-098": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-099": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-100": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-101": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-102": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-103": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-104": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-105": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-106": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-107": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-108": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-109": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-110": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-111": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-112": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-113": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-114": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-115": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-116": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-117": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-118": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-119": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-120": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-121": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-122": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-123": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-124": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-125": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-126": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-127": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-128": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-129": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-130": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-131": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-132": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-133": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-134": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-135": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-136": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-137": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-138": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-139": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-140": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-141": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-142": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-143": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-144": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-145": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-146": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-147": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-148": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-149": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-150": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-151": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-152": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-153": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-154": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-155": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-156": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-157": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-158": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-159": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-160": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-161": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-162": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-163": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-164": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-165": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-166": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-167": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-168": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-169": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-170": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-171": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-172": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-173": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-174": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-175": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-176": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-177": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-178": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-179": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-180": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-181": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-182": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-183": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-184": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-185": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-186": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-187": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-188": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-189": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-190": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-191": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-192": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-193": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-194": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-195": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-196": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-197": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-198": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-199": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-200": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-201": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-202": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-203": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-204": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-205": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-206": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-207": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-208": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-209": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-210": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-211": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-212": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-213": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-214": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-215": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-216": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-217": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-218": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-219": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-220": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-221": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-222": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-223": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-224": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-225": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-226": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-227": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-228": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-229": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-230": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-231": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-232": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-233": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-234": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-235": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-236": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-237": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-238": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-239": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-240": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-241": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-242": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-243": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-244": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-245": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-246": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-247": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-248": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-249": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-250": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-251": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-252": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-253": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-254": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-255": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-256": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-257": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-258": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-259": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-260": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-261": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-262": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-263": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-264": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-265": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-266": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-267": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-268": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-269": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-270": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-271": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-272": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-273": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-274": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-275": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-276": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-277": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-278": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-279": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-280": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-281": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-282": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-283": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-284": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-285": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-286": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-287": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-288": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-289": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-290": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-291": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-292": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-293": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-294": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-295": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-296": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-297": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-298": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-299": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-300": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-301": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-302": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-303": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-304": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-305": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-306": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-307": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-308": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-309": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-310": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-311": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-312": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-313": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-314": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-315": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-316": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-317": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-318": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-319": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-320": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-321": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-322": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-323": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-324": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-325": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-326": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-327": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-328": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-329": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-330": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-331": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-332": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-333": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-334": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-335": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-336": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-337": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-338": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-339": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-340": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-341": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-342": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-343": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-344": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-345": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-346": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-347": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-348": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-349": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-350": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-351": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-352": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-353": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-354": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-355": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-356": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-357": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-358": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-359": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-360": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-361": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-362": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-363": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-364": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-365": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-366": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-367": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-368": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-369": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-370": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-371": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-372": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-373": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-374": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-375": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-376": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-377": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-378": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-379": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-380": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-381": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-382": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-383": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-384": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-385": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-386": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-387": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-388": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-389": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-390": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-391": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-392": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-393": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-394": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-395": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-396": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-397": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-398": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-399": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-400": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-401": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-402": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    },
+    "UP-AC-403": {
+      "status": "NOT_AVAILABLE",
+      "availability_status": "NOT_AVAILABLE_AT_CONSTITUENCY_LEVEL"
+    }
+  }
+}

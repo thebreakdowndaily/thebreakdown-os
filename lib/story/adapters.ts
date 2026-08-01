@@ -14,6 +14,7 @@ import type { Story, Chapter, StoryBlock, Source, Claim, PublicationStatus, Stor
 import type { APIStory } from '@/utils/data-layer/types';
 import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 import { createBlocksFromStory } from '@/lib/bootstrap';
+import { deterministicClaimId } from '@/lib/story/claim-identity';
 
 /**
  * Maps external/API status strings to canonical StoryStatus.
@@ -43,7 +44,7 @@ export function apiStoryToCanonicalAdapter(s: APIStory): Story {
   );
   const mappedClaims = (s.claims || []).map(
     (c, i): Claim => ({
-      id: `claim-${s.slug || 'story'}-${i}`,
+      id: (c as any).id || deterministicClaimId(c.claim || '', c.source || '', s.slug || 'story'),
       claim: c.claim || '',
       data: c.explanation || '',
       source: c.source || '',
@@ -58,6 +59,7 @@ export function apiStoryToCanonicalAdapter(s: APIStory): Story {
           : (c.confidence || 0) >= 0.6
           ? 'moderate'
           : 'unverified',
+      counterArguments: (c as any).counterArguments || [],
     })
   );
 
@@ -105,12 +107,19 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
   const pubStatus: PublicationStatus = isPublished ? 'published' : 'draft';
   const canonicalStatus: StoryStatus = isPublished ? 'published' : 'draft';
 
-  const blocks: StoryBlock[] = chapter.content.map((kb) => ({
-    id: kb.id,
-    type: kb.type as any,
-    region: 'main',
-    data: kb.data,
-  }));
+  const blocks: StoryBlock[] = chapter.content.map((kb) => {
+    let canonicalType = kb.type as string;
+    if (canonicalType === 'heading') canonicalType = 'chapter-heading';
+    else if (canonicalType === 'paragraph') canonicalType = 'text';
+    else if (canonicalType === 'evidence-summary') canonicalType = 'evidence';
+
+    return {
+      id: kb.id,
+      type: canonicalType,
+      region: 'main',
+      data: kb.data || {},
+    };
+  });
 
   const readingTimeVal =
     typeof chapter.readingTime === 'number'

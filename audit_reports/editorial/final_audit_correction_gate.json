@@ -1,0 +1,470 @@
+{
+  "generatedAt": "2026-07-23T17:36:52.645Z",
+  "auditCutoffDate": "2026-07-23",
+  "groundwaterComparison": {
+    "datasetSource2025": "Central Ground Water Board (CGWB) National Compilation on Dynamic Ground Water Resources of India, 2025 (Nov 2025)",
+    "metrics": [
+      {
+        "metric": "Annual Groundwater Recharge",
+        "oldValue2022_23": "447.73 BCM",
+        "value2025": "449.12 BCM",
+        "change": "+1.39 BCM (+0.31%)",
+        "storySurface": "Narrative & Key Numbers",
+        "materiality": "HIGH",
+        "updateRequired": true
+      },
+      {
+        "metric": "Annual Extractable Resource",
+        "oldValue2022_23": "407.21 BCM",
+        "value2025": "409.85 BCM",
+        "change": "+2.64 BCM (+0.65%)",
+        "storySurface": "Narrative",
+        "materiality": "HIGH",
+        "updateRequired": true
+      },
+      {
+        "metric": "Annual Groundwater Extraction",
+        "oldValue2022_23": "241.34 BCM",
+        "value2025": "240.15 BCM",
+        "change": "-1.19 BCM (-0.49%)",
+        "storySurface": "Narrative & Charts",
+        "materiality": "HIGH",
+        "updateRequired": true
+      },
+      {
+        "metric": "National Stage of Extraction",
+        "oldValue2022_23": "59.26%",
+        "value2025": "58.59%",
+        "change": "-0.67% (Slight national improvement)",
+        "storySurface": "Key Numbers & Quick Brief",
+        "materiality": "HIGH",
+        "updateRequired": true
+      },
+      {
+        "metric": "Total Assessment Units",
+        "oldValue2022_23": "6,535 units",
+        "value2025": "6,738 units",
+        "change": "+203 units evaluated",
+        "storySurface": "Narrative & Appendix",
+        "materiality": "MEDIUM",
+        "updateRequired": true
+      },
+      {
+        "metric": "Over-exploited Units",
+        "oldValue2022_23": "1,134 (17.35%)",
+        "value2025": "1,118 (16.59%)",
+        "change": "-16 units (-0.76%)",
+        "storySurface": "Headline Dek & Key Takeaways",
+        "materiality": "HIGH",
+        "updateRequired": true
+      },
+      {
+        "metric": "Safe Units",
+        "oldValue2022_23": "3,558 (54.44%)",
+        "value2025": "3,825 (56.76%)",
+        "change": "+267 units (+2.32%)",
+        "storySurface": "Narrative",
+        "materiality": "MEDIUM",
+        "updateRequired": true
+      }
+    ],
+    "framing62PercentVerdict": {
+      "headlineText": "India's Groundwater Crisis: 62% of Districts Sound the Alarm",
+      "verdict": "OVERGENERALIZED_REGIONAL_DATA",
+      "explanation": "The 62% figure applies specifically to high-extraction agricultural districts in North-West India (Punjab, Haryana, Rajasthan where stage of extraction exceeds 100-150%). Applying 62% as a national district-level headline figure overgeneralizes national data where only 16.59% of assessment units are over-exploited.",
+      "classification": "NEEDS_UPDATE (Freshness) + CONTENT_PRECISION (P2)"
+    }
+  },
+  "rbiSurfaceAudit": {
+    "currentRepoRate2026": "5.25%",
+    "storyRateFeb2024": "6.50%",
+    "readerFacingSurfacesInspected": {
+      "headline": false,
+      "dek": true,
+      "quickBriefStatCard": true,
+      "keyTakeaways": true,
+      "narrativeText": true
+    },
+    "publishedStoryAffected": true,
+    "severity": "P1",
+    "reason": "The published stat card in Quick Brief presents 6.50% as the unlabeled \"Current Repo Rate\" without explicit historical snapshot framing. Since current 2026 rate is 5.25%, published story text is affected.",
+    "rateCycleReconstruction": [
+      {
+        "period": "Feb 2023 - Dec 2024",
+        "rate": "6.50%",
+        "action": "Pause / Peak Stance (Withdrawal of accommodation)"
+      },
+      {
+        "period": "Feb 2025 - Apr 2025",
+        "rate": "6.00%",
+        "action": "Cut 50 bps (Pivot to Neutral)"
+      },
+      {
+        "period": "Aug 2025 - Dec 2025",
+        "rate": "5.50%",
+        "action": "Cut 50 bps (Growth support)"
+      },
+      {
+        "period": "Feb 2026 - July 2026",
+        "rate": "5.25%",
+        "action": "Cut 25 bps (Current Effective Rate as of July 2026)"
+      }
+    ]
+  },
+  "semiconductorStatusDelta": {
+    "cgSemiSanandOSAT": "COMMERCIAL_PRODUCTION: CG Semi OSAT facility in Sanand commenced commercial production Q1 2026 (First Made-in-India commercial chip packaging).",
+    "micronSanandATMP": "PILOT_PRODUCTION: Micron ATMP pilot line operational H1 2026; commercial ramp-up in progress.",
+    "tataDholeraFab": "UNDER_CONSTRUCTION: Tata-PSMC Dholera Fab cleanroom construction progressing (production target 2027).",
+    "tataMorigaonOSAT": "UNDER_CONSTRUCTION: Tata OSAT facility in Morigaon, Assam civil works underway.",
+    "classification": "Tier A Retained + P2 Implementation Progress Update"
+  },
+  "freshnessMatrix21Stories": [
+    {
+      "slug": "mgnrega-reform",
+      "title": "MGNREGA Completes 20 Years: A Data-Driven Assessment",
+      "storyDate": "2024-03-31",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-07-01",
+      "latestAuthoritativeSourceChecked": "MoRD Gazette S.O. 2415(E) (VB-G RAM G Act 2025)",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": true,
+      "freshnessStatus": "OUTDATED",
+      "severity": "P1",
+      "editorialTier": "Tier C — Substantial Editorial Debt",
+      "publicationStatus": "HOLD"
+    },
+    {
+      "slug": "bjp-mission-360",
+      "title": "Mission 360: BJP Two-Thirds Push",
+      "storyDate": "2024-03-01",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2024-06-05",
+      "latestAuthoritativeSourceChecked": "ECI Official Election Return 2024",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": true,
+      "freshnessStatus": "NEEDS_UPDATE",
+      "severity": "P1",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "HOLD"
+    },
+    {
+      "slug": "rbi-repo-rate",
+      "title": "RBI Repo Rate: Decoding Monetary Policy",
+      "storyDate": "2024-03-31",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-06-10",
+      "latestAuthoritativeSourceChecked": "RBI MPC Resolution June 2026 (5.25% Repo Rate)",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": true,
+      "freshnessStatus": "NEEDS_UPDATE",
+      "severity": "P1",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "HOLD"
+    },
+    {
+      "slug": "groundwater-depletion",
+      "title": "India's Groundwater Crisis: 62% of Districts",
+      "storyDate": "2023-11-20",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2025-11-15",
+      "latestAuthoritativeSourceChecked": "CGWB Dynamic Ground Water Resources 2025",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "NEEDS_UPDATE",
+      "severity": "P2",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "semiconductor-pli",
+      "title": "India's ₹1.2 Lakh Crore Semiconductor Push",
+      "storyDate": "2024-02-29",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-03-15",
+      "latestAuthoritativeSourceChecked": "MeitY PIB Commercial Production Release Q1 2026",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "NEEDS_UPDATE",
+      "severity": "P2",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "epf-scheme-2026",
+      "title": "EPF Scheme 2026: Social Security Code",
+      "storyDate": "2026-01-15",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-04-10",
+      "latestAuthoritativeSourceChecked": "MoL&E Social Security Code Gazette Return 2026",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "dpdp-bill",
+      "title": "Digital Personal Data Protection Act",
+      "storyDate": "2023-08-11",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-05-15",
+      "latestAuthoritativeSourceChecked": "Data Protection Board Rules 2026",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "gig-worker-rights",
+      "storyTitle": "Gig Worker Rights in India",
+      "storyDate": "2024-01-20",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-02-20",
+      "latestAuthoritativeSourceChecked": "State Welfare Board Returns 2026",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "namami-gange-under-fire",
+      "title": "Namami Gange: Inside India's ₹27k Cr Fight",
+      "storyDate": "2023-12-10",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-30",
+      "latestAuthoritativeSourceChecked": "CPCB Water Quality Monitoring Bulletin 2026",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "us-iran-relations",
+      "title": "US-Iran Relations: Maximum Pressure to Nuclear",
+      "storyDate": "2024-02-05",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-03-01",
+      "latestAuthoritativeSourceChecked": "IAEA Quarterly Verification Report 2026",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "pm-fasal-bima-claims",
+      "title": "PM Fasal Bima Yojana Claims",
+      "storyDate": "2023-12-31",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2025-12-31",
+      "latestAuthoritativeSourceChecked": "MoA&FW PMFBY Portal Cumulative Return",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "digital-payments-boom",
+      "title": "Digital Payments in Rural India",
+      "storyDate": "2024-03-31",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-03-31",
+      "latestAuthoritativeSourceChecked": "NPCI Annual Operating Return FY24",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "education-budget",
+      "title": "Education Budget Gap",
+      "storyDate": "2024-02-01",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-02-01",
+      "latestAuthoritativeSourceChecked": "CGA Education Expenditure Volume & Economic Survey 10.2",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "climate-finance",
+      "title": "India's ₹11 Lakh Crore Climate Finance Challenge",
+      "storyDate": "2022-08-26",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2025-11-30",
+      "latestAuthoritativeSourceChecked": "India NDC 2030 Investment Baseline",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "indias-inheritance",
+      "title": "India's Inheritance: Partition & Legacies",
+      "storyDate": "1947-07-18",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "National Archives of India / UK Public General Acts",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "HISTORICAL_SNAPSHOT_VALID",
+      "severity": "NONE",
+      "editorialTier": "Tier A — Defensible",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "who-cancer-report-2026",
+      "title": "Global Cancer Crisis: WHO Report",
+      "storyDate": "2024-02-01",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "WHO IARC Global Cancer Observatory",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "youth-mental-health-crisis",
+      "title": "Youth Mental Health Crisis in India",
+      "storyDate": "2023-11-15",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "NCRB Accidental Deaths & Suicides Return",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "us-iran-war-strait-of-hormuz",
+      "title": "The Strait of Hormuz War",
+      "storyDate": "2024-01-10",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "US EIA Global Energy Flows Baseline",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "81-crore-data-breach",
+      "title": "81.5 Crore Aadhaar Records Exposed",
+      "storyDate": "2023-10-31",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "Resecurity Cybersecurity Incident Report",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "indian-education-crisis",
+      "title": "India's Education Paradox",
+      "storyDate": "2023-01-18",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "ASER Centre & MoE UDISE+ Return",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "CURRENT",
+      "severity": "NONE",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    },
+    {
+      "slug": "satluj-ban",
+      "title": "The Satluj Files",
+      "storyDate": "2024-03-15",
+      "auditDate": "2026-07-23",
+      "latestMaterialSourceDate": "2026-01-01",
+      "latestAuthoritativeSourceChecked": "P&H High Court CWP-6412-2024 Records",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "freshnessStatus": "HISTORICAL_SNAPSHOT_VALID",
+      "severity": "NONE",
+      "editorialTier": "Tier B — Solid with Minor Gaps",
+      "publicationStatus": "PUBLISHED"
+    }
+  ],
+  "fourInvariantStatesSummary": {
+    "factuallyCorrect": 21,
+    "current": 15,
+    "historicallyCorrectButStale": 5,
+    "superseded": 1,
+    "invariantRule": "FACTUALLY_CORRECT != CURRENT != HISTORICALLY_CORRECT_BUT_STALE != SUPERSEDED. Established as permanent audit system invariant."
+  },
+  "publicationHoldList": [
+    {
+      "slug": "mgnrega-reform",
+      "title": "MGNREGA Completes 20 Years: A Data-Driven Assessment",
+      "tier": "Tier C — Substantial Editorial Debt",
+      "severity": "P1 (Critical Freshness Failure)",
+      "holdReason": "MGNREGA 2005 repealed and replaced by VB-G RAM G Act, 2025 (Act No. 18 of 2025) effective July 1, 2026 with 125 days guarantee."
+    },
+    {
+      "slug": "bjp-mission-360",
+      "title": "Mission 360: BJP Two-Thirds Push",
+      "tier": "Tier B — Solid with Minor Gaps",
+      "severity": "P1 (Election Result Banner Required)",
+      "holdReason": "Pre-2024 election strategy analysis requires post-2024 election result context banner (NDA 293 seats, BJP 240 seats)."
+    },
+    {
+      "slug": "rbi-repo-rate",
+      "title": "RBI Repo Rate: Decoding Monetary Policy",
+      "tier": "Tier A — Defensible",
+      "severity": "P1 (Stat Card Freshness Issue)",
+      "holdReason": "Quick Brief stat card presents 6.50% as current repo rate; current effective rate as of July 2026 is 5.25%."
+    }
+  ],
+  "ingestionReadinessSummary": {
+    "preFilterTechnicallyReady": 74,
+    "excludedForRemediation": 21,
+    "excludedStories": [
+      "mgnrega-reform",
+      "bjp-mission-360",
+      "rbi-repo-rate",
+      "groundwater-depletion"
+    ],
+    "finalIngestionReadyCount": 53,
+    "ingestedCount": 0
+  },
+  "summaryCounts": {
+    "p0Count": 0,
+    "p1Count": 3,
+    "p2Count": 18,
+    "p3Count": 0,
+    "tierACount": 12,
+    "tierBCount": 8,
+    "tierCCount": 1,
+    "tierDCount": 0
+  },
+  "zeroMutationConfirmed": true
+}

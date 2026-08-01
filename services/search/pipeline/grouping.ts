@@ -9,7 +9,8 @@ export class SearchGroupingBuilder implements SearchBuilder {
       entities: [] as any[],
       topics: [] as any[],
       documents: [] as any[],
-      media: [] as any[]
+      media: [] as any[],
+      problems: [] as any[]
     };
 
     rawResults.forEach(r => {
@@ -19,6 +20,8 @@ export class SearchGroupingBuilder implements SearchBuilder {
         grouped.entities.push(r);
       } else if (r.type === 'topic') {
         grouped.topics.push(r);
+      } else if (r.type === 'problem') {
+        grouped.problems.push(r);
       } else {
         grouped.documents.push(r);
       }

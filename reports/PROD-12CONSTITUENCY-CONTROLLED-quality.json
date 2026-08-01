@@ -1,0 +1,75 @@
+{
+  "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+  "generated_at": "2026-07-22T06:19:45.579Z",
+  "total_flags": 5,
+  "by_priority": {
+    "P0_BLOCKING": 0,
+    "P1_HIGH": 2,
+    "P2_MEDIUM": 2,
+    "P3_LOW": 1
+  },
+  "by_type": {
+    "FINANCIAL_STAGE_EQUIVALENCE": 1,
+    "BOUNDARY_COMPLEXITY": 1,
+    "AMBIGUOUS_GEOGRAPHY": 1,
+    "NEEDS_SECONDARY_REVIEW": 2
+  },
+  "flags": [
+    {
+      "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+      "constituency_id": "MH-AC-191",
+      "flag_type": "FINANCIAL_STAGE_EQUIVALENCE",
+      "description": "Multiple cost figures exist (₹12,721 crore original, ₹13,060 crore interim, ₹13,983 crore final, ₹13,984 crore variant). These represent different reporting dates, not contradictions.",
+      "related_ids": [
+        "FIN-MUM-COSTAL-ORIGINAL",
+        "FIN-MUM-COSTAL-REVISED"
+      ],
+      "priority": "P3_LOW",
+      "created_at": "2026-07-22T06:19:07.848Z"
+    },
+    {
+      "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+      "constituency_id": "UK-AC-48",
+      "flag_type": "BOUNDARY_COMPLEXITY",
+      "description": "₹4,200 crore covers district-wide projects across multiple sectors, not just constituency-level. Geographic attribution is approximate.",
+      "related_ids": [
+        "FIN-PIT-PM-PROJECTS"
+      ],
+      "priority": "P2_MEDIUM",
+      "created_at": "2026-07-22T06:19:19.482Z"
+    },
+    {
+      "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+      "constituency_id": "AR-AC-22",
+      "flag_type": "AMBIGUOUS_GEOGRAPHY",
+      "description": "Frontier Highway spans 1,637 km across 12 districts — attribution to Tawang specifically is approximate. Highway passes through but does not terminate in Tawang.",
+      "related_ids": [
+        "CLM-TAW-001"
+      ],
+      "priority": "P2_MEDIUM",
+      "created_at": "2026-07-22T06:19:24.385Z"
+    },
+    {
+      "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+      "constituency_id": "JH-AC-60",
+      "flag_type": "NEEDS_SECONDARY_REVIEW",
+      "description": "PESA compliance claim is from an academic journal article (2024), not an official government source. Needs verification against current state government records.",
+      "related_ids": [
+        "CLM-KHU-002"
+      ],
+      "priority": "P1_HIGH",
+      "created_at": "2026-07-22T06:19:31.556Z"
+    },
+    {
+      "batch_id": "PROD-12CONSTITUENCY-CONTROLLED",
+      "constituency_id": "RJ-AC-144",
+      "flag_type": "NEEDS_SECONDARY_REVIEW",
+      "description": "This is a statewide judicial precedent, not specific to Jalore constituency. Attributed to Jalore as a SC-reserved constituency representative.",
+      "related_ids": [
+        "CLM-JAL-001"
+      ],
+      "priority": "P1_HIGH",
+      "created_at": "2026-07-22T06:19:34.735Z"
+    }
+  ]
+}

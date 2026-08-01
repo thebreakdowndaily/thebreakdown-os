@@ -1,0 +1,102 @@
+[
+  {
+    "canonical_id": "UP-AC-030",
+    "official_name": "Bilari",
+    "historical_district": "Moradabad",
+    "current_district": "Moradabad",
+    "current_division": "Moradabad",
+    "administrative_change_date": null,
+    "geographic_type": "CROSS_DISTRICT",
+    "notes": "Bilari is split between Moradabad and Sambhal districts. Administratively under Moradabad district, electorally mapped to Sambhal Lok Sabha constituency."
+  },
+  {
+    "canonical_id": "UP-AC-031",
+    "official_name": "Chandausi",
+    "historical_district": "Moradabad",
+    "current_district": "Sambhal",
+    "current_division": "Moradabad",
+    "administrative_change_date": "2012-07-23",
+    "geographic_type": "STANDARD",
+    "notes": "Sambhal district was officially formed on 23 July 2012, carved out of Moradabad and Badaun districts."
+  },
+  {
+    "canonical_id": "UP-AC-032",
+    "official_name": "Asmoli",
+    "historical_district": "Moradabad",
+    "current_district": "Sambhal",
+    "current_division": "Moradabad",
+    "administrative_change_date": "2012-07-23",
+    "geographic_type": "STANDARD",
+    "notes": "Sambhal district was officially formed on 23 July 2012, carved out of Moradabad and Badaun districts."
+  },
+  {
+    "canonical_id": "UP-AC-033",
+    "official_name": "Sambhal",
+    "historical_district": "Moradabad",
+    "current_district": "Sambhal",
+    "current_division": "Moradabad",
+    "administrative_change_date": "2012-07-23",
+    "geographic_type": "STANDARD",
+    "notes": "Sambhal district was officially formed on 23 July 2012, carved out of Moradabad and Badaun districts."
+  },
+  {
+    "canonical_id": "UP-AC-058",
+    "official_name": "Dhaulana",
+    "historical_district": "Hapur",
+    "current_district": "Hapur",
+    "current_division": "Meerut",
+    "administrative_change_date": null,
+    "geographic_type": "CROSS_DISTRICT",
+    "notes": "Dhaulana is split between Ghaziabad and Hapur districts. Contains parts of Hapur tehsil and Ghaziabad tehsil, falls under Ghaziabad Lok Sabha constituency."
+  },
+  {
+    "canonical_id": "UP-AC-111",
+    "official_name": "Gunnaur",
+    "historical_district": "Budaun",
+    "current_district": "Sambhal",
+    "current_division": "Moradabad",
+    "administrative_change_date": "2012-07-23",
+    "geographic_type": "STANDARD",
+    "notes": "Sambhal district was officially formed on 23 July 2012, carved out of Moradabad and Badaun districts."
+  },
+  {
+    "canonical_id": "UP-AC-178",
+    "official_name": "Tiloi",
+    "historical_district": "Raebareli",
+    "current_district": "Amethi",
+    "current_division": "Ayodhya",
+    "administrative_change_date": "2010-07-01",
+    "geographic_type": "STANDARD",
+    "notes": "Tiloi was carved out of Raebareli district on 1 July 2010 into Amethi district."
+  },
+  {
+    "canonical_id": "UP-AC-184",
+    "official_name": "Jagdishpur",
+    "historical_district": "Sultanpur",
+    "current_district": "Amethi",
+    "current_division": "Ayodhya",
+    "administrative_change_date": "2010-07-01",
+    "geographic_type": "CROSS_DISTRICT",
+    "notes": "Amethi district was carved out of Sultanpur and Raebareli on 1 July 2010. During delimitation (2008), this seat belonged to Sultanpur district."
+  },
+  {
+    "canonical_id": "UP-AC-185",
+    "official_name": "Gauriganj",
+    "historical_district": "Sultanpur",
+    "current_district": "Amethi",
+    "current_division": "Ayodhya",
+    "administrative_change_date": "2010-07-01",
+    "geographic_type": "STANDARD",
+    "notes": "Amethi district was carved out of Sultanpur and Raebareli on 1 July 2010. During delimitation (2008), this seat belonged to Sultanpur district."
+  },
+  {
+    "canonical_id": "UP-AC-186",
+    "official_name": "Amethi",
+    "historical_district": "Sultanpur",
+    "current_district": "Amethi",
+    "current_division": "Ayodhya",
+    "administrative_change_date": "2010-07-01",
+    "geographic_type": "STANDARD",
+    "notes": "Amethi district was carved out of Sultanpur and Raebareli on 1 July 2010. During delimitation (2008), this seat belonged to Sultanpur district."
+  }
+]

@@ -24,7 +24,12 @@ export default function EntitiesPage() {
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Entities</h1>
         <p className="text-gray-400 text-lg mb-8">Policies, organizations, schemes, and key institutions tracked by The Breakdown.</p>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {entities.map((entity) => (
+          {entities.length === 0 ? (
+            <div className="col-span-full text-center py-16">
+              <p className="text-gray-400 text-lg mb-4">No entities tracked yet.</p>
+              <p className="text-gray-500 text-sm">Check back soon for policies, organizations, and key institutions.</p>
+            </div>
+          ) : entities.map((entity) => (
             <Link key={entity.slug} href={`/entity/${entity.slug}`} className="group block p-6 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-amber-500/50 transition-colors">
               <div className="flex items-start justify-between mb-3">
                 <Badge variant="category">{entity.type}</Badge>

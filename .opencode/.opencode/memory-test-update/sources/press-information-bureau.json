@@ -1,0 +1,28 @@
+{
+  "publisher": "Press Information Bureau",
+  "credibility": 95,
+  "tier": 1,
+  "version": 2,
+  "id": "press-information-bureau",
+  "createdAt": "2026-07-31T09:22:11.546Z",
+  "lastUsed": "2026-07-31T09:22:11.556Z",
+  "history": [
+    {
+      "version": 1,
+      "timestamp": "2026-07-31T09:22:11.546Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "source-created"
+      ]
+    },
+    {
+      "version": 2,
+      "timestamp": "2026-07-31T09:22:11.556Z",
+      "updatedBy": "memory-engine",
+      "changes": [
+        "source-updated"
+      ]
+    }
+  ],
+  "stories": []
+}

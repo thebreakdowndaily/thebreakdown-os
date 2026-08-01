@@ -1,0 +1,96 @@
+{
+  "id": "ref-constituency",
+  "slug": "ref-constituency",
+  "storyType": "Profile",
+  "title": "Lucknow Constituency: A Profile",
+  "metadata": {
+    "difficulty": "Beginner",
+    "confidence": "High",
+    "confidenceRationale": "Based on EC records and census data",
+    "updateRequired": false,
+    "readingTimeMinutes": 4,
+    "tags": [
+      "constituency",
+      "lucknow",
+      "profile"
+    ],
+    "entities": [
+      {
+        "name": "Lucknow Lok Sabha Constituency",
+        "type": "location",
+        "role": "primary"
+      }
+    ],
+    "lastVerified": "2026-07-29",
+    "nextVerificationDue": "2026-10-29"
+  },
+  "hero": {
+    "image": "/images/reference/lucknow.jpg",
+    "statistic": "8 seats",
+    "statisticSource": "ECI",
+    "caption": "Constituency profile",
+    "altText": "Lucknow cityscape",
+    "credit": "ECI",
+    "aspectRatio": "16:9"
+  },
+  "summary": "Lucknow Lok Sabha constituency has 8 assembly segments and roughly 25 lakh eligible voters.",
+  "keyFacts": [
+    {
+      "claim": "8 assembly segments in constituency",
+      "source": "ECI",
+      "confidence": 1
+    },
+    {
+      "claim": "Approximately 25 lakh eligible voters",
+      "source": "ECI Voter List",
+      "confidence": 1
+    }
+  ],
+  "whyItMatters": "Constituency profiles inform understanding of electoral politics and local governance.",
+  "narrative": "Lucknow is one of Uttar Pradesh's most significant constituencies, historically competitive across party lines.",
+  "timeline": [
+    {
+      "date": "2024",
+      "event": "Last general election",
+      "source": "ECI",
+      "significance": "Most recent electoral data"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "8 assembly segments",
+      "source": "ECI Delimitation",
+      "confidence": 1,
+      "verifiedAt": "2026-07-29"
+    }
+  ],
+  "charts": [],
+  "stakeholders": {
+    "headline": "Key Stakeholders",
+    "stakeholders": [
+      {
+        "name": "Electoral Commission",
+        "type": "institution",
+        "position": "Manages elections",
+        "interest": "Free and fair polls",
+        "stance": "neutral"
+      },
+      {
+        "name": "Voters",
+        "type": "community",
+        "position": "Electorate",
+        "interest": "Representation",
+        "stance": "support"
+      }
+    ],
+    "summary": "Voters and ECI shape the constituency."
+  },
+  "sources": [
+    {
+      "title": "ECI Voter List 2024",
+      "author": "Election Commission",
+      "reliability": "high"
+    }
+  ],
+  "visuals": []
+}

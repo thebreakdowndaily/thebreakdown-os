@@ -1,0 +1,19 @@
+{
+  "url": "http://localhost:3000",
+  "command": "npx lighthouse http://localhost:3000",
+  "timestamp": "2026-08-01T09:40:54.375Z",
+  "durationMs": 10643,
+  "exitCode": 1,
+  "categories": {
+    "performance": 90,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "agentic-browsing": 100
+  },
+  "passed": false,
+  "jsonReport": "audit/reports/lighthouse.report.json",
+  "htmlReport": "audit/reports/lighthouse.report.html",
+  "logFile": "audit/raw/lighthouse.log",
+  "outputTail": ""
+}

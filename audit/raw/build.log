@@ -1,0 +1,360 @@
+> thebreakdown-os@0.1.0 prebuild
+> node scripts/generate-sitemap.js
+
+Generated sitemap.xml with 120 URLs → public/sitemap.xml
+
+> thebreakdown-os@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.18
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · clientTraceMetadata
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 10.6s
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/1074) ...
+[ImageIntelligence] Fetching official image from Wikimedia for: India data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: India climate change
+[ImageIntelligence] Fetching official image from Wikimedia for: India groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: India PDS
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Education education
+[ImageIntelligence] Fetching official image from Wikimedia for: India supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Women and Child Development ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare groundwater
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: India RBI
+[ImageIntelligence] Fetching official image from Wikimedia for: india data protection
+[ImageIntelligence] Fetching official image from Wikimedia for: India ICDS
+[ImageIntelligence] Fetching official image from Wikimedia for: India education
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: National Payments Corporation of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Agriculture and Farmers Welfare crop insurance
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India supply chain
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Rural Development MGNREGA
+[ImageIntelligence] Fetching official image from Wikimedia for: India Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: india EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: india Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+   Generating static pages (268/1074) 
+[ImageIntelligence] Fetching official image from Wikimedia for: India ethanol
+[ImageIntelligence] Fetching official image from Wikimedia for: India EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations US Iran
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations education
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India inequality
+[ImageIntelligence] Fetching official image from Wikimedia for: India Satluj
+[ImageIntelligence] Fetching official image from Wikimedia for: Indian Computer Emergency Response Team data breach
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations India China
+[ImageIntelligence] Fetching official image from Wikimedia for: India crop insurance
+   Generating static pages (536/1074) 
+[ImageIntelligence] Fetching official image from Wikimedia for: Reserve Bank of India UPI
+[ImageIntelligence] Fetching official image from Wikimedia for: India MGNREGA
+   Generating static pages (805/1074) 
+[ImageIntelligence] Fetching official image from Wikimedia for: india ethanol
+[ImageIntelligence] Fetching official image from Wikimedia for: india EWS quota
+[ImageIntelligence] Fetching official image from Wikimedia for: india Satluj
+[ImageIntelligence] Fetching official image from Wikimedia for: India inequality
+[ImageIntelligence] Fetching official image from Wikimedia for: India India China
+[ImageIntelligence] Fetching official image from Wikimedia for: Indian Council of Medical Research data breach
+[ImageIntelligence] Fetching official image from Wikimedia for: India US Iran
+[ImageIntelligence] Fetching official image from Wikimedia for: Comptroller and Auditor General of India crop insurance
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Finance semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: International Monetary Fund inequality
+[ImageIntelligence] Fetching official image from Wikimedia for: Unique Identification Authority of India data breach
+[ImageIntelligence] Fetching official image from Wikimedia for: India semiconductor
+[ImageIntelligence] Fetching official image from Wikimedia for: Resecurity Inc. data breach
+[ImageIntelligence] Fetching official image from Wikimedia for: India data breach
+[ImageIntelligence] Fetching official image from Wikimedia for: icmr data breach
+[ImageIntelligence] No authentic image found for 'icmr'. Falling back to AI generation.
+[ImageIntelligence] Fetching official image from Wikimedia for: India Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: United Nations US Iran War
+[ImageIntelligence] Fetching official image from Wikimedia for: World Health Organization WHO
+[ImageIntelligence] Fetching official image from Wikimedia for: World Health Organization mental health
+[ImageIntelligence] Fetching official image from Wikimedia for: India EPF
+[ImageIntelligence] Fetching official image from Wikimedia for: National Mission for Clean Ganga Namami Gange
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Labour & Employment gig workers
+[ImageIntelligence] Fetching official image from Wikimedia for: india EPF
+[ImageIntelligence] Fetching official image from Wikimedia for: india Mission 360
+[ImageIntelligence] Fetching official image from Wikimedia for: India US Iran War
+[ImageIntelligence] Fetching official image from Wikimedia for: India mental health
+[ImageIntelligence] Fetching official image from Wikimedia for: India WHO
+[ImageIntelligence] Fetching official image from Wikimedia for: India gig workers
+[ImageIntelligence] Fetching official image from Wikimedia for: Ministry of Jal Shakti Namami Gange
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] Fetching official image from Wikimedia for: india US Iran War
+[ImageIntelligence] Fetching official image from Wikimedia for: Comptroller and Auditor General of India Namami Gange
+[ImageIntelligence] No authentic image found for 'india'. Falling back to AI generation.
+[ImageIntelligence] Fetching official image from Wikimedia for: Central Pollution Control Board Namami Gange
+[ImageIntelligence] Fetching official image from Wikimedia for: India Namami Gange
+ ✓ Generating static pages (1074/1074)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                                                 Size  First Load JS  Revalidate  Expire
+┌ ○ /                                                                                    2.53 kB         231 kB          1m      1y
+├ ○ /_not-found                                                                            574 B         227 kB
+├ ○ /about                                                                                 380 B         229 kB
+├ ○ /about/contact                                                                         576 B         227 kB
+├ ○ /about/methodology                                                                     576 B         227 kB
+├ ○ /about/team                                                                            577 B         227 kB
+├ ○ /accessibility                                                                         421 B         229 kB
+├ ○ /admin                                                                               1.83 kB         296 kB
+├ ƒ /api/ai/copilot                                                                        576 B         227 kB
+├ ƒ /api/analytics                                                                         576 B         227 kB
+├ ƒ /api/analytics/story/[slug]                                                            576 B         227 kB
+├ ƒ /api/auth/[...all]                                                                     577 B         227 kB
+├ ƒ /api/auth/keys                                                                         577 B         227 kB
+├ ƒ /api/auth/keys/[keyId]                                                                 574 B         227 kB
+├ ƒ /api/countries                                                                         576 B         227 kB
+├ ƒ /api/countries/[slug]                                                                  577 B         227 kB
+├ ƒ /api/docs                                                                              574 B         227 kB
+├ ƒ /api/entities                                                                          575 B         227 kB
+├ ƒ /api/entities/[slug]                                                                   576 B         227 kB
+├ ƒ /api/entity                                                                            580 B         227 kB
+├ ƒ /api/feed                                                                              576 B         227 kB
+├ ƒ /api/fixes                                                                             577 B         227 kB
+├ ƒ /api/fixes/[slug]                                                                      577 B         227 kB
+├ ƒ /api/graphs                                                                            577 B         227 kB
+├ ƒ /api/health                                                                            575 B         227 kB
+├ ƒ /api/intelligence/resolve-image                                                        575 B         227 kB
+├ ƒ /api/organizations                                                                     576 B         227 kB
+├ ƒ /api/organizations/[slug]                                                              576 B         227 kB
+├ ƒ /api/search                                                                            576 B         227 kB
+├ ƒ /api/statistics                                                                        576 B         227 kB
+├ ƒ /api/stories                                                                           576 B         227 kB
+├ ƒ /api/stories/[slug]                                                                    575 B         227 kB
+├ ƒ /api/story                                                                             576 B         227 kB
+├ ƒ /api/timelines                                                                         577 B         227 kB
+├ ƒ /api/timelines/[id]                                                                    576 B         227 kB
+├ ƒ /api/topics                                                                            578 B         227 kB
+├ ƒ /api/topics/[slug]                                                                     577 B         227 kB
+├ ƒ /api/up403/v1                                                                          577 B         227 kB
+├ ƒ /api/up403/v1/analytics                                                                576 B         227 kB
+├ ƒ /api/up403/v1/compare                                                                  577 B         227 kB
+├ ƒ /api/up403/v1/constituencies                                                           576 B         227 kB
+├ ƒ /api/up403/v1/constituencies/[canonical_id]                                            577 B         227 kB
+├ ƒ /api/up403/v1/docs                                                                     576 B         227 kB
+├ ƒ /api/up403/v1/elections                                                                576 B         227 kB
+├ ƒ /api/up403/v1/elections/[year]                                                         577 B         227 kB
+├ ƒ /api/up403/v1/filter/options                                                           576 B         227 kB
+├ ƒ /api/up403/v1/graph                                                                    576 B         227 kB
+├ ƒ /api/up403/v1/graph/[canonical_id]                                                     576 B         227 kB
+├ ƒ /api/up403/v1/people                                                                   575 B         227 kB
+├ ƒ /api/up403/v1/people/[person_id]                                                       575 B         227 kB
+├ ƒ /api/up403/v1/search                                                                   576 B         227 kB
+├ ƒ /api/up403/v1/timeline/[canonical_id]                                                  575 B         227 kB
+├ ƒ /api/v1/analytics                                                                      576 B         227 kB
+├ ƒ /api/v1/auth/login                                                                     575 B         227 kB
+├ ƒ /api/v1/auth/logout                                                                    579 B         227 kB
+├ ƒ /api/v1/auth/me                                                                        575 B         227 kB
+├ ƒ /api/v1/auth/register                                                                  577 B         227 kB
+├ ƒ /api/v1/datasets                                                                       578 B         227 kB
+├ ƒ /api/v1/datasets/[slug]                                                                577 B         227 kB
+├ ƒ /api/v1/datasets/[slug]/chart                                                          577 B         227 kB
+├ ƒ /api/v1/datasets/[slug]/download                                                       577 B         227 kB
+├ ƒ /api/v1/datasets/[slug]/history                                                        575 B         227 kB
+├ ƒ /api/v1/datasets/[slug]/series                                                         576 B         227 kB
+├ ƒ /api/v1/editorial/evaluate                                                             577 B         227 kB
+├ ƒ /api/v1/entities                                                                       576 B         227 kB
+├ ƒ /api/v1/entities/[slug]                                                                575 B         227 kB
+├ ƒ /api/v1/fixes                                                                          577 B         227 kB
+├ ƒ /api/v1/fixes/[slug]                                                                   575 B         227 kB
+├ ƒ /api/v1/media                                                                          576 B         227 kB
+├ ƒ /api/v1/media/[id]                                                                     576 B         227 kB
+├ ƒ /api/v1/search                                                                         576 B         227 kB
+├ ƒ /api/v1/stories                                                                        577 B         227 kB
+├ ƒ /api/v1/stories/[slug]                                                                 575 B         227 kB
+├ ƒ /api/v1/timelines                                                                      577 B         227 kB
+├ ƒ /api/v1/timelines/[id]                                                                 576 B         227 kB
+├ ƒ /api/v1/topics                                                                         575 B         227 kB
+├ ƒ /api/v1/topics/[slug]                                                                  575 B         227 kB
+├ ƒ /api/v2/analytics                                                                      576 B         227 kB
+├ ƒ /api/v2/claims                                                                         576 B         227 kB
+├ ƒ /api/v2/entities                                                                       576 B         227 kB
+├ ƒ /api/v2/entities/[slug]                                                                576 B         227 kB
+├ ƒ /api/v2/fixes                                                                          576 B         227 kB
+├ ƒ /api/v2/fixes/[slug]                                                                   575 B         227 kB
+├ ƒ /api/v2/graph                                                                          577 B         227 kB
+├ ƒ /api/v2/graph/nodes                                                                    576 B         227 kB
+├ ƒ /api/v2/search                                                                         575 B         227 kB
+├ ƒ /api/v2/sources                                                                        576 B         227 kB
+├ ƒ /api/v2/stories                                                                        574 B         227 kB
+├ ƒ /api/v2/stories/[slug]                                                                 575 B         227 kB
+├ ƒ /api/v2/timelines                                                                      575 B         227 kB
+├ ƒ /api/v2/timelines/[slug]                                                               577 B         227 kB
+├ ƒ /api/v2/topics                                                                         577 B         227 kB
+├ ƒ /api/v2/topics/[slug]                                                                  576 B         227 kB
+├ ƒ /cms                                                                                   346 B         229 kB
+├ ○ /cms/datasets                                                                          575 B         227 kB
+├ ƒ /cms/datasets/[slug]                                                                   309 B         231 kB
+├ ○ /cms/datasets/new                                                                      308 B         231 kB
+├ ○ /cms/entities                                                                        2.49 kB         229 kB
+├ ○ /cms/fixes                                                                           3.13 kB         230 kB
+├ ○ /cms/media                                                                           3.71 kB         231 kB
+├ ƒ /cms/stories                                                                         1.68 kB         232 kB
+├ ƒ /cms/story/[id]                                                                        782 B         249 kB
+├ ○ /cms/story/new                                                                          2 kB         250 kB
+├ ○ /cms/timelines                                                                       2.41 kB         229 kB
+├ ○ /cms/topics                                                                          2.51 kB         229 kB
+├ ƒ /compare                                                                             7.07 kB         236 kB
+├ ○ /countries                                                                             422 B         229 kB
+├ ● /country/[slug]                                                                        576 B         227 kB
+├   ├ /country/bihar
+├   └ /country/india
+├ ○ /dashboard                                                                           14.8 kB         381 kB
+├ ○ /data                                                                                37.9 kB         267 kB
+├ ● /dataset/[slug]                                                                      2.05 kB         234 kB
+├   ├ /dataset/gdp-growth
+├   ├ /dataset/inflation-cpi
+├   ├ /dataset/trade-deficit
+├   └ [+2 more paths]
+├ ○ /datasets                                                                            2.95 kB         635 kB
+├ ● /datasets/[slug]                                                                       365 B         233 kB
+├   ├ /datasets/gdp-growth
+├   ├ /datasets/inflation-cpi
+├   ├ /datasets/trade-deficit
+├   └ [+2 more paths]
+├ ○ /editor                                                                                381 B         229 kB
+├ ○ /editor/analytics                                                                      421 B         229 kB
+├ ○ /editor/assignments                                                                    380 B         229 kB
+├ ƒ /editor/citations/[id]                                                                 421 B         229 kB
+├ ○ /editor/collections                                                                    421 B         229 kB
+├ ƒ /editor/dossier/[id]                                                                 1.21 kB         230 kB
+├ ƒ /editor/fact-check/[id]                                                              3.21 kB         232 kB
+├ ○ /editor/governance                                                                     420 B         229 kB
+├ ƒ /editor/stories/[id]                                                                   379 B         229 kB
+├ ○ /editorial                                                                             421 B         229 kB
+├ ○ /editorial-constitution                                                                381 B         229 kB
+├ ƒ /editorial/knowledge                                                                 4.18 kB         231 kB
+├ ○ /entities                                                                              420 B         229 kB
+├ ● /entity/[slug]                                                                        2.1 kB         236 kB
+├   ├ /entity/un
+├   ├ /entity/wto
+├   ├ /entity/imf
+├   └ [+38 more paths]
+├ ○ /evolution                                                                             421 B         229 kB
+├ ƒ /explorer                                                                            5.06 kB         234 kB
+├ ƒ /fix                                                                                 8.66 kB         237 kB
+├ ● /fix/[slug]                                                                          10.6 kB         239 kB
+├   ├ /fix/fix-mgnrega-reform
+├   ├ /fix/fix-pmfby-claims
+├   ├ /fix/fix-air-pollution
+├   └ [+3 more paths]
+├ ○ /founding-edition                                                                      421 B         229 kB
+├ ƒ /founding-edition/[slug]                                                               369 B         229 kB
+├ ○ /founding-edition/chapter-1                                                            369 B         229 kB
+├ ○ /graph                                                                               7.31 kB         642 kB
+├ ● /investigation/[slug]                                                                1.62 kB         230 kB
+├   └ /investigation/namami-gange
+├ ○ /investigations                                                                        420 B         229 kB
+├ ○ /login                                                                               1.72 kB         296 kB
+├ ○ /methodology                                                                           381 B         229 kB
+├ ○ /newsletter                                                                            422 B         229 kB
+├ ○ /operations                                                                          2.65 kB         230 kB
+├ ● /organization/[slug]                                                                   576 B         227 kB
+├   ├ /organization/un
+├   ├ /organization/wto
+├   ├ /organization/imf
+├   └ [+35 more paths]
+├ ○ /organizations                                                                         421 B         229 kB
+├ ○ /performance                                                                           574 B         227 kB
+├ ○ /precedents                                                                            421 B         229 kB
+├ ○ /problems                                                                            5.64 kB         241 kB
+├ ƒ /problems/[slug]                                                                     7.42 kB         243 kB
+├ ƒ /problems/[slug]/compare                                                             3.17 kB         232 kB
+├ ƒ /problems/[slug]/evolution                                                             421 B         229 kB
+├ ƒ /problems/[slug]/precedents                                                            421 B         229 kB
+├ ƒ /problems/[slug]/tracking                                                              421 B         229 kB
+├ ○ /reader                                                                              2.56 kB         297 kB
+├ ○ /robots.txt                                                                            577 B         227 kB
+├ ○ /rss                                                                                   578 B         227 kB
+├ ƒ /search                                                                              2.35 kB         236 kB
+├ ○ /series                                                                                381 B         229 kB          1h      1y
+├ ● /series/[collectionSlug]                                                               380 B         229 kB          1h      1y
+├   └ /series/foundations-1947-1962                                                                                      1h      1y
+├ ● /series/[collectionSlug]/volume/[volumeSlug]                                           421 B         229 kB          1h      1y
+├   └ /series/foundations-1947-1962/volume/the-nehruvian-era                                                             1h      1y
+├ ● /series/[collectionSlug]/volume/[volumeSlug]/chapter/[chapterSlug]                     381 B         277 kB          1h      1y
+├   └ /series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance                                  1h      1y
+├ ○ /settings                                                                            2.11 kB         297 kB
+├ ○ /sitemap.xml                                                                           575 B         227 kB
+├ ○ /stories                                                                               421 B         229 kB          1m      1y
+├ ● /story/[slug]                                                                          521 B         278 kB
+├   ├ /story/mgnrega-reform
+├   ├ /story/digital-payments-boom
+├   ├ /story/pm-fasal-bima-claims
+├   └ [+27 more paths]
+├ ○ /story/rbi-monetary-policy                                                           1.39 kB         262 kB
+├ ○ /subscribe                                                                             578 B         227 kB
+├ ○ /timeline                                                                            1.91 kB         231 kB
+├ ● /topic/[slug]                                                                         3.2 kB         638 kB
+├   ├ /topic/economy
+├   ├ /topic/technology
+├   ├ /topic/cybersecurity
+├   └ [+12 more paths]
+├ ○ /topics                                                                              12.8 kB         242 kB
+├ ○ /tracking                                                                              421 B         229 kB
+├ ○ /trust                                                                                 381 B         229 kB
+├ ○ /up403                                                                                 421 B         229 kB
+├ ● /up403/[slug]                                                                          368 B         229 kB
+├   ├ /up403/up-ac-001
+├   ├ /up403/up-ac-002
+├   ├ /up403/up-ac-003
+├   └ [+400 more paths]
+├ ○ /up403/collections                                                                   4.56 kB         233 kB
+├ ○ /up403/compare                                                                       5.59 kB         234 kB
+├ ƒ /up403/constituencies/[id]                                                           5.88 kB         235 kB
+├ ƒ /up403/evidence/[id]                                                                 3.77 kB         232 kB
+├ ○ /up403/explore                                                                       2.98 kB         232 kB
+├ ○ /up403/map                                                                           4.24 kB         233 kB
+├ ○ /up403/query                                                                         7.88 kB         235 kB
+├ ○ /up403/search                                                                        5.58 kB         234 kB
+├ ○ /up403/stories                                                                         422 B         229 kB
+├ ● /up403/timeline/[id]                                                                   421 B         229 kB
+├   ├ /up403/timeline/UP-AC-001
+├   ├ /up403/timeline/UP-AC-002
+├   ├ /up403/timeline/UP-AC-003
+├   └ [+400 more paths]
+└ ○ /workspace                                                                           3.38 kB         232 kB
++ First Load JS shared by all                                                             227 kB
+  ├ chunks/2432-b8fb5c110fb7f094.js                                                       130 kB
+  ├ chunks/4a7b0c69-c28b3c0d6d42b12c.js                                                  39.1 kB
+  ├ chunks/4bd1b696-ce2979bcee2ca415.js                                                  54.4 kB
+  └ other shared chunks (total)                                                          3.75 kB
+
+
+ƒ Middleware                                                                              158 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+ ⚠ Using edge runtime on a page currently disables static generation for that page
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.
+[ImageIntelligence] OPENAI_API_KEY is not set. Cannot generate AI image fallback.

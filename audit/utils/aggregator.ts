@@ -25,7 +25,7 @@ export function aggregateReport(
 ): Report {
   const endTime = Date.now();
   const overallScore =
-    results.reduce((sum, r) => sum + r.score, 0) / (results.length || 1);
+    results.reduce((sum, r) => sum + (r.data?.score || 0), 0) / (results.length || 1);
 
   // Git info (optional)
   let gitSha: string | undefined;

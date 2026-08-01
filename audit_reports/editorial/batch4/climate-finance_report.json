@@ -1,0 +1,56 @@
+{
+  "batchNumber": 4,
+  "storySlug": "climate-finance",
+  "storyTitle": "India's ₹11 Lakh Crore Climate Finance Challenge",
+  "auditedAt": "2026-07-23T17:26:39.982Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "India's NDC 2022 & MoF Task Force Report verified: ₹11 lakh crore ($160B/yr) annual investment requirement to 2030. Explicitly distinguished from actual committed flows.",
+  "rawExtractedSurfaceItems": 17,
+  "confirmedMaterialClaims": 16,
+  "registrationCandidates": 16,
+  "verifiedRegistrationCandidates": 16,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsTotal": 8,
+  "highMaterialityVerified": 8,
+  "highMaterialityUnresolved": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "FULLY_VERIFIED",
+  "freshnessStatus": "CURRENT",
+  "domainCategory": "Financial",
+  "domainFactCheckDetails": "India's Updated Nationally Determined Contribution (NDC) 2022 & Ministry of Finance Climate Finance Report 2023: ₹11 lakh crore ($160-170 billion per year) represents India's estimated ANNUAL climate investment requirement through 2030 to achieve 50% non-fossil cumulative electric power capacity. Total cumulative requirement to 2030 is $2.5 trillion. 2070 Net-Zero pathway requirement estimated by CEEW at $10.1 trillion.",
+  "authoritativeSources": [
+    {
+      "exactTitle": "Report of the Task Force on Climate Finance & India's Updated NDC",
+      "issuingAuthority": "Ministry of Finance & UNFCCC Secretariat",
+      "publicationDate": "2022-08-26",
+      "officialURLOrIdentifier": "https://unfccc.int/sites/default/files/NDC/2022-08/India%20Updated%20First%20NDC.pdf",
+      "pageOrTableOrSection": "Section 4: Financing Requirements & Table 2",
+      "retrievalDate": "2026-07-23",
+      "sourceStatus": "PRIMARY_SOURCE_LOCATED",
+      "relevantPassageOrDataCell": "Annual climate investment requirement of ₹11 lakh crore to meet 2030 NDC targets.",
+      "semanticRelationship": "EXACT_SUPPORT",
+      "temporalScope": "2022-2030 Target Period",
+      "geographicScope": "India (National)",
+      "denominator": "Annual Investment Requirement in INR",
+      "caveats": "Distinguishes annual investment requirement from actual committed/mobilized climate finance flows."
+    }
+  ],
+  "quickModeDefensible": true,
+  "standardModeDefensible": true,
+  "deepModeValueAdd": true,
+  "timelineQuality": "ESSENTIAL",
+  "visualsQuality": "PEDAGOGICAL",
+  "issues": [
+    {
+      "id": "ISS-B4-CLIMAT",
+      "severity": "P2",
+      "category": "KNOWLEDGE_COVERAGE",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "16 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

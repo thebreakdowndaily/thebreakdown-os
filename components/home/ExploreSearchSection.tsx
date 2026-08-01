@@ -94,6 +94,12 @@ export default function ExploreSearchSection() {
             >
               Public Data
             </Link>
+            <Link
+              href="/problems"
+              className="px-3 py-1 rounded bg-neutral-900 border border-neutral-800 hover:border-emerald-500/40 hover:text-emerald-400 transition-colors"
+            >
+              Problems
+            </Link>
           </div>
         </div>
       </div>

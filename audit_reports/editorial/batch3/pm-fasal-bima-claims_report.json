@@ -1,0 +1,38 @@
+{
+  "storySlug": "pm-fasal-bima-claims",
+  "storyTitle": "PM Fasal Bima Yojana: The Claims That Never Reached Farmers",
+  "auditedAt": "2026-07-23T17:15:56.515Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "MoA&FW portal figures (₹31,800 cr gross premium vs ₹27,500 cr claims paid) verified; claim delay attributed to State Subsidy Share release and CCE disputes.",
+  "rawExtractedSurfaceItems": 19,
+  "confirmedMaterialClaims": 16,
+  "registrationCandidates": 16,
+  "existingCanonicalMatches": 2,
+  "externallyVerifiedMaterialClaims": 16,
+  "verifiedRegistrationCandidates": 16,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsCount": 8,
+  "highMaterialityVerifiedCount": 8,
+  "highMaterialityUnresolvedCount": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "VERIFIED_SUPPORT",
+  "domainFactCheckDetails": {
+    "financialOrNumericStatus": "Gross Premium: ₹31,800 crore. Farmer Premium: ₹4,200 crore (1.5-2% actuarial cap). Claims Paid: ₹27,500 crore. Pending claims delay attributed 68% to delayed State Subsidy Share release and 22% to CCE yield dispute.",
+    "authoritativeSourcesUsed": [
+      "Ministry of Agriculture and Farmers Welfare (MoA&FW)"
+    ]
+  },
+  "issues": [
+    {
+      "id": "ISS-B3-PM-FAS",
+      "severity": "P2",
+      "category": "FACTUAL",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "16 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

@@ -15,7 +15,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 py-16">
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 py-16" role="alert" aria-live="assertive">
       <h1 className="text-4xl sm:text-5xl font-bold text-amber-400 mb-4">Something went wrong</h1>
       <p className="text-gray-400 mb-2 text-center max-w-md">
         An unexpected error occurred. Please try again.

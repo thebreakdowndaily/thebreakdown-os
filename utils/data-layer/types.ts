@@ -93,6 +93,7 @@ export interface APIClaim {
   verification: string;
   explanation: string;
   confidence: number;
+  counterArguments?: import('@/types/canonical').CounterArgument[];
 }
 
 export interface APISource {

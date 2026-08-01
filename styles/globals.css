@@ -39,7 +39,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-brand-400);
+    outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
@@ -85,11 +85,11 @@
     margin-bottom: var(--spacing-4);
   }
   .prose-custom a {
-    color: var(--color-brand-400);
+    color: var(--color-text-link);
     text-decoration: underline;
   }
   .prose-custom a:hover {
-    color: var(--color-brand-300);
+    color: var(--color-text-link-hover);
   }
   .prose-custom ul {
     list-style-type: disc;
@@ -137,6 +137,9 @@
   }
   .bg-surface-tertiary {
     background-color: var(--color-bg-tertiary);
+  }
+  .bg-surface-canvas {
+    background-color: var(--color-bg-canvas);
   }
   .text-surface-primary {
     color: var(--color-text-primary);
@@ -206,5 +209,47 @@
   .group:hover .group-hover-border-accent {
     border-color: var(--color-brand-400) !important;
     transition: border-color var(--duration-fast) var(--easing-out);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer,
+  .animate-fadeIn,
+  .animate-slideUp,
+  .animate-slideDown,
+  .animate-scaleIn,
+  .animate-shimmer,
+  .animate-spin,
+  .animate-pulse {
+    animation: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Narrative Reveal — Phase N-1 (ERD-NAV-001) ────────────────────────────
+ * Elements with [data-narrative-reveal] start invisible and translate down.
+ * The NarrativeReveal client component attaches an IntersectionObserver that
+ * adds .narrative-revealed when the element enters the viewport.
+ * prefers-reduced-motion: elements start visible, no transition applied.
+ * ──────────────────────────────────────────────────────────────────────────── */
+[data-narrative-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+[data-narrative-reveal].narrative-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-narrative-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

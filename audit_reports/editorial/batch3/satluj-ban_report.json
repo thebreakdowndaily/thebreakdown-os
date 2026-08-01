@@ -1,0 +1,39 @@
+{
+  "storySlug": "satluj-ban",
+  "storyTitle": "The Satluj Files: Censored, Released, Removed — The 48-Hour Life of India's Most Controversial Film",
+  "auditedAt": "2026-07-23T17:15:56.514Z",
+  "editorialTier": "Tier B — Solid with Minor Gaps",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "Legally sensitive subject matter: correctly distinguishes CBFC certificate refusal under Sec 5B from judicial stay and executive blocking orders.",
+  "rawExtractedSurfaceItems": 33,
+  "confirmedMaterialClaims": 29,
+  "registrationCandidates": 29,
+  "existingCanonicalMatches": 3,
+  "externallyVerifiedMaterialClaims": 29,
+  "verifiedRegistrationCandidates": 29,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsCount": 9,
+  "highMaterialityVerifiedCount": 9,
+  "highMaterialityUnresolvedCount": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "VERIFIED_SUPPORT",
+  "domainFactCheckDetails": {
+    "legalStatus": "CBFC Certificate withheld under Sec 5B Cinematograph Act 1952; Punjab & Haryana HC interim stay.",
+    "financialOrNumericStatus": "Certification status: Certificate withheld / Court stay granted under Section 5B of Cinematograph Act 1952. State-level administrative restriction under Section 13.",
+    "authoritativeSourcesUsed": [
+      "Ministry of Information & Broadcasting (MIB) / Punjab & Haryana High Court"
+    ]
+  },
+  "issues": [
+    {
+      "id": "ISS-B3-SATLUJ",
+      "severity": "P2",
+      "category": "FACTUAL",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "29 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

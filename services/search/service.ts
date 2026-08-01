@@ -1,11 +1,12 @@
 import type { SearchIndexEntry, APIListParams, APIResponse, Story, Topic, Entity, Timeline, Fix, Dataset } from '@/types/canonical';
+import type { Problem } from '@/lib/problem-helpers';
 
 export interface SearchService {
   index(items: SearchIndexEntry[]): void;
   indexOne(item: SearchIndexEntry): void;
   search(query: string, params?: APIListParams): APIResponse<SearchIndexEntry[]>;
   searchByType(query: string, type: string, params?: APIListParams): APIResponse<SearchIndexEntry[]>;
-  rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[]): void;
+  rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[], problems?: Problem[]): void;
 }
 
 function toEntry(id: string, type: SearchIndexEntry['type'], title: string, slug: string, description: string, tags: string[], content: string, updatedAt: string): SearchIndexEntry {
@@ -68,7 +69,7 @@ export class MemorySearchService implements SearchService {
     return { data: page, meta: { total, page: params?.page || 1, pageSize: params?.pageSize || filtered.length } };
   }
 
-  rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[]): void {
+  rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[], problems?: Problem[]): void {
     this.entries = [];
     const items: SearchIndexEntry[] = [
       ...stories.map(s => toEntry(s.id, 'story', s.title, s.slug, s.summary, s.tags, s.blocks.map(b => JSON.stringify(b.data)).join(' '), s.updatedAt)),
@@ -77,6 +78,7 @@ export class MemorySearchService implements SearchService {
       ...timelines.map(t => toEntry(t.id, 'timeline', t.title, '', t.description, [], t.events.map(e => e.title + ' ' + e.description).join(' '), t.updatedAt)),
       ...fixes.map(f => toEntry(f.id, 'fix', f.headline, f.slug, f.problem.content, [], f.rootCauses.content + ' ' + f.recommendedActions.map(a => a.title).join(' '), f.updatedAt)),
       ...(datasets || []).map(d => toEntry(d.id, 'dataset', d.title, d.slug, d.description, d.tags, d.metrics.map(m => m.label).join(' ') + ' ' + d.methodology, d.updatedAt)),
+      ...(problems || []).map(p => toEntry(p.slug, 'problem', p.title, p.slug, p.description, p.tags, '', p.lastUpdated)),
     ];
     this.index(items);
   }

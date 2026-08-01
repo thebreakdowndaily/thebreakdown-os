@@ -1,0 +1,21 @@
+{
+  "phase": "12.5B",
+  "status": "PHASE_12_5B_COMPLETE",
+  "summary": "Phase 12.5B successfully executed a reader-first visual remediation across the active Phase 0 architecture of The Breakdown OS.",
+  "filesModified": [
+    "design-system/tokens.css",
+    "styles/globals.css",
+    "components/rxs/StoryProgress.tsx",
+    "components/rxs/StoryShell.tsx",
+    "components/story/ExploreConnections.tsx",
+    "components/story/StoryOrientationRail.tsx",
+    "components/story/StoryResearchAppendix.tsx",
+    "components/story/StoryHeroCanonical.tsx"
+  ],
+  "accessibilityFixes": [
+    "focus-visible rings on links and cards",
+    "contrast upgrades on neutral text",
+    "semantic HTML elements for claims and hero metadata",
+    "reduced motion media query"
+  ]
+}

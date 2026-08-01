@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-07-23T18:01:54.500Z",
+  "status": "PHASE5_INGESTION_SUCCESS",
+  "persistenceBackend": "FILE_PERSISTED",
+  "persistenceLocation": "C:\\newsjack-content\\thebreakdown-os\\lib\\knowledge\\claim-registry.ts",
+  "authorizedManifestPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_final_write_manifest.json",
+  "authorizedManifestSha256": "e8f4a322d313849393f7dc64428f13364bb685a097efa0aeb702e409629ed126",
+  "actualManifestSha256": "e8f4a322d313849393f7dc64428f13364bb685a097efa0aeb702e409629ed126",
+  "preWriteSnapshot": {
+    "preWriteClaimCount": 90,
+    "preWriteRegistrySHA256": "491111c0f41cf5284aa3303aaa041d2c75c68a1f2306cc5a66d97f0f251b0105",
+    "snapshotBackupPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\snapshots\\phase5_pre_write_claim_registry_1784829714504.ts.bak"
+  },
+  "ingestionSummary": {
+    "insertedClaims": 52,
+    "updatedClaims": 0,
+    "preExistingClaimsModified": 0,
+    "sourceRelationshipsCreated": 52,
+    "evidenceRelationshipsCreated": 52,
+    "totalRelationshipsCreated": 104
+  },
+  "postWriteVerification": {
+    "freshProcessPostWriteCount": 142,
+    "authorizedManifestClaimsPresent": 52,
+    "preExistingClaimsPreserved": 90,
+    "duplicateClaimIds": 0,
+    "duplicateContentHashes": 0,
+    "orphanSources": 0,
+    "orphanEvidence": 0,
+    "orphanStories": 0,
+    "orphanEntities": 0,
+    "contentIntegrityPassed": true
+  },
+  "idempotencyProof": {
+    "secondRunInserted": 0,
+    "secondRunUpdated": 0,
+    "secondRunDeleted": 0,
+    "secondRunDuplicateLinks": 0,
+    "secondRunPostWriteCount": 142,
+    "idempotencyPassed": true
+  },
+  "coverageMetrics": {
+    "physicalRegistryInventory": 142,
+    "auditedMaterialClaimRegistryCoverage": "27.09% (142 / 524 material claims persisted in ClaimRegistry)",
+    "editorialVerificationCoverage": "100.0% (524 / 524 material claims verified)",
+    "canonicalStoryModelingCoverage": "50.76% (266 / 524 material claims modeled in story objects)",
+    "evidenceLinkedPersistedCoverage": "100.0% (142 / 142 persisted claims evidence-linked)"
+  },
+  "regressionGates": {
+    "typecheckPassed": true,
+    "testsPassed": true,
+    "buildPassed": true,
+    "scopedLintPassed": true,
+    "registryTestsPassed": true
+  },
+  "rollbackTriggered": false,
+  "rollbackReason": null,
+  "artifactPaths": {
+    "reportJsonPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_ingestion_execution_report.json",
+    "reportMdPath": "C:\\newsjack-content\\thebreakdown-os\\audit_reports\\editorial\\phase5_ingestion_execution_report.md"
+  }
+}

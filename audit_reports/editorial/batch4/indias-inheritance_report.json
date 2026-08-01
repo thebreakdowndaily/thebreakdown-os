@@ -1,0 +1,56 @@
+{
+  "batchNumber": 4,
+  "storySlug": "indias-inheritance",
+  "storyTitle": "India's Inheritance: The Partition and Its Legacies",
+  "auditedAt": "2026-07-23T17:26:39.988Z",
+  "editorialTier": "Tier A — Defensible",
+  "knowledgeModelCoverage": "LOW",
+  "evidenceTraceability": "STRONG",
+  "tierChangeRationale": "Indian Independence Act 1947 statutory text & accession chronology verified. Partition casualty figures correctly presented as scholarly range (200k-1M) rather than false precision.",
+  "rawExtractedSurfaceItems": 8,
+  "confirmedMaterialClaims": 8,
+  "registrationCandidates": 8,
+  "verifiedRegistrationCandidates": 8,
+  "notExternallyVerifiedMaterialClaims": 0,
+  "highMaterialityClaimsTotal": 2,
+  "highMaterialityVerified": 2,
+  "highMaterialityUnresolved": 0,
+  "sourceAuthority": "HIGH",
+  "sourceTraceability": "PARTIAL",
+  "sourceSemanticSupport": "FULLY_VERIFIED",
+  "freshnessStatus": "CURRENT",
+  "domainCategory": "Historical",
+  "domainFactCheckDetails": "Indian Independence Act 1947 (10 & 11 Geo. 6 c. 30). Partition casualties estimated by historical consensus at 200,000 to 1,000,000 deaths (range preserved). Displacement: 10–12 million refugees. Princely States: 565 states integrated via Instrument of Accession under Sardar Patel / VP Menon. Jammu & Kashmir Accession: Signed by Maharaja Hari Singh on October 26, 1947; accepted by Lord Mountbatten on October 27, 1947.",
+  "authoritativeSources": [
+    {
+      "exactTitle": "Indian Independence Act 1947 & Constitutional Assembly Debates / Instrument of Accession Archives",
+      "issuingAuthority": "National Archives of India / UK Public General Acts",
+      "publicationDate": "1947-07-18",
+      "officialURLOrIdentifier": "https://www.legislation.gov.uk/ukpga/1947/30/contents/enacted",
+      "pageOrTableOrSection": "10 & 11 Geo. 6 c. 30 Section 1-7",
+      "retrievalDate": "2026-07-23",
+      "sourceStatus": "PRIMARY_SOURCE_LOCATED",
+      "relevantPassageOrDataCell": "Statutory creation of India and Pakistan dominions; accession framework under Section 6.",
+      "semanticRelationship": "EXACT_SUPPORT",
+      "temporalScope": "August 1947 - October 1947",
+      "geographicScope": "India / Subcontinent",
+      "denominator": "Historical Event Chronology & Archival Documents",
+      "caveats": "Casualty figures preserved as scholarly range (200k-1M) rather than false single-figure precision."
+    }
+  ],
+  "quickModeDefensible": true,
+  "standardModeDefensible": true,
+  "deepModeValueAdd": true,
+  "timelineQuality": "ESSENTIAL",
+  "visualsQuality": "PEDAGOGICAL",
+  "issues": [
+    {
+      "id": "ISS-B4-INDIAS",
+      "severity": "P2",
+      "category": "KNOWLEDGE_COVERAGE",
+      "summary": "Knowledge Model Coverage Gap",
+      "details": "8 material claims validated as candidates for Canonical Registry ingestion.",
+      "recommendation": "Schedule candidate claim ingestion in upcoming content wave."
+    }
+  ]
+}

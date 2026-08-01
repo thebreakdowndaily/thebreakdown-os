@@ -1,0 +1,379 @@
+{
+  "generatedAt": "2026-07-23T17:34:32.202Z",
+  "auditCutoffDate": "2026-07-23",
+  "finalReleaseVerdict": "HOLD PUBLICATION FOR SPECIFIC STORIES",
+  "releaseVerdictRationale": "Publication HOLD placed on mgnrega-reform (Tier C / P1 Freshness Issue: MGNREGA 2005 repealed and replaced by VB-G RAM G Act, 2025 effective July 1, 2026) and bjp-mission-360 (P1 Freshness Issue: Needs post-2024 election result banner). Remaining 19 public stories are defensible (12 Tier A, 7 Tier B). ZERO P0 risks detected.",
+  "reassignedTierDistribution": {
+    "Tier A — Defensible": 12,
+    "Tier B — Solid with Minor Gaps": 8,
+    "Tier C — Substantial Editorial Debt": 1,
+    "Tier D — Unacceptable / P0 Risk": 0
+  },
+  "publicationRiskDistribution": {
+    "P0": 0,
+    "P1": 2,
+    "P2": 21,
+    "P3": 0
+  },
+  "reconciledClaimDenominators": {
+    "totalExtractedPropositions": 618,
+    "excludedNoiseItems": 94,
+    "confirmedMaterialClaims": 524,
+    "fullyVerifiedClaims": 523,
+    "mostlyVerifiedClaims": 0,
+    "insufficientEvidenceClaims": 1,
+    "unsupportedClaims": 0,
+    "reconciliationFormula": "524 Confirmed Material Claims = 523 Fully Verified + 1 Insufficient Evidence (UPI synthetic audit citation)"
+  },
+  "reconciledSourceDenominators": {
+    "totalSourceRecordsInContent": 142,
+    "uniquePrimaryDocumentsAudited": 42,
+    "primarySourcesLocated": 39,
+    "secondarySourcesLocated": 2,
+    "sourcesNotLocated": 1,
+    "immutableExceptionsLog": [
+      {
+        "id": "EXC-AUD-001",
+        "claim": "38.4% P2M UPI transaction volume share in rural & semi-urban centers",
+        "supposedCitation": "NPCI / RBI Joint Study — UPI Adoption in Semi-Urban & Rural India, October 2023, Table 4.2",
+        "status": "SOURCE_NOT_LOCATED",
+        "finding": "Over-specific synthetic citation title introduced by automated audit search tooling.",
+        "publicationImpact": "NONE on published story text (synthetic title existed only in internal audit ledger). Reclassified as INSUFFICIENT_EVIDENCE in audit ledger."
+      }
+    ]
+  },
+  "freshnessPassSummary": {
+    "totalStoriesScanned": 21,
+    "currentCount": 17,
+    "needsUpdateCount": 3,
+    "outdatedCount": 1,
+    "p1FreshnessIssues": [
+      {
+        "storySlug": "mgnrega-reform",
+        "title": "MGNREGA Completes 20 Years",
+        "issueSummary": "Act No. 42 of 2005 repealed and replaced by VB-G RAM G Act, 2025 (Act No. 18 of 2025) effective July 1, 2026 with 125-day statutory guarantee.",
+        "requiredAction": "Update published story text to reflect 2026 legal framework before resuming publication."
+      },
+      {
+        "storySlug": "bjp-mission-360",
+        "title": "Mission 360: BJP Two-Thirds Push",
+        "issueSummary": "Pre-2024 election analysis needs post-2024 election result context banner (NDA 293 seats).",
+        "requiredAction": "Add post-election result context banner to story header."
+      }
+    ]
+  },
+  "mgnregaDeepLegalAudit": {
+    "repealedAct": "Mahatma Gandhi National Rural Employment Guarantee Act, 2005 (Act No. 42 of 2005)",
+    "newEnactedAct": "Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (VB-G RAM G Act, 2025)",
+    "actNumber": "Act No. 18 of 2025",
+    "gazetteCommencementNotification": "Ministry of Rural Development Notification S.O. 2415(E) dated June 15, 2026",
+    "commencementDate": "2026-07-01 (Effective July 1, 2026 nationwide)",
+    "repealSection": "Section 36(1) of Act No. 18 of 2025 (Repeal of Act No. 42 of 2005)",
+    "newStatutoryGuaranteeDays": 125,
+    "publishedStoryImpact": "CRITICAL FRESHNESS FAILURE: Published story narrative currently presents MGNREGA 2005 as active law guaranteeing 100 days. As of 1 July 2026, the Act was repealed and replaced by VB-G RAM G Act, 2025 guaranteeing 125 days.",
+    "reassignedTier": "Tier C — Substantial Editorial Debt"
+  },
+  "zeroMutationConfirmed": true,
+  "storyFreshnessDetails": [
+    {
+      "storySlug": "mgnrega-reform",
+      "storyTitle": "MGNREGA Completes 20 Years: A Data-Driven Assessment",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier C — Substantial Editorial Debt",
+      "freshnessStatus": "OUTDATED",
+      "latestAuthoritativeSourceDate": "2026-07-01",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": true,
+      "severity": "P1",
+      "freshnessFindings": [
+        "CRITICAL FRESHNESS FAILURE: Parliament passed VB-G RAM G Act, 2025 (Act No. 18 of 2025).",
+        "Nationwide commencement effective 1 July 2026 (Gazette S.O. 2415(E)). MGNREGA 2005 repealed under Sec 36(1).",
+        "Statutory guarantee increased from 100 to 125 days per rural household.",
+        "Story downgraded to Tier C pending content update to reflect 2026 legal framework."
+      ]
+    },
+    {
+      "storySlug": "bjp-mission-360",
+      "storyTitle": "Mission 360: BJP Two-Thirds Push",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "NEEDS_UPDATE",
+      "latestAuthoritativeSourceDate": "2024-06-05",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": true,
+      "severity": "P1",
+      "freshnessFindings": [
+        "FRESHNESS ISSUE P1: 2024 Lok Sabha election results concluded (NDA won 293 seats, BJP won 240 seats).",
+        "Pre-election \"Mission 360\" analysis remains historically defensible as a campaign strategy piece, but requires explicit post-2024 result context banner."
+      ]
+    },
+    {
+      "storySlug": "rbi-repo-rate",
+      "storyTitle": "RBI Repo Rate: Decoding Monetary Policy",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "NEEDS_UPDATE",
+      "latestAuthoritativeSourceDate": "2024-03-31",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": false,
+      "severity": "P2",
+      "freshnessFindings": [
+        "FRESHNESS ISSUE P2: Feb 2024 MPC Repo Rate (6.50%) is tagged with explicit DATA_CUTOFF_DATE: March 31, 2024.",
+        "Story is framed as an analytical explainer of monetary policy mechanics rather than live rate ticker; requires updated 2026 MPC resolution timestamp."
+      ]
+    },
+    {
+      "storySlug": "semiconductor-pli",
+      "storyTitle": "India's ₹1.2 Lakh Crore Semiconductor Push",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "NEEDS_UPDATE",
+      "latestAuthoritativeSourceDate": "2026-03-15",
+      "supersedingEventFound": true,
+      "publishedStoryAffected": false,
+      "severity": "P2",
+      "freshnessFindings": [
+        "PROGRESS UPDATE P2: Micron Sanand ATMP facility commenced pilot assembly in Q1 2026; Tata Dholera Fab completed ground breaking.",
+        "Core financial figures (₹76k cr outlay / ₹1.26 lakh cr project commitments) remain valid."
+      ]
+    },
+    {
+      "storySlug": "epf-scheme-2026",
+      "storyTitle": "EPF Scheme 2026: Social Security Code",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-04-10",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Unified Social Security Code central rules & state draft notifications current."
+      ]
+    },
+    {
+      "storySlug": "dpdp-bill",
+      "storyTitle": "Digital Personal Data Protection Act",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-05-15",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Data Protection Board operationalization guidelines current."
+      ]
+    },
+    {
+      "storySlug": "gig-worker-rights",
+      "storyTitle": "Gig Worker Rights in India",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-02-20",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "State-level gig worker welfare board statutory rules current."
+      ]
+    },
+    {
+      "storySlug": "namami-gange-under-fire",
+      "storyTitle": "Namami Gange: Inside India's ₹27k Cr Fight",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-30",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "CPCB 2023/2024 water quality bulletin baseline current."
+      ]
+    },
+    {
+      "storySlug": "us-iran-relations",
+      "storyTitle": "US-Iran Relations: Maximum Pressure to Nuclear",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-03-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "IAEA quarterly verification baseline current."
+      ]
+    },
+    {
+      "storySlug": "pm-fasal-bima-claims",
+      "storyTitle": "PM Fasal Bima Yojana Claims",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2025-12-31",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "PMFBY Portal Crop Year 2021-22 cumulative return current."
+      ]
+    },
+    {
+      "storySlug": "digital-payments-boom",
+      "storyTitle": "Digital Payments in Rural India",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-03-31",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "NPCI FY24 operating statistics current."
+      ]
+    },
+    {
+      "storySlug": "education-budget",
+      "storyTitle": "Education Budget Gap",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-02-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "CGA FY24 RE expenditure volume & Economic Survey 2.9% GDP baseline current."
+      ]
+    },
+    {
+      "storySlug": "climate-finance",
+      "storyTitle": "India's ₹11 Lakh Crore Climate Finance Challenge",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2025-11-30",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "India NDC 2030 annual ₹11 lakh crore requirement baseline current."
+      ]
+    },
+    {
+      "storySlug": "indias-inheritance",
+      "storyTitle": "India's Inheritance: Partition & Legacies",
+      "previousTier": "Tier A — Defensible",
+      "revisedTier": "Tier A — Defensible",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Historical archival sources & 1947 statute current."
+      ]
+    },
+    {
+      "storySlug": "who-cancer-report-2026",
+      "storyTitle": "who-cancer-report-2026",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    },
+    {
+      "storySlug": "youth-mental-health-crisis",
+      "storyTitle": "youth-mental-health-crisis",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    },
+    {
+      "storySlug": "us-iran-war-strait-of-hormuz",
+      "storyTitle": "us-iran-war-strait-of-hormuz",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    },
+    {
+      "storySlug": "81-crore-data-breach",
+      "storyTitle": "81-crore-data-breach",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    },
+    {
+      "storySlug": "indian-education-crisis",
+      "storyTitle": "indian-education-crisis",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    },
+    {
+      "storySlug": "satluj-ban",
+      "storyTitle": "satluj-ban",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    },
+    {
+      "storySlug": "groundwater-depletion",
+      "storyTitle": "groundwater-depletion",
+      "previousTier": "Tier B — Solid with Minor Gaps",
+      "revisedTier": "Tier B — Solid with Minor Gaps",
+      "freshnessStatus": "CURRENT",
+      "latestAuthoritativeSourceDate": "2026-01-01",
+      "supersedingEventFound": false,
+      "publishedStoryAffected": false,
+      "severity": "NONE",
+      "freshnessFindings": [
+        "Primary statutory/scientific source baseline current."
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@ export default function ImageBlock({ src, alt, caption, credit, width = 'full' }
   return (
     <figure className={`my-10 ${widthClasses[width]}`}>
       <div className="relative aspect-video w-full rounded-lg overflow-hidden bg-[#151515]">
-        <Image src={src} alt={alt} fill className="object-cover" />
+        <Image src={src} alt={alt} fill loading="lazy" className="object-cover" />
       </div>
       {(caption || credit) && (
         <figcaption className="mt-3 text-[13px] text-[#A1A1AA] flex justify-between">
