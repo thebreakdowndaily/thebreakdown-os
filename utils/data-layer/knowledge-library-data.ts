@@ -79,7 +79,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-exec-summary', type: 'callout',
     data: {
       variant: 'info',
-      text: 'India began its independent existence on 15 August 1947 amid the trauma of Partition — the largest forced migration in human history and one of the bloodiest communal conflagrations of the twentieth century. The division of British India into two sovereign states, India and Pakistan, displaced an estimated 14.5 million people, killed between 200,000 and 2 million, and left an enduring legacy of hostility between the two nuclear-armed neighbours. This chapter examines how the foundational experience of Partition shaped every dimension of India\'s foreign policy — its security doctrine, its approach to Pakistan, its engagement with international institutions, its commitment to secular nationalism, and its pursuit of strategic autonomy through non-alignment. The decisions made in the first five years of independence created the framework within which Indian foreign policy has operated for more than seven decades.',
+      text: '• FOUNDATIONAL TRAUMA: India began its independent existence in August 1947 amid the trauma of Partition — the largest forced migration in human history, displacing 14.5 million people and claiming 800,000 to 1 million lives.\n• STRATEGIC VULNERABILITY: The immediate outbreak of war in Kashmir and its subsequent referral to the United Nations Security Council in 1948 created a permanent diplomatic and territorial friction point with Pakistan.\n• GEOPOLITICAL ALIGNMENT: To secure domestic unity and preserve its newly won sovereignty, India adopted a civic model of constitutional secularism and pursued strategic autonomy through Non-Alignment.',
     },
   },
   // ── 2. Evidence Summaries ──
