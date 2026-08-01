@@ -13,24 +13,24 @@ import type { Metadata } from 'next';
 import TheBeginning from '@/components/narrative/TheBeginning';
 
 export const metadata: Metadata = {
-  title: 'The Breakdown — The World\'s First Narrative Intelligence Platform',
+  title: 'The Breakdown — Evidence-First Explainers on India',
   description:
-    'We do not publish articles. We build structured journeys through evidence — so you leave knowing something real. Evidence before conclusions. Uncertainty always visible. Reasoning always shown.',
+    'Deep, evidence-first explainers on Indian history, policy, and foreign relations. Every claim is sourced. Every source is linked. No takes — just understanding.',
   keywords:
     'India, knowledge, evidence, history, policy, research, primary sources, verification, non-alignment, partition, constitution, narrative intelligence',
   openGraph: {
-    title: 'The Breakdown — Narrative Intelligence Platform',
-    description: 'Not to maximise attention. To maximise understanding.',
+    title: 'The Breakdown — Evidence-First Explainers on India',
+    description: 'Deep, evidence-first explainers on Indian history, policy, and foreign relations.',
     url: 'https://thebreakdown.in',
-    siteName: 'The Breakdown Knowledge Platform',
+    siteName: 'The Breakdown',
     locale: 'en_IN',
     type: 'website',
-    images: [{ url: '/images/og-home.jpg', width: 1200, height: 630, alt: 'The Breakdown — Narrative Intelligence Platform' }],
+    images: [{ url: '/images/og-home.jpg', width: 1200, height: 630, alt: 'The Breakdown — Evidence-first explainers on India' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Breakdown — Narrative Intelligence Platform',
-    description: 'Not to maximise attention. To maximise understanding.',
+    title: 'The Breakdown — Evidence-First Explainers on India',
+    description: 'Deep, evidence-first explainers on Indian history, policy, and foreign relations.',
     images: ['/images/og-home.jpg'],
   },
   alternates: {

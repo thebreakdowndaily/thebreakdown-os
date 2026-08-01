@@ -189,10 +189,10 @@ export default function Scene4StoryWorlds({ topics, leadStory }: Scene4StoryWorl
         </p>
 
         <Link
-          href="/investigations"
+          href="/series"
           className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
         >
-          Continue The Journey
+          Browse the Knowledge Library
           <span aria-hidden="true">→</span>
         </Link>
       </div>

@@ -14,14 +14,14 @@ interface NavigationProps {
   transparent?: boolean;
 }
 
+// Only link to routes that exist and have content.
+// Dead links removed: /news, /analysis, /explainers, /timelines, /stories (empty)
 const navLinks: NavLink[] = [
-  { label: 'Stories', href: '/stories' },
-  { label: 'News', href: '/news' },
-  { label: 'Analysis', href: '/analysis' },
-  { label: 'Explainers', href: '/explainers' },
+  { label: 'Chapters', href: '/series' },
+  { label: 'Explainers', href: '/fix' },
   { label: 'Topics', href: '/topics' },
-  { label: 'Timelines', href: '/timelines' },
   { label: 'Data', href: '/data' },
+  { label: 'About', href: '/about' },
 ];
 
 export default function Navigation({ currentPath = '', transparent = false }: NavigationProps) {

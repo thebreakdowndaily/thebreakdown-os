@@ -30,7 +30,7 @@ export default function Scene1Opening() {
         {/* Platform identity badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/60 text-xs font-mono uppercase tracking-widest text-neutral-400">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-          The World&apos;s First Narrative Intelligence Platform
+          Evidence-First Explainers on India
         </div>
 
         {/* North Star Motto */}

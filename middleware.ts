@@ -31,9 +31,12 @@ const AUTHENTICATED_PAGES = [
   '/performance',
   '/tracking',
   '/settings',
+  '/editor',
 ];
 
-const DEPRECATED_DEBUG_ROUTES = ['/fix', '/problems', '/evolution'];
+// Routes that exist in the codebase but are not ready for public traffic.
+// Return 404 to prevent indexing and reader confusion.
+const DEPRECATED_DEBUG_ROUTES = ['/problems', '/evolution', '/compare', '/precedents'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -146,9 +149,11 @@ export const config = {
     '/performance/:path*',
     '/tracking/:path*',
     '/settings/:path*',
+    '/editor/:path*',
     '/reader/:path*',
-    '/fix/:path*',
     '/problems/:path*',
     '/evolution/:path*',
+    '/compare/:path*',
+    '/precedents/:path*',
   ],
 };
