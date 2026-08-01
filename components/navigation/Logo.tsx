@@ -1,13 +1,31 @@
 import Link from 'next/link';
 
+/**
+ * Logo — RC-1 Editorial Wordmark
+ * Playfair Display serif · gold accent · no graphic mark needed
+ */
 export default function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="The Breakdown — Home">
-      <div className="w-[14px] h-[14px] bg-brand-500 rounded-sm transition-transform duration-200 group-hover:scale-110" />
-      <div className="flex flex-col">
-        <span className="text-xl font-bold text-text-primary leading-none">The Breakdown</span>
-        <span className="text-[11px] text-text-muted tracking-widest uppercase leading-tight mt-1">India Explained</span>
-      </div>
+    <Link
+      href="/"
+      className="flex items-center gap-0 shrink-0 group"
+      aria-label="The Breakdown — Home"
+    >
+      <span
+        className="text-lg font-bold leading-none tracking-tight transition-colors duration-150"
+        style={{
+          fontFamily: 'var(--font-playfair), Georgia, serif',
+          color: '#C9A84C',
+        }}
+      >
+        The Breakdown
+      </span>
+      <span
+        className="hidden sm:inline-block ml-3 text-[10px] font-mono uppercase tracking-[0.2em] leading-none self-center pt-0.5"
+        style={{ color: '#444' }}
+      >
+        India Explained
+      </span>
     </Link>
   );
 }

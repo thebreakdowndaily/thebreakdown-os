@@ -8,17 +8,28 @@ interface NavItemProps {
   isActive?: boolean;
 }
 
+/**
+ * NavItem — RC-1 Editorial
+ * Small-caps · gold active indicator · no background fill on hover
+ */
 export default function NavItem({ href, label, isActive }: NavItemProps) {
   return (
     <Link
       href={href}
-      className={`relative flex items-center h-full px-3 text-sm font-medium transition-colors duration-200 ${
-        isActive ? 'text-text-primary' : 'text-text-muted hover:text-text-primary'
-      }`}
+      className="relative flex items-center h-full px-3.5 text-xs font-medium transition-colors duration-150"
+      style={{
+        color: isActive ? '#F5F5F5' : '#777',
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        fontFamily: 'var(--font-inter), system-ui, sans-serif',
+      }}
     >
       {label}
       {isActive && (
-        <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-brand-400 rounded-full" />
+        <span
+          className="absolute bottom-0 left-3.5 right-3.5 h-px rounded-full"
+          style={{ backgroundColor: '#C9A84C' }}
+        />
       )}
     </Link>
   );
