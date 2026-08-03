@@ -8,6 +8,8 @@ import {
   AUTHENTICATED_HEADER_POLICY,
   SECURITY_HEADERS,
 } from './lib/infrastructure/cache-policy';
+import { intelModuleFromPath } from './features/auth/intel-auth';
+import { normalizeIntelRole, canAccessIntelModule } from './features/auth/roles';
 
 const PUBLIC_API_PATHS = [
   '/api/docs',
@@ -32,6 +34,7 @@ const AUTHENTICATED_PAGES = [
   '/tracking',
   '/settings',
   '/editor',
+  '/intel',
 ];
 
 // Routes that exist in the codebase but are not ready for public traffic.
@@ -110,6 +113,24 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
       }
 
+      // Intelligence boundary — module-level authorization at the edge.
+      // Runs before any page is served, so unauthorized requests never reach
+      // a Server Component and no payload is computed or streamed.
+      const intelModule = intelModuleFromPath(pathname);
+      if (intelModule) {
+        const role = normalizeIntelRole((session.user.user_metadata.role as string | undefined) ?? null);
+        if (!canAccessIntelModule(role, intelModule)) {
+          return new NextResponse('Forbidden', {
+            status: 403,
+            headers: {
+              ...SECURITY_HEADERS,
+              'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+              'X-Robots-Tag': 'noindex, nofollow',
+            } as HeadersInit,
+          });
+        }
+      }
+
       // Apply authenticated security headers
       Object.entries(AUTHENTICATED_HEADER_POLICY).forEach(([k, v]) => {
         response.headers.set(k, v);
@@ -126,9 +147,9 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   if (pathname.startsWith('/reader/') || pathname.startsWith('/rss')) {
-    Object.entries(PUBLIC_UNINDEXED_HEADER).forEach(([k, v]) => response.headers.set(k, v));
+    Object.entries(PUBLIC_UNINDEXED_HEADER).forEach(([k, v]) => { response.headers.set(k, v); });
   } else {
-    Object.entries(PUBLIC_CACHE_POLICY).forEach(([k, v]) => response.headers.set(k, v));
+    Object.entries(PUBLIC_CACHE_POLICY).forEach(([k, v]) => { response.headers.set(k, v); });
   }
 
   return response;
@@ -150,6 +171,7 @@ export const config = {
     '/tracking/:path*',
     '/settings/:path*',
     '/editor/:path*',
+    '/intel/:path*',
     '/reader/:path*',
     '/problems/:path*',
     '/evolution/:path*',

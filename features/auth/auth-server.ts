@@ -25,20 +25,24 @@ export interface AuthSession {
 }
 
 export async function getSession(): Promise<AuthSession | null> {
-  const supabase = await getSupabaseAuth();
-  const { data: { session: s } } = await supabase.auth.getSession();
-  if (!s) return null;
-  return {
-    user: {
-      id: s.user.id,
-      email: s.user.email ?? '',
-      name: s.user.user_metadata?.name || s.user.email?.split('@')[0] || '',
-      image: s.user.user_metadata?.avatar_url || null,
-      role: s.user.user_metadata?.role || 'reader',
-    },
-    session: {
-      id: s.user.id,
-      expiresAt: s.expires_at ? s.expires_at * 1000 : 0,
-    },
-  };
+  try {
+    const supabase = await getSupabaseAuth();
+    const { data: { session: s } } = await supabase.auth.getSession();
+    if (!s) return null;
+    return {
+      user: {
+        id: s.user.id,
+        email: s.user.email ?? '',
+        name: s.user.user_metadata?.name || s.user.email?.split('@')[0] || '',
+        image: s.user.user_metadata?.avatar_url || null,
+        role: s.user.user_metadata?.role || 'reader',
+      },
+      session: {
+        id: s.user.id,
+        expiresAt: s.expires_at ? s.expires_at * 1000 : 0,
+      },
+    };
+  } catch {
+    return null;
+  }
 }
