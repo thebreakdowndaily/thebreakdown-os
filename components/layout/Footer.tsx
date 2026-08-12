@@ -9,7 +9,6 @@ const footerSections = [
       { label: 'Data Stories', href: '/data' },
       { label: 'Policy Tracker', href: '/topic/policy' },
       { label: 'The Fix', href: '/fix' },
-      { label: 'Problems', href: '/problems' },
     ],
   },
   {
