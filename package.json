@@ -41,6 +41,7 @@
     "check:lint": "eslint app components providers styles hooks types features",
     "check:type": "tsc --noEmit",
     "check:type:frontend": "tsc --noEmit --project tsconfig.frontend.json",
+    "check:registry": "npx tsx scripts/stories-registry-check.ts",
     "check:build": "next build",
     "check:test": "node -e \"console.log('Placeholder: frontend test script')\"",
     "check:test:frontend": "jest --config jest.frontend.config.js",
