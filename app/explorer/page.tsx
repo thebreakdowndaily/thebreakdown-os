@@ -1,7 +1,13 @@
+// app/explorer/page.tsx
+// Sprint 5C — Knowledge Explorer Page Wrapper with Suspense and Error Boundary
+
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import KnowledgeExplorerView from '@/components/explorer/KnowledgeExplorerView';
+import { ExplorerErrorBoundary } from '@/components/explorer/ExplorerErrorBoundary';
 import { CHAPTER_1_FIX } from '@/lib/editorial/chapter-1-data';
+import Skeleton from '@/components/ui/Skeleton';
 
 export const metadata: Metadata = {
   title: 'Knowledge Explorer — The Breakdown Knowledge Platform',
@@ -16,8 +22,42 @@ interface ExplorerPageProps {
   }>;
 }
 
+function ExplorerLoaderFallback() {
+  return (
+    <div className="space-y-6 max-w-7xl mx-auto p-4 animate-pulse">
+      <div className="h-28 bg-[#151515] border border-gray-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <Skeleton className="h-6 w-1/3" />
+        <Skeleton className="h-4 w-2/3" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-4 space-y-4">
+          <Skeleton className="h-5 w-1/4" />
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-24 bg-gray-800/40 border border-gray-700/60 rounded-xl p-4 space-y-2">
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-5 w-3/4" />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="lg:col-span-8 h-96 bg-[#151515] border border-gray-850 rounded-2xl p-6 space-y-4 shadow-xl">
+          <Skeleton className="h-6 w-1/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-5/6" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default async function KnowledgeExplorerPage({ searchParams }: ExplorerPageProps) {
-  const params = await searchParams;
+  const rawParams = (await (searchParams as Promise<Record<string, unknown>>));
+  const params = {
+    search: typeof rawParams.search === 'string' ? rawParams.search : '',
+    node: typeof rawParams.node === 'string' ? rawParams.node : '',
+    type: typeof rawParams.type === 'string' ? rawParams.type : '',
+  };
   const fixes = [CHAPTER_1_FIX];
 
   return (
@@ -52,12 +92,16 @@ export default async function KnowledgeExplorerPage({ searchParams }: ExplorerPa
         ]} />
 
         <div className="mt-6">
-          <KnowledgeExplorerView
-            fixes={fixes}
-            initialSearch={params.search || ''}
-            initialNodeId={params.node || ''}
-            initialType={params.type || 'ALL'}
-          />
+          <ExplorerErrorBoundary>
+            <Suspense fallback={<ExplorerLoaderFallback />}>
+              <KnowledgeExplorerView
+                fixes={fixes}
+                initialSearch={params.search || ''}
+                initialNodeId={params.node || ''}
+                initialType={params.type || 'ALL'}
+              />
+            </Suspense>
+          </ExplorerErrorBoundary>
         </div>
       </main>
     </div>
