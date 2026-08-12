@@ -134,8 +134,8 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
       heroImage: heroImg,
       actionText: 'Understand the story →',
       stats: {
-        claims: (rawLead.claims || []).length,
-        sources: (rawLead.sources || []).length,
+        claims: rawLead.claims.length,
+        sources: rawLead.sources.length,
         evidenceGrade: gradeForScore(rawLead.evidenceScore),
         reviewStatus: reviewLabel(rawLead.status, rawLead.publicationStatus),
       },
