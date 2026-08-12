@@ -5,9 +5,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   reactStrictMode: true,
   outputFileTracingRoot: path.resolve(__dirname),
 
