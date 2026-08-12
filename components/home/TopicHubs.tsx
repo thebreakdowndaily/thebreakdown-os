@@ -86,7 +86,7 @@ export default function TopicHubs({ topics }: TopicHubsProps) {
             {displayTopics.map((topic) => (
               <li key={topic.slug}>
                 <Link
-                  href={`/topics/${topic.slug}`}
+                  href={`/topic/${topic.slug}`}
                   className="group flex flex-col gap-2 p-4 rounded border transition-colors duration-150 h-full"
                   style={{ backgroundColor: '#111111', borderColor: '#1A1A1A' }}
                   id={`topic-hub-${topic.slug}`}

@@ -41,6 +41,10 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
     'Partition left India with disputed borders, a shattered economy, 562 princely states, and a foreign policy philosophy it would spend fifteen years trying to define. This is where the story begins.';
   const category = leadStory?.category ?? 'FOUNDING CHAPTER · VOLUME I';
   const readingTime = leadStory?.readingTime ?? FOUNDING_CHAPTER_STATS.readingTime;
+  const claims = leadStory?.stats?.claims ?? FOUNDING_CHAPTER_STATS.claims;
+  const sources = leadStory?.stats?.sources ?? FOUNDING_CHAPTER_STATS.sources;
+  const evidenceGrade = leadStory?.stats?.evidenceGrade ?? FOUNDING_CHAPTER_STATS.evidenceGrade;
+  const reviewStatus = leadStory?.stats?.reviewStatus ?? FOUNDING_CHAPTER_STATS.reviewStatus;
 
   return (
     <section
@@ -86,13 +90,13 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
 
             {/* Trust signals row */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-mono" style={{ color: '#A1A1AA' }}>
-              <span>{FOUNDING_CHAPTER_STATS.claims} verified claims</span>
+              <span>{claims} verified claims</span>
               <span aria-hidden="true" style={{ color: '#2A2A2A' }}>·</span>
-              <span>{FOUNDING_CHAPTER_STATS.sources} primary sources</span>
+              <span>{sources} primary sources</span>
               <span aria-hidden="true" style={{ color: '#2A2A2A' }}>·</span>
               <span>{readingTime} min read</span>
               <span aria-hidden="true" style={{ color: '#2A2A2A' }}>·</span>
-              <span style={{ color: '#C9A84C' }}>Evidence Grade {FOUNDING_CHAPTER_STATS.evidenceGrade}</span>
+              <span style={{ color: '#C9A84C' }}>Evidence Grade {evidenceGrade}</span>
             </div>
 
             {/* CTAs */}
@@ -103,7 +107,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                 style={{ backgroundColor: '#C9A84C', color: '#0A0A0A' }}
                 id="hero-read-chapter-cta"
               >
-                Read Chapter
+                {leadStory?.slug ? 'Read Story' : 'Read Chapter'}
                 <span aria-hidden="true">→</span>
               </Link>
             </div>
@@ -125,17 +129,17 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                   Knowledge Metrics
                 </p>
                 <p className="text-sm" style={{ color: '#A1A1AA' }}>
-                  Foundations of Indian Foreign Policy · 1947–1962
+                  {leadStory?.slug ? leadStory.category.toUpperCase() : 'Foundations of Indian Foreign Policy · 1947–1962'}
                 </p>
               </div>
 
               {/* Stats grid */}
               <div className="grid grid-cols-2 gap-6">
                 {[
-                  { value: FOUNDING_CHAPTER_STATS.claims, label: 'Verified Claims', accent: true },
-                  { value: FOUNDING_CHAPTER_STATS.sources, label: 'Primary Sources', accent: false },
+                  { value: claims, label: 'Verified Claims', accent: true },
+                  { value: sources, label: 'Primary Sources', accent: false },
                   { value: readingTime, label: 'Minutes to Read', accent: false },
-                  { value: `Grade ${FOUNDING_CHAPTER_STATS.evidenceGrade}`, label: 'Evidence Rating', accent: true },
+                  { value: `Grade ${evidenceGrade}`, label: 'Evidence Rating', accent: true },
                 ].map((stat) => (
                   <div key={stat.label} className="space-y-1">
                     <p
@@ -151,25 +155,39 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                 ))}
               </div>
 
-              {/* Timeline strip */}
-              <div className="space-y-3">
-                <p className="text-xs font-mono uppercase tracking-widest" style={{ color: '#A1A1AA' }}>
-                  Period Covered
-                </p>
-                <div className="relative h-px" style={{ backgroundColor: '#1F1F1F' }}>
-                  {/* Filled portion */}
-                  <div
-                    className="absolute top-0 left-0 h-full"
-                    style={{ width: '100%', background: 'linear-gradient(90deg, #C9A84C, #7A6030)' }}
-                    aria-hidden="true"
-                  />
+              {/* Timeline strip — founding chapter only; stories carry their own date context */}
+              {!leadStory?.slug && (
+                <div className="space-y-3">
+                  <p className="text-xs font-mono uppercase tracking-widest" style={{ color: '#A1A1AA' }}>
+                    Period Covered
+                  </p>
+                  <div className="relative h-px" style={{ backgroundColor: '#1F1F1F' }}>
+                    {/* Filled portion */}
+                    <div
+                      className="absolute top-0 left-0 h-full"
+                      style={{ width: '100%', background: 'linear-gradient(90deg, #C9A84C, #7A6030)' }}
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs font-mono" style={{ color: '#A1A1AA' }}>
+                    <span>1947</span>
+                    <span>Independence · Partition · NAM</span>
+                    <span>1962</span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-xs font-mono" style={{ color: '#A1A1AA' }}>
-                  <span>1947</span>
-                  <span>Independence · Partition · NAM</span>
-                  <span>1962</span>
+              )}
+
+              {/* Updated line — lead story freshness context */}
+              {leadStory?.slug && (
+                <div className="space-y-3">
+                  <p className="text-xs font-mono uppercase tracking-widest" style={{ color: '#A1A1AA' }}>
+                    Updated
+                  </p>
+                  <p className="text-sm" style={{ color: '#F5F5F5' }}>
+                    {leadStory.updatedAt}
+                  </p>
                 </div>
-              </div>
+              )}
 
               {/* Review status */}
               <div
@@ -177,7 +195,7 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
                 style={{ backgroundColor: '#0F1A0F', border: '1px solid #1A2E1A', color: '#4CAF50' }}
               >
                 <span aria-hidden="true">✓</span>
-                {FOUNDING_CHAPTER_STATS.reviewStatus}
+                {reviewStatus}
               </div>
             </div>
           </div>
