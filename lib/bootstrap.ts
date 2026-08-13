@@ -1,5 +1,6 @@
 import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations, LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
+import { getFixtureBySlug } from '../fixtures/fixes/index';
 import { getServices } from '@/services/registry';
 import type { Services } from '@/services/registry';
 import type { Story, Topic, Entity, Timeline, Fix, Dataset, MediaItem, StoryBlock, Source, Claim, TimelineEvent, FAQItem, ChartDef, ExistingSolution, GlobalExample, FixAction, FixMetric, Investigation } from '@/types/canonical';
@@ -262,7 +263,6 @@ export function apiInvestigationToCanonical(i: APIInvestigation): Investigation 
 }
 
 export function apiFixToCanonical(f: APIFix): Fix {
-  const { getFixtureBySlug } = require('../fixtures/fixes') as typeof import('../fixtures/fixes');
   const fixture = getFixtureBySlug(f.slug);
 
   const base: Record<string, unknown> = {

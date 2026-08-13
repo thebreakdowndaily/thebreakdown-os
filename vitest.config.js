@@ -86,6 +86,7 @@ module.exports = {
       'tests/resilience.test.ts',
       'tests/security.test.ts',
       'tests/solution-comparison.test.ts',
+      'tests/story/canonical-adapter.test.ts',
       'tests/telemetry.test.ts',
     ],
     exclude: ['node_modules/**', 'tests/e2e/**'],

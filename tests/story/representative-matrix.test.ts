@@ -93,17 +93,23 @@ async function runRepresentativeMatrixTests() {
 
   // 3. Knowledge Library chapter
   await test('Matrix 3: Knowledge Library chapter resolves and adapts to universal presentation model', async () => {
-    const resolution = await resolveStory('indias-inheritance');
-    assert.notEqual(resolution.type, 'not_found');
+    const orig = process.env.CANONICAL_READ_PATH;
+    process.env.CANONICAL_READ_PATH = 'ON';
+    try {
+      const resolution = await resolveStory('indias-inheritance');
+      assert.notEqual(resolution.type, 'not_found');
 
-    const canonicalStory = resolution.canonicalStory;
-    assert.equal(isCanonicalStoryPublic(canonicalStory), true);
+      const canonicalStory = resolution.canonicalStory;
+      assert.equal(isCanonicalStoryPublic(canonicalStory), true);
 
-    const presentation = buildStoryPresentationModel(canonicalStory, resolution.candidateTimelineEvents, resolution.relatedStories);
-    const visibleExperience = applyReadingModePolicy(presentation, 'standard');
+      const presentation = buildStoryPresentationModel(canonicalStory, resolution.candidateTimelineEvents, resolution.relatedStories);
+      const visibleExperience = applyReadingModePolicy(presentation, 'standard');
 
-    assert.equal(visibleExperience.storySlug, 'indias-inheritance');
-    assert.ok(visibleExperience.chapters.length >= 1);
+      assert.equal(visibleExperience.storySlug, 'indias-inheritance');
+      assert.ok(visibleExperience.chapters.length >= 1);
+    } finally {
+      process.env.CANONICAL_READ_PATH = orig;
+    }
   });
 
   // 4. Minimal story
