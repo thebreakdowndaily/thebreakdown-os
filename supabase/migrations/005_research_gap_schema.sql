@@ -2,9 +2,23 @@
 
 CREATE TYPE research_gap_status_type AS ENUM ('NOT_FOUND', 'NOT_REPORTED', 'NOT_VERIFIED', 'WITHHELD', 'NOT_APPLICABLE');
 
--- REPORTED was added to value_availability_status_type in migration 004
--- (ALTER TYPE ADD VALUE cannot run in a transaction block, so it must be
--- defined at CREATE TYPE time rather than added later).
+-- REPORTED is defined in migration 004 at CREATE TYPE time
+-- (ALTER TYPE ADD VALUE cannot run inside a transaction that later uses the
+-- value, so it must be defined at CREATE TYPE time rather than added later).
+-- The guarded block below covers pre-existing databases that applied the
+-- original 004 enum (without REPORTED); it runs in its own statement before
+-- the COMMIT_SPLIT so the new label is committed before it is referenced.
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_enum e
+        JOIN pg_type t ON t.oid = e.enumtypid
+        WHERE t.typname = 'value_availability_status_type' AND e.enumlabel = 'REPORTED'
+    ) THEN
+        ALTER TYPE value_availability_status_type ADD VALUE 'REPORTED';
+    END IF;
+END $$;
 
 -- COMMIT_SPLIT
 
@@ -54,7 +68,12 @@ ALTER TABLE research_claims DROP CONSTRAINT IF EXISTS claim_publish_requires_app
 ALTER TABLE research_claims ADD CONSTRAINT claim_publish_requires_approval 
 CHECK (publication_status != 'PUBLISHED' OR (human_review_status = 'APPROVED' AND verification_required = false));
 
--- Recreate the CHECK constraint with REPORTED now in the enum
+-- Recreate the CHECK constraint with REPORTED now in the enum.
+-- Migration 004's inline amount_value CHECK references amount_status, so
+-- PostgreSQL promotes it to a table constraint auto-named
+-- research_financial_records_check. It is dropped here and re-added under the
+-- same name so the old (KNOWN-only) constraint does not survive alongside the
+-- new REPORTED-aware one.
 ALTER TABLE research_financial_records DROP CONSTRAINT IF EXISTS research_financial_records_check;
 ALTER TABLE research_financial_records ADD CONSTRAINT research_financial_records_check
 CHECK (

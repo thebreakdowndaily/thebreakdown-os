@@ -9,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS btree_gist;
 -------------------------------------------------------------------------------
 CREATE TYPE publication_status_type AS ENUM ('DRAFT', 'READY_FOR_PUBLICATION', 'PUBLISHED', 'ARCHIVED', 'WITHDRAWN');
 CREATE TYPE human_review_status_type AS ENUM ('UNREVIEWED', 'IN_REVIEW', 'APPROVED', 'REJECTED');
-CREATE TYPE value_availability_status_type AS ENUM ('KNOWN', 'UNKNOWN', 'NOT_FOUND', 'WITHHELD', 'NOT_REPORTED', 'NOT_APPLICABLE');
+CREATE TYPE value_availability_status_type AS ENUM ('KNOWN', 'REPORTED', 'UNKNOWN', 'NOT_FOUND', 'WITHHELD', 'NOT_REPORTED', 'NOT_APPLICABLE');
 CREATE TYPE affiliation_type_enum AS ENUM ('FORMAL_MEMBERSHIP', 'LEGISLATIVE_PARTY', 'ELECTORAL_ALLIANCE', 'POLITICAL_SUPPORT');
 CREATE TYPE affiliation_status_enum AS ENUM ('ACTIVE', 'SUSPENDED', 'EXPELLED', 'RESIGNED', 'DISPUTED');
 CREATE TYPE claim_scope_type AS ENUM ('PRIMARY_SUBJECT', 'RELATED_ENTITY', 'GEOGRAPHIC_SCOPE');
