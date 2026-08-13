@@ -13,6 +13,7 @@ Last Updated: 30 Jul 2026
 **Platform Beta**: The infrastructure phase is complete. All future engineering must produce improvements a first-time reader can notice within five minutes. No new generic infrastructure.
 
 ---
+*Canonical repository:* `C:/newsjack-content/thebreakdown-os`
 
 # ADO Execution Patterns
 
