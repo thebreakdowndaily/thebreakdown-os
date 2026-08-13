@@ -7,6 +7,7 @@ import { toSlug, fromSlug } from '@/lib/up403/slug';
 import { winnerRow, formatNumber, formatPct, partyColorClass, dataStatusBadge } from '@/lib/up403/format';
 import { EvidenceBadge, DatasetProvenance } from '@/components/up403/evidence';
 import type { ConstituencyRecord } from '@/lib/up403/types';
+import { EditorialLayout } from '@/packages/editorial/src';
 
 const SITE_URL = 'https://thebreakdown.in';
 const YEARS = [2012, 2017, 2022] as const;
@@ -98,16 +99,17 @@ export default async function Up403ReaderProfile({ params }: { params: Promise<{
     },
   ];
 
-  return (
-    <div className="space-y-8">
-      <Script id={`schema-${rec.canonical_constituency_id}`} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <nav className="text-xs text-[#6B6B6B]" aria-label="Breadcrumb">
-        <Link href="/up403" className="hover:text-[#D4A843]">Uttar Pradesh</Link>
-        <span className="mx-2" aria-hidden="true">/</span>
-        <span className="text-[#A1A1AA]">{rec.constituency_name}</span>
-      </nav>
+  const breadcrumbs = [
+    { label: 'Uttar Pradesh', href: '/up403' },
+    { label: rec.constituency_name, href: `/up403/${slug}` },
+  ];
 
-      <header className="flex flex-wrap items-start justify-between gap-4">
+  return (
+    <EditorialLayout breadcrumbItems={breadcrumbs}>
+      <div className="space-y-8">
+        <Script id={`schema-${rec.canonical_constituency_id}`} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+
+        <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="font-serif text-3xl font-semibold text-[#F5F5F5] sm:text-4xl">{rec.constituency_name} <span className="text-xl font-normal text-[#A1A1AA]">Assembly Constituency</span></h1>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-[#A1A1AA]">
@@ -297,7 +299,8 @@ export default async function Up403ReaderProfile({ params }: { params: Promise<{
           For a full record including raw values and research tools, use the Research view.
         </p>
       </section>
-    </div>
+      </div>
+    </EditorialLayout>
   );
 }
 

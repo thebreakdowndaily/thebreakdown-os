@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getPublicStories } from '@/utils/data-layer/store';
-import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { EditorialLayout } from '@/packages/editorial/src';
 
 export const metadata: Metadata = {
   title: 'Stories — The Breakdown',
@@ -24,13 +23,13 @@ export default function StoriesPage() {
     redirect('/series');
   }
 
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Stories', href: '/stories' },
+  ];
+
   return (
-    <>
-      <Breadcrumbs items={[
-        { label: 'Home', href: '/' },
-        { label: 'Stories', href: '/stories' },
-      ]} />
-    <Container>
+    <EditorialLayout breadcrumbItems={breadcrumbs}>
       <div className="py-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Stories</h1>
         <p className="text-gray-400 text-lg mb-8">All data-driven investigations and analyses.</p>
@@ -53,7 +52,6 @@ export default function StoriesPage() {
           </div>
         </section>
       </div>
-    </Container>
-    </>
+    </EditorialLayout>
   );
 }

@@ -17,6 +17,7 @@
 
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildHomepage } from '@/features/home/view-model';
+import { EditorialLayout } from '@/packages/editorial/src';
 import HeroSection from './HeroSection';
 import MissionBar from './MissionBar';
 import StartHereSection from './StartHereSection';
@@ -29,24 +30,26 @@ export default async function HomepageLayout() {
   const vm = await buildHomepage(services);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white">
-      {/* 1. Hero — flagship chapter above the fold */}
-      <HeroSection leadStory={vm.leadStory} />
+    <EditorialLayout breadcrumbItems={[]}>
+      <div className="text-white space-y-12">
+        {/* 1. Hero — flagship chapter above the fold */}
+        <HeroSection leadStory={vm.leadStory} />
 
-      {/* 2. Mission / Trust pillars */}
-      <MissionBar />
+        {/* 2. Mission / Trust pillars */}
+        <MissionBar />
 
-      {/* 3. Start Here — first-time visitor orientation */}
-      <StartHereSection />
+        {/* 3. Start Here — first-time visitor orientation */}
+        <StartHereSection />
 
-      {/* 4. Latest Chapters */}
-      <LatestChapters />
+        {/* 4. Latest Chapters */}
+        <LatestChapters />
 
-      {/* 5. Topic Hubs */}
-      <TopicHubs topics={vm.topics} />
+        {/* 5. Topic Hubs */}
+        <TopicHubs topics={vm.topics} />
 
-      {/* 6. Newsletter capture */}
-      <NewsletterBand />
-    </div>
+        {/* 6. Newsletter capture */}
+        <NewsletterBand />
+      </div>
+    </EditorialLayout>
   );
 }

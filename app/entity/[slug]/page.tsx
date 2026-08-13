@@ -3,7 +3,7 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildEntityTerminalViewModel } from '@/features/entity/view-model';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { EditorialLayout } from '@/packages/editorial/src';
 
 // Terminal Orchestrator
 import EntityTerminal from '@/components/entity/EntityTerminal';
@@ -67,6 +67,12 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
   
   if (!viewModel) notFound();
 
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Intelligence Terminal', href: '/entities' },
+    { label: viewModel.name, href: `/entity/${viewModel.slug}` },
+  ];
+
   return (
     <>
       {createJsonLd(viewModel).map((ld, i) => (
@@ -75,15 +81,9 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
         </Script>
       ))}
 
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Intelligence Terminal', href: '/entities' },
-          { label: viewModel.name, href: `/entity/${viewModel.slug}` },
-        ]}
-      />
-
-      <EntityTerminal viewModel={viewModel} />
+      <EditorialLayout breadcrumbItems={breadcrumbs}>
+        <EntityTerminal viewModel={viewModel} />
+      </EditorialLayout>
     </>
   );
 }
