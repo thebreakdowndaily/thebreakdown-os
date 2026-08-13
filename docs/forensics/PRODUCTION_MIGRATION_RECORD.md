@@ -87,18 +87,38 @@ This formal migration record documents the exact state transition observed in pr
 
 ---
 
-## Edge Telemetry Log Snapshot
+## Phase 5B Observation Sign-Off Specification & Go/No-Go Gate
 
-```json
-{"event":"story_read_resolution","slug":"mgnrega-reform","flag":"CANARY","path":"canonical","chapterFound":true,"claimCount":5,"evidenceCount":6,"resolution":"success","fallbackUsed":false}
-{"event":"story_read_resolution","slug":"rbi-repo-rate","flag":"CANARY","path":"canonical","chapterFound":true,"claimCount":4,"evidenceCount":5,"resolution":"success","fallbackUsed":false}
-{"event":"story_read_resolution","slug":"digital-payments-boom","flag":"CANARY","path":"legacy","chapterFound":false,"claimCount":4,"evidenceCount":0,"resolution":"success","fallbackUsed":false}
-```
+At the conclusion of the 24–48h observation window, the following formal audit protocol will be evaluated:
 
----
+### 1. Deployment & Configuration Integrity
+- **Production Commit SHA**: `b73ea46`
+- **Active Deployment ID**: `dpl_RtvnxH8B6Rf2c9VAjEHVp9XDVZ3x` (or active aliased release)
+- **Active Read Path Flag**: `CANONICAL_READ_PATH=CANARY`
+- **Deployment Timestamp**: `2026-08-13T17:52:42Z`
 
-## Archival Verification Artifacts
+### 2. Granular Traffic Breakdown
+- **Total Request Volume**: [Count]
+- **Canonical Eligible Traffic**: [Count / %]
+- **Canonical Successful Traffic**: [Count / % (Target: 100%)]
+- **Canonical Failed Traffic**: [Count (Target: 0)]
+- **Legacy Control Traffic**: [Count / %]
 
-- Baseline HTML Snapshots: `scratch/comparisons/production-baseline/`
-- Live Canary HTML Snapshots: `scratch/comparisons/production-live-canary/`
-- Manifest: `scratch/comparisons/production-baseline/baseline-manifest.json`
+### 3. Operational Alarms & Hard Invariants
+- **P0 / P1 / P2 Operational Alarms**: 0 (Strict)
+- **Unintended Canonical → Legacy Fallbacks**: 0 (Strict Fail-Closed)
+
+### 4. HTTP & Edge Telemetry Health
+- **5xx Server Error Rate**: 0% regression
+- **404 Not Found Rate**: 0% unexplained regression
+- **Edge Response Latency (p50 / p95 / p99)**: Stable
+- **Cloudflare Edge Cache Hit Ratio**: Stable
+
+### 5. Provenance & Certification Integrity
+- **Unexplained Certification Invalidations**: 0
+- **Primary Source Link Reachability**: 100%
+- **Presentation Model Consistency**: 100%
+
+### Decision Rule
+- **GO**: All 5 criteria satisfied with zero unexplained anomalies $\longrightarrow$ Authorize Phase 5B Cohort 1 rollout (3–5 certified stories).
+- **NO-GO**: Any invariant violation, fallback, or unexplained anomaly $\longrightarrow$ Freeze rollout, investigate logs, and execute rollback if necessary.
