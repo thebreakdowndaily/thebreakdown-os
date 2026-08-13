@@ -42,9 +42,9 @@ export const tryLoadChapter = cache(async function tryLoadChapter(slug: string):
   try {
     seedAll();
     const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
-    const library = await repo.getLibrary('india-and-the-world');
-    if (!library) return null;
-    for (const c of library.collections) {
+    const libraries = await repo.getAllLibraries();
+    for (const library of libraries) {
+      for (const c of library.collections) {
       for (const v of c.volumes) {
         const ch = v.chapters.find((ch) => ch.slug === slug);
         if (ch) {
@@ -74,6 +74,7 @@ export const tryLoadChapter = cache(async function tryLoadChapter(slug: string):
           };
         }
       }
+    }
     }
   } catch {}
   return null;
@@ -137,8 +138,8 @@ export async function getAllStoryAndChapterSlugs(): Promise<{ slug: string }[]> 
   try {
     seedAll();
     const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
-    const library = await repo.getLibrary('india-and-the-world');
-    if (library) {
+    const libraries = await repo.getAllLibraries();
+    for (const library of libraries) {
       for (const c of library.collections) {
         for (const v of c.volumes) {
           for (const ch of v.chapters) {

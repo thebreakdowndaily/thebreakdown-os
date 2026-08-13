@@ -484,25 +484,28 @@ export function seedClaims(): void {
     },
 
   // ── Phase 4 Canonical Ingested Claims (2026-07-23T17:50:45.409Z) ──
+    // Classification: VERIFIED
     {
       id: "clm-mgnrega-reform-001",
       statement: "The Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025) expanded the statutory rural wage employment guarantee to 125 days per household starting 1 July 2026.",
       confidence: 'established',
       evidence: [
         { sourceId: "src-mgnrega-reform-1", relevance: 'direct', excerpt: "The Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025) expanded the statutory rural wage employment guarantee to 125 days per household starting 1 July 2026." },
+        { sourceId: "src-mgnrega-reform-2", relevance: 'supporting', excerpt: "Statutory guarantee for rural wage employment is expanded from 100 days to 125 days per rural household per financial year." },
       ],
       counterArguments: [],
-      sourceIds: ["src-mgnrega-reform-1"],
+      sourceIds: ["src-mgnrega-reform-1", "src-mgnrega-reform-2"],
       documentIds: [],
       entityIds: ["ministry-of-rural-development"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "mgnrega-reform", contentTitle: "mgnrega-reform" },
+        { contentType: 'chapter', contentId: "kl-ch-mgnrega", contentTitle: "MGNREGA & The 2026 Rural Employment Transition" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-mgnrega-reform-002",
       statement: "MGNREGA 2005 (Act No. 42 of 2005) stood repealed under Section 36(1) of Act No. 18 of 2025 effective July 1, 2026 with full transitional job card protection.",
@@ -516,18 +519,19 @@ export function seedClaims(): void {
       entityIds: ["ministry-of-rural-development"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "mgnrega-reform", contentTitle: "mgnrega-reform" },
+        { contentType: 'chapter', contentId: "kl-ch-mgnrega", contentTitle: "MGNREGA & The 2026 Rural Employment Transition" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: HISTORICAL / VERIFIED
     {
       id: "clm-mgnrega-reform-003",
       statement: "Under the historical MGNREGA 2005 framework, 100 days of wage employment were guaranteed per rural household per financial year.",
       confidence: 'established',
       evidence: [
-        { sourceId: "src-mgnrega-reform-3", relevance: 'direct', excerpt: "Under the historical MGNREGA 2005 framework, 100 days of wage employment were guaranteed per rural household per financial year." },
+        { sourceId: "src-mgnrega-reform-3", relevance: 'contextual', excerpt: "Under the historical MGNREGA 2005 framework, 100 days of wage employment were guaranteed per rural household per financial year." },
       ],
       counterArguments: [],
       sourceIds: ["src-mgnrega-reform-3"],
@@ -535,50 +539,53 @@ export function seedClaims(): void {
       entityIds: ["ministry-of-rural-development"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "mgnrega-reform", contentTitle: "mgnrega-reform" },
+        { contentType: 'chapter', contentId: "kl-ch-mgnrega", contentTitle: "MGNREGA & The 2026 Rural Employment Transition" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-mgnrega-reform-004",
       statement: "Active registered rural workers under India's employment guarantee program totaled 14.2 crore in FY2025-26.",
       confidence: 'established',
       evidence: [
-        { sourceId: "src-mgnrega-reform-4", relevance: 'direct', excerpt: "Active registered rural workers under India's employment guarantee program totaled 14.2 crore in FY2025-26." },
+        { sourceId: "src-mgnrega-reform-3", relevance: 'direct', excerpt: "Active registered rural workers under India's employment guarantee program totaled 14.2 crore in FY2025-26." },
       ],
       counterArguments: [],
-      sourceIds: ["src-mgnrega-reform-4"],
+      sourceIds: ["src-mgnrega-reform-3"],
       documentIds: [],
       entityIds: ["ministry-of-rural-development"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "mgnrega-reform", contentTitle: "mgnrega-reform" },
+        { contentType: 'chapter', contentId: "kl-ch-mgnrega", contentTitle: "MGNREGA & The 2026 Rural Employment Transition" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-mgnrega-reform-005",
       statement: "Women participation in rural employment guarantee schemes reached 55.3% in FY2025-26.",
       confidence: 'established',
       evidence: [
-        { sourceId: "src-mgnrega-reform-5", relevance: 'direct', excerpt: "Women participation in rural employment guarantee schemes reached 55.3% in FY2025-26." },
+        { sourceId: "src-mgnrega-reform-3", relevance: 'direct', excerpt: "Women participation in rural employment guarantee schemes reached 55.3% in FY2025-26." },
       ],
       counterArguments: [],
-      sourceIds: ["src-mgnrega-reform-5"],
+      sourceIds: ["src-mgnrega-reform-3"],
       documentIds: [],
       entityIds: ["ministry-of-rural-development"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "mgnrega-reform", contentTitle: "mgnrega-reform" },
+        { contentType: 'chapter', contentId: "kl-ch-mgnrega", contentTitle: "MGNREGA & The 2026 Rural Employment Transition" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-rbi-repo-rate-001",
       statement: "The Reserve Bank of India policy repo rate stands at 5.25% as of July 2026 following a 125 bps cumulative rate easing cycle.",
@@ -592,64 +599,68 @@ export function seedClaims(): void {
       entityIds: ["reserve-bank-of-india"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "rbi-repo-rate", contentTitle: "rbi-repo-rate" },
+        { contentType: 'chapter', contentId: "kl-ch-rbi-repo-rate", contentTitle: "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-rbi-repo-rate-002",
       statement: "The RBI MPC maintained a peak pause rate of 6.50% from February 2023 through December 2024 before initiating rate cuts.",
       confidence: 'established',
       evidence: [
-        { sourceId: "src-rbi-repo-rate-2", relevance: 'direct', excerpt: "The RBI MPC maintained a peak pause rate of 6.50% from February 2023 through December 2024 before initiating rate cuts." },
+        { sourceId: "src-rbi-repo-rate-1", relevance: 'direct', excerpt: "The RBI MPC maintained a peak pause rate of 6.50% from February 2023 through December 2024 before initiating rate cuts." },
+        { sourceId: "src-rbi-repo-rate-2", relevance: 'supporting', excerpt: "MPC Minutes from 2023 and 2024 consistently reflect the 6.50% pause stance." }
       ],
       counterArguments: [],
-      sourceIds: ["src-rbi-repo-rate-2"],
+      sourceIds: ["src-rbi-repo-rate-1", "src-rbi-repo-rate-2"],
       documentIds: [],
       entityIds: ["reserve-bank-of-india"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "rbi-repo-rate", contentTitle: "rbi-repo-rate" },
+        { contentType: 'chapter', contentId: "kl-ch-rbi-repo-rate", contentTitle: "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-rbi-repo-rate-003",
       statement: "The Standing Deposit Facility (SDF) rate is set at 5.00% as of July 2026.",
       confidence: 'established',
       evidence: [
-        { sourceId: "src-rbi-repo-rate-3", relevance: 'direct', excerpt: "The Standing Deposit Facility (SDF) rate is set at 5.00% as of July 2026." },
+        { sourceId: "src-rbi-repo-rate-1", relevance: 'direct', excerpt: "The Standing Deposit Facility (SDF) rate is set at 5.00% as of July 2026." },
       ],
       counterArguments: [],
-      sourceIds: ["src-rbi-repo-rate-3"],
+      sourceIds: ["src-rbi-repo-rate-1"],
       documentIds: [],
       entityIds: ["reserve-bank-of-india"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "rbi-repo-rate", contentTitle: "rbi-repo-rate" },
+        { contentType: 'chapter', contentId: "kl-ch-rbi-repo-rate", contentTitle: "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
       lastVerifiedAt: "2026-07-23T17:50:45.409Z",
     },
+    // Classification: VERIFIED
     {
       id: "clm-rbi-repo-rate-004",
       statement: "The Marginal Standing Facility (MSF) rate is set at 5.50% as of July 2026.",
       confidence: 'established',
       evidence: [
-        { sourceId: "src-rbi-repo-rate-4", relevance: 'direct', excerpt: "The Marginal Standing Facility (MSF) rate is set at 5.50% as of July 2026." },
+        { sourceId: "src-rbi-repo-rate-1", relevance: 'direct', excerpt: "The Marginal Standing Facility (MSF) rate is set at 5.50% as of July 2026." },
       ],
       counterArguments: [],
-      sourceIds: ["src-rbi-repo-rate-4"],
+      sourceIds: ["src-rbi-repo-rate-1"],
       documentIds: [],
       entityIds: ["reserve-bank-of-india"],
       conceptIds: [],
       appearsIn: [
-        { contentType: 'story', contentId: "rbi-repo-rate", contentTitle: "rbi-repo-rate" },
+        { contentType: 'chapter', contentId: "kl-ch-rbi-repo-rate", contentTitle: "RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle" },
       ],
       createdAt: "2026-07-23T17:50:45.409Z",
       updatedAt: "2026-07-23T17:50:45.409Z",
