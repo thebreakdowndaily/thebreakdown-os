@@ -11,6 +11,14 @@
  * - Post-001: Expected 001 tables exist.
  * - Post-002: Expected 002 multi-schema tables exist, 001 tables dropped.
  * - Post-004: Expected 004 research tables and types exist, RLS enabled.
+ * - Post-013: Expected 009-013 W3/W4 tables exist; newsroom schema created;
+ *   all 31 protected public tables + 17 newsroom tables have RLS enabled.
+ *
+ * Migration 007 makes research_financial_records.canonical_id NOT NULL and
+ * migration 006 adds a NOT NULL currency column, so financial fixtures below
+ * supply both. Migration 005 guards an enum ADD VALUE behind a -- COMMIT_SPLIT
+ * marker; the apply loop commits each part separately, mirroring the replay
+ * harness (scripts/db-migration-replay.js).
  *
  * Column names match supabase/migrations/004_canonical_research_schema.sql exactly:
  * - research_claims.confidence (NOT confidence_level)
@@ -90,6 +98,15 @@ const EXPECTED_MIGRATIONS = [
   '002_canonical_schema.sql',
   '003_image_intelligence_schema.sql',
   '004_canonical_research_schema.sql',
+  '005_research_gap_schema.sql',
+  '006_financial_record_identity_and_geography.sql',
+  '007_close_financial_canonical_id_nulls.sql',
+  '008_relax_constituency_canonical_id_check.sql',
+  '009_knowledge_acquisition_platform.sql',
+  '010_investigation_workspace.sql',
+  '011_governance_intelligence.sql',
+  '012_create_intelligence_schema.sql',
+  '013_create_corrections_schema.sql',
 ];
 
 // --- Pre-001 Deny-List: Application tables that should NOT exist on a pristine database ---
@@ -104,6 +121,11 @@ const PRE_001_DENY_TABLES = [
   'research_projects', 'research_party_affiliation_history',
   'research_financial_records', 'research_sources', 'research_evidence_items',
   'research_claims', 'research_claim_subject_relationships', 'research_corrections',
+  'research_collectors', 'research_ingestion_queue', 'research_diff_alerts',
+  'workspace_cases', 'workspace_evidence', 'workspace_notes', 'workspace_timeline_events',
+  'workspace_tasks', 'workspace_exports',
+  'gov_ministries', 'gov_budgets', 'gov_schemes', 'gov_projects', 'gov_contractors', 'gov_audits',
+  'corrections', 'reader_corrections',
 ];
 
 const PRE_001_DENY_TYPES = [
@@ -130,6 +152,15 @@ const POST_004_RESEARCH_TABLES = [
   'research_projects', 'research_party_affiliation_history',
   'research_financial_records', 'research_sources', 'research_evidence_items',
   'research_claims', 'research_claim_subject_relationships', 'research_corrections',
+];
+
+// --- Post-013 Expected W3/W4 Artifacts ---
+const POST_013_W3W4_TABLES = [
+  'research_collectors', 'research_ingestion_queue', 'research_diff_alerts',
+  'workspace_cases', 'workspace_evidence', 'workspace_notes', 'workspace_timeline_events',
+  'workspace_tasks', 'workspace_exports',
+  'gov_ministries', 'gov_budgets', 'gov_schemes', 'gov_projects', 'gov_contractors', 'gov_audits',
+  'corrections', 'reader_corrections',
 ];
 
 describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
@@ -172,6 +203,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     for (const schema of ['editorial', 'graph', 'audit', 'identity', 'search']) {
       await pgAdmin.query(`DROP SCHEMA IF EXISTS ${schema} CASCADE`).catch(() => {});
     }
+    // Drop any leftover schemas created by migration 012
+    await pgAdmin.query(`DROP SCHEMA IF EXISTS newsroom CASCADE`).catch(() => {});
     // Drop research tables that may exist with different names from prior migration attempts
     await pgAdmin.query(`
       DO $$ DECLARE r RECORD;
@@ -272,13 +305,19 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
       expect(contaminated).toEqual([]);
     });
 
-    it('applies migrations 001-004 sequentially with per-migration schema verification', async () => {
+    it('applies migrations 001-013 sequentially with per-migration schema verification', async () => {
       const migrationDir = path.resolve(__dirname, '../../supabase/migrations');
 
       for (const file of EXPECTED_MIGRATIONS) {
         const sql = fs.readFileSync(path.join(migrationDir, file), 'utf8');
         try {
-          await pgAdmin.query(sql);
+          // Migration 005 guards an enum ADD VALUE behind a -- COMMIT_SPLIT
+          // marker so the new label is committed before it is used by the
+          // constraint rebuild in the same file. Apply each part as its own
+          // implicit transaction, mirroring the replay harness.
+          for (const part of sql.split('-- COMMIT_SPLIT').map((p) => p.trim()).filter(Boolean)) {
+            await pgAdmin.query(part);
+          }
         } catch (e) {
           throw new Error(`Migration ${file} failed: ${e}`);
         }
@@ -317,6 +356,32 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
 
           const extCheck = await pgAdmin.query("SELECT extname FROM pg_extension WHERE extname = 'btree_gist'");
           expect(extCheck.rowCount).toBe(1);
+        }
+
+        if (file === '013_create_corrections_schema.sql') {
+          const tables = await pgAdmin.query(
+            "SELECT tablename FROM pg_tables WHERE schemaname = 'public'"
+          );
+          const names: string[] = tables.rows.map((r: any) => r.tablename);
+          for (const expected of POST_013_W3W4_TABLES) {
+            expect(names).toContain(expected);
+          }
+
+          const newsroomSchemas = await pgAdmin.query(
+            "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'newsroom'"
+          );
+          expect(newsroomSchemas.rowCount).toBe(1);
+
+          // All 31 protected public tables + 17 newsroom tables must have RLS.
+          const rlsCheck = await pgAdmin.query(`
+            SELECT count(*)::int AS n
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind = 'r'
+              AND c.relrowsecurity
+              AND n.nspname = 'public'
+          `);
+          expect(rlsCheck.rows[0].n).toBe(31);
         }
       }
 
@@ -528,8 +593,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('KNOWN + value accepted', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','ANNOUNCEMENT','KNOWN',1000,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','ANNOUNCEMENT','KNOWN',1000,'INR','2025-01-01','TEST','FIN-TEST-001')`
         )
       ).resolves.not.toThrow();
     });
@@ -537,8 +602,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('KNOWN + NULL rejected (CHECK)', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','ANNOUNCEMENT','KNOWN',NULL,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','ANNOUNCEMENT','KNOWN',NULL,'INR','2025-01-01','TEST','FIN-TEST-002')`
         )
       ).rejects.toThrow();
     });
@@ -546,8 +611,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('UNKNOWN + NULL accepted', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','ANNOUNCEMENT','UNKNOWN',NULL,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','ANNOUNCEMENT','UNKNOWN',NULL,'INR','2025-01-01','TEST','FIN-TEST-003')`
         )
       ).resolves.not.toThrow();
     });
@@ -555,8 +620,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('UNKNOWN + zero rejected (CHECK)', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','ANNOUNCEMENT','UNKNOWN',0,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','ANNOUNCEMENT','UNKNOWN',0,'INR','2025-01-01','TEST','FIN-TEST-004')`
         )
       ).rejects.toThrow();
     });
@@ -564,8 +629,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('KNOWN + zero accepted (explicit zero)', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','ANNOUNCEMENT','KNOWN',0,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','ANNOUNCEMENT','KNOWN',0,'INR','2025-01-01','TEST','FIN-TEST-005')`
         )
       ).resolves.not.toThrow();
     });
@@ -573,8 +638,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('NOT_FOUND behavior verified', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','ANNOUNCEMENT','NOT_FOUND',NULL,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','ANNOUNCEMENT','NOT_FOUND',NULL,'INR','2025-01-01','TEST','FIN-TEST-006')`
         )
       ).resolves.not.toThrow();
     });
@@ -582,8 +647,8 @@ describeDB('Canonical Research Schema 004 Integration (PostgreSQL)', () => {
     it('stage enum constraint enforced', async () => {
       await expect(
         pgAdmin.query(
-          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, valid_from, ingestion_method)
-           VALUES ('${projId}','INVALID_STAGE','UNKNOWN',NULL,'2025-01-01','TEST')`
+          `INSERT INTO research_financial_records (project_id, stage, amount_status, amount_value, currency, valid_from, ingestion_method, canonical_id)
+           VALUES ('${projId}','INVALID_STAGE','UNKNOWN',NULL,'INR','2025-01-01','TEST','FIN-TEST-007')`
         )
       ).rejects.toThrow();
     });
