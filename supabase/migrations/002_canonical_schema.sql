@@ -612,8 +612,13 @@ BEGIN
   FOREACH sch IN ARRAY schemas
   LOOP
     FOR tbl IN
-      SELECT tablename FROM pg_tables
-      WHERE schemaname = sch AND tablename NOT LIKE 'dataset_%'
+      SELECT t.tablename
+      FROM pg_tables t
+      JOIN information_schema.columns c
+        ON c.table_schema = t.schemaname
+       AND c.table_name = t.tablename
+       AND c.column_name = 'updated_at'
+      WHERE t.schemaname = sch AND t.tablename NOT LIKE 'dataset_%'
     LOOP
       EXECUTE format(
         'CREATE TRIGGER trg_%I_updated_at BEFORE UPDATE ON %I.%I FOR EACH ROW EXECUTE FUNCTION set_updated_at()',
