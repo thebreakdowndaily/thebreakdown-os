@@ -1,21 +1,42 @@
+import crypto from 'crypto';
 import type { Chapter, Claim, Evidence, Source, KnowledgeLibrary } from '@/types/canonical';
 import type { CanonicalEligibilityStatus } from '@/lib/feature-flags';
+import { getKnowledgeCore, enrichClaimLazy } from '@/lib/knowledge/knowledge-core';
 
-export interface ValidationIssue {
-  layer: 'claim' | 'evidence' | 'source' | 'temporal' | 'presentation';
-  severity: 'error' | 'warning';
-  targetId?: string;
+export type ValidationLayer =
+  | 'structural'
+  | 'provenance'
+  | 'evidence_support'
+  | 'editorial_verification'
+  | 'temporal'
+  | 'presentation';
+
+export interface AuditRuleEvaluation {
+  ruleId: string;
+  layer: ValidationLayer;
+  name: string;
+  status: 'PASS' | 'FAIL' | 'WARN';
   message: string;
+  targetId?: string;
 }
 
-export interface CertificationMetrics {
-  totalClaims: number;
-  verifiedClaims: number;
-  needsVerificationClaims: number;
-  totalEvidence: number;
-  totalSources: number;
+export interface DisambiguatedMetrics {
+  claimsCount: number;
+  verifiedClaimsCount: number;
+  needsVerificationCount: number;
+  unsupportedClaimsCount: number;
+  evidenceObjectsCount: number;
+  uniqueSourcesCount: number;
+  citationOccurrencesCount: number;
   verifiedClaimRatio: number;
   evidencePerClaimRatio: number;
+}
+
+export interface CertificationAuditTrail {
+  engineVersion: string;
+  certifiedAt: string;
+  contentHash: string;
+  evaluations: AuditRuleEvaluation[];
 }
 
 export interface CertificationResult {
@@ -24,154 +45,385 @@ export interface CertificationResult {
   status: CanonicalEligibilityStatus;
   isCertified: boolean;
   score: number; // 0 - 100
-  metrics: CertificationMetrics;
-  issues: ValidationIssue[];
+  contentHash: string;
+  certifiedAt: string;
+  engineVersion: string;
+  metrics: DisambiguatedMetrics;
+  auditTrail: CertificationAuditTrail;
+  issues: Array<{
+    layer: ValidationLayer;
+    severity: 'error' | 'warning';
+    targetId?: string;
+    message: string;
+  }>;
 }
 
 export class CanonicalCertificationEngine {
+  public static readonly ENGINE_VERSION = 'canonical-certification@2.0';
+
   /**
-   * Certifies a canonical chapter against the 5 Gold Standard audit dimensions:
-   * 1. Claim Validation
-   * 2. Evidence Validation
-   * 3. Source Validation
-   * 4. Temporal Validation
-   * 5. Presentation Compatibility
+   * Resolves canonical claims, evidence, and sources from either direct arrays or knowledge core.
+   */
+  public static resolveChapterKnowledge(chapter: Chapter): {
+    claims: Array<{ id: string; text: string; status: string; confidence: number; evidenceIds: string[] }>;
+    evidence: Array<{ id: string; description: string; sourceId?: string; strength?: string }>;
+    sources: Array<{ id: string; title: string; url?: string; tier?: number }>;
+    blocks: any[];
+  } {
+    const blocks = chapter.blocks || chapter.content || [];
+    
+    // Check if direct claims exist
+    if (chapter.claims && chapter.claims.length > 0) {
+      return {
+        claims: chapter.claims.map((c) => ({
+          id: c.id,
+          text: c.text,
+          status: c.status || 'VERIFIED',
+          confidence: typeof c.confidence === 'number' ? c.confidence : 0.8,
+          evidenceIds: c.evidenceIds || [],
+        })),
+        evidence: (chapter.evidence || []).map((e) => ({
+          id: e.id,
+          description: e.description,
+          sourceId: e.sourceId,
+          strength: e.strength,
+        })),
+        sources: (chapter.sources || []).map((s) => ({
+          id: s.id,
+          title: s.title,
+          url: s.url,
+          tier: s.tier,
+        })),
+        blocks,
+      };
+    }
+
+    // Resolve from inline content claim blocks & Knowledge Core
+    const inlineClaimIds = blocks
+      .filter((b: any) => b.type === 'claim' && b.data?.claimId)
+      .map((b: any) => b.data.claimId as string);
+
+    const core = getKnowledgeCore();
+    const conceptClaimIds = chapter.relatedConceptIds?.flatMap((cid) => core.claims.byConcept(cid)).map((c) => c.id) || [];
+    const allClaimIds = Array.from(new Set([...conceptClaimIds, ...inlineClaimIds]));
+
+    const enrichedClaims = allClaimIds.map((id) => enrichClaimLazy(id)).filter(Boolean) as any[];
+
+    const claims = enrichedClaims.map((ec) => {
+      const evList = ec._evidence || ec.evidence || [];
+      return {
+        id: ec.id,
+        text: ec.statement,
+        status: ec.confidence === 'established' ? 'VERIFIED' : ec.confidence === 'debated' ? 'NEEDS_VERIFICATION' : 'UNSUPPORTED',
+        confidence: ec.confidence === 'established' ? 0.9 : ec.confidence === 'debated' ? 0.6 : 0.4,
+        evidenceIds: evList.map((e: any) => e.id),
+      };
+    });
+
+    const evidenceMap = new Map<string, any>();
+    const sourcesMap = new Map<string, any>();
+
+    enrichedClaims.forEach((ec) => {
+      const evList = ec._evidence || ec.evidence || [];
+      const srcList = ec._sources || ec.sources || [];
+
+      evList.forEach((ev: any) => {
+        evidenceMap.set(ev.id, {
+          id: ev.id,
+          description: ev.excerpt || ev.description || '',
+          sourceId: ev.sourceId || srcList[0]?.id,
+          strength: ev.strength,
+        });
+      });
+      srcList.forEach((src: any) => {
+        sourcesMap.set(src.id, {
+          id: src.id,
+          title: src.title,
+          url: src.url,
+          tier: src.tier,
+        });
+      });
+    });
+
+    return {
+      claims,
+      evidence: Array.from(evidenceMap.values()),
+      sources: Array.from(sourcesMap.values()),
+      blocks,
+    };
+  }
+
+  /**
+   * Computes a deterministic SHA-256 hash of canonical content to detect changes.
+   */
+  public static computeContentHash(chapter: Chapter): string {
+    const { claims, evidence, sources, blocks } = this.resolveChapterKnowledge(chapter);
+    const payload = {
+      slug: chapter.slug,
+      claims,
+      evidence,
+      sources,
+      blocksCount: blocks.length,
+    };
+    return crypto.createHash('sha256').update(JSON.stringify(payload)).digest('hex').slice(0, 16);
+  }
+
+  /**
+   * Evaluates a chapter across all 5 verification layers:
+   * Layer 1: Structural Validation
+   * Layer 2: Provenance & Source Authority
+   * Layer 3: Evidence Support Validation
+   * Layer 4: Editorial Verification Classification
+   * Layer 5: Presentation Contract
    */
   public static certifyChapter(chapter: Chapter): CertificationResult {
-    const issues: ValidationIssue[] = [];
+    const evaluations: AuditRuleEvaluation[] = [];
+    const issues: CertificationResult['issues'] = [];
 
-    // 1. Claim Validation
-    const claims = chapter.claims || [];
+    const { claims, evidence: evidenceList, sources, blocks } = this.resolveChapterKnowledge(chapter);
+
+    // --- Layer 1: Structural Validation ---
     if (claims.length === 0) {
+      evaluations.push({
+        ruleId: 'STRUC-001',
+        layer: 'structural',
+        name: 'Claim Minimum Count',
+        status: 'FAIL',
+        message: 'Chapter must contain at least 1 canonical claim.',
+      });
       issues.push({
-        layer: 'claim',
+        layer: 'structural',
         severity: 'error',
-        message: 'Chapter has 0 canonical claims. A minimum of 1 verified claim is required.',
+        message: 'Chapter has 0 canonical claims.',
+      });
+    } else {
+      evaluations.push({
+        ruleId: 'STRUC-001',
+        layer: 'structural',
+        name: 'Claim Minimum Count',
+        status: 'PASS',
+        message: `Found ${claims.length} claims.`,
       });
     }
 
     let verifiedCount = 0;
     let needsVerificationCount = 0;
+    let unsupportedCount = 0;
 
     claims.forEach((claim, idx) => {
+      const claimId = claim.id || `claim-${idx}`;
+      
+      // Text validity
       if (!claim.text || claim.text.trim().length < 10) {
-        issues.push({
-          layer: 'claim',
-          severity: 'error',
-          targetId: claim.id || `claim-${idx}`,
+        evaluations.push({
+          ruleId: 'STRUC-002',
+          layer: 'structural',
+          name: 'Claim Text Validity',
+          status: 'FAIL',
+          targetId: claimId,
           message: `Claim text is empty or too short (${claim.text?.length || 0} chars).`,
         });
-      }
-
-      if (typeof claim.confidence !== 'number' || claim.confidence < 0 || claim.confidence > 1) {
         issues.push({
-          layer: 'claim',
+          layer: 'structural',
           severity: 'error',
-          targetId: claim.id,
-          message: `Invalid confidence score: ${claim.confidence}. Must be between 0.0 and 1.0.`,
+          targetId: claimId,
+          message: `Claim text is empty or too short.`,
         });
       }
 
+      // Confidence score bounds
+      if (typeof claim.confidence !== 'number' || claim.confidence < 0 || claim.confidence > 1) {
+        evaluations.push({
+          ruleId: 'STRUC-003',
+          layer: 'structural',
+          name: 'Claim Confidence Range',
+          status: 'FAIL',
+          targetId: claimId,
+          message: `Confidence ${claim.confidence} out of range [0.0, 1.0].`,
+        });
+        issues.push({
+          layer: 'structural',
+          severity: 'error',
+          targetId: claimId,
+          message: `Confidence ${claim.confidence} is invalid.`,
+        });
+      }
+
+      // Layer 4: Editorial Verification
       if (claim.status === 'VERIFIED') {
         verifiedCount++;
       } else if (claim.status === 'NEEDS_VERIFICATION') {
         needsVerificationCount++;
+        evaluations.push({
+          ruleId: 'EDIT-001',
+          layer: 'editorial_verification',
+          name: 'Claim Verification State',
+          status: 'WARN',
+          targetId: claimId,
+          message: `Claim is pending fact-check review (NEEDS_VERIFICATION).`,
+        });
         issues.push({
-          layer: 'claim',
+          layer: 'editorial_verification',
           severity: 'warning',
-          targetId: claim.id,
-          message: `Claim status is marked NEEDS_VERIFICATION.`,
+          targetId: claimId,
+          message: `Claim ${claimId} status is NEEDS_VERIFICATION.`,
+        });
+      } else if (claim.status === 'UNSUPPORTED') {
+        unsupportedCount++;
+        evaluations.push({
+          ruleId: 'EDIT-002',
+          layer: 'editorial_verification',
+          name: 'Unsupported Claim',
+          status: 'FAIL',
+          targetId: claimId,
+          message: `Claim marked as UNSUPPORTED by fact-checking audit.`,
+        });
+        issues.push({
+          layer: 'editorial_verification',
+          severity: 'error',
+          targetId: claimId,
+          message: `Claim ${claimId} is UNSUPPORTED and cannot be published.`,
         });
       }
     });
 
-    // 2. Evidence Validation
-    const evidenceList = chapter.evidence || [];
+    // --- Layer 2 & 3: Evidence Support & Provenance Validation ---
+    let citationOccurrences = 0;
+
     claims.forEach((claim) => {
-      const linkedEvidence = (claim.evidenceIds || []).map((id) => evidenceList.find((e) => e.id === id)).filter(Boolean);
+      const linkedEvidence = (claim.evidenceIds || [])
+        .map((id) => evidenceList.find((e) => e.id === id))
+        .filter(Boolean);
+
       if (linkedEvidence.length === 0) {
+        evaluations.push({
+          ruleId: 'EVID-001',
+          layer: 'evidence_support',
+          name: 'Claim Evidence Linkage',
+          status: 'FAIL',
+          targetId: claim.id,
+          message: `Claim ${claim.id} has 0 linked evidence records.`,
+        });
         issues.push({
-          layer: 'evidence',
+          layer: 'evidence_support',
           severity: 'error',
           targetId: claim.id,
-          message: `Claim ${claim.id} has no linked evidence records.`,
+          message: `Claim ${claim.id} lacks supporting evidence linkage.`,
         });
+      } else {
+        citationOccurrences += linkedEvidence.length;
       }
     });
 
     evidenceList.forEach((ev, idx) => {
+      const evId = ev.id || `evidence-${idx}`;
       if (!ev.description || ev.description.trim().length < 5) {
+        evaluations.push({
+          ruleId: 'EVID-002',
+          layer: 'evidence_support',
+          name: 'Evidence Content Description',
+          status: 'FAIL',
+          targetId: evId,
+          message: `Evidence description is missing or insufficient.`,
+        });
         issues.push({
-          layer: 'evidence',
+          layer: 'evidence_support',
           severity: 'error',
-          targetId: ev.id || `evidence-${idx}`,
-          message: `Evidence description is missing or too short.`,
+          targetId: evId,
+          message: `Evidence ${evId} description is missing or insufficient.`,
         });
       }
-    });
 
-    // 3. Source Validation
-    const sources = chapter.sources || [];
-    evidenceList.forEach((ev) => {
+      // Provenance: Source Reference
       if (ev.sourceId) {
-        const foundSource = sources.find((s) => s.id === ev.sourceId);
-        if (!foundSource) {
+        const found = sources.find((s) => s.id === ev.sourceId);
+        if (!found) {
+          evaluations.push({
+            ruleId: 'PROV-001',
+            layer: 'provenance',
+            name: 'Source Existence',
+            status: 'WARN',
+            targetId: evId,
+            message: `Evidence references missing source '${ev.sourceId}'.`,
+          });
           issues.push({
-            layer: 'source',
+            layer: 'provenance',
             severity: 'warning',
-            targetId: ev.id,
-            message: `Evidence points to sourceId '${ev.sourceId}' not found in chapter sources.`,
+            targetId: evId,
+            message: `Evidence points to missing sourceId '${ev.sourceId}'.`,
           });
         }
       }
     });
 
     sources.forEach((source, idx) => {
+      const srcId = source.id || `source-${idx}`;
       if (!source.title || source.title.trim().length === 0) {
+        evaluations.push({
+          ruleId: 'PROV-002',
+          layer: 'provenance',
+          name: 'Source Title Required',
+          status: 'FAIL',
+          targetId: srcId,
+          message: `Source has no title.`,
+        });
         issues.push({
-          layer: 'source',
+          layer: 'provenance',
           severity: 'error',
-          targetId: source.id || `source-${idx}`,
-          message: `Source title is required.`,
+          targetId: srcId,
+          message: `Source ${srcId} is missing title.`,
         });
       }
     });
 
-    // 4. Temporal Validation
-    if (!chapter.publishedAt || isNaN(Date.parse(chapter.publishedAt))) {
+    // --- Layer 5: Presentation Contract & Temporal ---
+    const pubDate = chapter.publishedAt || chapter.createdAt || chapter.lastVerifiedAt;
+    if (!pubDate || isNaN(Date.parse(pubDate))) {
+      evaluations.push({
+        ruleId: 'TEMP-001',
+        layer: 'temporal',
+        name: 'Publication Date',
+        status: 'WARN',
+        message: `Missing or invalid published/created date.`,
+      });
       issues.push({
         layer: 'temporal',
         severity: 'warning',
-        message: `Invalid or missing publishedAt date: '${chapter.publishedAt}'.`,
+        message: `Invalid or missing published/created date.`,
       });
     }
 
-    // 5. Presentation Compatibility
     if (!chapter.title || chapter.title.trim().length === 0) {
+      evaluations.push({
+        ruleId: 'PRES-001',
+        layer: 'presentation',
+        name: 'Presentation Title',
+        status: 'FAIL',
+        message: 'Chapter title is missing.',
+      });
       issues.push({
         layer: 'presentation',
         severity: 'error',
-        message: `Chapter title is missing.`,
+        message: 'Chapter title is missing.',
       });
     }
 
-    if (!chapter.summary || chapter.summary.trim().length < 20) {
-      issues.push({
+    if (!blocks || blocks.length === 0) {
+      evaluations.push({
+        ruleId: 'PRES-002',
         layer: 'presentation',
-        severity: 'warning',
-        message: `Chapter summary is too short for optimal presentation (< 20 chars).`,
+        name: 'Presentation Content Blocks',
+        status: 'FAIL',
+        message: 'Chapter contains 0 content blocks.',
       });
-    }
-
-    if (!chapter.blocks || chapter.blocks.length === 0) {
       issues.push({
         layer: 'presentation',
         severity: 'error',
-        message: `Chapter contains 0 content blocks.`,
+        message: 'Chapter contains 0 content blocks.',
       });
     }
 
-    // Determine status & score
+    // Determine status & metrics
     const errors = issues.filter((i) => i.severity === 'error');
     const warnings = issues.filter((i) => i.severity === 'warning');
 
@@ -180,7 +432,7 @@ export class CanonicalCertificationEngine {
     const evidenceRatio = totalClaims > 0 ? evidenceList.length / totalClaims : 0;
 
     let status: CanonicalEligibilityStatus = 'ELIGIBLE';
-    if (errors.length > 0) {
+    if (errors.length > 0 || unsupportedCount > 0) {
       status = 'BLOCKED';
     } else if (warnings.length > 0 || verifiedRatio < 0.75) {
       status = 'NEEDS_REVIEW';
@@ -192,12 +444,15 @@ export class CanonicalCertificationEngine {
         100,
         Math.round(
           (errors.length === 0 ? 60 : 0) +
-          (verifiedRatio * 20) +
-          Math.min(evidenceRatio * 10, 15) +
+          (verifiedRatio * 25) +
+          Math.min(evidenceRatio * 10, 10) +
           Math.max(0, 5 - warnings.length)
         )
       )
     );
+
+    const contentHash = this.computeContentHash(chapter);
+    const certifiedAt = new Date().toISOString();
 
     return {
       slug: chapter.slug,
@@ -205,17 +460,38 @@ export class CanonicalCertificationEngine {
       status,
       isCertified: status === 'ELIGIBLE',
       score,
+      contentHash,
+      certifiedAt,
+      engineVersion: this.ENGINE_VERSION,
       metrics: {
-        totalClaims,
-        verifiedClaims: verifiedCount,
-        needsVerificationClaims: needsVerificationCount,
-        totalEvidence: evidenceList.length,
-        totalSources: sources.length,
+        claimsCount: totalClaims,
+        verifiedClaimsCount: verifiedCount,
+        needsVerificationCount,
+        unsupportedClaimsCount: unsupportedCount,
+        evidenceObjectsCount: evidenceList.length,
+        uniqueSourcesCount: sources.length,
+        citationOccurrencesCount: citationOccurrences,
         verifiedClaimRatio: Number(verifiedRatio.toFixed(2)),
         evidencePerClaimRatio: Number(evidenceRatio.toFixed(2)),
       },
+      auditTrail: {
+        engineVersion: this.ENGINE_VERSION,
+        certifiedAt,
+        contentHash,
+        evaluations,
+      },
       issues,
     };
+  }
+
+  /**
+   * Verifies if an existing certification record remains valid against the live chapter content.
+   * If any content has changed or if the engine version mismatches, returns false.
+   */
+  public static isCertificationValid(chapter: Chapter, previousCertification: CertificationResult): boolean {
+    if (previousCertification.engineVersion !== this.ENGINE_VERSION) return false;
+    const currentHash = this.computeContentHash(chapter);
+    return currentHash === previousCertification.contentHash && previousCertification.status === 'ELIGIBLE';
   }
 
   /**
@@ -227,10 +503,12 @@ export class CanonicalCertificationEngine {
     const registry: Record<string, CanonicalEligibilityStatus> = {};
 
     for (const lib of libraries) {
-      for (const vol of lib.volumes || []) {
-        for (const chap of vol.chapters || []) {
-          const result = this.certifyChapter(chap);
-          registry[chap.slug] = result.status;
+      for (const col of lib.collections || []) {
+        for (const vol of col.volumes || []) {
+          for (const chap of vol.chapters || []) {
+            const result = this.certifyChapter(chap);
+            registry[chap.slug] = result.status;
+          }
         }
       }
     }

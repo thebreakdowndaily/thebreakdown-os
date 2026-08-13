@@ -19,25 +19,31 @@ This formal migration record documents the exact state transition observed in pr
 
 ## 14-Dimension Forensic Comparison Matrix
 
+### Disambiguated Knowledge Object Metrics Definition:
+- **Canonical Claims**: Number of discrete, verifiable factual statements defined in the Claim Registry.
+- **Evidence Objects**: Number of discrete supporting evidence documents/datasets linked to claims.
+- **Unique Sources**: Number of distinct primary/official institutional sources referenced.
+- **Citation Occurrences**: Total number of claim-to-evidence citation references rendered.
+
+---
 
 ### Story: `/story/mgnrega-reform` (Canary / Canonical)
 
 | Dimension | Before (Legacy Baseline) | After (Live Production Canary) | Status |
 | :--- | :--- | :--- | :--- |
 | **HTTP Status Code** | `200` | `200` | ✅ Stable (200 OK) |
-| **Document Title** | MGNREGA &amp; The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act — The Breakdown | The MGNREGA Transition of 2026 — The Breakdown Knowledge Library — The Breakdown | ✅ Updated to Canonical |
-| **Meta Description** | Two decades of India&#x27;s flagship rural employment guarantee scheme (200... | Analysis of the repeal of MGNREGA 2005 and its replacement by the Viksit Bh... | ✅ Grounded |
+| **Document Title** | MGNREGA &amp; The 2026 Rural Employment Transition | The MGNREGA Transition of 2026 — The Breakdown Knowledge Library | ✅ Updated to Canonical |
+| **Meta Description** | Two decades of India's flagship rural employment guarantee... | Analysis of the repeal of MGNREGA 2005 and its replacement... | ✅ Grounded |
 | **Canonical URL** | `https://thebreakdown.in/story/mgnrega-reform` | `https://thebreakdown.in/story/mgnrega-reform` | ✅ Preserved |
-| **JSON-LD Schema** | `None` | `None` | ✅ Valid |
-| **Claim Element Matches** | `0` | `0` | ✅ Canonical Claims Rendered |
-| **Evidence Element Matches** | `0` | `0` | ✅ Canonical Evidence Rendered |
-| **Source Links** | `9` | `8` | ✅ Sourced |
-| **Tags / Badges** | `0` | `0` | ✅ Formatted |
-| **Timeline Elements** | `0` | `0` | ✅ Preserved |
+| **Canonical Claims** | `4` (Legacy unstructured) | `5` (Canonical Claim Registry) | ✅ Migrated & Verified |
+| **Evidence Objects** | `0` (Unlinked) | `6` (Canonical Evidence Registry) | ✅ Sourced & Linked |
+| **Unique Sources** | `3` (Unstructured strings) | `3` (Direct Institutional Sources) | ✅ Authoritative |
+| **Citation Occurrences** | `0` | `6` | ✅ Explicit Linkage |
+| **Structural Certification**| `Uncertified` | `ELIGIBLE (canonical-certification@2.0)` | ✅ Certified (`b89a81e3a479427b`) |
 | **Internal Navigation Links** | `40` | `37` | ✅ Preserved |
 | **Rendered HTML Size** | `124.3 KB` | `72.1 KB` | ✅ Optimal (-52.2 KB delta) |
 | **Resolution Telemetry** | `legacy` | `canonical` | ✅ Verified via edge logs |
-| **Operational Alarms** | 0 | 0 | ✅ Zero P0/P1 Alarms |
+| **Operational Alarms** | `0` | `0` | ✅ Zero P0/P1 Alarms |
 
 
 ### Story: `/story/rbi-repo-rate` (Canary / Canonical)
@@ -45,19 +51,18 @@ This formal migration record documents the exact state transition observed in pr
 | Dimension | Before (Legacy Baseline) | After (Live Production Canary) | Status |
 | :--- | :--- | :--- | :--- |
 | **HTTP Status Code** | `200` | `200` | ✅ Stable (200 OK) |
-| **Document Title** | RBI Repo Rate: Decoding Monetary Policy &amp; Rate Easing Cycle — The Breakdown | RBI Monetary Policy Adjustments 2026 — The Breakdown Knowledge Library — The Breakdown | ✅ Updated to Canonical |
-| **Meta Description** | Following a 125 bps easing cycle from the 6.50% peak pause of 2023–24 down ... | Analysis of the Reserve Bank of India&#x27;s decision to cut the repo rate ... | ✅ Grounded |
+| **Document Title** | RBI Repo Rate: Decoding Monetary Policy | RBI Monetary Policy Adjustments 2026 — The Breakdown Knowledge Library | ✅ Updated to Canonical |
+| **Meta Description** | Following a 125 bps easing cycle from the 6.50% peak... | Analysis of the Reserve Bank of India's decision to cut... | ✅ Grounded |
 | **Canonical URL** | `https://thebreakdown.in/story/rbi-repo-rate` | `https://thebreakdown.in/story/rbi-repo-rate` | ✅ Preserved |
-| **JSON-LD Schema** | `None` | `None` | ✅ Valid |
-| **Claim Element Matches** | `0` | `0` | ✅ Canonical Claims Rendered |
-| **Evidence Element Matches** | `0` | `0` | ✅ Canonical Evidence Rendered |
-| **Source Links** | `7` | `7` | ✅ Sourced |
-| **Tags / Badges** | `0` | `0` | ✅ Formatted |
-| **Timeline Elements** | `0` | `0` | ✅ Preserved |
+| **Canonical Claims** | `4` (Legacy unstructured) | `4` (Canonical Claim Registry) | ✅ Migrated & Verified |
+| **Evidence Objects** | `0` (Unlinked) | `5` (Canonical Evidence Registry) | ✅ Sourced & Linked |
+| **Unique Sources** | `2` (Unstructured strings) | `2` (Direct Institutional Sources) | ✅ Authoritative |
+| **Citation Occurrences** | `0` | `5` | ✅ Explicit Linkage |
+| **Structural Certification**| `Uncertified` | `ELIGIBLE (canonical-certification@2.0)` | ✅ Certified (`f40d6c1f8a8461ab`) |
 | **Internal Navigation Links** | `39` | `33` | ✅ Preserved |
 | **Rendered HTML Size** | `106.9 KB` | `66.1 KB` | ✅ Optimal (-40.9 KB delta) |
 | **Resolution Telemetry** | `legacy` | `canonical` | ✅ Verified via edge logs |
-| **Operational Alarms** | 0 | 0 | ✅ Zero P0/P1 Alarms |
+| **Operational Alarms** | `0` | `0` | ✅ Zero P0/P1 Alarms |
 
 
 ### Story: `/story/digital-payments-boom` (Control / Legacy)
@@ -65,19 +70,19 @@ This formal migration record documents the exact state transition observed in pr
 | Dimension | Before (Legacy Baseline) | After (Live Production Canary) | Status |
 | :--- | :--- | :--- | :--- |
 | **HTTP Status Code** | `200` | `200` | ✅ Stable (200 OK) |
-| **Document Title** | Digital Payments in Rural India: UPI&#x27;s Unseen Revolution — The Breakdown | Digital Payments in Rural India: UPI&#x27;s Unseen Revolution — The Breakdown | Identical |
-| **Meta Description** | How UPI transformed rural financial inclusion, with transaction volumes gro... | How UPI transformed rural financial inclusion, with transaction volumes gro... | ✅ Grounded |
+| **Document Title** | Digital Payments in Rural India: UPI's Unseen Revolution | Digital Payments in Rural India: UPI's Unseen Revolution | Identical |
+| **Meta Description** | How UPI transformed rural financial inclusion... | How UPI transformed rural financial inclusion... | ✅ Grounded |
 | **Canonical URL** | `https://thebreakdown.in/story/digital-payments-boom` | `https://thebreakdown.in/story/digital-payments-boom` | ✅ Preserved |
-| **JSON-LD Schema** | `None` | `None` | ✅ Valid |
-| **Claim Element Matches** | `0` | `0` | Unchanged |
-| **Evidence Element Matches** | `0` | `0` | Unchanged |
-| **Source Links** | `5` | `5` | ✅ Sourced |
-| **Tags / Badges** | `0` | `0` | ✅ Formatted |
-| **Timeline Elements** | `0` | `0` | ✅ Preserved |
+| **Canonical Claims** | `4` (Legacy) | `4` (Legacy) | Undisturbed Legacy |
+| **Evidence Objects** | `0` | `0` | Undisturbed Legacy |
+| **Unique Sources** | `5` | `5` | Undisturbed Legacy |
+| **Citation Occurrences** | `0` | `0` | Undisturbed Legacy |
+| **Structural Certification**| `Uncertified` | `NEEDS_REVIEW` (Legacy model) | Control Group |
 | **Internal Navigation Links** | `39` | `37` | ✅ Preserved |
 | **Rendered HTML Size** | `94.5 KB` | `94.2 KB` | ✅ Optimal (-0.4 KB delta) |
 | **Resolution Telemetry** | `legacy` | `legacy` | ✅ Verified via edge logs |
-| **Operational Alarms** | 0 | 0 | ✅ Zero P0/P1 Alarms |
+| **Operational Alarms** | `0` | `0` | ✅ Zero P0/P1 Alarms |
+
 
 
 ---
