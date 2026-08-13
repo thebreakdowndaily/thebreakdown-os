@@ -29,7 +29,7 @@ describe('TEST-CHAPTER-FACTORY: Chapter Production Factory (Phase 15C)', () => {
 
   it('TEST-CF-03: Resolves Multi-Chapter Registry (Volume I)', () => {
     const published = VolumeRegistryService.getPublishedChapters();
-    expect(published.length).toBe(5);
+    expect(published.length).toBe(7);
     
     const slugs = published.map((c) => c.slug);
     expect(slugs).toContain('foundations-of-strategic-autonomy-1947-1962');
@@ -37,6 +37,8 @@ describe('TEST-CHAPTER-FACTORY: Chapter Production Factory (Phase 15C)', () => {
     expect(slugs).toContain('kashmir-1947-1948-un-referral');
     expect(slugs).toContain('panchsheel-bandung-conference-1954-1955');
     expect(slugs).toContain('1962-sino-indian-war-strategic-lessons');
+    expect(slugs).toContain('bandung-conference-afro-asian-solidarity-1955');
+    expect(slugs).toContain('birth-of-non-alignment-belgrade-summit-1961');
   });
 
   it('TEST-CF-04: Rejects Duplicate Slugs and Invalid Lookups', () => {

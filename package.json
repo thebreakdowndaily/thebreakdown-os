@@ -36,6 +36,7 @@
     "test:relationship-graph": "npx tsx plugins/relationship-graph/tests/relationship-graph.test.tsx",
     "test:plugin-sdk": "npx tsx packages/plugin-sdk/tests/compatibility.test.ts",
     "test:research": "jest --config jest.research.config.js",
+    "test:vitest": "vitest run",
     "checkpoint:b": "npm-run-all -s prepare:artifacts check:lint check:type check:build",
     "verify:frontend": "npm run checkpoint:b",
     "check:lint": "eslint app components providers styles hooks types features",
@@ -107,6 +108,7 @@
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "vitest": "4.1.10"
   }
 }
