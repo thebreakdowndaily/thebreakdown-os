@@ -42,7 +42,10 @@ function freePort() {
 function migrationFiles() {
   return fs
     .readdirSync(MIGRATIONS_DIR)
-    .filter((f) => /^\d{3}_.*\.sql$/.test(f))
+    // Scope is migrations 001..013 (W3/W4 Forensic Audit remediation).
+    // Later migrations (e.g. 014 Reader Workspace) are out of scope for this
+    // replay harness and must not be swept in by a generic glob.
+    .filter((f) => /^(00[1-9]|01[0-3])_.*\.sql$/.test(f))
     .sort();
 }
 
