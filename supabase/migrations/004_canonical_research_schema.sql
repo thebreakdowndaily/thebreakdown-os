@@ -311,3 +311,184 @@ FOR INSERT WITH CHECK (
     AND publication_status = 'DRAFT'
     AND human_review_status = 'UNREVIEWED'
 );
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- RLS SECURITY PASS — W3/W4 Forensic Audit (docs/audits/w3w4-forensic-audit-20260813.md)
+--
+-- The eight research tables below were created without any RLS policy, leaving
+-- them readable by the anon role on any deployment that grants default
+-- privileges (Supabase does). All are internal research infrastructure.
+-- Row access is gated to the research roles carried in the JWT app_metadata,
+-- mirroring the policy pattern used for research_claims above. No DELETE
+-- policy is created on any table, preserving hard-delete protection.
+-- ═══════════════════════════════════════════════════════════════════════════
+
+-- research_constituencies
+ALTER TABLE research_constituencies ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_constituencies ON research_constituencies
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_constituencies ON research_constituencies
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_constituencies ON research_constituencies
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_persons
+ALTER TABLE research_persons ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_persons ON research_persons
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_persons ON research_persons
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_persons ON research_persons
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_political_parties
+ALTER TABLE research_political_parties ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_political_parties ON research_political_parties
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_political_parties ON research_political_parties
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_political_parties ON research_political_parties
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_projects
+ALTER TABLE research_projects ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_projects ON research_projects
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_projects ON research_projects
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_projects ON research_projects
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_sources (reference data consumed by collectors and ingestion)
+ALTER TABLE research_sources ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_sources ON research_sources
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_sources ON research_sources
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_sources ON research_sources
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_evidence_items (extracted_text is confidential research material)
+ALTER TABLE research_evidence_items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_evidence_items ON research_evidence_items
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_evidence_items ON research_evidence_items
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_evidence_items ON research_evidence_items
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_claim_subject_relationships
+ALTER TABLE research_claim_subject_relationships ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_claim_subject_relationships ON research_claim_subject_relationships
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_insert_claim_subject_relationships ON research_claim_subject_relationships
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY internal_update_claim_subject_relationships ON research_claim_subject_relationships
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+
+-- research_corrections — editorial audit trail. Write access is restricted to
+-- editors and administrators (the authorized_by_user_id column records who
+-- issued the correction); all internal roles may read it.
+ALTER TABLE research_corrections ENABLE ROW LEVEL SECURITY;
+CREATE POLICY internal_read_research_corrections ON research_corrections
+FOR SELECT USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('researcher', 'reviewer', 'editor', 'administrator', 'automated_ingestion_agent')
+);
+CREATE POLICY editorial_insert_research_corrections ON research_corrections
+FOR INSERT WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('editor', 'administrator')
+);
+CREATE POLICY editorial_update_research_corrections ON research_corrections
+FOR UPDATE USING (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('editor', 'administrator')
+) WITH CHECK (
+    (SELECT auth.jwt() -> 'app_metadata' ->> 'research_role')
+    IN ('editor', 'administrator')
+);
