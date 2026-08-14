@@ -1,7 +1,6 @@
 import { loadData, getCachedData, paginate, stableSort } from '@/lib/up403/loader';
-import { okResponse, badRequestResponse, parsePagination, shouldIncludeProvenance } from '@/lib/up403/response';
+import { okResponse, parsePagination, shouldIncludeProvenance } from '@/lib/up403/response';
 import { getApiProvenance } from '@/lib/up403/provenance';
-import type { ConstituencyRecord, ApiProvenance } from '@/lib/up403/types';
 
 export async function GET(request: Request) {
   await loadData();
@@ -18,8 +17,8 @@ export async function GET(request: Request) {
       r.constituency_name.toLowerCase().includes(q) ||
       r.district.toLowerCase().includes(q) ||
       r.division.toLowerCase().includes(q) ||
-      r.current_mla_name?.toLowerCase().includes(q) ||
-      r.current_mp_name?.toLowerCase().includes(q)
+      r.current_mla_name.toLowerCase().includes(q) ||
+      r.current_mp_name.toLowerCase().includes(q)
     );
   }
 
@@ -39,9 +38,9 @@ export async function GET(request: Request) {
   if (party) {
     const q = party.toLowerCase();
     records = records.filter(r =>
-      r.current_mla_party?.toLowerCase() === q ||
-      r.current_mp_party?.toLowerCase() === q ||
-      r.winner_party_2022?.toLowerCase() === q
+      r.current_mla_party.toLowerCase() === q ||
+      r.current_mp_party.toLowerCase() === q ||
+      r.winner_party_2022.toLowerCase() === q
     );
   }
 

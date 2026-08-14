@@ -1,6 +1,5 @@
 import { loadData, getTotalConstituencies, getDatasetVersion, getResearchCutoff } from '@/lib/up403/loader';
 import { okResponse } from '@/lib/up403/response';
-import type { ApiResponse } from '@/lib/up403/types';
 
 export async function GET() {
   await loadData();

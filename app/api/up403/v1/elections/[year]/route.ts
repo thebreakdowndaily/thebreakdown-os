@@ -43,15 +43,15 @@ export async function GET(
   }
 
   const y = parseInt(year, 10);
-  const winnerKey = `winner_${y}` as keyof typeof d[0];
-  const partyKey = `winner_party_${y}` as keyof typeof d[0];
-  const votesKey = `winner_votes_${y}` as keyof typeof d[0];
-  const shareKey = `winner_vote_share_${y}` as keyof typeof d[0];
-  const runnerKey = `runner_up_${y}` as keyof typeof d[0];
-  const runnerPartyKey = `runner_up_party_${y}` as keyof typeof d[0];
-  const marginKey = `victory_margin_pct_${y}` as keyof typeof d[0];
-  const totalVotesKey = `total_valid_votes_${y}` as keyof typeof d[0];
-  const candidatesKey = `total_candidates_${y}` as keyof typeof d[0];
+  const winnerKey = `winner_${String(y)}` as keyof typeof d[0];
+  const partyKey = `winner_party_${String(y)}` as keyof typeof d[0];
+  const votesKey = `winner_votes_${String(y)}` as keyof typeof d[0];
+  const shareKey = `winner_vote_share_${String(y)}` as keyof typeof d[0];
+  const runnerKey = `runner_up_${String(y)}` as keyof typeof d[0];
+  const runnerPartyKey = `runner_up_party_${String(y)}` as keyof typeof d[0];
+  const marginKey = `victory_margin_pct_${String(y)}` as keyof typeof d[0];
+  const totalVotesKey = `total_valid_votes_${String(y)}` as keyof typeof d[0];
+  const candidatesKey = `total_candidates_${String(y)}` as keyof typeof d[0];
 
   const sorted = stableSort(d, r => r.ac_number);
   const records = sorted.map(rec => {

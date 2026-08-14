@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export function GET() {
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>

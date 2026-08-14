@@ -1,6 +1,6 @@
 import { loadData } from '@/lib/up403/loader';
 import { listPeople } from '@/lib/up403/compare';
-import { okResponse, parsePagination, shouldIncludeProvenance } from '@/lib/up403/response';
+import { okResponse, parsePagination } from '@/lib/up403/response';
 
 export async function GET(request: Request) {
   await loadData();

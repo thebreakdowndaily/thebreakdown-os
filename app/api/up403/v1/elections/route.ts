@@ -16,9 +16,8 @@ export async function GET(request: Request) {
 
   const years = [2012, 2017, 2022];
   const elections = years.map(year => {
-    const winnerKey = `winner_party_${year}` as keyof typeof d[0];
-    const marginKey = `victory_margin_pct_${year}` as keyof typeof d[0];
-    const validKey = `total_valid_votes_${year}` as keyof typeof d[0];
+    const winnerKey = `winner_party_${String(year)}` as keyof typeof d[0];
+    const validKey = `total_valid_votes_${String(year)}` as keyof typeof d[0];
 
     const partyCounts: Record<string, number> = {};
     let totalValid = 0;
@@ -31,7 +30,7 @@ export async function GET(request: Request) {
 
     return {
       year,
-      label: `${year} Uttar Pradesh Vidhan Sabha Election`,
+      label: `${String(year)} Uttar Pradesh Vidhan Sabha Election`,
       type: 'Vidhan Sabha',
       constituencies_contested: filtered.length,
       total_valid_votes: totalValid,
