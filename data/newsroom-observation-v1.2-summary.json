@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-08-15T07:47:19.706Z",
+  "daysRecorded": 1,
+  "missingDates": [
+    "2026-08-16",
+    "2026-08-17",
+    "2026-08-18",
+    "2026-08-19",
+    "2026-08-20",
+    "2026-08-21",
+    "2026-08-22"
+  ],
+  "totals": {
+    "pullsRan": 1,
+    "pullFailures": 0,
+    "retriesAbsorbed": 0,
+    "fetched": 20,
+    "ingested": 20,
+    "duplicates": 20,
+    "rejected": 0,
+    "signals": 20,
+    "alerts": 0,
+    "acknowledgedAlerts": 0,
+    "editorialActions": 0,
+    "falsePositives": 0,
+    "evaluatedSignals": 0,
+    "coverageGaps": 1,
+    "rotationEvents": 1,
+    "persistentFailures": 0
+  },
+  "notMeasured": {
+    "eligibleObservableEvents": 1,
+    "missedEvents": 1,
+    "silentLosses": 1,
+    "publishedFromAlert": 1
+  },
+  "latency": {
+    "medianTimeToSignalMs": 0,
+    "medianTimeToAlertMs": null,
+    "medianTimeToEditorMs": null,
+    "medianTimeToActionMs": null,
+    "timeToEditorSamples": 0,
+    "timeToActionSamples": 0
+  },
+  "verdict": "OPERATIONALLY DEGRADED",
+  "v13": "GO TO V1.3"
+}

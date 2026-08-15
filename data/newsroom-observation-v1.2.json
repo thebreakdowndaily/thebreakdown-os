@@ -1,0 +1,206 @@
+{
+  "window": {
+    "start": "2026-08-15",
+    "end": "2026-08-22",
+    "expectedDays": 8
+  },
+  "baseline": {
+    "commit": "209a46b",
+    "version": "1.2.0",
+    "tag": "news-intelligence-baseline-1.2"
+  },
+  "sourceUniverse": [
+    "pib"
+  ],
+  "dailySnapshots": [
+    {
+      "date": "2026-08-15",
+      "generatedAt": "2026-08-15T07:45:15.430Z",
+      "provenance": "local_observation_harness_v1",
+      "baseline": {
+        "commit": "209a46b",
+        "version": "1.2.0",
+        "tag": "news-intelligence-baseline-1.2"
+      },
+      "pull": {
+        "ran": true,
+        "fetched": 20,
+        "ingested": 0,
+        "duplicates": 20,
+        "skippedInvalid": 0,
+        "errors": [],
+        "registeredGapIds": [
+          "gap-source-pib-rotation-1786779570838"
+        ],
+        "rotationGapDetected": true,
+        "feedOldest": "2026-08-15T07:45:16.252Z",
+        "feedNewest": "2026-08-15T07:45:16.252Z",
+        "feedItemCount": 20,
+        "requests": 1,
+        "failedRequests": 0,
+        "retries": 0
+      },
+      "counts": {
+        "eligibleObservableEvents": "NOT_MEASURED",
+        "detectedEvents": 20,
+        "missedEvents": "NOT_MEASURED",
+        "coverageGaps": 1,
+        "silentLosses": "NOT_MEASURED",
+        "signals": 20,
+        "evaluatedSignals": 0,
+        "falsePositives": 0,
+        "duplicates": 20,
+        "alerts": 0,
+        "acknowledgedAlerts": 0,
+        "editorialActions": 0,
+        "publishedFromAlert": "NOT_MEASURED"
+      },
+      "lifetime": {
+        "observations": 20,
+        "clusters": 20,
+        "signals": 20,
+        "alerts": 0,
+        "acknowledgedAlerts": 0,
+        "coverageGapsOpen": 1,
+        "coverageGapsResolved": 0,
+        "triageActions": 0,
+        "publishedFromAlert": 0,
+        "observationStartAt": "2026-08-15T07:39:29.877Z",
+        "daysElapsed": 0
+      },
+      "sourceHealth": {
+        "pib": {
+          "requests": 1,
+          "successfulFetches": 1,
+          "failedFetches": 0,
+          "retries": 0,
+          "rotationEvents": 1,
+          "persistentFailures": 0,
+          "itemsIngested": 20,
+          "itemsRejected": 0,
+          "itemsDuplicated": 20
+        }
+      },
+      "gaps": [
+        {
+          "id": "gap-source-pib-rotation-1786779570838",
+          "sourceId": "pib",
+          "failureType": "ROTATION_GAP",
+          "detectedAt": "2026-08-15T07:45:15.432Z",
+          "retryAttempts": 0,
+          "status": "open",
+          "recoveryStatus": "unrecovered",
+          "backfillCandidate": true
+        }
+      ],
+      "incidents": [
+        {
+          "id": "inc-cover-rotation-2026-08-15",
+          "classification": "COVERAGE",
+          "sourceId": "pib",
+          "description": "PIB feed window rotation: releases between the previously ingested newest and the current feed oldest were not observed by the scheduled pull.",
+          "detectedAt": "2026-08-15T07:45:15.430Z",
+          "status": "open"
+        },
+        {
+          "id": "inc-cover-gap-gap-source-pib-rotation-1786779570838",
+          "classification": "COVERAGE",
+          "sourceId": "pib",
+          "description": "Open coverage gap: gap-source-pib-rotation-1786779570838 (ROTATION_GAP)",
+          "detectedAt": "2026-08-15T07:45:15.432Z",
+          "status": "open"
+        },
+        {
+          "id": "inc-cover-dates-2026-08-15",
+          "classification": "COVERAGE",
+          "sourceId": "pib",
+          "description": "20 observation(s) carry no parseable publication date; publicationTimestamp falls back to ingestion time, which disables feed-window rotation-gap detection on this feed.",
+          "detectedAt": "2026-08-15T07:45:15.430Z",
+          "status": "open"
+        }
+      ],
+      "latency": {
+        "medianTimeToSignalMs": 0,
+        "medianTimeToAlertMs": null,
+        "medianTimeToEditorMs": null,
+        "medianTimeToActionMs": null,
+        "medianVerifiedLeadMsReference": 2520000,
+        "timeToEditorSamples": 0,
+        "timeToActionSamples": 0
+      },
+      "notMeasured": [
+        "eligibleObservableEvents",
+        "missedEvents",
+        "silentLosses",
+        "publishedFromAlert"
+      ]
+    }
+  ],
+  "incidents": [
+    {
+      "id": "inc-cover-rotation-2026-08-15",
+      "classification": "COVERAGE",
+      "sourceId": "pib",
+      "description": "PIB feed window rotation: releases between the previously ingested newest and the current feed oldest were not observed by the scheduled pull.",
+      "detectedAt": "2026-08-15T07:45:15.430Z",
+      "status": "open"
+    },
+    {
+      "id": "inc-cover-gap-gap-source-pib-rotation-1786779570838",
+      "classification": "COVERAGE",
+      "sourceId": "pib",
+      "description": "Open coverage gap: gap-source-pib-rotation-1786779570838 (ROTATION_GAP)",
+      "detectedAt": "2026-08-15T07:45:15.432Z",
+      "status": "open"
+    },
+    {
+      "id": "inc-cover-dates-2026-08-15",
+      "classification": "COVERAGE",
+      "sourceId": "pib",
+      "description": "20 observation(s) carry no parseable publication date; publicationTimestamp falls back to ingestion time, which disables feed-window rotation-gap detection on this feed.",
+      "detectedAt": "2026-08-15T07:45:15.430Z",
+      "status": "open"
+    }
+  ],
+  "coverageGaps": [
+    {
+      "id": "gap-source-pib-rotation-1786779570838",
+      "sourceId": "pib",
+      "failureType": "ROTATION_GAP",
+      "detectedAt": "2026-08-15T07:45:15.432Z",
+      "retryAttempts": 0,
+      "status": "open",
+      "recoveryStatus": "unrecovered",
+      "backfillCandidate": true
+    }
+  ],
+  "signalMetrics": {
+    "signals": 20,
+    "alerts": 0,
+    "acknowledgedAlerts": 0,
+    "falsePositives": 0,
+    "evaluatedSignals": 0,
+    "editorialActions": 0,
+    "publishedFromAlert": 0
+  },
+  "editorialMetrics": {
+    "triageActions": 0,
+    "editorialActionsPerAlert": null,
+    "publishedFromAlertRate": null
+  },
+  "latencyMetrics": {
+    "medianTimeToSignalMs": 0,
+    "medianTimeToAlertMs": null,
+    "medianTimeToEditorMs": null,
+    "medianTimeToActionMs": null,
+    "timeToEditorSamples": 0,
+    "timeToActionSamples": 0
+  },
+  "verdict": {
+    "verdict": "OPERATIONALLY DEGRADED",
+    "v13": "GO TO V1.3",
+    "rationale": [
+      "Structural weakness observed in live data: feed-window rotation gaps recorded (1)."
+    ]
+  }
+}

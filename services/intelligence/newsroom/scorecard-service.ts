@@ -32,7 +32,8 @@ const OBSERVATION_WINDOW_DAYS = 7;
 /** Frozen v1.1 verified-lead reference (42 min), from newsroom-advantage-v1.1-summary.json. */
 const V1_1_MEDIAN_VERIFIED_LEAD_MS = 42 * 60 * 1000;
 
-const TRIAGE_ACTIONS: ReadonlySet<string> = new Set([
+/** Triage actions that constitute an editorial action on an alerted signal. */
+export const TRIAGE_ACTIONS: ReadonlySet<string> = new Set([
   'VERIFY',
   'ASSIGN',
   'FOLLOW',
@@ -45,7 +46,8 @@ const TRIAGE_ACTIONS: ReadonlySet<string> = new Set([
   'RESOLVE',
 ]);
 
-const FALSE_POSITIVE_ACTIONS: ReadonlySet<string> = new Set([
+/** Actions that classify an alerted signal as a false positive. */
+export const FALSE_POSITIVE_ACTIONS: ReadonlySet<string> = new Set([
   'NOT_RELEVANT',
   'IGNORE',
   'WRONG_TOPIC',

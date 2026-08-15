@@ -320,3 +320,43 @@ v1.3 (archive backfill) starts **only after** the observation window completes
 and live telemetry confirms a recurring volume of rotation-lost releases that
 the 6-hour feed window cannot cover. Source expansion is deferred further, one
 source family at a time.
+
+### 11.5 Daily operation (v1.2 Observation Mode)
+
+Observed window: **2026-08-15 → 2026-08-22** (one capture per calendar day).
+
+Run once per day on the live deployment:
+
+```bash
+npx tsx scripts/run-newsroom-observation-report.ts snapshot
+```
+
+- Captures a real PIB pull against file-persisted observation state
+  (`data/newsroom/observation-runtime-state.json`, gitignored) and writes
+  `data/newsroom-observation-YYYY-MM-DD.json` (committed evidence).
+- Re-runs are idempotent (dedup on `canonicalUrl`); re-running same-day does
+  **not** under-report day deltas — day counts are state-timestamp-based.
+- Snapshot rows labelled "latest scheduled pull" reflect the most recent pull;
+  "day, from canonical state" counts are robust to re-runs.
+
+At window close run once:
+
+```bash
+npx tsx scripts/run-newsroom-observation-report.ts report
+```
+
+Emits `data/newsroom-observation-v1.2.json`, `data/newsroom-observation-v1.2-summary.json`,
+and `docs/newsroom/NEWSROOM_OPERATIONAL_OBSERVATION_V1_2_REPORT.md`. The report is
+marked FINAL only when all 8 expected dates have snapshots; otherwise INTERIM.
+
+**Known live finding (2026-08-15, verified):** the PIB feed
+(`RssMain.aspx?ModId=6&Lang=1&Regid=3`) carries no publication dates, so
+`publicationTimestamp` falls back to ingestion time. Rotation-gap detection
+(`oldest > prevNewestMs + 5 min`, `lib/intelligence/pib-adapter.ts`) therefore
+fires on elapsed wall-clock between pulls and registers gap windows whose
+endpoints are ingestion-time fallbacks — an instrument artifact, not proof of
+an unobserved release. Recorded as incident `inc-cover-dates-2026-08-15`; the
+report classifies these as `rotation_gap_unconfirmed`. The structural weakness
+it evidences (no parseable dates → I2 rotation detection disabled, time-to-publication
+unmeasurable) is a live finding for the v1.3 decision. No threshold or detector
+logic was changed during the window.
