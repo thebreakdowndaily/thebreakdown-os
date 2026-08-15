@@ -29,10 +29,22 @@ export interface RssFeedConfig {
   sourceClass: ResearchSourceClass;
 }
 
+/** Per-feed discovery outcome, reported to the source registry for health. */
+export interface RssFeedOutcome {
+  feedUrl: string;
+  ok: boolean;
+  statusCode?: number;
+  latencyMs: number;
+  itemsParsed: number;
+  error?: string;
+}
+
 export interface RssAdapterOptions {
   feeds?: RssFeedConfig[];
   retries?: number;
   retryDelayMs?: number;
+  /** Optional per-feed outcome callback (source health). Additive, optional. */
+  onFeedOutcome?: (outcome: RssFeedOutcome) => void;
 }
 
 export interface RssFeedItem {
@@ -144,11 +156,13 @@ export class RssAdapter implements ResearchSourceAdapter {
   private readonly feeds: RssFeedConfig[];
   private readonly retries: number;
   private readonly retryDelayMs: number;
+  private readonly onFeedOutcome?: (outcome: RssFeedOutcome) => void;
 
   constructor(options: RssAdapterOptions = {}) {
     this.feeds = options.feeds ?? [];
     this.retries = options.retries ?? 1;
     this.retryDelayMs = options.retryDelayMs ?? 500;
+    this.onFeedOutcome = options.onFeedOutcome;
   }
 
   async discover(query: { text: string }, ctx: AdapterContext): Promise<DiscoveryResult> {
@@ -165,13 +179,20 @@ export class RssAdapter implements ResearchSourceAdapter {
     }> = [];
 
     for (const feed of this.feeds) {
+      const startedAt = performance.now();
       let ok = false;
+      let statusCode: number | undefined;
+      let itemsParsed = 0;
+      let lastError: string | undefined;
       for (let attempt = 0; attempt <= this.retries; attempt += 1) {
         try {
           const response = await ctx.fetcher(feed.url);
+          statusCode = response.status;
           if (!response.ok) throw new Error(`feed ${feed.url} returned status ${response.status ?? 'unknown'}`);
           const xml = await response.text();
-          for (const item of parseFeed(xml)) {
+          const parsed = parseFeed(xml);
+          itemsParsed = parsed.length;
+          for (const item of parsed) {
             const haystack = `${item.title} ${item.snippet ?? ''} ${feed.publisher}`;
             if (!tokenMatch(query.text, haystack)) continue;
             items.push({
@@ -188,16 +209,23 @@ export class RssAdapter implements ResearchSourceAdapter {
           ok = true;
           break;
         } catch (err) {
+          lastError = err instanceof Error ? err.message : String(err);
           if (attempt >= this.retries) {
-            errors.push(
-              `rss:${feed.url}: ${err instanceof Error ? err.message : String(err)}`
-            );
+            errors.push(`rss:${feed.url}: ${lastError}`);
           } else {
             await new Promise((resolve) => setTimeout(resolve, this.retryDelayMs));
           }
         }
       }
       if (!ok) errors.push(`rss:${feed.url}: unreachable after retries`);
+      this.onFeedOutcome?.({
+        feedUrl: feed.url,
+        ok,
+        statusCode,
+        latencyMs: Math.round(performance.now() - startedAt),
+        itemsParsed,
+        error: ok ? undefined : lastError,
+      });
     }
 
     const maxResults = ctx.maxResults ?? 10;

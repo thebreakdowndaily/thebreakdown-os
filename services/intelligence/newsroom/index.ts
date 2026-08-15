@@ -52,6 +52,16 @@ export class NewsroomIntelligenceCore {
 
   private readonly persistence: NewsroomStateRepository;
 
+  /**
+   * Optional News Intelligence → Research bridge. When set, every evaluated
+   * signal is offered to the bridge; the bridge applies its own researchTrigger
+   * gate, so most signals never create research projects. Absent by default —
+   * the newsroom core behaves exactly as before.
+   *
+   * Governing document: docs/research/source-governance.md
+   */
+  private researchBridge: ((signal: NewsroomSignal) => void | Promise<void>) | null = null;
+
   private clusters: Map<string, StoryCluster> = new Map();
   private observations: Map<string, NewsroomObservation> = new Map();
   private claims: Map<string, NewsroomExtractedClaim> = new Map();
@@ -228,8 +238,28 @@ export class NewsroomIntelligenceCore {
       contradictions.length > 0
     );
 
+    // Offer the signal to the research bridge (gated internally; fire-and-forget).
+    if (this.researchBridge) {
+      try {
+        void this.researchBridge(signal);
+      } catch (err) {
+        console.error('[NewsroomIntelligenceCore] research bridge error:', err);
+      }
+    }
+
     this.persist();
     return { signal, alert };
+  }
+
+  // ── Research bridge (News Intelligence → RIE) ─────────────────────────────
+
+  /** Registers (or clears) the gated News Intelligence → Research bridge. */
+  public setResearchBridge(handler: ((signal: NewsroomSignal) => void | Promise<void>) | null): void {
+    this.researchBridge = handler;
+  }
+
+  public getResearchBridge(): ((signal: NewsroomSignal) => void | Promise<void>) | null {
+    return this.researchBridge;
   }
 
   // ── Queries & Queue ─────────────────────────────────────────────────────────

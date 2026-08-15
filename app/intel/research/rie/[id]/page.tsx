@@ -13,6 +13,7 @@ import type {
   ResearchContradiction,
   ResearchGap,
   ResearchChangeEvent,
+  ResearchDocument,
 } from '@/types/research-intelligence';
 
 export const metadata: Metadata = {
@@ -21,6 +22,8 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = 'force-dynamic';
+
+const PRIMARY_SOURCE_CLASSES = new Set(['PRIMARY', 'OFFICIAL', 'REGULATORY', 'JUDICIAL', 'PARLIAMENTARY']);
 
 const CLAIM_COLOR: Record<string, string> = {
   PRIMARY_SOURCE_CONFIRMED: 'var(--color-brand-400)',
@@ -43,12 +46,14 @@ export default async function ResearchProjectPage({ params }: { params: Promise<
 
   const overview = researchIntelligenceCore.getProjectOverview(id);
   const sources = researchIntelligenceCore.getSources(id);
+  const documents = researchIntelligenceCore.getDocuments(id);
   const claims = researchIntelligenceCore.getClaims(id);
   const contradictions = researchIntelligenceCore.getContradictions(id);
   const gaps = researchIntelligenceCore.getGaps(id);
   const events = researchIntelligenceCore.getChangeEvents(id);
   const briefs = researchIntelligenceCore.getStoryBriefs(id);
   const latestBrief = briefs[briefs.length - 1];
+  const retrievedBySource = new Map(documents.map((d) => [d.sourceId, d.retrievedAt]));
 
   const claimCounts = claims.reduce<Record<string, number>>((acc, c) => {
     acc[c.verificationState] = (acc[c.verificationState] ?? 0) + 1;
@@ -79,25 +84,21 @@ export default async function ResearchProjectPage({ params }: { params: Promise<
           <RecentEvents events={events.slice(-8).reverse()} />
           <ClaimSummary counts={claimCounts} total={claims.length} />
         </div>
-
         <div style={{ marginBottom: 'var(--spacing-6)' }}>
           <Section title={`Sources (${String(sources.length)})`}>
-            <SourceList sources={sources} />
+            <SourceList sources={sources} retrievedBySource={retrievedBySource} />
           </Section>
         </div>
-
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-6)', marginBottom: 'var(--spacing-6)' }}>
           <ContradictionsSection contradictions={contradictions} />
           <GapsSection gaps={gaps} />
         </div>
-
         <div style={{ marginBottom: 'var(--spacing-6)' }}>
           <Section title={`Claims (${String(claims.length)})`}>
             <ClaimList claims={claims.slice(0, 12)} />
             {claims.length > 12 ? <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginTop: 'var(--spacing-3)' }}>+{String(claims.length - 12)} more claims — full list in the research pack.</p> : null}
           </Section>
         </div>
-
         {latestBrief ? <Section title={`Latest story brief (${new Date(latestBrief.generatedAt).toLocaleString()})`}>
           <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-text-primary)', margin: 0 }}>{latestBrief.title}</h3>
           <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>{latestBrief.summary}</p>
@@ -187,18 +188,25 @@ function ClaimSummary({ counts, total }: { counts: Record<string, number>; total
   );
 }
 
-function SourceList({ sources }: { sources: ResearchSource[] }) {
+function SourceList({ sources, retrievedBySource }: { sources: ResearchSource[]; retrievedBySource: Map<string, string> }) {
   if (sources.length === 0) return <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>No sources yet.</p>;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
       {sources.map((s) => (
-        <div key={s.id} style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', display: 'flex', gap: 'var(--spacing-3)', alignItems: 'baseline' }}>
-          <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>{s.title}</span>
-          <span style={{ color: 'var(--color-text-muted)' }}>{s.publisher}</span>
-          <span style={{ color: 'var(--color-text-muted)' }}>{s.sourceClass.replace(/_/g, ' ')}</span>
-          <div style={{ flex: 1 }} />
-          <span style={{ color: 'var(--color-text-muted)' }}>{s.publishedAt?.slice(0, 10)}</span>
-          <span style={{ color: 'var(--color-text-muted)' }}>{s.status.replace(/_/g, ' ')}</span>
+        <div key={s.id} style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-3)', alignItems: 'baseline', flexWrap: 'wrap' }}>
+            <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>{s.title}</span>
+            <span style={{ color: 'var(--color-text-muted)' }}>{s.publisher ?? '—'}</span>
+            <span style={{ color: PRIMARY_SOURCE_CLASSES.has(s.sourceClass) ? 'var(--color-brand-400)' : 'var(--color-text-muted)', fontWeight: PRIMARY_SOURCE_CLASSES.has(s.sourceClass) ? 600 : 400 }}>
+              {PRIMARY_SOURCE_CLASSES.has(s.sourceClass) ? 'Primary' : 'Secondary'}
+            </span>
+            <span style={{ color: 'var(--color-text-muted)' }}>{s.sourceType.replace(/_/g, ' ')}</span>
+            <span style={{ color: 'var(--color-text-muted)' }}>{s.status.replace(/_/g, ' ')}</span>
+          </div>
+          <div style={{ color: 'var(--color-text-muted)', marginTop: 2 }}>
+            Adapter: {s.adapter.replace(/_/g, ' ')} · discovered {new Date(s.discoveredAt).toLocaleDateString()} · last retrieved {retrievedBySource.get(s.id) ? new Date(retrievedBySource.get(s.id)!).toLocaleDateString() : 'never'}
+          </div>
+          {s.queryText ? <div style={{ color: 'var(--color-text-muted)', marginTop: 2 }}>Matched query: &quot;{s.queryText}&quot; · relevance {s.relevanceScore}</div> : null}
         </div>
       ))}
     </div>

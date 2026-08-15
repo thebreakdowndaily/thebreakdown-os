@@ -648,3 +648,120 @@ export interface ResearchProjectOverview {
   recentDevelopments: ResearchChangeEvent[];
   latestRun: ResearchRun | null;
 }
+
+// ── 21. Research Source Registry & governance ────────────────────────────────
+//
+// The source registry is the editorial-governed list of discovery surfaces for
+// production research. Source activation is an editorial decision, never an
+// engineering default. Only APPROVED and ACTIVE sources participate in
+// production discovery.
+
+export type ResearchSourceApprovalState =
+  | 'PROPOSED'
+  | 'APPROVED'
+  | 'ACTIVE'
+  | 'PAUSED'
+  | 'RETIRED';
+
+export type ResearchSourceRefreshPolicy = 'HOURLY' | 'DAILY' | 'WEEKLY';
+
+export interface ResearchSourceDefinition {
+  id: string;
+  name: string;
+  publisher: string;
+  sourceType: ResearchSourceType;
+  adapter: string;
+  url: string;
+  canonicalDomain: string;
+  jurisdiction?: string;
+  language?: string;
+  authorityClass: ResearchSourceClass;
+  primarySource: boolean;
+  enabled: boolean;
+  topics: string[];
+  geographies: string[];
+  priority: 'P0' | 'P1' | 'P2' | 'P3';
+  refreshPolicy: ResearchSourceRefreshPolicy;
+  notes?: string;
+  /** Editorial rationale for inclusion. Required once approvalStatus is set. */
+  rationale?: string;
+  approvalStatus: ResearchSourceApprovalState;
+  approvedBy?: string;
+  approvedAt?: string;
+}
+
+export type ResearchSourceHealthStatus = 'HEALTHY' | 'DEGRADED' | 'FAILING' | 'DISABLED';
+
+/** Runtime health of a registry feed. Persisted in memory in v1 (see source-governance). */
+export interface ResearchSourceHealth {
+  sourceId: string;
+  feedUrl: string;
+  lastSuccessfulFetch?: string;
+  lastFailure?: string;
+  lastStatusCode?: number;
+  failureCount: number;
+  consecutiveFailures: number;
+  averageLatencyMs?: number;
+  contentChanges: number;
+  parserSuccessRate: number;
+  status: ResearchSourceHealthStatus;
+}
+
+// ── 22. News Intelligence → Research bridge ──────────────────────────────────
+//
+// Gated, evidence-oriented integration: a meaningful newsroom event may create
+// or update a research project. The gate is the researchTrigger — most events
+// never cross it, so research universes are not created for everything.
+
+export type ResearchTriggerReason =
+  | 'BREAKING_DEVELOPMENT'
+  | 'HIGH_IMPORTANCE'
+  | 'NOVEL_EVENT'
+  | 'EDIT_REQUESTED'
+  | 'SIGNIFICANT_CLAIM'
+  | 'HIGH_SIGNAL_VELOCITY'
+  | 'POLICY_CHANGE'
+  | 'COURT_DECISION'
+  | 'GOVERNMENT_ACTION';
+
+export type ResearchChangeLevel =
+  | 'NO_CHANGE'
+  | 'MINOR_CHANGE'
+  | 'MEANINGFUL_CHANGE'
+  | 'MAJOR_CHANGE'
+  | 'BREAKING_DEVELOPMENT';
+
+export interface ResearchUpdateAlertItem {
+  kind:
+    | 'NEW_PRIMARY_SOURCE'
+    | 'NEW_CLAIMS'
+    | 'CONTRADICTION'
+    | 'GAP_RESOLVED'
+    | 'BREAKING_DEVELOPMENT'
+    | 'RESEARCH_NOTE';
+  title: string;
+  detail: string;
+  evidenceRefs: string[];
+}
+
+/** Evidence-oriented research update alert for the newsroom. */
+export interface ResearchUpdateAlert {
+  id: string;
+  projectId: string;
+  topic: string;
+  generatedAt: string;
+  level: ResearchChangeLevel;
+  triggerReason?: ResearchTriggerReason;
+  items: ResearchUpdateAlertItem[];
+}
+
+/** Deterministic delta of a research run, used for change-level classification. */
+export interface ResearchRunDelta {
+  newSources: number;
+  newPrimarySources: number;
+  newDocuments: number;
+  newClaims: number;
+  newContradictions: number;
+  resolvedGaps: number;
+  breakingDevelopment: boolean;
+}

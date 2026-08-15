@@ -3,6 +3,8 @@ import { IntelModuleGuard } from '@/features/auth/components/IntelModuleGuard';
 import { guardIntelModule } from '@/features/auth/intel-server';
 import { IntelDenied } from '@/components/intel/IntelDenied';
 import { researchIntelligenceCore } from '@/services/intelligence/research';
+import { researchSourceRegistry } from '@/services/intelligence/research/source-registry';
+import type { ResearchSourceHealthStatus } from '@/types/research-intelligence';
 import { ensureResearchRuntime } from '@/lib/intelligence/research-bootstrap';
 import { createResearchProjectAction, runPipelineAction } from './actions';
 import type { ResearchProject } from '@/types/research-intelligence';
@@ -35,6 +37,8 @@ export default async function ResearchIntelligencePage() {
         <div style={{ marginBottom: 'var(--spacing-8)' }}>
           <NewProjectForm />
         </div>
+
+        <SourceRegistryStatus />
 
         <h2 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 'var(--spacing-4)' }}>
           Projects ({String(projects.length)})
@@ -79,6 +83,46 @@ function NewProjectForm() {
       </div>
     </form>
   );
+}
+
+function SourceRegistryStatus() {
+  const snapshot = researchSourceRegistry.snapshot();
+  const eligible = snapshot.sources.filter((s) => s.status === 'APPROVED' || s.status === 'ACTIVE');
+  return (
+    <div style={{ padding: 'var(--spacing-5)', background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border-default)', marginBottom: 'var(--spacing-8)' }}>
+      <h2 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 'var(--spacing-3)' }}>
+        Research Source Registry
+      </h2>
+      <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', margin: '0 0 var(--spacing-3)', lineHeight: 1.6 }}>
+        Approved discovery sources. Only APPROVED/ACTIVE sources feed production discovery; the fixture adapter never participates.
+        (Governing document: docs/research/source-governance.md)
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-3)' }}>
+        <MiniStat label="Eligible" value={String(snapshot.eligible)} />
+        <MiniStat label="Approved" value={String(snapshot.byState.APPROVED)} />
+        <MiniStat label="Proposed" value={String(snapshot.byState.PROPOSED)} />
+        <MiniStat label="Retired" value={String(snapshot.byState.RETIRED)} />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--spacing-2)' }}>
+        {eligible.map((s) => (
+          <div key={s.id} style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+            <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>{s.name}</span>
+            <span style={{ color: 'var(--color-text-muted)' }}> · {s.publisher} · {s.status}</span>
+            <span style={{ color: healthColor(s.healthStatus) }}> · {s.healthStatus}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function healthColor(status: ResearchSourceHealthStatus | undefined): string {
+  switch (status) {
+    case 'HEALTHY': return 'var(--color-brand-400)';
+    case 'DEGRADED': return 'var(--color-amber-400)';
+    case 'FAILING': return 'var(--color-error)';
+    default: return 'var(--color-text-muted)';
+  }
 }
 
 function ProjectCard({ project }: { project: ResearchProject }) {
