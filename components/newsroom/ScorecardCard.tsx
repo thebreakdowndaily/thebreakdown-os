@@ -1,11 +1,12 @@
-'use client';
-
 /**
  * ─── Scorecard Metric Card (Newsroom Intelligence) ───────────────────────────
  *
  * Presentational card for the Newsroom Intelligence Scorecard. Read-only.
  * Tone encodes direction only where the metric is a measured quality signal;
  * the scorecard defines no targets, so no card carries a pass/fail judgement.
+ *
+ * Server Component by design: the scorecard page renders it on the server and
+ * calls formatMs/formatPct/formatNumber during server rendering.
  */
 
 export function formatMs(ms: number | null | undefined): string {
