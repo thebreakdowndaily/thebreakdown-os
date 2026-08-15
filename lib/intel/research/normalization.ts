@@ -45,7 +45,15 @@ export function canonicalizeUrl(rawUrl: string): string {
   try {
     const url = new URL(rawUrl.trim());
     url.hash = '';
-    url.search = '';
+    const TRACKING_PARAMS = new Set([
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+      'fbclid', 'gclid', 'igshid', 'mc_cid', 'mc_eid', 'ref', 'source',
+    ]);
+    const params = url.searchParams;
+    for (const key of Array.from(params.keys())) {
+      if (TRACKING_PARAMS.has(key.toLowerCase())) params.delete(key);
+    }
+    url.search = params.toString();
     url.hostname = url.hostname.toLowerCase();
     url.pathname = url.pathname.replace(/\/+$/, '') || '/';
     return url.toString();
@@ -81,6 +89,7 @@ export function detectLanguage(text: string): string {
 /** Split a document into sentences on standard sentence boundaries. */
 export function sentenceSplit(text: string): string[] {
   return normalizeText(text)
+    /* eslint-disable-next-line no-misleading-character-class, no-useless-escape */
     .replace(/([.!?])\s+(?=[A-Z\u0900-\u097f"'(\[])/g, '$1\n')
     .split('\n')
     .map((s) => s.trim())
