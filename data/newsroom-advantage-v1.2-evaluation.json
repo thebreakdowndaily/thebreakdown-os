@@ -1,0 +1,352 @@
+{
+  "artifact": "newsroom-advantage-v1.2-evaluation",
+  "generated_at": "2026-08-15T06:43:57.282Z",
+  "holdout": "C:\\newsjack-content\\thebreakdown-os\\data\\newsroom-advantage-v1.2-holdout.json",
+  "metrics": {
+    "observation_period": {
+      "start": "2026-08-17T00:00:00Z",
+      "end": "2026-08-18T23:59:59Z"
+    },
+    "ground_truth_releases": 54,
+    "coverage_recall_baseline": 66.7,
+    "coverage_recall_intervention": 77.8,
+    "coverage_recall_delta_pts": 11.1,
+    "ingested_baseline": 36,
+    "ingested_intervention": 42,
+    "recovered_by_retry": [
+      2100013,
+      2100014,
+      2100015,
+      2100016,
+      2100017,
+      2100018
+    ],
+    "regressed_events": [],
+    "silent_losses_baseline": [
+      2100031,
+      2100032,
+      2100033,
+      2100060,
+      2100061,
+      2100062
+    ],
+    "silent_losses_intervention": [],
+    "gaps_baseline": [
+      "gap-source-pib-fetch-failed",
+      "gap-source-pib-fetch-failed"
+    ],
+    "gaps_intervention": [
+      "gap-source-pib-rotation",
+      "gap-source-pib-rotation",
+      "gap-source-pib-fetch-failed"
+    ],
+    "false_positive_gaps_baseline": 0,
+    "false_positive_gaps_intervention": 0,
+    "intelligence_recall_baseline": 100,
+    "intelligence_recall_intervention": 100,
+    "duplicate_rate_baseline": 0,
+    "duplicate_rate_intervention": 0,
+    "valid_gt_ids": 54
+  },
+  "verdict": "RECALL RECOVERED",
+  "baseline": {
+    "config": "retries=0, detectRotationGap=false",
+    "windows": [
+      {
+        "window_id": "w1",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-17T09:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w2",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-17T10:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w3",
+        "feed_behavior": "transient_failure",
+        "pull_scheduled_at": "2026-08-17T11:00:00Z",
+        "threw": true,
+        "fetched": 0,
+        "ingested": 0,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": [
+          "gap-source-pib-fetch-failed-1786776237140"
+        ]
+      },
+      {
+        "window_id": "w4",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-17T12:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w5",
+        "feed_behavior": "rotation",
+        "pull_scheduled_at": "2026-08-17T13:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w6",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-18T10:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w7",
+        "feed_behavior": "persistent_failure",
+        "pull_scheduled_at": "2026-08-18T11:00:00Z",
+        "threw": true,
+        "fetched": 0,
+        "ingested": 0,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": [
+          "gap-source-pib-fetch-failed-1786776237178"
+        ]
+      },
+      {
+        "window_id": "w8",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-18T12:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      }
+    ],
+    "gaps": [
+      {
+        "id": "gap-source-pib-fetch-failed-1786776237140",
+        "type": "source_gap",
+        "title": "PIB feed fetch failed",
+        "severity": "critical"
+      },
+      {
+        "id": "gap-source-pib-fetch-failed-1786776237178",
+        "type": "source_gap",
+        "title": "PIB feed fetch failed",
+        "severity": "critical"
+      }
+    ],
+    "covered_by_gap": {
+      "gap-source-pib-fetch-failed-1786776237140": [
+        2100013,
+        2100014,
+        2100015,
+        2100016,
+        2100017,
+        2100018
+      ],
+      "gap-source-pib-fetch-failed-1786776237178": [
+        2100040,
+        2100041,
+        2100042,
+        2100043,
+        2100044,
+        2100045
+      ]
+    }
+  },
+  "intervention": {
+    "config": "retries=2, retryDelayMs=1, detectRotationGap=true",
+    "windows": [
+      {
+        "window_id": "w1",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-17T09:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w2",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-17T10:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w3",
+        "feed_behavior": "transient_failure",
+        "pull_scheduled_at": "2026-08-17T11:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w4",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-17T12:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      },
+      {
+        "window_id": "w5",
+        "feed_behavior": "rotation",
+        "pull_scheduled_at": "2026-08-17T13:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": true,
+        "gap_start": "2026-08-17T11:20:00.000Z",
+        "gap_end": "2026-08-17T12:00:00.000Z",
+        "registered_gap_ids": [
+          "gap-source-pib-rotation-1786965600000"
+        ]
+      },
+      {
+        "window_id": "w6",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-18T10:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": true,
+        "gap_start": "2026-08-17T12:50:00.000Z",
+        "gap_end": "2026-08-18T08:00:00.000Z",
+        "registered_gap_ids": [
+          "gap-source-pib-rotation-1786971000000"
+        ]
+      },
+      {
+        "window_id": "w7",
+        "feed_behavior": "persistent_failure",
+        "pull_scheduled_at": "2026-08-18T11:00:00Z",
+        "threw": true,
+        "fetched": 0,
+        "ingested": 0,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": [
+          "gap-source-pib-fetch-failed-1786776237266"
+        ]
+      },
+      {
+        "window_id": "w8",
+        "feed_behavior": "ok",
+        "pull_scheduled_at": "2026-08-18T12:00:00Z",
+        "threw": false,
+        "fetched": 6,
+        "ingested": 6,
+        "duplicates": 0,
+        "rotation_gap_detected": false,
+        "gap_start": null,
+        "gap_end": null,
+        "registered_gap_ids": []
+      }
+    ],
+    "gaps": [
+      {
+        "id": "gap-source-pib-rotation-1786965600000",
+        "type": "source_gap",
+        "title": "PIB feed window rotation gap",
+        "severity": "high"
+      },
+      {
+        "id": "gap-source-pib-rotation-1786971000000",
+        "type": "source_gap",
+        "title": "PIB feed window rotation gap",
+        "severity": "high"
+      },
+      {
+        "id": "gap-source-pib-fetch-failed-1786776237266",
+        "type": "source_gap",
+        "title": "PIB feed fetch failed",
+        "severity": "critical"
+      }
+    ],
+    "covered_by_gap": {
+      "gap-source-pib-rotation-1786965600000": [
+        2100031,
+        2100032,
+        2100033
+      ],
+      "gap-source-pib-rotation-1786971000000": [
+        2100060,
+        2100061,
+        2100062
+      ],
+      "gap-source-pib-fetch-failed-1786776237266": [
+        2100040,
+        2100041,
+        2100042,
+        2100043,
+        2100044,
+        2100045
+      ]
+    }
+  }
+}

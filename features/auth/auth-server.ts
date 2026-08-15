@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
+import { isDemoMode, DEMO_USER } from './demo';
 
 export async function getSupabaseAuth() {
   const cookieStore = await cookies();
@@ -25,6 +26,26 @@ export interface AuthSession {
 }
 
 export async function getSession(): Promise<AuthSession | null> {
+  // Demo mode (no Supabase configured, non-production): the server presents
+  // the same demo identity the client SessionProvider builds, so the whole
+  // intel surface is navigable in local development. Never reachable in
+  // production because isDemoMode() requires NODE_ENV !== 'production'.
+  if (isDemoMode()) {
+    return {
+      user: {
+        id: DEMO_USER.id,
+        email: DEMO_USER.email,
+        name: DEMO_USER.name,
+        image: DEMO_USER.image,
+        role: DEMO_USER.role,
+      },
+      session: {
+        id: DEMO_USER.id,
+        expiresAt: Date.now() + 86400000,
+      },
+    };
+  }
+
   try {
     const supabase = await getSupabaseAuth();
     const { data: { session: s } } = await supabase.auth.getSession();

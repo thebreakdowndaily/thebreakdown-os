@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/v2/newsroom/observations/pull",
+      "schedule": "30 * * * *"
+    }
+  ]
+}

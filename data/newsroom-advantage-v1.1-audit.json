@@ -1,0 +1,114 @@
+[
+  {
+    "event_id": "pib-v11-001",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "SEBI circular and Reuters article overlap matches perfectly."
+  },
+  {
+    "event_id": "pib-v11-002",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "HAL light utility helicopter contract announcement matched with ET."
+  },
+  {
+    "event_id": "pib-v11-003",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "RBI interest rate MPC announcement matched with Bloomberg."
+  },
+  {
+    "event_id": "pib-v11-004",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Supreme Court GST notice on online gaming matched with LiveLaw."
+  },
+  {
+    "event_id": "pib-v11-005",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "ISRO semi-cryogenic engine test matched with The Hindu."
+  },
+  {
+    "event_id": "pib-v11-006",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Finance Minister recapitalization infusion roadmap matched with Financial Express."
+  },
+  {
+    "event_id": "pib-v11-007",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "TRAI infrastructure sharing consultation paper matched with Moneycontrol."
+  },
+  {
+    "event_id": "pib-v11-008",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Supreme Court environmental trial benches matched with LiveLaw."
+  },
+  {
+    "event_id": "pib-v11-010",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "SEBI F&O margins circular matched with Moneycontrol."
+  },
+  {
+    "event_id": "pib-v11-011",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Defence procurement tactical comms deal matched with Times of India."
+  },
+  {
+    "event_id": "pib-v11-046",
+    "automated_classification": "POSSIBLE_MATCH",
+    "human_classification": "UNKNOWN",
+    "audit_result": "CORRECTED",
+    "auditor_notes": "Spurious match to an unrelated border infrastructure article. Reclassified as UNKNOWN."
+  },
+  {
+    "event_id": "pib-v11-009",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Finance treaty had no external reporting within evaluated window."
+  },
+  {
+    "event_id": "pib-v11-035",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Finance devolution release had no external mainstream articles."
+  },
+  {
+    "event_id": "pib-v11-038",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "SEBI investment advisers circular had no external coverage."
+  },
+  {
+    "event_id": "pib-v11-039",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "ISRO private startup partnership was not reported externally."
+  },
+  {
+    "event_id": "pib-v11-041",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "CONFIRMED",
+    "auditor_notes": "Supreme Court mineral rights taxation order has no observable logs or external reports."
+  }
+]

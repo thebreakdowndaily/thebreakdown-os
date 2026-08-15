@@ -27,3 +27,6 @@ Thumbs.db
 # VS Code
 .vscode/
 .vercel
+
+# Newsroom Intelligence state (runtime persistence)
+data/newsroom/

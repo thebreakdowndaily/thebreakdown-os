@@ -1,0 +1,121 @@
+[
+  {
+    "event_id": "pib-2026-08-01-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "SC sub-classification verdict matches CJP article published 1 hour later."
+  },
+  {
+    "event_id": "pib-2026-08-02-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "Arjun Mk-1A tank upgrade clears CCS; matches ET report."
+  },
+  {
+    "event_id": "pib-2026-08-03-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "SEBI consultation on simplified FPI guidelines matches Financial Express."
+  },
+  {
+    "event_id": "pib-2026-08-04-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "July GST collections revenue statistics matches The Hindu."
+  },
+  {
+    "event_id": "pib-2026-08-05-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "ISRO Gaganyaan crew module propulsion test matches India Today."
+  },
+  {
+    "event_id": "pib-2026-08-06-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "Rural infrastructure budget allocation matches Business Standard."
+  },
+  {
+    "event_id": "pib-2026-08-07-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "SC notices challenging environmental clearance norms matches LiveLaw."
+  },
+  {
+    "event_id": "pib-2026-08-08-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "RBI repo rate unchanged decision matches Reuters wires."
+  },
+  {
+    "event_id": "pib-2026-08-09-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "SEBI derivatives safeguard regulations matches Moneycontrol."
+  },
+  {
+    "event_id": "pib-2026-08-10-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "MOD HAL components light utility helicopter contract matches Hindu BusinessLine."
+  },
+  {
+    "event_id": "pib-2026-08-14-01",
+    "automated_classification": "MATCH",
+    "human_classification": "MATCH",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "MOD loiter munitions contract matches Times of India."
+  },
+  {
+    "event_id": "pib-2026-08-14-10",
+    "automated_classification": "POSSIBLE_MATCH",
+    "human_classification": "UNKNOWN",
+    "audit_result": "AUTO_POSSIBLE_INVALID",
+    "auditor_notes": "Spurious match to generic border infra article. Human reclassified as UNKNOWN."
+  },
+  {
+    "event_id": "pib-2026-08-14-04",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "No external mainstream coverage found for this routine tax devolution release."
+  },
+  {
+    "event_id": "pib-2026-08-14-08",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "No external coverage for routine ISRO startup MoU."
+  },
+  {
+    "event_id": "pib-2026-08-14-15",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "Court order on tax disputes. No external reports."
+  },
+  {
+    "event_id": "pib-2026-08-14-16",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "Defence Minister shipyard visit. No external articles found."
+  },
+  {
+    "event_id": "pib-2026-08-14-18",
+    "automated_classification": "UNKNOWN",
+    "human_classification": "UNKNOWN",
+    "audit_result": "AUTO_MATCH_CORRECT",
+    "auditor_notes": "Routine ISRO collaborative CNES announcement. No mainstream matches."
+  }
+]

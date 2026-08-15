@@ -1,0 +1,16 @@
+{
+  "verdict": "DEMONSTRATED ADVANTAGE",
+  "metrics": {
+    "total_eligible": 40,
+    "observable": 35,
+    "not_observable": 5,
+    "recall": 0.8285714285714286,
+    "false_positive_rate": 0,
+    "valid_comparator_rate": 0.7931034482758621,
+    "unknown_rate": 0.22857142857142856,
+    "verified_lead_rate": 1,
+    "velt_median_ms": 2340000,
+    "velt_p90_ms": 2868000,
+    "match_audit_precision": 1
+  }
+}

@@ -14,6 +14,7 @@ const MODULE_DESCRIPTIONS: Record<IntelModule, string> = {
   verification: 'Verification queue and fact-check status across the workspace.',
   rti: 'RTI tracker: filed requests, deadlines, and responses.',
   tasks: 'Editorial task queue across the intelligence workspace.',
+  newsroom: 'Newsroom Intelligence OS: live observation clustering, signal evaluation, and triage command center.',
 };
 
 export function ModulePlaceholder({ module }: { module: IntelModule }) {

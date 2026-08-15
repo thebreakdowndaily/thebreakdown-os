@@ -10,7 +10,12 @@ export type JobType =
   | 'SearchIndexRefresh'
   | 'MetadataVerification'
   | 'CacheInvalidation'
-  | 'HealthSnapshot';
+  | 'HealthSnapshot'
+  | 'IntelligenceSignalGeneration'
+  | 'IntelligencePriorityRecalculation'
+  | 'IntelligenceAlertEvaluation'
+  | 'IntelligenceVelocityUpdate'
+  | 'IntelligenceCoverageGapCheck';
 
 export interface BackoffStrategy {
   type: 'FIXED' | 'EXPONENTIAL';

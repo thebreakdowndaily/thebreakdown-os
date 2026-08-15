@@ -1,0 +1,52 @@
+{
+  "baseline_tag": "news-intelligence-baseline-1.2",
+  "baseline_version": "1.2.0",
+  "status": "FROZEN",
+  "frozen_at": "2026-08-15T00:00:00Z",
+  "governing_document": "docs/newsroom/NEWS_INTELLIGENCE_V1_2_COVERAGE_RECOVERY_REPORT.md",
+  "verdict": "RECALL RECOVERED",
+  "purpose": "Frozen production baseline for News Intelligence v1.2. Records the post-intervention state (coverage-recall recovery) so future engineering and live observation can be measured against an immutable reference. Observation-period metrics are measured live; v1.2 holdout metrics are frozen and do not change.",
+  "artifacts": {
+    "holdout": "data/newsroom-advantage-v1.2-holdout.json",
+    "evaluation": "data/newsroom-advantage-v1.2-evaluation.json",
+    "miss_diagnostics": "data/newsroom-advantage-v1.2-miss-diagnostics.json",
+    "pipeline_diagnostics": "data/newsroom-advantage-v1.2-pipeline-diagnostics.json",
+    "report": "docs/newsroom/NEWS_INTELLIGENCE_V1_2_COVERAGE_RECOVERY_REPORT.md"
+  },
+  "holdout_spec": {
+    "ground_truth_releases": 54,
+    "windows": 8,
+    "rotation_lost_releases": 6,
+    "transient_failure_windows": 1,
+    "persistent_failure_windows": 1,
+    "rotation_gap_windows": 2
+  },
+  "metrics": {
+    "coverage_recall": 0.778,
+    "coverage_recall_fraction": { "detected": 42, "eligible": 54 },
+    "intelligence_recall": 1.0,
+    "silent_losses": 0,
+    "false_positive_gaps": 0,
+    "recovered_by_retry": 6,
+    "regressed_events": 0,
+    "duplicate_rate": 0.0
+  },
+  "quality_gates": {
+    "tests_passing": 682,
+    "test_files": 58,
+    "typescript": "PASS",
+    "smoke_newsroom": "PASS",
+    "v1_1_integrity": { "passed": 11, "of": 11 },
+    "v1_2_integrity": { "passed": 0, "of": 0, "note": "backfilled by tests/news-intelligence-benchmark-v1.2-integrity.test.ts at freeze time" }
+  },
+  "interventions": [
+    "I1 — bounded retry + fetch-failure coverage gap (lib/intelligence/pib-adapter.ts)",
+    "I2 — feed-window rotation-gap detection (lib/intelligence/pib-adapter.ts)",
+    "I3 — coverage telemetry on PullPibResult.coverage (PibCoverageWindow)"
+  ],
+  "observation_notes": {
+    "live_observation": "Operational telemetry for the post-freeze observation period is captured by the /newsroom/scorecard surface. Live metrics (events detected, coverage gaps, alerts, editor acknowledgement rate, time-to-editor, time-to-action, published-from-alert, false-positive rate) are measured from canonical state and are NOT frozen — they establish the real operating baseline.",
+    "requires_ground_truth": "Coverage recall and silent losses require a ground-truth audit; the frozen values above come from the v1.2 holdout and are the reference until a live recall audit is performed.",
+    "targets": "No targets are set. All values are measured baselines."
+  }
+}

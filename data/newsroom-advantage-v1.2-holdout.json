@@ -1,0 +1,191 @@
+{
+  "version": "v1.2",
+  "artifact": "newsroom-advantage-v1.2-holdout",
+  "frozen_at": "2026-08-15T00:00:00Z",
+  "purpose": "Frozen, pre-registration holdout for NEWS_INTELLIGENCE_V1_2_COVERAGE_RECOVERY. Models a NEW observation period (17-18 Aug 2026, after the v1.1 15 Jul - 14 Aug window) and replays the REAL production ingestion pipeline (pullPibObservations) under two configurations: v1.2-interventions-off (retries=0, detectRotationGap=false) vs v1.2-interventions-on (retries=2, detectRotationGap=true).",
+  "governing_document": "docs/newsroom/NEWS_INTELLIGENCE_V1_2_COVERAGE_RECOVERY_REPORT.md",
+  "observation_period": {
+    "start": "2026-08-17T00:00:00Z",
+    "end": "2026-08-18T23:59:59Z"
+  },
+  "feed_window_model": "Each scheduled pull is replayed through the adapter's fetch boundary: the fetcher returns exactly the releases listed for that window (the adapter cannot observe anything beyond what the feed returns). feed_behavior per window: 'ok' (returns releases), 'transient_failure' (first fetch throws, later attempts succeed), 'persistent_failure' (every fetch throws), 'rotation' (feed window has moved forward; its oldest item is newer than the previously ingested newest). ground_truth_releases published inside a rotation gap exist but appear in NO window - modelling the dominant v1.1 miss mechanism (rolling-window rotation; release never in a polled feed). Two rotation scenarios: w5 is a same-day 40-minute feed rotation (gap 11:20-12:00); w6 is the overnight pull gap after 19 hours without a scheduled pull (gap 12:50 Aug 17 - 08:00 Aug 18). Releases 2100060-2100062 (published overnight) and 2100031-2100033 (published inside the w5 rotation gap) appear in no window.",
+  "recovery_scopes": {
+    "retry_recovers": "releases in a transient_failure window (I1) - recovered at ingestion level when retries>0.",
+    "gap_surfaces": "releases in a persistent_failure window (fetch-failed gap) and releases inside a rotation gap (rotation gap, I2) - surfaced to the editorial queue as COVERAGE_GAPS; backfill from the PIB archive is the documented operational remedy (adapter-level auto-backfill is out of scope).",
+    "not_affected": "VELT/timing family (median VELT, P90 VELT, positive lead rate, valid comparator rate) - these require external t2 comparators and are unchanged by collection-side interventions; reported N/A for this holdout."
+  },
+  "windows": [
+    {
+      "id": "w1",
+      "pull_scheduled_at": "2026-08-17T09:00:00Z",
+      "feed_behavior": "ok",
+      "expected_rotation_gap": false,
+      "releases": [
+        { "prid": 2100001, "title": "RBI keeps repo rate unchanged at 6.5%", "snippet": "Reserve Bank of India holds the policy rate steady amid inflation concerns.", "published_at": "2026-08-17T08:00:00Z" },
+        { "prid": 2100002, "title": "ISRO to launch earth observation satellite", "snippet": "The space agency announced the launch window for the earth observation satellite.", "published_at": "2026-08-17T08:10:00Z" },
+        { "prid": 2100003, "title": "Ministry of Finance presents fiscal deficit roadmap", "snippet": "Union budget targets a lower fiscal deficit over the next three years.", "published_at": "2026-08-17T08:20:00Z" },
+        { "prid": 2100004, "title": "SEBI seeks comments on new listing norms", "snippet": "Markets regulator proposes revised capital market rules for public comments.", "published_at": "2026-08-17T08:30:00Z" },
+        { "prid": 2100005, "title": "Supreme Court Constitution Bench to hear plea", "snippet": "The Constitution Bench will examine the petition in the next sitting.", "published_at": "2026-08-17T08:40:00Z" },
+        { "prid": 2100006, "title": "TRAI finalises spectrum auction rules", "snippet": "Regulator sets guidelines for the upcoming airwaves auction.", "published_at": "2026-08-17T08:50:00Z" }
+      ]
+    },
+    {
+      "id": "w2",
+      "pull_scheduled_at": "2026-08-17T10:00:00Z",
+      "feed_behavior": "ok",
+      "expected_rotation_gap": false,
+      "releases": [
+        { "prid": 2100007, "title": "ECI announces schedule for assembly elections", "snippet": "Election Commission of India releases poll dates for five states.", "published_at": "2026-08-17T08:50:00Z" },
+        { "prid": 2100008, "title": "Ministry of Defence approves fighter jet procurement", "snippet": "CCS clears the Tejas procurement for the Air Force.", "published_at": "2026-08-17T09:00:00Z" },
+        { "prid": 2100009, "title": "MeitY launches semiconductor fab incentive scheme", "snippet": "Ministry of Electronics launches production-linked incentives for fabrication.", "published_at": "2026-08-17T09:10:00Z" },
+        { "prid": 2100010, "title": "ICMR issues new clinical trial guidelines", "snippet": "The apex health body updated the advisory for drug approval.", "published_at": "2026-08-17T09:20:00Z" },
+        { "prid": 2100011, "title": "Railway Board approves new freight corridor", "snippet": "Dedicated corridor will boost freight movement across regions.", "published_at": "2026-08-17T09:30:00Z" },
+        { "prid": 2100012, "title": "EPFO raises provident fund returns", "snippet": "Employees' Provident Fund Organisation announces higher returns.", "published_at": "2026-08-17T09:40:00Z" }
+      ]
+    },
+    {
+      "id": "w3",
+      "pull_scheduled_at": "2026-08-17T11:00:00Z",
+      "feed_behavior": "transient_failure",
+      "expected_rotation_gap": false,
+      "releases": [
+        { "prid": 2100013, "title": "MEA announces state visit programme", "snippet": "The ministry confirmed a bilateral visit to a partner nation.", "published_at": "2026-08-17T09:40:00Z" },
+        { "prid": 2100014, "title": "IMD issues cyclone warning for coastal districts", "snippet": "Heavy rainfall expected as the weather system intensifies.", "published_at": "2026-08-17T09:50:00Z" },
+        { "prid": 2100015, "title": "Navy conducts high seas readiness drill", "snippet": "The Indian Navy exercised fleet readiness in the Bay of Bengal.", "published_at": "2026-08-17T10:00:00Z" },
+        { "prid": 2100016, "title": "Finance Ministry clears AMRUT water supply projects", "snippet": "Union government approves municipal water supply works under AMRUT.", "published_at": "2026-08-17T10:10:00Z" },
+        { "prid": 2100017, "title": "ISRO cryogenic booster ground tests at Mahendragiri", "snippet": "The space agency completed a ground test of the cryogenic upper stage.", "published_at": "2026-08-17T10:20:00Z" },
+        { "prid": 2100018, "title": "SEBI finalises FPI insider trading regulations", "snippet": "Markets regulator tightens insider trading norms for foreign portfolio investors.", "published_at": "2026-08-17T10:30:00Z" }
+      ]
+    },
+    {
+      "id": "w4",
+      "pull_scheduled_at": "2026-08-17T12:00:00Z",
+      "feed_behavior": "ok",
+      "expected_rotation_gap": false,
+      "releases": [
+        { "prid": 2100019, "title": "Supreme Court to examine anti-defection laws", "snippet": "A larger bench will consider the scope of the anti-defection provisions.", "published_at": "2026-08-17T10:30:00Z" },
+        { "prid": 2100020, "title": "Ministry of Defence signs missile tracking sensors deal", "snippet": "Contract awarded for missile tracking sensor components.", "published_at": "2026-08-17T10:40:00Z" },
+        { "prid": 2100021, "title": "RBI governor addresses bankers' conclave", "snippet": "The central bank chief spoke on financial stability at the conclave.", "published_at": "2026-08-17T10:50:00Z" },
+        { "prid": 2100022, "title": "DGCA issues drone operations advisory", "snippet": "Civil aviation regulator updates beyond-visual-line-of-sight guidelines.", "published_at": "2026-08-17T11:00:00Z" },
+        { "prid": 2100023, "title": "Government fixes MSP for kharif crops", "snippet": "Cabinet approves higher minimum support prices for paddy.", "published_at": "2026-08-17T11:10:00Z" },
+        { "prid": 2100024, "title": "IMD upgrades cyclone to severe", "snippet": "Weather office upgrades the system to a severe cyclonic storm.", "published_at": "2026-08-17T11:20:00Z" }
+      ]
+    },
+    {
+      "id": "w5",
+      "pull_scheduled_at": "2026-08-17T13:00:00Z",
+      "feed_behavior": "rotation",
+      "expected_rotation_gap": true,
+      "gap_start": "2026-08-17T11:20:00Z",
+      "gap_end": "2026-08-17T12:00:00Z",
+      "releases": [
+        { "prid": 2100025, "title": "PM inaugurates semiconductor fabrication facility", "snippet": "The Prime Minister dedicated the new chip fabrication unit.", "published_at": "2026-08-17T12:00:00Z" },
+        { "prid": 2100026, "title": "Election Commission holds press conference on EVMs", "snippet": "ECI briefed media on electronic voting machine protocols.", "published_at": "2026-08-17T12:10:00Z" },
+        { "prid": 2100027, "title": "Finance Ministry announces GST council meeting", "snippet": "Finance ministry convenes the GST Council to review rates.", "published_at": "2026-08-17T12:20:00Z" },
+        { "prid": 2100028, "title": "ISRO signs launch agreement with private operator", "snippet": "The space agency signed a launch services agreement.", "published_at": "2026-08-17T12:30:00Z" },
+        { "prid": 2100029, "title": "Railway Board approves Vande Bharat expansion", "snippet": "New routes cleared for the Vande Bharat train service.", "published_at": "2026-08-17T12:40:00Z" },
+        { "prid": 2100030, "title": "SEBI issues advisory on client funds collateral", "snippet": "Markets regulator clarified margin and collateral handling norms.", "published_at": "2026-08-17T12:50:00Z" }
+      ]
+    },
+    {
+      "id": "w6",
+      "pull_scheduled_at": "2026-08-18T10:00:00Z",
+      "feed_behavior": "ok",
+      "expected_rotation_gap": true,
+      "gap_start": "2026-08-17T12:50:00Z",
+      "gap_end": "2026-08-18T08:00:00Z",
+      "releases": [
+        { "prid": 2100034, "title": "RBI issues repo rate statement", "snippet": "Reserve Bank of India released the monetary policy statement.", "published_at": "2026-08-18T08:00:00Z" },
+        { "prid": 2100035, "title": "MOHFW launches vaccination drive", "snippet": "Ministry of Health begins the nationwide immunisation campaign.", "published_at": "2026-08-18T08:10:00Z" },
+        { "prid": 2100036, "title": "ISRO completes PSLV integration", "snippet": "The launch vehicle was integrated at the spaceport.", "published_at": "2026-08-18T08:20:00Z" },
+        { "prid": 2100037, "title": "Finance Ministry publishes fiscal data", "snippet": "Monthly fiscal deficit figures released by the ministry.", "published_at": "2026-08-18T08:30:00Z" },
+        { "prid": 2100038, "title": "TRAI releases tariff order", "snippet": "Regulator issued the revised interconnection usage charge order.", "published_at": "2026-08-18T08:40:00Z" },
+        { "prid": 2100039, "title": "NCLT approves merger scheme", "snippet": "Company law tribunal sanctioned the amalgamation scheme.", "published_at": "2026-08-18T08:50:00Z" }
+      ]
+    },
+    {
+      "id": "w7",
+      "pull_scheduled_at": "2026-08-18T11:00:00Z",
+      "feed_behavior": "persistent_failure",
+      "expected_rotation_gap": false,
+      "releases": [
+        { "prid": 2100040, "title": "SEBI board meets on derivatives", "snippet": "Markets regulator board reviewed derivative market safeguards.", "published_at": "2026-08-18T09:00:00Z" },
+        { "prid": 2100041, "title": "Ministry of Defence procurement board clears naval sensors", "snippet": "Defence acquisition council cleared naval sensor packages.", "published_at": "2026-08-18T09:10:00Z" },
+        { "prid": 2100042, "title": "EPFO updates subscriber guidelines", "snippet": "Employees' Provident Fund Organisation revised claim guidelines.", "published_at": "2026-08-18T09:20:00Z" },
+        { "prid": 2100043, "title": "ISRO announces crewed mission timeline", "snippet": "Space agency outlined the human spaceflight programme schedule.", "published_at": "2026-08-18T09:30:00Z" },
+        { "prid": 2100044, "title": "Supreme Court to hear electoral bond case", "snippet": "The apex court listed the electoral bonds matter for hearing.", "published_at": "2026-08-18T09:40:00Z" },
+        { "prid": 2100045, "title": "Finance Ministry releases treasury bill auction", "snippet": "The ministry announced the upcoming treasury bill auction.", "published_at": "2026-08-18T09:50:00Z" }
+      ]
+    },
+    {
+      "id": "w8",
+      "pull_scheduled_at": "2026-08-18T12:00:00Z",
+      "feed_behavior": "ok",
+      "expected_rotation_gap": false,
+      "releases": [
+        { "prid": 2100046, "title": "ECI releases voter list summary", "snippet": "Election Commission published the revised electoral roll summary.", "published_at": "2026-08-18T08:50:00Z" },
+        { "prid": 2100047, "title": "RBI finalises digital currency pilot", "snippet": "Reserve Bank of India expands the digital rupee pilot.", "published_at": "2026-08-18T09:00:00Z" },
+        { "prid": 2100048, "title": "DGCA clears new airport runway", "snippet": "Civil aviation regulator approved the new runway certification.", "published_at": "2026-08-18T09:10:00Z" },
+        { "prid": 2100049, "title": "MeitY announces data centre policy", "snippet": "Ministry of Electronics unveiled the national data centre framework.", "published_at": "2026-08-18T09:20:00Z" },
+        { "prid": 2100050, "title": "MOHFW issues heatwave advisory", "snippet": "Ministry of Health issued seasonal heatwave health guidelines.", "published_at": "2026-08-18T09:30:00Z" },
+        { "prid": 2100051, "title": "ISRO launches navigation satellite", "snippet": "The space agency launched a navigation satellite into orbit.", "published_at": "2026-08-18T09:40:00Z" }
+      ]
+    }
+  ],
+  "ground_truth_releases": [
+    { "prid": 2100001, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100001", "title": "RBI keeps repo rate unchanged at 6.5%", "snippet": "Reserve Bank of India holds the policy rate steady amid inflation concerns.", "published_at": "2026-08-17T08:00:00Z", "in_window": "w1" },
+    { "prid": 2100002, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100002", "title": "ISRO to launch earth observation satellite", "snippet": "The space agency announced the launch window for the earth observation satellite.", "published_at": "2026-08-17T08:10:00Z", "in_window": "w1" },
+    { "prid": 2100003, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100003", "title": "Ministry of Finance presents fiscal deficit roadmap", "snippet": "Union budget targets a lower fiscal deficit over the next three years.", "published_at": "2026-08-17T08:20:00Z", "in_window": "w1" },
+    { "prid": 2100004, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100004", "title": "SEBI seeks comments on new listing norms", "snippet": "Markets regulator proposes revised capital market rules for public comments.", "published_at": "2026-08-17T08:30:00Z", "in_window": "w1" },
+    { "prid": 2100005, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100005", "title": "Supreme Court Constitution Bench to hear plea", "snippet": "The Constitution Bench will examine the petition in the next sitting.", "published_at": "2026-08-17T08:40:00Z", "in_window": "w1" },
+    { "prid": 2100006, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100006", "title": "TRAI finalises spectrum auction rules", "snippet": "Regulator sets guidelines for the upcoming airwaves auction.", "published_at": "2026-08-17T08:50:00Z", "in_window": "w1" },
+    { "prid": 2100007, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100007", "title": "ECI announces schedule for assembly elections", "snippet": "Election Commission of India releases poll dates for five states.", "published_at": "2026-08-17T08:50:00Z", "in_window": "w2" },
+    { "prid": 2100008, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100008", "title": "Ministry of Defence approves fighter jet procurement", "snippet": "CCS clears the Tejas procurement for the Air Force.", "published_at": "2026-08-17T09:00:00Z", "in_window": "w2" },
+    { "prid": 2100009, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100009", "title": "MeitY launches semiconductor fab incentive scheme", "snippet": "Ministry of Electronics launches production-linked incentives for fabrication.", "published_at": "2026-08-17T09:10:00Z", "in_window": "w2" },
+    { "prid": 2100010, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100010", "title": "ICMR issues new clinical trial guidelines", "snippet": "The apex health body updated the advisory for drug approval.", "published_at": "2026-08-17T09:20:00Z", "in_window": "w2" },
+    { "prid": 2100011, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100011", "title": "Railway Board approves new freight corridor", "snippet": "Dedicated corridor will boost freight movement across regions.", "published_at": "2026-08-17T09:30:00Z", "in_window": "w2" },
+    { "prid": 2100012, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100012", "title": "EPFO raises provident fund returns", "snippet": "Employees' Provident Fund Organisation announces higher returns.", "published_at": "2026-08-17T09:40:00Z", "in_window": "w2" },
+    { "prid": 2100013, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100013", "title": "MEA announces state visit programme", "snippet": "The ministry confirmed a bilateral visit to a partner nation.", "published_at": "2026-08-17T09:40:00Z", "in_window": "w3" },
+    { "prid": 2100014, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100014", "title": "IMD issues cyclone warning for coastal districts", "snippet": "Heavy rainfall expected as the weather system intensifies.", "published_at": "2026-08-17T09:50:00Z", "in_window": "w3" },
+    { "prid": 2100015, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100015", "title": "Navy conducts high seas readiness drill", "snippet": "The Indian Navy exercised fleet readiness in the Bay of Bengal.", "published_at": "2026-08-17T10:00:00Z", "in_window": "w3" },
+    { "prid": 2100016, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100016", "title": "Finance Ministry clears AMRUT water supply projects", "snippet": "Union government approves municipal water supply works under AMRUT.", "published_at": "2026-08-17T10:10:00Z", "in_window": "w3" },
+    { "prid": 2100017, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100017", "title": "ISRO cryogenic booster ground tests at Mahendragiri", "snippet": "The space agency completed a ground test of the cryogenic upper stage.", "published_at": "2026-08-17T10:20:00Z", "in_window": "w3" },
+    { "prid": 2100018, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100018", "title": "SEBI finalises FPI insider trading regulations", "snippet": "Markets regulator tightens insider trading norms for foreign portfolio investors.", "published_at": "2026-08-17T10:30:00Z", "in_window": "w3" },
+    { "prid": 2100019, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100019", "title": "Supreme Court to examine anti-defection laws", "snippet": "A larger bench will consider the scope of the anti-defection provisions.", "published_at": "2026-08-17T10:30:00Z", "in_window": "w4" },
+    { "prid": 2100020, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100020", "title": "Ministry of Defence signs missile tracking sensors deal", "snippet": "Contract awarded for missile tracking sensor components.", "published_at": "2026-08-17T10:40:00Z", "in_window": "w4" },
+    { "prid": 2100021, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100021", "title": "RBI governor addresses bankers' conclave", "snippet": "The central bank chief spoke on financial stability at the conclave.", "published_at": "2026-08-17T10:50:00Z", "in_window": "w4" },
+    { "prid": 2100022, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100022", "title": "DGCA issues drone operations advisory", "snippet": "Civil aviation regulator updates beyond-visual-line-of-sight guidelines.", "published_at": "2026-08-17T11:00:00Z", "in_window": "w4" },
+    { "prid": 2100023, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100023", "title": "Government fixes MSP for kharif crops", "snippet": "Cabinet approves higher minimum support prices for paddy.", "published_at": "2026-08-17T11:10:00Z", "in_window": "w4" },
+    { "prid": 2100024, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100024", "title": "IMD upgrades cyclone to severe", "snippet": "Weather office upgrades the system to a severe cyclonic storm.", "published_at": "2026-08-17T11:20:00Z", "in_window": "w4" },
+    { "prid": 2100025, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100025", "title": "PM inaugurates semiconductor fabrication facility", "snippet": "The Prime Minister dedicated the new chip fabrication unit.", "published_at": "2026-08-17T12:00:00Z", "in_window": "w5" },
+    { "prid": 2100026, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100026", "title": "Election Commission holds press conference on EVMs", "snippet": "ECI briefed media on electronic voting machine protocols.", "published_at": "2026-08-17T12:10:00Z", "in_window": "w5" },
+    { "prid": 2100027, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100027", "title": "Finance Ministry announces GST council meeting", "snippet": "Finance ministry convenes the GST Council to review rates.", "published_at": "2026-08-17T12:20:00Z", "in_window": "w5" },
+    { "prid": 2100028, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100028", "title": "ISRO signs launch agreement with private operator", "snippet": "The space agency signed a launch services agreement.", "published_at": "2026-08-17T12:30:00Z", "in_window": "w5" },
+    { "prid": 2100029, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100029", "title": "Railway Board approves Vande Bharat expansion", "snippet": "New routes cleared for the Vande Bharat train service.", "published_at": "2026-08-17T12:40:00Z", "in_window": "w5" },
+    { "prid": 2100030, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100030", "title": "SEBI issues advisory on client funds collateral", "snippet": "Markets regulator clarified margin and collateral handling norms.", "published_at": "2026-08-17T12:50:00Z", "in_window": "w5" },
+    { "prid": 2100031, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100031", "title": "Defence Ministry clears indigenous shipbuilding order", "snippet": "Indigenous shipbuilding programme awarded to the domestic yard.", "published_at": "2026-08-17T11:30:00Z", "in_window": null },
+    { "prid": 2100032, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100032", "title": "Supreme Court hearing on land acquisition begins", "snippet": "The apex court opened hearings on the acquisition dispute.", "published_at": "2026-08-17T11:40:00Z", "in_window": null },
+    { "prid": 2100033, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100033", "title": "Finance Ministry approves public research grant", "snippet": "Union ministry sanctioned a research grant to public institutions.", "published_at": "2026-08-17T11:50:00Z", "in_window": null },
+    { "prid": 2100034, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100034", "title": "RBI issues repo rate statement", "snippet": "Reserve Bank of India released the monetary policy statement.", "published_at": "2026-08-18T08:00:00Z", "in_window": "w6" },
+    { "prid": 2100035, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100035", "title": "MOHFW launches vaccination drive", "snippet": "Ministry of Health begins the nationwide immunisation campaign.", "published_at": "2026-08-18T08:10:00Z", "in_window": "w6" },
+    { "prid": 2100036, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100036", "title": "ISRO completes PSLV integration", "snippet": "The launch vehicle was integrated at the spaceport.", "published_at": "2026-08-18T08:20:00Z", "in_window": "w6" },
+    { "prid": 2100037, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100037", "title": "Finance Ministry publishes fiscal data", "snippet": "Monthly fiscal deficit figures released by the ministry.", "published_at": "2026-08-18T08:30:00Z", "in_window": "w6" },
+    { "prid": 2100038, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100038", "title": "TRAI releases tariff order", "snippet": "Regulator issued the revised interconnection usage charge order.", "published_at": "2026-08-18T08:40:00Z", "in_window": "w6" },
+    { "prid": 2100039, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100039", "title": "NCLT approves merger scheme", "snippet": "Company law tribunal sanctioned the amalgamation scheme.", "published_at": "2026-08-18T08:50:00Z", "in_window": "w6" },
+    { "prid": 2100040, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100040", "title": "SEBI board meets on derivatives", "snippet": "Markets regulator board reviewed derivative market safeguards.", "published_at": "2026-08-18T09:00:00Z", "in_window": "w7" },
+    { "prid": 2100041, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100041", "title": "Ministry of Defence procurement board clears naval sensors", "snippet": "Defence acquisition council cleared naval sensor packages.", "published_at": "2026-08-18T09:10:00Z", "in_window": "w7" },
+    { "prid": 2100042, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100042", "title": "EPFO updates subscriber guidelines", "snippet": "Employees' Provident Fund Organisation revised claim guidelines.", "published_at": "2026-08-18T09:20:00Z", "in_window": "w7" },
+    { "prid": 2100043, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100043", "title": "ISRO announces crewed mission timeline", "snippet": "Space agency outlined the human spaceflight programme schedule.", "published_at": "2026-08-18T09:30:00Z", "in_window": "w7" },
+    { "prid": 2100044, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100044", "title": "Supreme Court to hear electoral bond case", "snippet": "The apex court listed the electoral bonds matter for hearing.", "published_at": "2026-08-18T09:40:00Z", "in_window": "w7" },
+    { "prid": 2100045, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100045", "title": "Finance Ministry releases treasury bill auction", "snippet": "The ministry announced the upcoming treasury bill auction.", "published_at": "2026-08-18T09:50:00Z", "in_window": "w7" },
+    { "prid": 2100046, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100046", "title": "ECI releases voter list summary", "snippet": "Election Commission published the revised electoral roll summary.", "published_at": "2026-08-18T08:50:00Z", "in_window": "w8" },
+    { "prid": 2100047, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100047", "title": "RBI finalises digital currency pilot", "snippet": "Reserve Bank of India expands the digital rupee pilot.", "published_at": "2026-08-18T09:00:00Z", "in_window": "w8" },
+    { "prid": 2100048, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100048", "title": "DGCA clears new airport runway", "snippet": "Civil aviation regulator approved the new runway certification.", "published_at": "2026-08-18T09:10:00Z", "in_window": "w8" },
+    { "prid": 2100049, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100049", "title": "MeitY announces data centre policy", "snippet": "Ministry of Electronics unveiled the national data centre framework.", "published_at": "2026-08-18T09:20:00Z", "in_window": "w8" },
+    { "prid": 2100050, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100050", "title": "MOHFW issues heatwave advisory", "snippet": "Ministry of Health issued seasonal heatwave health guidelines.", "published_at": "2026-08-18T09:30:00Z", "in_window": "w8" },
+    { "prid": 2100051, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100051", "title": "ISRO launches navigation satellite", "snippet": "The space agency launched a navigation satellite into orbit.", "published_at": "2026-08-18T09:40:00Z", "in_window": "w8" },
+    { "prid": 2100060, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100060", "title": "PM chairs Cabinet Committee on Security meeting", "snippet": "The Prime Minister reviewed national security preparedness with the CCS.", "published_at": "2026-08-17T20:00:00Z", "in_window": null },
+    { "prid": 2100061, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100061", "title": "Finance Ministry notifies revised capital gains rules", "snippet": "The ministry notified the revised capital gains taxation regime.", "published_at": "2026-08-17T22:00:00Z", "in_window": null },
+    { "prid": 2100062, "canonical_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2100062", "title": "ISRO updates satellite launch manifest", "snippet": "The space agency revised the upcoming satellite launch schedule.", "published_at": "2026-08-17T23:30:00Z", "in_window": null }
+  ]
+}

@@ -1,0 +1,424 @@
+[
+  {
+    "event_id": "pib-v11-036",
+    "title": "Supreme Court grants interim bail to political leader on medical grounds",
+    "canonical_entity": "Supreme Court",
+    "claimed_category": "OBSERVABILITY_GAP",
+    "claimed_reason": "Rapid break detection window occurred during server restart.",
+    "entities_matched_by_real_pipeline": [
+      "supreme court"
+    ],
+    "routed_beats": [
+      "judiciary"
+    ],
+    "expected_beat": "judiciary",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-037",
+    "title": "Ministry of Finance signs $200 million loan agreement with ADB for urban development",
+    "canonical_entity": "Finance Ministry",
+    "claimed_category": "ENTITY_MATCH_FAILURE",
+    "claimed_reason": "Entity extraction failed to associate ADB with Ministry of Finance.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of finance"
+    ],
+    "routed_beats": [
+      "economy"
+    ],
+    "expected_beat": "economy",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-038",
+    "title": "SEBI updates regulatory framework for investment advisers",
+    "canonical_entity": "SEBI",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Semantic similarity model failed on technical terms 'investment advisers'.",
+    "entities_matched_by_real_pipeline": [
+      "sebi"
+    ],
+    "routed_beats": [
+      "business"
+    ],
+    "expected_beat": "business",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-039",
+    "title": "ISRO signs MoU with private space startup for payload integration",
+    "canonical_entity": "ISRO",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as routine corporate space startup MoUs without security impact.",
+    "entities_matched_by_real_pipeline": [
+      "isro"
+    ],
+    "routed_beats": [
+      "science"
+    ],
+    "expected_beat": "science",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-040",
+    "title": "Historic decisions by Ministry of Defence on indigenous shipbuilding",
+    "canonical_entity": "Defence Ministry",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Generic keyword mismatch on 'indigenous shipbuilding'.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of defence"
+    ],
+    "routed_beats": [
+      "defence"
+    ],
+    "expected_beat": "defence",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-046",
+    "title": "Ministry of Defence review meeting highlights border infrastructure development",
+    "canonical_entity": "Defence Ministry",
+    "claimed_category": "DEDUPLICATION",
+    "claimed_reason": "Incorrectly deduplicated against a prior border review meeting announcement.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of defence"
+    ],
+    "routed_beats": [
+      "defence"
+    ],
+    "expected_beat": "defence",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-068",
+    "title": "Supreme Court refuses to hear urgent plea seeking stay on high-speed rail corridor land acquisition",
+    "canonical_entity": "Supreme Court",
+    "claimed_category": "OBSERVABILITY_GAP",
+    "claimed_reason": "Rapid break detection window occurred during server restart.",
+    "entities_matched_by_real_pipeline": [
+      "supreme court"
+    ],
+    "routed_beats": [
+      "judiciary",
+      "business"
+    ],
+    "expected_beat": "judiciary",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-069",
+    "title": "Ministry of Finance releases capital grants to autonomous public research institutions",
+    "canonical_entity": "Finance Ministry",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as routine allocation grant announcement for public research.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of finance"
+    ],
+    "routed_beats": [
+      "economy"
+    ],
+    "expected_beat": "economy",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-070",
+    "title": "SEBI releases advisory on client funds collateral margins protections",
+    "canonical_entity": "SEBI",
+    "claimed_category": "ENTITY_MATCH_FAILURE",
+    "claimed_reason": "Entity extractor did not resolve 'client funds collateral' as a business priority.",
+    "entities_matched_by_real_pipeline": [
+      "sebi"
+    ],
+    "routed_beats": [
+      "health",
+      "business"
+    ],
+    "expected_beat": "business",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-071",
+    "title": "ISRO test-fires high-thrust liquid engine for heavy satellite missions",
+    "canonical_entity": "ISRO",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Model classification failure on 'high-thrust liquid engine' terminology.",
+    "entities_matched_by_real_pipeline": [
+      "isro"
+    ],
+    "routed_beats": [
+      "science"
+    ],
+    "expected_beat": "science",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-072",
+    "title": "Ministry of Defence finalizes contract for naval missile system tracking sensors with local manufacturer",
+    "canonical_entity": "Defence Ministry",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Generic keyword mismatch on tactical missile tracking components.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of defence"
+    ],
+    "routed_beats": [
+      "defence"
+    ],
+    "expected_beat": "defence",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-073",
+    "title": "Union Finance Ministry allocates Rs 3,000 crore for urban water supply projects under AMRUT scheme",
+    "canonical_entity": "Finance Ministry",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as minor water supply project grant announcement.",
+    "entities_matched_by_real_pipeline": [
+      "finance ministry"
+    ],
+    "routed_beats": [
+      "economy"
+    ],
+    "expected_beat": "economy",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-074",
+    "title": "Supreme Court sets schedule for hearings on constitutional validity of anti-defection laws",
+    "canonical_entity": "Supreme Court",
+    "claimed_category": "ENTITY_MATCH_FAILURE",
+    "claimed_reason": "Entity extraction failed to resolve 'anti-defection laws' as legal priority.",
+    "entities_matched_by_real_pipeline": [
+      "supreme court"
+    ],
+    "routed_beats": [
+      "judiciary"
+    ],
+    "expected_beat": "judiciary",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-075",
+    "title": "SEBI releases consultation paper on insider trading regulations changes",
+    "canonical_entity": "SEBI",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Model classification failure on FPI insider trading regulations.",
+    "entities_matched_by_real_pipeline": [
+      "sebi"
+    ],
+    "routed_beats": [
+      "business"
+    ],
+    "expected_beat": "business",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-076",
+    "title": "ISRO signs agreement with domestic space startup for launch support services",
+    "canonical_entity": "ISRO",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as routine commercial startup launch agreement.",
+    "entities_matched_by_real_pipeline": [
+      "isro"
+    ],
+    "routed_beats": [
+      "science"
+    ],
+    "expected_beat": "science",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-077",
+    "title": "Ministry of Defence finalizes contract for army logistics vehicle spares with local auto major",
+    "canonical_entity": "Defence Ministry",
+    "claimed_category": "DEDUPLICATION",
+    "claimed_reason": "Incorrectly deduplicated against HAL utility spares contract.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of defence",
+      "army"
+    ],
+    "routed_beats": [
+      "defence"
+    ],
+    "expected_beat": "defence",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-094",
+    "title": "Supreme Court refuses to hear urgent plea seeking stay on high-speed rail corridor land acquisition in Maharashtra",
+    "canonical_entity": "Supreme Court",
+    "claimed_category": "DEDUPLICATION",
+    "claimed_reason": "Incorrectly deduplicated against previous high-speed rail land dispute case.",
+    "entities_matched_by_real_pipeline": [
+      "supreme court"
+    ],
+    "routed_beats": [
+      "judiciary",
+      "business"
+    ],
+    "expected_beat": "judiciary",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-095",
+    "title": "Ministry of Finance releases capital grants to autonomous agricultural research institutes",
+    "canonical_entity": "Finance Ministry",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as routine agricultural institute allocation grant.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of finance"
+    ],
+    "routed_beats": [
+      "economy"
+    ],
+    "expected_beat": "economy",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-096",
+    "title": "SEBI releases advisory on client funds collateral margins protections limits",
+    "canonical_entity": "SEBI",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Model classification failure on client funds collateral limitations.",
+    "entities_matched_by_real_pipeline": [
+      "sebi"
+    ],
+    "routed_beats": [
+      "health",
+      "business"
+    ],
+    "expected_beat": "business",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-097",
+    "title": "ISRO test-fires high-thrust liquid engine for heavy satellite missions at Mahendragiri",
+    "canonical_entity": "ISRO",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Model classification failure on cryogenic booster ground tests at Mahendragiri.",
+    "entities_matched_by_real_pipeline": [
+      "isro"
+    ],
+    "routed_beats": [
+      "science"
+    ],
+    "expected_beat": "science",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-098",
+    "title": "Ministry of Defence finalizes contract for naval missile system tracking sensors components with local manufacturer at Pune",
+    "canonical_entity": "Defence Ministry",
+    "claimed_category": "DEDUPLICATION",
+    "claimed_reason": "Incorrectly deduplicated against previous missile tracking sensors deal.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of defence"
+    ],
+    "routed_beats": [
+      "defence"
+    ],
+    "expected_beat": "defence",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-099",
+    "title": "Union Finance Ministry allocates Rs 3,000 crore for urban water supply projects under AMRUT scheme in southern states",
+    "canonical_entity": "Finance Ministry",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as routine local water supply projects AMRUT grant.",
+    "entities_matched_by_real_pipeline": [
+      "finance ministry"
+    ],
+    "routed_beats": [
+      "economy"
+    ],
+    "expected_beat": "economy",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-100",
+    "title": "Supreme Court sets schedule for hearings on constitutional validity of anti-defection laws of political parties",
+    "canonical_entity": "Supreme Court",
+    "claimed_category": "DEDUPLICATION",
+    "claimed_reason": "Incorrectly deduplicated against previous anti-defection laws hearings.",
+    "entities_matched_by_real_pipeline": [
+      "supreme court"
+    ],
+    "routed_beats": [
+      "judiciary"
+    ],
+    "expected_beat": "judiciary",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-101",
+    "title": "SEBI releases consultation paper on insider trading regulations changes for institutional investors",
+    "canonical_entity": "SEBI",
+    "claimed_category": "EVENT_MATCH_FAILURE",
+    "claimed_reason": "Model classification failure on insider trading rules for institutions.",
+    "entities_matched_by_real_pipeline": [
+      "sebi"
+    ],
+    "routed_beats": [
+      "business"
+    ],
+    "expected_beat": "business",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-102",
+    "title": "ISRO signs agreement with domestic space startup for launch support services at Sriharikota",
+    "canonical_entity": "ISRO",
+    "claimed_category": "FILTERING",
+    "claimed_reason": "Filtered as routine commercial startup launch agreement at Sriharikota.",
+    "entities_matched_by_real_pipeline": [
+      "isro"
+    ],
+    "routed_beats": [
+      "science"
+    ],
+    "expected_beat": "science",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  },
+  {
+    "event_id": "pib-v11-103",
+    "title": "Ministry of Defence finalizes contract for army logistics vehicle spares with local auto major at Jamshedpur",
+    "canonical_entity": "Defence Ministry",
+    "claimed_category": "DEDUPLICATION",
+    "claimed_reason": "Incorrectly deduplicated against Jamshedpur spares contract.",
+    "entities_matched_by_real_pipeline": [
+      "ministry of defence",
+      "army"
+    ],
+    "routed_beats": [
+      "defence"
+    ],
+    "expected_beat": "defence",
+    "entity_recognized": true,
+    "would_route_to_expected_beat": true
+  }
+]

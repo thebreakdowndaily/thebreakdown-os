@@ -1,0 +1,104 @@
+{
+  "verdict": "INCONCLUSIVE",
+  "manifest": {
+    "benchmark_window_start": "2026-07-15T00:00:00+05:30",
+    "benchmark_window_end": "2026-08-14T23:59:59+05:30",
+    "source_universes": [
+      "PIB",
+      "RBI",
+      "SEBI",
+      "ECI",
+      "Supreme Court",
+      "TRAI",
+      "ISRO",
+      "Defence",
+      "Finance"
+    ],
+    "monitored_entities": [
+      "RBI",
+      "SEBI",
+      "Election Commission",
+      "Supreme Court",
+      "TRAI",
+      "ISRO",
+      "Defence Ministry",
+      "Finance Ministry"
+    ],
+    "eligibility_rule": "All eligible announcements matching monitored entities during the window",
+    "collection_commit": "audit-fixes-20260812",
+    "collection_timestamp": "2026-08-15T11:00:00+05:30",
+    "eligible_total": 105,
+    "observable_total": 100,
+    "not_observable_total": 5
+  },
+  "metrics": {
+    "recall": 0.74,
+    "false_positive_rate": 0,
+    "valid_comparator_rate": 0.7027027027027027,
+    "unknown_rate": 0.34,
+    "verified_lead_rate": 1,
+    "velt_median_ms": 2400000,
+    "velt_p90_ms": 2580000,
+    "match_audit_precision": 1,
+    "weeks_positive_median": 5,
+    "weeks_negative_median": 0,
+    "weeks_insufficient_sample": 0
+  },
+  "weekly": [
+    {
+      "week": 1,
+      "eligible": 7,
+      "observable": 7,
+      "detected": 7,
+      "missed": 0,
+      "recall": 1,
+      "positive_lead_rate": 1,
+      "median_velt_ms": 2520000,
+      "p90_velt_ms": 2580000
+    },
+    {
+      "week": 2,
+      "eligible": 7,
+      "observable": 7,
+      "detected": 7,
+      "missed": 0,
+      "recall": 1,
+      "positive_lead_rate": 1,
+      "median_velt_ms": 2400000,
+      "p90_velt_ms": 2430000
+    },
+    {
+      "week": 3,
+      "eligible": 12,
+      "observable": 8,
+      "detected": 8,
+      "missed": 0,
+      "recall": 1,
+      "positive_lead_rate": 1,
+      "median_velt_ms": 2490000,
+      "p90_velt_ms": 3018000
+    },
+    {
+      "week": 4,
+      "eligible": 8,
+      "observable": 7,
+      "detected": 7,
+      "missed": 0,
+      "recall": 1,
+      "positive_lead_rate": 1,
+      "median_velt_ms": 2220000,
+      "p90_velt_ms": 2676000
+    },
+    {
+      "week": 5,
+      "eligible": 71,
+      "observable": 71,
+      "detected": 45,
+      "missed": 26,
+      "recall": 0.6338028169014085,
+      "positive_lead_rate": 1,
+      "median_velt_ms": 2340000,
+      "p90_velt_ms": 2580000
+    }
+  ]
+}

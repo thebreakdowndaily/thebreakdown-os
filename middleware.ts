@@ -51,6 +51,22 @@ export async function middleware(request: NextRequest) {
 
   // 2. API Authentication & Rate Limiting
   if (pathname.startsWith('/api/')) {
+    // Vercel Cron Ingestion Security Gate (Operating Standard §21)
+    if (pathname === '/api/v2/newsroom/observations/pull') {
+      const isCron = request.headers.get('x-vercel-cron') === '1';
+      const authHeader = request.headers.get('authorization');
+      const cronSecret = process.env.CRON_SECRET;
+
+      if (isCron && cronSecret && authHeader === `Bearer ${cronSecret}`) {
+        return NextResponse.next();
+      }
+
+      return NextResponse.json(
+        { error: 'Unauthorized', message: 'Invalid or missing cron credentials' },
+        { status: 401, headers: SECURITY_HEADERS as HeadersInit }
+      );
+    }
+
     if (PUBLIC_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
       return NextResponse.next();
     }
