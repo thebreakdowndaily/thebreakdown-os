@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { captureEvent } from '@/lib/analytics/capture';
 import type { VisibleStoryExperience } from '@/lib/story/reading-mode-policy';
 import type { Chapter } from '@/types/canonical';
 import type { ChapterGraph } from '@/lib/knowledge/knowledge-graph';
@@ -12,6 +13,18 @@ import { BlockRenderer } from '@/components/story/blocks/registry';
 import NextExploration from '@/components/story/NextExploration';
 import ExploreConnections from '@/components/story/ExploreConnections';
 import { StoryProgress, StoryProgressBar } from '@/components/rxs/StoryProgress';
+import { ReadingRegion } from '@/components/rxs/regions/ReadingRegion';
+import { LearningFooter } from '@/components/rxs/LearningFooter';
+import { extractTocItems } from '@/lib/toc';
+import { useReadingDepth, useSetReadingDepth } from '@/components/knowledge-library/reader/ReadingModeContext';
+import StoryNewsletterCTA from '@/components/retention/StoryNewsletterCTA';
+import RecentlyRead from '@/components/retention/RecentlyRead';
+import SaveStoryButton from '@/components/retention/SaveStoryButton';
+import { AdSlot } from '@/components/monetization/AdSlot';
+import { AdBlockDetector } from '@/components/monetization/AdBlockDetector';
+import { PaywallOverlay } from '@/components/monetization/PaywallOverlay';
+import { CitationExporter } from '@/components/intel/CitationExporter';
+import { SocialSharePanel } from '@/components/retention/SocialSharePanel';
 
 interface StoryShellProps {
   visibleExperience?: VisibleStoryExperience;
@@ -27,13 +40,54 @@ interface StoryShellProps {
   graph?: ChapterGraph;
   nextChapter?: { title: string; slug: string } | null;
   relatedInvestigation?: { title: string; slug: string } | null;
+  // TASK-08 EXP-05: contextual internal links (topics/entities that resolve)
+  relatedTopicLinks?: { slug: string; name: string }[];
+  relatedEntityLinks?: { slug: string; name: string }[];
 }
 
 export function StoryShell({
   visibleExperience,
   chapter,
+  collectionSlug,
+  volumeSlug,
+  enrichedClaims,
+  nextChapter,
+  relatedInvestigation,
+  relatedTopicLinks,
+  relatedEntityLinks,
 }: StoryShellProps) {
   const [readingProgress, setReadingProgress] = useState(0);
+  const [isSupporter, setIsSupporter] = useState(false);
+  const openedRef = useRef(false);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    setIsSupporter(localStorage.getItem('tb_supporter') === 'true');
+  }, []);
+
+  const contentId = visibleExperience?.storySlug || chapter?.slug || '';
+  const contentType = visibleExperience ? 'story' : chapter ? 'chapter' : '';
+
+  // TASK-07: story_opened fires once per view; story_completed fires once
+  // when the reader reaches 90% scroll depth (reading intent marker).
+  useEffect(() => {
+    if (!contentId) return;
+    if (!openedRef.current) {
+      openedRef.current = true;
+      captureEvent('story_opened', {
+        content_id: contentId,
+        content_type: contentType,
+      });
+    }
+    if (!completedRef.current && readingProgress >= 90) {
+      completedRef.current = true;
+      captureEvent('story_completed', {
+        content_id: contentId,
+        content_type: contentType,
+        scroll_depth_pct: Math.round(readingProgress),
+      });
+    }
+  }, [contentId, contentType, readingProgress]);
 
   useEffect(() => {
     let rafId: number;
@@ -103,6 +157,7 @@ export function StoryShell({
         <StoryProgress />
 
         <main id="main-content" tabIndex={-1} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 focus:outline-none">
+          <AdBlockDetector />
           <div className="flex gap-12 items-start">
             {/* Desktop Orientation Rail */}
             <StoryOrientationRail
@@ -212,6 +267,12 @@ export function StoryShell({
                 <>
                   {/* Short Version Orientation */}
                   <StoryOrientation orientation={orientation} />
+                  <SocialSharePanel storySlug={storySlug} storyTitle={hero.headline} />
+                  <SaveStoryButton slug={storySlug} headline={hero.headline} />
+
+                  <AdSlot placement="leaderboard" storySlug={storySlug} />
+
+                  <CitationExporter storySlug={storySlug} storyTitle={hero.headline} />
 
                   {/* Main Chapters */}
                   <div className="space-y-12 my-8 prose prose-invert max-w-none">
@@ -231,6 +292,8 @@ export function StoryShell({
                       </section>
                     ))}
                   </div>
+
+                  <AdSlot placement="mpu" storySlug={storySlug} />
 
                   {/* Timeline */}
                   {showTimeline && timeline && timeline.events.length > 0 && (
@@ -275,7 +338,25 @@ export function StoryShell({
                   )}
 
                   {/* Research Appendix */}
-                  {showResearchAppendix && <StoryResearchAppendix research={research} />}
+                  {showResearchAppendix && (
+                    mode === 'deep' && !isSupporter ? (
+                      <div className="relative my-12">
+                        <div className="blur-sm opacity-40 select-none pointer-events-none p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80">
+                          <h3 className="text-2xl font-bold text-white mb-6">Research Appendix & Citations</h3>
+                          {research?.claims && research.claims.length > 0 && (
+                            <div className="p-4 bg-neutral-950/60 rounded-xl border border-neutral-800/60 mb-4">
+                              <p className="font-medium text-white">{research.claims[0].statement}</p>
+                            </div>
+                          )}
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center top-12 z-10 h-full">
+                          <PaywallOverlay placement="story_appendix" storySlug={storySlug} />
+                        </div>
+                      </div>
+                    ) : (
+                      <StoryResearchAppendix research={research} />
+                    )
+                  )}
 
                   {/* Continue Exploring */}
                   <div id="continue-exploring" className="my-12 pt-8 border-t border-neutral-800">
@@ -310,6 +391,11 @@ export function StoryShell({
                         }))}
                       />
                     </div>
+                  
+                  <StoryNewsletterCTA />
+                  <RecentlyRead currentSlug={storySlug} />
+
+                  <AdSlot placement="leaderboard" storySlug={storySlug} />
 
                   {/* Cross-Story Intelligence Connections Drawer */}
                   {crossStoryRecommendations && crossStoryRecommendations.length > 0 && (
@@ -318,6 +404,43 @@ export function StoryShell({
                       readingMode={mode}
                       storySlug={storySlug}
                     />
+                  )}
+
+                  {/* TASK-08 EXP-05: contextual internal links to topics & entities that exist */}
+                  {((relatedTopicLinks?.length ?? 0) > 0 || (relatedEntityLinks?.length ?? 0) > 0) && (
+                    <section
+                      aria-label="Related topics and entities"
+                      className="my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-4"
+                    >
+                      <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        Related Topics &amp; Entities
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {(relatedTopicLinks ?? []).map((t) => (
+                          <a
+                            key={`topic-${t.slug}`}
+                            href={`/topic/${t.slug}`}
+                            data-analytics="topic"
+                            data-topic-id={t.slug}
+                            className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-emerald-400 bg-neutral-950/60 border border-neutral-700/60 hover:border-emerald-500/50 hover:text-emerald-300 transition-colors"
+                          >
+                            {t.name}
+                          </a>
+                        ))}
+                        {(relatedEntityLinks ?? []).map((e) => (
+                          <a
+                            key={`entity-${e.slug}`}
+                            href={`/entity/${e.slug}`}
+                            data-analytics="entity"
+                            data-entity-id={e.slug}
+                            className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-sky-400 bg-neutral-950/60 border border-neutral-700/60 hover:border-sky-500/50 hover:text-sky-300 transition-colors"
+                          >
+                            {e.name}
+                          </a>
+                        ))}
+                      </div>
+                    </section>
                   )}
                 </>
               )}
@@ -328,15 +451,152 @@ export function StoryShell({
     );
   }
 
-  // Fallback for legacy chapter call without visibleExperience
+  // Canonical chapter rendering pipeline
   if (chapter) {
     return (
-      <div className="p-8 text-white max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">{chapter.title}</h1>
-        <p className="text-neutral-300">{chapter.summary}</p>
-      </div>
+      <ChapterShellView
+        chapter={chapter}
+        collectionSlug={collectionSlug}
+        volumeSlug={volumeSlug}
+        enrichedClaims={enrichedClaims}
+        nextChapter={nextChapter}
+        relatedInvestigation={relatedInvestigation}
+        readingProgress={readingProgress}
+      />
     );
   }
 
   return null;
+}
+
+function ChapterShellView({
+  chapter,
+  collectionSlug,
+  volumeSlug,
+  enrichedClaims,
+  nextChapter,
+  relatedInvestigation,
+  readingProgress,
+}: {
+  chapter: Chapter;
+  collectionSlug?: string;
+  volumeSlug?: string;
+  enrichedClaims?: any[];
+  nextChapter?: { title: string; slug: string } | null;
+  relatedInvestigation?: { title: string; slug: string } | null;
+  readingProgress: number;
+}) {
+  const depth = useReadingDepth();
+  const setDepth = useSetReadingDepth();
+
+  const toc = extractTocItems(chapter.content || []).map((t) => ({
+    id: t.id,
+    label: t.text,
+    level: t.level,
+  }));
+
+  const readingTimeMinutes =
+    chapter.readingTime?.[depth] ||
+    chapter.readingTime?.scholar ||
+    chapter.readingTime?.explorer ||
+    Math.max(1, Math.round((chapter.metadata?.wordCount || 1000) / 200));
+
+  const hasResearchAppendix = (chapter.content || []).some(
+    (b) => b.id.includes('research') || b.type === 'historiography' || b.type === 'primary-source' || b.type === 'document'
+  );
+
+  return (
+    <div className="min-h-screen bg-surface-canvas text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
+      {/* Sticky Reading Progress Bar */}
+      <div className="sticky top-[4rem] z-[var(--z-sticky)] w-full">
+        <StoryProgressBar progress={readingProgress} />
+      </div>
+
+      <StoryProgress />
+
+      <main id="main-content" tabIndex={-1} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 focus:outline-none">
+        <div className="flex gap-12 items-start">
+          {/* Desktop Orientation Rail with TOC derived from chapter heading blocks */}
+          <StoryOrientationRail
+            toc={toc}
+            readingTimeMinutes={readingTimeMinutes}
+            updatedAt={chapter.updatedAt || chapter.createdAt || new Date().toISOString()}
+            hasResearchAppendix={hasResearchAppendix}
+          />
+
+          {/* Main Chapter Content Column */}
+          <article className="flex-1 max-w-3xl min-w-0 mx-auto">
+            <header className="mb-8 border-b border-neutral-800/80 pb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#C9A84C]">
+                  Chapter {chapter.order}
+                </span>
+                <span className="text-neutral-600">·</span>
+                <span className="text-xs font-mono text-neutral-400">
+                  {readingTimeMinutes} min read
+                </span>
+                {chapter.status && (
+                  <>
+                    <span className="text-neutral-600">·</span>
+                    <span className="text-xs font-mono text-emerald-400 uppercase">
+                      [{chapter.status}]
+                    </span>
+                  </>
+                )}
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 font-playfair">
+                {chapter.title}
+              </h1>
+
+              {chapter.summary && (
+                <p className="text-lg text-neutral-300 leading-relaxed font-serif mb-6">
+                  {chapter.summary}
+                </p>
+              )}
+
+              {/* Mode Switcher for Chapter: Explorer / Scholar / Researcher */}
+              <nav
+                aria-label="Reading depth"
+                className="my-6 flex items-center gap-2 p-1 rounded-xl bg-neutral-900/80 border border-neutral-800 w-fit max-w-full overflow-x-auto"
+              >
+                {([
+                  { depthValue: 'explorer' as const, label: 'Explorer' },
+                  { depthValue: 'scholar' as const, label: 'Scholar' },
+                  { depthValue: 'researcher' as const, label: 'Researcher' },
+                ]).map(({ depthValue, label }) => (
+                  <button
+                    key={depthValue}
+                    type="button"
+                    onClick={() => setDepth(depthValue)}
+                    aria-current={depth === depthValue ? 'page' : undefined}
+                    className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-canvas)] px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors ${
+                      depth === depthValue ? 'bg-[#C9A84C] text-neutral-950 font-bold' : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </nav>
+            </header>
+
+            {/* Central Reading Viewport */}
+            <ReadingRegion
+              chapter={chapter}
+              enrichedClaims={enrichedClaims}
+            />
+
+            {/* Learning Footer */}
+            <LearningFooter
+              chapter={chapter}
+              collectionSlug={collectionSlug || chapter.collectionSlug || ''}
+              volumeSlug={volumeSlug || chapter.volumeSlug || ''}
+              nextChapter={nextChapter}
+              relatedInvestigation={relatedInvestigation}
+            />
+          </article>
+        </div>
+      </main>
+    </div>
+  );
 }

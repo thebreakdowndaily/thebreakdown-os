@@ -1,0 +1,6 @@
+dataset_id,name,premium,description
+sino-indian-border,"Sino-Indian Defense Forecast 2026",true,"Strategic capability forecasting, border deployment models, and logistics infrastructure metrics."
+pli-semiconductor,"PLI Semiconductor Subsidy Ledger",true,"Entity-by-entity fiscal disbursements, fab construction markers, and component yield statistics."
+mgnrega,"MGNREGA Budget Allocation",false,"Year-wise central budget allocation to MGNREGA from 2006 to 2026"
+gdp-growth,"GDP Growth Rate",false,"India's annual GDP growth rate from 2015 to 2026"
+upi-transactions,"UPI Transaction Volume",false,"Annual UPI transaction value in India"

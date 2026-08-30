@@ -53,7 +53,7 @@ export default function LatestStories({ stories }: LatestStoriesProps) {
                       {story.qualityScore?.score && (
                         <>
                           <span>•</span>
-                          <span className="text-emerald-500">QS {story.qualityScore.score}</span>
+                          <span className="text-emerald-500">CS {story.qualityScore.score}</span>
                         </>
                       )}
                     </div>

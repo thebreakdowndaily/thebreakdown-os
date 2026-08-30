@@ -21,6 +21,9 @@ const PrimarySources: React.FC<PrimarySourcesProps> = ({ sources }) => (
             href={src.url}
             target="_blank"
             rel="noopener noreferrer"
+            data-analytics="source"
+            data-source-title={src.name}
+            data-source-domain=""
             className="inline-flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors"
           >
             Open Source &rarr;

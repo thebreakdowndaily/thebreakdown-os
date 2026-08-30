@@ -32,7 +32,7 @@ if (!fs.existsSync(BENCHMARK_DOCS_DIR)) {
 
 // ── 1. Mock Search Adapter Implementation ───────────────────────────────────
 
-class MockSearchAdapter implements ResearchSourceAdapter {
+export class MockSearchAdapter implements ResearchSourceAdapter {
   id = 'mock-search';
   capabilities = ['KEYWORDS', 'DOMAINS'] as any;
   simulatedNow = BENCHMARK_SNAPSHOT_DATE;
@@ -56,6 +56,9 @@ class MockSearchAdapter implements ResearchSourceAdapter {
         sourceClass: d.sourceClass,
         adapter: this.id,
         relevanceScore: 0.9,
+        rankingScore: 0.9,
+        discoveryPath: query.text,
+        rankingComponents: { queryRelevance: 0.6, primarySourceBonus: 0.3 },
       })),
       errors: [],
     };
@@ -76,7 +79,7 @@ class MockSearchAdapter implements ResearchSourceAdapter {
 
 // ── 2. Replay-Enabled Discovery Driver ───────────────────────────────────────
 
-function createReplayDriver(enabledDomains?: string[]): BenchmarkDiscoveryDriver {
+export function createReplayDriver(enabledDomains?: string[]): BenchmarkDiscoveryDriver {
   const adapter = new MockSearchAdapter(enabledDomains);
 
   return async (topic, projectId, core, options) => {
@@ -101,6 +104,8 @@ function createReplayDriver(enabledDomains?: string[]): BenchmarkDiscoveryDriver
         maxSources: options.maxSources,
         maxDocuments: options.maxDocuments,
         maxDiscoveryResultsPerQuery: options.maxDiscoveryResultsPerQuery,
+        primarySourceDiscovery: options.primarySourceDiscovery,
+        sourceContext: options.sourceContext,
         adapters: [adapter],
         now: () => new Date(timeStep),
       });
@@ -192,7 +197,317 @@ function generateMarkdownReport(report: any, isBaseline: boolean): string {
   return md;
 }
 
-// ── 4. Jest Test Suite ───────────────────────────────────────────────────────
+// ── 5. RIE v1.2 — Primary-Source Discovery Evaluation ────────────────────────
+//
+// Governing document: docs/research/benchmarks/RIE_V1_2_FAILURE_ANALYSIS.md
+//
+// A/B/C design:
+//   A = v1.1 configuration exactly (v1.1 surface, feature off, maxQueries 10)
+//       → must reproduce the frozen v1.1 numbers (64.7% / 53.3%).
+//   B = v1.2 candidate (registry-derived surface, feature on, maxQueries 48).
+//   C = v1.1 surface + feature on (isolates the query-family contribution from
+//       the surface contribution).
+
+function generateV12MarkdownReport(reportA: any, reportB: any, reportC: any): string {
+  let md = `# RIE v1.2 — Primary-Source Discovery Benchmark\n\n`;
+  md += `**Timestamp:** ${reportB.createdAt}\n`;
+  md += `**Corpus Version:** ${reportB.corpusVersion}\n`;
+  md += `**Baseline Tag:** ${reportA.benchmarkTag}\n`;
+  md += `**Candidate Tag:** ${reportB.benchmarkTag}\n`;
+  md += `**Registry Sources (eligible):** ${reportB.engine.registryApprovedSources}\n\n`;
+  md += `## A/B/C Runs\n\n`;
+  md += `| Run | Surface | Feature | maxQueries | Tag |\n`;
+  md += `|-----|---------|---------|-----------|-----|\n`;
+  md += `| A (v1.1) | v1.1 expanded domains | off | 10 | \`${reportA.benchmarkTag}\` |\n`;
+  md += `| B (v1.2) | registry-derived surface | on | 48 | \`${reportB.benchmarkTag}\` |\n`;
+  md += `| C (isolation) | v1.1 expanded domains | on | 48 | \`${reportC.benchmarkTag}\` |\n\n`;
+  md += `## Aggregate Performance\n\n`;
+  md += `| Metric | A (v1.1) | B (v1.2) | C (query-only) |\n`;
+  md += `|--------|----------|----------|----------------|\n`;
+  const row = (label: string, fmt: (r: any) => string) =>
+    `| ${label} | ${fmt(reportA)} | ${fmt(reportB)} | ${fmt(reportC)} |\n`;
+  const pct = (r: any, k: string) => `${(r.aggregates[k] * 100).toFixed(1)}%`;
+  md += row('Overall Source Recall', (r) => pct(r, 'sourceRecall'));
+  md += row('Primary Source Recall', (r) => pct(r, 'primaryRecall'));
+  md += row('Independent Publisher Recall', (r) => pct(r, 'independentRecall'));
+  md += row('Regional Source Recall', (r) => pct(r, 'regionalRecall'));
+  md += row('Claim Extraction Recall', (r) => pct(r, 'claimRecall'));
+  md += row('Retrieval Precision', (r) => pct(r, 'precision'));
+  md += row('Independent Publisher Ratio', (r) => pct(r, 'independentRatio'));
+  md += row('Median TTD (hours)', (r) => String(r.aggregates.ttdMedianHours ?? 'N/A'));
+  md += `\n## Miss Diagnostics (B, Source Recall failures)\n\n`;
+  md += `| Topic ID | Gold Source URL | Classification |\n`;
+  md += `|----------|-----------------|----------------|\n`;
+  for (const miss of reportB.misses) {
+    md += `| \`${miss.topicId}\` | \`${miss.goldUrl}\` | ${miss.classification} |\n`;
+  }
+  md += `\n`;
+  return md;
+}
+
+// ── RIE v1.2 Phase 2 — Regional Baseline Diagnostic ────────────────────────
+
+describe('RIE v1.2 Phase 2 — Regional Baseline Diagnostic', () => {
+  const v12Registry = new ResearchSourceRegistry(RESEARCH_SOURCE_DEFINITIONS);
+  const v12Domains = v12Registry.getEligible().map((d) => d.canonicalDomain);
+  const sourceContext = v12Registry.getEligible().map((d) => ({
+    domain: d.canonicalDomain,
+    authorityClass: d.authorityClass,
+    documentTypes: d.documentTypes,
+    priority: d.priority,
+  }));
+
+  it('captures the full regional baseline (Phase 1 = Phase 2 start)', async () => {
+    const report = await runRecallBenchmark(BENCHMARK_GOLD_CORPUS, createReplayDriver(v12Domains), {
+      maxQueries: 48,
+      maxSources: 15,
+      maxDocuments: 15,
+      benchmarkTag: 'rie-v1.2-phase2-baseline',
+      status: 'RESULTS',
+      availableAdapters: ['rss', 'mock-search'],
+      activeFeedDomains: v12Domains,
+      primarySourceDiscovery: true,
+      sourceContext,
+      notes: ['Phase 2 regional baseline: v1.2 Phase 1 configuration (starting point for regional improvements).'],
+    });
+
+    console.log('--- RIE v1.2 Phase 2 REGIONAL BASELINE ---');
+    console.log(`Overall Source Recall: ${(report.aggregates.sourceRecall * 100).toFixed(1)}%`);
+    console.log(`Primary Source Recall: ${(report.aggregates.primaryRecall * 100).toFixed(1)}%`);
+    console.log(`Regional Source Recall: ${(report.aggregates.regionalRecall * 100).toFixed(1)}%`);
+    console.log(`Regional Source Discovery Recall: ${(report.aggregates.regionalSourceDiscoveryRecall * 100).toFixed(1)}%`);
+    console.log(`Regional Entity Recall: ${(report.aggregates.regionalEntityRecall * 100).toFixed(1)}%`);
+    console.log(`Translation Preservation Rate: ${(report.aggregates.translationPreservationRate * 100).toFixed(1)}%`);
+    console.log(`Claim Extraction Recall: ${(report.aggregates.claimRecall * 100).toFixed(1)}%`);
+    console.log(`Event Extraction Recall: ${(report.aggregates.eventRecall * 100).toFixed(1)}%`);
+    console.log(`Retrieval Precision: ${(report.aggregates.precision * 100).toFixed(1)}%`);
+    console.log(`Independent Publisher Ratio: ${(report.aggregates.independentRatio * 100).toFixed(1)}%`);
+
+    // Per-topic regional detail
+    console.log('\n--- PER-TOPIC REGIONAL DETAIL ---');
+    for (const t of report.topics) {
+      const topic = BENCHMARK_GOLD_CORPUS.topics.find((x) => x.topicId === t.topicId)!;
+      const isRegionalTopic = topic.language !== 'English' || topic.geography === 'state' || topic.geography === 'local';
+      const regionalGoldCount = topic.goldSources.filter((g) => g.category === 'REGIONAL').length;
+      if (isRegionalTopic || regionalGoldCount > 0) {
+        console.log(`  ${t.topicId}: lang=${topic.language}, geo=${topic.geography}, env=${topic.sourceEnvironment}`);
+        console.log(`    regionalRecall=${(t.regionalRecall * 100).toFixed(1)}%, sourceRecall=${(t.sourceRecall * 100).toFixed(1)}%, claimRecall=${(t.claimRecall * 100).toFixed(1)}%`);
+        console.log(`    eligibleGold=${t.eligibleGold}, recalledGold=${t.recalledGold}`);
+        for (const g of topic.goldSources) {
+          const match = report.misses.find((m) => m.goldSourceId === g.sourceId);
+          const status = match ? `MISSED (${match.classification})` : 'RECALLED';
+          console.log(`      ${g.sourceId}: category=${g.category}, lang=${detectLang(g.url, g.title)}, domain=${new URL(g.url).hostname} → ${status}`);
+        }
+      }
+    }
+
+    // Regional source classification
+    console.log('\n--- REGIONAL GOLD SOURCE ANALYSIS ---');
+    const allGold = BENCHMARK_GOLD_CORPUS.topics.flatMap((t) => t.goldSources.map((g) => ({ ...g, topicId: t.topicId, topicLang: t.language, topicGeo: t.geography, topicEnv: t.sourceEnvironment })));
+    for (const g of allGold) {
+      const domain = new URL(g.url).hostname.replace(/^www\./, '');
+      console.log(`  ${g.sourceId}: cat=${g.category}, class=${g.sourceClass}, lang=${g.topicLang}, geo=${g.topicGeo}, env=${g.topicEnv}, domain=${domain}`);
+    }
+
+    // Language breakdown from mock index
+    console.log('\n--- MOCK INDEX LANGUAGE ANALYSIS ---');
+    for (const doc of BENCHMARK_MOCK_DOCUMENTS) {
+      const domain = new URL(doc.url).hostname.replace(/^www\./, '');
+      console.log(`  ${domain}: lang=${doc.language}, class=${doc.sourceClass}, title=${doc.title.slice(0, 60)}...`);
+    }
+
+    // Environmental breakdown
+    console.log('\n--- ENVIRONMENTAL BREAKDOWN ---');
+    for (const [env, data] of Object.entries(report.environmentalBreakdown)) {
+      if (data) {
+        console.log(`  ${env}: recall=${(data.recall * 100).toFixed(1)}%, eligible=${data.eligible}, recalled=${data.recalled}`);
+      }
+    }
+
+    // Language breakdown
+    console.log('\n--- LANGUAGE BREAKDOWN ---');
+    for (const [lang, data] of Object.entries(report.languageBreakdown)) {
+      if (data) {
+        console.log(`  ${lang}: recall=${(data.recall * 100).toFixed(1)}%, eligible=${data.eligible}, recalled=${data.recalled}`);
+      }
+    }
+
+    // Write baseline report
+    fs.writeFileSync(
+      path.resolve(BENCHMARK_DOCS_DIR, 'RIE_V1_2_PHASE2_BASELINE.md'),
+      generateV12Phase2BaselineReport(report)
+    );
+
+    // Store baseline for comparison (does NOT assert improvement — this IS the baseline)
+    expect(report.aggregates.sourceRecall).toBeCloseTo(1.0, 2);
+  });
+});
+
+function detectLang(url: string, title: string): string {
+  if (/[\u0D00-\u0D7F]/.test(title)) return 'ml';
+  if (/[\u0900-\u097F]/.test(title) || /[\u093E-\u094D]/.test(title)) return 'hi';
+  if (url.includes('mathrubhumi')) return 'ml';
+  if (url.includes('jagran') || url.includes('bih.nic') || url.includes('maharashtra.gov')) return 'hi';
+  return 'en';
+}
+
+function generateV12Phase2BaselineReport(report: any): string {
+  let md = `# RIE v1.2 Phase 2 — Regional Baseline\n\n`;
+  md += `**Timestamp:** ${report.createdAt}\n`;
+  md += `**Corpus Version:** ${report.corpusVersion}\n`;
+  md += `**Baseline Tag:** ${report.benchmarkTag}\n`;
+  md += `**Registry Sources (eligible):** ${report.engine.registryApprovedSources}\n\n`;
+
+  md += `## Aggregate Performance\n\n`;
+  md += `| Metric | Value |\n`;
+  md += `|--------|-------|\n`;
+  md += `| Overall Source Recall | ${(report.aggregates.sourceRecall * 100).toFixed(1)}% |\n`;
+  md += `| Primary Source Recall | ${(report.aggregates.primaryRecall * 100).toFixed(1)}% |\n`;
+  md += `| Independent Publisher Recall | ${(report.aggregates.independentRecall * 100).toFixed(1)}% |\n`;
+  md += `| Regional Source Recall | ${(report.aggregates.regionalRecall * 100).toFixed(1)}% |\n`;
+  md += `| Regional Source Discovery Recall | ${(report.aggregates.regionalSourceDiscoveryRecall * 100).toFixed(1)}% |\n`;
+  md += `| Regional Entity Recall | ${(report.aggregates.regionalEntityRecall * 100).toFixed(1)}% |\n`;
+  md += `| Translation Preservation Rate | ${(report.aggregates.translationPreservationRate * 100).toFixed(1)}% |\n`;
+  md += `| Claim Extraction Recall | ${(report.aggregates.claimRecall * 100).toFixed(1)}% |\n`;
+  md += `| Event Extraction Recall | ${(report.aggregates.eventRecall * 100).toFixed(1)}% |\n`;
+  md += `| Retrieval Precision | ${(report.aggregates.precision * 100).toFixed(1)}% |\n`;
+  md += `| Independent Publisher Ratio | ${(report.aggregates.independentRatio * 100).toFixed(1)}% |\n`;
+  md += `| Median TTD (hours) | ${report.aggregates.ttdMedianHours ?? 'N/A'} |\n\n`;
+
+  md += `## Environmental Breakdown\n\n`;
+  md += `| Environment | Recall | Eligible | Recalled |\n`;
+  md += `|-------------|--------|----------|----------|\n`;
+  for (const [env, data] of Object.entries(report.environmentalBreakdown)) {
+    if (data) md += `| ${env} | ${(data.recall * 100).toFixed(1)}% | ${data.eligible} | ${data.recalled} |\n`;
+  }
+  md += `\n`;
+
+  md += `## Language Breakdown\n\n`;
+  md += `| Language | Recall | Eligible | Recalled |\n`;
+  md += `|----------|--------|----------|----------|\n`;
+  for (const [lang, data] of Object.entries(report.languageBreakdown)) {
+    if (data) md += `| ${lang} | ${(data.recall * 100).toFixed(1)}% | ${data.eligible} | ${data.recalled} |\n`;
+  }
+  md += `\n`;
+
+  md += `## Gold Source Inventory\n\n`;
+  md += `| Source ID | Topic | Category | Class | Language | Geography | Environment | Domain |\n`;
+  md += `|-----------|-------|----------|-------|----------|-----------|-------------|--------|\n`;
+  for (const topic of BENCHMARK_GOLD_CORPUS.topics) {
+    for (const g of topic.goldSources) {
+      const domain = new URL(g.url).hostname.replace(/^www\./, '');
+      md += `| \`${g.sourceId}\` | \`${topic.topicId}\` | ${g.category} | ${g.sourceClass} | ${topic.language} | ${topic.geography} | ${topic.sourceEnvironment} | \`${domain}\` |\n`;
+    }
+  }
+  md += `\n`;
+
+  md += `## Mock Index Inventory\n\n`;
+  md += `| Domain | Language | Class | Title |\n`;
+  md += `|--------|----------|-------|-------|\n`;
+  for (const doc of BENCHMARK_MOCK_DOCUMENTS) {
+    const domain = new URL(doc.url).hostname.replace(/^www\./, '');
+    md += `| \`${domain}\` | ${doc.language} | ${doc.sourceClass} | ${doc.title.slice(0, 70)} |\n`;
+  }
+  md += `\n`;
+
+  md += `## Miss Diagnostics\n\n`;
+  md += `| Topic ID | Gold Source ID | Gold URL | Classification | Language | Geography |\n`;
+  md += `|----------|----------------|----------|----------------|----------|-----------|\n`;
+  for (const miss of report.misses) {
+    const topic = BENCHMARK_GOLD_CORPUS.topics.find((t) => t.topicId === miss.topicId);
+    md += `| \`${miss.topicId}\` | \`${miss.goldSourceId}\` | \`${miss.goldUrl}\` | ${miss.classification} | ${topic?.language ?? '?'} | ${topic?.geography ?? '?'} |\n`;
+  }
+  md += `\n`;
+
+  return md;
+}
+
+describe('RIE v1.2 — Primary-Source Discovery Evaluation', () => {
+  const v11Domains = [
+    'theguardian.com', 'feeds.bbci.co.uk', 'thehindu.com',
+    'pib.gov.in', 'rbi.org.in', 'sci.gov.in', 'cag.gov.in',
+    'jagran.com', 'mathrubhumi.com', 'maharashtra.gov.in', 'panchayatiraj.bih.nic.in',
+  ];
+  const v12Registry = new ResearchSourceRegistry(RESEARCH_SOURCE_DEFINITIONS);
+  const v12Domains = v12Registry.getEligible().map((d) => d.canonicalDomain);
+  const sourceContext = v12Registry.getEligible().map((d) => ({
+    domain: d.canonicalDomain,
+    authorityClass: d.authorityClass,
+    documentTypes: d.documentTypes,
+    priority: d.priority,
+  }));
+
+  it('runs A/B/C and records the primary-source discovery delta', async () => {
+    // A — v1.1 control (must reproduce the frozen baseline)
+    const reportA = await runRecallBenchmark(BENCHMARK_GOLD_CORPUS, createReplayDriver(v11Domains), {
+      maxQueries: 10,
+      maxSources: 15,
+      maxDocuments: 15,
+      benchmarkTag: 'rie-v1.1-expanded',
+      status: 'RESULTS',
+      availableAdapters: ['rss', 'mock-search'],
+      activeFeedDomains: v11Domains,
+      notes: ['RIE v1.2 A/B control: v1.1 configuration (feature disabled).'],
+    });
+
+    // B — v1.2 candidate (registry-derived surface + feature enabled)
+    const reportB = await runRecallBenchmark(BENCHMARK_GOLD_CORPUS, createReplayDriver(v12Domains), {
+      maxQueries: 48,
+      maxSources: 15,
+      maxDocuments: 15,
+      benchmarkTag: 'rie-v1.2-primary-discovery',
+      status: 'RESULTS',
+      availableAdapters: ['rss', 'mock-search'],
+      activeFeedDomains: v12Domains,
+      primarySourceDiscovery: true,
+      sourceContext,
+      notes: ['RIE v1.2 candidate: registry-derived surface + primary-source discovery enabled.'],
+    });
+
+    // C — isolation: v1.1 surface + feature enabled
+    const reportC = await runRecallBenchmark(BENCHMARK_GOLD_CORPUS, createReplayDriver(v11Domains), {
+      maxQueries: 48,
+      maxSources: 15,
+      maxDocuments: 15,
+      benchmarkTag: 'rie-v1.2-query-isolation',
+      status: 'DRAFT',
+      availableAdapters: ['rss', 'mock-search'],
+      activeFeedDomains: v11Domains,
+      primarySourceDiscovery: true,
+      sourceContext,
+      notes: ['RIE v1.2 isolation: v1.1 surface + primary-source discovery enabled (query-family contribution).'],
+    });
+
+    // Serialise the v1.2 results report
+    fs.writeFileSync(
+      path.resolve(BENCHMARK_DOCS_DIR, 'RIE_V1_2_RESULTS.md'),
+      generateV12MarkdownReport(reportA, reportB, reportC)
+    );
+
+    console.log('--- RIE v1.2 BENCHMARK DELTA ---');
+    console.log(`Source Recall: ${(reportA.aggregates.sourceRecall * 100).toFixed(1)}% -> ${(reportB.aggregates.sourceRecall * 100).toFixed(1)}%`);
+    console.log(`Primary Source Recall: ${(reportA.aggregates.primaryRecall * 100).toFixed(1)}% -> ${(reportB.aggregates.primaryRecall * 100).toFixed(1)}%`);
+    console.log(`Query-only Primary Source Recall (C): ${(reportC.aggregates.primaryRecall * 100).toFixed(1)}%`);
+    console.log(`Precision: ${(reportA.aggregates.precision * 100).toFixed(1)}% -> ${(reportB.aggregates.precision * 100).toFixed(1)}%`);
+    console.log(`Independent Publisher Ratio: ${(reportA.aggregates.independentRatio * 100).toFixed(1)}% -> ${(reportB.aggregates.independentRatio * 100).toFixed(1)}%`);
+
+    // A reproduces the frozen v1.1 baseline.
+    expect(reportA.aggregates.sourceRecall).toBeCloseTo(0.647, 2);
+    expect(reportA.aggregates.primaryRecall).toBeCloseTo(0.533, 2);
+
+    // B improves the target metric without regression.
+    expect(reportB.aggregates.primaryRecall).toBeGreaterThan(reportA.aggregates.primaryRecall);
+    expect(reportB.aggregates.sourceRecall).toBeGreaterThan(reportA.aggregates.sourceRecall);
+    expect(reportB.aggregates.precision).toBeGreaterThanOrEqual(reportA.aggregates.precision - 0.01);
+    expect(reportB.aggregates.independentRatio).toBeGreaterThanOrEqual(reportA.aggregates.independentRatio - 0.01);
+
+    // The candidate leaves no gold source unrecalled that the control recalled.
+    const missedB = new Set(reportB.misses.map((m: any) => `${m.topicId}:${m.goldSourceId}`));
+    for (const miss of reportA.misses) {
+      expect(missedB.has(`${miss.topicId}:${miss.goldSourceId}`)).toBe(false);
+    }
+  });
+});
 
 describe('Research Intelligence Engine (RIE) v1.1 Evaluation', () => {
   let registry: ResearchSourceRegistry;

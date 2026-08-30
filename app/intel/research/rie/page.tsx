@@ -118,9 +118,14 @@ function SourceRegistryStatus() {
 
 function healthColor(status: ResearchSourceHealthStatus | undefined): string {
   switch (status) {
-    case 'HEALTHY': return 'var(--color-brand-400)';
-    case 'DEGRADED': return 'var(--color-amber-400)';
-    case 'FAILING': return 'var(--color-error)';
+    case 'HEALTHY_WITH_ITEMS': return 'var(--color-brand-400)';
+    case 'HEALTHY_EMPTY': return 'var(--color-amber-400)';
+    case 'UNVALIDATED': return 'var(--color-amber-400)';
+    case 'UNAVAILABLE':
+    case 'INVALID_FEED':
+    case 'PARSE_ERROR':
+    case 'TIMEOUT':
+    case 'UNSUPPORTED': return 'var(--color-error)';
     default: return 'var(--color-text-muted)';
   }
 }

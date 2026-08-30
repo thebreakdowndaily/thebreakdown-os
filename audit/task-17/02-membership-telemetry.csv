@@ -1,0 +1,3 @@
+event_name,parameters
+paywall_viewed,"placement, story_slug"
+paywall_action_clicked,"placement, action_type"

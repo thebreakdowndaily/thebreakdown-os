@@ -6,7 +6,7 @@ export class EntityAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
     const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
     const storiesResult = await Promise.all(storyPromises);
-    const stories = storiesResult.filter((s): s is Story => !!s);
+    const stories = storiesResult.filter((s: Story | null | undefined): s is Story => !!s);
 
     const entityMap = new Map<string, { entity: Entity, frequency: number, maxEvidence: number }>();
 

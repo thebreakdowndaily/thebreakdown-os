@@ -22,6 +22,8 @@ export interface Database {
       edges: GraphEdgeRow;
       claims: ClaimRow;
       sources: SourceRow;
+      editorial_schedule: EditorialScheduleRow;
+      publication_gate_log: PublicationGateLogRow;
     };
   };
 }
@@ -53,6 +55,11 @@ export interface StoryRow {
     notes: string | null;
     version: number;
     published_at: string | null;
+    scheduled_at: string | null;
+    scheduled_by: string | null;
+    block_reason: string | null;
+    blocked_at: string | null;
+    fallback_story_id: string | null;
     created_at: string;
     updated_at: string;
     updated_by: string | null;
@@ -83,6 +90,11 @@ export interface StoryRow {
     notes?: string | null;
     version?: number;
     published_at?: string | null;
+    scheduled_at?: string | null;
+    scheduled_by?: string | null;
+    block_reason?: string | null;
+    blocked_at?: string | null;
+    fallback_story_id?: string | null;
     created_at?: string;
     updated_at?: string;
     updated_by?: string | null;
@@ -113,6 +125,11 @@ export interface StoryRow {
     notes?: string | null;
     version?: number;
     published_at?: string | null;
+    scheduled_at?: string | null;
+    scheduled_by?: string | null;
+    block_reason?: string | null;
+    blocked_at?: string | null;
+    fallback_story_id?: string | null;
     created_at?: string;
     updated_at?: string;
     updated_by?: string | null;
@@ -830,6 +847,96 @@ export interface IndexEntryRow {
     tags?: string[] | null;
     score?: number | null;
     updated_at?: string;
+  };
+}
+
+export interface EditorialScheduleRow {
+  Row: {
+    id: string;
+    story_id: string;
+    slot_date: string;
+    slot_position: number;
+    priority: number;
+    category: string;
+    rationale: string | null;
+    notes: string | null;
+    status: string;
+    validated_at: string | null;
+    published_at: string | null;
+    blocked_at: string | null;
+    block_reason: string | null;
+    fallback_schedule_id: string | null;
+    created_at: string;
+    updated_at: string;
+  };
+  Insert: {
+    id?: string;
+    story_id: string;
+    slot_date: string;
+    slot_position?: number;
+    priority?: number;
+    category?: string;
+    rationale?: string | null;
+    notes?: string | null;
+    status?: string;
+    validated_at?: string | null;
+    published_at?: string | null;
+    blocked_at?: string | null;
+    block_reason?: string | null;
+    fallback_schedule_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+  };
+  Update: {
+    id?: string;
+    story_id?: string;
+    slot_date?: string;
+    slot_position?: number;
+    priority?: number;
+    category?: string;
+    rationale?: string | null;
+    notes?: string | null;
+    status?: string;
+    validated_at?: string | null;
+    published_at?: string | null;
+    blocked_at?: string | null;
+    block_reason?: string | null;
+    fallback_schedule_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+  };
+}
+
+export interface PublicationGateLogRow {
+  Row: {
+    id: string;
+    story_id: string;
+    schedule_id: string | null;
+    gate_result: string;
+    checks: unknown;
+    checked_at: string;
+    published_at: string | null;
+    triggered_by: string;
+  };
+  Insert: {
+    id?: string;
+    story_id: string;
+    schedule_id?: string | null;
+    gate_result: string;
+    checks?: unknown;
+    checked_at?: string;
+    published_at?: string | null;
+    triggered_by?: string;
+  };
+  Update: {
+    id?: string;
+    story_id?: string;
+    schedule_id?: string | null;
+    gate_result?: string;
+    checks?: unknown;
+    checked_at?: string;
+    published_at?: string | null;
+    triggered_by?: string;
   };
 }
 

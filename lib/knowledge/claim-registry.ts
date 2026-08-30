@@ -2777,6 +2777,44 @@ export function seedClaims(): void {
       updatedAt: "2026-07-23T18:01:54.500Z",
       lastVerifiedAt: "2026-07-23T18:01:54.500Z",
     },
+    {
+      id: "claim.upi.upi123pay-limit",
+      statement: "The per-transaction limit for UPI123Pay was raised from ₹5,000 to ₹10,000 by the Reserve Bank of India (RBI) in October 2024 to enhance feature phone digital adoption.",
+      confidence: 'established',
+      evidence: [
+        { sourceId: "src-rbi-sdrp-oct-2024", relevance: 'direct', excerpt: "transaction limit for UPI123Pay was raised from ₹5,000 to ₹10,000" },
+      ],
+      counterArguments: [],
+      sourceIds: ["src-rbi-sdrp-oct-2024", "src-npci-circular-209"],
+      documentIds: [],
+      entityIds: ["rbi", "npci"],
+      conceptIds: [],
+      appearsIn: [
+        { contentType: 'story', contentId: "digital-payments-boom", contentTitle: "digital-payments-boom" },
+      ],
+      createdAt: "2026-08-30T00:00:00Z",
+      updatedAt: "2026-08-30T00:00:00Z",
+      lastVerifiedAt: "2026-08-30T00:00:00Z",
+    },
+    {
+      id: "claim.climate.cop29-ncqg-finance",
+      statement: "At COP29 in Baku (November 2024), parties adopted the New Collective Quantified Goal (NCQG) setting a target of at least US$300 billion per year in climate finance from developed countries by 2035, and separately calling for a scale-up to at least US$1.3 trillion per year.",
+      confidence: 'established',
+      evidence: [
+        { sourceId: "src-unfccc-cop29-decision-1-cma-6", relevance: 'direct', excerpt: "sets a target of at least US$ 300 billion per year by 2035" },
+      ],
+      counterArguments: [],
+      sourceIds: ["src-unfccc-cop29-decision-1-cma-6"],
+      documentIds: [],
+      entityIds: ["un"],
+      conceptIds: [],
+      appearsIn: [
+        { contentType: 'story', contentId: "climate-finance", contentTitle: "climate-finance" },
+      ],
+      createdAt: "2026-08-30T00:00:00Z",
+      updatedAt: "2026-08-30T00:00:00Z",
+      lastVerifiedAt: "2026-08-30T00:00:00Z",
+    },
   ];
 
   for (const c of seed) claims.set(c.id, c);

@@ -163,6 +163,16 @@ export interface Story {
   costValue?: string;
   versionHistory?: Array<{ date: string; description: string }>;
   freshness?: FreshnessMetadata;
+  /** Scheduled publication timestamp — NEVER causes publication alone. Requires gate pass. */
+  scheduledAt?: string;
+  /** Who scheduled this story */
+  scheduledBy?: string;
+  /** Reason the story is blocked from publication */
+  blockReason?: string;
+  /** When the story was blocked */
+  blockedAt?: string;
+  /** Fallback story if this one cannot be published */
+  fallbackStoryId?: string;
   confidenceBreakdown?: {
     overallScore: number;
     sourceQuality: number;
@@ -2147,3 +2157,4 @@ export interface ExplainerCard {
   steps: Array<{ number: number; title: string; description: string }>;
   showConnector?: boolean;
 }
+export type { Citation } from './citation';

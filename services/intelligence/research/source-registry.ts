@@ -175,11 +175,16 @@ export class ResearchSourceRegistry {
   // ── Adapter construction ───────────────────────────────────────────────────
 
   public toRssFeedConfigs(): RssFeedConfig[] {
-    return this.getEligible().map((d) => ({
+    return this.getEligible().filter((d) => {
+      const protocol = d.discoveryProtocol ?? 'RSS';
+      const validation = d.validationStatus ?? 'VALIDATED';
+      return validation === 'VALIDATED' && (protocol === 'RSS' || protocol === 'ATOM');
+    }).map((d) => ({
       url: d.url,
       publisher: d.publisher,
       sourceType: d.sourceType,
       sourceClass: d.authorityClass,
+      documentTypes: d.documentTypes,
     }));
   }
 
@@ -206,7 +211,7 @@ export class ResearchSourceRegistry {
       consecutiveFailures: 0,
       contentChanges: 0,
       parserSuccessRate: 1,
-      status: 'HEALTHY' as ResearchSourceHealthStatus,
+      status: 'UNAVAILABLE' as ResearchSourceHealthStatus,
     };
     if (outcome.ok) {
       current.lastSuccessfulFetch = nowIso();
@@ -216,7 +221,7 @@ export class ResearchSourceRegistry {
       current.averageLatencyMs = current.averageLatencyMs
         ? Math.round((current.averageLatencyMs + outcome.latencyMs) / 2)
         : outcome.latencyMs;
-      const rate = outcome.itemsParsed > 0 ? 1 : 0.5;
+      const rate = outcome.status === 'HEALTHY_WITH_ITEMS' ? 1 : 0.5;
       current.parserSuccessRate = current.parserSuccessRate
         ? Math.round((current.parserSuccessRate + rate) / 2 * 1000) / 1000
         : rate;
@@ -232,7 +237,7 @@ export class ResearchSourceRegistry {
         ? Math.round((current.parserSuccessRate + 0) / 2 * 1000) / 1000
         : 0;
     }
-    current.status = this.classifyHealth(def, current);
+    current.status = this.classifyHealth(def, current, outcome.status);
     this.health.set(def.id, current);
   }
 
@@ -245,12 +250,17 @@ export class ResearchSourceRegistry {
     return def ? this.health.get(def.id) : undefined;
   }
 
-  private classifyHealth(def: ResearchSourceDefinition, health: ResearchSourceHealth | undefined): ResearchSourceHealthStatus {
+  private classifyHealth(
+    def: ResearchSourceDefinition,
+    health: ResearchSourceHealth | undefined,
+    outcomeStatus?: ResearchSourceHealthStatus
+  ): ResearchSourceHealthStatus {
     if (!def.enabled || !ELIGIBLE_STATES.includes(def.approvalStatus)) return 'DISABLED';
-    if (!health) return 'HEALTHY';
-    if (health.consecutiveFailures >= 3 || health.failureCount >= 5) return 'FAILING';
-    if (health.consecutiveFailures >= 1 || (health.averageLatencyMs ?? 0) > 5000) return 'DEGRADED';
-    return 'HEALTHY';
+    if ((def.validationStatus ?? 'VALIDATED') !== 'VALIDATED') return 'UNVALIDATED';
+    if (!health) return 'UNAVAILABLE';
+    if (outcomeStatus && outcomeStatus !== 'HEALTHY_WITH_ITEMS' && outcomeStatus !== 'HEALTHY_EMPTY') return outcomeStatus;
+    if (health.consecutiveFailures >= 1 || (health.averageLatencyMs ?? 0) > 5000) return 'UNAVAILABLE';
+    return outcomeStatus ?? (health.parserSuccessRate >= 0.75 ? 'HEALTHY_WITH_ITEMS' : 'HEALTHY_EMPTY');
   }
 
   // ── Registry status (transparency) ─────────────────────────────────────────
@@ -285,7 +295,7 @@ export class ResearchSourceRegistry {
     }> = [];
     for (const def of this.list()) {
       byState[def.approvalStatus] += 1;
-      const status = this.health.get(def.id)?.status ?? 'HEALTHY';
+      const status = this.health.get(def.id)?.status ?? this.classifyHealth(def, undefined);
       health[def.id] = status;
       sources.push({
         id: def.id,

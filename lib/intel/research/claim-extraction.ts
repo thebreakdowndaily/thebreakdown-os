@@ -18,9 +18,10 @@ import type {
   ResearchClaimType,
   TopicExpansion,
 } from '@/types/research-intelligence';
-import { sentenceSplit, normalizeText, propositionKey, detectLanguage } from './normalization';
+import { sentenceSplit, normalizeText, propositionKey, multilingualPropositionKey, detectLanguage } from './normalization';
 import { findEntity, entitySearchTerms } from './topic-expansion';
 import { createClaimId } from './ids';
+import { resolveEntity, CROSS_SCRIPT_ENTITY_REGISTRY } from './entity-resolver';
 
 const ATTRIBUTION_PATTERNS = [
   /\b(said|stated|announced|declared|told|according to|confirmed|revealed|argued|claimed|reported)\b/i,
@@ -108,12 +109,21 @@ export function extractClaims(
     if (isBoilerplate(sentence)) continue;
 
     const normalized = propositionKey(sentence);
-    if (normalized.length < 8) continue;
+    const mlNormalized = multilingualPropositionKey(sentence);
+    if (mlNormalized.length < 8) continue;
 
     const { speaker, attributed } = extractSpeaker(sentence);
     const entityMentions = expansion.entities
       .filter((e) => [e.name, ...e.aliases].some((a) => sentence.includes(a)))
       .map((e) => e.name);
+
+    for (const cs of CROSS_SCRIPT_ENTITY_REGISTRY) {
+      const allForms = [...cs.englishAliases, ...cs.nativeAliases];
+      if (allForms.some((a) => sentence.includes(a)) && !entityMentions.includes(cs.canonicalName)) {
+        entityMentions.push(cs.canonicalName);
+      }
+    }
+
     if (entityMentions.length === 0) continue;
 
     const concreteness =

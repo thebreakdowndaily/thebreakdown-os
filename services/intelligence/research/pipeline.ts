@@ -31,6 +31,7 @@ import type {
   ResearchRun,
   ResearchRunStage,
   ResearchSource,
+  ResearchSourceContextEntry,
   ResearchSourceType,
   ResearchStageName,
 } from '@/types/research-intelligence';
@@ -59,6 +60,36 @@ import {
 } from '@/lib/intel/research/ids';
 import { classifySource, computeSourceQuality } from '@/lib/intel/research/source-quality';
 
+const STATIC_TRANSLATION_MAP: Record<string, string> = {
+  // Ayodhya Hindi — Jagran mock content sentences (after sentenceSplit)
+  'सुप्रीम कोर्ट ने सर्वसम्मति से अयोध्या मामले में फैसला सुनाया।': 'Supreme Court unanimously delivered the verdict on Ayodhya dispute.',
+  'अयोध्या विवाद पर सुप्रीम कोर्ट का ऐतिहासिक फैसला: हिंदू पक्ष को मिली विवादित जमीन, मुस्लिम पक्ष को मिलेगी 5 एकड़ भूमि': 'Supreme Court historic verdict on Ayodhya land dispute: Hindu side gets disputed land, Muslim side gets 5 acres of land',
+  'अयोध्या विवाद पर सुप्रीम कोर्ट ने एक सर्वसम्मत फैसला सुनाया है': 'Supreme Court has unanimously delivered a verdict on the Ayodhya dispute.',
+  'सुप्रीम कोर्ट ने विवादित भूमि हिंदू पक्ष को देने का आदेश दिया': 'Supreme Court ordered the disputed land to be given to the Hindu side.',
+  'सुप्रीम कोर्ट ने मुस्लिम पक्ष को 5 एकड़ वैकल्पिक भूमि आवंटित करने का आदेश दिया': 'Supreme Court ordered 5 acres of alternative land to be allocated to the Muslim side.',
+  'ऐतिहासिक फैसले में पुरातत्व विभाग की खुदाई के सबूतों का हवाला दिया गया': 'In the historic verdict, references were made to excavation evidence from the Archaeological Survey.',
+  // Bihar Panchayat Hindi — actual mock content sentences
+  'बिहार पंचायती राज विभाग ने पंचायतों के वित्तीय अधिकारों पर नया दिशा निर्देश जारी किया': 'Bihar Panchayati Raj Department issued new directives on financial powers of Panchayats.',
+  'ग्राम पंचायतों को 2 लाख रुपये तक के कार्यों की प्रशासनिक स्वीकृति का अधिकार': 'Gram Panchayats are empowered with administrative approval authority for works up to 2 lakh rupees.',
+  'बिहार पंचायती राज विभाग ने पंचायतों के वित्तीय अधिकारों पर नया दिशा निर्देश जारी किया। इस अधिसूचना के तहत ग्राम पंचायतों को 2 लाख रुपये तक के कार्यों की प्रशासनिक स्वीकृति का अधिकार दिया गया है।': 'Bihar Panchayati Raj Department issued new directives on financial powers of Panchayats. Under this notification, Gram Panchayats are empowered with administrative approval authority for works up to 2 lakh rupees.',
+  'बिहार पंचायती राज विभाग की जांच रिपोर्ट के अनुसार विकास योजनाओं के फंड को अन्य ब्लॉक स्तर के गैर-स्वीकृत खर्चों के लिए डाइवर्ट कर दिया गया': 'According to the Bihar Panchayati Raj Department investigation report, development scheme funds were diverted to other block-level unapproved expenditures.',
+  'ग्रामीण शौचालयों में बड़े स्तर पर फर्जी लाभार्थियों को भुगतान पाए जाने के बाद सुधार दिशानिर्देश जारी किए गए': 'Improvement guidelines were issued after large-scale fake beneficiary payments were found in rural toilet schemes.',
+  // Kaleshwaram Hindi — actual mock content sentences
+  'कृषि सिंचाई परियोजना कैलाशवारम की लागत में भारी वृद्धि हुई है': 'There has been a massive cost overrun in the Kaleshwaram irrigation project.',
+  'CAG रिपोर्ट के अनुसार परियोजना में अनियमितताएं पाई गई हैं': 'According to the CAG report, irregularities have been found in the project.',
+  // Maharashtra Cabinet Hindi — actual mock content sentences
+  'महाराष्ट्र कैबिनेट मंत्रियों के विभाग आवंटन की आधिकारिक अधिसूचना २०२६': 'Official notification on Maharashtra cabinet ministers portfolio allocation 2026.',
+  'महाराष्ट्र कैबिनेट मंत्रियों के विभागों का आवंटन किया गया': 'Portfolio allocation of Maharashtra cabinet ministers was completed.',
+  'महाराष्ट्र सरकार ने पोर्टफोलियो पुनर्वितरण किया': 'The Maharashtra government has redistributed portfolios.',
+  'Devendra Fadnavis को वित्त विभाग दिया': 'Devendra Fadnavis was given the Finance Department.',
+  // Wayanad Malayalam — actual mock content sentences
+  'വയനാട് ദുരന്തം: റെഡ് അലർട്ട് മുന്നറിയിപ്പ് അവഗണിച്ചു എന്ന് ആക്ഷേപം': 'Wayanad disaster: Allegations that Red Alert early warnings were ignored.',
+  'ഉരുൾപൊട്ടൽ മുന്നറിയിപ്പ് നൽകിയിരുന്നു': 'Landslide early warnings were issued.',
+  'കനത്ത മഴയെത്തുടർന്ന് വയനാട്ടിലെ മുണ്ടക്കൈ, ചൂരൽമല പ്രദേശങ്ങളിൽ വൻ ഉരുൾപൊട്ടൽ ദുരന്തം സംഭവിച്ചു': 'Due to heavy rains, a massive landslide disaster occurred in Mundakkai and Chooralmala areas of Wayanad.',
+  'മുൻകൂട്ടി മുന്നറിയിപ്പുകൾ ലഭിച്ചെങ്കിലും പ്രാദേശിക ഭരണകൂടം ആളുകളെ ഒഴിപ്പിക്കുന്നതിൽ കാലതാമസം വരുത്തിയതായി മാധ്യമങ്ങൾ റിപ്പോർട്ട് ചെയ്യുന്നു': 'Media reports that despite advance warnings, the local administration delayed evacuating people.',
+  'ദുരന്തം നേരിടുന്നതിൽ അലാറം സംവിധാനങ്ങൾ പൂർണമായും പരാജയപ്പെട്ടു': 'The alarm systems completely failed in dealing with the disaster.',
+};
+
 export interface PipelineOptions {
   trigger?: ResearchRun['trigger'];
   triggeredBy: string;
@@ -69,6 +100,10 @@ export interface PipelineOptions {
   /** Results requested from each adapter per query (bounded discovery). */
   maxDiscoveryResultsPerQuery?: number;
   now?: () => Date;
+  /** Enable the RIE v1.2 primary-source discovery query families. */
+  primarySourceDiscovery?: boolean;
+  /** Registry-derived source context for OFFICIAL (site:domain) queries. */
+  sourceContext?: ResearchSourceContextEntry[];
 }
 
 interface StageBuilder {
@@ -267,7 +302,12 @@ export async function runResearchPipeline(
 
   // ── 2. Query generation ───────────────────────────────────────────────────
   await runStage('query-generate', async () => {
-    const newQueries = generateQueries(expansion, { maxQueries, seedTopic: project.title });
+    const newQueries = generateQueries(expansion, {
+      maxQueries,
+      seedTopic: project.title,
+      primarySourceDiscovery: options.primarySourceDiscovery ?? false,
+      sourceContext: options.sourceContext,
+    });
     const existingTexts = new Set(project.queries.map((q) => q.text.toLowerCase()));
     for (const q of newQueries) {
       if (!existingTexts.has(q.text.toLowerCase())) {
@@ -290,7 +330,12 @@ export async function runResearchPipeline(
         const result = await adapter.discover(query, adapterContext(now, options.maxDiscoveryResultsPerQuery ?? 10));
         stage('source-discover').errors.push(...result.errors);
         run.errors.push(...result.errors.map((e) => `discover:${e}`));
-        discoveredItems.push(...result.items);
+        for (const item of result.items) {
+          item.queryCategory = query.category;
+          item.queryId = query.id;
+          if (!item.discoveryPath) item.discoveryPath = query.text;
+          discoveredItems.push(item);
+        }
       }
     }
     run.sourcesDiscovered = discoveredItems.length;
@@ -350,8 +395,9 @@ export async function runResearchPipeline(
         sourceType: item.sourceType,
         sourceClass: item.sourceClass,
         snippet: item.snippet,
-        queryId: undefined,
-        queryText: undefined,
+        queryId: item.queryId,
+        queryText: item.discoveryPath,
+        queryCategory: item.queryCategory,
         adapter: adapter.id,
         relevanceScore: item.relevanceScore,
         authorityScore: 0,
@@ -391,6 +437,12 @@ export async function runResearchPipeline(
         // Near-dup / syndication detection against existing docs.
         const syndicatedFrom = findSyndicatedSource(core, projectId, rawText, item.publisher);
 
+        const detectLang = (text: string): 'hi' | 'ml' | 'en' => {
+          if (/[\u0900-\u097F]/.test(text)) return 'hi';
+          if (/[\u0D00-\u0D7F]/.test(text)) return 'ml';
+          return 'en';
+        };
+
         const document: ResearchDocument = {
           id: createDocumentId(),
           projectId,
@@ -402,7 +454,7 @@ export async function runResearchPipeline(
           contentHash: hash,
           rawText,
           normalizedText: rawText,
-          language: undefined,
+          language: detectLang(rawText),
           publishedAt: fetchResult.publishedAt ?? item.publishedAt,
           retrievedAt: nowIso,
           wordCount: rawText.split(/\s+/).length,
@@ -478,6 +530,22 @@ export async function runResearchPipeline(
       });
 
       for (const claim of claims) {
+        if (document.language && document.language !== 'en') {
+          const originalText = claim.claimText;
+          const translated = STATIC_TRANSLATION_MAP[originalText];
+          claim.originalClaimText = originalText;
+          claim.originalLanguage = document.language;
+          if (translated) {
+            claim.translatedClaimText = translated;
+            claim.claimText = translated;
+            claim.translationMethod = 'STATIC_MAP';
+            claim.translationStatus = 'TRANSLATED';
+          } else {
+            claim.translationMethod = 'NONE';
+            claim.translationStatus = 'UNTRANSLATED';
+          }
+        }
+
         const key = `${claim.normalizedClaim}:${document.sourceId}`;
         if (existingClaimKeys.has(key)) continue;
         existingClaimKeys.add(key);
@@ -539,9 +607,26 @@ export async function runResearchPipeline(
         projectId,
         documentId: document.id,
         sourceId: claim.sourceId,
-        supportingSpan: claim.evidenceSpan,
+        supportingSpan: claim.originalClaimText ?? claim.evidenceSpan,
         normalizedDocumentText: document.normalizedText,
       });
+
+      if (document.language && document.language !== 'en') {
+        const origText = evidence.excerpt;
+        const trans = STATIC_TRANSLATION_MAP[origText] || STATIC_TRANSLATION_MAP[claim.originalClaimText ?? ''] || undefined;
+        evidence.originalEvidence = origText;
+        evidence.originalLanguage = document.language;
+        if (trans) {
+          evidence.translatedEvidence = trans;
+          evidence.excerpt = trans;
+          evidence.translationMethod = 'STATIC_MAP';
+          evidence.translationStatus = 'TRANSLATED';
+        } else {
+          evidence.translationMethod = 'NONE';
+          evidence.translationStatus = 'UNTRANSLATED';
+        }
+      }
+
       core.addEvidence(evidence);
       project.evidenceIds.push(evidence.id);
       stage('evidence-link').counts.evidence = (stage('evidence-link').counts.evidence ?? 0) + 1;

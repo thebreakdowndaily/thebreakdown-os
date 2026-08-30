@@ -1,0 +1,19 @@
+Check,#,Check,Result,Evidence,Owner
+Environment,1,GA4 script only loads in production builds,## PASS,app/layout.tsx gates gtag block on NODE_ENV===production + GA_MEASUREMENT_ID,Engineering
+Environment,2,GA4 config never fires on preview/dev hosts,## PASS,GATracker hostname guard (isProductionHost); capture events double-gated by isProductionAnalytics,Engineering
+Environment,3,Landing + interaction delegation only run in production,## PASS,app/layout.tsx mounts LandingTracker/InteractionTracker under isProductionAnalytics(),Engineering
+Taxonomy,4,All event names lowercase_snake_case and <=40 chars,## PASS,tests/analytics-taxonomy.test.ts,Engineering
+Taxonomy,5,No GA4-reserved event names used,## PASS,tests/analytics-taxonomy.test.ts,Engineering
+Taxonomy,6,Every event has an allow-list; unknown params dropped,## PASS,lib/analytics/capture.ts ALLOWED_PARAMS; tests/analytics-taxonomy.test.ts,Engineering
+Privacy,7,No PII / secrets / full query text in payloads,## PASS,tests/analytics-taxonomy.test.ts PII scan; search_query truncated to 200 chars,Engineering
+Privacy,8,Email can never leak into URL via subscribe form,## PASS,SubscribeForm preventDefault()（was a GET form before）,Engineering
+Privacy,9,One landing event per session (no UT re-fire),## PASS,SessionStorage key tbd_landing_captured,Engineering
+Attribution,10,Google and Google India (google.co.in) classified as organic_search,## PASS,tests/analytics-taxonomy.test.ts (suffix table),Engineering
+Attribution,11,x / t.me / telegram classifiable as social without substring collisions,## PASS,tests/analytics-taxonomy.test.ts (tokenized SOCIAL_SOURCE_TOKENS),Engineering
+Funnel,12,story_completed fires once per view at >=90% scroll,## PASS,StoryShell guard refs + readingProgress>=90,Engineering
+Funnel,13,search_performed fires only on /search, not from SearchBar,## PASS,SearchAnalytics mounted in app/search/page.tsx; SearchBar left untouched,Engineering
+Funnel,14,Related content does not double-fire related_story_clicked,## PASS,ExploreConnections uses explicit captureEvent; RelatedStories uses data-analytics delegation (mutually exclusive),Engineering
+Data Integrity,15,Newsletter subscription is never fabricated,## PASS,newsletter_subscribed defined but never emitted; provider gap documented,Editorial
+Data Integrity,16,GSC / GA4 baselines never fabricated,## PASS,03/04 use NOT VERIFIED — PRODUCTION ACCESS REQUIRED placeholders,Research
+Access,17,GA4 property access verified,NONE — NOT VERIFIED,01-access-audit.csv,Research
+Access,18,GSC property access verified,NONE — NOT VERIFIED,01-access-audit.csv,Research

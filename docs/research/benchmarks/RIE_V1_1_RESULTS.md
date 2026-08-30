@@ -1,6 +1,6 @@
 # RIE v1.1 Recall Benchmark — Results
 
-**Timestamp:** 2026-08-15T12:26:55.405Z
+**Timestamp:** 2026-08-18T15:27:51.177Z
 **Corpus Version:** 1.1
 **Benchmark Tag:** rie-v1.1-expanded
 **Approved Sources Count:** 15
@@ -14,11 +14,11 @@
 | Independent Publisher Recall | 0.0% |
 | Regional Source Recall | 13.3% |
 | Regional Source Discovery Recall | 100.0% |
-| Regional Entity Recall | 46.7% |
+| Regional Entity Recall | 73.3% |
 | Translation Preservation Rate | 100.0% |
 | Claim Extraction Recall | 28.9% |
 | Event Extraction Recall | 33.3% |
-| Retrieval Precision | 7.5% |
+| Retrieval Precision | 11.2% |
 | Independent Publisher Ratio | 80.4% |
 | Median TTD (hours) | 0.1 |
 

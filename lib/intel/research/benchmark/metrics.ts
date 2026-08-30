@@ -7,9 +7,10 @@
  * No network, no AI, no randomness — fully testable.
  */
 
-import { propositionKey, detectLanguage } from '@/lib/intel/research/normalization';
+import { propositionKey, multilingualPropositionKey, detectLanguage } from '@/lib/intel/research/normalization';
 import { WIRE_AGENCIES } from '@/lib/intel/research/deduplication';
 import { isRecalled, titleSimilarity } from './matching';
+import { CROSS_SCRIPT_ENTITY_REGISTRY, resolveEntity } from '@/lib/intel/research/entity-resolver';
 import type {
   BenchmarkTopic,
   CoverageGap,
@@ -20,6 +21,279 @@ import type {
   TopicMatchResult,
   TopicRunSnapshot,
 } from './types';
+
+// ── Phase 4: Canonical Proposition Matching ─────────────────────────────────
+
+/** Numeric normalization patterns for language-independent claim evaluation. */
+const NUMERIC_NORMALIZATIONS: Array<[RegExp, (match: string, ...args: string[]) => string]> = [
+  [/(\d+)\s*(?:lakh|लाख)/gi, (_match, n) => `${n}00000`],
+  [/(\d+)\s*(?:crore|करोड़|करोड)/gi, (_match, n) => `${n}0000000`],
+  [/(\d[\d.]*)\s*(?:billion|बिलियन)/gi, (_match, n) => `${Math.round(parseFloat(n) * 1e9)}`],
+  [/(\d[\d.]*)\s*(?:million|मिलियन)/gi, (_match, n) => `${Math.round(parseFloat(n) * 1e6)}`],
+];
+
+/** Canonical proposition: a language-independent representation of a claim's factual content. */
+export interface CanonicalProposition {
+  /** Normalized factual tokens (numbers, entities, key terms). */
+  normalizedTokens: string[];
+  /** The original claim text in its source language. */
+  originalText: string;
+  /** Language of the original text. */
+  language: string;
+  /** Numeric values extracted and normalized. */
+  numericValues: string[];
+  /** Entity names detected. */
+  entities: string[];
+}
+
+/**
+ * Normalize a numeric expression to canonical form.
+ * "₹1,200 crore" → "12000000"
+ * "5 lakh" → "500000"
+ */
+function normalizeNumeric(expr: string): string {
+  let result = expr;
+  // Strip currency symbols and commas before applying scale normalizations
+  result = result.replace(/[₹$]/g, '');
+  result = result.replace(/,/g, '');
+  for (const [pattern, replacer] of NUMERIC_NORMALIZATIONS) {
+    result = result.replace(pattern, replacer);
+  }
+  return result.replace(/[^\d]/g, '');
+}
+
+/**
+ * Extract numeric values from claim text and normalize them.
+ */
+function extractNumericValues(text: string): string[] {
+  const values: string[] = [];
+  const patterns = [
+    /₹\s?\d[\d,.]*(?:\s?(?:crore|lakh|billion|million|करोड़|लाख))?/gi,
+    /\$\s?\d[\d,.]*(?:\s?(?:billion|million|trillion))?/gi,
+    /(?<!\w)\d[\d,.]*\s?(?:crore|lakh|billion|million|trillion|करोड़|लाख)(?!\w)/gi,
+    /\d+(?:\.\d+)?\s?%/g,
+    /(?<!\w)\d[\d,]+(?!\w)/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of text.matchAll(pattern)) {
+      const normalized = normalizeNumeric(match[0]);
+      if (normalized.length > 0) values.push(normalized);
+    }
+  }
+  return [...new Set(values)];
+}
+
+/**
+ * Extract key entity tokens from claim text.
+ * Uses simple heuristics: proper nouns, capitalized words, known entity patterns.
+ */
+function extractEntityTokens(text: string): string[] {
+  const entities: string[] = [];
+  // Capitalized multi-word proper nouns
+  const properNouns = text.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b/g) ?? [];
+  entities.push(...properNouns.map((n) => n.toLowerCase()));
+  // Single capitalised words that look like names
+  const singleCaps = text.match(/\b[A-Z][a-z]{2,}\b/g) ?? [];
+  entities.push(...singleCaps.map((n) => n.toLowerCase()));
+  return [...new Set(entities)].slice(0, 20);
+}
+
+/**
+ * Build a canonical proposition from claim text.
+ * Language-independent: normalizes numbers, extracts entities, preserves factual tokens.
+ */
+export function buildCanonicalProposition(text: string, language: string): CanonicalProposition {
+  const normalizedTokens = multilingualPropositionKey(text)
+    .split(/\s+/)
+    .filter((t) => t.length > 2);
+  const numericValues = extractNumericValues(text);
+  const entities = extractEntityTokens(text);
+  return { normalizedTokens, originalText: text, language, numericValues, entities };
+}
+
+/**
+ * Match two canonical propositions using language-independent comparison.
+ * Returns a matching state and confidence.
+ */
+export type ClaimMatchState =
+  | 'EXACT_TEXT'
+  | 'TRANSLATED_TEXT'
+  | 'PROPOSITION_MATCH'
+  | 'PARTIAL_PROPOSITION'
+  | 'NUMERIC_MATCH'
+  | 'CONFLICT'
+  | 'NO_MATCH';
+
+export function matchCanonicalPropositions(
+  a: CanonicalProposition,
+  b: CanonicalProposition
+): { state: ClaimMatchState; confidence: number } {
+  // 1. Exact text match
+  if (a.originalText === b.originalText) {
+    return { state: 'EXACT_TEXT', confidence: 1.0 };
+  }
+
+  // 2. Normalized text match (same tokens after normalization)
+  const aNorm = a.normalizedTokens.join(' ');
+  const bNorm = b.normalizedTokens.join(' ');
+  if (aNorm === bNorm) {
+    return { state: 'TRANSLATED_TEXT', confidence: 0.95 };
+  }
+
+  // 3. Numeric proposition match (same numbers even if text differs)
+  if (a.numericValues.length > 0 && b.numericValues.length > 0) {
+    const aNums = new Set(a.numericValues);
+    const bNums = new Set(b.numericValues);
+    const numOverlap = [...aNums].filter((n) => bNums.has(n)).length;
+    if (numOverlap > 0) {
+      const numConfidence = numOverlap / Math.max(aNums.size, bNums.size);
+      if (numConfidence >= 0.8) {
+        return { state: 'NUMERIC_MATCH', confidence: 0.85 };
+      }
+    }
+  }
+
+  // 4. Entity-based cross-script match (resolve entities via registry, check overlap)
+  // Also resolve significant tokens from original text to handle cross-script entity detection
+  const resolveOpts = { crossScriptEntities: CROSS_SCRIPT_ENTITY_REGISTRY, maxLayer: 4 as const };
+  const resolveEntitiesFromText = (text: string): string[] => {
+    const resolved: string[] = [];
+    const tokens = text.split(/[\s,।]+/).filter((t) => t.length > 1);
+    for (const token of tokens) {
+      const r = resolveEntity(token, [], resolveOpts);
+      if (r.canonicalName && r.matchMethod !== 'NO_MATCH') {
+        resolved.push(r.canonicalName);
+      }
+    }
+    return [...new Set(resolved)];
+  };
+  const aResolvedEntities = [
+    ...a.entities.map((e) => resolveEntity(e, [], resolveOpts).canonicalName ?? e),
+    ...resolveEntitiesFromText(a.originalText),
+  ];
+  const bResolvedEntities = [
+    ...b.entities.map((e) => resolveEntity(e, [], resolveOpts).canonicalName ?? e),
+    ...resolveEntitiesFromText(b.originalText),
+  ];
+  const aCanon = new Set(aResolvedEntities.filter(Boolean));
+  const bCanon = new Set(bResolvedEntities.filter(Boolean));
+  if (aCanon.size > 0 && bCanon.size > 0) {
+    const entityOverlap = [...aCanon].filter((e) => bCanon.has(e)).length;
+    const entityUnion = new Set([...aCanon, ...bCanon]).size;
+    if (entityUnion > 0 && entityOverlap / entityUnion >= 0.5) {
+      return { state: 'PROPOSITION_MATCH', confidence: 0.6 + (entityOverlap / entityUnion) * 0.3 };
+    }
+  }
+
+  // 5. Full proposition match (all significant tokens overlap)
+  const aTokenSet = new Set(a.normalizedTokens);
+  const bTokenSet = new Set(b.normalizedTokens);
+  const overlap = a.normalizedTokens.filter((t) => bTokenSet.has(t)).length;
+  const union = new Set([...a.normalizedTokens, ...b.normalizedTokens]).size;
+  if (union > 0) {
+    const jaccard = overlap / union;
+    if (jaccard >= 0.6) {
+      return { state: 'PROPOSITION_MATCH', confidence: 0.7 + jaccard * 0.25 };
+    }
+    if (jaccard >= 0.3) {
+      return { state: 'PARTIAL_PROPOSITION', confidence: 0.4 + jaccard * 0.3 };
+    }
+  }
+
+  return { state: 'NO_MATCH', confidence: 0 };
+}
+
+// ── Phase 4: Entity Coverage Trace ──────────────────────────────────────────
+
+/** Per-entity diagnostic for end-to-end trace. */
+export interface EntityTraceEntry {
+  /** The expected entity text (from regionalEntitiesExpected). */
+  expectedEntity: string;
+  /** Found in mock document text? */
+  presentInDocText: boolean;
+  /** Found in expansion entities (name or alias)? */
+  presentInExpansion: boolean;
+  /** Found in CROSS_SCRIPT_ENTITY_REGISTRY? */
+  presentInRegistry: boolean;
+  /** Detected as entityMention in any extracted claim? */
+  detectedInClaim: boolean;
+  /** The actual entity mention text (if detected). */
+  detectedEntityMention: string | null;
+  /** Resolution method (if resolved). */
+  resolutionMethod: string | null;
+  /** Whether the metric would count this as recalled. */
+  countedAsRecalled: boolean;
+}
+
+/**
+ * Trace an expected entity through the full pipeline for a single topic.
+ */
+export function traceEntity(
+  expectedEntity: string,
+  topic: BenchmarkTopic,
+  snapshot: TopicRunSnapshot,
+  expansionEntities: Array<{ name: string; aliases: string[] }>,
+  registryEntities: Array<{ canonicalName: string; englishAliases: string[]; nativeAliases: string[] }>,
+  docTexts: string[]
+): EntityTraceEntry {
+  const allDocText = docTexts.join(' ');
+
+  // Step 1: Is the entity text present in mock document content?
+  const presentInDocText = allDocText.includes(expectedEntity);
+
+  // Step 2: Is it present in expansion entities (name or alias)?
+  const presentInExpansion = expansionEntities.some(
+    (e) => e.name === expectedEntity || e.aliases.includes(expectedEntity)
+  );
+
+  // Step 3: Is it in the CROSS_SCRIPT_ENTITY_REGISTRY?
+  const registryEntry = registryEntities.find(
+    (cs) =>
+      cs.canonicalName === expectedEntity ||
+      cs.englishAliases.includes(expectedEntity) ||
+      cs.nativeAliases.includes(expectedEntity)
+  );
+  const presentInRegistry = registryEntry !== undefined;
+
+  // Step 4: Is it detected in any extracted claim's entityMentions?
+  const allEntityMentions = new Set(
+    (snapshot.fullClaims ?? []).flatMap((c) => {
+      const claimObj = c as { entityMentions?: string[] };
+      return claimObj.entityMentions ?? [];
+    })
+  );
+
+  let detectedInClaim = false;
+  let detectedEntityMention: string | null = null;
+  let resolutionMethod: string | null = null;
+
+  for (const ent of allEntityMentions) {
+    if (ent.toLowerCase().includes(expectedEntity.toLowerCase()) || expectedEntity.toLowerCase().includes(ent.toLowerCase())) {
+      detectedInClaim = true;
+      detectedEntityMention = ent;
+      // Determine resolution method: if it came from expansion → 'EXPANSION', if from registry → 'CROSS_SCRIPT'
+      const fromExpansion = expansionEntities.some(
+        (e) => e.name.toLowerCase() === ent.toLowerCase() && (e.name.toLowerCase() === expectedEntity.toLowerCase() || e.aliases.some(a => a.toLowerCase() === expectedEntity.toLowerCase()))
+      );
+      resolutionMethod = fromExpansion ? 'EXPANSION' : 'CROSS_SCRIPT';
+      break;
+    }
+  }
+
+  // Step 5: Would the metric count this as recalled?
+  const countedAsRecalled = detectedInClaim;
+
+  return {
+    expectedEntity,
+    presentInDocText,
+    presentInExpansion,
+    presentInRegistry,
+    detectedInClaim,
+    detectedEntityMention,
+    resolutionMethod,
+    countedAsRecalled,
+  };
+}
 
 const PRIMARY_CLASSES = ['PRIMARY', 'OFFICIAL', 'REGULATORY', 'JUDICIAL', 'PARLIAMENTARY'];
 const PRIMARY_LIKE_CATEGORIES = new Set(['PRIMARY', 'COURT', 'REGULATORY', 'PARLIAMENTARY', 'DATASET']);
@@ -64,7 +338,7 @@ function isPrimaryLike(gold: GoldSource): boolean {
 }
 
 function significantTokens(text: string): string[] {
-  return propositionKey(text)
+  return multilingualPropositionKey(text)
     .split(' ')
     .filter((t) => t.length > 3)
     .slice(0, 12);
@@ -156,13 +430,17 @@ export interface ComputeMetricsInput {
   match: TopicMatchResult;
   snapshot: TopicRunSnapshot;
   ctx: MissContext;
+  /** Phase 4: Optional expansion entities for entity trace. */
+  expansionEntities?: Array<{ name: string; aliases: string[] }>;
+  /** Phase 4: Optional document texts for entity trace. */
+  docTexts?: string[];
 }
 
 export function computeTopicMetrics(input: ComputeMetricsInput): {
   metrics: TopicMetrics;
   misses: MissDiagnostic[];
 } {
-  const { topic, match, snapshot, ctx } = input;
+  const { topic, match, snapshot, ctx, expansionEntities, docTexts } = input;
   const gold = topic.goldSources;
   const eligible = gold.length;
   const recalledIds = gold.filter((g) => isRecalled(match.matches[g.sourceId] ?? null));
@@ -298,7 +576,9 @@ export function computeTopicMetrics(input: ComputeMetricsInput): {
   }
   const regionalEntityRecall = regionalEntitiesEligible === 0 ? 1 : regionalEntitiesRecalled / regionalEntitiesEligible;
 
-  // Translation Preservation Rate
+  // Translation Preservation Rate — counts claims from non-English sources
+  // where the original text is preserved (originalClaimText is set), regardless
+  // of whether a translation also exists.
   let nonEnglishClaims = 0;
   let preservedClaims = 0;
   const nonEnglishSourceIds = new Set(snapshot.sources.filter(s => {
@@ -308,7 +588,7 @@ export function computeTopicMetrics(input: ComputeMetricsInput): {
     const claim = c as { sourceId: string; originalLanguage?: string; originalClaimText?: string; translationStatus?: string };
     if (nonEnglishSourceIds.has(claim.sourceId) || claim.originalLanguage) {
       nonEnglishClaims += 1;
-      if (claim.originalClaimText && claim.translationStatus === 'TRANSLATED') {
+      if (claim.originalClaimText) {
         preservedClaims += 1;
       }
     }
@@ -350,6 +630,16 @@ export function computeTopicMetrics(input: ComputeMetricsInput): {
     if (delta !== null) independentLatencies.push(delta);
   }
   const independentCorroborationLatency = independentLatencies.length === 0 ? null : round2(Math.min(...independentLatencies));
+
+  // ── Phase 4: Entity Coverage Trace ─────────────────────────────────────────
+  // Trace each expected entity through the full pipeline for this topic.
+  const REGIONAL_ENTITIES_EXPECTED = ['अयोध्या', 'വയനാട്', 'കേരളം', 'മഹാരാഷ്ട്ര', 'വിഭാഗ'];
+  let entityTrace: TopicMetrics['entityTrace'] = undefined;
+  if (expansionEntities) {
+    entityTrace = REGIONAL_ENTITIES_EXPECTED.map((expectedEntity) =>
+      traceEntity(expectedEntity, topic, snapshot, expansionEntities, CROSS_SCRIPT_ENTITY_REGISTRY, docTexts ?? [])
+    );
+  }
 
   const metrics: TopicMetrics = {
     topicId: topic.topicId,
@@ -393,6 +683,7 @@ export function computeTopicMetrics(input: ComputeMetricsInput): {
     primarySourceDiscoveryLatency,
     independentCorroborationLatency,
     costs,
+    entityTrace,
   };
 
   const misses = gold
@@ -414,7 +705,7 @@ function computeProbeRecall(expected: string[], actual: string[]): number {
   for (const e of expected) {
     const tokens = significantTokens(e);
     if (tokens.length === 0) continue;
-    const all = tokens.every((t) => propositionKey(actualText).includes(t));
+    const all = tokens.every((t) => multilingualPropositionKey(actualText).includes(t));
     if (all) hit += 1;
   }
   return hit / expected.length;

@@ -11,6 +11,7 @@ import type { AnalyticsService } from './analytics/service';
 import type { GraphProjectionService } from './graph/service';
 import type { MonitorService } from './monitoring/service';
 import type { ImageIntelligenceService } from './media/intelligence';
+import type { CitationService } from './interfaces/citation';
 
 export interface Services {
   stories: StoryService;
@@ -26,6 +27,7 @@ export interface Services {
   graph: GraphProjectionService;
   monitoring: MonitorService;
   intelligence: ImageIntelligenceService;
+  citations: CitationService;
 }
 
 let instance: Services | null = null;

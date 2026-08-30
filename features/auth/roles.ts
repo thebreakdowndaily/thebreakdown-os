@@ -22,7 +22,8 @@ export type IntelModule =
   | 'verification'
   | 'rti'
   | 'tasks'
-  | 'newsroom';
+  | 'newsroom'
+  | 'demand';
 
 export const INTEL_MODULES: IntelModule[] = [
   'dashboard',
@@ -39,6 +40,7 @@ export const INTEL_MODULES: IntelModule[] = [
   'rti',
   'tasks',
   'newsroom',
+  'demand',
 ];
 
 export const INTEL_ROLE_ORDER: IntelRole[] = [
@@ -67,6 +69,7 @@ const MODULE_MIN_ROLE: Record<IntelModule, IntelRole> = {
   rti: 'researcher',
   tasks: 'reporter',
   newsroom: 'reporter',
+  demand: 'researcher',
 };
 
 const ROLE_RANK: Record<IntelRole, number> = {

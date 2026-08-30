@@ -1,0 +1,11 @@
+Opportunity ID,Query,Pillar,Intent,Target Action,Competitors,Breakdown Advantage,Status
+OPP-01,mgnrega budget 2026,Policy & Governance,Policy,EXPAND,"mord.gov.in, moneycontrol",Detailed comparison of MGNREGA 2005 vs VB-G RAM G Act 2025,Approved
+OPP-02,upi transaction limit rural,"Economy, Technology & Systems",Explanatory,UPDATE,"npci.org.in, phonepe",Explain transaction caps and failures in feature phone UPI,Approved
+OPP-03,india china border dispute galwan map,India & the World,Causal,EXPAND,"idsa.in, foreignpolicy",Integrate visual timeline of Galwan clashes with primary sources,Approved
+OPP-04,pm fasal bima yojana claims data,Policy & Governance,Data,EXPAND,"pmfby.gov.in, agri-ministry",Audit claims backlog using CAG findings,Approved
+OPP-05,ews reservation eligibility upsc,Policy & Governance,Policy,EXPAND,"upsc.gov.in, drishtiias",Provide legal analysis of Supreme Court review petitions,Approved
+OPP-06,aadhaar data breach icmr report,"Economy, Technology & Systems",Document,EXPAND,"cert-in, resecurity",Expose sus leak vectors using CERT-In notification briefs,Approved
+OPP-07,india us relations trade agreements,India & the World,Policy,REJECT,"mea.gov.in, state.gov","Incumbent results are too generic, we lack original research datasets",Rejected
+OPP-08,rbi repo rate hikes 2026 inflation,"Economy, Technology & Systems",Monitoring,DEFER,"rbi.org.in, livemint",Postpone until RBI quarterly monetary review meeting in Sept 2026,Deferred
+OPP-09,climate finance commitments cop29 india,India & the World,Explanatory,EXPAND,"unfccc.int, downtoearth",Audit COP29 funding flows using international treaties data,Approved
+OPP-10,anganwadi workers salary hike statewise,Policy & Governance,Comparative,DEFER,"mwcd.nic.in, financialexpress",Wait for state welfare budgets compilation in Oct 2026,Deferred

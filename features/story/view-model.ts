@@ -68,6 +68,17 @@ export async function buildStoryPage(services: Services, slug: string): Promise<
     return acc;
   }, {} as Record<number, number>);
 
+  const totalClaims = rawStory.claims.length;
+  const t1t2 = rawStory.sources.filter((src) => src.tier <= 2).length;
+  const sourceQuality = rawStory.sources.length > 0 ? Math.round((t1t2 / rawStory.sources.length) * 100) : 0;
+  const verificationStatus = totalClaims > 0 ? Math.round((rawStory.claims.filter(c => c.status === 'verified').length / totalClaims) * 100) : 0;
+
+  const confirmedCount = rawStory.claims.filter((c) => c.status === 'verified' || c.status === 'strong').length;
+  const dynamicConfirmations = totalClaims > 0 ? Math.round((confirmedCount / totalClaims) * 100) : 0;
+  const dynamicDataAvailability = totalClaims > 0
+    ? Math.round(rawStory.claims.reduce((sum, c) => sum + (c.confidence || 0.5) * 100, 0) / totalClaims)
+    : 0;
+
   return {
     story: rawStory,
     relatedStories,
@@ -97,10 +108,10 @@ export async function buildStoryPage(services: Services, slug: string): Promise<
     },
     evidenceSummary: {
       overallScore: rawStory.confidenceBreakdown?.overallScore || rawStory.evidenceScore,
-      sourceQuality: rawStory.confidenceBreakdown?.sourceQuality || 0,
-      confirmations: rawStory.confidenceBreakdown?.confirmations || 0,
-      dataAvailability: rawStory.confidenceBreakdown?.dataAvailability || 0,
-      verificationStatus: rawStory.confidenceBreakdown?.verificationStatus || 0,
+      sourceQuality: rawStory.confidenceBreakdown?.sourceQuality || sourceQuality,
+      confirmations: rawStory.confidenceBreakdown?.confirmations || dynamicConfirmations,
+      dataAvailability: rawStory.confidenceBreakdown?.dataAvailability || dynamicDataAvailability,
+      verificationStatus: rawStory.confidenceBreakdown?.verificationStatus || verificationStatus,
       totalClaims: rawStory.claims.length,
       verified,
       misleading,

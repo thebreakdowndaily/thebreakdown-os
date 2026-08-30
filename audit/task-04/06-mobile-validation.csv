@@ -1,0 +1,5 @@
+Viewport Width,Component tested,Layout Overflow,Touch Target (min 44px),Hamburger Drawer,Status
+320px,Header & Hamburger,None,YES,YES,PASS
+320px,Homepage Grids,None,YES,N/A,PASS
+320px,Article Sidebar,None (collapses),YES,N/A,PASS
+480px,Interactive Timelines,None (scroll),YES,N/A,PASS

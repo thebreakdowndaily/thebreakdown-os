@@ -9,7 +9,7 @@
  */
 
 import { ResearchSourceRegistry } from '../../services/intelligence/research/source-registry';
-import { NoApprovedSourcesError, runApprovedSourceDiscovery } from '../../services/intelligence/research/production-discovery';
+import { NoApprovedSourcesError, NoValidatedDiscoverySourcesError, runApprovedSourceDiscovery } from '../../services/intelligence/research/production-discovery';
 import { ResearchIntelligenceCore } from '../../services/intelligence/research/core';
 import { MemoryStateRepository } from '../../services/intelligence/research/persistence';
 import { RssAdapter } from '../../services/intelligence/research/adapters/rss';
@@ -39,17 +39,36 @@ function def(overrides: Partial<ResearchSourceDefinition> & { id: string; url: s
 
 describe('Research Source Registry', () => {
   describe('seed data', () => {
-    it('ships 4 definitions: 3 ACTIVE + 1 PROPOSED (The Guardian World)', () => {
-      expect(RESEARCH_SOURCE_DEFINITIONS).toHaveLength(4);
-      expect(RESEARCH_SOURCE_DEFINITIONS.filter((d) => d.approvalStatus === 'ACTIVE')).toHaveLength(3);
+    it('ships 19 definitions: 18 ACTIVE + 1 PROPOSED (The Guardian World)', () => {
+      expect(RESEARCH_SOURCE_DEFINITIONS).toHaveLength(19);
+      expect(RESEARCH_SOURCE_DEFINITIONS.filter((d) => d.approvalStatus === 'ACTIVE')).toHaveLength(18);
       expect(RESEARCH_SOURCE_DEFINITIONS.filter((d) => d.approvalStatus === 'PROPOSED').map((d) => d.id)).toContain('src-theguardian-world-rss');
     });
 
-    it('global singleton reports 3 eligible sources', () => {
+    it('global singleton reports 18 eligible sources', () => {
       const { researchSourceRegistry } = require('../../services/intelligence/research/source-registry') as {
         researchSourceRegistry: ResearchSourceRegistry;
       };
-      expect(researchSourceRegistry.getEligible()).toHaveLength(3);
+      expect(researchSourceRegistry.getEligible()).toHaveLength(18);
+    });
+
+    it('ships the 6 primary-source discovery domains closed by RIE v1.2', () => {
+      const eligible = RESEARCH_SOURCE_DEFINITIONS.filter((d) => d.approvalStatus === 'ACTIVE' && d.enabled);
+      const ids = new Set(eligible.map((d) => d.id));
+      expect([...ids]).toEqual(expect.arrayContaining([
+        'src-meity-gov-rss',
+        'src-undocs-rss',
+        'src-karnataka-gov-rss',
+        'src-ngt-gov-rss',
+        'src-cmrs-gov-rss',
+        'src-sebi-gov-rss',
+      ]));
+      for (const id of ['src-meity-gov-rss', 'src-undocs-rss', 'src-karnataka-gov-rss', 'src-ngt-gov-rss', 'src-cmrs-gov-rss', 'src-sebi-gov-rss']) {
+        const d = eligible.find((x) => x.id === id)!;
+        expect(d.primarySource).toBe(true);
+        expect(d.approvedBy).toBe('Editor-in-Chief (primary-source discovery milestone v1.2)');
+        expect(d.documentTypes?.length).toBeGreaterThan(0);
+      }
     });
   });
 
@@ -155,44 +174,56 @@ describe('Research Source Registry', () => {
       registry = new ResearchSourceRegistry([def({ id: 'src', url: 'https://example.com/feed' })]);
     });
 
-    it('starts HEALTHY with no data', () => {
-      expect(registry.getHealth('src')?.status).toBe('HEALTHY');
+    it('starts UNAVAILABLE until a validated endpoint has a result', () => {
+      expect(registry.getHealth('src')?.status).toBe('UNAVAILABLE');
     });
 
-    it('records a successful fetch as HEALTHY', () => {
-      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: true, statusCode: 200, latencyMs: 400, itemsParsed: 12 });
+    it('records a populated valid feed as HEALTHY_WITH_ITEMS', () => {
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: true, status: 'HEALTHY_WITH_ITEMS', statusCode: 200, latencyMs: 400, itemsParsed: 12 });
       const h = registry.getHealth('src')!;
-      expect(h.status).toBe('HEALTHY');
+      expect(h.status).toBe('HEALTHY_WITH_ITEMS');
       expect(h.consecutiveFailures).toBe(0);
       expect(h.lastSuccessfulFetch).toBeTruthy();
       expect(h.parserSuccessRate).toBeGreaterThan(0.9);
     });
 
-    it('classifies a single consecutive failure as DEGRADED', () => {
-      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, statusCode: 500, latencyMs: 900, itemsParsed: 0 });
-      expect(registry.getHealth('src')?.status).toBe('DEGRADED');
+    it('classifies HTTP failures as UNAVAILABLE', () => {
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, status: 'UNAVAILABLE', statusCode: 500, latencyMs: 900, itemsParsed: 0 });
+      expect(registry.getHealth('src')?.status).toBe('UNAVAILABLE');
     });
 
-    it('classifies high latency as DEGRADED', () => {
-      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: true, statusCode: 200, latencyMs: 6000, itemsParsed: 4 });
-      expect(registry.getHealth('src')?.status).toBe('DEGRADED');
+    it('keeps an HTTP-successful empty feed distinct from healthy populated discovery', () => {
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: true, status: 'HEALTHY_EMPTY', statusCode: 200, latencyMs: 400, itemsParsed: 0 });
+      expect(registry.getHealth('src')?.status).toBe('HEALTHY_EMPTY');
     });
 
-    it('classifies 3 consecutive failures as FAILING', () => {
-      for (let i = 0; i < 3; i += 1) {
-        registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, statusCode: 500, latencyMs: 800, itemsParsed: 0 });
-      }
-      expect(registry.getHealth('src')?.status).toBe('FAILING');
-      expect(registry.getHealth('src')?.failureCount).toBe(3);
+    it('records parser and timeout failures with explicit health states', () => {
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, status: 'PARSE_ERROR', statusCode: 200, latencyMs: 100, itemsParsed: 0 });
+      expect(registry.getHealth('src')?.status).toBe('PARSE_ERROR');
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, status: 'TIMEOUT', latencyMs: 30_000, itemsParsed: 0 });
+      expect(registry.getHealth('src')?.status).toBe('TIMEOUT');
     });
 
-    it('recovers to HEALTHY after a success following failures', () => {
-      for (let i = 0; i < 2; i += 1) {
-        registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, statusCode: 500, latencyMs: 800, itemsParsed: 0 });
-      }
-      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: true, statusCode: 200, latencyMs: 300, itemsParsed: 6 });
+    it('reports unvalidated sources without polling them', () => {
+      const unvalidated = new ResearchSourceRegistry([def({ id: 'root', url: 'https://example.com/', discoveryProtocol: 'HTML', validationStatus: 'UNVALIDATED' })]);
+      expect(unvalidated.getHealth('root')?.status).toBe('UNVALIDATED');
+      expect(unvalidated.toRssFeedConfigs()).toHaveLength(0);
+    });
+
+    it('builds production RSS configs from validated endpoints only', () => {
+      const mixed = new ResearchSourceRegistry([
+        def({ id: 'feed', url: 'https://example.com/feed.xml', discoveryProtocol: 'RSS', validationStatus: 'VALIDATED' }),
+        def({ id: 'root', url: 'https://example.com/root', discoveryProtocol: 'HTML', validationStatus: 'UNVALIDATED' }),
+      ]);
+      expect(mixed.toRssFeedConfigs().map((config) => config.url)).toEqual(['https://example.com/feed.xml']);
+      expect(mixed.getHealth('root')?.status).toBe('UNVALIDATED');
+    });
+
+    it('recovers to HEALTHY_WITH_ITEMS after a valid populated feed', () => {
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: false, status: 'UNAVAILABLE', statusCode: 500, latencyMs: 800, itemsParsed: 0 });
+      registry.recordFeedOutcome({ feedUrl: 'https://example.com/feed', ok: true, status: 'HEALTHY_WITH_ITEMS', statusCode: 200, latencyMs: 300, itemsParsed: 6 });
       const h = registry.getHealth('src')!;
-      expect(h.status).toBe('HEALTHY');
+      expect(h.status).toBe('HEALTHY_WITH_ITEMS');
       expect(h.consecutiveFailures).toBe(0);
     });
   });
@@ -241,7 +272,7 @@ describe('Research Source Registry', () => {
       );
       expect(result.items).toHaveLength(0);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(registry.getHealth('src')?.status).toBe('DEGRADED');
+      expect(registry.getHealth('src')?.status).toBe('UNAVAILABLE');
     });
   });
 
@@ -264,6 +295,16 @@ describe('Research Source Registry', () => {
       ).rejects.toBeInstanceOf(NoApprovedSourcesError);
     });
 
+    it('refuses a production run when every approved source lacks a validated RSS/Atom endpoint', async () => {
+      const unvalidated = new ResearchSourceRegistry([
+        def({ id: 'root', url: 'https://example.com/', discoveryProtocol: 'HTML', validationStatus: 'UNVALIDATED' }),
+      ]);
+      const project = core.createProject({ title: 't', description: 'd', createdBy: 'test' });
+      await expect(
+        runApprovedSourceDiscovery(core, project.id, { triggeredBy: 'test' }, unvalidated)
+      ).rejects.toBeInstanceOf(NoValidatedDiscoverySourcesError);
+    });
+
     it('runApprovedSourceDiscovery is fixture-free by construction', async () => {
       const registry = new ResearchSourceRegistry([def({ id: 'src', url: 'https://example.com/feed', approvalStatus: 'ACTIVE' })]);
       const adapter = registry.toRssAdapter();
@@ -272,6 +313,41 @@ describe('Research Source Registry', () => {
       // content for a failing real source.
       expect(adapter).toBeInstanceOf(RssAdapter);
       expect(core.getAdapters().some((a) => a.id === 'fixture')).toBe(false);
+    });
+  });
+
+  describe('MeitY source validation (UNVALIDATED)', () => {
+    it('ships src-meity-gov-rss with UNVALIDATED validationStatus and HTML discoveryProtocol', () => {
+      const meity = RESEARCH_SOURCE_DEFINITIONS.find((d) => d.id === 'src-meity-gov-rss');
+      expect(meity).toBeDefined();
+      expect(meity!.validationStatus).toBe('UNVALIDATED');
+      expect(meity!.discoveryProtocol).toBe('HTML');
+      expect(meity!.url).toBe('https://meity.gov.in/');
+      expect(meity!.primarySource).toBe(true);
+      expect(meity!.authorityClass).toBe('PRIMARY');
+    });
+
+    it('excludes MeitY from production RSS feed configs (no validated endpoint)', () => {
+      const meity = RESEARCH_SOURCE_DEFINITIONS.find((d) => d.id === 'src-meity-gov-rss')!;
+      const registry = new ResearchSourceRegistry(RESEARCH_SOURCE_DEFINITIONS);
+      const configs = registry.toRssFeedConfigs();
+      expect(configs.some((c) => c.url === meity.url)).toBe(false);
+    });
+
+    it('reports MeitY health as UNVALIDATED without attempting a network fetch', () => {
+      const registry = new ResearchSourceRegistry(RESEARCH_SOURCE_DEFINITIONS);
+      const health = registry.getHealth('src-meity-gov-rss');
+      expect(health?.status).toBe('UNVALIDATED');
+    });
+
+    it('MeitY remains eligible (ACTIVE + enabled) but excluded from RSS adapter feeds', () => {
+      const registry = new ResearchSourceRegistry(RESEARCH_SOURCE_DEFINITIONS);
+      const eligible = registry.getEligible();
+      const meity = eligible.find((d) => d.id === 'src-meity-gov-rss');
+      expect(meity).toBeDefined();
+      // eligible but not in RSS configs
+      const rssConfigs = registry.toRssFeedConfigs();
+      expect(rssConfigs.some((c) => c.url === 'https://meity.gov.in/')).toBe(false);
     });
   });
 });

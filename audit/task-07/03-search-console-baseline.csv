@@ -1,0 +1,9 @@
+Content ID,Target Query,Target URL,Intent,Pillar,GSC Baseline Position,GSC Baseline Clicks,GSC Baseline Impressions,GSC Baseline CTR,Baseline Status,Source
+CNT-HP-01,mgnrega budget 2026,/story/mgnrega-reform,Policy,Policy & Governance,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+CNT-HP-02,upi transaction limit rural,/story/digital-payments-boom,Explanatory,"Economy, Technology & Systems",NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+CNT-HP-03,india china border dispute galwan map,/story/india-china-border-tensions,Causal,India & the World,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+CNT-HP-04,pm fasal bima yojana claims data,/story/pm-fasal-bima-claims,Data,Policy & Governance,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+CNT-HP-05,ews reservation eligibility upsc,/story/ews-quota-upsc-investigation,Policy,Policy & Governance,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+CNT-HP-06,aadhaar data breach icmr report,/story/81-crore-data-breach,Document,"Economy, Technology & Systems",NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+CNT-HP-07,climate finance commitments cop29 india,/story/climate-finance,Explanatory,India & the World,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,audit/task-06/02-first-batch.csv
+SITE_ROOT,* (domain),/ — whole site,All,All,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,app/robots.ts references https://thebreakdown.in/sitemap.xml

@@ -13,7 +13,7 @@
     "lint": "eslint app components providers styles hooks types features",
     "audit": "tsx audit/scripts/audit.ts",
     "smoke:newsroom": "npx tsx scripts/newsroom-smoke.ts",
-    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts && npx tsx tests/story/presentation-model.test.ts && npx tsx tests/story/representative-matrix.test.ts && npx tsx tests/golden-story.test.ts",
+    "test": "npx tsx tests/homepage.test.ts && npx tsx tests/story-page.test.ts && npx tsx tests/entity-page.test.ts && npx tsx tests/search.test.ts && npx tsx tests/seo.test.ts && npx tsx tests/auth.test.ts && npx tsx tests/story/presentation-model.test.ts && npx tsx tests/story/representative-matrix.test.ts && npx tsx tests/golden-story.test.ts && npx tsx tests/content-scale/refresh-pipeline.test.ts && npx tsx tests/content-scale/programmatic-seo.test.ts && npx tsx tests/monetization/monetization.test.ts && npx tsx tests/monetization/advertising.test.ts && npx tsx tests/monetization/membership.test.ts && npx tsx tests/monetization/premium-data.test.ts && npx tsx tests/monetization/institutional.test.ts && npx tsx tests/graph/evidence-graph.test.ts && npx tsx tests/explorer/explorer.test.ts && npx tsx tests/content-scale/distribution.test.ts && npx tsx tests/retention/retention.test.ts",
     "test:dataset": "npx tsx tests/dataset.test.ts",
     "test:intel-scoring": "npx tsx tests/intel-scoring.test.ts",
     "test:intel-predictions": "npx tsx tests/intel-predictions.test.ts",
@@ -56,9 +56,11 @@
     "check:performance": "node -e \"console.log('Placeholder: performance script')\"",
     "check:security": "node -e \"console.log('Placeholder: security script')\"",
     "check:verify": "npm run checkpoint:b",
+    "build:scheduled-worker": "node workers/scheduled-publish/build.mjs",
     "prepare:artifacts": "node scripts/prepare-artifacts.js",
     "ci:verify": "run-s prepare:artifacts check:lint check:type check:test check:build check:a11y check:storybook check:bundle check:lighthouse check:audit check:performance check:security",
-    "test:all": "npm run test && npm run test:dataset && npm run test:intel-scoring && npm run test:intel-predictions && npm run test:intel-scenarios && npm run test:intel-evidence && npm run test:intel-toolkit && npm run test:intel-editorial && npm run test:intel-trust && npm run test:intel-executive && npm run test:intel-verification && npm run test:intel-story && npm run test:intel-auth && npm run test:dataset:e2e && npm run test:compiler && npm run test:graph && npm run test:engine && npm run test:kxe && npm run test:renderer && npm run test:plugin-sdk && npm run test:timeline && npm run test:citations && npm run test:relationship-graph"
+    "test:monetization": "npx tsx tests/monetization/monetization.test.ts",
+    "test:all": "npm run test && npm run test:dataset && npm run test:intel-scoring && npm run test:intel-predictions && npm run test:intel-scenarios && npm run test:intel-evidence && npm run test:intel-toolkit && npm run test:intel-editorial && npm run test:intel-trust && npm run test:intel-executive && npm run test:intel-verification && npm run test:intel-story && npm run test:intel-auth && npm run test:dataset:e2e && npm run test:compiler && npm run test:graph && npm run test:engine && npm run test:kxe && npm run test:renderer && npm run test:plugin-sdk && npm run test:timeline && npm run test:citations && npm run test:relationship-graph && npm run test:monetization && npx tsx tests/monetization/membership.test.ts && npx tsx tests/monetization/institutional.test.ts"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.63.0",
@@ -100,6 +102,7 @@
     "@types/topojson-client": "^3.1.0",
     "autoprefixer": "^10.4.0",
     "embedded-postgres": "^18.4.0-beta.17",
+    "esbuild": "^0.28.2",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.10",
     "globals": "^17.7.0",

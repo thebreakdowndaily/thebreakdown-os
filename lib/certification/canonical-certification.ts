@@ -70,26 +70,26 @@ export class CanonicalCertificationEngine {
     sources: Array<{ id: string; title: string; url?: string; tier?: number }>;
     blocks: any[];
   } {
-    const blocks = chapter.blocks || chapter.content || [];
+    const blocks = (chapter as any).blocks || chapter.content || [];
     
     // Check if direct claims exist
     if (chapter.claims && chapter.claims.length > 0) {
       return {
         claims: chapter.claims.map((c) => ({
           id: c.id,
-          text: c.text,
+          text: (c as any).text || c.claim || '',
           status: c.status || 'VERIFIED',
           confidence: typeof c.confidence === 'number' ? c.confidence : 0.8,
-          evidenceIds: c.evidenceIds || [],
+          evidenceIds: (c as any).evidenceIds || (c.evidenceId ? [c.evidenceId] : []),
         })),
-        evidence: (chapter.evidence || []).map((e) => ({
+        evidence: ((chapter as any).evidence || []).map((e: any) => ({
           id: e.id,
           description: e.description,
           sourceId: e.sourceId,
           strength: e.strength,
         })),
         sources: (chapter.sources || []).map((s) => ({
-          id: s.id,
+          id: s.id || '',
           title: s.title,
           url: s.url,
           tier: s.tier,
@@ -377,7 +377,7 @@ export class CanonicalCertificationEngine {
     });
 
     // --- Layer 5: Presentation Contract & Temporal ---
-    const pubDate = chapter.publishedAt || chapter.createdAt || chapter.lastVerifiedAt;
+    const pubDate = (chapter as any).publishedAt || chapter.createdAt || chapter.lastVerifiedAt;
     if (!pubDate || isNaN(Date.parse(pubDate))) {
       evaluations.push({
         ruleId: 'TEMP-001',

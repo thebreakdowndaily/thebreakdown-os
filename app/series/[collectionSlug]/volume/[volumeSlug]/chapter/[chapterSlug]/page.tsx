@@ -7,11 +7,11 @@ import { seedAll, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
 import { buildChapterGraph } from '@/lib/knowledge/knowledge-graph';
 import { getEntityIndex } from '@/utils/data-layer/entity-index';
 import { enrichClaimLazy } from '@/lib/knowledge/knowledge-core';
-import type { CanonicalClaim } from '@/types/canonical';
 import Script from 'next/script';
 import { createArticleSchema, createBreadcrumbSchema } from '@/lib/seo/jsonld';
+import { isPubliclyPublished } from '@/lib/story/publication';
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
@@ -79,6 +79,15 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
   const chapter = await repo.getChapter('india-and-the-world', collectionSlug, volumeSlug, chapterSlug);
   if (!chapter) notFound();
 
+  // Fail-closed publication visibility check
+  const pubCtx = {
+    publicationStatus: (chapter.status === 'published' ? 'published' : (chapter as any).publicationStatus) as any,
+    publishedAt: (chapter as any).publishedAt || chapter.createdAt,
+  };
+  if (chapter.status !== 'published' && chapter.status !== 'verified' && !isPubliclyPublished(pubCtx)) {
+    notFound();
+  }
+
   const allChapters = library.collections.flatMap(c =>
     c.volumes.flatMap(v => v.chapters)
   );
@@ -94,6 +103,11 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
 
   const collection = library.collections.find(c => c.slug === collectionSlug);
   const volume = collection?.volumes.find(v => v.slug === volumeSlug);
+
+  const chapterIdx = volume?.chapters.findIndex(c => c.slug === chapterSlug) ?? -1;
+  const nextChap = (chapterIdx >= 0 && volume && volume.chapters[chapterIdx + 1])
+    ? { title: volume.chapters[chapterIdx + 1].title, slug: volume.chapters[chapterIdx + 1].slug }
+    : null;
 
   const jsonLd = [
     createArticleSchema({
@@ -128,6 +142,8 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
         volumeSlug={volumeSlug}
         graph={graph}
         enrichedClaims={enrichedClaims}
+        nextChapter={nextChap}
+        relatedInvestigation={{ title: 'Namami Gange: The Clean Ganga Audit', slug: 'namami-gange' }}
       />
     </>
   );

@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import type { CrossStoryRecommendation } from '@/services/graph/crossStoryResolver';
 import { PluginAnalyticsService } from '@/services/analytics/service';
+import { captureEvent } from '@/lib/analytics/capture';
 
 interface ExploreConnectionsProps {
   recommendations: CrossStoryRecommendation[];
@@ -56,6 +57,15 @@ export const ExploreConnections: React.FC<ExploreConnectionsProps> = ({
       });
     } catch {
       // Fail silent
+    }
+
+    // TASK-07: GA4 cross-story continuation event.
+    if (storySlug) {
+      captureEvent('related_story_clicked', {
+        source_id: storySlug,
+        target_id: rec.targetStorySlug,
+        position: rankPosition,
+      });
     }
   };
 

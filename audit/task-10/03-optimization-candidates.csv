@@ -1,0 +1,6 @@
+Candidate ID,Slug,Title,Primary Query,Intent Category,Intent Mismatch,Hypothesis,Status
+CAND-01,mgnrega-reform,MGNREGA Completes 20 Years: What the Data Reveals,mgnrega budget 2026,Policy,MINOR,Adding the VB-G RAM G Act 2025 transition details improves search-intent matching,Completed
+CAND-02,digital-payments-boom,Digital Payments in Rural India,upi transaction limit rural,Explanatory,MODERATE,Integrating UPI123Pay limit details will satisfy feature phone query traffic,Completed
+CAND-03,india-china-border-tensions,India-China at the Crossroads,india china border dispute galwan map,Causal,MINOR,Replacing copied asset and highlighting the LAC timeline resolves intent mismatch,Completed
+CAND-04,climate-finance,India's Climate Finance Challenge,climate finance commitments cop29 india,Explanatory,SEVERE,Adding the COP29 NCQG $300B/$1.3T decision satisfies international treaty searches,Completed
+CAND-05,pm-fasal-bima-claims,PM Fasal Bima Yojana: The Claims That Never Reached Farmers,pm fasal bima yojana claims data,Data,MINOR,Detailing CAG crop insurance claims audits targets data seekers,Completed

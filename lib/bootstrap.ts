@@ -89,7 +89,7 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
     : (s.claims && s.claims.length >= 3 ? s.claims.slice(0, 4).map((c) => c.claim) : []);
 
   if (keyPoints.length > 0) {
-    blocks.push({ id: 'executive-summary', type: 'executive-summary', region: 'main', data: { summary: s.summary, keyPoints } });
+    blocks.push({ id: 'executive-summary', type: 'executive-summary', region: 'main', data: { summary: s.summary, keyPoints, whyItMatters: (s as any).whyItMatters, takeaway: (s as any).takeaway } });
   }
 
   const evidenceClaims = (s.claims || []).map((c, i) => ({
@@ -110,6 +110,12 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
   const sourceQuality = allSources.length > 0 ? Math.round((t1t2 / allSources.length) * 100) : 0;
   const verificationStatus = totalClaims > 0 ? Math.round((verifiedCount / totalClaims) * 100) : 0;
 
+  const confirmedCount = evidenceClaims.filter((c) => c.status === 'verified' || c.status === 'strong').length;
+  const dynamicConfirmations = totalClaims > 0 ? Math.round((confirmedCount / totalClaims) * 100) : 0;
+  const dynamicDataAvailability = totalClaims > 0
+    ? Math.round(evidenceClaims.reduce((sum, c) => sum + (c.confidence || 0), 0) / totalClaims)
+    : 0;
+
   // CONFIDENCE METER (Region: main)
   blocks.push({
     id: 'confidence-meter',
@@ -118,8 +124,8 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
     data: {
       overallScore: s.evidenceScore ?? 0,
       sourceQuality,
-      confirmations: 80,
-      dataAvailability: 70,
+      confirmations: dynamicConfirmations,
+      dataAvailability: dynamicDataAvailability,
       verificationStatus,
       totalClaims,
       verified: verifiedCount,

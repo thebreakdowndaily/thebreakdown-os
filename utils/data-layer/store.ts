@@ -45,9 +45,11 @@ function seed(): DataStore {
   const story1: APIStory = {
     id: 'mgnrega-reform',
     slug: 'mgnrega-reform',
-    headline: 'MGNREGA & The 2026 Rural Employment Transition: From 100 Days to VB-G RAM G Act',
+    headline: 'MGNREGA 2026: The 125-Day Rural Employment Guarantee Explained',
     summary: 'Two decades of India\'s flagship rural employment guarantee scheme (2005–2026) — and what changed on 1 July 2026 with the repeal of MGNREGA 2005 and commencement of the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025), expanding the statutory guarantee from 100 to 125 days.',
     heroImage: '/images/stories/mgnrega-20.jpg',
+    takeaway: 'Effective July 1, 2026, the VB-G RAM G Act, 2025 (Act No. 18 of 2025) officially replaces MGNREGA 2005, expanding the statutory employment guarantee from 100 to 125 days per household per financial year.',
+    whyItMatters: 'This statutory shift marks the largest legislative overhaul of India\'s rural safety net in twenty years, transitioning administrative and funding frameworks while preserving existing job cards.',
     publishedAt: '2026-07-23T10:00:00Z',
     updatedAt: '2026-07-23T10:00:00Z',
     readingTime: 14,
@@ -55,6 +57,7 @@ function seed(): DataStore {
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 94,
     category: 'economy',
+    impactLevel: 'high',
     tags: ['MGNREGA', 'VB-G RAM G Act 2025', 'rural employment', '125 days guarantee', 'policy transition', 'social schemes'],
     primaryEntityId: 'ministry-of-rural-development',
     relatedTopicIds: ['economy', 'policy', 'agriculture', 'employment'],
@@ -116,12 +119,15 @@ function seed(): DataStore {
     headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution',
     summary: 'How UPI transformed rural financial inclusion, with transaction volumes growing 400% in three years.',
     heroImage: '/images/stories/digital-payments.jpg',
+    takeaway: 'The per-transaction limit for UPI123Pay (feature phone payments) was officially raised from ₹5,000 to ₹10,000 by the RBI in October 2024 to accelerate rural digital transactions.',
+    whyItMatters: 'Over 18 crore feature phone users gain expanded payment capabilities, addressing the key transactional limit barrier in areas lacking smartphone or internet access.',
     publishedAt: '2026-06-12T08:00:00Z',
     updatedAt: '2026-06-12T08:00:00Z',
     readingTime: 8,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 88,
     category: 'technology',
+    impactLevel: 'high',
     tags: ['UPI', 'digital payments', 'rural India', 'fintech', 'NPCI'],
     primaryEntityId: 'npci',
     relatedTopicIds: ['economy', 'technology', 'digital-payments', 'agriculture'],
@@ -141,7 +147,10 @@ function seed(): DataStore {
       { label: 'Feature Phone UPI Users', value: '18 crore', source: 'NPCI Annual Report' },
       { label: 'Year-on-Year Growth', value: '63%', source: 'NPCI' },
     ],
-    claims: [{ claim: 'UPI has eliminated the urban-rural digital payments divide.', source: 'Industry Report 2025', verification: 'misleading', explanation: 'Urban transactions still account for 68% of total UPI volume.', confidence: 0.75 }],
+    claims: [
+      { claim: 'UPI has eliminated the urban-rural digital payments divide.', source: 'Industry Report 2025', verification: 'misleading', explanation: 'Urban transactions still account for 68% of total UPI volume.', confidence: 0.75 },
+      { id: 'claim.upi.upi123pay-limit', claim: 'The per-transaction limit for UPI123Pay was raised from ₹5,000 to ₹10,000 by the RBI in its October 2024 SDRP statement.', source: 'RBI SDRP October 2024', verification: 'true', explanation: 'NPCI issued Circular 209 directing member banks to implement the new transaction limit, enhancing feature phone payment adoption.', confidence: 1.0 }
+    ],
     sources: [{ name: 'NPCI Annual Report 2025-26', url: 'https://npci.org.in', type: 'government', tier: 1 }],
     charts: [
       { type: 'line', title: 'Rural UPI Transaction Growth (₹L Cr)', data: [
@@ -151,7 +160,7 @@ function seed(): DataStore {
       ], xKey: 'year', yKey: 'amount' },
     ],
     faq: [
-      { question: 'How does UPI work on feature phones?', answer: 'UPI works on feature phones via USSD codes (*99#) and NPCI\'s UPI123Pay service.' },
+      { question: 'How does UPI work on feature phones?', answer: 'UPI works on feature phones via USSD codes (*99#) and NPCI\'s UPI123Pay service, which supports IVR, missed-call, and sound-based payments. The per-transaction limit for UPI123Pay was raised from \u20B95,000 to \u20B910,000 by the RBI in its October 2024 Statement on Development and Regulatory Policies; NPCI\'s circular UPI OC No. 209 FY 24-25 directed members to implement the higher limit with immediate effect and complete compliance by 1 January 2025.' },
     ],
     relatedStories: [{ slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years', summary: 'Data-driven assessment.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' }],
     relatedEntities: [
@@ -166,6 +175,8 @@ function seed(): DataStore {
     headline: 'PM Fasal Bima Yojana: The Claims That Never Reached Farmers',
     summary: 'Investigation into delayed and unpaid crop insurance claims across six states.',
     heroImage: '/images/stories/fasal-bima.jpg',
+    takeaway: 'Crop insurance claims audit reports reveal significant backlogs and disbursement delays across six major states, leaving millions of farmers vulnerable.',
+    whyItMatters: 'The audit findings highlight critical governance gaps, administrative friction, and delay penalties that limit the efficacy of India\'s flagship crop insurance scheme.',
     publishedAt: '2026-06-05T06:00:00Z',
     updatedAt: '2026-06-05T06:00:00Z',
     readingTime: 15,
@@ -173,6 +184,7 @@ function seed(): DataStore {
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 97,
     category: 'policy',
+    impactLevel: 'high',
     tags: ['crop insurance', 'agriculture', 'farmer welfare', 'PMFBY'],
     primaryEntityId: 'ministry-of-agriculture',
     relatedTopicIds: ['policy', 'agriculture'],
@@ -235,10 +247,11 @@ function seed(): DataStore {
     heroImage: '/images/stories/semiconductor-pli.jpg',
     publishedAt: '2026-07-23T06:00:00Z',
     updatedAt: '2026-07-23T06:00:00Z',
+    lastVerified: '2026-08-30T00:00:00Z',
     readingTime: 14,
     wordCount: 4800,
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
-    evidenceScore: 91,
+    evidenceScore: 95,
     category: 'technology',
     tags: ['semiconductor', 'PLI', 'CG Semi OSAT', 'Sanand', 'Dholera Fab', 'commercial production', 'electronics', 'Make in India'],
     primaryEntityId: 'ministry-of-finance',
@@ -267,10 +280,13 @@ function seed(): DataStore {
     claims: [
       { claim: 'The ₹76,000 crore semiconductor PLI outlay represents total private factory investment.', source: 'Media Summaries', verification: 'misleading', explanation: '₹76,000 crore is the government\'s fiscal incentive outlay. Total approved private project investment commitments stand at ₹1.26 lakh crore across 5 facilities.', confidence: 0.94 },
       { claim: 'Commercial semiconductor production has commenced in India under the PLI scheme.', source: 'MeitY PIB Release Q1 2026', verification: 'true', explanation: 'Commercial production of packaged semiconductors commenced at the CG Semi OSAT facility in Sanand in Q1 2026.', confidence: 0.95 },
+      { claim: 'India will stop importing all microchips by 2030.', source: 'Social Media', verification: 'false', explanation: 'The PLI scheme aims for self-reliance in mature node packaging and select fabrication, not absolute independence from global supply chains by 2030.', confidence: 0.98 },
     ],
     sources: [
       { name: 'MeitY PIB Commercial Production Release Q1 2026', url: 'https://pib.gov.in', type: 'government', tier: 1 },
       { name: 'India Semiconductor Mission (ISM) Guidelines', url: 'https://ism.gov.in', type: 'government', tier: 1 },
+      { name: 'Union Cabinet Press Release March 2025', url: 'https://pib.gov.in', type: 'government', tier: 1 },
+      { name: 'Ministry of Electronics and IT Annual Report 2025-26', url: 'https://meity.gov.in', type: 'government', tier: 1 },
     ],
     charts: [
       { type: 'line', title: 'Semiconductor PLI Outlay Over Time (₹ Crore)', data: [
@@ -282,6 +298,8 @@ function seed(): DataStore {
     faq: [
       { question: 'What is the Semiconductor PLI scheme?', answer: 'It is a production-linked incentive scheme aimed at attracting semiconductor fabrication, packaging, and design investments with fiscal incentives of up to 50% of project cost.' },
       { question: 'Which companies have committed to setting up fabs in India?', answer: 'Tata Electronics, CG Power (in partnership with Renesas), and the Murugappa Group are among approved applicants. The Vedanta-Foxconn joint venture was scrapped in June 2024.' },
+      { question: 'Is India building advanced 3nm chips?', answer: 'No, initial fabs like the Tata-PSMC facility in Dholera are focused on mature nodes (28nm, 50nm) used in automotive, power, and consumer electronics.' },
+      { question: 'What is the timeline for the Dholera Fab?', answer: 'Construction began in 2024, with first commercial output targeted for late 2026 to 2027.' }
     ],
     relatedStories: [
       { slug: 'mgnrega-reform', headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment', summary: 'Two decades of India\'s flagship rural employment guarantee scheme.', publishedAt: '2026-06-15T10:00:00Z', readingTime: 12, evidenceScore: 92, category: 'economy' },
@@ -418,6 +436,8 @@ function seed(): DataStore {
     headline: "India's ₹11 Lakh Crore Climate Finance Challenge",
     summary: "As India pursues its net zero 2070 target, a massive climate finance gap threatens to slow the renewable energy transition and adaptation efforts.",
     heroImage: '/images/stories/climate-finance.jpg',
+    takeaway: 'COP29 in Baku adopted the New Collective Quantified Goal (NCQG) committing developed nations to at least $300 billion annually by 2035, replacing the $100 billion goal.',
+    whyItMatters: 'India requires ₹11 lakh crore ($130 billion) annually for its energy transition. While the $300 billion global pool is an increase, it remains far below the $1.3 trillion needed by developing nations.',
     publishedAt: '2026-07-10T06:00:00Z',
     updatedAt: '2026-07-10T06:00:00Z',
     readingTime: 13,
@@ -425,6 +445,7 @@ function seed(): DataStore {
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 87,
     category: 'environment',
+    impactLevel: 'high',
     tags: ['climate change', 'renewable energy', 'climate finance', 'net zero', 'COP'],
     primaryEntityId: 'india',
     relatedTopicIds: ['environment', 'geopolitics'],
@@ -448,6 +469,7 @@ function seed(): DataStore {
     claims: [
       { claim: 'India is on track to achieve 500 GW of renewable energy capacity by 2030.', source: 'Government Press Release', verification: 'misleading', explanation: 'At the current installation rate of 18 GW/year, India would reach approximately 380 GW by 2030 — falling short of the 500 GW target by 24%.', confidence: 0.84 },
       { claim: 'Developed countries have failed to deliver the promised $100 billion in annual climate finance.', source: 'Climate Action Network', verification: 'true', explanation: 'OECD data confirms that developed countries only delivered $83.3 billion in 2020, and the $100 billion goal was first met only in 2022 — two years after the 2020 deadline.', confidence: 0.9 },
+      { id: 'claim.climate.cop29-ncqg-finance', claim: 'COP29 adopted the New Collective Quantified Goal (NCQG) of at least US$300 billion annually by 2035 from developed nations.', source: 'UNFCCC Decision 1/CMA.6', verification: 'true', explanation: 'The Baku agreement adopted in November 2024 sets a target of $300 billion/year by 2035 and calls for scaling up total finance to at least $1.3 trillion/year, replacing the $100 billion goal.', confidence: 1.0 }
     ],
     sources: [
       { name: 'Ministry of New and Renewable Energy Dashboard', url: 'https://mnre.gov.in', type: 'government', tier: 1 },
@@ -462,6 +484,7 @@ function seed(): DataStore {
     ],
     faq: [
       { question: 'What is India\'s net zero target?', answer: 'India committed to achieving net zero emissions by 2070 at COP26 in Glasgow. This means balancing the amount of greenhouse gases emitted with the amount removed from the atmosphere.' },
+      { question: 'What did COP29 decide on climate finance?', answer: 'At COP29 in Baku (November 2024), parties adopted the New Collective Quantified Goal (decision 1/CMA.6), replacing the earlier $100 billion annual goal. It sets a target of at least US$300 billion per year in climate finance from developed countries, to be delivered to developing countries by 2035, and separately calls on all actors to scale up finance from public and private sources to at least US$1.3 trillion per year by 2035.' },
       { question: 'What is climate finance and why is it important for India?', answer: 'Climate finance refers to funding for climate mitigation and adaptation projects. India requires significant international and domestic investment to transition to renewable energy and build climate-resilient infrastructure.' },
     ],
     relatedStories: [
@@ -898,6 +921,7 @@ function seed(): DataStore {
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 94,
     category: 'policy',
+    impactLevel: 'critical',
     tags: ['EWS quota', 'UPSC', 'reservation', 'civil services', 'constitutional law', 'social justice'],
     primaryEntityId: 'india',
     relatedTopicIds: ['policy', 'education'],
@@ -1179,9 +1203,11 @@ function seed(): DataStore {
   const story25: APIStory = {
     id: 'india-china-border-tensions',
     slug: 'india-china-border-tensions',
-    headline: 'India-China at the Crossroads: Four Years After Galwan, the Border Remains the Flashpoint',
+    headline: 'India-China Border: Galwan and the Standoff Four Years On',
     summary: 'Despite 20 rounds of military talks, India and China remain locked in the most intense border confrontation in five decades — with 60,000 troops deployed on each side and a broader strategic rivalry reshaping Asia.',
-    heroImage: '/images/stories/mgnrega-reform.jpg',
+    heroImage: '/images/stories/india-china-border-tensions.jpg',
+    takeaway: 'Despite 20 rounds of military negotiations, India and China remain locked in a massive border confrontation along the LAC with 60,000 troops deployed on each side.',
+    whyItMatters: 'The military standoff has fundamentally altered India\'s strategic stance towards China, forcing structural re-deployments and border infrastructure upgrades while trade volumes persist at record highs.',
     publishedAt: '2026-07-30T06:00:00Z',
     updatedAt: '2026-07-30T06:00:00Z',
     readingTime: 17,
@@ -1189,6 +1215,7 @@ function seed(): DataStore {
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 92,
     category: 'politics',
+    impactLevel: 'critical',
     tags: ['India-China', 'border dispute', 'Galwan', 'LAC', 'military standoff', 'geopolitics', 'Asia'],
     primaryEntityId: 'un',
     relatedTopicIds: ['geopolitics', 'policy'],
@@ -1889,6 +1916,7 @@ function seed(): DataStore {
     author: { name: 'The Breakdown Editorial', bio: 'The Breakdown editorial desk.' },
     evidenceScore: 94,
     category: 'technology',
+    impactLevel: 'critical',
     tags: ['data breach', 'Aadhaar', 'cybersecurity', 'ICMR', 'data privacy', 'DPDP Act', 'identity theft', 'dark web'],
     primaryEntityId: 'cert-in',
     keyPoints: [
@@ -3427,7 +3455,7 @@ function seed(): DataStore {
   const entityData: APIEntity[] = [
     {
       id: 'mgnrega', slug: 'mgnrega', name: 'Mahatma Gandhi National Rural Employment Guarantee Act',
-      type: 'policy', description: 'India\'s flagship rural employment guarantee scheme.',
+      type: 'policy', description: 'India\'s flagship statutory employment guarantee. Enacted in September 2005, MGNREGA guarantees 100 days of unskilled wage employment per financial year to every rural household whose adult members volunteer to work, with wages payable within 15 days and an unemployment allowance if work is not provided within 15 days of application. Implemented by the Ministry of Rural Development, it is among the largest public works programmes in the world and funds asset creation linked to water conservation, drought proofing, rural connectivity, and land development. A 2025 amendment provides for up to 125 days of guaranteed work in notified districts, introduced alongside a restructuring of delivery and grievance mechanisms. The scheme is financed by the Union government, with states bearing the job card and wage administration costs.',
       aliases: ['MGNREGA', 'NREGA', 'Rural Employment Scheme'], storyCount: 24, updatedAt: '2026-06-15T10:00:00Z',
       image: '/images/entities/mgnrega.jpg',
       timeline: story1.timeline, statistics: { 'Total Person-Days': '385 crore', 'Active Workers': '14.2 crore', 'Average Wage': '₹267/day' },
@@ -3437,7 +3465,7 @@ function seed(): DataStore {
     },
     {
       id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development',
-      type: 'organization', description: 'Nodal ministry of Government of India responsible for rural development policies, programmes, and schemes including MGNREGA, PMAY-G, and DAY-NRLM.',
+      type: 'organization', description: 'Nodal ministry of the Government of India responsible for socioeconomic development of rural areas. MoRD formulates policies and programmes covering rural employment, poverty reduction, rural housing, connectivity, and livelihoods. It administers flagship schemes including MGNREGA (guaranteed rural employment), Pradhan Mantri Awas Yojana – Gramin (rural housing), Deendayal Antyodaya Yojana – National Rural Livelihoods Mission (self-help-group livelihoods), Pradhan Mantri Gram Sadak Yojana (rural roads), and the National Social Assistance Programme (pensions). The ministry traces its origins to a Department of Rural Development created within the Ministry of Agriculture in 1979, which attained independent full ministry status in October 1999. Its schemes are implemented through state governments, rural local bodies, and self-help groups.',
       aliases: ['MoRD', 'Rural Development Ministry'], storyCount: 56, updatedAt: '2026-06-18T08:00:00Z',
       image: '/images/entities/mord.jpg', evidenceScore: 91,
       timeline: [
@@ -3466,7 +3494,12 @@ function seed(): DataStore {
       datasets: [],
       sources: [{ name: 'RBI Official Website', url: 'https://rbi.org.in', type: 'government', description: 'Official portal with data and publications.' }],
       statistics: { 'Policy Rate': '6.00%', 'GDP Forecast': '6.8%', 'Inflation Target': '4.0%', 'Forex Reserves': '$675 billion' },
-      relatedStories: [{ slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' }],
+      relatedStories: [
+        { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
+        { slug: 'rbi-repo-rate', headline: 'RBI Repo Rate: Decoding Monetary Policy & Rate Easing Cycle', summary: 'India\'s monetary policy balances inflation control with growth support.', publishedAt: '2026-07-23T06:00:00Z', readingTime: 11, evidenceScore: 93, category: 'economy' },
+        { slug: 'supply-chain-shift', headline: 'The Great Supply Chain Shift: Can India Capture the China+1 Opportunity?', summary: 'India has attracted $85 billion in FDI since 2023.', publishedAt: '2026-07-24T06:00:00Z', readingTime: 13, evidenceScore: 90, category: 'economy' },
+        { slug: 'income-inequality-india', headline: 'Income Inequality in India: The Top 1% Now Owns 40% of the Wealth', summary: 'India\'s income inequality has reached levels not seen since the colonial era.', publishedAt: '2026-07-26T06:00:00Z', readingTime: 15, evidenceScore: 94, category: 'economy' },
+      ],
       relatedEntities: [{ id: 'npci', slug: 'npci', name: 'NPCI', type: 'organization' }],
       faq: [
         { question: 'What is the current repo rate?', answer: 'The repo rate as of June 2026 is 6.00%.' },
@@ -3475,7 +3508,7 @@ function seed(): DataStore {
     },
     {
       id: 'npci', slug: 'npci', name: 'National Payments Corporation of India',
-      type: 'organization', description: 'An umbrella organisation for operating retail payment and settlement systems in India, including UPI, IMPS, and RuPay.',
+      type: 'organization', description: 'The National Payments Corporation of India (NPCI) is the umbrella organisation for operating retail payment and settlement systems in India. Incorporated in December 2008 as a not-for-profit company promoted by the Reserve Bank of India and the Indian Banks\' Association, NPCI operates the Unified Payments Interface (UPI), the RuPay card network, IMPS, NACH, AePS, FASTag, and Bharat BillPay. Its mandate is to build a cash-lite ecosystem by operating a robust, low-cost, interoperable digital payment infrastructure accessible across the country, including feature-phone users in rural areas through products such as UPI123Pay. UPI has become the dominant retail payments rail in India, processing billions of transactions per month, and NPCI also leads internationalisation of UPI and RuPay through bilateral arrangements. NPCI reports transaction statistics on a public dashboard and supports the Reserve Bank of India\'s financial-inclusion objectives.',
       aliases: ['NPCI'], storyCount: 34, updatedAt: '2026-06-12T08:00:00Z',
       image: '/images/entities/npci.jpg', evidenceScore: 88,
       timeline: [
@@ -3499,7 +3532,10 @@ function seed(): DataStore {
       timeline: [], datasets: [],
       sources: [{ name: 'Ministry of Agriculture Website', url: 'https://agriculture.gov.in', type: 'government', description: 'Official ministry portal.' }],
       statistics: { 'Schemes Managed': '20+', 'Annual Budget': '₹1.2 lakh crore' },
-      relatedStories: [{ slug: 'pm-fasal-bima-claims', headline: 'PMFBY: Claims That Never Reached Farmers', summary: 'Investigation into delayed crop insurance claims.', publishedAt: '2026-06-05T06:00:00Z', readingTime: 15, evidenceScore: 97, category: 'policy' }],
+      relatedStories: [
+        { slug: 'pm-fasal-bima-claims', headline: 'PMFBY: Claims That Never Reached Farmers', summary: 'Investigation into delayed crop insurance claims.', publishedAt: '2026-06-05T06:00:00Z', readingTime: 15, evidenceScore: 97, category: 'policy' },
+        { slug: 'groundwater-depletion', headline: 'India\'s Groundwater Crisis: North-West Agricultural Belt Stressed as CGWB 2025 Assessment Tracks 449 BCM Recharge', summary: 'Groundwater depletion threatens India\'s food and water security.', publishedAt: '2026-07-23T06:00:00Z', readingTime: 12, evidenceScore: 92, category: 'environment' },
+      ],
       relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
       faq: [
         { question: 'What is the budget of the Ministry?', answer: 'The Ministry\'s annual budget is approximately ₹1.2 lakh crore.' },
@@ -3577,7 +3613,10 @@ function seed(): DataStore {
       timeline: [], datasets: [],
       sources: [{ name: 'CAG Official Website', url: 'https://cag.gov.in', type: 'government', description: 'Official CAG portal with audit reports.' }],
       statistics: { 'Reports Published (2025-26)': '72', 'Audited Expenditure': '₹80 lakh crore' },
-      relatedStories: [{ slug: 'pm-fasal-bima-claims', headline: 'PMFBY: Claims That Never Reached Farmers', summary: 'Investigation into delayed crop insurance claims.', publishedAt: '2026-06-05T06:00:00Z', readingTime: 15, evidenceScore: 97, category: 'policy' }],
+      relatedStories: [
+        { slug: 'pm-fasal-bima-claims', headline: 'PMFBY: Claims That Never Reached Farmers', summary: 'Investigation into delayed crop insurance claims.', publishedAt: '2026-06-05T06:00:00Z', readingTime: 15, evidenceScore: 97, category: 'policy' },
+        { slug: 'namami-gange-under-fire', headline: 'Namami Gange: Inside India\'s ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind', summary: 'CAG audit findings on the flagship river rejuvenation programme.', publishedAt: '2026-07-14T06:00:00Z', readingTime: 22, evidenceScore: 94, category: 'environment' },
+      ],
       relatedEntities: [],
       faq: [
         { question: 'What is the role of CAG?', answer: 'CAG audits all receipts and expenditure of the Government of India and state governments.' },
@@ -3720,7 +3759,7 @@ function seed(): DataStore {
     // ── Data Breach Entities ─────────────────────────────────────────
     const icmr: APIEntity = {
       id: 'icmr', slug: 'icmr', name: 'Indian Council of Medical Research',
-      type: 'organization', description: 'The apex body in India for the formulation, coordination and promotion of biomedical research. Its COVID-19 testing database was the suspected source of India\'s largest data breach compromising 81.5 crore Aadhaar and passport records.',
+      type: 'organization', description: 'The Indian Council of Medical Research (ICMR) is the apex body in India for the formulation, coordination, and promotion of biomedical research. It was established as the Indian Research Fund Association in 1911 and renamed the Indian Council of Medical Research in 1949. Headquartered in New Delhi, ICMR operates a network of permanent research institutes and centres across the country, many addressing diseases including tuberculosis, malaria, leprosy, nutrition, reproductive health, and virology. During the COVID-19 pandemic, ICMR served as the nodal agency for testing policy and aggregated nationwide testing data, including personal identifiers collected at test registration. In October 2023 a threat actor offered for sale a database of 81.5 crore Indian records; ICMR\'s COVID-19 testing database is the suspected source. The incident is among the largest reported breaches of Indian personal data and remains under investigation.',
       aliases: ['ICMR', 'Indian Council of Medical Research'], storyCount: 3, updatedAt: '2026-07-09T00:00:00Z',
       image: '/images/entities/icmr.jpg', evidenceScore: 85,
       timeline: [
@@ -3738,7 +3777,7 @@ function seed(): DataStore {
 
     const certin: APIEntity = {
       id: 'cert-in', slug: 'cert-in', name: 'Indian Computer Emergency Response Team',
-      type: 'organization', description: 'The national nodal agency for cybersecurity incident response, operating under MeitY. CERT-In was notified of the 81.5 crore data breach in October 2023.',
+      type: 'organization', description: 'The Indian Computer Emergency Response Team (CERT-In) is the national nodal agency for responding to cyber security incidents in India. It functions under the Ministry of Electronics and Information Technology (MeitY) as the apex national agency for cyber security incident management, established under Section 70B of the Information Technology Act, 2000, and notified as the National CERT in October 2014. CERT-In collects, analyses, and disseminates information on cyber incidents; issues alerts and advisories; coordinates emergency response measures with government agencies, service providers, and intermediaries; and recommends mitigation strategies. Under the April 2022 Cyber Security Directions, service providers, intermediaries, data centres, and government bodies must report cyber incidents to CERT-In within six hours of becoming aware. CERT-In was notified of the October 2023 breach involving 81.5 crore Indian records and coordinated the investigation.',
       aliases: ['CERT-In', 'CERT India', 'Indian CERT'], storyCount: 2, updatedAt: '2026-07-09T00:00:00Z',
       relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
       image: '/images/entities/cert-in.jpg', evidenceScore: 88,
@@ -3756,7 +3795,7 @@ function seed(): DataStore {
 
     const uidai: APIEntity = {
       id: 'uidai', slug: 'uidai', name: 'Unique Identification Authority of India',
-      type: 'organization', description: 'The statutory authority responsible for issuing Aadhaar numbers and managing the Aadhaar ecosystem. UIDAI was not the source of the breach but its database metadata was exposed through the ICMR breach.',
+      type: 'organization', description: 'The Unique Identification Authority of India (UIDAI) is the statutory authority established under the Aadhaar (Targeted Delivery of Financial and Other Subsidies, Benefits and Services) Act, 2016, responsible for issuing Aadhaar, a 12-digit unique identity number linked to an individual\'s biometric and demographic data. UIDAI operates under the Ministry of Electronics and Information Technology and maintains the Central Identities Data Repository (CIDR). Aadhaar is used for authentication across welfare payments, mobile connections, banking, tax filing, and public services. UIDAI states that its own systems have not been breached: in the October 2023 incident in which a database of 81.5 crore Indian records was offered for sale, the suspected source was a third-party COVID-19 testing database rather than the CIDR. The Aadhaar ecosystem processes several crore authentication transactions daily, with authentication linked to direct benefit transfers.',
       aliases: ['UIDAI', 'Aadhaar Authority'], storyCount: 2, updatedAt: '2026-07-09T00:00:00Z',
       relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
       image: '/images/entities/uidai.jpg', evidenceScore: 87,

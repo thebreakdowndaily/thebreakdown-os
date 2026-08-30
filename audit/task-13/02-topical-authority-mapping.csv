@@ -1,0 +1,16 @@
+topicSlug,topicName,cornerstones,supportingArticles,hasEligibleCornerstone
+economy,"Economy & Finance",7,3,true
+technology,"Technology & Digital India",3,2,true
+cybersecurity,"Cybersecurity & Data Privacy",2,0,true
+policy,"Policy & Governance",18,18,true
+agriculture,"Agriculture & Rural Development",3,3,true
+digital-payments,"Digital Payments & Fintech",0,2,false
+employment,"Employment & Labour",2,1,true
+environment,"Environment & Climate",4,16,true
+education,"Education & Skill Development",3,1,true
+semiconductor,"Semiconductor & Electronics",2,0,true
+health,"Health & Nutrition",2,2,true
+mental-health,"Mental Health",1,0,true
+governance,"Governance & Institutions",4,14,true
+infrastructure,"Infrastructure & Logistics",4,15,true
+geopolitics,"Geopolitics & International Relations",10,6,true

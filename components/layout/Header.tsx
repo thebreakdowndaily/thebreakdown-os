@@ -9,12 +9,11 @@ interface HeaderProps {
 }
 
 const navLinks = [
-  { label: "Stories", href: "/stories" },
-  { label: "Investigations", href: "/investigations" },
-  { label: "Data", href: "/data" },
-  { label: "The Fix", href: "/fix" },
   { label: "Topics", href: "/topics" },
-  { label: "Library", href: "/series" }
+  { label: "Briefings", href: "/stories" },
+  { label: "Library", href: "/series" },
+  { label: "Data", href: "/data" },
+  { label: "Trust", href: "/trust" }
 ];
 
 /* ── Inline SVG icons (no icon system dependency) ──────────────────────── */

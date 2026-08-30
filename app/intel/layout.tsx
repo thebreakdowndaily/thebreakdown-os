@@ -25,6 +25,7 @@ const INTEL_TABS: IntelTab[] = [
   { module: 'predictions', href: '/intel/predictions', label: 'Predictions', icon: '🎯' },
   { module: 'scenarios', href: '/intel/scenarios', label: 'Scenarios', icon: '🔄' },
   { module: 'research', href: '/intel/research', label: 'Evidence & Research', icon: '🔍' },
+  { module: 'demand', href: '/intel/demand', label: 'Public Demand', icon: '📊' },
   { module: 'verification', href: '/intel/verification', label: 'Verification', icon: '✔️' },
   { module: 'toolkit', href: '/intel/toolkit', label: 'Journalist Toolkit', icon: '🧰' },
   { module: 'candidates', href: '/intel/candidates', label: 'Candidates', icon: '👤' },

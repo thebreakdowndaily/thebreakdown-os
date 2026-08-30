@@ -11,9 +11,10 @@
  * Client island — small, isolated, renders nothing on SSR (returns null until hydrated).
  */
 
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { captureEvent } from '@/lib/analytics/capture';
+import { detectReturningReader } from '@/lib/retention/returning-reader';
 
 const STORAGE_KEY = 'tb_last_story';
 
@@ -49,6 +50,23 @@ export default function NarrativeMemory() {
     return readLastStory();
   });
   const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!lastStory) return;
+    try {
+      if (sessionStorage.getItem('tb_return_fired')) return;
+      const { isReturning, storiesRead, daysSinceLast } = detectReturningReader();
+      if (isReturning) {
+        captureEvent('reader_returned', {
+          stories_read: storiesRead,
+          days_since_last: daysSinceLast,
+        });
+        sessionStorage.setItem('tb_return_fired', 'true');
+      }
+    } catch {
+      // Ignore sessionStorage errors
+    }
+  }, [lastStory]);
 
   if (!lastStory || dismissed) return null;
 

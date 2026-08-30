@@ -8,6 +8,7 @@
  */
 
 import Link from 'next/link';
+import type { TrustMetrics } from '@/lib/knowledge/trust-metrics';
 
 // Static founding chapter — used until CMS data populates from buildHomepage()
 const FOUNDING_CHAPTER = {
@@ -17,8 +18,6 @@ const FOUNDING_CHAPTER = {
   title: "India's Inheritance",
   subtitle:
     'Partition left India with disputed borders, a shattered economy, 562 princely states, and a foreign policy philosophy it would spend fifteen years defining.',
-  claims: 18,
-  sources: 31,
   readingTime: 47,
   evidenceGrade: 'A',
   status: 'Internal Gold Candidate',
@@ -54,7 +53,14 @@ const UPCOMING_CHAPTERS = [
   },
 ];
 
-export default function LatestChapters() {
+interface LatestChaptersProps {
+  trustMetrics?: TrustMetrics | null;
+}
+
+export default function LatestChapters({ trustMetrics }: LatestChaptersProps = {}) {
+  const claims = trustMetrics?.chapterOneClaims ?? '--';
+  const sources = trustMetrics?.chapterOneSources ?? '--';
+
   return (
     <section
       aria-labelledby="chapters-heading"
@@ -131,9 +137,9 @@ export default function LatestChapters() {
 
               {/* Stats */}
               <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-mono" style={{ color: '#A1A1AA' }}>
-                <span>{FOUNDING_CHAPTER.claims} verified claims</span>
+                <span>{claims} verified claims</span>
                 <span aria-hidden="true">·</span>
-                <span>{FOUNDING_CHAPTER.sources} primary sources</span>
+                <span>{sources} primary sources</span>
                 <span aria-hidden="true">·</span>
                 <span>{FOUNDING_CHAPTER.readingTime} min</span>
                 <span aria-hidden="true">·</span>

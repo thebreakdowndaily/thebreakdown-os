@@ -1,0 +1,72 @@
+URL Path,Schema Type,Validator Status,Errors Found,Notes
+/,"WebSite, Organization",VALID,None,Standard home schema structure
+/series,"WebSite, Organization",VALID,None,Standard home schema structure
+/topics,"WebSite, Organization",VALID,None,Standard home schema structure
+/entities,"WebSite, Organization",VALID,None,Standard home schema structure
+/organizations,"WebSite, Organization",VALID,None,Standard home schema structure
+/countries,"WebSite, Organization",VALID,None,Standard home schema structure
+/founding-edition,"WebSite, Organization",VALID,None,Standard home schema structure
+/methodology,"WebSite, Organization",VALID,None,Standard home schema structure
+/trust,"WebSite, Organization",VALID,None,Standard home schema structure
+/editorial-constitution,"WebSite, Organization",VALID,None,Standard home schema structure
+/data,"WebSite, Organization",VALID,None,Standard home schema structure
+/story/mgnrega-reform,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/digital-payments-boom,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/pm-fasal-bima-claims,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/semiconductor-pli,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/dpdp-bill,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/rbi-repo-rate,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/climate-finance,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/education-budget,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/groundwater-depletion,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ration-digitization,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/anganwadi-icds,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/supply-chain-shift,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ethanol-backlash,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ews-quota-upsc-investigation,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/us-iran-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/indian-education-crisis,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/income-inequality-india,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-china-border-tensions,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/indias-foreign-policy,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/satluj-ban,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-us-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-indonesia-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-china-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-europe-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-uk-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-russia-relations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/81-crore-data-breach,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/bjp-mission-360,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-5g-rollout,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-ev-paradox,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ayushman-bharat,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/electoral-bonds,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/who-cancer-report-2026,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/us-iran-war-strait-of-hormuz,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/epf-scheme-2026,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/youth-mental-health-crisis,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/gig-worker-rights,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/namami-gange-under-fire,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/india-china-border-lac,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/kashmir-the-first-test,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-01-the-promise,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-02-follow-the-money,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-03-the-sewage-problem,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-04-the-audit-trail,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-05-procurement-and-accountability,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-06-why-stps-dont-work,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-07-water-quality,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-08-city-report-cards,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-09-contractors,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-10-timeline-of-delays,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-11-ecology,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-12-voices-from-the-river,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-13-government-response,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-14-what-worked,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/story/ng-ch-15-recommendations,"Article, BreadcrumbList, WebPage",VALID,None,Replaced custom proprietary context with valid schema.org WebPage
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,"Article, BreadcrumbList, WebPage",VALID,None,Valid schema.org structure
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/kashmir-the-first-test,"Article, BreadcrumbList, WebPage",VALID,None,Valid schema.org structure
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/india-china-border-lac,"Article, BreadcrumbList, WebPage",VALID,None,Valid schema.org structure
+/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform,"Article, BreadcrumbList, WebPage",VALID,None,Valid schema.org structure
+/series/economic-policy-2026/volume/structural-reforms/chapter/rbi-repo-rate,"Article, BreadcrumbList, WebPage",VALID,None,Valid schema.org structure

@@ -51,12 +51,13 @@ build:
     - install
   script:
     - npm run build
-    - npm run cf:build
+    - npm run build:scheduled-worker
   artifacts:
     paths:
       - .open-next/
       - .next/
       - public/
+      - workers/scheduled-publish/dist/
     expire_in: 1h
 
 playwright:
@@ -106,6 +107,7 @@ deploy_production:
     - accessibility
   script:
     - npx wrangler deploy --name thebreakdown-website-worker
+    - npx wrangler deploy --config workers/scheduled-publish/wrangler.toml
   environment:
     name: production
     url: https://thebreakdown.in

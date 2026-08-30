@@ -14,9 +14,12 @@ import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeB
 import InteractiveTimelineBlock from '@/components/story/blocks/InteractiveTimelineBlock';
 import FAQ from '@/components/story/FAQ';
 import { TopicGraphSection } from '@/features/graph/components/TopicGraphSection';
+import { ContentPageTracker } from '@/components/analytics/ContentPageTracker';
 import Image from 'next/image';
 import TopicHero from '@/components/topic/TopicHero';
 import TopicStats from '@/components/topic/TopicStats';
+import TopicFollowButton from '@/components/retention/TopicFollowButton';
+import TopicUpdateBanner from '@/components/retention/TopicUpdateBanner';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { FeedbackSection } from '@/components/rxs/LearningFooter';
@@ -88,6 +91,33 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
   
   const { topic, storyGroups, rankedEntities, unifiedTimeline, statistics, qualityScore } = vm;
 
+  // ── Topic Hub Content Model (TASK-09 Phase D) ─────────────────────────
+  // Deterministic multi-section hub: In Focus → Latest → Deep Research →
+  // Important Developments → From the Archive. Each story renders once.
+  // Replaces the recency-only `latest.slice(0,4)` so evidence-backed
+  // evergreen stories stay discoverable regardless of newer additions.
+  const sections: { key: string; title: string; stories: typeof storyGroups.latest }[] = [];
+  const shown = new Set<string>();
+  const pushSection = (key: string, title: string, cap: number, source: typeof storyGroups.latest) => {
+    const items = source.filter((s) => !shown.has(s.slug)).slice(0, cap);
+    if (items.length > 0) {
+      items.forEach((s) => shown.add(s.slug));
+      sections.push({ key, title, stories: items });
+    }
+  };
+  pushSection('focus', 'In Focus', 3, storyGroups.recommended);
+  pushSection('latest', 'Latest Intelligence', 6, storyGroups.latest);
+  pushSection('deep', 'Deep Research', 4, storyGroups.highestEvidence);
+  pushSection('important', 'Important Developments', 4, storyGroups.important);
+  pushSection('archive', 'From the Archive', 4, storyGroups.historical);
+  const totalStories = new Set([
+    ...storyGroups.recommended.map((s) => s.slug),
+    ...storyGroups.latest.map((s) => s.slug),
+    ...storyGroups.highestEvidence.map((s) => s.slug),
+    ...storyGroups.important.map((s) => s.slug),
+    ...storyGroups.historical.map((s) => s.slug),
+  ]).size;
+
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
   const library = await repo.getLibrary('india-and-the-world');
   
@@ -124,6 +154,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
           {JSON.stringify(ld)}
         </Script>
       ))}
+      <ContentPageTracker contentType="topic" id={topic.slug} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <SpatialNarrativeBreadcrumb
@@ -173,18 +204,40 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                   </span>
                 </>
               )}
+
+              <span className="ml-auto">
+                <TopicFollowButton slug={topic.slug} name={topic.name} />
+              </span>
             </div>
           </header>
 
-          {/* Stories Section */}
-          <section className="space-y-6">
-            <h2 className="text-2xl font-bold border-b border-neutral-800 pb-2">Latest Intelligence</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {storyGroups.latest.slice(0, 4).map((s) => (
-                <StoryCard key={s.slug} story={s} variant="compact" />
-              ))}
-            </div>
-          </section>
+          <TopicUpdateBanner
+            slug={topic.slug}
+            stories={[
+              ...storyGroups.latest,
+              ...storyGroups.important,
+              ...storyGroups.recommended,
+              ...storyGroups.highestEvidence,
+            ].map((s) => ({ slug: s.slug, publishedAt: s.publishedAt, updatedAt: s.updatedAt }))}
+          />
+
+          {/* Stories — TASK-09 topic hub model (Freshness + Importance + Evidence + Evergreen) */}
+          {sections.map((section) => (
+            <section key={section.key} className="space-y-6">
+              <h2 className="text-2xl font-bold border-b border-neutral-800 pb-2">{section.title}</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {section.stories.map((s) => (
+                  <StoryCard key={s.slug} story={s} variant="compact" />
+                ))}
+              </div>
+            </section>
+          ))}
+          {sections.length === 0 && (
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold border-b border-neutral-800 pb-2">Latest Intelligence</h2>
+              <p className="text-neutral-400">No published stories are assigned to this topic yet.</p>
+            </section>
+          )}
 
           {/* Timeline Section */}
           {unifiedTimeline.length > 0 && (
@@ -245,7 +298,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               <h3 className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-4">Topic Statistics</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-neutral-900 rounded p-3 text-center border border-neutral-800">
-                  <span className="block text-2xl font-mono text-emerald-400 mb-1">{storyGroups.latest.length}</span>
+                  <span className="block text-2xl font-mono text-emerald-400 mb-1">{totalStories}</span>
                   <span className="block text-[10px] uppercase tracking-widest text-neutral-500">Stories</span>
                 </div>
                 <div className="bg-neutral-900 rounded p-3 text-center border border-neutral-800">
@@ -270,7 +323,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                 <div className="space-y-3">
                   {rankedEntities.slice(0, 5).map((re, i) => (
                     <div key={i} className="flex items-center justify-between">
-                      <Link href={`/entity/${re.entity.slug}`} className="text-sm font-medium text-emerald-400 hover:underline">
+                      <Link href={`/entity/${re.entity.slug}`} data-analytics="entity" data-entity-id={re.entity.slug} className="text-sm font-medium text-emerald-400 hover:underline">
                         {re.entity.name}
                       </Link>
                       <span className="text-xs text-neutral-500 border border-neutral-700 px-2 py-0.5 rounded">

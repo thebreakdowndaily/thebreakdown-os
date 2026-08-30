@@ -18,9 +18,11 @@
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildHomepage } from '@/features/home/view-model';
 import { EditorialLayout } from '@/packages/editorial/src';
+import { getCanonicalTrustMetrics, type TrustMetrics } from '@/lib/knowledge/trust-metrics';
 import HeroSection from './HeroSection';
 import MissionBar from './MissionBar';
-import StartHereSection from './StartHereSection';
+import ShortVersionGrid from './ShortVersionGrid';
+import DeepDivesGrid from './DeepDivesGrid';
 import LatestChapters from './LatestChapters';
 import TopicHubs from './TopicHubs';
 import NewsletterBand from './NewsletterBand';
@@ -29,25 +31,36 @@ export default async function HomepageLayout() {
   const services = bootstrapServices({ publicOnly: true });
   const vm = await buildHomepage(services);
 
+  let trustMetrics: TrustMetrics | null = null;
+  try {
+    trustMetrics = await getCanonicalTrustMetrics();
+  } catch (err) {
+    console.error('Failed to load trust metrics for homepage:', err);
+    trustMetrics = null;
+  }
+
   return (
     <EditorialLayout breadcrumbItems={[]}>
       <div className="text-white space-y-12">
         {/* 1. Hero — flagship chapter above the fold */}
-        <HeroSection leadStory={vm.leadStory} />
+        <HeroSection leadStory={vm.leadStory} trustMetrics={trustMetrics} />
 
-        {/* 2. Mission / Trust pillars */}
-        <MissionBar />
+        {/* 2. What Changed — Latest Briefings */}
+        <ShortVersionGrid briefings={vm.briefings} />
 
-        {/* 3. Start Here — first-time visitor orientation */}
-        <StartHereSection />
+        {/* 3. Deep Analysis — Investigations & Explainers */}
+        <DeepDivesGrid deepDives={vm.deepDives} />
 
-        {/* 4. Latest Chapters */}
-        <LatestChapters />
-
-        {/* 5. Topic Hubs */}
+        {/* 4. Explore Topics */}
         <TopicHubs topics={vm.topics} />
 
-        {/* 6. Newsletter capture */}
+        {/* 5. Evidence / Documents */}
+        <MissionBar />
+
+        {/* 6. Data / Knowledge */}
+        <LatestChapters trustMetrics={trustMetrics} />
+
+        {/* 7. Newsletter capture */}
         <NewsletterBand />
       </div>
     </EditorialLayout>

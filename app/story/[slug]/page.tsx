@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { StoryShell } from '@/components/rxs/StoryShell';
 import { buildStoryMetadata } from '@/lib/story/metadata';
 import { resolveStory, getAllStoryAndChapterSlugs } from '@/lib/story/resolver';
@@ -9,7 +9,16 @@ import { createStoryJsonLd } from '@/lib/seo/jsonld-story';
 import { buildStoryPresentationModel } from '@/lib/story/presentation-model';
 import { applyReadingModePolicy } from '@/lib/story/reading-mode-policy';
 import StoryMemoryWriter from '@/components/narrative/StoryMemoryWriter';
-import type { ReadingMode } from '@/types/canonical';
+import type { ReadingMode, Story } from '@/types/canonical';
+import { getTopic } from '@/utils/data-layer/store';
+import { getEntityById } from '@/utils/data-layer/entity-index';
+
+interface StoryEntityRef {
+  id?: string;
+  slug?: string;
+  name?: string;
+  title?: string;
+}
 
 
 import { cookies } from 'next/headers';
@@ -42,6 +51,12 @@ export default async function StoryPage({
   const resolution = await resolveStory(slug);
   if (resolution.type === 'not_found') notFound();
 
+  if (resolution.type === 'chapter') {
+    const queryString = new URLSearchParams(resolvedSearchParams as Record<string, string>).toString();
+    const dest = `/series/${resolution.collectionSlug}/volume/${resolution.volumeSlug}/chapter/${resolution.chapter.slug}${queryString ? `?${queryString}` : ''}`;
+    permanentRedirect(dest);
+  }
+
   const canonicalStory = resolution.canonicalStory;
 
   // Fail-closed publication safety check
@@ -64,6 +79,25 @@ export default async function StoryPage({
 
   const jsonLd = createStoryJsonLd(canonicalStory);
 
+  // TASK-08 EXP-05: internal-link strip — only emit links to topics/entities
+  // that resolve to real pages (no 404 links). One variable: adding the links.
+  const topicLinks: { slug: string; name: string }[] = [];
+  const seenTopics = new Set<string>();
+  for (const id of canonicalStory.relatedTopicIds ?? []) {
+    if (topicLinks.length >= 6 || seenTopics.has(id)) continue;
+    seenTopics.add(id);
+    const topic = getTopic(id);
+    if (topic) topicLinks.push({ slug: id, name: topic.name });
+  }
+
+  const entityLinks: { slug: string; name: string }[] = [];
+  const storyWithEntities = canonicalStory as Story & { relatedEntities?: StoryEntityRef[] };
+  for (const re of storyWithEntities.relatedEntities ?? []) {
+    if (entityLinks.length >= 6) break;
+    const resolved = getEntityById(re.id || re.slug || '');
+    if (resolved) entityLinks.push({ slug: resolved.slug, name: resolved.title ?? resolved.name ?? resolved.slug });
+  }
+
   // 1. Build Canonical Story Presentation Model DTO
   const presentationModel = buildStoryPresentationModel(
     canonicalStory,
@@ -85,7 +119,7 @@ export default async function StoryPage({
         </Script>
       ))}
 
-      <StoryShell visibleExperience={visibleExperience} />
+      <StoryShell visibleExperience={visibleExperience} relatedTopicLinks={topicLinks} relatedEntityLinks={entityLinks} />
     </>
   );
 }

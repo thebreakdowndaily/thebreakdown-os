@@ -1,9 +1,9 @@
 {
   "date": "2026-08-15",
-  "generatedAt": "2026-08-15T07:45:15.430Z",
+  "generatedAt": "2026-08-15T07:58:59.569Z",
   "provenance": "local_observation_harness_v1",
   "baseline": {
-    "commit": "209a46b",
+    "commit": "c7b1e46",
     "version": "1.2.0",
     "tag": "news-intelligence-baseline-1.2"
   },
@@ -18,8 +18,8 @@
       "gap-source-pib-rotation-1786779570838"
     ],
     "rotationGapDetected": true,
-    "feedOldest": "2026-08-15T07:45:16.252Z",
-    "feedNewest": "2026-08-15T07:45:16.252Z",
+    "feedOldest": "2026-08-15T07:59:00.476Z",
+    "feedNewest": "2026-08-15T07:59:00.476Z",
     "feedItemCount": 20,
     "requests": 1,
     "failedRequests": 0,
@@ -32,7 +32,7 @@
     "coverageGaps": 1,
     "silentLosses": "NOT_MEASURED",
     "signals": 20,
-    "evaluatedSignals": 0,
+    "evaluatedSignals": 1,
     "falsePositives": 0,
     "duplicates": 20,
     "alerts": 0,
@@ -71,7 +71,7 @@
       "id": "gap-source-pib-rotation-1786779570838",
       "sourceId": "pib",
       "failureType": "ROTATION_GAP",
-      "detectedAt": "2026-08-15T07:45:15.432Z",
+      "detectedAt": "2026-08-15T07:58:59.571Z",
       "retryAttempts": 0,
       "status": "open",
       "recoveryStatus": "unrecovered",
@@ -84,7 +84,7 @@
       "classification": "COVERAGE",
       "sourceId": "pib",
       "description": "PIB feed window rotation: releases between the previously ingested newest and the current feed oldest were not observed by the scheduled pull.",
-      "detectedAt": "2026-08-15T07:45:15.430Z",
+      "detectedAt": "2026-08-15T07:58:59.569Z",
       "status": "open"
     },
     {
@@ -92,7 +92,7 @@
       "classification": "COVERAGE",
       "sourceId": "pib",
       "description": "Open coverage gap: gap-source-pib-rotation-1786779570838 (ROTATION_GAP)",
-      "detectedAt": "2026-08-15T07:45:15.432Z",
+      "detectedAt": "2026-08-15T07:58:59.571Z",
       "status": "open"
     },
     {
@@ -100,7 +100,7 @@
       "classification": "COVERAGE",
       "sourceId": "pib",
       "description": "20 observation(s) carry no parseable publication date; publicationTimestamp falls back to ingestion time, which disables feed-window rotation-gap detection on this feed.",
-      "detectedAt": "2026-08-15T07:45:15.430Z",
+      "detectedAt": "2026-08-15T07:58:59.569Z",
       "status": "open"
     }
   ],

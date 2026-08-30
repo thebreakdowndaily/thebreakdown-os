@@ -7,6 +7,7 @@ import type { FixService } from '../interfaces/fix';
 import type { MediaService } from '../interfaces/media';
 import type { DatasetService } from '../interfaces/dataset';
 import type { InvestigationService } from '../interfaces/investigation';
+import type { CitationService } from '../interfaces/citation';
 import { MemoryStoryService } from '../repositories/memory/story';
 import { SupabaseStoryRepository } from '../repositories/supabase/story';
 import { MemoryTopicRepository } from '../repositories/memory/topic';
@@ -23,6 +24,7 @@ import { MemoryDatasetRepository } from '../repositories/memory/dataset';
 import { SupabaseDatasetRepository } from '../repositories/supabase/dataset';
 import { MemoryInvestigationRepository } from '../repositories/memory/investigation';
 import { MemoryKnowledgeLibraryRepository } from '../repositories/memory/knowledge-library';
+import { MemoryCitationService } from '../repositories/memory/citation';
 
 function getProvider(): 'memory' | 'supabase' {
   const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
@@ -78,6 +80,12 @@ export class RepositoryFactory {
 
   static getKnowledgeLibraryRepository(initialData: any[] = []): KnowledgeLibraryService {
     return new MemoryKnowledgeLibraryRepository(initialData);
+  }
+
+  static getCitationRepository(): CitationService {
+    // Currently only in‑memory implementation is available.
+    // Future Supabase implementation can be added here.
+    return new MemoryCitationService();
   }
 
   static getDataProvider(): 'memory' | 'supabase' {

@@ -1,0 +1,7 @@
+Capability,Status,Component,Location
+AdSlot Component,Implemented,AdSlot,components/monetization/AdSlot.tsx
+AdBlock Detection,Implemented,AdBlockDetector,components/monetization/AdBlockDetector.tsx
+Checkout API,Implemented,POST /api/checkout,app/api/checkout/route.ts
+Membership Page,Implemented,MembershipPage,app/membership/page.tsx
+Success Redirection,Implemented,MembershipSuccessPage,app/membership/success/page.tsx
+Unit Testing,Implemented,Jest,tests/monetization/monetization.test.ts

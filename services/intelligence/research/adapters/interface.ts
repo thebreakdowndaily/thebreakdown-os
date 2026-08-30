@@ -15,10 +15,20 @@ import type {
   ResearchAdapterCapability,
   ResearchDocumentFormat,
   ResearchQuery,
+  ResearchQueryCategory,
   ResearchSourceClass,
   ResearchSourceType,
   TopicEntity,
 } from '@/types/research-intelligence';
+
+export interface DiscoveryRankingComponents {
+  /** Adapter's base query-relevance score (0..1). */
+  queryRelevance?: number;
+  /** Deterministic bonus when the feed/source is a primary source class. */
+  primarySourceBonus?: number;
+  /** Optional source-quality signal (registry/authority based). */
+  sourceQuality?: number;
+}
 
 export interface DiscoveredSourceItem {
   url: string;
@@ -30,6 +40,15 @@ export interface DiscoveredSourceItem {
   sourceClass: ResearchSourceClass;
   adapter: string;
   relevanceScore: number;
+  queryCategory?: ResearchQueryCategory;
+  queryId?: string;
+  /** The query text that surfaced this item (discovery path provenance). */
+  discoveryPath?: string;
+  /** Primary document type this item is (e.g. Act, Judgment, Order). */
+  documentType?: string;
+  rankingScore?: number;
+  /** Transparent ranking decomposition, reviewed like any source metadata. */
+  rankingComponents?: DiscoveryRankingComponents;
 }
 
 export interface DiscoveryResult {

@@ -1,3 +1,5 @@
+import { isProductionHost } from '@/lib/analytics/environment';
+
 /**
  * THE BREAKDOWN — Analytics Engine v1.0
  *
@@ -238,6 +240,7 @@ function scheduleFlush(): void {
  */
 function sendToGA4(event: TrackEventPayload): void {
   if (typeof window.gtag === 'undefined') return;
+  if (!isProductionHost()) return; // TASK-07: never pollute production GA4
   try {
     const params: Record<string, string | number> = { event_category: event.type };
     if ('storySlug' in event && event.storySlug) params.story_slug = event.storySlug;

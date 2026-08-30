@@ -1,0 +1,3 @@
+Event,Parameters,Description
+citation_exported,"format, story_slug",Fired when a citation is copied to clipboard
+license_seat_invited,"role",Fired when an institutional member invites a new seat

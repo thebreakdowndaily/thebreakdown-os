@@ -248,6 +248,17 @@ export interface TopicMetrics {
     tokens: number;
     latencyMs: number;
   };
+  /** Phase 4: Per-entity coverage trace (only populated when entityTrace is requested). */
+  entityTrace?: Array<{
+    expectedEntity: string;
+    presentInDocText: boolean;
+    presentInExpansion: boolean;
+    presentInRegistry: boolean;
+    detectedInClaim: boolean;
+    detectedEntityMention: string | null;
+    resolutionMethod: string | null;
+    countedAsRecalled: boolean;
+  }>;
 }
 
 export interface LatencyStats {

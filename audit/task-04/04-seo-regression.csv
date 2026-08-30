@@ -1,0 +1,6 @@
+Page Type,Canonical URL Tag,Meta Title Tag,Meta Description,JSON-LD Type,Robots Tag,Status
+Homepage,YES (Absolute),YES,YES,WebSite,index,PASS
+Briefing Story,YES (Absolute),YES,YES,NewsArticle,index,PASS
+Library Chapter,YES (Absolute),YES,YES,Article,index,PASS
+Topic Hub,YES (Absolute),YES,YES,CollectionPage,index,PASS
+Entity Profile,YES (Absolute),YES,YES,Person/Organization,index,PASS

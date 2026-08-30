@@ -117,6 +117,11 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
     relatedStoryIds: row.related_story_ids || [],
     relatedEntityIds: row.related_entity_ids || [],
     relatedTopicIds: row.related_topic_ids || [],
+    scheduledAt: row.scheduled_at || undefined,
+    scheduledBy: row.scheduled_by || undefined,
+    blockReason: row.block_reason || undefined,
+    blockedAt: row.blocked_at || undefined,
+    fallbackStoryId: row.fallback_story_id || undefined,
   };
 }
 
@@ -144,6 +149,11 @@ function rowFromStory(s: Story): import('@/supabase/client').TypedDatabase['publ
     related_topic_ids: s.relatedTopicIds,
     tags: s.tags,
     published_at: s.publishedAt,
+    scheduled_at: s.scheduledAt || null,
+    scheduled_by: s.scheduledBy || null,
+    block_reason: s.blockReason || null,
+    blocked_at: s.blockedAt || null,
+    fallback_story_id: s.fallbackStoryId || null,
     updated_at: new Date().toISOString(),
     updated_by: s.updatedBy,
   };

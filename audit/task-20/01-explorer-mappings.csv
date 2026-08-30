@@ -1,0 +1,8 @@
+Query Category,Matches On,Result Type
+Stories,title|summary|blocks,StoryResult
+Topics,name|description,TopicResult
+Entities,name|description|aliases,EntityResult
+Timelines,title|description,TimelineResult
+Claims,claim text|data|source,ClaimResult
+Sources,title|publisher|url,SourceResult
+Evidence,evidence block content,EvidenceResult

@@ -1,6 +1,6 @@
 # RIE v1.1 Recall Benchmark — Baseline
 
-**Timestamp:** 2026-08-15T12:26:55.333Z
+**Timestamp:** 2026-08-18T15:27:51.145Z
 **Corpus Version:** 1.1
 **Benchmark Tag:** rie-v1.0-baseline
 **Approved Sources Count:** 15
@@ -58,7 +58,7 @@
 | `topic-kaleshwaram-cag` | `https://cag.gov.in/uploads/download_audit_report/2023/Report_No_6_of_2023_Kaleshwaram_Telangana.pdf` | **PRIMARY_SOURCE_GAP** | Gold source gold-kaleshwaram-cag-report (PRIMARY, PRIMARY, lang=en) not recalled; classified as PRIMARY_SOURCE_GAP. |
 | `topic-bihar-panchayat` | `https://panchayatiraj.bih.nic.in/documents/audit-report-local-funds-2025.pdf` | **LANGUAGE_GAP** | Gold source gold-bihar-panchayat-notif (PRIMARY, PRIMARY, lang=hi) not recalled; classified as LANGUAGE_GAP. |
 | `topic-kashmir-un-1948` | `https://undocs.org/S/RES/47(1948)` | **PRIMARY_SOURCE_GAP** | Gold source gold-kashmir-unres-47 (PRIMARY, PRIMARY, lang=en) not recalled; classified as PRIMARY_SOURCE_GAP. |
-| `topic-wayanad-landslide` | `https://www.mathrubhumi.com/rss/news/kerala-1.976543` | **REGIONAL_GAP** | Gold source gold-wayanad-malayalam-news (REGIONAL, GENERAL_MEDIA, lang=en) not recalled; classified as REGIONAL_GAP. |
+| `topic-wayanad-landslide` | `https://www.mathrubhumi.com/rss/news/kerala-1.976543` | **LANGUAGE_GAP** | Gold source gold-wayanad-malayalam-news (REGIONAL, GENERAL_MEDIA, lang=ml) not recalled; classified as LANGUAGE_GAP. |
 | `topic-panchsheel-1954` | `https://pib.gov.in/PressReleasePage.aspx?PRID=Panchsheel1954` | **PRIMARY_SOURCE_GAP** | Gold source gold-panchsheel-treaty (PRIMARY, PRIMARY, lang=en) not recalled; classified as PRIMARY_SOURCE_GAP. |
 | `topic-pmjay-audit` | `https://cag.gov.in/uploads/download_audit_report/2023/PMJAY_Audit_Report_2023.pdf` | **PRIMARY_SOURCE_GAP** | Gold source gold-pmjay-audit-cag (PRIMARY, PRIMARY, lang=en) not recalled; classified as PRIMARY_SOURCE_GAP. |
 | `topic-karnataka-res` | `https://www.karnataka.gov.in/press-release/local-candidates-private-sector-employment-bill-2024.pdf` | **PRIMARY_SOURCE_GAP** | Gold source gold-karnataka-bill-pr (PRIMARY, PRIMARY, lang=en) not recalled; classified as PRIMARY_SOURCE_GAP. |

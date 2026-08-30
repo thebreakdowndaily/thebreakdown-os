@@ -1,0 +1,6 @@
+Channel,Type,Endpoint/URL
+RSS,Feed,/feed.xml
+X,Social,https://x.com/intent/tweet
+WhatsApp,Social,https://api.whatsapp.com/send
+LinkedIn,Social,https://www.linkedin.com/sharing/share-offsite/
+Clipboard,Local,navigator.clipboard

@@ -1,0 +1,10 @@
+Implementation Path,Component Name,Active/Inactive,Target Viewport / Scope
+components/story/Timeline.tsx,Timeline,Active,Legacy Story Timeline view
+components/story/blocks/TimelineBlock.tsx,TimelineBlock,Active,Registry Block Renderer (Static Timeline)
+components/story/blocks/InteractiveTimelineBlock.tsx,InteractiveTimelineBlock,Active,Registry Block Renderer (Interactive Timeline)
+components/knowledge-library/blocks/TimelineBlock.tsx,TimelineBlock,Active,Knowledge Library Chapter layout timeline rendering
+components/entity/EntityTimeline.tsx,EntityTimeline,Active,Entity Profile Page historical view
+components/entity/EvidenceTimeline.tsx,EvidenceTimeline,Active,Entity Verification Evidence tracking
+components/entity/TerminalTimeline.tsx,TerminalTimeline,Inactive,Legacy entity node trace
+components/home/timeline/Timeline.tsx,Timeline,Active,Homepage chronological dashboard
+components/timeline/TimelineRenderer.tsx,TimelineRenderer,Active,Global timeline projection explorer

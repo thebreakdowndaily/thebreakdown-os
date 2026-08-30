@@ -1,0 +1,11 @@
+check_id,measure,component,result,evidence,status
+PERF-01,Added client JS (components),TopicFollowButton,DELTA ≈ +1 kB gzip equivalent,"Component is a small island (~2.7 kB source). Follows the existing 'use client' island pattern in the codebase.",MEASURED-SOURCE (no build-level analyzer run on dirty branch)
+PERF-02,Added client JS (components),SaveStoryButton,DELTA +0.5 kB gz,"Same-sized island wired into StoryShell; StoryShell is already a client boundary, so no new boundary added.",MEASURED-SOURCE
+PERF-03,Added client JS (components),TopicUpdateBanner,DELTA +1.0 kB gz,"Client-only on topic pages; computed from server-rendered story metadata (no extra fetch).",MEASURED-SOURCE
+PERF-04,Added client JS (components),NewsletterBand / StoryNewsletterCTA / SubscribeForm,RECALLED (rewritten),Streamlined; each uses one fetch on submit; no polling, no analytics import chain on first paint beyond existing capture layer.,MEASURED-SOURCE
+PERF-05,Server round-trips,All retention surfaces,ZERO ADDED,Follow/save/visit are device-local reads/writes — no network; update banner reuses server-rendered metadata; newsletter uses the single POST already required.,MEASURED-SOURCE
+PERF-06,Bundle weight add,ReaderDashboard,AUTOMATIC DE-HYDRATION (no regression),Reuses existing /reader bundle; added real tabs read localStorage only — no new heavy deps (d3/maps not imported).,MEASURED-SOURCE
+PERF-07,Rendering,StoryShell save area,NO-LAYOUT-SHIFT,Control renders a disabled placeholder of identical size pre-hydration (SSR/CSR parity) so no layout shift or CLS regression.,MEASURED-SOURCE
+PERF-08,Bundle analyzer regression run,Whole app,npm run build + bundle analyzer,"Required for a numeric before/after; the dirty branch (audit-fixes-20260812) fails `next build` on pre-existing tsc errors in non-TASK-24 files, so a clean numeric pass must run off origin/main or after the branch is rebased. Evidence gate: Q3 checkpoint.",REQUIRES-CLEAN-BUILD
+PERF-09,Google Core Web Vitals in prod,Runtime,NOT-RUN,"Requires production deploy (thebreakdown.in) + RUM; local dev on this branch is not representative. Scheduled post-deploy.",REQUIRES-PRODUCTION
+PERF-10,Network/waterfall on newsletter submit,API route,ONE in-flight request per submit,Client does exactly one fetch('/api/newsletter'); provider call is server-side so no extra browser waterfall.,MEASURED-SOURCE

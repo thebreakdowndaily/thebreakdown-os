@@ -12,11 +12,11 @@ export class TopicQualityAggregator implements TopicAggregator {
 
     const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
     const storiesResult = await Promise.all(storyPromises);
-    const stories = storiesResult.filter((s): s is Story => !!s);
+    const stories = storiesResult.filter((s: Story | null | undefined): s is Story => !!s);
 
     if (stories.length === 0) missingStories.push('No stories associated with topic.');
     
-    stories.forEach(s => {
+    stories.forEach((s: Story) => {
       if (s.evidenceScore < 70) weakEvidence.push(`Weak evidence in story: ${s.slug}`);
       if (!s.timeline || s.timeline.length === 0) missingTimeline.push(`Missing timeline in story: ${s.slug}`);
       if (!s.heroImage) missingMedia.push(`Missing media in story: ${s.slug}`);

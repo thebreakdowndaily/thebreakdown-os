@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { captureEvent } from '@/lib/analytics/capture';
 
 interface InlineEvidencePanelProps {
   claimId: string;
@@ -12,6 +13,7 @@ interface InlineEvidencePanelProps {
 }
 
 export function InlineEvidencePanel({
+  claimId,
   statement,
   status,
   explanation,
@@ -19,6 +21,19 @@ export function InlineEvidencePanel({
   limitations,
 }: InlineEvidencePanelProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const togglePanel = () => {
+    const next = !isOpen;
+    setIsOpen(next);
+    if (next) {
+      // TASK-07: evidence interaction signals learning intent.
+      captureEvent('evidence_expanded', {
+        content_id: claimId,
+        claim_id: claimId,
+        evidence_path: status,
+      });
+    }
+  };
 
   const statusBadge =
     status === 'supported'
@@ -32,7 +47,7 @@ export function InlineEvidencePanel({
   return (
     <span className="inline-block my-1">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={togglePanel}
         className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-400 border border-emerald-800/40 transition-colors"
         aria-expanded={isOpen}
       >
@@ -49,7 +64,9 @@ export function InlineEvidencePanel({
               {statusBadge.label}
             </span>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+              }}
               className="text-neutral-400 hover:text-neutral-300 text-xs font-mono"
             >
               Close ✕
@@ -78,6 +95,10 @@ export function InlineEvidencePanel({
                         href={s.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        data-analytics="source"
+                        data-content-id={claimId}
+                        data-source-title={s.title}
+                        data-source-domain=""
                         className="text-emerald-400 hover:underline font-medium"
                       >
                         {s.title}

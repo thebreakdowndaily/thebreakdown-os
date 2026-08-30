@@ -6,7 +6,7 @@ import { seedDocuments, getDocument, getAllDocuments } from './document-registry
 import { seedTimelineEvents, getTimelineEvent, getEventsByEntity, getAllTimelineEvents } from './timeline-registry';
 import { seedThinkers, getThinker, getThinkersByConcept, getAllThinkers } from './thinker-registry';
 import { seedRelationships, getRelationship, getRelationshipsByEntity } from './relationship-registry';
-import { seedEvidence, getEvidence, getEvidenceByClaim, getEvidenceBySource } from './evidence-registry';
+import { seedEvidence, getEvidence, getEvidenceByClaim, getEvidenceBySource, getAllEvidence } from './evidence-registry';
 
 let seeded = false;
 
@@ -55,6 +55,7 @@ export interface KnowledgeCoreAPI {
   };
   evidence: {
     get: (id: string) => CanonicalEvidence | undefined;
+    all: () => CanonicalEvidence[];
     byClaim: (claimId: string) => CanonicalEvidence[];
     bySource: (sourceId: string) => CanonicalEvidence[];
   };
@@ -99,6 +100,7 @@ export function getKnowledgeCore(): KnowledgeCoreAPI {
     },
     evidence: {
       get: getEvidence,
+      all: getAllEvidence,
       byClaim: getEvidenceByClaim,
       bySource: getEvidenceBySource,
     },

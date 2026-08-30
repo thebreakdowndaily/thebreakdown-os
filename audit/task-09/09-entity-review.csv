@@ -1,0 +1,43 @@
+slug,type,descWords,related_stories,stats,total_articles,eligible,page,action,notes
+icmr,organization,137,1,3,1,true,published,ENRICHED (TASK-09),description expanded; dossier live; breach story linked via Related Coverage.
+npci,organization,135,1,3,1,true,published,ENRICHED (TASK-09),description expanded; dossier live; digital-payments linked.
+uidai,organization,135,1,3,1,true,published,ENRICHED (TASK-09),description expanded; dossier live; breach story linked.
+cert-in,organization,132,1,3,1,true,published,ENRICHED (TASK-09),description expanded; dossier live; breach story linked.
+mgnrega,policy,125,1,3,1,true,published,ENRICHED (TASK-09),description expanded; dossier live; mgnrega-reform linked; stats kept.
+ministry-of-rural-development,organization,111,1,4,1,true,published,ENRICHED (TASK-09),desc raised 98→111 words to clear term-gate; dossier live; mgnrega-reform linked.
+wto,organization,65,2,3,2,true,published,unchanged,eligible via totalArticles>=2.
+world-bank,organization,62,2,3,2,true,published,unchanged,eligible via totalArticles>=2.
+ilo,organization,61,2,3,2,true,published,unchanged,
+fatf,organization,61,2,3,2,true,published,unchanged,
+who,organization,59,3,3,3,true,published,unchanged,
+iora,organization,58,2,3,2,true,published,unchanged,
+imf,organization,55,2,3,2,true,published,unchanged,
+g20,organization,54,3,3,3,true,published,unchanged,
+brics,organization,52,3,3,3,true,published,unchanged,
+saarc,organization,52,2,3,2,true,published,unchanged,
+sco,organization,50,2,3,2,true,published,unchanged,
+aiib,organization,50,2,3,2,true,published,unchanged,
+adb,organization,48,2,3,2,true,published,unchanged,
+bimstec,organization,46,2,3,2,true,published,unchanged,
+quad,organization,46,3,3,3,true,published,unchanged,
+g77,organization,46,2,3,2,true,published,unchanged,
+ministry-of-labour,organization,43,2,3,2,true,published,unchanged,
+un,organization,42,3,3,3,true,published,unchanged,india-china-border-tensions linked (usage-graph mention).
+india,country,26,11,4,11,true,published,unchanged,hub entity; 11 story mentions.
+bihar,country,19,2,4,2,true,published,unchanged,
+ministry-of-finance,organization,18,3,4,3,true,published,unchanged,
+ministry-of-agriculture,organization,17,2,2,2,true,published,ENRICHED (TASK-09),relatedStories +groundwater-depletion; desktop linked +fasal-bima.
+cag,organization,16,2,2,2,true,published,ENRICHED (TASK-09),relatedStories +namami-gange-under-fire.
+rbi,organization,13,4,4,4,true,published,ENRICHED (TASK-09),relatedStories +rbi-repo-rate, supply-chain-shift, income-inequality-india.
+nam,organization,63,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),1 story + desc 63; term-gate not met.
+commonwealth,organization,57,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),1 story + desc 57.
+cdri,organization,54,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+isa,organization,53,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+ministry-of-education,organization,41,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),ews story investment is next realistic enrichment; deferred to editorial.
+election-commission,organization,33,1,4,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+nmcg,organization,32,1,5,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+ministry-of-jal-shakti,organization,28,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+cpcb,organization,28,1,4,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+resecurity,organization,22,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),Reviewed for the 81-crore story; verification strength of billing (Indian-origin EDR vendor) too weak to promote — see 10-pilot-decisions.csv CRE-08.
+ministry-of-women-and-child-development,organization,13,1,3,1,false,draft,BELOW THRESHOLD — no bypass (TASK-04),
+policy,eligibility gate note,NA,NA,gate = totalArticles>=2 OR (descWords>=100 AND metadata/statistics>=3) in buildEntityTerminalViewModel,41 entities reviewed; 30 published; 11 intentionally draft. No TASK-04 eligibility bypass occurred.

@@ -45,6 +45,7 @@ export interface APIStory {
   relatedEntities: APIRelatedEntity[];
   organisations?: APIRelatedEntity[];
   countries?: APIRelatedEntity[];
+  whyItMatters?: string;
   /** Editorial/story classification — NOT a publication gate. */
   status?: 'breaking' | 'developing' | 'verified' | 'explainer' | 'archive';
   /** Publication lifecycle — controls public visibility. Missing = draft (fail-closed). */
@@ -65,6 +66,7 @@ export interface APIStory {
   costValue?: string;
   takeaway?: string;
   whoIsAffected?: string;
+  lastVerified?: string;
 }
 
 export interface APIAuthor {
@@ -88,6 +90,7 @@ export interface APIFact {
 }
 
 export interface APIClaim {
+  id?: string;
   claim: string;
   source: string;
   verification: string;

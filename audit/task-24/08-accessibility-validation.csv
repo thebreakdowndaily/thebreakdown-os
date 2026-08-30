@@ -1,0 +1,23 @@
+check_id,component,requirement,standard,result,evidence,status
+A11Y-01,NewsletterBand,Input has an accessible label,sr-only label "+ id association;input[type=email]",PASS,<label class=sr-only for=newsletter-email>Email address</label> + id/for binding,VERIFIED-STATIC
+A11Y-02,NewsletterBand,Error is announced,aria-live assertive + role=alert,PASS,<p id=newsletter-error role=alert aria-live=assertive> on error path,VERIFIED-STATIC
+A11Y-03,NewsletterBand,Success state announced,aria-live polite + role=status,PASS,<div role=status aria-live=polite> for submitted/unavailable,VERIFIED-STATIC
+A11Y-04,NewsletterBand,Button keyboard-operable,native <button>,PASS,native button with disabled during loading,VERIFIED-STATIC
+A11Y-05,NewsletterBand,Focus visible,focus-visible ring,PASS,focus:outline-none + focus:border for input; default focus ring retained on button,VERIFIED-STATIC
+A11Y-06,StoryNewsletterCTA,Dismiss control labelled,aria-label on close,PASS,aria-label="Dismiss newsletter signup" on the X button,VERIFIED-STATIC
+A11Y-07,StoryNewsletterCTA,Email input accessible,label + association via id/for,pending-verify,<label class=sr-only for=cta-email>…</label> + id binding,VERIFIED-STATIC
+A11Y-08,StoryNewsletterCTA,Status announcements,role=status / role=alert,PASS,submitted uses role=status; error uses role=alert,VERIFIED-STATIC
+A11Y-09,TopicFollowButton,State exposed to assistive tech,aria-pressed,PASS,aria-pressed={following} on the native button,VERIFIED-STATIC
+A11Y-10,TopicFollowButton,Accessible name reflects action,aria-label,PASS,aria-label=Follow/Unfollow {name},VERIFIED-STATIC
+A11Y-11,TopicFollowButton,Green-only state conveys meaning,aria-pressed + text label=PASS,text also flips Following/Follow topic (not colour-only),VERIFIED-STATIC
+A11Y-12,SaveStoryButton,Pressed state exposed,aria-pressed,PASS,aria-pressed={saved} on native button,VERIFIED-STATIC
+A11Y-13,SaveStoryButton,Label announces effect of toggle,aria-label,PASS,aria-label=Save story to your library / Remove from your saved library,VERIFIED-STATIC
+A11Y-14,TopicUpdateBanner,New-content signal is not visual-only,role=status + text,PASS,banner renders <div role=status> with text "N stories are new here"; link is a text link,VERIFIED-STATIC
+A11Y-15,TopicUpdateBanner,Link focus ring,focus-visible, PASS,focus-visible:ring-2 ring-emerald-400 on link,VERIFIED-STATIC
+A11Y-16,ReaderDashboard,Tab navigation semantics,tablist/tab keys,pending-verify,sidebar buttons are native <button> with aria-current-equivalent active styling; keyboard reachable,VERIFIED-STATIC
+A11Y-17,ReaderDashboard,Headings hierarchy,one h2 per section,PASS,each tab section renders a single h2,VERIFIED-STATIC
+A11Y-18,ReaderDashboard,Empty states readable,semantic text,PASS,EmptySection uses <p> with plain copy,VERIFIED-STATIC
+A11Y-19,ReaderDashboard,No-account messaging,plain language,PASS,empty/settings copy states device-local storage plainly,VERIFIED-STATIC
+A11Y-20,All,Contrast on interactive text,WCAG AA (4.5:1 normal / 3:1 large),PASS,Design-token pairs spot-checked: amber #C9A84C on #0A0A0A and white on dark exceed AA; emerald-400 on dark exceeds AA; full axe-core pass scheduled in walkthrough.md,VERIFIED-STATIC
+A11Y-21,All,Screen-reader pass over full story flow,axe-core @playwright / NVDA,NOT-RUN,"Automated a11y runner available (@axe-core/playwright) but requires running dev server + browser; scheduled in walkthrough.md",REQUIRES-RUNTIME
+A11Y-22,All,Keyboard end-to-end path (tab through band, story-end CTA, follow, save, dashboard),manual,NOT-RUN,Manual QA checklist in walkthrough.md,REQUIRES-RUNTIME

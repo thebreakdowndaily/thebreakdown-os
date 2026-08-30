@@ -1,0 +1,55 @@
+Route Path,Type,Before (TASK-02),After (TASK-04),Status,SEO Impact
+/,Homepage,200 OK,200 OK,PASS,Optimized section flow
+/stories,Index,200 OK,200 OK,PASS,Exposed briefings index
+/series,Index,200 OK,200 OK,PASS,Exposed Library index
+/story/indias-inheritance,Chapter Redirect,308 Redirect,308 Redirect,PASS,No crawler duplicate routes
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,Chapter Canonical,200 OK,200 OK,PASS,Authoritative landing
+/story/kashmir-the-first-test,Chapter Redirect,308 Redirect,308 Redirect,PASS,No crawler duplicate routes
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/kashmir-the-first-test,Chapter Canonical,200 OK,200 OK,PASS,Authoritative landing
+/story/india-china-border-lac,Chapter Redirect,308 Redirect,308 Redirect,PASS,No crawler duplicate routes
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/india-china-border-lac,Chapter Canonical,200 OK,200 OK,PASS,Authoritative landing
+/story/mgnrega-reform,Chapter Redirect,308 Redirect,308 Redirect,PASS,No crawler duplicate routes
+/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform,Chapter Canonical,200 OK,200 OK,PASS,Authoritative landing
+/story/rbi-repo-rate,Chapter Redirect,308 Redirect,308 Redirect,PASS,No crawler duplicate routes
+/series/economic-policy-2026/volume/structural-reforms/chapter/rbi-repo-rate,Chapter Canonical,200 OK,200 OK,PASS,Authoritative landing
+/entity/un,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/wto,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/imf,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/world-bank,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/who,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/ilo,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/brics,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/sco,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/g20,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/saarc,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/commonwealth,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/adb,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/aiib,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/bimstec,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/quad,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/nam,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/g77,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/fatf,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/isa,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/iora,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/cdri,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/icmr,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/ministry-of-education,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/ministry-of-labour,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/mgnrega,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/ministry-of-rural-development,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/rbi,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/npci,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/ministry-of-agriculture,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/nmcg,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/ministry-of-jal-shakti,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/cpcb,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/cag,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/bihar,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/ministry-of-finance,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/ministry-of-women-and-child-development,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/india,Entity Profile,200 OK,200 OK,PASS,Rich profile dossier indexable
+/entity/election-commission,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/cert-in,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/uidai,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution
+/entity/resecurity,Entity Stub,200 OK,404 Not Found,PASS,Stub page hidden to prevent crawl quality dilution

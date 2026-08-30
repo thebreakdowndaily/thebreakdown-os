@@ -1,0 +1,3 @@
+Event_Name,Parameter,Type,Description,Location
+ad_blocker_detected,active,boolean,Fired when an adblocker is detected via DOM manipulation or network block,AdBlockDetector.tsx
+membership_purchased,planId,string,Fired upon successful checkout redirect for a specific plan tier,MembershipSuccessPage.tsx

@@ -1,7 +1,8 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense } from 'react';
+import { useEffect, useRef, Suspense } from 'react';
+import { isProductionHost } from '@/lib/analytics/environment';
 
 declare global {
   interface Window {
@@ -12,9 +13,15 @@ declare global {
 function GATrackerContent({ gaId }: { gaId: string }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isFirstRun = useRef(true);
 
   useEffect(() => {
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
+    if (!isProductionHost()) return;
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+    const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
     if (typeof window.gtag !== 'undefined') {
       window.gtag('config', gaId, { page_path: url });
     }

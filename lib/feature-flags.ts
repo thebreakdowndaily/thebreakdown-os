@@ -20,6 +20,7 @@ export const CANONICAL_ELIGIBILITY_REGISTRY: Record<string, CanonicalEligibility
   'pm-fasal-bima-claims': 'NEEDS_REVIEW',
   'cyber-resilience-act': 'BLOCKED',
   'semiconductor-mission': 'NEEDS_REVIEW',
+  'semiconductor-pli': 'ELIGIBLE',
   'space-economy-2026': 'NEEDS_REVIEW',
   'green-hydrogen-mission': 'NEEDS_REVIEW',
 };

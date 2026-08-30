@@ -1,0 +1,3 @@
+event_name,parameters,description
+dataset_download_started,"dataset_id, status","Fired when a download is requested. Status can be success or blocked."
+premium_data_viewed,"dataset_id","Fired when a premium dataset is viewed or rendered."

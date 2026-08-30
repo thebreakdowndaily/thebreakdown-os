@@ -30,6 +30,15 @@ export function propositionKey(text: string): string {
     .trim();
 }
 
+/** Like propositionKey but preserves non-ASCII word characters (Hindi, Malayalam, etc.). */
+export function multilingualPropositionKey(text: string): string {
+  return normalizeText(text)
+    .toLowerCase()
+    .replace(/^(the|a|an)\s+/, '')
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
+    .trim();
+}
+
 /** sha256 hex digest of arbitrary content. */
 export function contentHash(content: string): string {
   return createHash('sha256').update(content, 'utf8').digest('hex');
@@ -77,10 +86,18 @@ export function normalizedClaimKey(claim: string): string {
   return propositionKey(claim);
 }
 
-/** Estimate language from script. Devanagari → 'hi', CJK → 'zh', else 'en'. */
+/** Estimate language from script. Devanagari → 'hi', Bengali → 'bn', Malayalam → 'ml', CJK → 'zh', else 'en'. */
 export function detectLanguage(text: string): string {
   const sample = normalizeText(text).slice(0, 500);
   if (/[\u0900-\u097f]/.test(sample)) return 'hi';
+  if (/[\u0980-\u09ff]/.test(sample)) return 'bn';
+  if (/[\u0d00-\u0d7f]/.test(sample)) return 'ml';
+  if (/[\u0a00-\u0a7f]/.test(sample)) return 'pa';
+  if (/[\u0a80-\u0aff]/.test(sample)) return 'gu';
+  if (/[\u0b00-\u0b7f]/.test(sample)) return 'or';
+  if (/[\u0b80-\u0bff]/.test(sample)) return 'ta';
+  if (/[\u0c00-\u0c7f]/.test(sample)) return 'te';
+  if (/[\u0c80-\u0cff]/.test(sample)) return 'kn';
   if (/[\u4e00-\u9fff]/.test(sample)) return 'zh';
   if (/[\u0600-\u06ff]/.test(sample)) return 'ar';
   return 'en';
@@ -90,10 +107,71 @@ export function detectLanguage(text: string): string {
 export function sentenceSplit(text: string): string[] {
   return normalizeText(text)
     /* eslint-disable-next-line no-misleading-character-class, no-useless-escape */
-    .replace(/([.!?])\s+(?=[A-Z\u0900-\u097f"'(\[])/g, '$1\n')
+    .replace(/([.!?\u0964\u0965])\s+(?=[A-Z\u0900-\u097f\u0D00-\u0D7f\u0980-\u09ff\u0A00-\u0A7f"'(\[])/g, '$1\n')
     .split('\n')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
+}
+
+/**
+ * Entity-text normalization for cross-script comparison.
+ * Preserves original text; returns a comparison form.
+ */
+export interface NormalizedEntity {
+  original: string;
+  normalized: string;
+  script: string;
+  language: string;
+}
+
+/** Detect the dominant script of a text fragment. */
+export function detectScript(text: string): string {
+  const sample = text.slice(0, 200);
+  if (/[\u0900-\u097f]/.test(sample)) return 'devanagari';
+  if (/[\u0980-\u09ff]/.test(sample)) return 'bengali';
+  if (/[\u0d00-\u0d7f]/.test(sample)) return 'malayalam';
+  if (/[\u0a00-\u0a7f]/.test(sample)) return 'gurmukhi';
+  if (/[\u0a80-\u0aff]/.test(sample)) return 'gujarati';
+  if (/[\u0b00-\u0b7f]/.test(sample)) return 'oriya';
+  if (/[\u0b80-\u0bff]/.test(sample)) return 'tamil';
+  if (/[\u0c00-\u0c7f]/.test(sample)) return 'telugu';
+  if (/[\u0c80-\u0cff]/.test(sample)) return 'kannada';
+  if (/[\u4e00-\u9fff]/.test(sample)) return 'cjk';
+  if (/[\u0600-\u06ff]/.test(sample)) return 'arabic';
+  if (/[\u0370-\u03ff]/.test(sample)) return 'greek';
+  if (/[\u0400-\u04ff]/.test(sample)) return 'cyrillic';
+  if (/[\u0041-\u005a\u0061-\u007a]/.test(sample)) return 'latin';
+  return 'unknown';
+}
+
+/**
+ * Normalize entity text for comparison.
+ * Steps: trim → NFKC → normalize whitespace → normalize punctuation → lowercase.
+ * Does not mutate the original.
+ */
+export function normalizeEntityText(text: string): string {
+  return text
+    .trim()
+    .normalize('NFKC')
+    .replace(/\s+/g, ' ')
+    .replace(/[\u2018\u2019\u201a\u201b]/g, "'")
+    .replace(/[\u201c\u201d\u201e\u201f]/g, '"')
+    .replace(/[\u2013\u2014\u2015]/g, '-')
+    .replace(/\u00a0/g, ' ')
+    .toLowerCase()
+    .trim();
+}
+
+/**
+ * Create a NormalizedEntity from raw text.
+ */
+export function createNormalizedEntity(text: string): NormalizedEntity {
+  return {
+    original: text,
+    normalized: normalizeEntityText(text),
+    script: detectScript(text),
+    language: detectLanguage(text),
+  };
 }
 
 /** Basic slugification for project URLs. */

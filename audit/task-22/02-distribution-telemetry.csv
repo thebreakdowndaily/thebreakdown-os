@@ -1,0 +1,3 @@
+EventName,Parameter,Type,Description
+share_clicked,platform,string,The platform the user clicked to share to (x, whatsapp, linkedin, clipboard)
+share_clicked,story_slug,string,The slug of the story being shared

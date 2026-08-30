@@ -6,13 +6,13 @@ export class StatisticsAggregator implements TopicAggregator {
   async aggregate(topic: Topic, currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
     const storyPromises = topic.storyIds.map(id => getServices().stories.getStory(id));
     const storiesResult = await Promise.all(storyPromises);
-    const stories = storiesResult.filter((s): s is Story => !!s);
+    const stories = storiesResult.filter((s: Story | null | undefined): s is Story => !!s);
 
     let totalClaims = 0;
     let totalSources = 0;
     let totalEvidenceScore = 0;
     
-    stories.forEach(s => {
+    stories.forEach((s: Story) => {
       totalClaims += s.claims?.length || 0;
       totalSources += s.sources?.length || 0;
       totalEvidenceScore += s.evidenceScore || 0;
@@ -24,7 +24,7 @@ export class StatisticsAggregator implements TopicAggregator {
 
     // Gather unique entity IDs across all stories in this topic
     const entityIds = new Set<string>();
-    stories.forEach(s => {
+    stories.forEach((s: Story) => {
       if (s.relatedEntityIds) {
         s.relatedEntityIds.forEach((id: string) => entityIds.add(id));
       }
@@ -51,7 +51,7 @@ export class StatisticsAggregator implements TopicAggregator {
         averageConfidence,
         totalEntities: entityIds.size,
         totalClaims,
-        totalMediaAssets: stories.filter(s => s.heroImage).length, // simplified
+        totalMediaAssets: stories.filter((s: Story) => s.heroImage).length, // simplified
         totalSources,
         totalCountries,
         totalOrganizations,

@@ -35,6 +35,9 @@ const RelatedStories: React.FC<RelatedStoriesProps> = ({ stories }) => {
             <a
               key={story.slug}
               href={`/story/${story.slug}`}
+              data-analytics="related_story"
+              data-content-id={story.slug}
+              data-position={stories.indexOf(story) + 1}
               className="group bg-neutral-900/60 border border-neutral-800 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors flex flex-col backdrop-blur-sm"
             >
               {hasImage && (

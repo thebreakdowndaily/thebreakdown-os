@@ -23,6 +23,11 @@ export default function robots(): MetadataRoute.Robots {
           '/topic',
           '/topics',
           '/about',
+          '/problems',
+          '/compare',
+          '/evolution',
+          '/precedents',
+          '/tracking',
         ],
         disallow: [
           // Internal tools — must never be indexed
@@ -41,17 +46,9 @@ export default function robots(): MetadataRoute.Robots {
           '/explorer',
           '/performance',
           '/operations',
-          '/tracking',
           // Sub-products / experimental routes not ready for public
           '/up403',
-          '/problems',
-          '/compare',
-          '/evolution',
-          '/precedents',
           // Empty pages
-          '/stories',
-          '/investigation',
-          '/investigations',
           '/timelines',
           '/subscribe',
         ],

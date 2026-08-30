@@ -75,6 +75,9 @@ export default function SourcesList({ sources }: SourcesListProps) {
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-analytics="source"
+                  data-source-title={src.name}
+                  data-source-domain=""
                   className="flex items-start sm:items-center justify-between gap-3 px-4 py-3 rounded-xl bg-[#151515] border border-[#2A2A2A] hover:border-[#D4A843]/30 transition-colors duration-200 group"
                 >
                   <div className="flex items-start sm:items-center gap-3">

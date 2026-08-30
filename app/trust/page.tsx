@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Container from '@/components/layout/Container';
 import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
+import { getCanonicalTrustMetrics, type TrustMetrics } from '@/lib/knowledge/trust-metrics';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Trust Dashboard — The Breakdown',
@@ -10,7 +13,17 @@ export const metadata: Metadata = {
   twitter: { card: 'summary', title: 'Trust Dashboard — The Breakdown', description: 'Live transparency for The Breakdown Knowledge Platform: claims, sources, evidence, review status.' },
 };
 
-export default function TrustPage() {
+export default async function TrustPage() {
+  let metrics: TrustMetrics | null = null;
+  try {
+    metrics = await getCanonicalTrustMetrics();
+  } catch (err) {
+    console.error('Failed to load trust metrics:', err);
+    metrics = null;
+  }
+
+  const formatVal = (val: number | undefined) => (val !== undefined && val !== null ? String(val) : '--');
+
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
@@ -42,7 +55,7 @@ export default function TrustPage() {
           <div className="flex items-center gap-2 mb-2">
             <span className="text-amber-400 text-sm font-semibold">★ Founding Edition v1.0</span>
           </div>
-          <p className="text-gray-300 text-sm">The Breakdown Knowledge Library — Founding Edition. <strong>Founding Monograph 001</strong> published. All metrics below reflect current state of the editorial infrastructure.</p>
+          <p className="text-gray-300 text-sm">The Breakdown Knowledge Library — Founding Edition. <strong>Founding Chapter 001</strong> published. All metrics below reflect current state of the editorial infrastructure.</p>
         </div>
 
         {/* Platform Status */}
@@ -50,36 +63,36 @@ export default function TrustPage() {
           <h2 className="text-lg font-semibold text-white mb-3">Platform Status</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Published monographs</p>
-              <p className="text-green-400 text-2xl font-bold">1</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Published chapters</p>
+              <p className="text-green-400 text-2xl font-bold">{formatVal(metrics?.publishedChapters)}</p>
             </div>
             <div>
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Monographs in review</p>
-              <p className="text-amber-400 text-2xl font-bold">0</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Chapters in review</p>
+              <p className="text-amber-400 text-2xl font-bold">{formatVal(metrics?.chaptersInReview)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Total claims registered</p>
-              <p className="text-white text-2xl font-bold">18</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.totalClaims)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Primary sources cited</p>
-              <p className="text-white text-2xl font-bold">13</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.primarySourcesCited)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Sources in registry</p>
-              <p className="text-white text-2xl font-bold">31</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.sourcesInRegistry)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Evidence entries</p>
-              <p className="text-white text-2xl font-bold">36</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.evidenceEntries)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Documents reproduced</p>
-              <p className="text-white text-2xl font-bold">8</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.documentsReproduced)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Thinkers profiled</p>
-              <p className="text-white text-2xl font-bold">10</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.thinkersProfiled)}</p>
             </div>
           </div>
         </div>
@@ -90,15 +103,15 @@ export default function TrustPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Open scholarly disagreements</p>
-              <p className="text-white text-2xl font-bold">18</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.openScholarlyDisagreements)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Counterarguments documented</p>
-              <p className="text-white text-2xl font-bold">18</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.counterArgumentsDocumented)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Corrections issued</p>
-              <p className="text-white text-2xl font-bold">0</p>
+              <p className="text-white text-2xl font-bold">{formatVal(metrics?.correctionsIssued)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Average Trust Score</p>
@@ -109,7 +122,7 @@ export default function TrustPage() {
 
         {/* Gold Standard Review */}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-3">Gold Standard Review — Founding Monograph 001</h2>
+          <h2 className="text-lg font-semibold text-white mb-3">Gold Standard Review — Founding Chapter 001</h2>
           <p className="text-gray-400 text-sm mb-3">Phase 1–2 pending external reviewer network. Phases 3–7 passable with current editorial resources.</p>
           <div className="space-y-2">
             <div className="flex items-center justify-between">

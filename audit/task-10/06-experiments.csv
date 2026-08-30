@@ -1,0 +1,6 @@
+Experiment ID,Page,Hypothesis,Metric,Baseline,Change,Start date,End date,Result,Confidence,Decision
+EXP-10-01,mgnrega-reform,Adding VB-G RAM G Act 2025 details increases click duration,engaged session duration,NOT VERIFIED,Statutory transition context added,2026-08-30,2026-09-30,Awaiting data,Pending,Hold
+EXP-10-02,digital-payments-boom,"Adding UPI123Pay ₹10,000 transaction limit satisfies query demand",search position,8,UPI123Pay FAQ limit added,2026-08-30,2026-09-30,Awaiting data,Pending,Hold
+EXP-10-03,india-china-border-tensions,Replacing copied asset with Aksai Chin map improves CTR,CTR,NOT VERIFIED,Visual asset replaced,2026-08-30,2026-09-30,Awaiting data,Pending,Hold
+EXP-10-04,climate-finance,Adding COP29 NCQG numbers expands search impressions,impressions,NOT VERIFIED,COP29 finance FAQ targets added,2026-08-30,2026-09-30,Awaiting data,Pending,Hold
+EXP-10-05,pm-fasal-bima-claims,Detailing CAG crop insurance claims delays targets data traffic,search visibility,9,CAG insurance claims audit details added,2026-08-30,2026-09-30,Awaiting data,Pending,Hold

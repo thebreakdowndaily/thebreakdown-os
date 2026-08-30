@@ -12,11 +12,13 @@
 import type {
   ResearchQuery,
   ResearchQueryCategory,
+  ResearchSourceContextEntry,
   ResearchSourceType,
   TopicExpansion,
 } from '@/types/research-intelligence';
 import { entitySearchTerms } from './topic-expansion';
 import { createQueryId } from './ids';
+import { generatePrimarySourceDiscoveryQueries } from './primary-source-discovery';
 
 interface QueryTemplate {
   category: ResearchQueryCategory;
@@ -44,14 +46,30 @@ const QUERY_TEMPLATES: QueryTemplate[] = [
 /** Generate the bounded, deduplicated query set for a project run. */
 export function generateQueries(
   expansion: TopicExpansion,
-  options: { maxQueries?: number; seedTopic?: string } = {}
+  options: {
+    maxQueries?: number;
+    seedTopic?: string;
+    /**
+     * Enable the RIE v1.2 primary-source discovery families (DOCUMENT_TYPE and
+     * OFFICIAL). Defaults to false so v1.1 behaviour (and its benchmark
+     * outputs) is unchanged unless explicitly enabled.
+     */
+    primarySourceDiscovery?: boolean;
+    /** Registry-derived source context for OFFICIAL (site:domain) queries. */
+    sourceContext?: ResearchSourceContextEntry[];
+  } = {}
 ): ResearchQuery[] {
   const maxQueries = options.maxQueries ?? 24;
   const now = new Date().toISOString();
   const queries: ResearchQuery[] = [];
   const seen = new Set<string>();
 
-  const add = (text: string, category: ResearchQueryCategory, sourceType: ResearchSourceType) => {
+  const add = (
+    text: string,
+    category: ResearchQueryCategory,
+    sourceType: ResearchSourceType,
+    reason?: string
+  ) => {
     const normalized = text.trim().toLowerCase();
     if (!normalized || seen.has(normalized)) return;
     seen.add(normalized);
@@ -62,6 +80,7 @@ export function generateQueries(
       sourceType,
       generatedAt: now,
       usedInRuns: [],
+      ...(reason ? { reason } : {}),
     });
   };
 
@@ -70,6 +89,17 @@ export function generateQueries(
     for (const text of template.template(expansion.canonical, expansion)) {
       if (queries.length >= maxQueries) break;
       add(text, template.category, template.sourceType);
+    }
+  }
+
+  if (options.primarySourceDiscovery) {
+    for (const spec of generatePrimarySourceDiscoveryQueries(
+      expansion.canonical,
+      options.sourceContext,
+      { maxOfficialDomains: 5 }
+    )) {
+      if (queries.length >= maxQueries) break;
+      add(spec.text, spec.category, spec.sourceType, spec.reason);
     }
   }
 

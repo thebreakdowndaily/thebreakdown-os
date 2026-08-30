@@ -83,7 +83,9 @@ export type ResearchQueryCategory =
   | 'LEGAL'
   | 'REGULATORY'
   | 'LOCAL'
-  | 'LANGUAGE_SPECIFIC';
+  | 'LANGUAGE_SPECIFIC'
+  | 'DOCUMENT_TYPE'
+  | 'OFFICIAL';
 
 export interface ResearchQuery {
   id: string;
@@ -92,6 +94,28 @@ export interface ResearchQuery {
   sourceType: ResearchSourceType;
   generatedAt: string;
   usedInRuns: string[];
+  /**
+   * Why this query exists (query-family provenance, RIE v1.2). Present on
+   * primary-source discovery queries so each generated query is reviewable.
+   */
+  reason?: string;
+}
+
+/** Topic family used to target primary-source document types (RIE v1.2). */
+export type PrimarySourceFamily =
+  | 'POLICY'
+  | 'PARLIAMENT'
+  | 'REGULATORY'
+  | 'COURT'
+  | 'GOVERNMENT_ACTION'
+  | 'GENERIC';
+
+/** Registry-derived source context for domain-targeted (OFFICIAL) queries. */
+export interface ResearchSourceContextEntry {
+  domain: string;
+  authorityClass: ResearchSourceClass;
+  documentTypes?: string[];
+  priority?: 'P0' | 'P1' | 'P2' | 'P3';
 }
 
 // ── 3. Topic intelligence ────────────────────────────────────────────────────
@@ -193,6 +217,7 @@ export interface ResearchSource {
   snippet?: string;
   queryId?: string;
   queryText?: string;
+  queryCategory?: ResearchQueryCategory;
   adapter: string;
   relevanceScore: number;
   authorityScore: number;
@@ -300,6 +325,11 @@ export interface ResearchClaim {
   contradictionIds: string[];
   firstSeenAt: string;
   lastVerifiedAt?: string;
+  originalClaimText?: string;
+  originalLanguage?: string;
+  translatedClaimText?: string;
+  translationMethod?: 'STATIC_MAP' | 'NONE';
+  translationStatus?: 'TRANSLATED' | 'PARTIALLY_TRANSLATED' | 'UNTRANSLATED';
 }
 
 // ── 8. Evidence ──────────────────────────────────────────────────────────────
@@ -323,6 +353,11 @@ export interface ResearchEvidence {
   excerpt: string;
   retrievalTimestamp: string;
   qualityScore: number;
+  originalEvidence?: string;
+  translatedEvidence?: string;
+  originalLanguage?: string;
+  translationMethod?: 'STATIC_MAP' | 'NONE';
+  translationStatus?: 'TRANSLATED' | 'PARTIALLY_TRANSLATED' | 'UNTRANSLATED';
 }
 
 // ── 9. Events / timeline ─────────────────────────────────────────────────────
@@ -665,6 +700,12 @@ export type ResearchSourceApprovalState =
 
 export type ResearchSourceRefreshPolicy = 'HOURLY' | 'DAILY' | 'WEEKLY';
 
+/** Transport configured for production discovery. */
+export type ResearchDiscoveryProtocol = 'RSS' | 'ATOM' | 'API' | 'HTML';
+
+/** Validation concerns the configured transport, not the source's authority. */
+export type ResearchSourceValidationStatus = 'VALIDATED' | 'UNVALIDATED';
+
 export interface ResearchSourceDefinition {
   id: string;
   name: string;
@@ -682,6 +723,11 @@ export interface ResearchSourceDefinition {
   geographies: string[];
   priority: 'P0' | 'P1' | 'P2' | 'P3';
   refreshPolicy: ResearchSourceRefreshPolicy;
+  discoveryProtocol?: ResearchDiscoveryProtocol;
+  /** Only validated RSS/Atom endpoints are sent to the RSS adapter. */
+  validationStatus?: ResearchSourceValidationStatus;
+  /** Primary-source document types this feed can carry (e.g. Act, Judgment). */
+  documentTypes?: string[];
   notes?: string;
   /** Editorial rationale for inclusion. Required once approvalStatus is set. */
   rationale?: string;
@@ -690,7 +736,16 @@ export interface ResearchSourceDefinition {
   approvedAt?: string;
 }
 
-export type ResearchSourceHealthStatus = 'HEALTHY' | 'DEGRADED' | 'FAILING' | 'DISABLED';
+export type ResearchSourceHealthStatus =
+  | 'HEALTHY_WITH_ITEMS'
+  | 'HEALTHY_EMPTY'
+  | 'UNAVAILABLE'
+  | 'INVALID_FEED'
+  | 'PARSE_ERROR'
+  | 'TIMEOUT'
+  | 'UNSUPPORTED'
+  | 'UNVALIDATED'
+  | 'DISABLED';
 
 /** Runtime health of a registry feed. Persisted in memory in v1 (see source-governance). */
 export interface ResearchSourceHealth {

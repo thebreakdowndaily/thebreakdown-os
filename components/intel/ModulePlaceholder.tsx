@@ -15,6 +15,7 @@ const MODULE_DESCRIPTIONS: Record<IntelModule, string> = {
   rti: 'RTI tracker: filed requests, deadlines, and responses.',
   tasks: 'Editorial task queue across the intelligence workspace.',
   newsroom: 'Newsroom Intelligence OS: live observation clustering, signal evaluation, and triage command center.',
+  demand: 'Public Demand & Search Intelligence: Hindi/English search demand analysis, coverage gap detection, and research handoff.',
 };
 
 export function ModulePlaceholder({ module }: { module: IntelModule }) {

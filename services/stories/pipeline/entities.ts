@@ -28,12 +28,12 @@ export class EntityBuilder implements StoryBuilder {
     const entityResults = await Promise.all(
       s.relatedEntityIds.map(id => getServices().entities.getEntity(id))
     );
-    const relatedEntities = entityResults.filter((e): e is EntityBase => !!e);
+    const relatedEntities = entityResults.filter((e: EntityBase | null | undefined): e is EntityBase => !!e);
 
     // If primaryEntityId is set, use it as primary; rest are supporting
     if (s.primaryEntityId) {
-      const primary = relatedEntities.find(e => e.id === s.primaryEntityId || e.slug === s.primaryEntityId) || null;
-      const supporting = relatedEntities.filter(e => e !== primary);
+      const primary = relatedEntities.find((e: EntityBase) => e.id === s.primaryEntityId || e.slug === s.primaryEntityId) || null;
+      const supporting = relatedEntities.filter((e: EntityBase) => e !== primary);
       story.resolvedEntities = { primary, supporting };
       return story;
     }

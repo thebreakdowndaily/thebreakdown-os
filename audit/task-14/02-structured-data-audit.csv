@@ -1,0 +1,10 @@
+url,schemaType,mainContext,keyFieldsVerified
+https://thebreakdown.in/problems,DefinedTermSet,https://schema.org,name description
+https://thebreakdown.in/precedents,Dataset,https://schema.org,name description
+https://thebreakdown.in/evolution,DataFeed,https://schema.org,name description
+https://thebreakdown.in/compare,Table,https://schema.org,name description
+https://thebreakdown.in/problems/{slug},Article,https://schema.org,headline articleSection
+https://thebreakdown.in/problems/{slug}/compare,Table,https://schema.org,about description
+https://thebreakdown.in/problems/{slug}/precedents,ItemPage,https://schema.org,name
+https://thebreakdown.in/problems/{slug}/tracking,ItemPage,https://schema.org,name
+https://thebreakdown.in/problems/{slug}/evolution,ItemPage,https://schema.org,name

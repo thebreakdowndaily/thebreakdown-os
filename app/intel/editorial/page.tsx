@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { IntelModuleGuard } from '@/features/auth/components/IntelModuleGuard';
 import { guardIntelModule } from '@/features/auth/intel-server';
 import { IntelDenied } from '@/components/intel/IntelDenied';
@@ -48,6 +49,26 @@ export default async function EditorialPage() {
             (structural priority, prediction instability, scenario exposure, evidence debt, verification pressure). Every seat states why it ranks where it does, and what it cannot tell you
             (dataset {overview.dataSource}, cutoff {overview.researchCutoff}).
           </p>
+          <div style={{ marginTop: 'var(--spacing-3)' }}>
+            <Link
+              href="/intel/editorial/calendar"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 14px',
+                borderRadius: '8px',
+                border: '1px solid var(--color-border-default)',
+                background: 'var(--color-bg-primary)',
+                color: 'var(--color-text-primary)',
+                fontSize: '12px',
+                fontWeight: 500,
+                textDecoration: 'none',
+              }}
+            >
+              📅 Editorial Calendar — Weekly Story Plan
+            </Link>
+          </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--spacing-4)', marginBottom: 'var(--spacing-8)' }}>

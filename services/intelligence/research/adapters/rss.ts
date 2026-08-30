@@ -27,12 +27,16 @@ export interface RssFeedConfig {
   publisher: string;
   sourceType: ResearchSourceType;
   sourceClass: ResearchSourceClass;
+  /** Primary document types this feed can carry (e.g. Act, Judgment, Order). */
+  documentTypes?: string[];
 }
 
 /** Per-feed discovery outcome, reported to the source registry for health. */
 export interface RssFeedOutcome {
   feedUrl: string;
   ok: boolean;
+  /** HTTP success alone is not a healthy discovery result. */
+  status: 'HEALTHY_WITH_ITEMS' | 'HEALTHY_EMPTY' | 'UNAVAILABLE' | 'INVALID_FEED' | 'PARSE_ERROR' | 'TIMEOUT' | 'UNSUPPORTED';
   statusCode?: number;
   latencyMs: number;
   itemsParsed: number;
@@ -67,7 +71,7 @@ function stripHtml(raw: string): string {
     .trim();
 }
 
-function parseFeed(xml: string): RssFeedItem[] {
+function parseFeed(xml: string): { kind: 'RSS' | 'ATOM' | 'INVALID_FEED' | 'UNSUPPORTED'; items: RssFeedItem[] } {
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
@@ -79,6 +83,12 @@ function parseFeed(xml: string): RssFeedItem[] {
     feed?: { entry?: unknown };
   };
   const items: RssFeedItem[] = [];
+  const declaresRss = /^\s*(?:<\?xml[^>]*>\s*)?<rss(?:\s|>)/i.test(xml);
+  const declaresAtom = /^\s*(?:<\?xml[^>]*>\s*)?<feed(?:\s|>)/i.test(xml);
+  const kind = declaresRss
+    ? parsed.rss?.channel ? 'RSS' : 'INVALID_FEED'
+    : declaresAtom ? 'ATOM' : 'UNSUPPORTED';
+  if (kind === 'UNSUPPORTED') return { kind, items };
 
   const rssItems = parsed.rss?.channel?.item;
   if (rssItems) {
@@ -122,7 +132,15 @@ function parseFeed(xml: string): RssFeedItem[] {
     }
   }
 
-  return items;
+  return { kind, items };
+}
+
+function outcomeForError(error: unknown): RssFeedOutcome['status'] {
+  const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+  if ((error instanceof DOMException && error.name === 'AbortError') || message.includes('timeout') || message.includes('aborted')) {
+    return 'TIMEOUT';
+  }
+  return 'UNAVAILABLE';
 }
 
 /** Strip scripts/styles/boilerplate from HTML for document text extraction. */
@@ -150,6 +168,27 @@ function tokenMatch(queryText: string, haystack: string): boolean {
   return queryTokens.length === 0 || queryTokens.some((t) => h.includes(t));
 }
 
+/**
+ * Primary-source ranking bonus (RIE v1.2, Failure F4). Mirrors the shared
+ * policy in services/intelligence/research/source-registry.ts (PRIMARY_SOURCE_
+ * CLASSES); defined here to keep this leaf module import-cycle free. Primary
+ * feeds outrank general media within bounded per-query discovery.
+ */
+const PRIMARY_SOURCE_CLASSES = new Set<ResearchSourceClass>([
+  'PRIMARY',
+  'OFFICIAL',
+  'REGULATORY',
+  'JUDICIAL',
+  'PARLIAMENTARY',
+]);
+
+function isPrimaryClass(sourceClass: ResearchSourceClass): boolean {
+  return PRIMARY_SOURCE_CLASSES.has(sourceClass);
+}
+
+const BASE_QUERY_RELEVANCE = 0.6;
+const PRIMARY_SOURCE_BONUS = 0.3;
+
 export class RssAdapter implements ResearchSourceAdapter {
   readonly id = 'rss';
   readonly capabilities = ['discover', 'fetch'] as const;
@@ -175,7 +214,9 @@ export class RssAdapter implements ResearchSourceAdapter {
       publishedAt?: string;
       sourceType: ResearchSourceType;
       sourceClass: ResearchSourceClass;
+      documentType?: string;
       relevance: number;
+      rankingComponents: { queryRelevance: number; primarySourceBonus: number };
     }> = [];
 
     for (const feed of this.feeds) {
@@ -184,17 +225,33 @@ export class RssAdapter implements ResearchSourceAdapter {
       let statusCode: number | undefined;
       let itemsParsed = 0;
       let lastError: string | undefined;
+      let outcomeStatus: RssFeedOutcome['status'] = 'UNAVAILABLE';
       for (let attempt = 0; attempt <= this.retries; attempt += 1) {
         try {
           const response = await ctx.fetcher(feed.url);
           statusCode = response.status;
           if (!response.ok) throw new Error(`feed ${feed.url} returned status ${response.status ?? 'unknown'}`);
           const xml = await response.text();
-          const parsed = parseFeed(xml);
-          itemsParsed = parsed.length;
-          for (const item of parsed) {
+          let parsed: ReturnType<typeof parseFeed>;
+          try {
+            parsed = parseFeed(xml);
+          } catch (error) {
+            outcomeStatus = 'PARSE_ERROR';
+            throw error;
+          }
+          if (parsed.kind === 'INVALID_FEED') {
+            outcomeStatus = 'INVALID_FEED';
+            throw new Error(`feed ${feed.url} is an invalid RSS document`);
+          }
+          if (parsed.kind === 'UNSUPPORTED') {
+            outcomeStatus = 'UNSUPPORTED';
+            throw new Error(`feed ${feed.url} is not an RSS or Atom document`);
+          }
+          itemsParsed = parsed.items.length;
+          for (const item of parsed.items) {
             const haystack = `${item.title} ${item.snippet ?? ''} ${feed.publisher}`;
             if (!tokenMatch(query.text, haystack)) continue;
+            const primaryBonus = isPrimaryClass(feed.sourceClass) ? PRIMARY_SOURCE_BONUS : 0;
             items.push({
               url: item.url,
               title: item.title,
@@ -203,13 +260,22 @@ export class RssAdapter implements ResearchSourceAdapter {
               publishedAt: item.publishedAt,
               sourceType: feed.sourceType,
               sourceClass: feed.sourceClass,
-              relevance: 0.6,
+              documentType: feed.documentTypes?.[0],
+              relevance: Math.round((BASE_QUERY_RELEVANCE + primaryBonus) * 100) / 100,
+              rankingComponents: {
+                queryRelevance: BASE_QUERY_RELEVANCE,
+                primarySourceBonus: primaryBonus,
+              },
             });
           }
           ok = true;
+          outcomeStatus = itemsParsed > 0 ? 'HEALTHY_WITH_ITEMS' : 'HEALTHY_EMPTY';
           break;
         } catch (err) {
           lastError = err instanceof Error ? err.message : String(err);
+          if (outcomeStatus !== 'UNSUPPORTED' && outcomeStatus !== 'INVALID_FEED' && outcomeStatus !== 'PARSE_ERROR') {
+            outcomeStatus = outcomeForError(err);
+          }
           if (attempt >= this.retries) {
             errors.push(`rss:${feed.url}: ${lastError}`);
           } else {
@@ -221,6 +287,7 @@ export class RssAdapter implements ResearchSourceAdapter {
       this.onFeedOutcome?.({
         feedUrl: feed.url,
         ok,
+        status: outcomeStatus,
         statusCode,
         latencyMs: Math.round(performance.now() - startedAt),
         itemsParsed,
@@ -235,10 +302,13 @@ export class RssAdapter implements ResearchSourceAdapter {
       items: items
         .sort((a, b) => b.relevance - a.relevance)
         .slice(0, maxResults)
-        .map(({ relevance, ...item }) => ({
+        .map(({ relevance, rankingComponents, documentType, ...item }) => ({
           ...item,
           adapter: this.id,
           relevanceScore: relevance,
+          rankingScore: relevance,
+          documentType,
+          rankingComponents,
         })),
       errors,
     };

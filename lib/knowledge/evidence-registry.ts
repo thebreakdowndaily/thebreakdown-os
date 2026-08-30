@@ -18,6 +18,10 @@ export function getEvidenceBySource(sourceId: string): CanonicalEvidence[] {
   );
 }
 
+export function getAllEvidence(): CanonicalEvidence[] {
+  return Array.from(evidenceEntries.values());
+}
+
 export function registerEvidence(ev: CanonicalEvidence): void {
   evidenceEntries.set(ev.id, ev);
 }
@@ -356,6 +360,24 @@ export function seedEvidence(): void {
       excerpt: 'The Marginal Standing Facility (MSF) rate is set at 5.50% as of July 2026.',
       confidence: 0.98,
       verifiedAt: '2026-07-23T17:50:45.409Z',
+    },
+    {
+      id: 'ev.upi.123pay-limit',
+      claimId: 'claim.upi.upi123pay-limit',
+      sourceId: 'src-rbi-sdrp-oct-2024',
+      relevance: 'direct',
+      excerpt: 'The per-transaction limit for UPI123Pay was raised from ₹5,000 to ₹10,000 by the Reserve Bank of India (RBI) in October 2024 to promote digital transactions on feature phones.',
+      confidence: 1.0,
+      verifiedAt: '2026-08-30T00:00:00Z',
+    },
+    {
+      id: 'ev.climate.cop29-ncqg-finance',
+      claimId: 'claim.climate.cop29-ncqg-finance',
+      sourceId: 'src-unfccc-cop29-decision-1-cma-6',
+      relevance: 'direct',
+      excerpt: 'At COP29 in Baku (November 2024), parties adopted the New Collective Quantified Goal (NCQG) setting a target of at least US$300 billion per year in climate finance from developed countries by 2035.',
+      confidence: 1.0,
+      verifiedAt: '2026-08-30T00:00:00Z',
     },
   ];
 

@@ -1,0 +1,5 @@
+Inbound Type,Outbound Type,Reciprocal Linking Rules,Validation,Status
+Homepage,Topic Hub,Must display top 4 topics,YES,PASS
+Topic Hub,Briefings,Must display latest 4 story cards,YES,PASS
+Story Article,Entity Profile,Must link back to mentioned profile,YES,PASS
+Entity Profile,Story Article,Must link back to stories referencing it,YES,PASS

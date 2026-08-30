@@ -18,9 +18,9 @@ import type { HomepageLeadStory } from '@/features/home/view-model';
 const FOUNDING_CHAPTER_PATH =
   '/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance';
 
+import type { TrustMetrics } from '@/lib/knowledge/trust-metrics';
+
 const FOUNDING_CHAPTER_STATS = {
-  claims: 18,
-  sources: 31,
   readingTime: 47,
   evidenceGrade: 'A',
   reviewStatus: 'Internal Gold Candidate',
@@ -28,9 +28,10 @@ const FOUNDING_CHAPTER_STATS = {
 
 interface HeroSectionProps {
   leadStory: HomepageLeadStory | null;
+  trustMetrics?: TrustMetrics | null;
 }
 
-export default function HeroSection({ leadStory }: HeroSectionProps) {
+export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProps) {
   const href = leadStory?.slug
     ? `/story/${leadStory.slug}`
     : FOUNDING_CHAPTER_PATH;
@@ -41,8 +42,8 @@ export default function HeroSection({ leadStory }: HeroSectionProps) {
     'Partition left India with disputed borders, a shattered economy, 562 princely states, and a foreign policy philosophy it would spend fifteen years trying to define. This is where the story begins.';
   const category = leadStory?.category ?? 'FOUNDING CHAPTER · VOLUME I';
   const readingTime = leadStory?.readingTime ?? FOUNDING_CHAPTER_STATS.readingTime;
-  const claims = leadStory?.stats?.claims ?? FOUNDING_CHAPTER_STATS.claims;
-  const sources = leadStory?.stats?.sources ?? FOUNDING_CHAPTER_STATS.sources;
+  const claims = leadStory?.stats?.claims ?? (trustMetrics?.chapterOneClaims ?? '--');
+  const sources = leadStory?.stats?.sources ?? (trustMetrics?.chapterOneSources ?? '--');
   const evidenceGrade = leadStory?.stats?.evidenceGrade ?? FOUNDING_CHAPTER_STATS.evidenceGrade;
   const reviewStatus = leadStory?.stats?.reviewStatus ?? FOUNDING_CHAPTER_STATS.reviewStatus;
 

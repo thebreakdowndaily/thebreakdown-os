@@ -16,7 +16,7 @@
 import { ResearchIntelligenceCore } from '@/services/intelligence/research';
 import { runApprovedSourceDiscovery } from '@/services/intelligence/research/production-discovery';
 import { ResearchSourceRegistry } from '@/services/intelligence/research/source-registry';
-import type { ResearchRun } from '@/types/research-intelligence';
+import type { ResearchRun, ResearchSourceContextEntry } from '@/types/research-intelligence';
 import { matchDiscoveredToGold } from './matching';
 import { computeTopicMetrics, MissContext } from './metrics';
 import type {
@@ -76,7 +76,14 @@ export type BenchmarkDiscoveryDriver = (
   topic: BenchmarkTopic,
   projectId: string,
   core: ResearchIntelligenceCore,
-  options: { maxQueries: number; maxSources: number; maxDocuments: number; maxDiscoveryResultsPerQuery: number }
+  options: {
+    maxQueries: number;
+    maxSources: number;
+    maxDocuments: number;
+    maxDiscoveryResultsPerQuery: number;
+    primarySourceDiscovery?: boolean;
+    sourceContext?: ResearchSourceContextEntry[];
+  }
 ) => Promise<ResearchRun>;
 
 export interface BenchmarkRunOptions {
@@ -91,6 +98,10 @@ export interface BenchmarkRunOptions {
   availableAdapters?: string[];
   availableQueryCategories?: string[];
   notes?: string[];
+  /** Enable the RIE v1.2 primary-source discovery query families. */
+  primarySourceDiscovery?: boolean;
+  /** Registry-derived source context for OFFICIAL (site:domain) queries. */
+  sourceContext?: ResearchSourceContextEntry[];
   /** Inject a fresh core; defaults to a reset singleton backed by memory. */
   coreFactory?: () => ResearchIntelligenceCore;
 }
@@ -112,6 +123,8 @@ export function createApprovedSourceDiscoveryDriver(
       maxSources: options.maxSources,
       maxDocuments: options.maxDocuments,
       maxDiscoveryResultsPerQuery: options.maxDiscoveryResultsPerQuery,
+      primarySourceDiscovery: options.primarySourceDiscovery,
+      sourceContext: options.sourceContext,
     }, registry);
 }
 
@@ -211,7 +224,14 @@ export async function runRecallBenchmark(
 
     let run: ResearchRun;
     try {
-      run = await driver(topic, project.id, core, { maxQueries, maxSources, maxDocuments, maxDiscoveryResultsPerQuery });
+      run = await driver(topic, project.id, core, {
+        maxQueries,
+        maxSources,
+        maxDocuments,
+        maxDiscoveryResultsPerQuery,
+        primarySourceDiscovery: options.primarySourceDiscovery,
+        sourceContext: options.sourceContext,
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       totalEligible += topic.goldSources.length;

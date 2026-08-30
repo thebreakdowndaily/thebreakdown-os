@@ -1,0 +1,7 @@
+Event Name,Properties,Description
+search_performed,query|mode|resultCount|durationMs,Fired when a user submits a query
+search_result_clicked,resultId|resultType|position|query,Fired when a user clicks a result
+search_filter_applied,filterType|filterValue,Fired when a user changes the result type filter
+search_paginated,pageNumber|query,Fired when a user clicks next/prev page
+search_abandoned,query|timeSpent,Fired when a user leaves without clicking any result
+search_zero_results,query|mode,Fired when a query returns 0 matches

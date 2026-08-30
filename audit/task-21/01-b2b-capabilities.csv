@@ -1,0 +1,4 @@
+Feature,Role,Route
+Citation Exporter,Institutional,/story/[slug]
+License Manager,Institutional Admin,/membership/licenses
+License API,Institutional,/api/institution/licenses

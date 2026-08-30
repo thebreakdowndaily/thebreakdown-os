@@ -9,6 +9,7 @@ import SearchLayout from '@/layouts/SearchLayout';
 import StoryCard from '@/components/ui/StoryCard';
 import EntityCard from '@/components/ui/EntityCard';
 import Card from '@/components/ui/Card';
+import { SearchAnalytics } from '@/components/search/SearchAnalytics';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
@@ -70,6 +71,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   return (
     <SearchLayout query={query} seo={seo}>
+      {query && <SearchAnalytics query={query} resultsCount={total} />}
       <div className="space-y-8">
         
         {/* Spatial Orientation Breadcrumb */}

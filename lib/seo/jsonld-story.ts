@@ -44,29 +44,17 @@ export function createStoryJsonLd(story: Story): Record<string, unknown>[] {
   }
 
   ld.push({
-    '@context': 'https://thebreakdown.in/schema',
-    '@type': 'TheBreakdownKnowledgeStory',
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
     headline: story.headline,
-    summary: story.summary,
-    entities: story.tags || [],
-    topics: story.category ? [story.category] : [],
-    claims: story.claims?.map((c) => ({
-      claim: c.claim,
-      source: c.source,
-      verification: c.status,
-      confidence: c.confidence,
-    })) || [],
-    sources: story.sources?.map((s: any) => ({
-      title: s.title,
+    description: story.summary,
+    about: story.tags?.map((t) => ({ '@type': 'Thing', name: t })) || [],
+    genre: story.category ? [story.category] : [],
+    citation: story.sources?.map((s: any) => ({
+      '@type': 'CreativeWork',
+      name: s.title,
       url: s.url,
-      tier: s.tier,
     })) || [],
-    timeline: story.timeline?.map((t) => ({
-      date: t.date,
-      title: t.title,
-      description: t.description,
-    })) || [],
-    relationships: story.stakeholderNames || [],
   });
 
   return ld;

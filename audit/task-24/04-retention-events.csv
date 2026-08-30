@@ -1,0 +1,16 @@
+event_name,domain,params,fired_when,honesty_rule,initially_existing
+newsletter_viewed,funnel,topic_placeholder:page (homepage|story_end_cta|newsletter|subscribe),A newsletter surface was presented to a reader,No PII. Page label only.,FALSE
+newsletter_started,funnel,page,Reader submitted the subscribe form,No PII. Page label only.,FALSE
+newsletter_submitted,funnel,page,Provider accepted the address and dispatched the double opt-in confirmation email,MUST be an explicit provider 2xx. Never inferred.,FALSE
+newsletter_subscribed,funnel,page,Provider confirms the double opt-in subscription is complete,ONLY on provider-reported confirmed. NEVER fabricated or defaulted. Hard rule TASK-09 s11 / TASK-24.,FALSE
+newsletter_error,funnel,page,No provider configured (unavailable) or provider/network failure (error),unavailable and error are distinct and honest. No fake success.,FALSE
+topic_followed,reader-state,topic_id,Reader follows a topic (device-local),Content id only. No PII.,FALSE
+topic_unfollowed,reader-state,topic_id,Reader unfollows a topic (device-local),Content id only. No PII.,FALSE
+story_saved,reader-state,content_id|content_type,Reader saves a story (device-local library),Content id + fixed type label. No PII.,FALSE
+story_unsaved,reader-state,content_id|content_type,Reader removes a saved story (device-local library),Content id + fixed type label. No PII.,FALSE
+reader_dashboard_opened,reader-state,tab (/reader library tab),Reader opens the /reader dashboard or switches tabs,Enables device-local library behaviour tracking without account identity.,FALSE
+reader_returned,retention,stories_read|days_since_last,NarrativeMemory detects a returning reader,Derived counts only. No identity.,TRUE
+story_opened,content,content_id|content_type,Reader opens a story,Content id only.,TRUE
+story_completed,content,content_id|content_type|scroll_depth_pct,Reader reaches story completion signal,Content id + depth percentage.,TRUE
+related_story_clicked,content,source_id|target_id|position,Reader clicks a related story link,Content ids only.,TRUE
+topic_opened,content,topic_id,Reader opens a topic hub,Content id only.,TRUE

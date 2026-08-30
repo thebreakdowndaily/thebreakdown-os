@@ -1,0 +1,17 @@
+Event,Description,Fired When,Params,Allowed Values / Notes,Volume Source,Destination
+landing,First visit in a session carrying acquisition attribution,On first page load per browser session (sessionStorage key tbd_landing_captured),utm_source; utm_medium; utm_campaign; utm_content; distribution_channel; referrer_type; landing_page,distribution_channel in {social, newsletter, referral, direct, other}; referrer_type in {organic_search, social, referral, direct},Reader,GA4 only
+story_opened,A story/chapter page view (reading intent),On mount of StoryShell with a resolvable story slug or chapter slug,content_id; content_type,"content_type in {story, chapter}",Reader,GA4 only
+story_completed,Reader reached 90% scroll depth of a story/chapter (completion marker),Once per view when readingProgress>=90,content_id; content_type; scroll_depth_pct,"scroll_depth_pct 90-100",Reader,GA4 only
+topic_opened,A topic page view,On mount of /topic/[slug],topic_id,Canonical topic slug,Reader,GA4 only
+entity_opened,An entity terminal page view,On mount of /entity/[slug],entity_id,Canonical entity slug,Reader,GA4 only
+evidence_expanded,Reader opened an inline evidence panel for a claim,On toggle open in InlineEvidencePanel,content_id; claim_id; evidence_path,"evidence_path in {supported, mixed, not_supported, unverified}",Reader,GA4 only
+source_opened,Reader clicked an external source link,Delegated click on [data-analytics=source],content_id; source_title; source_domain,source_domain auto-extracted from href,Reader,GA4 only
+document_opened,Reader clicked a primary document link,Delegated click on [data-analytics=document],content_id; document_title; document_domain,Not yet wired to any surface (attribute exists for future),Reader,GA4 only
+search_performed,A site search executed,On /search page mount with a non-empty q,search_query; results_count; search_type,"search_type = 'site'; query sanitized+truncated to 200 chars; no full text",Reader,GA4 only
+search_result_clicked,Reader clicked a search result while a live query context exists,Delegated click on /search using sessionStorage tbd_last_search_query,search_query; result_type; result_id; result_position,"result_type in {story, topic, entity, fix, problem, dataset, collection, chapter}; result_position 1-based",Reader,GA4 only
+related_story_clicked,Reader continued from one story to a related one,ExploreConnections explicit capture AND delegated [data-analytics=related_story] clicks,source_id; target_id; position,"position is 1-based rank; both code paths used, neither double-fires per link",Reader,GA4 only
+topic_link_clicked,Reader jumped from a page to a topic,Delegated click on [data-analytics=topic],source_id; topic_id,source_id is current pathname,Reader,GA4 only
+entity_link_clicked,Reader jumped from a page to an entity terminal,Delegated click on [data-analytics=entity],source_id; entity_id,source_id is current pathname,Reader,GA4 only
+newsletter_viewed,Reader saw the newsletter landing or subscribe form,On mount (NewsletterTracker page=newsletter; SubscribeForm page=subscribe),page,"page in {newsletter, subscribe}",Reader,GA4 only
+newsletter_started,Reader began the subscribe funnel (first interaction),SubscribeForm focus/input/submit; NewsletterTracker CTA click,page,"page in {newsletter, subscribe}",Reader,GA4 only
+newsletter_subscribed,Reader completed a real subscription,NOT FIRED — provider not connected (IMPLEMENTATION GAP — NOT YET CONNECTED),page,Do not fire until delivery provider confirms double-opt-in,Reader,GA4 only

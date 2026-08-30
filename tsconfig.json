@@ -41,6 +41,7 @@
     ".open-next",
     "scripts",
     "playwright.config.ts",
-    ".storybook"
+    ".storybook",
+    "workers"
   ]
 }

@@ -1,0 +1,11 @@
+slug,url,description,changeFrequency,priority
+,https://thebreakdown.in/problems,Public policy challenges root causes,weekly,0.8
+,https://thebreakdown.in/compare,Side-by-side comparison of policy solutions,weekly,0.8
+,https://thebreakdown.in/evolution,Historical snapshot diffs and claim revisions,weekly,0.8
+,https://thebreakdown.in/precedents,Global and historical policy precedents,weekly,0.8
+,https://thebreakdown.in/tracking,Longitudinal outcome metrics,weekly,0.8
+slug,https://thebreakdown.in/problems/{slug},Problem root causes and solutions,weekly,0.7
+slug,https://thebreakdown.in/problems/{slug}/compare,Compare fixes for this problem,weekly,0.6
+slug,https://thebreakdown.in/problems/{slug}/evolution,Evolution of this problem,weekly,0.6
+slug,https://thebreakdown.in/problems/{slug}/precedents,Global precedents for this problem,weekly,0.6
+slug,https://thebreakdown.in/problems/{slug}/tracking,Tracking outcomes for this problem,weekly,0.6
