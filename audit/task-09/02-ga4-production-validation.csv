@@ -1,0 +1,22 @@
+event,source,production gating,present,verified,notes
+page_view,GATracker.tsx (EXP-01 patch),host allowlist + NODE_ENV,true,code-level PASS,One page_view per path per session-guarded dispatch; no duplicates in local render crawl; live dispatch requires production access.
+view_content,GATracker.tsx,host allowlist + NODE_ENV,true,code-level PASS,Component visibility intersection observer; unchanged from TASK-08 baseline.
+search,capture.ts (tbd_last_search_key handled),host allowlist + NODE_ENV,true,code-level PASS,Search widget fires on query submit.
+search_selected,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,Result click event; session key tbd_last_search_query preserved.
+sign_in,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,Purpose-preserving; not dispatched on anonymous sessions.
+sign_up,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+share,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+guide_click,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+evidence_click,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,Directly supports understanding metric journey (Reader opens Evidence).
+viewer_changed,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+read_more,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+story_complete,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,Understanding-metric step (Completes Story).
+continue_learning,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,Understanding-metric step (Clicks Continue Learning).
+related_story_click,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+newsletter_subscribed,DISABLED BY POLICY,host allowlist + NODE_ENV,false,BLOCKED,nothing may claim subscription until a delivery provider confirms double opt-in (see 11-newsletter-validation.md). Confirmed not wired to any live provider path.
+not_found,capture.ts,host allowlist + NODE_ENV,true,code-level PASS,
+session:landing captured,tbd_landing_captured,client-localStorage,true,code-level PASS,Persists first-landing timestamp for cohort semantics.
+session:last search,tbd_last_search_query,client-localStorage,true,code-level PASS,Carries last query into search_selected context.
+GA config tag,G-79ZCJWS0WS,root layout Script + ga-init,true,code-level PASS,Config fires with page_path; tag existence on the property requires production access (01-production-access.csv).
+Dispatch guard,isProductionAnalytics(),lib/analytics/capture.ts,true,code-level PASS,Production hostname allowlist thebreakdown.in/www.thebreakdown.in.
+Regression,analytics-taxonomy suite,tests/analytics-taxonomy.test.ts,true,33/33 PASS,No vocabulary or gating regressions introduced by TASK-09.

@@ -1,0 +1,11 @@
+metric,status,iif_template,derived_from,notes
+Sitemap submitted,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,Ping/Index API state per sitemap-ping,app/sitemap.ts (253 pages),Requires GSC console; code emits sitemap.xml + robots.txt unchanged.
+Indexed pages,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,Sitemap > Indexing > Submitted URLs,production sitemap,Requires GSC.
+Discoverable-as-discovered vs valid,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,URL Inspection per key URL,/, /topic/policy, /entity/npci,Requires GSC.
+Crawl errors,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,Indexing report,production console,Requires GSC.
+Performance budget,VERIFIED (code-level),no-deps change to metadata,app/topic/[slug]/page.tsx :: metadata,No TTFB-relevant data-layer change; hubs remain SSG/SSR of pre-aggregated groups.
+Indexability of topic hubs,VERIFIED (code-level),200 + index,follow on all hub slugs,local crawl (15/15 hubs 200),Robots meta remains index,follow; no noindex introduced.
+Indexability of entity dossiers,VERIFIED (code-level),200 + index,follow on eligible entities,local crawl (11 checked, 10 eligible 200; resecurity 404 noindex),Below-threshold entities remain 404 + notFound (TASK-04 gate respected).
+Newsletter landing noindex policy,UNCHANGED,/, /newsletter metadata,app/newsletter,No search-intent change made.
+Structured data,UNCHANGED,JSON-LD WebSite / Organization / entity + breadcrumb blocks,layout + entity page,No schema regression.
+Baseline sitemap count,VERIFIED (build),253 pages built,npm run build summary,No regressions.

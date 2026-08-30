@@ -1,0 +1,14 @@
+system,resource,status,evidence,notes
+GA4,property (G-79ZCJWS0WS),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,Hardcoded at app/layout.tsx via <Script src="https://www.googletagmanager.com/gtag/js?id=G-79ZCJWS0WS">,No GA4 credentials/API access present in this environment; property existence and live dispatch cannot be confirmed from code alone.
+GA4,data stream,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,Script tag configured in Next root layout,Requires logged-in GA4 console check (Admin > Data Streams).
+GA4,live event dispatch,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,gating in lib/analytics/capture.ts uses production host check (thebreakdown.in/www.thebreakdown.in) + NODE_ENV,Local/dev environments intentionally suppress dispatch; production dispatch unverified without a browser session on the production hostname.
+GSC,Domain property,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,No GSC credentials or API access present in this environment,Requires Search Console ownership verification.
+GSC,Sitemap (253 pages),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,app/sitemap.ts + app/robots.ts exist using canonical site URLs,"Sitemap submitted/pinged status unknown; needs GSC console (Sitemaps > Submitted sitemaps)."
+GSC,indexing status,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,No search console data access available,Page-level index status (Valid/Excluded/Discovered) requires GSC API or console.
+GSC,query performance,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,No search console data access available,No query/impression/position data can be reported without GSC access. 03-gsc-baseline.csv is a tracking template only.
+Newsletter,provider (delivery),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,app/newsletter + components/newsletter integration present but provider contract unspecified,"newsletter_subscribed MUST NOT fire until a delivery provider confirms double opt-in (see 11-newsletter-validation.md)."
+Newsletter,double opt-in,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,No provider used in this environment,Verification requires provider console (e.g., Mailchimp/Buttondown/Resend).
+Analytics,event taxonomy regression,VERIFIED (code-level),16-event vocabulary + session keys unchanged; tests/analytics-taxonomy.test.ts 33/33 passing,Code-level audit only — event delivery still requires production access.
+Analysis Vec,GATracker EXP-01 dedupe,VERIFIED (code-level),components/analytics/GATracker.tsx guards page_view per path,Confirmed in code; live double-count protection depends on production dispatch.
+Supabase,backend services,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,services use Supabase adapter in production mode,No service role key or project access in this environment; not exercised.
+Vercel,deployment,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,No Vercel project access,Deployment/edge config unverified.

@@ -41,6 +41,7 @@ import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-librar
 import type { Investigation } from '@/types/canonical';
 
 export interface EntityTerminalExtendedViewModel extends EntityTerminalViewModel {
+  relatedStories: Story[];
   relatedChapters: Array<{ slug: string; title: string; summary: string; collectionSlug: string; volumeSlug: string }>;
   relatedInvestigations: Investigation[];
 }
@@ -49,7 +50,9 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
   const entity = await services.entities.getEntityBySlug(slug);
   if (!entity) return null;
   
-  const terminalStoriesPromises = (entity.usageGraph?.stories || []).map(id => services.stories.getStory(id));
+  const usageStories = entity.usageGraph?.stories;
+  const storyIds = (usageStories && usageStories.length > 0) ? usageStories : ((entity as any).relatedStoryIds || []);
+  const terminalStoriesPromises = storyIds.map((id: string) => services.stories.getStory(id));
   const terminalStoriesResult = await Promise.all(terminalStoriesPromises);
   const stories = terminalStoriesResult.filter((s): s is Story => !!s && canPubliclyViewStory(storyPublicationContext(s)));
   
@@ -123,6 +126,13 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
     inv.chapters?.some((ch: any) => entity.usageGraph?.stories?.includes(ch.storySlug))
   );
   
+  const totalArticles = stories.length + relatedChapters.length + relatedInvestigations.length;
+  const wordCount = (entity.description || '').split(/\s+/).filter(Boolean).length;
+  const hasMetadata = (((entity as any).metadata) && Object.keys((entity as any).metadata).length >= 3) || (statistics && statistics.length >= 3);
+  
+  const isEligible = totalArticles >= 2 || (wordCount >= 100 && hasMetadata);
+  if (!isEligible) return null;
+
   return {
     id: entity.id,
     slug: entity.slug,
@@ -153,6 +163,7 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
       coverageTrend: signals.coverageTrend
     },
     
+    relatedStories: stories,
     relatedChapters,
     relatedInvestigations,
     

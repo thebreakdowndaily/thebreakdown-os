@@ -22,14 +22,42 @@ interface EntityTerminalProps {
 }
 
 function TerminalRelatedContent({ viewModel }: { viewModel: EntityTerminalExtendedViewModel }) {
-  const { relatedChapters, relatedInvestigations } = viewModel;
+  const { relatedStories, relatedChapters, relatedInvestigations } = viewModel;
 
-  if ((!relatedChapters || relatedChapters.length === 0) && (!relatedInvestigations || relatedInvestigations.length === 0)) {
+  if (
+    (!relatedStories || relatedStories.length === 0) &&
+    (!relatedChapters || relatedChapters.length === 0) &&
+    (!relatedInvestigations || relatedInvestigations.length === 0)
+  ) {
     return null;
   }
 
   return (
     <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 flex flex-col gap-4">
+      {relatedStories && relatedStories.length > 0 && (
+        <div>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-500 border-b border-neutral-800 pb-2 mb-3">
+            Related Coverage
+          </h2>
+          <div className="flex flex-col gap-2">
+            {relatedStories.map((st) => (
+              <Link
+                key={st.slug}
+                href={`/story/${st.slug}`}
+                className="group flex flex-col p-3 rounded-lg bg-[#0c0c0c] border border-neutral-800/50 hover:border-amber-500/30 transition-all"
+              >
+                <span className="text-sm text-neutral-300 font-medium group-hover:text-amber-400 transition-colors">
+                  {st.title || st.slug}
+                </span>
+                <span className="text-xs text-neutral-500 line-clamp-2 mt-1">
+                  {st.summary}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {relatedChapters && relatedChapters.length > 0 && (
         <div>
           <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-500 border-b border-neutral-800 pb-2 mb-3">

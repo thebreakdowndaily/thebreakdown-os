@@ -7,6 +7,7 @@ import { EditorialLayout } from '@/packages/editorial/src';
 
 // Terminal Orchestrator
 import EntityTerminal from '@/components/entity/EntityTerminal';
+import { ContentPageTracker } from '@/components/analytics/ContentPageTracker';
 
 function createJsonLd(entity: { name: string; description: string; slug: string; type: string }) {
   const schemaType =
@@ -35,7 +36,15 @@ function createJsonLd(entity: { name: string; description: string; slug: string;
 
 export async function generateStaticParams() {
   const services = bootstrapServices({ publicOnly: true });
-  return (await services.entities.getEntities({ pageSize: 100 })).data.map((e) => ({ slug: e.slug }));
+  const all = (await services.entities.getEntities({ pageSize: 100 })).data;
+  const eligiblePaths = [];
+  for (const e of all) {
+    const vm = await buildEntityTerminalViewModel(services, e.slug);
+    if (vm) {
+      eligiblePaths.push({ slug: e.slug });
+    }
+  }
+  return eligiblePaths;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -82,6 +91,7 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
       ))}
 
       <EditorialLayout breadcrumbItems={breadcrumbs}>
+        <ContentPageTracker contentType="entity" id={viewModel.slug} />
         <EntityTerminal viewModel={viewModel} />
       </EditorialLayout>
     </>
