@@ -83,3 +83,13 @@ Additionally, 148 TS7006 (implicit any) errors across pipeline files were fixed 
 - Registry: `services/registry.ts`
 - Bootstrap: `services/init.ts`
 - Canonical re-export: `types/canonical.ts` (line 2160)
+
+## Commit
+
+`d1716a8` on branch `audit-fixes-20260812`
+
+## Verification
+
+- `npx tsc --noEmit`: 0 errors
+- `npm test`: 126+ tests, 0 failures
+- `npm run build`: success
