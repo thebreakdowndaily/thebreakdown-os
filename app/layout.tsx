@@ -5,6 +5,9 @@ import { Navigation } from '@/components/navigation';
 import Footer from '@/components/layout/Footer';
 import { AuthWrapper } from '@/features/auth/components/AuthWrapper';
 import { GATracker } from '@/components/analytics/GATracker';
+import { LandingTracker } from '@/components/analytics/LandingTracker';
+import { InteractionTracker } from '@/components/analytics/InteractionTracker';
+import { isProductionAnalytics } from '@/lib/analytics/environment';
 import { Suspense } from 'react';
 import '@/styles/globals.css';
 
@@ -81,7 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="schema-organization" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(organizationSchema)}
         </Script>
-        {GA_MEASUREMENT_ID && (
+        {GA_MEASUREMENT_ID && process.env.NODE_ENV === 'production' && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />
             <Script id="ga-init" strategy="afterInteractive">
@@ -94,7 +97,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main id="main-content" className="flex-1 pt-16 lg:pt-[72px]">{children}</main>
           <Footer />
         </AuthWrapper>
-        {GA_MEASUREMENT_ID && <Suspense><GATracker gaId={GA_MEASUREMENT_ID} /></Suspense>}
+        {GA_MEASUREMENT_ID && process.env.NODE_ENV === 'production' && <Suspense><GATracker gaId={GA_MEASUREMENT_ID} /></Suspense>}
+        {isProductionAnalytics() && (
+          <>
+            <LandingTracker />
+            <InteractionTracker />
+          </>
+        )}
       </body>
     </html>
   );
