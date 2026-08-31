@@ -1,0 +1,7 @@
+opportunityID,category,description,impact,confidence,effort,revenueValue,strategicValue
+OP-01,Monetization,Live Stripe production environment verification (TASK-28),High,High,Medium,High,High
+OP-02,Content Refresh,CAG audit data updates for pm-fasal-bima-claims,Medium,High,Low,Low,High
+OP-03,SEO,Index compare and precedents routes in Search Console,High,Medium,Low,Medium,High
+OP-04,UX,Add helper tooltips explaining paywall gated citation lists,Medium,High,Low,Low,Medium
+OP-05,Tech Issue,Mitigate local env.local alert warnings in security-audit script,Low,High,Low,None,Low
+OP-06,Content,Draft new evergreen explainer brief for climate-finance-2026,Medium,Medium,Medium,Low,Medium

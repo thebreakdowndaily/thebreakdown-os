@@ -1,0 +1,6 @@
+slug,title,ageDays,evidenceScore,lastVerified,decayReason,priority
+pm-fasal-bima-claims,Crop Insurance Ledger,210,76,2026-03-10,Last verified > 180 days; low evidence density; low citation density,P0
+groundwater-depletion,Northern India Groundwater Reserves,195,81,2026-03-25,Last verified > 180 days; contains unlinked claims,P1
+anganwadi-icds,Anganwadi Services and ICDS Audit,185,83,2026-04-05,Outdated verified status; missing primary source links,P1
+digital-payments-boom,Digital Payments in Rural India,80,88,2026-06-12,No decay; high engagement; verified current,P3
+semiconductor-pli,India Semiconductor Subsidies,60,95,2026-07-01,No decay; high citation count; verified current,P3

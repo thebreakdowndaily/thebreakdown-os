@@ -1,0 +1,5 @@
+decision,evidence,date,owner,expectedOutcome,reviewDate,actualOutcome
+Standardize on unified localStorage read history system,TASK-11 user testing reports on session retention,2026-08-15,Retention,D7 retention increases by 15% through recently read links,2026-09-01,Pending production validation
+Gate research appendix behind paywall teaser,EX-01 conversion signals showing higher CTA clicks,2026-08-20,Growth,Increase supporting reader checkout rate by 2%,2026-09-10,Pending production validation
+Integrate approved citations in evidence graph,TASK-23 validation criteria,2026-08-31,Engineering,Enhance source credibility and mapping clarity for researchers,2026-09-15,Verified locally via test suite
+Restrict dynamic summary additions to automated pipeline,Q3 format performance review,2026-08-31,Editorial,Reduce editorial overhead by 15 hours per story,2026-10-01,Pending rollout

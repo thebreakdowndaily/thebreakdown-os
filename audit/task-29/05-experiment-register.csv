@@ -1,0 +1,5 @@
+experimentID,hypothesis,pageProduct,metric,baseline,change,start,end,result,confidence,decision,owner
+EX-01,Faded teaser for paywalled research appendix increases supporter clicks,StoryShell,paywall_action_clicked,0.0,0.048,2026-08-15,2026-08-30,ITERATE,0.92,Adjust blur and CTA styling,Growth
+EX-02,Dismissible weekly brief CTA on story ends reduces subscriber fatigue,StoryNewsletterCTA,newsletter_conversion_rate,0.03,0.052,2026-08-10,2026-08-28,SCALE,0.95,Make dismissal persistent for 7 days,Retention
+EX-03,Locking raw CSV downloads behind supporter check triggers premium conversion,DataHub,dataset_download_started,0.0,0.025,2026-08-18,2026-08-31,ITERATE,0.88,Refine preview description,Commercial
+EX-04,Placing ad slots above folds increases click telemetry without lowering session length,StoryShell,ad_clicked,0.0,0.015,2026-08-20,2026-08-29,STOP,0.91,Ad blocks above fold hurt LCP,Growth
