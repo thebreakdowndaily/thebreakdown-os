@@ -1,0 +1,6 @@
+channel,utmSource,utmMedium,utmCampaign,utmContent,exampleUrl
+Newsletter Brief,newsletter,email,weekly_brief,mgnrega_reform,"https://thebreakdown.in/story/mgnrega-reform?utm_source=newsletter&utm_medium=email&utm_campaign=weekly_brief&utm_content=mgnrega_reform"
+X (Twitter) Thread,twitter,social_thread,upi_tracker,decadal_stats,"https://thebreakdown.in/trackers/upi?utm_source=twitter&utm_medium=social_thread&utm_campaign=upi_tracker&utm_content=decadal_stats"
+LinkedIn Post,linkedin,organic_post,semiconductor_pli,fab_progress,"https://thebreakdown.in/trackers/semiconductor?utm_source=linkedin&utm_medium=organic_post&utm_campaign=semiconductor_pli&utm_content=fab_progress"
+WhatsApp Broadcast,whatsapp,direct_message,policy_update,125days_statute,"https://thebreakdown.in/trackers/mgnrega?utm_source=whatsapp&utm_medium=direct_message&utm_campaign=policy_update&utm_content=125days_statute"
+Telegram Channel,telegram,channel_broadcast,upi_limits,oct2024_sdrp,"https://thebreakdown.in/trackers/upi?utm_source=telegram&utm_medium=channel_broadcast&utm_campaign=upi_limits&utm_content=oct2024_sdrp"

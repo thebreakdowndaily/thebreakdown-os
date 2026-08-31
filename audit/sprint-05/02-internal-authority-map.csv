@@ -1,0 +1,14 @@
+sourceUrl,targetUrl,relationshipType,anchorOrContext,status
+/story/mgnrega-reform,/trackers/mgnrega,EvidenceToTracker,"📊 Live Tracker badge in EvidenceTrail",ACTIVE
+/story/mgnrega-reform,/entity/ministry-of-rural-development,StoryToEntity,Primary entity profile link,ACTIVE
+/story/digital-payments-boom,/trackers/upi,EvidenceToTracker,"📊 Live Tracker badge in EvidenceTrail",ACTIVE
+/story/digital-payments-boom,/entity/npci,StoryToEntity,Primary entity profile link,ACTIVE
+/story/semiconductor-pli,/trackers/semiconductor,EvidenceToTracker,"📊 Live Tracker badge in EvidenceTrail",ACTIVE
+/topic/economy,/trackers/mgnrega,TopicToTracker,Flagship Policy Trackers card grid,ACTIVE
+/topic/digital-payments,/trackers/upi,TopicToTracker,Flagship Policy Trackers card grid,ACTIVE
+/trackers,/trackers/mgnrega,HubToTracker,Explore Tracker & Evidence Chain button,ACTIVE
+/trackers,/trackers/upi,HubToTracker,Explore Tracker & Evidence Chain button,ACTIVE
+/trackers,/trackers/semiconductor,HubToTracker,Explore Tracker & Evidence Chain button,ACTIVE
+/trackers/mgnrega,/story/mgnrega-reform,TrackerToStory,Related Exploration story link,ACTIVE
+/trackers/upi,/story/digital-payments-boom,TrackerToStory,Related Exploration story link,ACTIVE
+/trackers/semiconductor,/story/semiconductor-pli,TrackerToStory,Related Exploration story link,ACTIVE

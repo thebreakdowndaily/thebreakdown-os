@@ -1,0 +1,8 @@
+initialLandingPage,nextAvailableActions,deadEndRisk,loopClosureStatus
+/story/mgnrega-reform,"EvidenceTrail -> /trackers/mgnrega, Entity -> /entity/ministry-of-rural-development, Newsletter -> /subscribe",NONE (100% interconnected),PASS
+/story/digital-payments-boom,"EvidenceTrail -> /trackers/upi, Entity -> /entity/npci, Newsletter -> /subscribe",NONE (100% interconnected),PASS
+/story/semiconductor-pli,"EvidenceTrail -> /trackers/semiconductor, Entity -> /entity/meity, NextExploration",NONE (100% interconnected),PASS
+/trackers/upi,"Related Exploration -> /story/digital-payments-boom, Topic -> /topic/digital-payments, Documents Modal",NONE (100% interconnected),PASS
+/trackers/mgnrega,"Related Exploration -> /story/mgnrega-reform, Topic -> /topic/economy, Documents Modal",NONE (100% interconnected),PASS
+/topic/economy,"Trackers Grid -> /trackers/mgnrega, Story List -> /story/mgnrega-reform, Topic Follow",NONE (100% interconnected),PASS
+/trackers,"Tracker Cards -> /trackers/upi /trackers/mgnrega /trackers/semiconductor, Policy Newsletter CTA",NONE (100% interconnected),PASS

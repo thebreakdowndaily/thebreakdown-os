@@ -1,0 +1,7 @@
+componentOrPage,testedCapability,wcagCriterion,status,notes
+Trackers Hub (/trackers),Card Focus & Navigation,WCAG 2.1 AA (2.1.1 Keyboard),PASS,All tracker cards and CTA buttons focusable with clear focus rings
+Trackers Hub Newsletter,Form Labels & ARIA,WCAG 2.1 AA (3.3.2 Labels or Instructions),PASS,Input carries hidden label + aria-describedby for errors
+StoryOrientation,Semantic Headings & Short Version,WCAG 2.1 AA (1.3.1 Info and Relationships),PASS,Hierarchy h3 -> h4 -> ul/p preserved
+EvidenceTrail,Interactive Accordion & Status,WCAG 2.1 AA (4.1.2 Name Role Value),PASS,aria-expanded and live region attributes
+TimeSeriesChart,Tabular View Alternative,WCAG 2.1 AA (1.1.1 Non-text Content),PASS,One-click switch to semantic HTML table
+DocumentPreviewModal,Focus Trap & Escape Close,WCAG 2.1 AA (2.1.2 No Keyboard Trap),PASS,ESC key handling and focus restore on modal exit

@@ -1,0 +1,7 @@
+dimension,question,indianExpressExplained,isignal,factly,theBreakdown
+Direct Answer,Is the question answered quickly?,Moderate (buried in prose),Low (brief summary),Moderate (fact-check verdict),High (StoryOrientation Short Version block)
+Evidence Depth,Can readers see why claims are made?,Low (journalist assertions),Moderate (raw data tables),High (claim debunking),High (Evidence Provenance Trail with confidence scores)
+Primary Sources,Can readers reach primary documents?,Low (hyperlinks to news),Low (general citations),High (links to sources),High (In-app primary document preview modal & clause citations)
+Knowledge Hubs,Can readers explore issues deeply?,Low (standard tag archives),Moderate (industry dashboard),Low (flat category lists),High (Interactive topic & tracker hubs with time-series charts)
+Change Tracking,Can readers see what changed over time?,Low (new article required),Low (static snapshots),Low (single verification date),High (Living trackers with recent material changes & timelines)
+Audience Retention,Is there a clear reason to return?,Low (generic newsletter),Low (enterprise licensing),Low (social follow),High (Topic-specific briefs & continuous policy tracking)

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllTrackers } from '@/lib/trackers/registry';
+import StoryNewsletterCTA from '@/components/retention/StoryNewsletterCTA';
 
 export const metadata: Metadata = {
   title: 'Policy & Issue Trackers | The Breakdown',
@@ -107,6 +108,14 @@ export default function TrackersIndexPage() {
               </div>
             </article>
           ))}
+        </div>
+
+        {/* Contextual Newsletter Conversion */}
+        <div className="pt-6">
+          <StoryNewsletterCTA
+            headline="Get policy tracker & statutory updates"
+            subtext="The Breakdown Policy Brief — what changed, why it matters, and the primary documents behind it. Weekly. Free."
+          />
         </div>
       </div>
     </main>

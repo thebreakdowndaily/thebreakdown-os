@@ -106,7 +106,24 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 5 & Beyond)
+## Sprint 5 — Search Authority, Knowledge Hub & Distribution Engine (complete)
+
+**Deliverables:**
+1. **Search Authority Audit & Direct-Answer Optimization**: Audited top 10 high-value search landing pages (`audit/sprint-05/01-search-authority-audit.csv`), structured direct answers via `StoryOrientation` (The Short Version $\to$ Key Takeaways $\to$ Key Numbers $\to$ Why It Matters), and mapped EvidenceTrail links.
+2. **Flagship Knowledge Hubs**: Strengthened `/trackers` and `/topic/[slug]` pages with unified policy tracker cards, cornerstone explainers, primary document previews, and contextual newsletters.
+3. **Internal-Link Authority & Loop Closure**: Audited bidirectional knowledge pathways (`audit/sprint-05/02-internal-authority-map.csv` and `audit/sprint-05/08-knowledge-discovery-validation.csv`) with zero dead ends.
+4. **Distribution Engine & Standardized UTMs**: Published reusable distribution frameworks for Email Briefs, X threads, LinkedIn posts, and WhatsApp/Telegram broadcasts with standardized UTM parameters (`audit/sprint-05/03-distribution-framework.md` and `audit/sprint-05/04-distribution-attribution.csv`).
+5. **Contextual Newsletter Acquisition**: Integrated dynamic topic-tailored conversion copy on the `/trackers` directory and story ends (`audit/sprint-05/07-newsletter-conversion-validation.csv`).
+6. **Controlled Experiments & Competitive Benchmarking**: Registered 3 experiments (EXP-S5-01, EXP-S5-02, EXP-S5-03) all approved for scaling (`audit/sprint-05/12-experiment-register.csv`) and benchmarked against Indian Express Explained, ISignal, and FACTLY (`audit/sprint-05/11-competitive-comparison.csv`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 25 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all tracker, topic, and story routes.
+
+---
+
+## Next Priorities (Sprint 6 & Beyond)
 
 1. **Fourth Flagship Tracker**: PM Fasal Bima Yojana (Crop Insurance) or Climate Finance Tracker.
 2. **Interactive Multi-Series Comparison**: Allow side-by-side comparison of policy metrics across states or years.
@@ -119,4 +136,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GA4, GSC, Beehiiv, Stripe, AdSense) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 31 Aug 2026, Sprint 4 complete.
+Last verified: 31 Aug 2026, Sprint 5 complete.

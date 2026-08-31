@@ -1,0 +1,9 @@
+url,primaryIntent,userQuestion,directAnswerProvided,theBreakdownAdvantage,validationStatus
+/story/mgnrega-reform,Core / Status,"Is MGNREGA still active law in 2026?",YES (Orientation + EvidenceTrail),Documents 125-day expansion and Act No. 18 of 2025 repeal,PASS
+/trackers/mgnrega,Tracking / Data,"What are the key expenditure and person-day metrics for rural employment?",YES (Ledger + TimeSeries),Interactive 20-year budget series + primary gazette acts,PASS
+/story/digital-payments-boom,Core / Explanatory,"What is the transaction limit for feature phone UPI?",YES (Takeaway + FAQ),Direct reference to RBI October 2024 SDRP & NPCI Circular 209,PASS
+/trackers/upi,Tracking / Volume,"What is the annual transaction volume of UPI?",YES (Ledger + TimeSeries),10-year volume & value growth charts with underlying data tables,PASS
+/story/semiconductor-pli,Causal / Policy,"Which fab plants are currently under construction in India?",YES (Orientation + Timeline),Clarifies government subsidy vs private capex across 5 units,PASS
+/trackers/semiconductor,Tracking / Industry,"What is the operational status of the Sanand OSAT plant?",YES (Status card),Records commercial chip packaging commencement at CG Semi Sanand,PASS
+/topic/economy,Hub / Synthesis,"Where can I find all Indian economic policy explainers and trackers?",YES (Topic hub + Trackers grid),Aggregates living trackers and cornerstone explainers,PASS
+/trackers,Hub / Discovery,"What policy trackers are available on The Breakdown?",YES (Directory grid),Directory of all 3 live trackers with status previews,PASS
