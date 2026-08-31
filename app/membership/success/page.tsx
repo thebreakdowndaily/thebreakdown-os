@@ -21,7 +21,7 @@ function SuccessContent() {
     }
 
     // Fire telemetry event
-    captureEvent('membership_purchased', { planId });
+    captureEvent('membership_purchased', { plan_id: planId });
     
   }, [planId]);
 

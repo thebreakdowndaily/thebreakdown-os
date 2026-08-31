@@ -89,7 +89,7 @@ export const ALLOWED_PARAMS: Record<CoreEventName, readonly string[]> = {
   ],
   reader_returned: ['stories_read', 'days_since_last'],
   ad_blocker_detected: ['active'],
-  'membership_purchased': ['planId'],
+  'membership_purchased': ['plan_id'],
   'ad_slot_rendered': ['placement'],
   'ad_clicked': ['placement'],
   'paywall_viewed': ['placement', 'story_slug'],
