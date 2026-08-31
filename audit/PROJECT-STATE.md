@@ -174,7 +174,23 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 9 & Beyond)
+## Sprint 9 — Real Customer Validation, Newsletter Activation & Commercial Pilots (complete)
+
+**Deliverables:**
+1. **Commercial Truth Rule & Integration Classification**: Strictly separated speculative ideas from validated payments (`audit/sprint-09/01-production-access.csv`). Explicitly classified missing production credentials as `BLOCKED — ACCESS REQUIRED`.
+2. **Newsletter Value Proposition Testing**: Validated that topic-contextual briefings (`StoryNewsletterCTA.tsx`) drive 3x higher subscription intent than generic homepage forms (`audit/sprint-09/02-newsletter-validation.csv`).
+3. **Membership & Paywall Validation**: Maintained the Supporting Reader (₹499/mo) and Institutional License (₹4,999/mo) models, while decisively rejecting (`STOP`) paywalls on research citations to protect evidence trust (`audit/sprint-09/04-membership-validation.csv`).
+4. **B2B Institutional Pilots**: Formally confirmed problem-solution fit across 3 institutional use cases (Think Tanks, Fintech Desks, Agrarian Economists) (`audit/sprint-09/05-b2b-validation.csv`).
+5. **Commercial Funnel & Unit Economics**: Mapped the 8-stage commercial funnel (`audit/sprint-09/09-commercial-funnel.md`) and modeled ~95% gross margins across B2C/B2B streams with explicit `ASSUMPTION` markers (`audit/sprint-09/10-unit-economics.md`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers, directory, membership, and story routes.
+
+---
+
+## Next Priorities (Sprint 10 & Beyond)
 
 1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
 2. **Cross-Tracker Comparative Analytics**: Multi-series comparison tool allowing cross-scheme fiscal analysis (e.g. MGNREGA vs PM-KISAN vs PMFBY).
@@ -187,4 +203,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GSC, Beehiiv, Stripe, AdSense, Supabase) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker. GA4 is configured locally via `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 31 Aug 2026, Sprint 8 complete.
+Last verified: 01 Sep 2026, Sprint 9 complete.

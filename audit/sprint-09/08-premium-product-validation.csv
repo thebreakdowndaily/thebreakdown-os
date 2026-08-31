@@ -1,0 +1,2 @@
+productSlug,productName,targetSegment,differentiationOverFree,deliveryMechanism,priceHypothesis,validationStage,decision
+tb-policy-intelligence,"The Breakdown Intelligence Feed","Think tanks, policy research desks, academic departments","Raw CSV time-series exports, statutory clause citation tool, 5 user seat licenses, monthly policy change alerts",REST API + /workspace CSV exports,₹4999 / month,Problem Confirmation / Pilot,SCALE

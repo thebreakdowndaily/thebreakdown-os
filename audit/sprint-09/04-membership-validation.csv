@@ -1,0 +1,4 @@
+propositionSlug,monthlyPrice,coreBenefits,testingMechanism,conversionFunnelStage,validationResult,decision
+supporting-reader-adfree,₹499 / month,"100% ad-free reading, verified dataset downloads, primary source highlights",/membership page + checkout simulation,User Interest / Intent,Simulated flow functional; no live billing until retention threshold met,ITERATE
+appendix-gating-paywall,₹499 / month,"Gating secondary scholarly citations and deep appendix behind paywall",PaywallOverlay in deep reading mode,User Interest / Teaser,Users dislike gating citations; violates open evidence principle,STOP
+institutional-seat-license,₹4999 / month,"5 team seats, raw CSV exports, citation tool, API access",/membership tier 3 + institutional inquiry form,Qualified Lead,Strong institutional demand from think tanks and research units,SCALE

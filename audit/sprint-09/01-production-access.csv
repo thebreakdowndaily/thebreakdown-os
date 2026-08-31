@@ -1,0 +1,7 @@
+integrationName,implementationStage,configuredEnvVar,localTestStatus,productionVerificationStatus,operationalState,resolutionPath
+Google Analytics 4,Configured & Tested,NEXT_PUBLIC_GA_MEASUREMENT_ID (G-79ZCJWS0WS),PASS,Stream Pending (External GA4 Property),ACTIVE (Client-side proxy active),Verify data ingestion in GA4 console
+Google Search Console,Implemented (Sitemaps/Meta),Missing API Key / Domain DNS,PASS,BLOCKED — ACCESS REQUIRED,BLOCKED,Add domain property in GSC and verify DNS
+Beehiiv Newsletter,Implemented (StubProvider),Missing BEEHIIV_API_KEY,PASS,BLOCKED — ACCESS REQUIRED,BLOCKED (Stub fallback logging),Supply Beehiiv API V2 key in hosting dashboard
+Stripe Payments,Implemented (Simulated Checkout),Missing STRIPE_SECRET_KEY,PASS,BLOCKED — ACCESS REQUIRED,BLOCKED (Mock checkout active),Supply Stripe live secret and webhook keys
+Google AdSense,Implemented (AdSlot),Missing NEXT_PUBLIC_ADSENSE_CLIENT,PASS,BLOCKED — ACCESS REQUIRED,BLOCKED (House promo active),Supply AdSense publisher ID (ca-pub-xxx)
+Supabase Database,Implemented (Data Layer),Missing SUPABASE_SERVICE_ROLE_KEY,PASS,BLOCKED — ACCESS REQUIRED,BLOCKED (In-memory store serving SSG),Supply database URL and service role key

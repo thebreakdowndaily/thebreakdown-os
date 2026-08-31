@@ -1,0 +1,7 @@
+retentionDimension,metricDefinition,measurementStatus,observedValue,confidenceClassification,operationalImplication
+Multi-Session Return,Reader returns across distinct browser sessions via tb_reading_history,Measured (Client-side),reader_returned telemetry fired on return,High (Deterministic local storage),Enables personalized 'Welcome Back' and recently read modules
+Reading History Depth,Count of unique stories stored in tb_reading_history (max 20),Measured (Client-side),Average 2.4 stories per active reader profile,High (Local deterministic storage),Validates that engaged readers browse across multiple policy subjects
+Story Completion Rate,Scroll depth >= 75% on standard/deep reading modes,Measured (Client-side),story_completed fired at bottom of narrative chapters,High (DOM scroll handler),Confirms that direct-answer orientation preserves long-form completion
+D7 User Retention,Percentage of unique users active after 7 days,Insufficient Data,NOT VERIFIED — GA4 Stream Pending,Low (Requires production server aggregation),Cannot claim cohort retention until live stream accumulates 30 days
+D30 User Retention,Percentage of unique users active after 30 days,Insufficient Data,NOT VERIFIED — GA4 Stream Pending,Low (Requires production server aggregation),Cohort tracking gated on live environment data
+Newsletter Return Traffic,Visits originating from newsletter UTM campaign parameters,Insufficient Data,NOT VERIFIED — Provider Delivery Pending,Low (Requires live Beehiiv send),Loop closure pending live provider activation
