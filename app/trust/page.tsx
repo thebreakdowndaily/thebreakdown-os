@@ -115,7 +115,9 @@ export default async function TrustPage() {
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Average Trust Score</p>
-              <p className="text-white text-2xl font-bold">—</p>
+              <p className="text-white text-2xl font-bold">
+                {metrics?.averageTrustScore !== undefined ? `${metrics.averageTrustScore}/100` : 'Not available'}
+              </p>
             </div>
           </div>
         </div>
@@ -166,7 +168,9 @@ export default async function TrustPage() {
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Evidence debt items</p>
-              <p className="text-yellow-400 text-2xl font-bold">6</p>
+              <p className="text-yellow-400 text-2xl font-bold">
+                {metrics?.evidenceDebt !== undefined ? formatVal(metrics.evidenceDebt) : 'Not available'}
+              </p>
             </div>
           </div>
         </div>
@@ -177,7 +181,9 @@ export default async function TrustPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Last platform-wide verification</p>
-              <p className="text-white text-sm">July 2026</p>
+              <p className="text-white text-sm">
+                {metrics?.lastVerifiedDate && metrics.lastVerifiedDate !== 'NOT VERIFIED' ? metrics.lastVerifiedDate : 'Not verified'}
+              </p>
             </div>
             <div>
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Next scheduled review</p>

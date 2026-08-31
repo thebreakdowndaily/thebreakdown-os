@@ -24,6 +24,14 @@ export function DatasetHero({ dataset }: { dataset: Dataset }) {
         </span>
         <span className="text-sm text-[#A1A1AA]">·</span>
         <span className="text-sm text-[#A1A1AA]">{dataset.frequency}</span>
+        <span className="text-sm text-[#A1A1AA]">·</span>
+        <span className="text-sm text-[#A1A1AA]">
+          {(dataset as any).lastVerifiedAt || (dataset as any).lastVerified ? (
+            `Verified ${new Date((dataset as any).lastVerifiedAt || (dataset as any).lastVerified).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+          ) : (
+            `Updated ${new Date(dataset.updatedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+          )}
+        </span>
       </div>
       <h1 className="text-3xl font-bold text-[#F5F5F5] mb-4">{dataset.title}</h1>
       <p className="text-lg text-[#A1A1AA] max-w-3xl">{dataset.description}</p>

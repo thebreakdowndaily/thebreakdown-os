@@ -56,8 +56,8 @@ export default function FixHeroStrip({ fix }: FixHeroStripProps) {
 
           <div className="flex items-center gap-6 mt-6 flex-wrap">
             <MetadataItem
-              label="Last Verified"
-              value={formatDate(fix.lastVerified)}
+              label={fix.lastVerified ? 'Verified' : 'Updated'}
+              value={formatDate(fix.lastVerified || fix.updatedAt)}
               icon={<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
             />
             <MetadataItem

@@ -19,6 +19,7 @@ import { bootstrapServices } from '@/lib/bootstrap';
 import { buildHomepage } from '@/features/home/view-model';
 import { EditorialLayout } from '@/packages/editorial/src';
 import { getCanonicalTrustMetrics, type TrustMetrics } from '@/lib/knowledge/trust-metrics';
+import { TrustBar } from '@/components/home/trust/TrustBar';
 import HeroSection from './HeroSection';
 import MissionBar from './MissionBar';
 import ShortVersionGrid from './ShortVersionGrid';
@@ -45,8 +46,17 @@ export default async function HomepageLayout() {
         {/* 1. Hero — flagship chapter above the fold */}
         <HeroSection leadStory={vm.leadStory} trustMetrics={trustMetrics} />
 
+        {/* TrustBar below the Hero */}
+        <TrustBar
+          chaptersPublished={trustMetrics?.publishedChapters}
+          claimsRegistered={trustMetrics?.totalClaims}
+          primarySources={trustMetrics?.primarySourcesCited}
+          lastVerified={trustMetrics?.lastVerifiedDate}
+        />
+
         {/* 2. What Changed — Latest Briefings */}
         <ShortVersionGrid briefings={vm.briefings} />
+
 
         {/* 3. Deep Analysis — Investigations & Explainers */}
         <DeepDivesGrid deepDives={vm.deepDives} />

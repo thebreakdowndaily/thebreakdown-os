@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 interface TrustBarProps {
-  chaptersPublished: number;
-  claimsRegistered: number;
-  primarySources: number;
-  lastVerified: string;
+  chaptersPublished?: number;
+  claimsRegistered?: number;
+  primarySources?: number;
+  lastVerified?: string;
 }
 
 export function TrustBar({
@@ -13,6 +13,11 @@ export function TrustBar({
   primarySources,
   lastVerified,
 }: TrustBarProps) {
+  const chaptersStr = chaptersPublished !== undefined && chaptersPublished > 0 ? `${chaptersPublished} Chapters` : 'Not available';
+  const claimsStr = claimsRegistered !== undefined && claimsRegistered > 0 ? `${claimsRegistered} Claims` : 'Not available';
+  const sourcesStr = primarySources !== undefined && primarySources > 0 ? `${primarySources} Primary Sources` : 'Not available';
+  const verifiedStr = lastVerified && lastVerified !== 'NOT VERIFIED' ? `Last Review: ${lastVerified}` : 'Not verified';
+
   return (
     <section className="bg-gray-50 border-y" aria-label="Trust signals">
       <div className="max-w-6xl mx-auto px-4 py-4">
@@ -22,33 +27,34 @@ export function TrustBar({
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
               <span className="font-semibold text-emerald-700">Editorially Reviewed</span>
             </div>
-            <span className="text-xs text-gray-400 font-mono mt-0.5">{chaptersPublished} Chapters</span>
+            <span className="text-xs text-gray-400 font-mono mt-0.5">{chaptersStr}</span>
           </div>
           <span className="text-gray-300 hidden sm:inline" aria-hidden="true">·</span>
           
           <div className="flex flex-col items-center">
             <span className="font-medium text-gray-700">Evidence-based Research</span>
-            <span className="text-xs text-gray-400 font-mono mt-0.5">{claimsRegistered} Claims</span>
+            <span className="text-xs text-gray-400 font-mono mt-0.5">{claimsStr}</span>
           </div>
           <span className="text-gray-300 hidden sm:inline" aria-hidden="true">·</span>
           
           <div className="flex flex-col items-center">
             <span className="font-medium text-gray-700">Transparent Methodology</span>
-            <span className="text-xs text-gray-400 font-mono mt-0.5">{primarySources} Primary Sources</span>
+            <span className="text-xs text-gray-400 font-mono mt-0.5">{sourcesStr}</span>
           </div>
           <span className="text-gray-300 hidden sm:inline" aria-hidden="true">·</span>
           
           <div className="flex flex-col items-center">
             <span className="font-medium text-gray-700">Corrections on Record</span>
-            <span className="text-xs text-gray-400 font-mono mt-0.5">Last Review: {lastVerified}</span>
+            <span className="text-xs text-gray-400 font-mono mt-0.5">{verifiedStr}</span>
           </div>
           <span className="text-gray-300 hidden sm:inline" aria-hidden="true">·</span>
           
           <Link href="/trust" className="text-blue-600 hover:underline font-medium">
-            Trust ↗
+            Trust Dashboard ↗
           </Link>
         </div>
       </div>
     </section>
   );
 }
+

@@ -43,6 +43,7 @@ fixing 177 TypeScript errors and verifying the build.
 | TASK-22 | Distribution Engine | ✅ Complete | `d1716a8` |
 | TASK-23 | Citation & External Reference System | ✅ Complete | `d1716a8` |
 | TASK-24 | Retention Layer | ✅ Complete | `d1716a8` |
+| TASK-25 | Dynamic Trust Computation & Freshness Badges | ✅ Complete | (working branch) |
 
 ## Build Status
 
