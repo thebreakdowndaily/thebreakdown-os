@@ -43,13 +43,14 @@ fixing 177 TypeScript errors and verifying the build.
 | TASK-22 | Distribution Engine | ✅ Complete | `d1716a8` |
 | TASK-23 | Citation & External Reference System | ✅ Complete | `d1716a8` |
 | TASK-24 | Retention Layer | ✅ Complete | `d1716a8` |
-| TASK-25 | Dynamic Trust Computation & Freshness Badges | ✅ Complete | (working branch) |
+| TASK-25 | Dynamic Trust Computation & Freshness Badges | ✅ Complete | `8c1fb9d` |
+| TASK-26 | Volume I Data Integrity & Verification Linkage | ✅ Complete | `b499097` |
 
 ## Build Status
 
 - **TypeScript**: ✅ 0 errors (as of 2026-08-31)
-- **Tests**: ✅ 70/70 retention tests passing
-- **Build**: Pending full `npm run build` verification
+- **Tests**: ✅ All tests passing (70/70 retention + explorer, advertising, B2B, etc.)
+- **Build**: ✅ Next.js production build succeeds (as of 2026-08-31)
 
 ## Production Access Blockers
 
