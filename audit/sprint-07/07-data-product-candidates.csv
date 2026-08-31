@@ -1,0 +1,5 @@
+candidateId,title,sourceProvenance,updateCadence,audienceDemand,academicCitationPotential,monetizationModel,feasibility
+dp-pmfby-claims,"India Crop Insurance Decadal Ledger (2016-2026)",MoA&FW PMFBY Dashboard & CAG Audits,Quarterly,High (Agri economists & think tanks),Very High (Peer-reviewed citations),Free Public CSV / Premium API,High (Already modeled in pmfby-tracker)
+dp-upi-growth,"National UPI Transaction Velocity & Volume Series",NPCI Official Bulletins & RBI Bulletins,Monthly,Very High (Fintech analysts & VC funds),High (Policy references),Free Public Asset / Institutional Feed,High (Already modeled in upi-tracker)
+dp-mgnrega-20yr,"MGNREGA 20-Year Budget & Wage Arrears Series",Union Budget Documents & MoRD Reports,Annual/Monthly,High (Development scholars & UPSC),Very High (Historical economic research),Free Public Dataset,High (Already modeled in mgnrega-tracker)
+dp-semiconductor-pli,"Semiconductor Fab & OSAT Construction Tracker",MeitY ISM Disclosures & Cabinet Decisions,Quarterly,High (Hardware investors & tech media),High (Supply chain analyses),Supporting Reader / CSV Export,High (Already modeled in semiconductor-tracker)

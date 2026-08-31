@@ -1,0 +1,7 @@
+provider,capability,envVariableKey,localState,productionStatus,resolutionPath
+Google Analytics 4,Real-time event capture and user analytics,NEXT_PUBLIC_GA_MEASUREMENT_ID,Configured (G-79ZCJWS0WS),TESTED LOCALLY (Telemetry proxy active),Production GA4 property receiving stream
+Google Search Console,Search queries / CTR / impressions,GSC_SERVICE_ACCOUNT_KEY,Missing,NOT VERIFIED (Production API required),Verify domain DNS TXT record or OAuth credentials
+Beehiiv,Double opt-in newsletter delivery & subscriber list,BEEHIIV_API_KEY / BEEHIIV_PUB_ID,Missing (Stub fallback active),NOT VERIFIED (Production API required),Supply Beehiiv API V2 key in hosting dashboard
+Stripe,Membership billing & subscription checkout,STRIPE_SECRET_KEY,Missing (Mock checkout active),NOT VERIFIED (Production API required),Provide Stripe live secret key and webhook secret
+Google AdSense,Programmatic banner ad delivery,NEXT_PUBLIC_ADSENSE_CLIENT,Missing (House ad fallback active),NOT VERIFIED (Production API required),Supply AdSense publisher client ID (ca-pub-xxx)
+Supabase / Postgres,User authentication & live database persistence,SUPABASE_SERVICE_ROLE_KEY,Missing (Memory mock store active),NOT VERIFIED (Production API required),Supply production Postgres connection string and role key

@@ -1,0 +1,11 @@
+objectSlug,objectType,url,primaryIntent,evidenceScore,measuredEngagementScore,conversionCTAStatus,dataStatus
+mgnrega-reform,Story,/story/mgnrega-reform,Core Explanatory,95,NOT VERIFIED,Active (Rural Economy Brief),PRODUCTION ACCESS REQUIRED
+pm-fasal-bima-claims,Story,/story/pm-fasal-bima-claims,Core Explanatory,97,NOT VERIFIED,Active (Agriculture & Welfare Brief),PRODUCTION ACCESS REQUIRED
+digital-payments-boom,Story,/story/digital-payments-boom,Core Explanatory,94,NOT VERIFIED,Active (Fintech & Payments Brief),PRODUCTION ACCESS REQUIRED
+semiconductor-pli,Story,/story/semiconductor-pli,Core Explanatory,96,NOT VERIFIED,Active (Industrial Policy Brief),PRODUCTION ACCESS REQUIRED
+mgnrega,Tracker,/trackers/mgnrega,Live Policy Status,98,NOT VERIFIED,Active (Policy Update Brief),PRODUCTION ACCESS REQUIRED
+pmfby,Tracker,/trackers/pmfby,Live Policy Status,98,NOT VERIFIED,Active (Policy Update Brief),PRODUCTION ACCESS REQUIRED
+upi,Tracker,/trackers/upi,Live Policy Status,99,NOT VERIFIED,Active (Policy Update Brief),PRODUCTION ACCESS REQUIRED
+semiconductor,Tracker,/trackers/semiconductor,Live Policy Status,97,NOT VERIFIED,Active (Policy Update Brief),PRODUCTION ACCESS REQUIRED
+trackers,Hub,/trackers,Directory Discovery,95,NOT VERIFIED,Active (Policy Update Brief),PRODUCTION ACCESS REQUIRED
+economy,Topic,/topic/economy,Topic Synthesis,96,NOT VERIFIED,Active (Topic Follow),PRODUCTION ACCESS REQUIRED

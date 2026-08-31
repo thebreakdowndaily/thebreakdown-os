@@ -1,0 +1,9 @@
+metricOrChannel,dimensionType,targetBenchmark,measuredLiveValue,measurementMethod,dataStatus
+Organic Search,Acquisition,>55% of total sessions,NOT VERIFIED,Client-side captureEvent proxy,PRODUCTION ACCESS REQUIRED
+Direct / Referral,Acquisition,>25% of total sessions,NOT VERIFIED,Client-side captureEvent proxy,PRODUCTION ACCESS REQUIRED
+Newsletter / Owned,Acquisition,>15% of total sessions,NOT VERIFIED,Client-side captureEvent proxy,PRODUCTION ACCESS REQUIRED
+Average Engagement Time,Engagement,>3m 00s on Explainers,NOT VERIFIED,story_completed & scroll depth telemetry,PRODUCTION ACCESS REQUIRED
+Second-Content Rate,Engagement,>30% click to next object,NOT VERIFIED,Related exploration & tracker telemetry,PRODUCTION ACCESS REQUIRED
+Evidence Interaction Rate,Engagement,>20% expanding EvidenceTrail,NOT VERIFIED,evidence_expanded event logging,PRODUCTION ACCESS REQUIRED
+Document Preview Open Rate,Engagement,>10% opening primary doc modals,NOT VERIFIED,document_preview_opened telemetry,PRODUCTION ACCESS REQUIRED
+Returning Reader Rate (D7),Retention,>18% returning in 7 days,NOT VERIFIED,tb_reading_history & reader_returned,PRODUCTION ACCESS REQUIRED
