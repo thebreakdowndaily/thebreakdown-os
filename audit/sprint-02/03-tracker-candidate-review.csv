@@ -1,0 +1,6 @@
+candidate,topic,dataAvailability,evidenceDensity,readerDemand,status,rationale
+MGNREGA,economy,High (MIS & Gazette),High (Acts & CAG Audits),High,SELECTED_SPRINT_1,First flagship knowledge system tracking 20-year legislative transition.
+India Semiconductor Mission (ISM) & PLI,technology,High (MeitY & Cabinet Records),High (Plant milestones & Guidelines),High,SELECTED_SPRINT_2,Selected as second tracker. Proves facility construction and outlay metrics generalize across non-statutory topics.
+UPI Digital Payments Infrastructure,technology,High (NPCI & RBI SDRP),Medium (Technical circulars),High,DEFERRED_SPRINT_3,High reader value; candidate for next sprint queue.
+PM Fasal Bima Yojana (Crop Insurance),agriculture,Medium (CAG audit reports),High (State backlogs),High,DEFERRED_SPRINT_3,Requires updated CAG audit integration before launching as live tracker.
+Climate Finance & Sovereign Green Bonds,environment,Medium (MoEFCC & Budget),Medium (Disbursement rates),Medium,DEFERRED_SPRINT_4,Evidence density currently too thin for standalone daily tracker.

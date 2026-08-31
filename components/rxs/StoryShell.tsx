@@ -25,6 +25,8 @@ import { AdBlockDetector } from '@/components/monetization/AdBlockDetector';
 import { PaywallOverlay } from '@/components/monetization/PaywallOverlay';
 import { CitationExporter } from '@/components/intel/CitationExporter';
 import { SocialSharePanel } from '@/components/retention/SocialSharePanel';
+import EvidenceTrail, { type EvidenceTrailItem } from '@/components/evidence/EvidenceTrail';
+import { getTrackersForStory } from '@/lib/trackers/registry';
 
 interface StoryShellProps {
   visibleExperience?: VisibleStoryExperience;
@@ -147,6 +149,18 @@ export function StoryShell({
       quickBrief,
     } = visibleExperience;
 
+    const rawClaims = research?.claims || evidence?.claims || [];
+    const trailItems: EvidenceTrailItem[] = rawClaims.map((c) => ({
+      id: c.id,
+      claim: c.statement,
+      explanation: c.explanation,
+      status: c.status,
+      sources: c.sources?.map((s) => ({ title: s.title, url: s.url, type: (s as any).publisher })),
+      lastVerified: hero.updatedAt ? new Date(hero.updatedAt).toISOString().split('T')[0] : undefined,
+    }));
+    const matchingTrackers = getTrackersForStory(storySlug);
+    const relatedTracker = matchingTrackers.length > 0 ? matchingTrackers[0] : undefined;
+
     return (
       <div className="min-h-screen bg-surface-canvas text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
         {/* Sticky Reading Progress Bar (uses canonical z-sticky index below header) */}
@@ -267,6 +281,17 @@ export function StoryShell({
                 <>
                   {/* Short Version Orientation */}
                   <StoryOrientation orientation={orientation} />
+
+                  {/* Visible Evidence Provenance Trail */}
+                  {trailItems.length > 0 && (
+                    <EvidenceTrail
+                      storySlug={storySlug}
+                      items={trailItems}
+                      relatedTrackerSlug={relatedTracker?.slug}
+                      relatedTrackerTitle={relatedTracker?.title}
+                    />
+                  )}
+
                   <SocialSharePanel storySlug={storySlug} storyTitle={hero.headline} />
                   <SaveStoryButton slug={storySlug} headline={hero.headline} />
 

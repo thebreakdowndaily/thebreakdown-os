@@ -23,6 +23,7 @@ import TopicUpdateBanner from '@/components/retention/TopicUpdateBanner';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { FeedbackSection } from '@/components/rxs/LearningFooter';
+import { getTrackersForTopic, getAllTrackers } from '@/lib/trackers/registry';
 
 
 function createJsonLd(topic: { name: string; description: string; slug: string }) {
@@ -220,6 +221,42 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               ...storyGroups.highestEvidence,
             ].map((s) => ({ slug: s.slug, publishedAt: s.publishedAt, updatedAt: s.updatedAt }))}
           />
+
+          {/* Flagship Policy Trackers (Sprint 2) */}
+          {getTrackersForTopic(topic.slug).length > 0 && (
+            <section className="space-y-4 p-5 sm:p-6 rounded-2xl bg-neutral-900/40 border border-emerald-500/30">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <h2 className="text-xl font-bold text-white font-mono">Flagship Policy Trackers</h2>
+                </div>
+                <Link href="/trackers" className="text-xs font-mono text-emerald-400 hover:text-emerald-300 underline">
+                  All Trackers ({getAllTrackers().length}) →
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {getTrackersForTopic(topic.slug).map((t) => (
+                  <div key={t.id} className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-800 space-y-2.5">
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase font-bold tracking-wider block">
+                      Live Tracker · {t.lastUpdated}
+                    </span>
+                    <h3 className="text-base font-bold text-white leading-snug">
+                      <Link href={`/trackers/${t.slug}`} className="hover:text-emerald-300 transition-colors">
+                        {t.title}
+                      </Link>
+                    </h3>
+                    <p className="text-xs text-neutral-300 line-clamp-2 leading-relaxed">{t.subtitle}</p>
+                    <Link
+                      href={`/trackers/${t.slug}`}
+                      className="inline-flex items-center gap-1 text-xs font-mono font-bold text-emerald-400 hover:text-emerald-300 pt-1"
+                    >
+                      Inspect Evidence Chain →
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Stories — TASK-09 topic hub model (Freshness + Importance + Evidence + Evergreen) */}
           {sections.map((section) => (

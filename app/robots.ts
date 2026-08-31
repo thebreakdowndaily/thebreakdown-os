@@ -28,6 +28,7 @@ export default function robots(): MetadataRoute.Robots {
           '/evolution',
           '/precedents',
           '/tracking',
+          '/trackers',
         ],
         disallow: [
           // Internal tools — must never be indexed

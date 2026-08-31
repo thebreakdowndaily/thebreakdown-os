@@ -58,21 +58,33 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (per priority framework)
+## Sprint 2 — Evidence Visibility & Tracker Framework (complete)
 
-Priority = `User value × Competitive advantage × Revenue potential × Search potential × Evidence/data moat ÷ Implementation complexity`
+**Deliverables:**
+1. **Evidence Provenance Trail on Stories** (`components/evidence/EvidenceTrail.tsx`): progressive disclosure showing Claim → Evidence → Source → Primary Document with direct links and canonical status badges.
+2. **Reusable Tracker Framework** (`lib/trackers/`): canonical data contract (`types.ts`), multi-tracker registry (`registry.ts`), reusable renderer (`GenericTracker.tsx`), and dedicated Trackers Directory (`/trackers`).
+3. **Second Flagship Tracker — India Semiconductor Mission (ISM) & PLI** (`/trackers/semiconductor`): facility-by-facility construction, capital outlays, and commercial milestones.
+4. **Topic Hub Trackers Integration** (`app/topic/[slug]/page.tsx`): automatically surfaces policy trackers on `/topic/economy` and `/topic/technology`.
+5. **Evidence Analytics**: registered typed events `evidence_expanded`, `source_opened`, `document_opened`, `claim_opened`, `tracker_viewed` in `lib/analytics/capture.ts`.
 
-1. **Generalize the tracker pattern to more policy problems** (extend `lib/trackers/` model to a second flagship system — e.g. a fixed-interest / tax-tracker or a parliament-tracker) now that the renderer + canonical model exist.
-2. **Surface the evidence chain on story and topic pages** — the core differentiator is currently invisible to first-time readers; make Claims/Sources/Evidence visible at the point of reading.
-3. **Deepen `/trackers/mgnrega` data** — add a full MGNREGA MIS metrics time-series (person-days, expenditure, districts) and a "how this compares to other countries' job-guarantee schemes" section.
-4. **Link the tracker to the topic hub** (`/topics/economy`) and to search results.
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 22 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for `/trackers`, `/trackers/mgnrega`, `/trackers/semiconductor`, stories, and topics.
+
+---
+
+## Next Priorities (Sprint 3 & Beyond)
+
+1. **Candidate for Sprint 3 Tracker**: UPI & Digital Payments Infrastructure Tracker (`digital-payments-boom`) or PM Fasal Bima Yojana Claims Tracker (`pm-fasal-bima-claims`).
+2. **Deepen Tracker Time-Series**: Embed interactive time-series charts directly within `GenericTracker`.
+3. **Reader Evidence Feedback Loop**: Allow readers to suggest corrections or submit verified primary documents for open claims.
 
 ---
 
 ## Notes & Observability
 
-- Live smoke test of `/trackers/mgnrega` after deployment: pending (requires the production push to propagate).
 - External provider metrics (GA4, GSC, Beehiiv, Stripe, AdSense) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 31 Aug 2026, commit `797b68a` on `main`, origin in sync.
+Last verified: 31 Aug 2026, Sprint 2 complete.

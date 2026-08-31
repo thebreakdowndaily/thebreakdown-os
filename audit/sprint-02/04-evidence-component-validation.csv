@@ -1,0 +1,9 @@
+componentName,featureArea,status,testEvidence,notes
+EvidenceTrail,Progressive Disclosure,PASS,Verified in tests/evidence/evidence-trail.test.ts,Collapses to summary pill by default; expands on user toggle
+EvidenceTrail,Canonical Status Mapping,PASS,Verified in tests/evidence/evidence-trail.test.ts,Supports verified/supported/mixed/not_supported/uncertain
+EvidenceTrail,Outbound Link Sanitization,PASS,Verified in tests/evidence/evidence-trail.test.ts,Domain extraction via buildOutboundParams helper
+EvidenceTrail,Missing Document Handling,PASS,Verified in tests/evidence/evidence-trail.test.ts,Gracefully renders claim and source if document node is absent
+GenericTracker,Status & Metric Grid,PASS,Verified in tests/trackers/tracker-framework.test.ts,Renders keyDataPoints in responsive grid with sources and asOf dates
+GenericTracker,Evidence Chain Ledger,PASS,Verified in tests/trackers/tracker-framework.test.ts,Renders confidence badges and counterpoints without fabrication
+GenericTracker,Primary Documents Index,PASS,Verified in tests/trackers/tracker-framework.test.ts,Lists official acts/notifications with date tags and summaries
+GenericTracker,Telemetry Triggers,PASS,Verified in tests/evidence/evidence-trail.test.ts,Emits evidence_expanded and tracker_viewed correctly

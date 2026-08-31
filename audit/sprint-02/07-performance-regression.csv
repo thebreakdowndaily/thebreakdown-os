@@ -1,0 +1,8 @@
+route,firstLoadJsShared,routeSize,lcpBudget,measuredBuildOutput,status
+/trackers,227 kB,418 B,<1.2s,Static SSG,PASS
+/trackers/mgnrega,233 kB,313 B,<1.2s,Static SSG,PASS
+/trackers/semiconductor,233 kB,314 B,<1.2s,Static SSG,PASS
+/story/mgnrega-reform,309 kB,394 B,<1.2s,Static SSG with EvidenceTrail,PASS
+/story/semiconductor-pli,309 kB,394 B,<1.2s,Static SSG with EvidenceTrail,PASS
+/topic/economy,649 kB,6.59 kB,<1.2s,Static SSG with Tracker Section,PASS
+/topic/technology,649 kB,6.59 kB,<1.2s,Static SSG with Tracker Section,PASS

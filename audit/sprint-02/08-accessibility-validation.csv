@@ -1,0 +1,7 @@
+surface,feature,wcagCriterion,status,notes
+EvidenceTrail,Inspect Toggle Button,WCAG 2.1 AA (4.1.2 Name Role Value),PASS,Includes aria-expanded and explicit text labels
+EvidenceTrail,Color Contrast on Status Badges,WCAG 2.1 AA (1.4.3 Contrast Minimum),PASS,Green/Amber/Red text with high contrast on dark surfaces
+EvidenceTrail,Outbound Links,WCAG 2.1 AA (2.4.4 Link Purpose),PASS,All source links include rel="noopener noreferrer" and descriptive titles
+GenericTracker,Keyboard Navigation,WCAG 2.1 AA (2.1.1 Keyboard),PASS,All cards links and buttons are focusable via tab index
+GenericTracker,Semantic Headings,WCAG 2.1 AA (1.3.1 Info and Relationships),PASS,Hierarchical h1 -> h2 -> h3 structure
+GenericTracker,Schema Metadata,Schema.org Dataset,PASS,Valid JSON-LD embedded for search engine discovery

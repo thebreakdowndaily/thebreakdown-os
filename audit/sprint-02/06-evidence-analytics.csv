@@ -1,0 +1,6 @@
+eventName,allowedParams,triggerCondition,privacyCompliance
+evidence_expanded,"content_id, claim_id, evidence_path",Fired when reader clicks Inspect Evidence Trail or toggles individual claim,PASS (No PII / Allow-listed)
+source_opened,"content_id, source_title, source_domain",Fired when reader clicks outbound verified source link in EvidenceTrail,PASS (Domain sanitized)
+document_opened,"content_id, document_title, document_domain",Fired when reader clicks primary official document link,PASS (No PII)
+claim_opened,"content_id, claim_id",Fired when reader expands specific claim assertion detail,PASS (No PII)
+tracker_viewed,"tracker_id, topic",Fired on initial mount of /trackers/[slug] page,PASS (Enum bound)
