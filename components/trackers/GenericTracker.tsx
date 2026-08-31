@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { TrackerDefinition } from '@/lib/trackers/types';
+import type { TrackerDefinition, TrackerDocument } from '@/lib/trackers/types';
 import { captureEvent } from '@/lib/analytics/capture';
+import TimeSeriesChart from './TimeSeriesChart';
+import DocumentPreviewModal from '@/components/documents/DocumentPreviewModal';
 
 interface GenericTrackerProps {
   tracker: TrackerDefinition;
@@ -30,12 +32,18 @@ const categoryIcon = {
 } as const;
 
 export default function GenericTracker({ tracker }: GenericTrackerProps) {
+  const [selectedDoc, setSelectedDoc] = useState<TrackerDocument | null>(null);
+
   useEffect(() => {
+    captureEvent('tracker_viewed', {
+      tracker_id: tracker.id,
+      topic: tracker.topicSlug,
+    });
     captureEvent('evidence_expanded', {
       content_id: `tracker:${tracker.id}`,
       claim_id: tracker.slug,
     });
-  }, [tracker.id, tracker.slug]);
+  }, [tracker.id, tracker.slug, tracker.topicSlug]);
 
   return (
     <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 sm:p-8 space-y-8 font-sans text-neutral-100 max-w-5xl mx-auto shadow-2xl backdrop-blur-sm">
@@ -97,6 +105,20 @@ export default function GenericTracker({ tracker }: GenericTrackerProps) {
           ))}
         </div>
       </div>
+
+      {/* Quantitative Time-Series Visualizations (Sprint 4) */}
+      {tracker.timeSeries && tracker.timeSeries.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-xs font-bold text-neutral-400 uppercase font-mono tracking-wider">
+            Verified Quantitative Time-Series ({tracker.timeSeries.length})
+          </h2>
+          <div className="grid grid-cols-1 gap-4">
+            {tracker.timeSeries.map((ts) => (
+              <TimeSeriesChart key={ts.id} series={ts} trackerId={tracker.id} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* What Changed Recently */}
       <div className="space-y-3">
@@ -178,21 +200,49 @@ export default function GenericTracker({ tracker }: GenericTrackerProps) {
         <h2 className="text-xs font-bold text-neutral-400 uppercase font-mono tracking-wider">
           Primary Official Documents ({tracker.documents.length})
         </h2>
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {tracker.documents.map((doc) => (
-            <div key={doc.title} className="bg-neutral-950/40 border border-neutral-800/60 rounded-xl p-3.5 text-xs space-y-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-300 font-mono uppercase font-bold">
-                  {doc.type}
-                </span>
-                <strong className="text-neutral-200 font-medium">{doc.title}</strong>
-                <span className="text-[10px] font-mono text-neutral-500 ml-auto">{doc.date}</span>
+            <div key={doc.title} className="bg-neutral-950/40 border border-neutral-800/60 rounded-xl p-3.5 text-xs space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-300 font-mono uppercase font-bold">
+                    {doc.type}
+                  </span>
+                  <strong className="text-neutral-200 font-medium">{doc.title}</strong>
+                </div>
+                <span className="text-[10px] font-mono text-neutral-500">{doc.date}</span>
               </div>
               <p className="text-neutral-400 leading-relaxed">{doc.summary}</p>
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setSelectedDoc(doc)}
+                  className="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-[11px] border border-neutral-700 transition-colors"
+                >
+                  Inspect Document Record →
+                </button>
+                {doc.url && (
+                  <a
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 rounded bg-transparent hover:bg-neutral-900 text-neutral-400 hover:text-white font-mono text-[11px] transition-colors"
+                  >
+                    Direct Source ↗
+                  </a>
+                )}
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Document Preview Modal */}
+      <DocumentPreviewModal
+        document={selectedDoc}
+        trackerId={tracker.id}
+        onClose={() => setSelectedDoc(null)}
+      />
 
       {/* Related Stories & Exploration Links */}
       <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-neutral-800">

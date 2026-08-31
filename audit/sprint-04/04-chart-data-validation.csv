@@ -1,0 +1,5 @@
+trackerSlug,seriesId,title,dataPointsCount,minDate,maxDate,unit,sourceVerified,status
+upi,upi-volume-growth,Annual UPI Transaction Volume (2016–2026),10,2016-17,2025-26,Billion Transactions,NPCI Payment Statistics,PASS
+upi,upi-value-growth,Annual UPI Transaction Value (2016–2026),10,2016-17,2025-26,₹ Lakh Crore,RBI & NPCI Bulletins,PASS
+mgnrega,mgnrega-budget-growth,Rural Employment Scheme Budget Allocation (2006–2027),7,2006-07,2026-27,₹ Crore,Union Budget & MoRD Accounts,PASS
+semiconductor,semiconductor-investment-growth,Semiconductor Program Allocations vs Approved Investments,4,2021-22,2025-26,₹ Lakh Crore,MeitY ISM Disclosures,PASS

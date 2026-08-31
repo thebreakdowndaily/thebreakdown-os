@@ -1,0 +1,8 @@
+metric,value,unit,timePeriod,sourceAuthority,provenanceTier,derivationType,verificationStatus
+Annual Transaction Volume,185.2,Billion Transactions,FY 2025-26,NPCI Official Monthly Bulletins,Tier 1 (Direct Switch Ledger),Official,PASS
+Annual Transaction Value,260.4,₹ Lakh Crore,FY 2025-26,Reserve Bank of India & NPCI,Tier 1 (Settlement Accounts),Official,PASS
+UPI123Pay Per-Txn Limit,10000,₹ (Rupees),Effective Jan 2025,RBI SDRP Statement & NPCI Circular 209,Tier 1 (Regulatory Order),Official,PASS
+Rural UPI Turnover,12.0,₹ Lakh Crore,FY 2025-26,MoF / NPCI Financial Inclusion Report,Tier 1 (Government Report),Official,PASS
+Feature Phone UPI Users,18.0,Crore Users,FY 2025-26,NPCI Annual Report,Tier 1 (Registrations),Official,PASS
+Zero MDR Mandate,100% Retained,Binary Status,Current Law,Section 10A PSS Act 2007 (MoF),Tier 1 (Statutory Provision),Official,PASS
+International Linkages,7,Jurisdictions,June 2026,NPCI International Payments Ltd (NIPL),Tier 1 (Bilateral MoUs),Official,PASS

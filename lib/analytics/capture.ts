@@ -53,6 +53,8 @@ export const CORE_EVENTS = [
   'share_clicked',
   'claim_opened',
   'tracker_viewed',
+  'chart_interacted',
+  'document_preview_opened',
 ] as const;
 
 export type CoreEventName = (typeof CORE_EVENTS)[number];
@@ -103,6 +105,8 @@ export const ALLOWED_PARAMS: Record<CoreEventName, readonly string[]> = {
   'share_clicked': ['platform', 'story_slug'],
   'claim_opened': ['content_id', 'claim_id'],
   'tracker_viewed': ['tracker_id', 'topic'],
+  'chart_interacted': ['chart_id', 'tracker_id'],
+  'document_preview_opened': ['document_title', 'tracker_id'],
 };
 
 /** GA4 reserves these; our taxonomy must never emit them. */

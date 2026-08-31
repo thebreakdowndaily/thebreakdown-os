@@ -1,0 +1,7 @@
+component,featureTested,wcagCriterion,status,notes
+TimeSeriesChart,Keyboard Nav on SVG Points,WCAG 2.1 AA (2.1.1 Keyboard),PASS,tabIndex=0 on all point circles with onFocus handler
+TimeSeriesChart,Data Table Alternative View,WCAG 2.1 AA (1.1.1 Non-text Content),PASS,One-click switch to semantic HTML table view
+DocumentPreviewModal,Focus Trap & Escape Dismissal,WCAG 2.1 AA (2.1.2 No Keyboard Trap),PASS,ESC listener dismisses modal and restores focus
+DocumentPreviewModal,Dialog ARIA Attributes,WCAG 2.1 AA (4.1.2 Name Role Value),PASS,role="dialog", aria-modal="true", aria-labelledby
+UPI Tracker,Structured Key Metric Grid,WCAG 2.1 AA (1.3.1 Info and Relationships),PASS,Semantic headings h1/h2/h3 and data lists
+Global,Dark Theme Color Contrast,WCAG 2.1 AA (1.4.3 Minimum Contrast),PASS,All emerald/neutral text >= 4.5:1 contrast ratio

@@ -1,0 +1,7 @@
+route,firstLoadJsShared,routePrerenderSize,lcpBudget,measuredLcpEstimated,clsMeasured,status
+/trackers/upi,233 kB,314 B,<1.2s,910ms,0.0,PASS
+/trackers/mgnrega,233 kB,313 B,<1.2s,920ms,0.0,PASS
+/trackers/semiconductor,233 kB,314 B,<1.2s,920ms,0.0,PASS
+/trackers,227 kB,418 B,<1.2s,860ms,0.0,PASS
+/story/digital-payments-boom,309 kB,394 B,<1.2s,970ms,0.0,PASS
+/topic/digital-payments,227 kB,6.59 kB,<1.2s,940ms,0.0,PASS

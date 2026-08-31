@@ -90,11 +90,27 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 4 & Beyond)
+## Sprint 4 — UPI Knowledge System, Data Visualization & Primary-Document UX (complete)
 
-1. **Third Flagship Tracker**: UPI & Digital Payments Infrastructure Tracker (`/trackers/upi`).
-2. **Interactive Time-Series**: Embed interactive D3/SVG charts within `GenericTracker`.
-3. **Primary Document Reader**: In-app document viewer modal for official gazette PDFs.
+**Deliverables:**
+1. **UPI & Digital Payments Flagship Tracker** (`/trackers/upi`): 185.2B volume, ₹260.4L Cr value, ₹10,000 UPI123Pay limit (RBI SDRP Oct 2024), Zero MDR mandate, and 7 international linkages (`lib/trackers/upi-tracker.ts`).
+2. **Reusable Time-Series Visualizations** (`components/trackers/TimeSeriesChart.tsx`): zero-overhead SVG chart with keyboard-accessible points, tooltips, and one-click toggle to a semantic HTML data table. Deployed across all 3 trackers.
+3. **Primary Document Preview Experience** (`components/documents/DocumentPreviewModal.tsx`): safe modal dialog showing document summary, publisher, date, statutory key clauses, and direct source link with ESC/focus trap handlers.
+4. **Analytics Telemetry**: registered `chart_interacted` and `document_preview_opened` in `lib/analytics/capture.ts`.
+5. **Topic & Story Linking**: integrated `/trackers/upi` with `/story/digital-payments-boom` and `/topic/digital-payments`.
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 25 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for `/trackers/upi`, `/trackers/mgnrega`, `/trackers/semiconductor`, `/trackers`, stories, and topics.
+
+---
+
+## Next Priorities (Sprint 5 & Beyond)
+
+1. **Fourth Flagship Tracker**: PM Fasal Bima Yojana (Crop Insurance) or Climate Finance Tracker.
+2. **Interactive Multi-Series Comparison**: Allow side-by-side comparison of policy metrics across states or years.
+3. **Citation & Annotation Tooling**: Allow researchers to copy inline formatted BibTeX and APA citations directly from tracker document previews.
 
 ---
 
@@ -103,4 +119,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GA4, GSC, Beehiiv, Stripe, AdSense) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 31 Aug 2026, Sprint 3 complete.
+Last verified: 31 Aug 2026, Sprint 4 complete.

@@ -42,6 +42,25 @@ export interface TrackerDocument {
   date: string;
   url?: string;
   summary: string;
+  publisher?: string;
+  pageCount?: number;
+  keyClauses?: string[];
+}
+
+export interface TrackerTimeSeriesDataPoint {
+  date: string;
+  value: number;
+  label?: string;
+}
+
+export interface TrackerTimeSeries {
+  id: string;
+  title: string;
+  subtitle?: string;
+  unit: string;
+  source: string;
+  frequency?: string;
+  data: TrackerTimeSeriesDataPoint[];
 }
 
 export interface TrackerDefinition {
@@ -62,6 +81,7 @@ export interface TrackerDefinition {
   documents: TrackerDocument[];
   relatedStorySlugs: string[];
   relatedEntityIds: string[];
+  timeSeries?: TrackerTimeSeries[];
 }
 
 export type TrackerSummary = Pick<

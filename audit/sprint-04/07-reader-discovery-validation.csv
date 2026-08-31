@@ -1,0 +1,6 @@
+entryPoint,interactionPath,expectedDiscoverability,actualBehavior,status
+Story (/story/digital-payments-boom),"User reads story -> EvidenceTrail -> clicks Live Tracker badge",Direct transition into /trackers/upi with zero friction,Seamless route transition; EvidenceTrail surfaces RBI SDRP claim,PASS
+Topic (/topic/digital-payments),"User visits topic page -> discovers Flagship Policy Trackers section",Prominent UPI Tracker card with latest 185B volume metric,Card links directly to /trackers/upi,PASS
+Tracker Hub (/trackers),"User browses directory -> selects UPI & Digital Rails Tracker",All 3 trackers (MGNREGA, Semiconductor, UPI) listed clearly,Filters and cards render with last updated metadata,PASS
+Quantitative Chart (/trackers/upi),"User explores 10-year volume chart -> toggles to data table view",Full table with 10 fiscal year points accessible without JS hurdles,Table and SVG render synchronously with tooltip inspection,PASS
+Document Preview (/trackers/upi),"User clicks Inspect Document Record on RBI SDRP entry",Modal dialog opens with summary, publisher, date, and key clauses,Modal opens cleanly; ESC dismisses; focus trapped,PASS

@@ -1,0 +1,5 @@
+eventName,allowedParams,triggerCondition,privacyCompliance,status
+chart_interacted,"chart_id, tracker_id",Fired when user hovers a chart data point or toggles chart/table view,PASS (No PII / Allow-listed),PASS
+document_preview_opened,"document_title, tracker_id",Fired when user clicks Inspect Document Record button to open modal,PASS (Title and tracker ID only),PASS
+tracker_viewed,"tracker_id, topic",Fired on initial mount of /trackers/[slug] page,PASS (Enum bound),PASS
+evidence_expanded,"content_id, claim_id, evidence_path",Fired on expanding EvidenceTrail,PASS (No PII),PASS
