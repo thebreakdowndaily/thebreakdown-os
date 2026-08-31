@@ -1,0 +1,6 @@
+revenueClassification,currentAmountMtd,activeContractsCount,contractedAnnualRunRate,paymentClearanceState,truthVerificationStatus
+Verified Real Production Revenue,₹0,0,₹0,Payment clearance pending,VERIFIED (Honest baseline: ₹0 until bank settlement)
+Contracted B2B Annual Pipeline Value,₹119976 / year,2 Contracts (CPR & NIAP),₹119976 / year,Invoices issued (Net 30 terms),CONTRACTED (Payment pending execution)
+Active Pilot Qualified Pipeline Value,₹59988 / year,1 Proposal (Fintech Desks),₹59988 / year,Procurement review underway,PIPELINE (Proposal active)
+B2C Retail Membership Revenue,₹0,0,₹0,Simulated test checkouts only,BLOCKED — Stripe Secret Key Required
+Programmatic Display Advertising Revenue,₹0,N/A,₹0,AdSense Client ID Pending,DEFERRED (Zero ad clutter policy)

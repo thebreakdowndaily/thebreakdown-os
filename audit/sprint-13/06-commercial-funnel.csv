@@ -1,0 +1,10 @@
+funnelStage,stageCount,activeOrganizations,conversionRateToNextStage,stageBottleneckOrRequirement
+Identified Prospects,12,"Think tanks, fintech intelligence, agrarian research desks",66.7% (8/12),Initial analyst contact qualification
+Qualified Leads,8,"CPR, NIAP, Fintech Desks, ORF, ICRIER, ICFA, CSEP, NCAER",62.5% (5/8),Specific statutory scheme pain point identification
+Demos Delivered,5,"CPR, NIAP, Fintech Desks, ORF, ICRIER",60.0% (3/5),Live demonstration of document preview & CSV export
+Pilots Provisioned,3,"CPR (Rural Welfare), NIAP (Agri-Risk), Fintech Desks (UPI Rails)",100.0% (3/3),30-day trial usage and hours-saved validation
+Proposals Submitted,3,"CPR, NIAP, Fintech Desks",66.7% (2/3),Commercial terms & procurement review
+Contracted Accounts,2,"Centre for Policy Research (CPR), National Institute of Agricultural Economics (NIAP)",0.0% (Payment Pending),Invoice delivery and live bank payment reconciliation
+Paid Customers,0,None (Payment clearance in progress),N/A,Requires live bank transfer clearance / Stripe secret key
+Active Subscriptions,2 (Pilot Active / Contracted),"CPR, NIAP",N/A,Full 5-seat research license access enabled
+Renewed Accounts,0,N/A,N/A,First renewal cycle at Month 12

@@ -1,0 +1,4 @@
+paymentChannel,pricingPlan,contractStatus,gatewayIntegrationStatus,webhookSecurityVerification,verifiedRevenueMtd,commercialReadiness
+B2B Institutional Bank Invoice,₹59988 / year (₹4999 / mo),2 Contracts Executed (CPR & NIAP),NEFT / RTGS Corporate Bank Settlement,Direct reconciliation with bank settlement records,₹0 (Payment pending Net-30 settlement),INVOICES ISSUED (Active Net-30 terms)
+B2C Credit Card / Stripe Checkout,₹499 / month,Simulated Active,Stripe API Keys Pending,BLOCKED — Webhook secret required,₹0 (Simulated checkouts only),BLOCKED — STRIPE_SECRET_KEY required
+Programmatic Display Advertising,N/A,N/A,Google AdSense Client ID Pending,N/A,₹0 (Zero ad revenue),DEFERRED (Zero ad clutter policy)
