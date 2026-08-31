@@ -1,0 +1,7 @@
+queryCluster,targetUrl,currentStatus,editorialDecision,rationale
+"PMFBY Live Scheme Status & Delays",/trackers/pmfby,NEW,CREATE,"Flagship requirement for continuous empirical monitoring of claim settlement rates and penal interest enforcement."
+"PMFBY Deep Investigation & Mechanics",/story/pm-fasal-bima-claims,EXISTING,EXPAND,"Connect existing explainer to new tracker and add direct answer orientation."
+"MGNREGA 125-Day Reform Status",/trackers/mgnrega,EXISTING,MAINTAIN,"Already complete with 20-year budget series and gazette previews."
+"MGNREGA 20-Year Assessment Explainer",/story/mgnrega-reform,EXISTING,MAINTAIN,"Fully aligned with VB-G RAM G Act 2025."
+"State-wise Crop Cutting Experiment Protocols",/trackers/pmfby#documents,NEW,CONSOLIDATE,"Embed YES-TECH technical protocols directly into PMFBY tracker document modal instead of creating thin state pages."
+"Generic Crop Insurance Advice",N/A,N/A,REJECT,"Commercial insurance advisory out of editorial scope."

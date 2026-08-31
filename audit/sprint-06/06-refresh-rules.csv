@@ -1,0 +1,6 @@
+triggerType,monitoringCadence,actionRequired,verificationGate,assignedBureau
+Monthly Official Data Release,Monthly (1st to 5th),Update keyDataPoints and append newest timeSeries point,Cross-check against official statistical bulletin,Research & Verification Bureau
+Cabinet / Legislative Decision,Immediate (Within 24h),Add Recent Material Change card and update operational status,Verify against Gazette notification or Cabinet release,Editorial Bureau
+Supreme Audit / CAG Report,Event-driven,Extract primary audit claims and attach PDF record to document modal,Audit against table numbers and report paragraphs,Verification Bureau
+Statutory Rule Expiry / Sunset,Quarterly,Verify if regulatory ceilings or subsidies were extended,Check parliamentary standing committee gazettes,Knowledge Operations Bureau
+Annual Budget Tabled,Annual (Feb),Update fiscal allocation time series and state expenditure ledgers,Verify Union Expenditure Budget Annexures,Research Bureau

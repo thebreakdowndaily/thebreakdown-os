@@ -1,0 +1,9 @@
+route,firstLoadJsShared,routePrerenderSize,lcpBudget,measuredLcpEstimated,clsMeasured,status
+/trackers/pmfby,233 kB,313 B,<1.2s,910ms,0.0,PASS
+/trackers/upi,233 kB,313 B,<1.2s,910ms,0.0,PASS
+/trackers/mgnrega,233 kB,313 B,<1.2s,920ms,0.0,PASS
+/trackers/semiconductor,233 kB,314 B,<1.2s,920ms,0.0,PASS
+/trackers,227 kB,3.71 kB,<1.2s,870ms,0.0,PASS
+/story/pm-fasal-bima-claims,313 kB,393 B,<1.2s,960ms,0.0,PASS
+/story/mgnrega-reform,313 kB,392 B,<1.2s,960ms,0.0,PASS
+/topic/agriculture,227 kB,6.63 kB,<1.2s,940ms,0.0,PASS

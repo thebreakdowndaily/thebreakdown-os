@@ -1,0 +1,7 @@
+candidateSystem,searchOpportunity,evidenceAvailability,primaryDocsRichness,updateFrequency,audienceRetentionValue,overallRank,selectionDecision
+"Rural Employment Guarantee (MGNREGA / VB-G RAM G Act 2025)",High (125-day reform & wage queries),High (MoRD & CAG databases),High (Act No 18 2025 & State gazettes),Weekly (State person-day releases),Very High (Evergreen policy reference),1,SELECTED
+"Crop Insurance & Agri Risk (PM Fasal Bima Yojana - PMFBY)",Very High (Seasonal claim disputes & yield rules),High (PMFBY DigiClaim & CAG audits),High (Revised Guidelines 2024 & CCE orders),Monthly (Seasonal claim releases),Very High (Farmers & policy researchers),2,SELECTED
+"Digital Payments & Rails (UPI / NPCI / RBI)",High (Limits & MDR mandates),High (NPCI Switch & RBI Bulletins),High (RBI SDRP & PSS Act),Monthly (Monthly volume releases),High (Fintech audience),3,MAINTAINED (Sprint 4)
+"Semiconductor Mission (ISM / PLI)",Medium (Fab construction markers),High (MeitY & Cabinet releases),High (ISM Guidelines 2022),Quarterly (Plant construction milestones),High (Tech/Industrial investors),4,MAINTAINED (Sprint 2)
+"India-China Border Infrastructure",Medium (High defense intent),Medium (Restricted military docs),Moderate (MoD & MEA briefings),Event-driven,Moderate (Geopolitical interest),5,DEFERRED
+"Green Hydrogen & Climate Finance",Medium (Emerging policy),Medium (MNRE & IREDA tenders),Moderate (National Hydrogen Mission 2023),Quarterly (Bidding rounds),Moderate (Energy transition researchers),6,DEFERRED

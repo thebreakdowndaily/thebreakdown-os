@@ -1,0 +1,7 @@
+eventName,allowedParams,triggerCondition,privacyCompliance,status
+tracker_viewed,"tracker_id, topic",Fired on initial mount of /trackers/pmfby,PASS (Enum bound),PASS
+chart_interacted,"chart_id, tracker_id",Fired when user hovers PMFBY chart point or switches to table view,PASS (No PII / Allow-listed),PASS
+document_preview_opened,"document_title, tracker_id",Fired when user inspects PMFBY Revised Guidelines or CAG Report,PASS (Title and tracker ID only),PASS
+evidence_expanded,"content_id, claim_id, evidence_path",Fired on expanding PMFBY EvidenceTrail,PASS (No PII),PASS
+newsletter_started,"page",Fired when user focuses or types into newsletter input,PASS (Page context only),PASS
+newsletter_submitted,"page",Fired on form submission to /api/newsletter,PASS (No email in telemetry),PASS

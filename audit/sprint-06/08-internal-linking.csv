@@ -1,0 +1,12 @@
+sourceUrl,targetUrl,linkAnchor,contextSection,status
+/story/pm-fasal-bima-claims,/trackers/pmfby,📊 Live PMFBY Tracker,EvidenceTrail / Related Exploration,ACTIVE
+/trackers/pmfby,/story/pm-fasal-bima-claims,Story: pm-fasal-bima-claims ↗,Related Exploration Footer,ACTIVE
+/trackers/pmfby,/topic/agriculture,Topic: agriculture →,Header Topic Badge,ACTIVE
+/trackers/pmfby,/entity/ministry-of-agriculture,Entity: ministry-of-agriculture,Related Exploration Footer,ACTIVE
+/trackers,/trackers/pmfby,Explore Tracker & Evidence Chain →,Trackers Directory Grid,ACTIVE
+/story/mgnrega-reform,/trackers/mgnrega,📊 Live MGNREGA Tracker,EvidenceTrail / Related Exploration,ACTIVE
+/trackers/mgnrega,/story/mgnrega-reform,Story: mgnrega-reform ↗,Related Exploration Footer,ACTIVE
+/story/digital-payments-boom,/trackers/upi,📊 Live UPI Tracker,EvidenceTrail / Related Exploration,ACTIVE
+/trackers/upi,/story/digital-payments-boom,Story: digital-payments-boom ↗,Related Exploration Footer,ACTIVE
+/story/semiconductor-pli,/trackers/semiconductor,📊 Live Semiconductor Tracker,EvidenceTrail / Related Exploration,ACTIVE
+/trackers/semiconductor,/story/semiconductor-pli,Story: semiconductor-pli ↗,Related Exploration Footer,ACTIVE

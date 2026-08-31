@@ -1,0 +1,5 @@
+datasetId,title,metricsTracked,timeRange,sourceAuthority,provenanceStatus
+pmfby-decadal-ledger,"PMFBY 10-Year Claims and Premium Ledger","Gross Premium (₹ Cr), Claims Paid (₹ Cr), Settlement Ratio (%), Farmer Enrollment",2016-17 to 2025-26,Ministry of Agriculture & CAG,PASS (Tier 1 Verified)
+mgnrega-20yr-budget,"Rural Employment Scheme Budget Series","Annual Budget Allocation (₹ Cr), Guaranteed Days (100 -> 125)",2006-07 to 2026-27,Union Budget Documents & MoRD,PASS (Tier 1 Verified)
+upi-decadal-turnover,"UPI 10-Year Transaction Volume and Turnover","Annual Transaction Volume (Billion), Turnover Value (₹ Lakh Cr)",2016-17 to 2025-26,NPCI Payment Switch & RBI,PASS (Tier 1 Verified)
+semiconductor-ism-capex,"ISM Semiconductor Capital Allocation & Investment Ledger","Government Program Outlays (₹76k Cr), Approved Private Investments (₹1.26L Cr)",2021-22 to 2025-26,MeitY & ISM Disclosures,PASS (Tier 1 Verified)

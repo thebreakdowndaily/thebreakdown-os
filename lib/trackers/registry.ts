@@ -2,11 +2,13 @@ import type { TrackerDefinition } from './types';
 import { mgnregaTracker } from './mgnrega-tracker';
 import { semiconductorTracker } from './semiconductor-tracker';
 import { upiTracker } from './upi-tracker';
+import { pmfbyTracker } from './pmfby-tracker';
 
 export const TRACKER_REGISTRY: Record<string, TrackerDefinition> = {
   mgnrega: mgnregaTracker,
   semiconductor: semiconductorTracker,
   upi: upiTracker,
+  pmfby: pmfbyTracker,
 };
 
 export function getAllTrackers(): TrackerDefinition[] {

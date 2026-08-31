@@ -1,0 +1,9 @@
+knowledgeSystem,searchIntentType,exampleQueries,bestDestinationUrl,intentSatisfactionCriteria
+PMFBY Crop Insurance,Core / Definition,"what is pm fasal bima yojana 2026 guidelines",/story/pm-fasal-bima-claims,Direct orientation on scheme mechanics and subsidy caps
+PMFBY Crop Insurance,Current Status / Delays,"pmfby claim settlement delay reasons 2026",/trackers/pmfby,Live operational status card and state pending subsidy ledger
+PMFBY Crop Insurance,Data / Time-Series,"pmfby claim settlement ratio trend premium collection",/trackers/pmfby,Interactive 10-year settlement trend & gross premium charts
+PMFBY Crop Insurance,Document / Statutory,"pmfby revised operational guidelines 2024 pdf download cag",/trackers/pmfby,Primary document preview modal with Clause 13.2 penal interest text
+PMFBY Crop Insurance,Entity / Governance,"ministry of agriculture crop insurance nodal agency",/entity/ministry-of-agriculture,Entity profile with statutory duties and linked stories
+MGNREGA Rural Guarantee,Core / Definition,"mgnrega 125 days reform vb-g ram g act 2025",/story/mgnrega-reform,Direct explanation of 100 to 125 day statutory transition
+MGNREGA Rural Guarantee,Current Status / Budget,"mgnrega 2026 budget allocation expenditure live status",/trackers/mgnrega,Live operational card and 20-year budget time series
+MGNREGA Rural Guarantee,Document / Statutory,"mgnrega repeal act no 18 2025 gazette notification",/trackers/mgnrega,Primary document modal with Section 4(1) guarantee clause

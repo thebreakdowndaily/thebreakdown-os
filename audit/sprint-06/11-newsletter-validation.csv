@@ -1,0 +1,5 @@
+surface,contextualHeadline,contextualSubtext,eventsTracked,liveProviderStatus,status
+PMFBY Story (/story/pm-fasal-bima-claims),"The Breakdown Agriculture & Welfare Brief","Verified crop insurance statistics, state subsidy ledgers, and CAG audit analysis. Free.","newsletter_started, newsletter_submitted",NOT VERIFIED (Production API required),PASS
+Trackers Directory (/trackers),"Get policy tracker & statutory updates","The Breakdown Policy Brief — what changed, why it matters, and the primary documents behind it. Weekly. Free.","newsletter_started, newsletter_submitted",NOT VERIFIED (Production API required),PASS
+MGNREGA Story (/story/mgnrega-reform),"The Breakdown Rural Economy Brief","Verified facts, primary statutory sources, and welfare metrics. Weekly. Free.","newsletter_started, newsletter_submitted",NOT VERIFIED (Production API required),PASS
+Homepage (/),"The Breakdown Brief — What changed, why it matters, and the evidence behind it","One email a week: the story that matters, the documents behind it, and the questions we're still asking.","newsletter_started, newsletter_submitted, newsletter_subscribed",NOT VERIFIED (Production API required),PASS

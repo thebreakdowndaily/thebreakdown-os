@@ -1,0 +1,7 @@
+componentOrPage,testedCapability,wcagCriterion,status,notes
+PMFBY Tracker (/trackers/pmfby),Keyboard Navigation & Focus,WCAG 2.1 AA (2.1.1 Keyboard),PASS,All interactive metric cards and document links fully focusable
+PMFBY TimeSeriesChart,SVG Points Keyboard Focus,WCAG 2.1 AA (2.1.1 Keyboard),PASS,tabIndex=0 on all 10 point circles with onFocus handler
+PMFBY TimeSeriesChart,Semantic Table Alternative,WCAG 2.1 AA (1.1.1 Non-text Content),PASS,One-click switch to semantic HTML table with column headers
+PMFBY DocumentPreviewModal,Focus Trap & Escape Key,WCAG 2.1 AA (2.1.2 No Keyboard Trap),PASS,ESC key handling and focus restore on modal exit
+PMFBY DocumentPreviewModal,Dialog ARIA Attributes,WCAG 2.1 AA (4.1.2 Name Role Value),PASS,role="dialog", aria-modal="true", aria-labelledby
+Global,Dark Theme Color Contrast,WCAG 2.1 AA (1.4.3 Minimum Contrast),PASS,All emerald/neutral text >= 4.5:1 contrast ratio

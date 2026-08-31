@@ -1,0 +1,9 @@
+contentSlug,url,type,roleInCluster,primaryQuestion,keySourceAuthority,status
+pmfby-tracker,/trackers/pmfby,Tracker,Live Policy Engine,"What is the real-time operational status of crop insurance claims in 2026?",MoA&FW PMFBY Dashboard & DigiClaim,SHIPPED
+pm-fasal-bima-claims,/story/pm-fasal-bima-claims,Story,Cornerstone Explainer,"Why are crop insurance claims delayed and what are the statutory penalties?",CAG Report 2024 & Revised Guidelines 2024,SHIPPED
+mgnrega-tracker,/trackers/mgnrega,Tracker,Live Policy Engine,"What is the current budget allocation and status of the 125-day guarantee?",Ministry of Rural Development & Union Budget,SHIPPED
+mgnrega-reform,/story/mgnrega-reform,Story,Cornerstone Explainer,"How does the VB-G RAM G Act 2025 replace MGNREGA 2005?",Act No. 18 of 2025 & Parliamentary Debates,SHIPPED
+upi-tracker,/trackers/upi,Tracker,Live Policy Engine,"What are the volume, value, and regulatory limits on UPI rails in 2026?",NPCI & RBI Monthly Bulletins,SHIPPED
+digital-payments-boom,/story/digital-payments-boom,Story,Context Explainer,"How did UPI123Pay expand rural financial inclusion?",RBI October 2024 Statement & NPCI Circulars,SHIPPED
+semiconductor-tracker,/trackers/semiconductor,Tracker,Live Policy Engine,"What is the construction and fabrication status of ISM plants?",MeitY & India Semiconductor Mission,SHIPPED
+semiconductor-pli,/story/semiconductor-pli,Story,Industrial Explainer,"How is India's ₹76000 Cr semiconductor outlay structured?",Cabinet Decisions & ISM Guidelines,SHIPPED

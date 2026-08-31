@@ -123,11 +123,28 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 6 & Beyond)
+## Sprint 6 — Knowledge System Scale, Content Production & Audience Growth (complete)
 
-1. **Fourth Flagship Tracker**: PM Fasal Bima Yojana (Crop Insurance) or Climate Finance Tracker.
-2. **Interactive Multi-Series Comparison**: Allow side-by-side comparison of policy metrics across states or years.
-3. **Citation & Annotation Tooling**: Allow researchers to copy inline formatted BibTeX and APA citations directly from tracker document previews.
+**Deliverables:**
+1. **Selection of Two Priority Systems**: Selected Rural Employment Guarantee (MGNREGA / VB-G RAM G Act, 2025) and Crop Insurance Architecture (PM Fasal Bima Yojana — PMFBY) (`audit/sprint-06/01-knowledge-system-selection.csv`).
+2. **Fourth Flagship Knowledge Tracker** (`/trackers/pmfby`): Launched PMFBY Tracker tracking ₹31,450 Cr gross premiums, 4.1 Cr farmers, 12% penal interest enforcement, state subsidy arrears, and remote sensing (YES-TECH / CROPIC) yield estimation across 22 States/UTs (`lib/trackers/pmfby-tracker.ts`).
+3. **Decadal Claims & Premium Time-Series**: Embedded 10-year settlement trend chart (2016–2026) and gross premium growth series into PMFBY tracker with accessible data table alternative.
+4. **Primary Document Provenance**: Connected in-app previews for 2024 Revised Guidelines, CAG Report on PMFBY (2024), and Standing Committee 58th Report with statutory clause citations.
+5. **Content Production System & Brief Template**: Formalized end-to-end editorial pipeline (`audit/sprint-06/04-content-production-system.md`), cataloged first batch of 8 content objects (`audit/sprint-06/05-first-content-batch.csv`), and defined refresh triggers (`audit/sprint-06/06-refresh-rules.csv`).
+6. **Controlled Experiments & Competitive Benchmarks**: Registered 4 experiments (EXP-S6-01 to EXP-S6-04) all approved for scaling (`audit/sprint-06/10-experiment-register.csv`) and benchmarked against The Hindu Explained, Down To Earth, and Krishi Jagran (`audit/sprint-06/09-competitive-benchmark.csv`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers (`/trackers/pmfby`, `/trackers/upi`, `/trackers/mgnrega`, `/trackers/semiconductor`), directory (`/trackers`), stories, and topics.
+
+---
+
+## Next Priorities (Sprint 7 & Beyond)
+
+1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
+2. **Cross-Tracker Comparative Analytics**: Multi-series comparison tool allowing cross-scheme fiscal analysis (e.g. MGNREGA vs PM-KISAN vs PMFBY).
+3. **Interactive Citation Exporter**: 1-click APA, BibTeX, and Harvard citation export directly from tracker document preview modals.
 
 ---
 
@@ -136,4 +153,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GA4, GSC, Beehiiv, Stripe, AdSense) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 31 Aug 2026, Sprint 5 complete.
+Last verified: 31 Aug 2026, Sprint 6 complete.
