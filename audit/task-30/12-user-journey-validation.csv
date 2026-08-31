@@ -1,0 +1,8 @@
+journeyName,userSteps,expectedOutcome,actualOutcome,status
+Discovery,User lands on home -> clicks story link -> views story,Story reader loads standard narrative view with zero exceptions,Story reader renders correctly,PASS
+Exploration,User views story -> clicks topics link -> navigates to topic hub -> selects related story,Topic hub loads matching story list; dynamic link transitions work cleanly,Transitions work cleanly without page reload errors,PASS
+Verification,User scrolls standard view -> clicks evidence link -> opens deep appendix -> checks cited source -> checks document ledger,Deep mode paywall teaser appears for non-supporters; supporter token allows full access,Gates render correctly and trigger telemetries,PASS
+Knowledge,User selects topic -> views linked entities -> explores entity timeline and evidence,Entity timelines populate with relevant story claims,Claims map dynamically based on entity registries,PASS
+Citation,User copies citation to clipboard,Citation clipboard utility writes cite format and logs clipboard event,Citation copied successfully; telemetry event emitted,PASS
+Reader,User types email in newsletter CTA -> clicks Subscribe Free,Client fires event -> API handles signup -> triggers subscription state UI,Subscription logs to mock backend; feedback state displays,PASS
+Editor,Editor logs in -> views dashboard -> approves/rejects citation,Access control blocks mutations for non-editors; editor token modifies citation state successfully,Role checks verify token payload server-side,PASS

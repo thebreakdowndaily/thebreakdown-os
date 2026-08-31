@@ -1,0 +1,6 @@
+slug,title,status,lastVerified,decayScore,actionRecommended
+pm-fasal-bima-claims,Crop Insurance Claims Explainer,OUTDATED,2026-03-10,P0 (Critical),Recheck primary source data against the latest CAG report and update claims ledger
+groundwater-depletion,Northern India Groundwater Reserves,NEEDS_UPDATE,2026-03-25,P1 (High),Hydrate internal links and update citation metrics
+anganwadi-icds,Anganwadi Services & ICDS Audit,NEEDS_UPDATE,2026-04-05,P1 (High),Add missing schema tags and verify timeline milestones
+digital-payments-boom,Digital Payments in Rural India,CURRENT,2026-06-12,None,No decay; high engagement; verified current
+semiconductor-pli,India Semiconductor Subsidies,CURRENT,2026-07-01,None,No decay; verified current

@@ -1,0 +1,16 @@
+route,httpStatus,canonicalUrl,robots,metadata,structuredData,rendering,accessControl
+/,200,https://thebreakdown.in/,index/follow,Title/Description,Organization,SSR/Static,Public
+/story/mgnrega-reform,200,https://thebreakdown.in/story/mgnrega-reform,index/follow,Story Headline/Summary,Article,SSR/Static,Public (Teaser)
+/topic/economy,200,https://thebreakdown.in/topic/economy,index/follow,Topic Name,DefinedTermSet,SSR/Static,Public
+/organization/un,200,https://thebreakdown.in/organization/un,index/follow,Entity Profile,Organization,SSR/Static,Public
+/series/foundations-1947-1962,200,https://thebreakdown.in/series/foundations-1947-1962,index/follow,Series Info,ItemPage,SSR/Static,Public
+/series/foundations-1947-1962/volume/the-nehruvian-era,200,https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era,index/follow,Volume Info,ItemPage,SSR/Static,Public
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,200,https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,index/follow,Chapter Context,Article,SSR/Static,Public (Teaser)
+/data,200,https://thebreakdown.in/data,index/follow,Data Hub,Dataset,SSR/Static,Public
+/timeline,200,https://thebreakdown.in/timeline,index/follow,Timeline Context,DataFeed,SSR/Static,Public
+/newsroom,200,https://thebreakdown.in/newsroom,noindex/nofollow,Editorial OS,None,Dynamic/CSR,Editor Only (JWT)
+/api/data/download,403/200,None,noindex/nofollow,None,None,Dynamic,Authenticated Supporter
+/trust,200,https://thebreakdown.in/trust,index/follow,Trust Dashboard,None,Dynamic/SSR,Public
+/search,200,https://thebreakdown.in/search,index/follow,Search Results,None,Dynamic,Public
+/dashboard,200,https://thebreakdown.in/dashboard,noindex/nofollow,Dashboard Panel,None,Dynamic/CSR,Editor Only (JWT)
+/api/citations,200,None,noindex/nofollow,None,None,Dynamic,Public GET / Editor mutations

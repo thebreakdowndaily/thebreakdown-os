@@ -1,0 +1,9 @@
+registryName,checkPerformed,status,findings,remediationAction
+ClaimRegistry,Orphan Claims sweep,PASS,All story claims link to active story IDs,None
+ClaimRegistry,Duplicate claim IDs,PASS,Zero duplicate IDs found in store registries,None
+SourceRegistry,Missing cited sources,PASS,Every claim references a source found in sources registry,None
+CitationSystem,Maximum limit verification,PASS,Enforced limit of 10 approved citations per story slug,None
+CitationSystem,Source confusion check,PASS,Citations and sources are separated; citations do not override primary sources,None
+TrustMetrics,Freshness score verification,PASS,Verification timestamps map to current dates; trust ratings calculate correctly,None
+EntityEligibility,Universal mapping bounds,PASS,Entities map to countries/organizations correctly,None
+TopicRelationships,Adjacency loops check,PASS,Zero circular dependencies in topic mappings,None

@@ -1,0 +1,17 @@
+eventName,trackedParams,verificationStatus,notes
+page_view,"url, referrer, user_agent",Measured (Local) / UNVERIFIED (Production),Exactly one page_view fired per session in standard routes; production requires Google Analytics access
+story_read_started,"story_slug, mode",Measured (Local),Fired on story reader mount
+story_read_resolution,"story_slug, path, resolution",Measured (Local),Fired on story data resolution
+reader_returned,"stories_read, days_since_last",Measured (Local),Fired once per returning session based on localStorage checks
+newsletter_viewed,page,Measured (Local),Fired on newsletter CTA render
+newsletter_started,page,Measured (Local),Fired on email input change
+newsletter_submitted,page,Measured (Local) / UNVERIFIED (Production),Fired on opt-in post response; production requires Beehiiv API key integration
+ad_slot_rendered,placement,Measured (Local),Fired when ad containers render
+ad_clicked,placement,Measured (Local),Fired on mock ad placeholder clicks
+paywall_viewed,"placement, story_slug",Measured (Local),Fired when paywall card overlays lock deep modes
+paywall_action_clicked,"placement, action_type",Measured (Local),Fired on paywall upgrade or standard mode return buttons
+dataset_download_started,"dataset_id, status",Measured (Local),Fired on premium data downloads
+share_clicked,"story_slug, medium",Measured (Local),Fired on SocialSharePanel clicks
+search_query,"q, type, results_count",Measured (Local),Fired on explorer search query resolution
+evidence_interaction,"action, claim_id",Measured (Local),Fired on interactive chart clicks and timeline expansions
+license_seat_invited,"role, status",Measured (Local),Fired on B2B member invites

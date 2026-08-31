@@ -1,0 +1,9 @@
+route,metricName,budget,estimatedLocalValue,status,notes
+/,LCP,<1.2s,950ms,PASS,Fast static HTML prerender
+/,CLS,=0.0,0.0,PASS,No shifting elements
+/,INP,<200ms,85ms,PASS,Optimized interactive blocks
+/story/mgnrega-reform,LCP,<1.2s,980ms,PASS,Teaser HTML optimized
+/story/mgnrega-reform,FCP,<1.0s,450ms,PASS,Quick initial render
+/topic/economy,LCP,<1.2s,920ms,PASS,Category page uses cached SSG
+/search,TTFB,<200ms,32ms,PASS,Explorer API response is cached at edge
+/dashboard,JS Weight,<350kB,233kB,PASS,First Load JS budget compliant

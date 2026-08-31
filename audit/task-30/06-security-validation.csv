@@ -1,0 +1,10 @@
+category,checkName,status,verificationEvidence,riskAssessment
+Transport,HTTPS & HSTS,PASS,Verified in middleware.ts response headers,Low
+CSP,Content Security Policy,PASS,default-src 'self' verified in middleware headers,Low
+XSS,HTML Input Sanitization,PASS,Verified in production-readiness.test.ts; script tags encoded,Low
+Auth,Server-side JWT verify,PASS,Server route checks verify auth token context,Low
+Auth,Editor Role check,PASS,PATCH /api/citations verifies role context server-side,Low
+Secrets,Secrets Isolation,PASS,Checked package config; no server secrets in NEXT_PUBLIC_ variables,Low
+Rate Limit,Request Throttling,PASS,Verified in monetization and checkout test suites; blocks third requests,Low
+Info Leak,Error Leakage protection,PASS,Production build disables stack traces in API response payloads,Low
+SSRF,URL validation gate,PASS,Citations URL regex rejects non-http/https schemes,Low

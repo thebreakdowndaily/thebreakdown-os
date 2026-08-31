@@ -1,0 +1,13 @@
+element,status,implementationDetails,notes
+robots.txt,PASS,Configured dynamically at app/robots.ts; allows problems precedents tracking compare evolution while blocking private admin/editorial paths,No crawl leaks
+sitemap,PASS,Configured dynamically at app/sitemap.ts; indexes all static and dynamic story/problems/categories paths,Exited 0 in dynamic build
+canonical_URLs,PASS,Every page layout verifies process.env.NEXT_PUBLIC_APP_URL to prevent duplicate mirrors,Correctly set to https://thebreakdown.in
+redirects,PASS,Redirect rules verified in next.config.mjs / middleware.ts,Clean trailing slash normalization
+noindex_guards,PASS,Verify no noindex is present on evergreen public routes,Checked via SEO test suite
+metadata,PASS,Correctly configures title description and keywords tags,Checked
+breadcrumbs,PASS,Rich breadcrumbs present on sub-collections volumes and chapters,Checked
+Article_schema,PASS,Renders on all story page options (standard and deep modes) as Article,Conforms to Schema.org Article
+Organization_schema,PASS,Renders on organization entity profile pages as Organization,Conforms to Schema.org Organization
+citation_schema,PASS,Renders citations using semantic <cite> and markup schemas on story references,Checked
+Open_Graph,PASS,Correctly configures og:title og:description and og:image,Checked
+image_metadata,PASS,Hero image attributes alt-text and credits are properly populated in the metadata,Checked
