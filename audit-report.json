@@ -3,16 +3,16 @@
   "schemaVersion": "2.0",
   "reportVersion": "1.0",
   "policyVersion": "1.0",
-  "platformHealthScore": 78.88888888888889,
-  "weightedPlatformHealthScore": 78.88888888888889,
+  "platformHealthScore": 82.22222222222223,
+  "weightedPlatformHealthScore": 82.22222222222223,
   "coverage": 100,
   "pluginCount": 11,
-  "successfulPlugins": 6,
-  "failedPlugins": 5,
+  "successfulPlugins": 7,
+  "failedPlugins": 4,
   "skippedPlugins": 0,
   "execution": {
-    "totalDurationMs": 593,
-    "generatedAt": "2026-08-01T08:58:32.732Z",
+    "totalDurationMs": 352,
+    "generatedAt": "2026-08-31T03:13:29.037Z",
     "nodeVersion": "v24.18.0",
     "os": "win32"
   },
@@ -41,9 +41,9 @@
         }
       },
       "execution": {
-        "durationMs": 1,
-        "startedAt": "2026-08-01T08:58:32.036Z",
-        "finishedAt": "2026-08-01T08:58:32.037Z"
+        "durationMs": 2,
+        "startedAt": "2026-08-31T03:13:28.628Z",
+        "finishedAt": "2026-08-31T03:13:28.630Z"
       }
     },
     {
@@ -67,6 +67,10 @@
           },
           {
             "severity": "low",
+            "message": "Unknown top-level directory: backup/"
+          },
+          {
+            "severity": "low",
             "message": "Unknown top-level directory: checkpoints/"
           },
           {
@@ -84,6 +88,10 @@
           {
             "severity": "low",
             "message": "Unknown top-level directory: frontend/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: playwright-report/"
           },
           {
             "severity": "low",
@@ -108,6 +116,14 @@
           {
             "severity": "low",
             "message": "Unknown top-level directory: schemas/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: test-results/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: workers/"
           }
         ],
         "metrics": {
@@ -123,13 +139,13 @@
             "missing": 0
           },
           "forbiddenImports": 0,
-          "unknownDirectories": 14
+          "unknownDirectories": 18
         }
       },
       "execution": {
-        "durationMs": 276,
-        "startedAt": "2026-08-01T08:58:32.043Z",
-        "finishedAt": "2026-08-01T08:58:32.319Z"
+        "durationMs": 171,
+        "startedAt": "2026-08-31T03:13:28.636Z",
+        "finishedAt": "2026-08-31T03:13:28.807Z"
       }
     },
     {
@@ -146,49 +162,28 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-01T08:58:32.323Z",
-        "finishedAt": "2026-08-01T08:58:32.323Z"
+        "startedAt": "2026-08-31T03:13:28.810Z",
+        "finishedAt": "2026-08-31T03:13:28.810Z"
       }
     },
     {
       "pluginName": "knowledge-graph-audit",
-      "state": "FAILED",
+      "state": "PASSED",
       "data": {
-        "score": 70,
+        "score": 100,
         "coverage": 100,
-        "findings": [
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/claims"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/sources"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/thinkers"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/documents"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/events"
-          }
-        ],
+        "findings": [],
         "metrics": {
-          "registriesScore": 0,
+          "registriesScore": 100,
           "schemasScore": 100,
           "integrityScore": 100,
-          "knowledgeGraphHealthScore": 70
+          "knowledgeGraphHealthScore": 100
         }
       },
       "execution": {
-        "durationMs": 3,
-        "startedAt": "2026-08-01T08:58:32.326Z",
-        "finishedAt": "2026-08-01T08:58:32.329Z"
+        "durationMs": 2,
+        "startedAt": "2026-08-31T03:13:28.813Z",
+        "finishedAt": "2026-08-31T03:13:28.815Z"
       }
     },
     {
@@ -208,9 +203,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-08-01T08:58:32.333Z",
-        "finishedAt": "2026-08-01T08:58:32.335Z"
+        "durationMs": 3,
+        "startedAt": "2026-08-31T03:13:28.818Z",
+        "finishedAt": "2026-08-31T03:13:28.821Z"
       }
     },
     {
@@ -229,8 +224,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-01T08:58:32.338Z",
-        "finishedAt": "2026-08-01T08:58:32.338Z"
+        "startedAt": "2026-08-31T03:13:28.823Z",
+        "finishedAt": "2026-08-31T03:13:28.823Z"
       },
       "error": "Simulated plugin failure"
     },
@@ -247,8 +242,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-01T08:58:32.340Z",
-        "finishedAt": "2026-08-01T08:58:32.340Z"
+        "startedAt": "2026-08-31T03:13:28.825Z",
+        "finishedAt": "2026-08-31T03:13:28.825Z"
       }
     },
     {
@@ -268,9 +263,9 @@
         }
       },
       "execution": {
-        "durationMs": 9,
-        "startedAt": "2026-08-01T08:58:32.414Z",
-        "finishedAt": "2026-08-01T08:58:32.423Z"
+        "durationMs": 10,
+        "startedAt": "2026-08-31T03:13:28.853Z",
+        "finishedAt": "2026-08-31T03:13:28.863Z"
       }
     },
     {
@@ -293,9 +288,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-08-01T08:58:32.425Z",
-        "finishedAt": "2026-08-01T08:58:32.427Z"
+        "durationMs": 1,
+        "startedAt": "2026-08-31T03:13:28.866Z",
+        "finishedAt": "2026-08-31T03:13:28.867Z"
       }
     },
     {
@@ -327,9 +322,9 @@
         }
       },
       "execution": {
-        "durationMs": 299,
-        "startedAt": "2026-08-01T08:58:32.430Z",
-        "finishedAt": "2026-08-01T08:58:32.729Z"
+        "durationMs": 159,
+        "startedAt": "2026-08-31T03:13:28.870Z",
+        "finishedAt": "2026-08-31T03:13:29.029Z"
       }
     },
     {
@@ -352,9 +347,9 @@
         }
       },
       "execution": {
-        "durationMs": 1,
-        "startedAt": "2026-08-01T08:58:32.731Z",
-        "finishedAt": "2026-08-01T08:58:32.732Z"
+        "durationMs": 4,
+        "startedAt": "2026-08-31T03:13:29.033Z",
+        "finishedAt": "2026-08-31T03:13:29.037Z"
       }
     }
   ]

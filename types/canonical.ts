@@ -1887,6 +1887,8 @@ export interface CanonicalSource {
   thinkerIds: string[];
   storyIds: string[];
   datasetIds: string[];
+  lastVerifiedAt?: string;
+  verificationStatus?: 'verified' | 'partial' | 'unverified' | 'needs_review';
 }
 
 export interface CanonicalDocument {

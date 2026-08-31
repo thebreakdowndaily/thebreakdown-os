@@ -74,6 +74,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's5',
@@ -98,6 +100,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's7',
@@ -139,6 +143,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's10',
@@ -168,6 +174,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's12',
@@ -181,6 +189,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's13',
@@ -197,6 +207,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's14',
@@ -213,6 +225,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's15',
@@ -226,6 +240,22 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
+    },
+    {
+      id: 's65',
+      title: 'Cabinet Mission Plan (Cmnd. 6821, May 1946)',
+      tier: 1,
+      accessedAt: '2026-07-14',
+      claimIds: ['claim.partition.cabinet-mission', 'claim.partition.avoidable'],
+      documentIds: ['b-doc-cabinet-mission'],
+      chapterIds: ['kl-ch-1'],
+      thinkerIds: [],
+      storyIds: [],
+      datasetIds: [],
+      lastVerifiedAt: '2026-07-14',
+      verificationStatus: 'verified',
     },
     {
       id: 's16',
