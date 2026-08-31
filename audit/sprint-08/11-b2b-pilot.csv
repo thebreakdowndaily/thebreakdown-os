@@ -1,0 +1,4 @@
+pilotId,targetInstitutionType,corePainPoint,proposedSolution,pricingHypothesis,validationStatus,decision
+PILOT-01,Public Policy Think Tanks (CPR / ICRIER / ORF),"Tracking statutory amendments, gazette numbers, and state compliance across central schemes",Living Policy Trackers + In-app primary document preview modals with § clauses,₹4999 / month (5 seats),Conceptually Validated,SCALE
+PILOT-02,Fintech & Payments Research Desks,"Monitoring regulatory caps, Zero MDR mandates, and monthly transaction switch data",UPI Tracker + decadal volume/value time series + instant CSV data download,₹4999 / month (5 seats),Conceptually Validated,SCALE
+PILOT-03,Agrarian Economists & Farm Policy Units,"Tracking PMFBY claims settlement ratios and state subsidy arrears across kharif/rabi seasons",PMFBY Tracker with 10-year settlement curve + CCE technical documentation,₹4999 / month (5 seats),Conceptually Validated,SCALE

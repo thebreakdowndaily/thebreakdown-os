@@ -1,0 +1,13 @@
+eventName,payloadParameters,triggerSurface,deduplicationMechanism,localTelemetryStatus,productionValidationStatus
+story_opened,"content_id, content_type",StoryShell mount,SessionStorage per slug,PASS,CONFIGURED (Stream pending)
+story_completed,"content_id, scroll_depth_pct",StoryShell scroll depth >= 75%,Fired once per slug mount,PASS,CONFIGURED (Stream pending)
+tracker_viewed,"tracker_id, topic",GenericTracker mount,Fired once on mount,PASS,CONFIGURED (Stream pending)
+chart_interacted,"chart_id, tracker_id",TimeSeriesChart point focus / toggle,Debounced on hover/focus,PASS,CONFIGURED (Stream pending)
+document_preview_opened,"document_title, tracker_id",DocumentPreviewModal open,Fired once on modal open,PASS,CONFIGURED (Stream pending)
+evidence_expanded,"content_id, claim_id, evidence_path",EvidenceTrail accordion expand,Fired on click,PASS,CONFIGURED (Stream pending)
+reader_returned,"stories_read, days_since_last",NarrativeMemory mount,SessionStorage tb_return_fired flag,PASS,CONFIGURED (Stream pending)
+newsletter_started,page,StoryNewsletterCTA input focus,Fired on first keystroke/focus,PASS,CONFIGURED (Stream pending)
+newsletter_submitted,page,StoryNewsletterCTA form submit,Fired on HTTP 200 submit,PASS,CONFIGURED (Stream pending)
+ad_slot_rendered,placement,AdSlot mount,Fired once per placement,PASS,CONFIGURED (Stream pending)
+paywall_viewed,"placement, story_slug",PaywallOverlay mount,Fired once on mount,PASS,CONFIGURED (Stream pending)
+dataset_download_started,"dataset_id, status",Data download click,Fired on download attempt,PASS,CONFIGURED (Stream pending)

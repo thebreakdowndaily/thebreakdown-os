@@ -1,0 +1,4 @@
+experimentId,proposition,pricePoint,audienceTarget,metricTracked,observedInterest,conversionRateEstimate,decision
+EXP-MEM-01,"Supporting Reader (Ad-free reading, verified dataset downloads, primary source highlights)",₹499 / month,Frequent readers & civil service aspirants,Paywall overlay clicks & checkout starts,Moderate qualified intent,Estimated ~1.8% of engaged readers,ITERATE
+EXP-MEM-02,"Deep Research Appendix Gating (Paywall on secondary scholarly citations in deep reading mode)",₹499 / month,Academic researchers & policy analysts,paywall_viewed to subscribe_click ratio,Low interest (Users prefer core text over gated appendices),Estimated ~0.6% conversion,DEFER
+EXP-MEM-03,"Institutional Research License (5 team seats, raw CSV exports, citation tool)",₹4999 / month,Think tanks, fintech desks, and university departments,Institutional lead signups & download attempts,High organizational intent,Estimated ~4.5% qualified inquiry rate,SCALE

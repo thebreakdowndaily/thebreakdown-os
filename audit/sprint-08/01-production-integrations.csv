@@ -1,0 +1,7 @@
+integrationName,codeImplemented,configured,locallyTested,productionVerified,productionMeasured,currentStatus,operationalFallback
+Google Analytics 4,YES,YES (NEXT_PUBLIC_GA_MEASUREMENT_ID),YES,NO (Production deploy stream pending),NO,CONFIGURED BUT NOT VERIFIED,Local telemetry logger & captureEvent proxy active
+Google Search Console,YES (Sitemap/Robots/Meta),NO (OAuth/Service Account),YES,NO,NO,BLOCKED — ACCESS REQUIRED,Static XML sitemaps & dynamic problem sitemaps ready
+Beehiiv Newsletter,YES (app/api/newsletter),NO (BEEHIIV_API_KEY),YES,NO,NO,BLOCKED — ACCESS REQUIRED,StubProvider logging subscriptions with zero data loss
+Stripe Payments,YES (app/api/checkout),NO (STRIPE_SECRET_KEY),YES,NO,NO,BLOCKED — ACCESS REQUIRED,Simulated checkout redirect + localStorage supporter authorization
+Google AdSense,YES (components/monetization/AdSlot),NO (NEXT_PUBLIC_ADSENSE_CLIENT),YES,NO,NO,BLOCKED — ACCESS REQUIRED,Internal membership promo placeholder with zero script bloat
+Supabase Database,YES (utils/data-layer/supabase),NO (SUPABASE_SERVICE_ROLE_KEY),YES,NO,NO,BLOCKED — ACCESS REQUIRED,In-memory canonical store (store.ts) serving all SSG pages

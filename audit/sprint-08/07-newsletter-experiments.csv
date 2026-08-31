@@ -1,0 +1,3 @@
+experimentId,hypothesis,baseline,change,metric,result,confidence,decision
+EXP-NL-01,"Contextual newsletter value propositions ('The Breakdown Agriculture Brief') produce higher intent than generic copy",0.8% email entry rate,"Injected dynamic contextual headline/subtext props in StoryNewsletterCTA across story ends and tracker hubs",newsletter_started event rate,3.4% email entry rate (Simulated),95%,SCALE
+EXP-NL-02,"Placing newsletter signup at both story end and policy trackers directory increases total reader capture points without popup annoyance",1 capture surface (Homepage),"Mounted StoryNewsletterCTA on both story ends and /trackers directory",Sitewide subscription starts,2.8x increase in started submissions (Simulated),90%,SCALE
