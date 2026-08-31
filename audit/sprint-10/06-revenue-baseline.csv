@@ -1,0 +1,4 @@
+revenueStream,monetizationMechanism,pricingTier,activeSubscribers,grossRevenueMtd,netRevenueMtd,paymentGatewayState,verificationStatus
+Supporting Reader (B2C),Simulated Stripe Checkout (/api/checkout),₹499 / month,0 (Gated on live Stripe),₹0,₹0,BLOCKED — STRIPE_SECRET_KEY required,NOT VERIFIED (Simulated test transactions only)
+Institutional Intelligence (B2B),Direct Invoicing & Seat Management,₹4999 / month,0 (Pilots active; billing pending launch),₹0,₹0,Direct Bank / Stripe Invoice Ready,PILOT STAGE (Commercial discussions active)
+Programmatic Display Ads,AdSlot Component (/components/monetization/AdSlot),₹120-250 CPM,N/A,₹0,₹0,BLOCKED — NEXT_PUBLIC_ADSENSE_CLIENT required,DEFERRED (Preserving zero ad clutter)

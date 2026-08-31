@@ -1,0 +1,11 @@
+entityLevel,dimensionOrQuery,targetUrl,intentCategory,impressions,clicks,ctr,averagePosition,accessState
+Site Level,Sitewide Organic Traffic,https://thebreakdown.in,Global,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Page Level,PMFBY Crop Insurance Tracker,/trackers/pmfby,Tracking / Status,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Page Level,UPI & Digital Rails Tracker,/trackers/upi,Tracking / Volume,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Page Level,MGNREGA 125-Day Reform Tracker,/trackers/mgnrega,Tracking / Status,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Page Level,India Semiconductor Mission Tracker,/trackers/semiconductor,Tracking / Industry,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Query Level,"pmfby claim settlement delay cag report",/story/pm-fasal-bima-claims,Core Explanatory,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Query Level,"upi 123pay limit 10000 circular 2024",/story/digital-payments-boom,Core Explanatory,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Query Level,"vb-g ram g act 2025 mgnrega 125 days",/story/mgnrega-reform,Core Explanatory,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Query Level,"semiconductor pli outlay guidelines dholera",/story/semiconductor-pli,Core Explanatory,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED
+Query Level,"policy trackers india public welfare schemes",/trackers,Hub Discovery,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,NOT VERIFIED,BLOCKED — ACCESS REQUIRED

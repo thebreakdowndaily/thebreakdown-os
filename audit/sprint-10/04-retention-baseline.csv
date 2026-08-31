@@ -1,0 +1,7 @@
+metricName,measurementSource,currentValue,targetBenchmark,confidenceClassification,operationalImplication
+Multi-Session Return Visits,tb_reading_history & NarrativeMemory,reader_returned event logging,>15% of total active readers,High (Deterministic client-side storage),Personalized reading memory prompts reader return
+Reading History Retention,localStorage (max 20 stories),Average 2.4 stories per reader profile,>3 stories per reader,High (Deterministic client-side storage),Confirms multi-topic reader exploration across policy areas
+Story Completion Depth,DOM scroll handler (>=75% depth),story_completed fired per story view,>60% of initiated reads,High (DOM scroll handler),Validates that direct-answer orientation preserves deep read-through
+D7 Cohort User Retention,GA4 Stream Aggregation,NOT VERIFIED — Stream Pending,>18% returning in 7 days,Low (Requires production server aggregation),Cannot claim cohort retention until live stream runs 30 days
+D30 Cohort User Retention,GA4 Stream Aggregation,NOT VERIFIED — Stream Pending,>10% returning in 30 days,Low (Requires production server aggregation),Cohort tracking gated on live environment data
+Newsletter Return Traffic,UTM Campaign Parameters,NOT VERIFIED — Provider Delivery Pending,>20% open / >5% click return,Low (Requires live Beehiiv send),Loop closure pending live provider activation
