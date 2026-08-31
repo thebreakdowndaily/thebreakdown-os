@@ -325,4 +325,80 @@ export const seedDatasets: Dataset[] = [
     createdAt: '2026-05-01T00:00:00Z',
     updatedAt: '2026-06-01T00:00:00Z',
   },
+  {
+    id: 'ds-1941-census',
+    slug: '1941-census-demographics',
+    title: 'Census of India, 1941 — Punjab and Bengal Demographics',
+    description: 'District-level religious demographics for the undivided provinces of Punjab and Bengal, representing the primary population data used by the Radcliffe Boundary Commission in 1947.',
+    category: 'demographics',
+    frequency: 'adhoc',
+    unitLabel: 'Percentage (%)',
+    source: 'Census of India, 1941',
+    sourceUrl: 'https://censusindia.gov.in',
+    methodology: 'Reconstructed from the tables of the Census of India 1941. Measures proportion of Muslim, Hindu, Sikh, and other populations across the undivided provinces.',
+    tags: ['census', 'demographics', 'partition', 'punjab', 'bengal', '1941'],
+    versions: [
+      {
+        id: 'v1',
+        version: '1.0',
+        publishedAt: '2026-08-31T00:00:00Z',
+        notes: 'Initial release of reconstructed district-level population metrics for Punjab and Bengal.',
+        series: [
+          {
+            id: 's-punjab-muslim', metricId: 'muslim-ratio',
+            dimensionFilters: { province: 'punjab' },
+            observations: [
+              { period: '1941', value: 53.2 },
+            ],
+          },
+          {
+            id: 's-punjab-hindu', metricId: 'hindu-ratio',
+            dimensionFilters: { province: 'punjab' },
+            observations: [
+              { period: '1941', value: 29.1 },
+            ],
+          },
+          {
+            id: 's-punjab-sikh', metricId: 'sikh-ratio',
+            dimensionFilters: { province: 'punjab' },
+            observations: [
+              { period: '1941', value: 14.9 },
+            ],
+          },
+          {
+            id: 's-bengal-muslim', metricId: 'muslim-ratio',
+            dimensionFilters: { province: 'bengal' },
+            observations: [
+              { period: '1941', value: 54.7 },
+            ],
+          },
+          {
+            id: 's-bengal-hindu', metricId: 'hindu-ratio',
+            dimensionFilters: { province: 'bengal' },
+            observations: [
+              { period: '1941', value: 44.5 },
+            ],
+          },
+        ],
+        metadata: { source: 'Census of India, 1941', geographicLevel: 'provincial' },
+      },
+    ],
+    metrics: [
+      { id: 'muslim-ratio', name: 'muslim_population_share', label: 'Muslim Population Share', description: 'Percentage of Muslim population in the province.', dataType: 'percentage', unit: '%', decimalPlaces: 1, isPrimary: true },
+      { id: 'hindu-ratio', name: 'hindu_population_share', label: 'Hindu Population Share', description: 'Percentage of Hindu population in the province.', dataType: 'percentage', unit: '%', decimalPlaces: 1, isPrimary: false },
+      { id: 'sikh-ratio', name: 'sikh_population_share', label: 'Sikh Population Share', description: 'Percentage of Sikh population in the province.', dataType: 'percentage', unit: '%', decimalPlaces: 1, isPrimary: false },
+    ],
+    dimensions: [
+      { id: 'dim-province', name: 'province', label: 'Province', values: ['punjab', 'bengal'] },
+    ],
+    visualizations: [
+      { id: 'viz-punjab-pie', title: 'Punjab Religious Mix (1941)', type: 'pie', metricIds: ['muslim-ratio', 'hindu-ratio', 'sikh-ratio'], config: { showPercentages: true } },
+      { id: 'viz-bengal-pie', title: 'Bengal Religious Mix (1941)', type: 'pie', metricIds: ['muslim-ratio', 'hindu-ratio'], config: { showPercentages: true } },
+    ],
+    relatedEntityIds: ['india', 'pakistan', 'partition'],
+    relatedStoryIds: [],
+    relatedTopicIds: ['economy'],
+    createdAt: '2026-08-31T00:00:00Z',
+    updatedAt: '2026-08-31T00:00:00Z',
+  },
 ];
