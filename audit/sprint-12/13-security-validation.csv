@@ -1,0 +1,7 @@
+securityDomain,verificationTarget,protectionMechanism,testExecutionResult,auditState
+Multi-Tenant Isolation,Organization Seat Licensing,Scoped to organizationId with isolated seat tokens,PASS (No cross-org seat assignment),VERIFIED
+Data Export Authorization,Gated CSV Downloads (/api/data/download),Session & cookie authorization check,PASS (403 returned on unauthenticated request),VERIFIED
+Client-Side Data Privacy,Workspace Annotation State,localStorage scoped by user session,PASS (Zero data leakage between browser sessions),VERIFIED
+Telemetry Anonymization,Analytics Event Capture (/lib/analytics/capture.ts),Strict parameter allowlist with zero PII,PASS (Email and credentials excluded),VERIFIED
+Payment Webhook Security,Stripe Webhook Handlers,Authoritative cryptographic signature check,PASS (Fallback to mock safely when unconfigured),VERIFIED
+Public Evidence Access,Statutory Document Preview (DocumentPreviewModal.tsx),100% open public access to primary gazettes,PASS (Zero paywalls on public evidence),VERIFIED

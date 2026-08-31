@@ -1,0 +1,6 @@
+entitlementCheck,implementationMechanism,multiTenantIsolation,authorizationVerification,leakagePreventionStatus
+Seat License Authorization,/api/membership/seats route handler,Scoped to organizationId,Verifies valid organization token,PASS (Zero cross-org seat assignment)
+Dataset Download Access,/api/data/download route handler,Cookie & session verification,Requires active supporter/license entitlement,PASS (Gated 403 on unauthenticated requests)
+Workspace Annotations,/workspace client state,localStorage scoped by user session,Zero cross-user data exposure,PASS (Strict client isolation)
+Document Preview Access,DocumentPreviewModal.tsx,Public statutory open access,100% open evidence principle,PASS (Core evidence remains unpaywalled)
+Research Appendix Access,StoryResearchAppendix.tsx,Supporter status verification,Supporter mode unlocks full appendix,PASS (Preserves evidence trust)

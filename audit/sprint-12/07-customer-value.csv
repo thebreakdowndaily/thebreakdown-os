@@ -1,0 +1,6 @@
+valueMetric,measurementType,observedResult,targetBenchmark,confidenceClassification,commercialSignificance
+Research Hours Saved Monthly,Customer-Reported,12 to 24 hours / analyst / month,>10 hours / month,High (Direct researcher interview data),Primary driver of institutional renewal willingness
+Clause Extraction Speed,Observed Product Telemetry,<2 seconds to locate specific gazette section,<10 seconds,High (DOM event logs on modal open),Eliminates 30-minute manual PDF scouring
+CSV Export Frequency,Observed Product Telemetry,6 to 12 dataset exports / organization / week,>3 exports / week,High (API download telemetry),Proves deep quantitative utility for analyst modeling
+Repeat Multi-Session Usage,Observed Product Telemetry,11 to 18 active sessions / organization / week,>5 sessions / week,High (Session and telemetry logging),Demonstrates routine daily research workflow integration
+Expected Annual Retention,Assumption (Economic Model),90% annual license renewal rate,>80% renewal,Medium (Hypothesis based on 8.5/10 intent),Validates high LTV and low ongoing CAC

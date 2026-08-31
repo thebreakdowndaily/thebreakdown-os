@@ -1,0 +1,4 @@
+paymentMethod,pricingTier,contractStatus,paymentGatewayStatus,webhookAuthoritative,revenueVerifiedState,operationalStatus
+B2B Direct Bank Transfer / Invoice,Institutional License (₹4999 / mo),Proposal Submitted,Direct Bank NEFT / RTGS,Authoritative via bank reconciliation,₹0 (Payment pending contract signature),READY FOR BILLING
+B2C Credit Card / UPI,Supporting Reader (₹499 / mo),Simulated Active,Stripe / Razorpay API Pending,BLOCKED — Webhook secret required,₹0 (Simulated checkouts only),BLOCKED — ACCESS REQUIRED
+Programmatic Display Advertising,House Promotion Active,N/A,Google AdSense Client ID Pending,N/A,₹0 (Zero ad revenue),DEFERRED (Zero ad clutter policy)
