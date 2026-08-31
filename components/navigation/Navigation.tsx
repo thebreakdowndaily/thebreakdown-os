@@ -19,6 +19,7 @@ interface NavigationProps {
 const navLinks: NavLink[] = [
   { label: 'Chapters', href: '/series' },
   { label: 'Explainers', href: '/fix' },
+  { label: 'Trackers', href: '/trackers/mgnrega' },
   { label: 'Topics', href: '/topics' },
   { label: 'Data', href: '/data' },
   { label: 'About', href: '/about' },
