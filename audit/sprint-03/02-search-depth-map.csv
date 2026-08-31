@@ -1,0 +1,9 @@
+intentCategory,queryPattern,targetUrl,contentFormat,canonicalStatus,cannibalizationRisk
+Core,"what is mgnrega 2026 / what is vb-g ram g act 2025",/story/mgnrega-reform,Cornerstone Story,CANONICAL_TARGET,Low (Primary organic entry)
+Explanatory,"how does 125 day rural guarantee work / mgnrega days increase",/fix/mgnrega-reform,Policy Explainer / Fix Hub,RESOLVED,Low (Targeted search snippet)
+Causal,"why was mgnrega replaced / reasons for rural employment reform 2025",/story/mgnrega-reform#why-it-matters,Contextual Anchor,RESOLVED,Low (Section anchor on cornerstone)
+Current,"is mgnrega still active law / mgnrega current status 2026",/trackers/mgnrega,Issue Tracker,RESOLVED,Low (Serves freshness & status intent)
+Data,"mgnrega expenditure statistics / rural workers person days data",/trackers/mgnrega#key-data,Data Ledger / Metric Grid,RESOLVED,Low (Dataset schema markup)
+Document,"vb g ram g act 2025 pdf / notification s.o. 2415 e download",/trackers/mgnrega#documents,Document Index,RESOLVED,Low (Official document intent)
+Entity,"ministry of rural development schemes / mord rural employment",/entity/ministry-of-rural-development,Entity Knowledge Hub,RESOLVED,Low (Entity profile)
+Comparison,"mgnrega 2005 vs vb g ram g act 2025 difference 100 vs 125 days",/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform,Volume Chapter,RESOLVED,Low (Deep scholarly analysis)

@@ -1,0 +1,6 @@
+entityId,entityName,entityType,eligibilityStatus,relatedStoriesCount,documentsCount,substantiveValue,recommendation
+ministry-of-rural-development,Ministry of Rural Development,organization,ELIGIBLE,3,5,High (Nodal ministry for VB-G RAM G Act & wage MIS),Maintain dedicated profile with tracker & document cross-links
+cag,Comptroller and Auditor General of India,organization,ELIGIBLE,4,6,High (Constitutional audit authority for welfare schemes),Maintain dedicated profile with performance audit ledger
+ministry-of-finance,Ministry of Finance,organization,ELIGIBLE,12,14,High (Union budget outlays and subsidy disbursements),Maintain central economic ministry profile
+india,Republic of India,country,ELIGIBLE,28,40,High (Sovereign jurisdiction and statutory umbrella),Maintain sovereign profile
+planning-commission,Planning Commission of India,organization,ELIGIBLE,2,3,Medium (Historical context for 2005 NREGA design),Preserve archival historical links

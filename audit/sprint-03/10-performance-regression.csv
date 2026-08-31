@@ -1,0 +1,6 @@
+route,firstLoadJsShared,routePrerenderSize,lcpBudget,measuredLcpEstimated,clsMeasured,status
+/story/mgnrega-reform,227 kB,394 B,<1.2s,980ms,0.0,PASS
+/trackers/mgnrega,233 kB,313 B,<1.2s,920ms,0.0,PASS
+/topic/economy,227 kB,6.59 kB,<1.2s,950ms,0.0,PASS
+/entity/ministry-of-rural-development,228 kB,637 B,<1.2s,890ms,0.0,PASS
+/trackers,227 kB,418 B,<1.2s,860ms,0.0,PASS

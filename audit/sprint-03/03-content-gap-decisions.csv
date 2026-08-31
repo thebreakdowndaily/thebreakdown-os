@@ -1,0 +1,6 @@
+queryTheme,decision,targetLocation,rationale,actionTaken
+"MGNREGA 125 days wage guarantee eligibility and transition rules",EXPAND,/story/mgnrega-reform,"Consolidate wage rates, transition clauses, and 125-day eligibility inside the cornerstone rather than creating duplicate thin pages.","Expanded key points, FAQ, and EvidenceTrail in story store."
+"Viksit Bharat Guarantee for Rozgar (Gramin) Act 2025 Gazette PDF",EXPAND,/trackers/mgnrega,"Direct document access must be available from tracker and evidence trail without requiring external search engine roundtrips.","Added primary document metadata and direct gazette links in tracker documents registry."
+"State-wise wage disparities in rural employment",UPDATE,/trackers/mgnrega,"Audit report findings by CAG regarding wage delays and inflation gaps needed explicit evidence citations.","Added CAG audit claim and document entry in tracker evidence chain."
+"Fake / Scam job card verification updates",DEFER,/trackers/mgnrega,"Aadhaar-based payment system (ABPS) and digital attendance MIS metrics are planned for Sprint 4 data expansion.","Scheduled for Sprint 4 MIS data depth expansion."
+"MGNREGA vs universal basic income comparison",REJECT,N/A,"Theoretical UBI debates without Indian statutory backing would distract from verifiable empirical knowledge.","Rejected to preserve evidence density standard."

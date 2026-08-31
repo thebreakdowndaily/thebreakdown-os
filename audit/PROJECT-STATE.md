@@ -74,11 +74,27 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 3 & Beyond)
+## Sprint 3 — Knowledge Systems, Search Depth & Reader Conversion (complete)
 
-1. **Candidate for Sprint 3 Tracker**: UPI & Digital Payments Infrastructure Tracker (`digital-payments-boom`) or PM Fasal Bima Yojana Claims Tracker (`pm-fasal-bima-claims`).
-2. **Deepen Tracker Time-Series**: Embed interactive time-series charts directly within `GenericTracker`.
-3. **Reader Evidence Feedback Loop**: Allow readers to suggest corrections or submit verified primary documents for open claims.
+**Deliverables:**
+1. **Flagship Selection**: Selected rural employment guarantee (`MGNREGA → VB-G RAM G Act, 2025`) based on empirical evaluation (`audit/sprint-03/01-flagship-selection.csv`).
+2. **Search Depth & Intent Clustering**: Mapped 8 search intent dimensions without keyword cannibalization (`audit/sprint-03/02-search-depth-map.csv` & `audit/sprint-03/03-content-gap-decisions.csv`).
+3. **Flagship Knowledge Architecture**: Mapped complete knowledge graph linking Cornerstone Explainer, Evidence Trail, Issue Tracker, Entity Hubs, Topic Pages, and Primary Documents (`audit/sprint-03/04-knowledge-system-map.md`).
+4. **Contextual Newsletter Conversion**: Dynamic headline/subtext props in `StoryNewsletterCTA` enabling topic-specific briefings (`The Breakdown Rural Economy Brief`).
+5. **Experiments & Validation**: Recorded 3 experiments (EXP-S3-01, EXP-S3-02, EXP-S3-03) all approved for scaling (`audit/sprint-03/09-retention-experiments.csv`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 22 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all flagship routes (`/trackers/mgnrega`, `/story/mgnrega-reform`, `/topic/economy`, `/entity/ministry-of-rural-development`).
+
+---
+
+## Next Priorities (Sprint 4 & Beyond)
+
+1. **Third Flagship Tracker**: UPI & Digital Payments Infrastructure Tracker (`/trackers/upi`).
+2. **Interactive Time-Series**: Embed interactive D3/SVG charts within `GenericTracker`.
+3. **Primary Document Reader**: In-app document viewer modal for official gazette PDFs.
 
 ---
 
@@ -87,4 +103,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GA4, GSC, Beehiiv, Stripe, AdSense) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 31 Aug 2026, Sprint 2 complete.
+Last verified: 31 Aug 2026, Sprint 3 complete.

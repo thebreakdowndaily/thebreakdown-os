@@ -8,7 +8,16 @@ const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
 type CtaState = 'idle' | 'loading' | 'error' | 'unavailable';
 
-export default function StoryNewsletterCTA() {
+export interface StoryNewsletterCTAProps {
+  headline?: string;
+  subtext?: string;
+  topic?: string;
+}
+
+export default function StoryNewsletterCTA({
+  headline = 'Get the evidence behind the story',
+  subtext = 'The Breakdown Brief — what changed, why it matters, and the documents behind it. Weekly. Free.',
+}: StoryNewsletterCTAProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [status, setStatus] = useState<CtaState>('idle');
   const [submitted, setSubmitted] = useState(false);
@@ -109,10 +118,10 @@ export default function StoryNewsletterCTA() {
 
       <div className="max-w-xl">
         <h3 className="text-2xl font-bold text-white mb-2">
-          Get the evidence behind the story
+          {headline}
         </h3>
         <p className="text-neutral-400 mb-6">
-          The Breakdown Brief — what changed, why it matters, and the documents behind it. Weekly. Free.
+          {subtext}
         </p>
 
         {submitted ? (
