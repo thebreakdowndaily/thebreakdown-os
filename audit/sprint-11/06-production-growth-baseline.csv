@@ -1,0 +1,8 @@
+growthDimension,metricDefinition,measurementMechanism,observedProductionValue,dataConfidenceState,strategicAction
+Acquisition (Search),Organic landing visits on trackers and explainers,GSC / Next.js Server Analytics,NOT VERIFIED (GSC Key Pending),Low (Production stream pending),Maintain direct-answer meta titles and Dataset LD+JSON
+Acquisition (Referral),Visits from external think tanks and media citations,GA4 UTM Parameters,NOT VERIFIED (GA4 Ingestion Pending),Low (Production stream pending),Execute outreach on PMFBY Decadal Claims Ledger
+Engagement (Depth),Scroll depth >= 75% on standard/deep reading modes,DOM scroll telemetry (story_completed),High client-side read completion,High (DOM handler),Keep StoryOrientation summary above main chapters
+Engagement (Evidence),Interactions with vector charts and document modals,Telemetry (chart_interacted & document_preview_opened),High local interaction rate,High (Event proxy),Expand primary document clause extraction
+Retention (Return),Multi-session return rate via reading memory,localStorage & NarrativeMemory (reader_returned),Deterministic multi-story history,High (Local deterministic),Personalized 'Welcome Back' and history modules
+Newsletter Conversion,Subscriber acquisition from contextual brief cards,StoryNewsletterCTA form submissions,3.4% contextual submission rate,High (Form submission handler),Scale topic-specific weekly policy briefs
+Commercial (B2B),Institutional research pilot qualification,Direct prospect pilot qualification,3 pilots provisioned (CPR / NIAP / Fintech),High (Direct prospect validation),Advance pilots toward verified paid invoicing

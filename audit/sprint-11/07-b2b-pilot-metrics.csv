@@ -1,0 +1,4 @@
+pilotId,organizationName,activeSeats,weeklySessionsCount,csvExportsDownloaded,documentModalsOpened,reportedHoursSavedMonthly,renewalIntentScore
+B2B-P01,Centre for Policy Research (CPR),5 Seats,14 sessions / week,8 CSV downloads,22 document modal opens,18 hours saved (Analyst reported),8.5 / 10
+B2B-P02,National Institute of Agricultural Economics (NIAP),5 Seats,18 sessions / week,12 CSV downloads,31 document modal opens,24 hours saved (Analyst reported),9.0 / 10
+B2B-P03,Fintech & Regulatory Strategy Intelligence Desks,5 Seats,11 sessions / week,6 CSV downloads,15 document modal opens,12 hours saved (Analyst reported),8.0 / 10

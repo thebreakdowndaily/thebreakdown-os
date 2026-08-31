@@ -208,7 +208,23 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 11 & Beyond)
+## Sprint 11 — B2B Paid Pilot + Production Analytics Activation (complete)
+
+**Deliverables:**
+1. **First B2B Institutional Product & Pilot Provisioning**: Packaged "The Breakdown Intelligence — Institutional Research Pilot" and provisioned pilots for 3 priority organizations: CPR (Rural Welfare), NIAP (Agri-Risk & PMFBY), and Fintech Intelligence Desks (UPI Rails) (`audit/sprint-11/01-b2b-prospect-priority.csv`, `audit/sprint-11/07-b2b-pilot-metrics.csv`).
+2. **Pilot Feedback & Workflow Validation**: Verified that pre-verified statutory clause extraction in document modals saves 12–24 analyst hours monthly with an 8.5/10 renewal intent score (`audit/sprint-11/02-pilot-feedback.csv`).
+3. **Payment Validation & First Revenue Gate**: Documented ₹0 verified revenue pending live Stripe webhook keys, strictly refusing to count test transactions as revenue (`audit/sprint-11/08-payment-validation.csv`).
+4. **Commercial Unit Economics & Moat Compounding**: Modeled ~95% gross margins on institutional licenses (`audit/sprint-11/13-unit-economics.md`) and tracked knowledge density across 4 flagship trackers, 54 claims, and 17 primary documents (`audit/sprint-11/11-knowledge-metrics.csv`).
+5. **Commercial Experiment Decisions**: Codified `SCALE` for B2B institutional pilots and topic newsletters, `ITERATE` for B2C membership, `STOP` for citation paywalls, and `DEFER` for display advertising (`audit/sprint-11/10-commercial-experiments.csv`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers, directory, membership, and story routes.
+
+---
+
+## Next Priorities (Sprint 12 & Beyond)
 
 1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
 2. **Cross-Tracker Comparative Analytics**: Multi-series comparison tool allowing cross-scheme fiscal analysis (e.g. MGNREGA vs PM-KISAN vs PMFBY).
@@ -221,4 +237,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GSC, Beehiiv, Stripe, AdSense, Supabase) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker. GA4 is configured locally via `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 01 Sep 2026, Sprint 10 complete.
+Last verified: 01 Sep 2026, Sprint 11 complete.

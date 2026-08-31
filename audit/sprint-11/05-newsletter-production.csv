@@ -1,0 +1,6 @@
+flowStage,componentImplementation,providerStatus,doubleOptInHandling,telemetryLogged,status
+Reader Sees CTA,StoryNewsletterCTA.tsx,PASS,N/A,newsletter_viewed,CONFIGURED (Tested Locally)
+Reader Submits Email,SubscribeForm & StoryNewsletterCTA,PASS,Email format regex validated,newsletter_started,CONFIGURED (Tested Locally)
+API Ingestion,/app/api/newsletter/route.ts,StubProvider active (BEEHIIV_API_KEY pending),Handles mock double opt-in payload,newsletter_submitted,BLOCKED — BEEHIIV API KEY REQUIRED
+Provider Subscription,Beehiiv API V2 Endpoint,Blocked pending production key,Provider manages confirmation token,newsletter_subscribed,BLOCKED — BEEHIIV API KEY REQUIRED
+Delivery & Return Traffic,The Breakdown Weekly Briefing,Blocked pending production send,UTM campaign parameters configured,reader_returned (UTM),BLOCKED — BEEHIIV API KEY REQUIRED

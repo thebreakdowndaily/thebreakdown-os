@@ -1,0 +1,4 @@
+paymentStream,gatewayProvider,checkoutEndpoint,webhookVerificationStatus,serverSideEntitlement,realRevenueVerified,operationalStatus
+B2C Supporting Reader,Stripe Checkout,/api/checkout,Missing STRIPE_WEBHOOK_SECRET,Mock Token (localStorage tb_supporter),NO (₹0 real revenue),BLOCKED — STRIPE_SECRET_KEY required
+B2B Institutional Pilot,Stripe Billing / Direct Bank Invoice,/membership tier 3,Manual Institutional Agreement,Direct Org Provisioning,PILOT STAGE (Invoicing pending live launch),COMMERCIAL DISCUSSIONS ACTIVE
+Programmatic Display Ads,Google AdSense,/components/monetization/AdSlot,N/A,House Promotion Active,NO (₹0 ad revenue),DEFERRED (Preserving ad-free evidence UX)
