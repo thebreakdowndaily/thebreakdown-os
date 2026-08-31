@@ -11,8 +11,8 @@
   "failedPlugins": 4,
   "skippedPlugins": 0,
   "execution": {
-    "totalDurationMs": 367,
-    "generatedAt": "2026-08-31T03:27:59.398Z",
+    "totalDurationMs": 372,
+    "generatedAt": "2026-08-31T05:47:13.260Z",
     "nodeVersion": "v24.18.0",
     "os": "win32"
   },
@@ -42,8 +42,8 @@
       },
       "execution": {
         "durationMs": 2,
-        "startedAt": "2026-08-31T03:27:58.975Z",
-        "finishedAt": "2026-08-31T03:27:58.977Z"
+        "startedAt": "2026-08-31T05:47:12.415Z",
+        "finishedAt": "2026-08-31T05:47:12.417Z"
       }
     },
     {
@@ -143,9 +143,9 @@
         }
       },
       "execution": {
-        "durationMs": 174,
-        "startedAt": "2026-08-31T03:27:58.982Z",
-        "finishedAt": "2026-08-31T03:27:59.156Z"
+        "durationMs": 171,
+        "startedAt": "2026-08-31T05:47:12.423Z",
+        "finishedAt": "2026-08-31T05:47:12.594Z"
       }
     },
     {
@@ -162,8 +162,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-31T03:27:59.160Z",
-        "finishedAt": "2026-08-31T03:27:59.160Z"
+        "startedAt": "2026-08-31T05:47:12.597Z",
+        "finishedAt": "2026-08-31T05:47:12.597Z"
       }
     },
     {
@@ -182,8 +182,8 @@
       },
       "execution": {
         "durationMs": 3,
-        "startedAt": "2026-08-31T03:27:59.162Z",
-        "finishedAt": "2026-08-31T03:27:59.165Z"
+        "startedAt": "2026-08-31T05:47:12.600Z",
+        "finishedAt": "2026-08-31T05:47:12.603Z"
       }
     },
     {
@@ -204,8 +204,8 @@
       },
       "execution": {
         "durationMs": 3,
-        "startedAt": "2026-08-31T03:27:59.168Z",
-        "finishedAt": "2026-08-31T03:27:59.171Z"
+        "startedAt": "2026-08-31T05:47:12.606Z",
+        "finishedAt": "2026-08-31T05:47:12.609Z"
       }
     },
     {
@@ -224,8 +224,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-31T03:27:59.173Z",
-        "finishedAt": "2026-08-31T03:27:59.173Z"
+        "startedAt": "2026-08-31T05:47:12.611Z",
+        "finishedAt": "2026-08-31T05:47:12.611Z"
       },
       "error": "Simulated plugin failure"
     },
@@ -242,8 +242,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-31T03:27:59.176Z",
-        "finishedAt": "2026-08-31T03:27:59.176Z"
+        "startedAt": "2026-08-31T05:47:12.613Z",
+        "finishedAt": "2026-08-31T05:47:12.613Z"
       }
     },
     {
@@ -264,8 +264,8 @@
       },
       "execution": {
         "durationMs": 10,
-        "startedAt": "2026-08-31T03:27:59.203Z",
-        "finishedAt": "2026-08-31T03:27:59.213Z"
+        "startedAt": "2026-08-31T05:47:13.056Z",
+        "finishedAt": "2026-08-31T05:47:13.066Z"
       }
     },
     {
@@ -289,8 +289,8 @@
       },
       "execution": {
         "durationMs": 1,
-        "startedAt": "2026-08-31T03:27:59.217Z",
-        "finishedAt": "2026-08-31T03:27:59.218Z"
+        "startedAt": "2026-08-31T05:47:13.070Z",
+        "finishedAt": "2026-08-31T05:47:13.071Z"
       }
     },
     {
@@ -322,9 +322,9 @@
         }
       },
       "execution": {
-        "durationMs": 172,
-        "startedAt": "2026-08-31T03:27:59.221Z",
-        "finishedAt": "2026-08-31T03:27:59.393Z"
+        "durationMs": 181,
+        "startedAt": "2026-08-31T05:47:13.074Z",
+        "finishedAt": "2026-08-31T05:47:13.255Z"
       }
     },
     {
@@ -347,9 +347,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-08-31T03:27:59.396Z",
-        "finishedAt": "2026-08-31T03:27:59.398Z"
+        "durationMs": 1,
+        "startedAt": "2026-08-31T05:47:13.259Z",
+        "finishedAt": "2026-08-31T05:47:13.260Z"
       }
     }
   ]

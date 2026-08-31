@@ -1,12 +1,12 @@
 {
-  "capturedAt": "2026-08-01T09:38:28.323Z",
+  "capturedAt": "2026-08-31T05:47:38.649Z",
   "source": "audit/scripts/audit.ts (Audit-as-Code framework)",
   "frameworkVersion": "1.0.0",
   "reportVersion": "1.0",
-  "platformHealthScore": 76.25,
+  "platformHealthScore": 80,
   "coverage": 100,
-  "successfulPlugins": 4,
-  "failedPlugins": 4,
+  "successfulPlugins": 5,
+  "failedPlugins": 3,
   "skippedPlugins": 0,
   "results": [
     {
@@ -33,9 +33,9 @@
         }
       },
       "execution": {
-        "durationMs": 1,
-        "startedAt": "2026-08-01T08:58:32.036Z",
-        "finishedAt": "2026-08-01T08:58:32.037Z"
+        "durationMs": 2,
+        "startedAt": "2026-08-31T05:47:12.415Z",
+        "finishedAt": "2026-08-31T05:47:12.417Z"
       }
     },
     {
@@ -59,6 +59,10 @@
           },
           {
             "severity": "low",
+            "message": "Unknown top-level directory: backup/"
+          },
+          {
+            "severity": "low",
             "message": "Unknown top-level directory: checkpoints/"
           },
           {
@@ -76,6 +80,10 @@
           {
             "severity": "low",
             "message": "Unknown top-level directory: frontend/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: playwright-report/"
           },
           {
             "severity": "low",
@@ -100,6 +108,14 @@
           {
             "severity": "low",
             "message": "Unknown top-level directory: schemas/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: test-results/"
+          },
+          {
+            "severity": "low",
+            "message": "Unknown top-level directory: workers/"
           }
         ],
         "metrics": {
@@ -115,54 +131,33 @@
             "missing": 0
           },
           "forbiddenImports": 0,
-          "unknownDirectories": 14
+          "unknownDirectories": 18
         }
       },
       "execution": {
-        "durationMs": 276,
-        "startedAt": "2026-08-01T08:58:32.043Z",
-        "finishedAt": "2026-08-01T08:58:32.319Z"
+        "durationMs": 171,
+        "startedAt": "2026-08-31T05:47:12.423Z",
+        "finishedAt": "2026-08-31T05:47:12.594Z"
       }
     },
     {
       "pluginName": "knowledge-graph-audit",
-      "state": "FAILED",
+      "state": "PASSED",
       "data": {
-        "score": 70,
+        "score": 100,
         "coverage": 100,
-        "findings": [
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/claims"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/sources"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/thinkers"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/documents"
-          },
-          {
-            "severity": "critical",
-            "message": "Missing canonical knowledge registry: registry/events"
-          }
-        ],
+        "findings": [],
         "metrics": {
-          "registriesScore": 0,
+          "registriesScore": 100,
           "schemasScore": 100,
           "integrityScore": 100,
-          "knowledgeGraphHealthScore": 70
+          "knowledgeGraphHealthScore": 100
         }
       },
       "execution": {
         "durationMs": 3,
-        "startedAt": "2026-08-01T08:58:32.326Z",
-        "finishedAt": "2026-08-01T08:58:32.329Z"
+        "startedAt": "2026-08-31T05:47:12.600Z",
+        "finishedAt": "2026-08-31T05:47:12.603Z"
       }
     },
     {
@@ -182,9 +177,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-08-01T08:58:32.333Z",
-        "finishedAt": "2026-08-01T08:58:32.335Z"
+        "durationMs": 3,
+        "startedAt": "2026-08-31T05:47:12.606Z",
+        "finishedAt": "2026-08-31T05:47:12.609Z"
       }
     },
     {
@@ -204,9 +199,9 @@
         }
       },
       "execution": {
-        "durationMs": 9,
-        "startedAt": "2026-08-01T08:58:32.414Z",
-        "finishedAt": "2026-08-01T08:58:32.423Z"
+        "durationMs": 10,
+        "startedAt": "2026-08-31T05:47:13.056Z",
+        "finishedAt": "2026-08-31T05:47:13.066Z"
       }
     },
     {
@@ -229,9 +224,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-08-01T08:58:32.425Z",
-        "finishedAt": "2026-08-01T08:58:32.427Z"
+        "durationMs": 1,
+        "startedAt": "2026-08-31T05:47:13.070Z",
+        "finishedAt": "2026-08-31T05:47:13.071Z"
       }
     },
     {
@@ -263,9 +258,9 @@
         }
       },
       "execution": {
-        "durationMs": 299,
-        "startedAt": "2026-08-01T08:58:32.430Z",
-        "finishedAt": "2026-08-01T08:58:32.729Z"
+        "durationMs": 181,
+        "startedAt": "2026-08-31T05:47:13.074Z",
+        "finishedAt": "2026-08-31T05:47:13.255Z"
       }
     },
     {
@@ -289,8 +284,8 @@
       },
       "execution": {
         "durationMs": 1,
-        "startedAt": "2026-08-01T08:58:32.731Z",
-        "finishedAt": "2026-08-01T08:58:32.732Z"
+        "startedAt": "2026-08-31T05:47:13.259Z",
+        "finishedAt": "2026-08-31T05:47:13.260Z"
       }
     }
   ],

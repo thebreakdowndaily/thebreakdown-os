@@ -24,7 +24,14 @@ export interface SourceNode {
   url?: string;
 }
 
-export type EvidenceGraphNode = StoryNode | ClaimNode | EvidenceNode | SourceNode;
+export interface CitationNode {
+  id: string;
+  type: 'citation';
+  label: string;
+  url?: string;
+}
+
+export type EvidenceGraphNode = StoryNode | ClaimNode | EvidenceNode | SourceNode | CitationNode;
 
 export interface EvidenceGraphEdge {
   source: string;
@@ -71,6 +78,13 @@ export function buildEvidenceGraph(stories: any[]): EvidenceGraph {
       const srcId = src.id || src.url || hashText(src.name);
       addNode({ id: srcId, type: 'source', label: src.name, url: src.url });
       addEdge(storyId, srcId, 'references');
+    }
+
+    const citations = story.citations || [];
+    for (const cite of citations) {
+      const citeId = cite.id || cite.url || hashText(cite.title);
+      addNode({ id: citeId, type: 'citation', label: cite.title, url: cite.url });
+      addEdge(storyId, citeId, 'references');
     }
 
     const claims = story.claims || [];

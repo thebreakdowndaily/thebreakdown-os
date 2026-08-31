@@ -734,7 +734,7 @@ export interface StatItem {
 
 export interface GraphNode {
   id: string;
-  type: EntityKind | 'story' | 'topic' | 'timeline' | 'fix' | 'dataset' | 'claim';
+  type: EntityKind | 'story' | 'topic' | 'timeline' | 'fix' | 'dataset' | 'claim' | 'citation';
   title: string;
   slug: string;
   subtitle?: string;

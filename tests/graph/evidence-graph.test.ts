@@ -11,6 +11,9 @@ async function runTests() {
       sources: [
         { id: 'src-1', name: 'Source 1', url: 'http://src1.com' }
       ],
+      citations: [
+        { id: 'cite-1', title: 'Citation 1', url: 'http://cite1.com', status: 'approved' }
+      ],
       claims: [
         {
           id: 'claim-1',
@@ -28,9 +31,11 @@ async function runTests() {
   assert(graph.nodes.some(n => n.type === 'claim' && n.id === 'claim-1'), 'Missing claim node');
   assert(graph.nodes.some(n => n.type === 'evidence'), 'Missing evidence node');
   assert(graph.nodes.some(n => n.type === 'source' && n.id === 'src-1'), 'Missing source node');
+  assert(graph.nodes.some(n => n.type === 'citation' && n.id === 'cite-1'), 'Missing citation node');
 
   // Verify edges
   assert(graph.edges.some(e => e.source === 'story-1' && e.target === 'claim-1' && e.type === 'references'), 'Missing story->claim edge');
+  assert(graph.edges.some(e => e.source === 'story-1' && e.target === 'cite-1' && e.type === 'references'), 'Missing story->citation edge');
   assert(graph.edges.some(e => e.target === 'claim-1' && e.type === 'verifies'), 'Missing evidence->claim edge');
 
   const lineage = getClaimLineage(graph, 'claim-1');

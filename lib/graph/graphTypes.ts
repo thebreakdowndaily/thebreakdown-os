@@ -1,7 +1,7 @@
 export type NodeType =
   | 'person' | 'organization' | 'policy' | 'scheme' | 'budget'
   | 'report' | 'dataset' | 'source' | 'country'
-  | 'story' | 'topic' | 'timeline' | 'fix';
+  | 'story' | 'topic' | 'timeline' | 'fix' | 'citation';
 
 export type RelationType =
   | 'mentions' | 'belongs_to' | 'implemented_by' | 'announced_by'
