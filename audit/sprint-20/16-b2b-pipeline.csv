@@ -1,0 +1,11 @@
+opportunityId,customerOrganization,stage,buyer,problem,nextAction,deadline,evidence,owner,priority
+OPP-CPR,Centre for Policy Research (CPR),CONTRACTED - Payment pending,Welfare policy research desk,Rural welfare scheme analysis + statutory clause lookup,Follow up on INV-2026-01 payment (vendor cycle),2026-09-07,Executed contract CTR-2026-CPR01 + invoice INV-2026-01,Sales + Finance,CRITICAL
+OPP-NIAP,National Institute of Agricultural Economics (NIAP),CONTRACTED - Payment pending,Agricultural policy research desk,Crop insurance (PMFBY) decadal analysis,Follow up on INV-2026-02 payment (treasury batch),2026-09-07,Executed contract CTR-2026-NIAP02 + invoice INV-2026-02,Sales + Finance,CRITICAL
+OPP-FIN,Fintech Intelligence Desk,PROPOSAL - Active,Fintech research / UPI rails,UPI payment rails analysis,Advance proposal to contract; confirm buyer + procurement,2026-09-14,Active proposal ₹159,988/yr; no signed contract,Sales,HIGH
+OPP-ORF,Observer Research Foundation,QUALIFIED,Public policy research,Policy tracker + research feed,Contact/qualify deepening,2026-09-21,Prior pipeline record (reported),Sales,MEDIUM
+OPP-ICRIER,ICRIER,QUALIFIED,Public policy research,Policy tracker + research feed,Contact/qualify deepening,2026-09-21,Prior pipeline record (reported),Sales,MEDIUM
+OPP-CSEP,CSEP,QUALIFIED,Public policy research,Policy tracker + research feed,Contact/qualify deepening,2026-09-21,Prior pipeline record (reported),Sales,MEDIUM
+OPP-NCAER,NCAER,QUALIFIED,Public policy research,Agri + welfare data,Contact/qualify deepening,2026-09-21,Prior pipeline record (reported),Sales,MEDIUM
+OPP-ICFA,ICFA,QUALIFIED,Public policy research,Policy tracker + research feed,Contact/qualify deepening,2026-09-21,Prior pipeline record (reported),Sales,MEDIUM
+OPP-EXT,Extension - additional referrals,CONTACTED/QUALIFYING,Varies,Varies,Qualify inbound/referral mentions,2026-09-28,Pipeline holds ≤10 active opportunities; growth from referrals,Sales,MEDIUM
+OVERALL,8 active opportunities (2 contracted + 1 proposal + 5 qualified),≤10 active maintained,Multiple,Varies,Advance highest-value + unblock payments,2026-09-28,No new production pipeline evidence this sprint; records carry prior-sprint provenance,Sales,ACTIVE

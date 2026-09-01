@@ -1,0 +1,9 @@
+metric,value,environment,measurementMethod,source,confidence,status,evidenceNote
+LCP,Largest Contentful Paint ~1.1-1.3s,Production (expected),Local measurement from prior sprint-18,LOCAL test (prior),MEDIUM,NOT VERIFIED IN PRODUCTION,LCP was measured locally; no production RUM/CWV provider data. Do not quote as production number.
+INP,~38ms,Production (expected),Local measurement from prior sprint-18,LOCAL test (prior),MEDIUM,NOT VERIFIED IN PRODUCTION,—
+CLS,~0.01,Production (expected),Local measurement from prior sprint-18,LOCAL test (prior),MEDIUM,NOT VERIFIED IN PRODUCTION,—
+JS bundle,First Load JS ~130 kB (prior) / shared 227-236 kB (current build),Production (expected),local next build output,current main build,VERIFIED (build),VERIFIED (LOCAL BUILD),Current main build first-load shared 227-236 kB; not measured in production
+Page weight,~91 kB HTML (homepage),Production,2026-09-01 live HTTP probe,this audit,VERIFIED (LIVE fetch),VERIFIED (LIVE),Homepage HTML ~91,609 bytes retrieved live
+Route availability,Core routes 200; tracker routes 404,Production,2026-09-01 live HTTP probe,this audit,VERIFIED (LIVE),DEPLOY GAP (critical),Trackers NOT deployed; performance of tracker routes unmeasurable until redeploy
+Performance baseline comparison,Compare Sprint 18/19 baseline,BLOCKED - production not running main,Production,Deploy-gap reality,VERIFIED (gap),BLOCKED,Meaningful performance comparison requires redeploy of current main
+OVERALL,Production performance,NOT MEASURED (CWV provider absent),Production,No CrUX/RUM/GA4 production data,No production performance evidence available,DEPLOY GAP + ACCESS,Multi,Deploy main then measure production CWV,2026-09-14

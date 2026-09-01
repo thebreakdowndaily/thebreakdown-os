@@ -1,0 +1,11 @@
+metricDimension,metricName,value,source,environment,dateRange,confidence,status,evidenceNote
+Users,Total active users,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No production GA4 account access; local stream G-79ZCJWS0WS is a local/test stream only
+Sessions,Total sessions,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No production GA4 data observed in any tool in this environment
+Acquisition,Traffic channels,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Story engagement,Story views/engagement,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Evidence,evidence_expanded / source_opened / document_opened events,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,Event taxonomy exists in lib/analytics/capture.ts but no production event counts observed
+Tracker,tracker_viewed events (mgnrega/upi/pmfby/semiconductor),NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED (ALSO: tracker routes 404 on production - see deploy gap),Production tracker routes currently 404; no tracker traffic exists to measure
+Document,document_preview_opened events,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Newsletter,newsletter_subscribed / newsletter_form events,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+B2B,Institutional usage events,NOT VERIFIED,GA4 (production property),PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No GA4 production account / property access in this environment
+OVERALL,Production GA4,NOT VERIFIED,GA4,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,Local test stream ≠ production measurement. Do not use local counts as production metrics.

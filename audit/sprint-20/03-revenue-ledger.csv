@@ -1,0 +1,5 @@
+customer,contract,invoice,payment,settlement,reconciliation,status,definedRevenue,notPipeline
+CPR,CTR-2026-CPR01 (₹159,988/yr),INV-2026-01 (₹159,988; due 2026-09-30),Corporate NEFT/RTGS - Pending,Not cleared - no bank deposit evidence,Pending bank fund clearance,IN PROGRESS,₹0 (cleared cash),₹0 - NO pipeline value recorded
+NIAP,CTR-2026-NIAP02 (₹159,988/yr),INV-2026-02 (₹159,988; due 2026-09-30),Corporate NEFT/RTGS - Pending,Not cleared - no bank deposit evidence,Pending bank fund clearance,IN PROGRESS,₹0 (cleared cash),₹0 - NO pipeline value recorded
+Fintech Desk,(no contract),FIN-2026-03 (proposal, not issued),N/A,N/A,N/A,PROPOSAL,₹0 (cleared cash),₹159,988 quoted but NOT recorded as revenue (no contract/invoice)
+NOTE,DEFINITION,₹0 VERIFIED REVENUE as of 2026-09-01,All rows require cleared + reconciled settlement,<REAL CUSTOMER + REAL TRANSACTION + FUNDS CLEARED + RECONCILED> = VERIFIED REVENUE,Only cleared+reconciled cash enters revenue ledger,STRICT GATE,₹0,₹319,976 contracted/quoted is NOT revenue until cleared

@@ -1,0 +1,9 @@
+metricDimension,metricName,value,source,environment,dateRange,confidence,status,evidenceNote
+Impressions,Total impressions,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No GSC domain-profile access in this environment
+Clicks,Total clicks,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+CTR,Average CTR,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Average position,Avg position,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Top queries,Query list,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Top pages,Page list,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Indexing,Sitemap submission,CONFIGURED - sitemap.xml exists (112 URLs currently on production),Google Search Console (as reported),PRODUCTION,2026-09-01,MEDIUM,CONFIGURED - VERIFICATION PENDING,Production sitemap currently reports 112 URLs with NO tracker entries (reflects stale production build - see deploy gap). Sitemap consistency with main is pending redeploy.
+OVERALL,Production GSC,NOT VERIFIED,Google Search Console,PRODUCTION,2026-01-09-01,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No production GSC access. All search-performance numbers in prior sprint reports are NOT backed by actual GSC datasets.

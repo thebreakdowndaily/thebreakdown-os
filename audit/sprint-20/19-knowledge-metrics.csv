@@ -1,0 +1,12 @@
+metricDimension,metricName,value,source,environment,confidence,status,evidenceNote
+Knowledge base,Canonical claims,54 (prior); verify @ current main,Knowledge registries (lib/knowledge/claim-registry.ts + tracker data),LOCAL (code),MEDIUM,MEASURED FROM CODE,Claim count recomputable from registry
+Knowledge base,Evidence nodes,128 (prior); verify @ current main,Knowledge registries (lib/knowledge/evidence-registry.ts + tracker data),LOCAL (code),MEDIUM,MEASURED FROM CODE,Evidence count recomputable from registry
+Knowledge base,Primary official documents,17 (prior); verify @ current main,Document registry + tracker documents,LOCAL (code),MEDIUM,MEASURED FROM CODE,Document count recomputable from registry + tracker document indexes
+Knowledge base,Flagship trackers,4 (mgnrega/upi/pmfby/semiconductor),git main + local build,LOCAL (build),VERIFIED (built locally),BUILT LOCALLY - NOT DEPLOYED,Local build emits all 4 tracker routes; production 404s them (deploy gap)
+Knowledge base,Citations / external references,NOT VERIFIED,External,PRODUCTION,NOT VERIFIED,NOT VERIFIED,No external citation evidence
+Entities,Entities indexed,11+ (entities + ministries + schemes),store.ts + registries,LOCAL (code),MEDIUM,MEASURED FROM CODE,—
+Timelines,Historical timeline events,MGNREGA 8 events + others,lib/trackers/mgnrega-tracker.ts,LOCAL,VERIFIED,DOCUMENTED,—
+Data series,Time-series datasets,UPI 185.2B volume / ₹1260.4L Cr value; PMFBY ₹131,450 Cr premiums; MGNREGA ₹105,000 Cr FY27 estimate,LOCAL (code),VERIFIED (code),DOCUMENTED,—
+Relationship density,Cross-linked entities <-> trackers <-> stories <-> topics,Linked via relatedEntityIds/relatedStories,Code inspection,LOCAL,HIGH,STRUCTURALLY LINKED,Knowledge graph architecture links tracker -> stories/entities; relationship density not numerically measured this sprint
+Freshness,Last verified date,2026-09-01 (this audit),audit/sprint-20 files,This sprint,HIGH,VERIFIED,—
+OVERALL,Knowledge moat,Coverage + freshness + relationship density present; raw counts need recompute from current main,Code + registries,LOCAL,HIGH,MEASURED (LOCAL ONLY),Production deployment of this knowledge requires redeploy of main (trackers currently 404)

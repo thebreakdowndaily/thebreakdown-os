@@ -1,8 +1,33 @@
 # PROJECT STATE — Competitive Advantage & Growth Improvement Program
 
 Status: Active
-Date: 31 Aug 2026
-Governance: AGENTS.md v1.0 — Platform Beta / One New Capability Per Sprint / Experience Rule
+Date: 01 Sep 2026 (Sprint 20 opened)
+Governance: AGENTS.md v1.0 — Platform Beta / One New Capability Per Sprint / Sprint 20 Real-World Execution Doctrine
+
+---
+
+## Sprint 20 — First Verified Revenue, Production Data Activation & Growth Operating Loop (OPEN 01→30 Sep 2026)
+
+**Objective:** Real production data + real cash + real customer behavior. Final chain: Product → Real User → Repeated Value → Contract → Cash → Renewal → Repeatable Acquisition.
+
+**Verified sprint-start state (01 Sep 2026):**
+- **₹0 VERIFIED REVENUE** (strict gate). ₹319,976 contracted ARR (CPR + NIAP) + Net-30 invoices INV-2026-01/02 issued, due 2026-09-30, pending bank clearance.
+- **CRITICAL DISCOVERY — Production deploy gap.** All four flagship tracker routes, `/membership`, `/compare`, `/evolution`, `/precedents`, `/problems` return **404 on production**. Production sitemap = 112 URLs, 0 tracker entries. Current `main` (`bb96d58`) builds them all (typecheck/tests/build green). **Prior "PRODUCTION VERIFIED" tracker claims reclassified as NOT DEPLOYED.** See `audit/sprint-20/`.
+- **External integrations remain BLOCKED** (GA4, GSC, Beehiiv, Stripe, AdSense, Supabase production access required).
+- **Customer value figures are CUSTOMER-REPORTED/ASSUMPTION**, not telemetry-verified.
+- Business state: **ITERATE** (strong product + contracts; no cleared cash; production measurement pending).
+
+**Single highest-leverage action for Sprint 21:** Deploy current `main` to production (unblocks trackers, membership, sitemap, production measurement), then obtain production credentials, then clear INV-2026-01/02 to first verified cash.
+
+**All artifacts:** `audit/sprint-20/` (01→28 deliverables complete as sprint-start baseline).
+
+---
+
+## Sprint 19 — Production Analytics, SEO Growth & First Verified Cash (complete)
+
+**Result:** Business classified **`ITERATE`** — strong validated product + initial executed contracts (₹319,976 contracted ARR), ₹0 verified cash pending Net-30 settlement, production integrations gated on access, and a large pie of production measurement still unavailable.
+
+**Reclassification note (Sprint 20):** any prior "PRODUCTION VERIFIED" label for tracker routes is now corrected to NOT DEPLOYED (production 404s them; see Sprint 20 section above).
 
 ---
 

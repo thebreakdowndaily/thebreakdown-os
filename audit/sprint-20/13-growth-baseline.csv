@@ -1,0 +1,11 @@
+dimension,metric,value,source,dateRange,environment,confidence,status,evidenceNote
+Acquisition,Publishing platform live,200 OK on core routes (/trust /methodology /entity /topic /series /fix /data /tracking),Live HTTP check thebreakdown.in,2026-09-01,LOCALLY WHAT IS DEPLOYED,VERIFIED,routeCheck,Core reader surfaces live; tracker routes return 404 (deploy gap)
+Acquisition,Flagship tracker routes (/trackers/*),404 ON PRODUCTION,Live HTTP check thebreakdown.in,2026-09-01,PRODUCTION,VERIFIED (failure),DEPLOY GAP - BLOCKER,All 4 flagship trackers built on main return 404; sitemap has 0 tracker URLs; NOT DEPLOYED
+Search,Search traffic,NOT VERIFIED,Google Search Console,2026-01-09-01,PRODUCTION,NOT VERIFIED,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No GSC access
+Engagement,Reader engagement,NOT VERIFIED,GA4,2026-01-09-01,PRODUCTION,NOT VERIFIED,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No GA4 production access
+Retention,Returning reader,NOT VERIFIED,GA4,2026-01-09-01,PRODUCTION,NOT VERIFIED,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Newsletter,Subscriber counts,NOT VERIFIED,Beehiiv,2026-01-09-01,PRODUCTION,NOT VERIFIED,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Commercial,Contracted ARR,₹319,976/yr (CPR ₹159,988 + NIAP ₹159,988),Executed contracts CTR-2026-CPR01 + CTR-2026-NIAP02,2026-08-30,PRODUCTION (contracts),VERIFIED (contracts exist),CONTRACTED - NOT CASH,Two executed annual contracts; invoices issued Net-30 due 2026-09-30
+Commercial,Verified cash collected,₹0,Revenue gate (bank clearance),2026-09-01,PRODUCTION (bank),VERIFIED (₹0),NO VERIFIED REVENUE,No cleared bank deposit evidence; strict gate enforced
+Commercial,B2B pipeline,8 qualified opportunities (reported),Prior sprint pipeline records,2026-08,PRODUCTION (records),MEDIUM (reported),ACTIVE,1 proposal outstanding (Fintech Desk); remainder qualified/contacted; no new production evidence in this sprint
+Performance,Production CWV,NOT MEASURED,Production provider,LOCAL ONLY (previous sprint measured local),2026-01-09-01,PRODUCTION,NOT VERIFIED,NOT MEASURED - PRODUCTION ACCESS REQUIRED,Prior LCP/INP numbers were local test measurements, not production

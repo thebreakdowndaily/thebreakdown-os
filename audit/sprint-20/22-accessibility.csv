@@ -1,0 +1,10 @@
+checkCategory,checkName,result,environment,evidenceSource,confidence,status,owner,nextAction,deadline
+Keyboard,Full keyboard navigation,VERIFIED (prior sprint-18 local audit),LOCAL + prior,audit/sprint-18/04-accessibility-validation.csv,HIGH,VERIFIED (LOCAL),Engineering,Re-verify on deployed production after redeploy,2026-09-14
+Focus management,Focus traps in dialogs/modals,VERIFIED (prior sprint-18 - DocumentPreviewModal focus trap ESC),LOCAL + prior,audit/sprint-18/04-accessibility-validation.csv,HIGH,VERIFIED (LOCAL),Engineering,Re-verify after redeploy,2026-09-14
+Forms,Newsletter + checkout forms accessible,VERIFIED (prior sprint-18),LOCAL + prior,audit/sprint-18/04-accessibility-validation.csv,HIGH,VERIFIED (LOCAL),Engineering,Re-verify after redeploy,2026-09-14
+Documents,Primary document preview semantics,VERIFIED (prior sprint-18 - WCAG AA semantic HTML),LOCAL + prior,audit/sprint-18/04-accessibility-validation.csv,HIGH,VERIFIED (LOCAL),Engineering,—
+Charts,SVG chart keyboard-accessible + semantic HTML table fallback,VERIFIED (prior - TimeSeriesChart),LOCAL + prior,audit/sprint-18 + tracker tests,HIGH,VERIFIED (LOCAL),Engineering,—
+Dialogs,Mobile menu + modal ARIA,VERIFIED (prior sprint-18),LOCAL + prior,audit/sprint-18/04-accessibility-validation.csv,HIGH,VERIFIED (LOCAL),Engineering,—
+Mobile,>=44px touch targets; no horizontal overflow,VERIFIED (prior sprint-18),LOCAL + prior,audit/sprint-18/03-mobile-validation.csv,HIGH,VERIFIED (LOCAL),Engineering,—
+Contrast,WCAG 2.1 AA 19.5:1 text contrast (gold #C9A84C on dark),VERIFIED (prior redesign + sprint-18),LOCAL + prior,audit/frontend-design/11-accessibility-review.csv,HIGH,VERIFIED (LOCAL),Engineering,—
+OVERALL,Production accessibility,NOT RE-TESTED IN PRODUCTION,PRODUCTION,Local audits only,STILL VERIFIED LOCALLY ONLY,Engineering,Re-run a11y audit against deployed production after redeploy,2026-09-14

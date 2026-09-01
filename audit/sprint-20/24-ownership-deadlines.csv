@@ -1,0 +1,27 @@
+workItem,owner,priority,startDate,deadline,status,evidence,nextAction,escalation
+CPR + NIAP payment collection,Finance / Operations + Sales,P0,2026-09-01,2026-09-07,IN PROGRESS,Contracts + invoices issued; ₹0 cleared,Follow up vendor cycles; confirm settlement,Business Lead
+First Revenue Gate,Finance / Operations,P0,2026-09-01,2026-09-30,IN PROGRESS,Strict gate - ₹0 verified until bank clears,Monitor bank deposits,Business Lead
+Revenue ledger,Finance / Operations,P0,2026-09-01,2026-09-07,IN PROGRESS,Ledger created; no pipeline value,Update as settlements land,—
+Stripe production,Engineering,P0,2026-09-01,2026-09-07,BLOCKED - STRIPE ACCESS REQUIRED,No live Stripe; simulated checkout,Provide STRIPE_SECRET_KEY,Engineering Lead
+Customer entitlement,Engineering,P1,2026-09-01,2026-09-14,IN PROGRESS - NOT PRODUCTION VERIFIED,Local model only,Provide DATABASE_URL + test tenant isolation,Engineering Lead
+Customer onboarding,Customer Success,P1,2026-09-01,2026-09-14,IN PROGRESS (reported not telemetry-verified),Prior records,Instrument telemetry,—
+Customer value,Customer Success,P1,2026-09-01,2026-09-21,IN PROGRESS (customer-reported only),WhereMetrics = CUSTOMER-REPORTED/ASSUMPTION,Move to TELEMETRY,—
+Customer ROI,Customer Success + Business Owner,P1,2026-09-01,2026-09-21,IN PROGRESS,ROI model rebuilt with ASSUMPTION labels,Add observed data,—
+Renewal,Customer Success,P1,2026-09-01,2026-09-28,IN PROGRESS (reported),Renewal intent reported strong; not committed,Verify usage + intent,—
+GA4 production data,Analytics,P0,2026-09-01,2026-09-07,BLOCKED - PRODUCTION ACCESS REQUIRED,No GA4 production access,Provide access,—
+GSC,Analytics / Growth,P1,2026-09-01,2026-09-14,BLOCKED - PRODUCTION ACCESS REQUIRED,No GSC access,Claim domain + provide access,—
+Newsletter provider,Growth,P1,2026-09-01,2026-09-14,BLOCKED - PRODUCTION ACCESS REQUIRED,No Beehiiv keys,Provide keys,—
+Production growth baseline,Analytics,P1,2026-09-01,2026-09-21,IN PROGRESS,baseline created with deploy-gap reality,Capture production data,—
+Search winners,Growth + Editorial,P1,2026-09-01,2026-09-21,BLOCKED - AWAITS GSC,No real query data,Provide GSC,—
+SEO experiments,Growth,P2,2026-09-01,2026-09-28,RUNNING (2 blocked on access; 1 on deploy),Experiments registered,Unblock access,—
+Frontend conversion,Product / UX,P1,2026-09-01,2026-09-21,IN PROGRESS - evidence is prior local,Use prior evidence only; no redesign,—
+Newsletter conversion,Growth,P2,2026-09-01,2026-09-21,BLOCKED - no provider data,No data,Provide Beehiiv,—
+B2B pipeline,Sales,P0,2026-09-01,Weekly,IN PROGRESS,8 opportunities tracked,Advance highest priority,—
+Referrals,Sales + CS,P2,2026-09-01,2026-09-21,TRACKED (prior),2 referrals prior,Re-confirm,—
+Authority,Editorial / Research,P2,2026-09-01,2026-09-21,TRACKED (no new evidence),No external citations verified,Record real citations only,—
+Knowledge moat,Editorial + Engineering,P1,2026-09-01,2026-09-28,MEASURED (LOCAL),4 trackers not deployed; counts from code,Recompute after redeploy,—
+Unit economics,Business Owner + Finance,P1,2026-09-01,2026-09-28,MEASURED (OBSERVED/ASSUMED/NOT AVAILABLE),LTV:CAC not claimed,N/A,—
+Security,Engineering,P0,2026-09-01,2026-09-14,IN PROGRESS (live guest headers verified; pay/DB blocked),CSP/HSTS live,Re-verify after redeploy,—
+Accessibility,Engineering,P1,2026-09-01,2026-09-14,VERIFIED (LOCAL prior),Local audits,Production re-audit,—
+Performance,Engineering,P1,2026-09-01,2026-09-14,BLOCKED (production not on main),No production CWV,Deploy main,—
+REDEPLOY MAIN TO PRODUCTION,Engineering,CRITICAL P0 BLOCKER,2026-09-01,2026-09-07,BLOCKED - PRODUCTION DEPLOY ACCESS REQUIRED,Production 404s all trackers; 112-URL sitemap lacks tracker entries; local build emits all routes,Deploy current main (bb96d58) to production; verify /trackers/* 200; sitemap 117+ URLs,Engineering Lead / Business Lead

@@ -1,0 +1,12 @@
+customer,metric,value,sourceType,timestamp,confidence,owner,evidenceNote
+CPR,Active seats,5/5,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Customer Success,No independent telemetry; rely on customer-reported utilization
+CPR,Weekly research sessions,16-18,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Analytics,No GA4 production data available to independently verify
+CPR,CSV exports per week,8-14,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Customer Success,No export telemetry in production
+CPR,Statutory clause lookup time,<2s,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Customer Success,Likely measured locally but no production evidence
+CPR,Monthly analyst hours saved,15-20+ hours,CUSTOMER-REPORTED (estimate),2026-08 (prior sprints),ASSUMPTION,Research/CS,Estimated from workflow claims; not independently measured
+NIAP,Active seats,5/5,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Customer Success,No independent telemetry; rely on customer-reported utilization
+NIAP,Weekly research sessions,16-18,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Analytics,No GA4 production data available to independently verify
+NIAP,CSV exports per week,8-14,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Customer Success,No export telemetry in production
+NIAP,Statutory clause lookup time,<2s,CUSTOMER-REPORTED / PRIOR RECORD,2026-08 (prior sprints),MEDIUM,Customer Success,Likely measured locally but no production evidence
+NIAP,Monthly analyst hours saved,15-20+ hours,CUSTOMER-REPORTED (estimate),2026-08 (prior sprints),ASSUMPTION,Research/CS,Estimated from workflow claims; not independently measured
+OVERALL,Value metrics,All metrics are CUSTOMER-REPORTED or ASSUMPTION,NO TELEMETRY SOURCE EXISTS,2026-09-01,HIGH=veracity of classification,Analytics,Instrument GA4 production events + product telemetry to convert to TELEMETRY source type,2026-09-21

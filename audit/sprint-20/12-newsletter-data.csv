@@ -1,0 +1,7 @@
+stage,metricName,value,source,environment,confidence,status,evidenceNote
+CTA,CTA impressions,NOT VERIFIED,Beehiiv,PRODUCTION,,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No Beehiiv production access
+Submission,Form submissions,NOT VERIFIED,Beehiiv,PRODUCTION,,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,The Breakdown newsletter form uses StubProvider fallback in local dev (console-logged); no provider-side submission confirmed
+Double Opt-In,Opt-in completions,NOT VERIFIED,Beehiiv,PRODUCTION,,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+Subscriber,Active subscribers,NOT VERIFIED,Beehiiv,PRODUCTION,,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,No provider-side subscriber record confirmed
+Delivery,Email delivery / opens,NOT VERIFIED,Beehiiv,PRODUCTION,,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,—
+OVERALL,Newsletter provider,NOT VERIFIED,Beehiiv API,PRODUCTION,,,NOT VERIFIED - PRODUCTION ACCESS REQUIRED,Requires BEEHIIV_API_KEY + BEEHIIV_PUB_ID. Provider never contacted/verified in this environment.
