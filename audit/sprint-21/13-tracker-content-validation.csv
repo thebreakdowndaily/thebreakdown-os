@@ -1,0 +1,7 @@
+tracker,http_status,title,key_metric_ledger,time_series_charts,evidence_chain,doc_records,content_verified,notes
+mgnrega,200,MGNREGA Tracker | The Breakdown,true,1,true,5,true,125/100 day guarantee cards, 14.2Cr workers, 55.3% women, budget allocation chart, counterpoint on status
+upi,200,UPI & Digital Payments Rails Tracker | The Breakdown,true,2,true,3,true,digital payments rails metrics + charts + evidence
+semiconductor,200,Semiconductor PLI & ISM Tracker | The Breakdown,true,1,true,5,true,PLI/ISM metrics + chart + evidence
+pmfby,200,PM Fasal Bima Yojana (PMFBY) Tracker | The Breakdown,true,2,true,4,true,₹31,450Cr premium, claim settlement ratio + premium charts, CAG counterpoint
+trackers_index,200,The Breakdown — India Explained,true,true,false,false,true,/trackers hub renders with links to all 4
+verdict,PASS,all four flagship trackers render full content not just HTTP 200,evidence chain + documents + charts + metrics confirmed live

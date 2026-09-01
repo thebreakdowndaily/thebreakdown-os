@@ -1,0 +1,15 @@
+date,2026-09-01,evidence_source,npm run test:smoke-prod vs https://thebreakdown.in
+result,25 passed 0 failed,run_live,true
+route_/,200,route_trackers,200
+route_trackers_mgnrega,200,route_trackers_upi,200
+route_trackers_semiconductor,200,route_trackers_pmfby,200
+route_membership,200,route_search,200
+route_trust,200,route_topics,200
+route_series,200,route_data,200
+route_sitemap_xml,200,route_robots_txt,200
+deprecated_compare,404,deprecated_evolution,404
+deprecated_precedents,404,deprecated_problems,404
+sitemap_has_mgnrega,true,sitemap_has_upi,true
+sitemap_has_semiconductor,true,sitemap_has_pmfby,true
+robots_sitemap_ref,true,robots_allows_trackers,true
+hsts_present,true,verdict,PASS

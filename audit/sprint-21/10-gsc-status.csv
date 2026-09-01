@@ -1,0 +1,8 @@
+check,status,evidence
+domain_ownership,BLOCKED,GSC access not present in this environment
+sitemap_submission,BLOCKED,no GSC profile; sitemap.xml verified live (160 URLs, 5 trackers) at HTTP layer only
+indexing,BLOCKED,no GSC data
+coverage,BLOCKED,no GSC data
+representative_urls,BLOCKED,no GSC data
+note,do not infer GSC results from sitemap availability,verification via live fetch only
+verdict,BLOCKED - GSC ACCESS REQUIRED,Analytics/SEO owner

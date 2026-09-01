@@ -1,0 +1,15 @@
+field,value,evidence
+deployment_id,dpl_42CbGLFn3jrSRPhQHKK5N549uFki,Vercel API
+deployment_url,https://thebreakdown-4ktlgpbfe-bholebababhakti108-makers-projects.vercel.app,Vercel CLI + API
+target,production,Vercel API
+status,READY,Vercel API
+hosting_provider,Vercel,CLI
+deployed_commit,12df5a0 (source) + vercel.json cron fix (committed as next commit),git rev-parse HEAD 12df5a0; vercel.json edited
+deployment_timestamp,2026-09-01 17:23:53 UTC,Vercel API createdAt
+deployment_branch,main,Vercel API gitBranch
+alias_thebreakdown_in,https://thebreakdown.in,vercel alias ls + inspection
+previous_production_alias,iwcqrg89t (2026-08-12),replaced by new deployment
+deploy_health,READY no errors,API
+deploy_method,Vercel CLI --prod from clean working tree (HEAD 12df5a0),command
+release_blocker_found,true vercel.json hourly cron exceeded Hobby daily limit causing repeated deploy_failed,Vercel CLI error
+release_blocker_fix,changed cron 30 * * * * -> 0 6 * * * in vercel.json,committed fix

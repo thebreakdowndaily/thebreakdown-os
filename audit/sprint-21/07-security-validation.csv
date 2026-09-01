@@ -1,0 +1,18 @@
+check,status,evidence,severity
+hsts,PRESENT,strict-transport-security max-age=63072000,ok
+csp,PRESENT,default-src self; frame-ancestors none; base-uri self; form-action self; restricted script/img/font/connect-src,ok
+x-content-type-options,ABSENT,nosniff header not returned,high
+x-frame-options,ABSENT,mitigated by CSP frame-ancestors none; header itself absent,medium
+referrer-policy,ABSENT,header not returned,medium
+api_unauth,401,GET /api/foo without x-api-key returns 401 (middleware gate),ok
+api_cron_gate,401,POST/GET /api/v2/newsroom/observations/pull without x-vercel-cron + CRON_SECRET returns 401,ok
+auth_admin_pages,307,/admin redirects to /login (auth-gated),ok
+auth_editorial_workspace,PROTECTED,AUTHENTICATED_PAGES list in middleware.ts:23-38,ok
+tenant_isolation,NOT_VERIFIED,no Supabase production DB access; entitlements modeled locally only,blocked
+rate_limiting,PRESENT-in-api,checkRateLimit 100 req window in middleware.ts:90-96,ok
+secrets_in_client,NOT_PRESENT,no secrets observed in served HTML,ok
+stack_traces,NOT_PRESENT,no stack traces in served pages,ok
+debug_info,NOT_PRESENT,no debug info in served pages,ok
+cron_secret_configured,NOT_CONFIGURED,CRON_SECRET absent from Vercel env (verified env ls),blocked
+cron_can_reach_route,BLOCKED,Vercel cron headers fixed; per docs C2 middleware exemption exists but secret unset; cron not operational,blocked
+verdict,CONDITIONAL,HSTS+CSP+API auth strong; hardening gaps (x-content-type-options, referrer-policy) and Supabase/CRON secret blocked

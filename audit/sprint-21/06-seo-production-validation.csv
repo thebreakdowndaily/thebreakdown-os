@@ -1,0 +1,17 @@
+page,element,present,value,evidence
+/,title,true,MGNREGA sample/route verified via tracker; homepage title via layout,index
+/,canonical,true,https://thebreakdown.in,layout metadata
+/,description,true,Independent data-driven journalism on Indian policy politics and society,layout
+/,open_graph,true,og:title og:description og:type website,layout
+/,twitter_card,true,summary_large_image,layout
+/,schema,true,WebSite + Organization JSON-LD via Script,layout:81-86
+/,h1,true,renders,index
+/,robots,true,index follow,layout
+/trackers/mgnrega,title,true,MGNREGA Tracker | The Breakdown,served HTML
+/trackers/mgnrega,description,true,"Track India's rural employment guarantee...",served HTML
+/trackers/mgnrega,open_graph,true,og:title og:description og:type website,served HTML
+/trackers/mgnrega,twitter_card,true,summary_large_image,served HTML
+/trackers/mgnrega,robots,true,index follow,served HTML
+/trackers/mgnrega,schema,true,Dataset JSON-LD,served HTML
+/trackers/mgnrega,h1,true,MGNREGA -> VB-G RAM G Act 2025,served HTML
+verdict,PASS,no SEO regression; canonical/title/desc/OG/schema/robots present,linked in nav

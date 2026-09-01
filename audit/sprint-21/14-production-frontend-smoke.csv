@@ -1,0 +1,19 @@
+area,check,status,evidence
+header,renders with nav,pass,Playfair brand + nav (Chapters/Explainers/Trackers/Topics/Data/About) + search + Subscribe CTA
+header,skip link,pass,Skip to main content anchor present
+header,mobile menu,pass,mobile nav toggle with aria-expanded + aria-controls (md:hidden)
+homepage,renders,pass,HTTP 200 redesigned frontend
+homepage,dark theme,pass,data-theme=dark
+homepage,viewport,pass,name=viewport present
+homepage,html lang,pass,<html lang="en">
+story,route,pass,/story redirects to chapter landing (verified mgnrega-reform 308) - target 404 data issue flagged separately
+tracker,renders,pass,all 4 trackers full content
+topic,renders,pass,/topic/economy 200
+search,renders,pass,/search 200
+document_modal,"Inspect Document Record" button,pass,buttons present per tracker doc records
+newsletter,route,pass,/newsletter + /subscribe routes serve (CTA)
+footer,renders,pass,multi-column footer (Sections/Topics/Knowledge Library/Governance) + RSS
+focus_indicators,skip link + focus styles,pass,focus-visible classes present
+table_view_switch,chart <-> table toggle,pass,View Table buttons on tracker charts
+mobile_widths,375/390/430,not_measured_in_browser,verified markup-level only (responsive Tailwind + mobile nav)
+verdict,CONDITIONAL_READY,markup-level frontend structure verified; no browser rendering at 375/390/430 px in this environment

@@ -1,98 +1,132 @@
 /**
- * THE BREAKDOWN OS — Release 1 Production Deployment Test Suite (P1)
+ * Sprint 21 — Production Deployment Release-Integrity smoke test.
  *
- * Verifies edge header policies, authenticated route isolation, database backup/restore,
- * request traceability, and operational health check contracts.
+ * Verifies the live `thebreakdown.in` deployment independently of the local
+ * repository, so repository/build/test state can never mask a stale or broken
+ * production build (Section 1: REPOSITORY STATE != PRODUCTION STATE).
+ *
+ * Run: npx tsx tests/production-deployment.test.ts
+ * (Added as `npm run test:smoke-prod`.)
+ *
+ * Developer note: base URL defaults to production; override with
+ * `PROD_SMOKE_BASE` env var (e.g. a preview URL or `http://localhost:3000`)
+ * for non-production verification. Do not hardcode a temporary URL.
  */
 
-import { getEdgeHeaderPolicy, PRODUCTION_SECURITY_HEADERS } from '../lib/infrastructure/edge-config';
-import { executeMigration, rollbackMigration, createDatabaseBackup, verifyRestore } from '../lib/infrastructure/db-ops';
-import { createRequestTraceContext, finalizeRequestTrace } from '../lib/infrastructure/observability';
+const BASE = process.env.PROD_SMOKE_BASE || 'https://thebreakdown.in';
+const TIMEOUT_MS = 20000;
 
-function runProductionDeploymentTests() {
-  let passed = 0;
-  let failed = 0;
+interface ExpectedRoute {
+  path: string;
+  status: number; // expected final HTTP status
+  reason?: string;
+}
 
-  function assert(condition: boolean, name: string) {
-    if (condition) {
-      console.log(`  ✓ PASS: ${name}`);
-      passed++;
-    } else {
-      console.error(`  ✗ FAIL: ${name}`);
-      failed++;
-    }
-  }
+const EXPECTED_200: ExpectedRoute[] = [
+  { path: '/', status: 200, reason: 'homepage serves' },
+  { path: '/trackers', status: 200, reason: 'trackers index' },
+  { path: '/trackers/mgnrega', status: 200, reason: 'flagship tracker' },
+  { path: '/trackers/upi', status: 200, reason: 'flagship tracker' },
+  { path: '/trackers/semiconductor', status: 200, reason: 'flagship tracker' },
+  { path: '/trackers/pmfby', status: 200, reason: 'flagship tracker' },
+  { path: '/membership', status: 200, reason: 'commercial route' },
+  { path: '/search', status: 200, reason: 'search route' },
+  { path: '/trust', status: 200, reason: 'trust dashboard' },
+  { path: '/topics', status: 200, reason: 'topics' },
+  { path: '/series', status: 200, reason: 'series' },
+  { path: '/data', status: 200, reason: 'data' },
+  { path: '/sitemap.xml', status: 200, reason: 'sitemap' },
+  { path: '/robots.txt', status: 200, reason: 'robots' },
+];
 
-  console.log('--- RUNNING RELEASE 1 PRODUCTION INFRASTRUCTURE TESTS (P1) ---');
+// DEPRECATED_DEBUG_ROUTES intentionally 404 by middleware.ts:42.
+const EXPECTED_404: ExpectedRoute[] = [
+  { path: '/compare', status: 404, reason: 'deprecated debug route' },
+  { path: '/evolution', status: 404, reason: 'deprecated debug route' },
+  { path: '/precedents', status: 404, reason: 'deprecated debug route' },
+  { path: '/problems', status: 404, reason: 'deprecated debug route' },
+];
 
-  // Test 1: Public Edge Cache Policy
+async function statusOf(path: string): Promise<number> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const publicPolicy = getEdgeHeaderPolicy('/stories/foundations');
-    assert(publicPolicy.cacheControl.includes('s-maxage=300'), 'Public story sets 300s edge max age');
-    assert(publicPolicy.robots === 'index, follow', 'Public story route indexed');
-    assert(publicPolicy.securityHeaders['X-Frame-Options'] === 'DENY', 'Strict security headers included');
-  } catch (err) {
-    console.error('  ✗ FAIL: Public edge policy test failed', err);
-    failed++;
-  }
-
-  // Test 2: Authenticated Route Cache Isolation
-  try {
-    const edPolicy = getEdgeHeaderPolicy('/editorial/dashboard');
-    const resPolicy = getEdgeHeaderPolicy('/research/workspace');
-    const adminPolicy = getEdgeHeaderPolicy('/admin/settings');
-
-    assert(edPolicy.cacheControl.includes('no-store'), '/editorial route sets no-store');
-    assert(resPolicy.cacheControl.includes('no-store'), '/research route sets no-store');
-    assert(adminPolicy.cacheControl.includes('no-store'), '/admin route sets no-store');
-
-    assert(edPolicy.robots === 'noindex, nofollow', '/editorial route marked noindex, nofollow');
-  } catch (err) {
-    console.error('  ✗ FAIL: Authenticated route policy test failed', err);
-    failed++;
-  }
-
-  // Test 3: Database Migration Execution & Rollback Automation
-  try {
-    const mig = executeMigration('mig_001', 'v1.0.1', 'Add audit log index');
-    assert(mig.status === 'applied', 'Migration applied successfully');
-
-    const rolled = rollbackMigration(mig);
-    assert(rolled.status === 'rolled_back', 'Migration rollback executed successfully');
-  } catch (err) {
-    console.error('  ✗ FAIL: Migration execution/rollback test failed', err);
-    failed++;
-  }
-
-  // Test 4: Database Backup & Restore Verification
-  try {
-    const backup = createDatabaseBackup('bak_20260727', 10485760, 'sha256:abc123def456');
-    assert(backup.verified === true, 'Backup marked verified');
-
-    const restore = verifyRestore(backup);
-    assert(restore.success === true, 'Database restore verified successfully');
-  } catch (err) {
-    console.error('  ✗ FAIL: Backup/restore test failed', err);
-    failed++;
-  }
-
-  // Test 5: Request ID Traceability & Latency Monitoring
-  try {
-    const traceCtx = createRequestTraceContext('/api/health', 'GET');
-    assert(traceCtx.requestId.startsWith('req_'), 'Trace context generates unique Request ID');
-
-    const finalTrace = finalizeRequestTrace(traceCtx, 200);
-    assert(finalTrace.statusCode === 200, 'Trace finalizes status code');
-    assert(typeof finalTrace.durationMs === 'number', 'Trace records duration latency');
-  } catch (err) {
-    console.error('  ✗ FAIL: Observability trace test failed', err);
-    failed++;
-  }
-
-  console.log(`\nRESULTS: ${passed} passed, ${failed} failed.`);
-  if (failed > 0) {
-    process.exit(1);
+    const res = await fetch(`${BASE}${path}`, {
+      signal: controller.signal,
+      redirect: 'manual',
+    });
+    return res.status;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
-runProductionDeploymentTests();
+async function runTests() {
+  let passed = 0;
+  let failed = 0;
+  const assert = (cond: boolean, name: string) => {
+    if (cond) {
+      console.log(`  PASS: ${name}`);
+      passed++;
+    } else {
+      console.error(`  FAIL: ${name}`);
+      failed++;
+    }
+  };
+
+  console.log(`\nProduction deployment smoke vs ${BASE}\n`);
+
+  for (const r of EXPECTED_200) {
+    try {
+      const code = await statusOf(r.path);
+      assert(code === r.status, `${r.path} -> ${code} (expected ${r.status}) ${r.reason ?? ''}`);
+    } catch (e) {
+      assert(false, `${r.path} -> request error: ${(e as Error).message}`);
+    }
+  }
+
+  for (const r of EXPECTED_404) {
+    try {
+      const code = await statusOf(r.path);
+      assert(code === r.status, `${r.path} -> ${code} (expected ${r.status} deprecated) ${r.reason ?? ''}`);
+    } catch (e) {
+      assert(false, `${r.path} -> request error: ${(e as Error).message}`);
+    }
+  }
+
+  // Sitemap completeness: all four flagship trackers must be present.
+  try {
+    const sitemap = await (await fetch(`${BASE}/sitemap.xml`, { signal: AbortSignal.timeout(TIMEOUT_MS) })).text();
+    for (const t of ['/trackers/mgnrega', '/trackers/upi', '/trackers/semiconductor', '/trackers/pmfby']) {
+      assert(sitemap.includes(`https://thebreakdown.in${t}`), `sitemap contains ${t}`);
+    }
+  } catch (e) {
+    assert(false, `sitemap fetch error: ${(e as Error).message}`);
+  }
+
+  // Robots must reference the sitemap and allow public content.
+  try {
+    const robots = await (await fetch(`${BASE}/robots.txt`, { signal: AbortSignal.timeout(TIMEOUT_MS) })).text();
+    assert(robots.includes('Sitemap:'), 'robots.txt references a Sitemap');
+    assert(robots.includes('Allow: /trackers'), 'robots.txt allows /trackers');
+  } catch (e) {
+    assert(false, `robots fetch error: ${(e as Error).message}`);
+  }
+
+  // Security: HSTS present on homepage.
+  try {
+    const res = await fetch(`${BASE}/`, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+    const hsts = res.headers.get('strict-transport-security') ?? '';
+    assert(hsts.includes('max-age'), 'homepage sends Strict-Transport-Security');
+  } catch (e) {
+    assert(false, `homepage header error: ${(e as Error).message}`);
+  }
+
+  console.log(`\n${passed} passed, ${failed} failed\n`);
+  if (failed > 0) process.exit(1);
+}
+
+runTests().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

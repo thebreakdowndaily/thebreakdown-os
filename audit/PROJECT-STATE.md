@@ -1,8 +1,32 @@
 # PROJECT STATE — Competitive Advantage & Growth Improvement Program
 
 Status: Active
-Date: 01 Sep 2026 (Sprint 20 opened)
-Governance: AGENTS.md v1.0 — Platform Beta / One New Capability Per Sprint / Sprint 20 Real-World Execution Doctrine
+Date: 01 Sep 2026 (Sprint 21)
+Governance: AGENTS.md v1.0 — Platform Beta / One New Capability Per Sprint / Sprint 21 Production Recovery & Release Integrity Doctrine
+
+---
+
+## Sprint 21 — Production Deployment Recovery, Live Route Verification & Release Integrity (01→07 Sep 2026)
+
+**Result:** Production deployment **REPAIRED**. Current `main` is now live and independently verified. Release integrity restored (LOCAL MAIN = DEPLOYED BUILD = LIVE PRODUCTION). Overall classification **READY (release integrity) / CONDITIONAL (measurement + hardening open)** — see `audit/sprint-21/` (21 deliverables complete).
+
+**Root cause found & fixed (the Sprint 21 discovery):** `vercel.json` defined an **hourly cron** (`30 * * * *`); **Vercel Hobby accounts limit to ≤1 cron/day**, so every production deploy errored (`deploy_failed`) and the live alias never advanced past 13 Aug 2026. Fixed to daily `0 6 * * *`.
+
+**Deployed & verified (2026-09-01):**
+- **Deployment:** `dpl_42CbGLFn3jrSRPhQHKK5N549uFki` — target production, **READY**, 2026-09-01 17:23:53 UTC, alias `thebreakdown.in`. Source = clean `main` `12df5a0` + committed cron fix. Deploy access AVAILABLE (Vercel CLI authenticated, project linked).
+- **Routes (live):** `/`, `/trackers`, all 4 trackers (mgnrega/upi/semiconductor/pmfby), `/membership`, `/search`, `/trust`, `/topics`, `/series`, `/data`, `/sitemap.xml`, `/robots.txt` → **200**. Deprecated `/compare`, `/evolution`, `/precedents`, `/problems` → **404 by design** (`middleware.ts:42`).
+- **Sitemap:** **160 URLs** incl. 5 tracker entries (was 112 / 0 trackers).
+- **Smoke:** new `tests/production-deployment.test.ts` + `npm run test:smoke-prod` = **25/25 PASS** live.
+- **Tracker content:** all four trackers render full editorial content (metrics, SVG charts, evidence chain, primary documents) — `audit/sprint-21/13`.
+- **Frontend:** redesigned Playfair/Inter dark theme + Trackers nav link confirmed on prod.
+
+**Still open (see `audit/OPEN-BLOCKERS.md` §4):**
+- **GA4 NOT firing** (no tag in prod; needs valid production property + env). GSC, Beehiiv, Stripe, Supabase, CRON secret — **BLOCKED** (access required). **Revenue stays ₹0** (invoices OUTSTANDING, no settlement evidence).
+- **Security hardening:** add `x-content-type-options: nosniff` + `referrer-policy` (x-frame-options mitigated by CSP frame-ancestors none).
+- **Content defect:** `/story/mgnrega-reform` 308 → 404 chapter (mapping defect; valid chapter routes work 200). Owner Editorial + Engineering.
+- **No new features / no growth roadmap** added. Only source change = one-line vercel.json cron fix + new smoke test.
+
+**All artifacts:** `audit/sprint-21/` (01→21 complete).
 
 ---
 
@@ -17,7 +41,7 @@ Governance: AGENTS.md v1.0 — Platform Beta / One New Capability Per Sprint / S
 - **Customer value figures are CUSTOMER-REPORTED/ASSUMPTION**, not telemetry-verified.
 - Business state: **ITERATE** (strong product + contracts; no cleared cash; production measurement pending).
 
-**Single highest-leverage action for Sprint 21:** Deploy current `main` to production (unblocks trackers, membership, sitemap, production measurement), then obtain production credentials, then clear INV-2026-01/02 to first verified cash.
+**Single highest-leverage action for Sprint 21:** Deploy current `main` to production (unblocks trackers, membership, sitemap, production measurement), then obtain production credentials, then clear INV-2026-01/02 to first verified cash. → **ACCOMPLISHED by Sprint 21** (deployed `dpl_42CbGLFn`; see Sprint 21 section above).
 
 **All artifacts:** `audit/sprint-20/` (01→28 deliverables complete as sprint-start baseline).
 

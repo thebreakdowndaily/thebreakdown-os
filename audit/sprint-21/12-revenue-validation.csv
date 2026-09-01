@@ -1,0 +1,9 @@
+item,owner,status,evidence,next_action
+INV-2026-01,CPR 159988 INR/yr 5 seats,Finance/Ops + Sales,OUTSTANDING,Net-30 invoiced 2026-08-30 due 2026-09-30; no cleared bank deposit; 0 verified cash,confirm with payment/reconciliation source
+INV-2026-02,NIAP 159988 INR/yr 5 seats,Finance/Ops + Sales,OUTSTANDING,Net-30 invoiced 2026-08-30 due 2026-09-30; no cleared bank deposit; 0 verified cash,confirm with payment/reconciliation source
+contracted_ARR_verified,true,319976 INR signed contracts CTR-2026-CPR01 + CTR-2026-NIAP02 (audit/sprint-14),used to drive invoice follow-up
+cash_collected,0 INR,no cleared bank settlement evidence,strict gate - not revenue until cleared
+official_revenue,0 INR,hard rule - do not change without settlement evidence,recheck at 30 Sep
+bank_transfer_reconciliation,NOT_STARTED,no reconciliation run this sprint,run when funds clear
+payment_infra_production,BLOCKED,no STRIPE_SECRET_KEY; mock checkout; bank-transfer is only real settlement path,Stripe access if consumer payments needed
+verdict,OUTSTANDING - 0 verified revenue,invoices due by 30 Sep,drive to cleared settlement

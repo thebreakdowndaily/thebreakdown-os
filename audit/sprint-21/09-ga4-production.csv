@@ -1,0 +1,17 @@
+check,status,evidence
+event_pipeline,NOT_VERIFIED,no gtag script in served production HTML (verified / and /trackers/mgnrega)
+gtm_id,ABSENT,no G-/GTM- ID in served HTML
+measurement_id_env,ABSENT,NEXT_PUBLIC_GA_MEASUREMENT_ID not in Vercel production env
+layout_injection,conditional,app/layout.tsx:89-92 injects only when NEXT_PUBLIC_GA_MEASUREMENT_ID set
+page_view,BLOCKED,no tag to fire it
+story_opened,BLOCKED,no tag
+story_completed,BLOCKED,no tag
+evidence_expanded,BLOCKED,no tag
+tracker_viewed,BLOCKED,no tag
+document_opened,BLOCKED,no tag
+newsletter_events,BLOCKED,no provider + no tag
+commercial_events,BLOCKED,no tag
+pageview_duplication,NOT_APPLICABLE,no tag present
+hostname_filtering,N/A,isProductionHost gating in lib/analytics/environment.ts:10-18 protects production only
+development_leakage,no_leak,no GA tag shipped at all so no leakage risk currently
+verdict,BLOCKED,requires valid production GA4 property id + NEXT_PUBLIC_GA_MEASUREMENT_ID env + redeploy; do NOT use local test stream G-79ZCJWS0WS for production

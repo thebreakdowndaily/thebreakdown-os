@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/v2/newsroom/observations/pull",
-      "schedule": "30 * * * *"
+      "schedule": "0 6 * * *"
     }
   ]
 }

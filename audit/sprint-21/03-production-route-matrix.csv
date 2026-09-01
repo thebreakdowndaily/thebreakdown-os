@@ -1,0 +1,27 @@
+route,group,http_status,expected,actual_state,notes
+/,Core,200,200,READY,homepage serves redesigned frontend (Playfair nav confirmed)
+/search,Core,200,200,READY,works
+/topics,Core,200,200,READY,works
+/stories,Core,200,200,READY,works
+/series,Core,200,200,READY,works
+/data,Core,200,200,READY,works
+/trust,Core,200,200,READY,works
+/trackers,Trackers,200,200,READY,index page renders
+/trackers/mgnrega,Trackers,200,200,READY,full content verified (metrics, chart, evidence chain, documents)
+/trackers/upi,Trackers,200,200,READY,verifies
+/trackers/semiconductor,Trackers,200,200,READY,verifies
+/trackers/pmfby,Trackers,200,200,READY,verifies
+/membership,Commercial,200,200,READY,route serves
+/about,Core,200,200,READY,works
+/methodology,Core,200,200,READY,works
+/topic/economy,Content,200,200,READY,works
+/entity/ministry-of-rural-development,Content,200,200,READY,works
+/story/mgnrega-reform,Content,308->404,BROKEN,DEFECT,note: valid chapter route /series/foundations... works (200); target /series/economic-policy-2026/.../mgnrega-reform 404s (data mismatch)
+/founding-edition,Content,200,200,READY,works
+/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,Content,200,200,READY,flagship chapter works
+/sitemap.xml,SEO,200,200,READY,160 URLs, 5 tracker entries
+/robots.txt,SEO,200,200,READY,correct directives + sitemap ref
+/compare,Knowledge,404,404,DEPRECATED_BY_DESIGN,middleware.ts:42 DEPRECATED_DEBUG_ROUTES
+/evolution,Knowledge,404,404,DEPRECATED_BY_DESIGN,middleware.ts:42
+/precedents,Knowledge,404,404,DEPRECATED_BY_DESIGN,middleware.ts:42
+/problems,Knowledge,404,404,DEPRECATED_BY_DESIGN,middleware.ts:42

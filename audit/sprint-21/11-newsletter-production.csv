@@ -1,0 +1,7 @@
+check,status,evidence
+provider_access,BLOCKED,Beehiiv /API KEY + PUB ID absent
+cta_present,true,/subscribe and subscribe CTA render (newsletter route 200)
+submission_pipeline,BLOCKED,no provider credentials to test POST
+double_opt_in,BLOCKED,no provider
+confirmed_subscriber_count,0,fake counts rejected
+verdict,BLOCKED - NEWSLETTER PROVIDER ACCESS REQUIRED,Growth/Sales owner

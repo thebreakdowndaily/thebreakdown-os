@@ -1,0 +1,9 @@
+system,code_present,env_configured,production_accessible,production_verified,notes,owner
+GA4,partial,NO (NEXT_PUBLIC_GA_MEASUREMENT_ID absent),NO (no tag in served HTML),NOT_VERIFIED,app/layout.tsx:89-92 injects gtag only when measurement id set; not set in prod env; local test stream G-79ZCJWS0WS NOT cited as production,Analytics/Growth
+GSC,NO,NO,NO,NOT_VERIFIED,GSC domain access not present in this environment; do not infer from sitemap,Analytics/SEO
+Beehiiv,N/A,NO (BEEHIIV_API_KEY/PUB_ID absent),NO,BLOCKED,Stub fallback; no live newsletter,Sales/Growth
+Stripe,N/A,NO (STRIPE_SECRET_KEY absent),NO,BLOCKED,no live charge/webhook; mock checkout fallback,Engineering/Finance
+Supabase,YES,CONFIGURED (NEXT_PUBLIC_SUPABASE_URL + ANON + SERVICE_ROLE),NOT VERIFIED,DB creds present in Vercel env but no verified prod tenant data access in this env; entitlements modeled locally,Supabase
+AdSense,partial,NO,NO,BLOCKED,membership placeholder fallback,Engineering
+CRON_SECRET,NO,NO,NO,BLOCKED,needed for cron route; absent; cron not operational,DevOps/Engineering
+vercel deploy access,AVAILABLE,CONFIGURED,AVAILABLE,VERIFIED,CLI authenticated (bholebababhakti108-maker) + project linked; used to deploy main,Sprint-21 resolved P0

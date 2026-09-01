@@ -1,0 +1,17 @@
+field,value,evidence
+hosting_provider,Vercel,vercel project thebreakdown-os linked
+account_plan,HOBBY,Vercel CLI deploy error: Hobby limited to 1 cron/day
+primary_domain,thebreakdown.in,verified live HTTP 200
+cdn_front,Cloudflare,response header Server: cloudflare + x-vercel-id
+origin,Vercel Edge/Serverless,response header x-vercel-id sin1::iad1
+deployment_source,Vercel CLI deploy from local working tree,vercel deploy --prod
+connected_repository,true,project.json linked to git
+deployment_branch,main,deployment gitBranch=main
+framework,Next.js,project.json settings.framework=nextjs
+node_version,24.x,project.json settings.nodeVersion
+build_command,null (Vercel default next build),project.json
+output_directory,null (Vercel default .next),project.json
+root_directory,null (project root),project.json
+cron_config,vercel.json drives /api/v2/newsroom/observations/pull originally hourly,blocked deploy
+verified_routes,/,/trackers,/trackers/*4,/membership,/search,/trust,/sitemap.xml,/robots.txt,200 live probes
+notes,Production 404s for /compare /evolution /precedents /problems are intentional DEPRECATED_DEBUG_ROUTES (middleware.ts:42),verified in served build

@@ -1,0 +1,18 @@
+check,status,evidence
+url,https://thebreakdown.in/sitemap.xml,HTTP 200
+url_count,160,match <loc> count
+trackers_present,true,/trackers /trackers/mgnrega /trackers/semiconductor /trackers/upi /trackers/pmfby
+trackers_missing_prior,true (was 0 in Sprint 20),now resolved
+core_routes_trust,true,/trust present
+core_routes_methodology,true,/methodology present
+core_routes_topics,true,/topics present
+core_routes_series,true,/series present
+core_routes_data,true,/data present
+membership_in_sitemap,false,commercial route intentionally excluded from sitemap
+search_in_sitemap,false,excluded (non-indexable)
+stories_index_in_sitemap,false,linked from nav; individual stories resolve via story routes
+stale_urls,none_observed,no 404 URLs found in sampled loc list
+duplicates,none_observed,sampled
+incorrect_domains,none,all locs use https://thebreakdown.in
+match_local_sitemap_ts,true,app/sitemap.ts includes same 5 tracker entries
+verdict,PASS,deployment restored sitemap completeness (112->160; trackers now present)

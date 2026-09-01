@@ -1,0 +1,14 @@
+area,check,status,evidence
+semantic,html lang,pass,<html lang="en">
+semantic,landmarks,pass,header role=banner, main id=main-content, footer role=contentinfo, nav aria-label
+keyboard,skip to content,pass,Skip to main content focusable link
+keyboard,charts,pass,svg role=img + aria-label (chart description) + tabindex=0 data points, cursor-pointer focusable
+keyboard,table toggle,pass,View Table button aria-label
+focus,visible focus,pass,skip-link focus styles + focus-visible utilities
+dialogs,mobile menu,pass,toggle has aria-expanded + aria-controls
+forms,search button,pass,aria-label="Search (press / or ⌘K)"
+charts_fallback,table view option,pass,View Table switch provides non-SVG fallback
+color_contrast,not_measured,unknown,(CuA) text on dark bg uses neutral palette; not measured
+labels,form controls,partial,aria-labels present; no forms sampled beyond search
+mobile_controls,mobile nav,pass,toggle + hamburger svg aria-label
+a11y_scan_verdict,CONDITIONAL,markup-level a11y markers verified (landmarks, aria, keyboard, skip link, chart aria-labels); no axe automated scan in this environment

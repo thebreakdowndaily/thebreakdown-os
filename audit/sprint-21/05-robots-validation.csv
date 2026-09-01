@@ -1,0 +1,12 @@
+check,status,evidence
+url,https://thebreakdown.in/robots.txt,HTTP 200
+public_content_crawlable,true,User-Agent * Allow / + explicit Allow lines
+core_allows,true,/founding-edition /methodology /trust /series /story /fix /data /topic /entity /trackers allowed
+private_admin_protected,true,/workspace /admin /cms /editorial /dashboard /settings /api disallowed
+search_disallowed,true,/search disallowed (by design)
+auth_pages_disallowed,true,/login /subscribe disallowed
+sitemap_reference,true,Sitemap: https://thebreakdown.in/sitemap.xml
+ai_content_signals,true,Cloudflare-managed Content-Signal block present
+ai_training_blocked,true,Content-Signal ai-train=no; GPTBot/CCBot/ClaudeBot/Google-Extended/etc disallowed
+ai_search_allowed,true,Content-Signal search=yes use=reference
+verdict,PASS,robots correct and complete

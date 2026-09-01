@@ -1,0 +1,14 @@
+metric,sprint21_val,sprint18_19_baseline,status,evidence/notes
+http_ttfb,not_captured,not_captured,not_measured,no RUM tool in this env
+LCP,not_captured,not_captured,not_measured,requires browser render
+INP,not_captured,not_captured,not_measured,requires browser render
+CLS,not_captured,not_captured,not_measured,requires browser render
+http_status,200 all core,200,pass,route probes
+server_response,cloudflare + vercel edge,cloudflare + vercel,pass,server cloudflare, x-vercel-id
+html_lang,en,en,pass
+meta_viewport,true,true,pass
+css_links,6,6,ok
+js_script_tags,46,similar,ok(fairly heavy),
+page_visual_weight,multiple tracker SVGs inlined,ok,charts are inline SVG (no external image network fetch)
+cdn,cloudflare fronting,pass,cf-cache-status present
+performance_score_verdict,CONDITIONAL,no field/RUM data; markup hardened (inline SVG charts, responsive); LCP/INP/CLS need real-user or Lighthouse measurement

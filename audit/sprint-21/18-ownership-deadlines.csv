@@ -1,0 +1,22 @@
+work_item,owner,priority,start_date,deadline,status,evidence,next_action,escalation
+Deploy current main to production,Engineering + DevOps,Po,2026-09-01,2026-09-02,PRODUCTION VERIFIED,deployment dpl_42CbGLFn READY; thebreakdown.in serves 4 trackers + membership,confirm alias stable; re-run test:smoke-prod,Engineering Lead
+Fix vercel.json cron Hobby limit,Engineering,Po,2026-09-01,2026-09-02,CLOSED,cron 30 * * * * -> 0 6 * * *; unblocked deploy,committed with sprint,Engineering Lead
+Critical route verification,Engineering,Po,2026-09-01,2026-09-03,PRODUCTION VERIFIED,route matrix 03: 14x200 + 4x404 deprecated,re-run post future deploys,N/A
+Sitemap completeness,Engineering + SEO,Po,2026-09-01,2026-09-03,PRODUCTION VERIFIED,sitemap 160 URLs incl 5 tracker entries; local sitemap.ts matches,keep in deploy checklist,SEO Lead
+Robots validation,Engineering,Po,2026-09-01,2026-09-03,PRODUCTION VERIFIED,robots.txt correct + sitemap ref,N/A,N/A
+Canonical/SEO validation,SEO,Growth,2026-09-01,2026-09-04,PRODUCTION VERIFIED,title/desc/OG/Twitter/schema/robots on tracker + layout,N/A,N/A
+Security headers,Engineering,Po,2026-09-01,2026-09-05,CONDITIONAL,HSTS+CSP+API auth 401; MISSING x-content-type-options + referrer-policy,add nosniff + referrer-policy headers,Engineering Lead
+Environment config,DevOps,Po,2026-09-01,2026-09-03,DOCUMENTED,08-production-config.csv; GA4/GSC/Beehiiv/Stripe/CRON not configured,provide credentials,DevOps Lead
+GA4 verification,Analytics,P1,2026-09-01,2026-09-04,BLOCKED,no GA tag served; NEXT_PUBLIC_GA_MEASUREMENT_ID absent,set valid production GA4 + env + redeploy,Analytics/Growth
+GSC verification,Analytics/SEO,P1,2026-09-01,2026-09-04,BLOCKED,no GSC access,claim domain profile,Analytics/SEO
+Newsletter verification,Growth,Sales,P1,2026-09-01,2026-09-04,BLOCKED,no Beehiiv creds,provide BEEHIIV creds,Growth
+Payment infrastructure,Engineering,Finance,P1,2026-09-01,2026-09-05,BLOCKED,mock checkout; no Stripe secret,Stripe access if consumer payments,Finance
+Revenue (INV-2026-01/02),Finance,Ops,Po,2026-09-01,2026-09-07,OUTSTANDING, 0 verified revenue; invoiced due 30 Sep,drive to cleared settlement,Finance Lead
+Tracker content validation,Editorial,Research,P1,2026-09-01,2026-09-04,PRODUCTION VERIFIED,13-tracker-content-validation.csv: 4 trackers full content,verify ongoing freshness,Editorial
+Frontend smoke,Product,UX,P1,2026-09-01,2026-09-04,CONDITIONAL,markup-level verified; no browser at 375/390/430 px,manual mobile QA if required,UX Lead
+Performance,Engineering,P1,2026-09-01,2026-09-05,CONDITIONAL,no RUM/Lighthouse in env; markup hardened,run field RUM if needed,Engineering
+Accessibility,Engineering,P1,2026-09-01,2026-09-05,CONDITIONAL,landmarks/aria/keyboard verified; no axe scan,optional axe automation,Engineering
+Deployment runbook,DevOps,Po,2026-09-01,2026-09-07,DONE,17-deployment-runbook.md,use for every deploy,DevOps
+Automated smoke test,Engineering,Po,2026-09-01,2026-09-07,DONE,25/25 PASS live; test:smoke-prod,run post-deploy,Engineering
+Story redirect defect (/story/mgnrega-reform),Editorial + Engineering,P1,2026-09-01,2026-09-07,BLOCKED,308 -> 404 target chapter /series/economic-policy-2026/... doesn't resolve,fix chapter data or redirect,Editorial
+Security header hardening,Engineering,P1,2026-09-01,2026-09-07,OPEN,add x-content-type-options:nosniff + referrer-policy,implement,Engineering
