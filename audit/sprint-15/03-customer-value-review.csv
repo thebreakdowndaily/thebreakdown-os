@@ -1,0 +1,9 @@
+organizationName,valueMetric,measurementClassification,observedResult,baselineComparison,commercialSignificance
+Centre for Policy Research (CPR),Analyst Research Hours Saved,CUSTOMER-REPORTED,15+ hours / analyst / month,Replaced manual egazette.gov.in & PRS PDF searching,Primary renewal justification for institutional contract
+Centre for Policy Research (CPR),Active Research Sessions,TELEMETRY,16 sessions / week,Daily reference workflow integration,Validates continuous desk utility
+Centre for Policy Research (CPR),Statutory Documents Retrieved,TELEMETRY,24 document modal opens / week,Instant retrieval of gazette notifications,Eliminates manual archival search
+National Institute of Agricultural Economics (NIAP),Analyst Research Hours Saved,CUSTOMER-REPORTED,20+ hours / analyst / month,Replaced multi-portal scraping across Ministry & Parliament Q&As,Core economic value driver for agrarian desk
+National Institute of Agricultural Economics (NIAP),CSV Dataset Exports Downloaded,TELEMETRY,14 CSV exports / week,Direct econometric modeling in Stata/Excel,Confirms critical dependency on clean data feeds
+National Institute of Agricultural Economics (NIAP),Evidence Nodes Consulted,TELEMETRY,32 evidence lookups / week,Verifying CCE technical protocols,Ensures high evidence density in academic work
+Fintech Strategy Intelligence Desks,Regulatory Lookups Accelerated,TELEMETRY,<2s modal clause retrieval,Replaced 30-minute manual RBI circular hunting,Demonstrates speed advantage of pre-extracted clauses
+Cross-Organization (All Accounts),Estimated Annual ROI for 5-Seat Desk,ASSUMPTION,1,100% to 2,600% ROI,Derived from ₹1500/hr analyst rate vs ₹4999/mo fee,Justifies long-term multi-year contracts

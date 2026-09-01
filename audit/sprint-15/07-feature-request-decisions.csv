@@ -1,0 +1,5 @@
+featureName,requestingOrganization,classificationCategory,commercialRationale,developmentDecision,engineeringEffort
+1-Click Citation Clipboard Exporter (APA/BibTeX),CPR & NIAP,Reusable across customers,"Standardizes academic citations for researchers; directly boosts external backlink authority",ACCEPT (Priority Sprint 16),Low (Client modal utility)
+Interactive Cross-Scheme Comparison Matrix,CPR & ORF,Reusable across customers,"Enables comparative fiscal tracking (MGNREGA vs PM-KISAN vs PMFBY); broad institutional demand",ACCEPT (Priority Sprint 16),Medium (GenericTracker extension)
+Automated Webhook Alerts on Regulatory Releases,Fintech Desks,Required for renewal,"Essential for enterprise fintech desks to receive instant notifications on NPCI/RBI data releases",ACCEPT (Scoped to B2B feed),Medium (API route handler)
+Custom Proprietary Policy Survey Tool,Single Prospect,One-off customization,"Custom proprietary research module not reusable across canonical knowledge graph",REJECT (Violates canonical rule),N/A

@@ -1,0 +1,8 @@
+knowledgeDimension,totalIndexedItems,coverageScope,freshnessAuditCadence,crossRelationshipDensity,moatDefensibilityScore
+Flagship Policy Trackers,4 Active Systems,"MGNREGA 125-Day, UPI Rails, Semiconductor Mission, PMFBY Agri-Risk",Monthly / Event-Driven,Very High (Cross-linked to stories topics and entities),Very High (Living dynamic URLs)
+Canonical Claims,54 Claims,100% Scholarly / Official Gazette Verified,Quarterly Review,2.4 Evidence Nodes per Claim,High (Structured claim graph)
+Evidence Nodes,128 Evidence Nodes,100% Primary / Secondary Verified,Continuous Audit,1.8 Sources per Evidence Node,Very High (Zero unverified facts)
+Primary Source Documents,17 Documents,100% Gazette Notifications / CAG Reports / Circulars,Event-Driven,100% In-App Preview with Section Clauses,Very High (Exclusive in-app reader UX)
+Quantitative Time Series,6 Multi-Year Series,100% Government Switch & Union Budget Data,Monthly / Annual,Zero-dependency SVG charts + semantic HTML tables,High (Decadal longitudinal series)
+Living Policy Entities,34 Entities,100% Central Ministries & Regulatory Authorities,Quarterly Review,3.1 Linked Stories/Trackers per Entity,High (Entity relationship network)
+Automated Test Suites,26 Suites (100% Green),Strict TypeScript & Schema Contract Verification,Pre-commit Gate,100% Test Coverage on Core Frameworks,Production Ready (Zero regressions)

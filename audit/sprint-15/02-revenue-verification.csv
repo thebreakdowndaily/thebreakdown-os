@@ -1,0 +1,4 @@
+revenueStream,activeContractsCount,contractedAnnualRunRate,collectedCashMtd,paymentGatewayState,verificationStatus
+B2B Institutional Intelligence Subscriptions,2 Contracts (CPR & NIAP),₹119976 / year,₹0,Net 30 Invoices Active (Pending Settlement),NO VERIFIED REVENUE (Honest baseline until bank reconciliation)
+B2C Supporting Reader Memberships,0 Active (Mock Checkout),₹0,₹0,BLOCKED — Stripe Secret Key Required,NO VERIFIED REVENUE (Simulated test transactions only)
+Programmatic Display Advertising,N/A,₹0,₹0,BLOCKED — AdSense Client ID Pending,NO VERIFIED REVENUE (Zero ad clutter policy)

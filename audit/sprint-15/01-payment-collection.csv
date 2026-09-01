@@ -1,0 +1,3 @@
+customerName,invoiceNumber,invoiceAmount,issueDate,dueDate,paymentStatus,reconciliationStatus,paymentMethod,clearanceStage
+Centre for Policy Research (CPR),INV-2026-01,₹59988,2026-08-31,2026-09-30,Payment Pending (Net 30 terms),Pending Bank Settlement,Corporate NEFT / RTGS Bank Transfer,Invoiced (Net 30 Active)
+National Institute of Agricultural Economics (NIAP),INV-2026-02,₹59988,2026-08-31,2026-09-30,Payment Pending (Net 30 terms),Pending Bank Settlement,Corporate NEFT / RTGS Bank Transfer,Invoiced (Net 30 Active)
