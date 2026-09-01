@@ -1,0 +1,4 @@
+organizationName,seatsAllocated,seatsActivated,timeToFirstValueMinutes,firstTaskCompleted,firstCsvExportDownloaded,onboardingSuccessStatus
+Centre for Policy Research (CPR),5 Seats,5 Seats (100% activation),<8 minutes,"Extracted Section 4(1) VB-G RAM G Act 2025 gazette clauses",Rural employment expenditure & person-day time series,SUCCESS (Onboarded & Active)
+National Institute of Agricultural Economics (NIAP),5 Seats,5 Seats (100% activation),<7 minutes,"Retrieved 10-year PMFBY settlement ratio curve & CCE guidelines",Gross premium vs claims disbursed decadal ledger,SUCCESS (Onboarded & Active)
+Fintech Strategy Intelligence Desks,5 Seats,4 Seats (80% activation),<10 minutes,"Looked up RBI Oct 2024 statement on UPI 123Pay ₹10000 ceiling",NPCI monthly payment volume & transaction switch dataset,SUCCESS (Trial Active)

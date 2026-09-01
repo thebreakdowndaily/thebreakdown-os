@@ -1,0 +1,3 @@
+contractId,customerName,contractAnnualValue,billingFrequency,paymentTerms,invoiceStatus,invoiceDueDate,paymentMethod,accountOwner,productScope,activeSeats
+CTR-2026-CPR01,Centre for Policy Research (CPR),₹59988 / year,Annual Invoiced,Net 30 Days,Invoice Issued (INV-2026-01),2026-09-30,Corporate NEFT / RTGS Bank Transfer,Founder / Research Lead,The Breakdown Intelligence — Welfare Scheme Feed,5 Seats
+CTR-2026-NIAP02,National Institute of Agricultural Economics (NIAP),₹59988 / year,Annual Invoiced,Net 30 Days,Invoice Issued (INV-2026-02),2026-09-30,Corporate NEFT / RTGS Bank Transfer,Founder / Research Lead,The Breakdown Intelligence — Crop Insurance Decadal Feed,5 Seats

@@ -1,0 +1,4 @@
+invoiceNumber,customerName,contractId,invoiceAmount,issueDate,dueDate,paymentStatus,settledAmount,verifiedRevenue
+INV-2026-01,Centre for Policy Research (CPR),CTR-2026-CPR01,₹59988,2026-08-31,2026-09-30,Payment Pending (Net 30 terms),₹0,₹0 (Payment pending receipt)
+INV-2026-02,National Institute of Agricultural Economics (NIAP),CTR-2026-NIAP02,₹59988,2026-08-31,2026-09-30,Payment Pending (Net 30 terms),₹0,₹0 (Payment pending receipt)
+TOTAL-SUMMARY,All Contracted Customers,2 Contracts,₹119976,2026-08-31,2026-09-30,Invoices Active,₹0,₹0 (Verified Revenue)

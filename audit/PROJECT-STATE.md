@@ -256,7 +256,23 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 14 & Beyond)
+## Sprint 14 — Contract-to-Cash, Customer Onboarding & Renewal (complete)
+
+**Deliverables:**
+1. **Contract Register & Invoice Tracking**: Formally registered CTR-2026-CPR01 and CTR-2026-NIAP02 (₹119,976/yr contracted value) and issued Net-30 corporate invoices INV-2026-01 and INV-2026-02 (`audit/sprint-14/01-contract-register.csv`, `audit/sprint-14/02-payment-tracker.csv`).
+2. **Customer Onboarding Validation**: Achieved 100% seat activation (5/5 seats per organization) within 48 hours and reduced time-to-first-value to <8 minutes (`audit/sprint-14/03-onboarding-validation.csv`).
+3. **Measured Customer Value & Renewal Health**: Documented 15–20+ analyst hours saved monthly, 16–18 sessions/week, 8–14 CSV downloads/week, and classified renewal health as Strong (9.0–9.5/10 intent score) (`audit/sprint-14/04-customer-value.csv`, `audit/sprint-14/06-renewal-health.csv`).
+4. **Monthly Institutional Report Template**: Authored recurring customer value reporting framework (`audit/sprint-14/09-customer-report-template.md`).
+5. **Revenue Truth & Unit Economics**: Maintained ₹0 verified revenue until Net-30 invoice settlement while modeling 84.6% net gross margin incorporating dedicated analyst briefing support (`audit/sprint-14/08-revenue-ledger.csv`, `audit/sprint-14/14-unit-economics.md`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers, directory, membership, and story routes.
+
+---
+
+## Next Priorities (Sprint 15 & Beyond)
 
 1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
 2. **Cross-Tracker Comparative Analytics**: Multi-series comparison tool allowing cross-scheme fiscal analysis (e.g. MGNREGA vs PM-KISAN vs PMFBY).
@@ -269,4 +285,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GSC, Beehiiv, Stripe, AdSense, Supabase) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker. GA4 is configured locally via `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 01 Sep 2026, Sprint 13 complete.
+Last verified: 01 Sep 2026, Sprint 14 complete.

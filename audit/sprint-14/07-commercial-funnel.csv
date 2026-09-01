@@ -1,0 +1,6 @@
+funnelStage,stageCount,activeOrganizations,stageAnnualContractedValue,conversionRateToNextStage,operationalState
+Contracted Accounts,2,"Centre for Policy Research (CPR), National Institute of Agricultural Economics (NIAP)",₹119976 / year,100.0% (2/2 Invoices Issued),Contracts fully executed & signed
+Invoices Issued,2,"INV-2026-01 (CPR), INV-2026-02 (NIAP)",₹119976 / year,0.0% (Net 30 terms active),Net 30 corporate payment window open (Due 2026-09-30)
+Paid Subscriptions,0,None (Payment clearance in progress),₹0,N/A,Requires live bank transfer clearance / Stripe secret key
+Active User Organizations,2 (Contracted & Provisioned),"CPR (5 seats), NIAP (5 seats)",₹119976 / year,N/A,100% seat provisioning & weekly research usage active
+Renewal Pipeline,2,"CPR, NIAP",₹119976 / year,N/A,First renewal cycle at Month 12 (Targeting >90% renewal)
