@@ -1,0 +1,7 @@
+integrationName,classification,envVariable,localTestStatus,productionStreamState,operationalFallback,notes
+Google Analytics 4,CONFIGURED,NEXT_PUBLIC_GA_MEASUREMENT_ID (G-79ZCJWS0WS),PASS,Stream Pending (External GA4 Console ingestion),Client-side proxy & local telemetry active,Event taxonomy fully verified in local tests
+Google Search Console,BLOCKED,GSC Service Account / DNS TXT,PASS,BLOCKED — ACCESS REQUIRED,Dynamic XML sitemaps ready at /sitemap.xml,Domain DNS profile verification required
+Beehiiv Newsletter,BLOCKED,BEEHIIV_API_KEY / BEEHIIV_PUB_ID,PASS,BLOCKED — ACCESS REQUIRED,StubProvider logs subscriptions with zero data loss,API key required in production dashboard
+Stripe Payments,BLOCKED,STRIPE_SECRET_KEY,PASS,BLOCKED — ACCESS REQUIRED,Simulated checkout redirect + localStorage supporter authorization,Live secret & webhook secret keys required
+Google AdSense,BLOCKED,NEXT_PUBLIC_ADSENSE_CLIENT,PASS,BLOCKED — ACCESS REQUIRED,House ad / membership promotion placeholder active,Publisher client ID required in production
+Supabase Database,BLOCKED,SUPABASE_SERVICE_ROLE_KEY / DATABASE_URL,PASS,BLOCKED — ACCESS REQUIRED,In-memory canonical store (store.ts) serving all SSG pages,Postgres connection string required for dynamic DB

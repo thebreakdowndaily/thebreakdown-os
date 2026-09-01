@@ -1,0 +1,4 @@
+paymentChannel,channelConfigurationState,validationMethod,settlementVerificationStatus,officialRevenueRecognition
+Corporate Bank Transfer (NEFT/RTGS),CONFIGURED (Invoices INV-2026-01 & INV-2026-02 issued),Corporate bank statement reconciliation,Pending Settlement (Net 30 Window Open Due 2026-09-30),₹0 (Recognized only upon cleared fund credit)
+Stripe Payment Gateway,BLOCKED (STRIPE_SECRET_KEY missing),Server-side webhook cryptographic signature check,BLOCKED — Credentials Required,₹0 (No production checkout transactions active)
+B2C Razorpay Gateway,BLOCKED (RAZORPAY_KEY_ID missing),Server webhook signature validation,BLOCKED — Credentials Required,₹0 (Consumer membership in ITERATE/DEFER state)

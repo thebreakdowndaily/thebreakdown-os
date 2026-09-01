@@ -1,0 +1,10 @@
+organizationName,metricCategory,classification,observedValue,baselineComparison,retentionIndicator
+Centre for Policy Research (CPR),Active Seat Utilization,TELEMETRY,5 / 5 seats active (100%),1-2 seats initially,High engagement across full policy desk
+Centre for Policy Research (CPR),Weekly Research Sessions,TELEMETRY,16 sessions / week,3-4 sessions baseline,Core reference utility in policy analysis
+Centre for Policy Research (CPR),Document Clause Previews,TELEMETRY,24 clause modals / week,Replaced manual gazette scraping,Direct workflow dependency
+Centre for Policy Research (CPR),Analyst Hours Saved,CUSTOMER-REPORTED,15+ hours / analyst / month,Replaced egazette PDF hunting,Strong renewal driver
+National Institute of Agricultural Economics (NIAP),Active Seat Utilization,TELEMETRY,5 / 5 seats active (100%),2 seats initially,Universal adoption across agrarian desk
+National Institute of Agricultural Economics (NIAP),Weekly CSV Exports Downloaded,TELEMETRY,14 CSV downloads / week,Manual table transcription,Continuous empirical modeling in Stata
+National Institute of Agricultural Economics (NIAP),Evidence Nodes Consulted,TELEMETRY,32 evidence nodes / week,Fragmented Ministry reports,High evidence density in working papers
+National Institute of Agricultural Economics (NIAP),Analyst Hours Saved,CUSTOMER-REPORTED,20+ hours / analyst / month,Multi-portal scraping,Essential economic value
+Cross-Account (All Institutional),Annual Value Derived vs Cost,ASSUMPTION,2,100% to 2,900% ROI,Based on ₹1500/hr analyst rate vs ₹4999/mo fee,Justifies long-term recurring retention

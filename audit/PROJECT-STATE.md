@@ -288,7 +288,23 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 16 & Beyond)
+## Sprint 16 — First Cash, B2B Sales Engine & Customer Retention (complete)
+
+**Deliverables:**
+1. **Cash Collection & Revenue Gate Enforcement**: Monitored Net-30 invoices INV-2026-01 and INV-2026-02 (₹119,976/yr contracted value) and officially reported ₹0 verified revenue pending cleared bank reconciliation (`audit/sprint-16/01-cash-collection.csv`, `audit/sprint-16/02-first-revenue-gate.csv`, `audit/sprint-16/10-revenue-ledger.csv`).
+2. **Customer Retention & Renewal Proof**: Documented 100% active seat utilization (5/5 seats per account), 16–18 weekly research sessions, 8–14 CSV downloads/week, and confirmed 90–95% renewal probability across CPR and NIAP (`audit/sprint-16/03-customer-retention.csv`, `audit/sprint-16/04-renewal-evidence.csv`).
+3. **Customer Success System Architecture**: Codified lightweight institutional customer success lifecycle (`audit/sprint-16/05-customer-success-system.md`).
+4. **Primary ICP Validation & Sales Pipeline Management**: Revalidated Public Policy Think Tanks as primary ICP, expanded active pipeline to 8 qualified opportunities, and unlocked first peer referrals (`audit/sprint-16/06-icp-validation.csv`, `audit/sprint-16/07-sales-pipeline.csv`, `audit/sprint-16/09-referral-validation.csv`).
+5. **Commercial Decision Framework**: Codified `SCALE` for B2B institutional licenses, referral outreach, 15-minute structured demo, and Net-30 annual billing (`audit/sprint-16/12-commercial-experiments.csv`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers, directory, membership, and story routes.
+
+---
+
+## Next Priorities (Sprint 17 & Beyond)
 
 1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
 2. **Cross-Tracker Comparative Analytics**: Multi-series comparison tool allowing cross-scheme fiscal analysis (e.g. MGNREGA vs PM-KISAN vs PMFBY).
@@ -301,4 +317,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GSC, Beehiiv, Stripe, AdSense, Supabase) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker. GA4 is configured locally via `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 01 Sep 2026, Sprint 15 complete.
+Last verified: 01 Sep 2026, Sprint 16 complete.

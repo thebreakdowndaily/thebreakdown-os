@@ -1,0 +1,7 @@
+verificationItem,requirementState,evidenceObserved,gateVerdict,officialRevenueStatus
+Real Customer Identity,VERIFIED,Centre for Policy Research (CPR) & NIAP,PASS,Active Contracts
+Authoritative Contract & Scope,VERIFIED,CTR-2026-CPR01 and CTR-2026-NIAP02 signed,PASS,Active Terms (₹119976 ARR)
+Production Invoice Issued,VERIFIED,INV-2026-01 and INV-2026-02 delivered with Net 30 terms,PASS,Due 2026-09-30
+Production Funds Cleared,PENDING,Corporate NEFT/RTGS bank clearance in progress,PENDING,Funds Not Yet Reconciled
+Stripe Webhook Verification,BLOCKED,STRIPE_SECRET_KEY not configured in production,BLOCKED,Stripe Keys Required
+FIRST VERIFIED REVENUE GATE RESULT,PENDING CLEARANCE,"2 contracts executed, Net 30 invoices active, payment pending",₹0 — PAYMENT STILL OUTSTANDING,₹0 (Authoritative Revenue State)
