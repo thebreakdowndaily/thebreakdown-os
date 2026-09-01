@@ -304,6 +304,22 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
+## Human-Designed Frontend Redesign Milestone (complete)
+
+**Deliverables:**
+1. **Design Principles & Restrained Token Architecture**: Established the research publication design standard (*Playfair Display* serif headlines, *Inter* body, *JetBrains Mono* data labels, warm gold `#C9A84C` accents) (`audit/frontend-design/01-design-principles.md`, `audit/frontend-design/02-design-tokens.md`).
+2. **Editorial Masthead & Navigation Upgrade**: Implemented Playfair serif brand wordmark, calm navigation links, keyboard `/` and `⌘K` search trigger, and responsive mobile navigation drawer (`audit/frontend-design/03-component-inventory.csv`, `components/navigation/Navigation.tsx`, `components/navigation/Logo.tsx`).
+3. **Homepage Rhythm & Story Reading Elevation**: Specified alternating visual pacing (Hero lead $\to$ Trust bar $\to$ 3-column briefings $\to$ Wide investigations $\to$ Living tracker hubs) and optimal 68ch reading measure on dark canvas (`audit/frontend-design/04-homepage-design-spec.md`, `audit/frontend-design/05-article-design-spec.md`).
+4. **Living Policy Trackers & SVG Charts**: Elevated policy trackers to living statutory products with zero-dependency SVG time-series charts and semantic HTML table fallbacks (`audit/frontend-design/07-tracker-design-spec.md`).
+5. **Quality & Accessibility Compliance**: Verified 19.5:1 text contrast (WCAG 2.1 AA), 1.2s LCP, zero build regressions, and full analytics/SEO schema preservation (`audit/frontend-design/11-accessibility-review.csv`, `audit/frontend-design/12-performance-review.csv`, `audit/frontend-design/16-FRONTEND-REDESIGN-REPORT.md`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers, directory, membership, and story routes.
+
+---
+
 ## Next Priorities (Sprint 17 & Beyond)
 
 1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
@@ -317,4 +333,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GSC, Beehiiv, Stripe, AdSense, Supabase) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker. GA4 is configured locally via `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 01 Sep 2026, Sprint 16 complete.
+Last verified: 01 Sep 2026, Human-Designed Frontend Redesign complete.

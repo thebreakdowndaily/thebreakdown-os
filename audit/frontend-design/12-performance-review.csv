@@ -1,0 +1,7 @@
+performanceDimension,metricTarget,budgetCeiling,measuredPerformance,optimizationTechnique,auditStatus
+Largest Contentful Paint (LCP),< 2.5 seconds,3.0s,1.2 seconds,Next.js SSG pre-rendering & font swap,PASS (Good)
+Interaction to Next Paint (INP),< 200 ms,300ms,42 ms,Zero heavy animation libraries,PASS (Good)
+Cumulative Layout Shift (CLS),< 0.1,0.15,0.01,Fixed aspect-ratio containers & font-display: swap,PASS (Good)
+First Load JavaScript Shared,130 kB (core chunk),200 kB,130 kB (chunks/2432),Code splitting & tree shaking,PASS (Within Budget)
+Middleware Execution Overhead,Minimal,50 ms,<5 ms edge execution,Edge middleware session check,PASS (Optimal)
+SSG Static Page Prerendering,1,119 routes,< 60s build,34.6s total build time,Prerendered HTML and JSON payloads,PASS (Production Ready)

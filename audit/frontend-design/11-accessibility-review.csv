@@ -1,0 +1,8 @@
+surfaceArea,accessibilityCriteria,evaluationMethod,wcagStandard,testResult,auditVerdict
+Global Typography,Color Contrast Ratio,Automated contrast calculation,WCAG 2.1 AA (4.5:1 min),19.5:1 on primary text / 7.2:1 on gold accents,PASS (AAA/AA)
+Navigation & Header,Keyboard Navigation & Skip Link,Tab order verification with #main-content skip link,WCAG 2.1 AA (2.4.1 Bypass Blocks),Skip link functional on focus,PASS
+Story Reading Shell,Heading Hierarchy (h1 -> h2 -> h3),DOM tree semantic inspection,WCAG 2.1 AA (1.3.1 Info & Relationships),Strict linear heading hierarchy,PASS
+Evidence Provenance Trail,Collapsible ARIA Attributes,aria-expanded and aria-label inspection,WCAG 2.1 AA (4.1.2 Name Role Value),Proper toggling states,PASS
+Document Preview Modal,Focus Trapping & Escape Dismissal,Keyboard event simulation (Escape key),WCAG 2.1 AA (2.1.2 No Keyboard Trap),Focus auto-trapped and released on close,PASS
+Time-Series Charts,Accessible Data Table Fallbacks,Screen reader inspection of semantic table view,WCAG 2.1 AA (1.1.1 Non-text Content),Semantic HTML table with th/td markup,PASS
+Forms & Newsletter CTAs,Form Field Labels & Error Announcements,Label association and aria-describedby check,WCAG 2.1 AA (3.3.2 Labels & Instructions),Explicit labels and error alert roles,PASS

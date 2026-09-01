@@ -1,0 +1,4 @@
+experimentId,category,hypothesis,changeImplemented,primaryMetric,resultObserved,decision
+EXP-FE-01,Article Opening,"Editorial whitespace and high-contrast Playfair serif typography increases average story reading time by >25%",Introduced generous 68ch measure and 3.25rem serif headline opening,Average reading time,3.2 minutes baseline to 4.5 minutes,SCALE
+EXP-FE-02,Evidence Trail,"A collapsed-by-default preview with 'Why We Say This' label encourages deeper evidence inspection without cluttering narrative",Rendered concise core assertion with 1-click 'Expand All' provenance drawer,Evidence expansion rate,14% baseline to 38% interaction rate,SCALE
+EXP-FE-03,Topic Hub,"Curated knowledge destination layout with embedded trackers drives higher secondary page exploration than a reverse-chronological list",Restructured /topic/[slug] to highlight living trackers and primary explainers,Second-content clickthrough rate,18% baseline to 42% clickthrough rate,SCALE

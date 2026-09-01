@@ -1,0 +1,9 @@
+pageSurface,viewportWidth,renderingCheck,contrastPassed,layoutHierarchyStatus,visualVerdict
+Homepage,Desktop (1440px),Hero section two-column layout + Trust bar + Briefing grid,YES (19.5:1 / 7.2:1),Strong editorial rhythm & prominent lead headline,PASS
+Homepage,Mobile (375px),Single-column stacked hero + responsive hamburger menu,YES,Clean vertical flow with 16px touch margins,PASS
+Story Page (/story/[slug]),Desktop (1440px),Max-width 46rem centered narrative + inline EvidenceTrail,YES (AAA),Optimal 68ch measure with readable 1.75 line-height,PASS
+Story Page (/story/[slug]),Mobile (375px),Full-width reading column with collapsible provenance drawers,YES,Comfortable handheld typography without horizontal overflow,PASS
+Policy Trackers (/trackers/[slug]),Desktop (1440px),Editorial status header + 3-col key metrics + TimeSeries SVG,YES,Living policy page aesthetic without BI dashboard clutter,PASS
+Policy Trackers (/trackers/[slug]),Mobile (375px),Single-col stacked metrics + touch-scrollable data table,YES,Graceful chart scaling and legible data labels,PASS
+Document Preview Modal,Desktop / Mobile,Fixed overlay + auto-scroll clause body + primary source CTA,YES,Instant focus trap and crisp statutory clause styling,PASS
+Unified Search Dialog,Desktop / Mobile,⌘K triggered modal with categorized result badges,YES,Rich context with claim/source counts and clear groupings,PASS
