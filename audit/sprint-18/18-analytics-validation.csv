@@ -1,0 +1,10 @@
+eventCategory,eventName,parametersLogged,triggerContext,pipelineVerification,productionDataStatus
+Story Engagement,story_viewed,"[story_slug, category, reading_time]",Page load of story shell,PASS (Fired via useStoryAnalytics),Local GA4 configured / Production credentials required
+Evidence Interaction,evidence_expanded,"[content_id, claim_id, evidence_path]",Clicking 'Inspect Evidence' in EvidenceTrail,PASS (Fired via captureEvent),Local GA4 configured / Production credentials required
+Source Inspection,source_opened,"[story_slug, url, title]",Clicking external cited source link,PASS (Fired via captureEvent),Local GA4 configured / Production credentials required
+Primary Document,document_preview_opened,"[document_title, tracker_id]",Opening in-app gazette preview modal,PASS (Fired via DocumentPreviewModal),Local GA4 configured / Production credentials required
+Policy Tracker,tracker_viewed,"[tracker_id, topic]",Navigating to /trackers/[slug],PASS (Fired via GenericTracker),Local GA4 configured / Production credentials required
+Chart Interaction,chart_interacted,"[chart_id, interaction_type, tracker_id]",Hovering data point or toggling table view,PASS (Fired via TimeSeriesChart),Local GA4 configured / Production credentials required
+Newsletter Conversion,newsletter_started,"[page, source]",Focusing/typing in newsletter input field,PASS (Fired via SubscribeForm / StoryCTA),Local GA4 configured / Production credentials required
+Newsletter Subscription,newsletter_subscribed,"[page, plan]",Submitting verified newsletter subscription,PASS (Fired via /api/newsletter),Local GA4 configured / Production credentials required
+B2B Engagement,b2b_inquiry_started,"[planId, seats]",Clicking enterprise contact / demo CTA,PASS (Fired via Membership pricing cards),Local GA4 configured / Production credentials required

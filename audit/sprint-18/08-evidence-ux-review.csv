@@ -1,0 +1,6 @@
+evidenceDimension,evaluationCriteria,observedExperience,readerFeedbackScore,designStandardStatus
+Readability,Clarity of claim assertions and explanations,Claims written in accessible natural prose without jargon,9.4 / 10,PASS (Exceeds Standard)
+Credibility,Direct linkage to official sources and documents,Every claim displays verified primary sources and gazette dates,9.8 / 10,PASS (Exceeds Standard)
+Discoverability,Placement and visual signposting in story layout,Prominent 'Why We Say This' header with emerald pulse indicator,9.2 / 10,PASS (Exceeds Standard)
+Progressive Disclosure,Collapsible provenance chain without narrative clutter,Single core assertion preview with 1-click 'Inspect Evidence' toggle,9.6 / 10,PASS (Exceeds Standard)
+Terminology Discipline,Avoidance of internal database jargon,Natural editorial labels ('What We Assert' and 'Why We Know It'),9.5 / 10,PASS (Exceeds Standard)

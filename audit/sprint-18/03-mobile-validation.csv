@@ -1,0 +1,9 @@
+mobileSurface,viewportTested,touchTargetSize,horizontalOverflowStatus,textMeasureQuality,modalBehavior,mobileVerdict
+Mobile Navigation Drawer,375px / 390px,>=48px touch targets,No overflow,Clear high-contrast nav links,Full viewport drawer with instant close,PASS
+Lead Story Hero,375px / 390px,>=44px CTA button,No overflow,Responsive 32px serif headline,N/A,PASS
+Story Body Reading Measure,375px / 390px,>=44px interactive links,No overflow,Full-bleed reading with 16px margins,N/A,PASS
+Evidence Trail Drawer,375px / 390px,>=44px expand trigger,No overflow,Collapsible cards with clear hierarchy,Smooth inline expansion,PASS
+TimeSeries SVG Charts,375px / 390px,>=44px table toggle,No overflow,Auto-scaling SVG viewBox with table view,Semantic table touch-scrollable,PASS
+Document Preview Modal,375px / 390px,>=44px close button,No overflow,Scrollable modal body with 16px padding,Full-height viewport overlay,PASS
+Unified Search Modal,375px / 390px,>=48px input field,No overflow,Responsive search input & grouped results,Fixed overlay with touch scrolling,PASS
+Newsletter & Footer CTAs,375px / 390px,>=48px submit button,No overflow,Stacked input and submit button,N/A,PASS

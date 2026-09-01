@@ -1,0 +1,5 @@
+debtItem,sourceLocation,impactSeverity,architecturalRisk,remediationAction,resolutionStatus
+Ad-hoc inline styles in Header,components/layout/Header.tsx,Low,Minor styling variance,Standardized with Tailwind design tokens,RESOLVED
+Redundant boxed card wrappers,components/home/LatestChapters.tsx,Medium,Visual noise and border clutter,Replaced with clean divider rules and typography,RESOLVED
+Unoptimized SVG viewBox in TimeSeriesChart,components/trackers/TimeSeriesChart.tsx,Medium,Mobile chart scaling,Applied responsive viewBox scaling and table toggle,RESOLVED
+Unstandardized dialog keydown handlers,components/search/UnifiedSearchDialog.tsx,Low,Inconsistent keyboard navigation,Unified Escape key and focus trapping logic,RESOLVED

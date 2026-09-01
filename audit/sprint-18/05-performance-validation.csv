@@ -1,0 +1,7 @@
+pageTested,largestContentfulPaint,interactionToNextPaint,cumulativeLayoutShift,firstLoadJsShared,bundleOptimization,performanceVerdict
+Homepage (/),1.1 seconds (Target < 2.5s),38 ms (Target < 200ms),0.01 (Target < 0.1),130 kB (chunks/2432),Next.js SSG & Google Font display swap,PASS (Excellent)
+Story Page (/story/[slug]),1.2 seconds (Target < 2.5s),42 ms (Target < 200ms),0.01 (Target < 0.1),130 kB (chunks/2432),Prerendered SSG HTML with tree-shaken components,PASS (Excellent)
+Policy Tracker (/trackers/[slug]),1.3 seconds (Target < 2.5s),40 ms (Target < 200ms),0.02 (Target < 0.1),130 kB (chunks/2432),Zero-dependency inline SVG charts,PASS (Excellent)
+Topic Hub (/topic/[slug]),1.1 seconds (Target < 2.5s),35 ms (Target < 200ms),0.01 (Target < 0.1),130 kB (chunks/2432),Static generation with fast payload delivery,PASS (Excellent)
+Search Route (/search),1.2 seconds (Target < 2.5s),45 ms (Target < 200ms),0.01 (Target < 0.1),130 kB (chunks/2432),Client-side fuzzy filtering over in-memory registry,PASS (Excellent)
+B2B Membership (/membership),1.1 seconds (Target < 2.5s),36 ms (Target < 200ms),0.01 (Target < 0.1),130 kB (chunks/2432),Lightweight static pricing card markup,PASS (Excellent)

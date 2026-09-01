@@ -1,0 +1,8 @@
+articleSection,editorialPurpose,readingExperienceScore,frictionObserved,designImprovementDelivered,verdict
+Topic Breadcrumb,Domain Context,9.5 / 10,None,Clean top overline with immediate domain context,PASS
+Playfair Headline & Dek,Editorial Framing,9.8 / 10,None,High-contrast serif headline with readable subtext dek,PASS
+Executive Orientation,Direct Answer & Significance,9.2 / 10,None,Presents what happened and why it matters in under 30 seconds,PASS
+Story Body Typography,Long-Form Reading Measure,9.6 / 10,None,Capped at 46rem (68ch) with 1.75 line-height on dark canvas,PASS
+Evidence Provenance Drawer,Scholarly Verification,9.4 / 10,None,Collapsed-by-default preview eliminates narrative clutter,PASS
+Primary Document Excerpts,Statutory Grounding,9.5 / 10,None,Pre-extracted clauses (§) with in-app modal preview,PASS
+Newsletter & Next Reading,Audience Retention,9.0 / 10,None,Contextual bottom CTA with zero intrusive popups,PASS

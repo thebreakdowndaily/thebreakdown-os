@@ -1,0 +1,7 @@
+componentGroup,primitiveStandard,auditFindings,consistencyStatus,recommendedRefinement
+Buttons & CTAs,Gold primary (#C9A84C) / Neutral secondary (#27272A),Standardized across homepage story and membership surfaces,PASS (High Consistency),Maintain design token usage
+Typography Headings,Playfair Display serif for H1/H2 headlines,Standardized in Hero story and tracker headers,PASS (High Consistency),Enforce font-serif tokens across all new routes
+Status Badges,Muted emerald/amber background with 1px border,Used consistently in EvidenceTrail and tracker statuses,PASS (High Consistency),Keep badge proliferation strictly constrained
+Dividers & Borders,1px hairline border (#27272A / #1F1F23),Eliminates heavy box shadows across card layouts,PASS (High Consistency),Maintain whitespace-first spacing
+Modal Dialogs,Fixed black/80 backdrop with focus trap and Escape key,Standardized in Search and DocumentPreviewModal,PASS (High Consistency),Share dialog base pattern across future modals
+Forms & Inputs,Dark surface (#18181B) with 1px border and focus ring,Standardized in SearchBar and SubscribeForm,PASS (High Consistency),Preserve input label associations

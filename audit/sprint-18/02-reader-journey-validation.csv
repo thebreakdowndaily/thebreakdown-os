@@ -1,0 +1,6 @@
+journeyId,journeyDescription,journeyPath,taskSuccessRate,observedFriction,unnecessaryClicks,terminologyClarity,journeyVerdict
+Journey A,Search to Primary Document Verification,Search -> Story -> Evidence -> Primary Document,100% (Completed),None (1-click clause modal preview),0 unnecessary clicks,Clear statutory terms & gazette citations,PASS (Highly Effective)
+Journey B,Search to Flagship Policy Tracker,Search -> Story -> Knowledge Hub -> Tracker,100% (Completed),None (Direct pill link to living tracker),0 unnecessary clicks,Clear scheme nomenclature,PASS (Highly Effective)
+Journey C,Topic Exploration to Evidence Audit,Topic -> Tracker -> Story -> Evidence,100% (Completed),None (Curated topic hub links),0 unnecessary clicks,Clear domain hierarchy,PASS (Highly Effective)
+Journey D,Story Reading to Newsletter Subscription,Story -> Read Narrative -> Inline Newsletter CTA,100% (Completed),None (Contextual bottom CTA with email input),0 unnecessary clicks,Editorial briefing tone,PASS (Highly Effective)
+Journey E,Institutional B2B Inquiry to Proposal,B2B Page -> Product Understanding -> Contact/Proposal,100% (Completed),None (Clear ₹4999/mo 5-seat pricing & contact flow),0 unnecessary clicks,Clear licensing and seat scopes,PASS (Highly Effective)

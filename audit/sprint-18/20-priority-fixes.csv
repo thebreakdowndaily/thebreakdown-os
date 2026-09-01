@@ -1,0 +1,6 @@
+fixId,priorityLevel,surfaceArea,issueDescription,proposedResolution,owner,targetDeadline,status
+FIX-18-01,P0,Navigation,Ensure mobile hamburger drawer traps focus and closes on route navigation,Add focus trap and close handler to MobileMenu,Engineering,2026-09-07,VERIFIED_FIXED
+FIX-18-02,P1,TimeSeriesChart,Ensure SVG hover tooltip coordinates do not clip on small mobile viewports,Apply viewport bounding clamp to chart tooltips,Engineering,2026-09-14,VERIFIED_FIXED
+FIX-18-03,P1,EvidenceTrail,Clarify 1-click 'Inspect Evidence' label so first-time readers know it expands a verification chain,Add step-by-step verification subtext in trail header,Editorial / Research,2026-09-14,VERIFIED_FIXED
+FIX-18-04,P2,DocumentPreviewModal,Add 1-click clipboard copy for statutory section clauses (§),Add copy button next to key statutory clauses,Product / UX,2026-09-21,PLANNED_SPRINT_19
+FIX-18-05,P3,Homepage,Subjective user request for animated particle background in hero,Rejected per 'No new feature / No unnecessary animation' rule,Business Owner,2026-09-28,REJECTED_OUT_OF_SCOPE

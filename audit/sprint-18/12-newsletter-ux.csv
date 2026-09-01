@@ -1,0 +1,4 @@
+formPlacement,ctaHeading,valuePropositionClarity,formFriction,analyticsEventCaptured,productionDataStatus,verdict
+Story End Inline CTA,"Get evidence-first analysis delivered weekly",Clear editorial proposition (verified facts no noise),Single email input with instant submit,newsletter_started / newsletter_subscribed,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,PASS (UX Verified)
+Homepage Newsletter Band,"The Breakdown Brief",Direct weekly intelligence framing,Clean single-field input with instant submit,newsletter_started / newsletter_subscribed,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,PASS (UX Verified)
+Dedicated /subscribe Page,"Independent Research & Policy Intelligence",Full breakdown of editorial topics covered,Clean dedicated subscription form,newsletter_started / newsletter_subscribed,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,PASS (UX Verified)

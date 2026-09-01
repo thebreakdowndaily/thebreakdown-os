@@ -1,0 +1,11 @@
+surfaceArea,viewportTested,visualHierarchyQuality,spacingAndWhitespace,responsiveBehavior,defectClassification,resolutionStatus
+Homepage,Desktop (1440px / 1920px),Strong lead story dominance with 52px serif headline,Disciplined 48px-64px section rhythm,Clean 2-col hero & 3-col briefing layout,None (Optimal),PASS (Production Verified)
+Homepage,Tablet (768px - 834px),Clear transition from wide hero to stacked sections,Balanced 32px padding,Graceful 2-col briefing grid wrap,None (Optimal),PASS (Production Verified)
+Homepage,Mobile (375px / 390px / 430px),High legibility stacked hero with gold category overline,16px side breathing room,No horizontal overflow or clipped text,None (Optimal),PASS (Production Verified)
+Story Page (/story/[slug]),Desktop (1440px),Optimal 68ch measure with 1.75rem line height,Generous margin centering (46rem max-width),Sticky progress bar without layout shifting,None (Optimal),PASS (Production Verified)
+Story Page (/story/[slug]),Mobile (375px),Full-width reading measure without clipping,16px touch margin padding,Inline collapsible EvidenceTrail drawer,None (Optimal),PASS (Production Verified)
+Policy Tracker (/trackers/[slug]),Desktop (1440px),Living policy product layout with 3-col metrics,24px card spacing and subtle hairline borders,Interactive SVG time-series charts with hover nodes,None (Optimal),PASS (Production Verified)
+Policy Tracker (/trackers/[slug]),Mobile (375px),Single-column metric cards with accessible table fallback,16px padding,Horizontally scrollable table view without viewport break,None (Optimal),PASS (Production Verified)
+Document Preview Modal,Desktop / Mobile,Crisp statutory clause layout with (§) markers,Generous 24px internal modal padding,Full focus trap and Escape key dismissal,None (Optimal),PASS (Production Verified)
+Unified Search Dialog,Desktop / Mobile,Grouped result categories with rich metadata tags,16px padding inside modal,Instant keyboard navigation (Up/Down/Enter),None (Optimal),PASS (Production Verified)
+Newsletter / B2B Surfaces,Desktop / Mobile,Editorial tone with clear value proposition,24px padding inside dark container,Frictionless 1-field email capture,None (Optimal),PASS (Production Verified)

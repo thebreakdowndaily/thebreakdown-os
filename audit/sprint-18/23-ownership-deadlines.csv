@@ -1,0 +1,14 @@
+Work Item,Owner,Priority,Start Date,Deadline,Status,Evidence,Next Action,Escalation
+Live Production Visual Audit across 6 viewports,Product / UX,P0,2026-09-01,2026-09-07,COMPLETED,audit/sprint-18/01-live-visual-audit.csv,Scale production visual polish,None
+Core Reader Journeys A through E validation,Product / UX,P0,2026-09-01,2026-09-07,COMPLETED,audit/sprint-18/02-reader-journey-validation.csv,Monitor reader path completion,None
+Mobile Reading Experience & Touch Target validation,Product / UX + Engineering,P0,2026-09-01,2026-09-07,COMPLETED,audit/sprint-18/03-mobile-validation.csv,Enforce mobile touch minimums on all future PRs,None
+Accessibility WCAG 2.1 AA validation,Engineering,P0,2026-09-01,2026-09-07,COMPLETED,audit/sprint-18/04-accessibility-validation.csv,Automate axe-core regression checks in CI,None
+Performance & Core Web Vitals audit,Engineering,P0,2026-09-01,2026-09-07,COMPLETED,audit/sprint-18/05-performance-validation.csv,Maintain sub-1.5s LCP budget on dynamic routes,None
+Homepage & Article UX Review,Product / UX + Editorial,P1,2026-09-07,2026-09-14,COMPLETED,audit/sprint-18/06-homepage-conversion.csv,Expand cornerstone explainers,None
+Evidence & Document Provenance UX Review,Editorial / Research + Product,P1,2026-09-07,2026-09-14,COMPLETED,audit/sprint-18/08-evidence-ux-review.csv,Scale primary gazette citations,None
+Flagship Living Tracker UX Review,Product / UX,P1,2026-09-07,2026-09-14,COMPLETED,audit/sprint-18/09-tracker-ux-review.csv,Prepare Fifth Flagship Tracker (Green Hydrogen),None
+B2B Commercial & Institutional Journey Review,Business Owner + Product,P1,2026-09-07,2026-09-21,COMPLETED,audit/sprint-18/13-b2b-ux-review.csv,Scale outreach to 8 qualified think tank prospects,None
+Controlled Design Experiments (EXP-F18-01 to 03),Analytics / Growth + Product,P2,2026-09-01,2026-09-21,COMPLETED,audit/sprint-18/17-design-experiments.csv,SCALE winning variants to production,None
+Component Consistency & Design Debt audit,Engineering + Product,P2,2026-09-14,2026-09-21,COMPLETED,audit/sprint-18/14-component-consistency.csv,Enforce token linting rules,None
+Real User Feedback collection from ICPs,Product / UX,P2,2026-09-14,2026-09-21,COMPLETED,audit/sprint-18/16-user-feedback.csv,Incorporate analyst feedback into Sprint 19 roadmap,None
+Final Release Quality Gate & Sprint Close,Business Owner,P0,2026-09-21,2026-09-30,COMPLETED,audit/sprint-18/21-SPRINT-18-REPORT.md,Approve production release gate,None

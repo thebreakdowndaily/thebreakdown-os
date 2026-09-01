@@ -1,0 +1,8 @@
+componentSurface,accessibilityRequirement,wcagCriterion,browserTestResult,screenReaderOutput,verdict
+Global Layout,Skip to Main Content Link,WCAG 2.1 AA (2.4.1),Tab key reveals skip link pointing to #main-content,"'Skip to main content' announced correctly",PASS
+Global Navigation,Visible Focus Rings on Nav Links,WCAG 2.1 AA (2.4.7),2px solid focus ring displayed on all tab stops,Interactive links announced with current state,PASS
+Story Reading Shell,Linear Heading Structure,WCAG 2.1 AA (1.3.1),Single H1 followed by structured H2/H3 subsections,Heading hierarchy navigation operates cleanly,PASS
+Evidence Provenance Trail,ARIA Expansion States,WCAG 2.1 AA (4.1.2),aria-expanded toggles dynamically on button click,Button announces 'Inspect Evidence' and expanded state,PASS
+Document Preview Modal,Focus Trapping & Escape Key,WCAG 2.1 AA (2.1.2),Focus auto-trapped inside modal and released on close,Dialog role and labelledby title announced,PASS
+TimeSeries Charts,Accessible Semantic Table View,WCAG 2.1 AA (1.1.1),Toggle button switches between SVG chart and semantic table,Screen reader traverses th/td cells in chronological order,PASS
+Search & Form Dialogs,Explicit Labels & Input Roles,WCAG 2.1 AA (3.3.2),Explicit aria-label and placeholder text on inputs,Input field purpose and shortcuts announced,PASS

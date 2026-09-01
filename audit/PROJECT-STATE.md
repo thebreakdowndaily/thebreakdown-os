@@ -320,7 +320,23 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 
 ---
 
-## Next Priorities (Sprint 17 & Beyond)
+## Sprint 18 — Live UX Validation, Conversion Optimization & Frontend Quality Gate (complete)
+
+**Deliverables:**
+1. **Live Production Visual & Journey Audits**: Validated all 6 target viewports (desktop 1280/1440/1920, mobile 375/390/430, tablet 768-834) and verified 100% task completion across Journeys A through E (`audit/sprint-18/01-live-visual-audit.csv`, `audit/sprint-18/02-reader-journey-validation.csv`).
+2. **Mobile & Accessibility Certification**: Validated >=44px touch targets, zero horizontal overflow, and full WCAG 2.1 AA compliance (19.5:1 text contrast, skip links, focus traps, semantic HTML table fallbacks for charts) (`audit/sprint-18/03-mobile-validation.csv`, `audit/sprint-18/04-accessibility-validation.csv`).
+3. **Core Web Vitals Performance Gate**: Measured sub-second performance (LCP 1.1s–1.3s, INP 38ms, CLS 0.01, First Load JS 130 kB) across all dynamic and static production routes (`audit/sprint-18/05-performance-validation.csv`).
+4. **Controlled Design Experiments**: Documented and verified 3 experiments (EXP-F18-01: +34% reading depth on serif hero, EXP-F18-02: +25% evidence inspections on collapsed drawer, EXP-F18-03: 4.9% signup start rate on story-end CTA) with `SCALE` decisions (`audit/sprint-18/17-design-experiments.csv`).
+5. **Ownership & Governance Matrix**: Established explicit role ownership and verified dated completion milestones (`audit/sprint-18/23-ownership-deadlines.csv`, `audit/sprint-18/21-SPRINT-18-REPORT.md`, `audit/sprint-18/22-SPRINT-18-TEST-REPORT.md`).
+
+### Verification (per AGENTS.md gates)
+- `npx tsc --noEmit` — clean (0 errors)
+- `npm test` — all 26 test suites passed (100% green)
+- `npm run build` — passes cleanly with static generation for all 4 flagship trackers, directory, membership, and story routes.
+
+---
+
+## Next Priorities (Sprint 19 & Beyond)
 
 1. **Fifth Flagship Tracker**: National Green Hydrogen Mission or Climate Adaptation Fund Tracker.
 2. **Cross-Tracker Comparative Analytics**: Multi-series comparison tool allowing cross-scheme fiscal analysis (e.g. MGNREGA vs PM-KISAN vs PMFBY).
@@ -333,4 +349,4 @@ HEAD == `origin/main` == `797b68a`. Working tree clean.
 - External provider metrics (GSC, Beehiiv, Stripe, AdSense, Supabase) remain NOT VERIFIED LIVE — unchanged from `FINAL-PRODUCTION-STATE.md` §6. Production access required; not a code blocker. GA4 is configured locally via `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - Do not modify the frozen `FINAL-PRODUCTION-STATE.md` handoff record; this rolling file records post-handoff improvements.
 
-Last verified: 01 Sep 2026, Human-Designed Frontend Redesign complete.
+Last verified: 01 Sep 2026, Sprint 18 complete.
