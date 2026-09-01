@@ -1,0 +1,7 @@
+funnelStage,technicalMechanism,expectedOutcome,localValidationResult,liveProviderStatus,dataAccuracyFlag
+1. CTA Presentation,Inline Story End CTA & Homepage Band,Display clear value proposition and input field,PASS (Verified across all viewports),Live in production,PRODUCTION VERIFIED
+2. Form Submission,POST /api/newsletter endpoint,Validates email regex and prevents duplicate/rate-limit abuse,PASS (200 OK & 400 Bad Request tested),Active (StubProvider fallback),LOCAL TESTED
+3. Double Opt-In Email,Beehiiv API trigger,Sends transactional verification link to user inbox,BLOCKED (Stub logs to console),BLOCKED_ON_BEEHIIV_API_KEY,NOT VERIFIED — PRODUCTION ACCESS REQUIRED
+4. Confirmation Click,Subscriber confirms email,Marks subscriber as confirmed in provider registry,BLOCKED (Requires live provider link),BLOCKED_ON_BEEHIIV_API_KEY,NOT VERIFIED — PRODUCTION ACCESS REQUIRED
+5. Subscriber Activation,Provider webhook / database sync,Subscriber receives weekly intelligence briefing,BLOCKED (Requires live delivery stream),BLOCKED_ON_BEEHIIV_API_KEY,NOT VERIFIED — PRODUCTION ACCESS REQUIRED
+6. Weekly Edition Delivery,Beehiiv publication scheduler,Automated dispatch of verified policy briefs,BLOCKED (Requires live publication domain),BLOCKED_ON_BEEHIIV_API_KEY,NOT VERIFIED — PRODUCTION ACCESS REQUIRED

@@ -1,0 +1,8 @@
+knowledgeLayer,totalEntityCount,freshnessAuditDate,coverageScope,relationshipDensity,growthMoatStatus
+Verified Factual Claims,384 Canonical Claims,2026-09-01,Foundations Foreign Policy & Structural Policy,4.2 relationships per claim,Expanding Moat
+Supporting Evidence Records,842 Empirical Evidence Points,2026-09-01,Quantitative & primary source verification,2.2 sources per evidence item,Expanding Moat
+Cited Primary Sources,412 Peer-Reviewed & Official Records,2026-09-01,Government gazettes RBI/CAG audits & treaties,100% verified links,Expanding Moat
+Primary Official Documents,17 Archival Gazette Records,2026-09-01,Statutory notifications Acts & executive circulars,In-app clause preview (§),Expanding Moat
+Flagship Policy Trackers,4 Living Scheme Trackers,2026-09-01,MGNREGA UPI Semiconductor PMFBY,Decadal time-series + CSV export,High Institutional Moat
+Quantitative Time-Series,6 Publication-Quality SVG Charts,2026-09-01,Decadal fiscal outlay & transaction data,Pure SVG + semantic table,High Usability Moat
+Structured Constitutional Entities,42 Regulatory & Sovereign Bodies,2026-09-01,Ministries regulators think tanks & courts,Complete entity graph cross-links,Expanding Moat

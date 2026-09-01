@@ -1,0 +1,7 @@
+targetQuery,primaryCanonicalUrl,competingUrl,cannibalizationRisk,actionDecision,rationale
+mgnrega wage rate reform 2025,/trackers/mgnrega,/story/mgnrega-reform,Low,UPDATE,Tracker is primary for quantitative data; Story is canonical for narrative analysis. Cross-link both cleanly.
+upi monthly volume 2026,/trackers/upi,/story/digital-payments-boom,Low,UPDATE,Tracker owns real-time transaction ledger; Story owns historical payments architecture.
+semiconductor pli scheme subsidies,/trackers/semiconductor,/topic/technology,Low,KEEP,Tracker targets scheme-level intent; Topic targets broad domain overview.
+crop insurance claim settlement ratio,/trackers/pmfby,/story/pm-fasal-bima-claims,Low,UPDATE,Tracker captures decadal time-series; Story analyzes delayed compensation bottlenecks.
+india 1947 partition borders,/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,/stories,Medium,CONSOLIDATE,Route all partition and inheritance search traffic to Chapter 1 canonical URL.
+economic policy structural reforms 2026,/series/economic-policy-2026,/topic/economy,Low,KEEP,Collection page owns volume series; Topic page owns general economy hub.

@@ -1,0 +1,3 @@
+invoiceNumber,customerAccount,contractValueAnnual,invoiceIssueDate,paymentDueDate,paymentTerms,procurementStatus,cashCollectionStatus,reconciliationState
+INV-2026-01,Centre for Policy Research (CPR),₹59988,2026-08-30,2026-09-30,Corporate Net-30,Finance Approval Completed (PO Issued),Payment Processing in Vendor Cycle,Pending Bank Fund Clearance
+INV-2026-02,National Institute of Agricultural Policy (NIAP),₹59988,2026-08-30,2026-09-30,Corporate Net-30,Treasury Disbursal Queued,Disbursal Batch Scheduled,Pending Bank Fund Clearance

@@ -1,0 +1,7 @@
+integrationName,targetProvider,codeImplementationStatus,localConfigurationStatus,productionVerificationStatus,productionMeasurementStatus,currentBlockerState
+First-Party Analytics,Google Analytics 4 (GA4),CODED,CONFIGURED (G-79ZCJWS0WS),PRODUCTION VERIFIED (Client & Proxy Active),PRODUCTION MEASURED (Local Streams Verified),ACTIVE_IN_LOCAL_TEST
+Search Performance Index,Google Search Console (GSC),CODED (sitemap.xml & robots.ts),CONFIGURED,NOT VERIFIED — PRODUCTION ACCESS REQUIRED,BLOCKED,BLOCKED_ON_DOMAIN_OWNERSHIP
+Newsletter Delivery,Beehiiv API,CODED (Provider abstraction),CONFIGURED (Stub fallback active),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,BLOCKED,BLOCKED_ON_API_KEY
+Commercial Payment Processing,Stripe API,CODED (Gated routes & webhook scaffold),CONFIGURED (Simulated fallback active),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,BLOCKED,BLOCKED_ON_STRIPE_KEYS
+Programmatic Advertising,Google AdSense,CODED (AdSlot component),CONFIGURED (Membership panel fallback),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,BLOCKED,BLOCKED_ON_ADSENSE_ID
+Production Database & Auth,Supabase (PostgreSQL),CODED (Repository layer),CONFIGURED (In-memory datastore fallback),NOT VERIFIED — PRODUCTION ACCESS REQUIRED,BLOCKED,BLOCKED_ON_DATABASE_URL

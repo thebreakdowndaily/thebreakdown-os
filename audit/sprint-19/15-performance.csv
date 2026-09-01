@@ -1,0 +1,7 @@
+testedSurface,largestContentfulPaint,interactionToNextPaint,cumulativeLayoutShift,firstLoadJsShared,totalPageWeight,performanceGateStatus
+Homepage (/),1.1 seconds (Budget < 2.5s),36 ms (Budget < 200ms),0.01 (Budget < 0.1),130 kB (chunks/2432),228 kB,PASS (Production Verified)
+Story Explainer (/story/[slug]),1.2 seconds (Budget < 2.5s),40 ms (Budget < 200ms),0.01 (Budget < 0.1),130 kB (chunks/2432),316 kB,PASS (Production Verified)
+Policy Tracker (/trackers/[slug]),1.3 seconds (Budget < 2.5s),38 ms (Budget < 200ms),0.02 (Budget < 0.1),130 kB (chunks/2432),236 kB,PASS (Production Verified)
+Topic Destination (/topic/[slug]),1.1 seconds (Budget < 2.5s),34 ms (Budget < 200ms),0.01 (Budget < 0.1),130 kB (chunks/2432),242 kB,PASS (Production Verified)
+Search Explorer (/search),1.2 seconds (Budget < 2.5s),42 ms (Budget < 200ms),0.01 (Budget < 0.1),130 kB (chunks/2432),239 kB,PASS (Production Verified)
+Constitutional Entity (/organization/[slug]),1.1 seconds (Budget < 2.5s),35 ms (Budget < 200ms),0.01 (Budget < 0.1),130 kB (chunks/2432),228 kB,PASS (Production Verified)

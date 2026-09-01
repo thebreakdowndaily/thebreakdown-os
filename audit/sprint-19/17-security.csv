@@ -1,0 +1,7 @@
+securityDomain,auditScope,potentialVulnerabilityAudit,tenantIsolationCheck,complianceStatus
+Customer Multi-Tenancy,Institutional Workspaces & Datasets,Zero cross-tenant data leakage across CPR and NIAP sessions,Strict account session boundaries enforced,PASS (Secure)
+Analytics Telemetry,Client Event Pipeline,No PII (names passwords or raw emails) passed in query params,Telemetry stripped of private attributes before dispatch,PASS (Secure)
+Newsletter API,POST /api/newsletter Route,Strict email regex validation and in-memory rate limiting,No persistence of unhashed credentials in public storage,PASS (Secure)
+Gated Data Download API,GET /api/data/download Route,403 Forbidden enforced when supporter authorization cookie absent,Strict server-side validation of dataset identifiers,PASS (Secure)
+Authentication & Tokens,AuthWrapper & ProfileDropdown,Session tokens protected via httpOnly cookies where applicable,In-memory state cleanses on logout,PASS (Secure)
+Source & Citation APIs,Public Citation Exporter,Sanitized output preventing script injection in BibTeX/APA exports,Public read-only endpoints with zero write permissions,PASS (Secure)

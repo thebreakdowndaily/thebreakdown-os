@@ -1,0 +1,8 @@
+testedSurface,accessibilityDimension,wcagStandard,browserValidationResult,screenReaderExperience,auditVerdict
+Global Navigation,Skip to Content & Tab Order,WCAG 2.1 AA (2.4.1),Tab exposes skip link; sequential tab index across all links,Announces skip landmark and active nav items,PASS
+Story Presentation Shell,Heading Hierarchy & Measure,WCAG 2.1 AA (1.3.1),Single H1 with semantic H2/H3 subheadings; 68ch measure,Screen reader navigates headings without structural skips,PASS
+Evidence Provenance Drawer,Collapsible ARIA State,WCAG 2.1 AA (4.1.2),aria-expanded updates dynamically; 19.5:1 text contrast,Announces 'Inspect Evidence' button state and claim count,PASS
+Quantitative Charts,Data Table Fallback,WCAG 2.1 AA (1.1.1),Toggle button switches between SVG chart and semantic table,Screen reader traverses chronological rows and numerical values,PASS
+Document Preview Modal,Focus Trapping & Escape Key,WCAG 2.1 AA (2.1.2),Focus locked inside modal on mount; Escape key closes,Dialog role announced with document title and close button,PASS
+Newsletter & Search Forms,Explicit Field Labels,WCAG 2.1 AA (3.3.2),Explicit aria-label and associated labels on all inputs,Form fields and validation requirements announced,PASS
+Mobile Touch Navigation,Minimum Touch Targets,WCAG 2.1 AA (2.5.5),>=44px touch targets across all interactive buttons,All buttons easily actionable on handheld touch displays,PASS

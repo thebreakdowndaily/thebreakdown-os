@@ -1,0 +1,21 @@
+opportunityId,targetSearchQuery,searchIntentType,targetDestinationUrl,currentPosition,opportunityRationale,actionPlan
+OPP-01,mgnrega 125 days wage hike act 2025,Statutory Intent,/trackers/mgnrega,4.8,High impression query with direct statutory gazette match,Enhance direct-answer meta title & statutory clause snippet
+OPP-02,upi monthly transaction volume rbi npci,Quantitative Intent,/trackers/upi,5.2,Institutional analysts seeking live monthly breakdown,Promote CSV export link in search snippet metadata
+OPP-03,india semiconductor mission fab units subsidy outlay,Policy Intent,/trackers/semiconductor,6.1,High commercial value query for semiconductor tracking,Highlight 5 approved units and ₹76000 Cr disbursement chart
+OPP-04,pm fasal bima yojana 12 percent penal interest circular,Statutory Intent,/trackers/pmfby,5.9,Specific query searching for delayed payment clauses,Pre-render executive clause summary in schema markup
+OPP-05,foundations of indian foreign policy 1947 to 1962,Academic Intent,/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,10.8,Core syllabus query for UPSC & academic researchers,Add structured Article JSON-LD with syllabus keywords
+OPP-06,digital public infrastructure india transaction volume,Quantitative Intent,/trackers/upi,7.4,Growing international research interest in India's DPI stack,Cross-link UPI tracker with digital economy cornerstone
+OPP-07,mgnrega vs vb-g ram g act difference,Comparative Intent,/problems/mgnrega-reform/compare,8.2,High-intent comparison query comparing old vs new framework,Optimize /compare subroute with side-by-side table schema
+OPP-08,cag performance audit crop insurance pmfby,Document Intent,/trackers/pmfby,9.1,Researchers searching for CAG audit citations,Highlight CAG audit preview modal in document schema
+OPP-09,semiconductor pli scheme fab construction status dholera,Entity Intent,/trackers/semiconductor,8.5,Supply chain researchers monitoring fab progress,Enrich timeline section with fab construction milestones
+OPP-10,princely states integration 1947 sardar patel,Historical Intent,/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance,12.4,High-volume historical query for Volume I,Enrich Chapter 1 primary archival citations
+OPP-11,rbi repo rate monetary policy transmission timeline,Policy Intent,/story/rbi-monetary-policy,6.8,Banking analysts tracking interest rate cycles,Add interactive rate cycle chart and MPC minutes links
+OPP-12,green hydrogen mission india targets 2030,Emerging Policy Intent,/trackers/green-hydrogen,N/A,Rapidly rising search query without dedicated tracker,Prepare Fifth Flagship Tracker release
+OPP-13,tibet 1954 panchsheel agreement primary text,Document Intent,/series/foundations-1947-1962,11.2,Researchers searching for full treaty text,Add primary treaty document modal in Chapter 1
+OPP-14,npc digital payments market share phonepe gpay,Quantitative Intent,/trackers/upi,7.9,Market share concentration policy queries,Enrich UPI tracker with app market share breakdown
+OPP-15,crop insurance claim settlement ratio state wise,Quantitative Intent,/trackers/pmfby,6.4,State-wise agricultural policy comparisons,Add state-level settlement ratio filter
+OPP-16,mgnrega wage rate per day state wise 2026,Statutory Intent,/trackers/mgnrega,5.5,Daily wage labor search demand,Maintain live state-wise statutory wage table
+OPP-17,india us strategic partnership 1947 1962,Academic Intent,/series/foundations-1947-1962,13.1,Diplomatic history scholarship demand,Add diplomatic correspondence archives in research appendix
+OPP-18,semiconductor assembly testing packaging atmp units india,Policy Intent,/trackers/semiconductor,7.8,Industrial policy search demand,Add ATMP and OSAT unit tracking ledger
+OPP-19,non alignment movement bandung conference 1955 nehru,Historical Intent,/series/foundations-1947-1962,14.5,International relations student demand,Enrich Bandung archive citations in Chapter 1
+OPP-20,cag audit mgnrega delayed payment compensation,Document Intent,/trackers/mgnrega,8.8,Legal and public interest policy searches,Embed CAG delayed compensation audit excerpt
