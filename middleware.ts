@@ -121,9 +121,9 @@ export async function middleware(request: NextRequest) {
         }
       );
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-      if (!session) {
+      if (userError || !user) {
         const loginUrl = new URL('/login', request.url);
         loginUrl.searchParams.set('redirect', pathname);
         return NextResponse.redirect(loginUrl);
@@ -134,7 +134,10 @@ export async function middleware(request: NextRequest) {
       // a Server Component and no payload is computed or streamed.
       const intelModule = intelModuleFromPath(pathname);
       if (intelModule) {
-        const role = normalizeIntelRole((session.user.user_metadata.role as string | undefined) ?? null);
+        // Authoritative role: derived strictly from server-controlled app_metadata.
+        // Note: user_metadata.role is client-writable in Supabase and strictly ignored for authorization.
+        const authoritativeRole = (user.app_metadata.role as string | undefined) ?? null;
+        const role = normalizeIntelRole(authoritativeRole);
         if (!canAccessIntelModule(role, intelModule)) {
           return new NextResponse('Forbidden', {
             status: 403,

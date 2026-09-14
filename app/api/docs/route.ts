@@ -234,7 +234,7 @@ const openApiDoc = {
         type: 'apiKey',
         in: 'header',
         name: 'x-api-key',
-        description: 'API key for authentication. Obtain from /api/auth/keys (admin). Default dev key: dev-key-0000-0000-0000-000000000000',
+        description: 'API key for authentication. Configured via deployment environment.',
       },
     },
     schemas: {

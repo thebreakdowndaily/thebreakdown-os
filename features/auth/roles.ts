@@ -115,3 +115,18 @@ export function intelRoleLabel(role: string | null | undefined): string {
 export function intelModulesForRole(role: string | null | undefined): IntelModule[] {
   return INTEL_MODULES.filter(m => canAccessIntelModule(role, m));
 }
+
+/**
+ * Resolves role strictly from authoritative server-controlled metadata (app_metadata),
+ * completely ignoring client-controlled user_metadata for privilege assignment.
+ * Fails closed to 'guest'.
+ */
+export function extractAuthoritativeRole(
+  user: { app_metadata?: Record<string, unknown>; user_metadata?: Record<string, unknown> } | null | undefined
+): IntelRole {
+  if (!user) return 'guest';
+  // app_metadata is strictly server-controlled in Supabase; user_metadata is client-writable.
+  const rawRole = user.app_metadata?.role as string | undefined;
+  return normalizeIntelRole(rawRole ?? null);
+}
+

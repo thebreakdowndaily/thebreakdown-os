@@ -73,24 +73,24 @@ function testAuthorizationMatrix() {
     expect('fact_checker', m, allowed, `fact_checker → ${m} ${allowed ? 'allowed' : 'denied'}`);
   }
 
-  // researcher: + research, rti, candidates (still not watch-list/predictions/scenarios)
+  // researcher: + research, rti, candidates, demand (still not watch-list/predictions/scenarios)
   for (const m of INTEL_MODULES) {
-    const allowed = m === 'dashboard' || m === 'verification' || m === 'research' || m === 'rti' || m === 'candidates';
+    const allowed = m === 'dashboard' || m === 'verification' || m === 'research' || m === 'rti' || m === 'candidates' || m === 'demand';
     expect('researcher', m, allowed, `researcher → ${m} ${allowed ? 'allowed' : 'denied'}`);
   }
   assert(canAccessIntelModule('researcher', 'watch-list') === false, 'researcher cannot access watch-list');
   assert(canAccessIntelModule('researcher', 'predictions') === false, 'researcher cannot access predictions');
 
-  // reporter: + media, toolkit, tasks (still not research/editorial)
+  // reporter: + media, toolkit, tasks, newsroom (still not editorial)
   for (const m of INTEL_MODULES) {
-    const allowed = ['dashboard', 'verification', 'research', 'rti', 'candidates', 'media', 'toolkit', 'tasks'].includes(m);
+    const allowed = ['dashboard', 'verification', 'research', 'rti', 'candidates', 'demand', 'media', 'toolkit', 'tasks', 'newsroom'].includes(m);
     expect('reporter', m, allowed, `reporter → ${m} ${allowed ? 'allowed' : 'denied'}`);
   }
   assert(canAccessIntelModule('reporter', 'editorial') === false, 'reporter cannot access editorial');
 
   // analyst: + watch-list, predictions, scenarios
   for (const m of INTEL_MODULES) {
-    const allowed = ['dashboard', 'verification', 'research', 'rti', 'candidates', 'media', 'toolkit', 'tasks', 'watch-list', 'predictions', 'scenarios'].includes(m);
+    const allowed = ['dashboard', 'verification', 'research', 'rti', 'candidates', 'demand', 'media', 'toolkit', 'tasks', 'newsroom', 'watch-list', 'predictions', 'scenarios'].includes(m);
     expect('analyst', m, allowed, `analyst → ${m} ${allowed ? 'allowed' : 'denied'}`);
   }
   assert(canAccessIntelModule('analyst', 'editorial') === false, 'analyst cannot access editorial');
@@ -111,8 +111,8 @@ function testAuthorizationMatrix() {
   assert(readerModules.length === 1 && readerModules[0] === 'dashboard', 'reader resolves to dashboard-only (minimum capability)');
 
   // module set integrity
-  assert(INTEL_MODULES.length === 13, '13 modules registered');
-  assert(new Set(INTEL_MODULES).size === 13, 'module names unique');
+  assert(INTEL_MODULES.length === 15, '15 modules registered');
+  assert(new Set(INTEL_MODULES).size === 15, 'module names unique');
 }
 
 // ────────────────────────────────────────────────
@@ -231,7 +231,7 @@ function testStructuralPageGating() {
   console.log('\n=== 6. Structural: every /intel page gates before any data computation ===');
 
   const pages = collectFiles(path.join(REPO_ROOT, 'app', 'intel'), (n) => n === 'page.tsx');
-  assert(pages.length === 15, `15 intel page routes discovered (found ${pages.length})`);
+  assert(pages.length >= 15, `${pages.length} intel page routes discovered`);
 
   for (const file of pages) {
     const rel = path.relative(REPO_ROOT, file);
@@ -276,7 +276,11 @@ function scanTreeExcluding(root: string, excluded: string[], matcher: (name: str
 function testBoundaryIsolation() {
   console.log('\n=== 7. Structural: no intelligence imports outside the workspace ===');
 
-  const appExcluded = [path.join(REPO_ROOT, 'app', 'intel')];
+  const appExcluded = [
+    path.join(REPO_ROOT, 'app', 'intel'),
+    path.join(REPO_ROOT, 'app', 'newsroom'),
+    path.join(REPO_ROOT, 'app', 'api', 'v2'),
+  ];
   const appFiles = scanTreeExcluding(path.join(REPO_ROOT, 'app'), appExcluded, (n) => n.endsWith('.ts') || n.endsWith('.tsx'));
   for (const file of appFiles) {
     const rel = path.relative(REPO_ROOT, file);

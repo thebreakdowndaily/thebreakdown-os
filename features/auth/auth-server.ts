@@ -4,9 +4,11 @@ import { isDemoMode, DEMO_USER } from './demo';
 
 export async function getSupabaseAuth() {
   const cookieStore = await cookies();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_anon_key';
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     { cookies: { getAll: () => cookieStore.getAll() } }
   );
 }
@@ -48,19 +50,27 @@ export async function getSession(): Promise<AuthSession | null> {
 
   try {
     const supabase = await getSupabaseAuth();
+    // Validate cryptographic JWT signature on the server via getUser()
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) return null;
+
+    // Retrieve active session metadata for expiration timestamp
     const { data: { session: s } } = await supabase.auth.getSession();
-    if (!s) return null;
+
+    // Sourced strictly from server-controlled app_metadata; mutable user_metadata is ignored.
+    const authoritativeRole = (user.app_metadata.role as string | undefined) ?? 'reader';
+
     return {
       user: {
-        id: s.user.id,
-        email: s.user.email ?? '',
-        name: s.user.user_metadata?.name || s.user.email?.split('@')[0] || '',
-        image: s.user.user_metadata?.avatar_url || null,
-        role: s.user.user_metadata?.role || 'reader',
+        id: user.id,
+        email: user.email ?? '',
+        name: (user.user_metadata.name as string | undefined) || user.email?.split('@')[0] || '',
+        image: (user.user_metadata.avatar_url as string | undefined) || null,
+        role: authoritativeRole,
       },
       session: {
-        id: s.user.id,
-        expiresAt: s.expires_at ? s.expires_at * 1000 : 0,
+        id: user.id,
+        expiresAt: s?.expires_at ? s.expires_at * 1000 : Date.now() + 3600000,
       },
     };
   } catch {

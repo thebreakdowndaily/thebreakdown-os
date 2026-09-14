@@ -29,9 +29,9 @@ export function mapUser(user: User) {
   return {
     id: user.id,
     email: user.email ?? '',
-    name: user.user_metadata?.name || user.email?.split('@')[0] || '',
-    image: user.user_metadata?.avatar_url || null,
+    name: (user.user_metadata.name as string | undefined) || user.email?.split('@')[0] || '',
+    image: (user.user_metadata.avatar_url as string | undefined) || null,
     emailVerified: !!user.email_confirmed_at,
-    role: user.user_metadata?.role || 'reader',
+    role: (user.app_metadata.role as string | undefined) || 'reader',
   };
 }

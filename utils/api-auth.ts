@@ -27,7 +27,8 @@ class ApiKeyManager {
   private seedFromEnv() {
     const raw = process.env.API_KEYS || '';
     if (!raw) {
-      this.addKeyInternal('dev-key-0000-0000-0000-000000000000', 'Development Default', 'admin');
+      // Fail closed: never generate default admin credentials in production or local environments.
+      // Explicit configuration via API_KEYS environment variable is strictly required.
       return;
     }
     for (const entry of raw.split(',')) {
