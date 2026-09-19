@@ -69,8 +69,8 @@ export default async function StoryPage({
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key',
         { cookies: { getAll: () => cookieStore.getAll() } }
       );
-      const { data: { session } } = await supabase.auth.getSession();
-      isAuthenticated = Boolean(session);
+      const { data: { user }, error } = await supabase.auth.getUser();
+      isAuthenticated = Boolean(!error && user);
     } catch {
       // Ignore
     }

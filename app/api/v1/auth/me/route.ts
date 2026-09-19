@@ -10,11 +10,12 @@ export async function GET(request: NextRequest) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       { cookies: { getAll: () => cookieStore.getAll() } }
     );
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
-    return NextResponse.json({ user: session.user, session });
+    const { data: { session } } = await supabase.auth.getSession();
+    return NextResponse.json({ user, session });
   } catch {
     return NextResponse.json({ error: 'Failed to fetch session' }, { status: 500 });
   }
