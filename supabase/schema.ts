@@ -15,6 +15,7 @@ export interface Database {
       dataset_observations: DatasetObservationRow;
       dataset_visualizations: DatasetVisualizationRow;
       users: UserRow;
+      user_roles: UserRoleRow;
       bookmarks: BookmarkRow;
       activity_log: ActivityLogRow;
       index_entries: IndexEntryRow;
@@ -728,6 +729,36 @@ export interface UserRow {
     name?: string;
     role?: string;
     avatar_url?: string | null;
+    created_at?: string;
+    updated_at?: string;
+  };
+}
+
+export interface UserRoleRow {
+  Row: {
+    id: string;
+    user_id: string;
+    role: string;
+    organization_id: string | null;
+    status: string;
+    created_at: string;
+    updated_at: string;
+  };
+  Insert: {
+    id?: string;
+    user_id: string;
+    role: string;
+    organization_id?: string | null;
+    status?: string;
+    created_at?: string;
+    updated_at?: string;
+  };
+  Update: {
+    id?: string;
+    user_id?: string;
+    role?: string;
+    organization_id?: string | null;
+    status?: string;
     created_at?: string;
     updated_at?: string;
   };

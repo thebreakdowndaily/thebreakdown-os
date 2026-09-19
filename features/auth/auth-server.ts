@@ -57,8 +57,20 @@ export async function getSession(): Promise<AuthSession | null> {
     // Retrieve active session metadata for expiration timestamp
     const { data: { session: s } } = await supabase.auth.getSession();
 
-    // Sourced strictly from server-controlled app_metadata; mutable user_metadata is ignored.
-    const authoritativeRole = (user.app_metadata.role as string | undefined) ?? 'reader';
+    // Sourced strictly from database user_roles, falling back to server-controlled app_metadata
+    let authoritativeRole = (user.app_metadata.role as string | undefined) ?? 'reader';
+    try {
+      const { data: dbRole } = (await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .maybeSingle()) as { data: { role?: string } | null };
+      if (typeof dbRole?.role === 'string') {
+        authoritativeRole = dbRole.role;
+      }
+    } catch {
+      // Keep app_metadata fallback
+    }
 
     return {
       user: {

@@ -45,8 +45,69 @@ export function getServerClient(getAll: GetAllCookies, setAll?: SetAllCookies) {
 }
 
 let adminClient: ReturnType<typeof createClient<TypedDatabase>> | null = null;
+let anonServerClient: ReturnType<typeof createClient<TypedDatabase>> | null = null;
 
-export function getServiceClient() {
+export function getAnonClient(): SupabaseClient<TypedDatabase> {
+  if (typeof window !== 'undefined') {
+    return getBrowserClient();
+  }
+  if (!anonServerClient) {
+    const { url, anonKey } = getConfig();
+    anonServerClient = createClient<TypedDatabase>(url, anonKey, {
+      auth: { persistSession: false },
+    });
+  }
+  return anonServerClient;
+}
+
+/**
+ * Returns an authoritative user-scoped Supabase client that preserves JWT context
+ * and is constrained by PostgreSQL Row Level Security (RLS).
+ */
+export async function createUserScopedClient(): Promise<SupabaseClient<TypedDatabase>> {
+  if (typeof window !== 'undefined') {
+    return getBrowserClient();
+  }
+
+  try {
+    const { cookies } = await import('next/headers');
+    const cookieStore = await cookies();
+    const { url, anonKey } = getConfig();
+    return createServerClient<TypedDatabase>(url, anonKey, {
+      cookies: {
+        getAll: () => cookieStore.getAll(),
+        setAll: (cookiesToSet) => {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Read-only context (e.g. Server Component)
+          }
+        },
+      },
+    });
+  } catch {
+    // Outside request context (e.g. build-time or background execution)
+    return getAnonClient();
+  }
+}
+
+/**
+ * Explicitly privileged Supabase client powered by SUPABASE_SERVICE_ROLE_KEY.
+ * Bypasses RLS. Strictly forbidden in client/browser environments.
+ */
+export function createServiceClient(): SupabaseClient<TypedDatabase> {
+  if (typeof window !== 'undefined') {
+    throw new Error('createServiceClient() is strictly forbidden in client/browser environments.');
+  }
+  return getServiceClient();
+}
+
+export function getServiceClient(): SupabaseClient<TypedDatabase> {
+  if (typeof window !== 'undefined') {
+    throw new Error('getServiceClient() is strictly forbidden in client/browser environments.');
+  }
   if (adminClient) return adminClient;
   const { url } = getConfig();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-admin-key';
@@ -59,10 +120,14 @@ export function getServiceClient() {
   return adminClient;
 }
 
+/**
+ * Standard data-access client.
+ * Enforces PostgreSQL Row-Level Security (RLS) by routing to user/anon scope.
+ * Silent escalation to service_role is permanently eliminated.
+ */
 export function getSupabaseClient(): SupabaseClient<TypedDatabase> {
-  // Use service_role key for API routes (bypasses RLS)
   if (typeof window === 'undefined') {
-    return getServiceClient() as unknown as SupabaseClient<TypedDatabase>;
+    return getAnonClient();
   }
-  return getBrowserClient() as unknown as SupabaseClient<TypedDatabase>;
+  return getBrowserClient();
 }
