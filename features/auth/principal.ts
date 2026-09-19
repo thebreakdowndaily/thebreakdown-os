@@ -61,7 +61,7 @@ export function resolvePrincipalFromUser(user: User): Principal {
   return {
     userId: user.id,
     email: user.email ?? '',
-    name: (user.user_metadata.name as string | undefined) || user.email?.split('@')[0] || 'User',
+    name: (user.user_metadata?.name as string | undefined) || user.email?.split('@')[0] || 'User',
     role,
     isSuperAdmin,
     status,
@@ -109,7 +109,7 @@ export async function getCurrentPrincipal(): Promise<Principal | null> {
       return {
         userId: user.id,
         email: user.email ?? '',
-        name: (user.user_metadata.name as string | undefined) || user.email?.split('@')[0] || 'User',
+        name: (user.user_metadata?.name as string | undefined) || user.email?.split('@')[0] || 'User',
         role: dbRole.role,
         isSuperAdmin,
         status,

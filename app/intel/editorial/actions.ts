@@ -18,6 +18,7 @@ import {
 } from '@/services/editorial/schedule';
 import { validateStoryForPublication } from '@/lib/editorial/publication-gate';
 import { getServiceClient } from '@/supabase/client';
+import { requireRole } from '@/features/auth/require-role';
 import type {
   EditorialScheduleEntry,
   PublicationGateResult,
@@ -36,6 +37,7 @@ export async function scheduleStoryAction(params: {
   notes?: string;
 }): Promise<{ success: boolean; entry?: EditorialScheduleEntry; error?: string }> {
   try {
+    await requireRole('editor');
     const entry = await createScheduleEntry({
       storyId: params.storyId,
       slotDate: params.slotDate,
@@ -71,6 +73,7 @@ export async function updateScheduleEntryAction(
   updates: Partial<Pick<EditorialScheduleEntry, 'status' | 'priority' | 'rationale' | 'notes'>>,
 ): Promise<{ success: boolean; entry?: EditorialScheduleEntry; error?: string }> {
   try {
+    await requireRole('editor');
     const entry = await updateScheduleEntry(id, updates);
     revalidatePath('/intel/editorial/calendar');
     return { success: true, entry };
@@ -83,6 +86,7 @@ export async function cancelScheduleAction(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await requireRole('editor');
     await updateScheduleEntry(id, { status: 'skipped' });
     revalidatePath('/intel/editorial/calendar');
     return { success: true };
@@ -98,6 +102,7 @@ export async function validateStoryAction(
   scheduleId?: string,
 ): Promise<{ success: boolean; result?: PublicationGateResult; error?: string }> {
   try {
+    await requireRole('editor');
     const db = getServiceClient();
     const { data: storyRow, error: storyError } = await db
       .from('stories')
@@ -167,6 +172,7 @@ export async function publishNowAction(
   scheduleId?: string,
 ): Promise<{ success: boolean; result?: PublicationGateResult; error?: string }> {
   try {
+    await requireRole('editor');
     const db = getServiceClient();
     const { data: storyRow, error: storyError } = await db
       .from('stories')
@@ -245,6 +251,7 @@ export async function getWeeklyPlanAction(
   weekStart: string,
 ): Promise<{ success: boolean; plan?: Awaited<ReturnType<typeof getWeeklyPlan>>; error?: string }> {
   try {
+    await requireRole('reporter');
     const plan = await getWeeklyPlan(weekStart);
     return { success: true, plan };
   } catch (e) {
@@ -258,6 +265,7 @@ export async function getAllScheduledEntriesAction(): Promise<{
   error?: string;
 }> {
   try {
+    await requireRole('reporter');
     const db = getServiceClient();
     const { data, error } = await db
       .from('editorial_schedule')
@@ -297,6 +305,7 @@ export async function runPublishDueAction(): Promise<{
   error?: string;
 }> {
   try {
+    await requireRole('editor');
     const results = await validateAndPublishDueStories();
     revalidatePath('/intel/editorial/calendar');
     revalidatePath('/intel/editorial');

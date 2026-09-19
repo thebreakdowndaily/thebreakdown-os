@@ -335,53 +335,63 @@ BEGIN
     END LOOP;
 END $$;
 
--- H. Users: User reads & updates own profile; Admin reads all
-DROP POLICY IF EXISTS self_read_user ON public.users;
-CREATE POLICY self_read_user ON public.users
-    FOR SELECT USING (
-        auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin())
-    );
+-- H. Users: User reads & updates own profile; Admin reads all (applied to public and/or identity schema)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'users') THEN
+        EXECUTE 'DROP POLICY IF EXISTS self_read_user ON public.users';
+        EXECUTE 'CREATE POLICY self_read_user ON public.users FOR SELECT USING (auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin()))';
 
-DROP POLICY IF EXISTS self_update_user ON public.users;
-CREATE POLICY self_update_user ON public.users
-    FOR UPDATE USING (
-        auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin())
-    ) WITH CHECK (
-        auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin())
-    );
+        EXECUTE 'DROP POLICY IF EXISTS self_update_user ON public.users';
+        EXECUTE 'CREATE POLICY self_update_user ON public.users FOR UPDATE USING (auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin())) WITH CHECK (auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin()))';
 
-DROP POLICY IF EXISTS admin_insert_user ON public.users;
-CREATE POLICY admin_insert_user ON public.users
-    FOR INSERT WITH CHECK (
-        auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin())
-    );
+        EXECUTE 'DROP POLICY IF EXISTS admin_insert_user ON public.users';
+        EXECUTE 'CREATE POLICY admin_insert_user ON public.users FOR INSERT WITH CHECK (auth.uid() IS NOT NULL AND (auth.uid()::text = id OR public.is_admin()))';
+    END IF;
 
--- I. Bookmarks: Strictly user-owned; User A cannot read or modify User B's bookmarks
-DROP POLICY IF EXISTS self_select_bookmarks ON public.bookmarks;
-CREATE POLICY self_select_bookmarks ON public.bookmarks
-    FOR SELECT USING (
-        auth.uid() IS NOT NULL AND auth.uid()::text = user_id
-    );
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'identity' AND table_name = 'users') THEN
+        EXECUTE 'DROP POLICY IF EXISTS self_read_user ON identity.users';
+        EXECUTE 'CREATE POLICY self_read_user ON identity.users FOR SELECT USING (auth.uid() IS NOT NULL AND (auth.uid()::text = id::text OR public.is_admin()))';
 
-DROP POLICY IF EXISTS self_insert_bookmarks ON public.bookmarks;
-CREATE POLICY self_insert_bookmarks ON public.bookmarks
-    FOR INSERT WITH CHECK (
-        auth.uid() IS NOT NULL AND auth.uid()::text = user_id
-    );
+        EXECUTE 'DROP POLICY IF EXISTS self_update_user ON identity.users';
+        EXECUTE 'CREATE POLICY self_update_user ON identity.users FOR UPDATE USING (auth.uid() IS NOT NULL AND (auth.uid()::text = id::text OR public.is_admin())) WITH CHECK (auth.uid() IS NOT NULL AND (auth.uid()::text = id::text OR public.is_admin()))';
 
-DROP POLICY IF EXISTS self_update_bookmarks ON public.bookmarks;
-CREATE POLICY self_update_bookmarks ON public.bookmarks
-    FOR UPDATE USING (
-        auth.uid() IS NOT NULL AND auth.uid()::text = user_id
-    ) WITH CHECK (
-        auth.uid() IS NOT NULL AND auth.uid()::text = user_id
-    );
+        EXECUTE 'DROP POLICY IF EXISTS admin_insert_user ON identity.users';
+        EXECUTE 'CREATE POLICY admin_insert_user ON identity.users FOR INSERT WITH CHECK (auth.uid() IS NOT NULL AND (auth.uid()::text = id::text OR public.is_admin()))';
+    END IF;
+END $$;
 
-DROP POLICY IF EXISTS self_delete_bookmarks ON public.bookmarks;
-CREATE POLICY self_delete_bookmarks ON public.bookmarks
-    FOR DELETE USING (
-        auth.uid() IS NOT NULL AND auth.uid()::text = user_id
-    );
+-- I. Bookmarks: Strictly user-owned; User A cannot read or modify User B's bookmarks (applied to public and/or identity schema)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'bookmarks') THEN
+        EXECUTE 'DROP POLICY IF EXISTS self_select_bookmarks ON public.bookmarks';
+        EXECUTE 'CREATE POLICY self_select_bookmarks ON public.bookmarks FOR SELECT USING (auth.uid() IS NOT NULL AND auth.uid()::text = user_id)';
+
+        EXECUTE 'DROP POLICY IF EXISTS self_insert_bookmarks ON public.bookmarks';
+        EXECUTE 'CREATE POLICY self_insert_bookmarks ON public.bookmarks FOR INSERT WITH CHECK (auth.uid() IS NOT NULL AND auth.uid()::text = user_id)';
+
+        EXECUTE 'DROP POLICY IF EXISTS self_update_bookmarks ON public.bookmarks';
+        EXECUTE 'CREATE POLICY self_update_bookmarks ON public.bookmarks FOR UPDATE USING (auth.uid() IS NOT NULL AND auth.uid()::text = user_id) WITH CHECK (auth.uid() IS NOT NULL AND auth.uid()::text = user_id)';
+
+        EXECUTE 'DROP POLICY IF EXISTS self_delete_bookmarks ON public.bookmarks';
+        EXECUTE 'CREATE POLICY self_delete_bookmarks ON public.bookmarks FOR DELETE USING (auth.uid() IS NOT NULL AND auth.uid()::text = user_id)';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'identity' AND table_name = 'bookmarks') THEN
+        EXECUTE 'DROP POLICY IF EXISTS self_select_bookmarks ON identity.bookmarks';
+        EXECUTE 'CREATE POLICY self_select_bookmarks ON identity.bookmarks FOR SELECT USING (auth.uid() IS NOT NULL AND auth.uid()::text = user_id::text)';
+
+        EXECUTE 'DROP POLICY IF EXISTS self_insert_bookmarks ON identity.bookmarks';
+        EXECUTE 'CREATE POLICY self_insert_bookmarks ON identity.bookmarks FOR INSERT WITH CHECK (auth.uid() IS NOT NULL AND auth.uid()::text = user_id::text)';
+
+        EXECUTE 'DROP POLICY IF EXISTS self_update_bookmarks ON identity.bookmarks';
+        EXECUTE 'CREATE POLICY self_update_bookmarks ON identity.bookmarks FOR UPDATE USING (auth.uid() IS NOT NULL AND auth.uid()::text = user_id::text) WITH CHECK (auth.uid() IS NOT NULL AND auth.uid()::text = user_id::text)';
+
+        EXECUTE 'DROP POLICY IF EXISTS self_delete_bookmarks ON identity.bookmarks';
+        EXECUTE 'CREATE POLICY self_delete_bookmarks ON identity.bookmarks FOR DELETE USING (auth.uid() IS NOT NULL AND auth.uid()::text = user_id::text)';
+    END IF;
+END $$;
 
 -- J. User Roles: User reads own role; Admins manage roles; Regular users cannot self-escalate
 DROP POLICY IF EXISTS self_select_user_roles ON public.user_roles;
