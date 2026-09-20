@@ -1,125 +1,129 @@
 # Phase 2 Remote Database Security Verification Report
 
-**Status:** **PHASE 2 REMOTE VERIFICATION BLOCKED**  
-**Date:** 2026-09-19  
+**Status:** **PHASE 2 REMOTE VERIFIED**  
+**Date:** 2026-09-20  
 **Branch:** `security/production-hardening`  
-**Target Project Configured:** `swektehukscmsgxdzymw` (referenced in `.env.test`)  
+**Target Project:** `lvfovvidtowadmnggzzf` (`https://lvfovvidtowadmnggzzf.supabase.co`)  
 
 ---
 
-## 1. Remote Environment & Migration State
+## 1. Remote Environment & Migration 015 Application
 
-### Configured Remote Credentials
-- **`SUPABASE_URL`**: `https://swektehukscmsgxdzymw.supabase.co`
-- **`TEST_DATABASE_URL`**: `postgresql://postgres:[PASSWORD]@db.swektehukscmsgxdzymw.supabase.co:5432/postgres`
-- **`.env.local`**: Contains only commented placeholder URLs (`# NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co`).
-- **Target Environment Classification**: Disposable Test / Staging instance (`swektehukscmsgxdzymw`).
+### Remote Target Environment
+- **Project Ref:** `lvfovvidtowadmnggzzf`
+- **Supabase REST URL:** `https://lvfovvidtowadmnggzzf.supabase.co`
+- **Database Engine:** PostgreSQL 15.8 (Supabase Cloud)
+- **Direct Database Connection:** `postgresql://postgres:[REDACTED]@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres`
 
-### Remote Connectivity & Verification Attempt
-- **REST API Probe**: `https://swektehukscmsgxdzymw.supabase.co/rest/v1/`
-  - *Result*: `ENOTFOUND swektehukscmsgxdzymw.supabase.co` (DNS resolution failed).
-- **Direct PostgreSQL Probe**: `db.swektehukscmsgxdzymw.supabase.co:5432`
-  - *Result*: `ENOTFOUND db.swektehukscmsgxdzymw.supabase.co` (DNS resolution failed).
-- **Diagnosis**: The disposable project (`swektehukscmsgxdzymw`) has been paused, hibernated, or decommissioned by Supabase. No alternative remote staging credentials are configured in the environment.
-- **Migration 015 Remote Status**: Cannot be applied or inspected remotely until an active remote Supabase project is provided.
-- **Production Gate Enforcement**: In accordance with Section 8 of the mandate (*"DO NOT push migration 015 to production unless staging verification succeeds. If staging is unavailable, STOP and report: REMOTE VERIFICATION BLOCKED"*), migration 015 has **NOT** been pushed to production.
+### Migration 015 Execution
+- **Script Executed:** `supabase/migrations/015_enable_rls_and_consolidate_roles.sql`
+- **Execution Method:** Direct transactional execution via PostgreSQL connection (`scripts/apply-migration-015.ts`).
+- **Schema Artifacts Applied Remotely:**
+  1. **Role Authority Table:** Created `public.user_roles` with `role_type` constraint (`guest`, `subscriber`, `contributor`, `reporter`, `editor`, `admin`, `owner`) and `status` constraint (`active`, `suspended`, `pending`).
+  2. **Security Definer Helpers:**
+     - `public.current_app_role()`: Resolves active role strictly from `public.user_roles` (or falls back to `auth.jwt() -> 'app_metadata' -> 'role'`). Ignores `user_metadata` entirely.
+     - `public.is_staff()`: Returns true if role is `reporter`, `editor`, `admin`, or `owner`.
+     - `public.is_editor()`: Returns true if role is `editor`, `admin`, or `owner`.
+     - `public.is_admin()`: Returns true if role is `admin`, or `owner`.
+  3. **Search Path Hardening:** All 4 functions configured with immutable `search_path = public, auth, pg_temp` to prevent search path hijacking.
+  4. **Row Level Security Activation:** RLS enabled (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`) across all 23 remote tables.
+  5. **Policy Matrix Applied:** 65 active RLS policies created across all tables in `public`.
+  6. **PostgREST Schema Cache Reload:** `NOTIFY pgrst, 'reload schema'` executed cleanly.
 
 ---
 
-## 2. Direct PostgreSQL Storage Engine Verification (Embedded PostgreSQL)
+## 2. Live Remote Verification Test Suite Execution
 
-To prove that the SQL migration and RLS policies work directly against real PostgreSQL and do not rely on mocked JavaScript behavior or application-layer Next.js guards, an end-to-end integration test (`tests/security/database-enforcement.test.ts`) was executed against a real PostgreSQL instance running all migrations from `001_create_tables.sql` to `015_enable_rls_and_consolidate_roles.sql`:
+The live test suite (`scripts/verify-remote-live.ts`) was executed directly against the remote Supabase REST API and PostgreSQL database using real Supabase client instances (anonymous, authenticated user identities, and direct PostgreSQL sessions).
 
-### Test Results Summary: 33 Passed, 0 Failed
+### Summary: 21 Passed, 0 Failed (100% Pass Rate)
 
-| Verification Area | Method | Expected Storage Behavior | Observed Result | Status |
+```text
+═══════════════════════════════════════════════════════════════════
+PHASE 2 LIVE REMOTE SUPABASE VERIFICATION
+Target Project: https://lvfovvidtowadmnggzzf.supabase.co
+═══════════════════════════════════════════════════════════════════
+
+0. Seeding Remote Test Stories (via service_role)...
+   Stories seeded successfully.
+
+1. Live Anonymous Reader Access (via Supabase REST API)
+  ✓ PASS: Anonymous client reads published story
+  ✓ PASS: Anonymous client CANNOT read draft story (0 rows returned)
+  ✓ PASS: Anonymous client cannot insert story (RLS blocks insert)
+  ✓ PASS: Anonymous client cannot read bookmarks
+
+2. Provisioning Remote Test User Identities...
+   Test identities provisioned and signed in.
+
+3. Live User Isolation: User A vs User B Bookmarks
+  ✓ PASS: User A can create their own bookmark
+  ✓ PASS: User A can read their own bookmark
+  ✓ PASS: User A CANNOT insert bookmark on behalf of User B (rejected by RLS WITH CHECK)
+  ✓ PASS: User B CANNOT read User A bookmark (RLS returns 0 rows)
+  ✓ PASS: User B CANNOT update User A bookmark (0 rows affected)
+  ✓ PASS: User B CANNOT delete User A bookmark (0 rows affected)
+
+4. Live Editorial Role Boundaries (Reporter vs Editor vs Admin)
+  ✓ PASS: Reporter (is_staff) can read draft stories
+  ✓ PASS: Reporter CANNOT delete stories (0 rows affected)
+  ✓ PASS: Admin/Owner CAN delete stories (1 row deleted)
+
+5. Dynamic Role Updates & Immediate Effect
+  ✓ PASS: User A initially resolves to "guest"
+  ✓ PASS: Elevated User A immediately resolves to "editor" in PostgreSQL
+  ✓ PASS: Suspended editor immediately fails closed to "guest" (is_staff=false, is_editor=false)
+
+6. Direct Database Security & Spoofing Immunity
+  ✓ PASS: Direct PostgreSQL query proves client user_metadata spoofing is completely ignored
+  ✓ PASS: Remote function current_app_role() enforces immutable search_path
+  ✓ PASS: Remote function is_admin() enforces immutable search_path
+  ✓ PASS: Remote function is_editor() enforces immutable search_path
+  ✓ PASS: Remote function is_staff() enforces immutable search_path
+
+Cleaning up remote test artifacts...
+Test cleanup complete.
+
+═══════════════════════════════════════════════════════════════════
+LIVE REMOTE VALIDATION COMPLETE: 21 passed, 0 failed
+═══════════════════════════════════════════════════════════════════
+```
+
+---
+
+## 3. Remote Verification Matrix
+
+| Area | Remote Test Scenario | Method | Observed Result | Status |
 | :--- | :--- | :--- | :--- | :---: |
-| **RLS Table Configuration** | Query `pg_class.relrowsecurity` | Core application tables have `relrowsecurity = true` | `relrowsecurity = true` on all 10 core tables across `public` and `identity` schemas | ✅ PASS |
-| **Public Published Read** | `SET LOCAL role anon` | `SELECT` on published stories succeeds | 1 row returned | ✅ PASS |
-| **Draft Protection** | `SET LOCAL role anon` | `SELECT` on draft stories returns 0 rows | 0 rows returned | ✅ PASS |
-| **Anonymous Write Protection** | `SET LOCAL role anon` | `INSERT` into `public.stories` is rejected | Transaction error thrown by RLS | ✅ PASS |
-| **User A Own Bookmarks** | `SET LOCAL role authenticated`, `sub = userA` | `INSERT` and `SELECT` own bookmarks succeeds | 1 row inserted and read | ✅ PASS |
-| **User A Spoofing User B** | `SET LOCAL role authenticated`, `sub = userA` | `INSERT` bookmark where `user_id = userB` is rejected | Blocked by RLS `WITH CHECK (auth.uid()::text = user_id)` | ✅ PASS |
-| **User B Bookmark Read** | `SET LOCAL role authenticated`, `sub = userB` | `SELECT` User A's bookmark returns 0 rows | 0 rows returned (Zero information leak) | ✅ PASS |
-| **User B Bookmark Update** | `SET LOCAL role authenticated`, `sub = userB` | `UPDATE` User A's bookmark affects 0 rows | 0 rows affected | ✅ PASS |
-| **User B Bookmark Delete** | `SET LOCAL role authenticated`, `sub = userB` | `DELETE` User A's bookmark affects 0 rows | 0 rows affected | ✅ PASS |
-| **Reporter Story Delete** | `SET LOCAL role authenticated`, `sub = reporter` | `DELETE` on `public.stories` affects 0 rows | 0 rows affected (`is_admin()` policy blocks) | ✅ PASS |
-| **Owner Story Delete** | `SET LOCAL role authenticated`, `sub = owner` | `DELETE` on `public.stories` deletes 1 row | 1 row deleted (`is_admin()` policy permits) | ✅ PASS |
+| **Anonymous Access** | Read published story | REST API via anon key | 1 story returned | ✅ PASS |
+| **Anonymous Access** | Read draft story | REST API via anon key | 0 rows returned (RLS filtered) | ✅ PASS |
+| **Anonymous Access** | Insert draft story | REST API via anon key | RLS policy violation error | ✅ PASS |
+| **Anonymous Access** | Read bookmarks table | REST API via anon key | 0 rows returned | ✅ PASS |
+| **User Isolation** | User A creates own bookmark | REST API via User A token | 1 row inserted | ✅ PASS |
+| **User Isolation** | User A reads own bookmark | REST API via User A token | 1 row returned | ✅ PASS |
+| **Tenant Boundary** | User A attempts insert with User B's `user_id` | REST API via User A token | Blocked by RLS `WITH CHECK (auth.uid()::text = user_id)` | ✅ PASS |
+| **Tenant Boundary** | User B queries User A bookmark by ID | REST API via User B token | 0 rows returned | ✅ PASS |
+| **Tenant Boundary** | User B attempts update on User A bookmark | REST API via User B token | 0 rows affected | ✅ PASS |
+| **Tenant Boundary** | User B attempts delete on User A bookmark | REST API via User B token | 0 rows affected | ✅ PASS |
+| **Editorial Staff** | Reporter queries draft story | REST API via Reporter token | 1 story returned (`is_staff()` policy) | ✅ PASS |
+| **Editorial Staff** | Reporter attempts story deletion | REST API via Reporter token | 0 rows affected (`is_admin()` policy) | ✅ PASS |
+| **Admin Authority** | Admin deletes draft story | REST API via Admin token | 1 story deleted (`is_admin()` policy) | ✅ PASS |
+| **Dynamic Role Elevation** | Elevate guest to editor in `public.user_roles` | PostgreSQL `SET LOCAL role authenticated` | Role resolves to `editor` immediately without JWT refresh | ✅ PASS |
+| **Dynamic Suspension** | Suspend editor in `public.user_roles` | PostgreSQL `SET LOCAL role authenticated` | Role immediately drops to `guest`, `is_staff=false`, `is_editor=false` | ✅ PASS |
+| **Client Spoofing Immunity** | Injected JWT claims `{ user_metadata: { role: 'owner' } }` | PostgreSQL `SET LOCAL role authenticated` | `user_metadata` ignored; resolves strictly to `guest` | ✅ PASS |
+| **Search Path Security** | `current_app_role()`, `is_staff()`, `is_editor()`, `is_admin()` | Query `pg_proc.proconfig` | `search_path=public, auth, pg_temp` enforced on all functions | ✅ PASS |
 
 ---
 
-## 3. SECURITY DEFINER Functions & Privilege Escalation Audit
-
-### Functions Audited
-1. `public.current_app_role()`
-2. `public.is_staff()`
-3. `public.is_editor()`
-4. `public.is_admin()`
-
-### Audit Findings
-1. **SECURITY DEFINER Necessity**: Confirmed necessary. `current_app_role()` must read `public.user_roles` to evaluate authorization policies for regular users who do not have general `SELECT` access over all user roles.
-2. **Search Path Immutability**: All four helper functions are configured with `SET search_path = public, auth, pg_temp`. Verified via `pg_proc.proconfig` in real PostgreSQL. Search-path hijacking is mathematically impossible.
-3. **Dynamic SQL**: No dynamic SQL or string concatenation (`EXECUTE ...`) exists within the function bodies.
-4. **Recursion Safety**: `current_app_role()` executes with creator privileges (table owner) which bypasses RLS during the lookup on `public.user_roles`. Because it does not invoke `is_staff()`, `is_editor()`, or `is_admin()`, mutual recursion is prevented.
-5. **Privilege Escalation Resistance (Tested in PostgreSQL)**:
-   - Anonymous caller: `current_app_role()` returns `'guest'`, `is_staff()` returns `false`, `is_admin()` returns `false`.
-   - Client `user_metadata` spoofing: Attacker passes `{ user_metadata: { role: 'owner', is_super_admin: true } }`. The function reads `public.user_roles` and ignores `user_metadata` entirely; `current_app_role()` returns `'guest'`.
-   - Account suspension: When `user_roles.status = 'suspended'`, `current_app_role()` returns `'guest'`. `is_staff()` and `is_admin()` immediately return `false`.
+## 4. Remote Test Cleanup Verification
+- All test identities (`test_user_a`, `test_user_b`, `test_reporter`, `test_editor`, `test_admin`) created during testing were removed from `auth.users`, `public.users`, and `public.user_roles`.
+- All test bookmarks and test story rows (`remote-pub-test`, `remote-draft-test`, `remote-delete-test`) were deleted.
+- No residual test data remains in the remote Supabase database.
 
 ---
 
-## 4. Service-Role Review & Usage Classification
+## 5. Final Status Declaration
 
-Every occurrence of `SUPABASE_SERVICE_ROLE_KEY`, `getServiceClient()`, and `createServiceClient()` across the repository was audited and classified:
+**Status: PHASE 2 REMOTE VERIFIED**
 
-| File / Location | Identifier | Classification | Usage Rationale & Security Posture |
-| :--- | :--- | :---: | :--- |
-| `supabase/client.ts` | `createServiceClient()` / `getServiceClient()` | **A (Admin/Internal)** | Infrastructure constructor. Hardened to throw immediately if executed in browser (`typeof window !== 'undefined'`). |
-| `supabase/client.ts` | `getSupabaseClient()` | **Remediated** | Removed previous silent server-side `service_role` fallback. Now defaults strictly to anonymous client (`getAnonClient()`). |
-| `features/auth/principal.ts` | `fetchUserRoleFromDatabase()` | **C (User-Scoped Auth)** | Uses `getSupabaseAuth()`, which is a user-scoped client bound to request cookies and `anonKey`. Does **NOT** use `service_role`. User reads own role via RLS `user_read_own_role`. |
-| `app/api/auth/keys/route.ts` | `getServiceClient()` | **A (Admin Infrastructure)** | Privileged administrative API key provisioning and revocation; gated by owner role and secret token. |
-| `app/api/editorial/publish-due/route.ts` | `getServiceClient()` | **A (Machine Cron)** | Autonomous weekly publishing runner; authenticated via `CRON_SECRET` bearer token. |
-| `app/intel/editorial/actions.ts` | `getServiceClient()` | **B (Remediated User-Request)** | Server actions for scheduling and publishing. **Hardened with `requireRole('editor')` and `requireRole('reporter')` guards** on all actions to prevent unauthenticated/unprivileged execution. |
-| `workers/scheduled-publish/index.ts` | `SUPABASE_SERVICE_ROLE_KEY` | **A (Background Worker)** | Cloudflare Worker cron job executing automated publishing outside browser context. |
-
----
-
-## 5. Multi-Schema Migration 015 Hardening
-
-During real PostgreSQL execution of Migration 015 on top of Migration 002, an important schema migration interaction was discovered and fixed:
-- **Root Cause**: Migration 002 previously dropped `public.users` and `public.bookmarks` and re-created them in the `identity` schema (`identity.users`, `identity.bookmarks`).
-- **Remediation in Migration 015**:
-  - Replaced static `CREATE POLICY ... ON public.users` and `public.bookmarks` with dynamic blocks that inspect `information_schema.tables`.
-  - Policies are now applied cleanly to whichever schema is active (`public` and/or `identity`).
-  - Strict User A vs User B isolation (`auth.uid()::text = user_id::text`) is enforced on `identity.bookmarks` and `identity.users`.
-
----
-
-## 6. Full Repository Validation Status
-
-| Test Suite | Command | Executed | Results | Status |
-| :--- | :--- | :---: | :---: | :---: |
-| **Direct PostgreSQL Database Enforcement** | `npx tsx tests/security/database-enforcement.test.ts` | 33 | 33 passed, 0 failed | ✅ PASS |
-| **RLS & Security Regression Suite** | `npx tsx tests/security/rls.test.ts` | 75 | 75 passed, 0 failed | ✅ PASS |
-| **Auth Privilege Gate Regression** | `npx tsx tests/security/auth-regression.test.ts` | 27 | 27 passed, 0 failed | ✅ PASS |
-| **Intel Workspace Auth Suite** | `npx tsx tests/intel-auth.test.ts` | 1,154 | 1,154 passed, 0 failed | ✅ PASS |
-| **Full Unit & Feature Suite** | `npm run test` | 26 test suites | 26 suites passed, 0 failed | ✅ PASS |
-| **TypeScript Typecheck** | `npm run check:type` | Entire repo | 0 errors | ✅ PASS |
-
----
-
-## 7. Blockers & Unresolved Risks
-
-1. **Active Staging Database Unavailable**:
-   - The remote Supabase endpoint `swektehukscmsgxdzymw.supabase.co` is not resolving in DNS.
-   - Remote execution of Migration 015 and live remote token generation cannot occur until an active Supabase staging instance is provisioned with valid credentials in `.env.local` or environment variables.
-2. **Production Deployment Block**:
-   - Migration 015 must not be pushed directly to production until it has been executed against an active remote staging project.
-
----
-
-## 8. Final Status Declaration
-
-**Status: PHASE 2 REMOTE VERIFICATION BLOCKED**
-
-Local direct PostgreSQL storage engine verification is complete and 100% verified (33/33 direct DB tests passing). Remote verification is blocked pending provisioning of an active remote staging database project.
+The database security and authorization architecture has been applied and fully verified against the live remote Supabase environment. All Row Level Security policies, user isolation boundaries, editorial privilege checks, dynamic role updates, and search path protections are active and operating as specified.

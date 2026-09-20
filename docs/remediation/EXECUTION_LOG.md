@@ -47,3 +47,27 @@
   - `npm run test`: 26/26 test suites passed
   - `npm run build`: Production build cleanly completed (1,119 routes)
 
+## Phase 2 Remote: Remote Database Security Verification (Supabase Cloud)
+- **Branch**: `security/production-hardening`
+- **Status**: Completed & Verified (`PHASE 2 REMOTE VERIFIED`)
+- **Target Project**: `https://lvfovvidtowadmnggzzf.supabase.co` (`lvfovvidtowadmnggzzf`)
+- **Objective**: Execute Migration 015 against real Supabase PostgreSQL cloud database, verify 23-table RLS activation and 65 policies, and prove end-to-end user isolation, role-based boundaries, and dynamic role updates via live REST API and direct PostgreSQL sessions.
+
+### Tasks & Validation
+- [x] Connect to active remote Supabase project (`lvfovvidtowadmnggzzf`)
+- [x] Execute Migration 015 cleanly (`scripts/apply-migration-015.ts`):
+  - Created `public.user_roles`
+  - Created 4 helper functions (`current_app_role()`, `is_staff()`, `is_editor()`, `is_admin()`) with immutable `search_path = public, auth, pg_temp`
+  - Enabled RLS across all 23 remote tables
+  - Created 65 active policies in `public`
+  - Reloaded PostgREST schema cache
+- [x] Author and execute live remote test suite (`scripts/verify-remote-live.ts`):
+  - Anonymous client: can read published stories, cannot read draft stories, cannot insert stories, cannot read bookmarks (4/4 PASS)
+  - User A vs User B isolation: User A creates & reads own bookmark, User A cannot insert as User B, User B cannot read, update, or delete User A bookmark (6/6 PASS)
+  - Editorial boundaries: Reporter reads drafts but cannot delete; Admin deletes draft (3/3 PASS)
+  - Dynamic role changes: User A initial guest -> elevated to editor immediately permits editorial actions -> suspended immediately drops to guest without relogin (3/3 PASS)
+  - Spoofing immunity & search path: Injected `user_metadata` claims ignored in direct PostgreSQL query; all 4 functions enforce immutable `search_path` (5/5 PASS)
+- [x] Live Remote Suite Result: **21/21 passed (100%)**
+- [x] Cleaned up all remote test artifacts (identities, stories, bookmarks)
+
+
