@@ -4,7 +4,7 @@
 - **Date**: 2026-09-20
 - **Branch**: `security/production-hardening`
 - **Environment**: Local & Supabase Remote Staging (`lvfovvidtowadmnggzzf`)
-- **Status**: **PASSED (100%)**
+- **Status**: **PHASE 3 VERIFIED — REMOTE PROVIDER VERIFIED**
 
 ---
 
@@ -149,10 +149,90 @@ API SECURITY VALIDATION COMPLETE: 49 passed, 0 failed (100%)
 | `tests/security/api-security.test.ts` | Phase 3 API keys & distributed rate limiting | **49/49 passed (100%)** |
 | `tests/security/auth-regression.test.ts` | Phase 1 authentication & authorization gates | **27/27 passed (100%)** |
 | `tests/security/rls.test.ts` | Phase 2 Row-Level Security & database isolation | **75/75 passed (100%)** |
+| `tests/security/database-enforcement.test.ts` | Direct PostgreSQL RLS enforcement & migrations | **33/33 passed (100%)** |
 | `tests/intel-auth.test.ts` | Intelligence module authorization matrix | **1154/1154 passed (100%)** |
 | `tests/monetization/monetization.test.ts` | Checkout API rate limiting & abuse prevention | **5/5 passed (100%)** |
 | `npm run test` | Full repository feature and unit test suite | **26/26 test suites passed** |
 | `npm run build` | Next.js 15 production build | **Passed (0 errors, 1,119 routes)** |
+| `scripts/verify-phase3-remote.ts` | Live remote staging provider verification | **49/49 passed (100%)** |
+
+### 4.3 Live Remote Provider Verification (`scripts/verify-phase3-remote.ts`)
+Executed directly against Supabase Cloud staging project `lvfovvidtowadmnggzzf`:
+```
+═══════════════════════════════════════════════════════════════════
+PHASE 3 REMOTE INFRASTRUCTURE & PROVIDER VERIFICATION
+═══════════════════════════════════════════════════════════════════
+
+1. Verifying Environment & Migration State
+  ✓ PASS: Target is confirmed NON-PRODUCTION staging project (lvfovvidtowadmnggzzf)
+  ✓ PASS: Supabase service role credentials available
+  ✓ PASS: Table public.api_keys exists and is accessible remotely
+  ✓ PASS: Table public.rate_limit_buckets exists and is accessible remotely
+  ✓ PASS: Function increment_rate_limit() exists and executes cleanly
+
+2. Verifying Remote API Key State & Immediate Cache Invalidation
+  ✓ PASS: Raw key returned on creation
+  ✓ PASS: Key record persisted in remote PostgreSQL
+  ✓ PASS: Database contains SHA-256 hash (64 hex characters)
+  ✓ PASS: Database contains key_prefix
+  ✓ PASS: Raw API secret is NEVER stored in database row
+  ✓ PASS: Authentication succeeds with valid raw key
+  ✓ PASS: Key successfully revoked
+  ✓ PASS: IMMEDIATE subsequent request rejected as REVOKED (cache invalidation verified)
+
+3. Verifying Multi-Instance Distributed Rate Limiting (Shared State)
+  ✓ PASS: Instance A performs request #1 (count = 1)
+  ✓ PASS: Instance B observes count = 2 across shared store
+  ✓ PASS: Instance C observes count = 3 across shared store
+  ✓ PASS: Instance B observes limit boundary (count = 5, remaining = 0)
+  ✓ PASS: Instance C blocked at limit (allowed = false)
+  ✓ PASS: Remaining requests = 0
+  ✓ PASS: X-RateLimit-Reset is positive seconds
+  ✓ PASS: Retry-After is positive seconds
+  ✓ PASS: Response status is HTTP 429
+  ✓ PASS: Header X-RateLimit-Limit is 5
+  ✓ PASS: Header X-RateLimit-Remaining is 0
+  ✓ PASS: Header Retry-After present on 429 response
+
+4. Verifying Rate Limiter Failure Modes (Fail-Closed vs Graceful Degradation)
+  ✓ PASS: Security-sensitive tier [auth] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [checkout] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [ai] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [intelligence] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [export] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [search] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [mutation] FAILS CLOSED when stores fail
+  ✓ PASS: Security-sensitive tier [standard_api] FAILS CLOSED when stores fail
+  ✓ PASS: Low-risk tier [public_api] DEGRADES GRACEFULLY when stores fail
+
+5. Verifying Remote PostgreSQL Atomic Concurrency & Locking
+   Observed concurrent counts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  ✓ PASS: All 15 concurrent increments were uniquely assigned without race conditions
+  ✓ PASS: Final bucket counter reached exactly 15
+
+6. Verifying Production Provider Selection & Downgrade Prevention
+  ✓ PASS: Default configuration selects distributed store: [postgres]
+  ✓ PASS: Production configuration throws STARTUP ERROR if distributed provider is missing (refuses silent memory fallback)
+
+7. Verifying Remote API Key Permission Boundaries
+  ✓ PASS: Read-only key principal permitted story.read
+  ✓ PASS: Read-only key principal CANNOT publish stories
+  ✓ PASS: Read-only key principal CANNOT create API keys
+  ✓ PASS: Read-only key principal CANNOT access restricted intel
+  ✓ PASS: Admin key principal permitted story.read
+  ✓ PASS: Admin key principal permitted story.publish
+  ✓ PASS: Admin key principal permitted api_key.create
+
+8. Verifying Abuse Controls & Request Bounds
+  ✓ PASS: Negative page number normalized to 1
+  ✓ PASS: Huge search pageSize 1000 clamped to 50
+  ✓ PASS: Huge general pageSize 999999 clamped to 100
+  ✓ PASS: Huge AI prompt truncated strictly to 4,000 chars
+
+═══════════════════════════════════════════════════════════════════
+REMOTE PROVIDER VERIFICATION SUMMARY: 49 passed, 0 failed (100%)
+═══════════════════════════════════════════════════════════════════
+```
 
 ---
 
@@ -163,7 +243,7 @@ API SECURITY VALIDATION COMPLETE: 49 passed, 0 failed (100%)
 - **Migrations Applied**:
   - `015_enable_rls_and_consolidate_roles.sql` (Phase 2 RLS and role consolidation)
   - `016_api_keys_and_rate_limiting.sql` (Phase 3 `api_keys`, `rate_limit_buckets`, and `increment_rate_limit` RPC)
-- **Live Verification**: Atomic `increment_rate_limit` RPC call verified against the remote PostgreSQL instance.
+- **Live Verification**: Atomic `increment_rate_limit` RPC, concurrent workers, and API key lifecycle verified live.
 
 ---
 

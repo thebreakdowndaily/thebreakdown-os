@@ -40,6 +40,10 @@ export class DistributedRateLimiter {
     } else if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
       this.primaryStore = new PostgresRateLimitStore();
       this.fallbackStore = new MemoryRateLimitStore();
+    } else if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PHASE) {
+      throw new Error(
+        '[FATAL_SECURITY_CONFIG] Distributed rate limiting backend (Redis or PostgreSQL Supabase) is not configured in production. Refusing to fall back silently to in-memory store.'
+      );
     } else {
       this.primaryStore = new MemoryRateLimitStore();
       this.fallbackStore = new MemoryRateLimitStore();
@@ -56,6 +60,25 @@ export class DistributedRateLimiter {
 
   async checkLimit(options: CheckLimitOptions): Promise<RateLimitResult> {
     const policy = RATE_LIMIT_POLICIES[options.tier];
+
+    // Enforce production security boundary: refuse memory store silently serving production traffic
+    if (process.env.NODE_ENV === 'production' && this.primaryStore.name === 'memory') {
+      logSecurityEvent({
+        type: 'rate_limit.store_error',
+        endpoint: options.endpoint,
+        reason: 'Distributed rate limiting store is unconfigured in production environment',
+      });
+      if (policy.failClosed) {
+        return {
+          allowed: false,
+          limit: policy.maxRequests,
+          current: policy.maxRequests + 1,
+          remaining: 0,
+          resetSeconds: policy.windowSeconds,
+          retryAfterSeconds: policy.windowSeconds,
+        };
+      }
+    }
 
     if (options.tier === 'unlimited') {
       return {

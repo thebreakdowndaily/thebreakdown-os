@@ -314,8 +314,9 @@ export async function revokeApiKey(
   const revokedAt = new Date().toISOString();
   targetKey.revoked_at = revokedAt;
 
-  // Evict from cache
-  verificationCache.delete(targetKey.key_hash);
+  // Explicitly cache the revoked record so any immediate subsequent request
+  // fails closed as REVOKED instantly without waiting for cache TTL or DB propagation
+  verificationCache.set(targetKey.key_hash, { record: targetKey, cachedAt: Date.now() });
 
   try {
     const supabase = getServiceClient();
@@ -346,6 +347,13 @@ export async function deleteApiKey(
     return { success: false, error: 'Admin access required to delete API keys' };
   }
 
+  // Purge from verification cache immediately
+  for (const [hash, entry] of verificationCache.entries()) {
+    if (entry.record.id === keyId) {
+      verificationCache.delete(hash);
+    }
+  }
+
   if (isConfiguredSupabase()) {
     try {
       const supabase = getServiceClient();
@@ -357,7 +365,6 @@ export async function deleteApiKey(
 
   for (const [hash, rec] of inMemoryKeys.entries()) {
     if (rec.id === keyId) {
-      verificationCache.delete(hash);
       inMemoryKeys.delete(hash);
       break;
     }
