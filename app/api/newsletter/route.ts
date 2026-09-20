@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getNewsletterProvider, NewsletterSubscribeResult } from '@/lib/newsletter/provider';
+import { rateLimiter } from '@/features/rate-limiting/limiter';
 
-// In-memory rate limiting map
-// Key: sha256(ip + email), Value: timestamp
-// The raw email and IP are never retained as keys — only a digest.
-const rateLimitMap = new Map<string, number>();
-const RATE_LIMIT_COOLDOWN_MS = 60 * 1000; // 1 minute
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 async function hashKey(value: string): Promise<string> {
@@ -35,41 +31,36 @@ export async function POST(request: Request) {
       );
     }
 
-    // Rate limiting on a digest of ip+email — no raw PII retained.
-    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    // Rate limiting on a digest of ip+email via distributed rate limiter
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
     const rateLimitKey = await hashKey(`${ip}:${normalized}`);
-    const now = Date.now();
-    const lastRequest = rateLimitMap.get(rateLimitKey);
+    
+    const rate = await rateLimiter.checkLimit({
+      key: `newsletter:${rateLimitKey}`,
+      tier: 'mutation',
+      endpoint: '/api/newsletter',
+      ip,
+    });
 
-    if (lastRequest && now - lastRequest < RATE_LIMIT_COOLDOWN_MS) {
-      return NextResponse.json(
-        { status: 'error', message: 'Too many requests. Please try again shortly.' },
-        { status: 429 }
-      );
-    }
-
-    rateLimitMap.set(rateLimitKey, now);
-
-    // Cleanup old rate limit entries to prevent memory leaks.
-    if (rateLimitMap.size > 1000) {
-      for (const [key, timestamp] of rateLimitMap.entries()) {
-        if (now - timestamp > RATE_LIMIT_COOLDOWN_MS) {
-          rateLimitMap.delete(key);
-        }
-      }
+    if (!rate.allowed) {
+      return rateLimiter.create429Response(rate, 'Too many requests. Please try again shortly.');
     }
 
     const provider = getNewsletterProvider();
     const result: NewsletterSubscribeResult = await provider.subscribe(normalized);
 
     if (result.status === 'submitted' || result.status === 'confirmed') {
-      return NextResponse.json(result, { status: 200 });
+      const resp = NextResponse.json(result, { status: 200 });
+      rateLimiter.applyHeaders(resp.headers, rate);
+      return resp;
     }
 
     // `unavailable` (503) and `error` (500) are distinct: unavailable means
     // no delivery provider is configured — nothing was attempted.
     const httpStatus = result.status === 'unavailable' ? 503 : 500;
-    return NextResponse.json(result, { status: httpStatus });
+    const resp = NextResponse.json(result, { status: httpStatus });
+    rateLimiter.applyHeaders(resp.headers, rate);
+    return resp;
   } catch (error) {
     console.error('Newsletter API Error:', error);
     return NextResponse.json(

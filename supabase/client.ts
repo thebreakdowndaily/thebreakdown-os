@@ -12,7 +12,7 @@ export type TypedDatabase = {
   public: {
     Tables: AddRelationships<Database['public']['Tables']>;
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: Database['public']['Functions'];
     Enums: Record<string, never>;
   };
 };

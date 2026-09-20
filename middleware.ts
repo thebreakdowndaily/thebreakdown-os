@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { validateApiKey, checkRateLimit } from './utils/api-auth';
+import { validateApiKeyAsync } from './utils/api-auth';
+import { rateLimiter } from './features/rate-limiting/limiter';
 import {
   PUBLIC_CACHE_POLICY,
   PUBLIC_UNINDEXED_HEADER,
@@ -67,8 +67,23 @@ export async function middleware(request: NextRequest) {
       );
     }
 
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+
     if (PUBLIC_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
-      return NextResponse.next();
+      const publicRate = await rateLimiter.checkLimit({
+        key: `public:${clientIp}`,
+        tier: 'public_api',
+        endpoint: pathname,
+        ip: clientIp,
+      });
+      if (!publicRate.allowed) {
+        const resp = rateLimiter.create429Response(publicRate);
+        Object.entries(SECURITY_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
+        return resp;
+      }
+      const pubResp = NextResponse.next();
+      rateLimiter.applyHeaders(pubResp.headers, publicRate);
+      return pubResp;
     }
 
     const apiKey = request.headers.get('x-api-key');
@@ -79,26 +94,29 @@ export async function middleware(request: NextRequest) {
       );
     }
 
-    const key = validateApiKey(apiKey);
+    const key = await validateApiKeyAsync(apiKey);
     if (!key) {
       return NextResponse.json(
-        { error: 'Forbidden', message: 'Invalid or revoked API key' },
+        { error: 'Forbidden', message: 'Invalid, expired, or revoked API key' },
         { status: 403, headers: SECURITY_HEADERS as HeadersInit }
       );
     }
 
-    const rate = checkRateLimit(apiKey);
+    const rate = await rateLimiter.checkLimit({
+      key: `apikey:${key.key}`,
+      tier: 'standard_api',
+      endpoint: pathname,
+      ip: clientIp,
+    });
+
     if (!rate.allowed) {
-      return NextResponse.json(
-        { error: 'Too Many Requests', message: 'Rate limit exceeded', retryAfter: Math.ceil(rate.resetMs / 1000) },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil(rate.resetMs / 1000)), ...SECURITY_HEADERS } }
-      );
+      const resp = rateLimiter.create429Response(rate);
+      Object.entries(SECURITY_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
+      return resp;
     }
 
     const response = NextResponse.next();
-    response.headers.set('X-RateLimit-Limit', '100');
-    response.headers.set('X-RateLimit-Remaining', String(rate.remaining));
-    response.headers.set('X-RateLimit-Reset', String(Math.ceil(rate.resetMs / 1000)));
+    rateLimiter.applyHeaders(response.headers, rate);
     return response;
   }
 

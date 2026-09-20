@@ -2,6 +2,7 @@ import { getSupabaseAuth } from './auth-server';
 import { isDemoMode, DEMO_USER } from './demo';
 import { extractAuthoritativeRole, normalizeIntelRole, type IntelRole } from './roles';
 import type { User } from '@supabase/supabase-js';
+import type { AppPermission } from './permissions';
 
 export interface Principal {
   userId: string;
@@ -11,6 +12,7 @@ export interface Principal {
   isSuperAdmin: boolean;
   status: 'active' | 'suspended';
   organizationId: string | null;
+  permissions?: AppPermission[];
 }
 
 /**

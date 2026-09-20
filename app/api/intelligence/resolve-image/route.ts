@@ -3,8 +3,22 @@ import { getServices } from '@/services/registry';
 import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { bootstrapServices } from '@/lib/bootstrap';
+import { rateLimiter } from '@/features/rate-limiting/limiter';
 
 export async function POST(req: Request) {
+  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+
+  const rate = await rateLimiter.checkLimit({
+    key: `intel:${clientIp}`,
+    tier: 'intelligence',
+    endpoint: '/api/intelligence/resolve-image',
+    ip: clientIp,
+  });
+
+  if (!rate.allowed) {
+    return rateLimiter.create429Response(rate);
+  }
+
   try {
     // Ensure services are initialized
     bootstrapServices();
@@ -34,7 +48,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Could not resolve or generate an image.' }, { status: 500 });
     }
     
-    return NextResponse.json({ data: mediaItem });
+    const response = NextResponse.json({ data: mediaItem });
+    rateLimiter.applyHeaders(response.headers, rate);
+    return response;
   } catch (error: any) {
     console.error('Image Intelligence Error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });

@@ -70,4 +70,48 @@
 - [x] Live Remote Suite Result: **21/21 passed (100%)**
 - [x] Cleaned up all remote test artifacts (identities, stories, bookmarks)
 
+## Phase 3: API Key Security, Distributed Rate Limiting, Abuse Prevention & Network Hardening
+- **Branch**: `security/production-hardening`
+- **Status**: Completed & Verified (`PHASE 3 VERIFIED`)
+- **Target Remote**: `https://lvfovvidtowadmnggzzf.supabase.co` (`lvfovvidtowadmnggzzf`)
+- **Objective**: Implement persistent hashed API keys in PostgreSQL, integrate API keys with the centralized Principal + Permission model, deploy distributed multi-store rate limiting with fail-closed security and graceful public degradation, and implement abuse prevention across all sensitive routes.
+
+### Tasks & Validation
+- [x] Author database migration `supabase/migrations/016_api_keys_and_rate_limiting.sql`:
+  - Created `public.api_keys` with RLS, hashed keys, prefix storage, owner foreign keys, and indexes
+  - Created `public.rate_limit_buckets` table
+  - Created atomic `public.increment_rate_limit()` stored procedure with `SECURITY DEFINER` and fixed search path
+- [x] Applied Migration 016 to remote Supabase staging environment
+- [x] Implement API key service & types (`features/auth/api-keys/`):
+  - 256-bit cryptographically secure generation (`tb_live_...`)
+  - One-time raw secret exposure at creation; raw secret never stored in database
+  - Fast constant-time lookup via SHA-256 hash
+  - In-memory verification cache (60s TTL)
+  - Debounced `last_used_at` updates to prevent database write amplification
+  - Masked key management views (`tb_live_abc...xyz`)
+- [x] Implement distributed multi-store rate limiting (`features/rate-limiting/`):
+  - Store abstraction: `RedisRateLimitStore` (Upstash REST pipeline), `PostgresRateLimitStore` (atomic RPC), and `MemoryRateLimitStore`
+  - Multi-tier policies: `auth` (10/min), `checkout` (1/min), `ai` (15/min), `intelligence` (20/min), `export` (10/min), `search` (30/min), `mutation` (20/min), `standard_api` (120/min), `public_api` (60/min), `unlimited`
+  - Explicit failure modes: Fail closed on security-sensitive tiers, degrade gracefully on public reads
+  - RFC 6585 compliance with standard `429 Too Many Requests` responses and headers (`X-RateLimit-*`, `Retry-After`)
+- [x] Centralized security audit logging (`features/security/audit-logger.ts`) with strict redaction of tokens, secrets, keys, and credentials
+- [x] Upgrade route handlers and middleware for abuse prevention:
+  - `middleware.ts`: Unified asynchronous API key validation and distributed rate limiting on `/api/*`
+  - `/api/auth/keys` & `/api/auth/keys/[keyId]`: Centralized permission checks, raw key returned once on creation, masked keys on list/get, rate limiting
+  - `/api/checkout`: Rate limited to 1 req/min per email+IP to prevent double charges
+  - `/api/search`: Bounded query length (200 chars), bounded pagination (max 50)
+  - `/api/ai/copilot`: Bounded prompt length (4,000 chars)
+  - `/api/data/download`, `/api/intelligence/resolve-image`, `/api/newsletter` hardened
+- [x] Author comprehensive security test suite `tests/security/api-security.test.ts` (49 tests)
+- [x] Complete Full Verification Matrix:
+  - Scoped ESLint (`features/rate-limiting`, `features/auth/api-keys`, `features/security`, `app/api/auth/keys`): **0 errors, 0 warnings**
+  - TypeScript `npm run check:type`: **0 errors**
+  - `tests/security/api-security.test.ts`: **49/49 passed (100%)**
+  - `tests/security/auth-regression.test.ts`: **27/27 passed (100%)**
+  - `tests/security/rls.test.ts`: **75/75 passed (100%)**
+  - `tests/intel-auth.test.ts`: **1154/1154 passed (100%)**
+  - `npm run test`: **26/26 suites passed**
+  - `npm run build`: **Next.js 15 production build passed (1,119 routes)**
+
+
 

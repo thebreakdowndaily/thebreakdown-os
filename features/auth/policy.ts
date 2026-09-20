@@ -1,6 +1,6 @@
 import type { Principal } from './principal';
 import type { AppPermission } from './permissions';
-import type { IntelRole } from './roles';
+import { normalizeIntelRole, type IntelRole } from './roles';
 
 const ROLE_PERMISSIONS: Record<IntelRole, Set<AppPermission>> = {
   owner: new Set<AppPermission>([
@@ -84,7 +84,14 @@ export function can(
     return true;
   }
 
-  const rolePermissions = ROLE_PERMISSIONS[principal.role] as Set<AppPermission> | undefined;
+  // 1. Explicit assigned permissions (e.g. scoped API keys or custom user grants)
+  if (Array.isArray(principal.permissions) && principal.permissions.length > 0) {
+    return principal.permissions.includes(permission);
+  }
+
+  // 2. Canonical role hierarchy permissions
+  const role = normalizeIntelRole(principal.role);
+  const rolePermissions = ROLE_PERMISSIONS[role] as Set<AppPermission> | undefined;
   return rolePermissions ? rolePermissions.has(permission) : false;
 }
 

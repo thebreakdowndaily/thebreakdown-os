@@ -25,6 +25,23 @@ export interface Database {
       sources: SourceRow;
       editorial_schedule: EditorialScheduleRow;
       publication_gate_log: PublicationGateLogRow;
+      api_keys: ApiKeyTableRow;
+      rate_limit_buckets: RateLimitBucketRow;
+    };
+    Functions: {
+      increment_rate_limit: {
+        Args: {
+          p_bucket_key: string;
+          p_window_seconds: number;
+          p_max_limit: number;
+        };
+        Returns: {
+          allowed: boolean;
+          current_count: number;
+          remaining: number;
+          reset_seconds: number;
+        }[];
+      };
     };
   };
 }
@@ -968,6 +985,72 @@ export interface PublicationGateLogRow {
     checked_at?: string;
     published_at?: string | null;
     triggered_by?: string;
+  };
+}
+
+export interface ApiKeyTableRow {
+  Row: {
+    id: string;
+    owner_id: string | null;
+    name: string;
+    key_prefix: string;
+    key_hash: string;
+    permissions: unknown;
+    role: string;
+    rate_limit_tier: string;
+    created_at: string;
+    expires_at: string | null;
+    revoked_at: string | null;
+    last_used_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    owner_id?: string | null;
+    name: string;
+    key_prefix: string;
+    key_hash: string;
+    permissions?: unknown;
+    role?: string;
+    rate_limit_tier?: string;
+    created_at?: string;
+    expires_at?: string | null;
+    revoked_at?: string | null;
+    last_used_at?: string | null;
+  };
+  Update: {
+    id?: string;
+    owner_id?: string | null;
+    name?: string;
+    key_prefix?: string;
+    key_hash?: string;
+    permissions?: unknown;
+    role?: string;
+    rate_limit_tier?: string;
+    created_at?: string;
+    expires_at?: string | null;
+    revoked_at?: string | null;
+    last_used_at?: string | null;
+  };
+}
+
+export interface RateLimitBucketRow {
+  Row: {
+    bucket_key: string;
+    window_start: string;
+    request_count: number;
+    expires_at: string;
+  };
+  Insert: {
+    bucket_key: string;
+    window_start: string;
+    request_count?: number;
+    expires_at: string;
+  };
+  Update: {
+    bucket_key?: string;
+    window_start?: string;
+    request_count?: number;
+    expires_at?: string;
   };
 }
 
