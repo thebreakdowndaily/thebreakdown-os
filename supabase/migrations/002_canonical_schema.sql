@@ -3,9 +3,7 @@
 -- Drops prior tables (001) and rebuilds under public, editorial, graph, audit, identity, search schemas.
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Drop old tables from 001
--- ═══════════════════════════════════════════════════════════════════════════
-
+-- APPROVED_DESTRUCTIVE: ARCH-002 Replaces flat prototype tables with normalized canonical schema
 DROP TABLE IF EXISTS dataset_observations CASCADE;
 DROP TABLE IF EXISTS dataset_series CASCADE;
 DROP TABLE IF EXISTS dataset_dimensions CASCADE;

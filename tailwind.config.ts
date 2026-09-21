@@ -48,6 +48,43 @@ const config: Config = {
           secondary: 'var(--color-bg-secondary)',
           tertiary: 'var(--color-bg-tertiary)',
         },
+        /* ── Environment surfaces ─── */
+        reading: {
+          DEFAULT: 'var(--color-bg-reading)',
+          card:    'var(--color-bg-reading-card)',
+          text:    'var(--color-text-reading)',
+          dim:     'var(--color-text-reading-dim)',
+          border:  'var(--color-border-reading)',
+        },
+        research: {
+          DEFAULT: 'var(--color-bg-research)',
+          card:    'var(--color-bg-research-card)',
+          text:    'var(--color-text-research)',
+          border:  'var(--color-border-research)',
+        },
+        /* ── Earth material palette ─── */
+        earth: {
+          clay:       'var(--color-earth-clay)',
+          forest:     'var(--color-earth-forest)',
+          moss:       'var(--color-earth-moss)',
+          stone:      'var(--color-earth-stone)',
+          atmosphere: 'var(--color-earth-atmosphere)',
+          parchment:  'var(--color-earth-parchment)',
+          ochre:      'var(--color-earth-ochre)',
+          dust:       'var(--color-earth-dust)',
+        },
+        /* ── Evidence semantic palette ─── */
+        evidence: {
+          verified:        'var(--color-evidence-verified)',
+          'verified-text': 'var(--color-evidence-verified-text)',
+          'verified-border':'var(--color-evidence-verified-border)',
+          partial:         'var(--color-evidence-partial)',
+          'partial-text':  'var(--color-evidence-partial-text)',
+          'partial-border':'var(--color-evidence-partial-border)',
+          unresolved:        'var(--color-evidence-unresolved)',
+          'unresolved-text': 'var(--color-evidence-unresolved-text)',
+          'unresolved-border':'var(--color-evidence-unresolved-border)',
+        },
         text: {
           primary: 'var(--color-text-primary)',
           secondary: 'var(--color-text-secondary)',
@@ -96,10 +133,12 @@ const config: Config = {
 
       // ── Typography ────────────────────────────────────────────────
       fontFamily: {
-        sans: ['var(--font-sans)'],
-        serif: ['var(--font-serif)'],
-        mono: ['var(--font-mono)'],
-        display: ['var(--font-display)'],
+        sans:      ['var(--font-sans)'],
+        serif:     ['var(--font-serif)'],
+        mono:      ['var(--font-mono)'],
+        display:   ['var(--font-display)'],   /* Playfair Display — headlines */
+        reading:   ['var(--font-reading)'],   /* Source Serif 4 — article body */
+        editorial: ['var(--font-editorial)'], /* Playfair Display — editorial serif */
       },
       fontSize: {
         xs: ['var(--text-xs)', { lineHeight: 'var(--text-xs--line-height)' }],

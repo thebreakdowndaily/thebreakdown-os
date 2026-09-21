@@ -12,14 +12,18 @@ stages:
   - install
   - typecheck
   - lint
+  - security
+  - database
+  - test
+  - accessibility
   - build
   - playwright
-  - accessibility
   - report
   - deploy
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  NODE_ENV: "test"
 
 install:
   stage: install
@@ -35,15 +39,42 @@ typecheck:
   dependencies:
     - install
   script:
-    - npm run typecheck
+    - npm run check:type
 
 lint:
   stage: lint
   dependencies:
     - install
   script:
-    - npm run lint
-  allow_failure: true
+    - npm run check:lint
+
+security:
+  stage: security
+  dependencies:
+    - install
+  script:
+    - npm run test:security
+
+database:
+  stage: database
+  dependencies:
+    - install
+  script:
+    - npm run test:migration
+
+unit_tests:
+  stage: test
+  dependencies:
+    - install
+  script:
+    - npm run test
+
+accessibility:
+  stage: accessibility
+  dependencies:
+    - install
+  script:
+    - npm run test:a11y
 
 build:
   stage: build
@@ -74,26 +105,13 @@ playwright:
       - test-results/
     expire_in: 30 days
 
-accessibility:
-  stage: accessibility
-  dependencies:
-    - install
-    - build
-  script:
-    - npx playwright test tests/e2e/accessibility.spec.ts
-  artifacts:
-    when: always
-    paths:
-      - playwright-report/
-    expire_in: 30 days
-
 upload_reports:
   stage: report
   dependencies:
     - playwright
     - accessibility
   script:
-    - echo "Playwright and Accessibility reports are ready for review."
+    - echo "Playwright, Security, and Accessibility reports are ready for review."
   artifacts:
     paths:
       - playwright-report/

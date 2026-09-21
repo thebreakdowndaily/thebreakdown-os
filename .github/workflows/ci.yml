@@ -1,4 +1,5 @@
-name: CI
+name: CI Pipeline
+
 on:
   push:
     branches-ignore:
@@ -6,14 +7,39 @@ on:
   pull_request:
 
 jobs:
-  lint-and-build:
+  validate-and-gate:
+    name: Continuous Integration & Release Gates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v22)
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
           cache: npm
-      - run: npm ci
-      - run: npm run lint || true
-      - run: npm run build
+
+      - name: 1. Clean Dependencies Installation
+        run: npm ci
+
+      - name: 2. Strict Typecheck Gate
+        run: npm run check:type
+
+      - name: 3. Strict Linting Gate
+        run: npm run check:lint
+
+      - name: 4. Security Regression Gate
+        run: npm run test:security
+
+      - name: 5. Database & Migration Safety Gate
+        run: npm run test:migration
+
+      - name: 6. Unit & Domain Test Suite
+        run: npm run test
+
+      - name: 7. Accessibility Validation Gate
+        run: npm run test:a11y
+
+      - name: 8. Production Next.js Build Verification
+        run: npm run build

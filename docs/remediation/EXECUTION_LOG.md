@@ -113,5 +113,38 @@
   - `npm run test`: **26/26 suites passed**
   - `npm run build`: **Next.js 15 production build passed (1,119 routes)**
 
+## Phase 4: CI/CD, Deterministic Testing, Security Regression & Release Hardening
+- **Branch**: `security/production-hardening`
+- **Status**: Completed & Verified (`PHASE 4 COMPLETE & RELEASE HARDENED`)
+- **Objective**: Establish CI/CD as an unbypassable production release gate that enforces all security, database, and reliability guarantees established in Phases 1–3 without silent failure masking.
+
+### Tasks & Validation
+- [x] Audit CI/CD pipelines and author `docs/remediation/PHASE4_CICD_MAP.md`:
+  - Mapped pipeline stages across GitLab CI and GitHub Actions
+  - Established 7-tier test classification taxonomy (Unit, Security Regression, Database Migration, Integration, Accessibility, E2E, External Integration)
+  - Documented deployment path, automated rollback strategy, and environment boundaries
+- [x] Script & Environment Synchronization:
+  - Added canonical aliases to `package.json`: `test:security`, `test:migration`, `test:a11y`, `test:e2e`, `typecheck`
+  - Replaced all placeholder dummy scripts (`check:test`, `check:security`, `check:a11y`, `check:performance`, etc.) with real verification commands
+  - Upgraded deployment pipeline node versions to Node 22 (matching `"engines": { "node": ">=22.0.0" }`)
+- [x] Eliminate Failure Masking:
+  - Removed `allow_failure: true` from `.gitlab-ci.yml` lint stage
+  - Removed `|| true` masking from `.github/workflows/ci.yml`
+  - Tuned ESLint flat configuration for TypeScript and React 19 rules: **0 errors across entire repository**
+- [x] Deterministic Network Isolation:
+  - Hardened `DefaultImageIntelligenceService` in `services/media/intelligence.ts`
+  - Automated test environments (`NODE_ENV=test` / `CI=true`) isolated from unmocked Wikimedia HTTP calls (`ALLOW_EXTERNAL_API !== 'true'`)
+  - Unit tests run 100% offline with zero external network latency
+- [x] Automated Migration Safety Gate:
+  - Implemented `scripts/verify-migrations.ts` (monotonic numbering, naming, non-destructive DDL check)
+  - Validated all 16 migrations apply cleanly in sequence without unapproved destructive DDL
+  - Coupled with isolated PostgreSQL cluster verification (`tests/security/database-enforcement.test.ts`)
+- [x] Pipeline Hardening:
+  - Hardened `.gitlab-ci.yml` with 11-stage pipeline (install, typecheck, lint, security, database, test, accessibility, build, playwright, report, deploy)
+  - Hardened `.github/workflows/ci.yml` with strict sequential gates (typecheck -> lint -> security -> database -> test -> a11y -> build)
+  - Hardened `.github/workflows/production-deploy.yml` with mandatory `test:security` and `test:migration` release gates
+- [x] Author final validation report `docs/remediation/PHASE4_FINAL_VALIDATION.md`
+
+
 
 

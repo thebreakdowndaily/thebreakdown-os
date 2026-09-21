@@ -179,56 +179,149 @@
 }
 
 [data-theme='dark'] {
-  --color-bg-primary: #18181b;
-  --color-bg-secondary: #27272a;
-  --color-bg-tertiary: #3f3f46;
+  /* ─────────────────────────────────────────────────────────────────────
+   * THE BREAKDOWN — EARTH-INSPIRED THREE-ENVIRONMENT DESIGN SYSTEM
+   *
+   * Three distinct visual environments:
+   *
+   * 1. DARK DISCOVERY  — Homepage, navigation, brand moments.
+   *    Deep charcoal + warm graphite. Orientation + identity.
+   *
+   * 2. WARM READING    — Stories, investigations, chapters, explainers.
+   *    Warm dark with ivory text. Immersion + human warmth.
+   *    Access via: [data-env="reading"] or .env-reading
+   *
+   * 3. DEEP RESEARCH   — Evidence, documents, data, timelines.
+   *    Near-black + precision type. Precision + investigation.
+   *    Access via: [data-env="research"] or .env-research
+   *
+   * Earth Material Palette:
+   *   Foundation   — #0E0D0B (deep charcoal), #1A1917 (warm graphite)
+   *   Paper        — #F2EDE4 (warm ivory), #E8E2D9 (bone), #D9D0C4 (parchment)
+   *   Earth        — #C9A84C (muted ochre/gold), #8B6914 (clay amber)
+   *   Vegetation   — #2A4A3A (deep forest), #3D6B57 (muted moss)
+   *   Atmosphere   — #1E2D40 (midnight blue), #2C3E50 (slate)
+   *   Mineral      — #6B6B6B (stone), #8A8A8A (granite), #4A4740 (warm grey)
+   *   Signal       — Evidence semantic colors only
+   * ─────────────────────────────────────────────────────────────────────
+   */
 
-  --color-text-primary: #f4f4f5;
-  --color-text-secondary: #d4d4d8;
-  --color-text-muted: #a1a1aa;
-  --color-text-inverse: #18181b;
+  /* ── DARK DISCOVERY: Base environment ────────────────────────────── */
+  --color-bg-primary:   #0E0D0B;   /* Deep charcoal — main app background */
+  --color-bg-secondary: #1A1917;   /* Warm graphite — cards, sections */
+  --color-bg-tertiary:  #252320;   /* Stone dark — borders, subtle fields */
 
-  --color-border-default: #3f3f46;
-  --color-border-hover: #52525b;
-  --color-border-active: #f59e0b;
+  --color-text-primary:   #F0EBE1; /* Warm ivory — headlines, primary text */
+  --color-text-secondary: #C4BAB0; /* Bone — body text, descriptions */
+  --color-text-muted:     #8A8480; /* Stone — metadata, labels */
+  --color-text-inverse:   #0E0D0B; /* For text on light/ochre backgrounds */
 
-  --color-success-light: #064e3b;
-  --color-success: #34d399;
-  --color-success-dark: #6ee7b7;
-  --color-text-success: #34d399;
+  --color-border-default: #2E2C29; /* Warm graphite hairline */
+  --color-border-hover:   #403D39; /* Stone hover */
+  --color-border-active:  #C9A84C; /* Ochre — active/brand state */
 
-  --color-warning-light: #7c2d12;
-  --color-warning: #fb923c;
-  --color-warning-dark: #fdba74;
-  --color-text-warning: #fb923c;
+  /* ── Brand accent: Warm Ochre (editorial gold) ───────────────────── */
+  --color-brand-50:  #FDF8EC;
+  --color-brand-100: #F9EDCA;
+  --color-brand-200: #F0D88A;
+  --color-brand-300: #E3C054;
+  --color-brand-400: #C9A84C; /* Primary editorial accent */
+  --color-brand-500: #A88B36;
+  --color-brand-600: #8B7029;
+  --color-brand-700: #6E571E;
+  --color-brand-800: #544214;
+  --color-brand-900: #3A2E0D;
+  --color-brand-950: #231B07;
 
-  --color-error-light: #7f1d1d;
-  --color-error: #f87171;
-  --color-error-dark: #fca5a5;
-  --color-text-error: #f87171;
+  /* ── WARM READING: Story/investigation/chapter surfaces ──────────── */
+  --color-bg-reading:       #141210; /* Warm near-black reading canvas */
+  --color-bg-reading-card:  #1C1A17; /* Card surface within reading env */
+  --color-text-reading:     #EDE7DC; /* Warm ivory for reading body text */
+  --color-text-reading-dim: #AFA89F; /* Muted reading annotation */
+  --color-border-reading:   #2A2722; /* Warm hairline for reading surfaces */
 
-  --color-info-light: #1e3a8a;
-  --color-info: #60a5fa;
-  --color-info-dark: #93c5fd;
-  --color-text-info: #60a5fa;
+  /* ── DEEP RESEARCH: Evidence/document/data surfaces ─────────────── */
+  --color-bg-research:       #0A0908; /* Near-black — maximum precision */
+  --color-bg-research-card:  #141312; /* Evidence card surface */
+  --color-text-research:     #D4CEC7; /* Precise reading type */
+  --color-border-research:   #1F1E1C; /* Cold hairline */
 
-  --color-text-link: #fcd34d;
-  --color-text-link-hover: #fde68a;
+  /* ── Earth material tokens (contextual use) ─────────────────────── */
+  --color-earth-clay:       #8B5E3C; /* Clay/terracotta — document accents */
+  --color-earth-forest:     #2A4A3A; /* Deep forest — topic markers */
+  --color-earth-moss:       #3D6B57; /* Muted moss — verified signal */
+  --color-earth-stone:      #6B6B6B; /* Granite — supporting type */
+  --color-earth-atmosphere: #1E2D40; /* Midnight blue — investigation mood */
+  --color-earth-parchment:  #D9D0C4; /* Parchment — document surfaces */
+  --color-earth-ochre:      #C9A84C; /* Ochre — primary editorial accent */
+  --color-earth-dust:       #8A8480; /* Warm dust — muted metadata */
 
-  --color-bg-canvas: #0a0a0a;  /* same in dark — this is the story canvas */
+  /* ── Evidence semantic colors ────────────────────────────────────── */
+  /* NEVER communicate evidence state using color alone.               */
+  /* Always pair with text label + icon/symbol.                        */
+  --color-evidence-verified:        #1E3D2A; /* Deep forest — verified bg */
+  --color-evidence-verified-text:   #5AAD80; /* Muted moss — verified text */
+  --color-evidence-verified-border: #2D5A3D; /* Forest border */
+  --color-evidence-partial:         #3D2C0E; /* Warm amber-dark — partial bg */
+  --color-evidence-partial-text:    #C9A84C; /* Ochre — partial text */
+  --color-evidence-partial-border:  #6E5018; /* Amber border */
+  --color-evidence-unresolved:      #3D1A1A; /* Deep red-dark — unresolved bg */
+  --color-evidence-unresolved-text: #C07070; /* Muted red — unresolved text */
+  --color-evidence-unresolved-border:#6B3030; /* Red border */
+
+  /* ── Semantic states ─────────────────────────────────────────────── */
+  --color-success-light: #1A3D2A;
+  --color-success:       #4CAF77;
+  --color-success-dark:  #6DB88A;
+  --color-text-success:  #4CAF77;
+
+  --color-warning-light: #3D2A0A;
+  --color-warning:       #D4943A;
+  --color-warning-dark:  #E8B870;
+  --color-text-warning:  #D4943A;
+
+  --color-error-light:   #3D1A1A;
+  --color-error:         #C07070;
+  --color-error-dark:    #D49090;
+  --color-text-error:    #C07070;
+
+  --color-info-light:    #1A2A3D;
+  --color-info:          #5B8AB0;
+  --color-info-dark:     #7BAAD0;
+  --color-text-info:     #5B8AB0;
+
+  --color-text-link:      #C9A84C; /* Ochre links — editorial authority */
+  --color-text-link-hover:#E3C054; /* Brighter ochre on hover */
+
+  /* ── Canvas ─────────────────────────────────────────────────────── */
+  --color-bg-canvas: #0E0D0B;
+
+  /* ── Focus ring ──────────────────────────────────────────────────── */
   --color-focus-ring: var(--color-brand-400);
 }
 
 /* ── Typography ───────────────────────────────────────────────────────── */
 
 :root {
-  --font-sans: var(--font-inter, 'Inter'), system-ui, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, sans-serif;
-  --font-serif: var(--font-playfair, 'Playfair Display'), Georgia, 'Times New Roman', serif;
+  /* ── Three-level typographic system ─────────────────────────────── */
+  /*
+   * DISPLAY  — Editorial serif. Headlines, investigations, chapters.
+   *            Playfair Display. Personality + authority.
+   *
+   * READING  — Long-form serif. Article body, chapter text.
+   *            Source Serif 4. Clarity + warmth + sustained reading.
+   *
+   * INTERFACE— Clean sans-serif. Navigation, labels, metadata.
+   *            Inter. Precision + legibility.
+   */
+  --font-sans:      var(--font-inter, 'Inter'), system-ui, -apple-system, BlinkMacSystemFont,
+                    'Segoe UI', Roboto, sans-serif;
+  --font-serif:     var(--font-source-serif, 'Source Serif 4'), var(--font-playfair, 'Playfair Display'),
+                    Georgia, 'Times New Roman', serif;
   --font-editorial: var(--font-playfair, 'Playfair Display'), Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas,
-    monospace;
-  --font-display: var(--font-inter, 'Inter'), system-ui, sans-serif;
+  --font-reading:   var(--font-source-serif, 'Source Serif 4'), Georgia, 'Times New Roman', serif;
+  --font-display:   var(--font-playfair, 'Playfair Display'), Georgia, serif;
+  --font-mono:      'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
   /* Type scale */
   --text-xs: 0.75rem;

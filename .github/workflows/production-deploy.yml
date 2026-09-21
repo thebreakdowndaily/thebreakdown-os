@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install Dependencies
@@ -25,6 +25,15 @@ jobs:
 
       - name: TypeScript Verification
         run: npm run check:type
+
+      - name: Strict Linting Verification
+        run: npm run check:lint
+
+      - name: Security Regression Gate
+        run: npm run test:security
+
+      - name: Database Migration Safety Gate
+        run: npm run test:migration
 
       - name: Master Architectural & Operational Test Suite
         run: |
@@ -35,7 +44,7 @@ jobs:
           npx tsx tests/reader-product-surface.test.ts
           npx tsx tests/editorial-operating-system.test.ts
           npx tsx tests/e2e-workflow.test.ts
-          npx tsx tests/accessibility.test.ts
+          npm run test:a11y
           npx tsx tests/production-readiness.test.ts
           npx tsx tests/data-integrity.test.ts
 
