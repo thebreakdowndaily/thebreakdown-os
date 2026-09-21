@@ -33,8 +33,9 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Earth ochre selection — editorial signature */
   ::selection {
-    background-color: var(--color-warning-light);
+    background-color: rgba(201, 168, 76, 0.25);
     color: var(--color-text-primary);
   }
 
@@ -58,6 +59,17 @@
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: var(--color-border-default);
     border-radius: var(--spacing-1);
+  }
+
+  /* ── Reduced motion — respect user preference ─────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -252,4 +264,137 @@
     transform: none;
     transition: none;
   }
+}
+
+/* ─── Earth Editorial Typography Utilities ───────────────────────────────────
+ *
+ * The Breakdown's three-level typographic system:
+ *   Display  — Playfair Display (font-editorial, font-display)
+ *   Reading  — Source Serif 4 (font-reading)
+ *   Interface— Inter (font-sans)
+ *
+ * Use these utility classes for consistent editorial typography.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+/* Category / section overline — small mono uppercase */
+.type-overline {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem; /* 11px */
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  color: var(--color-earth-ochre);
+}
+
+/* Article deck — large reading serif */
+.type-dek {
+  font-family: var(--font-reading), Georgia, serif;
+  font-size: 1.1875rem; /* 19px */
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+/* Pull quote */
+.type-pullquote {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  border-left: 3px solid var(--color-earth-ochre);
+  padding-left: 1.25rem;
+}
+
+/* Metadata / byline / timestamp */
+.type-meta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-earth-dust);
+  letter-spacing: 0.04em;
+}
+
+/* ── Editorial prose — chapter/article body ─────────────────────────────── */
+.prose-editorial {
+  font-family: var(--font-reading), Georgia, 'Times New Roman', serif;
+  font-size: 1.0625rem; /* 17px — optimal reading size */
+  line-height: 1.82;
+  color: var(--color-text-reading);
+}
+.prose-editorial p {
+  margin-bottom: 1.5em;
+}
+.prose-editorial h2 {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-reading);
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1.25;
+}
+.prose-editorial h3 {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-reading);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.35;
+}
+.prose-editorial a {
+  color: var(--color-earth-ochre);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-editorial a:hover {
+  color: var(--color-brand-300);
+}
+.prose-editorial blockquote {
+  border-left: 3px solid var(--color-earth-ochre);
+  padding-left: 1.25rem;
+  margin-left: 0;
+  font-style: italic;
+  color: var(--color-text-reading);
+}
+.prose-editorial ul,
+.prose-editorial ol {
+  margin-bottom: 1.25em;
+  padding-left: 1.5em;
+}
+.prose-editorial li + li {
+  margin-top: 0.375em;
+}
+.prose-editorial figure {
+  margin: 2rem 0;
+}
+.prose-editorial figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-earth-dust);
+  margin-top: 0.5rem;
+}
+.prose-editorial hr {
+  border: none;
+  border-top: 1px solid var(--color-border-reading);
+  margin: 2.5rem 0;
+}
+
+/* ── Three-environment CSS classes ──────────────────────────────────────── */
+
+/* Dark Discovery (default — homepage/nav) */
+.env-discovery {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* Warm Reading (articles/chapters/investigations) */
+.env-reading {
+  background-color: var(--color-bg-reading);
+  color: var(--color-text-reading);
+}
+
+/* Deep Research (evidence/documents/data) */
+.env-research {
+  background-color: var(--color-bg-research);
+  color: var(--color-text-research);
 }
