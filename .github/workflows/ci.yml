@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  validate-and-gate:
+  lint-and-build:
     name: Continuous Integration & Release Gates
     runs-on: ubuntu-latest
     steps:

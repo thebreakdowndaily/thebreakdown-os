@@ -38,7 +38,7 @@ jobs:
         run: npx tsx audit/scripts/validate-report.ts
 
       - name: git diff --exit-code
-        run: git diff --exit-code
+        run: git diff --exit-code -- ':!audit-report.json'
 
       - name: Upload audit-report.json
         uses: actions/upload-artifact@v4

@@ -85,7 +85,8 @@ async function executePlugin(
         score: 0,
         coverage: 0,
         findings: [{ severity: 'critical', message: (err as Error).message }],
-        metrics: {}
+        metrics: {},
+        error: (err as Error).message
       },
       execution: {
         durationMs: finishedAt.getTime() - startedAt.getTime(),

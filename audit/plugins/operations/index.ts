@@ -22,6 +22,7 @@ interface Metrics {
   configIntegrity: number;
   auditFrameworkHealth: number;
   operationsComplianceScore: number;
+  [key: string]: unknown;
 }
 
 export async function run(context: AuditContext): Promise<AuditResult> {

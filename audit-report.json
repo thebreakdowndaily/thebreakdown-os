@@ -3,6 +3,7 @@
   "schemaVersion": "2.0",
   "reportVersion": "1.0",
   "policyVersion": "1.0",
+  "timestamp": "2026-09-21T03:28:01.647Z",
   "platformHealthScore": 82.22222222222223,
   "weightedPlatformHealthScore": 82.22222222222223,
   "coverage": 100,
@@ -11,8 +12,8 @@
   "failedPlugins": 4,
   "skippedPlugins": 0,
   "execution": {
-    "totalDurationMs": 372,
-    "generatedAt": "2026-08-31T05:47:13.260Z",
+    "totalDurationMs": 391,
+    "generatedAt": "2026-09-21T03:28:01.647Z",
     "nodeVersion": "v24.18.0",
     "os": "win32"
   },
@@ -42,8 +43,8 @@
       },
       "execution": {
         "durationMs": 2,
-        "startedAt": "2026-08-31T05:47:12.415Z",
-        "finishedAt": "2026-08-31T05:47:12.417Z"
+        "startedAt": "2026-09-21T03:28:01.199Z",
+        "finishedAt": "2026-09-21T03:28:01.201Z"
       }
     },
     {
@@ -143,9 +144,9 @@
         }
       },
       "execution": {
-        "durationMs": 171,
-        "startedAt": "2026-08-31T05:47:12.423Z",
-        "finishedAt": "2026-08-31T05:47:12.594Z"
+        "durationMs": 197,
+        "startedAt": "2026-09-21T03:28:01.206Z",
+        "finishedAt": "2026-09-21T03:28:01.403Z"
       }
     },
     {
@@ -162,8 +163,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-31T05:47:12.597Z",
-        "finishedAt": "2026-08-31T05:47:12.597Z"
+        "startedAt": "2026-09-21T03:28:01.406Z",
+        "finishedAt": "2026-09-21T03:28:01.406Z"
       }
     },
     {
@@ -182,8 +183,8 @@
       },
       "execution": {
         "durationMs": 3,
-        "startedAt": "2026-08-31T05:47:12.600Z",
-        "finishedAt": "2026-08-31T05:47:12.603Z"
+        "startedAt": "2026-09-21T03:28:01.410Z",
+        "finishedAt": "2026-09-21T03:28:01.413Z"
       }
     },
     {
@@ -203,9 +204,9 @@
         }
       },
       "execution": {
-        "durationMs": 3,
-        "startedAt": "2026-08-31T05:47:12.606Z",
-        "finishedAt": "2026-08-31T05:47:12.609Z"
+        "durationMs": 2,
+        "startedAt": "2026-09-21T03:28:01.416Z",
+        "finishedAt": "2026-09-21T03:28:01.418Z"
       }
     },
     {
@@ -224,8 +225,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-08-31T05:47:12.611Z",
-        "finishedAt": "2026-08-31T05:47:12.611Z"
+        "startedAt": "2026-09-21T03:28:01.421Z",
+        "finishedAt": "2026-09-21T03:28:01.421Z"
       },
       "error": "Simulated plugin failure"
     },
@@ -241,9 +242,9 @@
         }
       },
       "execution": {
-        "durationMs": 0,
-        "startedAt": "2026-08-31T05:47:12.613Z",
-        "finishedAt": "2026-08-31T05:47:12.613Z"
+        "durationMs": 1,
+        "startedAt": "2026-09-21T03:28:01.423Z",
+        "finishedAt": "2026-09-21T03:28:01.424Z"
       }
     },
     {
@@ -263,9 +264,9 @@
         }
       },
       "execution": {
-        "durationMs": 10,
-        "startedAt": "2026-08-31T05:47:13.056Z",
-        "finishedAt": "2026-08-31T05:47:13.066Z"
+        "durationMs": 9,
+        "startedAt": "2026-09-21T03:28:01.451Z",
+        "finishedAt": "2026-09-21T03:28:01.460Z"
       }
     },
     {
@@ -288,9 +289,9 @@
         }
       },
       "execution": {
-        "durationMs": 1,
-        "startedAt": "2026-08-31T05:47:13.070Z",
-        "finishedAt": "2026-08-31T05:47:13.071Z"
+        "durationMs": 2,
+        "startedAt": "2026-09-21T03:28:01.463Z",
+        "finishedAt": "2026-09-21T03:28:01.465Z"
       }
     },
     {
@@ -322,9 +323,9 @@
         }
       },
       "execution": {
-        "durationMs": 181,
-        "startedAt": "2026-08-31T05:47:13.074Z",
-        "finishedAt": "2026-08-31T05:47:13.255Z"
+        "durationMs": 174,
+        "startedAt": "2026-09-21T03:28:01.468Z",
+        "finishedAt": "2026-09-21T03:28:01.642Z"
       }
     },
     {
@@ -348,8 +349,8 @@
       },
       "execution": {
         "durationMs": 1,
-        "startedAt": "2026-08-31T05:47:13.259Z",
-        "finishedAt": "2026-08-31T05:47:13.260Z"
+        "startedAt": "2026-09-21T03:28:01.645Z",
+        "finishedAt": "2026-09-21T03:28:01.646Z"
       }
     }
   ]

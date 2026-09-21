@@ -28,6 +28,7 @@ interface Metrics {
   requiredDirectories: { present: number; missing: number };
   forbiddenImports: number;
   unknownDirectories: number;
+  [key: string]: unknown;
 }
 
 function getDirectories(srcPath: string): string[] {

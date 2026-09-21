@@ -54,6 +54,7 @@ export function aggregate(results: AuditResult[]) {
     schemaVersion,
     reportVersion,
     policyVersion,
+    timestamp: generatedAt,
     
     platformHealthScore,
     weightedPlatformHealthScore,
