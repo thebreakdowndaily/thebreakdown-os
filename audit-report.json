@@ -3,7 +3,7 @@
   "schemaVersion": "2.0",
   "reportVersion": "1.0",
   "policyVersion": "1.0",
-  "timestamp": "2026-09-21T03:28:01.647Z",
+  "timestamp": "2026-09-21T03:37:21.479Z",
   "platformHealthScore": 82.22222222222223,
   "weightedPlatformHealthScore": 82.22222222222223,
   "coverage": 100,
@@ -12,8 +12,8 @@
   "failedPlugins": 4,
   "skippedPlugins": 0,
   "execution": {
-    "totalDurationMs": 391,
-    "generatedAt": "2026-09-21T03:28:01.647Z",
+    "totalDurationMs": 350,
+    "generatedAt": "2026-09-21T03:37:21.479Z",
     "nodeVersion": "v24.18.0",
     "os": "win32"
   },
@@ -43,8 +43,8 @@
       },
       "execution": {
         "durationMs": 2,
-        "startedAt": "2026-09-21T03:28:01.199Z",
-        "finishedAt": "2026-09-21T03:28:01.201Z"
+        "startedAt": "2026-09-21T03:37:21.075Z",
+        "finishedAt": "2026-09-21T03:37:21.077Z"
       }
     },
     {
@@ -144,9 +144,9 @@
         }
       },
       "execution": {
-        "durationMs": 197,
-        "startedAt": "2026-09-21T03:28:01.206Z",
-        "finishedAt": "2026-09-21T03:28:01.403Z"
+        "durationMs": 157,
+        "startedAt": "2026-09-21T03:37:21.081Z",
+        "finishedAt": "2026-09-21T03:37:21.238Z"
       }
     },
     {
@@ -163,8 +163,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-09-21T03:28:01.406Z",
-        "finishedAt": "2026-09-21T03:28:01.406Z"
+        "startedAt": "2026-09-21T03:37:21.241Z",
+        "finishedAt": "2026-09-21T03:37:21.241Z"
       }
     },
     {
@@ -183,8 +183,8 @@
       },
       "execution": {
         "durationMs": 3,
-        "startedAt": "2026-09-21T03:28:01.410Z",
-        "finishedAt": "2026-09-21T03:28:01.413Z"
+        "startedAt": "2026-09-21T03:37:21.244Z",
+        "finishedAt": "2026-09-21T03:37:21.247Z"
       }
     },
     {
@@ -204,9 +204,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-09-21T03:28:01.416Z",
-        "finishedAt": "2026-09-21T03:28:01.418Z"
+        "durationMs": 3,
+        "startedAt": "2026-09-21T03:37:21.250Z",
+        "finishedAt": "2026-09-21T03:37:21.253Z"
       }
     },
     {
@@ -221,12 +221,13 @@
             "message": "Simulated plugin failure"
           }
         ],
-        "metrics": {}
+        "metrics": {},
+        "error": "Simulated plugin failure"
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-09-21T03:28:01.421Z",
-        "finishedAt": "2026-09-21T03:28:01.421Z"
+        "startedAt": "2026-09-21T03:37:21.255Z",
+        "finishedAt": "2026-09-21T03:37:21.255Z"
       },
       "error": "Simulated plugin failure"
     },
@@ -242,9 +243,9 @@
         }
       },
       "execution": {
-        "durationMs": 1,
-        "startedAt": "2026-09-21T03:28:01.423Z",
-        "finishedAt": "2026-09-21T03:28:01.424Z"
+        "durationMs": 0,
+        "startedAt": "2026-09-21T03:37:21.258Z",
+        "finishedAt": "2026-09-21T03:37:21.258Z"
       }
     },
     {
@@ -264,9 +265,9 @@
         }
       },
       "execution": {
-        "durationMs": 9,
-        "startedAt": "2026-09-21T03:28:01.451Z",
-        "finishedAt": "2026-09-21T03:28:01.460Z"
+        "durationMs": 10,
+        "startedAt": "2026-09-21T03:37:21.284Z",
+        "finishedAt": "2026-09-21T03:37:21.294Z"
       }
     },
     {
@@ -289,9 +290,9 @@
         }
       },
       "execution": {
-        "durationMs": 2,
-        "startedAt": "2026-09-21T03:28:01.463Z",
-        "finishedAt": "2026-09-21T03:28:01.465Z"
+        "durationMs": 1,
+        "startedAt": "2026-09-21T03:37:21.298Z",
+        "finishedAt": "2026-09-21T03:37:21.299Z"
       }
     },
     {
@@ -323,9 +324,9 @@
         }
       },
       "execution": {
-        "durationMs": 174,
-        "startedAt": "2026-09-21T03:28:01.468Z",
-        "finishedAt": "2026-09-21T03:28:01.642Z"
+        "durationMs": 173,
+        "startedAt": "2026-09-21T03:37:21.302Z",
+        "finishedAt": "2026-09-21T03:37:21.475Z"
       }
     },
     {
@@ -349,8 +350,8 @@
       },
       "execution": {
         "durationMs": 1,
-        "startedAt": "2026-09-21T03:28:01.645Z",
-        "finishedAt": "2026-09-21T03:28:01.646Z"
+        "startedAt": "2026-09-21T03:37:21.478Z",
+        "finishedAt": "2026-09-21T03:37:21.479Z"
       }
     }
   ]

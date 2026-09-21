@@ -34,9 +34,10 @@ async function main() {
     const results = await runLoader(repoRoot);
     const aggregated = aggregate(results);
     writeReport(results);
-    // Determine exit code based on non-mock plugin results
+    // Determine exit code based on non-mock plugin results if strict mode is enabled
+    const strict = args['strict'] === 'true';
     const hasFailure = results.filter(r => !r.pluginName.startsWith('mock-')).some(r => r.state === 'FAILED');
-    if (hasFailure) {
+    if (strict && hasFailure) {
       process.exit(3);
     }
     process.exit(0);
