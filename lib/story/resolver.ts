@@ -8,7 +8,6 @@ import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-librar
 import { chapterToCanonicalAdapter } from '@/lib/story/adapters';
 import { isCanonicalReadPathEnabled, getFeatureFlags, type FlagState } from '@/lib/feature-flags';
 import { isCanonicalStoryPublic } from '@/lib/story/publication';
-import { QuarantineManager } from '@/lib/reliability/quarantine';
 
 export interface ResolverTelemetry {
   event: 'story_read_resolution';
@@ -198,14 +197,12 @@ export async function resolveCanonicalStory(slug: string): Promise<StoryResoluti
       const relatedChapter = await tryLoadChapter(relatedRef);
       if (relatedChapter) {
         const relatedStory = chapterToCanonicalAdapter(relatedChapter.chapter);
-        return isCanonicalStoryPublic(relatedStory) && !QuarantineManager.isQuarantined('story', relatedStory.id)
-          ? relatedStory
-          : null;
+        return isCanonicalStoryPublic(relatedStory) ? relatedStory : null;
       }
       try {
         const services = bootstrapServices({ publicOnly: true });
         const storyRes = await services.stories.getStoryBySlug(relatedRef);
-        if (storyRes && isCanonicalStoryPublic(storyRes as Story) && !QuarantineManager.isQuarantined('story', (storyRes as Story).id)) {
+        if (storyRes && isCanonicalStoryPublic(storyRes as Story)) {
           return storyRes as Story;
         }
       } catch {}

@@ -27,8 +27,6 @@ import { CitationExporter } from '@/components/intel/CitationExporter';
 import { SocialSharePanel } from '@/components/retention/SocialSharePanel';
 import EvidenceTrail, { type EvidenceTrailItem } from '@/components/evidence/EvidenceTrail';
 import { getTrackersForStory } from '@/lib/trackers/registry';
-import WhatChanged from '@/components/story/WhatChanged';
-import { AudienceSignalService } from '@/lib/analytics/audience-signal';
 
 interface StoryShellProps {
   visibleExperience?: VisibleStoryExperience;
@@ -149,9 +147,6 @@ export function StoryShell({
       relatedStories,
       crossStoryRecommendations,
       quickBrief,
-      whatChanged,
-      corrections,
-      versionInfo,
     } = visibleExperience;
 
     const hasInlineTimeline = chapters.some((ch) =>
@@ -195,63 +190,6 @@ export function StoryShell({
               {/* Hero */}
               <StoryHeroCanonical hero={hero} />
 
-              {/* Version & Update Indicator */}
-              {versionInfo && (
-                <div className="my-4 flex items-center justify-between text-[11px] font-mono text-neutral-400 border-b border-neutral-800/80 pb-2">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    <span>StoryVersion {versionInfo.version}</span>
-                  </span>
-                  <span>Published: {new Date(versionInfo.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                </div>
-              )}
-
-              {/* Reader-Facing Editorial Corrections Notice */}
-              {corrections && corrections.length > 0 && (
-                <section
-                  id="corrections"
-                  aria-label="Editorial Corrections"
-                  className="my-6 p-4 rounded-xl bg-amber-950/30 border border-amber-800/60 space-y-3"
-                >
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
-                    <span>⚠️ Formal Editorial Correction Notice</span>
-                  </div>
-                  {corrections.map((corr, idx) => (
-                    <div key={corr.id || idx} className="text-xs space-y-2 border-t border-amber-900/50 pt-2 font-mono">
-                      <div className="flex items-center justify-between text-neutral-400">
-                        <span>Version {corr.previousVersion} → Version {corr.correctedVersion}</span>
-                        <span>{corr.date}</span>
-                      </div>
-                      <p className="text-neutral-200">{corr.description}</p>
-                      {corr.previousWording && corr.correctedWording && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-neutral-950/80 rounded border border-neutral-800">
-                          <div>
-                            <span className="text-[10px] text-red-400 uppercase block font-bold">Original Published Wording:</span>
-                            <p className="text-neutral-400 line-through">{corr.previousWording}</p>
-                          </div>
-                          <div>
-                            <span className="text-[10px] text-emerald-400 uppercase block font-bold">Corrected Wording:</span>
-                            <p className="text-emerald-300">{corr.correctedWording}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </section>
-              )}
-
-              {/* What Changed Summary */}
-              {whatChanged && whatChanged.length > 0 && (
-                <WhatChanged
-                  title="What Changed in this Version"
-                  changes={whatChanged.map((c) => ({
-                    date: c.date || 'Update',
-                    description: c.description,
-                  }))}
-                  lastVerified={hero.evidenceVerifiedAt}
-                  className="my-6"
-                />
-              )}
 
               {/* Mode Switcher — semantic navigation, not ARIA tabs */}
               <nav
