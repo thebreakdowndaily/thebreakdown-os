@@ -290,14 +290,19 @@ export interface BlockMap {
   'image': ImageBlockData;
   'chapter-heading': ChapterHeadingData;
   'text': { content: string };
-  'chart': {
-    chartId: string;
-    type: string;
-    title: string;
-    data: Array<Record<string, unknown>>;
-    xKey: string;
-    yKey: string;
+  'chart': import('@/lib/story/chart-contract').CanonicalChartBlockData | {
+    chartId?: string;
+    type?: string;
+    chartType?: string;
+    title?: string;
+    caption?: string;
+    url?: string;
+    data?: Array<Record<string, unknown>>;
+    xKey?: string;
+    yKey?: string;
+    [key: string]: unknown;
   };
+
   'map': MapBlockData;
   'quote': { text: string; attribution?: string };
   'dataset-reference': import('./DatasetReferenceBlock').DatasetReferenceData;

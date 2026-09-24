@@ -40,6 +40,7 @@ export function apiStoryToCanonicalAdapter(s: APIStory): Story {
       url: src.url || '',
       accessedAt: '',
       tier: src.tier as import('@/types/canonical').ConfidenceTier,
+      publisher: (src as any).publisher || (src as any).type || src.name,
     })
   );
   const mappedClaims = (s.claims || []).map(
@@ -107,7 +108,25 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
   const pubStatus: PublicationStatus = isPublished ? 'published' : 'draft';
   const canonicalStatus: StoryStatus = isPublished ? 'published' : 'draft';
 
-  const blocks: StoryBlock[] = chapter.content.map((kb) => {
+  const heroBlock = chapter.content.find((block) => (block.type as string) === 'hero');
+  const heroData = heroBlock?.data as Record<string, unknown> | undefined;
+  const chapterHeroImage = (chapter as any).heroImage || (chapter.metadata as any)?.heroImage;
+  const firstImageBlock = chapter.content.find((b) => b.type === 'image' && typeof (b.data as any)?.url === 'string');
+  const heroImage = typeof chapterHeroImage === 'string' && chapterHeroImage
+    ? chapterHeroImage
+    : typeof heroData?.heroImage === 'string' && heroData.heroImage
+    ? heroData.heroImage
+    : typeof heroData?.image === 'string' && heroData.image
+    ? heroData.image
+    : typeof heroData?.url === 'string' && heroData.url
+    ? heroData.url
+    : typeof (firstImageBlock?.data as any)?.url === 'string'
+    ? (firstImageBlock?.data as any).url
+    : '';
+
+  // The canonical reader owns the hero region. Do not render an authored hero
+  // block a second time after safely projecting its supported image field.
+  const blocks: StoryBlock[] = chapter.content.filter((kb) => kb !== heroBlock).map((kb) => {
     let canonicalType = kb.type as string;
     if (canonicalType === 'heading') canonicalType = 'chapter-heading';
     else if (canonicalType === 'paragraph') canonicalType = 'text';
@@ -126,13 +145,73 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
       ? chapter.readingTime
       : chapter.readingTime?.explorer || chapter.readingTime?.scholar || 10;
 
+  // Restore timeline events from authored timeline blocks or chapter metadata
+  const extractedTimeline: Array<{ date: string; title: string; description: string; source?: string }> = [];
+  if (Array.isArray((chapter as any).timeline) && (chapter as any).timeline.length > 0) {
+    for (const ev of (chapter as any).timeline) {
+      if (ev && typeof ev === 'object') {
+        extractedTimeline.push({
+          date: ev.date || '',
+          title: ev.title || '',
+          description: ev.description || '',
+          source: ev.source || undefined,
+        });
+      }
+    }
+  } else {
+    for (const b of chapter.content) {
+      if (b.type === 'timeline' && b.data && Array.isArray((b.data as any).events)) {
+        for (const ev of (b.data as any).events) {
+          if (ev && typeof ev === 'object') {
+            extractedTimeline.push({
+              date: ev.date || '',
+              title: ev.title || '',
+              description: ev.description || '',
+              source: Array.isArray(ev.sources) ? ev.sources.join(', ') : ev.source || undefined,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Restore charts from authored chart blocks or chapter metadata
+  const extractedCharts: import('@/types/canonical').ChartDef[] = [];
+  if (Array.isArray((chapter as any).charts) && (chapter as any).charts.length > 0) {
+    extractedCharts.push(...(chapter as any).charts);
+  } else {
+    for (const b of chapter.content) {
+      if (b.type === 'chart' && b.data && typeof b.data === 'object') {
+        const cd = b.data as Record<string, unknown>;
+        extractedCharts.push({
+          type: (cd.type as string) || (cd.chartType as string) || 'bar',
+          chartType: (cd.chartType as string) || (cd.type as string) || 'bar',
+          title: (cd.title as string) || '',
+          description: (cd.caption as string) || (cd.description as string) || '',
+          data: Array.isArray(cd.data) ? cd.data : [],
+          xKey: (cd.xKey as string) || 'label',
+          yKey: (cd.yKey as string) || 'value',
+          color: (cd.color as string) || undefined,
+          caption: (cd.caption as string) || '',
+        });
+      }
+    }
+  }
+
+  const relatedTopicIds: string[] = Array.isArray((chapter as any).relatedTopicIds) && (chapter as any).relatedTopicIds.length > 0
+    ? (chapter as any).relatedTopicIds
+    : chapter.relatedConceptIds || [];
+
+  const relatedEntityIds = chapter.relatedEntityIds || [];
+  const relatedEntities = (chapter as any).relatedEntities || relatedEntityIds.map((id) => ({ id, slug: id }));
+
   return {
     id: chapter.id,
     title: chapter.title,
     slug: chapter.slug,
     headline: chapter.title,
     summary: chapter.summary,
-    heroImage: '',
+    heroImage,
     author: 'The Breakdown Editorial',
     category: chapter.collectionSlug,
     status: canonicalStatus,
@@ -147,13 +226,14 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
     blocks,
     sources: chapter.sources || [],
     claims: chapter.claims || [],
-    timeline: [],
+    timeline: extractedTimeline,
     faq: chapter.keyQuestions?.map((kq) => ({ question: kq.question, answer: kq.answer })) || [],
-    charts: [],
+    charts: extractedCharts,
     relatedStoryIds: chapter.recommendedNext || [],
-    relatedEntityIds: chapter.relatedEntityIds || [],
-    relatedTopicIds: [],
-  };
+    relatedEntityIds,
+    relatedTopicIds,
+    relatedEntities,
+  } as unknown as Story;
 }
 
 /**

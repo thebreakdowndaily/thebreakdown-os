@@ -10,7 +10,12 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: '**' },
+      { protocol: 'https', hostname: 'thebreakdown.in' },
+      { protocol: 'https', hostname: 'placehold.co' },
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+      { protocol: 'https', hostname: '**.wikimedia.org' },
+      { protocol: 'https', hostname: '**.supabase.co' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
     unoptimized: true,
   },
@@ -23,7 +28,7 @@ const nextConfig = {
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://thebreakdown.in https://www.googletagmanager.com https://static.cloudflareinsights.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https://thebreakdown.in https://placehold.co https://upload.wikimedia.org https://*.supabase.co",
+      "img-src 'self' data: https://thebreakdown.in https://placehold.co https://upload.wikimedia.org https://*.wikimedia.org https://*.supabase.co https://images.unsplash.com",
       "font-src 'self' data:",
       "connect-src 'self' https://thebreakdown.in https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://*.ingest.sentry.io https://*.supabase.co https://*.supabase.in",
       "worker-src 'self' blob:",
@@ -50,6 +55,21 @@ nextConfig.redirects = async () => [
     source: '/:path*',
     has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
     destination: 'https://thebreakdown.in/:path*',
+    permanent: true,
+  },
+  {
+    source: '/global/:slug',
+    destination: '/story/:slug',
+    permanent: true,
+  },
+  {
+    source: '/economy/:slug',
+    destination: '/story/:slug',
+    permanent: true,
+  },
+  {
+    source: '/story/rbi-monetary-policy',
+    destination: '/story/rbi-repo-rate',
     permanent: true,
   },
 ];

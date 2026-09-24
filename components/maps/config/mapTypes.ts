@@ -95,7 +95,6 @@ export const mapTypeConfigs: Record<string, MapTypeConfig> = {
 
 export const mapTypeLabels: Record<string, string> = {
   'india-state': 'India State Map',
-  'india-district': 'India District Map',
   'world-choropleth': 'World Map',
   'trade-routes': 'Trade Routes Map',
   migration: 'Migration Map',

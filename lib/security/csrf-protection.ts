@@ -24,7 +24,7 @@ export function generateContentSecurityPolicy(): string {
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    "img-src 'self' data: blob: https://thebreakdown.in https://placehold.co https://upload.wikimedia.org https://*.wikimedia.org https://*.supabase.co https://images.unsplash.com",
     "font-src 'self' data:",
     "connect-src 'self' https://*.supabase.co",
     "frame-ancestors 'none'",

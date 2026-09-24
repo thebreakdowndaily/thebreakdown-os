@@ -21,6 +21,10 @@ interface ChartBlockData {
 }
 
 export default function ChartBlock({ chartId, type, title, data, xKey, yKey }: ChartBlockData) {
+  if (!Array.isArray(data) || data.length === 0) {
+    return null;
+  }
+
   const [tooltip, setTooltip] = useState<{ x: number; y: number; label: string; value: number } | null>(null);
   const [zoomRange, setZoomRange] = useState<[number, number] | null>(null);
   const [isDragging, setIsDragging] = useState(false);

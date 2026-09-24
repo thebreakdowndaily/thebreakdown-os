@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { AnalyticsEvent } from '@/utils/analytics';
 import { aggregateStoryAnalytics } from '@/utils/analytics';
+import { getAnalyticsStore, requireAnalyticsAdmin } from '@/utils/analytics-admin';
 
-// ── In-Memory Event Store (replace with DB in production) ──────────────────
+// ── In-Memory Event Store (backed by globalStore via analytics-admin) ───────
+const store = getAnalyticsStore();
 
-interface EventStore {
-  events: AnalyticsEvent[];
-}
-
-// Global store — persists across requests in development
-const globalStore = global as unknown as { __analyticsEvents?: EventStore };
-if (!globalStore.__analyticsEvents) {
-  globalStore.__analyticsEvents = { events: [] };
-}
-const store = globalStore.__analyticsEvents;
 
 const RATE_LIMIT_WINDOW = 60_000; // 1 minute
 const MAX_EVENTS_PER_SESSION = 100; // per window
@@ -108,9 +100,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
+
 // ── GET /api/analytics — Retrieve aggregated analytics ─────────────────────
 
-export function GET(request: NextRequest) {
+
+export async function GET(request: NextRequest) {
+  const denied = await requireAnalyticsAdmin(request);
+  if (denied) return denied;
   const { searchParams } = new URL(request.url);
   const storySlug = searchParams.get('story');
   const aggregate = searchParams.get('aggregate') !== 'false';
@@ -166,7 +162,9 @@ export function GET(request: NextRequest) {
 
 // ── DELETE /api/analytics — Clear events (dev only) ────────────────────────
 
-export function DELETE() {
+export async function DELETE(request: NextRequest) {
+  const denied = await requireAnalyticsAdmin(request);
+  if (denied) return denied;
   const count = store.events.length;
   store.events = [];
   rateLimitMap.clear();

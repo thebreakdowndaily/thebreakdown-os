@@ -1,4 +1,5 @@
 import type { KnowledgeEntity } from '@/types/canonical';
+import { getEntity } from './store';
 
 const entityIndex = new Map<string, { id: string; slug: string; name: string; title: string }>();
 
@@ -27,5 +28,18 @@ export function getEntityIndex(): { id: string; slug: string; name: string; titl
 
 export function getEntityById(id: string): { id: string; slug: string; name: string; title: string } | undefined {
   if (entityIndex.size === 0) getEntityIndex();
-  return entityIndex.get(id);
+  const direct = entityIndex.get(id);
+  if (direct) return direct;
+  try {
+    const storeEntity = getEntity(id);
+    if (storeEntity) {
+      return {
+        id: storeEntity.id,
+        slug: storeEntity.slug,
+        name: storeEntity.name,
+        title: storeEntity.description || storeEntity.name,
+      };
+    }
+  } catch {}
+  return undefined;
 }

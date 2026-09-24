@@ -26,6 +26,8 @@ import SystemExplanationBlock from './SystemExplanationBlock';
 import StakeholdersBlock from './StakeholdersBlock';
 import PerspectivesBlock from './PerspectivesBlock';
 import FutureOutlookBlock from './FutureOutlookBlock';
+import SvgChartBlock from './SvgChartBlock';
+import { normalizeChartBlockData } from '@/lib/story/chart-contract';
 
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
   'executive-summary': ExecutiveSummaryBlock,
@@ -41,7 +43,14 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'image': ImageBlock,
   'evidence-inline': EvidenceInlineBlock,
   'text': ({ content }: BlockMap['text']) => <TextBlockClient content={content} />,
-  'chart': (props: BlockMap['chart']) => <ChartBlock {...props} />,
+  'chart': (props: BlockMap['chart']) => {
+    const chart = normalizeChartBlockData(props);
+    if (!chart) return null;
+    if (chart.type === 'svg') {
+      return <SvgChartBlock {...chart} />;
+    }
+    return <ChartBlock {...chart} />;
+  },
   'map': MapBlock,
   'dataset-reference': (props: BlockMap['dataset-reference']) => <DatasetReferenceBlock {...props} />,
   'quote': ({ text, attribution }: BlockMap['quote']) => (

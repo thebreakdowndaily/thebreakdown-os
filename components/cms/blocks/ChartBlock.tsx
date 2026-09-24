@@ -11,19 +11,39 @@ const CHART_TYPES = ['bar', 'line', 'pie', 'area', 'scatter', 'radar', 'heatmap'
 
 export default function ChartBlock({ block, onUpdate }: ChartBlockProps) {
   const d = block.data as ChartBlockData;
-  const dataPoints = d.data;
+  const dataPoints = d.data || [];
 
-  const updateMeta = (field: string, value: string) => { onUpdate({ ...d, [field]: value }); };
+  const emitCanonical = (dataUpdates: Partial<Record<string, unknown>>) => {
+    const updated = {
+      chartId: (d as any).chartId || block.id || 'chart',
+      type: (dataUpdates.type as string) || (dataUpdates.chartType as string) || (d as any).type || d.chartType || 'bar',
+      chartType: (dataUpdates.chartType as string) || (dataUpdates.type as string) || d.chartType || (d as any).type || 'bar',
+      title: (dataUpdates.title as string) ?? d.title ?? '',
+      caption: (dataUpdates.caption as string) ?? d.caption ?? '',
+      xKey: (d as any).xKey || 'label',
+      yKey: (d as any).yKey || 'value',
+      data: (dataUpdates.data as any) ?? dataPoints,
+      ...dataUpdates,
+    };
+    onUpdate(updated);
+  };
+
+  const updateMeta = (field: string, value: string) => {
+    emitCanonical({
+      [field]: value,
+      ...(field === 'chartType' ? { type: value } : {}),
+    });
+  };
 
   const updateDataPoint = (idx: number, field: string, value: string) => {
     const next = [...dataPoints];
     next[idx] = { ...next[idx], [field]: field === 'value' ? parseFloat(value) || 0 : value };
-    onUpdate({ ...d, data: next });
+    emitCanonical({ data: next });
   };
 
-  const addDataPoint = () => { onUpdate({ ...d, data: [...dataPoints, { label: '', value: 0 }] }); };
+  const addDataPoint = () => { emitCanonical({ data: [...dataPoints, { label: '', value: 0 }] }); };
 
-  const removeDataPoint = (idx: number) => { onUpdate({ ...d, data: dataPoints.filter((_, i) => i !== idx) }); };
+  const removeDataPoint = (idx: number) => { emitCanonical({ data: dataPoints.filter((_, i) => i !== idx) }); };
 
   return (
     <div>

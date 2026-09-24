@@ -19,5 +19,10 @@ export default function InteractiveTimelineBlock({ events }: TimelineData) {
     interactive: true,
   };
 
-  return <TimelineRenderer timeline={spec} />;
+  return (
+    <div id="timeline">
+      <TimelineRenderer timeline={spec} />
+    </div>
+  );
 }
+

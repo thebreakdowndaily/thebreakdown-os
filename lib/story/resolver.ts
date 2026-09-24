@@ -7,6 +7,8 @@ import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { chapterToCanonicalAdapter } from '@/lib/story/adapters';
 import { isCanonicalReadPathEnabled, getFeatureFlags, type FlagState } from '@/lib/feature-flags';
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
+import { QuarantineManager } from '@/lib/reliability/quarantine';
 
 export interface ResolverTelemetry {
   event: 'story_read_resolution';
@@ -76,7 +78,7 @@ export const tryLoadChapter = cache(async function tryLoadChapter(slug: string):
     for (const library of libraries) {
       for (const c of library.collections) {
       for (const v of c.volumes) {
-        const ch = v.chapters.find((ch) => ch.slug === slug);
+        const ch = v.chapters.find((ch) => ch.slug === slug || ch.title === slug || ch.title.toLowerCase() === slug.toLowerCase());
         if (ch) {
           let nextChapter = null;
           if (ch.recommendedNext && ch.recommendedNext.length > 0) {
@@ -191,12 +193,32 @@ export async function resolveCanonicalStory(slug: string): Promise<StoryResoluti
     fallbackUsed: false,
   });
 
+  const relatedStories = (await Promise.all(
+    (chapter.recommendedNext || []).slice(0, 6).map(async (relatedRef) => {
+      const relatedChapter = await tryLoadChapter(relatedRef);
+      if (relatedChapter) {
+        const relatedStory = chapterToCanonicalAdapter(relatedChapter.chapter);
+        return isCanonicalStoryPublic(relatedStory) && !QuarantineManager.isQuarantined('story', relatedStory.id)
+          ? relatedStory
+          : null;
+      }
+      try {
+        const services = bootstrapServices({ publicOnly: true });
+        const storyRes = await services.stories.getStoryBySlug(relatedRef);
+        if (storyRes && isCanonicalStoryPublic(storyRes as Story) && !QuarantineManager.isQuarantined('story', (storyRes as Story).id)) {
+          return storyRes as Story;
+        }
+      } catch {}
+      return null;
+    })
+  )).filter((story): story is Story => story !== null);
+
   return {
     type: 'chapter',
     chapter,
     canonicalStory,
-    candidateTimelineEvents: chapter.sources ? [] : [],
-    relatedStories: [],
+    candidateTimelineEvents: canonicalStory.timeline || [],
+    relatedStories,
     collectionSlug,
     volumeSlug,
     enrichedClaims,

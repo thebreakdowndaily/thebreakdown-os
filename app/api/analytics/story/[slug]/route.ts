@@ -1,29 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { AggregateStoryAnalytics } from '@/utils/analytics';
-import { generateImprovementReport } from '@/utils/analytics';
+import { aggregateStoryAnalytics, generateImprovementReport } from '@/utils/analytics';
+import { requireAnalyticsAdmin, getAnalyticsEvents } from '@/utils/analytics-admin';
 
-interface AnalyticsResponse {
-  analytics: AggregateStoryAnalytics | null;
-  totalEvents: number;
-}
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   context: { params: Promise<{ slug: string }> }
 ) {
+  const denied = await requireAnalyticsAdmin(request);
+  if (denied) return denied;
+
   const { slug } = await context.params;
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/analytics?story=${slug}&aggregate=true`);
+    const allEvents = getAnalyticsEvents();
+    const storyEvents = allEvents.filter((e) => e.storySlug === slug);
 
-    if (!res.ok) {
-      return NextResponse.json({ error: 'Analytics data not available' }, { status: 404 });
-    }
-
-    const data = (await res.json()) as AnalyticsResponse;
-
-    if (!data.analytics) {
+    if (storyEvents.length === 0) {
       return NextResponse.json({
         slug,
         analytics: null,
@@ -32,16 +25,23 @@ export async function GET(
       });
     }
 
-    const improvementReport = generateImprovementReport(data.analytics);
+    const analytics = aggregateStoryAnalytics(storyEvents, slug);
+    analytics.period = {
+      start: storyEvents[0].ts,
+      end: storyEvents[storyEvents.length - 1].ts,
+    };
+
+    const improvementReport = generateImprovementReport(analytics);
 
     return NextResponse.json({
       slug,
-      analytics: data.analytics,
+      analytics,
       improvementReport,
-      totalEvents: data.totalEvents,
+      totalEvents: storyEvents.length,
     });
   } catch (error) {
     console.error(`[Analytics] Error fetching analytics for ${slug}:`, error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
