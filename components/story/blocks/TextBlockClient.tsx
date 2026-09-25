@@ -25,6 +25,16 @@ export default function TextBlockClient({ content }: { content: string }) {
       cleanupFns.push(() => { cite.removeEventListener('click', clickHandler); });
     });
 
+    const tables = containerRef.current.querySelectorAll('table');
+    tables.forEach((table) => {
+      if (table.parentElement && !table.parentElement.classList.contains('table-scroll-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-scroll-wrapper overflow-x-auto max-w-full my-4';
+        table.parentNode?.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      }
+    });
+
     return () => { cleanupFns.forEach(fn => { fn(); }); };
   }, [content]);
 

@@ -2,15 +2,24 @@ import type { CanonicalSource } from '@/types/canonical';
 
 const sources = new Map<string, CanonicalSource>();
 
+function ensureSeeded(): void {
+  if (sources.size === 0) {
+    seedSources();
+  }
+}
+
 export function getSource(id: string): CanonicalSource | undefined {
+  ensureSeeded();
   return sources.get(id);
 }
 
 export function getAllSources(): CanonicalSource[] {
+  ensureSeeded();
   return Array.from(sources.values());
 }
 
 export function getSourcesByEntity(entityId: string): CanonicalSource[] {
+  ensureSeeded();
   return Array.from(sources.values()).filter(
     s => s.claimIds.some(cid => cid.includes(entityId))
   );
