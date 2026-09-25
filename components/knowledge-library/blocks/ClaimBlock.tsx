@@ -16,7 +16,8 @@ interface ThreeLayerData {
 export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
   const claimData = data as unknown as (ClaimBlockData & { claimId?: string });
   const registryClaim = claimData?.claimId ? getClaim(claimData.claimId) : undefined;
-  const statement = claimData?.statement || registryClaim?.statement || '';
+  const statement = claimData?.statement || registryClaim?.statement;
+  if (!statement) return null;
   const confidence = claimData?.confidence || registryClaim?.confidence || 'established';
   const evidence = claimData?.evidence || registryClaim?.evidence || [];
   const threeLayer = data as unknown as ThreeLayerData;
