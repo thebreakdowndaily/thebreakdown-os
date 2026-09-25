@@ -41,7 +41,9 @@ export async function generateMetadata({ params }: { params: Promise<{ collectio
   const { collectionSlug, volumeSlug, chapterSlug } = await params;
   seedAll();
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
-  const chapter = await repo.getChapter('india-and-the-world', collectionSlug, volumeSlug, chapterSlug);
+  const libraries = await repo.getAllLibraries();
+  const library = libraries.find((lib) => lib.collections.some((c) => c.slug === collectionSlug));
+  const chapter = library ? await repo.getChapter(library.slug, collectionSlug, volumeSlug, chapterSlug) : null;
   if (!chapter) return { title: 'Chapter Not Found' };
   const versionStr = `${chapter.version.major}.${chapter.version.minor}.${chapter.version.patch}`;
   return {
@@ -73,10 +75,11 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
   seedAll();
   const core = getKnowledgeCore();
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
-  const library = await repo.getLibrary('india-and-the-world');
+  const libraries = await repo.getAllLibraries();
+  const library = libraries.find((lib) => lib.collections.some((c) => c.slug === collectionSlug));
   if (!library) notFound();
 
-  const chapter = await repo.getChapter('india-and-the-world', collectionSlug, volumeSlug, chapterSlug);
+  const chapter = await repo.getChapter(library.slug, collectionSlug, volumeSlug, chapterSlug);
   if (!chapter) notFound();
 
   // Fail-closed publication visibility check

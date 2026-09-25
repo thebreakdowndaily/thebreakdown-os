@@ -10,7 +10,7 @@ export const ParagraphBlock: FC<BlockComponentProps> = ({ data }) => {
   return (
     <p className="text-gray-800 leading-relaxed">
       {text}
-      {citations.length > 0 && (
+      {citations && citations.length > 0 && (
         <sup className="ml-1">
           {citations.map((cid, i) => (
             <span key={cid}>
