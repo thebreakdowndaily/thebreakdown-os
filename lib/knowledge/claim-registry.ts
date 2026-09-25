@@ -2,21 +2,31 @@ import type { CanonicalClaim } from '@/types/canonical';
 
 const claims = new Map<string, CanonicalClaim>();
 
+function ensureSeeded(): void {
+  if (claims.size === 0) {
+    seedClaims();
+  }
+}
+
 export function getClaim(id: string): CanonicalClaim | undefined {
+  ensureSeeded();
   return claims.get(id);
 }
 
 export function getAllClaims(): CanonicalClaim[] {
+  ensureSeeded();
   return Array.from(claims.values());
 }
 
 export function getClaimsByEntity(entityId: string): CanonicalClaim[] {
+  ensureSeeded();
   return Array.from(claims.values()).filter(
     c => c.entityIds.includes(entityId)
   );
 }
 
 export function getClaimsByConcept(conceptId: string): CanonicalClaim[] {
+  ensureSeeded();
   return Array.from(claims.values()).filter(
     c => c.conceptIds.includes(conceptId)
   );

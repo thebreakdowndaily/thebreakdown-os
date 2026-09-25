@@ -140,6 +140,17 @@
     color: var(--color-brand-300);
   }
 
+  /* ── Responsive table containment (prevent mobile viewport overflow) ── */
+  .prose table,
+  .prose-custom table,
+  article table,
+  [data-region="reading"] table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* ── Utilities for common component patterns ─────────────────── */
   .bg-surface-primary {
     background-color: var(--color-bg-primary);
@@ -397,4 +408,13 @@
 .env-research {
   background-color: var(--color-bg-research);
   color: var(--color-text-research);
+}
+
+/* ── Table scroll container (guarantees horizontal scrolling and no document overflow) ── */
+.table-scroll-wrapper {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
 }

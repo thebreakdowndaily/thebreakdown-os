@@ -12,10 +12,10 @@ export const InlineCitation: FC<InlineCitationProps> = ({ sourceId }) => {
   const index = getSource(sourceId);
   if (index === -1) return <span className="text-blue-600 cursor-help">{sourceId.replace('s', '')}</span>;
   return (
-    <span className="text-blue-600 cursor-help group relative">
+    <span className="text-blue-600 cursor-help group relative inline-block">
       {index + 1}
-      <span className="invisible group-hover:visible absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 z-50">
-        <span className="block bg-white border rounded-lg shadow-xl p-3 text-xs text-gray-800 text-left font-normal">
+      <span className="hidden group-hover:block group-focus-within:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 max-w-[calc(100vw-2rem)] z-50 pointer-events-none">
+        <span className="block bg-white border border-neutral-200 rounded-lg shadow-xl p-3 text-xs text-gray-800 text-left font-normal">
           Source {index + 1}
         </span>
       </span>

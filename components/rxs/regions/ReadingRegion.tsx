@@ -1,6 +1,7 @@
 'use client';
 // @rxs/implementation: screens/story.md — ReadingRegion (content, claims, misconceptions, glossary, sources)
 
+import { useEffect } from 'react';
 import { useReadingDepth } from '@/components/knowledge-library/reader/ReadingModeContext';
 import { KnowledgeRenderer } from '@/components/knowledge-library/core/KnowledgeRenderer';
 import { ClaimRegistrySection } from '@/components/knowledge-library/claims/ClaimRegistrySection';
@@ -15,6 +16,21 @@ export function ReadingRegion({
   enrichedClaims?: EnrichedClaim[];
 }) {
   const depth = useReadingDepth();
+
+  // Contain markdown and dynamic tables inside horizontally scrollable wrappers to prevent mobile page overflow
+  useEffect(() => {
+    const region = document.querySelector('[data-region="reading"]');
+    if (!region) return;
+    const tables = region.querySelectorAll('table');
+    tables.forEach((table) => {
+      if (table.parentElement && !table.parentElement.classList.contains('table-scroll-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-scroll-wrapper overflow-x-auto max-w-full my-4';
+        table.parentNode?.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      }
+    });
+  }, [chapter, depth]);
 
   return (
     <section data-region="reading">
