@@ -4,6 +4,7 @@ import type { FC } from 'react';
 import type { BlockComponentProps } from '../core/block-registry';
 import type { ClaimBlockData, EvidenceRef } from '@/types/canonical';
 import { getSource } from '@/lib/knowledge/source-registry';
+import { getClaim } from '@/lib/knowledge/claim-registry';
 
 interface ThreeLayerData {
   documentedFacts?: Array<{ fact: string; sources: string[] }>;
@@ -13,9 +14,14 @@ interface ThreeLayerData {
 }
 
 export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
-  const { statement, confidence, evidence } = data as unknown as ClaimBlockData;
+  const claimData = data as unknown as (ClaimBlockData & { claimId?: string });
+  const registryClaim = claimData?.claimId ? getClaim(claimData.claimId) : undefined;
+  const statement = claimData?.statement || registryClaim?.statement;
+  if (!statement) return null;
+  const confidence = claimData?.confidence || registryClaim?.confidence || 'established';
+  const evidence = claimData?.evidence || registryClaim?.evidence || [];
   const threeLayer = data as unknown as ThreeLayerData;
-  const hasThreeLayer = Array.isArray(threeLayer.documentedFacts) && threeLayer.documentedFacts.length > 0;
+  const hasThreeLayer = Array.isArray(threeLayer?.documentedFacts) && threeLayer.documentedFacts.length > 0;
 
   const badgeColor =
     confidence === 'established' ? 'bg-green-100 text-green-700' :

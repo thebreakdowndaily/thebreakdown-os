@@ -22,7 +22,10 @@ export async function generateStaticParams() {
 export default async function CollectionPage({ params }: { params: Promise<{ collectionSlug: string }> }) {
   const { collectionSlug } = await params;
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
-  const collection = await repo.getCollection('india-and-the-world', collectionSlug);
+  const libraries = await repo.getAllLibraries();
+  const library = libraries.find((lib) => lib.collections.some((c) => c.slug === collectionSlug));
+  if (!library) notFound();
+  const collection = await repo.getCollection(library.slug, collectionSlug);
   if (!collection) notFound();
   return <CollectionLanding collection={collection} />;
 }

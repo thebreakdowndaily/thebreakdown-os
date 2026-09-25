@@ -149,6 +149,26 @@ describe('Phase 4.5: Canonical Adapter & Structured Telemetry', () => {
     }
   });
 
+  test('Canonical chapter route library lookup resolves collectionSlug to correct library', async () => {
+    const { RepositoryFactory } = await import('../../services/factory/repository');
+    const { getKnowledgeLibrarySeedData } = await import('../../utils/data-layer/knowledge-library-data');
+    const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+    const libraries = await repo.getAllLibraries();
+    
+    const collectionSlug = 'economic-policy-2026';
+    const volumeSlug = 'structural-reforms';
+    const chapterSlug = 'rbi-repo-rate';
+    
+    const library = libraries.find((lib) => lib.collections.some((c) => c.slug === collectionSlug));
+    expect(library).toBeDefined();
+    expect(library?.slug).toBe('indian-economy');
+
+    const chapter = await repo.getChapter(library!.slug, collectionSlug, volumeSlug, chapterSlug);
+    expect(chapter).toBeDefined();
+    expect(chapter?.slug).toBe('rbi-repo-rate');
+    expect(chapter?.status).toBe('verified');
+  });
+
   test('Hard Production Invariant: Canonical-classified stories NEVER silently fall back to legacy store', async () => {
     process.env.CANONICAL_READ_PATH = 'CANARY';
     delete process.env.NEXT_PUBLIC_CANONICAL_READ_PATH;
