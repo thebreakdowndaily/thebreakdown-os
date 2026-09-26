@@ -860,7 +860,10 @@ export type EventType =
   | 'dataset:created' | 'dataset:updated' | 'dataset:deleted'
   | 'media:uploaded' | 'media:updated' | 'media:deleted'
   | 'search:indexed'
-  | 'graph:updated';
+  | 'graph:updated'
+  | 'correction:submitted'
+  | 'correction:triaged'
+  | 'correction:published';
 
 export interface Event {
   type: EventType;

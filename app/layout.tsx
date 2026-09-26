@@ -58,6 +58,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: 'https://thebreakdown.in',
+    types: {
+      'application/rss+xml': 'https://thebreakdown.in/api/feed',
+    },
+  },
   // DNS TXT verification completed via Cloudflare
 };
 
@@ -91,13 +97,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" data-theme="dark" className={`${inter.variable} ${playfair.variable} ${sourceSerif.variable}`}>
+      <head>
+        <link rel="alternate" type="application/rss+xml" title="The Breakdown RSS Feed" href="https://thebreakdown.in/api/feed" />
+      </head>
       <body className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] font-sans flex flex-col antialiased">
-        <Script id="schema-website" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(websiteSchema)}
-        </Script>
-        <Script id="schema-organization" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(organizationSchema)}
-        </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema).replace(/</g, '\\u003c'),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c'),
+          }}
+        />
         {GA_MEASUREMENT_ID && process.env.NODE_ENV === 'production' && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />

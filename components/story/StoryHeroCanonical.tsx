@@ -76,6 +76,13 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
             alt={hero.heroMedia.altText || ''}
             fetchPriority="high"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              const target = e.currentTarget;
+              const fallback = `/images/placeholders/${(hero.category || 'story').toLowerCase()}-placeholder.svg`;
+              if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                target.src = fallback;
+              }
+            }}
           />
           {hero.heroMedia.caption && (
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-4 text-xs text-neutral-300">

@@ -23,11 +23,9 @@ export default function robots(): MetadataRoute.Robots {
           '/topic',
           '/topics',
           '/about',
-          '/problems',
+          '/investigation',
+          '/investigations',
           '/compare',
-          '/evolution',
-          '/precedents',
-          '/tracking',
           '/trackers',
         ],
         disallow: [
@@ -47,6 +45,11 @@ export default function robots(): MetadataRoute.Robots {
           '/explorer',
           '/performance',
           '/operations',
+          // Deprecated legacy routes
+          '/problems',
+          '/evolution',
+          '/precedents',
+          '/tracking',
           // Sub-products / experimental routes not ready for public
           '/up403',
           // Empty pages

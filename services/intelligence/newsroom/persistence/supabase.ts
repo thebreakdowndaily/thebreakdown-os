@@ -67,7 +67,9 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
-      return null;
+      throw new Error(
+        'Supabase client unavailable: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing or invalid. Fail closed.'
+      );
     }
 
     try {
@@ -98,7 +100,9 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async save(state: NewsroomPersistedState): Promise<void> {
     this.cachedState = state;
     if (!this.client) {
-      return;
+      throw new Error(
+        'Supabase client unavailable: cannot persist newsroom state. Fail closed.'
+      );
     }
 
     let retries = 3;

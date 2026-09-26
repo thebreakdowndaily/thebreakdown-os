@@ -54,8 +54,16 @@ describe('diagnostic route exposure', () => {
     expect(data.analytics).not.toBeNull();
   });
 
-  test('health returns liveness only', async () => {
-    expect(await (await healthGet()).json()).toEqual({ status: 'ok' });
+  test('health returns operational health and subsystem status', async () => {
+    const res = await healthGet();
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.status).toBe('healthy');
+    expect(data.subsystems).toBeDefined();
+    expect(data.subsystems.editorialState).toBe('operational');
+    expect(data.subsystems.projectionEngine).toBe('operational');
+    expect(data.subsystems.domainRegistry).toBe('operational');
+    expect(data.subsystems.researchPlatform).toBe('operational');
   });
 });
 

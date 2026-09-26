@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import Link from 'next/link';
 import { CHAPTER_1_PACKAGE } from '@/lib/editorial/chapter-1-data';
 import { GoldStandardAuditService } from '@/services/editorial/gold-standard-audit.service';
@@ -8,11 +7,14 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 export const metadata: Metadata = {
   title: `${CHAPTER_1_PACKAGE.title} — Founding Edition v1.0 — The Breakdown`,
   description: CHAPTER_1_PACKAGE.sixQuestions.whatHappened.summary,
+  alternates: {
+    canonical: `https://thebreakdown.in/founding-edition/${CHAPTER_1_PACKAGE.slug}`,
+  },
   openGraph: {
     title: `${CHAPTER_1_PACKAGE.title} — The Breakdown Knowledge Platform`,
     description: CHAPTER_1_PACKAGE.subtitle,
     type: 'article',
-    url: `https://thebreakdown.gov/founding-edition/${CHAPTER_1_PACKAGE.slug}`,
+    url: `https://thebreakdown.in/founding-edition/${CHAPTER_1_PACKAGE.slug}`,
   },
 };
 
@@ -22,7 +24,7 @@ export default function Chapter1FoundingPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    '@id': `https://thebreakdown.gov/founding-edition/${CHAPTER_1_PACKAGE.slug}#chapter`,
+    '@id': `https://thebreakdown.in/founding-edition/${CHAPTER_1_PACKAGE.slug}#chapter`,
     headline: CHAPTER_1_PACKAGE.title,
     alternativeHeadline: CHAPTER_1_PACKAGE.subtitle,
     description: CHAPTER_1_PACKAGE.sixQuestions.whatHappened.summary,
@@ -31,7 +33,7 @@ export default function Chapter1FoundingPage() {
     publisher: {
       '@type': 'NewsMediaOrganization',
       name: 'The Breakdown Knowledge Platform',
-      url: 'https://thebreakdown.gov',
+      url: 'https://thebreakdown.in',
     },
     citation: CHAPTER_1_PACKAGE.sources.map((s) => ({
       '@type': 'CreativeWork',
@@ -42,9 +44,12 @@ export default function Chapter1FoundingPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
-      <Script id="schema-ch1-jsonld" type="application/ld+json" strategy="beforeInteractive">
-        {JSON.stringify(jsonLd)}
-      </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
 
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },

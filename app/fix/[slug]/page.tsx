@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 import FixLayout from '@/layouts/FixLayout';
@@ -53,9 +52,12 @@ export default async function FixPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <>
-      <Script id="schema-fix-jsonld" type="application/ld+json" strategy="beforeInteractive">
-        {JSON.stringify(jsonLd)}
-      </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
       <FixLayout
         seo={{
           title: `${canonicalFix.headline} — The Breakdown Fix`,

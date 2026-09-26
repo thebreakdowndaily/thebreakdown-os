@@ -43,6 +43,7 @@ export function StoryOrientationRail({
   const formattedDate = new Date(updatedAt).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
+    timeZone: 'UTC',
   });
 
   return (

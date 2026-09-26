@@ -1,6 +1,6 @@
 # RIE v1.2 Phase 2 — Regional Baseline
 
-**Timestamp:** 2026-08-18T15:27:49.879Z
+**Timestamp:** 2026-09-26T14:48:36.252Z
 **Corpus Version:** 1.1
 **Baseline Tag:** rie-v1.2-phase2-baseline
 **Registry Sources (eligible):** 15

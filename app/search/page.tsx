@@ -12,6 +12,7 @@ import Card from '@/components/ui/Card';
 import { SearchAnalytics } from '@/components/search/SearchAnalytics';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { isPubliclyPublished } from '@/lib/story/publication';
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; type?: string; page?: string }>;
@@ -53,12 +54,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       c.summary.toLowerCase().includes(query.toLowerCase())
   ) : [];
 
+  const now = new Date();
+  const isChapterPublic = (ch: { status?: string; createdAt?: string; publishedAt?: string }): boolean => {
+    const isStatusPublic = ch.status === 'published' || ch.status === 'verified';
+    const pubStatus = isStatusPublic ? 'published' : 'draft';
+    const publishedAt = ch.publishedAt || ch.createdAt;
+    return isPubliclyPublished({ publicationStatus: pubStatus, publishedAt }, now);
+  };
+
   const matchingChapters = library ? library.collections.flatMap((c) =>
     c.volumes.flatMap((v) =>
       v.chapters.filter(
         (ch) =>
-          ch.title.toLowerCase().includes(query.toLowerCase()) ||
-          ch.summary.toLowerCase().includes(query.toLowerCase())
+          isChapterPublic(ch) &&
+          (ch.title.toLowerCase().includes(query.toLowerCase()) ||
+           ch.summary.toLowerCase().includes(query.toLowerCase()))
       ).map((ch) => ({
         ...ch,
         collectionSlug: c.slug,

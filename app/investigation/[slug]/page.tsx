@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 import type { Investigation } from '@/types/canonical';
@@ -27,6 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${inv.title} — Investigation — The Breakdown`,
     description: inv.subtitle || inv.summary,
+    alternates: {
+      canonical: `https://thebreakdown.in/investigation/${slug}`,
+    },
     openGraph: {
       title: `${inv.title} — The Breakdown Investigation`,
       description: inv.subtitle || inv.summary,
@@ -43,7 +45,8 @@ export default async function InvestigationPage({ params }: Props) {
 
   return (
     <>
-      <Script id="investigation-jsonld" type="application/ld+json"
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -53,7 +56,7 @@ export default async function InvestigationPage({ params }: Props) {
             datePublished: inv.publishedAt,
             dateModified: inv.updatedAt,
             about: { '@type': 'Thing', name: inv.title },
-          }),
+          }).replace(/</g, '\\u003c'),
         }}
       />
 

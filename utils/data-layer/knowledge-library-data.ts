@@ -3258,7 +3258,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
   title: 'India and the World',
   subtitle: 'The Complete Evidence-Based History of Indian Foreign Policy (1947–Present)',
   summary: 'A living knowledge collection exploring how India shaped — and was shaped by — the world. From Partition to nuclear power, from non-alignment to multi-alignment.',
-  heroImage: '/images/library/india-and-the-world-hero.jpg',
+  heroImage: '/images/entities/india.jpg',
   createdAt: '2026-07-12T00:00:00Z',
   updatedAt: '2026-07-12T00:00:00Z',
   collections: [
@@ -3627,7 +3627,7 @@ const indianEconomy: KnowledgeLibrary = {
   title: 'Indian Economy',
   subtitle: 'The Economic Transition of India',
   summary: 'A definitive guide to India\'s economic policies, reforms, and macroeconomic trajectory.',
-  heroImage: '/images/library/indian-economy-hero.jpg',
+  heroImage: '/images/topics/economy.jpg',
   createdAt: '2026-07-23T00:00:00Z',
   updatedAt: '2026-07-23T00:00:00Z',
   collections: [

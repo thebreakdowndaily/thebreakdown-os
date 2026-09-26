@@ -1,15 +1,17 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import ListenButton from './ListenButton';
 import SaveButton from './SaveButton';
+import CorrectionSubmissionDrawer from './CorrectionSubmissionDrawer';
 
 interface ActionBarProps {
   slug: string;
 }
 
 function ActionBarContent({ slug }: ActionBarProps) {
+  const [isCorrectionOpen, setIsCorrectionOpen] = useState(false);
   const url = `https://thebreakdown.in/story/${slug}`;
   const router = useRouter();
   const pathname = usePathname();
@@ -59,6 +61,22 @@ function ActionBarContent({ slug }: ActionBarProps) {
         <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
         Share
       </button>
+
+      <button
+        onClick={() => setIsCorrectionOpen(true)}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface-secondary text-text-muted hover:text-amber-500 hover:border-amber-500/40 text-xs font-medium transition-colors"
+        aria-label="Report an error or correction"
+        title="Report an error or correction"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        Report Error
+      </button>
+
+      <CorrectionSubmissionDrawer
+        isOpen={isCorrectionOpen}
+        onClose={() => setIsCorrectionOpen(false)}
+        storySlug={slug}
+      />
 
       <div className="flex items-center gap-1 ml-4 border-l border-border pl-4">
         <select

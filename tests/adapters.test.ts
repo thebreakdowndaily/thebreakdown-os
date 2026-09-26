@@ -180,7 +180,7 @@ async function runTests() {
     difficulty: 3,
     prerequisites: [],
     learningObjectives: [],
-    recommendedNext: ['kashmir-first-test'],
+    recommendedNext: ['kashmir-the-first-test'],
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z',
   };

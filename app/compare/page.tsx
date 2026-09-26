@@ -6,11 +6,14 @@ import { CompareView } from '@/components/compare/CompareView';
 export const metadata: Metadata = {
   title: 'Compare Solutions — The Fix Hub — The Breakdown',
   description: 'Compare evidence-backed policy solutions side by side. Analyse evidence quality, implementation cost, time horizon, trade-offs, and global precedents.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/compare',
+  },
   openGraph: {
     title: 'Compare Solutions — The Breakdown Knowledge Platform',
     description: 'Side-by-side comparison of evidence-backed policy solutions.',
     type: 'website',
-    url: 'https://thebreakdown.gov/compare',
+    url: 'https://thebreakdown.in/compare',
   },
 };
 

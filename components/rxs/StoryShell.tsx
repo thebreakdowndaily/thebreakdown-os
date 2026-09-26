@@ -28,8 +28,12 @@ import { SocialSharePanel } from '@/components/retention/SocialSharePanel';
 import EvidenceTrail, { type EvidenceTrailItem } from '@/components/evidence/EvidenceTrail';
 import { getTrackersForStory } from '@/lib/trackers/registry';
 
+import type { PublishedCorrection } from '@/types/corrections';
+import CorrectionNoticeBanner from '@/components/story/CorrectionNoticeBanner';
+
 interface StoryShellProps {
   visibleExperience?: VisibleStoryExperience;
+  publishedCorrections?: PublishedCorrection[];
   // Legacy chapter support props
   chapter?: Chapter;
   collectionSlug?: string;
@@ -49,6 +53,7 @@ interface StoryShellProps {
 
 export function StoryShell({
   visibleExperience,
+  publishedCorrections,
   chapter,
   collectionSlug,
   volumeSlug,
@@ -190,6 +195,10 @@ export function StoryShell({
               {/* Hero */}
               <StoryHeroCanonical hero={hero} />
 
+              {/* Editorial Correction Notice Banner (GAP-VS8-01) */}
+              {publishedCorrections && publishedCorrections.length > 0 && (
+                <CorrectionNoticeBanner corrections={publishedCorrections} />
+              )}
 
               {/* Mode Switcher — semantic navigation, not ARIA tabs */}
               <nav

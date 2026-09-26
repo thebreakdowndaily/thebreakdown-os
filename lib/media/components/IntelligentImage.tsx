@@ -30,7 +30,7 @@ const roundedClasses = {
 export default function IntelligentImage({
   asset, aspectRatio = '16:9', sizes, priority = false, className = '', overlay = true, rounded = 'lg', caption = false,
 }: IntelligentImageProps) {
-  if (!asset) return null;
+  if (!asset || !asset.optimization?.cdnUrl) return null;
 
   const arClass = aspectRatioClasses[aspectRatio];
   const rClass = roundedClasses[rounded];

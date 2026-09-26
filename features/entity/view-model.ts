@@ -126,12 +126,6 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
     inv.chapters?.some((ch: any) => entity.usageGraph?.stories?.includes(ch.storySlug))
   );
   
-  const totalArticles = stories.length + relatedChapters.length + relatedInvestigations.length;
-  const wordCount = (entity.description || '').split(/\s+/).filter(Boolean).length;
-  const hasMetadata = (((entity as any).metadata) && Object.keys((entity as any).metadata).length >= 3) || (statistics && statistics.length >= 3);
-  
-  const isEligible = totalArticles >= 2 || (wordCount >= 100 && hasMetadata);
-  if (!isEligible) return null;
 
   return {
     id: entity.id,

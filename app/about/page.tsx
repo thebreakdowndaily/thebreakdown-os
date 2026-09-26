@@ -15,6 +15,9 @@ import Container from '@/components/layout/Container';
 export const metadata: Metadata = {
   title:       'About — The Breakdown',
   description: 'The Breakdown is an independent, evidence-first knowledge platform covering India through primary sources, verified claims, and transparent methodology.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/about',
+  },
   openGraph: {
     title:       'About — The Breakdown',
     description: 'An independent, evidence-first knowledge platform.',
@@ -235,11 +238,6 @@ export default function AboutPage() {
                     href="/trust"
                     label="Trust Dashboard"
                     description="Live platform metrics: chapters reviewed, claims registered, sources cited."
-                  />
-                  <InstitutionLink
-                    href="/operations"
-                    label="Platform Operations"
-                    description="How The Breakdown platform is run, maintained, and governed."
                   />
                 </div>
               </div>

@@ -7,6 +7,14 @@ import { CHAPTER_1_FIX } from '@/lib/editorial/chapter-1-data';
 export const metadata: Metadata = {
   title: 'Public Knowledge Directory — The Breakdown',
   description: 'Evidence-first thematic navigation across Volume I published chapters and primary historical sources.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/topics',
+  },
+  openGraph: {
+    title: 'Public Knowledge Directory — The Breakdown',
+    description: 'Evidence-first thematic navigation across Volume I published chapters and primary historical sources.',
+    url: 'https://thebreakdown.in/topics',
+  },
 };
 
 export default function TopicsPage() {

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { loadData, getDataById, getDatasetVersion, getResearchCutoff } from '@/lib/up403/loader';
@@ -107,7 +106,12 @@ export default async function Up403ReaderProfile({ params }: { params: Promise<{
   return (
     <EditorialLayout breadcrumbItems={breadcrumbs}>
       <div className="space-y-8">
-        <Script id={`schema-${rec.canonical_constituency_id}`} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+          }}
+        />
 
         <header className="flex flex-wrap items-start justify-between gap-4">
         <div>

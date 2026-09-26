@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildOperationsProjection } from '@/lib/operations/platform-observability';
 import PlatformOperationsDashboard from '@/components/operations/PlatformOperationsDashboard';
@@ -29,6 +30,66 @@ export default async function OperationsPage() {
             Read-only observability dashboard. No editorial workflow. No mutations.
           </p>
         </div>
+
+        <nav aria-label="Operational Surfaces" style={{ display: 'flex', gap: 'var(--spacing-3)', marginBottom: 'var(--spacing-6)', flexWrap: 'wrap' }}>
+          <Link
+            href="/operations"
+            style={{
+              padding: 'var(--spacing-2) var(--spacing-4)',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-weight-semibold)',
+              textDecoration: 'none',
+              border: '1px solid var(--color-border-default)',
+            }}
+          >
+            Platform Operations
+          </Link>
+          <Link
+            href="/intel"
+            style={{
+              padding: 'var(--spacing-2) var(--spacing-4)',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-sm)',
+              textDecoration: 'none',
+              border: '1px solid var(--color-border-subtle)',
+            }}
+          >
+            Mission Control
+          </Link>
+          <Link
+            href="/newsroom"
+            style={{
+              padding: 'var(--spacing-2) var(--spacing-4)',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-sm)',
+              textDecoration: 'none',
+              border: '1px solid var(--color-border-subtle)',
+            }}
+          >
+            Newsroom Command Center
+          </Link>
+          <Link
+            href="/newsroom/scorecard"
+            style={{
+              padding: 'var(--spacing-2) var(--spacing-4)',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-sm)',
+              textDecoration: 'none',
+              border: '1px solid var(--color-border-subtle)',
+            }}
+          >
+            Intelligence Scorecard
+          </Link>
+        </nav>
 
         <PlatformOperationsDashboard projection={projection} />
       </main>

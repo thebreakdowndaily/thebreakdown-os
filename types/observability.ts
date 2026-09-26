@@ -25,6 +25,10 @@ export interface SystemAnomalyAlert {
   expectedBaseline: number;
   severity: AnomalySeverity;
   detectedTime: string;
+  source?: string;
+  condition?: string;
+  status?: 'ACTIVE' | 'RESOLVED' | 'ACKNOWLEDGED';
+  operationalSeverity?: 'P0' | 'P1' | 'P2' | 'P3';
 }
 
 export interface CapacityForecast {

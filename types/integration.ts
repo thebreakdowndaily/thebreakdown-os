@@ -52,6 +52,7 @@ export interface ProductionAuditCheck {
   category: 'LOAD' | 'SECURITY' | 'INFRASTRUCTURE' | 'GOVERNANCE';
   passed: boolean;
   observation: string;
+  evaluatedAt?: string;
 }
 
 export interface ReleaseGovernanceContract {

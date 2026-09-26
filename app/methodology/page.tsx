@@ -6,6 +6,9 @@ import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeB
 export const metadata: Metadata = {
   title: 'Methodology — The Breakdown',
   description: 'How The Breakdown researches, verifies, and publishes evidence-first knowledge objects — our editorial process, evidence hierarchy, and quality standards.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/methodology',
+  },
   openGraph: { title: 'Methodology — The Breakdown', description: 'How The Breakdown researches, verifies, and publishes evidence-first knowledge objects.', url: 'https://thebreakdown.in/methodology' },
   twitter: { card: 'summary', title: 'Methodology — The Breakdown', description: 'How The Breakdown researches, verifies, and publishes evidence-first knowledge objects.' },
 };

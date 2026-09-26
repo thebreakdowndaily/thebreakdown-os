@@ -15,6 +15,7 @@ const PUBLIC_API_PATHS = [
   '/api/docs',
   '/api/feed',
   '/api/auth',
+  '/api/search',
   '/api/up403',
   '/api/v1/auth/login',
   '/api/v1/auth/register',
@@ -31,22 +32,26 @@ const AUTHENTICATED_PAGES = [
   '/explorer',
   '/operations',
   '/performance',
-  '/tracking',
   '/settings',
   '/editor',
   '/intel',
 ];
 
-// Routes that exist in the codebase but are not ready for public traffic.
-// Return 404 to prevent indexing and reader confusion.
-const DEPRECATED_DEBUG_ROUTES = ['/problems', '/evolution', '/compare', '/precedents'];
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Deprecated debug route block (Phase 0/3 cleanup)
-  if (DEPRECATED_DEBUG_ROUTES.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
-    return new NextResponse('Not Found', { status: 404, headers: SECURITY_HEADERS as HeadersInit });
+  // 1. Legacy canonical route redirects (Phase 0/3 cleanup -> 308 permanent redirect)
+  if (pathname === '/tracking' || pathname.startsWith('/tracking/')) {
+    return NextResponse.redirect(new URL('/trackers', request.url), 308);
+  }
+  if (pathname === '/problems' || pathname.startsWith('/problems/')) {
+    return NextResponse.redirect(new URL('/fix', request.url), 308);
+  }
+  if (pathname === '/evolution' || pathname.startsWith('/evolution/')) {
+    return NextResponse.redirect(new URL('/data', request.url), 308);
+  }
+  if (pathname === '/precedents' || pathname.startsWith('/precedents/')) {
+    return NextResponse.redirect(new URL('/fix', request.url), 308);
   }
 
   // 2. API Authentication & Rate Limiting

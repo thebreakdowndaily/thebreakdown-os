@@ -20,6 +20,9 @@ export default function EntityIntelligenceHeader({ entity, storyCount }: EntityI
             src={entity.image}
             alt=""
             className="w-full h-full object-cover grayscale"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
           />
         </div>
       )}
@@ -30,17 +33,24 @@ export default function EntityIntelligenceHeader({ entity, storyCount }: EntityI
           <div className="flex items-start gap-6">
             {/* Entity Logo / Portrait Slot */}
             <div className="w-24 h-24 sm:w-32 sm:h-32 bg-neutral-900 border-2 border-neutral-800 rounded-xl flex items-center justify-center shrink-0 shadow-2xl overflow-hidden relative">
-               {hasImage ? (
-                 <img
+              {hasImage && (
+                <img
                   src={entity.image}
                   alt={entity.name}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.parentElement?.querySelector('.entity-avatar-fallback') as HTMLElement | null;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
                 />
-               ) : (
-                 <span className="text-3xl sm:text-4xl text-neutral-600 font-serif">
-                   {entity.name.charAt(0)}
-                 </span>
-               )}
+              )}
+              <span
+                className="entity-avatar-fallback w-full h-full items-center justify-center text-3xl sm:text-4xl text-neutral-600 font-serif"
+                style={{ display: hasImage ? 'none' : 'flex' }}
+              >
+                {entity.name.charAt(0)}
+              </span>
             </div>
 
             <div className="flex flex-col justify-center">

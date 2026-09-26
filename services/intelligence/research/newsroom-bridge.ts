@@ -402,6 +402,17 @@ function addNewsTimelineEvent(
 ): void {
   const project = core.getProject(projectId);
   if (!project) return;
+
+  // Bridge idempotency: do not add duplicate timeline events if this event already exists
+  const existingEvents = project.timelineEventIds
+    .map((id) => core.getEvent(id))
+    .filter((e): e is NonNullable<typeof e> => e !== undefined);
+
+  const isDuplicate = existingEvents.some(
+    (e) => e.title === event.title && e.date === event.firstDetectedAt
+  );
+  if (isDuplicate) return;
+
   const eventRecord = {
     id: createEventId(),
     projectId,
@@ -469,6 +480,9 @@ export async function applyNewsEventToResearch(
 
 /** Maps a NewsroomSignal to the normalised bridge input. */
 export function newsroomSignalToEvent(signal: NewsroomSignal): NewsroomEventInput {
+  const isPromoted = signal.editorialNotes?.some((n) =>
+    n.toLowerCase().includes('promoted to research')
+  );
   return {
     id: signal.id,
     title: signal.title,
@@ -486,6 +500,7 @@ export function newsroomSignalToEvent(signal: NewsroomSignal): NewsroomEventInpu
       velocity: signal.scores.velocity,
       importance: signal.scores.importance,
     },
+    triggerHint: isPromoted ? 'BREAKING_DEVELOPMENT' : undefined,
   };
 }
 

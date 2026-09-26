@@ -42,6 +42,10 @@ const nextConfig = {
         source: '/:path*',
         headers: [
           { key: 'Content-Security-Policy', value: csp },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
     ];
@@ -70,6 +74,46 @@ nextConfig.redirects = async () => [
   {
     source: '/story/rbi-monetary-policy',
     destination: '/story/rbi-repo-rate',
+    permanent: true,
+  },
+  {
+    source: '/rss.xml',
+    destination: '/api/feed',
+    permanent: true,
+  },
+  {
+    source: '/feed',
+    destination: '/api/feed',
+    permanent: true,
+  },
+  {
+    source: '/chapters',
+    destination: '/series',
+    permanent: true,
+  },
+  {
+    source: '/explainers',
+    destination: '/stories',
+    permanent: true,
+  },
+  {
+    source: '/the-fix',
+    destination: '/fix',
+    permanent: true,
+  },
+  {
+    source: '/data-stories',
+    destination: '/data',
+    permanent: true,
+  },
+  {
+    source: '/policy-tracker',
+    destination: '/trackers',
+    permanent: true,
+  },
+  {
+    source: '/tracking',
+    destination: '/trackers',
     permanent: true,
   },
 ];

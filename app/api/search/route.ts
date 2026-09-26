@@ -38,7 +38,38 @@ export async function GET(request: NextRequest) {
     ? services.search.searchByType(query, typeFilter, params)
     : services.search.search(query, params);
 
-  const response = NextResponse.json(result);
+  const rawList: any[] = (result as any).matches ?? (result as any).data ?? [];
+  const items = rawList.map((m: any) => {
+    let url = m.url;
+    if (!url) {
+      if (m.type === 'story') url = `/story/${m.slug || m.id}`;
+      else if (m.type === 'entity') url = `/entity/${m.slug || m.id}`;
+      else if (m.type === 'topic') url = `/topic/${m.slug || m.id}`;
+      else if (m.type === 'chapter') url = `/series`;
+      else if (m.type === 'fix') url = `/fix/${m.slug || m.id}`;
+      else if (m.type === 'investigation') url = `/investigation/${m.slug || m.id}`;
+      else url = `/${m.slug || m.id}`;
+    }
+    return {
+      ...m,
+      url,
+      href: url,
+    };
+  });
+
+  const total = (result as any).meta?.total ?? items.length;
+  const totalPages = Math.ceil(total / pageSize);
+
+  const payload = {
+    ...(result as object),
+    matches: items,
+    results: items,
+    data: items,
+    total,
+    totalPages,
+  };
+
+  const response = NextResponse.json(payload);
   rateLimiter.applyHeaders(response.headers, rate);
   return response;
 }

@@ -322,15 +322,20 @@ export interface EditorialQueueItem {
 
 export type NewsroomTriageAction =
   | 'VERIFY'
+  | 'REVIEW'
   | 'ASSIGN'
   | 'FOLLOW'
+  | 'WATCH'
   | 'IGNORE'
+  | 'DISMISS'
   | 'MERGE'
   | 'SPLIT'
   | 'MARK_RELEVANT'
   | 'NOT_RELEVANT'
   | 'ESCALATE'
-  | 'RESOLVE';
+  | 'PRIORITIZE'
+  | 'RESOLVE'
+  | 'PROMOTE_TO_RESEARCH';
 
 export interface NewsroomActionPayload {
   action: NewsroomTriageAction;

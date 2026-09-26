@@ -9,6 +9,9 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Trust Dashboard — The Breakdown',
   description: 'Live transparency dashboard for The Breakdown Knowledge Platform — see our editorial standards, chapter status, claim counts, evidence sources, and verification history.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/trust',
+  },
   openGraph: { title: 'Trust Dashboard — The Breakdown', description: 'Live transparency for The Breakdown Knowledge Platform: claims, sources, evidence, review status.', url: 'https://thebreakdown.in/trust' },
   twitter: { card: 'summary', title: 'Trust Dashboard — The Breakdown', description: 'Live transparency for The Breakdown Knowledge Platform: claims, sources, evidence, review status.' },
 };

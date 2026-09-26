@@ -17,6 +17,9 @@ import Container from '@/components/layout/Container';
 export const metadata: Metadata = {
   title:       'Investigations — The Breakdown',
   description: 'In-depth, evidence-driven investigations into Indian policy, governance, geopolitics, and society. Every claim sourced. Every source linked.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/investigations',
+  },
   openGraph: {
     title:       'Investigations — The Breakdown',
     description: 'In-depth evidence-driven investigations.',

@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 
 const typeColors: Record<string, string> = {
@@ -35,11 +38,12 @@ export default function EntityHero({
   name, type, description, image, aliases, storyCount, evidenceScore,
   established, coverage, ministry, beneficiaries, updatedAt,
 }: EntityHeroProps) {
+  const [imgError, setImgError] = useState(false);
   const tc = typeColors[type.toLowerCase()] || typeColors.default;
   return (
     <section aria-label={`Entity profile: ${name}`} className="pb-8 sm:pb-10">
       <div className="bg-[#151515] border border-[#2A2A2A] rounded-xl overflow-hidden">
-        {image && (
+        {image && !imgError && (
           <div className="w-full h-48 sm:h-56 relative bg-[#0A0A0A]">
             <Image
               src={image}
@@ -48,6 +52,7 @@ export default function EntityHero({
               priority
               className="object-cover opacity-60"
               sizes="(max-width: 1280px) 100vw, 1280px"
+              onError={() => setImgError(true)}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#151515] to-transparent z-10" />
           </div>

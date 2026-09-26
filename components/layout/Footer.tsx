@@ -32,8 +32,7 @@ const institutionLinks = [
   { label: 'Editorial Constitution',    href: '/editorial-constitution' },
   { label: 'Methodology & Sources',     href: '/methodology' },
   { label: 'Trust Dashboard',           href: '/trust' },
-  { label: 'Corrections',               href: '/methodology#corrections' },
-  { label: 'Platform Operations',       href: '/operations' },
+  { label: 'Corrections & Errata',      href: '/transparency/corrections' },
 ];
 
 const legalLinks = [

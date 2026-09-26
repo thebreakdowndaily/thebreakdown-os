@@ -7,11 +7,15 @@ export const metadata: Metadata = {
   title: 'Policy & Issue Trackers | The Breakdown',
   description:
     'Living, evidence-backed policy and issue trackers monitoring major Indian legislative overhauls, industrial investments, and welfare schemes.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/trackers',
+  },
   openGraph: {
     title: 'Policy & Issue Trackers | The Breakdown',
     description:
       'Living, evidence-backed policy and issue trackers monitoring major Indian legislative overhauls, industrial investments, and welfare schemes.',
     type: 'website',
+    url: 'https://thebreakdown.in/trackers',
   },
 };
 

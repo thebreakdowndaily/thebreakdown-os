@@ -21,6 +21,7 @@
 
 import type { Story, StoryStatus } from '@/types/canonical';
 import type { GateCheck, PublicationGateResult, PublicationGateInput } from '@/types/editorial-calendar';
+import { evaluateGoldStandardPass, type GoldStandardAuditRecord } from './gold-standard-review';
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
 
@@ -101,6 +102,28 @@ export function validateStoryForPublication(
     passed: notBlocked,
     reason: notBlocked ? 'Story is not blocked' : `Story is blocked: ${storyWithBlock.blockReason}`,
   });
+
+  // Gate 11: Gold Standard Review & Evidence Density (Article XI)
+  const auditRecord = (story as Story & { goldStandardAudit?: GoldStandardAuditRecord }).goldStandardAudit;
+  if (auditRecord) {
+    const passedGoldStandard = evaluateGoldStandardPass(auditRecord);
+    checks.push({
+      name: 'gold_standard_review',
+      passed: passedGoldStandard,
+      reason: passedGoldStandard
+        ? 'Gold Standard Review passed all 7 phases with zero blocking issues'
+        : 'Gold Standard Review has incomplete phases or unresolved blocking issues',
+    });
+  } else {
+    const hasDensity = hasSources && hasClaims;
+    checks.push({
+      name: 'gold_standard_review',
+      passed: hasDensity,
+      reason: hasDensity
+        ? 'Story meets foundational evidence and claim density requirements'
+        : 'Story lacks required evidence sources or claims for editorial density',
+    });
+  }
 
   const allPassed = checks.every(c => c.passed);
 

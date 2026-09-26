@@ -21,10 +21,22 @@ export function createNewsroomStateRepository(options?: {
   provider?: string;
   filePath?: string;
 }): NewsroomStateRepository {
-  const provider =
-    options?.provider ??
-    process.env.NEWSROOM_STATE_PROVIDER ??
-    (process.env.NODE_ENV === 'production' ? 'supabase' : 'memory');
+  const isProduction =
+    process.env.DATA_PROVIDER === 'supabase' || process.env.NODE_ENV === 'production';
+
+  const requestedProvider = options?.provider ?? process.env.NEWSROOM_STATE_PROVIDER;
+
+  // In production or when DATA_PROVIDER=supabase, local memory/file fallbacks are strictly prohibited
+  if (isProduction) {
+    if (requestedProvider && requestedProvider !== 'supabase') {
+      throw new Error(
+        `Production persistence policy violation: provider '${requestedProvider}' is forbidden. Production MUST use Supabase persistence.`
+      );
+    }
+    return new SupabaseStateRepository();
+  }
+
+  const provider = requestedProvider ?? 'memory';
 
   if (provider === 'supabase') {
     return new SupabaseStateRepository();

@@ -39,12 +39,12 @@ export function compareVersions(a: string, b: string): number {
   return 0;
 }
 
-export function isCompatible(version: string, minimumVersion: string): boolean {
-  return compareVersions(version, minimumVersion) >= 0;
+export function isCompatible(requiredVersion: string, currentVersion: string = KOS_VERSION): boolean {
+  return compareVersions(currentVersion, requiredVersion) >= 0;
 }
 
 export function assertCompatible(manifest: { id: string; minimumKOSVersion: string }) {
-  if (!isCompatible(KOS_VERSION, manifest.minimumKOSVersion)) {
+  if (!isCompatible(manifest.minimumKOSVersion, KOS_VERSION)) {
     throw new PluginCompatibilityError(
       manifest.id,
       manifest.minimumKOSVersion,

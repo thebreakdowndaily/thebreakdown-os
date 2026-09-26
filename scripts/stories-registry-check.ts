@@ -19,7 +19,7 @@ import { load } from 'js-yaml';
 import { STORY_REGISTRY } from '../stories/stories-registry';
 
 const STORIES_DIR = path.join(__dirname, '..', 'stories');
-const ALLOWED_NON_STORY_DIRS = new Set(['reference']);
+const ALLOWED_NON_STORY_DIRS = new Set(['reference', 'archive', 'drafts']);
 
 // Pre-existing data condition (documented in docs/story-structure-phase0-audit.md):
 // stories/kashmir-first-test is a legacy duplicate of stories/kashmir-the-first-test

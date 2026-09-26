@@ -14,6 +14,10 @@ export class OperationalIntelligenceEngine {
         expectedBaseline: 1.0,
         severity: 'WARNING',
         detectedTime: timestamp,
+        source: 'TelemetryCollector',
+        condition: 'telemetry_sample_rate < 1.0',
+        status: 'ACTIVE',
+        operationalSeverity: 'P2',
       },
     ];
 

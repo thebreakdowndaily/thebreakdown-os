@@ -683,7 +683,7 @@ function seed(): DataStore {
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India: UPI\'s Unseen Revolution', summary: 'How UPI transformed rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
     ],
     relatedEntities: [
-      { id: 'ministry-of-consumer-affairs', slug: 'ministry-of-consumer-affairs', name: 'Ministry of Consumer Affairs',image: '/images/entities/ministry-of-consumer-affairs.jpg',  type: 'organization', description: 'Nodal ministry for PDS and consumer protection.' },
+      { id: 'ministry-of-consumer-affairs', slug: 'ministry-of-consumer-affairs', name: 'Ministry of Consumer Affairs', type: 'organization', description: 'Nodal ministry for PDS and consumer protection.' },
       { id: 'india', slug: 'india', name: 'India',image: '/images/entities/india.jpg',  type: 'country', description: 'Republic of India.' },
     ],
   };
@@ -2006,7 +2006,7 @@ function seed(): DataStore {
     id: 'bjp-mission-360',
     slug: 'bjp-mission-360',
     headline: 'Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality',
-    heroImage: 'https://placehold.co/1200x630/151515/D4A843?text=Mission+360+BJP+Two-Thirds+Majority',
+    heroImage: '/images/placeholders/policy-placeholder.svg',
     summary: 'EDITORIAL CONTEXT (Post-2024 Election Retrospective): This investigation analyzes the BJP\'s pre-election "Mission 360 / Abki Baar 400 Paar" campaign strategy alongside actual election outcomes. In the June 2024 Lok Sabha general elections, the BJP secured 240 seats and the NDA coalition secured 293 seats, forming the government without achieving a single-party or two-thirds constitutional majority.',
     publishedAt: '2026-07-23T08:00:00Z',
     updatedAt: '2026-07-23T08:00:00Z',
@@ -3129,7 +3129,7 @@ function seed(): DataStore {
     slug: 'namami-gange-under-fire',
     headline: 'Namami Gange: Inside India\'s ₹27,000 Crore Fight to Clean the Ganga — and the Communities It Left Behind',
     summary: 'Twelve years and ₹26,824 crore into the government\'s flagship river rejuvenation programme, the Ganga is cleaner in stretches but remains biologically dead in 37. Sewage treatment plants that took a decade to build now discharge untreated waste. And the riverbank communities the programme was meant to serve have been displaced by the very infrastructure built in their name.',
-    heroImage: '/images/stories/namami-gange.jpg',
+    heroImage: '/images/placeholders/environment-placeholder.svg',
     publishedAt: '2026-07-14T06:00:00Z',
     updatedAt: '2026-07-14T06:00:00Z',
     readingTime: 22,
@@ -3273,7 +3273,7 @@ function seed(): DataStore {
     slug: 'india-china-border-lac',
     headline: 'The Cold Peace Along the LAC: Why the India–China Border Remains Unsettled After 75 Years',
     summary: 'The India-China border dispute is a 75-year-old territorial conflict rooted in the colonial legacy of the McMahon Line (1914), competing maps of Aksai Chin, and the unresolved status of approximately 90,000 square kilometres of territory claimed by both sides. The dispute escalated to a full-scale war in 1962, and has since produced a "cold peace" punctuated by periodic crises: Nathu La and Cho La (1967), Sumdorong Chu (1987), Depsang (2013), Doklam (2017), and Galwan (2020). This chapter traces the dispute from its colonial origins through the 1962 war to the present-day military standoff, examining why it remains one of the world\'s most dangerous flashpoints.',
-    heroImage: '/images/stories/india-china-border.jpg',
+    heroImage: '/images/stories/india-china-border-tensions.jpg',
     publishedAt: '2026-07-15T06:00:00Z',
     updatedAt: '2026-07-15T06:00:00Z',
     readingTime: 18,
@@ -3362,7 +3362,7 @@ function seed(): DataStore {
     slug: 'kashmir-the-first-test',
     headline: 'Kashmir: The First Test — How the 1947–48 War Established a Conflict That Remains Unresolved 75 Years Later',
     summary: 'The partition framework left princely states to choose their allegiance. Kashmir was the case this framework could not handle — a Muslim-majority state with a Hindu ruler, bordering both India and Pakistan. The tribal invasion of October 1947, the Maharaja\'s accession to India, the military campaign, and the UN ceasefire produced an unresolved division that has caused four wars and an insurgency that continues today. This chapter examines how the first India-Pakistan war over Kashmir established the terms — territorial, political, and psychological — of a conflict that remains one of the world\'s most dangerous flashpoints.',
-    heroImage: '/images/stories/kashmir-1947.jpg',
+    heroImage: '/images/library/chapter-1/maps/map-kashmir-1947.svg',
     publishedAt: '2026-07-15T06:00:00Z',
     updatedAt: '2026-07-15T06:00:00Z',
     readingTime: 17,
@@ -3545,7 +3545,7 @@ function seed(): DataStore {
       id: 'nmcg', slug: 'nmcg', name: 'National Mission for Clean Ganga',
       type: 'organization', description: 'Nodal implementing agency of the Namami Gange Programme under the Ministry of Jal Shakti. Responsible for sewage treatment infrastructure, riverfront development, afforestation, biodiversity conservation, and industrial effluent monitoring across the Ganga basin.',
       aliases: ['NMCG', 'Clean Ganga Mission', 'National Mission for Clean Ganga'], storyCount: 12, updatedAt: '2026-07-14T06:00:00Z',
-      image: '/images/entities/nmcg.jpg', evidenceScore: 65,
+      evidenceScore: 65,
       timeline: [
         { date: '2011-08-12', title: 'NMCG Registered as Society', description: 'National Mission for Clean Ganga registered under Societies Registration Act as implementation arm of NGRBA.' },
         { date: '2014-06-07', title: 'Namami Gange Launched', description: 'NMCG designated as nodal implementing agency for the flagship programme.' },
@@ -3568,7 +3568,7 @@ function seed(): DataStore {
       id: 'ministry-of-jal-shakti', slug: 'ministry-of-jal-shakti', name: 'Ministry of Jal Shakti',
       type: 'organization', description: 'Union ministry of Government of India responsible for water resources, river development, Ganga rejuvenation, drinking water supply, and sanitation. Overseeing ministry for NMCG and the Namami Gange Programme.',
       aliases: ['MoJS', 'Jal Shakti Ministry', 'Ministry of Jal Shakti'], storyCount: 15, updatedAt: '2026-07-14T06:00:00Z',
-      image: '/images/entities/jal-shakti.jpg', evidenceScore: 70,
+      evidenceScore: 70,
       timeline: [
         { date: '2019-05-31', title: 'Ministry of Jal Shakti Created', description: 'Merger of Ministry of Water Resources, River Development & Ganga Rejuvenation with Ministry of Drinking Water & Sanitation.' },
         { date: '2019-07-01', title: 'Jal Jeevan Mission Launched', description: 'Rs. 3.6 lakh crore mission to provide piped water to all rural households by 2024.' },
@@ -3587,7 +3587,7 @@ function seed(): DataStore {
       id: 'cpcb', slug: 'cpcb', name: 'Central Pollution Control Board',
       type: 'organization', description: 'Statutory pollution regulatory body under the Ministry of Environment, Forest and Climate Change. Responsible for water quality monitoring, industrial effluent regulation, and identifying polluted river stretches across India.',
       aliases: ['CPCB', 'Central Pollution Control Board'], storyCount: 25, updatedAt: '2026-07-14T06:00:00Z',
-      image: '/images/entities/cpcb.jpg', evidenceScore: 78,
+      evidenceScore: 78,
       timeline: [
         { date: '1974-01-01', title: 'CPCB Established', description: 'Constituted under the Water (Prevention and Control of Pollution) Act, 1974.' },
         { date: '2015-01-01', title: 'First Polluted River Stretches Report', description: 'CPCB identifies 302 polluted river stretches across 275 rivers.' },
@@ -3650,7 +3650,7 @@ function seed(): DataStore {
       id: 'ministry-of-finance', slug: 'ministry-of-finance', name: 'Ministry of Finance',
       type: 'organization', description: 'Nodal ministry of Government of India responsible for taxation, fiscal policy, financial sector regulation, and Union Budget preparation.',
       aliases: ['MoF', 'Finance Ministry', 'Ministry of Finance, GoI'], storyCount: 105, updatedAt: '2026-07-01T00:00:00Z',
-      image: '/images/entities/mof.jpg',
+      image: '/images/entities/ministry-of-finance.jpg',
       timeline: [
         { date: '1947-08-15', title: 'Ministry Established', description: 'Ministry of Finance established post-independence with Department of Economic Affairs.' },
         { date: '2016-07-01', title: 'GST Council Formed', description: 'GST Council established with Union Finance Minister as chairperson.' },
@@ -3677,7 +3677,7 @@ function seed(): DataStore {
       relatedStories: [
         { slug: 'anganwadi-icds', headline: 'Anganwadi Centres: Frontline Workers Burning Out', summary: 'ICDS programme challenges.', publishedAt: '2026-07-28T06:00:00Z', readingTime: 11, evidenceScore: 84, category: 'health' },
       ],
-      image: '/images/entities/mwcd.jpg',
+      image: '/images/entities/ministry-of-women-and-child-development.jpg',
       relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }],
       faq: [],
     },
@@ -3761,7 +3761,7 @@ function seed(): DataStore {
       id: 'icmr', slug: 'icmr', name: 'Indian Council of Medical Research',
       type: 'organization', description: 'The Indian Council of Medical Research (ICMR) is the apex body in India for the formulation, coordination, and promotion of biomedical research. It was established as the Indian Research Fund Association in 1911 and renamed the Indian Council of Medical Research in 1949. Headquartered in New Delhi, ICMR operates a network of permanent research institutes and centres across the country, many addressing diseases including tuberculosis, malaria, leprosy, nutrition, reproductive health, and virology. During the COVID-19 pandemic, ICMR served as the nodal agency for testing policy and aggregated nationwide testing data, including personal identifiers collected at test registration. In October 2023 a threat actor offered for sale a database of 81.5 crore Indian records; ICMR\'s COVID-19 testing database is the suspected source. The incident is among the largest reported breaches of Indian personal data and remains under investigation.',
       aliases: ['ICMR', 'Indian Council of Medical Research'], storyCount: 3, updatedAt: '2026-07-09T00:00:00Z',
-      image: '/images/entities/icmr.jpg', evidenceScore: 85,
+      evidenceScore: 85,
       timeline: [
         { date: '1911-01-01', title: 'ICMR Founded', description: 'Established as the Indian Research Fund Association.' },
         { date: '1949-01-01', title: 'Renamed ICMR', description: 'Reconstituted and renamed the Indian Council of Medical Research.' },
@@ -3780,7 +3780,7 @@ function seed(): DataStore {
       type: 'organization', description: 'The Indian Computer Emergency Response Team (CERT-In) is the national nodal agency for responding to cyber security incidents in India. It functions under the Ministry of Electronics and Information Technology (MeitY) as the apex national agency for cyber security incident management, established under Section 70B of the Information Technology Act, 2000, and notified as the National CERT in October 2014. CERT-In collects, analyses, and disseminates information on cyber incidents; issues alerts and advisories; coordinates emergency response measures with government agencies, service providers, and intermediaries; and recommends mitigation strategies. Under the April 2022 Cyber Security Directions, service providers, intermediaries, data centres, and government bodies must report cyber incidents to CERT-In within six hours of becoming aware. CERT-In was notified of the October 2023 breach involving 81.5 crore Indian records and coordinated the investigation.',
       aliases: ['CERT-In', 'CERT India', 'Indian CERT'], storyCount: 2, updatedAt: '2026-07-09T00:00:00Z',
       relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
-      image: '/images/entities/cert-in.jpg', evidenceScore: 88,
+      evidenceScore: 88,
       timeline: [
         { date: '2004-01-01', title: 'CERT-In Established', description: 'Established under the Information Technology Act, 2000.' },
         { date: '2014-10-16', title: 'CERT-In Notified as Nodal Agency', description: 'Government notifies CERT-In as the national agency for cybersecurity incident response.' },
@@ -3798,7 +3798,7 @@ function seed(): DataStore {
       type: 'organization', description: 'The Unique Identification Authority of India (UIDAI) is the statutory authority established under the Aadhaar (Targeted Delivery of Financial and Other Subsidies, Benefits and Services) Act, 2016, responsible for issuing Aadhaar, a 12-digit unique identity number linked to an individual\'s biometric and demographic data. UIDAI operates under the Ministry of Electronics and Information Technology and maintains the Central Identities Data Repository (CIDR). Aadhaar is used for authentication across welfare payments, mobile connections, banking, tax filing, and public services. UIDAI states that its own systems have not been breached: in the October 2023 incident in which a database of 81.5 crore Indian records was offered for sale, the suspected source was a third-party COVID-19 testing database rather than the CIDR. The Aadhaar ecosystem processes several crore authentication transactions daily, with authentication linked to direct benefit transfers.',
       aliases: ['UIDAI', 'Aadhaar Authority'], storyCount: 2, updatedAt: '2026-07-09T00:00:00Z',
       relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
-      image: '/images/entities/uidai.jpg', evidenceScore: 87,
+      evidenceScore: 87,
       timeline: [
         { date: '2016-03-03', title: 'Aadhaar Act Passed', description: 'Aadhaar (Targeted Delivery of Financial and Other Subsidies, Benefits and Services) Act passed.' },
         { date: '2018-09-26', title: 'Supreme Court Upholds Aadhaar', description: 'Supreme Court upholds constitutional validity of Aadhaar with restrictions on private sector use.' },
@@ -3816,7 +3816,7 @@ function seed(): DataStore {
       type: 'organization', description: 'A US-based cybersecurity firm whose HUNTER unit discovered the 81.5 crore Indian data breach on the dark web and alerted Indian authorities.',
       aliases: ['Resecurity', 'Resecurity Inc.'], storyCount: 1, updatedAt: '2026-07-09T00:00:00Z',
       relatedStories: [{ slug: '81-crore-data-breach', headline: '81.5 Crore Aadhaar Records Exposed', summary: 'Inside India\'s biggest data breach.', publishedAt: '2026-07-09T08:00:00Z', readingTime: 14, evidenceScore: 94, category: 'technology' }],
-      image: '/images/entities/resecurity.jpg', evidenceScore: 90,
+      evidenceScore: 90,
       timeline: [
         { date: '2015-01-01', title: 'Resecurity Founded', description: 'Cybersecurity firm founded in Los Angeles, California.' },
         { date: '2023-10-09', title: 'HUNTER Unit Discovers Breach', description: 'Resecurity\'s HUNTER threat intelligence unit discovers post on Breach Forums selling 81.5 crore Indian records.' },

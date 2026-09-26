@@ -201,6 +201,18 @@ export class NewsroomIntelligenceCore {
   // ── Ingestion & Clustering ──────────────────────────────────────────────────
 
   public ingestObservation(obs: NewsroomObservation): void {
+    if (this.observations.has(obs.id)) {
+      return;
+    }
+    for (const existing of this.observations.values()) {
+      if (
+        (obs.canonicalUrl && existing.canonicalUrl === obs.canonicalUrl) ||
+        (obs.contentHash && existing.contentHash === obs.contentHash) ||
+        (obs.externalId && existing.sourceId === obs.sourceId && existing.externalId === obs.externalId)
+      ) {
+        return;
+      }
+    }
     this.observations.set(obs.id, obs);
     this.persist();
   }
@@ -350,6 +362,10 @@ export class NewsroomIntelligenceCore {
     return detected;
   }
 
+  public applyAction(payload: NewsroomActionPayload, userRole?: string): NewsroomSignal | null {
+    return this.executeAction(payload, userRole);
+  }
+
   public executeAction(payload: NewsroomActionPayload, userRole?: string): NewsroomSignal | null {
     const signal = this.signals.get(payload.signalId);
     if (!signal) return null;
@@ -366,6 +382,16 @@ export class NewsroomIntelligenceCore {
 
     const updated = this.workflowService.applyAction(signal, payload);
     this.signals.set(updated.id, updated);
+
+    // If human editor explicitly promoted signal to research, trigger the bridge
+    if (payload.action === 'PROMOTE_TO_RESEARCH' && this.researchBridge) {
+      try {
+        void this.researchBridge(updated);
+      } catch (err) {
+        console.error('[NewsroomIntelligenceCore] research bridge promotion error:', err);
+      }
+    }
+
     this.persist();
     return updated;
   }

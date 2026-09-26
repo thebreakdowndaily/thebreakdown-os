@@ -1,7 +1,7 @@
 // ── Operations Control Plane Domain Specification (Phase 18A) ──────────────────
 // Observational & Operational Control Plane domain types. Immutable interfaces.
 
-export type SystemHealthSeverity = 'HEALTHY' | 'WARNING' | 'DEGRADED' | 'CRITICAL' | 'OFFLINE';
+export type SystemHealthSeverity = 'HEALTHY' | 'WARNING' | 'DEGRADED' | 'CRITICAL' | 'OFFLINE' | 'UNKNOWN';
 
 export type ControlPlaneEventType =
   | 'TelemetryUpdated'
@@ -35,7 +35,14 @@ export interface SystemHealth {
     telemetry: SystemHealthSeverity;
     jobs: SystemHealthSeverity;
     editorial: SystemHealthSeverity;
+    [key: string]: SystemHealthSeverity;
   };
+  subsystemDetails?: Record<string, {
+    status: SystemHealthSeverity;
+    timestamp: string;
+    latencyMs?: number;
+    error?: string;
+  }>;
 }
 
 export interface OperationsSnapshot {

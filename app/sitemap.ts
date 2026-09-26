@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
-import { extractProblems } from '@/lib/problem-helpers';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
@@ -70,22 +69,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: siteUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+    { url: `${siteUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/series`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
     { url: `${siteUrl}/topics`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${siteUrl}/entities`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${siteUrl}/organizations`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
     { url: `${siteUrl}/countries`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${siteUrl}/investigations`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     // Founding Edition public package (robots: allow) — trust & transparency pages
     { url: `${siteUrl}/founding-edition`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${siteUrl}/methodology`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/trust`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/editorial-constitution`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/data`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${siteUrl}/problems`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${siteUrl}/compare`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${siteUrl}/evolution`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${siteUrl}/precedents`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${siteUrl}/tracking`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${siteUrl}/trackers`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
     { url: `${siteUrl}/trackers/mgnrega`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/semiconductor`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
@@ -93,44 +90,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/trackers/pmfby`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
   ];
 
-  const problems = extractProblems();
-  const problemEntries: MetadataRoute.Sitemap = [];
-
-  for (const problem of problems) {
-    const lastMod = problem.lastUpdated ? new Date(parseInt(problem.lastUpdated)) : new Date();
-    
-    problemEntries.push({
-      url: `${siteUrl}/problems/${problem.slug}`,
-      lastModified: lastMod,
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    });
-    problemEntries.push({
-      url: `${siteUrl}/problems/${problem.slug}/compare`,
-      lastModified: lastMod,
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    });
-    problemEntries.push({
-      url: `${siteUrl}/problems/${problem.slug}/evolution`,
-      lastModified: lastMod,
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    });
-    problemEntries.push({
-      url: `${siteUrl}/problems/${problem.slug}/precedents`,
-      lastModified: lastMod,
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    });
-    problemEntries.push({
-      url: `${siteUrl}/problems/${problem.slug}/tracking`,
-      lastModified: lastMod,
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    });
-  }
-
-  return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes, ...problemEntries];
+  return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];
 }
 

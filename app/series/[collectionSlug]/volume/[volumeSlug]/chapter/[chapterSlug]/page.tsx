@@ -7,7 +7,6 @@ import { seedAll, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
 import { buildChapterGraph } from '@/lib/knowledge/knowledge-graph';
 import { getEntityIndex } from '@/utils/data-layer/entity-index';
 import { enrichClaimLazy } from '@/lib/knowledge/knowledge-core';
-import Script from 'next/script';
 import { createArticleSchema, createBreadcrumbSchema } from '@/lib/seo/jsonld';
 import { isPubliclyPublished } from '@/lib/story/publication';
 
@@ -37,6 +36,16 @@ export async function generateStaticParams() {
   return params;
 }
 
+function isChapterPubliclyPublished(
+  chapter: { status?: string; createdAt?: string; publishedAt?: string },
+  now: Date = new Date()
+): boolean {
+  const isStatusPublic = chapter.status === 'published' || chapter.status === 'verified';
+  const pubStatus = isStatusPublic ? 'published' : 'draft';
+  const publishedAt = chapter.publishedAt || chapter.createdAt;
+  return isPubliclyPublished({ publicationStatus: pubStatus, publishedAt }, now);
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ collectionSlug: string; volumeSlug: string; chapterSlug: string }> }): Promise<Metadata> {
   const { collectionSlug, volumeSlug, chapterSlug } = await params;
   seedAll();
@@ -44,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ collectio
   const libraries = await repo.getAllLibraries();
   const library = libraries.find((lib) => lib.collections.some((c) => c.slug === collectionSlug));
   const chapter = library ? await repo.getChapter(library.slug, collectionSlug, volumeSlug, chapterSlug) : null;
-  if (!chapter) return { title: 'Chapter Not Found' };
+  if (!chapter || !isChapterPubliclyPublished(chapter)) return { title: 'Chapter Not Found — The Breakdown' };
   const versionStr = `${chapter.version.major}.${chapter.version.minor}.${chapter.version.patch}`;
   return {
     title: `${chapter.title} — The Breakdown Knowledge Library`,
@@ -80,16 +89,7 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
   if (!library) notFound();
 
   const chapter = await repo.getChapter(library.slug, collectionSlug, volumeSlug, chapterSlug);
-  if (!chapter) notFound();
-
-  // Fail-closed publication visibility check
-  const pubCtx = {
-    publicationStatus: (chapter.status === 'published' ? 'published' : (chapter as any).publicationStatus) as any,
-    publishedAt: (chapter as any).publishedAt || chapter.createdAt,
-  };
-  if (chapter.status !== 'published' && chapter.status !== 'verified' && !isPubliclyPublished(pubCtx)) {
-    notFound();
-  }
+  if (!chapter || !isChapterPubliclyPublished(chapter)) notFound();
 
   const allChapters = library.collections.flatMap(c =>
     c.volumes.flatMap(v => v.chapters)
@@ -135,9 +135,13 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
   return (
     <>
       {jsonLd.map((schema, idx) => (
-        <Script key={`schema-${idx}`} id={`schema-chapter-${idx}`} type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(schema)}
-        </Script>
+        <script
+          key={`schema-${idx}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+          }}
+        />
       ))}
       <ChapterPageShell
         chapter={chapter}

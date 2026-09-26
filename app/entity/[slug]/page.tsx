@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { buildEntityTerminalViewModel } from '@/features/entity/view-model';
@@ -85,9 +84,13 @@ export default async function EntityPage({ params }: { params: Promise<{ slug: s
   return (
     <>
       {createJsonLd(viewModel).map((ld, i) => (
-        <Script key={`sc-${i}`} id={`schema-${i}`} type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(ld)}
-        </Script>
+        <script
+          key={`sc-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(ld).replace(/</g, '\\u003c'),
+          }}
+        />
       ))}
 
       <EditorialLayout breadcrumbItems={breadcrumbs}>

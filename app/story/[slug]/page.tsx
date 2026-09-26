@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { StoryShell } from '@/components/rxs/StoryShell';
 import { buildStoryMetadata } from '@/lib/story/metadata';
@@ -12,6 +11,7 @@ import StoryMemoryWriter from '@/components/narrative/StoryMemoryWriter';
 import type { ReadingMode, Story } from '@/types/canonical';
 import { getTopic } from '@/utils/data-layer/store';
 import { getEntityById } from '@/utils/data-layer/entity-index';
+import { listPublishedCorrections } from '@/services/editorial/corrections-service';
 
 interface StoryEntityRef {
   id?: string;
@@ -33,6 +33,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const resolution = await resolveStory(slug);
+  if (resolution.type === 'not_found' || !isCanonicalStoryPublic(resolution.canonicalStory)) {
+    return { title: 'Story Not Found — The Breakdown' };
+  }
   return buildStoryMetadata(slug);
 }
 
@@ -51,15 +55,9 @@ export default async function StoryPage({
   const resolution = await resolveStory(slug);
   if (resolution.type === 'not_found') notFound();
 
-  if (resolution.type === 'chapter') {
-    const queryString = new URLSearchParams(resolvedSearchParams as Record<string, string>).toString();
-    const dest = `/series/${resolution.collectionSlug}/volume/${resolution.volumeSlug}/chapter/${resolution.chapter.slug}${queryString ? `?${queryString}` : ''}`;
-    permanentRedirect(dest);
-  }
-
   const canonicalStory = resolution.canonicalStory;
 
-  // Fail-closed publication safety check
+  // Fail-closed publication safety check: unauthenticated visitors cannot view unpublished stories or receive canonical chapter redirects
   if (!isCanonicalStoryPublic(canonicalStory)) {
     let isAuthenticated = false;
     try {
@@ -75,6 +73,12 @@ export default async function StoryPage({
       // Ignore
     }
     if (!isAuthenticated) notFound();
+  }
+
+  if (resolution.type === 'chapter') {
+    const queryString = new URLSearchParams(resolvedSearchParams as Record<string, string>).toString();
+    const dest = `/series/${resolution.collectionSlug}/volume/${resolution.volumeSlug}/chapter/${resolution.chapter.slug}${queryString ? `?${queryString}` : ''}`;
+    permanentRedirect(dest);
   }
 
   const jsonLd = createStoryJsonLd(canonicalStory);
@@ -108,18 +112,30 @@ export default async function StoryPage({
   // 2. Apply Reading Mode Policy for progressive disclosure
   const visibleExperience = applyReadingModePolicy(presentationModel, mode);
 
+  // 3. Fetch published editorial errata/corrections for this story (GAP-VS8-01)
+  const publishedCorrections = await listPublishedCorrections(slug);
+
   return (
     <>
       {/* Narrative Memory writer — passive localStorage write, side-effect only */}
       <StoryMemoryWriter slug={slug} headline={canonicalStory.headline} />
 
       {jsonLd.map((ld, i) => (
-        <Script key={`sc-${String(i)}`} id={`schema-${String(i)}`} type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(ld)}
-        </Script>
+        <script
+          key={`sc-${String(i)}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(ld).replace(/</g, '\\u003c'),
+          }}
+        />
       ))}
 
-      <StoryShell visibleExperience={visibleExperience} relatedTopicLinks={topicLinks} relatedEntityLinks={entityLinks} />
+      <StoryShell
+        visibleExperience={visibleExperience}
+        relatedTopicLinks={topicLinks}
+        relatedEntityLinks={entityLinks}
+        publishedCorrections={publishedCorrections}
+      />
     </>
   );
 }

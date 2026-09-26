@@ -95,10 +95,12 @@ export class NewsroomWorkflowService {
         break;
 
       case 'VERIFY':
+      case 'REVIEW':
         updatedSignal.lifecycleState = 'confirmed';
         break;
 
       case 'ESCALATE':
+      case 'PRIORITIZE':
         if (payload.escalatedPriority) {
           updatedSignal.priority = payload.escalatedPriority;
           updatedSignal.lifecycleState = 'escalated';
@@ -107,7 +109,7 @@ export class NewsroomWorkflowService {
           signalId: signal.id,
           previousOwner: signal.assignedTo,
           newOwner: payload.assignedTo || 'managing_editor',
-          reason: payload.note || 'Escalated by reporter/editor',
+          reason: payload.note || (payload.action === 'PRIORITIZE' ? 'Priority adjusted by editor' : 'Escalated by reporter/editor'),
           timestamp: new Date().toISOString(),
           actor: payload.actorName || payload.actorId,
         });
@@ -118,12 +120,21 @@ export class NewsroomWorkflowService {
         break;
 
       case 'FOLLOW':
+      case 'WATCH':
+        updatedSignal.lifecycleState = 'monitoring';
         if (!updatedSignal.editorialNotes) updatedSignal.editorialNotes = [];
-        updatedSignal.editorialNotes.push(`Following signal by ${payload.actorName}`);
+        updatedSignal.editorialNotes.push(`Watching signal by ${payload.actorName}`);
         break;
 
       case 'IGNORE':
+      case 'DISMISS':
         updatedSignal.lifecycleState = 'retracted';
+        break;
+
+      case 'PROMOTE_TO_RESEARCH':
+        updatedSignal.lifecycleState = 'escalated';
+        if (!updatedSignal.editorialNotes) updatedSignal.editorialNotes = [];
+        updatedSignal.editorialNotes.push(`Promoted to research by ${payload.actorName}`);
         break;
 
       case 'MARK_RELEVANT':

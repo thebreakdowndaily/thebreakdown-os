@@ -3,7 +3,7 @@
   "schemaVersion": "2.0",
   "reportVersion": "1.0",
   "policyVersion": "1.0",
-  "timestamp": "2026-09-21T03:37:21.479Z",
+  "timestamp": "2026-09-26T16:08:08.400Z",
   "platformHealthScore": 82.22222222222223,
   "weightedPlatformHealthScore": 82.22222222222223,
   "coverage": 100,
@@ -12,8 +12,8 @@
   "failedPlugins": 4,
   "skippedPlugins": 0,
   "execution": {
-    "totalDurationMs": 350,
-    "generatedAt": "2026-09-21T03:37:21.479Z",
+    "totalDurationMs": 244,
+    "generatedAt": "2026-09-26T16:08:08.400Z",
     "nodeVersion": "v24.18.0",
     "os": "win32"
   },
@@ -43,8 +43,8 @@
       },
       "execution": {
         "durationMs": 2,
-        "startedAt": "2026-09-21T03:37:21.075Z",
-        "finishedAt": "2026-09-21T03:37:21.077Z"
+        "startedAt": "2026-09-26T16:08:08.102Z",
+        "finishedAt": "2026-09-26T16:08:08.104Z"
       }
     },
     {
@@ -65,10 +65,6 @@
           {
             "severity": "low",
             "message": "Unknown top-level directory: audit_reports/"
-          },
-          {
-            "severity": "low",
-            "message": "Unknown top-level directory: backup/"
           },
           {
             "severity": "low",
@@ -140,13 +136,13 @@
             "missing": 0
           },
           "forbiddenImports": 0,
-          "unknownDirectories": 18
+          "unknownDirectories": 17
         }
       },
       "execution": {
-        "durationMs": 157,
-        "startedAt": "2026-09-21T03:37:21.081Z",
-        "finishedAt": "2026-09-21T03:37:21.238Z"
+        "durationMs": 60,
+        "startedAt": "2026-09-26T16:08:08.109Z",
+        "finishedAt": "2026-09-26T16:08:08.169Z"
       }
     },
     {
@@ -163,8 +159,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-09-21T03:37:21.241Z",
-        "finishedAt": "2026-09-21T03:37:21.241Z"
+        "startedAt": "2026-09-26T16:08:08.172Z",
+        "finishedAt": "2026-09-26T16:08:08.172Z"
       }
     },
     {
@@ -182,9 +178,9 @@
         }
       },
       "execution": {
-        "durationMs": 3,
-        "startedAt": "2026-09-21T03:37:21.244Z",
-        "finishedAt": "2026-09-21T03:37:21.247Z"
+        "durationMs": 2,
+        "startedAt": "2026-09-26T16:08:08.175Z",
+        "finishedAt": "2026-09-26T16:08:08.177Z"
       }
     },
     {
@@ -205,8 +201,8 @@
       },
       "execution": {
         "durationMs": 3,
-        "startedAt": "2026-09-21T03:37:21.250Z",
-        "finishedAt": "2026-09-21T03:37:21.253Z"
+        "startedAt": "2026-09-26T16:08:08.180Z",
+        "finishedAt": "2026-09-26T16:08:08.183Z"
       }
     },
     {
@@ -226,8 +222,8 @@
       },
       "execution": {
         "durationMs": 0,
-        "startedAt": "2026-09-21T03:37:21.255Z",
-        "finishedAt": "2026-09-21T03:37:21.255Z"
+        "startedAt": "2026-09-26T16:08:08.185Z",
+        "finishedAt": "2026-09-26T16:08:08.185Z"
       },
       "error": "Simulated plugin failure"
     },
@@ -243,9 +239,9 @@
         }
       },
       "execution": {
-        "durationMs": 0,
-        "startedAt": "2026-09-21T03:37:21.258Z",
-        "finishedAt": "2026-09-21T03:37:21.258Z"
+        "durationMs": 1,
+        "startedAt": "2026-09-26T16:08:08.187Z",
+        "finishedAt": "2026-09-26T16:08:08.188Z"
       }
     },
     {
@@ -265,9 +261,9 @@
         }
       },
       "execution": {
-        "durationMs": 10,
-        "startedAt": "2026-09-21T03:37:21.284Z",
-        "finishedAt": "2026-09-21T03:37:21.294Z"
+        "durationMs": 7,
+        "startedAt": "2026-09-26T16:08:08.213Z",
+        "finishedAt": "2026-09-26T16:08:08.220Z"
       }
     },
     {
@@ -291,8 +287,8 @@
       },
       "execution": {
         "durationMs": 1,
-        "startedAt": "2026-09-21T03:37:21.298Z",
-        "finishedAt": "2026-09-21T03:37:21.299Z"
+        "startedAt": "2026-09-26T16:08:08.224Z",
+        "finishedAt": "2026-09-26T16:08:08.225Z"
       }
     },
     {
@@ -324,9 +320,9 @@
         }
       },
       "execution": {
-        "durationMs": 173,
-        "startedAt": "2026-09-21T03:37:21.302Z",
-        "finishedAt": "2026-09-21T03:37:21.475Z"
+        "durationMs": 167,
+        "startedAt": "2026-09-26T16:08:08.228Z",
+        "finishedAt": "2026-09-26T16:08:08.395Z"
       }
     },
     {
@@ -335,12 +331,7 @@
       "data": {
         "score": 100,
         "coverage": 100,
-        "findings": [
-          {
-            "severity": "low",
-            "message": "Root layout app/layout.tsx does not appear to configure canonical URLs"
-          }
-        ],
+        "findings": [],
         "metrics": {
           "robotsScore": 100,
           "sitemapScore": 100,
@@ -350,8 +341,8 @@
       },
       "execution": {
         "durationMs": 1,
-        "startedAt": "2026-09-21T03:37:21.478Z",
-        "finishedAt": "2026-09-21T03:37:21.479Z"
+        "startedAt": "2026-09-26T16:08:08.399Z",
+        "finishedAt": "2026-09-26T16:08:08.400Z"
       }
     }
   ]

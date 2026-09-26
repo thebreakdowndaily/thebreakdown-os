@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
@@ -151,9 +150,13 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
   return (
     <>
       {createJsonLd(topic).map((ld, i) => (
-        <Script key={`sc-${i}`} id={`schema-${i}`} type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(ld)}
-        </Script>
+        <script
+          key={`sc-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(ld).replace(/</g, '\\u003c'),
+          }}
+        />
       ))}
       <ContentPageTracker contentType="topic" id={topic.slug} />
 
