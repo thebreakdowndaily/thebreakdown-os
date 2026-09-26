@@ -51,6 +51,7 @@
     "check:type:frontend": "tsc --noEmit --project tsconfig.frontend.json",
     "check:registry": "npx tsx scripts/stories-registry-check.ts",
     "check:sources": "npx tsx scripts/check-source-integrity.ts",
+    "check:images": "npx tsx scripts/check-story-images.ts",
     "check:build": "next build",
     "check:test": "npm run test",
     "check:test:frontend": "jest --config jest.frontend.config.js",

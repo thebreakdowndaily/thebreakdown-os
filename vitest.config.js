@@ -110,6 +110,7 @@ module.exports = {
       'tests/vs7-editorial-quality-and-corrections.test.ts',
       'tests/vs8-cross-system-corrections.test.ts',
       'tests/image-asset-integrity.test.ts',
+      'tests/story-image-context-gate.test.ts',
     ],
     exclude: ['node_modules/**', 'tests/e2e/**'],
   },

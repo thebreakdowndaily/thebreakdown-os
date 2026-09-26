@@ -1,5 +1,7 @@
 import type { Story, Topic, Entity } from '@/types/canonical';
 import { findImage, getPlaceholder, type ImageCandidate, type ImagePriority } from './registry';
+import { getManifestEntry } from './manifest';
+import { matchImageToStoryContext } from './context-matcher';
 
 export interface ImageIntelligenceResult {
   src: string;
@@ -47,14 +49,81 @@ function fromCandidate(c: ImageCandidate, isFallback: boolean, w = DEFAULT_HERO_
 }
 
 export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
-  if (story.heroImage && !story.heroImage.includes('placehold.co')) {
+  // 1. Authoritative verified manifest lookup
+  const manifest = getManifestEntry(story.slug);
+  if (manifest) {
+    const isSvg = manifest.approvedImage.endsWith('.svg');
+    const type: ImageIntelligenceResult['type'] = isSvg
+      ? 'branded-placeholder'
+      : manifest.assetType === 'authentic-photo'
+        ? 'editorial'
+        : 'official';
     const r = toResult(
-      story.heroImage, story.headline, 1, 'editorial', DEFAULT_HERO_WIDTH, DEFAULT_HERO_HEIGHT, false,
-      { credit: 'The Breakdown', agency: 'The Breakdown', license: 'EDITORIAL' }
+      manifest.approvedImage,
+      manifest.description || story.headline,
+      1,
+      type,
+      DEFAULT_HERO_WIDTH,
+      DEFAULT_HERO_HEIGHT,
+      isSvg,
+      {
+        credit: manifest.provenance,
+        agency: manifest.provenance,
+        license: manifest.license,
+      }
     );
-    return { hero: r, og: r, thumbnail: toResult(story.heroImage, story.headline, 1, 'editorial', DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT, false) };
+    return {
+      hero: r,
+      og: r,
+      thumbnail: toResult(
+        manifest.approvedImage,
+        manifest.description || story.headline,
+        1,
+        type,
+        DEFAULT_THUMB_WIDTH,
+        DEFAULT_THUMB_HEIGHT,
+        isSvg,
+        {
+          credit: manifest.provenance,
+          agency: manifest.provenance,
+          license: manifest.license,
+        }
+      ),
+    };
   }
 
+  // 2. Validate story.heroImage context alignment if present
+  if (story.heroImage && !story.heroImage.includes('placehold.co')) {
+    const match = matchImageToStoryContext(story.heroImage, story, getManifestEntry);
+    if (match.aligned) {
+      const isSvg = story.heroImage.endsWith('.svg');
+      const r = toResult(
+        story.heroImage,
+        story.headline,
+        1,
+        isSvg ? 'branded-placeholder' : 'editorial',
+        DEFAULT_HERO_WIDTH,
+        DEFAULT_HERO_HEIGHT,
+        isSvg,
+        { credit: 'The Breakdown', agency: 'The Breakdown', license: 'EDITORIAL' }
+      );
+      return {
+        hero: r,
+        og: r,
+        thumbnail: toResult(
+          story.heroImage,
+          story.headline,
+          1,
+          isSvg ? 'branded-placeholder' : 'editorial',
+          DEFAULT_THUMB_WIDTH,
+          DEFAULT_THUMB_HEIGHT,
+          isSvg
+        ),
+      };
+    }
+  }
+
+  // 3. Fallback to entity images
   for (const entityId of story.relatedEntityIds) {
     const found = findImage(entityId);
     if (found) {
@@ -63,6 +132,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
     }
   }
 
+  // 4. Fallback to tag images
   for (const tag of story.tags) {
     const found = findImage(tag);
     if (found) {
@@ -71,6 +141,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
     }
   }
 
+  // 5. Category branded placeholder fallback
   const categoryPlaceholder = getPlaceholder(story.category);
   const fallback: ImageIntelligenceResult = toResult(
     categoryPlaceholder, story.headline, 4, 'branded-placeholder', DEFAULT_HERO_WIDTH, DEFAULT_HERO_HEIGHT, true
