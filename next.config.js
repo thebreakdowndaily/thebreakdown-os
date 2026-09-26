@@ -92,6 +92,11 @@ nextConfig.redirects = async () => [
     permanent: true,
   },
   {
+    source: '/library',
+    destination: '/series',
+    permanent: true,
+  },
+  {
     source: '/explainers',
     destination: '/stories',
     permanent: true,

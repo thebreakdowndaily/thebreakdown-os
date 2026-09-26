@@ -84,88 +84,116 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
     }
   });
 
-  const keyPoints = (s.keyPoints && s.keyPoints.length > 0) 
-    ? s.keyPoints 
-    : (s.claims && s.claims.length >= 3 ? s.claims.slice(0, 4).map((c) => c.claim) : []);
-
-  if (keyPoints.length > 0) {
-    blocks.push({ id: 'executive-summary', type: 'executive-summary', region: 'main', data: { summary: s.summary, keyPoints, whyItMatters: (s as any).whyItMatters, takeaway: (s as any).takeaway } });
-  }
-
-  const evidenceClaims = (s.claims || []).map((c, i) => ({
-    id: (c as any).id || deterministicClaimId(c.claim || '', c.source || '', s.slug || 'story'),
-    text: c.claim || '',
-    confidence: Math.round((c.confidence || 0.5) * 100),
-    status: c.verification === 'true' ? 'verified' as const : c.verification === 'false' ? 'unverified' as const : (c.confidence || 0) >= 0.8 ? 'strong' as const : (c.confidence || 0) >= 0.6 ? 'moderate' as const : 'unverified' as const,
-    sources: c.source ? [{ name: c.source || '', url: '', group: 'report' as const }] : [],
-    supportingEvidence: c.explanation ? [c.explanation] : [],
-    counterArguments: (c as any).counterArguments || [],
-  }));
-
-  const verifiedCount = evidenceClaims.filter((c) => c.status === 'verified').length;
-  const misleadingCount = evidenceClaims.filter((c) => c.status === 'moderate').length;
-  const unverifiableCount = evidenceClaims.filter((c) => c.status === 'unverified').length;
-  const totalClaims = evidenceClaims.length;
-  const t1t2 = allSources.filter((src) => src.tier <= 2).length;
-  const sourceQuality = allSources.length > 0 ? Math.round((t1t2 / allSources.length) * 100) : 0;
-  const verificationStatus = totalClaims > 0 ? Math.round((verifiedCount / totalClaims) * 100) : 0;
-
-  const confirmedCount = evidenceClaims.filter((c) => c.status === 'verified' || c.status === 'strong').length;
-  const dynamicConfirmations = totalClaims > 0 ? Math.round((confirmedCount / totalClaims) * 100) : 0;
-  const dynamicDataAvailability = totalClaims > 0
-    ? Math.round(evidenceClaims.reduce((sum, c) => sum + (c.confidence || 0), 0) / totalClaims)
-    : 0;
-
-  // CONFIDENCE METER (Region: main)
+  // 1. Chapter 1: Context & Core Significance
   blocks.push({
-    id: 'confidence-meter',
-    type: 'confidence-meter',
+    id: 'ch-context-heading',
+    type: 'chapter-heading',
     region: 'main',
-    data: {
-      overallScore: s.evidenceScore ?? 0,
-      sourceQuality,
-      confirmations: dynamicConfirmations,
-      dataAvailability: dynamicDataAvailability,
-      verificationStatus,
-      totalClaims,
-      verified: verifiedCount,
-      misleading: misleadingCount,
-      unverifiable: unverifiableCount,
-    }
+    data: { title: 'Context & Core Significance' },
   });
 
-  if (evidenceClaims.length > 0) {
+  const contextParagraphs: string[] = [];
+  const whyItMatters = (s as any).whyItMatters;
+  const takeaway = (s as any).takeaway;
+
+  if (whyItMatters) {
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${whyItMatters}</p>`);
+  }
+  if (takeaway && takeaway !== s.summary && takeaway !== whyItMatters) {
+    contextParagraphs.push(`<blockquote class="border-l-2 border-emerald-500 pl-4 py-2 my-4 text-white font-medium italic bg-neutral-900/40 rounded-r-lg">${takeaway}</blockquote>`);
+  }
+  if (contextParagraphs.length === 0) {
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">This briefing analyzes key regulatory, policy, and economic shifts documented across official filings and statutory notifications.</p>`);
+  }
+
+  blocks.push({
+    id: 'ch-context-text',
+    type: 'text',
+    region: 'main',
+    data: { content: contextParagraphs.join('\n') },
+  });
+
+  // 2. Chapter 2: Key Developments
+  const keyPoints = (s.keyPoints && s.keyPoints.length > 0) 
+    ? s.keyPoints 
+    : (s.claims && s.claims.length >= 2 ? s.claims.slice(0, 4).map((c) => c.claim) : []);
+
+  if (keyPoints.length > 0) {
     blocks.push({
-      id: 'evidence', type: 'evidence', region: 'main', data: {
-        overallScore: s.evidenceScore ?? 0,
-        verifiedClaims: verifiedCount,
-        primarySources: t1t2,
-        claims: evidenceClaims,
-        verification: { createdAt: s.publishedAt, updatedAt: s.updatedAt, verifiedAt: s.updatedAt },
-      },
+      id: 'ch-developments-heading',
+      type: 'chapter-heading',
+      region: 'main',
+      data: { title: 'Key Developments' },
+    });
+
+    const developmentsHtml = [
+      '<ul class="space-y-3 my-4 list-disc pl-5">',
+      ...keyPoints.map((kp) => `<li class="leading-relaxed text-neutral-200">${kp}</li>`),
+      '</ul>',
+    ].join('\n');
+
+    blocks.push({
+      id: 'ch-developments-text',
+      type: 'text',
+      region: 'main',
+      data: { content: developmentsHtml },
     });
   }
 
-  if (s.facts && s.facts.length > 0) {
-    blocks.push({ id: 'key-numbers', type: 'key-numbers', region: 'main', data: { items: s.facts.map((f) => ({ value: f.value, label: f.label, source: f.source })) } });
-  }
-
-  if (s.timeline && s.timeline.length > 0) {
-    blocks.push({ id: 'timeline', type: 'timeline', region: 'main', data: { events: s.timeline } });
-  }
-
-  if (s.charts && s.charts.length > 0) {
-    s.charts.forEach((c, i: number) => {
-      blocks.push({ id: `chart-${i}`, type: 'chart', region: 'main', data: { chartId: String(i), type: c.type, title: c.title, data: c.data, xKey: c.xKey, yKey: c.yKey } });
+  // 3. Chapter 3: Key Figures & Official Data
+  if ((s.facts && s.facts.length > 0) || (s.charts && s.charts.length > 0)) {
+    blocks.push({
+      id: 'ch-data-heading',
+      type: 'chapter-heading',
+      region: 'main',
+      data: { title: 'Key Figures & Data' },
     });
+
+    if (s.facts && s.facts.length > 0) {
+      blocks.push({
+        id: 'key-numbers',
+        type: 'key-numbers',
+        region: 'main',
+        data: { items: s.facts.map((f) => ({ value: f.value, label: f.label, source: f.source })) },
+      });
+    }
+
+    if (s.charts && s.charts.length > 0) {
+      s.charts.forEach((c, i: number) => {
+        blocks.push({
+          id: `chart-${i}`,
+          type: 'chart',
+          region: 'main',
+          data: { chartId: String(i), type: c.type, title: c.title, data: c.data, xKey: c.xKey, yKey: c.yKey },
+        });
+      });
+    }
   }
 
+  // 4. Chapter 4: Key Clarifications & Analysis (if FAQs exist)
   if (s.faq && s.faq.length > 0) {
-    blocks.push({ id: 'faq', type: 'faq', region: 'main', data: { questions: s.faq } });
-  }
+    blocks.push({
+      id: 'ch-clarifications-heading',
+      type: 'chapter-heading',
+      region: 'main',
+      data: { title: 'Key Clarifications' },
+    });
 
-  if (allSources.length > 0) {
-    blocks.push({ id: 'sources', type: 'sources', region: 'main', data: { sources: allSources } });
+    const faqHtml = s.faq
+      .map((item) => `
+        <div class="my-4 p-4 rounded-xl bg-neutral-900/50 border border-neutral-800">
+          <h4 class="font-bold text-white text-base mb-1.5">${item.question}</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed">${item.answer}</p>
+        </div>
+      `)
+      .join('\n');
+
+    blocks.push({
+      id: 'ch-clarifications-text',
+      type: 'text',
+      region: 'main',
+      data: { content: faqHtml },
+    });
   }
 
   const relData: Record<string, unknown> = {};

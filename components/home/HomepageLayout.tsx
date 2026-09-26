@@ -41,22 +41,13 @@ export default async function HomepageLayout() {
   }
 
   return (
-    <EditorialLayout breadcrumbItems={[]}>
-      <div className="text-white space-y-12">
-        {/* 1. Hero — flagship chapter above the fold */}
-        <HeroSection leadStory={vm.leadStory} trustMetrics={trustMetrics} />
+    <div className="w-full text-white space-y-16 pb-16">
+      {/* 1. Hero — flagship chapter above the fold */}
+      <HeroSection leadStory={vm.leadStory} trustMetrics={trustMetrics} />
 
-        {/* TrustBar below the Hero */}
-        <TrustBar
-          chaptersPublished={trustMetrics?.publishedChapters}
-          claimsRegistered={trustMetrics?.totalClaims}
-          primarySources={trustMetrics?.primarySourcesCited}
-          lastVerified={trustMetrics?.lastVerifiedDate}
-        />
-
-        {/* 2. What Changed — Latest Briefings */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* 2. Latest Stories & Briefings — What Changed */}
         <ShortVersionGrid briefings={vm.briefings} />
-
 
         {/* 3. Deep Analysis — Investigations & Explainers */}
         <DeepDivesGrid deepDives={vm.deepDives} />
@@ -64,15 +55,23 @@ export default async function HomepageLayout() {
         {/* 4. Explore Topics */}
         <TopicHubs topics={vm.topics} />
 
-        {/* 5. Evidence / Documents */}
-        <MissionBar />
+        {/* 5. Trust & Methodology — Principles & Institutional Transparency */}
+        <div className="space-y-6 pt-4 border-t border-neutral-800/80">
+          <MissionBar />
+          <TrustBar
+            chaptersPublished={trustMetrics?.publishedChapters}
+            claimsRegistered={trustMetrics?.totalClaims}
+            primarySources={trustMetrics?.primarySourcesCited}
+            lastVerified={trustMetrics?.lastVerifiedDate}
+          />
+        </div>
 
-        {/* 6. Data / Knowledge */}
+        {/* 6. Flagship Collections & Historical Series */}
         <LatestChapters trustMetrics={trustMetrics} />
 
         {/* 7. Newsletter capture */}
         <NewsletterBand />
       </div>
-    </EditorialLayout>
+    </div>
   );
 }

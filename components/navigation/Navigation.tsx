@@ -29,12 +29,12 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
-  { label: 'Library',        href: '/series' },
-  { label: 'Investigations', href: '/investigations' },
-  { label: 'Explainers',     href: '/fix' },
+  { label: 'Stories',        href: '/stories' },
   { label: 'Topics',         href: '/topics' },
-  { label: 'Data',           href: '/data' },
-  { label: 'The Brief',      href: '/newsletter' },
+  { label: 'Investigations', href: '/investigations' },
+  { label: 'The Fix',        href: '/fix' },
+  { label: 'Library',        href: '/series' },
+  { label: 'About',          href: '/about' },
 ];
 
 // ── Logo ─────────────────────────────────────────────────────────────────────

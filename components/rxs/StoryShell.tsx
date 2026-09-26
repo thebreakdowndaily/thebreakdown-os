@@ -180,7 +180,6 @@ export function StoryShell({
         <StoryProgress />
 
         <main id="main-content" tabIndex={-1} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 focus:outline-none">
-          <AdBlockDetector />
           <div className="flex gap-12 items-start">
             {/* Desktop Orientation Rail */}
             <StoryOrientationRail
@@ -293,25 +292,17 @@ export function StoryShell({
               {/* Standard & Deep Views */}
               {mode !== 'quick' && (
                 <>
-                  {/* Short Version Orientation */}
+                  {/* Short Version Orientation (rendered only if explicit orientation exists) */}
                   <StoryOrientation orientation={orientation} />
 
-                  {/* Visible Evidence Provenance Trail */}
-                  {trailItems.length > 0 && (
-                    <EvidenceTrail
-                      storySlug={storySlug}
-                      items={trailItems}
-                      relatedTrackerSlug={relatedTracker?.slug}
-                      relatedTrackerTitle={relatedTracker?.title}
-                    />
-                  )}
-
-                  <SocialSharePanel storySlug={storySlug} storyTitle={hero.headline} />
-                  <SaveStoryButton slug={storySlug} headline={hero.headline} />
-
-                  <AdSlot placement="leaderboard" storySlug={storySlug} />
-
-                  <CitationExporter storySlug={storySlug} storyTitle={hero.headline} />
+                  {/* Editorial Actions Toolbar */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 py-3 my-6 border-y border-neutral-800 text-xs font-mono text-neutral-400">
+                    <div className="flex items-center gap-3">
+                      <SaveStoryButton slug={storySlug} headline={hero.headline} />
+                      <CitationExporter storySlug={storySlug} storyTitle={hero.headline} />
+                    </div>
+                    <SocialSharePanel storySlug={storySlug} storyTitle={hero.headline} />
+                  </div>
 
                   {/* Main Chapters */}
                   <div className="space-y-12 my-8 prose prose-invert max-w-none">
@@ -331,8 +322,6 @@ export function StoryShell({
                       </section>
                     ))}
                   </div>
-
-                  <AdSlot placement="mpu" storySlug={storySlug} />
 
                   {/* Timeline (render standalone only if not already rendered inline in narrative) */}
                   {showTimeline && !hasInlineTimeline && timeline && timeline.events.length > 0 && (
@@ -354,47 +343,9 @@ export function StoryShell({
                     </section>
                   )}
 
-                  {/* Evidence Summary / Uncertainty */}
-                  {showEvidenceSummary && evidence && evidence.claims.length > 0 && (
-                    <section id="uncertainty" aria-labelledby="uncertainty-title" className="my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-4">
-                      <h3 id="uncertainty-title" className="text-lg font-bold text-white">State of the Evidence & Uncertainty</h3>
-                      <div className="grid grid-cols-1 gap-3">
-                        {evidence.claims.slice(0, 3).map((claim) => (
-                          <div key={claim.id} className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-800/60 text-xs space-y-1">
-                            <span className={`font-mono text-[10px] uppercase font-bold ${
-                              claim.status === 'not_supported' ? 'text-red-400' :
-                              claim.status === 'mixed' ? 'text-amber-400' :
-                              'text-emerald-400'
-                            }`}>
-                              [{claim.status.toUpperCase()}]
-                            </span>
-                            <p className="font-medium text-white">{claim.statement}</p>
-                            {claim.explanation && <p className="text-neutral-400">{claim.explanation}</p>}
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  )}
-
-                  {/* Research Appendix */}
+                  {/* Research & Evidence Appendix (Open access to primary sources & claims) */}
                   {showResearchAppendix && (
-                    mode === 'deep' && !isSupporter ? (
-                      <div className="relative my-12">
-                        <div className="blur-sm opacity-40 select-none pointer-events-none p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80">
-                          <h3 className="text-2xl font-bold text-white mb-6">Research Appendix & Citations</h3>
-                          {research?.claims && research.claims.length > 0 && (
-                            <div className="p-4 bg-neutral-950/60 rounded-xl border border-neutral-800/60 mb-4">
-                              <p className="font-medium text-white">{research.claims[0].statement}</p>
-                            </div>
-                          )}
-                        </div>
-                        <div className="absolute inset-0 flex items-center justify-center top-12 z-10 h-full">
-                          <PaywallOverlay placement="story_appendix" storySlug={storySlug} />
-                        </div>
-                      </div>
-                    ) : (
-                      <StoryResearchAppendix research={research} />
-                    )
+                    <StoryResearchAppendix research={research} />
                   )}
 
                   {/* Continue Exploring */}

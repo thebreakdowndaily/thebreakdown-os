@@ -1,57 +1,59 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { getPublicStories } from '@/utils/data-layer/store';
-import Badge from '@/components/ui/Badge';
-import { EditorialLayout } from '@/packages/editorial/src';
+import StoriesArchive from '@/components/stories/StoriesArchive';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Stories — The Breakdown',
-  description: 'Independent, data-driven stories on Indian policy, politics, and society.',
-  openGraph: { title: 'Stories — The Breakdown', url: 'https://thebreakdown.in/stories' },
-  robots: { index: false, follow: true },
+  title: 'Stories & Investigations — The Breakdown',
+  description:
+    'Deep, evidence-first explainers, analyses, and investigations on Indian policy, economy, geopolitics, and governance.',
+  openGraph: {
+    title: 'Stories & Investigations — The Breakdown',
+    description:
+      'Deep, evidence-first explainers, analyses, and investigations on Indian policy, economy, geopolitics, and governance.',
+    url: 'https://thebreakdown.in/stories',
+    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://thebreakdown.in/stories',
+  },
+  robots: { index: true, follow: true },
 };
 
 export const revalidate = 60;
 
 export default function StoriesPage() {
-  const { data: stories } = getPublicStories({ pageSize: 50 });
-
-  // Redirect to the Knowledge Library when no standalone stories are published yet.
-  // Once stories are seeded this redirect is removed.
-  if (stories.length === 0) {
-    redirect('/series');
-  }
-
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Stories', href: '/stories' },
-  ];
+  const { data: stories } = getPublicStories({ pageSize: 100 });
 
   return (
-    <EditorialLayout breadcrumbItems={breadcrumbs}>
-      <div className="py-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Stories</h1>
-        <p className="text-gray-400 text-lg mb-8">All data-driven investigations and analyses.</p>
-        <section aria-label="Stories list">
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {stories.map((story) => (
-              <Link key={story.slug} href={`/story/${story.slug}`} className="group block p-6 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-amber-500/50 transition-colors">
-                <div className="flex items-center gap-2 mb-3">
-                  <Badge variant="category">{story.category}</Badge>
-                </div>
-                <h2 className="text-lg font-semibold text-white group-hover:text-amber-400 transition-colors mb-2 leading-snug">{story.headline}</h2>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-2">{story.summary}</p>
-                <div className="flex items-center gap-4 text-xs text-gray-500">
-                  <span>{story.author.name}</span>
-                  <span>{story.readingTime} min</span>
-                  <span className="text-amber-500/80">{story.evidenceScore}%</span>
-                </div>
-              </Link>
-            ))}
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Stories', href: '/stories' },
+          ]}
+        />
+
+        {/* Page Header */}
+        <header className="space-y-4 max-w-3xl border-b border-neutral-800 pb-8">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-mono uppercase tracking-widest text-amber-400 bg-amber-950/40 border border-amber-800/30">
+            Editorial Archive
           </div>
-        </section>
+          <h1 className="text-4xl sm:text-5xl font-serif font-black tracking-tight text-white leading-tight">
+            Stories & Investigations
+          </h1>
+          <p className="text-lg sm:text-xl text-neutral-300 font-normal leading-relaxed">
+            Every story is grounded in statutory records, parliamentary data, and verified primary sources.
+            Filter by topic or search our investigative archive.
+          </p>
+        </header>
+
+        {/* Main Stories Archive Component */}
+        <main id="stories-archive" aria-label="Stories Archive">
+          <StoriesArchive initialStories={stories} />
+        </main>
       </div>
-    </EditorialLayout>
+    </div>
   );
 }

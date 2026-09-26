@@ -12,29 +12,10 @@ import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { QualityBuilder } from '@/services/stories/pipeline/quality';
 import { TimelineBuilder } from '@/services/stories/pipeline/timeline';
 import { EntityBuilder } from '@/services/stories/pipeline/entities';
-import { getReaderTrustSignals, TrustSignal } from '@/lib/story/trust-signals';
+import { getReaderTrustSignals, getStoryEvidenceSummary, TrustSignal } from '@/lib/story/trust-signals';
 import { extractFinancialFeature, FinancialFeatureData } from '@/lib/story/financial-eligibility';
 
-// Letter grade derived from the story's evidenceScore (0-100).
-// Drives the hero's "Evidence Rating" stat from canonical data instead of static copy.
-function gradeForScore(score?: number): string {
-  if (score == null) return '—';
-  if (score >= 90) return 'A';
-  if (score >= 80) return 'B';
-  if (score >= 70) return 'C';
-  if (score >= 60) return 'D';
-  return 'E';
-}
 
-// Reader-facing publication label for the hero's review-status stat.
-function reviewLabel(status?: string, publicationStatus?: string): string {
-  if (publicationStatus === 'published') return 'Published';
-  if (status === 'fact_check') return 'Fact-Checked';
-  if (status === 'review') return 'In Editorial Review';
-  if (status === 'scheduled') return 'Scheduled';
-  if (status === 'updated') return 'Updated';
-  return 'Published';
-}
 
 export interface HomepageLeadStory {
   slug: string;
@@ -134,10 +115,10 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
       heroImage: heroImg,
       actionText: 'Understand the story →',
       stats: {
-        claims: rawLead.claims.length,
-        sources: rawLead.sources.length,
-        evidenceGrade: gradeForScore(rawLead.evidenceScore),
-        reviewStatus: reviewLabel(rawLead.status, rawLead.publicationStatus),
+        claims: getStoryEvidenceSummary(rawLead).claimsTotal,
+        sources: getStoryEvidenceSummary(rawLead).primarySourcesCount || rawLead.sources.length,
+        evidenceGrade: getStoryEvidenceSummary(rawLead).evidenceGrade,
+        reviewStatus: getStoryEvidenceSummary(rawLead).reviewStatus,
       },
     };
   }

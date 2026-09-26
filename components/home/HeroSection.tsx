@@ -43,12 +43,11 @@ function EvidenceSignalStrip({
   claims,
   sources,
   readingTime,
-  evidenceGrade,
 }: {
   claims: number | string;
   sources: number | string;
   readingTime: number;
-  evidenceGrade: string;
+  evidenceGrade?: string;
 }) {
   const items = [
     { value: claims,       label: 'verified claims' },
@@ -69,11 +68,9 @@ function EvidenceSignalStrip({
         </span>
       ))}
       <span aria-hidden="true" style={{ color: 'var(--color-border-hover)' }}>·</span>
-      <span>
-        Evidence Grade{' '}
-        <span style={{ color: 'var(--color-earth-ochre)', fontWeight: 600 }}>
-          {evidenceGrade}
-        </span>
+      <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+        Primary Documentation
       </span>
     </div>
   );
@@ -115,119 +112,79 @@ function PeriodBar() {
   );
 }
 
-// ── Knowledge panel (right column) ──────────────────────────────────────────
+// ── Featured editorial panel (right column) ──────────────────────────────────
 
-function KnowledgePanel({
+function FeaturedEditorialPanel({
   claims,
   sources,
   readingTime,
-  evidenceGrade,
-  reviewStatus,
   isLeadStory,
   updatedAt,
   category,
+  heroImage,
+  headline,
+  slug,
+  byline,
 }: {
   claims: number | string;
   sources: number | string;
   readingTime: number;
-  evidenceGrade: string;
-  reviewStatus: string;
   isLeadStory: boolean;
   updatedAt?: string;
   category: string;
+  heroImage?: string;
+  headline: string;
+  slug?: string;
+  byline?: string;
 }) {
-  const stats = [
-    { value: claims,                label: 'Verified Claims',   accent: true  },
-    { value: sources,               label: 'Primary Sources',   accent: false },
-    { value: `${readingTime}`,      label: 'Minutes to Read',   accent: false },
-    { value: `Grade ${evidenceGrade}`, label: 'Evidence Rating', accent: true },
-  ];
+  const href = slug ? `/story/${slug}` : FOUNDING_CHAPTER_PATH;
 
   return (
     <div
-      className="relative flex flex-col gap-8 p-8 rounded"
+      className="relative flex flex-col gap-5 p-6 rounded-2xl overflow-hidden shadow-xl"
       style={{
         backgroundColor: 'var(--color-bg-secondary)',
         border: '1px solid var(--color-border-default)',
       }}
-      aria-label="Knowledge metrics for this chapter"
+      aria-label="Featured Story Spotlight"
     >
-      {/* Left-edge ochre accent */}
-      <div
-        className="absolute top-0 left-0 bottom-0 w-px"
-        style={{ background: 'linear-gradient(180deg, var(--color-earth-ochre) 0%, transparent 100%)' }}
-        aria-hidden="true"
-      />
-
-      {/* Header */}
-      <div>
-        <p
-          className="text-[10px] font-mono uppercase tracking-[0.2em] mb-1"
-          style={{ color: 'var(--color-earth-ochre)' }}
-        >
-          Knowledge Metrics
-        </p>
-        <p
-          className="text-xs font-mono"
-          style={{ color: 'var(--color-earth-dust)' }}
-        >
-          {isLeadStory ? category.toUpperCase() : 'Foundations of Indian Foreign Policy · 1947–1962'}
-        </p>
-      </div>
-
-      {/* Stats grid — 2×2 */}
-      <div className="grid grid-cols-2 gap-5">
-        {stats.map((stat) => (
-          <div key={stat.label}>
-            <p
-              className="text-3xl font-bold leading-none tracking-tight mb-1"
-              style={{
-                fontFamily: 'var(--font-playfair), Georgia, serif',
-                color: stat.accent
-                  ? 'var(--color-earth-ochre)'
-                  : 'var(--color-text-primary)',
-              }}
-            >
-              {stat.value}
-            </p>
-            <p
-              className="text-[10px] font-mono uppercase tracking-wider"
-              style={{ color: 'var(--color-earth-dust)' }}
-            >
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* Timeline bar (founding chapter) or update timestamp (lead story) */}
-      {!isLeadStory ? (
-        <PeriodBar />
-      ) : updatedAt ? (
-        <div>
-          <p
-            className="text-[10px] font-mono uppercase tracking-[0.2em] mb-1"
-            style={{ color: 'var(--color-earth-dust)' }}
-          >
-            Updated
-          </p>
-          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            {updatedAt}
+      {/* Featured visual */}
+      {heroImage ? (
+        <Link href={href} className="block group aspect-[16/10] rounded-xl overflow-hidden relative bg-neutral-900 border border-neutral-800">
+          <img
+            src={heroImage}
+            alt={headline}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        </Link>
+      ) : (
+        <div className="aspect-[16/10] rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center p-6 text-center">
+          <p className="font-serif text-lg italic text-neutral-300">
+            &ldquo;Transform information into understanding.&rdquo;
           </p>
         </div>
-      ) : null}
+      )}
 
-      {/* Review status pill */}
-      <div
-        className="flex items-center gap-2 px-3 py-2 rounded text-xs font-mono"
-        style={{
-          backgroundColor: 'var(--color-evidence-verified)',
-          border: '1px solid var(--color-evidence-verified-border)',
-          color: 'var(--color-evidence-verified-text)',
-        }}
-      >
-        <span aria-hidden="true">✓</span>
-        <span>{reviewStatus}</span>
+      {/* Editorial context */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-xs font-mono text-neutral-400">
+          <span className="uppercase tracking-wider text-emerald-400 font-bold">
+            {isLeadStory ? category.toUpperCase() : 'HISTORICAL SERIES'}
+          </span>
+          <span>{readingTime} min read</span>
+        </div>
+
+        {!isLeadStory && <PeriodBar />}
+
+        <div className="pt-2 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+          <span className="text-neutral-400">
+            {byline || 'The Breakdown Editorial'}
+          </span>
+          <span className="text-emerald-400 font-semibold inline-flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            {claims} verified · {sources} sources
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -353,16 +310,18 @@ export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProp
 
           </div>
 
-          {/* ── RIGHT: Knowledge panel ── */}
-          <KnowledgePanel
+          {/* ── RIGHT: Featured editorial panel ── */}
+          <FeaturedEditorialPanel
             claims={claims}
             sources={sources}
             readingTime={readingTime}
-            evidenceGrade={evidenceGrade}
-            reviewStatus={reviewStatus}
             isLeadStory={isLeadStory}
             updatedAt={leadStory?.updatedAt}
             category={category}
+            heroImage={leadStory?.heroImage}
+            headline={headline}
+            slug={leadStory?.slug}
+            byline={leadStory?.byline}
           />
 
         </div>

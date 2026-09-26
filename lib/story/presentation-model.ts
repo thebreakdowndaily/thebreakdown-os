@@ -217,9 +217,7 @@ function extractTOC(chapters: StoryChapterPresentation[], capabilities: StoryCap
     toc.push({ id: ch.id, label: ch.title, level: 1 });
   }
 
-  if (capabilities.hasUncertainty) {
-    toc.push({ id: 'uncertainty', label: 'State of the Evidence', level: 1 });
-  }
+
 
   if (capabilities.hasMeaningfulTimeline) {
     toc.push({ id: 'timeline', label: 'Timeline', level: 1 });
