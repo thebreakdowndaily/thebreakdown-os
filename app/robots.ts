@@ -35,6 +35,7 @@ export default function robots(): MetadataRoute.Robots {
           '/cms',
           '/editorial',
           '/dashboard',
+          '/newsroom',
           '/editor',
           '/api',
           '/settings',

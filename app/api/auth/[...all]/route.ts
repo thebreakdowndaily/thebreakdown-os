@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
-  const next = url.searchParams.get('next') || '/dashboard';
+  const next = url.searchParams.get('next') || '/newsroom';
   const type = url.searchParams.get('type');
 
   if (code) {

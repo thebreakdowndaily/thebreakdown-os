@@ -16,13 +16,13 @@ export default function LoginPage() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-bg-primary)' }}>
       {view === 'login' && (
         <LoginForm
-          onSuccess={() => { router.push('/dashboard'); }}
+          onSuccess={() => { router.push('/newsroom'); }}
           onRegisterClick={() => { setView('register'); }}
         />
       )}
       {view === 'register' && (
         <RegisterForm
-          onSuccess={() => { router.push('/dashboard'); }}
+          onSuccess={() => { router.push('/newsroom'); }}
           onLoginClick={() => { setView('login'); }}
         />
       )}
