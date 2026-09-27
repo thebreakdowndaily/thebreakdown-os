@@ -6,6 +6,8 @@ import { bootstrapServices } from '../lib/bootstrap';
 import { buildStoryPresentationModel } from '../lib/story/presentation-model';
 import { getStoryEvidenceSummary } from '../lib/story/trust-signals';
 import { isPubliclyPublished } from '../lib/story/publication';
+import { getManifestEntry } from '../lib/image-intelligence/manifest';
+import { resolveStoryHeroImage } from '../lib/image-intelligence/service';
 
 async function runRecoveryTests() {
   console.log('========================================================================');
@@ -181,15 +183,26 @@ async function runRecoveryTests() {
   });
 
   // 10. Flagship Image & Manifest Conformance
-  test('Flagship investigation accountability-in-india is verified in manifest', () => {
+  test('Flagship investigation accountability-in-india resolves to approved hero without fallback override', () => {
     const accountability = publicStories.find((s) => s.slug === 'accountability-in-india');
     assert.ok(accountability, 'accountability-in-india must be present in public stories');
     assert.strictEqual(accountability.category, 'governance');
-    assert.strictEqual(accountability.heroImage, '/images/placeholders/governance-placeholder.svg');
+    assert.strictEqual(accountability.heroImage, '/images/stories/accountability-in-india.jpg');
     assert.ok(
       fs.existsSync(path.join(process.cwd(), 'public', accountability.heroImage)),
       'Hero image file must exist on disk'
     );
+
+    // Verify manifest entry and resolveStoryHeroImage behavior
+    const manifestEntry = getManifestEntry('accountability-in-india');
+    assert.ok(manifestEntry, 'Must have verified manifest entry');
+    assert.strictEqual(manifestEntry.approvedImage, '/images/stories/accountability-in-india.jpg');
+    assert.strictEqual(manifestEntry.assetType, 'authentic-photo');
+
+    const resolved = resolveStoryHeroImage(accountability);
+    assert.strictEqual(resolved.hero.src, '/images/stories/accountability-in-india.jpg');
+    assert.strictEqual(resolved.hero.type, 'editorial');
+    assert.strictEqual(resolved.hero.isFallback, false, 'Fallback must not silently override approved hero image');
   });
 
   console.log(`\nReader-First Publication Recovery Tests: ${passed} passed, ${failed} failed`);

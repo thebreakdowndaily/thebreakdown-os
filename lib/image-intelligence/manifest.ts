@@ -206,11 +206,11 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'accountability-in-india': {
     storySlug: 'accountability-in-india',
-    approvedImage: '/images/placeholders/governance-placeholder.svg',
-    assetType: 'branded-placeholder',
+    approvedImage: '/images/stories/accountability-in-india.jpg',
+    assetType: 'authentic-photo',
     provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
-    description: 'Machinery of public accountability, CAG audit trail, and governance vector.',
+    license: 'EDITORIAL',
+    description: 'The Machinery of Public Accountability in India: Constitutional oversight, parliamentary audit trails, and institutional responsibility.',
   },
 };
 

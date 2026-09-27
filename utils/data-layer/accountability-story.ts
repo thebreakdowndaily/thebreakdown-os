@@ -489,7 +489,7 @@ export const accountabilityStory: APIStory = {
   slug: 'accountability-in-india',
   headline: 'When Something Goes Wrong, Who Actually Answers?',
   summary: 'India has created one of the most layered oversight systems in any democracy — auditors, writ courts, vigilance commissions, social audits, and parliamentary panels. Yet between the moment a public system fails and the moment a consequence lands on someone\'s desk, responsibility can dissolve. We followed the trail from an audited ledger in Madhya Pradesh to the Supreme Court to discover where the chain holds and where it stops.',
-  heroImage: '/images/placeholders/governance-placeholder.svg',
+  heroImage: '/images/stories/accountability-in-india.jpg',
   publishedAt: '2026-09-27T10:00:00Z',
   updatedAt: '2026-09-27T10:00:00Z',
   readingTime: 14,
