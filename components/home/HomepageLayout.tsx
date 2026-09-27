@@ -10,7 +10,7 @@
  *   1. HeroSection      — Featured chapter. Above the fold. Answers "what should I read?"
  *   2. MissionBar       — Three trust pillars. Answers "why should I trust this?"
  *   3. StartHere        — Orientation for first-time visitors.
- *   4. LatestChapters   — Knowledge Library grid.
+ *   4. LatestChapters   — Flagship monograph series grid.
  *   5. TopicHubs        — Six domain entry points.
  *   6. NewsletterBand   — Email capture. Conversion.
  */

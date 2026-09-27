@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   const suggestedLinks = [
-    { label: 'Knowledge Library',   href: '/series' },
+    { label: 'Monographs & Series', href: '/series' },
     { label: 'Investigations',      href: '/investigations' },
     { label: 'Founding Chapter',    href: '/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance' },
     { label: 'Browse all Topics',   href: '/topics' },
