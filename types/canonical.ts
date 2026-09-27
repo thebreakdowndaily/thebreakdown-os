@@ -863,7 +863,8 @@ export type EventType =
   | 'graph:updated'
   | 'correction:submitted'
   | 'correction:triaged'
-  | 'correction:published';
+  | 'correction:published'
+  | 'correction:handoff_to_verification';
 
 export interface Event {
   type: EventType;

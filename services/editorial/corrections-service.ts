@@ -9,18 +9,24 @@
 import { randomUUID } from 'crypto';
 import { eventBus } from '@/lib/events/event-bus';
 import type {
+  ClaimCandidate,
+  ClaimMatchStatus,
+  ClaimVerificationHandoffInput,
   CorrectionCategory,
   PublishedCorrection,
   ReaderCorrection,
   ReaderCorrectionSubmissionInput,
   ReaderCorrectionSubmissionResult,
   TriageCorrectionInput,
+  VerificationHandoffProvenance,
+  VerificationHandoffRecord,
 } from '@/types/corrections';
 
 // ─── In-Memory Fallback Store (for offline / test / local execution) ───────────
 
 const memoryReaderCorrections = new Map<string, ReaderCorrection>();
 const memoryPublishedCorrections = new Map<string, PublishedCorrection>();
+const memoryVerificationHandoffs = new Map<string, VerificationHandoffRecord>();
 
 // Rate-limiting tracker: IP -> timestamps[]
 const rateLimitWindowMs = 10 * 60 * 1000; // 10 minutes
@@ -30,6 +36,7 @@ const ipRequestTimestamps = new Map<string, number[]>();
 export function resetCorrectionsMemoryStore(): void {
   memoryReaderCorrections.clear();
   memoryPublishedCorrections.clear();
+  memoryVerificationHandoffs.clear();
   ipRequestTimestamps.clear();
 }
 
@@ -226,7 +233,7 @@ export async function listReaderCorrections(
 export async function triageReaderCorrection(
   input: TriageCorrectionInput,
   staffContext: StaffContext
-): Promise<{ success: boolean; updatedStatus: string }> {
+): Promise<{ success: boolean; updatedStatus: string; handoffRecord?: VerificationHandoffRecord }> {
   // Authorization Gate
   if (!AUTHORIZED_STAFF_ROLES.has(staffContext.role)) {
     throw new Error(`Unauthorized: User role '${staffContext.role}' cannot triage reader corrections.`);
@@ -244,6 +251,20 @@ export async function triageReaderCorrection(
     record.triageNotes = input.triageNotes;
   }
 
+  // Automated claim-level verification handoff (GAP-VS8-04)
+  let handoffRecord: VerificationHandoffRecord | undefined;
+  if (input.verificationHandoff) {
+    const handoffResult = await handoffCorrectionToVerification(
+      {
+        ...input.verificationHandoff,
+        correctionId: record.id,
+        storySlug: record.storySlug,
+      },
+      staffContext
+    );
+    handoffRecord = handoffResult.handoffRecord;
+  }
+
   // If resolved with published correction, append to public.corrections projection
   if (input.status === 'resolved' && input.publishedCorrection) {
     const publishedId = randomUUID();
@@ -251,7 +272,8 @@ export async function triageReaderCorrection(
       id: publishedId,
       storyId: record.storyId || record.storySlug,
       storySlug: record.storySlug,
-      claimId: record.claimId,
+      claimId: handoffRecord?.claimId || record.claimId,
+      verificationEventId: handoffRecord?.handoffId,
       category: input.publishedCorrection.category || record.category,
       previousWording: input.publishedCorrection.previousWording,
       correctedWording: input.publishedCorrection.correctedWording,
@@ -295,8 +317,136 @@ export async function triageReaderCorrection(
   return {
     success: true,
     updatedStatus: record.status,
+    handoffRecord,
   };
 }
+
+// ─── Automated Claim-Level Verification Handoff (GAP-VS8-04) ─────────────────
+
+export async function handoffCorrectionToVerification(
+  input: ClaimVerificationHandoffInput,
+  staffContext: StaffContext
+): Promise<{
+  success: boolean;
+  matchStatus: ClaimMatchStatus;
+  handoffRecord: VerificationHandoffRecord;
+}> {
+  // Authorization Gate
+  if (!AUTHORIZED_STAFF_ROLES.has(staffContext.role)) {
+    throw new Error(`Unauthorized: User role '${staffContext.role}' cannot execute verification handoff.`);
+  }
+
+  const record = memoryReaderCorrections.get(input.correctionId);
+  if (!record) {
+    throw new Error(`Correction submission not found: ${input.correctionId}`);
+  }
+
+  const now = new Date().toISOString();
+  const storySlug = input.storySlug || record.storySlug;
+  const candidateText = (input.candidateClaimText || record.passageExcerpt || '').toLowerCase().trim();
+
+  let matchStatus: ClaimMatchStatus = 'NO_MATCH';
+  let matchedClaimId: string | undefined = input.claimId || record.claimId;
+
+  // Matching algorithm:
+  if (input.claimsRegistry && input.claimsRegistry.length > 0) {
+    if (matchedClaimId) {
+      const exists = input.claimsRegistry.some(c => c.id === matchedClaimId);
+      matchStatus = exists ? 'MATCHED' : 'NO_MATCH';
+    } else if (candidateText) {
+      const candidates = input.claimsRegistry.filter(c => {
+        const text = c.claim.toLowerCase();
+        return text.includes(candidateText) || candidateText.includes(text);
+      });
+
+      if (candidates.length === 1) {
+        matchStatus = 'MATCHED';
+        matchedClaimId = candidates[0].id;
+      } else if (candidates.length > 1) {
+        matchStatus = 'AMBIGUOUS';
+        matchedClaimId = undefined; // Ambiguous match remains unresolved
+      } else {
+        matchStatus = 'NO_MATCH';
+      }
+    }
+  } else if (matchedClaimId) {
+    matchStatus = 'MATCHED';
+  } else {
+    matchStatus = 'NO_MATCH';
+  }
+
+  const reviewStatus =
+    matchStatus === 'AMBIGUOUS'
+      ? 'unresolved_ambiguity'
+      : matchStatus === 'MATCHED'
+      ? 'pending_editorial_verification'
+      : 'unmatched_review';
+
+  const handoffId = randomUUID();
+  const handoffRecord: VerificationHandoffRecord = {
+    handoffId,
+    correctionId: record.id,
+    storySlug,
+    claimId: matchedClaimId,
+    matchStatus,
+    reviewStatus,
+    candidateClaimText: input.candidateClaimText || record.passageExcerpt,
+    provenance: {
+      correctionId: record.id,
+      storyId: record.storyId,
+      storySlug,
+      claimId: matchedClaimId,
+      sourceOfTrigger: 'reader_correction',
+      timestamp: now,
+      actor: {
+        userId: staffContext.userId,
+        role: staffContext.role,
+      },
+    },
+    notes: `Verification handoff generated. Review status: ${reviewStatus}.`,
+  };
+
+  memoryVerificationHandoffs.set(handoffId, handoffRecord);
+
+  // Invariant check: Reader correction intake NEVER directly mutates claims in editorial.claims.
+  // The claim status remains controlled solely by verified editorial staff.
+
+  try {
+    eventBus.publish({
+      type: 'correction:handoff_to_verification',
+      payload: {
+        handoffId,
+        correctionId: record.id,
+        storySlug,
+        claimId: matchedClaimId,
+        matchStatus,
+        reviewStatus,
+        triagedBy: staffContext.userId,
+      },
+    });
+  } catch (err) {
+    console.error('[CorrectionsService] Failed to publish handoff event:', err);
+  }
+
+  return {
+    success: true,
+    matchStatus,
+    handoffRecord,
+  };
+}
+
+export async function getVerificationHandoffById(handoffId: string): Promise<VerificationHandoffRecord | undefined> {
+  return memoryVerificationHandoffs.get(handoffId);
+}
+
+export async function listVerificationHandoffs(correctionId?: string): Promise<VerificationHandoffRecord[]> {
+  const all = Array.from(memoryVerificationHandoffs.values());
+  if (correctionId) {
+    return all.filter(h => h.correctionId === correctionId);
+  }
+  return all;
+}
+
 
 // ─── Public Errata Projections ───────────────────────────────────────────────
 

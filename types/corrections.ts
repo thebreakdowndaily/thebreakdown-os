@@ -95,6 +95,7 @@ export interface TriageCorrectionInput {
   correctionId: string;
   status: 'triaged' | 'in_review' | 'resolved' | 'rejected';
   triageNotes?: string;
+  verificationHandoff?: ClaimVerificationHandoffInput;
   publishedCorrection?: {
     category: CorrectionCategory;
     previousWording: string;
@@ -102,3 +103,48 @@ export interface TriageCorrectionInput {
     explanation: string;
   };
 }
+
+/**
+ * Claim-level verification handoff types (GAP-VS8-04)
+ */
+export type ClaimMatchStatus = 'MATCHED' | 'AMBIGUOUS' | 'NO_MATCH';
+
+export interface VerificationHandoffProvenance {
+  correctionId: string;
+  storyId?: string;
+  storySlug: string;
+  claimId?: string;
+  sourceOfTrigger: 'reader_correction';
+  timestamp: string;
+  actor: {
+    userId: string;
+    role: string;
+  };
+}
+
+export interface VerificationHandoffRecord {
+  handoffId: string;
+  correctionId: string;
+  storySlug: string;
+  claimId?: string;
+  matchStatus: ClaimMatchStatus;
+  reviewStatus: 'pending_editorial_verification' | 'unresolved_ambiguity' | 'unmatched_review';
+  provenance: VerificationHandoffProvenance;
+  candidateClaimText?: string;
+  notes?: string;
+}
+
+export interface ClaimCandidate {
+  id: string;
+  claim: string;
+  status?: string;
+}
+
+export interface ClaimVerificationHandoffInput {
+  correctionId: string;
+  storySlug?: string;
+  claimId?: string;
+  candidateClaimText?: string;
+  claimsRegistry?: ClaimCandidate[];
+}
+
