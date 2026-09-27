@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200">
+  <title id="title-logo">Logo — The Breakdown</title>
+  <desc id="desc-logo">Visual knowledge graphic illustrating Logo for The Breakdown Knowledge Platform.</desc>
   <rect width="600" height="200" fill="#0A0A0A" rx="16"/>
   <g transform="translate(40, 60)">
     <text x="0" y="0" font-family="Georgia, serif" font-size="48" font-weight="bold" fill="#D4A843" letter-spacing="2">THE</text>

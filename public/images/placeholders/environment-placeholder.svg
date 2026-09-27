@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <title id="title-environment-placeholder">Environment Placeholder — The Breakdown</title>
+  <desc id="desc-environment-placeholder">Visual knowledge graphic illustrating Environment Placeholder for The Breakdown Knowledge Platform.</desc>
   <rect width="800" height="450" fill="#111827"/>
   <rect x="250" y="170" width="300" height="28" rx="4" fill="#E4A11D" opacity="0.3"/>
   <path d="M300 320 Q350 260 400 300 Q430 270 460 290 Q490 250 520 310" stroke="#22C55E" stroke-width="2" fill="none" opacity="0.35"/>

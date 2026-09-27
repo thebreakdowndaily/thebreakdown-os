@@ -111,6 +111,7 @@ module.exports = {
       'tests/vs8-cross-system-corrections.test.ts',
       'tests/image-asset-integrity.test.ts',
       'tests/story-image-context-gate.test.ts',
+      'tests/loop-visual-validation.test.ts',
     ],
     exclude: ['node_modules/**', 'tests/e2e/**'],
   },

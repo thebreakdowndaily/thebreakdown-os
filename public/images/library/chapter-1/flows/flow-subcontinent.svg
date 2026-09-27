@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <title id="title-flow-subcontinent">Flow Subcontinent — The Breakdown</title>
+  <desc id="desc-flow-subcontinent">Visual knowledge graphic illustrating Flow Subcontinent for The Breakdown Knowledge Platform.</desc>
   <defs>
     <style>
       .title { font-size: 32px; font-weight: 700; fill: #FFFFFF; }

@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <title id="title-flow-bengal">Flow Bengal — The Breakdown</title>
+  <desc id="desc-flow-bengal">Visual knowledge graphic illustrating Flow Bengal for The Breakdown Knowledge Platform.</desc>
   <defs>
     <style>
       .title { font-size: 28px; font-weight: 700; fill: #FFFFFF; }

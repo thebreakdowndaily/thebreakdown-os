@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <title id="title-diagram-actors-network">Diagram Actors Network — The Breakdown</title>
+  <desc id="desc-diagram-actors-network">Visual knowledge graphic illustrating Diagram Actors Network for The Breakdown Knowledge Platform.</desc>
   <defs>
     <style>
       .title { font-size: 26px; font-weight: 700; fill: #FFFFFF; }

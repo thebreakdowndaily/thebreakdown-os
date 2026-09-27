@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <title id="title-organization-placeholder">Organization Placeholder — The Breakdown</title>
+  <desc id="desc-organization-placeholder">Visual knowledge graphic illustrating Organization Placeholder for The Breakdown Knowledge Platform.</desc>
   <rect width="800" height="450" fill="#111827"/>
   <rect x="360" y="165" width="80" height="40" rx="6" fill="#E4A11D" opacity="0.3"/>
   <line x1="400" y1="205" x2="400" y2="235" stroke="#3B82F6" stroke-width="2" opacity="0.3"/>

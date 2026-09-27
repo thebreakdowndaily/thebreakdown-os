@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <title id="title-entity-placeholder">Entity Placeholder — The Breakdown</title>
+  <desc id="desc-entity-placeholder">Visual knowledge graphic illustrating Entity Placeholder for The Breakdown Knowledge Platform.</desc>
   <rect width="800" height="450" fill="#111827"/>
   <polygon points="400,165 310,210 490,210" fill="#E4A11D" opacity="0.3"/>
   <rect x="325" y="215" width="20" height="65" rx="3" fill="#3B82F6" opacity="0.2"/>

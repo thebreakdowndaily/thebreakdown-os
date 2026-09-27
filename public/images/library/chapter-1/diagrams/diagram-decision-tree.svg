@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <title id="title-diagram-decision-tree">Diagram Decision Tree — The Breakdown</title>
+  <desc id="desc-diagram-decision-tree">Visual knowledge graphic illustrating Diagram Decision Tree for The Breakdown Knowledge Platform.</desc>
   <defs>
     <style>
       .title { font-size: 28px; font-weight: 700; fill: #FFFFFF; }
