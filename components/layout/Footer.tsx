@@ -19,7 +19,7 @@ import Link from 'next/link';
 // ── Footer link data ─────────────────────────────────────────────────────────
 
 const exploreLinks = [
-  { label: 'Knowledge Library', href: '/series' },
+  { label: 'Monographs & Series', href: '/series' },
   { label: 'Investigations',    href: '/investigations' },
   { label: 'Explainers',        href: '/fix' },
   { label: 'Topics',            href: '/topics' },
@@ -31,7 +31,7 @@ const institutionLinks = [
   { label: 'About The Breakdown',       href: '/about' },
   { label: 'Editorial Constitution',    href: '/editorial-constitution' },
   { label: 'Methodology & Sources',     href: '/methodology' },
-  { label: 'Trust Dashboard',           href: '/trust' },
+  { label: 'Standards & Methodology',   href: '/trust' },
   { label: 'Corrections & Errata',      href: '/transparency/corrections' },
 ];
 
