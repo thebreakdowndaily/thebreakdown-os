@@ -96,18 +96,17 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
   const whyItMatters = (s as any).whyItMatters;
   const takeaway = (s as any).takeaway;
 
-  if (whyItMatters) {
-    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${whyItMatters}</p>`);
+  if (s.summary) {
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200 text-lg mb-4">${s.summary}</p>`);
+  }
+  if (whyItMatters && whyItMatters !== s.summary) {
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-300 mt-2">${whyItMatters}</p>`);
   }
   if (takeaway && takeaway !== s.summary && takeaway !== whyItMatters) {
     contextParagraphs.push(`<blockquote class="border-l-2 border-emerald-500 pl-4 py-2 my-4 text-white font-medium italic bg-neutral-900/40 rounded-r-lg">${takeaway}</blockquote>`);
   }
-  if (contextParagraphs.length === 0) {
-    if (s.keyPoints && s.keyPoints.length > 0) {
-      contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${s.keyPoints[0]}</p>`);
-    } else if (s.summary) {
-      contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${s.summary}</p>`);
-    }
+  if (contextParagraphs.length === 0 && s.keyPoints && s.keyPoints.length > 0) {
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${s.keyPoints[0]}</p>`);
   }
 
   blocks.push({
@@ -118,14 +117,9 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
   });
 
   // 2. Chapter 2: Key Developments
-  const allKeyPoints = (s.keyPoints && s.keyPoints.length > 0) 
+  const keyPoints = (s.keyPoints && s.keyPoints.length > 0) 
     ? s.keyPoints 
     : (s.claims && s.claims.length >= 2 ? s.claims.slice(0, 4).map((c) => c.claim) : []);
-
-  // Avoid repeating keyPoints[0] if it was already used as the single opening paragraph
-  const keyPoints = (!whyItMatters && !takeaway && s.keyPoints && s.keyPoints.length > 1)
-    ? allKeyPoints.slice(1)
-    : allKeyPoints;
 
   if (keyPoints.length > 0) {
     blocks.push({

@@ -31,3 +31,6 @@ Thumbs.db
 
 # Newsroom Intelligence state (runtime persistence)
 data/newsroom/
+
+# Test snapshots
+snapshots/

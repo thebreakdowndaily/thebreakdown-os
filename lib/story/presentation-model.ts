@@ -74,7 +74,15 @@ export interface EvidencePresentation {
 
 export interface ResearchAppendixPresentation {
   claims: EvidencePresentation['claims'];
-  sources: Array<{ title: string; url: string; publisher?: string; tierLabel?: string }>;
+  sources: Array<{
+    title: string;
+    url: string;
+    publisher?: string;
+    organization?: string;
+    date?: string;
+    sourceType?: string;
+    tierLabel?: string;
+  }>;
   methodology?: string;
   dataNotes?: string;
   corrections?: Array<{ date: string; description: string }>;
@@ -224,7 +232,7 @@ function extractTOC(chapters: StoryChapterPresentation[], capabilities: StoryCap
   }
 
   if (capabilities.hasResearchAppendix) {
-    toc.push({ id: 'research-appendix', label: 'Research Appendix', level: 1 });
+    toc.push({ id: 'research-appendix', label: 'Sources & Documentation', level: 1 });
   }
 
   if (capabilities.hasRelatedStories) {
@@ -324,15 +332,39 @@ export function buildStoryPresentationModel(
       }
     : undefined;
 
-  // 11. Research Appendix presentation
+  // 11. Sources & Documentation presentation
   const researchPresentation: ResearchAppendixPresentation | undefined = capabilities.hasResearchAppendix
     ? {
         claims: claimsList,
-        sources: (story.sources || []).map((s) => ({
-          title: s.title,
-          url: s.url,
-          tierLabel: s.tier ? `Tier ${s.tier}` : undefined,
-        })),
+        sources: (story.sources || []).map((s) => {
+          let org = (s as any).publisher || (s as any).organization;
+          if (!org || org === s.title) {
+            const t = s.title.toLowerCase();
+            if (t.includes('gazette') || t.includes('ministry') || t.includes('government') || t.includes('mord') || t.includes('meity') || t.includes('mnre') || t.includes('parliament')) org = 'Government of India';
+            else if (t.includes('supreme court')) org = 'Supreme Court of India';
+            else if (t.includes('rbi') || t.includes('reserve bank')) org = 'Reserve Bank of India';
+            else if (t.includes('npci') || t.includes('upi')) org = 'National Payments Corporation of India';
+            else if (t.includes('cag') || t.includes('comptroller')) org = 'Comptroller & Auditor General';
+            else if (t.includes('eci') || t.includes('election commission')) org = 'Election Commission of India';
+            else if (t.includes('who') || t.includes('cancer report')) org = 'World Health Organization';
+            else if (t.includes('un') || t.includes('security council')) org = 'United Nations';
+            else if (t.includes('prs')) org = 'PRS Legislative Research';
+            else if (t.includes('ceew')) org = 'Council on Energy, Environment and Water';
+            else org = (s as any).type ? String((s as any).type).toUpperCase() : 'Official Authority';
+          }
+          const isPrimary = s.tier === 1 || (s as any).type === 'government' || (s as any).type === 'statutory' || (s as any).type === 'primary';
+          const typeLabel = isPrimary ? 'Primary Statutory Record' : s.tier === 2 ? 'Official Dataset' : 'Reference Document';
+
+          return {
+            title: s.title,
+            url: s.url,
+            publisher: org,
+            organization: org,
+            date: (s as any).date || (s as any).accessedAt || undefined,
+            sourceType: typeLabel,
+            tierLabel: typeLabel,
+          };
+        }),
         faq: (story.faq || []).map((f) => ({ question: f.question, answer: f.answer })),
         versionHistory: story.versionHistory?.map((v) => ({ date: v.date, description: v.description })),
       }
