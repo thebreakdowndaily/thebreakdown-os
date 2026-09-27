@@ -106,7 +106,7 @@ export default function LatestChapters({ trustMetrics }: LatestChaptersProps = {
                 className="text-[11px] font-mono uppercase tracking-[0.22em]"
                 style={{ color: 'var(--color-earth-ochre)' }}
               >
-                Knowledge Library
+                Historical Monographs &amp; Series
               </h2>
             </div>
             <p
@@ -196,18 +196,16 @@ export default function LatestChapters({ trustMetrics }: LatestChaptersProps = {
                 </p>
               </div>
 
-              {/* Evidence stats */}
+              {/* Editorial metadata */}
               <div
                 className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-mono"
                 style={{ color: 'var(--color-text-muted)' }}
               >
-                <span>{claims} verified claims</span>
+                <span>Fully Sourced &amp; Fact-Checked</span>
                 <span aria-hidden="true">·</span>
-                <span>{sources} primary sources</span>
+                <span>{FOUNDING_CHAPTER.readingTime} min read</span>
                 <span aria-hidden="true">·</span>
-                <span>{FOUNDING_CHAPTER.readingTime} min</span>
-                <span aria-hidden="true">·</span>
-                <span style={{ color: 'var(--color-earth-ochre)' }}>Grade {FOUNDING_CHAPTER.evidenceGrade}</span>
+                <span style={{ color: 'var(--color-earth-ochre)' }}>Archival Record</span>
               </div>
 
               {/* CTA */}

@@ -19,7 +19,6 @@ import { bootstrapServices } from '@/lib/bootstrap';
 import { buildHomepage } from '@/features/home/view-model';
 import { EditorialLayout } from '@/packages/editorial/src';
 import { getCanonicalTrustMetrics, type TrustMetrics } from '@/lib/knowledge/trust-metrics';
-import { TrustBar } from '@/components/home/trust/TrustBar';
 import HeroSection from './HeroSection';
 import MissionBar from './MissionBar';
 import ShortVersionGrid from './ShortVersionGrid';
@@ -55,15 +54,9 @@ export default async function HomepageLayout() {
         {/* 4. Explore Topics */}
         <TopicHubs topics={vm.topics} />
 
-        {/* 5. Trust & Methodology — Principles & Institutional Transparency */}
-        <div className="space-y-6 pt-4 border-t border-neutral-800/80">
+        {/* 5. Trust & Methodology — Principles */}
+        <div className="pt-4 border-t border-neutral-800/80">
           <MissionBar />
-          <TrustBar
-            chaptersPublished={trustMetrics?.publishedChapters}
-            claimsRegistered={trustMetrics?.totalClaims}
-            primarySources={trustMetrics?.primarySourcesCited}
-            lastVerified={trustMetrics?.lastVerifiedDate}
-          />
         </div>
 
         {/* 6. Flagship Collections & Historical Series */}

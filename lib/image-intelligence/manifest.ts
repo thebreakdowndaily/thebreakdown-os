@@ -14,11 +14,11 @@ export interface VerifiedImageRecord {
 export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> = {
   'mgnrega-reform': {
     storySlug: 'mgnrega-reform',
-    approvedImage: '/images/stories/mgnrega-20.jpg',
-    assetType: 'authentic-photo',
-    provenance: 'Ministry of Rural Development / PIB Documentation',
-    license: 'PUBLIC_DOMAIN',
-    description: 'Rural workers engaged in MGNREGA social development works.',
+    approvedImage: '/images/placeholders/economy-placeholder.svg',
+    assetType: 'branded-placeholder',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'BRANDED_VECTOR',
+    description: 'Rural employment guarantee and economic policy vector.',
   },
   'digital-payments-boom': {
     storySlug: 'digital-payments-boom',
@@ -38,11 +38,11 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'semiconductor-pli': {
     storySlug: 'semiconductor-pli',
-    approvedImage: '/images/stories/semiconductor-pli.jpg',
-    assetType: 'authentic-photo',
-    provenance: 'India Semiconductor Mission / MeitY',
-    license: 'EDITORIAL',
-    description: 'Silicon wafer fabrication cleanroom technology.',
+    approvedImage: '/images/placeholders/technology-placeholder.svg',
+    assetType: 'branded-placeholder',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'BRANDED_VECTOR',
+    description: 'Semiconductor manufacturing and technology policy vector.',
   },
   'dpdp-bill': {
     storySlug: 'dpdp-bill',

@@ -6,7 +6,7 @@ const mockStoryData: Record<string, unknown> = {
     slug: 'mgnrega-reform',
     headline: 'MGNREGA Completes 20 Years: A Data-Driven Assessment of Rural Employment',
     summary: 'Two decades of India\'s flagship rural employment guarantee scheme — what the data reveals.',
-    heroImage: '/images/stories/mgnrega-20.jpg',
+    heroImage: '/images/placeholders/economy-placeholder.svg',
     publishedAt: '2026-06-15T10:00:00Z',
     updatedAt: '2026-06-15T10:00:00Z',
     readingTime: 12,

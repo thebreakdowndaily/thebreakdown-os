@@ -40,38 +40,29 @@ interface HeroSectionProps {
 // ── Evidence signal strip ────────────────────────────────────────────────────
 
 function EvidenceSignalStrip({
-  claims,
-  sources,
   readingTime,
 }: {
-  claims: number | string;
-  sources: number | string;
+  claims?: number | string;
+  sources?: number | string;
   readingTime: number;
   evidenceGrade?: string;
 }) {
-  const items = [
-    { value: claims,       label: 'verified claims' },
-    { value: sources,      label: 'primary sources' },
-    { value: `${readingTime} min`, label: 'read' },
-  ];
-
   return (
     <div
       className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono"
       style={{ color: 'var(--color-earth-dust)' }}
     >
-      {items.map((item, i) => (
-        <span key={i} className="flex items-center gap-1.5">
-          {i > 0 && <span aria-hidden="true" style={{ color: 'var(--color-border-hover)' }}>·</span>}
-          <span style={{ color: 'var(--color-text-muted)' }}>{item.value}</span>
-          <span>{item.label}</span>
-        </span>
-      ))}
+      <span className="flex items-center gap-1.5">
+        <span style={{ color: 'var(--color-text-muted)' }}>{readingTime} min</span>
+        <span>read</span>
+      </span>
       <span aria-hidden="true" style={{ color: 'var(--color-border-hover)' }}>·</span>
       <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
         Primary Documentation
       </span>
+      <span aria-hidden="true" style={{ color: 'var(--color-border-hover)' }}>·</span>
+      <span style={{ color: 'var(--color-earth-ochre)' }}>Archival Analysis</span>
     </div>
   );
 }
@@ -182,7 +173,7 @@ function FeaturedEditorialPanel({
           </span>
           <span className="text-emerald-400 font-semibold inline-flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            {claims} verified · {sources} sources
+            Verified &amp; Documented
           </span>
         </div>
       </div>

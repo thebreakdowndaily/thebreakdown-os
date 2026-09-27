@@ -44,8 +44,7 @@ export default function TopicsPage() {
             Explore by Topic
           </h1>
           <p className="text-lg sm:text-xl text-neutral-300 font-normal leading-relaxed">
-            Navigate all reporting, explainers, and investigations by domain. Every topic connects verified claims,
-            timelines, and institutional tracking.
+            Navigate all reporting, explainers, and investigations by domain. Each topic brings together comprehensive coverage, deep analysis, and primary source documentation.
           </p>
         </header>
 
@@ -65,11 +64,6 @@ export default function TopicsPage() {
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-neutral-900 text-neutral-400 border border-neutral-800 group-hover:text-amber-400 group-hover:border-amber-500/30 transition-colors">
                       {storyCount} {storyCount === 1 ? 'Story' : 'Stories'}
                     </span>
-                    {topic.entities && topic.entities.length > 0 && (
-                      <span className="text-[10px] font-mono text-neutral-500">
-                        {topic.entities.length} tracked entities
-                      </span>
-                    )}
                   </div>
 
                   <h2 className="text-xl font-bold font-serif text-white group-hover:text-amber-400 transition-colors mb-3 leading-snug">

@@ -225,7 +225,7 @@ export const mockCMSStories: CMSStory[] = [
         data: {
           headline: 'Semiconductor PLI Expansion: What It Means for India\'s Tech Ambitions',
           summary: 'The Cabinet has approved a ₹1.2 lakh crore expansion of the Production Linked Incentive scheme for semiconductor manufacturing. Here\'s what changes and why it matters.',
-          heroImage: '/images/stories/semiconductor-pli.jpg',
+          heroImage: '/images/placeholders/technology-placeholder.svg',
           category: 'economy',
           author: 'The Breakdown Editorial',
           publishedAt: '2026-07-02T09:30:00Z',

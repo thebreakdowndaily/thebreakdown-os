@@ -13,14 +13,14 @@ export interface FeatureFlags {
  */
 export const CANONICAL_ELIGIBILITY_REGISTRY: Record<string, CanonicalEligibilityStatus> = {
   'indias-inheritance': 'ELIGIBLE',
-  'mgnrega-reform': 'ELIGIBLE',
-  'rbi-repo-rate': 'ELIGIBLE',
+  'mgnrega-reform': 'NEEDS_REVIEW',
+  'rbi-repo-rate': 'NEEDS_REVIEW',
   // Non-migrated / audit targets
   'digital-payments-boom': 'NEEDS_REVIEW',
   'pm-fasal-bima-claims': 'NEEDS_REVIEW',
   'cyber-resilience-act': 'BLOCKED',
   'semiconductor-mission': 'NEEDS_REVIEW',
-  'semiconductor-pli': 'ELIGIBLE',
+  'semiconductor-pli': 'NEEDS_REVIEW',
   'space-economy-2026': 'NEEDS_REVIEW',
   'green-hydrogen-mission': 'NEEDS_REVIEW',
 };
@@ -42,7 +42,7 @@ export function getFeatureFlags(): FeatureFlags {
   };
 }
 
-export const CANARY_SLUGS = ['mgnrega-reform', 'rbi-repo-rate'] as const;
+export const CANARY_SLUGS = [] as const;
 
 export function isCanonicalReadPathEnabled(slug: string): boolean {
   const flags = getFeatureFlags();

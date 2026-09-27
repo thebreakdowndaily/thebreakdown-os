@@ -37,7 +37,7 @@ describe('Story-Image Verification and Context Alignment Subsystem', () => {
   it('correctly matches stories to their approved manifest images and catches mismatches', () => {
     // Verified story from manifest
     const mgnregaMatch = matchImageToStoryContext(
-      '/images/stories/mgnrega-20.jpg',
+      '/images/placeholders/economy-placeholder.svg',
       { slug: 'mgnrega-reform', category: 'economy', tags: ['rural', 'employment'] },
       getManifestEntry
     );
