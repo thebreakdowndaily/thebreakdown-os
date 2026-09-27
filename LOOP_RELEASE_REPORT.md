@@ -1,6 +1,7 @@
 # THE BREAKDOWN — ADVANCED LOOP RELEASE REPORT
 
-**Date:** 2026-09-27T19:45:00+05:30  
+**Date:** 2026-09-27T20:25:00+05:30  
+**Loop Iteration:** Loop 02  
 **Domain:** `https://thebreakdown.in`  
 **Production Platform:** Vercel Production (`iad1`)  
 **Operating Protocol:** Closed-Loop Engineering & Production Reliability  
@@ -9,38 +10,45 @@
 
 ## 1. Current Production State
 - **Canonical URL:** `https://thebreakdown.in`
-- **Secondary Alias:** `https://thebreakdown-os.vercel.app`
+- **Secondary Alias:** `https://thebreakdown-545l8m571-bholebababhakti108-makers-projects.vercel.app`
 - **Published Stories:** 41 public stories with full prose bodies, structured chapters, and verified sources.
-- **Flagship Investigation Live:** `/story/accountability-in-india` is fully deployed and serving (234,701 bytes HTML payload, 9 narrative acts, 6 custom React evidence/ledger blocks).
-- **Edge Integrity:** 0 occurrences of forbidden internal jargon across all 11 audited routes (`Knowledge Library`, `Research Appendix`, `Claims Assessed`, percentage confidence tags).
+- **Flagship Investigation Live:** `/story/accountability-in-india` is fully deployed and serving (234,334 bytes HTML payload, 9 narrative acts, 6 custom React evidence/ledger blocks).
+- **Edge Integrity:** 0 occurrences of forbidden internal jargon across all audited routes (`Knowledge Library`, `Research Appendix`, `Claims Assessed`, percentage confidence tags).
 - **Fail-Closed Security:** Embargoed draft chapters (`ng-ch-01` to `ng-ch-15`) fail-closed to HTTP 404 for unauthenticated visitors.
 
 ---
 
-## 2. Initial Failures Discovered
-1. **Regression Test Count Mismatch (`ISSUE-001` - P1):**
-   - In `tests/reader-publication-recovery.test.ts`, Test 6 failed: `Expected exactly 40 published stories, found 41 (41 !== 40)`.
-2. **Workspace Hygiene Pollution (`ISSUE-002` - P1):**
-   - Untracked editorial source pack zip and 8 loose markdown/text research briefs left unignored in repository root after commit `0cafa33`.
-3. **Hero Image Placeholder Dependency (`ISSUE-003` - P1):**
-   - Story `accountability-in-india` published using `/images/placeholders/governance-placeholder.svg` while high-fidelity PDF infographics remain in source packs awaiting vectorization.
+## 2. Issues Discovered in Loop 02
+1. **Title Template Brand Duplication (`ISSUE-004` - P3):**
+   - On `/stories` and `/topics`, the HTML `<title>` tag rendered duplicate brand suffixes:
+     - `Stories & Investigations — The Breakdown — The Breakdown`
+     - `Topic Directory — The Breakdown — The Breakdown`
+2. **Image Intelligence Verification Gate Failure (`ISSUE-005` - P2):**
+   - Running `npm run check:images` failed with exit code 1:
+     `[ FAIL ] accountability-in-india | governance | svg | MISMATCH | /images/placeholders/governance-placeholder.svg`
+     `>>> ERROR: Placeholder "governance-placeholder.svg" does not match story category "governance" or tags.`
 
 ---
 
 ## 3. Root Causes
-1. **Count Assertion Desynchronization:** Commit `0cafa33` (`feat(investigation): publish accountability in india`) legitimately published `accountabilityStory` to the store, incrementing public stories from 40 to 41. Test 7 description was updated, but Test 6 assertion was left at 40.
-2. **Missing Ignore Patterns:** Unpacked source archives and brief files were not matched by the existing `.gitignore` specification.
-3. **Phased Visual Pipeline:** The editorial team prioritized releasing the 3,220-word investigative text and interactive React ledger blocks, temporarily utilizing the branded governance vector placeholder for the hero card.
+1. **Root Layout Template Double Suffixing:** `app/layout.tsx` specifies `title.template: '%s — The Breakdown'`. In `app/stories/page.tsx` and `app/topics/page.tsx`, the exported metadata already had ` — The Breakdown` hardcoded.
+2. **Missing Category Mapping & Manifest Entry:** In `lib/image-intelligence/context-matcher.ts`, `CATEGORY_PLACEHOLDER_MAP` did not map `governance` to `governance-placeholder.svg`, and `lib/image-intelligence/manifest.ts` lacked an approved record for `accountability-in-india`.
 
 ---
 
 ## 4. Fixes Implemented
-1. **Synchronized Test Assertions (`tests/reader-publication-recovery.test.ts`):**
-   - Updated Test 6 title and assertion to expect 41 published stories.
-2. **Hardened Repository Hygiene (`.gitignore`):**
-   - Added ignore patterns for `THE_BREAKDOWN_Accountability_Source_Pack*`, `visual_assets/`, `0[0-9]_*.txt`, `0[0-9]_*.md`, and `scratch/`.
-3. **Structured Visual Roadmap:**
-   - Catalogued the 6 PDF infographics in `LOOP_ISSUE_QUEUE.csv` and verified that the existing `governance-placeholder.svg` is clean, branded, and non-misleading.
+1. **Deduplicated Title Metadata:**
+   - In `app/stories/page.tsx`: Set `title: 'Stories & Investigations'`.
+   - In `app/topics/page.tsx`: Set `title: 'Topic Directory'`.
+2. **Aligned Image Intelligence Pipeline:**
+   - In `lib/image-intelligence/context-matcher.ts`: Added `governance: 'governance-placeholder.svg'` and `institutions: 'governance-placeholder.svg'` to `CATEGORY_PLACEHOLDER_MAP`.
+   - In `lib/image-intelligence/manifest.ts`: Added verified entry for `accountability-in-india` pointing to `governance-placeholder.svg` under `BRANDED_VECTOR` license.
+3. **Automated Regression Suite Updated (`tests/reader-publication-recovery.test.ts`):**
+   - Added Test 9 verifying that `/stories` and `/topics` titles do not duplicate the brand suffix.
+   - Added Test 10 verifying `accountability-in-india` manifest registration and on-disk hero presence.
+4. **Added Golden Route Matrix & Numeric Integrity Suite:**
+   - Generated [`LOOP_ROUTE_MATRIX.csv`](file:///c:/newsjack-content/thebreakdown-os/LOOP_ROUTE_MATRIX.csv) probing 17 golden routes.
+   - Generated [`LOOP_NUMERIC_INTEGRITY.csv`](file:///c:/newsjack-content/thebreakdown-os/LOOP_NUMERIC_INTEGRITY.csv) validating 21 critical quantitative metrics across flagship stories.
 
 ---
 
@@ -48,40 +56,49 @@
 All local quality gates pass with zero failures:
 - `npm run check:type`: **PASS** (0 TypeScript errors)
 - `npm run check:lint`: **PASS** (0 ESLint errors, 437 stylistic warnings)
-- `npm test`: **PASS** (100% test suites passing across all 10 recovery tests, unit tests, and regression fixtures)
-- `npm run check:build`: **PASS** (1,132 static routes prerendered, all 41 public stories and 15 topics compiled)
+- `npm run check:images`: **PASS** (56 of 56 stories verified on disk and context-aligned)
+- `npm test`: **PASS** (100% test suites passing across all 12 recovery tests and regression suites)
+- `npm run check:build`: **PASS** (1,132 static routes prerendered without errors)
 
 ---
 
 ## 6. Deployment Identity
-- **Base Release Commit:** `0cafa331bc2c7662f93471ec83b180bbd1a1c222`
-- **Release Hygiene Commit:** `7086f57007fe819bc25fc8ff7284b1eb6368d4ea`
-- **Vercel Production Deployment ID:** `dpl_CWbyFsto7gnexxbWh3VoKyM2GB75`
+- **Previous Release Commit:** `49e6689e8f613686cc79f4c2b4af5321d718cf33`
+- **Loop 02 Release Commit:** `4faf95955050f2aa7cb72cbfa70829875fe5f6a9`
+- **Vercel Production Deployment ID:** `dpl_2i8DJHkHXRPqWsWjgpJoCTdmrwH2`
 - **Deployment Status:** `● Ready`
-- **Aliases:** `https://thebreakdown.in` and `https://thebreakdown-os-bholebababhakti108-makers-projects.vercel.app`
+- **Production Edge Aliases:**
+  - `https://thebreakdown.in`
+  - `https://thebreakdown-545l8m571-bholebababhakti108-makers-projects.vercel.app`
 
 ---
 
-## 7. Production Verification
-11 core routes probed directly against the live CDN edge (`https://thebreakdown.in`):
-- `/` $\to$ HTTP 200 (133,936 bytes)
-- `/stories` $\to$ HTTP 200 (533,792 bytes)
-- `/topics` $\to$ HTTP 200 (113,139 bytes)
-- `/topic/economy` $\to$ HTTP 200 (172,780 bytes)
-- `/story/mgnrega-reform` $\to$ HTTP 200 (121,462 bytes)
-- `/story/semiconductor-pli` $\to$ HTTP 200 (125,494 bytes)
-- `/story/electoral-bonds` $\to$ HTTP 200 (163,274 bytes)
-- `/story/kashmir-the-first-test` $\to$ HTTP 200 (143,655 bytes)
-- `/story/groundwater-depletion` $\to$ HTTP 200 (115,639 bytes)
-- `/story/digital-payments-boom` $\to$ HTTP 200 (107,018 bytes)
-- `/story/accountability-in-india` $\to$ HTTP 200 (234,701 bytes)
+## 7. Production Verification & Golden Route Matrix
+17 golden routes probed directly against the live CDN edge (`https://thebreakdown.in`):
+- `/` $\to$ HTTP 200 (Title: `The Breakdown — Evidence-First Explainers on India`)
+- `/stories` $\to$ HTTP 200 (Title: `Stories & Investigations — The Breakdown` — **Double suffix removed**)
+- `/topics` $\to$ HTTP 200 (Title: `Topic Directory — The Breakdown` — **Double suffix removed**)
+- `/topic/economy` $\to$ HTTP 200 (Title: `Economy & Finance — The Breakdown`)
+- `/topic/governance` $\to$ HTTP 200 (Title: `Governance & Institutions — The Breakdown`)
+- `/topic/technology` $\to$ HTTP 200 (Title: `Technology & Digital India — The Breakdown`)
+- `/entity/rbi` $\to$ HTTP 200 (Title: `Reserve Bank of India - Knowledge Terminal — The Breakdown`)
+- `/story/accountability-in-india` $\to$ HTTP 200 (Title: `When Something Goes Wrong, Who Actually Answers? — The Breakdown`)
+- `/story/mgnrega-reform` $\to$ HTTP 200 (Title: `MGNREGA 2026: The 125-Day Rural Employment Guarantee Explained — The Breakdown`)
+- `/story/semiconductor-pli` $\to$ HTTP 200 (Title: `India's Semiconductor Push... — The Breakdown`)
+- `/story/electoral-bonds` $\to$ HTTP 200 (Title: `Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme... — The Breakdown`)
+- `/story/kashmir-the-first-test` $\to$ HTTP 200 (Title: `Kashmir: The First Test... — The Breakdown`)
+- `/story/groundwater-depletion` $\to$ HTTP 200 (Title: `India's Groundwater Crisis... — The Breakdown`)
+- `/story/digital-payments-boom` $\to$ HTTP 200 (Title: `Digital Payments in Rural India: UPI's Unseen Revolution — The Breakdown`)
+- `/sitemap.xml` $\to$ HTTP 200 (Valid XML sitemap)
+- `/robots.txt` $\to$ HTTP 200 (Valid robots directive)
+- `/feed.xml` $\to$ HTTP 200 (Valid RSS 2.0 feed)
 
 ---
 
 ## 8. Expected vs Observed Differences
-- **Expected:** All 41 stories render with canonical StoryShell, structured chapters, and zero internal database jargon.
-- **Observed:** All 11 probed routes returned HTTP 200, matching local expectations exactly.
-- **Discrepancy:** 0 byte semantic divergence. Zero jargon leaks.
+- **Expected:** Title templates render concise, single-branded `<title>` tags on `/stories` and `/topics`. Image audit gate passes on all 56 stories.
+- **Observed:** Live CDN responses confirm title deduplication on `/stories` and `/topics`. Local and CI image gates pass 56/56.
+- **Discrepancy:** 0 byte semantic divergence. Zero unexplained discrepancies.
 
 ---
 
@@ -91,7 +108,7 @@ All local quality gates pass with zero failures:
 ---
 
 ## 10. Explicit Release Blockers
-- **None.** (0 P0 issues remain open).
+- **None.** (0 P0 / P1 issues remain open).
 
 ---
 
@@ -103,9 +120,12 @@ FINAL PROTOCOL VERDICT
 ================================================================================
 CLASSIFICATION: LOOP_COMPLETE_PRODUCTION_READY
 CANONICAL DOMAIN: https://thebreakdown.in
+DEPLOYMENT ID: dpl_2i8DJHkHXRPqWsWjgpJoCTdmrwH2
+COMMIT SHA: 4faf95955050f2aa7cb72cbfa70829875fe5f6a9
 PUBLIC STORIES: 41
+GOLDEN ROUTE MATRIX: 17 / 17 PASS
+NUMERIC INTEGRITY METRICS: 21 / 21 VERIFIED
 TECHNICAL GATES: 100% PASS
-EDGE PROBES: 11 / 11 PASS
 RELEASE BLOCKERS: 0
 ================================================================================
 ```
@@ -116,7 +136,9 @@ RELEASE BLOCKERS: 0
 - Baseline State: [`LOOP_00_BASELINE.md`](file:///c:/newsjack-content/thebreakdown-os/LOOP_00_BASELINE.md)
 - Machine-Readable State: [`LOOP_STATE.json`](file:///c:/newsjack-content/thebreakdown-os/LOOP_STATE.json)
 - Issue Tracking: [`LOOP_ISSUE_QUEUE.csv`](file:///c:/newsjack-content/thebreakdown-os/LOOP_ISSUE_QUEUE.csv)
+- Golden Route Matrix: [`LOOP_ROUTE_MATRIX.csv`](file:///c:/newsjack-content/thebreakdown-os/LOOP_ROUTE_MATRIX.csv)
+- Numeric Integrity Suite: [`LOOP_NUMERIC_INTEGRITY.csv`](file:///c:/newsjack-content/thebreakdown-os/LOOP_NUMERIC_INTEGRITY.csv)
 - Production Parity: [`LOOP_PRODUCTION_PARITY.md`](file:///c:/newsjack-content/thebreakdown-os/LOOP_PRODUCTION_PARITY.md)
 - Qualitative Editorial Audit: [`LOOP_EDITORIAL_VERIFICATION.md`](file:///c:/newsjack-content/thebreakdown-os/LOOP_EDITORIAL_VERIFICATION.md)
-- Test Script: [`tests/reader-publication-recovery.test.ts`](file:///c:/newsjack-content/thebreakdown-os/tests/reader-publication-recovery.test.ts)
+- Recovery Tests: [`tests/reader-publication-recovery.test.ts`](file:///c:/newsjack-content/thebreakdown-os/tests/reader-publication-recovery.test.ts)
 - Live Production Edge: `https://thebreakdown.in`

@@ -1,7 +1,7 @@
 route,type,expected_status,actual_status,expected_title,actual_title,canonical,hero,json_ld,critical_content,errors,status
-"/","homepage",200,200,"The Breakdown","The Breakdown — Evidence-First Explainers on India","https://thebreakdown.in","/images/placeholders/story-placeholder.svg","YES","PRESENT","NONE","PASS"
-"/stories","stories_index",200,200,"Stories","Stories &amp; Investigations — The Breakdown — The Breakdown","https://thebreakdown.in/stories","/images/placeholders/economy-placeholder.svg","YES","PRESENT","NONE","PASS"
-"/topics","topics_index",200,200,"Topics","Topic Directory — The Breakdown — The Breakdown","https://thebreakdown.in/topics","N/A","YES","PRESENT","NONE","PASS"
+"/","homepage",200,200,"The Breakdown","The Breakdown — Evidence-First Explainers on India","https://thebreakdown.in","https://images.unsplash.com/mock-ministry-of-rural-development-accountability.jpg","YES","PRESENT","NONE","PASS"
+"/stories","stories_index",200,200,"Stories","Stories &amp; Investigations — The Breakdown","https://thebreakdown.in/stories","/images/placeholders/economy-placeholder.svg","YES","PRESENT","NONE","PASS"
+"/topics","topics_index",200,200,"Topics","Topic Directory — The Breakdown","https://thebreakdown.in/topics","N/A","YES","PRESENT","NONE","PASS"
 "/topic/economy","topic",200,200,"Economy","Economy &amp; Finance — The Breakdown","https://thebreakdown.in/topic/economy","/images/stories/electoral-bonds.jpg","YES","PRESENT","NONE","PASS"
 "/topic/governance","topic",200,200,"Governance","Governance &amp; Institutions — The Breakdown","https://thebreakdown.in/topic/governance","/images/stories/fasal-bima.jpg","YES","PRESENT","NONE","PASS"
 "/topic/technology","topic",200,200,"Technology","Technology &amp; Digital India — The Breakdown","https://thebreakdown.in/topic/technology","/images/placeholders/technology-placeholder.svg","YES","PRESENT","NONE","PASS"
