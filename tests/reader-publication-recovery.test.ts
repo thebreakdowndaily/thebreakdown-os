@@ -166,6 +166,32 @@ async function runRecoveryTests() {
     }
   });
 
+  // 9. Root Layout Title Template Conformance
+  test('Index pages (stories, topics) avoid double brand suffixing in page title', () => {
+    // Read source metadata exports directly
+    const storiesPageContent = fs.readFileSync(path.join(process.cwd(), 'app', 'stories', 'page.tsx'), 'utf-8');
+    const topicsPageContent = fs.readFileSync(path.join(process.cwd(), 'app', 'topics', 'page.tsx'), 'utf-8');
+    
+    // Page title should be concise since layout.tsx appends " — The Breakdown"
+    const storiesTitle = storiesPageContent.match(/metadata:\s*Metadata\s*=\s*\{[\s\S]*?title:\s*['"]([^'"]+)['"]/)?.[1];
+    const topicsTitle = topicsPageContent.match(/metadata:\s*Metadata\s*=\s*\{[\s\S]*?title:\s*['"]([^'"]+)['"]/)?.[1];
+
+    assert.strictEqual(storiesTitle, 'Stories & Investigations', 'Stories page title must not duplicate brand suffix');
+    assert.strictEqual(topicsTitle, 'Topic Directory', 'Topics page title must not duplicate brand suffix');
+  });
+
+  // 10. Flagship Image & Manifest Conformance
+  test('Flagship investigation accountability-in-india is verified in manifest', () => {
+    const accountability = publicStories.find((s) => s.slug === 'accountability-in-india');
+    assert.ok(accountability, 'accountability-in-india must be present in public stories');
+    assert.strictEqual(accountability.category, 'governance');
+    assert.strictEqual(accountability.heroImage, '/images/placeholders/governance-placeholder.svg');
+    assert.ok(
+      fs.existsSync(path.join(process.cwd(), 'public', accountability.heroImage)),
+      'Hero image file must exist on disk'
+    );
+  });
+
   console.log(`\nReader-First Publication Recovery Tests: ${passed} passed, ${failed} failed`);
   if (failed > 0) {
     process.exit(1);

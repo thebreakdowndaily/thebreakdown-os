@@ -4,7 +4,7 @@ import { getTopics } from '@/utils/data-layer/store';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Topic Directory — The Breakdown',
+  title: 'Topic Directory',
   description:
     'Explore The Breakdown’s evidence-based reporting and explainers organized by policy, economic, and geopolitical domains.',
   alternates: {

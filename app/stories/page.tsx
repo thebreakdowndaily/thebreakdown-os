@@ -4,7 +4,7 @@ import StoriesArchive from '@/components/stories/StoriesArchive';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Stories & Investigations — The Breakdown',
+  title: 'Stories & Investigations',
   description:
     'Deep, evidence-first explainers, analyses, and investigations on Indian policy, economy, geopolitics, and governance.',
   openGraph: {

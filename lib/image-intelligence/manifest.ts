@@ -204,6 +204,14 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     license: 'EDITORIAL',
     description: 'Supreme Court of India judicial reform and docket management.',
   },
+  'accountability-in-india': {
+    storySlug: 'accountability-in-india',
+    approvedImage: '/images/placeholders/governance-placeholder.svg',
+    assetType: 'branded-placeholder',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'BRANDED_VECTOR',
+    description: 'Machinery of public accountability, CAG audit trail, and governance vector.',
+  },
 };
 
 export function getManifestEntry(storySlug: string): VerifiedImageRecord | null {
