@@ -55,10 +55,10 @@ All local quality gates pass with zero failures:
 
 ## 6. Deployment Identity
 - **Base Release Commit:** `0cafa331bc2c7662f93471ec83b180bbd1a1c222`
-- **Release Hygiene Commit:** Synchronized to `origin/main`
-- **Vercel Production Deployment ID:** `dpl_9r9C8arNMrf3WPizQUERQQZ1xXDU`
+- **Release Hygiene Commit:** `7086f57007fe819bc25fc8ff7284b1eb6368d4ea`
+- **Vercel Production Deployment ID:** `dpl_CWbyFsto7gnexxbWh3VoKyM2GB75`
 - **Deployment Status:** `● Ready`
-- **Aliases:** `https://thebreakdown.in` and `https://thebreakdown-os.vercel.app`
+- **Aliases:** `https://thebreakdown.in` and `https://thebreakdown-os-bholebababhakti108-makers-projects.vercel.app`
 
 ---
 

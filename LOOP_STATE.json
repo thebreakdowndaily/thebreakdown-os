@@ -1,27 +1,27 @@
 {
   "git": {
     "branch": "main",
-    "commit": "0cafa331bc2c7662f93471ec83b180bbd1a1c222",
-    "originMain": "0cafa331bc2c7662f93471ec83b180bbd1a1c222",
-    "status": "working tree has untracked research source pack files",
+    "commit": "7086f57007fe819bc25fc8ff7284b1eb6368d4ea",
+    "originMain": "7086f57007fe819bc25fc8ff7284b1eb6368d4ea",
+    "status": "clean",
     "author": "Ntn <hello@breakdown.in>",
-    "date": "Sun Sep 27 19:00:05 2026 +0530",
-    "message": "feat(investigation): publish accountability in india"
+    "date": "Sun Sep 27 19:48:47 2026 +0530",
+    "message": "fix(release): synchronize publication recovery test count to 41, harden repo hygiene, and publish loop release artifacts"
   },
   "github": {
     "repo": "thebreakdowndaily/thebreakdown-os",
     "synced": true
   },
   "vercel": {
-    "latestDeploymentId": "dpl_9r9C8arNMrf3WPizQUERQQZ1xXDU",
+    "latestDeploymentId": "dpl_CWbyFsto7gnexxbWh3VoKyM2GB75",
     "status": "● Ready",
     "environment": "Production",
-    "url": "https://thebreakdown-aeshp5t5e-bholebababhakti108-makers-projects.vercel.app",
-    "created": "Sun Sep 27 2026 19:05:25 GMT+0530",
-    "deploymentCommit": "0cafa331bc2c7662f93471ec83b180bbd1a1c222",
+    "url": "https://thebreakdown-2kb8guvy9-bholebababhakti108-makers-projects.vercel.app",
+    "created": "Sun Sep 27 2026 19:49:32 GMT+0530",
+    "deploymentCommit": "7086f57007fe819bc25fc8ff7284b1eb6368d4ea",
     "aliases": [
       "https://thebreakdown.in",
-      "https://thebreakdown-os.vercel.app"
+      "https://thebreakdown-os-bholebababhakti108-makers-projects.vercel.app"
     ]
   },
   "production": {
