@@ -127,8 +127,8 @@ async function runRecoveryTests() {
   });
 
   // 6. Content State Inventory & Quarantine Audit
-  test('Content state correctly identifies 40 published and 15 quarantined draft stories', () => {
-    assert.strictEqual(publicStories.length, 40, `Expected exactly 40 published stories, found ${publicStories.length}`);
+  test('Content state correctly identifies 41 published and 15 quarantined draft stories', () => {
+    assert.strictEqual(publicStories.length, 41, `Expected exactly 41 published stories, found ${publicStories.length}`);
     const quarantinedDrafts = allStories.filter((s) => s.slug.startsWith('ng-ch-'));
     assert.strictEqual(quarantinedDrafts.length, 15, `Expected 15 quarantined Namami Gange draft chapters, found ${quarantinedDrafts.length}`);
     for (const q of quarantinedDrafts) {

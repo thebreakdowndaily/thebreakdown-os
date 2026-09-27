@@ -1,0 +1,328 @@
+{
+  "git": {
+    "branch": "main",
+    "commit": "0cafa331bc2c7662f93471ec83b180bbd1a1c222",
+    "originMain": "0cafa331bc2c7662f93471ec83b180bbd1a1c222",
+    "status": "working tree has untracked research source pack files",
+    "author": "Ntn <hello@breakdown.in>",
+    "date": "Sun Sep 27 19:00:05 2026 +0530",
+    "message": "feat(investigation): publish accountability in india"
+  },
+  "github": {
+    "repo": "thebreakdowndaily/thebreakdown-os",
+    "synced": true
+  },
+  "vercel": {
+    "latestDeploymentId": "dpl_9r9C8arNMrf3WPizQUERQQZ1xXDU",
+    "status": "● Ready",
+    "environment": "Production",
+    "url": "https://thebreakdown-aeshp5t5e-bholebababhakti108-makers-projects.vercel.app",
+    "created": "Sun Sep 27 2026 19:05:25 GMT+0530",
+    "deploymentCommit": "0cafa331bc2c7662f93471ec83b180bbd1a1c222",
+    "aliases": [
+      "https://thebreakdown.in",
+      "https://thebreakdown-os.vercel.app"
+    ]
+  },
+  "production": {
+    "canonicalDomain": "https://thebreakdown.in",
+    "allProbedRoutes200": true,
+    "forbiddenTermsCount": 0,
+    "accountabilityStoryLive": true,
+    "accountabilityBytes": 234701
+  },
+  "stories": {
+    "total": 56,
+    "publicCount": 41,
+    "quarantinedDraftsCount": 15,
+    "publicSlugs": [
+      "mgnrega-reform",
+      "digital-payments-boom",
+      "pm-fasal-bima-claims",
+      "semiconductor-pli",
+      "dpdp-bill",
+      "rbi-repo-rate",
+      "climate-finance",
+      "education-budget",
+      "groundwater-depletion",
+      "ration-digitization",
+      "anganwadi-icds",
+      "supply-chain-shift",
+      "ethanol-backlash",
+      "ews-quota-upsc-investigation",
+      "us-iran-relations",
+      "indian-education-crisis",
+      "income-inequality-india",
+      "india-china-border-tensions",
+      "indias-foreign-policy",
+      "satluj-ban",
+      "india-us-relations",
+      "india-indonesia-relations",
+      "india-china-relations",
+      "india-europe-relations",
+      "india-uk-relations",
+      "india-russia-relations",
+      "81-crore-data-breach",
+      "bjp-mission-360",
+      "india-5g-rollout",
+      "india-ev-paradox",
+      "ayushman-bharat",
+      "electoral-bonds",
+      "who-cancer-report-2026",
+      "us-iran-war-strait-of-hormuz",
+      "epf-scheme-2026",
+      "youth-mental-health-crisis",
+      "gig-worker-rights",
+      "namami-gange-under-fire",
+      "india-china-border-lac",
+      "kashmir-the-first-test",
+      "accountability-in-india"
+    ]
+  },
+  "routes": {
+    "staticStoryPaths": 41,
+    "staticTopicPaths": 15,
+    "goldenStorySlugs": [
+      "mgnrega-reform",
+      "semiconductor-pli",
+      "electoral-bonds",
+      "kashmir-the-first-test",
+      "groundwater-depletion",
+      "digital-payments-boom"
+    ]
+  },
+  "visuals": {
+    "exactCount": 30,
+    "genericPlaceholderCount": 11,
+    "wrongCount": 0,
+    "missingCount": 0,
+    "details": {
+      "mgnrega-reform": {
+        "heroImage": "/images/placeholders/economy-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "digital-payments-boom": {
+        "heroImage": "/images/stories/digital-payments.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "pm-fasal-bima-claims": {
+        "heroImage": "/images/stories/fasal-bima.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "semiconductor-pli": {
+        "heroImage": "/images/placeholders/technology-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "dpdp-bill": {
+        "heroImage": "/images/stories/dpdp-bill.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "rbi-repo-rate": {
+        "heroImage": "/images/stories/rbi-repo-rate.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "climate-finance": {
+        "heroImage": "/images/stories/climate-finance.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "education-budget": {
+        "heroImage": "/images/topics/education.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "groundwater-depletion": {
+        "heroImage": "/images/stories/groundwater-depletion.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "ration-digitization": {
+        "heroImage": "/images/stories/ration-digitization.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "anganwadi-icds": {
+        "heroImage": "/images/stories/anganwadi.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "supply-chain-shift": {
+        "heroImage": "/images/placeholders/economy-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "ethanol-backlash": {
+        "heroImage": "/images/stories/ethanol-backlash.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "ews-quota-upsc-investigation": {
+        "heroImage": "/images/stories/ews-quota-upsc.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "us-iran-relations": {
+        "heroImage": "/images/stories/us-iran-relations.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "indian-education-crisis": {
+        "heroImage": "/images/placeholders/education-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "income-inequality-india": {
+        "heroImage": "/images/placeholders/economy-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "india-china-border-tensions": {
+        "heroImage": "/images/stories/india-china-border-tensions.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "indias-foreign-policy": {
+        "heroImage": "/images/stories/india-europe-relations.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "satluj-ban": {
+        "heroImage": "/images/stories/satluj-ban.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-us-relations": {
+        "heroImage": "/images/stories/india-us-relations.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-indonesia-relations": {
+        "heroImage": "/images/stories/india-europe-relations.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-china-relations": {
+        "heroImage": "/images/stories/india-china-border-tensions.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-europe-relations": {
+        "heroImage": "/images/stories/india-europe-relations.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-uk-relations": {
+        "heroImage": "/images/stories/india-europe-relations.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-russia-relations": {
+        "heroImage": "/images/placeholders/policy-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "81-crore-data-breach": {
+        "heroImage": "/images/stories/aadhaar-sc.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "bjp-mission-360": {
+        "heroImage": "/images/placeholders/policy-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "india-5g-rollout": {
+        "heroImage": "/images/placeholders/technology-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "india-ev-paradox": {
+        "heroImage": "/images/placeholders/environment-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "ayushman-bharat": {
+        "heroImage": "/images/topics/health.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "electoral-bonds": {
+        "heroImage": "/images/stories/electoral-bonds.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "who-cancer-report-2026": {
+        "heroImage": "/images/topics/health.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "us-iran-war-strait-of-hormuz": {
+        "heroImage": "/images/stories/us-iran-war-strait-of-hormuz.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "epf-scheme-2026": {
+        "heroImage": "/images/topics/economy.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "youth-mental-health-crisis": {
+        "heroImage": "/images/placeholders/health-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      },
+      "gig-worker-rights": {
+        "heroImage": "/images/topics/employment.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "namami-gange-under-fire": {
+        "heroImage": "/images/topics/environment.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "india-china-border-lac": {
+        "heroImage": "/images/stories/india-china-border-tensions.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "kashmir-the-first-test": {
+        "heroImage": "/images/library/chapter-1/maps/map-kashmir-1947.svg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset"
+      },
+      "accountability-in-india": {
+        "heroImage": "/images/placeholders/governance-placeholder.svg",
+        "classification": "GENERIC_PLACEHOLDER",
+        "reason": "Branded theme-matched vector placeholder"
+      }
+    }
+  },
+  "sources": {
+    "stats": {
+      "total": 191,
+      "primaryOfficial": 66,
+      "officialInstitutional": 4,
+      "courtLegal": 6,
+      "secondaryResearch": 57,
+      "otherReference": 58
+    }
+  },
+  "readerExperience": {
+    "testedNarrativeLayers": 10,
+    "jargonLeaks": 0,
+    "tocParity100Percent": true
+  },
+  "technicalGates": {
+    "typecheck": "PASS",
+    "lint": "PASS (0 errors, 432 warnings)",
+    "vitestAndUnitTests": "FAIL (1 failure in reader-publication-recovery.test.ts: expected 40, found 41)",
+    "build": "PASS"
+  }
+}

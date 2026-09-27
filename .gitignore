@@ -32,5 +32,12 @@ Thumbs.db
 # Newsroom Intelligence state (runtime persistence)
 data/newsroom/
 
-# Test snapshots
+# Test snapshots & scratch
 snapshots/
+scratch/
+
+# Research source packs & briefs
+THE_BREAKDOWN_Accountability_Source_Pack*
+visual_assets/
+0[0-9]_*.txt
+0[0-9]_*.md
