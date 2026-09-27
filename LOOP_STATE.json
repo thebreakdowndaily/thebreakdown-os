@@ -1,41 +1,40 @@
 {
-  "loop": 2,
+  "loop": 3,
   "phase": "VERIFIED",
-  "baselineCommit": "49e6689e8f613686cc79f4c2b4af5321d718cf33",
-  "currentCommit": "4faf95955050f2aa7cb72cbfa70829875fe5f6a9",
-  "productionDeployment": "dpl_2i8DJHkHXRPqWsWjgpJoCTdmrwH2",
-  "openIssues": [
-    "ISSUE-003"
-  ],
+  "baselineCommit": "50b0b5471562b7a3ee0168817533ed6b68de5714",
+  "currentCommit": "725e399",
+  "productionDeployment": "dpl_ALjpFqw7yHWR6PDsKDgj32yctW9u",
+  "openIssues": [],
   "resolvedIssues": [
     "ISSUE-001",
     "ISSUE-002",
+    "ISSUE-003",
     "ISSUE-004",
     "ISSUE-005"
   ],
-  "lastProbeAt": "2026-09-27T14:55:43Z",
-  "lastBuildAt": "2026-09-27T14:55:10Z",
+  "lastProbeAt": "2026-09-27T15:44:37Z",
+  "lastBuildAt": "2026-09-27T15:17:31Z",
   "status": "LOOP_COMPLETE",
   "git": {
     "branch": "main",
-    "commit": "4faf95955050f2aa7cb72cbfa70829875fe5f6a9",
-    "originMain": "4faf95955050f2aa7cb72cbfa70829875fe5f6a9",
+    "commit": "725e399",
+    "originMain": "725e399",
     "status": "clean",
     "author": "Ntn <hello@breakdown.in>",
-    "date": "Sun Sep 27 19:48:47 2026 +0530",
-    "message": "fix(release): synchronize publication recovery test count to 41, harden repo hygiene, and publish loop release artifacts"
+    "date": "Sun Sep 27 20:49:07 2026 +0530",
+    "message": "feat(visuals): deploy approved bespoke hero for accountability investigation and resolve ISSUE-003"
   },
   "github": {
     "repo": "thebreakdowndaily/thebreakdown-os",
     "synced": true
   },
   "vercel": {
-    "latestDeploymentId": "dpl_CWbyFsto7gnexxbWh3VoKyM2GB75",
+    "latestDeploymentId": "dpl_ALjpFqw7yHWR6PDsKDgj32yctW9u",
     "status": "● Ready",
     "environment": "Production",
-    "url": "https://thebreakdown-2kb8guvy9-bholebababhakti108-makers-projects.vercel.app",
-    "created": "Sun Sep 27 2026 19:49:32 GMT+0530",
-    "deploymentCommit": "7086f57007fe819bc25fc8ff7284b1eb6368d4ea",
+    "url": "https://thebreakdown-q0qobkz1c-bholebababhakti108-makers-projects.vercel.app",
+    "created": "Sun Sep 27 2026 20:49:25 GMT+0530",
+    "deploymentCommit": "725e399",
     "aliases": [
       "https://thebreakdown.in",
       "https://thebreakdown-os-bholebababhakti108-makers-projects.vercel.app"
@@ -109,8 +108,8 @@
     ]
   },
   "visuals": {
-    "exactCount": 30,
-    "genericPlaceholderCount": 11,
+    "exactCount": 31,
+    "genericPlaceholderCount": 10,
     "wrongCount": 0,
     "missingCount": 0,
     "details": {
@@ -315,9 +314,9 @@
         "reason": "Bespoke conceptual SVG or historical asset"
       },
       "accountability-in-india": {
-        "heroImage": "/images/placeholders/governance-placeholder.svg",
-        "classification": "GENERIC_PLACEHOLDER",
-        "reason": "Branded theme-matched vector placeholder"
+        "heroImage": "/images/stories/accountability-in-india.jpg",
+        "classification": "EXACT",
+        "reason": "Bespoke conceptual SVG or historical asset / Approved editorial visual package"
       }
     }
   },
@@ -338,8 +337,9 @@
   },
   "technicalGates": {
     "typecheck": "PASS",
-    "lint": "PASS (0 errors, 432 warnings)",
-    "vitestAndUnitTests": "FAIL (1 failure in reader-publication-recovery.test.ts: expected 40, found 41)",
-    "build": "PASS"
+    "lint": "PASS (0 errors, 437 warnings)",
+    "vitestAndUnitTests": "PASS (12/12 recovery tests, full suite pass)",
+    "imageIntegrity": "PASS (56/56 verified on disk, valid format, context-aligned)",
+    "build": "PASS (100% static prerender, 1132 pages)"
   }
 }
