@@ -210,13 +210,29 @@ Concrete evidence recorded for each story across the seven reader criteria:
 ## 6. Production Parity Verification
 
 ### Deployment Identity Matrix:
-- **Local Git HEAD:** Synchronized with `origin/main`.
-- **Target Branch:** `main`.
-- **Deployment Platform:** Vercel Production.
-- **Canonical Alias:** `https://thebreakdown.in`.
+- **Local Git HEAD:** `32532885c726a348f2caac602d14c7d1482142b7`
+- **Remote `origin/main`:** `32532885c726a348f2caac602d14c7d1482142b7` (Synchronized)
+- **Deployment Platform:** Vercel Production
+- **Vercel Deployment ID:** `dpl_FPngQXTkdAorRP7PUWdiTVqBxJaN`
+- **Deployment Status:** `● Ready`
+- **Canonical Alias:** `https://thebreakdown.in` / `https://thebreakdown-os.vercel.app`
 
-### Post-Deployment Live Route Verification:
-All primary routes will be fetched and audited on the live edge domain (`https://thebreakdown.in`) following deployment.
+### Post-Deployment Live Route Verification (Executed via edge probes):
+All 8 primary routes were fetched directly from `https://thebreakdown.in` and validated against production HTML snapshots:
+1. `https://thebreakdown.in/` (133,938 bytes) — Clean editorial publication homepage.
+2. `https://thebreakdown.in/stories` (477,200 bytes) — 40 stories rendered with publication cards.
+3. `https://thebreakdown.in/topics` (112,455 bytes) — Clean editorial taxonomy.
+4. `https://thebreakdown.in/topic/economy` (172,398 bytes) — Prerendered topic feed.
+5. `https://thebreakdown.in/story/mgnrega-reform` (121,142 bytes) — `Sources & Documentation` present, 0 internal jargon.
+6. `https://thebreakdown.in/story/semiconductor-pli` (125,173 bytes) — `Sources & Documentation` present, 0 internal jargon.
+7. `https://thebreakdown.in/story/electoral-bonds` (163,001 bytes) — `Sources & Documentation` present, 0 internal jargon.
+8. `https://thebreakdown.in/story/kashmir-the-first-test` (144,419 bytes) — `Sources & Documentation` present, 0 internal jargon.
+
+All 8 live HTML snapshots confirmed:
+- Zero occurrences of `Research Appendix`
+- Zero occurrences of `Claims Assessed`
+- Zero occurrences of percentage confidence/trust scores
+- Full presence of `Sources & Documentation` and `Documented Claims & Findings`
 
 ---
 
