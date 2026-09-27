@@ -1,0 +1,146 @@
+[
+  {
+    "target": "homepage",
+    "viewport": "mobile-375",
+    "file": "homepage-mobile-375.png",
+    "status": 200
+  },
+  {
+    "target": "stories",
+    "viewport": "mobile-375",
+    "file": "stories-mobile-375.png",
+    "status": 200
+  },
+  {
+    "target": "accountability-story",
+    "viewport": "mobile-375",
+    "file": "accountability-story-mobile-375.png",
+    "status": 200
+  },
+  {
+    "target": "mgnrega-story",
+    "viewport": "mobile-375",
+    "file": "mgnrega-story-mobile-375.png",
+    "status": 200
+  },
+  {
+    "target": "entity-who",
+    "viewport": "mobile-375",
+    "file": "entity-who-mobile-375.png",
+    "status": 200
+  },
+  {
+    "target": "chapter-1",
+    "viewport": "mobile-375",
+    "file": "chapter-1-mobile-375.png",
+    "status": 200
+  },
+  {
+    "target": "homepage",
+    "viewport": "mobile-390",
+    "file": "homepage-mobile-390.png",
+    "status": 200
+  },
+  {
+    "target": "stories",
+    "viewport": "mobile-390",
+    "file": "stories-mobile-390.png",
+    "status": 200
+  },
+  {
+    "target": "accountability-story",
+    "viewport": "mobile-390",
+    "file": "accountability-story-mobile-390.png",
+    "status": 200
+  },
+  {
+    "target": "mgnrega-story",
+    "viewport": "mobile-390",
+    "file": "mgnrega-story-mobile-390.png",
+    "status": 200
+  },
+  {
+    "target": "entity-who",
+    "viewport": "mobile-390",
+    "file": "entity-who-mobile-390.png",
+    "status": 200
+  },
+  {
+    "target": "chapter-1",
+    "viewport": "mobile-390",
+    "file": "chapter-1-mobile-390.png",
+    "status": 200
+  },
+  {
+    "target": "homepage",
+    "viewport": "tablet-768",
+    "file": "homepage-tablet-768.png",
+    "status": 200
+  },
+  {
+    "target": "stories",
+    "viewport": "tablet-768",
+    "file": "stories-tablet-768.png",
+    "status": 200
+  },
+  {
+    "target": "accountability-story",
+    "viewport": "tablet-768",
+    "file": "accountability-story-tablet-768.png",
+    "status": 200
+  },
+  {
+    "target": "mgnrega-story",
+    "viewport": "tablet-768",
+    "file": "mgnrega-story-tablet-768.png",
+    "status": 200
+  },
+  {
+    "target": "entity-who",
+    "viewport": "tablet-768",
+    "file": "entity-who-tablet-768.png",
+    "status": 200
+  },
+  {
+    "target": "chapter-1",
+    "viewport": "tablet-768",
+    "file": "chapter-1-tablet-768.png",
+    "status": 200
+  },
+  {
+    "target": "homepage",
+    "viewport": "desktop-1440",
+    "file": "homepage-desktop-1440.png",
+    "status": 200
+  },
+  {
+    "target": "stories",
+    "viewport": "desktop-1440",
+    "file": "stories-desktop-1440.png",
+    "status": 200
+  },
+  {
+    "target": "accountability-story",
+    "viewport": "desktop-1440",
+    "file": "accountability-story-desktop-1440.png",
+    "status": 200
+  },
+  {
+    "target": "mgnrega-story",
+    "viewport": "desktop-1440",
+    "file": "mgnrega-story-desktop-1440.png",
+    "status": 200
+  },
+  {
+    "target": "entity-who",
+    "viewport": "desktop-1440",
+    "file": "entity-who-desktop-1440.png",
+    "status": 200
+  },
+  {
+    "target": "chapter-1",
+    "viewport": "desktop-1440",
+    "file": "chapter-1-desktop-1440.png",
+    "status": 200
+  }
+]
