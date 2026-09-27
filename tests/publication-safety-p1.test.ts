@@ -258,27 +258,23 @@ describe('P1 Publication Safety Suite', () => {
       }
     });
 
-    it('issues a 308 permanent redirect from /story/rbi-repo-rate to its canonical chapter path', async () => {
+    it('renders published story rbi-repo-rate on canonical /story route without redirecting', async () => {
       let redirectedTo = '';
+      let rendered = false;
       try {
-        await StoryPage({
+        const page = await StoryPage({
           params: Promise.resolve({ slug: 'rbi-repo-rate' }),
           searchParams: Promise.resolve({}),
         });
+        rendered = Boolean(page);
       } catch (err: any) {
         if (err?.digest?.startsWith('NEXT_REDIRECT')) {
           redirectedTo = err.digest;
         }
       }
 
-      assert.ok(
-        redirectedTo.includes('/series/economic-policy-2026/volume/structural-reforms/chapter/rbi-repo-rate'),
-        `Expected redirect to canonical chapter route, got: ${redirectedTo}`
-      );
-      assert.ok(
-        redirectedTo.includes('308'),
-        `Expected permanent redirect (308), got: ${redirectedTo}`
-      );
+      assert.equal(redirectedTo, '', `Published story must NOT be redirected away from /story route! Redirected to: ${redirectedTo}`);
+      assert.equal(rendered, true, 'Published story must render canonical StoryPage');
     });
 
     it('generates full public metadata for published chapter rbi-repo-rate', async () => {

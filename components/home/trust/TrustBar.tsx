@@ -39,7 +39,7 @@ export function TrustBar({
       verified: Boolean(chaptersPublished && chaptersPublished > 0),
     },
     {
-      label:    'Claims Registered',
+      label:    'Documented Claims',
       value:    claimsRegistered && claimsRegistered > 0
                   ? `${claimsRegistered}`
                   : '—',
@@ -123,7 +123,7 @@ export function TrustBar({
             className="text-[10px] font-mono uppercase tracking-[0.14em] transition-colors duration-150 shrink-0"
             style={{ color: 'var(--color-earth-ochre)' }}
           >
-            Trust Dashboard ↗
+            Standards & Methodology ↗
           </Link>
 
         </div>

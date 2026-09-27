@@ -168,12 +168,8 @@ export default function StoriesArchive({ initialStories }: StoriesArchiveProps) 
                     {dateStr && <span>{dateStr}</span>}
                     <span>•</span>
                     <span>{story.readingTime || 5} min read</span>
-                    {story.evidenceScore ? (
-                      <>
-                        <span>•</span>
-                        <span className="text-emerald-400 font-semibold">{story.evidenceScore}% Verified</span>
-                      </>
-                    ) : null}
+                    <span>•</span>
+                    <span className="text-emerald-400 font-medium">Fact-Checked</span>
                   </div>
 
                   {/* Headline */}

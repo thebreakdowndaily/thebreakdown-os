@@ -58,11 +58,11 @@ function VolumeCard({ volume, collectionSlug }: { volume: Volume; collectionSlug
             );
           })}
           <div className="text-right mt-2">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">Evidence Coverage</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">Primary Sourced</div>
             <div className="w-24 h-1.5 bg-neutral-950 rounded-full mt-1 overflow-hidden border border-neutral-800">
               <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${String(coverageRatio)}%` }} />
             </div>
-            <div className="text-[10px] font-mono text-emerald-400 mt-0.5 font-bold">{coverageRatio}%</div>
+            <div className="text-[10px] font-mono text-emerald-400 mt-0.5 font-bold">{totalEvidence} Sources Verified</div>
 
           </div>
         </div>
@@ -79,7 +79,7 @@ export function KnowledgeLibraryIndex({ libraries }: { libraries: KnowledgeLibra
         <SpatialNarrativeBreadcrumb
           items={[
             { label: 'Home', href: '/' },
-            { label: 'Knowledge Library Index', href: '/series', current: true },
+            { label: 'Editorial Series & Monographs', href: '/series', current: true },
           ]}
           theme="dark"
         />
@@ -90,16 +90,16 @@ export function KnowledgeLibraryIndex({ libraries }: { libraries: KnowledgeLibra
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b border-neutral-800 pb-8">
           <div className="max-w-3xl space-y-3">
             <div className="flex items-center gap-2">
-              <Badge variant="category">Knowledge Library Index</Badge>
+              <Badge variant="category">Flagship Series</Badge>
               <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-                Canonical Collections Registry
+                Historical Monographs & Policy Compendiums
               </span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              Knowledge Library
+              Editorial Series & Monographs
             </h1>
             <p className="text-lg text-neutral-300 leading-relaxed">
-              Evidence-first canonical collections, volumes, and monographs on public policy, history, and governance.
+              Curated, multi-volume investigations and historical monographs grounded in primary documents and verifiable evidence.
             </p>
           </div>
 
@@ -137,12 +137,8 @@ export function KnowledgeLibraryIndex({ libraries }: { libraries: KnowledgeLibra
                     <div className="flex items-center gap-3 text-xs font-mono">
                       <span className="text-neutral-400">{totalClaims} Claims</span>
                       <span className="text-neutral-400">{totalSources} Documents</span>
-                      <span className={`px-3 py-1 rounded-full font-bold ${
-                        trust.grade === 'A' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                        trust.grade === 'B' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
-                        'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                      }`}>
-                        Trust {trust.score}/100 ({trust.grade})
+                      <span className="px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        Verified Series
                       </span>
                     </div>
                   </div>

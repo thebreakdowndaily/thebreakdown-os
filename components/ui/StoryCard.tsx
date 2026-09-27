@@ -1,5 +1,4 @@
 import React from 'react';
-import ScoreBadge from './ScoreBadge';
 import StoryImage from '@/components/story/StoryImage';
 import { cn } from '@/utils/cn';
 
@@ -63,7 +62,7 @@ const FeaturedStory: React.FC<StoryCardProps> = ({ story }) => (
         </div>
         <div className="flex items-center justify-between border-t border-border pt-4 mt-auto">
           <span className="text-xs text-text-muted font-mono uppercase">{story.readingTime} min read</span>
-          <ScoreBadge score={story.evidenceScore} size="sm" />
+          <span className="text-xs font-mono text-emerald-400 font-medium">Fact-Checked</span>
         </div>
       </div>
     </a>
@@ -133,7 +132,7 @@ const DefaultStory: React.FC<StoryCardProps> = ({ story }) => (
         </p>
         <div className="flex items-center justify-between border-t border-border pt-3 mt-auto">
           <span className="text-xs text-text-muted font-mono uppercase tracking-wider">{story.readingTime} min</span>
-          <ScoreBadge score={story.evidenceScore} size="sm" />
+          <span className="text-xs font-mono text-emerald-400 font-medium">Fact-Checked</span>
         </div>
       </div>
     </a>

@@ -73,8 +73,8 @@ export default function TopicStories({ stories }: { stories: StoryCard[] }) {
             href={`/story/${s.slug}`}
             className="group rounded-2xl bg-[#151515] border border-[#2A2A2A] p-5 hover:border-[#D4A843]/30 transition-colors duration-200"
           >
-            <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border mb-3 ${scoreColor(s.evidenceScore)}`}>
-              {s.evidenceScore}% Evidence
+            <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border mb-3 text-[#D4A843] bg-[#D4A843]/10 border-[#D4A843]/30 uppercase tracking-wider font-mono">
+              {s.category || 'Investigation'}
             </span>
             <h3 className="text-sm font-semibold text-[#F5F5F5] group-hover:text-[#D4A843] transition-colors mb-2 line-clamp-2">
               {s.headline}

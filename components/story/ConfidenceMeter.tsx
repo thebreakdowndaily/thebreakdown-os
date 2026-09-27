@@ -79,7 +79,7 @@ export default function ConfidenceMeter({
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#A1A1AA]">Confidence Score</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#A1A1AA]">Verification Rating</p>
             <p className={`text-xl font-bold ${text}`}>{label} Evidence</p>
             {totalClaims > 0 && (
               <p className="text-xs text-[#A1A1AA] mt-0.5">

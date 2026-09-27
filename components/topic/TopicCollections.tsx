@@ -108,10 +108,8 @@ const TopicCollections: React.FC<TopicCollectionsProps> = ({
                 </div>
               )}
               <div className="p-4">
-                <span
-                  className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-white mb-2 ${evidenceBadgeColor(story.evidenceScore)}`}
-                >
-                  {story.evidenceScore}% Evidence
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-amber-300 bg-amber-500/10 border border-amber-500/30 uppercase tracking-wider font-mono mb-2">
+                  {story.category || 'Investigation'}
                 </span>
                 <h3 className="text-base font-semibold text-gray-100 group-hover:text-amber-400 transition-colors mb-1">
                   {story.headline}

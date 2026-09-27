@@ -187,17 +187,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             </p>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-400 border-t border-b border-neutral-800 py-3">
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1.5 text-neutral-300">
                 <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                {qualityScore.score}% Coverage Score
+                {totalStories} Published {totalStories === 1 ? 'Investigation' : 'Investigations'}
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                {statistics.averageConfidence} Avg Confidence
-              </span>
-              <span>•</span>
-              <span>{statistics.totalEntities} Entities Tracked</span>
+              <span className="text-neutral-300">Primary Sourced & Verified</span>
 
               {topic.freshness && (
                 <>

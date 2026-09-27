@@ -1,5 +1,6 @@
+import React from 'react';
 import type { Metadata } from 'next';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { StoryShell } from '@/components/rxs/StoryShell';
 import { buildStoryMetadata } from '@/lib/story/metadata';
 import { resolveStory, getAllStoryAndChapterSlugs } from '@/lib/story/resolver';
@@ -73,12 +74,6 @@ export default async function StoryPage({
       // Ignore
     }
     if (!isAuthenticated) notFound();
-  }
-
-  if (resolution.type === 'chapter') {
-    const queryString = new URLSearchParams(resolvedSearchParams as Record<string, string>).toString();
-    const dest = `/series/${resolution.collectionSlug}/volume/${resolution.volumeSlug}/chapter/${resolution.chapter.slug}${queryString ? `?${queryString}` : ''}`;
-    permanentRedirect(dest);
   }
 
   const jsonLd = createStoryJsonLd(canonicalStory);
