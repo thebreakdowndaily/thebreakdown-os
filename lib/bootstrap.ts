@@ -36,6 +36,10 @@ export function bootstrapServices(options?: { publicOnly?: boolean }): Services 
 }
 
 export function createBlocksFromStory(s: APIStory): StoryBlock[] {
+  if ((s as any).blocks && Array.isArray((s as any).blocks) && (s as any).blocks.length > 0) {
+    return (s as any).blocks;
+  }
+
   const blocks: StoryBlock[] = [];
 
   const allSources = [

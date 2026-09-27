@@ -27,6 +27,11 @@ import StakeholdersBlock from './StakeholdersBlock';
 import PerspectivesBlock from './PerspectivesBlock';
 import FutureOutlookBlock from './FutureOutlookBlock';
 import SvgChartBlock from './SvgChartBlock';
+import AccountabilityChainBlock from './AccountabilityChainBlock';
+import CaseEvidenceCardBlock from './CaseEvidenceCardBlock';
+import MgnregaLedgerChartBlock from './MgnregaLedgerChartBlock';
+import DocumentaryEvidenceBlock from './DocumentaryEvidenceBlock';
+import SourcesMethodologyBlock from './SourcesMethodologyBlock';
 import { normalizeChartBlockData } from '@/lib/story/chart-contract';
 
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
@@ -71,6 +76,11 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'stakeholders': (props: BlockMap['stakeholders']) => <StakeholdersBlock {...props} />,
   'perspectives': (props: BlockMap['perspectives']) => <PerspectivesBlock {...props} />,
   'future-outlook': (props: BlockMap['future-outlook']) => <FutureOutlookBlock {...props} />,
+  'accountability-chain': (props: BlockMap['accountability-chain']) => <AccountabilityChainBlock {...props} />,
+  'case-evidence': (props: BlockMap['case-evidence']) => <CaseEvidenceCardBlock {...props} />,
+  'mgnrega-ledger': (props: BlockMap['mgnrega-ledger']) => <MgnregaLedgerChartBlock {...props} />,
+  'documentary-evidence': (props: BlockMap['documentary-evidence']) => <DocumentaryEvidenceBlock {...props} />,
+  'sources-methodology': (props: BlockMap['sources-methodology']) => <SourcesMethodologyBlock {...props} />,
 };
 
 export function getBlockComponent(type: string): React.ComponentType<any> | null {

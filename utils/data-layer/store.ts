@@ -12,6 +12,7 @@ import type {
   APIListResponse, APIRelatedEntity,
 } from './types';
 import { investigationChapterStories, namamiGangeInvestigation } from './investigation-data';
+import { accountabilityStory } from './accountability-story';
 
 /* ── Internal Store ────────────────────────────────────────────────── */
 
@@ -3447,6 +3448,9 @@ function seed(): DataStore {
   // ── Investigation Chapter Stories ─────────────────────────────────
   investigationChapterStories.forEach((ch) => stories.set(ch.slug, ch));
 
+  // ── Audited Investigative Explainer ──────────────────────────────
+  stories.set(accountabilityStory.slug, accountabilityStory);
+
   // ── Investigations ────────────────────────────────────────────────
   investigations.set(namamiGangeInvestigation.slug, namamiGangeInvestigation);
 
@@ -5241,6 +5245,7 @@ export const LEGACY_PUBLIC_SLUGS: ReadonlySet<string> = new Set([
   'anganwadi-icds',
   'ration-digitization',
   'ethanol-backlash',
+  'accountability-in-india',
 ]);
 
 import type { PublicationStatus } from './types';

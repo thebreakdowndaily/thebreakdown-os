@@ -314,6 +314,78 @@ export interface BlockMap {
   'stakeholders': StakeholdersData;
   'perspectives': PerspectivesData;
   'future-outlook': FutureOutlookData;
+  'accountability-chain': AccountabilityChainData;
+  'case-evidence': CaseEvidenceCardData;
+  'mgnrega-ledger': MgnregaLedgerData;
+  'documentary-evidence': DocumentaryEvidenceData;
+  'sources-methodology': SourcesMethodologyData;
+}
+
+export interface AccountabilityChainData {
+  title?: string;
+  description?: string;
+  steps?: Array<{
+    id: string;
+    stepNumber: number;
+    title: string;
+    subtitle: string;
+    description: string;
+    failurePoint?: string;
+    remedy?: string;
+  }>;
+}
+
+export interface CaseEvidenceCardData {
+  caseId: string;
+  title: string;
+  citation: string;
+  event: string;
+  whatRecordShows: string;
+  accountabilityMechanism: string;
+  legalStatus: string;
+  whatItDoesNotEstablish: string;
+  sources: Array<{ name: string; url?: string; date?: string; type: string }>;
+}
+
+export interface MgnregaLedgerData {
+  reportingPeriod?: string;
+  source?: string;
+  totalLiability?: number;
+  wageLiability?: number;
+  materialLiability?: number;
+  stalledTransactionsAmount?: number;
+  stalledTransactionCount?: number;
+  unpaidDelayCompensation?: number;
+  calculatedDelayCompensation?: number;
+  socialAuditObservations?: number;
+  recoveryDecidedCases?: number;
+  recoveryCompletedCases?: number;
+  recoveryPendingCases?: number;
+  recoveryPendingAmount?: number;
+  hundredDaysPct?: number;
+}
+
+export interface DocumentaryEvidenceData {
+  source: string;
+  date: string;
+  documentType: string;
+  title: string;
+  extract: string;
+  significance: string;
+  url?: string;
+}
+
+export interface SourcesMethodologyData {
+  cases: Array<{
+    caseTitle: string;
+    primarySource: string;
+    secondarySource?: string;
+    date: string;
+    whatSourceEstablishes: string;
+    category: 'FACT' | 'COURT OBSERVATION' | 'AUDIT FINDING' | 'ATTRIBUTED CLAIM' | 'REPORTER ANALYSIS';
+    url?: string;
+  }>;
 }
 
 export type BlockType = keyof BlockMap;
+

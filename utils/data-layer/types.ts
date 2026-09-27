@@ -4,6 +4,8 @@
  * Public-facing API response types (enriched versions of internal types).
  */
 
+import type { StoryBlock } from '@/components/story/blocks/types';
+
 export type APIStoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
 
 /**
@@ -67,6 +69,7 @@ export interface APIStory {
   takeaway?: string;
   whoIsAffected?: string;
   lastVerified?: string;
+  blocks?: StoryBlock[];
 }
 
 export interface APIAuthor {
