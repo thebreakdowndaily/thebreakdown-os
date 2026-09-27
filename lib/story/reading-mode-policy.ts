@@ -60,8 +60,8 @@ export function applyReadingModePolicy(
       chapters: [], // Quick mode renders Quick Brief instead of full chapter blocks
       toc: [
         { id: 'quick-brief', label: 'Quick Brief', level: 1 },
-        { id: 'key-findings', label: 'Key Findings', level: 1 },
-        { id: 'essential-sources', label: 'Essential Sources', level: 1 },
+        ...(quickBrief.keyFindings && quickBrief.keyFindings.length > 0 ? [{ id: 'key-findings', label: 'Key Findings', level: 1 }] : []),
+        ...(quickBrief.essentialSources && quickBrief.essentialSources.length > 0 ? [{ id: 'essential-sources', label: 'Essential Sources', level: 1 }] : []),
       ],
       showTimeline: false,
       showEvidenceSummary: false,

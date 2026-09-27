@@ -214,18 +214,28 @@ function extractChaptersPresentation(story: Story): StoryChapterPresentation[] {
   return chapters;
 }
 
-function extractTOC(chapters: StoryChapterPresentation[], capabilities: StoryCapabilities): Array<{ id: string; label: string; level: number }> {
+function extractTOC(
+  chapters: StoryChapterPresentation[],
+  capabilities: StoryCapabilities,
+  orientation?: StoryOrientationModel
+): Array<{ id: string; label: string; level: number }> {
   const toc: Array<{ id: string; label: string; level: number }> = [];
 
-  if (capabilities.hasOrientation) {
+  const hasOrientationContent = Boolean(
+    orientation &&
+    (orientation.centralFinding ||
+     (orientation.keyTakeaways && orientation.keyTakeaways.length > 0) ||
+     (orientation.keyNumbers && orientation.keyNumbers.length > 0) ||
+     orientation.whyItMatters)
+  );
+
+  if (hasOrientationContent) {
     toc.push({ id: 'orientation', label: 'Short Version', level: 1 });
   }
 
   for (const ch of chapters) {
     toc.push({ id: ch.id, label: ch.title, level: 1 });
   }
-
-
 
   if (capabilities.hasMeaningfulTimeline) {
     toc.push({ id: 'timeline', label: 'Timeline', level: 1 });
@@ -292,7 +302,7 @@ export function buildStoryPresentationModel(
   const chapters = extractChaptersPresentation(story);
 
   // 8. TOC extraction
-  const toc = extractTOC(chapters, capabilities);
+  const toc = extractTOC(chapters, capabilities, orientation);
 
   // 9. Timeline presentation
   const timelinePresentation: StoryTimelinePresentation | undefined = capabilities.hasMeaningfulTimeline
@@ -337,9 +347,10 @@ export function buildStoryPresentationModel(
     ? {
         claims: claimsList,
         sources: (story.sources || []).map((s) => {
+          const rawTitle = s.title || (s as any).name || 'Documentary Source';
           let org = (s as any).publisher || (s as any).organization;
-          if (!org || org === s.title) {
-            const t = s.title.toLowerCase();
+          if (!org || org === rawTitle) {
+            const t = rawTitle.toLowerCase();
             if (t.includes('gazette') || t.includes('ministry') || t.includes('government') || t.includes('mord') || t.includes('meity') || t.includes('mnre') || t.includes('parliament')) org = 'Government of India';
             else if (t.includes('supreme court')) org = 'Supreme Court of India';
             else if (t.includes('rbi') || t.includes('reserve bank')) org = 'Reserve Bank of India';
@@ -356,8 +367,8 @@ export function buildStoryPresentationModel(
           const typeLabel = isPrimary ? 'Primary Statutory Record' : s.tier === 2 ? 'Official Dataset' : 'Reference Document';
 
           return {
-            title: s.title,
-            url: s.url,
+            title: rawTitle,
+            url: s.url || '',
             publisher: org,
             organization: org,
             date: (s as any).date || (s as any).accessedAt || undefined,

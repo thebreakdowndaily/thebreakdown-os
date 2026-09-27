@@ -24,9 +24,8 @@ export function deriveStoryCapabilities(
   validatedRelatedStories: any[]
 ): StoryCapabilities {
   const hasOrientation = Boolean(
-    story.summary ||
     story.takeaway ||
-    (story.blocks && story.blocks.some((b) => b.type === 'executive-summary'))
+    (story.blocks && story.blocks.some((b) => b.type === 'executive-summary' || b.type === 'key-numbers' || b.type === 'quick-facts'))
   );
 
   const hasNarrative = Boolean(story.blocks && story.blocks.length > 0);

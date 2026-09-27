@@ -222,6 +222,32 @@ export function StoryShell({
                 ))}
               </nav>
 
+              {/* Mobile Table of Contents (lg:hidden) */}
+              {toc.length > 1 && (
+                <details className="lg:hidden my-4 p-3.5 rounded-xl bg-neutral-900/60 border border-neutral-800 text-sm group">
+                  <summary className="flex items-center justify-between cursor-pointer font-mono text-xs uppercase tracking-wider text-neutral-300 font-bold select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-focus-ring)] rounded py-0.5">
+                    <span className="flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                      </svg>
+                      On This Page ({toc.length})
+                    </span>
+                    <span className="text-neutral-500 group-open:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <nav aria-label="Mobile Table of Contents" className="mt-2.5 pt-2.5 border-t border-neutral-800/80 space-y-1.5">
+                    {toc.map((item) => (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        className="block py-1 text-xs text-neutral-400 hover:text-emerald-400 transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </nav>
+                </details>
+              )}
+
               {/* Quick Brief View */}
               {mode === 'quick' && quickBrief && (
                 <section id="quick-brief" aria-live="polite" aria-label="30-Second Brief" className="my-8 p-6 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-6">
