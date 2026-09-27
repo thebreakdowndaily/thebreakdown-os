@@ -89,7 +89,7 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
                     </span>
                   )}
                 </div>
-                {src.url && (
+                {src.url ? (
                   <a
                     href={src.url}
                     target="_blank"
@@ -98,6 +98,10 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
                   >
                     View Source ↗
                   </a>
+                ) : (
+                  <span className="text-[10px] font-mono text-neutral-400 bg-neutral-800/80 px-2 py-0.5 rounded border border-neutral-700/50 shrink-0">
+                    Archival Record
+                  </span>
                 )}
               </div>
             ))}
