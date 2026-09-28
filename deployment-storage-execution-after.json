@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-28T14:12:30Z",
+  "teamId": "team_tbFilNFb4UMox6A5vKhdBngZ",
+  "teamSlug": "bholebababhakti108-makers-projects",
+  "plan": "hobby",
+  "retainedDeploymentsCount": 1,
+  "deployments": [
+    {
+      "uid": "dpl_AAtzpPo15QUTz8aEeDcf3YF5kBQf",
+      "name": "thebreakdown-os",
+      "projectId": "prj_WcVDpSso6PPWWOPKwoBRC9lm0huO",
+      "url": "thebreakdown-esehjoezf-bholebababhakti108-makers-projects.vercel.app",
+      "state": "READY",
+      "target": "production",
+      "aliases": [
+        "thebreakdown.in",
+        "thebreakdown-os.vercel.app",
+        "thebreakdown-os-bholebababhakti108-makers-projects.vercel.app",
+        "thebreakdown-os-git-main-bholebababhakti108-makers-projects.vercel.app"
+      ],
+      "commitSha": "b4d495691504f11a62af51c63add867852dc025f",
+      "isLiveProduction": true
+    }
+  ],
+  "projects": [
+    {
+      "name": "thebreakdown-os",
+      "id": "prj_WcVDpSso6PPWWOPKwoBRC9lm0huO",
+      "productionUrl": "https://thebreakdown.in",
+      "link": "thebreakdowndaily/thebreakdown-os"
+    },
+    {
+      "name": "project-0hvar",
+      "id": "prj_KzP8W9eG7B7h1H6j2q8V8b1j4k2",
+      "productionUrl": null,
+      "link": null
+    }
+  ],
+  "sourceUploadSizeLocalMb": 47.95,
+  "gitTrackedSizeMb": 50.50,
+  "gitTrackedFilesCount": 3880,
+  "untrackedFilesCount": 1154,
+  "removedDeployments": [
+    "dpl_9jH4ZtH78S64oLqu3R61DpxaBiLq",
+    "dpl_9gRyL1DFV5ooEs1bEgAzRt1eRCzn",
+    "dpl_kNUCdqhWqznJgSBrb97XZCsXbndY",
+    "dpl_759gBKuVwif4dsnduYhVRzd8gqzJ",
+    "dpl_9jLCfERe6uTxyrXbihRTgNUSx1Am",
+    "dpl_6H4j4rEoQCLLH5YoBEMsEeWMq5kR",
+    "dpl_B5H4eADHM2sh8wTKiGCJjwhS4NKH",
+    "dpl_9Ea1SSMkmLzaG8KfCjAUDT2pwN28",
+    "dpl_D7jgyuRJ1HGMeEMSaiWZsmnxiwxB"
+  ]
+}
