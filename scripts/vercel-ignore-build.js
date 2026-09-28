@@ -60,6 +60,7 @@ function isNonProductionFile(file) {
       filename.endsWith('.txt') ||
       filename.startsWith('lint') ||
       filename.startsWith('test-') ||
+      filename.startsWith('deployment-storage-') ||
       filename === '.editorconfig' ||
       filename === 'LICENSE'
     ) {
@@ -74,10 +75,15 @@ function isNonProductionFile(file) {
 
 function evaluateBuild() {
   try {
-    // Compare against previous commit
-    const diffRaw = execSync('git diff HEAD^ HEAD --name-only', { encoding: 'utf-8' }).trim();
+    // Use Vercel's previous/current SHA when available, otherwise compare HEAD~1 HEAD
+    let diffCmd = 'git diff HEAD~1 HEAD --name-only';
+    if (process.env.VERCEL_GIT_PREVIOUS_SHA && process.env.VERCEL_GIT_COMMIT_SHA) {
+      diffCmd = `git diff ${process.env.VERCEL_GIT_PREVIOUS_SHA} ${process.env.VERCEL_GIT_COMMIT_SHA} --name-only`;
+    }
+
+    const diffRaw = execSync(diffCmd, { encoding: 'utf-8' }).trim();
     if (!diffRaw) {
-      console.log('ℹ️ No git diff detected between HEAD^ and HEAD. Defaulting to PROCEED WITH BUILD (code 1).');
+      console.log('ℹ️ No git diff detected between commits. Defaulting to PROCEED WITH BUILD (code 1).');
       process.exit(1);
     }
 
