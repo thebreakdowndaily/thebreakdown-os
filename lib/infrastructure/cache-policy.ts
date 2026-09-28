@@ -2,6 +2,7 @@
  * ─── The Breakdown OS — Infrastructure Cache & Security Header Policy ────────
  * Pure header generator for Public, Editorial, and Admin response projections.
  * Fully compatible with Vercel Edge and Cloudflare CDN.
+ * Deployment Canary: Loop 5 verified single-pipeline production build.
  */
 
 export interface HeaderMap {
