@@ -25,7 +25,6 @@ const NON_PRODUCTION_PREFIXES = [
   'specs/',
   'rfc/',
   'adr/',
-  'prompts/',
   'wiki/',
   'workflows/',
   '.github/',
@@ -35,7 +34,6 @@ const NON_PRODUCTION_PREFIXES = [
   '.ai/',
   '.opencode/',
   '.storybook/',
-  'stories/', // Storybook stories
   'coverage/',
   'dist-static/',
   '.open-next/',

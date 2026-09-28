@@ -1,32 +1,31 @@
 # Vercel Deployment Ignore Rules
 # Excludes non-production assets, local reports, tests, and documentation from CLI/deployment upload bundle
+# All directory rules are strictly root-anchored with leading '/' to prevent nested collisions with production modules
 
-# Test, audit, and benchmark reports
-audit_reports/
-screenshots/
-dist-static/
-.open-next/
-coverage/
-snapshots/
-scratch/
-tests/
-__tests__/
+# Test, audit, and benchmark reports (root-anchored)
+/audit_reports/
+/screenshots/
+/dist-static/
+/.open-next/
+/coverage/
+/snapshots/
+/scratch/
+/tests/
 
 # Lint and log files
 lint-results.json
 lint*.txt
 *.log
 
-# Large local research packs & local visual assets
-visual_assets/
-THE_BREAKDOWN_Accountability_Source_Pack*
-0[0-9]_*.txt
-0[0-9]_*.md
+# Large local research packs & local visual assets (root-anchored)
+/visual_assets/
+/THE_BREAKDOWN_Accountability_Source_Pack*
+/0[0-9]_*.txt
+/0[0-9]_*.md
 
-# Architecture and governance docs (not referenced by Next.js build runtime)
-docs/
-adr/
-rfc/
-prompts/
-*.md
-!README.md
+# Architecture and governance docs (root-anchored)
+/docs/
+/adr/
+/rfc/
+/*.md
+!/README.md
