@@ -41,3 +41,14 @@ THE_BREAKDOWN_Accountability_Source_Pack*
 visual_assets/
 0[0-9]_*.txt
 0[0-9]_*.md
+
+# Audit, test, coverage & QA artifacts
+audit_reports/
+screenshots/
+dist-static/
+.open-next/
+coverage/
+lint-results.json
+lint*.txt
+*.log
+

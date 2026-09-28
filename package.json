@@ -48,6 +48,7 @@
     "verify:frontend": "npm run checkpoint:b",
     "check:lint": "eslint app components providers styles hooks types features",
     "check:type": "tsc --noEmit",
+    "check:budget": "node scripts/check-deployment-budget.js",
     "check:type:frontend": "tsc --noEmit --project tsconfig.frontend.json",
     "check:registry": "npx tsx scripts/stories-registry-check.ts",
     "check:sources": "npx tsx scripts/check-source-integrity.ts",

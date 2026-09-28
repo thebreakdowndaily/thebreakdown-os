@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-09-28T13:54:30Z",
+  "team": {
+    "id": "team_tbFilNFb4UMox6A5vKhdBngZ",
+    "name": "bholebababhakti108-maker's projects",
+    "slug": "bholebababhakti108-makers-projects",
+    "plan": "hobby",
+    "reportedStorageUsage": "7.5 GB / 10.0 GB (75%)"
+  },
+  "git": {
+    "branch": "main",
+    "headSha": "f5dcfe864eabc352d2bf9f8f33cf4c76e1bdab77",
+    "headCommitMessage": "feat(dashboard,newsroom): synchronize dashboard and newsroom with latest canonical data",
+    "remoteUrl": "https://github.com/thebreakdowndaily/thebreakdown-os"
+  },
+  "production": {
+    "domain": "thebreakdown.in",
+    "activeDeploymentId": "dpl_AAtzpPo15QUTz8aEeDcf3YF5kBQf",
+    "activeDeploymentUrl": "thebreakdown-esehjoezf-bholebababhakti108-makers-projects.vercel.app",
+    "readyState": "READY",
+    "createdAt": 1790530054654
+  },
+  "projects": {
+    "thebreakdown-os": {
+      "id": "prj_WcVDpSso6PPWWOPKwoBRC9lm0huO",
+      "framework": "nextjs",
+      "gitRepo": "thebreakdowndaily/thebreakdown-os",
+      "deploymentCount": 4
+    },
+    "my": {
+      "id": "prj_DS1A590pEqozBYYUfYVNB4ZvH5wm",
+      "framework": null,
+      "gitRepo": "thebreakdowndaily/thebreakdown-os",
+      "deploymentCount": 6
+    },
+    "project-0hvar": {
+      "id": "prj_woZyW87JtX3ANqD8244hnvAPXfjk",
+      "framework": null,
+      "gitRepo": null,
+      "deploymentCount": 0
+    }
+  },
+  "deployments": {
+    "totalCount": 10,
+    "liveProductionDeployment": "dpl_AAtzpPo15QUTz8aEeDcf3YF5kBQf",
+    "cleanupTargets": [
+      "dpl_9jLCfERe6uTxyrXbihRTgNUSx1Am",
+      "dpl_759gBKuVwif4dsnduYhVRzd8gqzJ",
+      "dpl_kNUCdqhWqznJgSBrb97XZCsXbndY",
+      "dpl_D7jgyuRJ1HGMeEMSaiWZsmnxiwxB",
+      "dpl_9gRyL1DFV5ooEs1bEgAzRt1eRCzn",
+      "dpl_9jH4ZtH78S64oLqu3R61DpxaBiLq",
+      "dpl_9Ea1SSMkmLzaG8KfCjAUDT2pwN28",
+      "dpl_B5H4eADHM2sh8wTKiGCJjwhS4NKH",
+      "dpl_6H4j4rEoQCLLH5YoBEMsEeWMq5kR"
+    ]
+  },
+  "sourcePayload": {
+    "dryRunUploadSizeMB": 233.28,
+    "dryRunFileCount": 5245
+  }
+}
