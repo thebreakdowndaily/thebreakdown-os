@@ -59,6 +59,9 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://thebreakdown.in/sitemap.xml',
+    sitemap: [
+      'https://thebreakdown.in/sitemap.xml',
+      'https://thebreakdown.in/news-sitemap.xml',
+    ],
   };
 }

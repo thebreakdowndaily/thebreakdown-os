@@ -86,13 +86,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     },
   };
 
+  // Organization entity — single canonical identity for The Breakdown.
+  // publishingPrinciples / ethicsPolicy / correctionsPolicy help AI systems
+  // understand the editorial standards governing every claim on this site.
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'The Breakdown',
     url: 'https://thebreakdown.in',
-    logo: 'https://thebreakdown.in/logo.svg',
-    description: 'Independent, data-driven journalism on Indian policy, politics, and society.',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://thebreakdown.in/logo.svg',
+      width: 200,
+      height: 60,
+    },
+    description: 'Independent, evidence-backed journalism on Indian policy, politics, and society.',
+    publishingPrinciples: 'https://thebreakdown.in/editorial-constitution',
+    ethicsPolicy: 'https://thebreakdown.in/methodology',
+    correctionsPolicy: 'https://thebreakdown.in/trust',
   };
 
   return (

@@ -6,6 +6,9 @@ import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeB
 export const metadata: Metadata = {
   title: 'Editorial Constitution — The Breakdown',
   description: 'The governing principles of The Breakdown Knowledge Platform: evidence standard, editorial ethics, evidence hierarchy, and quality gates.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/editorial-constitution',
+  },
   openGraph: { title: 'Editorial Constitution — The Breakdown', description: 'The governing principles of The Breakdown: evidence standard, ethics, evidence hierarchy, quality gates.', url: 'https://thebreakdown.in/editorial-constitution' },
   twitter: { card: 'summary', title: 'Editorial Constitution — The Breakdown', description: 'The governing principles of The Breakdown: evidence standard, ethics, evidence hierarchy, quality gates.' },
 };

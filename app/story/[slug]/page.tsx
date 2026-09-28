@@ -76,8 +76,6 @@ export default async function StoryPage({
     if (!isAuthenticated) notFound();
   }
 
-  const jsonLd = createStoryJsonLd(canonicalStory);
-
   // TASK-08 EXP-05: internal-link strip — only emit links to topics/entities
   // that resolve to real pages (no 404 links). One variable: adding the links.
   const topicLinks: { slug: string; name: string }[] = [];
@@ -109,6 +107,18 @@ export default async function StoryPage({
 
   // 3. Fetch published editorial errata/corrections for this story (GAP-VS8-01)
   const publishedCorrections = await listPublishedCorrections(slug);
+
+  // 4. Build JSON-LD — after corrections are resolved so schema includes correction history
+  const jsonLd = createStoryJsonLd(canonicalStory, {
+    corrections: publishedCorrections?.map((c) => ({
+      timestamp: (c as { timestamp?: string; created_at?: string }).timestamp
+        ?? (c as { timestamp?: string; created_at?: string }).created_at
+        ?? new Date().toISOString(),
+      description: (c as { description?: string; summary?: string }).description
+        ?? (c as { description?: string; summary?: string }).summary
+        ?? '',
+    })),
+  });
 
   return (
     <>

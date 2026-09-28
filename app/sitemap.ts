@@ -67,27 +67,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  // Static trust and editorial pages — use actual content review dates, not build time.
+  // Using new Date() on stable pages falsely signals daily changes and wastes crawl budget.
+  const STATIC_PAGE_DATES = {
+    home: new Date(),  // Homepage changes frequently — use build time
+    trust: new Date('2026-07-01'),
+    methodology: new Date('2026-07-01'),
+    editorialConstitution: new Date('2026-07-01'),
+    about: new Date('2026-07-01'),
+    series: new Date(),
+    topics: new Date(),
+    entities: new Date(),
+    investigations: new Date(),
+    data: new Date(),
+    trackers: new Date(),
+  } as const;
+
   const staticPages: MetadataRoute.Sitemap = [
-    { url: siteUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
-    { url: `${siteUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${siteUrl}/series`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
-    { url: `${siteUrl}/topics`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${siteUrl}/entities`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${siteUrl}/organizations`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
-    { url: `${siteUrl}/countries`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
-    { url: `${siteUrl}/investigations`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    // Founding Edition public package (robots: allow) — trust & transparency pages
-    { url: `${siteUrl}/founding-edition`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${siteUrl}/methodology`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${siteUrl}/trust`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${siteUrl}/editorial-constitution`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${siteUrl}/data`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${siteUrl}/compare`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${siteUrl}/trackers`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-    { url: `${siteUrl}/trackers/mgnrega`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/trackers/semiconductor`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/trackers/upi`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/trackers/pmfby`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: siteUrl, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${siteUrl}/about`, lastModified: STATIC_PAGE_DATES.about, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/series`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${siteUrl}/topics`, lastModified: STATIC_PAGE_DATES.topics, changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${siteUrl}/entities`, lastModified: STATIC_PAGE_DATES.entities, changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${siteUrl}/organizations`, lastModified: STATIC_PAGE_DATES.entities, changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${siteUrl}/countries`, lastModified: STATIC_PAGE_DATES.entities, changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${siteUrl}/investigations`, lastModified: STATIC_PAGE_DATES.investigations, changeFrequency: 'weekly', priority: 0.8 },
+    // Trust & transparency package — stable pages, real last-review dates
+    { url: `${siteUrl}/founding-edition`, lastModified: new Date('2026-07-30'), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${siteUrl}/methodology`, lastModified: STATIC_PAGE_DATES.methodology, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/trust`, lastModified: STATIC_PAGE_DATES.trust, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/editorial-constitution`, lastModified: STATIC_PAGE_DATES.editorialConstitution, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/data`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${siteUrl}/compare`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${siteUrl}/trackers`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${siteUrl}/trackers/mgnrega`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/trackers/semiconductor`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/trackers/upi`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/trackers/pmfby`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
   ];
 
   return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];

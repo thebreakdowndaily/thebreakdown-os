@@ -180,6 +180,41 @@ export interface Story {
     dataAvailability: number;
     verificationStatus: number;
   };
+
+  // ─── AEO Layer ─────────────────────────────────────────────────────────────
+  // These fields are optional. New stories should populate them; legacy stories
+  // continue to function without them. See docs/aeo-geo/architecture.md Phase 5.
+
+  /**
+   * A concise direct answer to "what happened / what changed" — 40–100 words.
+   * Factual only. No hype. No unsupported claims.
+   * Updated when material facts change (never update dateModified without changing content).
+   * Used in structured data and as the AEO extraction anchor.
+   */
+  answerSummary?: string;
+
+  /**
+   * What remains uncertain, unconfirmed, or contested about this story.
+   * Helps prevent AI systems from treating uncertainty as established fact.
+   * Example: "The total number of affected residents is not yet confirmed officially."
+   */
+  whatIsUnknown?: string;
+
+  /**
+   * Editorial classification of the reporting type.
+   * Used to signal original work vs. aggregated or attributed reporting.
+   * Must only be set when editorially justified — never set 'original_reporting'
+   * for content that is primarily synthesising other sources.
+   */
+  reportingType?:
+    | 'original_reporting'
+    | 'exclusive'
+    | 'field_reporting'
+    | 'data_analysis'
+    | 'document_analysis'
+    | 'interview'
+    | 'investigation'
+    | 'aggregated';
 }
 
 export interface TBSStory {
@@ -606,6 +641,27 @@ export interface Source {
   tier: ConfidenceTier;
   archiveHash?: string;
   publisher?: string;
+  /**
+   * Classification of the source type — used in AEO structured data and editorial QA.
+   * Primary sources (government, court, official, rti, parliament) carry higher evidentiary weight.
+   * Original reporting (field_report) signals The Breakdown's own work.
+   */
+  sourceType?:
+    | 'government'    // Ministry/department publication, official data release
+    | 'court'         // Court order, judgment, filing
+    | 'official'      // Official press release, statement, speech
+    | 'academic'      // Peer-reviewed research
+    | 'company'       // Corporate filing, annual report, press release
+    | 'dataset'       // Government/research dataset
+    | 'interview'     // Primary interview conducted by The Breakdown
+    | 'document'      // Official PDF/document (non-court, non-govt)
+    | 'news'          // Secondary source: report by another news outlet
+    | 'rti'           // RTI (Right to Information) response
+    | 'parliament'    // Lok Sabha / Rajya Sabha / State legislature record
+    | 'field_report'  // The Breakdown's original field reporting
+    | 'other';
+  /** When the source itself was published (distinct from when we accessed it). */
+  publishedAt?: string;
 }
 
 /** Step 2 in 7-Step Knowledge Pipeline: Entity -> KnowledgeObservation -> Claim -> Evidence -> Source -> Publication -> Projection */
@@ -1879,6 +1935,16 @@ export interface ClaimAppearance {
   contentTitle: string;
 }
 
+export type CanonicalSourceStatus =
+  | 'verified'
+  | 'partial'
+  | 'unverified'
+  | 'needs_review'
+  | 'unresolved'
+  | 'disputed'
+  | 'retracted'
+  | 'superseded';
+
 export interface CanonicalSource {
   id: string;
   title: string;
@@ -1892,7 +1958,9 @@ export interface CanonicalSource {
   storyIds: string[];
   datasetIds: string[];
   lastVerifiedAt?: string;
-  verificationStatus?: 'verified' | 'partial' | 'unverified' | 'needs_review';
+  verificationStatus?: CanonicalSourceStatus;
+  publisher?: string;
+  notes?: string;
 }
 
 export interface CanonicalDocument {
