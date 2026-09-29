@@ -24,8 +24,61 @@ import type {
 
 // ─── In-Memory Fallback Store (for offline / test / local execution) ───────────
 
+export const INITIAL_PUBLISHED_CORRECTIONS: PublishedCorrection[] = [
+  {
+    id: 'corr-eb-001',
+    storyId: 'electoral-bonds',
+    storySlug: 'electoral-bonds',
+    storyTitle: 'The Electoral Bond Ledger: How ₹16,518 Crore Redrew Political Finance',
+    category: 'factual',
+    previousWording: 'The Bharatiya Janata Party (BJP) emerged as the single largest beneficiary of the electoral bond scheme, redeeming ₹6,060.5 crore—more than all other parties combined.',
+    correctedWording: 'The Bharatiya Janata Party (BJP) emerged as the single largest beneficiary of the electoral bond scheme, redeeming ₹6,060.5 crore—more than the next five largest recipient parties combined (47.5% of total encashed bond value).',
+    explanation: 'While the BJP was the predominant beneficiary, ₹6,060.5 crore represented 47.5% of the total ₹12,769 crore encashed during the disclosure window, which is slightly less than 50% of the aggregate total. The sentence was amended to accurately specify that BJP received more than the next five largest recipient parties combined.',
+    createdAt: '2026-09-29T10:00:00Z',
+    updatedAt: '2026-09-29T10:00:00Z',
+  },
+  {
+    id: 'corr-eb-002',
+    storyId: 'electoral-bonds',
+    storySlug: 'electoral-bonds',
+    storyTitle: 'The Electoral Bond Ledger: How ₹16,518 Crore Redrew Political Finance',
+    category: 'factual',
+    previousWording: 'The All India Trinamool Congress (TMC) redeemed ₹1,609.5 crore, ranking third behind the Indian National Congress (INC).',
+    correctedWording: 'The All India Trinamool Congress (TMC) redeemed ₹1,609.5 crore, ranking second behind the BJP, while the Indian National Congress (INC) redeemed ₹1,421.9 crore, ranking third.',
+    explanation: 'Corrected party encashment rankings. ECI disclosed filings confirm TMC was the second largest recipient overall with ₹1,609.5 crore, and INC was third with ₹1,421.9 crore.',
+    createdAt: '2026-09-29T10:00:00Z',
+    updatedAt: '2026-09-29T10:00:00Z',
+  },
+  {
+    id: 'corr-eb-003',
+    storyId: 'electoral-bonds',
+    storySlug: 'electoral-bonds',
+    storyTitle: 'The Electoral Bond Ledger: How ₹16,518 Crore Redrew Political Finance',
+    category: 'factual',
+    previousWording: '12 July 2017: Finance Minister Arun Jaitley announces electoral bond scheme in Union Budget speech.',
+    correctedWording: '1 February 2017: Finance Minister Arun Jaitley announces electoral bond scheme in Union Budget 2017–18 speech.',
+    explanation: 'Corrected date of the Union Budget 2017–18 speech in which the electoral bond scheme was originally proposed. The budget was presented on 1 February 2017, not 12 July 2017.',
+    createdAt: '2026-09-29T10:00:00Z',
+    updatedAt: '2026-09-29T10:00:00Z',
+  },
+  {
+    id: 'corr-mgnrega-001',
+    storyId: 'mgnrega-reform',
+    storySlug: 'mgnrega-reform',
+    storyTitle: 'Reforming MGNREGA: Can India\'s Rural Safety Net Be Fixed?',
+    category: 'clarification',
+    previousWording: 'Social audit category totals in the summary chart did not explicitly account for 6,666 record reconciliation items.',
+    correctedWording: 'Added Record Reconciliation / Procedural (6.6k records) to ensure social audit breakdown categories reconcile exactly to the 89,066 record total.',
+    explanation: 'Reconciled social audit finding categories so that individual complaint bars and categories sum precisely to the reported national audit total of 89,066 records.',
+    createdAt: '2026-09-29T10:00:00Z',
+    updatedAt: '2026-09-29T10:00:00Z',
+  },
+];
+
 const memoryReaderCorrections = new Map<string, ReaderCorrection>();
-const memoryPublishedCorrections = new Map<string, PublishedCorrection>();
+const memoryPublishedCorrections = new Map<string, PublishedCorrection>(
+  INITIAL_PUBLISHED_CORRECTIONS.map(c => [c.id, c])
+);
 const memoryVerificationHandoffs = new Map<string, VerificationHandoffRecord>();
 
 // Rate-limiting tracker: IP -> timestamps[]
@@ -36,6 +89,9 @@ const ipRequestTimestamps = new Map<string, number[]>();
 export function resetCorrectionsMemoryStore(): void {
   memoryReaderCorrections.clear();
   memoryPublishedCorrections.clear();
+  for (const c of INITIAL_PUBLISHED_CORRECTIONS) {
+    memoryPublishedCorrections.set(c.id, c);
+  }
   memoryVerificationHandoffs.clear();
   ipRequestTimestamps.clear();
 }
