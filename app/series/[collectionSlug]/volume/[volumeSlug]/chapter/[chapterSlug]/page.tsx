@@ -112,6 +112,25 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
     ? { title: volume.chapters[chapterIdx + 1].title, slug: volume.chapters[chapterIdx + 1].slug }
     : null;
 
+  const chapterCitations: Array<{ title: string; url: string }> = [];
+  const seenCitations = new Set<string>();
+  for (const ec of enrichedClaims) {
+    for (const src of ec._sources ?? []) {
+      if (src.url && !seenCitations.has(src.url)) {
+        seenCitations.add(src.url);
+        chapterCitations.push({
+          title: src.title || 'Primary Reference',
+          url: src.url,
+        });
+      }
+    }
+  }
+
+  const aboutEntities = (chapter.relatedConceptIds ?? []).slice(0, 5).map((cid) => ({
+    name: cid,
+    sameAs: `https://thebreakdown.in/entity/${cid}`,
+  }));
+
   const jsonLd = [
     createArticleSchema({
       headline: chapter.title,
@@ -119,8 +138,14 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
       url: `https://thebreakdown.in/series/${collectionSlug}/volume/${volumeSlug}/chapter/${chapterSlug}`,
       publishedAt: chapter.createdAt,
       updatedAt: chapter.updatedAt,
+      authorName: 'The Breakdown Editorial',
+      authorUrl: 'https://thebreakdown.in',
       wordCount: chapter.content?.reduce((sum, b) => sum + (JSON.stringify(b).length / 5), 0) || 0,
+      category: collection?.title,
       tags: chapter.relatedConceptIds,
+      aboutEntities: aboutEntities.length > 0 ? aboutEntities : undefined,
+      citations: chapterCitations.length > 0 ? chapterCitations : undefined,
+      abstract: chapter.summary,
       isNews: false, // Canonical chapters are long-form Articles
     }),
     createBreadcrumbSchema([

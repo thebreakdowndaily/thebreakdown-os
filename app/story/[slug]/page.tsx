@@ -88,11 +88,24 @@ export default async function StoryPage({
   }
 
   const entityLinks: { slug: string; name: string }[] = [];
+  const resolvedEntities: { slug: string; name: string }[] = [];
   const storyWithEntities = canonicalStory as Story & { relatedEntities?: StoryEntityRef[] };
-  for (const re of storyWithEntities.relatedEntities ?? []) {
-    if (entityLinks.length >= 6) break;
-    const resolved = getEntityById(re.id || re.slug || '');
-    if (resolved) entityLinks.push({ slug: resolved.slug, name: resolved.title ?? resolved.name ?? resolved.slug });
+  const allEntityCandidates = [
+    ...(storyWithEntities.relatedEntities ?? []).map((re) => re.id || re.slug || ''),
+    ...(canonicalStory.relatedEntityIds ?? []),
+  ];
+  const seenEntitySlugs = new Set<string>();
+  for (const idOrSlug of allEntityCandidates) {
+    if (!idOrSlug) continue;
+    const resolved = getEntityById(idOrSlug);
+    if (resolved && !seenEntitySlugs.has(resolved.slug)) {
+      seenEntitySlugs.add(resolved.slug);
+      const name = resolved.title ?? resolved.name ?? resolved.slug;
+      resolvedEntities.push({ slug: resolved.slug, name });
+      if (entityLinks.length < 6) {
+        entityLinks.push({ slug: resolved.slug, name });
+      }
+    }
   }
 
   // 1. Build Canonical Story Presentation Model DTO
@@ -108,8 +121,9 @@ export default async function StoryPage({
   // 3. Fetch published editorial errata/corrections for this story (GAP-VS8-01)
   const publishedCorrections = await listPublishedCorrections(slug);
 
-  // 4. Build JSON-LD — after corrections are resolved so schema includes correction history
+  // 4. Build JSON-LD — after corrections and entities are resolved so schema is enriched
   const jsonLd = createStoryJsonLd(canonicalStory, {
+    entities: resolvedEntities,
     corrections: publishedCorrections?.map((c) => ({
       timestamp: (c as { timestamp?: string; created_at?: string }).timestamp
         ?? (c as { timestamp?: string; created_at?: string }).created_at

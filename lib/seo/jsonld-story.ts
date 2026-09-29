@@ -14,17 +14,20 @@ import {
   createBreadcrumbSchema,
   createFAQSchema,
   isSafePublicUrl,
+  extractAuthorName,
+  isOrgAuthor,
 } from '@/lib/seo/jsonld';
 
 const SITE_URL = 'https://thebreakdown.in';
 
 /**
- * Derives the author profile URL from the author name string.
+ * Derives the author profile URL from the author name string or object.
  * Returns undefined if the author is the generic newsroom identity.
  * Only call when you have a named journalist — not a team/editorial credit.
  */
-function resolveAuthorUrl(authorName: string | undefined): string | undefined {
-  if (!authorName || authorName.trim() === '' || authorName === 'The Breakdown' || authorName === 'The Breakdown Editorial') {
+function resolveAuthorUrl(authorInput: unknown): string | undefined {
+  const authorName = extractAuthorName(authorInput);
+  if (!authorName || isOrgAuthor(authorName)) {
     return undefined;
   }
   // Derive a slug from the author name: "Nitin Pai" → "nitin-pai"
@@ -61,6 +64,7 @@ export function createStoryJsonLd(
   story: Story,
   options?: {
     corrections?: Array<{ timestamp: string; description: string }>;
+    entities?: Array<{ name: string; slug?: string; sameAs?: string }>;
   },
 ): Record<string, unknown>[] {
   const storyUrl = `${SITE_URL}/story/${story.slug}`;
@@ -70,12 +74,29 @@ export function createStoryJsonLd(
     .filter((s) => isSafePublicUrl(s.url))
     .map((s) => ({ title: s.title, url: s.url }));
 
+  // Collect primary evidence sources for isBasedOn
+  const primarySourceTypes = new Set(['government', 'court', 'official', 'dataset', 'rti', 'parliament']);
+  const isBasedOn = (story.sources ?? [])
+    .filter((s) => s.sourceType && primarySourceTypes.has(s.sourceType) && isSafePublicUrl(s.url))
+    .map((s) => ({ name: s.title, url: s.url }));
+
   // Collect entity references for `about` and `mentions`
-  // story.tags serve as broad topic references when no canonical entity data is available.
-  const aboutEntities =
-    story.tags && story.tags.length > 0
-      ? story.tags.slice(0, 5).map((t) => ({ name: t }))
-      : undefined;
+  let aboutEntities: Array<{ name: string; sameAs?: string }> | undefined;
+  let mentionedEntities: Array<{ name: string; url?: string }> | undefined;
+
+  if (options?.entities && options.entities.length > 0) {
+    aboutEntities = options.entities.slice(0, 5).map((e) => ({
+      name: e.name,
+      sameAs: e.sameAs || (e.slug ? `${SITE_URL}/entity/${e.slug}` : undefined),
+    }));
+    mentionedEntities = options.entities.map((e) => ({
+      name: e.name,
+      url: e.slug ? `${SITE_URL}/entity/${e.slug}` : undefined,
+    }));
+  } else if (story.tags && story.tags.length > 0) {
+    // story.tags serve as broad topic references when no canonical entity data is available
+    aboutEntities = story.tags.slice(0, 5).map((t) => ({ name: t }));
+  }
 
   const wordCount =
     story.blocks?.reduce((sum, b) => sum + Math.round(JSON.stringify(b).length / 5), 0) ?? 0;
@@ -89,15 +110,18 @@ export function createStoryJsonLd(
       image: story.heroImage,
       publishedAt: story.publishedAt,
       updatedAt: story.updatedAt,
-      authorName: story.author,
+      authorName: extractAuthorName(story.author),
       authorUrl: resolveAuthorUrl(story.author),
       wordCount,
       category: story.category,
       tags: story.tags,
       isNews: true,
       aboutEntities,
+      mentionedEntities,
       citations,
       corrections: options?.corrections,
+      abstract: story.answerSummary,
+      isBasedOn: isBasedOn.length > 0 ? isBasedOn : undefined,
     }),
 
     // 2. BreadcrumbList — corrected (no more slug-fragment heuristic)

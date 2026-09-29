@@ -8,26 +8,62 @@ import { EditorialLayout } from '@/packages/editorial/src';
 import EntityTerminal from '@/components/entity/EntityTerminal';
 import { ContentPageTracker } from '@/components/analytics/ContentPageTracker';
 
-function createJsonLd(entity: { name: string; description: string; slug: string; type: string }) {
+function createJsonLd(vm: {
+  name: string;
+  description: string;
+  slug: string;
+  type: string;
+  aliases?: string[];
+  relatedStories?: Array<{ headline: string; slug: string }>;
+  relatedChapters?: Array<{ title: string; slug: string; collectionSlug: string; volumeSlug: string }>;
+}) {
   const schemaType =
-    entity.type === 'organization' ? 'Organization' :
-    entity.type === 'person' ? 'Person' : 'Thing';
-  return [
-    {
-      '@context': 'https://schema.org',
-      '@type': schemaType,
-      name: entity.name,
-      description: entity.description,
-      url: `https://thebreakdown.in/entity/${entity.slug}`,
-      publisher: { '@type': 'Organization', name: 'The Breakdown' },
+    vm.type === 'organization' ? 'Organization' :
+    vm.type === 'person' ? 'Person' : 'Thing';
+
+  const subjectOf = [
+    ...(vm.relatedStories ?? []).slice(0, 5).map((s) => ({
+      '@type': 'NewsArticle',
+      headline: s.headline,
+      url: `https://thebreakdown.in/story/${s.slug}`,
+    })),
+    ...(vm.relatedChapters ?? []).slice(0, 5).map((c) => ({
+      '@type': 'Article',
+      headline: c.title,
+      url: `https://thebreakdown.in/series/${c.collectionSlug}/volume/${c.volumeSlug}/chapter/${c.slug}`,
+    })),
+  ];
+
+  const entitySchema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    name: vm.name,
+    description: vm.description,
+    url: `https://thebreakdown.in/entity/${vm.slug}`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://thebreakdown.in/entity/${vm.slug}`,
     },
+    publisher: { '@type': 'Organization', name: 'The Breakdown', url: 'https://thebreakdown.in' },
+  };
+
+  if (vm.aliases && vm.aliases.length > 0) {
+    entitySchema.alternateName = vm.aliases;
+  }
+
+  if (subjectOf.length > 0) {
+    entitySchema.subjectOf = subjectOf;
+  }
+
+  return [
+    entitySchema,
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://thebreakdown.in/' },
         { '@type': 'ListItem', position: 2, name: 'Entities', item: 'https://thebreakdown.in/entities' },
-        { '@type': 'ListItem', position: 3, name: entity.name, item: `https://thebreakdown.in/entity/${entity.slug}` },
+        { '@type': 'ListItem', position: 3, name: vm.name, item: `https://thebreakdown.in/entity/${vm.slug}` },
       ],
     },
   ];

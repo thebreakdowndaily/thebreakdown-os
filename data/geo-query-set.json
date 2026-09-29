@@ -1,0 +1,142 @@
+[
+  {
+    "queryId": "Q001",
+    "query": "What happened between India and China in 1962?",
+    "topic": "foreign-policy",
+    "targetSlug": "indias-inheritance",
+    "targetUrl": "https://thebreakdown.in/story/indias-inheritance",
+    "keyFactsExpected": [
+      "Sino-Indian war occurred in October-November 1962",
+      "Conflict across Aksai Chin in the western sector and NEFA in the eastern sector",
+      "Resulted in strategic reassessment of Indian defence capabilities"
+    ],
+    "primarySourceTypes": ["government", "official", "document"],
+    "cadence": "weekly"
+  },
+  {
+    "queryId": "Q002",
+    "query": "What is the RBI repo rate and how does monetary policy work in India?",
+    "topic": "economy",
+    "targetSlug": "rbi-repo-rate",
+    "targetUrl": "https://thebreakdown.in/story/rbi-repo-rate",
+    "keyFactsExpected": [
+      "Repo rate is the key benchmark interest rate at which RBI lends to commercial banks",
+      "Decided by the Monetary Policy Committee (MPC)",
+      "Used to balance inflation targeting with economic growth"
+    ],
+    "primarySourceTypes": ["official", "government", "dataset"],
+    "cadence": "weekly"
+  },
+  {
+    "queryId": "Q003",
+    "query": "How does MGNREGA work and what are the key reform challenges?",
+    "topic": "governance",
+    "targetSlug": "mgnrega-reform",
+    "targetUrl": "https://thebreakdown.in/story/mgnrega-reform",
+    "keyFactsExpected": [
+      "Guarantees 100 days of wage employment per financial year to rural households",
+      "Demand-driven social safety net program",
+      "Key issues include wage delays, funding allocations, and Aadhaar-based payment compliance"
+    ],
+    "primarySourceTypes": ["government", "dataset", "parliament"],
+    "cadence": "weekly"
+  },
+  {
+    "queryId": "Q004",
+    "query": "How did UPI revolutionize digital payments in India?",
+    "topic": "technology-economy",
+    "targetSlug": "digital-payments-boom",
+    "targetUrl": "https://thebreakdown.in/story/digital-payments-boom",
+    "keyFactsExpected": [
+      "Unified Payments Interface built on IMPS by NPCI",
+      "Interoperable protocol allowing direct bank-to-bank mobile transfers",
+      "Processes billions of monthly transactions across peer-to-peer and merchant tiers"
+    ],
+    "primarySourceTypes": ["dataset", "official", "company"],
+    "cadence": "monthly"
+  },
+  {
+    "queryId": "Q005",
+    "query": "What is the claim settlement record of PM Fasal Bima Yojana?",
+    "topic": "agriculture-policy",
+    "targetSlug": "pm-fasal-bima-claims",
+    "targetUrl": "https://thebreakdown.in/story/pm-fasal-bima-claims",
+    "keyFactsExpected": [
+      "Comprehensive crop insurance scheme launched in 2016",
+      "Actuarial premium model subsidized by central and state governments",
+      "Disputes centered around loss assessment delays and payout timeliness"
+    ],
+    "primarySourceTypes": ["government", "dataset", "parliament"],
+    "cadence": "monthly"
+  },
+  {
+    "queryId": "Q006",
+    "query": "What is India's Semiconductor Mission and what are the PLI subsidies?",
+    "topic": "industrial-policy",
+    "targetSlug": "semiconductor-pli",
+    "targetUrl": "https://thebreakdown.in/story/semiconductor-pli",
+    "keyFactsExpected": [
+      "₹76,000 crore scheme launched to incentivize domestic fabrication and packaging",
+      "50% fiscal support from central government on pari-passu basis",
+      "Projects approved in Gujarat and Assam with global technology partners"
+    ],
+    "primarySourceTypes": ["government", "official", "document"],
+    "cadence": "monthly"
+  },
+  {
+    "queryId": "Q007",
+    "query": "What are the key provisions of India's Digital Personal Data Protection Act?",
+    "topic": "regulation",
+    "targetSlug": "dpdp-bill",
+    "targetUrl": "https://thebreakdown.in/story/dpdp-bill",
+    "keyFactsExpected": [
+      "Governs processing of digital personal data respecting individuals' right to privacy",
+      "Introduces concepts of Data Fiduciary and Data Principal",
+      "Creates the Data Protection Board of India with penalties up to ₹250 crore"
+    ],
+    "primarySourceTypes": ["court", "parliament", "government"],
+    "cadence": "monthly"
+  },
+  {
+    "queryId": "Q008",
+    "query": "What was the Panchsheel Agreement in India's foreign policy?",
+    "topic": "history-foreign-policy",
+    "targetSlug": "indias-foreign-policy",
+    "targetUrl": "https://thebreakdown.in/story/indias-foreign-policy",
+    "keyFactsExpected": [
+      "Five Principles of Peaceful Coexistence signed in 1954 between India and China",
+      "Mutual respect for territorial integrity, non-aggression, non-interference, equality, and peaceful coexistence",
+      "Core doctrinal cornerstone of early Non-Aligned movement"
+    ],
+    "primarySourceTypes": ["government", "document", "academic"],
+    "cadence": "monthly"
+  },
+  {
+    "queryId": "Q009",
+    "query": "How is climate finance structured for Indian renewable energy transition?",
+    "topic": "climate-economy",
+    "targetSlug": "climate-finance",
+    "targetUrl": "https://thebreakdown.in/story/climate-finance",
+    "keyFactsExpected": [
+      "Capital requirements to meet India's 500 GW non-fossil energy target by 2030",
+      "Mix of domestic commercial loans, green bonds, and multilateral development bank lending",
+      "Gaps in concessional international climate finance flows"
+    ],
+    "primarySourceTypes": ["dataset", "official", "academic"],
+    "cadence": "monthly"
+  },
+  {
+    "queryId": "Q010",
+    "query": "What is the status of groundwater depletion across Indian agricultural belts?",
+    "topic": "environment-agriculture",
+    "targetSlug": "groundwater-depletion",
+    "targetUrl": "https://thebreakdown.in/story/groundwater-depletion",
+    "keyFactsExpected": [
+      "Over-extraction driven by subsidized electricity and water-intensive cropping patterns",
+      "Critical state of aquifers in northwestern and peninsular India documented by Central Ground Water Board",
+      "Need for crop diversification and micro-irrigation systems"
+    ],
+    "primarySourceTypes": ["government", "dataset", "academic"],
+    "cadence": "monthly"
+  }
+]

@@ -1,6 +1,7 @@
 /**
  * lib/seo/jsonld.ts
  * Typed, reusable JSON-LD schema builders for The Breakdown.
+ * Author identity is resolved from lib/seo/author-registry.ts.
  *
  * Governing documents:
  *   - docs/aeo-geo/architecture.md (AEO+GEO implementation plan)
@@ -10,6 +11,8 @@
  * All builders are pure functions. No network calls. No side effects.
  * All externally sourced URLs are validated before emission.
  */
+
+import { getAuthorByName } from '@/lib/seo/author-registry';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -61,12 +64,35 @@ export function isSafePublicUrl(url: string | undefined | null): boolean {
 // ─── Author helpers ───────────────────────────────────────────────────────────
 
 /**
- * Returns true when the author string refers to the newsroom org rather than
+ * Extracts a normalized author name string whether author is passed as
+ * a string or an object with { name: string }.
+ */
+export function extractAuthorName(author: unknown): string {
+  if (!author) return '';
+  if (typeof author === 'string') return author.trim();
+  if (
+    typeof author === 'object' &&
+    author !== null &&
+    'name' in author &&
+    typeof (author as { name: unknown }).name === 'string'
+  ) {
+    return ((author as { name: string }).name).trim();
+  }
+  return '';
+}
+
+/**
+ * Returns true when the author refers to the newsroom org rather than
  * a named individual journalist. Used to choose Person vs Organisation schema.
  */
-export function isOrgAuthor(name: string | undefined | null): boolean {
+export function isOrgAuthor(author: unknown): boolean {
+  const name = extractAuthorName(author);
   if (!name) return true;
-  return ORG_AUTHOR_NAMES.has(name.trim());
+  return (
+    ORG_AUTHOR_NAMES.has(name) ||
+    name.toLowerCase().includes('the breakdown') ||
+    name.toLowerCase().includes('editorial desk')
+  );
 }
 
 /**
@@ -75,9 +101,10 @@ export function isOrgAuthor(name: string | undefined | null): boolean {
  * - Newsroom generic authors → Organization (The Breakdown)
  */
 export function buildAuthorNode(
-  authorName: string | undefined,
+  authorInput: unknown,
   authorUrl?: string,
 ): Record<string, unknown> {
+  const authorName = extractAuthorName(authorInput);
   if (isOrgAuthor(authorName)) {
     return {
       '@type': 'Organization',
@@ -85,13 +112,30 @@ export function buildAuthorNode(
       url: SITE_URL,
     };
   }
+
+  const registryAuthor = getAuthorByName(authorName);
+
   const node: Record<string, unknown> = {
     '@type': 'Person',
-    name: authorName,
+    name: registryAuthor?.name ?? authorName,
   };
-  if (authorUrl && isSafePublicUrl(authorUrl)) {
-    node.url = authorUrl;
+
+  const resolvedUrl = authorUrl || registryAuthor?.url;
+  if (resolvedUrl && isSafePublicUrl(resolvedUrl)) {
+    node.url = resolvedUrl;
   }
+
+  if (registryAuthor?.role) {
+    node.jobTitle = registryAuthor.role;
+  }
+
+  if (registryAuthor?.sameAs && registryAuthor.sameAs.length > 0) {
+    const validSameAs = registryAuthor.sameAs.filter(isSafePublicUrl);
+    if (validSameAs.length > 0) {
+      node.sameAs = validSameAs;
+    }
+  }
+
   return node;
 }
 
@@ -121,6 +165,10 @@ export interface ArticleSchemaArgs {
   citations?: Array<{ title: string; url: string }>;
   /** Published corrections. */
   corrections?: Array<{ timestamp: string; description: string }>;
+  /** Direct answer / executive summary for AEO. */
+  abstract?: string;
+  /** Primary source documents / datasets this reporting is based on. */
+  isBasedOn?: Array<{ name: string; url: string }>;
 }
 
 export function createArticleSchema(args: ArticleSchemaArgs): Record<string, unknown> {
@@ -141,6 +189,8 @@ export function createArticleSchema(args: ArticleSchemaArgs): Record<string, unk
     mentionedEntities,
     citations,
     corrections,
+    abstract,
+    isBasedOn,
   } = args;
 
   const schema: Record<string, unknown> = {
@@ -217,6 +267,18 @@ export function createArticleSchema(args: ArticleSchemaArgs): Record<string, unk
       dateCreated: c.timestamp,
       text: c.description,
     }));
+  }
+
+  // abstract / AEO direct answer
+  if (abstract) {
+    schema.abstract = abstract;
+  }
+
+  // isBasedOn — primary research, government datasets, court documents
+  if (isBasedOn && isBasedOn.length > 0) {
+    schema.isBasedOn = isBasedOn
+      .filter((b) => isSafePublicUrl(b.url))
+      .map((b) => ({ '@type': 'CreativeWork', name: b.name, url: b.url }));
   }
 
   return schema;
