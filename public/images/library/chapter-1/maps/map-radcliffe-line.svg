@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
   <title id="title-map-radcliffe-line">Map Radcliffe Line — The Breakdown</title>
   <desc id="desc-map-radcliffe-line">Visual knowledge graphic illustrating Map Radcliffe Line for The Breakdown Knowledge Platform.</desc>
@@ -121,5 +121,5 @@
 
   <text x="40" y="40" font-size="28" font-weight="700" fill="#FFFFFF">The Radcliffe Line, 1947</text>
   <text x="40" y="62" font-size="14" fill="#999999">India-Pakistan Boundary in Punjab and Bengal with Demographic Context</text>
-  <text x="1590" y="890" font-size="7" fill="#555555" text-anchor="end">Boundary representation follows Book of Record #0003 — dashed lines indicate disputed borders.</text>
+  <text x="1590" y="890" font-size="7" fill="#555555" text-anchor="end">Boundary representation — dashed lines indicate disputed borders.</text>
 </svg>

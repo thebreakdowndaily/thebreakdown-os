@@ -12,7 +12,7 @@ export async function buildStoryMetadata(slug: string): Promise<Metadata> {
     const { chapter } = resolution;
     const versionStr = `${chapter.version.major}.${chapter.version.minor}.${chapter.version.patch}`;
     return {
-      title: `${chapter.title} — The Breakdown`,
+      title: chapter.title,
       description: chapter.summary,
       alternates: { canonical: `https://thebreakdown.in/story/${slug}` },
       openGraph: {

@@ -4,13 +4,13 @@ import Link from 'next/link';
 import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
 
 export const metadata: Metadata = {
-  title: 'Editorial Constitution — The Breakdown',
+  title: 'Editorial Constitution',
   description: 'The governing principles of The Breakdown Knowledge Platform: evidence standard, editorial ethics, evidence hierarchy, and quality gates.',
   alternates: {
     canonical: 'https://thebreakdown.in/editorial-constitution',
   },
-  openGraph: { title: 'Editorial Constitution — The Breakdown', description: 'The governing principles of The Breakdown: evidence standard, ethics, evidence hierarchy, quality gates.', url: 'https://thebreakdown.in/editorial-constitution' },
-  twitter: { card: 'summary', title: 'Editorial Constitution — The Breakdown', description: 'The governing principles of The Breakdown: evidence standard, ethics, evidence hierarchy, quality gates.' },
+  openGraph: { title: 'Editorial Constitution', description: 'The governing principles of The Breakdown: evidence standard, ethics, evidence hierarchy, quality gates.', url: 'https://thebreakdown.in/editorial-constitution' },
+  twitter: { card: 'summary', title: 'Editorial Constitution', description: 'The governing principles of The Breakdown: evidence standard, ethics, evidence hierarchy, quality gates.' },
 };
 
 export default function EditorialConstitutionPage() {
@@ -111,7 +111,7 @@ export default function EditorialConstitutionPage() {
             <li><strong>Phase 6</strong> — Knowledge Density Audit: automated check against evidence targets.</li>
             <li><strong>Phase 7</strong> — Defensibility Audit: "Could we defend this?" for every major interpretive claim.</li>
           </ul>
-          <p className="mt-4">The full internal text of the Editorial Constitution is maintained at <code className="text-amber-400 text-sm">docs/editorial/editorial-constitution.md</code> and includes articles on historiography, knowledge objects, workflow, transparency, and institutional memory.</p>
+          <p className="mt-4">The full text of the Editorial Constitution serves as the institutional foundation for The Breakdown, governing all articles on historiography, knowledge objects, workflow, transparency, and institutional memory.</p>
         </div>
 
         <div className="border-t border-gray-800 pt-6 mt-8 flex gap-4 text-sm">

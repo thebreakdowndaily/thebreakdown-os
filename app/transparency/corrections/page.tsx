@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { listPublishedCorrections } from '@/services/editorial/corrections-service';
 
 export const metadata: Metadata = {
-  title: 'Corrections & Errata Ledger — The Breakdown',
+  title: 'Corrections & Errata Ledger',
   description:
     'Institutional record of all factual corrections, clarifications, and source amendments across The Breakdown Knowledge Platform, governed by Editorial Constitution Article XIII.',
   alternates: {
     canonical: 'https://thebreakdown.in/transparency/corrections',
   },
   openGraph: {
-    title: 'Corrections & Errata Ledger — The Breakdown',
+    title: 'Corrections & Errata Ledger',
     description:
       'Institutional record of all factual corrections, clarifications, and source amendments across The Breakdown.',
     url: 'https://thebreakdown.in/transparency/corrections',

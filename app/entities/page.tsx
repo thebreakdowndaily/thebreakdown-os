@@ -6,9 +6,9 @@ import Badge from '@/components/ui/Badge';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Entities — The Breakdown',
+  title: 'Entities',
   description: 'Key entities tracked by The Breakdown — policies, organizations, schemes, and more.',
-  openGraph: { title: 'Entities — The Breakdown', url: 'https://thebreakdown.in/entities' },
+  openGraph: { title: 'Entities', url: 'https://thebreakdown.in/entities' },
   alternates: { canonical: 'https://thebreakdown.in/entities' },
 };
 

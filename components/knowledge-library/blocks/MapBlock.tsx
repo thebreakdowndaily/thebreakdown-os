@@ -83,9 +83,6 @@ export const MapBlock: FC<BlockComponentProps> = ({ data }) => {
                 {provenance?.source && <p><span className="font-medium">Source:</span> {provenance.source}</p>}
                 {provenance?.creator && <p><span className="font-medium">Creator:</span> {provenance.creator}</p>}
                 {license && <p><span className="font-medium">License:</span> {license}</p>}
-                {archivalProvenance?.cartographicStrategy && (
-                  <p><span className="font-medium">Strategy:</span> {archivalProvenance.cartographicStrategy}</p>
-                )}
                 {archivalProvenance?.citationChicago && (
                   <div className="mt-2 pt-2 border-t border-gray-100">
                     <p className="font-medium text-gray-600">Citation:</p>
@@ -158,7 +155,7 @@ export const MapBlock: FC<BlockComponentProps> = ({ data }) => {
 
         {disputedBoundaries && (
           <p className="text-xs text-amber-600">
-            Dashed lines mark disputed borders. Per Book of Record #0003, these must not be presented as settled fact.
+            Dashed lines mark disputed borders, indicating areas subject to competing territorial claims rather than settled frontiers.
           </p>
         )}
 
