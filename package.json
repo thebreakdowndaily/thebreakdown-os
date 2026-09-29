@@ -52,6 +52,7 @@
     "check:type:frontend": "tsc --noEmit --project tsconfig.frontend.json",
     "check:registry": "npx tsx scripts/stories-registry-check.ts",
     "validate:schema": "npx tsx scripts/validate-schema.ts",
+    "verify:aeo-geo": "npx tsx scripts/verify-aeo-geo-loopback.ts",
     "check:sources": "npx tsx scripts/check-source-integrity.ts",
     "check:images": "npx tsx scripts/check-story-images.ts",
     "check:build": "next build",

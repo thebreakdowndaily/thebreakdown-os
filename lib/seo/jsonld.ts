@@ -45,11 +45,13 @@ export function isSafePublicUrl(url: string | undefined | null): boolean {
   }
   if (!['https:', 'http:'].includes(parsed.protocol)) return false;
   const host = parsed.hostname.toLowerCase();
-  // Reject localhost and private network references
+  // Reject localhost and private/cloud metadata network references
   if (
     host === 'localhost' ||
-    host === '127.0.0.1' ||
+    host === '0.0.0.0' ||
     host === '::1' ||
+    host.startsWith('127.') ||
+    host.startsWith('169.254.') || // Cloud instance metadata SSRF
     host.startsWith('192.168.') ||
     host.startsWith('10.') ||
     host.startsWith('172.') ||

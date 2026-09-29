@@ -15,6 +15,9 @@ const seedEntities: { id: string; slug: string; name: string; title: string }[] 
   { id: 'soviet-union', slug: 'soviet-union', name: 'Soviet Union', title: 'Union of Soviet Socialist Republics' },
   { id: 'china', slug: 'china', name: 'China', title: 'People\'s Republic of China' },
   { id: 'un', slug: 'un', name: 'United Nations', title: 'United Nations Organization' },
+  { id: 'ministry-of-consumer-affairs', slug: 'ministry-of-consumer-affairs', name: 'Ministry of Consumer Affairs', title: 'Ministry of Consumer Affairs, Food and Public Distribution' },
+  { id: 'comptroller-and-auditor-general', slug: 'comptroller-and-auditor-general', name: 'Comptroller and Auditor General of India', title: 'Supreme Audit Institution of India' },
+  { id: 'supreme-court-of-india', slug: 'supreme-court-of-india', name: 'Supreme Court of India', title: 'Apex Judicial Authority of India' },
 ];
 
 export function getEntityIndex(): { id: string; slug: string; name: string; title: string }[] {
