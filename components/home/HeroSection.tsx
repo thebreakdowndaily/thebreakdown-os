@@ -24,10 +24,10 @@ const FOUNDING_CHAPTER_PATH =
 
 const FOUNDING_CHAPTER_DEFAULTS = {
   headline:     "India's Inheritance",
-  dek:          'Partition left India with disputed borders, a shattered economy, 562 princely states, and a foreign policy philosophy it would spend fifteen years trying to define. This is where the story begins.',
+  dek:          'Partition left India with disputed borders, a shattered economy, 565 princely states, and a foreign policy philosophy it would spend fifteen years trying to define. This is where the story begins.',
   category:     'FOUNDING CHAPTER',
   volume:       'VOLUME I · INDIA & THE WORLD',
-  readingTime:  47,
+  readingTime:  30,
   evidenceGrade: 'A',
   reviewStatus: 'Internal Gold Candidate',
 };

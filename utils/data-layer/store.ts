@@ -1843,11 +1843,12 @@ function seed(): DataStore {
     primaryEntityId: 'brics',
     relatedTopicIds: ['geopolitics'],
     keyPoints: [
-      'Russia supplied 60-65% of India\'s military equipment historically, though this has declined to ~45% as India diversifies to US, France, and Israel',
+      'Russian- and Soviet-origin platforms account for an estimated 60-65% of India\'s active legacy military equipment inventory, though dependency is gradually decreasing',
+      'Russia\'s share of India\'s new arms imports fell to 36% in 2020-2024 (down from 62% in 2014-2018 per SIPRI), as India actively diversified suppliers to France, the US, and Israel',
       'India\'s oil imports from Russia surged from 2% to 35% of total crude imports after the Ukraine war, saving an estimated $15 billion annually',
       'The S-400 Triumf air defence system deal ($5.4 billion) proceeded despite US CAATSA sanctions threat, demonstrating India\'s strategic autonomy',
       'Bilateral trade reached a record $65 billion in 2025-26, driven overwhelmingly (85%) by Indian oil purchases',
-      'Growing Russia-China military axis and delayed defence deliveries are pushing India toward greater diversification',
+      'Growing Russia-China military axis and delayed defence deliveries are accelerating India\'s domestic procurement and Western diversification',
     ],
     timeline: [
       { date: '1947-08-15', title: 'Early Diplomatic Ties', description: 'India establishes diplomatic relations with the Soviet Union days after independence. USSR supports India on Kashmir at the UN.', source: 'MEA' },
@@ -1860,13 +1861,14 @@ function seed(): DataStore {
     facts: [
       { label: 'Bilateral Trade (2025-26)', value: '$65 billion', source: 'Ministry of Commerce' },
       { label: 'Indian Oil Imports from Russia', value: '35% of total crude', source: 'PPAC' },
-      { label: 'Russian Defence Equipment Share', value: '~45% (down from 65%)', source: 'SIPRI 2025' },
+      { label: 'Russian Share of In-Service Military Inventory', value: '~60-65% of legacy platforms', source: 'Stimson Center / IISS' },
+      { label: 'Russian Share of Indian Arms Imports (2020–2024)', value: '36% (down from 62% in 2014–2018)', source: 'SIPRI Arms Transfers Database 2024' },
       { label: 'Nuclear Reactors (Kudankulam)', value: '6 (2 operational, 4 under construction)', source: 'NPCIL' },
       { label: 'S-400 Systems Delivered', value: '3 of 5 regiments', source: 'MOD' },
     ],
     claims: [
       { claim: 'India\'s oil imports from Russia are not violating Western sanctions.', source: 'Government of India', verification: 'true', explanation: 'India has not breached G7 price cap mechanisms and buys Russian oil at discounted rates ($10-15/barrel below Brent). EU nations including France, Italy, and Spain also continue importing Russian refined products.', confidence: 0.90 },
-      { claim: 'Russia remains India\'s most reliable defence partner regardless of the Ukraine war.', source: 'Russian Embassy, New Delhi', verification: 'misleading', explanation: 'While Russia has historically been India\'s primary defence supplier, deliveries of S-400 systems have been delayed, spare parts availability dropped by 40% since 2022, and Russia has prioritised its own military needs. India\'s defence imports from Russia fell to 36% (2020-24) from 62% (2014-18).', confidence: 0.85 },
+      { claim: 'Russia remains India\'s most reliable defence partner regardless of the Ukraine war.', source: 'Russian Embassy, New Delhi', verification: 'misleading', explanation: 'While Russia has historically been India\'s primary defence supplier, deliveries of S-400 systems have been delayed, spare parts availability dropped by 40% since 2022, and Russia has prioritised its own military needs. India\'s new arms imports from Russia fell to 36% (2020-24) from 62% (2014-18) according to SIPRI, though legacy inventory across the armed forces remains ~60%.', confidence: 0.85 },
     ],
     sources: [
       { name: 'MEA — India-Russia Bilateral Relations', url: 'https://mea.gov.in/india-russia', type: 'government', tier: 1 },
@@ -2008,7 +2010,7 @@ function seed(): DataStore {
     slug: 'bjp-mission-360',
     headline: 'Mission 360 & The 2024 Retrospective: Campaign Strategy vs Election Reality',
     heroImage: '/images/placeholders/policy-placeholder.svg',
-    summary: 'EDITORIAL CONTEXT (Post-2024 Election Retrospective): This investigation analyzes the BJP\'s pre-election "Mission 360 / Abki Baar 400 Paar" campaign strategy alongside actual election outcomes. In the June 2024 Lok Sabha general elections, the BJP secured 240 seats and the NDA coalition secured 293 seats, forming the government without achieving a single-party or two-thirds constitutional majority.',
+    summary: 'This investigation analyzes the BJP\'s pre-election "Mission 360 / Abki Baar 400 Paar" campaign strategy alongside actual election outcomes. In the June 2024 Lok Sabha general elections, the BJP secured 240 seats and the NDA coalition secured 293 seats, forming the government without achieving a single-party or two-thirds constitutional majority.',
     publishedAt: '2026-07-23T08:00:00Z',
     updatedAt: '2026-07-23T08:00:00Z',
     readingTime: 16,
@@ -2019,20 +2021,20 @@ function seed(): DataStore {
     tags: ['Mission 360', 'BJP', '2024 Election Results', '240 seats', '293 NDA', 'delimitation', 'women reservation', 'One Nation One Election', 'Lok Sabha'],
     primaryEntityId: 'election-commission',
     keyPoints: [
-      'THEN (Campaign Strategy): BJP leadership launched "Mission 360 / Abki Baar 400 Paar" aiming for a two-thirds Lok Sabha majority to pass major constitutional amendments.',
-      'NOW (Actual Election Outcome): In June 2024 Lok Sabha elections, ECI official returns confirmed NDA won 293 seats (BJP 240 seats), forming a coalition government (Modi 3.0).',
+      'Campaign Strategy: BJP leadership launched "Mission 360 / Abki Baar 400 Paar" aiming for a two-thirds Lok Sabha majority to pass major constitutional amendments.',
+      'Actual Election Outcome: In June 2024 Lok Sabha elections, ECI official returns confirmed NDA won 293 seats (BJP 240 seats), forming a coalition government (Modi 3.0).',
       'The 352-vote threshold required for two-thirds constitutional amendments remains out of reach without multi-party consensus.',
       'Key strategic assumptions (sweep of North-West belt vs regional opposition resistance) are evaluated against post-election returns.',
     ],
     timeline: [
       { date: '2023-09-19', title: 'Nari Shakti Vandan Adhiniyam Passed', description: 'Parliament passes 106th Constitutional Amendment reserving 33% of Lok Sabha and Assembly seats for women, tied to future delimitation.', source: 'PRS Legislative' },
       { date: '2024-03-15', title: 'Mission 360 Campaign Launch', description: 'BJP launches nationwide campaign targeting 370 seats for BJP and 400+ for NDA.', source: 'Campaign Statements' },
-      { date: '2024-06-04', title: '2024 Lok Sabha Election Results (NOW)', description: 'ECI returns confirm NDA wins 293 seats (BJP 240 seats), short of single-party majority and two-thirds threshold.', source: 'Election Commission of India' },
+      { date: '2024-06-04', title: '2024 Lok Sabha Election Results', description: 'ECI returns confirm NDA wins 293 seats (BJP 240 seats), short of single-party majority and two-thirds threshold.', source: 'Election Commission of India' },
       { date: '2024-06-09', title: 'Modi 3.0 Coalition Government Sworn In', description: 'Narendra Modi takes oath for third term heading an NDA coalition government supported by TDP (16) and JD(U) (12).', source: 'Official Gazette' },
     ],
     facts: [
-      { label: 'Campaign Target (THEN)', value: '370 BJP / 400+ NDA', source: 'BJP Manifesto 2024' },
-      { label: 'Actual Election Result (NOW)', value: '240 BJP / 293 NDA', source: 'Election Commission of India (June 2024)' },
+      { label: 'Campaign Target', value: '370 BJP / 400+ NDA', source: 'BJP Manifesto 2024' },
+      { label: 'Actual Election Result', value: '240 BJP / 293 NDA', source: 'Election Commission of India (June 2024)' },
       { label: 'Votes Needed for Two-Thirds Majority', value: '362 of 543 seats', source: 'Constitution of India Art. 368' },
       { label: 'Shortfall for Two-Thirds Majority', value: '69 seats (NDA total: 293)', source: 'The Breakdown Analysis' },
     ],
@@ -2374,7 +2376,7 @@ function seed(): DataStore {
     primaryEntityId: 'election-commission',
     keyPoints: [
       'Total electoral bonds worth ₹12,769 crore sold between April 2019 and February 2024 across 29 tranches',
-      'BJP received ₹6,060 crore (47.5% of total) — more than all other parties combined',
+      'BJP received ₹6,060 crore (47.5% of total) — more than the next five largest recipient parties combined',
       'Future Gaming and Hotel Services donated ₹1,368 crore — the single largest donor, now under ED investigation',
       '41 companies under CBI/ED/IT investigation donated ₹2,471 crore to the BJP',
       '30 shell companies with no real business operations donated ₹143.2 crore',
@@ -2383,7 +2385,7 @@ function seed(): DataStore {
       'SBI was the only authorized issuer, creating a monopoly on political donation data access',
     ],
     timeline: [
-      { date: '2017-07-12', title: 'Electoral Bonds Scheme Proposed', description: 'Finance Minister Arun Jaitley introduces Electoral Bond scheme in the Union Budget 2017-18 as an alternative to cash donations.', source: 'Union Budget Speech 2017' },
+      { date: '2017-02-01', title: 'Electoral Bonds Scheme Proposed', description: 'Finance Minister Arun Jaitley introduces Electoral Bond scheme in the Union Budget 2017-18 speech as an alternative to cash donations.', source: 'Union Budget Speech 2017' },
       { date: '2018-01-02', title: 'Scheme Notified', description: 'Government notifies the Electoral Bond Scheme, 2018. Bonds available for purchase at SBI branches in phases.', source: 'Gazette of India' },
       { date: '2018-03-01', title: 'First Tranche Sold', description: 'First tranche of electoral bonds goes on sale. Bonds available for 10 days in January, April, July, and October each year.', source: 'SBI Press Release' },
       { date: '2019-04-01', title: 'First Post-Lok Sabha Tranche', description: 'Bonds sold after the 2019 Lok Sabha elections. Total donations begin to accelerate significantly.', source: 'ECI Data' },
@@ -2396,9 +2398,9 @@ function seed(): DataStore {
     ],
     facts: [
       { label: 'Total Bonds Sold (Apr 2019–Feb 2024)', value: '₹12,769 crore', source: 'ECI / SBI Data' },
-      { label: 'BJP Share', value: '₹6,060 crore (47.5%)', source: 'ECI Data' },
-      { label: 'INC (Congress) Share', value: '₹1,422 crore (11.1%)', source: 'ECI Data' },
-      { label: 'Trinamool Congress Share', value: '₹1,391 crore (10.9%)', source: 'ECI Data' },
+      { label: 'BJP Share', value: '₹6,060.5 crore (47.5%)', source: 'ECI Data' },
+      { label: 'Trinamool Congress (AITC) Share', value: '₹1,609.5 crore (12.6%)', source: 'ECI Data' },
+      { label: 'INC (Congress) Share', value: '₹1,421.9 crore (11.1%)', source: 'ECI Data' },
       { label: 'BJP Share of Probed Companies\' Donations', value: '₹2,471 crore (96%)', source: 'The Breakdown Analysis' },
       { label: 'Shell Companies\' Total Donations', value: '₹143.2 crore', source: 'ADR Report' },
       { label: 'Government Contractors Who Donated to BJP', value: '33 entities · ₹1,751 crore', source: 'The Breakdown Analysis' },
@@ -2424,15 +2426,15 @@ function seed(): DataStore {
     charts: [
       {
         type: 'bar', title: 'Party-wise Electoral Bond Donations (₹ Crore)', data: [
-          { party: 'BJP', amount: 6060 },
+          { party: 'BJP', amount: 6061 },
+          { party: 'TMC', amount: 1610 },
           { party: 'INC', amount: 1422 },
-          { party: 'TMC', amount: 1391 },
-          { party: 'BRS', amount: 908 },
-          { party: 'BJD', amount: 775 },
-          { party: 'DMK', amount: 612 },
-          { party: 'YSRCP', amount: 420 },
+          { party: 'BRS', amount: 1215 },
+          { party: 'BJD', amount: 776 },
+          { party: 'DMK', amount: 632 },
+          { party: 'YSRCP', amount: 443 },
           { party: 'AAP', amount: 86 },
-          { party: 'Others', amount: 1095 },
+          { party: 'Others', amount: 516 },
         ], xKey: 'party', yKey: 'amount' },
       {
         type: 'bar', title: 'Donor Categories — Total Contributions', data: [

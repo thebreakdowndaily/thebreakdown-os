@@ -25,13 +25,13 @@ const FOUNDING_CHAPTER = {
   volume:  'Foundations 1947–1962',
   title:   "India's Inheritance",
   subtitle:
-    'Partition left India with disputed borders, a shattered economy, 562 princely states, and a foreign policy philosophy it would spend fifteen years trying to define.',
-  readingTime: 47,
+    'Partition left India with disputed borders, a shattered economy, 565 princely states, and a foreign policy philosophy it would spend fifteen years trying to define.',
+  readingTime: 30,
   evidenceGrade: 'A',
 };
 
 // Editorial publishing commitment
-const PUBLISHING_CADENCE = 'Monthly flagship chapters · Next drop September 2026';
+const PUBLISHING_CADENCE = 'Monthly flagship chapters · Volume I in progress';
 
 const UPCOMING_CHAPTERS = [
   {
@@ -56,7 +56,7 @@ const UPCOMING_CHAPTERS = [
     id:         'integration-princely',
     number:     '04',
     title:      'Integration of Princely States',
-    subtitle:   '562 kingdoms, one nation. How Patel accomplished in months what seemed impossible for decades.',
+    subtitle:   '565 kingdoms, one nation. How Patel accomplished in months what seemed impossible for decades.',
     collection: 'Foundations 1947–1962',
     status:     'Planned',
     statusType: 'planned' as const,
