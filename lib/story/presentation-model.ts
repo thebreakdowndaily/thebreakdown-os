@@ -95,6 +95,7 @@ export interface RelatedStoryPresentation {
   headline: string;
   summary?: string;
   category?: string;
+  publishedAt?: string;
   readingTimeMinutes?: number;
   relationshipContext?: string;
   image?: {
@@ -269,6 +270,7 @@ export function buildStoryPresentationModel(
       headline: rs.headline || rs.title,
       summary: rs.summary,
       category: rs.category,
+      publishedAt: rs.publishedAt,
       readingTimeMinutes: rs.readingTime || 5,
       image: rs.heroImage && !rs.heroImage.includes('placehold.co') ? { url: rs.heroImage, altText: rs.headline } : undefined,
     }));

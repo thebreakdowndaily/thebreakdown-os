@@ -14,9 +14,12 @@ export async function buildEntityPage(services: Services, slug: string): Promise
   const relatedTopicsPromises = (entity as any).relatedTopicIds?.map((id: string) => services.topics.getTopic(id)) || [];
   const relatedTopics = (await Promise.all(relatedTopicsPromises)).filter((t): t is Topic => !!t);
   
-  // The pipeline attaches signals. If missing, provide a safe fallback.
+  const storyDates = stories.map(s => s.publishedAt).filter(Boolean).sort().reverse();
+  const authenticLastMentioned = storyDates[0] || '';
+
+  // The pipeline attaches signals. If missing, provide an authentic fallback.
   const signals = (entity as any).signals || {
-    lastMentioned: new Date().toISOString(),
+    lastMentioned: authenticLastMentioned,
     mentionVelocity: 0,
     coverageTrend: 'flat',
     rank: 0,
@@ -63,6 +66,10 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
   const media = resolvedAssets.filter(a => ['social', 'gallery', 'editorial'].includes(entity.assets?.find(ref => ref.assetId === a.id)?.role || ''));
   const documents = resolvedAssets.filter(a => ['document', 'report', 'dataset'].includes(entity.assets?.find(ref => ref.assetId === a.id)?.role || ''));
   
+  // Derive authentic mention date from public stories
+  const storyDates = stories.map(s => s.publishedAt).filter(Boolean).sort().reverse();
+  const authenticLastMentioned = storyDates[0] || '';
+
   // Map Relationships
   const relationshipTargets = await Promise.all(
     (entity.relationships || []).map(rel => services.entities.getEntity(rel.targetId))
@@ -76,14 +83,14 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
       role: rel.role, // Map relation type to role
       evidence: (rel.metadata?.sharedStories as number) || 0,
       stories: [], // Expand if needed
-      latestMention: new Date().toISOString(), // Mocked or derived from story
+      latestMention: authenticLastMentioned,
       sharedTopics: []
     };
   }).filter(Boolean) as import('@/types/canonical').ResolvedRelationship[];
 
   // Signals & Stats
   const signals = (entity as any).signals || {
-    lastMentioned: new Date().toISOString(),
+    lastMentioned: authenticLastMentioned,
     mentionVelocity: Math.min(stories.length * 2, 100),
     coverageTrend: stories.length > 20 ? 'up' : 'flat',
     rank: 1,
@@ -127,6 +134,29 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
   );
   
 
+  // Derive sourceCount authentically: count unique sources from claims and story sources
+  const sourceSet = new Set<string>();
+  claims.forEach(c => {
+    if (c.source) sourceSet.add(c.source);
+    if (c.sourceUrl) sourceSet.add(c.sourceUrl);
+  });
+  stories.forEach(s => {
+    (s.sources || []).forEach(src => {
+      if (src.title) sourceSet.add(src.title);
+      else if (src.id) sourceSet.add(src.id);
+    });
+  });
+  const sourceCount = sourceSet.size;
+
+  // Derive confidence authentically from claims confidence and evidenceScore
+  const claimConfidences = claims.map(c => c.confidence).filter((c): c is number => typeof c === 'number');
+  const avgClaimConf = claimConfidences.length > 0
+    ? Math.round((claimConfidences.reduce((a, b) => a + b, 0) / claimConfidences.length) * 100)
+    : 0;
+  const derivedConfidence = entity.evidenceScore
+    ? Math.round(avgClaimConf > 0 ? (entity.evidenceScore + avgClaimConf) / 2 : entity.evidenceScore)
+    : (avgClaimConf || 0);
+
   return {
     id: entity.id,
     slug: entity.slug,
@@ -148,9 +178,9 @@ export async function buildEntityTerminalViewModel(services: Services, slug: str
     
     evidenceScore: entity.evidenceScore || 0,
     health: {
-      confidence: 98, // Typically computed from claims and evidence score
+      confidence: derivedConfidence,
       evidenceCount: stories.length,
-      sourceCount: 18, // Mocked for now until source extraction
+      sourceCount: sourceCount,
       relationshipCount: relationships.length,
       mediaCount: resolvedAssets.length,
       claimCount: claims.length,
