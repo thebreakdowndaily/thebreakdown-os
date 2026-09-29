@@ -31,22 +31,22 @@
     "url": "https://thebreakdown.in/entities",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/entities",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/organizations",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/organizations",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/countries",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/countries",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/investigations",
@@ -59,8 +59,8 @@
     "url": "https://thebreakdown.in/founding-edition",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/founding-edition",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/methodology",
@@ -108,43 +108,43 @@
     "url": "https://thebreakdown.in/trackers/mgnrega",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/trackers/mgnrega",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/trackers/semiconductor",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/trackers/semiconductor",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/trackers/upi",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/trackers/upi",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/trackers/pmfby",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/trackers/pmfby",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/series/foundations-1947-1962",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/series/foundations-1947-1962",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance",
@@ -157,15 +157,15 @@
     "url": "https://thebreakdown.in/series/economic-policy-2026",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/series/economic-policy-2026",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.in",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform",
@@ -864,42 +864,42 @@
     "url": "https://thebreakdown.in/fix/fix-mgnrega-reform",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.gov/fix/fix-mgnrega-reform",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/fix/fix-mgnrega-reform",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/fix/fix-pmfby-claims",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.gov/fix/fix-pmfby-claims",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/fix/fix-pmfby-claims",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/fix/fix-air-pollution",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.gov/fix/fix-air-pollution",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/fix/fix-air-pollution",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/fix/fix-farm-income",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.gov/fix/fix-farm-income",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/fix/fix-farm-income",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/fix/fix-judicial-pendency",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.gov/fix/fix-judicial-pendency",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/fix/fix-judicial-pendency",
+    "statusMatch": "MATCH"
   },
   {
     "url": "https://thebreakdown.in/fix/fix-anganwadi-reform",
     "statusCode": 200,
     "contentType": "text/html; charset=utf-8",
-    "canonicalHref": "https://thebreakdown.gov/fix/fix-anganwadi-reform",
-    "statusMatch": "MISMATCH"
+    "canonicalHref": "https://thebreakdown.in/fix/fix-anganwadi-reform",
+    "statusMatch": "MATCH"
   }
 ]
