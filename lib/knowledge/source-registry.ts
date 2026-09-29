@@ -93,6 +93,21 @@ export function seedSources(): void {
       datasetIds: [],
     },
     {
+      id: 's2',
+      title: 'The Sole Spokesman: Jinnah, the Muslim League and the Demand for Pakistan',
+      tier: 3,
+      accessedAt: '2026-06-20',
+      claimIds: [
+        'claim.two-nation.historical-validity',
+        'claim.partition.cabinet-mission',
+      ],
+      documentIds: [],
+      chapterIds: ['kl-ch-1'],
+      thinkerIds: [],
+      storyIds: [],
+      datasetIds: [],
+    },
+    {
       id: 's3',
       title: 'Partition of India: A Historical Survey',
       tier: 3,
