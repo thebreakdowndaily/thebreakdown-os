@@ -22,6 +22,7 @@
 import type { Story, StoryStatus } from '@/types/canonical';
 import type { GateCheck, PublicationGateResult, PublicationGateInput } from '@/types/editorial-calendar';
 import { evaluateGoldStandardPass, type GoldStandardAuditRecord } from './gold-standard-review';
+import { getSource } from '@/lib/knowledge/source-registry';
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
 
@@ -124,6 +125,24 @@ export function validateStoryForPublication(
         : 'Story lacks required evidence sources or claims for editorial density',
     });
   }
+
+  // Gate 12: Retracted sources check (Article III & XIII)
+  const hasRetractedSources = story.sources?.some((s: any) => {
+    if (s.status === 'retracted' || s.verificationStatus === 'retracted') return true;
+    if (s.id) {
+      const canonical = getSource(s.id);
+      if (canonical && canonical.verificationStatus === 'retracted') return true;
+    }
+    return false;
+  });
+
+  checks.push({
+    name: 'sources_not_retracted',
+    passed: !hasRetractedSources,
+    reason: !hasRetractedSources
+      ? 'No retracted sources detected in story evidence'
+      : 'Story cites one or more retracted sources — publication blocked',
+  });
 
   const allPassed = checks.every(c => c.passed);
 

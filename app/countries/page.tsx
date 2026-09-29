@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Countries — The Breakdown',
   description: 'Country profiles with data-driven coverage of policy, economy, and governance.',
   openGraph: { title: 'Countries — The Breakdown', url: 'https://thebreakdown.in/countries' },
+  alternates: { canonical: 'https://thebreakdown.in/countries' },
 };
 
 export default function CountriesPage() {

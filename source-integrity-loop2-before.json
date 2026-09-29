@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-09-28T16:15:22.884Z",
+  "head": "550b9e263d283dcf308a9707c606dc279ec7d6d3",
+  "branch": "main",
+  "sourceRegistrySize": 39,
+  "claimCount": 144,
+  "missingSourceCount": 111,
+  "integrityErrors": 106,
+  "integrityWarnings": 5,
+  "inventory": {
+    "totalClaimsInspected": 144,
+    "totalSourceReferences": 387,
+    "uniqueReferencedSourceIds": 148,
+    "resolvedSourceIds": 37,
+    "unresolvedSourceIds": 111,
+    "malformedReferences": 0,
+    "registeredSourcesCount": 39,
+    "unreferencedSourcesCount": 2,
+    "claimsByBoundary": {
+      "published": 139,
+      "draft": 0,
+      "fixture": 0,
+      "unreferenced": 5
+    },
+    "unresolvedByBoundary": {
+      "published": 106,
+      "draft": 0,
+      "fixture": 0,
+      "unreferenced": 5
+    }
+  },
+  "publicationIntegrityTests": "31/31 PASS",
+  "newsroomSmoke": "18/18 PASS",
+  "typecheck": "PASS",
+  "build": "PASS"
+}

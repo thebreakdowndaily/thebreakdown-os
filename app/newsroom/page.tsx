@@ -29,7 +29,7 @@ export default async function NewsroomPage() {
 
   return (
     <main>
-      <NewsroomDashboardClient initialQueue={queue} initialMetrics={metrics} />
+      <NewsroomDashboardClient initialQueue={queue} initialMetrics={metrics} userRole={gate.role} />
     </main>
   );
 }

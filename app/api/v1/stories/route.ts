@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RepositoryFactory } from '@/services/factory/repository';
 import type { Story, APIResponse, APIListParams } from '@/types/canonical';
 import { syncStory } from '@/lib/data-sync';
+import { requireApiPermission } from '@/features/auth/require-role';
+import { can } from '@/features/auth/policy';
+import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 
 const repo = RepositoryFactory.getStoryRepository();
 
@@ -18,6 +21,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('story.create', request);
+  if ('response' in auth) {
+    return auth.response;
+  }
+  const principal = auth.principal;
+
   const body = (await request.json()) as Partial<Story> & { blocks?: Array<{ type?: string; data?: Record<string, unknown> }> };
 
   const now = new Date().toISOString();
@@ -39,14 +48,14 @@ export async function POST(request: NextRequest) {
   const faq = body.faq || (faqBlock?.items as Story['faq']) || [];
   const publishedAt = body.publishedAt || (body.status === 'published' ? (publishedAtFromHero || now) : publishedAtFromHero);
 
-  const story: Story = {
+  const baseStory: Story = {
     id,
     title: body.title || '',
     slug: body.slug || '',
     headline,
     summary,
     heroImage,
-    author,
+    author: body.author || author || principal.name,
     category,
     status: body.status || 'draft',
     storyType: body.storyType || 'standard',
@@ -66,10 +75,33 @@ export async function POST(request: NextRequest) {
     relatedEntityIds: body.relatedEntityIds || [],
     relatedTopicIds: body.relatedTopicIds || [],
     notes: body.notes,
-    updatedBy: body.updatedBy,
+    updatedBy: principal.userId,
   };
 
-  const saved = await repo.saveStory(story);
+  if (body.status === 'published') {
+    if (!can(principal, 'story.publish')) {
+      return NextResponse.json(
+        { error: `Forbidden: Principal with role '${principal.role}' cannot publish stories. Editor role or higher required.` },
+        { status: 403 }
+      );
+    }
+
+    const decision = evaluatePublicationContract(undefined, baseStory, principal);
+    if (!decision.allowed) {
+      return NextResponse.json(
+        { error: decision.error, details: decision.gateResult },
+        { status: decision.httpStatus }
+      );
+    }
+
+    const saved = await repo.saveStory(decision.updatedStory!);
+    syncStory(saved);
+    executePostPublicationEffects(saved, principal, decision.gateResult);
+    const res: APIResponse<Story> = { data: saved };
+    return NextResponse.json(res, { status: 201 });
+  }
+
+  const saved = await repo.saveStory(baseStory);
   syncStory(saved);
   const res: APIResponse<Story> = { data: saved };
   return NextResponse.json(res, { status: 201 });

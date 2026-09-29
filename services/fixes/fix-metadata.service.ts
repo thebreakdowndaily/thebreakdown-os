@@ -42,7 +42,7 @@ export interface SchemaOrgLegislationJSONLD {
 }
 
 export class FixMetadataService {
-  public static readonly DEFAULT_BASE_URL = 'https://thebreakdown.gov';
+  public static readonly DEFAULT_BASE_URL = 'https://thebreakdown.in';
 
   /**
    * Generates absolute Canonical URL for a Fix.

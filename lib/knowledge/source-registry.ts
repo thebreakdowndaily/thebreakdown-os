@@ -1,4 +1,5 @@
-import type { CanonicalSource } from '@/types/canonical';
+import type { CanonicalSource, CanonicalSourceStatus } from '@/types/canonical';
+import { RECONSTRUCTED_STORY_SOURCES } from './reconstructed-sources';
 
 const sources = new Map<string, CanonicalSource>();
 
@@ -25,8 +26,43 @@ export function getSourcesByEntity(entityId: string): CanonicalSource[] {
   );
 }
 
+export function getSourcesByStatus(status: CanonicalSourceStatus): CanonicalSource[] {
+  ensureSeeded();
+  return Array.from(sources.values()).filter(s => s.verificationStatus === status);
+}
+
+export function getClaimsForSource(sourceId: string): string[] {
+  ensureSeeded();
+  const source = sources.get(sourceId);
+  return source ? [...source.claimIds] : [];
+}
+
+export function updateSourceStatus(
+  id: string,
+  status: CanonicalSourceStatus,
+  notes?: string
+): boolean {
+  ensureSeeded();
+  const existing = sources.get(id);
+  if (!existing) return false;
+
+  const source: CanonicalSource = { ...existing };
+  source.verificationStatus = status;
+  if (notes) {
+    source.notes = source.notes ? `${source.notes}; ${notes}` : notes;
+  }
+  source.lastVerifiedAt = new Date().toISOString();
+  sources.set(id, source);
+  return true;
+}
+
 export function registerSource(source: CanonicalSource): void {
   sources.set(source.id, source);
+}
+
+export function resetSourceRegistry(): void {
+  sources.clear();
+  seedSources();
 }
 
 export function seedSources(): void {
@@ -626,5 +662,12 @@ export function seedSources(): void {
     },
   ];
 
-  for (const s of seed) sources.set(s.id, s);
+  for (const s of seed) {
+    const copy = { ...s };
+    if (!copy.verificationStatus) copy.verificationStatus = 'verified';
+    sources.set(copy.id, copy);
+  }
+  for (const s of RECONSTRUCTED_STORY_SOURCES) {
+    sources.set(s.id, { ...s });
+  }
 }

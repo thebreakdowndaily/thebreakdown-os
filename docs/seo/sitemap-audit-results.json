@@ -1,0 +1,265 @@
+{
+  "timestamp": "2026-09-29T10:34:55.967Z",
+  "sitemapSha256": "77017af36a1c61ca48394986e32657e1b921d827ddd72d69707238e3d0f1dace",
+  "totalUrls": 129,
+  "routeFamilies": {
+    "homepage": 1,
+    "static_editorial": 13,
+    "story": 41,
+    "entity": 41,
+    "topic": 15,
+    "fix": 6,
+    "series_collection": 2,
+    "series_volume": 2,
+    "series_chapter": 3,
+    "tracker": 5,
+    "unknown": 0
+  },
+  "xmlValidationErrors": [],
+  "duplicateLocs": [],
+  "nonHttpsLocs": [],
+  "wrongHostLocs": [],
+  "queryOrFragmentLocs": [],
+  "invalidLastmods": 0,
+  "futureLastmods": 0,
+  "blockedSitemapUrls": [
+    "https://thebreakdown.in/editorial-constitution",
+    "https://thebreakdown.in/editorial-constitution"
+  ],
+  "newsUrlCount": 0,
+  "reverseCoverage": {
+    "publicStoriesCount": 41,
+    "sitemapStoryCount": 41,
+    "missingStoriesCount": 0,
+    "publicEntitiesCount": 41,
+    "sitemapEntityCount": 41,
+    "missingEntitiesCount": 0,
+    "publishedChaptersCount": 3,
+    "sitemapChapterCount": 3,
+    "missingChaptersCount": 0
+  },
+  "legacyStoryOverlaps": [
+    {
+      "slug": "mgnrega-reform",
+      "storyUrl": "https://thebreakdown.in/story/mgnrega-reform",
+      "chapterUrl": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform"
+    },
+    {
+      "slug": "rbi-repo-rate",
+      "storyUrl": "https://thebreakdown.in/story/rbi-repo-rate",
+      "chapterUrl": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/rbi-repo-rate"
+    },
+    {
+      "slug": "india-china-border-lac",
+      "storyUrl": "https://thebreakdown.in/story/india-china-border-lac",
+      "chapterUrl": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/india-china-border-lac"
+    },
+    {
+      "slug": "kashmir-the-first-test",
+      "storyUrl": "https://thebreakdown.in/story/kashmir-the-first-test",
+      "chapterUrl": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/kashmir-the-first-test"
+    }
+  ],
+  "probeResults": [
+    {
+      "loc": "https://thebreakdown.in",
+      "path": "/",
+      "routeFamily": "homepage",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/about",
+      "path": "/about",
+      "routeFamily": "static_editorial",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/about",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/editorial-constitution",
+      "path": "/editorial-constitution",
+      "routeFamily": "static_editorial",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/editorial-constitution",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/trust",
+      "path": "/trust",
+      "routeFamily": "static_editorial",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/trust",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/methodology",
+      "path": "/methodology",
+      "routeFamily": "static_editorial",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/methodology",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/series",
+      "path": "/series",
+      "routeFamily": "static_editorial",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/series",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/story/mgnrega-reform",
+      "path": "/story/mgnrega-reform",
+      "routeFamily": "story",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/story/mgnrega-reform",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/story/digital-payments-boom",
+      "path": "/story/digital-payments-boom",
+      "routeFamily": "story",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/story/digital-payments-boom",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/story/pm-fasal-bima-claims",
+      "path": "/story/pm-fasal-bima-claims",
+      "routeFamily": "story",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/story/pm-fasal-bima-claims",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/story/indias-inheritance",
+      "path": "/story/indias-inheritance",
+      "routeFamily": "story",
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in",
+      "canonicalStatus": "ERROR",
+      "robotsTag": "noindex",
+      "isPublicCanonical": false,
+      "notes": [
+        "Returned HTTP 404"
+      ]
+    },
+    {
+      "loc": "https://thebreakdown.in/entity/wto",
+      "path": "/entity/wto",
+      "routeFamily": "entity",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/entity/wto",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/entity/jawaharlal-nehru",
+      "path": "/entity/jawaharlal-nehru",
+      "routeFamily": "entity",
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in",
+      "canonicalStatus": "ERROR",
+      "robotsTag": "noindex",
+      "isPublicCanonical": false,
+      "notes": [
+        "Returned HTTP 404"
+      ]
+    },
+    {
+      "loc": "https://thebreakdown.in/topic/economy",
+      "path": "/topic/economy",
+      "routeFamily": "topic",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/topic/economy",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/series/foundations-1947-1962",
+      "path": "/series/foundations-1947-1962",
+      "routeFamily": "series_collection",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in",
+      "canonicalStatus": "MISMATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": false,
+      "notes": [
+        "Served canonical: https://thebreakdown.in !== https://thebreakdown.in/series/foundations-1947-1962"
+      ]
+    },
+    {
+      "loc": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance",
+      "path": "/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance",
+      "routeFamily": "series_chapter",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance",
+      "canonicalStatus": "MATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": true,
+      "notes": []
+    },
+    {
+      "loc": "https://thebreakdown.in/trackers/upi",
+      "path": "/trackers/upi",
+      "routeFamily": "tracker",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "canonicalHref": "https://thebreakdown.in",
+      "canonicalStatus": "MISMATCH",
+      "robotsTag": "index, follow",
+      "isPublicCanonical": false,
+      "notes": [
+        "Served canonical: https://thebreakdown.in !== https://thebreakdown.in/trackers/upi"
+      ]
+    }
+  ]
+}

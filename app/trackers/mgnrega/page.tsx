@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     description: 'Track India\'s rural employment guarantee — from MGNREGA 2005 (100 days) to the VB-G RAM G Act 2025 (125 days).',
     type: 'website',
   },
+  alternates: { canonical: 'https://thebreakdown.in/trackers/mgnrega' },
 };
 
 export default function MgnregaTrackerPage() {

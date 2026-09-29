@@ -51,7 +51,7 @@ describe('TEST-META: Fix Canonical Metadata Service (Phase 13B.4 Gate D)', () =>
 
   it('TEST-META-01: Projects valid Canonical URL', () => {
     const url = FixMetadataService.toCanonicalUrl(validMockFix);
-    expect(url).toBe('https://thebreakdown.gov/fix/digital-procurement-audit-trail');
+    expect(url).toBe('https://thebreakdown.in/fix/digital-procurement-audit-trail');
   });
 
   it('TEST-META-02: Generates Schema.org JSON-LD graph structure', () => {
@@ -59,7 +59,7 @@ describe('TEST-META: Fix Canonical Metadata Service (Phase 13B.4 Gate D)', () =>
     expect(jsonLd['@context']).toBe('https://schema.org');
     expect(jsonLd['@type']).toBe('Legislation');
     expect(jsonLd.name).toBe('Mandatory Real Time E Procurement Auditing');
-    expect(jsonLd.url).toBe('https://thebreakdown.gov/fix/digital-procurement-audit-trail');
+    expect(jsonLd.url).toBe('https://thebreakdown.in/fix/digital-procurement-audit-trail');
     expect(jsonLd.citation?.length).toBe(1);
     expect(jsonLd.citation?.[0].name).toBe('Gazette Notification No. 402/2025');
   });
@@ -70,14 +70,14 @@ describe('TEST-META: Fix Canonical Metadata Service (Phase 13B.4 Gate D)', () =>
     expect(og['og:title']).toContain('Mandatory Real Time E Procurement Auditing');
     expect(og['twitter:card']).toBe('summary_large_image');
     expect(og['twitter:description']).toContain('Evidence Grade: High');
-    expect(og.canonicalUrl).toBe('https://thebreakdown.gov/fix/digital-procurement-audit-trail');
+    expect(og.canonicalUrl).toBe('https://thebreakdown.in/fix/digital-procurement-audit-trail');
   });
 
   it('TEST-META-04: Generates RIS Bibliographic Citation for EndNote/Zotero', () => {
     const ris = FixMetadataService.toRISCitation(validMockFix);
     expect(ris).toContain('TY  - GOVT');
     expect(ris).toContain('TI  - Mandatory Real Time E Procurement Auditing');
-    expect(ris).toContain('UR  - https://thebreakdown.gov/fix/digital-procurement-audit-trail');
+    expect(ris).toContain('UR  - https://thebreakdown.in/fix/digital-procurement-audit-trail');
     expect(ris).toContain('ER  -');
   });
 });

@@ -1,0 +1,132 @@
+[
+  {
+    "queryId": "Q001",
+    "query": "What happened between India and China in 1962?",
+    "targetSlug": "indias-inheritance",
+    "requirements": [
+      { "id": "REQ_01", "description": "Identify Sino-Indian conflict in October-November 1962", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Identify geographic sectors: Aksai Chin (Western) and NEFA (Eastern)", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Detail diplomatic dispute over McMahon Line and boundary demarcation", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Cite historical/archival primary sources or official inquiry reports", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Explain strategic consequences and reorganization of Indian defence capabilities", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Preserve historical dispute nuances without speculative nationalism", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q002",
+    "query": "What is the RBI repo rate and how does monetary policy work in India?",
+    "targetSlug": "rbi-repo-rate",
+    "requirements": [
+      { "id": "REQ_01", "description": "Define repo rate as rate at which RBI lends to commercial banks against government securities", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Identify the Monetary Policy Committee (MPC) as the decision-making body", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Explain the flexible inflation targeting framework (4% +/- 2%) under RBI Act 1934", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Describe monetary transmission mechanism to bank lending and deposit rates", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite official RBI resolutions or interest rate time series data", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Explain policy trade-offs between growth stimulation and price stability", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q003",
+    "query": "How does MGNREGA work and what are the key reform challenges?",
+    "targetSlug": "mgnrega-reform",
+    "requirements": [
+      { "id": "REQ_01", "description": "Define statutory employment guarantee framework (100 days under 2005 Act / 125 days under 2025 Act)", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Identify demand-driven right to work mechanism and unemployment allowance provisions", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Explain wage delay challenges and Central-State fiscal allocation dynamics", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Analyze Aadhaar-Based Payment System (ABPS) and digital attendance (NMMS) compliance issues", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite statutory texts, Parliamentary committee reports, or administrative audit data", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Address rural livelihood asset creation quality and social audit efficacy", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q004",
+    "query": "How did UPI revolutionize digital payments in India?",
+    "targetSlug": "digital-payments-boom",
+    "requirements": [
+      { "id": "REQ_01", "description": "Identify NPCI as the foundational umbrella architecture and launch in 2016", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Explain interoperable virtual payment address (VPA) and 24/7 IMPS real-time settlement", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Provide empirical transaction volume and value scale metrics", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Analyze zero-MDR policy impact and third-party app provider (TPAP) market concentration", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite official NPCI bulletin or RBI payment systems indicators", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Discuss international linkage initiatives (Singapore PayNow, UAE, France)", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q005",
+    "query": "What is the claim settlement record of PM Fasal Bima Yojana?",
+    "targetSlug": "pm-fasal-bima-claims",
+    "requirements": [
+      { "id": "REQ_01", "description": "Define PMFBY insurance framework and premium sharing ratio (farmer vs Govt subsidy)", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Detail empirical claims-to-premium ratio across agricultural seasons", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Analyze causes of delayed claim settlements (Crop Cutting Experiments, state subsidy delays)", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Examine state government withdrawal and re-entry patterns", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite Ministry of Agriculture portal statistics, CAG audit, or Parliamentary questions", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Evaluate technological interventions (drones, satellite yield estimation)", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q006",
+    "query": "What is India's Semiconductor Mission and what are the PLI subsidies?",
+    "targetSlug": "semiconductor-pli",
+    "requirements": [
+      { "id": "REQ_01", "description": "Define India Semiconductor Mission (ISM) under Digital India Corporation with ₹76,000 crore outlay", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Explain 50% fiscal support on pari-passu basis for silicon fabs, display fabs, and ATMP/OSAT units", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Detail approved projects (Micron, Tata Electronics, CG Power) and state-level co-incentives", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Identify critical infrastructure prerequisites: ultra-pure water, uninterrupted power, supply chain chemicals", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite Cabinet notifications, MeitY guidelines, or statutory sanction orders", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Assess global geopolitical context and talent/fab manufacturing timeline constraints", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q007",
+    "query": "What are the key provisions of India's Digital Personal Data Protection Act?",
+    "targetSlug": "dpdp-bill",
+    "requirements": [
+      { "id": "REQ_01", "description": "Define DPDP Act 2023 statutory purpose and rights of Data Principals", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Explain obligations of Data Fiduciaries and Significant Data Fiduciaries (SDF)", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Analyze statutory exemptions for State instrumentalities and national security grounds", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Detail the creation, jurisdiction, and penalty powers of the Data Protection Board of India", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite statutory sections of the Gazette notification (Act No. 22 of 2023)", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Compare provisions with prior draft iterations and global benchmarks like GDPR", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q008",
+    "query": "What was the Panchsheel Agreement in India's foreign policy?",
+    "targetSlug": "indias-foreign-policy",
+    "requirements": [
+      { "id": "REQ_01", "description": "Identify 1954 Sino-Indian Agreement on Trade and Intercourse between Tibet Region and India", "weight": 1.0 },
+      { "id": "REQ_02", "description": "List the Five Principles of Peaceful Coexistence in full", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Explain geopolitical context of Tibet's status and decolonization diplomacy", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Track evolution into Non-Aligned Movement at the 1955 Bandung Conference", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite treaty text, Ministry of External Affairs historical archives, or Nehru speeches", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Examine breakdown of Panchsheel leading to the 1962 border crisis", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q009",
+    "query": "How is climate finance structured for Indian renewable energy transition?",
+    "targetSlug": "climate-finance",
+    "requirements": [
+      { "id": "REQ_01", "description": "Detail India's NDC targets (500 GW non-fossil capacity by 2030, net zero by 2070)", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Analyze domestic vs multilateral financing sources (green bonds, IREDA, Multilateral Development Banks)", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Quantify estimated capital expenditure requirements ($10+ trillion across transition horizons)", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Address concessional climate finance shortfalls and high foreign exchange hedging costs", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite CEA National Electricity Plan, RBI Green Finance reports, or UNFCCC submissions", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Evaluate grid integration investments and battery energy storage viability gap funding", "weight": 1.0 }
+    ]
+  },
+  {
+    "queryId": "Q010",
+    "query": "What is the status of groundwater depletion across Indian agricultural belts?",
+    "targetSlug": "groundwater-depletion",
+    "requirements": [
+      { "id": "REQ_01", "description": "Provide national groundwater extraction scale (India extracts ~25% of global groundwater)", "weight": 1.0 },
+      { "id": "REQ_02", "description": "Identify critical/over-exploited assessment units (Punjab, Haryana, Rajasthan, western UP)", "weight": 1.0 },
+      { "id": "REQ_03", "description": "Analyze nexus between free agricultural power tariffs, tube wells, and paddy monoculture", "weight": 1.0 },
+      { "id": "REQ_04", "description": "Evaluate water quality deterioration (arsenic, fluoride, salinity intrusion)", "weight": 1.0 },
+      { "id": "REQ_05", "description": "Cite Central Ground Water Board (CGWB) Dynamic Resource Assessment and Jal Shakti audits", "weight": 1.0 },
+      { "id": "REQ_06", "description": "Assess policy remedies (Atal Bhujal Yojana, direct seeding of rice, solar pump metering)", "weight": 1.0 }
+    ]
+  }
+]

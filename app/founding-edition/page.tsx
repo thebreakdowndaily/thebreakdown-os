@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description: 'The Breakdown Knowledge Library — Founding Edition. An evidence-first, versioned, transparent reference work. Includes Founding Monograph 001.',
   openGraph: { title: 'Founding Edition v1.0 — The Breakdown', description: 'The Breakdown Knowledge Library — Founding Edition. Evidence-first, versioned, transparent.', url: 'https://thebreakdown.in/founding-edition' },
   twitter: { card: 'summary_large_image', title: 'Founding Edition v1.0 — The Breakdown', description: 'The Breakdown Knowledge Library — Founding Edition. Evidence-first, versioned, transparent.' },
+  alternates: { canonical: 'https://thebreakdown.in/founding-edition' },
 };
 
 const included = [

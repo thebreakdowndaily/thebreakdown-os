@@ -1,0 +1,203 @@
+[
+  {
+    "variantId": "Q001-V1",
+    "queryId": "Q001",
+    "query": "1962 India China war summary and causes",
+    "variantType": "natural",
+    "intent": "historical_context",
+    "expectedInformationUnits": ["Sino-Indian conflict 1962", "Border dispute", "Aksai Chin NEFA"]
+  },
+  {
+    "variantId": "Q001-V2",
+    "queryId": "Q001",
+    "query": "Henderson Brooks Bhagat report 1962 war findings",
+    "variantType": "source_seeking",
+    "intent": "source_specific",
+    "expectedInformationUnits": ["Henderson Brooks report", "Military review", "Strategic reassessment"]
+  },
+  {
+    "variantId": "Q001-V3",
+    "queryId": "Q001",
+    "query": "What was India's strategic defense posture in Aksai Chin and NEFA in 1962?",
+    "variantType": "specific",
+    "intent": "historical_context",
+    "expectedInformationUnits": ["Forward Policy", "Aksai Chin", "NEFA infrastructure"]
+  },
+  {
+    "variantId": "Q001-V4",
+    "queryId": "Q001",
+    "query": "The Breakdown India China 1962 chapter",
+    "variantType": "navigational",
+    "intent": "historical_context",
+    "expectedInformationUnits": ["Foundations 1947-1962", "India's inheritance"]
+  },
+
+  {
+    "variantId": "Q002-V1",
+    "queryId": "Q002",
+    "query": "current RBI repo rate and inflation target India",
+    "variantType": "natural",
+    "intent": "definition",
+    "expectedInformationUnits": ["Repo rate definition", "4 percent inflation target", "MPC meeting"]
+  },
+  {
+    "variantId": "Q002-V2",
+    "queryId": "Q002",
+    "query": "Monetary Policy Committee statutory framework under RBI Act 1934",
+    "variantType": "source_seeking",
+    "intent": "source_specific",
+    "expectedInformationUnits": ["RBI Act 1934", "Section 45ZB", "MPC resolution minutes"]
+  },
+  {
+    "variantId": "Q002-V3",
+    "queryId": "Q002",
+    "query": "How does RBI repo rate hike transmit to home loan EMI?",
+    "variantType": "specific",
+    "intent": "policy_impact",
+    "expectedInformationUnits": ["Monetary transmission", "EBLR benchmark", "Bank lending rates"]
+  },
+
+  {
+    "variantId": "Q003-V1",
+    "queryId": "Q003",
+    "query": "MGNREGA 100 days vs 125 days reform changes",
+    "variantType": "natural",
+    "intent": "policy_impact",
+    "expectedInformationUnits": ["Statutory guarantee expansion", "Viksit Bharat VB-G RAM G Act", "125 days"]
+  },
+  {
+    "variantId": "Q003-V2",
+    "queryId": "Q003",
+    "query": "Ministry of Rural Development MGNREGA expenditure audit report",
+    "variantType": "source_seeking",
+    "intent": "source_specific",
+    "expectedInformationUnits": ["CAG audit", "Wage arrears", "Central state funding split"]
+  },
+  {
+    "variantId": "Q003-V3",
+    "queryId": "Q003",
+    "query": "Why are MGNREGA workers facing Aadhaar based payment system delays?",
+    "variantType": "question_formulation",
+    "intent": "controversial_issue",
+    "expectedInformationUnits": ["ABPS mandate", "Job card cancellation", "NMMS digital attendance"]
+  },
+
+  {
+    "variantId": "Q004-V1",
+    "queryId": "Q004",
+    "query": "UPI digital payments growth statistics India",
+    "variantType": "natural",
+    "intent": "timeline",
+    "expectedInformationUnits": ["NPCI transaction volume", "Monthly billion transactions", "Real time settlement"]
+  },
+  {
+    "variantId": "Q004-V2",
+    "queryId": "Q004",
+    "query": "NPCI zero MDR policy economic sustainability",
+    "variantType": "specific",
+    "intent": "policy_impact",
+    "expectedInformationUnits": ["Zero MDR", "Government subsidy reimbursement", "TPAP duopoly"]
+  },
+
+  {
+    "variantId": "Q005-V1",
+    "queryId": "Q005",
+    "query": "PM Fasal Bima Yojana claim settlement ratio and delays",
+    "variantType": "natural",
+    "intent": "data_evidence_query",
+    "expectedInformationUnits": ["Claim settlement ratio", "Crop cutting experiment delays", "Premium subsidy"]
+  },
+  {
+    "variantId": "Q005-V2",
+    "queryId": "Q005",
+    "query": "Why did states opt out of PMFBY crop insurance scheme?",
+    "variantType": "question_formulation",
+    "intent": "controversial_issue",
+    "expectedInformationUnits": ["State fiscal burden", "Private insurer profit margins", "Alternative state schemes"]
+  },
+
+  {
+    "variantId": "Q006-V1",
+    "queryId": "Q006",
+    "query": "India Semiconductor Mission 76000 crore PLI guidelines",
+    "variantType": "source_seeking",
+    "intent": "current_policy",
+    "expectedInformationUnits": ["MeitY PLI guidelines", "50 percent fiscal support", "ISM nodal agency"]
+  },
+  {
+    "variantId": "Q006-V2",
+    "queryId": "Q006",
+    "query": "What semiconductor fab projects are approved in Dholera and Sanand?",
+    "variantType": "specific",
+    "intent": "current_policy",
+    "expectedInformationUnits": ["Tata Electronics fab Dholera", "Micron ATMP Sanand", "CG Power"]
+  },
+
+  {
+    "variantId": "Q007-V1",
+    "queryId": "Q007",
+    "query": "Digital Personal Data Protection Act 2023 summary and exemptions",
+    "variantType": "natural",
+    "intent": "controversial_issue",
+    "expectedInformationUnits": ["Data Principal rights", "Section 17 State exemptions", "DPBI Board"]
+  },
+  {
+    "variantId": "Q007-V2",
+    "queryId": "Q007",
+    "query": "Data Protection Board of India penalty powers and independence",
+    "variantType": "specific",
+    "intent": "institutional_entity",
+    "expectedInformationUnits": ["DPBI composition", "Up to 250 crore penalty", "Appellate tribunal TDSAT"]
+  },
+
+  {
+    "variantId": "Q008-V1",
+    "queryId": "Q008",
+    "query": "Panchsheel Agreement 1954 text and 5 principles",
+    "variantType": "source_seeking",
+    "intent": "institutional_entity",
+    "expectedInformationUnits": ["1954 Agreement text", "Five principles", "Tibet trade"]
+  },
+  {
+    "variantId": "Q008-V2",
+    "queryId": "Q008",
+    "query": "Did Panchsheel fail to prevent the 1962 Sino-Indian conflict?",
+    "variantType": "question_formulation",
+    "intent": "historical_context",
+    "expectedInformationUnits": ["Historical collapse", "Border skirmishes", "Bandung evolution"]
+  },
+
+  {
+    "variantId": "Q009-V1",
+    "queryId": "Q009",
+    "query": "India 500 GW renewable energy transition finance requirements",
+    "variantType": "natural",
+    "intent": "comparative_question",
+    "expectedInformationUnits": ["500 GW non-fossil by 2030", "Capital outlay estimates", "Green bonds IREDA"]
+  },
+  {
+    "variantId": "Q009-V2",
+    "queryId": "Q009",
+    "query": "Multilateral climate finance shortfall and forex hedging cost India",
+    "variantType": "specific",
+    "intent": "policy_impact",
+    "expectedInformationUnits": ["Concessional finance shortfall", "Currency hedging premium", "Global South equity"]
+  },
+
+  {
+    "variantId": "Q010-V1",
+    "queryId": "Q010",
+    "query": "Central Ground Water Board dynamic resource assessment India statistics",
+    "variantType": "source_seeking",
+    "intent": "source_specific",
+    "expectedInformationUnits": ["CGWB assessment", "Over-exploited units percentage", "Stage of extraction"]
+  },
+  {
+    "variantId": "Q010-V2",
+    "queryId": "Q010",
+    "query": "Why are Punjab and Haryana groundwater tables collapsing?",
+    "variantType": "question_formulation",
+    "intent": "policy_impact",
+    "expectedInformationUnits": ["Free agricultural electricity", "Paddy wheat cycle", "Submersible tubewells"]
+  }
+]

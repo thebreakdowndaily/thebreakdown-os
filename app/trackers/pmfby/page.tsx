@@ -12,6 +12,7 @@ export const metadata: Metadata = {
       'Track India\'s crop insurance scheme — ₹31,450 Cr gross premiums, 4.1 Cr farmers, claim settlement delays, 12% penal interest rules, and YES-TECH satellite yield assessment across 22 States.',
     type: 'website',
   },
+  alternates: { canonical: 'https://thebreakdown.in/trackers/pmfby' },
 };
 
 export default function PmfbyTrackerPage() {

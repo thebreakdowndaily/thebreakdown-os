@@ -1,0 +1,905 @@
+[
+  {
+    "url": "https://thebreakdown.in",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/about",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/about",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/series",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topics",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topics",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entities",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/organizations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/countries",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/investigations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/investigations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/founding-edition",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/methodology",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/methodology",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/trust",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/trust",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/editorial-constitution",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/editorial-constitution",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/data",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/data",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/compare",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/compare",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/trackers",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/trackers",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/trackers/mgnrega",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/trackers/semiconductor",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/trackers/upi",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/trackers/pmfby",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/foundations-1947-1962",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/series/foundations-1947-1962/volume/the-nehruvian-era/chapter/indias-inheritance",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/economic-policy-2026",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/mgnrega-reform",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/rbi-repo-rate",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/series/economic-policy-2026/volume/structural-reforms/chapter/rbi-repo-rate",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/mgnrega-reform",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/mgnrega-reform",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/digital-payments-boom",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/digital-payments-boom",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/pm-fasal-bima-claims",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/pm-fasal-bima-claims",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/semiconductor-pli",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/semiconductor-pli",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/dpdp-bill",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/dpdp-bill",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/rbi-repo-rate",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/rbi-repo-rate",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/climate-finance",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/climate-finance",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/education-budget",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/education-budget",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/groundwater-depletion",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/groundwater-depletion",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/ration-digitization",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/ration-digitization",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/anganwadi-icds",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/anganwadi-icds",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/supply-chain-shift",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/supply-chain-shift",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/ethanol-backlash",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/ethanol-backlash",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/ews-quota-upsc-investigation",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/ews-quota-upsc-investigation",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/us-iran-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/us-iran-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/indian-education-crisis",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/indian-education-crisis",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/income-inequality-india",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/income-inequality-india",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-china-border-tensions",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-china-border-tensions",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/indias-foreign-policy",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/indias-foreign-policy",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/satluj-ban",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/satluj-ban",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-us-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-us-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-indonesia-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-indonesia-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-china-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-china-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-europe-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-europe-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-uk-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-uk-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-russia-relations",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-russia-relations",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/81-crore-data-breach",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/81-crore-data-breach",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/bjp-mission-360",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/bjp-mission-360",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-5g-rollout",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-5g-rollout",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-ev-paradox",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-ev-paradox",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/ayushman-bharat",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/ayushman-bharat",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/electoral-bonds",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/electoral-bonds",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/who-cancer-report-2026",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/who-cancer-report-2026",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/us-iran-war-strait-of-hormuz",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/us-iran-war-strait-of-hormuz",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/epf-scheme-2026",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/epf-scheme-2026",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/youth-mental-health-crisis",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/youth-mental-health-crisis",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/gig-worker-rights",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/gig-worker-rights",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/namami-gange-under-fire",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/namami-gange-under-fire",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/india-china-border-lac",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/india-china-border-lac",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/kashmir-the-first-test",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/kashmir-the-first-test",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/story/accountability-in-india",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/story/accountability-in-india",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/un",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/un",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/wto",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/wto",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/imf",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/imf",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/world-bank",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/world-bank",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/who",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/who",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ilo",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ilo",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/brics",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/brics",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/sco",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/sco",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/g20",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/g20",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/saarc",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/saarc",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/commonwealth",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/commonwealth",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/adb",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/adb",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/aiib",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/aiib",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/bimstec",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/bimstec",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/quad",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/quad",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/nam",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/nam",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/g77",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/g77",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/fatf",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/fatf",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/isa",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/isa",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/iora",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/iora",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/cdri",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/cdri",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/icmr",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/icmr",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-education",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-education",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-labour",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-labour",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/mgnrega",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/mgnrega",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-rural-development",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-rural-development",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/rbi",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/rbi",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/npci",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/npci",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-agriculture",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-agriculture",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/nmcg",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/nmcg",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-jal-shakti",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-jal-shakti",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/cpcb",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/cpcb",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/cag",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/cag",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/bihar",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/bihar",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-finance",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-finance",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/ministry-of-women-and-child-development",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/ministry-of-women-and-child-development",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/india",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/india",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/election-commission",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/election-commission",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/cert-in",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/cert-in",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/uidai",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/uidai",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/entity/resecurity",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/entity/resecurity",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/economy",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/economy",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/technology",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/technology",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/cybersecurity",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/cybersecurity",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/policy",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/policy",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/agriculture",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/agriculture",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/digital-payments",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/digital-payments",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/employment",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/employment",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/environment",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/environment",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/education",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/education",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/semiconductor",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/semiconductor",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/health",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/health",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/mental-health",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/mental-health",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/governance",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/governance",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/infrastructure",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/infrastructure",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/topic/geopolitics",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.in/topic/geopolitics",
+    "statusMatch": "MATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/fix/fix-mgnrega-reform",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.gov/fix/fix-mgnrega-reform",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/fix/fix-pmfby-claims",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.gov/fix/fix-pmfby-claims",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/fix/fix-air-pollution",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.gov/fix/fix-air-pollution",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/fix/fix-farm-income",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.gov/fix/fix-farm-income",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/fix/fix-judicial-pendency",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.gov/fix/fix-judicial-pendency",
+    "statusMatch": "MISMATCH"
+  },
+  {
+    "url": "https://thebreakdown.in/fix/fix-anganwadi-reform",
+    "statusCode": 200,
+    "contentType": "text/html; charset=utf-8",
+    "canonicalHref": "https://thebreakdown.gov/fix/fix-anganwadi-reform",
+    "statusMatch": "MISMATCH"
+  }
+]

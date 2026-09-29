@@ -1,9 +1,36 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { VolumePage } from '@/components/knowledge-library/VolumePage';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 export const revalidate = 3600;
+
+export async function generateMetadata({ params }: { params: Promise<{ collectionSlug: string; volumeSlug: string }> }): Promise<Metadata> {
+  const { collectionSlug, volumeSlug } = await params;
+  const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());
+  const libraries = await repo.getAllLibraries();
+  const library = libraries.find((lib) => lib.collections.some((c) => c.slug === collectionSlug));
+  const volume = library ? await repo.getVolume(library.slug, collectionSlug, volumeSlug) : null;
+  if (!volume) return { title: 'Volume Not Found — The Breakdown' };
+
+  const title = `${volume.title} — The Breakdown Knowledge Library`;
+  const description = volume.summary || volume.subtitle || `Explore ${volume.title} on The Breakdown.`;
+  const canonical = `https://thebreakdown.in/series/${collectionSlug}/volume/${volumeSlug}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+    },
+    alternates: {
+      canonical,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const repo = RepositoryFactory.getKnowledgeLibraryRepository(getKnowledgeLibrarySeedData());

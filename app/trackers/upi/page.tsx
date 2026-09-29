@@ -12,6 +12,7 @@ export const metadata: Metadata = {
       'Track India\'s Unified Payments Interface (UPI) — 185B+ annual volume, ₹260L Cr value, rural adoption, UPI123Pay limits, Zero MDR status, and cross-border linkages.',
     type: 'website',
   },
+  alternates: { canonical: 'https://thebreakdown.in/trackers/upi' },
 };
 
 export default function UpiTrackerPage() {

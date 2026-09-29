@@ -7,12 +7,15 @@ import { SignalCard } from './SignalCard';
 interface NewsroomDashboardProps {
   initialQueue: Record<QueueSection, EditorialQueueItem[]>;
   initialMetrics: NewsroomOperationalMetrics;
+  userRole?: string;
 }
 
-export function NewsroomDashboardClient({ initialQueue, initialMetrics }: NewsroomDashboardProps) {
+export function NewsroomDashboardClient({ initialQueue, initialMetrics, userRole }: NewsroomDashboardProps) {
   const [activeTab, setActiveTab] = useState<QueueSection>('BREAKING_P0');
   const [queue, setQueue] = useState(initialQueue);
   const [metrics] = useState(initialMetrics);
+  const [authorizing, setAuthorizing] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   const tabs: Array<{ key: QueueSection; label: string; count: number }> = [
     { key: 'BREAKING_P0', label: 'Breaking / P0', count: queue.BREAKING_P0.length },
@@ -23,6 +26,35 @@ export function NewsroomDashboardClient({ initialQueue, initialMetrics }: Newsro
     { key: 'COVERAGE_GAPS', label: 'Coverage Gaps', count: queue.COVERAGE_GAPS.length },
     { key: 'RESOLVED', label: 'Resolved', count: queue.RESOLVED.length },
   ];
+
+  const totalQueueCount = tabs.reduce((acc, t) => acc + t.count, 0);
+  const canManage = userRole === 'owner' || userRole === 'managing_editor' || userRole === 'editor';
+
+  const handleAuthorizePhase2 = async () => {
+    setAuthorizing(true);
+    try {
+      const res = await fetch('/api/v2/newsroom/authorize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'authorize' }),
+      });
+      if (res.ok) window.location.reload();
+    } finally {
+      setAuthorizing(false);
+    }
+  };
+
+  const handleSeedBaseline = async () => {
+    setSeeding(true);
+    try {
+      const res = await fetch('/api/v2/newsroom/seed', {
+        method: 'POST',
+      });
+      if (res.ok) window.location.reload();
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const handleAction = async (action: string, signalId: string) => {
     try {
@@ -91,9 +123,30 @@ export function NewsroomDashboardClient({ initialQueue, initialMetrics }: Newsro
               }
 
               return (
-                <span style={{ padding: '4px 10px', background: badgeBg, color: badgeColor, borderRadius: '4px', fontSize: 'var(--text-xs)', fontWeight: 700, border: badgeBorder }}>
-                  {badgeText}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                  <span style={{ padding: '4px 10px', background: badgeBg, color: badgeColor, borderRadius: '4px', fontSize: 'var(--text-xs)', fontWeight: 700, border: badgeBorder }}>
+                    {badgeText}
+                  </span>
+                  {!metrics.phase2Active && (userRole === 'owner' || userRole === 'managing_editor') && (
+                    <button
+                      type="button"
+                      onClick={handleAuthorizePhase2}
+                      disabled={authorizing}
+                      style={{
+                        padding: '4px 10px',
+                        background: 'var(--color-brand-400)',
+                        color: '#000',
+                        border: 'none',
+                        borderRadius: '4px',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 700,
+                        cursor: authorizing ? 'not-allowed' : 'pointer',
+                      }}
+                    >
+                      {authorizing ? 'Authorizing...' : 'Authorize Phase 2'}
+                    </button>
+                  )}
+                </div>
               );
             })()}
             <div style={{ marginTop: 'var(--spacing-2)', textAlign: 'right' }}>
@@ -104,6 +157,35 @@ export function NewsroomDashboardClient({ initialQueue, initialMetrics }: Newsro
           </div>
         </div>
       </header>
+
+      {/* Empty queue seed helper for authorized editors/owners */}
+      {totalQueueCount === 0 && canManage && (
+        <div style={{ marginBottom: 'var(--spacing-6)', padding: 'var(--spacing-4)', background: 'var(--color-bg-secondary)', border: '1px dashed var(--color-border-default)', borderRadius: 'var(--radius-md)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--spacing-3)' }}>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-text-primary)' }}>Queue is currently clean (0 signals)</div>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+              Populate realistic signals across all 16 Indian beats (RBI, Supreme Court, MeitY, ISRO, Defence, etc.) to begin triage.
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleSeedBaseline}
+            disabled={seeding}
+            style={{
+              padding: '6px 14px',
+              background: 'var(--color-brand-400)',
+              color: '#000',
+              border: 'none',
+              borderRadius: 'var(--radius-md)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 600,
+              cursor: seeding ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {seeding ? 'Populating...' : 'Populate 16 Beat Signals'}
+          </button>
+        </div>
+      )}
 
       {/* Operational Metrics Bar */}
       <section aria-label="Pipeline metrics" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--spacing-3)', marginBottom: 'var(--spacing-6)' }}>

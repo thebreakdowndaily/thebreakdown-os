@@ -114,6 +114,8 @@ module.exports = {
       'tests/story-image-context-gate.test.ts',
       'tests/loop-visual-validation.test.ts',
       'tests/reader-journey-loop.test.ts',
+      'tests/publication-integrity-p0.test.ts',
+      'tests/source-integrity-loop2.test.ts',
     ],
     exclude: ['node_modules/**', 'tests/e2e/**'],
   },

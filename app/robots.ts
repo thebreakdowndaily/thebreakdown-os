@@ -33,7 +33,7 @@ export default function robots(): MetadataRoute.Robots {
           '/workspace',
           '/admin',
           '/cms',
-          '/editorial',
+          '/editorial/',
           '/dashboard',
           '/newsroom',
           '/editor',

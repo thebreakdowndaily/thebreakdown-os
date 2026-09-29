@@ -59,7 +59,6 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: 'https://thebreakdown.in',
     types: {
       'application/rss+xml': 'https://thebreakdown.in/api/feed',
     },

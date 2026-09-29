@@ -32,7 +32,10 @@ export type SourceIssueReason =
   | 'MISSING_SOURCE_ID'
   | 'SOURCE_IN_UNRELATED_REGISTRY'
   | 'DUPLICATE_SOURCE_IN_CLAIM'
-  | 'SOURCE_CLAIM_MISMATCH';
+  | 'SOURCE_CLAIM_MISMATCH'
+  | 'SOURCE_RETRACTED'
+  | 'SOURCE_UNRESOLVED'
+  | 'SOURCE_DISPUTED';
 
 export type PublicationBoundary = 'published' | 'draft' | 'fixture' | 'unreferenced';
 
@@ -274,8 +277,45 @@ export function validateSourceIntegrity(
 
       if (sourceMap.has(sourceId)) {
         // Source exists in canonical registry
+        const sourceObj = sourceMap.get(sourceId)!;
+
+        // Check verification status lifecycle (Phase 10, 11, 12)
+        if (sourceObj.verificationStatus === 'retracted') {
+          errors.push({
+            severity: 'ERROR',
+            reason: 'SOURCE_RETRACTED',
+            claimId: claim.id,
+            sourceId,
+            field,
+            publicationBoundary: boundary,
+            message: `Claim "${claim.id}" references retracted source "${sourceId}" (${sourceObj.title}). Publication blocked.`,
+            contentTarget: primaryTarget,
+          });
+        } else if (sourceObj.verificationStatus === 'unresolved') {
+          warnings.push({
+            severity: 'WARNING',
+            reason: 'SOURCE_UNRESOLVED',
+            claimId: claim.id,
+            sourceId,
+            field,
+            publicationBoundary: boundary,
+            message: `Claim "${claim.id}" references source "${sourceId}" which is explicitly marked UNRESOLVED (Editorial Review Required).`,
+            contentTarget: primaryTarget,
+          });
+        } else if (sourceObj.verificationStatus === 'disputed') {
+          warnings.push({
+            severity: 'WARNING',
+            reason: 'SOURCE_DISPUTED',
+            claimId: claim.id,
+            sourceId,
+            field,
+            publicationBoundary: boundary,
+            message: `Claim "${claim.id}" references disputed source "${sourceId}" (${sourceObj.title}). Editorial verification required.`,
+            contentTarget: primaryTarget,
+          });
+        }
+
         if (checkBidirectional) {
-          const sourceObj = sourceMap.get(sourceId)!;
           if (Array.isArray(sourceObj.claimIds) && !sourceObj.claimIds.includes(claim.id)) {
             warnings.push({
               severity: 'WARNING',

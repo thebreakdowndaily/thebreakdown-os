@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Entities — The Breakdown',
   description: 'Key entities tracked by The Breakdown — policies, organizations, schemes, and more.',
   openGraph: { title: 'Entities — The Breakdown', url: 'https://thebreakdown.in/entities' },
+  alternates: { canonical: 'https://thebreakdown.in/entities' },
 };
 
 export default function EntitiesPage() {

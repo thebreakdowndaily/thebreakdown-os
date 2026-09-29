@@ -81,6 +81,10 @@ export function resolvePrincipalFromUser(user: User): Principal {
  * -> centralized policy engine
  */
 export async function getCurrentPrincipal(): Promise<Principal | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return null;
+  }
+
   if (isDemoMode()) {
     return {
       userId: DEMO_USER.id,

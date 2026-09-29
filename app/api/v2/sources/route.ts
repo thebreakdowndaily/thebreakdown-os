@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { db, list, created, serverError } from '@/lib/api-v2';
+import { requireApiPermission } from '@/features/auth/require-role';
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,6 +23,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireApiPermission('citation.create', request);
+    if ('response' in auth) {
+      return auth.response;
+    }
+
     const body = await request.json();
     const { data, error } = await db().from('sources').insert(body).select().single();
     if (error) throw error;

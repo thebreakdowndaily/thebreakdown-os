@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Organizations — The Breakdown',
   description: 'Key organizations tracked by The Breakdown — ministries, regulators, and institutions.',
   openGraph: { title: 'Organizations — The Breakdown', url: 'https://thebreakdown.in/organizations' },
+  alternates: { canonical: 'https://thebreakdown.in/organizations' },
 };
 
 export default function OrganizationsPage() {

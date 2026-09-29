@@ -22,6 +22,18 @@ const url = process.env.TEST_DATABASE_URL || process.env.DATABASE_URL;
     );
     if (res.rows.length > 0) {
       console.log('DEPLOYED: Table ai_visibility_observations exists in database.');
+      const countRes = await c.query('SELECT count(*) FROM public.ai_visibility_observations');
+      console.log('Row count in ai_visibility_observations:', countRes.rows[0].count);
+
+      const rlsRes = await c.query(
+        "SELECT rowsecurity FROM pg_tables WHERE schemaname = 'public' AND tablename = 'ai_visibility_observations'"
+      );
+      console.log('RLS enabled on table:', rlsRes.rows[0].rowsecurity);
+
+      const polRes = await c.query(
+        "SELECT policyname, cmd FROM pg_policies WHERE schemaname = 'public' AND tablename = 'ai_visibility_observations'"
+      );
+      console.log('Active policies:', polRes.rows.map(p => `${p.policyname} (${p.cmd})`));
     } else {
       console.log('PENDING: Migration 017 file exists on disk, but has NOT yet been applied to the database.');
     }

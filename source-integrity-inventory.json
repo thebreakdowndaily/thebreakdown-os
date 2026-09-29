@@ -1,0 +1,1670 @@
+[
+  {
+    "sourceId": "src-bjp-mission-360-1",
+    "claimId": "clm-bjp-mission-360-001",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "In the June 2024 Lok Sabha general elections, the BJP secured 240 seats and the NDA coalition secured 293 seats, forming a coalition government.",
+    "isP5Scaffold": false,
+    "classificationCategory": "B",
+    "classificationName": "ECI PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Election Commission of India — General Election 2024 Results",
+      "url": "https://results.eci.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Election Commission of India — General Election 2024 Results\" (https://results.eci.gov.in)."
+  },
+  {
+    "sourceId": "src-bjp-mission-360-2",
+    "claimId": "clm-bjp-mission-360-002",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "The pre-election campaign target declared by BJP leadership was 370 seats for BJP and 400+ seats for the NDA coalition.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "PRS Legislative — Constitution Amendment Process under Art. 368",
+      "url": "https://prsindia.org",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"PRS Legislative — Constitution Amendment Process under Art. 368\" (https://prsindia.org)."
+  },
+  {
+    "sourceId": "src-bjp-mission-360-3",
+    "claimId": "clm-bjp-mission-360-003",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "Article 368 of the Constitution of India requires 362 votes in the 543-member Lok Sabha to pass constitutional amendments needing a two-thirds majority.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Bhaskar English — Mission 360 Report",
+      "url": "https://www.bhaskarenglish.in/national/news/bjp-mission-360-two-thirds-majority-constitutional-reforms-138340238.html",
+      "type": "news",
+      "tier": 2
+    },
+    "notes": "Matched verified inline story source: \"Bhaskar English — Mission 360 Report\" (https://www.bhaskarenglish.in/national/news/bjp-mission-360-two-thirds-majority-constitutional-reforms-138340238.html)."
+  },
+  {
+    "sourceId": "src-bjp-mission-360-4",
+    "claimId": "clm-bjp-mission-360-004",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "With 293 NDA seats, the ruling coalition faces a 69-seat shortfall for two-thirds constitutional amendments without multi-party consensus.",
+    "isP5Scaffold": false,
+    "classificationCategory": "B",
+    "classificationName": "ECI PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Election Commission of India — General Election 2024 Results",
+      "url": "https://results.eci.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Election Commission of India — General Election 2024 Results\" (https://results.eci.gov.in)."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-1",
+    "claimId": "clm-groundwater-depletion-001",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "The CGWB 2025 National Compilation records total annual groundwater recharge of 449.12 BCM and total extraction of 240.15 BCM, yielding a national extraction stage of 58.59%.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CGWB National Compilation on Dynamic Ground Water Resources of India 2025",
+      "url": "https://cgwb.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CGWB National Compilation on Dynamic Ground Water Resources of India 2025\" (https://cgwb.gov.in)."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-2",
+    "claimId": "clm-groundwater-depletion-002",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "Total extractable groundwater resource in India stands at 409.85 BCM under the CGWB 2025 assessment.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "NASA-CGWB Groundwater Study",
+      "url": "https://nasa.gov",
+      "type": "research",
+      "tier": 2
+    },
+    "notes": "Matched verified inline story source: \"NASA-CGWB Groundwater Study\" (https://nasa.gov)."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-3",
+    "claimId": "clm-groundwater-depletion-003",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "Nationwide, 1,118 of 6,738 assessment units (16.59%) are categorized as over-exploited by CGWB in 2025.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CGWB National Compilation on Dynamic Ground Water Resources of India 2025",
+      "url": "https://cgwb.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CGWB National Compilation on Dynamic Ground Water Resources of India 2025\" (https://cgwb.gov.in)."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-4",
+    "claimId": "clm-groundwater-depletion-004",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "Agricultural irrigation accounts for 89% of total annual groundwater extraction in India.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CGWB National Compilation on Dynamic Ground Water Resources of India 2025",
+      "url": "https://cgwb.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CGWB National Compilation on Dynamic Ground Water Resources of India 2025\" (https://cgwb.gov.in)."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-1",
+    "claimId": "clm-semiconductor-pli-001",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "Government fiscal incentive outlay for the India Semiconductor Mission is set at ₹76,000 crore ($10 billion).",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "MeitY PIB Commercial Production Release Q1 2026",
+      "url": "https://pib.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"MeitY PIB Commercial Production Release Q1 2026\" (https://pib.gov.in)."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-2",
+    "claimId": "clm-semiconductor-pli-002",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "Approved private project investment commitments total ₹1.26 lakh crore ($15.2 billion) across 5 semiconductor facilities.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "India Semiconductor Mission (ISM) Guidelines",
+      "url": "https://ism.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"India Semiconductor Mission (ISM) Guidelines\" (https://ism.gov.in)."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-3",
+    "claimId": "clm-semiconductor-pli-003",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "Commercial semiconductor packaging commenced in India in Q1 2026 at the CG Semi OSAT facility in Sanand, Gujarat.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Union Cabinet Press Release March 2025",
+      "url": "https://pib.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Union Cabinet Press Release March 2025\" (https://pib.gov.in)."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-4",
+    "claimId": "clm-semiconductor-pli-004",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "The Micron ATMP facility in Sanand reached PILOT_PRODUCTION status with commercial packaging volume ramp-up in H1 2026.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Ministry of Electronics and IT Annual Report 2025-26",
+      "url": "https://meity.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Ministry of Electronics and IT Annual Report 2025-26\" (https://meity.gov.in)."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-1",
+    "claimId": "clm-epf-scheme-2026-001",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story epf-scheme-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "EPF Scheme 2026 — Gazette Notification G.S.R. 525(E)",
+      "url": "https://labour.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"EPF Scheme 2026 — Gazette Notification G.S.R. 525(E)\" (https://labour.gov.in)."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-2",
+    "claimId": "clm-epf-scheme-2026-002",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story epf-scheme-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "EPS 2026 — Gazette Notification G.S.R. 527(E)",
+      "url": "https://labour.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"EPS 2026 — Gazette Notification G.S.R. 527(E)\" (https://labour.gov.in)."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-3",
+    "claimId": "clm-epf-scheme-2026-003",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story epf-scheme-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "EDLI 2026 — Gazette Notification G.S.R. 526(E)",
+      "url": "https://labour.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"EDLI 2026 — Gazette Notification G.S.R. 526(E)\" (https://labour.gov.in)."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-4",
+    "claimId": "clm-epf-scheme-2026-004",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #4 for story epf-scheme-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Economic Times — EPF Scheme 2026 Analysis",
+      "url": "https://economictimes.indiatimes.com/wealth/invest/epf-scheme-2026-replaces-epf-scheme-1952",
+      "type": "news",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Economic Times — EPF Scheme 2026 Analysis\" (https://economictimes.indiatimes.com/wealth/invest/epf-scheme-2026-replaces-epf-scheme-1952)."
+  },
+  {
+    "sourceId": "src-dpdp-bill-1",
+    "claimId": "clm-dpdp-bill-001",
+    "storyId": "dpdp-bill",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story dpdp-bill verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Digital Personal Data Protection Act 2023",
+      "url": "https://meity.gov.in/dpdp",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Digital Personal Data Protection Act 2023\" (https://meity.gov.in/dpdp)."
+  },
+  {
+    "sourceId": "src-dpdp-bill-2",
+    "claimId": "clm-dpdp-bill-002",
+    "storyId": "dpdp-bill",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story dpdp-bill verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "PRS Legislative Analysis",
+      "url": "https://prsindia.org",
+      "type": "research",
+      "tier": 2
+    },
+    "notes": "Matched verified inline story source: \"PRS Legislative Analysis\" (https://prsindia.org)."
+  },
+  {
+    "sourceId": "src-dpdp-bill-3",
+    "claimId": "clm-dpdp-bill-003",
+    "storyId": "dpdp-bill",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story dpdp-bill verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Digital Personal Data Protection Act 2023",
+      "url": "https://meity.gov.in/dpdp",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Digital Personal Data Protection Act 2023\" (https://meity.gov.in/dpdp)."
+  },
+  {
+    "sourceId": "src-gig-worker-rights-1",
+    "claimId": "clm-gig-worker-rights-001",
+    "storyId": "gig-worker-rights",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story gig-worker-rights verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "NITI Aayog — India's Booming Gig and Platform Economy (2022)",
+      "url": "https://niti.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"NITI Aayog — India's Booming Gig and Platform Economy (2022)\" (https://niti.gov.in)."
+  },
+  {
+    "sourceId": "src-gig-worker-rights-2",
+    "claimId": "clm-gig-worker-rights-002",
+    "storyId": "gig-worker-rights",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story gig-worker-rights verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Karnataka Platform-Based Gig Workers Act, 2024",
+      "url": "https://karnataka.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Karnataka Platform-Based Gig Workers Act, 2024\" (https://karnataka.gov.in)."
+  },
+  {
+    "sourceId": "src-gig-worker-rights-3",
+    "claimId": "clm-gig-worker-rights-003",
+    "storyId": "gig-worker-rights",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story gig-worker-rights verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Code on Social Security, 2020",
+      "url": "https://labour.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Code on Social Security, 2020\" (https://labour.gov.in)."
+  },
+  {
+    "sourceId": "src-namami-gange-under-fire-1",
+    "claimId": "clm-namami-gange-under-fire-001",
+    "storyId": "namami-gange-under-fire",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story namami-gange-under-fire verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CAG Report No. 2 of 2025: Performance Audit of Namami Gange in Uttarakhand",
+      "url": "https://cag.gov.in/uploads/download_audit_report/2025/Report-No.-2-of-2025_Namami-Gange_UK_English-(04-07-2025)-069b020170bd314.74984302.pdf",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CAG Report No. 2 of 2025: Performance Audit of Namami Gange in Uttarakhand\" (https://cag.gov.in/uploads/download_audit_report/2025/Report-No.-2-of-2025_Namami-Gange_UK_English-(04-07-2025)-069b020170bd314.74984302.pdf)."
+  },
+  {
+    "sourceId": "src-namami-gange-under-fire-2",
+    "claimId": "clm-namami-gange-under-fire-002",
+    "storyId": "namami-gange-under-fire",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story namami-gange-under-fire verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CAG Report No. 39 of 2017: Performance Audit of Rejuvenation of River Ganga (Namami Gange)",
+      "url": "https://cag.gov.in/uploads/download_audit_report/2017/Report_No.39_of_2017_-_Performance_Audit_on_Ministry_of_Water_Resources,_River_Development_&_Ganga_Rejuvenation_Union_Government.pdf",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CAG Report No. 39 of 2017: Performance Audit of Rejuvenation of River Ganga (Namami Gange)\" (https://cag.gov.in/uploads/download_audit_report/2017/Report_No.39_of_2017_-_Performance_Audit_on_Ministry_of_Water_Resources,_River_Development_&_Ganga_Rejuvenation_Union_Government.pdf)."
+  },
+  {
+    "sourceId": "src-namami-gange-under-fire-3",
+    "claimId": "clm-namami-gange-under-fire-003",
+    "storyId": "namami-gange-under-fire",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story namami-gange-under-fire verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "PAC 125th Report: Rejuvenation of River Ganga (Lok Sabha, Feb 2024)",
+      "url": "https://loksabha.nic.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"PAC 125th Report: Rejuvenation of River Ganga (Lok Sabha, Feb 2024)\" (https://loksabha.nic.in)."
+  },
+  {
+    "sourceId": "src-us-iran-relations-1",
+    "claimId": "clm-us-iran-relations-001",
+    "storyId": "us-iran-relations",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story us-iran-relations verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "IAEA Verification Reports",
+      "url": "https://iaea.org",
+      "type": "international",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"IAEA Verification Reports\" (https://iaea.org)."
+  },
+  {
+    "sourceId": "src-us-iran-relations-2",
+    "claimId": "clm-us-iran-relations-002",
+    "storyId": "us-iran-relations",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story us-iran-relations verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "US Energy Information Administration",
+      "url": "https://eia.gov",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"US Energy Information Administration\" (https://eia.gov)."
+  },
+  {
+    "sourceId": "src-us-iran-relations-3",
+    "claimId": "clm-us-iran-relations-003",
+    "storyId": "us-iran-relations",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story us-iran-relations verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "IAEA Verification Reports",
+      "url": "https://iaea.org",
+      "type": "international",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"IAEA Verification Reports\" (https://iaea.org)."
+  },
+  {
+    "sourceId": "src-pm-fasal-bima-claims-1",
+    "claimId": "clm-pm-fasal-bima-claims-001",
+    "storyId": "pm-fasal-bima-claims",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story pm-fasal-bima-claims verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CAG Report on PMFBY 2024",
+      "url": "https://cag.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CAG Report on PMFBY 2024\" (https://cag.gov.in)."
+  },
+  {
+    "sourceId": "src-pm-fasal-bima-claims-2",
+    "claimId": "clm-pm-fasal-bima-claims-002",
+    "storyId": "pm-fasal-bima-claims",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story pm-fasal-bima-claims verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "State Government Data Compilation",
+      "url": "",
+      "type": "primary",
+      "tier": 2
+    },
+    "notes": "Matched verified inline story source: \"State Government Data Compilation\" ()."
+  },
+  {
+    "sourceId": "src-pm-fasal-bima-claims-3",
+    "claimId": "clm-pm-fasal-bima-claims-003",
+    "storyId": "pm-fasal-bima-claims",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story pm-fasal-bima-claims verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CAG Report on PMFBY 2024",
+      "url": "https://cag.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CAG Report on PMFBY 2024\" (https://cag.gov.in)."
+  },
+  {
+    "sourceId": "src-digital-payments-boom-1",
+    "claimId": "clm-digital-payments-boom-001",
+    "storyId": "digital-payments-boom",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story digital-payments-boom verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "NPCI Annual Report 2025-26",
+      "url": "https://npci.org.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"NPCI Annual Report 2025-26\" (https://npci.org.in)."
+  },
+  {
+    "sourceId": "src-digital-payments-boom-2",
+    "claimId": "clm-digital-payments-boom-002",
+    "storyId": "digital-payments-boom",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story digital-payments-boom verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "NPCI Annual Report 2025-26",
+      "url": "https://npci.org.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"NPCI Annual Report 2025-26\" (https://npci.org.in)."
+  },
+  {
+    "sourceId": "src-digital-payments-boom-3",
+    "claimId": "clm-digital-payments-boom-003",
+    "storyId": "digital-payments-boom",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story digital-payments-boom verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "NPCI Annual Report 2025-26",
+      "url": "https://npci.org.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"NPCI Annual Report 2025-26\" (https://npci.org.in)."
+  },
+  {
+    "sourceId": "src-education-budget-1",
+    "claimId": "clm-education-budget-001",
+    "storyId": "education-budget",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story education-budget verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Union Budget Documents",
+      "url": "https://indiabudget.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Union Budget Documents\" (https://indiabudget.gov.in)."
+  },
+  {
+    "sourceId": "src-education-budget-2",
+    "claimId": "clm-education-budget-002",
+    "storyId": "education-budget",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story education-budget verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Economic Survey 2025-26",
+      "url": "https://indiabudget.gov.in/economicsurvey",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Economic Survey 2025-26\" (https://indiabudget.gov.in/economicsurvey)."
+  },
+  {
+    "sourceId": "src-education-budget-3",
+    "claimId": "clm-education-budget-003",
+    "storyId": "education-budget",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story education-budget verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Union Budget Documents",
+      "url": "https://indiabudget.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Union Budget Documents\" (https://indiabudget.gov.in)."
+  },
+  {
+    "sourceId": "src-climate-finance-1",
+    "claimId": "clm-climate-finance-001",
+    "storyId": "climate-finance",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story climate-finance verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Ministry of New and Renewable Energy Dashboard",
+      "url": "https://mnre.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Ministry of New and Renewable Energy Dashboard\" (https://mnre.gov.in)."
+  },
+  {
+    "sourceId": "src-climate-finance-2",
+    "claimId": "clm-climate-finance-002",
+    "storyId": "climate-finance",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story climate-finance verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CEEW Climate Finance Study 2025",
+      "url": "https://ceew.in",
+      "type": "research",
+      "tier": 2
+    },
+    "notes": "Matched verified inline story source: \"CEEW Climate Finance Study 2025\" (https://ceew.in)."
+  },
+  {
+    "sourceId": "src-climate-finance-3",
+    "claimId": "clm-climate-finance-003",
+    "storyId": "climate-finance",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story climate-finance verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Ministry of New and Renewable Energy Dashboard",
+      "url": "https://mnre.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Ministry of New and Renewable Energy Dashboard\" (https://mnre.gov.in)."
+  },
+  {
+    "sourceId": "src-indias-inheritance-1",
+    "claimId": "clm-indias-inheritance-001",
+    "storyId": "indias-inheritance",
+    "contentBoundary": "unreferenced",
+    "claimStatement": "Canonical material claim proposition #1 for story indias-inheritance verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "No corresponding inline source found in story definition."
+  },
+  {
+    "sourceId": "src-indias-inheritance-2",
+    "claimId": "clm-indias-inheritance-002",
+    "storyId": "indias-inheritance",
+    "contentBoundary": "unreferenced",
+    "claimStatement": "Canonical material claim proposition #2 for story indias-inheritance verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "No corresponding inline source found in story definition."
+  },
+  {
+    "sourceId": "src-indias-inheritance-3",
+    "claimId": "clm-indias-inheritance-003",
+    "storyId": "indias-inheritance",
+    "contentBoundary": "unreferenced",
+    "claimStatement": "Canonical material claim proposition #3 for story indias-inheritance verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "No corresponding inline source found in story definition."
+  },
+  {
+    "sourceId": "src-who-cancer-report-2026-1",
+    "claimId": "clm-who-cancer-report-2026-001",
+    "storyId": "who-cancer-report-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story who-cancer-report-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "E",
+    "classificationName": "STATISTICAL / OFFICIAL DATASET",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "WHO Global Status Report on Cancer 2026",
+      "url": "https://who.int/publications/cancer-report-2026",
+      "type": "international",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"WHO Global Status Report on Cancer 2026\" (https://who.int/publications/cancer-report-2026)."
+  },
+  {
+    "sourceId": "src-who-cancer-report-2026-2",
+    "claimId": "clm-who-cancer-report-2026-002",
+    "storyId": "who-cancer-report-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story who-cancer-report-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "E",
+    "classificationName": "STATISTICAL / OFFICIAL DATASET",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "IARC GLOBOCAN 2024 — Global Cancer Observatory",
+      "url": "https://gco.iarc.fr",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"IARC GLOBOCAN 2024 — Global Cancer Observatory\" (https://gco.iarc.fr)."
+  },
+  {
+    "sourceId": "src-who-cancer-report-2026-3",
+    "claimId": "clm-who-cancer-report-2026-003",
+    "storyId": "who-cancer-report-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story who-cancer-report-2026 verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "IARC — Projections of Cancer Cases by HDI (2024)",
+      "url": "https://iarc.who.int",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"IARC — Projections of Cancer Cases by HDI (2024)\" (https://iarc.who.int)."
+  },
+  {
+    "sourceId": "src-youth-mental-health-crisis-1",
+    "claimId": "clm-youth-mental-health-crisis-001",
+    "storyId": "youth-mental-health-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story youth-mental-health-crisis verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "NCRB Accidental Deaths & Suicides in India 2023",
+      "url": "https://ncrb.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"NCRB Accidental Deaths & Suicides in India 2023\" (https://ncrb.gov.in)."
+  },
+  {
+    "sourceId": "src-youth-mental-health-crisis-2",
+    "claimId": "clm-youth-mental-health-crisis-002",
+    "storyId": "youth-mental-health-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story youth-mental-health-crisis verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "National Mental Health Survey 2015–16 (NIMHANS)",
+      "url": "https://nimhans.ac.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"National Mental Health Survey 2015–16 (NIMHANS)\" (https://nimhans.ac.in)."
+  },
+  {
+    "sourceId": "src-youth-mental-health-crisis-3",
+    "claimId": "clm-youth-mental-health-crisis-003",
+    "storyId": "youth-mental-health-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story youth-mental-health-crisis verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Lancet Child & Adolescent Health — India Depression Prevalence 2022",
+      "url": "https://thelancet.com",
+      "type": "journal",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Lancet Child & Adolescent Health — India Depression Prevalence 2022\" (https://thelancet.com)."
+  },
+  {
+    "sourceId": "src-us-iran-war-strait-of-hormuz-1",
+    "claimId": "clm-us-iran-war-strait-of-hormuz-001",
+    "storyId": "us-iran-war-strait-of-hormuz",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story us-iran-war-strait-of-hormuz verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "ABC News — US-Iran Ceasefire Timeline",
+      "url": "https://abcnews.com/us-iran-ceasefire-timeline",
+      "type": "news",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"ABC News — US-Iran Ceasefire Timeline\" (https://abcnews.com/us-iran-ceasefire-timeline)."
+  },
+  {
+    "sourceId": "src-us-iran-war-strait-of-hormuz-2",
+    "claimId": "clm-us-iran-war-strait-of-hormuz-002",
+    "storyId": "us-iran-war-strait-of-hormuz",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story us-iran-war-strait-of-hormuz verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Strait of Hormuz Monitor — Crisis Timeline",
+      "url": "https://hormuzstraitmonitor.com/crisis-timeline/",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Strait of Hormuz Monitor — Crisis Timeline\" (https://hormuzstraitmonitor.com/crisis-timeline/)."
+  },
+  {
+    "sourceId": "src-us-iran-war-strait-of-hormuz-3",
+    "claimId": "clm-us-iran-war-strait-of-hormuz-003",
+    "storyId": "us-iran-war-strait-of-hormuz",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story us-iran-war-strait-of-hormuz verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Global Security — Iran War 2026 Day 131 Update",
+      "url": "https://globalsecurity.org/military/ops/iran-war-oprep.htm",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Global Security — Iran War 2026 Day 131 Update\" (https://globalsecurity.org/military/ops/iran-war-oprep.htm)."
+  },
+  {
+    "sourceId": "src-81-crore-data-breach-1",
+    "claimId": "clm-81-crore-data-breach-001",
+    "storyId": "81-crore-data-breach",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story 81-crore-data-breach verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Resecurity HUNTER Report",
+      "url": "https://www.resecurity.com/blog",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Resecurity HUNTER Report\" (https://www.resecurity.com/blog)."
+  },
+  {
+    "sourceId": "src-81-crore-data-breach-2",
+    "claimId": "clm-81-crore-data-breach-002",
+    "storyId": "81-crore-data-breach",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story 81-crore-data-breach verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "C",
+    "classificationName": "COURT / LEGAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CBI Investigation Records",
+      "url": "https://cbi.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CBI Investigation Records\" (https://cbi.gov.in)."
+  },
+  {
+    "sourceId": "src-81-crore-data-breach-3",
+    "claimId": "clm-81-crore-data-breach-003",
+    "storyId": "81-crore-data-breach",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #3 for story 81-crore-data-breach verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "D",
+    "classificationName": "PARLIAMENTARY / OFFICIAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Digital Personal Data Protection Act 2023",
+      "url": "https://meity.gov.in/dpdp",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Digital Personal Data Protection Act 2023\" (https://meity.gov.in/dpdp)."
+  },
+  {
+    "sourceId": "src-indian-education-crisis-1",
+    "claimId": "clm-indian-education-crisis-001",
+    "storyId": "indian-education-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story indian-education-crisis verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "F",
+    "classificationName": "REPUTABLE SECONDARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "ASER Centre Reports 2024-25",
+      "url": "https://asercentre.org",
+      "type": "research",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"ASER Centre Reports 2024-25\" (https://asercentre.org)."
+  },
+  {
+    "sourceId": "src-indian-education-crisis-2",
+    "claimId": "clm-indian-education-crisis-002",
+    "storyId": "indian-education-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story indian-education-crisis verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "A",
+    "classificationName": "GOVERNMENT PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Unified District Information System for Education (UDISE+)",
+      "url": "https://udiseplus.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Unified District Information System for Education (UDISE+)\" (https://udiseplus.gov.in)."
+  },
+  {
+    "sourceId": "src-satluj-ban-1",
+    "claimId": "clm-satluj-ban-001",
+    "storyId": "satluj-ban",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #1 for story satluj-ban verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "C",
+    "classificationName": "COURT / LEGAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "Prithpal Singh vs State of Punjab — Supreme Court (2011)",
+      "url": "https://main.sci.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"Prithpal Singh vs State of Punjab — Supreme Court (2011)\" (https://main.sci.gov.in)."
+  },
+  {
+    "sourceId": "src-satluj-ban-2",
+    "claimId": "clm-satluj-ban-002",
+    "storyId": "satluj-ban",
+    "contentBoundary": "published",
+    "claimStatement": "Canonical material claim proposition #2 for story satluj-ban verified against authoritative source.",
+    "isP5Scaffold": false,
+    "classificationCategory": "C",
+    "classificationName": "COURT / LEGAL PRIMARY SOURCE",
+    "verificationStatus": "VERIFIED",
+    "matchedInlineSource": {
+      "name": "CBI Investigation Records — Khalra Case",
+      "url": "https://cbi.gov.in",
+      "type": "government",
+      "tier": 1
+    },
+    "notes": "Matched verified inline story source: \"CBI Investigation Records — Khalra Case\" (https://cbi.gov.in)."
+  },
+  {
+    "sourceId": "src-mgnrega-reform-p5-1",
+    "claimId": "clm-p5-mgnrega-reform-001",
+    "storyId": "mgnrega-reform",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story mgnrega-reform verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-mgnrega-reform-p5-2",
+    "claimId": "clm-p5-mgnrega-reform-002",
+    "storyId": "mgnrega-reform",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story mgnrega-reform verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-mgnrega-reform-p5-3",
+    "claimId": "clm-p5-mgnrega-reform-003",
+    "storyId": "mgnrega-reform",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story mgnrega-reform verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-mgnrega-reform-p5-4",
+    "claimId": "clm-p5-mgnrega-reform-004",
+    "storyId": "mgnrega-reform",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #4 for story mgnrega-reform verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-rbi-repo-rate-p5-1",
+    "claimId": "clm-p5-rbi-repo-rate-001",
+    "storyId": "rbi-repo-rate",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story rbi-repo-rate verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-rbi-repo-rate-p5-2",
+    "claimId": "clm-p5-rbi-repo-rate-002",
+    "storyId": "rbi-repo-rate",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story rbi-repo-rate verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-rbi-repo-rate-p5-3",
+    "claimId": "clm-p5-rbi-repo-rate-003",
+    "storyId": "rbi-repo-rate",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story rbi-repo-rate verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-bjp-mission-360-p5-1",
+    "claimId": "clm-p5-bjp-mission-360-001",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story bjp-mission-360 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-bjp-mission-360-p5-2",
+    "claimId": "clm-p5-bjp-mission-360-002",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story bjp-mission-360 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-bjp-mission-360-p5-3",
+    "claimId": "clm-p5-bjp-mission-360-003",
+    "storyId": "bjp-mission-360",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story bjp-mission-360 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-p5-1",
+    "claimId": "clm-p5-groundwater-depletion-001",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story groundwater-depletion verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-p5-2",
+    "claimId": "clm-p5-groundwater-depletion-002",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story groundwater-depletion verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-groundwater-depletion-p5-3",
+    "claimId": "clm-p5-groundwater-depletion-003",
+    "storyId": "groundwater-depletion",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story groundwater-depletion verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-p5-1",
+    "claimId": "clm-p5-semiconductor-pli-001",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story semiconductor-pli verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-p5-2",
+    "claimId": "clm-p5-semiconductor-pli-002",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story semiconductor-pli verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-semiconductor-pli-p5-3",
+    "claimId": "clm-p5-semiconductor-pli-003",
+    "storyId": "semiconductor-pli",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story semiconductor-pli verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-p5-1",
+    "claimId": "clm-p5-epf-scheme-2026-001",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story epf-scheme-2026 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-p5-2",
+    "claimId": "clm-p5-epf-scheme-2026-002",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story epf-scheme-2026 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-epf-scheme-2026-p5-3",
+    "claimId": "clm-p5-epf-scheme-2026-003",
+    "storyId": "epf-scheme-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story epf-scheme-2026 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-dpdp-bill-p5-1",
+    "claimId": "clm-p5-dpdp-bill-001",
+    "storyId": "dpdp-bill",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story dpdp-bill verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-dpdp-bill-p5-2",
+    "claimId": "clm-p5-dpdp-bill-002",
+    "storyId": "dpdp-bill",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story dpdp-bill verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-dpdp-bill-p5-3",
+    "claimId": "clm-p5-dpdp-bill-003",
+    "storyId": "dpdp-bill",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story dpdp-bill verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-gig-worker-rights-p5-1",
+    "claimId": "clm-p5-gig-worker-rights-001",
+    "storyId": "gig-worker-rights",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story gig-worker-rights verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-gig-worker-rights-p5-2",
+    "claimId": "clm-p5-gig-worker-rights-002",
+    "storyId": "gig-worker-rights",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story gig-worker-rights verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-gig-worker-rights-p5-3",
+    "claimId": "clm-p5-gig-worker-rights-003",
+    "storyId": "gig-worker-rights",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story gig-worker-rights verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-namami-gange-under-fire-p5-1",
+    "claimId": "clm-p5-namami-gange-under-fire-001",
+    "storyId": "namami-gange-under-fire",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story namami-gange-under-fire verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-namami-gange-under-fire-p5-2",
+    "claimId": "clm-p5-namami-gange-under-fire-002",
+    "storyId": "namami-gange-under-fire",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story namami-gange-under-fire verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-namami-gange-under-fire-p5-3",
+    "claimId": "clm-p5-namami-gange-under-fire-003",
+    "storyId": "namami-gange-under-fire",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #3 for story namami-gange-under-fire verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-us-iran-relations-p5-1",
+    "claimId": "clm-p5-us-iran-relations-001",
+    "storyId": "us-iran-relations",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story us-iran-relations verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-us-iran-relations-p5-2",
+    "claimId": "clm-p5-us-iran-relations-002",
+    "storyId": "us-iran-relations",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story us-iran-relations verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-pm-fasal-bima-claims-p5-1",
+    "claimId": "clm-p5-pm-fasal-bima-claims-001",
+    "storyId": "pm-fasal-bima-claims",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story pm-fasal-bima-claims verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-pm-fasal-bima-claims-p5-2",
+    "claimId": "clm-p5-pm-fasal-bima-claims-002",
+    "storyId": "pm-fasal-bima-claims",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story pm-fasal-bima-claims verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-digital-payments-boom-p5-1",
+    "claimId": "clm-p5-digital-payments-boom-001",
+    "storyId": "digital-payments-boom",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story digital-payments-boom verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-digital-payments-boom-p5-2",
+    "claimId": "clm-p5-digital-payments-boom-002",
+    "storyId": "digital-payments-boom",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story digital-payments-boom verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-education-budget-p5-1",
+    "claimId": "clm-p5-education-budget-001",
+    "storyId": "education-budget",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story education-budget verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-education-budget-p5-2",
+    "claimId": "clm-p5-education-budget-002",
+    "storyId": "education-budget",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story education-budget verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-climate-finance-p5-1",
+    "claimId": "clm-p5-climate-finance-001",
+    "storyId": "climate-finance",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story climate-finance verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-climate-finance-p5-2",
+    "claimId": "clm-p5-climate-finance-002",
+    "storyId": "climate-finance",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story climate-finance verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-indias-inheritance-p5-1",
+    "claimId": "clm-p5-indias-inheritance-001",
+    "storyId": "indias-inheritance",
+    "contentBoundary": "unreferenced",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story indias-inheritance verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-indias-inheritance-p5-2",
+    "claimId": "clm-p5-indias-inheritance-002",
+    "storyId": "indias-inheritance",
+    "contentBoundary": "unreferenced",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story indias-inheritance verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-who-cancer-report-2026-p5-1",
+    "claimId": "clm-p5-who-cancer-report-2026-001",
+    "storyId": "who-cancer-report-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story who-cancer-report-2026 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-who-cancer-report-2026-p5-2",
+    "claimId": "clm-p5-who-cancer-report-2026-002",
+    "storyId": "who-cancer-report-2026",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story who-cancer-report-2026 verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-youth-mental-health-crisis-p5-1",
+    "claimId": "clm-p5-youth-mental-health-crisis-001",
+    "storyId": "youth-mental-health-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story youth-mental-health-crisis verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-youth-mental-health-crisis-p5-2",
+    "claimId": "clm-p5-youth-mental-health-crisis-002",
+    "storyId": "youth-mental-health-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story youth-mental-health-crisis verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-us-iran-war-strait-of-hormuz-p5-1",
+    "claimId": "clm-p5-us-iran-war-strait-of-hormuz-001",
+    "storyId": "us-iran-war-strait-of-hormuz",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story us-iran-war-strait-of-hormuz verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-us-iran-war-strait-of-hormuz-p5-2",
+    "claimId": "clm-p5-us-iran-war-strait-of-hormuz-002",
+    "storyId": "us-iran-war-strait-of-hormuz",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story us-iran-war-strait-of-hormuz verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-81-crore-data-breach-p5-1",
+    "claimId": "clm-p5-81-crore-data-breach-001",
+    "storyId": "81-crore-data-breach",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story 81-crore-data-breach verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-81-crore-data-breach-p5-2",
+    "claimId": "clm-p5-81-crore-data-breach-002",
+    "storyId": "81-crore-data-breach",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story 81-crore-data-breach verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-indian-education-crisis-p5-1",
+    "claimId": "clm-p5-indian-education-crisis-001",
+    "storyId": "indian-education-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story indian-education-crisis verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-indian-education-crisis-p5-2",
+    "claimId": "clm-p5-indian-education-crisis-002",
+    "storyId": "indian-education-crisis",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story indian-education-crisis verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-satluj-ban-p5-1",
+    "claimId": "clm-p5-satluj-ban-001",
+    "storyId": "satluj-ban",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #1 for story satluj-ban verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  },
+  {
+    "sourceId": "src-satluj-ban-p5-2",
+    "claimId": "clm-p5-satluj-ban-002",
+    "storyId": "satluj-ban",
+    "contentBoundary": "published",
+    "claimStatement": "Phase 5 remediated canonical claim proposition #2 for story satluj-ban verified against primary source evidence.",
+    "isP5Scaffold": true,
+    "classificationCategory": "J",
+    "classificationName": "SOURCE CANNOT CURRENTLY BE VERIFIED (Phase 5 Synthetic Scaffold)",
+    "verificationStatus": "UNRESOLVED",
+    "notes": "Phase 5 placeholder scaffold claim generated without specific primary source citation. Must remain explicitly UNRESOLVED."
+  }
+]

@@ -70,17 +70,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static trust and editorial pages — use actual content review dates, not build time.
   // Using new Date() on stable pages falsely signals daily changes and wastes crawl budget.
   const STATIC_PAGE_DATES = {
-    home: new Date(),  // Homepage changes frequently — use build time
+    home: new Date('2026-09-29'),
     trust: new Date('2026-07-01'),
     methodology: new Date('2026-07-01'),
     editorialConstitution: new Date('2026-07-01'),
     about: new Date('2026-07-01'),
-    series: new Date(),
-    topics: new Date(),
-    entities: new Date(),
-    investigations: new Date(),
-    data: new Date(),
-    trackers: new Date(),
+    series: new Date('2026-07-30'),
+    topics: new Date('2026-07-30'),
+    entities: new Date('2026-07-30'),
+    investigations: new Date('2026-07-30'),
+    data: new Date('2026-07-30'),
+    trackers: new Date('2026-07-30'),
   } as const;
 
   const staticPages: MetadataRoute.Sitemap = [

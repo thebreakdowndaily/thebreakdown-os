@@ -1,0 +1,17 @@
+[
+  {
+    "queryId": "Q001",
+    "targetUrl": "https://thebreakdown.in/stories/delhi-air-pollution-emergency",
+    "engine": "google",
+    "source": "operator_manual_gsc_inspection",
+    "timestamp": "2026-09-29T07:42:34.975Z",
+    "googleIndexStatus": "INDEX_STATUS_UNKNOWN",
+    "bingIndexStatus": "INDEX_STATUS_UNKNOWN",
+    "searchRetrieval": "NOT_RETRIEVED",
+    "mentionStatus": "NOT_MENTIONED",
+    "citationStatus": "UNCITED",
+    "claimGrounding": "GROUNDING_UNKNOWN",
+    "canonicalRelation": "match",
+    "notes": "Template record for operator manual inspection"
+  }
+]

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
       "Track India's semiconductor manufacturing push — ₹76,000 Cr outlays, ₹1.26 lakh Cr private commitments, and OSAT/Fab construction in Sanand, Dholera, and Morigaon.",
     type: 'website',
   },
+  alternates: { canonical: 'https://thebreakdown.in/trackers/semiconductor' },
 };
 
 export default function SemiconductorTrackerPage() {
