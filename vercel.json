@@ -7,7 +7,7 @@
     },
     {
       "path": "/api/v2/radar/poll",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 18 * * *"
     }
   ]
 }

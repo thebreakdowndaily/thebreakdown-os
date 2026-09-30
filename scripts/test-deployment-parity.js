@@ -61,7 +61,8 @@ async function runParitySuite() {
     { path: '/story/mgnrega-reform', name: 'Story: MGNREGA', expStatus: 200 },
     { path: '/entity/cag', name: 'Entity: CAG', expStatus: 200 },
     { path: '/entity/supreme-court-of-india', name: 'Entity: Supreme Court', expStatus: 200 },
-    { path: '/entity/eci', name: 'Entity: ECI', expStatus: 200 },
+    { path: '/entity/eci', name: 'Entity: ECI Redirect', expStatus: 308 },
+    { path: '/entity/election-commission', name: 'Entity: Election Commission', expStatus: 200 },
     { path: '/topics', name: 'Topics Index', expStatus: 200 },
     { path: '/topic/governance', name: 'Topic: Governance', expStatus: 200 },
     { path: '/trackers', name: 'Trackers Hub', expStatus: 200 },
@@ -91,6 +92,8 @@ async function runParitySuite() {
     if (res.status !== item.expStatus) {
       parityStatus = 'DRIFT_FAIL';
       notes = `Expected HTTP ${item.expStatus}, got ${res.status}`;
+    } else if (item.expStatus === 308) {
+      notes = `Redirects to ${res.headers.location || 'target'}`;
     } else if (item.path.endsWith('.xml') || item.path === '/rss') {
       if (res.body.length < 500) {
         parityStatus = 'DRIFT_FAIL';
