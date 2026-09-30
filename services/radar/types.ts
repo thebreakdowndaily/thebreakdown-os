@@ -153,6 +153,9 @@ export type RadarSourceHealthStatus =
   | 'degraded'
   | 'failing'
   | 'stale'
+  | 'changed'
+  | 'unavailable'
+  | 'disputed'
   | 'unknown';
 
 export interface RadarSourceHealth {

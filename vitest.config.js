@@ -123,6 +123,7 @@ module.exports = {
       'tests/phase6-reader-validation.test.ts',
       'tests/phase8-production-promotion-and-validation.test.ts',
       'tests/master-loopback-engineering.test.ts',
+      'tests/continuous-newsroom-os.test.ts',
       'services/radar/__tests__/change-detection.test.ts',
       'services/radar/__tests__/entity-resolution.test.ts',
       'services/radar/__tests__/geo-resolution.test.ts',

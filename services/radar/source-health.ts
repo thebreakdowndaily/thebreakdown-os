@@ -91,10 +91,48 @@ export class RadarSourceHealthMonitor {
     const updated: RadarSourceHealth = {
       ...current,
       sourceId,
+      status: 'changed',
       lastChangedAt: new Date().toISOString(),
       totalChanges: current.totalChanges + 1,
     };
 
+    this.healthMap.set(sourceId, updated);
+    this.dirtyIds.add(sourceId);
+  }
+
+  public markStale(sourceId: string): void {
+    const current = this.getHealth(sourceId);
+    const updated: RadarSourceHealth = {
+      ...current,
+      sourceId,
+      status: 'stale',
+      scheduleState: 'STALE',
+    };
+    this.healthMap.set(sourceId, updated);
+    this.dirtyIds.add(sourceId);
+  }
+
+  public markUnavailable(sourceId: string, reason?: string): void {
+    const current = this.getHealth(sourceId);
+    const updated: RadarSourceHealth = {
+      ...current,
+      sourceId,
+      status: 'unavailable',
+      scheduleState: 'DISABLED',
+      lastError: reason || 'Source marked unavailable by operational probe',
+    };
+    this.healthMap.set(sourceId, updated);
+    this.dirtyIds.add(sourceId);
+  }
+
+  public markDisputed(sourceId: string, reason?: string): void {
+    const current = this.getHealth(sourceId);
+    const updated: RadarSourceHealth = {
+      ...current,
+      sourceId,
+      status: 'disputed',
+      lastError: reason || 'Source reliability or provenance disputed by editorial audit',
+    };
     this.healthMap.set(sourceId, updated);
     this.dirtyIds.add(sourceId);
   }
