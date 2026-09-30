@@ -101,6 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/compare`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${siteUrl}/trackers`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'daily', priority: 0.9 },
     { url: `${siteUrl}/trackers/mgnrega`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/trackers/pmfby`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/semiconductor`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/upi`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/stories`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'daily', priority: 0.9 },

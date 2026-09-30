@@ -424,6 +424,23 @@ export function resolveNextBestUnderstanding(storySlug: string): NextBestUnderst
       filteredSteps = filteredSteps.filter((s) => s.type !== 'prerequisite');
     }
 
+    if (override?.pinnedUrls && override.pinnedUrls.length > 0) {
+      for (const pinUrl of override.pinnedUrls) {
+        if (!filteredSteps.some((s) => s.url === pinUrl)) {
+          filteredSteps.unshift({
+            type: 'structural_fix',
+            learningPath: 'structural_reform',
+            badgeLabel: 'Editorially Pinned',
+            title: 'Pinned Learning Path',
+            summary: 'High-priority cognitive connection pinned by editorial staff.',
+            url: pinUrl,
+            estimatedMinutes: 5,
+            explanationReason: 'Explicitly pinned by editorial team as essential context.'
+          });
+        }
+      }
+    }
+
     return {
       storySlug,
       storyTitle,
@@ -511,7 +528,39 @@ export function resolveNextBestUnderstanding(storySlug: string): NextBestUnderst
   }
 
   // Filter out false connections and circular links
-  const finalSteps = candidateSteps.filter((s) => !isFalseConnection(storySlug, s, override));
+  let finalSteps = candidateSteps.filter((s) => !isFalseConnection(storySlug, s, override));
+
+  if (override?.pinnedUrls && override.pinnedUrls.length > 0) {
+    for (const pinUrl of override.pinnedUrls) {
+      if (!finalSteps.some((s) => s.url === pinUrl)) {
+        finalSteps.unshift({
+          type: 'structural_fix',
+          learningPath: 'structural_reform',
+          badgeLabel: 'Editorially Pinned',
+          title: 'Pinned Learning Path',
+          summary: 'High-priority cognitive connection pinned by editorial staff.',
+          url: pinUrl,
+          estimatedMinutes: 5,
+          explanationReason: 'Explicitly pinned by editorial team as essential context.'
+        });
+      }
+    }
+  }
+
+  if (finalSteps.length === 0) {
+    finalSteps.push({
+      type: 'upstream_cause',
+      learningPath: 'legal_statutory',
+      badgeLabel: 'Knowledge Directory',
+      title: 'Topics & Policy Index',
+      subtitle: 'Systemic Overview',
+      summary: 'Explore all registered topics, policy sectors, and institutional frameworks.',
+      url: '/topics',
+      entityOrCategory: 'Directory',
+      estimatedMinutes: 3,
+      explanationReason: 'Navigate foundational institutional and policy topics across The Breakdown knowledge base.',
+    });
+  }
 
   return {
     storySlug,

@@ -94,13 +94,84 @@ export class MemorySearchService implements SearchService {
   rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[], problems?: Problem[]): void {
     this.entries = [];
     const items: SearchIndexEntry[] = [
-      ...stories.map(s => toEntry(s.id, 'story', s.title, s.slug, s.summary, s.tags, s.blocks.map(b => JSON.stringify(b.data)).join(' '), s.updatedAt)),
-      ...topics.map(t => toEntry(t.id, 'topic', t.name, t.slug, t.description, [], t.overview || '', t.updatedAt)),
-      ...entities.map(e => toEntry(e.id, 'entity', e.name, e.slug, e.description, e.aliases, e.statistics.map(s => s.label + ' ' + s.value).join(' '), e.updatedAt)),
-      ...timelines.map(t => toEntry(t.id, 'timeline', t.title, '', t.description, [], t.events.map(e => e.title + ' ' + e.description).join(' '), t.updatedAt)),
-      ...fixes.map(f => toEntry(f.id, 'fix', f.headline, f.slug, f.problem.content, [], f.rootCauses.content + ' ' + f.recommendedActions.map(a => a.title).join(' '), f.updatedAt)),
-      ...(datasets || []).map(d => toEntry(d.id, 'dataset', d.title, d.slug, d.description, d.tags, d.metrics.map(m => m.label).join(' ') + ' ' + d.methodology, d.updatedAt)),
-      ...(problems || []).map(p => toEntry(p.slug, 'problem', p.title, p.slug, p.description, p.tags, '', p.lastUpdated)),
+      ...stories.map(s => toEntry(
+        s.id,
+        'story',
+        s.title,
+        s.slug,
+        s.summary,
+        Array.isArray(s.tags) ? s.tags : [],
+        Array.isArray(s.blocks) ? s.blocks.map(b => JSON.stringify(b?.data || '')).join(' ') : '',
+        s.updatedAt
+      )),
+      ...topics.map(t => toEntry(
+        t.id,
+        'topic',
+        t.name,
+        t.slug,
+        t.description,
+        [],
+        t.overview || '',
+        t.updatedAt
+      )),
+      ...entities.map(e => {
+        let statsStr = '';
+        if (Array.isArray(e.statistics)) {
+          statsStr = e.statistics.map(s => `${s?.label || ''} ${s?.value || ''}`).join(' ');
+        } else if (e.statistics && typeof e.statistics === 'object') {
+          statsStr = Object.entries(e.statistics).map(([k, v]) => `${k} ${v}`).join(' ');
+        }
+        return toEntry(
+          e.id,
+          'entity',
+          e.name,
+          e.slug,
+          e.description,
+          Array.isArray(e.aliases) ? e.aliases : [],
+          statsStr,
+          e.updatedAt
+        );
+      }),
+      ...timelines.map(t => toEntry(
+        t.id,
+        'timeline',
+        t.title,
+        '',
+        t.description,
+        [],
+        Array.isArray(t.events) ? t.events.map(e => `${e?.title || ''} ${e?.description || ''}`).join(' ') : '',
+        t.updatedAt
+      )),
+      ...fixes.map(f => toEntry(
+        f.id,
+        'fix',
+        f.headline,
+        f.slug,
+        f.problem?.content || '',
+        [],
+        `${f.rootCauses?.content || ''} ${Array.isArray(f.recommendedActions) ? f.recommendedActions.map(a => a?.title || '').join(' ') : ''}`,
+        f.updatedAt
+      )),
+      ...(datasets || []).map(d => toEntry(
+        d.id,
+        'dataset',
+        d.title,
+        d.slug,
+        d.description,
+        Array.isArray(d.tags) ? d.tags : [],
+        `${Array.isArray(d.metrics) ? d.metrics.map(m => m?.label || '').join(' ') : ''} ${d.methodology || ''}`,
+        d.updatedAt
+      )),
+      ...(problems || []).map(p => toEntry(
+        p.slug,
+        'problem',
+        p.title,
+        p.slug,
+        p.description,
+        Array.isArray(p.tags) ? p.tags : [],
+        '',
+        p.lastUpdated
+      )),
     ];
     this.index(items);
   }
