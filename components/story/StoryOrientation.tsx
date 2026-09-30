@@ -2,18 +2,48 @@ import type { StoryOrientationModel } from '@/lib/story/presentation-model';
 
 interface StoryOrientationProps {
   orientation?: StoryOrientationModel;
+  prerequisite?: {
+    title: string;
+    url: string;
+    summary: string;
+  };
 }
 
-export function StoryOrientation({ orientation }: StoryOrientationProps) {
-  if (!orientation) return null;
+export function StoryOrientation({ orientation, prerequisite }: StoryOrientationProps) {
+  if (!orientation && !prerequisite) return null;
 
-  const { centralFinding, keyTakeaways, keyNumbers, whyItMatters } = orientation;
-  if (!centralFinding && (!keyTakeaways || keyTakeaways.length === 0) && (!keyNumbers || keyNumbers.length === 0) && !whyItMatters) {
+  const { centralFinding, keyTakeaways, keyNumbers, whyItMatters } = orientation || {};
+  if (!centralFinding && (!keyTakeaways || keyTakeaways.length === 0) && (!keyNumbers || keyNumbers.length === 0) && !whyItMatters && !prerequisite) {
     return null;
   }
 
   return (
     <section id="orientation" className="my-8 p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-neutral-800/80 backdrop-blur-sm shadow-xl space-y-6">
+      {prerequisite && (
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+          <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 shrink-0 mt-0.5">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div className="text-xs space-y-1">
+            <span className="font-mono font-bold uppercase tracking-wider text-amber-400 block">
+              Read This First (Prerequisite Context)
+            </span>
+            <p className="text-neutral-200 leading-relaxed">
+              {prerequisite.summary}{' '}
+              <a
+                href={prerequisite.url}
+                className="text-amber-300 hover:text-amber-200 underline font-medium inline-flex items-center gap-0.5"
+              >
+                <span>{prerequisite.title}</span>
+                <span>&rarr;</span>
+              </a>
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
         <h3 className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">

@@ -28,6 +28,9 @@ export const mgnregaTracker: TrackerDefinition = {
   topicSlug: 'economy',
   currentStatus:
     'VB-G RAM G Act 2025 is now the operative statute (since 1 July 2026). MGNREGA 2005 repealed under Section 36(1) of Act No. 18 of 2025. Existing job card holders retain full transitional protection.',
+  freshnessState: 'current',
+  dataThrough: 'Operative Statute as of 1 July 2026 / Budget FY 2026-27',
+  reviewDueAt: '2026-10-31',
   lastUpdated: '2026-07-23',
   lastVerifiedBy: 'The Breakdown Editorial',
   keyDataPoints: [

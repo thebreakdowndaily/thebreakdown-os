@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      'application/rss+xml': 'https://thebreakdown.in/api/feed',
+      'application/rss+xml': 'https://thebreakdown.in/rss',
     },
   },
   // DNS TXT verification completed via Cloudflare

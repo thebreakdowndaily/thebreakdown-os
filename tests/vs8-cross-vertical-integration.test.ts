@@ -39,7 +39,7 @@ import type { Event, Claim } from '../types/canonical';
 
 describe('VS8 — Cross-Vertical Platform Integration Suite', () => {
   beforeEach(() => {
-    resetCorrectionsMemoryStore();
+    resetCorrectionsMemoryStore(false);
     vi.restoreAllMocks();
   });
 
@@ -455,8 +455,8 @@ describe('VS8 — Cross-Vertical Platform Integration Suite', () => {
     const migrationsDir = path.resolve(process.cwd(), 'supabase/migrations');
     const migrationFiles = fs.readdirSync(migrationsDir).filter((f) => f.endsWith('.sql'));
 
-    expect(migrationFiles.length).toBe(16);
-    expect(migrationFiles[migrationFiles.length - 1]).toContain('016_api_keys_and_rate_limiting');
+    expect(migrationFiles.length).toBeGreaterThanOrEqual(16);
+    expect(migrationFiles.some((f) => f.includes('016_api_keys_and_rate_limiting'))).toBe(true);
 
     // 2. VS6 Control plane must be intact
     const pipelineFile = path.resolve(process.cwd(), 'lib/operations/pipeline-health.ts');

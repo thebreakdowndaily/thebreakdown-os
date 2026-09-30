@@ -43,12 +43,15 @@ export async function GET(request: NextRequest) {
     let url = m.url;
     if (!url) {
       if (m.type === 'story') url = `/story/${m.slug || m.id}`;
-      else if (m.type === 'entity') url = `/entity/${m.slug || m.id}`;
+      else if (m.type === 'entity' || m.type === 'country' || m.type === 'organization') url = `/entity/${m.slug || m.id}`;
       else if (m.type === 'topic') url = `/topic/${m.slug || m.id}`;
       else if (m.type === 'chapter') url = `/series`;
       else if (m.type === 'fix') url = `/fix/${m.slug || m.id}`;
+      else if (m.type === 'problem') url = `/problems/${m.slug || m.id}`;
       else if (m.type === 'investigation') url = `/investigation/${m.slug || m.id}`;
-      else url = `/${m.slug || m.id}`;
+      else if (m.type === 'timeline') url = `/timeline`;
+      else if (m.type === 'dataset') url = `/datasets/${m.slug || m.id}`;
+      else url = `/story/${m.slug || m.id}`;
     }
     return {
       ...m,

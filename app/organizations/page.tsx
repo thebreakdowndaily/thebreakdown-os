@@ -4,7 +4,7 @@ import { getOrganizations } from '@/utils/data-layer/store';
 import Container from '@/components/layout/Container';
 
 export const metadata: Metadata = {
-  title: 'Organizations — The Breakdown',
+  title: 'Organizations',
   description: 'Key organizations tracked by The Breakdown — ministries, regulators, and institutions.',
   openGraph: { title: 'Organizations — The Breakdown', url: 'https://thebreakdown.in/organizations' },
   alternates: { canonical: 'https://thebreakdown.in/organizations' },

@@ -72,6 +72,9 @@ export interface TrackerDefinition {
   topic: string;
   topicSlug: string;
   currentStatus: string;
+  freshnessState?: 'current' | 'review-due' | 'stale' | 'changed' | 'unavailable' | 'disputed';
+  dataThrough?: string;
+  reviewDueAt?: string;
   lastUpdated: string;
   lastVerifiedBy: string;
   keyDataPoints: TrackerDataPoint[];

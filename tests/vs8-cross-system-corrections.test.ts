@@ -18,7 +18,7 @@ import type { Event } from '../types/canonical';
 
 describe('VS8: Cross-System Corrections & Operations Pipeline Integration', () => {
   beforeEach(() => {
-    resetCorrectionsMemoryStore();
+    resetCorrectionsMemoryStore(false);
   });
 
   it('GAP-VS8-03: emits correction:submitted event when reader submits correction', async () => {

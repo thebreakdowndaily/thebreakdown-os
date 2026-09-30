@@ -3,7 +3,7 @@ import { upiTracker } from '@/lib/trackers/upi-tracker';
 import GenericTracker from '@/components/trackers/GenericTracker';
 
 export const metadata: Metadata = {
-  title: 'UPI & Digital Payments Rails Tracker | The Breakdown',
+  title: 'UPI & Digital Payments Rails Tracker',
   description:
     'Track India\'s Unified Payments Interface (UPI) — 185B+ annual volume, ₹260L Cr value, rural adoption, UPI123Pay limits, Zero MDR status, and cross-border linkages.',
   openGraph: {

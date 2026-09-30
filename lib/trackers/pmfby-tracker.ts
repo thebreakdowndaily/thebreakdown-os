@@ -10,6 +10,9 @@ export const pmfbyTracker: TrackerDefinition = {
     'Living tracker tracking PMFBY implementation across 22 States/UTs, comparing gross premium collections against actual claim payouts, state subsidy arrears, and automated DigiClaim DBT transfers.',
   currentStatus:
     'Active Operational Framework — Revised Operational Guidelines 2024 active across 22 States/UTs. Strict 12% per annum penal interest mandated on state subsidy delays exceeding 3 months. Tech-based yield estimation (YES-TECH) mandatory for Kharif/Rabi seasons.',
+  freshnessState: 'current',
+  dataThrough: 'FY 2025-26 PMFBY Dashboard (as of 2026-08-31)',
+  reviewDueAt: '2026-11-30',
   lastUpdated: '31 Aug 2026',
   lastVerifiedBy: 'The Breakdown Policy & Agricultural Desk',
   topic: 'Agriculture & Welfare',

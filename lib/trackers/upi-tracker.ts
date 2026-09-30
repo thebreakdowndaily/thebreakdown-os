@@ -5,12 +5,15 @@ export const upiTracker: TrackerDefinition = {
   slug: 'upi',
   title: 'Unified Payments Interface (UPI) & Digital Rails Tracker',
   subtitle:
-    'Real-time tracking of India\'s sovereign retail payments architecture — volume, limits, rural penetration, MDR rules, and cross-border linkages (2016–2026).',
+    'Verified periodic tracking of India\'s sovereign retail payments architecture — volume, limits, rural penetration, MDR rules, and cross-border linkages (Data through FY 2025–26).',
   description:
     'The Breakdown\'s comprehensive intelligence tracker for the Unified Payments Interface (UPI). Maintained by NPCI and regulated by the Reserve Bank of India, UPI processes over 80% of India\'s retail digital transactions. This tracker monitors regulatory limits, merchant discount rate (MDR) policy, feature phone access (UPI123Pay), market share concentration, and international cross-border linkages.',
   topic: 'Digital Payments & Fintech',
   topicSlug: 'digital-payments',
   currentStatus: 'Active · Record 185B Annual Volume · Zero MDR Retained',
+  freshnessState: 'current',
+  dataThrough: 'FY 2025–26 (as of 2026-03-31)',
+  reviewDueAt: '2026-10-31',
   lastUpdated: '2026-08-30',
   lastVerifiedBy: 'The Breakdown Financial Regulation Desk',
 

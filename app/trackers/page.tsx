@@ -4,7 +4,7 @@ import { getAllTrackers } from '@/lib/trackers/registry';
 import StoryNewsletterCTA from '@/components/retention/StoryNewsletterCTA';
 
 export const metadata: Metadata = {
-  title: 'Policy & Issue Trackers | The Breakdown',
+  title: 'Policy & Issue Trackers',
   description:
     'Living, evidence-backed policy and issue trackers monitoring major Indian legislative overhauls, industrial investments, and welfare schemes.',
   alternates: {

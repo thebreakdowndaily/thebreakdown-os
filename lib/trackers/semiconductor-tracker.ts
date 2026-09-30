@@ -12,6 +12,9 @@ export const semiconductorTracker: TrackerDefinition = {
   topicSlug: 'technology',
   currentStatus:
     'COMMERCIAL_PRODUCTION commenced at CG Semi OSAT in Sanand (Q1 2026). Micron ATMP in PILOT_PRODUCTION. Tata-PSMC Dholera Fab (₹91,000 cr) and Tata Morigaon OSAT facility progressing cleanroom construction towards 2026–2027 output.',
+  freshnessState: 'current',
+  dataThrough: 'Q1 2026 Commercial Milestones (as of 2026-08-30)',
+  reviewDueAt: '2026-11-30',
   lastUpdated: '2026-08-30',
   lastVerifiedBy: 'The Breakdown Editorial',
   keyDataPoints: [

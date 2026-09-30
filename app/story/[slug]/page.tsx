@@ -100,7 +100,7 @@ export default async function StoryPage({
     const resolved = getEntityById(idOrSlug);
     if (resolved && !seenEntitySlugs.has(resolved.slug)) {
       seenEntitySlugs.add(resolved.slug);
-      const name = resolved.title ?? resolved.name ?? resolved.slug;
+      const name = resolved.name || resolved.title || resolved.slug;
       resolvedEntities.push({ slug: resolved.slug, name });
       if (entityLinks.length < 6) {
         entityLinks.push({ slug: resolved.slug, name });
@@ -125,12 +125,8 @@ export default async function StoryPage({
   const jsonLd = createStoryJsonLd(canonicalStory, {
     entities: resolvedEntities,
     corrections: publishedCorrections?.map((c) => ({
-      timestamp: (c as { timestamp?: string; created_at?: string }).timestamp
-        ?? (c as { timestamp?: string; created_at?: string }).created_at
-        ?? new Date().toISOString(),
-      description: (c as { description?: string; summary?: string }).description
-        ?? (c as { description?: string; summary?: string }).summary
-        ?? '',
+      timestamp: c.createdAt || c.updatedAt || canonicalStory.updatedAt || canonicalStory.publishedAt,
+      description: c.explanation || c.correctedWording || '',
     })),
   });
 

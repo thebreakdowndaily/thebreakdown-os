@@ -1,9 +1,18 @@
 import type { KnowledgeEntity } from '@/types/canonical';
 import { getEntity } from './store';
 
-const entityIndex = new Map<string, { id: string; slug: string; name: string; title: string }>();
+export interface IndexedEntity {
+  id: string;
+  slug: string;
+  name: string;
+  title: string;
+  type?: string;
+  description?: string;
+}
 
-const seedEntities: { id: string; slug: string; name: string; title: string }[] = [
+const entityIndex = new Map<string, IndexedEntity>();
+
+const seedEntities: IndexedEntity[] = [
   { id: 'jawaharlal-nehru', slug: 'jawaharlal-nehru', name: 'Jawaharlal Nehru', title: 'Prime Minister of India' },
   { id: 'mahatma-gandhi', slug: 'mahatma-gandhi', name: 'Mahatma Gandhi', title: 'Leader of Indian Independence Movement' },
   { id: 'mohammad-ali-jinnah', slug: 'mohammad-ali-jinnah', name: 'Muhammad Ali Jinnah', title: 'Founder of Pakistan' },
@@ -15,12 +24,14 @@ const seedEntities: { id: string; slug: string; name: string; title: string }[] 
   { id: 'soviet-union', slug: 'soviet-union', name: 'Soviet Union', title: 'Union of Soviet Socialist Republics' },
   { id: 'china', slug: 'china', name: 'China', title: 'People\'s Republic of China' },
   { id: 'un', slug: 'un', name: 'United Nations', title: 'United Nations Organization' },
-  { id: 'ministry-of-consumer-affairs', slug: 'ministry-of-consumer-affairs', name: 'Ministry of Consumer Affairs', title: 'Ministry of Consumer Affairs, Food and Public Distribution' },
-  { id: 'comptroller-and-auditor-general', slug: 'comptroller-and-auditor-general', name: 'Comptroller and Auditor General of India', title: 'Supreme Audit Institution of India' },
-  { id: 'supreme-court-of-india', slug: 'supreme-court-of-india', name: 'Supreme Court of India', title: 'Apex Judicial Authority of India' },
+  { id: 'ministry-of-consumer-affairs', slug: 'ministry-of-consumer-affairs', name: 'Ministry of Consumer Affairs', title: 'Ministry of Consumer Affairs' },
+  { id: 'comptroller-and-auditor-general', slug: 'cag', name: 'Comptroller and Auditor General of India', title: 'Comptroller and Auditor General of India' },
+  { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General of India', title: 'Comptroller and Auditor General of India' },
+  { id: 'supreme-court-of-india', slug: 'supreme-court-of-india', name: 'Supreme Court of India', title: 'Supreme Court of India' },
+  { id: 'supreme-court', slug: 'supreme-court-of-india', name: 'Supreme Court of India', title: 'Supreme Court of India' },
 ];
 
-export function getEntityIndex(): { id: string; slug: string; name: string; title: string }[] {
+export function getEntityIndex(): IndexedEntity[] {
   if (entityIndex.size === 0) {
     for (const e of seedEntities) {
       entityIndex.set(e.id, e);
@@ -29,7 +40,7 @@ export function getEntityIndex(): { id: string; slug: string; name: string; titl
   return seedEntities;
 }
 
-export function getEntityById(id: string): { id: string; slug: string; name: string; title: string } | undefined {
+export function getEntityById(id: string): IndexedEntity | undefined {
   if (entityIndex.size === 0) getEntityIndex();
   const direct = entityIndex.get(id);
   if (direct) return direct;
@@ -40,7 +51,9 @@ export function getEntityById(id: string): { id: string; slug: string; name: str
         id: storeEntity.id,
         slug: storeEntity.slug,
         name: storeEntity.name,
-        title: storeEntity.description || storeEntity.name,
+        title: storeEntity.name,
+        type: storeEntity.type,
+        description: storeEntity.description,
       };
     }
   } catch {}

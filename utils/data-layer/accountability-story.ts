@@ -515,7 +515,7 @@ export const accountabilityStory: APIStory = {
     'Article 21',
     'Governance',
   ],
-  primaryEntityId: 'comptroller-and-auditor-general',
+  primaryEntityId: 'cag',
   relatedTopicIds: ['governance', 'policy', 'economy', 'judiciary'],
   keyPoints: [
     'CAG Report No. 4 of 2026 recorded ₹1,217.05 crore in pending liabilities under MGNREGA in Madhya Pradesh, with ₹54.79 crore blocked across 4.7 lakh transactions due to Aadhaar non-mapping.',
@@ -655,7 +655,7 @@ export const accountabilityStory: APIStory = {
     },
   ],
   relatedEntities: [
-    { id: 'comptroller-and-auditor-general', slug: 'comptroller-and-auditor-general', name: 'Comptroller and Auditor General of India', type: 'organization' },
+    { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General of India', type: 'organization' },
     { id: 'supreme-court-of-india', slug: 'supreme-court-of-india', name: 'Supreme Court of India', type: 'organization' },
     { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development', type: 'organization' },
   ],

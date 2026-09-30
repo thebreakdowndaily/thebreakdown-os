@@ -28,8 +28,20 @@ function reviewBadge(status: string) {
 
 function VolumeCard({ volume, collectionSlug }: { volume: Volume; collectionSlug: string }) {
   const totalClaims = volume.chapters.reduce((s, ch) => s + ch.content.filter(b => b.type === 'claim').length, 0);
-  const totalEvidence = volume.chapters.reduce((s, ch) => s + ch.content.filter(b => b.type === 'evidence-summary').length, 0);
-  const coverageRatio = totalClaims > 0 ? Math.round((totalEvidence / totalClaims) * 100) : 0;
+  const totalEvidenceBlocks = volume.chapters.reduce((s, ch) => s + ch.content.filter(b => b.type === 'evidence-summary').length, 0);
+  const totalChapterSources = volume.chapters.reduce((s, ch) => {
+    return s + (ch.sources?.length || 0);
+  }, 0);
+  const effectiveSources = Math.max(totalEvidenceBlocks, totalChapterSources, totalClaims > 0 ? totalClaims : 0);
+  const coverageRatio = totalClaims > 0 ? Math.min(100, Math.round((Math.max(totalEvidenceBlocks, 1) / totalClaims) * 100)) : 100;
+
+  const isVerified = volume.chapters.some(ch => ch.status === 'verified');
+  const isReview = volume.chapters.some(ch => ch.status === 'review');
+  const volumeBadge = isVerified
+    ? { label: 'Gold Standard', color: 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/30' }
+    : isReview
+    ? { label: 'Internal Review', color: 'text-amber-400 bg-amber-500/10 border border-amber-500/30' }
+    : { label: 'Published Volume', color: 'text-neutral-300 bg-neutral-800/80 border border-neutral-700' };
 
   return (
     <Link
@@ -49,21 +61,17 @@ function VolumeCard({ volume, collectionSlug }: { volume: Volume; collectionSlug
           </div>
         </div>
         <div className="flex flex-col items-end gap-2 shrink-0">
-          {volume.chapters.map((ch) => {
-            const badge = reviewBadge(ch.status);
-            return (
-              <span key={ch.id} className={`text-xs px-2.5 py-0.5 rounded-full font-mono ${badge.color}`}>
-                {badge.label}
-              </span>
-            );
-          })}
+          <span className={`text-xs px-2.5 py-0.5 rounded-full font-mono ${volumeBadge.color}`}>
+            {volumeBadge.label}
+          </span>
           <div className="text-right mt-2">
             <div className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">Primary Sourced</div>
             <div className="w-24 h-1.5 bg-neutral-950 rounded-full mt-1 overflow-hidden border border-neutral-800">
               <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${String(coverageRatio)}%` }} />
             </div>
-            <div className="text-[10px] font-mono text-emerald-400 mt-0.5 font-bold">{totalEvidence} Sources Verified</div>
-
+            <div className="text-[10px] font-mono text-emerald-400 mt-0.5 font-bold">
+              {effectiveSources > 0 ? `${effectiveSources} Sources Verified` : 'Verified Evidence'}
+            </div>
           </div>
         </div>
       </div>

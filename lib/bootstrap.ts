@@ -280,6 +280,7 @@ export function apiTopicToCanonical(t: APITopic): Topic {
 export function apiEntityToCanonical(e: APIEntity): Entity {
   const entity = {
     ...e as unknown as Entity,
+    aliases: e.aliases || [],
     evidenceScore: e.evidenceScore || 85,
     relatedEntityIds: (e.relatedEntities || []).map((re) => re.id),
     relatedStoryIds: (e.relatedStories || []).map((rs) => rs.slug),

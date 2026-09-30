@@ -4,6 +4,10 @@
     {
       "path": "/api/v2/newsroom/observations/pull",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/v2/radar/poll",
+      "schedule": "*/30 * * * *"
     }
   ]
 }

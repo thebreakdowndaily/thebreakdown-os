@@ -103,7 +103,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/trackers/mgnrega`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/semiconductor`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/upi`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/trackers/pmfby`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/stories`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${siteUrl}/fix`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${siteUrl}/transparency/corrections`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/newsletter`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/subscribe`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${siteUrl}/timeline`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'weekly', priority: 0.7 },
   ];
 
   return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];

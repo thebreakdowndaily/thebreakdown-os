@@ -1282,7 +1282,7 @@ function seed(): DataStore {
     slug: 'indias-foreign-policy',
     headline: 'India\'s Foreign Policy at 80: From Non-Alignment to Multi-Alignment',
     summary: 'As India celebrates 80 years of independence, its foreign policy has undergone a fundamental transformation — from Nehruvian idealism to pragmatic multi-alignment, balancing the US, China, Russia, and the Global South.',
-    heroImage: '/images/stories/india-europe-relations.jpg',
+    heroImage: '/images/library/chapter-1/photos/a-07-nehru-unga-1948.jpg',
     publishedAt: '2026-08-05T06:00:00Z',
     updatedAt: '2026-08-05T06:00:00Z',
     readingTime: 18,
@@ -2185,7 +2185,7 @@ function seed(): DataStore {
     id: 'india-ev-paradox',
     slug: 'india-ev-paradox',
     headline: 'India\'s EV Paradox: Rising Sales, Stalled Charging, and the \u20B94 Lakh Crore Battery Import Bill',
-    heroImage: '/images/placeholders/environment-placeholder.svg',
+    heroImage: '/images/stories/climate-finance.jpg',
     summary: 'EV sales have grown 4x in three years, but India\'s public charging network stands at only 26% of the official target. Meanwhile, the country\'s battery import bill is projected to hit \u20B94 lakh crore by 2030 — creating a strategic vulnerability as deep as the oil dependency EVs were meant to solve.',
     publishedAt: '2026-08-15T06:00:00Z',
     updatedAt: '2026-08-15T06:00:00Z',
@@ -4309,15 +4309,46 @@ function seed(): DataStore {
         ],
         sources: [{ name: 'Ministry of Labour & Employment Official Website', url: 'https://labour.gov.in', type: 'government', description: 'Official MoLE portal.' }],
       },
+      {
+        id: 'supreme-court-of-india', slug: 'supreme-court-of-india', name: 'Supreme Court of India',
+        type: 'organization', description: 'The Supreme Court of India is the highest judicial forum and final court of appeal under the Constitution of India, exercising original, appellate, and advisory jurisdiction under Articles 124 to 147. It serves as the protector of fundamental rights through prerogative writs under Article 32 and possesses powers of constitutional review over legislative and executive actions.',
+        aliases: ['Supreme Court of India', 'Supreme Court', 'Apex Court', 'SC'], storyCount: 2, updatedAt: '2026-09-28T00:00:00Z',
+        image: '/images/stories/aadhaar-sc.jpg',
+        timeline: [
+          { date: '1950-01-28', title: 'Supreme Court Inaugurated', description: 'Established two days after India became a sovereign republic, replacing the Federal Court of India.' },
+          { date: '1993-03-24', title: 'Nilabati Behera v. State of Orissa', description: 'Landmark judgment establishing strict state liability in public law under Article 21, piercing sovereign immunity for custodial deaths.' },
+          { date: '2012-02-02', title: '2G Spectrum Allocation Quashed', description: 'Supreme Court holds first-come-first-served 2G spectrum allocation unconstitutional under Article 14, mandating transparent public auctions.' },
+          { date: '2024-02-15', title: 'Electoral Bond Scheme Struck Down', description: '5-judge Constitution Bench unanimously declares anonymous political donations unconstitutional under Article 19(1)(a).' },
+        ],
+        statistics: { 'Sanctioned Strength': '34 Judges', 'Pending Cases': '82,000+', 'Constitutional Jurisdiction': 'Articles 32, 131-136, 142' },
+        relatedStories: [
+          { slug: 'accountability-in-india', headline: 'When Something Goes Wrong, Who Actually Answers?', summary: 'Constitutional oversight, writ jurisdiction, and institutional accountability from Nilabati Behera to 2G and Rajkot.', publishedAt: '2026-09-27T10:00:00Z', readingTime: 14, evidenceScore: 96, category: 'governance' },
+          { slug: 'electoral-bonds', headline: 'Electoral Bonds: The ₹12,769 Crore Anonymous Donation Scheme the Supreme Court Struck Down', summary: 'The 5-judge Constitution bench ruling that anonymous campaign finance violated Article 19(1)(a).', publishedAt: '2026-09-20T10:00:00Z', readingTime: 14, evidenceScore: 97, category: 'policy' },
+        ], relatedEntities: [{ id: 'india', slug: 'india', name: 'India', type: 'country' }, { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General of India', type: 'organization' }],
+        faq: [
+          { question: 'What is the Supreme Court\'s role in public accountability?', answer: 'Under Article 32, the Supreme Court enforces fundamental rights through writ petitions, reviewing administrative arbitrary actions under Article 14 and custodial abuse under Article 21. It can award constitutional damages and mandate independent statutory inquiries.' },
+          { question: 'What is the distinction between constitutional review and criminal trial?', answer: 'Constitutional review assesses whether state policy complies with fundamental rights and administrative fairness, whereas criminal trials evaluate individual penal guilt beyond reasonable doubt under specific statutory offenses.' },
+        ],
+        sources: [{ name: 'Supreme Court of India Official Portal', url: 'https://main.sci.gov.in', type: 'government', description: 'Official apex court decisions and cause lists.' }],
+      },
     ];
 
     intlEntities.forEach((ie) => {
       entities.set(ie.slug, ie);
       organizations.set(ie.slug, ie);
+      if (ie.slug === 'supreme-court-of-india') {
+        entities.set('sc', ie);
+      }
     });
 
   entityData.forEach((e) => {
     entities.set(e.slug, e);
+    if (e.slug === 'cag') {
+      entities.set('comptroller-and-auditor-general', e);
+    }
+    if (e.slug === 'election-commission') {
+      entities.set('eci', e);
+    }
     if (e.type === 'country') countries.set(e.slug, e);
     if (e.type === 'organization') organizations.set(e.slug, e);
   });

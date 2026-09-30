@@ -121,6 +121,21 @@ nextConfig.redirects = async () => [
     destination: '/trackers',
     permanent: true,
   },
+  {
+    source: '/corrections',
+    destination: '/transparency/corrections',
+    permanent: true,
+  },
+  {
+    source: '/entity/eci',
+    destination: '/entity/election-commission',
+    permanent: true,
+  },
+  {
+    source: '/entity/sc',
+    destination: '/entity/supreme-court-of-india',
+    permanent: true,
+  },
 ];
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

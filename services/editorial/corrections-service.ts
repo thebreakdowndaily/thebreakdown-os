@@ -86,11 +86,13 @@ const rateLimitWindowMs = 10 * 60 * 1000; // 10 minutes
 const maxRequestsPerWindow = 5;
 const ipRequestTimestamps = new Map<string, number[]>();
 
-export function resetCorrectionsMemoryStore(): void {
+export function resetCorrectionsMemoryStore(includeInitialPublished: boolean = true): void {
   memoryReaderCorrections.clear();
   memoryPublishedCorrections.clear();
-  for (const c of INITIAL_PUBLISHED_CORRECTIONS) {
-    memoryPublishedCorrections.set(c.id, c);
+  if (includeInitialPublished) {
+    for (const c of INITIAL_PUBLISHED_CORRECTIONS) {
+      memoryPublishedCorrections.set(c.id, c);
+    }
   }
   memoryVerificationHandoffs.clear();
   ipRequestTimestamps.clear();

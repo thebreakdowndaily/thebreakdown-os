@@ -3,7 +3,7 @@ import { getMgnregaTracker } from '@/lib/trackers/mgnrega-tracker';
 import MgnregaTrackerComponent from '@/components/trackers/MgnregaTracker';
 
 export const metadata: Metadata = {
-  title: 'MGNREGA Tracker | The Breakdown',
+  title: 'MGNREGA Tracker',
   description: 'Track India\'s rural employment guarantee — from MGNREGA 2005 (100 days) to the VB-G RAM G Act 2025 (125 days). Key data, timeline, evidence chain, and what changed.',
   openGraph: {
     title: 'MGNREGA Tracker | The Breakdown',

@@ -55,7 +55,7 @@ describe('TEST-FOUNDING-CH1: Volume I Chapter 1 Founding Publication (Phase 15A)
 
     const og = FixMetadataService.toOpenGraph(CHAPTER_1_FIX);
     expect(og['og:title']).toContain('Integrated Defense Procurement Auditing');
-    expect(og.canonicalUrl).toBe('https://thebreakdown.gov/fix/strategic-autonomy-defense-recalibration');
+    expect(og.canonicalUrl).toBe('https://thebreakdown.in/fix/strategic-autonomy-defense-recalibration');
 
     const ris = FixMetadataService.toRISCitation(CHAPTER_1_FIX);
     expect(ris).toContain('TY  - GOVT');

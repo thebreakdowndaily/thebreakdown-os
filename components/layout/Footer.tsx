@@ -78,16 +78,30 @@ function FooterHeading({ children }: { children: React.ReactNode }) {
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   const isExternal = href.startsWith('http');
+  if (isExternal) {
+    return (
+      <li>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link text-sm leading-relaxed transition-colors duration-150"
+          style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}
+        >
+          {children}
+        </a>
+      </li>
+    );
+  }
   return (
     <li>
-      <a
+      <Link
         href={href}
-        {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         className="footer-link text-sm leading-relaxed transition-colors duration-150"
         style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}
       >
         {children}
-      </a>
+      </Link>
     </li>
   );
 }

@@ -9,17 +9,39 @@ export interface SearchService {
   rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[], problems?: Problem[]): void;
 }
 
-function toEntry(id: string, type: SearchIndexEntry['type'], title: string, slug: string, description: string, tags: string[], content: string, updatedAt: string): SearchIndexEntry {
-  return { id, type, title, slug, description, tags, content, score: 0, updatedAt };
+function toEntry(id: string, type: SearchIndexEntry['type'], title: string, slug: string, description: string, tags: string[] | undefined, content: string, updatedAt: string): SearchIndexEntry {
+  return {
+    id,
+    type,
+    title: title || '',
+    slug: slug || '',
+    description: description || '',
+    tags: Array.isArray(tags) ? tags : [],
+    content: content || '',
+    score: 0,
+    updatedAt: updatedAt || '',
+  };
 }
 
 function scoreEntry(entry: SearchIndexEntry, query: string): number {
-  const q = query.toLowerCase();
+  const q = query.toLowerCase().trim();
+  if (!q) return 0;
   let score = 0;
-  if (entry.title.toLowerCase().includes(q)) score += 10;
-  if (entry.description.toLowerCase().includes(q)) score += 5;
-  if (entry.tags.some(t => t.toLowerCase().includes(q))) score += 3;
-  if (entry.content.toLowerCase().includes(q)) score += 1;
+  const title = (entry.title || '').toLowerCase();
+  const desc = (entry.description || '').toLowerCase();
+  const tags = Array.isArray(entry.tags) ? entry.tags : [];
+
+  // Exact or prefix title match
+  if (title === q) score += 50;
+  else if (title.startsWith(q)) score += 25;
+  else if (title.includes(q)) score += 10;
+
+  // Exact alias/tag match (e.g. acronym queries like 'cag', 'sc', 'mgnrega')
+  if (tags.some((t) => t.toLowerCase() === q)) score += 35;
+  else if (tags.some((t) => t.toLowerCase().includes(q))) score += 5;
+
+  if (desc.includes(q)) score += 5;
+  if ((entry.content || '').toLowerCase().includes(q)) score += 1;
   return score;
 }
 

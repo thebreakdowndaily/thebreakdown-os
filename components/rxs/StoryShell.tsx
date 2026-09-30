@@ -11,6 +11,8 @@ import { StoryOrientationRail } from '@/components/story/StoryOrientationRail';
 import { StoryResearchAppendix } from '@/components/story/StoryResearchAppendix';
 import { BlockRenderer } from '@/components/story/blocks/registry';
 import NextExploration from '@/components/story/NextExploration';
+import NextBestUnderstanding from '@/components/story/NextBestUnderstanding';
+import { resolveNextBestUnderstanding } from '@/lib/comprehension/next-best-understanding';
 import ExploreConnections from '@/components/story/ExploreConnections';
 import { StoryProgress, StoryProgressBar } from '@/components/rxs/StoryProgress';
 import { ReadingRegion } from '@/components/rxs/regions/ReadingRegion';
@@ -169,6 +171,8 @@ export function StoryShell({
     }));
     const matchingTrackers = getTrackersForStory(storySlug);
     const relatedTracker = matchingTrackers.length > 0 ? matchingTrackers[0] : undefined;
+    const nextBestPlan = resolveNextBestUnderstanding(storySlug);
+    const prereqStep = nextBestPlan.steps.find((s) => s.type === 'prerequisite');
 
     return (
       <div className="min-h-screen bg-surface-canvas text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
@@ -318,8 +322,15 @@ export function StoryShell({
               {/* Standard & Deep Views */}
               {mode !== 'quick' && (
                 <>
-                  {/* Short Version Orientation (rendered only if explicit orientation exists) */}
-                  <StoryOrientation orientation={orientation} />
+                  {/* Short Version Orientation (with Prerequisite Read This First if applicable) */}
+                  <StoryOrientation
+                    orientation={orientation}
+                    prerequisite={prereqStep ? {
+                      title: prereqStep.title,
+                      url: prereqStep.url,
+                      summary: prereqStep.summary,
+                    } : undefined}
+                  />
 
                   {/* Editorial Actions Toolbar */}
                   <div className="flex flex-wrap items-center justify-between gap-4 py-3 my-6 border-y border-neutral-800 text-xs font-mono text-neutral-400">
@@ -373,6 +384,9 @@ export function StoryShell({
                   {showResearchAppendix && (
                     <StoryResearchAppendix research={research} />
                   )}
+
+                  {/* Next Best Understanding Cognitive Roadmap */}
+                  <NextBestUnderstanding plan={nextBestPlan} />
 
                   {/* Continue Exploring */}
                   <div id="continue-exploring" className="my-12 pt-8 border-t border-neutral-800">
