@@ -2777,7 +2777,21 @@ const chapter1Blocks: KnowledgeBlock[] = [
   { id: 'b-vis-doc-4', type: 'image', data: { title: 'Extract from Radcliffe Boundary Commission Proceedings', caption: 'Proceedings of the commission that drew the Partition boundary.', altText: 'Facsimile of Boundary Commission proceedings.', provenance: { creator: 'Radcliffe Boundary Commission', source: 'British Library', reference: 'IOR/L/P&J/10/117', date: '1947' }, license: 'Public Record', credit: 'British Library', status: 'requested', aiGenerated: false, linkedClaims: ['claim.partition.radcliffe-arbitrary'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'British Library → India Office Records', note: 'Physical only — digitisation required (no permanent URL available).' } } },
   { id: 'b-vis-doc-5', type: 'image', data: { title: 'Cabinet Mission Plan memorandum', caption: 'The memorandum proposing the federal structure rejected by the Congress and League.', altText: 'Facsimile of the Cabinet Mission Plan memorandum.', url: '/images/library/chapter-1/documents/doc-cabinet-mission-plan.pdf', provenance: { creator: 'Cabinet Mission', source: 'British Library', reference: 'Cmd. 6821', date: '1946' }, license: 'Public Record', credit: 'British Library', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.cabinet-mission'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'British Library → Cmd. 6821', note: 'Digitised copy acquired from Internet Archive (Papers Relating to the Cabinet Mission to India).' } } },
   // Charts
-  { id: 'b-vis-chart-2', type: 'chart', data: { title: 'Refugee flows and destinations, 1947-48', caption: 'Tabular and map-based summary of refugee movements and resettlement.', chartType: 'combined', dataSource: '1951 Census of India/Pakistan', url: '/images/library/chapter-1/charts/chart-refugee-flows.svg', provenance: { source: '1951 Census of India/Pakistan' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.refugee-crisis'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — split-flow Sankey diagram from census data' } } },
+  { id: 'b-vis-chart-2', type: 'chart', data: { 
+    title: 'Refugee Flows, 1947–1951', 
+    chartType: 'sankey', 
+    question: 'How many people were displaced across the new borders?', 
+    period: '1947–1951', 
+    unit: 'Millions of people', 
+    provenance: { source: '1951 Census of India; 1951 Census of Pakistan' }, 
+    limitations: 'Figures reflect surviving displaced persons enumerated in 1951. Totals contain minor discrepancies (~4k-26k) due to historical macro-regional rounding. The diagram represents macro-regional flow volumes, not individual migration journeys.', 
+    data: [
+      { origin: 'West Pakistan', destination: 'India (North/West)', volume: 4.7 },
+      { origin: 'India (North/West)', destination: 'West Pakistan', volume: 6.5 },
+      { origin: 'East Pakistan', destination: 'India (East/Bengal)', volume: 2.6 },
+      { origin: 'India (East/Bengal)', destination: 'East Pakistan', volume: 0.7 }
+    ] 
+  } },
   { id: 'b-vis-chart-3', type: 'chart', data: { title: 'Timeline of key events, 1945-1948', caption: 'Multi-row timeline colour-coded by category (political, military, diplomatic, violence).', chartType: 'timeline', dataSource: 'Transfer of Power volumes (HMSO)', url: '/images/library/chapter-1/charts/chart-timeline-1945-1948.svg', provenance: { source: 'Transfer of Power (HMSO)' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.sequence'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — vertical chronological timeline from ToP volumes' } } },
   { id: 'b-vis-chart-4', type: 'chart', data: { title: 'Religious composition of India, 1941 vs 1951', caption: 'Stacked bar chart showing the demographic transformation wrought by Partition.', chartType: 'stacked-bar', dataSource: 'Census of India 1941 and 1951', url: '/images/library/chapter-1/charts/chart-demography-1941-1951.svg', provenance: { source: 'Census of India 1941, 1951' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.demographic-impact'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — comparative stacked bar charts from census data' } } },
   // Migration Flow Maps
@@ -3051,7 +3065,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
               order: 1,
               difficulty: 2,
               version: { major: 1, minor: 0, patch: 0, label: 'initial' },
-              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 31 },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 31, heroImageAlt: 'India map and historical documents' },
               readingTime: { explorer: 30, scholar: 75, researcher: 200 },
               studyTime: { explorer: 45, scholar: 120, researcher: 480 },
               content: chapter1Blocks,
