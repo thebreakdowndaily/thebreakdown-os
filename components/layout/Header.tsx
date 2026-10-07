@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import SearchBar from '@/components/ui/SearchBar';
 
 interface HeaderProps {
@@ -100,14 +101,16 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
     flexShrink: 0,
   }}
 >
-  {/* Temporary Logo Mark */}
-  <div
+  <Image
+    src="/b-mark.jpg"
+    alt="The Breakdown"
+    width={24}
+    height={24}
     style={{
-      width: "12px",
-      height: "12px",
       borderRadius: "2px",
-      background: "var(--color-brand-400)",
+      display: "block"
     }}
+    priority
   />
 
   {/* Logo Text */}

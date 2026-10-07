@@ -209,9 +209,7 @@ export function createArticleSchema(args: ArticleSchemaArgs): Record<string, unk
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/logo.svg`,
-        width: 200,
-        height: 60,
+        url: `${SITE_URL}/b-mark.jpg`, width: 1024, height: 1024,
       },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
@@ -345,7 +343,7 @@ export function createOrganizationSchema(args: OrganizationSchemaArgs = {}): Rec
   const {
     name = ORG_NAME,
     url = SITE_URL,
-    logoUrl = `${SITE_URL}/logo.svg`,
+    logoUrl = `${SITE_URL}/b-mark.jpg`,
     description,
     sameAs,
     publishingPrinciplesUrl,
@@ -361,8 +359,7 @@ export function createOrganizationSchema(args: OrganizationSchemaArgs = {}): Rec
     logo: {
       '@type': 'ImageObject',
       url: logoUrl,
-      width: 200,
-      height: 60,
+      width: 1024, height: 1024,
     },
   };
 
