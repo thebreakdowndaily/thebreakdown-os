@@ -3,7 +3,7 @@ import { getSemiconductorTracker } from '@/lib/trackers/semiconductor-tracker';
 import GenericTracker from '@/components/trackers/GenericTracker';
 
 export const metadata: Metadata = {
-  title: 'Semiconductor PLI & ISM Tracker | The Breakdown',
+  title: 'Semiconductor PLI & ISM Tracker',
   description:
     "Track India's semiconductor manufacturing push — ₹76,000 Cr outlays, ₹1.26 lakh Cr private commitments, and OSAT/Fab construction in Sanand, Dholera, and Morigaon.",
   openGraph: {

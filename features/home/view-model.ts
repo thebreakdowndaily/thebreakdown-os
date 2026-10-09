@@ -27,6 +27,8 @@ export interface HomepageLeadStory {
   byline: string;
   trustSignals: TrustSignal[];
   heroImage?: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   actionText: string;
   stats?: {
     claims: number;
@@ -113,6 +115,12 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
       byline: authorName || 'The Breakdown Desk',
       trustSignals: getReaderTrustSignals(rawLead),
       heroImage: heroImg,
+      heroImageAlt: (() => {
+        if (rawLead.heroImageIsDecorative) return '';
+        if (rawLead.heroImageAlt) return rawLead.heroImageAlt;
+        throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
+      })(),
+      heroImageIsDecorative: rawLead.heroImageIsDecorative,
       actionText: 'Understand the story →',
       stats: {
         claims: getStoryEvidenceSummary(rawLead).claimsTotal,

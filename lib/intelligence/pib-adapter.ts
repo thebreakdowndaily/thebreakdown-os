@@ -176,15 +176,49 @@ function extractEntities(text: string, lexicon: string[]): string[] {
   return Array.from(found);
 }
 
-function stripHtml(raw: string): string {
-  return raw
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/\s+/g, ' ')
-    .trim();
+/**
+ * Robust, multi-pass HTML sanitizer and text extractor.
+ * Handles entity-encoded HTML, nested entity encoding, full documents with <head>/<style>/<script>,
+ * malformed markup, and whitespace normalization.
+ */
+export function stripHtml(raw: string): string {
+  if (!raw || typeof raw !== 'string') return '';
+
+  // 1. Repeated entity decode (up to 4 passes for nested encoding like &amp;lt;)
+  let decoded = raw;
+  for (let i = 0; i < 4; i++) {
+    const next = decoded
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/&#x27;/gi, "'")
+      .replace(/&#([0-9]+);/gi, (_, dec) => String.fromCharCode(Number(dec)))
+      .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+    if (next === decoded) break;
+    decoded = next;
+  }
+
+  // 2. If a <body> tag exists, isolate body content to exclude <head>, <script>, <style>
+  const bodyMatch = /<body\b[^>]*>([\s\S]*?)<\/body>/i.exec(decoded);
+  let content = bodyMatch ? bodyMatch[1] : decoded;
+
+  // 3. Remove <head>, <script>, <style> blocks if present
+  content = content
+    .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ');
+
+  // 4. Strip remaining HTML tags, doctype, and comments
+  content = content
+    .replace(/<!DOCTYPE[^>]*>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<[^>]+>/g, ' ');
+
+  // 5. Normalise whitespace
+  return content.replace(/\s+/g, ' ').trim();
 }
 
 function slugify(input: string): string {

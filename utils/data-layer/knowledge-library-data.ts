@@ -123,7 +123,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       academicPapers: [],
       datasets: [],
       contradictions: [
-        { sourceId: 's21', relevance: 'contextual', excerpt: 'Gopal\'s biography of Nehru argues that referring Kashmir to the UN was a necessary step to prevent a full-scale war for which India\'s military was unprepared, and that the alternative — continued escalation — carried even greater risks.' },
+        { sourceId: 's22', relevance: 'contextual', excerpt: 'Gopal\'s biography of Nehru argues that referring Kashmir to the UN was a necessary step to prevent a full-scale war for which India\'s military was unprepared, and that the alternative — continued escalation — carried even greater risks.' },
       ],
       verificationDate: '2026-07-12',
       editorNotes: 'The debate over the UN referral remains one of the most contested questions in Indian foreign policy historiography. The strategic school (Raghavan, Raja Mohan) tends to view it critically; the nationalist school (Gopal, Chandra) sees it as principled.',
@@ -214,7 +214,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     },
   },
   // Visual: Cabinet Mission Plan structure — the federal alternative
-  { id: 'b-vis-diagram-2', type: 'image', data: { title: 'Cabinet Mission Plan — organisational structure', caption: 'Centre, provinces, and groups under the proposed federal structure. Explanatory diagram.', altText: 'Hierarchy diagram of the Cabinet Mission federal structure.', url: '/images/library/chapter-1/diagrams/diagram-cabinet-mission-structure.svg', provenance: { source: 'Original explanatory diagram' }, license: 'Original (AI-generated explanatory diagram)', credit: 'The Breakdown (explanatory diagram)', status: 'draft', aiGenerated: true, linkedClaims: ['claim.partition.cabinet-mission'], note: 'AI-generated explanatory diagram — not a historical photograph; labelled per Book of Record #0005.' } },
+  { id: 'b-vis-diagram-2', type: 'image', data: { title: 'Cabinet Mission Plan — organisational structure', caption: 'Centre, provinces, and groups under the proposed federal structure. Explanatory diagram.', altText: 'Hierarchy diagram of the Cabinet Mission federal structure.', url: '/images/library/chapter-1/diagrams/diagram-cabinet-mission-structure.svg', provenance: { source: 'Original explanatory diagram' }, license: 'Original (AI-generated explanatory diagram)', credit: 'The Breakdown (explanatory diagram)', status: 'draft', aiGenerated: true, linkedClaims: ['claim.partition.cabinet-mission'], note: 'Explanatory diagram illustrating federal structure.' } },
   {
     id: 'b-p-empire-6', type: 'paragraph',
     data: {
@@ -302,7 +302,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     },
   },
   // Visual: death toll estimates — what the evidence shows
-  { id: 'b-vis-chart-1', type: 'chart', data: { title: 'Casualties of Partition — death toll estimates by source', caption: 'Death toll estimates from official, press, and scholarly sources, with consensus range 800k-1M.', chartType: 'bar', dataSource: 'Scholarly aggregates (per Book of Record #0006)', url: '/images/library/chapter-1/charts/chart-death-toll-estimates.svg', provenance: { source: 'Synthesis of cited estimates' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.death-toll'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — range/bar chart illustrating variance across sources' } } },
+  { id: 'b-vis-chart-1', type: 'chart', data: { title: 'Casualties of Partition — death toll estimates by source', caption: 'Death toll estimates from official, press, and scholarly sources, with consensus range 800k-1M.', chartType: 'bar', dataSource: 'Scholarly aggregates across cited historical sources', url: '/images/library/chapter-1/charts/chart-death-toll-estimates.svg', provenance: { source: 'Synthesis of cited estimates' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.death-toll'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — range/bar chart illustrating variance across sources' } } },
   {
     id: 'b-p-narr-4', type: 'paragraph',
     data: {
@@ -614,7 +614,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
         {
           id: 'ev-tl-8', date: '22 Oct 1947', title: 'Kashmir Invasion Begins',
           description: 'Pakistani tribal militias invade Kashmir, advancing toward Srinagar.',
-          categories: ['military', 'conflict'], sources: ['s21'], entities: ['Kashmir', 'Pakistan'], documents: [], significance: 5,
+          categories: ['military', 'conflict'], sources: ['s22'], entities: ['Kashmir', 'Pakistan'], documents: [], significance: 5,
         },
         {
           id: 'ev-tl-9', date: '26 Oct 1947', title: 'Kashmir Accedes to India',
@@ -1149,7 +1149,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   },
   { id: 'b-h-relationship', type: 'heading', data: { text: 'Relationship Explorer: The Key Actors', level: 1 } },
   // Visual: actor network diagram — the full cast of Partition
-  { id: 'b-vis-diagram-1', type: 'image', data: { title: 'Key actors network — Nehru, Jinnah, Gandhi, Patel, Mountbatten, Wavell, Attlee', caption: 'Relationships and points of conflict among the principal actors of Partition. Explanatory diagram.', altText: 'Network graph of Partition-era actors and their relationships.', url: '/images/library/chapter-1/diagrams/diagram-actors-network.svg', provenance: { source: 'Original explanatory diagram' }, license: 'Original (AI-generated explanatory diagram)', credit: 'The Breakdown (explanatory diagram)', status: 'draft', aiGenerated: true, linkedClaims: ['claim.partition.actors'], note: 'AI-generated explanatory diagram — not a historical photograph; labelled per Book of Record #0005.' } },
+  { id: 'b-vis-diagram-1', type: 'image', data: { title: 'Key actors network — Nehru, Jinnah, Gandhi, Patel, Mountbatten, Wavell, Attlee', caption: 'Relationships and points of conflict among the principal actors of Partition. Explanatory diagram.', altText: 'Network graph of Partition-era actors and their relationships.', url: '/images/library/chapter-1/diagrams/diagram-actors-network.svg', provenance: { source: 'Original explanatory diagram' }, license: 'Original (AI-generated explanatory diagram)', credit: 'The Breakdown (explanatory diagram)', status: 'draft', aiGenerated: true, linkedClaims: ['claim.partition.actors'], note: 'Explanatory network diagram illustrating actor relationships.' } },
   {
     id: 'b-relationship-nehru-2', type: 'relationship-card', depth: ['scholar', 'researcher'],
     data: {
@@ -1179,7 +1179,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     },
   },
   // Visual: decision tree — the branching logic of Partition (closing reflection)
-  { id: 'b-vis-diagram-3', type: 'image', data: { title: 'Decision tree of Partition — key decision points, 1945-1947', caption: 'Branching outcomes of the major decisions leading to Partition. Explanatory diagram.', altText: 'Decision-tree diagram of Partition decisions and consequences.', url: '/images/library/chapter-1/diagrams/diagram-decision-tree.svg', provenance: { source: 'Original explanatory diagram' }, license: 'Original (AI-generated explanatory diagram)', credit: 'The Breakdown (explanatory diagram)', status: 'draft', aiGenerated: true, linkedClaims: ['claim.partition.avoidable'], note: 'AI-generated explanatory diagram — not a historical photograph; labelled per Book of Record #0005.' } },
+  { id: 'b-vis-diagram-3', type: 'image', data: { title: 'Decision tree of Partition — key decision points, 1945-1947', caption: 'Branching outcomes of the major decisions leading to Partition. Explanatory diagram.', altText: 'Decision-tree diagram of Partition decisions and consequences.', url: '/images/library/chapter-1/diagrams/diagram-decision-tree.svg', provenance: { source: 'Original explanatory diagram' }, license: 'Original (AI-generated explanatory diagram)', credit: 'The Breakdown (explanatory diagram)', status: 'draft', aiGenerated: true, linkedClaims: ['claim.partition.avoidable'], note: 'Explanatory diagram illustrating key decision points.' } },
   // ── State of the Evidence (Constitution v1.1 required block) ──
   { id: 'b-h-state-evidence', type: 'heading', data: { text: 'State of the Evidence', level: 1 } },
   {
@@ -1577,7 +1577,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       items: [
         { text: 'Partition was not merely a political division but a foundational trauma that created a permanent security consciousness in India\'s foreign policy, shaping every major strategic decision for decades.', sources: ['s1', 's3'] },
         { text: 'The integration of 565 princely states, achieved primarily through diplomacy by Patel and Menon, was one of the most successful state-building projects of the twentieth century.', sources: ['s1', 's18'] },
-        { text: 'India\'s decision to refer the Kashmir dispute to the UN internationalised a conflict India was winning, creating a diplomatic framework that Pakistan exploited for seven decades.', sources: ['s1', 's6', 's21'] },
+        { text: 'India\'s decision to refer the Kashmir dispute to the UN internationalised a conflict India was winning, creating a diplomatic framework that Pakistan exploited for seven decades.', sources: ['s1', 's6', 's22'] },
         { text: 'The contradictory experiences of Partition — the trauma of division and the triumph of integration — created an enduring tension in India\'s strategic culture between assertive nationalism and internationalist idealism.', sources: ['s1', 's7', 's22'] },
         { text: 'India\'s secular nationalism, forged in explicit opposition to the Two-Nation theory, became both a domestic constitutional commitment and a foreign policy asset, particularly in relations with the Muslim world.', sources: ['s1', 's4'] },
       ],
@@ -1930,13 +1930,13 @@ const chapter1Blocks: KnowledgeBlock[] = [
       evidence: [
         { sourceId: 's14', relevance: 'direct', excerpt: 'The Instrument of Accession transferred defence, foreign affairs, and communications to India.' },
         { sourceId: 's6', relevance: 'direct', excerpt: 'UN Security Council Resolution 47 called for a ceasefire, withdrawal, and a plebiscite.' },
-        { sourceId: 's21', relevance: 'direct', excerpt: 'Gopal\'s biography argues that the UN referral was necessary to prevent a full-scale war.' },
+        { sourceId: 's22', relevance: 'direct', excerpt: 'Gopal\'s biography argues that the UN referral was necessary to prevent a full-scale war.' },
       ],
       documentedFacts: [
         { fact: 'Maharaja Hari Singh signed the Instrument of Accession on 26 October 1947, transferring defence, foreign affairs, and communications to India under the Indian Independence Act 1947.', sources: ['s14'] },
         { fact: 'India referred the Kashmir dispute to the UN Security Council on 1 January 1948 under Article 35 of the UN Charter (situation likely to threaten international peace).', sources: ['s6'] },
         { fact: 'UN Security Council Resolution 47 (21 April 1948) called for a ceasefire, Pakistani withdrawal of tribesmen and regular troops, and a plebiscite under UN supervision to determine Kashmir\'s future.', sources: ['s6'] },
-        { fact: 'The resolution placed India and Pakistan on equal footing as disputants, rejecting India\'s position that Pakistan was an aggressor and that Kashmir\'s accession to India was legally complete.', sources: ['s6', 's21'] },
+        { fact: 'The resolution placed India and Pakistan on equal footing as disputants, rejecting India\'s position that Pakistan was an aggressor and that Kashmir\'s accession to India was legally complete.', sources: ['s6', 's22'] },
       ],
       interpretations: [
         { historian: 'Sarvepalli Gopal', school: 'Orthodox/Nationalist', argument: 'Argues that the UN referral was a necessary act of statesmanship to prevent escalation to a full-scale India-Pakistan war at a time when the Indian Army was still being reorganised after Partition.' },
@@ -2078,12 +2078,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Non-alignment preserved India\'s strategic autonomy and allowed aid from both Cold War blocs.' },
-        { sourceId: 's21', relevance: 'supporting', excerpt: 'Gopal emphasises that non-alignment was rooted in India\'s anti-colonial struggle and commitment to sovereignty.' },
+        { sourceId: 's22', relevance: 'supporting', excerpt: 'Gopal emphasises that non-alignment was rooted in India\'s anti-colonial struggle and commitment to sovereignty.' },
       ],
       documentedFacts: [
         { fact: 'India formally adopted non-alignment as its foreign policy framework under Prime Minister Jawaharlal Nehru, co-founding the Non-Aligned Movement at the Bandung Conference in 1955.', sources: ['s1', 's25'] },
         { fact: 'India accepted economic aid from both the United States (PL-480 food aid, technical assistance) and the Soviet Union (steel plants, heavy industry, military equipment) throughout the 1950s and 1960s.', sources: ['s1', 's24'] },
-        { fact: 'India\'s defence expenditure in the 1950s averaged approximately 2% of GDP, reflecting both genuine resource constraints and a strategic calculation that non-alignment would reduce the need for military spending.', sources: ['s1', 's21'] },
+        { fact: 'India\'s defence expenditure in the 1950s averaged approximately 2% of GDP, reflecting both genuine resource constraints and a strategic calculation that non-alignment would reduce the need for military spending.', sources: ['s1', 's22'] },
         { fact: 'Pakistan joined the US-led Southeast Asia Treaty Organisation (SEATO) in 1954 and the Central Treaty Organisation (CENTO) in 1955, bringing Cold War alliance structures directly to India\'s borders.', sources: ['s1', 's24'] },
       ],
       interpretations: [
@@ -2216,12 +2216,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'The experience of British arbitration during Partition convinced Nehru that India could not entrust its security to Great Powers.' },
-        { sourceId: 's21', relevance: 'direct', excerpt: 'Gopal argues non-alignment was rooted in India\'s anti-colonial struggle and commitment to national sovereignty.' },
+        { sourceId: 's22', relevance: 'direct', excerpt: 'Gopal argues non-alignment was rooted in India\'s anti-colonial struggle and commitment to national sovereignty.' },
       ],
       documentedFacts: [
         { fact: 'The British government unilaterally advanced the date of transfer of power from June 1948 to August 1947, demonstrating that India could not rely on British timelines or commitments.', sources: ['s1', 's11'] },
         { fact: 'Lord Mountbatten\'s role as both Viceroy and interim Governor-General, and the British government\'s mediation during Partition, convinced Indian leaders that external arbitration served British rather than Indian interests.', sources: ['s1'] },
-        { fact: 'India\'s first foreign policy decision — to join the Commonwealth as a republic in 1949 — was itself an assertion of autonomy: India remained associated with Britain but on its own terms, without accepting the British monarch as head of state.', sources: ['s1', 's21'] },
+        { fact: 'India\'s first foreign policy decision — to join the Commonwealth as a republic in 1949 — was itself an assertion of autonomy: India remained associated with Britain but on its own terms, without accepting the British monarch as head of state.', sources: ['s1', 's22'] },
       ],
       interpretations: [
         { historian: 'Sarvepalli Gopal', school: 'Orthodox/Nationalist', argument: 'Argues that non-alignment was rooted in India\'s anti-colonial struggle and its determination never again to be dependent on external powers for its security — Partition had demonstrated the dangers of trusting one\'s fate to British arbitration.' },
@@ -2285,12 +2285,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Guha argues that Nehru\'s neglect of military modernisation left India unprepared for the 1962 war with China.' },
-        { sourceId: 's21', relevance: 'direct', excerpt: 'Gopal notes that Nehru prioritised industrial development over military capacity, with catastrophic consequences.' },
+        { sourceId: 's22', relevance: 'direct', excerpt: 'Gopal notes that Nehru prioritised industrial development over military capacity, with catastrophic consequences.' },
       ],
       documentedFacts: [
         { fact: 'India\'s defence expenditure averaged approximately 2% of GDP between 1947 and 1962, one of the lowest rates among newly independent nations.', sources: ['s1'] },
-        { fact: 'The Indian Army in 1962 was still equipped largely with World War II-era weaponry and had not been reorganised for high-altitude warfare on the Himalayan frontier.', sources: ['s1', 's21'] },
-        { fact: 'Nehru\'s government prioritised industrial development (five-year plans, heavy industry) and education over military modernisation, reflecting a strategic assumption that China would not resort to war.', sources: ['s21'] },
+        { fact: 'The Indian Army in 1962 was still equipped largely with World War II-era weaponry and had not been reorganised for high-altitude warfare on the Himalayan frontier.', sources: ['s1', 's22'] },
+        { fact: 'Nehru\'s government prioritised industrial development (five-year plans, heavy industry) and education over military modernisation, reflecting a strategic assumption that China would not resort to war.', sources: ['s22'] },
         { fact: 'The 1962 Sino-Indian War revealed severe military unpreparedness — China\'s People\'s Liberation Army breached Indian defences and advanced to the 1960 claim line before unilaterally withdrawing.', sources: ['s1'] },
       ],
       interpretations: [
@@ -2320,12 +2320,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
       confidence: 'debated',
       evidence: [
         { sourceId: 's6', relevance: 'direct', excerpt: 'UNSCR 47 placed India and Pakistan on equal footing as disputants, frustrating India\'s expectation of legal vindication.' },
-        { sourceId: 's21', relevance: 'contextual', excerpt: 'Gopal argues the UN referral was necessary to prevent escalation despite its ultimately unfavourable outcome.' },
+        { sourceId: 's22', relevance: 'contextual', excerpt: 'Gopal argues the UN referral was necessary to prevent escalation despite its ultimately unfavourable outcome.' },
       ],
       documentedFacts: [
         { fact: 'India submitted its complaint to the UN Security Council on 1 January 1948 under Article 35 of the UN Charter, which allows member states to bring situations likely to threaten international peace to the Council\'s attention.', sources: ['s6'] },
         { fact: 'UN Security Council Resolution 47 (21 April 1948) called for a ceasefire, Pakistani withdrawal of tribesmen and regular troops, and a plebiscite under UN supervision — placing India and Pakistan on equal footing as disputants.', sources: ['s6'] },
-        { fact: 'India had expected the UN to treat Pakistan as an aggressor rather than a co-disputant, based on India\'s legal position that Kashmir\'s accession was complete and Pakistan\'s tribal invasion constituted external aggression.', sources: ['s6', 's21'] },
+        { fact: 'India had expected the UN to treat Pakistan as an aggressor rather than a co-disputant, based on India\'s legal position that Kashmir\'s accession was complete and Pakistan\'s tribal invasion constituted external aggression.', sources: ['s6', 's22'] },
         { fact: 'The UN secured a ceasefire in January 1949 and established the UN Military Observer Group for India and Pakistan (UNMOGIP), which remains in place as of 2026.', sources: ['s6'] },
       ],
       interpretations: [
@@ -2744,252 +2744,6 @@ const chapter1Blocks: KnowledgeBlock[] = [
       citations: ['s6'],
     },
   },
-  // ── Visual Asset Acquisition List ──
-  { id: 'b-h-visual', type: 'heading', data: { text: 'Visual Asset Acquisition List', level: 1 } },
-  {
-    id: 'b-p-visual-intro', type: 'paragraph',
-    data: {
-      text: 'This list identifies the visual assets needed to bring Chapter 1 to publication quality. Each entry specifies the asset type, subject, source recommendations, provenance requirements, and the specific claims or narrative elements it supports. Every visual must include: provenance (creator, date, location), copyright or license status, an editorial caption explaining historical significance, a "why it matters" note connecting it to the chapter\'s core argument, and linked claims from the claim registry.',
-      citations: [],
-    },
-  },
-  { id: 'b-h-visual-archival', type: 'heading', data: { text: 'Archival Photographs (15–20)', level: 2 } },
-  {
-    id: 'b-p-visual-archival-1', type: 'paragraph',
-    data: {
-      text: '1. Mountbatten and Jinnah at the Viceroy\'s House, 1947. Source: British Library / India Office Records. Supports: The Mountbatten Plan, Jinnah\'s final negotiations. Item reference: Photo 930/1. License: Public domain (British government works).',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-2', type: 'paragraph',
-    data: {
-      text: '2. Cabinet Mission delegates with Congress leaders, Simla 1946. Source: National Archives of India. Supports: Cabinet Mission Plan, collapse of negotiations. License: Government work, presumed public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-3', type: 'paragraph',
-    data: {
-      text: '3. Great Calcutta Killing aftermath, August 1946. Source: Getty Images / Hulton Archive. Supports: Direct Action Day, communal violence spiral. License: Licensed (editorial use). Caption: Bodies in the streets of Calcutta after the Great Calcutta Killing of 16-19 August 1946.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-4', type: 'paragraph',
-    data: {
-      text: '4. Refugee train arriving at Old Delhi railway station, 1947. Source: Photo Division, Government of India. Supports: Mass migration, refugee crisis. License: Government of India archives, public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-5', type: 'paragraph',
-    data: {
-      text: '5. Foot column of refugees on the Grand Trunk Road, Punjab, 1947. Source: British Library / Margaret Bourke-White (Life Magazine). Supports: Human consequences, Punjab migration. License: Licensed (Time Inc. / LIFE archive).',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-6', type: 'paragraph',
-    data: {
-      text: '6. Maharaja Hari Singh signing the Instrument of Accession, 26 October 1947. Source: Jammu & Kashmir State Archives. Supports: Kashmir accession. License: State government archives, presumed public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-7', type: 'paragraph',
-    data: {
-      text: '7. Nehru addressing the UN General Assembly, October 1948. Source: UN Photo Archive. Supports: UN referral, Kashmir internationalisation. License: UN Photo, public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-8', type: 'paragraph',
-    data: {
-      text: '8. Sir Cyril Radcliffe at work, 1947. Source: British Library. Supports: Boundary Commission, arbitrary border. License: Public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-9', type: 'paragraph',
-    data: {
-      text: '9. Jinnah and Gandhi in conversation, Bombay 1944. Source: GandhiServe Foundation. Supports: Gandhi-Jinnah talks, failure of unity efforts. License: GandhiServe, non-commercial educational use.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-archival-10', type: 'paragraph',
-    data: {
-      text: '10. Noakhali riots aftermath, October 1946. Source: British Library. Supports: Communal violence, subaltern experience. License: Public domain.',
-      citations: [],
-    },
-  },
-  { id: 'b-h-visual-maps', type: 'heading', data: { text: 'Maps (8–10)', level: 2 } },
-  {
-    id: 'b-p-visual-maps-1', type: 'paragraph',
-    data: {
-      text: '1. British India, 1939 — administrative divisions and princely states. Source: Schwartzberg Historical Atlas. Supports: Overview of pre-Partition India. Map type: Reference.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-maps-2', type: 'paragraph',
-    data: {
-      text: '2. Cabinet Mission Plan, 1946 — proposed three-group federal structure. Source: Original cartography. Supports: Cabinet Mission Plan, federal alternative. Map type: Diagrammatic.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-maps-3', type: 'paragraph',
-    data: {
-      text: '3. The Radcliffe Line, 1947 — India-Pakistan boundary in Punjab and Bengal. Source: Original cartography based on Radcliffe Award. Supports: Arbitrary border, divided communities. Map type: Reference with demographic overlay.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-maps-4', type: 'paragraph',
-    data: {
-      text: '4. Partition migration flows, 1947-48 — population movements across the new border. Source: Original cartography based on refugee data. Supports: Mass migration, demographic transformation. Map type: Flow map with proportional arrows.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-maps-5', type: 'paragraph',
-    data: {
-      text: '5. Kashmir, 1947-48 — the tribal invasion, Indian response, and ceasefire line. Source: Original cartography based on Raghavan and official records. Supports: Kashmir conflict, UN Resolution 47. Map type: Military campaign map with timeline.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-maps-6', type: 'paragraph',
-    data: {
-      text: '6. Religious demography of India, 1941 — district-level Muslim population percentages. Source: Census of India 1941. Supports: Demographic basis of partition, election results. Map type: Choropleth.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-maps-7', type: 'paragraph',
-    data: {
-      text: '7. Princely states of India — map showing accession outcomes. Source: Original cartography. Supports: Integration of princely states, Junagadh, Hyderabad, Kashmir. Map type: Reference.',
-      citations: [],
-    },
-  },
-  { id: 'b-h-visual-documents', type: 'heading', data: { text: 'Documents Reproductions (5–8)', level: 2 } },
-  {
-    id: 'b-p-visual-docs-1', type: 'paragraph',
-    data: {
-      text: '1. Indian Independence Act, 1947 — cover page and key clauses. Source: UK National Archives. License: Crown Copyright, public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-docs-2', type: 'paragraph',
-    data: {
-      text: '2. Instrument of Accession of Jammu and Kashmir — facsimile. Source: Jammu & Kashmir State Archives. License: State archives, educational use.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-docs-3', type: 'paragraph',
-    data: {
-      text: '3. UN Security Council Resolution 47 — facsimile. Source: UN Archives. License: UN document, public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-docs-4', type: 'paragraph',
-    data: {
-      text: '4. Extract from Radcliffe Boundary Commission Proceedings. Source: India Office Records, British Library. License: Public domain.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-docs-5', type: 'paragraph',
-    data: {
-      text: '5. Cabinet Mission Plan memorandum. Source: British Library / India Office Records. License: Public domain.',
-      citations: [],
-    },
-  },
-  { id: 'b-h-visual-charts', type: 'heading', data: { text: 'Charts and Data Visualisations (5–10)', level: 2 } },
-  {
-    id: 'b-p-visual-charts-1', type: 'paragraph',
-    data: {
-      text: '1. Casualties of Partition — death toll estimates from different sources. Source: Multiple (official, press, scholarly). Type: Bar chart with confidence intervals.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-charts-2', type: 'paragraph',
-    data: {
-      text: '2. Refugee flows and destination — tabular and map-based. Source: Government of India rehabilitation data. Type: Combined chart and map.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-charts-3', type: 'paragraph',
-    data: {
-      text: '3. Timeline of key events, 1945-1948. Type: Multi-row timeline with colour-coded categories (political, military, diplomatic, violence).',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-charts-4', type: 'paragraph',
-    data: {
-      text: '4. Religious composition of India, 1941 vs 1951 — showing demographic transformation. Type: Stacked bar chart comparing census data.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-charts-5', type: 'paragraph',
-    data: {
-      text: '5. India-Pakistan military balance, 1947. Type: Comparison chart (manpower, equipment, budgets). Source: Raghavan, Cohen.',
-      citations: [],
-    },
-  },
-  { id: 'b-h-visual-diagrams', type: 'heading', data: { text: 'Relationship Diagrams (3–5)', level: 2 } },
-  {
-    id: 'b-p-visual-diagrams-1', type: 'paragraph',
-    data: {
-      text: '1. Key actors network — Nehru, Jinnah, Gandhi, Patel, Mountbatten, Wavell, Attlee showing their relationships and points of conflict. Type: Force-directed network graph.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-diagrams-2', type: 'paragraph',
-    data: {
-      text: '2. The Cabinet Mission Plan — organisational structure showing centre, provinces, and groups. Type: Hierarchy diagram.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-diagrams-3', type: 'paragraph',
-    data: {
-      text: '3. Decision tree of Partition — key decision points and their consequences, 1945-1947. Type: Decision-tree diagram with branching outcomes.',
-      citations: [],
-    },
-  },
-  { id: 'b-h-visual-flows', type: 'heading', data: { text: 'Migration Flow Maps (2–3)', level: 2 } },
-  {
-    id: 'b-p-visual-flows-1', type: 'paragraph',
-    data: {
-      text: '1. Punjab migration — population flows across the Punjab boundary, west to east and east to west. Type: Flow map with proportional arrow width.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-flows-2', type: 'paragraph',
-    data: {
-      text: '2. Bengal migration — population flows across the Bengal boundary. Type: Flow map.',
-      citations: [],
-    },
-  },
-  {
-    id: 'b-p-visual-flows-3', type: 'paragraph',
-    data: {
-      text: '3. Total subcontinental migration — synthesised overview of all major flows, 1947-1950. Type: Comprehensive flow map.',
-      citations: [],
-    },
-  },
   // ── Visual Archive (reference index — key visuals are placed inline above) ──
   // This archive provides a browsable reference index of all visual assets for the chapter.
   // Key narrative visuals (maps, photos, charts, diagrams) are embedded at their narrative
@@ -3002,7 +2756,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   { id: 'b-vis-img-4', type: 'image', data: { title: 'Refugee train at New Delhi railway station, 1947', caption: 'A refugee train departing New Delhi during the mass migration triggered by Partition.', altText: 'Crowded railway platform with refugees, 1947.', provenance: { creator: 'Margaret Bourke-White', source: 'LIFE Picture Collection / Getty Images', date: '1947' }, license: 'Rights Managed (Time Inc. / Getty Images)', credit: 'Margaret Bourke-White — The LIFE Picture Collection/Getty Images', status: 'requested', aiGenerated: false, linkedClaims: ['claim.partition.refugee-crisis'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'Time Inc. Archive → LIFE Picture Collection → Margaret Bourke-White Archive → 1947 Partition Assignment', note: 'Metadata confirms New Delhi, not Old Delhi station as often misattributed.' } } },
   { id: 'b-vis-img-5', type: 'image', data: { title: 'Foot column of refugees on the Grand Trunk Road, Punjab, 1947', caption: 'Refugees on foot on the Grand Trunk Road during the Punjab migration.', altText: 'Long column of refugees walking along a road.', provenance: { creator: 'Margaret Bourke-White', source: 'LIFE Picture Collection / Getty Images', date: '1947' }, license: 'Rights Managed (Time Inc. / Getty Images)', credit: 'Margaret Bourke-White — The LIFE Picture Collection/Getty Images', status: 'requested', aiGenerated: false, linkedClaims: ['claim.partition.refugee-crisis'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'Time Inc. Archive → LIFE Picture Collection → Margaret Bourke-White Archive → 1947 Punjab Migration', citationChicago: 'Bourke-White, Margaret. Rural Sikhs in a Long Oxcart Train. 1947. B/W Negative. LIFE Picture Collection / Getty Images.' } } },
   { id: 'b-vis-img-7', type: 'image', data: { title: 'Nehru addressing the UN General Assembly, November 1948', caption: 'Jawaharlal Nehru addresses the UN General Assembly at the Palais de Chaillot, Paris, during the internationalisation of the Kashmir dispute.', altText: 'Nehru at a podium at the UN, 1948.', url: '/images/library/chapter-1/photos/a-07-nehru-unga-1948.jpg', provenance: { creator: 'UN Photo', source: 'UN Photo Archive', reference: 'GA 3rd Session 1948', date: '1948-11' }, license: 'UN Public Domain / Editorial Use', credit: 'UN Photo', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.kashmir-unfinished'], archivalProvenance: { evidenceLevel: 'D', archiveHierarchy: 'United Nations Archives → UN Photo Library → General Assembly → 3rd Session (Palais de Chaillot, Paris)', iiifUrl: 'https://media.un.org/photo/en/', citationChicago: 'United Nations Photo. Jawaharlal Nehru Addressing the General Assembly. November 1948. Photograph. UN Photo Library.', note: 'Corrected from October/New York to November/Paris.' } } },
-  { id: 'b-vis-img-8', type: 'image', data: { title: 'Sir Cyril Radcliffe, 1957', caption: 'Sir Cyril Radcliffe, who drew the Partition boundary in five weeks with no prior knowledge of India. This 1957 portrait is the sole authoritative likeness; no photograph of his work in India survives.', altText: 'Portrait of Sir Cyril Radcliffe, 1957.', provenance: { creator: 'Elliott & Fry', source: 'National Portrait Gallery, London', reference: 'NPG x88321', date: '1957' }, license: 'Rights Managed (NPG)', credit: '© National Portrait Gallery, London', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.radcliffe-arbitrary'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'National Portrait Gallery, London → Photographs Collection → Elliott & Fry', iiifUrl: 'https://www.npg.org.uk/collections/search/portrait/mw107297/Cyril-John-Radcliffe-1st-Viscount-Radcliffe', citationChicago: 'Elliott & Fry. Cyril John Radcliffe, 1st Viscount Radcliffe. 1957. Half-plate negative. National Portrait Gallery, London, NPG x88321.', note: 'No photo of Radcliffe at work in India exists. 1957 NPG portrait is the authorised substitute per Book of Record #0017.' } } },
+  { id: 'b-vis-img-8', type: 'image', data: { title: 'Sir Cyril Radcliffe, 1957', caption: 'Sir Cyril Radcliffe, who drew the Partition boundary in five weeks with no prior knowledge of India. This 1957 portrait is the sole authoritative likeness; no photograph of his work in India survives.', altText: 'Portrait of Sir Cyril Radcliffe, 1957.', provenance: { creator: 'Elliott & Fry', source: 'National Portrait Gallery, London', reference: 'NPG x88321', date: '1957' }, license: 'Rights Managed (NPG)', credit: '© National Portrait Gallery, London', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.radcliffe-arbitrary'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'National Portrait Gallery, London → Photographs Collection → Elliott & Fry', iiifUrl: 'https://www.npg.org.uk/collections/search/portrait/mw107297/Cyril-John-Radcliffe-1st-Viscount-Radcliffe', citationChicago: 'Elliott & Fry. Cyril John Radcliffe, 1st Viscount Radcliffe. 1957. Half-plate negative. National Portrait Gallery, London, NPG x88321.', note: 'No photograph of Radcliffe at work in India survives; 1957 NPG portrait is the sole authoritative archival likeness.' } } },
   { id: 'b-vis-img-9', type: 'image', data: { title: 'Jinnah and Gandhi in conversation, Bombay 1944', caption: 'Jinnah and Gandhi during the failed Bombay talks of 1944, an early missed opportunity for unity.', altText: 'Jinnah and Gandhi seated in conversation, 1944.', url: '/images/library/chapter-1/photos/photo-gandhi-jinnah-bombay-1944-dinodia-mkg33469.jpg', provenance: { creator: 'ullstein bild', source: 'Getty Images / Dinodia Photos', reference: '542347429', date: '1944-09' }, license: 'Public Domain in India (Section 25, Copyright Act 1957) / Rights Managed (International)', credit: 'Dinodia Photos / Rühe/ullstein bild via Getty Images', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.gandhi-jinnah-talks'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'Dinodia Photos Archive / ullstein bild → 1944 Bombay Talks', iiifUrl: 'https://commons.wikimedia.org/wiki/File:Gandhi_Jinnah_Sept_1944.jpg', commercialId: 'Getty 542347429', citationChicago: 'Jinnah & Gandhi, 1944. September 9, 1944. Photograph. ullstein bild / Getty Images, 542347429.', note: 'Public domain in India. Free via Wikimedia Commons.' } } },
   { id: 'b-vis-img-10', type: 'image', data: { title: 'Gandhi at Noakhali, 1946', caption: 'Mahatma Gandhi walks barefoot through riot-torn villages of Noakhali during his peace mission, October 1946.', altText: 'Gandhi walking through a village with followers.', provenance: { creator: 'Kanu Gandhi', source: 'GandhiServe Foundation', reference: 'Kanu Gandhi Collection', date: '1946-10' }, license: 'Rights Managed (GandhiServe / Kanu Gandhi Estate)', credit: 'Photograph by Kanu Gandhi / GandhiServe Foundation', status: 'requested', aiGenerated: false, linkedClaims: ['claim.partition.violence-civil-society'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'GandhiServe Foundation → The Gandhi Collection → Kanu Gandhi → Noakhali Peace Mission 1946', iiifUrl: 'https://www.gandhiserve.net/the-gandhi-collection/kanu-gandhi/', citationChicago: 'Gandhi, Kanu. Gandhi in Noakhali. 1946. Photograph. Kanu Gandhi Collection, GandhiServe Foundation.' } } },
   // Supplementary Assets — Provisional
@@ -3023,7 +2777,21 @@ const chapter1Blocks: KnowledgeBlock[] = [
   { id: 'b-vis-doc-4', type: 'image', data: { title: 'Extract from Radcliffe Boundary Commission Proceedings', caption: 'Proceedings of the commission that drew the Partition boundary.', altText: 'Facsimile of Boundary Commission proceedings.', provenance: { creator: 'Radcliffe Boundary Commission', source: 'British Library', reference: 'IOR/L/P&J/10/117', date: '1947' }, license: 'Public Record', credit: 'British Library', status: 'requested', aiGenerated: false, linkedClaims: ['claim.partition.radcliffe-arbitrary'], archivalProvenance: { evidenceLevel: 'C', archiveHierarchy: 'British Library → India Office Records', note: 'Physical only — digitisation required (no permanent URL available).' } } },
   { id: 'b-vis-doc-5', type: 'image', data: { title: 'Cabinet Mission Plan memorandum', caption: 'The memorandum proposing the federal structure rejected by the Congress and League.', altText: 'Facsimile of the Cabinet Mission Plan memorandum.', url: '/images/library/chapter-1/documents/doc-cabinet-mission-plan.pdf', provenance: { creator: 'Cabinet Mission', source: 'British Library', reference: 'Cmd. 6821', date: '1946' }, license: 'Public Record', credit: 'British Library', status: 'archived', aiGenerated: false, linkedClaims: ['claim.partition.cabinet-mission'], archivalProvenance: { evidenceLevel: 'B', archiveHierarchy: 'British Library → Cmd. 6821', note: 'Digitised copy acquired from Internet Archive (Papers Relating to the Cabinet Mission to India).' } } },
   // Charts
-  { id: 'b-vis-chart-2', type: 'chart', data: { title: 'Refugee flows and destinations, 1947-48', caption: 'Tabular and map-based summary of refugee movements and resettlement.', chartType: 'combined', dataSource: '1951 Census of India/Pakistan', url: '/images/library/chapter-1/charts/chart-refugee-flows.svg', provenance: { source: '1951 Census of India/Pakistan' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.refugee-crisis'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — split-flow Sankey diagram from census data' } } },
+  { id: 'b-vis-chart-2', type: 'chart', data: { 
+    title: 'Refugee Flows, 1947–1951', 
+    chartType: 'sankey', 
+    question: 'How many people were displaced across the new borders?', 
+    period: '1947–1951', 
+    unit: 'Millions of people', 
+    provenance: { source: '1951 Census of India; 1951 Census of Pakistan' }, 
+    limitations: 'Figures reflect surviving displaced persons enumerated in 1951. Totals contain minor discrepancies (~4k-26k) due to historical macro-regional rounding. The diagram represents macro-regional flow volumes, not individual migration journeys.', 
+    data: [
+      { origin: 'West Pakistan', destination: 'India (North/West)', volume: 4.7 },
+      { origin: 'India (North/West)', destination: 'West Pakistan', volume: 6.5 },
+      { origin: 'East Pakistan', destination: 'India (East/Bengal)', volume: 2.6 },
+      { origin: 'India (East/Bengal)', destination: 'East Pakistan', volume: 0.7 }
+    ] 
+  } },
   { id: 'b-vis-chart-3', type: 'chart', data: { title: 'Timeline of key events, 1945-1948', caption: 'Multi-row timeline colour-coded by category (political, military, diplomatic, violence).', chartType: 'timeline', dataSource: 'Transfer of Power volumes (HMSO)', url: '/images/library/chapter-1/charts/chart-timeline-1945-1948.svg', provenance: { source: 'Transfer of Power (HMSO)' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.sequence'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — vertical chronological timeline from ToP volumes' } } },
   { id: 'b-vis-chart-4', type: 'chart', data: { title: 'Religious composition of India, 1941 vs 1951', caption: 'Stacked bar chart showing the demographic transformation wrought by Partition.', chartType: 'stacked-bar', dataSource: 'Census of India 1941 and 1951', url: '/images/library/chapter-1/charts/chart-demography-1941-1951.svg', provenance: { source: 'Census of India 1941, 1951' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.demographic-impact'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — comparative stacked bar charts from census data' } } },
   // Migration Flow Maps
@@ -3297,7 +3065,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
               order: 1,
               difficulty: 2,
               version: { major: 1, minor: 0, patch: 0, label: 'initial' },
-              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 31 },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 31, heroImageAlt: 'India map and historical documents' },
               readingTime: { explorer: 30, scholar: 75, researcher: 200 },
               studyTime: { explorer: 45, scholar: 120, researcher: 480 },
               content: chapter1Blocks,
@@ -3523,7 +3291,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
               recommendedNext: ['The Making of the India–China Border', 'Panchsheel and Non-Alignment'],
               keyQuestions: [
                 { question: 'Could the Kashmir conflict have been avoided at Partition?', answer: 'The partition framework provided no mechanism for states where demographics, ruler preference, and geography conflicted. A joint occupation or independence might have been alternatives, but both were rejected before the invasion.', sources: ['s1', 's3'] },
-                { question: 'Was the tribal invasion entirely spontaneous?', answer: 'The evidence strongly suggests official Pakistani involvement. Lamb, Jha, and UN sources document logistical coordination and Pakistani military personnel accompanying tribal fighters.', sources: ['s3', 's2', 's6'] },
+                { question: 'Was the tribal invasion entirely spontaneous?', answer: 'The evidence strongly suggests official Pakistani involvement. Lamb, Jha, and UN sources document logistical coordination and Pakistani military personnel accompanying tribal fighters.', sources: ['s16', 's17', 's6'] },
                 { question: 'Was India\'s accession of Kashmir legal?', answer: 'The Instrument of Accession was legal under the Indian Independence Act. The UN accepted India\'s right to request Pakistani withdrawal before any plebiscite. The debate centres on the voluntariness of the Maharaja\'s signature under military pressure.', sources: ['s9', 's3'] },
                 { question: 'Should India have gone to the UN?', answer: 'Nehru expected the UN to condemn Pakistan\'s aggression. Instead, the UN proposed a plebiscite conditioned on Pakistan\'s withdrawal — a condition never met. Most scholars consider it a strategic error.', sources: ['s1', 's6'] },
                 { question: 'Why did the plebiscite never happen?', answer: 'India insisted on Pakistan\'s withdrawal first (never completed). Pakistan insisted on the plebiscite first. India later argued conditions had changed — Pakistan\'s alignment with US military pacts invalidated the original terms.', sources: ['s1', 's5', 's6'] },

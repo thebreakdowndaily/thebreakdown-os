@@ -75,6 +75,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     name: 'The Breakdown',
     url: 'https://thebreakdown.in',
     description: 'Independent, data-driven journalism on Indian policy, politics, and society.',
+    publisher: {
+      '@type': 'Organization',
+      name: 'The Breakdown',
+      url: 'https://thebreakdown.in',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://thebreakdown.in/b-mark.jpg',
+        width: 1024,
+        height: 1024,
+      }
+    },
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -95,9 +106,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     url: 'https://thebreakdown.in',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://thebreakdown.in/logo.svg',
-      width: 200,
-      height: 60,
+      url: 'https://thebreakdown.in/b-mark.jpg',
+      width: 1024,
+      height: 1024,
     },
     description: 'Independent, evidence-backed journalism on Indian policy, politics, and society.',
     publishingPrinciples: 'https://thebreakdown.in/editorial-constitution',

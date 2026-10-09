@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { captureEvent } from '@/lib/analytics/capture';
 import type { VisibleStoryExperience } from '@/lib/story/reading-mode-policy';
-import type { Chapter } from '@/types/canonical';
+import type { Chapter, Fix } from '@/types/canonical';
 import type { ChapterGraph } from '@/lib/knowledge/knowledge-graph';
 import { StoryHeroCanonical } from '@/components/story/StoryHeroCanonical';
 import { StoryOrientation } from '@/components/story/StoryOrientation';
@@ -11,6 +11,9 @@ import { StoryOrientationRail } from '@/components/story/StoryOrientationRail';
 import { StoryResearchAppendix } from '@/components/story/StoryResearchAppendix';
 import { BlockRenderer } from '@/components/story/blocks/registry';
 import NextExploration from '@/components/story/NextExploration';
+import NextBestUnderstanding from '@/components/story/NextBestUnderstanding';
+import { MobileStoryContext } from '@/components/story/MobileStoryContext';
+import { resolveNextBestUnderstanding, type NextBestUnderstandingPlan } from '@/lib/comprehension/next-best-understanding';
 import ExploreConnections from '@/components/story/ExploreConnections';
 import { StoryProgress, StoryProgressBar } from '@/components/rxs/StoryProgress';
 import { ReadingRegion } from '@/components/rxs/regions/ReadingRegion';
@@ -34,6 +37,8 @@ import CorrectionNoticeBanner from '@/components/story/CorrectionNoticeBanner';
 interface StoryShellProps {
   visibleExperience?: VisibleStoryExperience;
   publishedCorrections?: PublishedCorrection[];
+  nextBestPlan?: NextBestUnderstandingPlan;
+  relatedFixes?: Fix[];
   // Legacy chapter support props
   chapter?: Chapter;
   collectionSlug?: string;
@@ -54,6 +59,8 @@ interface StoryShellProps {
 export function StoryShell({
   visibleExperience,
   publishedCorrections,
+  nextBestPlan: propNextBestPlan,
+  relatedFixes: propRelatedFixes,
   chapter,
   collectionSlug,
   volumeSlug,
@@ -169,6 +176,8 @@ export function StoryShell({
     }));
     const matchingTrackers = getTrackersForStory(storySlug);
     const relatedTracker = matchingTrackers.length > 0 ? matchingTrackers[0] : undefined;
+    const nextBestPlan = propNextBestPlan || resolveNextBestUnderstanding(storySlug);
+    const prereqStep = nextBestPlan.steps.find((s) => s.type === 'prerequisite');
 
     return (
       <div className="min-h-screen bg-surface-canvas text-neutral-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
@@ -318,8 +327,15 @@ export function StoryShell({
               {/* Standard & Deep Views */}
               {mode !== 'quick' && (
                 <>
-                  {/* Short Version Orientation (rendered only if explicit orientation exists) */}
-                  <StoryOrientation orientation={orientation} />
+                  {/* Short Version Orientation (with Prerequisite Read This First if applicable) */}
+                  <StoryOrientation
+                    orientation={orientation}
+                    prerequisite={prereqStep ? {
+                      title: prereqStep.title,
+                      url: prereqStep.url,
+                      summary: prereqStep.summary,
+                    } : undefined}
+                  />
 
                   {/* Editorial Actions Toolbar */}
                   <div className="flex flex-wrap items-center justify-between gap-4 py-3 my-6 border-y border-neutral-800 text-xs font-mono text-neutral-400">
@@ -351,7 +367,7 @@ export function StoryShell({
 
                   {/* Timeline (render standalone only if not already rendered inline in narrative) */}
                   {showTimeline && !hasInlineTimeline && timeline && timeline.events.length > 0 && (
-                    <section id="timeline" className="my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-6">
+                    <section id="timeline" className="hidden lg:block my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-6">
                       <h3 className="text-lg font-bold text-white flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
                         Relevant Chronology & Timeline
@@ -374,19 +390,23 @@ export function StoryShell({
                     <StoryResearchAppendix research={research} />
                   )}
 
+                  {/* Next Best Understanding Cognitive Roadmap */}
+                  <NextBestUnderstanding plan={nextBestPlan} />
+
                   {/* Continue Exploring */}
                   <div id="continue-exploring" className="my-12 pt-8 border-t border-neutral-800">
                       <NextExploration
                         storySlug={storySlug}
+                        relatedFixes={propRelatedFixes}
                         stories={relatedStories?.map((rs) => ({
                           id: rs.slug,
                           slug: rs.slug,
                           headline: rs.headline,
                           summary: rs.summary || '',
                           heroImage: rs.image?.url || '',
-                          publishedAt: new Date().toISOString(),
-                          createdAt: new Date().toISOString(),
-                          updatedAt: new Date().toISOString(),
+                          publishedAt: rs.publishedAt || '',
+                          createdAt: rs.publishedAt || '',
+                          updatedAt: rs.publishedAt || '',
                           readingTime: rs.readingTimeMinutes || 5,
                           evidenceScore: 90,
                           category: rs.category || 'policy',
@@ -460,6 +480,8 @@ export function StoryShell({
                   )}
                 </>
               )}
+              
+              <MobileStoryContext timeline={timeline} keyNumbers={orientation?.keyNumbers} />
             </article>
           </div>
         </main>

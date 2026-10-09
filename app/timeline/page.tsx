@@ -7,10 +7,10 @@ import { EntityBuilder } from '@/services/stories/pipeline/entities';
 import { GlobalTimelineExplorer } from '@/components/timeline/GlobalTimelineExplorer';
 
 export const metadata: Metadata = {
-  title: 'Timeline — The Breakdown',
+  title: 'Timeline',
   description: 'Explore all major events across stories, policies, and entities on The Breakdown.',
   openGraph: {
-    title: 'Timeline — The Breakdown',
+    title: 'Timeline',
     description: 'Explore all major events across stories, policies, and entities.',
     url: 'https://thebreakdown.in/timeline',
   },

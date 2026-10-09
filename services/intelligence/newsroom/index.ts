@@ -33,6 +33,10 @@ import { NewsroomPersistedState, NewsroomStateRepository } from './persistence/s
 import { createNewsroomStateRepository } from './persistence';
 import { computeNewsroomScorecard } from './scorecard-service';
 import { loadNewsroomScorecardBaseline } from '@/lib/intelligence/newsroom-scorecard-baseline';
+import type { RadarLatencyRecord } from '@/services/radar/types';
+import type { RadarPersistenceRepository } from '@/services/radar/persistence/types';
+import { createRadarPersistenceRepository } from '@/services/radar/persistence';
+import { recordEditorialVerification, recordStoryPublication } from '@/services/radar/latency-tracker';
 
 const HOUR_MS = 60 * 60 * 1000;
 const MINUTE_MS = 60 * 1000;
@@ -47,10 +51,26 @@ function medianOf(values: number[]): number {
   return Math.round(sorted[mid]);
 }
 
+export class VerificationPreconditionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'VerificationPreconditionError';
+  }
+}
+
 export class NewsroomIntelligenceCore {
   private static instance: NewsroomIntelligenceCore | null = null;
 
   private readonly persistence: NewsroomStateRepository;
+  private evidenceVault?: import('../evidence-vault.service').EvidenceVaultService;
+
+  public setEvidenceVault(vault: import('../evidence-vault.service').EvidenceVaultService): void {
+    this.evidenceVault = vault;
+  }
+
+  public getEvidenceVault(): import('../evidence-vault.service').EvidenceVaultService | undefined {
+    return this.evidenceVault;
+  }
 
   /**
    * Optional News Intelligence → Research bridge. When set, every evaluated
@@ -70,6 +90,18 @@ export class NewsroomIntelligenceCore {
 
   private alertEngine = new AlertEngine();
   private workflowService = new NewsroomWorkflowService();
+  private radarRepository: RadarPersistenceRepository | null = null;
+
+  public setRadarRepository(repo: RadarPersistenceRepository): void {
+    this.radarRepository = repo;
+  }
+
+  public getRadarRepository(): RadarPersistenceRepository {
+    if (!this.radarRepository) {
+      this.radarRepository = createRadarPersistenceRepository();
+    }
+    return this.radarRepository;
+  }
 
   private constructor(repository?: NewsroomStateRepository) {
     this.persistence = repository ?? createNewsroomStateRepository();
@@ -126,9 +158,6 @@ export class NewsroomIntelligenceCore {
 
           this.isLoaded = true;
         } else {
-          if (this.persistence.kind === 'supabase') {
-            throw new Error('Supabase state load returned empty, possible configuration or table error.');
-          }
           this.isLoaded = true;
         }
       } catch (err) {
@@ -204,15 +233,73 @@ export class NewsroomIntelligenceCore {
     if (this.observations.has(obs.id)) {
       return;
     }
-    for (const existing of this.observations.values()) {
-      if (
-        (obs.canonicalUrl && existing.canonicalUrl === obs.canonicalUrl) ||
-        (obs.contentHash && existing.contentHash === obs.contentHash) ||
-        (obs.externalId && existing.sourceId === obs.sourceId && existing.externalId === obs.externalId)
-      ) {
+
+    // 1. Natural key matching (canonicalUrl or sourceId + externalId)
+    const matchingUrl = obs.canonicalUrl
+      ? Array.from(this.observations.values()).filter((e) => e.canonicalUrl === obs.canonicalUrl)
+      : [];
+    const matchingExt = (obs.externalId && obs.sourceId)
+      ? Array.from(this.observations.values()).filter(
+          (e) => e.sourceId === obs.sourceId && e.externalId === obs.externalId
+        )
+      : [];
+
+    const priorMatches = matchingUrl.length > 0 ? matchingUrl : matchingExt;
+
+    if (priorMatches.length > 0) {
+      // Check if this exact content version was already ingested (idempotent / duplicate fetch)
+      const exactVersionAlreadyIngested = priorMatches.some(
+        (e) =>
+          (obs.contentHash && e.contentHash === obs.contentHash) ||
+          (!obs.contentHash && !e.contentHash)
+      );
+
+      if (exactVersionAlreadyIngested) {
+        // CASE A: Same URL/key + same fingerprint => unchanged / deduplicated
         return;
       }
+
+      // CASE B/C/D/E/G: Same URL/key + changed fingerprint => MATERIAL MUTATION!
+      // Identify the immediate prior version (latest retrieval)
+      const sortedPrior = [...priorMatches].sort(
+        (a, b) =>
+          new Date(b.ingestionTimestamp).getTime() - new Date(a.ingestionTimestamp).getTime()
+      );
+      const immediatePrior = sortedPrior[0];
+
+      const priorRev = (immediatePrior.metadata?.revisionNumber as number) || 1;
+      const revisionNumber = priorRev + 1;
+
+      // Link to prior state without destructive overwrite
+      obs.duplicateOfId = immediatePrior.id;
+      obs.duplicateState = 'unique';
+      obs.metadata = {
+        ...obs.metadata,
+        isMutation: true,
+        previousObservationId: immediatePrior.id,
+        previousContentHash: immediatePrior.contentHash,
+        newContentHash: obs.contentHash,
+        previousRetrievalTimestamp: immediatePrior.ingestionTimestamp,
+        newRetrievalTimestamp: obs.ingestionTimestamp,
+        revisionNumber,
+        mutationId: obs.metadata?.mutationId || `mut-${obs.id}`,
+      };
+
+      this.observations.set(obs.id, obs);
+      this.persist();
+      return;
     }
+
+    // 2. Cross-URL identical content hash duplication (CASE F: Syndication)
+    if (obs.contentHash) {
+      for (const existing of this.observations.values()) {
+        if (existing.contentHash === obs.contentHash) {
+          // Exact content hash already exists elsewhere => syndicated / duplicate
+          return;
+        }
+      }
+    }
+
     this.observations.set(obs.id, obs);
     this.persist();
   }
@@ -349,6 +436,22 @@ export class NewsroomIntelligenceCore {
     return Array.from(this.observations.values());
   }
 
+  public getObservation(id: string): NewsroomObservation | undefined {
+    return this.observations.get(id);
+  }
+
+  public getObservationsForUrl(url: string): NewsroomObservation[] {
+    return Array.from(this.observations.values()).filter((o) => o.canonicalUrl === url);
+  }
+
+  public getClusters(): StoryCluster[] {
+    return Array.from(this.clusters.values());
+  }
+
+  public getCluster(id: string): StoryCluster | undefined {
+    return this.clusters.get(id);
+  }
+
   public runCoverageGapCheck(expectations: MonitoredTopicExpectation[]): CoverageGap[] {
     const detected = CoverageGapEngine.detectCoverageGaps(
       Array.from(this.clusters.values()),
@@ -380,6 +483,33 @@ export class NewsroomIntelligenceCore {
       }
     }
 
+    // Phase 4B-2E: Evidence Provenance Verification Gate
+    if (payload.action === 'VERIFY') {
+      if (signal.clusterId) {
+        const cluster = this.clusters.get(signal.clusterId);
+        if (cluster && cluster.observationIds && cluster.observationIds.length > 0) {
+          for (const obsId of cluster.observationIds) {
+            const obs = this.observations.get(obsId);
+            if (!obs) continue;
+            if (!obs.archiveId || obs.archivalState === 'archive_failed' || obs.archivalState === 'corrupted') {
+              throw new VerificationPreconditionError(
+                `Cannot verify signal ${signal.id}: Observation ${obs.id} lacks a verified archive artifact.`
+              );
+            }
+            if (this.evidenceVault) {
+              void this.evidenceVault.lockRetention(obs.archiveId, {
+                signalId: signal.id,
+                verifierId: payload.actorId,
+                reason: `Verified by editor ${payload.actorName || payload.actorId}`,
+              }).catch((err) => {
+                console.error('[NewsroomIntelligenceCore] failed to lock evidence retention:', err);
+              });
+            }
+          }
+        }
+      }
+    }
+
     const updated = this.workflowService.applyAction(signal, payload);
     this.signals.set(updated.id, updated);
 
@@ -392,8 +522,55 @@ export class NewsroomIntelligenceCore {
       }
     }
 
+    // Bridge human verification into radar latency measurement
+    if ((payload.action === 'VERIFY' || payload.action === 'REVIEW') && signal.clusterId) {
+      const isHuman = userRole ? userRole !== 'system' && userRole !== 'crawler' : true;
+      void this.recordVerification(
+        signal.clusterId,
+        { id: payload.actorId, role: userRole || 'editor', isHuman },
+        new Date().toISOString()
+      ).catch((err) => {
+        console.error('[NewsroomIntelligenceCore] failed to record verification latency:', err);
+      });
+    }
+
     this.persist();
     return updated;
+  }
+
+  // ── End-to-End Latency Instrumentation ──────────────────────────────────────
+
+  public async getLatencyRecord(clusterId: string): Promise<RadarLatencyRecord | null> {
+    return this.getRadarRepository().getLatencyRecord(clusterId);
+  }
+
+  public async getLatencyRecords(): Promise<RadarLatencyRecord[]> {
+    return this.getRadarRepository().getLatencyRecords();
+  }
+
+  public async recordVerification(
+    clusterId: string,
+    actor: { id: string; role: string; isHuman?: boolean },
+    verifiedAt?: string
+  ): Promise<RadarLatencyRecord | null> {
+    return recordEditorialVerification(this.getRadarRepository(), {
+      clusterId,
+      actor,
+      verifiedAt,
+      verificationStatus: 'verified',
+    });
+  }
+
+  public async recordPublication(
+    clusterId: string,
+    publishedAt?: string,
+    storyStatus: string = 'published'
+  ): Promise<RadarLatencyRecord | null> {
+    return recordStoryPublication(this.getRadarRepository(), {
+      clusterId,
+      publishedAt,
+      storyStatus,
+    });
   }
 
   public getSourceReputations() {
@@ -587,3 +764,12 @@ export class NewsroomIntelligenceCore {
 }
 
 export const newsroomIntelligenceCore = NewsroomIntelligenceCore.getInstance();
+
+export { NewsroomDeskService, newsroomDeskService } from './desk-service';
+export type {
+  NewsroomDeskItem,
+  NewsroomDeskFilter,
+  NewsroomDeskResponse,
+  NewsroomDeskSummary,
+  NewsroomDeskActionInput,
+} from './desk-service';

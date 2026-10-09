@@ -7,11 +7,11 @@ import DataCards from '@/components/story/DataCards';
 import { captureEvent } from '@/lib/analytics/capture';
 
 const featuredDatasets = [
-  { label: 'MGNREGA Budget Allocation', description: 'Year-wise central budget allocation to MGNREGA from 2006 to 2026', data: [{ year: '2015-16', allocation: 37300 }, { year: '2020-21', allocation: 111500 }, { year: '2025-26', allocation: 86000 }], source: 'Union Budget' },
-  { label: 'GDP Growth Rate', description: 'India\'s annual GDP growth rate from 2015 to 2026', data: [{ year: '2015-16', growth: 8.0 }, { year: '2020-21', growth: -5.8 }, { year: '2025-26', growth: 6.8 }], source: 'MOSPI' },
-  { label: 'UPI Transaction Volume', description: 'Annual UPI transaction value in India', data: [{ year: '2018-19', value: 11100 }, { year: '2021-22', value: 84000 }, { year: '2025-26', value: 272000 }], source: 'NPCI' },
-  { label: 'Sino-Indian Defense Forecast 2026', description: 'Strategic capability forecasting, border deployment models, and logistics infrastructure metrics.', data: [], source: 'The Breakdown Intelligence', id: 'sino-indian-border', isPremium: true },
-  { label: 'PLI Semiconductor Subsidy Ledger', description: 'Entity-by-entity fiscal disbursements, fab construction markers, and component yield statistics.', data: [], source: 'The Breakdown Intelligence', id: 'pli-semiconductor', isPremium: true },
+  { label: 'MGNREGA Budget Allocation', description: 'Year-wise central budget allocation to MGNREGA from 2006 to 2026', data: [{ year: '2015-16', allocation: 37300 }, { year: '2020-21', allocation: 111500 }, { year: '2025-26', allocation: 86000 }], source: 'Union Budget', sourceUrl: 'https://www.indiabudget.gov.in' },
+  { label: 'GDP Growth Rate', description: 'India\'s annual GDP growth rate from 2015 to 2026', data: [{ year: '2015-16', growth: 8.0 }, { year: '2020-21', growth: -5.8 }, { year: '2025-26', growth: 6.8 }], source: 'MOSPI', sourceUrl: 'https://mospi.gov.in' },
+  { label: 'UPI Transaction Volume', description: 'Annual UPI transaction value in India', data: [{ year: '2018-19', value: 11100 }, { year: '2021-22', value: 84000 }, { year: '2025-26', value: 272000 }], source: 'NPCI', sourceUrl: 'https://www.npci.org.in' },
+  { label: 'Sino-Indian Defense Forecast 2026', description: 'Strategic capability forecasting, border deployment models, and logistics infrastructure metrics.', data: [], source: 'The Breakdown Intelligence', sourceUrl: '/stories', id: 'sino-indian-border', isPremium: true },
+  { label: 'PLI Semiconductor Subsidy Ledger', description: 'Entity-by-entity fiscal disbursements, fab construction markers, and component yield statistics.', data: [], source: 'The Breakdown Intelligence', sourceUrl: '/stories', id: 'pli-semiconductor', isPremium: true },
 ];
 
 const featuredCharts = [

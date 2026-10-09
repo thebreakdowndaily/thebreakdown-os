@@ -5,6 +5,7 @@ import type { BlockComponentProps } from '../core/block-registry';
 import type { ClaimBlockData, EvidenceRef } from '@/types/canonical';
 import { getSource } from '@/lib/knowledge/source-registry';
 import { getClaim } from '@/lib/knowledge/claim-registry';
+import { InlineEvidenceCard } from '../evidence/InlineEvidenceCard';
 
 interface ThreeLayerData {
   documentedFacts?: Array<{ fact: string; sources: string[] }>;
@@ -49,18 +50,23 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
         </div>
         {evidence && evidence.length > 0 && (
           <div className="mt-2 space-y-1">
-            {evidence.map((e: EvidenceRef, i: number) => {
-              const src = getSource(e.sourceId);
-              return (
-                <p key={i} className="text-sm text-gray-600 pl-3 border-l-2 border-blue-300">
-                  <span className="text-xs uppercase font-medium text-blue-500">{e.relevance}</span>
-                  : {e.excerpt}
-                  <span className="text-gray-400 ml-1">
-                    — {src ? src.title : 'Unknown Source'}
-                  </span>
-                </p>
-              );
-            })}
+            <div className="hidden lg:block space-y-1">
+              {evidence.map((e: EvidenceRef, i: number) => {
+                const src = getSource(e.sourceId);
+                return (
+                  <p key={i} className="text-sm text-gray-600 pl-3 border-l-2 border-blue-300">
+                    <span className="text-xs uppercase font-medium text-blue-500">{e.relevance}</span>
+                    : {e.excerpt}
+                    <span className="text-gray-400 ml-1">
+                      — {src ? src.title : 'Unknown Source'}
+                    </span>
+                  </p>
+                );
+              })}
+            </div>
+            <div className="block lg:hidden">
+              <InlineEvidenceCard evidence={evidence} />
+            </div>
           </div>
         )}
       </div>
@@ -132,7 +138,7 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
         {evidence && evidence.length > 0 && (
           <div className="px-5 py-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Evidence</p>
-            <div className="space-y-2">
+            <div className="hidden lg:block space-y-2">
               {evidence.map((e: EvidenceRef, i: number) => {
                 const src = getSource(e.sourceId);
                 return (
@@ -148,6 +154,9 @@ export const ClaimBlock: FC<BlockComponentProps> = ({ id, data }) => {
                   </p>
                 );
               })}
+            </div>
+            <div className="block lg:hidden">
+              <InlineEvidenceCard evidence={evidence} />
             </div>
           </div>
         )}

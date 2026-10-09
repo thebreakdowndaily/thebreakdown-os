@@ -5,13 +5,13 @@ import DataCards from '@/components/story/DataCards';
 
 
 export const metadata: Metadata = {
-  title: 'Data Hub — The Breakdown',
+  title: 'Data Hub',
   description: 'Explore datasets, statistics, and data visualizations on Indian policy, economy, and society.',
   alternates: {
     canonical: 'https://thebreakdown.in/data',
   },
   openGraph: {
-    title: 'Data Hub — The Breakdown',
+    title: 'Data Hub',
     description: 'Explore datasets, statistics, and data visualizations.',
     url: 'https://thebreakdown.in/data',
   },

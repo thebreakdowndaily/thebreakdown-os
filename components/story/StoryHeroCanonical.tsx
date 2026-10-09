@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { StoryHeroModel } from '@/lib/story/presentation-model';
 
 interface StoryHeroCanonicalProps {
@@ -71,14 +72,17 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
       {/* Hero Media */}
       {hero.heroMedia?.url && (
         <div className="w-full aspect-video rounded-2xl overflow-hidden border border-neutral-800 my-6 relative bg-neutral-900">
-          <img
+          <Image
             src={hero.heroMedia.url}
-            alt={hero.heroMedia.altText || ''}
-            fetchPriority="high"
-            className="w-full h-full object-cover"
+            alt={hero.heroMedia.altText}
+            fill
+            sizes="(max-width: 1200px) 100vw, 1200px"
+            priority
+            className="object-cover"
             onError={(e) => {
               const target = e.currentTarget;
               const fallback = `/images/placeholders/${(hero.category || 'story').toLowerCase()}-placeholder.svg`;
+              target.srcset = '';
               if (target.src !== fallback && !target.src.endsWith(fallback)) {
                 target.src = fallback;
               }

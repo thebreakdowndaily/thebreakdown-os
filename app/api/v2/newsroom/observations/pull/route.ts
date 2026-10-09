@@ -5,30 +5,28 @@ import {
   pullPibObservations,
   DEFAULT_PIB_FEED_URL,
 } from '@/lib/intelligence/pib-adapter';
+import { isValidCronRequest } from '@/lib/security/cron-auth';
 
 export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
 
 /**
- * POST /api/v2/newsroom/observations/pull
+ * GET & POST /api/v2/newsroom/observations/pull
  *
- * Vercel Cron ingestion endpoint. Authenticated by the `x-vercel-cron` header
- * (set only by the Vercel cron scheduler) plus a bearer token matching
- * `CRON_SECRET`. Not reachable by normal users.
+ * Vercel Cron ingestion endpoint. Authenticated via CRON_SECRET matching
+ * `Authorization: Bearer <CRON_SECRET>`.
  *
  * Governing documents:
  *   - NEWSROOM_INTELLIGENCE_OPERATING_STANDARD.md §21 (Persistence & Durability)
  *   - NEWSROOM_INTELLIGENCE_FINAL_OPERATIONALIZATION_REPORT.md §0 (LIVE
  *     PRODUCTION CONVERGENCE — production ingestion adapter)
  */
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  if (req.headers.get('x-vercel-cron') !== '1') {
-    return NextResponse.json({ error: 'forbidden: cron-only endpoint' }, { status: 403 });
-  }
-
-  const secret = process.env.CRON_SECRET;
-  const auth = req.headers.get('authorization');
-  if (!secret || auth !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+async function handlePull(req: NextRequest): Promise<NextResponse> {
+  if (!isValidCronRequest(req)) {
+    return NextResponse.json(
+      { error: 'unauthorized', message: 'Invalid or missing cron credentials' },
+      { status: 401 }
+    );
   }
 
   try {
@@ -46,4 +44,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
     throw err;
   }
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  return handlePull(req);
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  return handlePull(req);
 }

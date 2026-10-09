@@ -58,7 +58,8 @@ export async function PUT(
       );
     }
 
-    const decision = evaluatePublicationContract(existing, targetStory, principal);
+    const { evaluatePublicationContractAsync } = await import('@/lib/editorial/canonical-publication');
+    const decision = await evaluatePublicationContractAsync(existing, targetStory, principal);
     if (!decision.allowed) {
       return NextResponse.json(
         { error: decision.error, details: decision.gateResult },
@@ -66,7 +67,7 @@ export async function PUT(
       );
     }
 
-    const saved = await repo.saveStory(decision.updatedStory!);
+    const saved = await repo.saveStory(decision.updatedStory!, { publicationToken: decision.publicationToken });
     syncStory(saved);
     executePostPublicationEffects(saved, principal, decision.gateResult);
     const res: APIResponse<Story> = { data: saved };

@@ -1,34 +1,42 @@
 import type { MetadataRoute } from 'next';
-import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
+  const services = bootstrapServices();
 
-  const stories = getPublicStories({ pageSize: 100 }).data.map((s) => ({
+  const [storiesRes, entitiesRes, topicsRes, fixesRes] = await Promise.all([
+    services.stories.getPublicStories({ pageSize: 100 }),
+    services.entities.getEntities({ pageSize: 100 }),
+    services.topics.getTopics({ pageSize: 100 }),
+    services.fixes.getFixes({ pageSize: 100 }),
+  ]);
+
+  const stories = storiesRes.data.map((s) => ({
     url: `${siteUrl}/story/${s.slug}`,
     lastModified: new Date(s.updatedAt || s.publishedAt),
     changeFrequency: 'daily' as const,
     priority: 0.9,
   }));
 
-  const entities = getEntities({ pageSize: 100 }).data.map((e) => ({
+  const entities = entitiesRes.data.map((e) => ({
     url: `${siteUrl}/entity/${e.slug}`,
-    lastModified: new Date(e.updatedAt),
+    lastModified: new Date(e.updatedAt || e.createdAt),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
 
-  const topics = getTopics({ pageSize: 100 }).data.map((t) => ({
+  const topics = topicsRes.data.map((t) => ({
     url: `${siteUrl}/topic/${t.slug}`,
-    lastModified: new Date(t.updatedAt),
+    lastModified: new Date(t.updatedAt || t.createdAt),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
-  const fixes = getFixes({ pageSize: 100 }).data.map((f) => ({
+  const fixes = fixesRes.data.map((f) => ({
     url: `${siteUrl}/fix/${f.slug}`,
-    lastModified: new Date(f.updatedAt),
+    lastModified: new Date(f.updatedAt || f.publishedAt),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -101,9 +109,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/compare`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${siteUrl}/trackers`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'daily', priority: 0.9 },
     { url: `${siteUrl}/trackers/mgnrega`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/trackers/pmfby`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/semiconductor`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/upi`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/trackers/pmfby`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/stories`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${siteUrl}/fix`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${siteUrl}/transparency/corrections`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/newsletter`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/subscribe`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${siteUrl}/timeline`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'weekly', priority: 0.7 },
   ];
 
   return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];

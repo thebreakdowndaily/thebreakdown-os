@@ -95,6 +95,7 @@ export interface RelatedStoryPresentation {
   headline: string;
   summary?: string;
   category?: string;
+  publishedAt?: string;
   readingTimeMinutes?: number;
   relationshipContext?: string;
   image?: {
@@ -269,8 +270,9 @@ export function buildStoryPresentationModel(
       headline: rs.headline || rs.title,
       summary: rs.summary,
       category: rs.category,
+      publishedAt: rs.publishedAt,
       readingTimeMinutes: rs.readingTime || 5,
-      image: rs.heroImage && !rs.heroImage.includes('placehold.co') ? { url: rs.heroImage, altText: rs.headline } : undefined,
+      image: rs.heroImage && !rs.heroImage.includes('placehold.co') ? { url: rs.heroImage, altText: (() => { if (rs.heroImageIsDecorative) return ''; if (rs.heroImageAlt) return rs.heroImageAlt; throw new Error('DATA_QUALITY_FAILURE: Missing informative image description'); })() } : undefined,
     }));
 
   // 3. Derive capabilities
@@ -291,7 +293,14 @@ export function buildStoryPresentationModel(
     readingTimeMinutes: story.readingTime || 5,
     trustSignals,
     heroMedia: story.heroImage && !story.heroImage.includes('placehold.co')
-      ? { url: story.heroImage, altText: story.headline }
+      ? { 
+          url: story.heroImage, 
+          altText: (() => {
+            if (story.heroImageIsDecorative) return '';
+            if (story.heroImageAlt) return story.heroImageAlt;
+            throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
+          })()
+        }
       : undefined,
   };
 

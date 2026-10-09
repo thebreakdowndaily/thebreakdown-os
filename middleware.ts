@@ -11,6 +11,8 @@ import {
 import { intelModuleFromPath } from './features/auth/intel-auth';
 import { normalizeIntelRole, canAccessIntelModule } from './features/auth/roles';
 
+import { isValidCronRequest } from './lib/security/cron-auth';
+
 const PUBLIC_API_PATHS = [
   '/api/docs',
   '/api/feed',
@@ -19,6 +21,7 @@ const PUBLIC_API_PATHS = [
   '/api/up403',
   '/api/v1/auth/login',
   '/api/v1/auth/register',
+  '/api/corrections/submit',
 ];
 
 const AUTHENTICATED_PAGES = [
@@ -56,20 +59,36 @@ export async function middleware(request: NextRequest) {
 
   // 2. API Authentication & Rate Limiting
   if (pathname.startsWith('/api/')) {
-    // Vercel Cron Ingestion Security Gate (Operating Standard §21)
-    if (pathname === '/api/v2/newsroom/observations/pull') {
-      const isCron = request.headers.get('x-vercel-cron') === '1';
-      const authHeader = request.headers.get('authorization');
-      const cronSecret = process.env.CRON_SECRET;
-
-      if (isCron && cronSecret && authHeader === `Bearer ${cronSecret}`) {
+    // Vercel Cron Ingestion Security Gate (Operating Standard A 21)
+    if (pathname === '/api/v2/newsroom/observations/pull' || pathname === '/api/v2/radar/poll') {
+      if (isValidCronRequest(request)) {
         return NextResponse.next();
       }
 
-      return NextResponse.json(
-        { error: 'Unauthorized', message: 'Invalid or missing cron credentials' },
-        { status: 401, headers: SECURITY_HEADERS as HeadersInit }
-      );
+      // Newsroom observations pull is strictly cron-authenticated
+      if (pathname === '/api/v2/newsroom/observations/pull') {
+        return NextResponse.json(
+          { error: 'Unauthorized', message: 'Invalid or missing cron credentials' },
+          { status: 401, headers: SECURITY_HEADERS as HeadersInit }
+        );
+      }
+
+      // Radar poll: If not authenticated via cron Bearer secret, check if an x-api-key is supplied.
+      // If no x-api-key is present, reject immediately as unauthorized.
+      const apiKey = request.headers.get('x-api-key');
+      if (!apiKey) {
+        return NextResponse.json(
+          { error: 'Unauthorized', message: 'Invalid or missing credentials' },
+          { status: 401, headers: SECURITY_HEADERS as HeadersInit }
+        );
+      }
+      // If x-api-key is present, fall through to standard API key validation below
+    }
+
+    // Inbound HMAC-authenticated webhook endpoints (Phase 4B-1)
+    // Authenticated cryptographically via X-Breakdown-Signature at the route boundary
+    if (pathname === '/api/v2/newsroom/alerts/webhook' || pathname === '/api/editorial/publish-due') {
+      return NextResponse.next();
     }
 
     const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';

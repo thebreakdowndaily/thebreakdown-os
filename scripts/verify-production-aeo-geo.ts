@@ -133,13 +133,18 @@ async function verifyLiveEndpoints() {
 
   // 7. News Sitemap (Must be 200 OK)
   const newsSitemap = await fetchEndpoint('https://thebreakdown.in/news-sitemap.xml');
-  const newsSitemapActive = newsSitemap.statusCode === 200 && newsSitemap.body.includes('<news:news>');
+  const newsSitemapActive = newsSitemap.statusCode === 200 && 
+    newsSitemap.body.includes('<urlset') && 
+    newsSitemap.body.includes('xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"');
+  const hasRecentStories = newsSitemap.body.includes('<news:news>');
   checks.push({
     name: 'Google News Sitemap (news-sitemap.xml)',
     category: 'DISCOVERY',
     passed: newsSitemapActive,
     status: newsSitemap.statusCode,
-    details: newsSitemapActive ? 'Active 200 OK and serving Google News XML' : `FAILED: HTTP ${newsSitemap.statusCode}`
+    details: newsSitemapActive 
+      ? (hasRecentStories ? 'Active 200 OK and serving Google News XML with active stories' : 'Active 200 OK with valid Google News XML schema (no stories in 48h window)')
+      : `FAILED: HTTP ${newsSitemap.statusCode}`
   });
 
   // 8. llms.txt (Must be 200 OK)

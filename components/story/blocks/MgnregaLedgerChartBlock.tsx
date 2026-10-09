@@ -95,7 +95,7 @@ export default function MgnregaLedgerChartBlock(props: Partial<MgnregaLedgerData
           </span>
           <div className="text-2xl font-bold font-mono text-white">89,066</div>
           <p className="text-xs text-neutral-400 mt-1 leading-snug">
-            Generated across MP (49.7k process, 22.1k deviations, 10.7k misappropriations).
+            Generated across MP: 49.7k process, 22.1k deviations, 10.7k misappropriations, 6.6k record reconciliation.
           </p>
         </div>
 

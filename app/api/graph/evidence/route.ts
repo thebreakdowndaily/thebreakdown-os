@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getStore } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import { buildEvidenceGraph, getClaimLineage } from '@/lib/graph/evidence-graph';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const claimId = searchParams.get('claimId');
 
-  const store = getStore();
-  const stories = Array.from(store.stories.values());
+  const services = bootstrapServices();
+  const { data: stories } = await services.stories.getStories({ pageSize: 1000 });
 
   const graph = buildEvidenceGraph(stories);
 

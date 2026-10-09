@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Container from '@/components/layout/Container';
-import { getPublicStories } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
@@ -8,11 +8,13 @@ export const metadata: Metadata = {
   description: 'The editorial team behind The Breakdown.',
 };
 
-export default function TeamPage() {
-  const { data: stories } = getPublicStories({ pageSize: 50 });
+export default async function TeamPage() {
+  const services = bootstrapServices({ publicOnly: true });
+  const { data: stories } = await services.stories.getPublicStories({ pageSize: 50 });
   const authorMap = new Map<string, { name: string; stories: string[] }>();
   for (const s of stories) {
-    const name = s.author.name;
+    const name = typeof s.author === 'string' ? s.author : (s.author as any)?.name || 'The Breakdown';
+    if (!name) continue;
     if (!authorMap.has(name)) authorMap.set(name, { name, stories: [] });
     authorMap.get(name)!.stories.push(s.headline);
   }

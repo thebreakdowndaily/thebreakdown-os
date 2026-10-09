@@ -8,7 +8,13 @@ interface DataCardsProps {
     description: string;
     data: Array<Record<string, string | number | boolean | null>>;
     source?: string;
+    sourceUrl?: string;
   }>;
+}
+
+function isValidUrl(url?: string): boolean {
+  if (!url) return false;
+  return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
 }
 
 const DataCards: React.FC<DataCardsProps> = ({ datasets }) => {
@@ -137,21 +143,33 @@ const DataCard: React.FC<{ dataset: DataCardsProps['datasets'][0] }> = ({ datase
         </button>
       )}
 
-      {/* Source link */}
-      {dataset.source && (
-        <a
-          href={dataset.source}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'block',
-            marginTop: 'var(--spacing-2)',
-            fontSize: 'var(--text-xs)',
-            color: 'var(--color-brand-400)',
-          }}
-        >
-          Source →
-        </a>
+      {/* Source link or attribution text */}
+      {(dataset.source || dataset.sourceUrl) && (
+        isValidUrl(dataset.sourceUrl || dataset.source) ? (
+          <a
+            href={dataset.sourceUrl || dataset.source}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              marginTop: 'var(--spacing-2)',
+              fontSize: 'var(--text-xs)',
+              color: 'var(--color-brand-400)',
+            }}
+          >
+            Source: {dataset.source && !isValidUrl(dataset.source) ? dataset.source : 'Official Dataset'} →
+          </a>
+        ) : (
+          <p
+            style={{
+              marginTop: 'var(--spacing-2)',
+              fontSize: 'var(--text-xs)',
+              color: 'var(--color-text-muted)',
+            }}
+          >
+            Source: {dataset.source}
+          </p>
+        )
       )}
     </div>
   );

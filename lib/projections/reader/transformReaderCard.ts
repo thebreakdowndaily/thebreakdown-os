@@ -17,6 +17,12 @@ export function transformStoryToReaderCard(story: Story, isFeatured: boolean = f
     headline: story.headline || story.title,
     summary: story.summary,
     heroImage: story.heroImage || '/assets/images/placeholder.jpg',
+    heroImageAlt: (() => {
+      if (story.heroImageIsDecorative) return '';
+      if (story.heroImageAlt) return story.heroImageAlt;
+      throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
+    })(),
+    heroImageIsDecorative: story.heroImageIsDecorative,
     category: story.category || 'Analysis',
     readingTimeMinutes: story.readingTime || 5,
     publishedAt: story.publishedAt,

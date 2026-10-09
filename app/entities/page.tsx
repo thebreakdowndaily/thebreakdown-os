@@ -1,19 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getEntities } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Entities — The Breakdown',
+  title: 'Entities',
   description: 'Key entities tracked by The Breakdown — policies, organizations, schemes, and more.',
-  openGraph: { title: 'Entities — The Breakdown', url: 'https://thebreakdown.in/entities' },
+  openGraph: { title: 'Entities', url: 'https://thebreakdown.in/entities' },
   alternates: { canonical: 'https://thebreakdown.in/entities' },
 };
 
-export default function EntitiesPage() {
-  const { data: entities } = getEntities({ pageSize: 50 });
+export const revalidate = 60;
+
+export default async function EntitiesPage() {
+  const services = bootstrapServices();
+  const { data: entities } = await services.entities.getEntities({ pageSize: 50 });
   return (
     <>
       <Breadcrumbs items={[

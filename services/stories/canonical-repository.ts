@@ -3,7 +3,20 @@ import { db } from '@/lib/api-v2';
 import type { StoryService } from '@/services/interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 
+import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
+import { consumePublicationToken } from '@/lib/editorial/publication-token';
+import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
+
 export class CanonicalStoryService implements StoryService {
+  private evidenceVault?: EvidenceVaultService;
+
+  public setEvidenceVault(vault: EvidenceVaultService): void {
+    this.evidenceVault = vault;
+  }
+
+  public getEvidenceVault(): EvidenceVaultService | undefined {
+    return this.evidenceVault;
+  }
   async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
     let query = db().from('stories').select('*', { count: 'exact' });
     if (params?.search) query = query.or(`title.ilike.%${params.search}%,summary.ilike.%${params.search}%`);
@@ -27,11 +40,53 @@ export class CanonicalStoryService implements StoryService {
     return data ? rowToStory(data) : undefined;
   }
 
-  async saveStory(story: Story): Promise<Story> {
+  async saveStory(story: Story, options?: { publicationToken?: string }): Promise<Story> {
+    // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
+    if (story.status === 'published' || story.publicationStatus === 'published') {
+      const token = options?.publicationToken || (story as any)._publicationToken;
+      if (!token || !consumePublicationToken(token, story.id)) {
+        throw new DirectPublicationForbiddenError(
+          `Direct saveStory with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
+        );
+      }
+    }
+
     const { data, error } = await db().from('stories').upsert(rowFromStory(story)).select().single();
     if (error) throw error;
     return rowToStory(data);
   }
+
+
+  async saveStoryOCC(story: Story, expectedVersion: number, options?: { publicationToken?: string }): Promise<Story> {
+    if (story.status === 'published' || story.publicationStatus === 'published') {
+      const token = options?.publicationToken || (story as any)._publicationToken;
+      if (!token || !consumePublicationToken(token, story.id)) {
+        throw new DirectPublicationForbiddenError(
+          `Direct saveStoryOCC with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
+        );
+      }
+    }
+
+    const row = rowFromStory(story);
+    row.version = (expectedVersion || 0) + 1; // Increment version
+
+    const { data, error } = await db()
+      .from('stories')
+      .update(row)
+      .eq('id', story.id)
+      .eq('version', expectedVersion || 0)
+      .select()
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error; // Re-throw real errors
+    if (!data) {
+      console.log('OCC_FAILURE NO DATA:', { expectedVersion, updatedVersion: row.version, storyId: story.id, error });
+      throw new Error(`OCC_FAILURE: Story ${story.id} has been modified concurrently.`);
+    }
+
+    return rowToStory(data);
+  }
+
 
   async deleteStory(id: string): Promise<void> {
     const { error } = await db().from('stories').delete().eq('id', id);
@@ -41,8 +96,24 @@ export class CanonicalStoryService implements StoryService {
   async publishStory(id: string): Promise<Story | undefined> {
     const story = await this.getStory(id);
     if (!story) return undefined;
-    const updated = { ...story, status: 'published' as const, publishedAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-    return this.saveStory(updated);
+
+    // Phase 4B-2E: Evidence Provenance Publication Guard
+    const validation = await validateStoryEvidenceCompleteness(story, this.evidenceVault);
+    if (!validation.valid) {
+      throw new PublicationBlockedError(validation.violations);
+    }
+
+    const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+    const token = issuePublicationToken(story.id);
+
+    const updated = {
+      ...story,
+      status: 'published' as const,
+      publicationStatus: 'published' as const,
+      publishedAt: story.publishedAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    return this.saveStory(updated, { publicationToken: token });
   }
 
   async count(): Promise<number> {
@@ -91,6 +162,7 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
 
   return {
     id: row.id,
+      version: row.version || 0,
     slug: row.slug,
     title: row.title,
     headline: row.headline || row.title,
@@ -148,7 +220,7 @@ function rowFromStory(s: Story): import('@/supabase/client').TypedDatabase['publ
     related_entity_ids: s.relatedEntityIds,
     related_topic_ids: s.relatedTopicIds,
     tags: s.tags,
-    published_at: s.publishedAt,
+    published_at: s.publishedAt || null,
     scheduled_at: s.scheduledAt || null,
     scheduled_by: s.scheduledBy || null,
     block_reason: s.blockReason || null,

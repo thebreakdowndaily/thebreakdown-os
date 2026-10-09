@@ -20,7 +20,7 @@ export class SupabaseTopicRepository implements TopicService {
 
   async getTopic(id: string) {
     const { data, error } = await db().from('topics').select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
     return data ? rowToTopic(data) : undefined;
   }
 

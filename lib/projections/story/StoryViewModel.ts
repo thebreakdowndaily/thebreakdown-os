@@ -74,6 +74,8 @@ export interface StoryViewModel {
   headline: string;
   summary: string;
   heroImage: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   author: string;
   category: string;
   readingTimeMinutes: number;

@@ -15,7 +15,8 @@ export async function GET() {
 
   for (const story of publicStories) {
     const storyLink = `https://thebreakdown.in/story/${story.slug}`;
-    const pubDate = new Date(story.publishedAt || new Date()).toUTCString();
+    const dateStr = story.publishedAt || (story as any).updatedAt || '2026-07-30T00:00:00Z';
+    const pubDate = new Date(dateStr).toUTCString();
     feed += `    <item>
       <title><![CDATA[${story.title || story.headline}]]></title>
       <link>${storyLink}</link>

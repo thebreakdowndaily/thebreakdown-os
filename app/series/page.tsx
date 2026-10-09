@@ -6,13 +6,13 @@ import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-librar
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Series & Collections — The Breakdown',
+  title: 'Series & Collections',
   description: 'Structured knowledge series and flagship historical volumes on Indian strategic policy, diplomacy, and governance.',
   alternates: {
     canonical: 'https://thebreakdown.in/series',
   },
   openGraph: {
-    title: 'Series & Collections — The Breakdown',
+    title: 'Series & Collections',
     description: 'Structured knowledge series and flagship historical volumes on Indian strategic policy, diplomacy, and governance.',
     url: 'https://thebreakdown.in/series',
   },

@@ -23,6 +23,8 @@ export interface APIStory {
   headline: string;
   summary: string;
   heroImage?: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   publishedAt: string;
   updatedAt: string;
   readingTime: number;
@@ -201,6 +203,8 @@ export interface APIInvestigation {
   subtitle?: string;
   summary: string;
   heroImage?: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   publishedAt: string;
   updatedAt: string;
   chapters: Array<{
@@ -231,6 +235,8 @@ export interface APIFix {
   headline: string;
   summary: string;
   heroImage?: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   publishedAt: string;
   updatedAt: string;
   readingTime: number;

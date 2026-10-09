@@ -3,7 +3,7 @@ import { pmfbyTracker } from '@/lib/trackers/pmfby-tracker';
 import GenericTracker from '@/components/trackers/GenericTracker';
 
 export const metadata: Metadata = {
-  title: 'PM Fasal Bima Yojana (PMFBY) Tracker | The Breakdown',
+  title: 'PM Fasal Bima Yojana (PMFBY) Tracker',
   description:
     'Track India\'s crop insurance scheme — ₹31,450 Cr gross premiums, 4.1 Cr farmers, claim settlement delays, 12% penal interest rules, and YES-TECH satellite yield assessment across 22 States.',
   openGraph: {

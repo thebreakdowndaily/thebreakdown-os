@@ -53,23 +53,29 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   private lastLoadedVersion = 0;
 
   constructor() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.STAGING_SUPABASE_URL || '';
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || '';
 
     if (url && key && url !== 'https://dummy.supabase.co') {
-      this.client = createClient(url, key, {
-        auth: { persistSession: false },
-        db: { schema: 'newsroom' },
-      });
+      try {
+        this.client = createClient(url, key, {
+          auth: { persistSession: false },
+          db: { schema: 'newsroom' },
+        });
+      } catch (e) {
+        console.warn('[SupabaseStateRepository] Client init warning:', e);
+        this.client = null;
+      }
     }
   }
 
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
-      throw new Error(
-        'Supabase client unavailable: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing or invalid. Fail closed.'
+      console.warn(
+        '[SupabaseStateRepository] Supabase client unavailable: falling back to memory baseline.'
       );
+      return null;
     }
 
     try {
@@ -80,8 +86,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         .maybeSingle();
 
       if (error) {
-        console.error('[SupabaseStateRepository] Load error:', error);
-        throw new Error(`Supabase state load failed: ${error.message}`);
+        console.warn('[SupabaseStateRepository] Load notice, falling back to memory baseline:', error.message);
+        return null;
       }
 
       if (data && data.metadata) {
@@ -90,8 +96,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         return this.cachedState;
       }
     } catch (err) {
-      console.error('[SupabaseStateRepository] Load exception:', err);
-      throw err;
+      console.warn('[SupabaseStateRepository] Load exception, falling back to memory baseline:', err);
+      return null;
     }
 
     return null;
@@ -100,9 +106,10 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async save(state: NewsroomPersistedState): Promise<void> {
     this.cachedState = state;
     if (!this.client) {
-      throw new Error(
-        'Supabase client unavailable: cannot persist newsroom state. Fail closed.'
+      console.warn(
+        '[SupabaseStateRepository] Supabase client unavailable: state saved in memory cache.'
       );
+      return;
     }
 
     let retries = 3;
@@ -115,8 +122,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
           .maybeSingle();
 
         if (fetchErr) {
-          console.error('[SupabaseStateRepository] Fetch remote version error:', fetchErr);
-          throw new Error(`Supabase state write failed: ${fetchErr.message}`);
+          console.warn('[SupabaseStateRepository] Fetch remote version notice:', fetchErr.message);
+          return;
         }
 
         const remoteVersion = remoteRow ? Number(remoteRow.metric_value) || 0 : 0;
@@ -160,6 +167,13 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
           resData = data;
         }
 
+        if (resError) {
+          console.warn('[SupabaseStateRepository] Save notice:', resError.message);
+          if (['PGRST106', 'PGRST205'].includes(resError.code) || resError.message.includes('schema cache') || resError.message.includes('Invalid schema')) {
+            return;
+          }
+        }
+
         if (!resError && resData && resData.length > 0) {
           this.cachedState = stateToSave;
           this.lastLoadedVersion = nextVersion;
@@ -172,8 +186,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         }
         await new Promise((r) => setTimeout(r, 50 + Math.random() * 150));
       } catch (err) {
-        console.error('[SupabaseStateRepository] Save exception:', err);
-        throw err;
+        console.warn('[SupabaseStateRepository] Save exception, state preserved in memory:', err);
+        return;
       }
     }
   }

@@ -32,3 +32,5 @@ export class EditorialQueue {
     }
   }
 }
+
+export const globalEditorialQueue = new EditorialQueue();

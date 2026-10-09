@@ -11,6 +11,8 @@ export interface ReaderCardViewModel {
   headline: string;
   summary: string;
   heroImage: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   category: string;
   readingTimeMinutes: number;
   publishedAt: string;

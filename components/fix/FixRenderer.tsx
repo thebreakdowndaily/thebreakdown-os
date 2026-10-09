@@ -173,8 +173,12 @@ function FixActionList({ actions, title }: { actions: FixAction[]; title: string
               {a.timeframe.replace('-', ' ')}
             </span>
           </div>
-          <h4 className="font-semibold text-[var(--color-text-primary)] text-sm mt-1">{a.title}</h4>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-1">{a.description}</p>
+          <h4 className="font-semibold text-[var(--color-text-primary)] text-sm mt-1">
+            {typeof a.title === 'string' ? a.title : ((a.title as any)?.title || String(a.title || ''))}
+          </h4>
+          <p className="text-xs text-[var(--color-text-secondary)] mt-1">
+            {typeof a.description === 'string' ? a.description : ((a.description as any)?.description || String(a.description || ''))}
+          </p>
           <div className="flex flex-wrap gap-1.5 mt-2">
             {a.actors.map((actor) => (
               <span key={actor} className="text-[10px] bg-[var(--color-surface-primary)] text-[var(--color-text-tertiary)] px-2 py-0.5 rounded border border-[var(--color-border)]">

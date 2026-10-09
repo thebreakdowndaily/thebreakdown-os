@@ -490,6 +490,7 @@ export const accountabilityStory: APIStory = {
   headline: 'When Something Goes Wrong, Who Actually Answers?',
   summary: 'India has created one of the most layered oversight systems in any democracy — auditors, writ courts, vigilance commissions, social audits, and parliamentary panels. Yet between the moment a public system fails and the moment a consequence lands on someone\'s desk, responsibility can dissolve. We followed the trail from an audited ledger in Madhya Pradesh to the Supreme Court to discover where the chain holds and where it stops.',
   heroImage: '/images/stories/accountability-in-india.jpg',
+  heroImageAlt: 'Protestors demanding accountability outside a government building in New Delhi',
   publishedAt: '2026-09-27T10:00:00Z',
   updatedAt: '2026-09-27T10:00:00Z',
   readingTime: 14,
@@ -515,7 +516,7 @@ export const accountabilityStory: APIStory = {
     'Article 21',
     'Governance',
   ],
-  primaryEntityId: 'comptroller-and-auditor-general',
+  primaryEntityId: 'cag',
   relatedTopicIds: ['governance', 'policy', 'economy', 'judiciary'],
   keyPoints: [
     'CAG Report No. 4 of 2026 recorded ₹1,217.05 crore in pending liabilities under MGNREGA in Madhya Pradesh, with ₹54.79 crore blocked across 4.7 lakh transactions due to Aadhaar non-mapping.',
@@ -655,7 +656,7 @@ export const accountabilityStory: APIStory = {
     },
   ],
   relatedEntities: [
-    { id: 'comptroller-and-auditor-general', slug: 'comptroller-and-auditor-general', name: 'Comptroller and Auditor General of India', type: 'organization' },
+    { id: 'cag', slug: 'cag', name: 'Comptroller and Auditor General of India', type: 'organization' },
     { id: 'supreme-court-of-india', slug: 'supreme-court-of-india', name: 'Supreme Court of India', type: 'organization' },
     { id: 'ministry-of-rural-development', slug: 'ministry-of-rural-development', name: 'Ministry of Rural Development', type: 'organization' },
   ],

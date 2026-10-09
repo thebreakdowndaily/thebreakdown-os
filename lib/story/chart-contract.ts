@@ -27,7 +27,19 @@ export interface CanonicalSvgChartBlockData {
   status?: string;
 }
 
-export type CanonicalChartBlockData = CanonicalStructuredChartBlockData | CanonicalSvgChartBlockData;
+export interface CanonicalSankeyChartBlockData {
+  chartId: string;
+  type: 'sankey';
+  title: string;
+  question?: string;
+  period?: string;
+  unit?: string;
+  source?: string;
+  limitations?: string;
+  data: Array<{ origin: string; destination: string; volume: number }>;
+}
+
+export type CanonicalChartBlockData = CanonicalStructuredChartBlockData | CanonicalSvgChartBlockData | CanonicalSankeyChartBlockData;
 
 export function normalizeChartBlockData(raw: unknown): CanonicalChartBlockData | null {
   if (!raw || typeof raw !== 'object') return null;
@@ -35,6 +47,20 @@ export function normalizeChartBlockData(raw: unknown): CanonicalChartBlockData |
 
   // 1. Structured data path: requires valid array data with numeric yKey values
   const structuredType = input.type ?? input.chartType;
+  if (structuredType === 'sankey' && Array.isArray(input.data)) {
+    return {
+      chartId: typeof input.chartId === 'string' && input.chartId ? input.chartId : 'chart',
+      type: 'sankey',
+      title: typeof input.title === 'string' && input.title ? input.title : 'Data visualization',
+      question: typeof input.question === 'string' ? input.question : undefined,
+      period: typeof input.period === 'string' ? input.period : undefined,
+      unit: typeof input.unit === 'string' ? input.unit : undefined,
+      source: typeof input.source === 'string' ? input.source : (typeof (input.provenance as any)?.source === 'string' ? (input.provenance as any).source : undefined),
+      limitations: typeof input.limitations === 'string' ? input.limitations : undefined,
+      data: input.data as Array<{ origin: string; destination: string; volume: number }>,
+    };
+  }
+
   if ((structuredType === 'bar' || structuredType === 'line') && Array.isArray(input.data) && input.data.length > 0) {
     if (input.data.every((row) => row && typeof row === 'object')) {
       const xKey = typeof input.xKey === 'string' && input.xKey ? input.xKey : 'label';

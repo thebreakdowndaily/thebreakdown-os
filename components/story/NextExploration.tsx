@@ -3,20 +3,19 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import RelatedStories from './RelatedStories';
-import type { Story } from '@/types/canonical';
-import { CANONICAL_FIXTURES } from '@/fixtures/fixes';
-import { getFixesForStory, MATURITY_CONFIG, INTERVENTION_COLOR_MAP, getEvidenceLabel, getEvidenceTextColor } from '@/lib/fix-helpers';
+import type { Fix, Story } from '@/types/canonical';
+import { MATURITY_CONFIG, INTERVENTION_COLOR_MAP, getEvidenceLabel, getEvidenceTextColor } from '@/lib/fix-helpers';
 
 interface NextExplorationProps {
   stories: Story[];
   storySlug?: string;
+  relatedFixes?: Fix[];
 }
 
-export default function NextExploration({ stories, storySlug }: NextExplorationProps) {
+export default function NextExploration({ stories, storySlug, relatedFixes: propFixes }: NextExplorationProps) {
   const relatedFixes = useMemo(() => {
-    if (!storySlug) return [];
-    return getFixesForStory(storySlug, CANONICAL_FIXTURES);
-  }, [storySlug]);
+    return propFixes || [];
+  }, [propFixes]);
 
   if (stories.length === 0 && relatedFixes.length === 0) return null;
 

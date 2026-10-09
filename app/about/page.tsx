@@ -13,13 +13,13 @@ import Container from '@/components/layout/Container';
  */
 
 export const metadata: Metadata = {
-  title:       'About — The Breakdown',
+  title:       'About',
   description: 'The Breakdown is an independent, evidence-first knowledge platform covering India through primary sources, verified claims, and transparent methodology.',
   alternates: {
     canonical: 'https://thebreakdown.in/about',
   },
   openGraph: {
-    title:       'About — The Breakdown',
+    title:       'About',
     description: 'An independent, evidence-first knowledge platform.',
     url:         'https://thebreakdown.in/about',
   },

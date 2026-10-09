@@ -15,6 +15,7 @@
  */
 
 import Link from 'next/link';
+import Image from 'next/image';
 import type { HomepageLeadStory } from '@/features/home/view-model';
 import type { TrustMetrics } from '@/lib/knowledge/trust-metrics';
 
@@ -24,10 +25,10 @@ const FOUNDING_CHAPTER_PATH =
 
 const FOUNDING_CHAPTER_DEFAULTS = {
   headline:     "India's Inheritance",
-  dek:          'Partition left India with disputed borders, a shattered economy, 562 princely states, and a foreign policy philosophy it would spend fifteen years trying to define. This is where the story begins.',
+  dek:          'Partition left India with disputed borders, a shattered economy, 565 princely states, and a foreign policy philosophy it would spend fifteen years trying to define. This is where the story begins.',
   category:     'FOUNDING CHAPTER',
   volume:       'VOLUME I · INDIA & THE WORLD',
-  readingTime:  47,
+  readingTime:  30,
   evidenceGrade: 'A',
   reviewStatus: 'Internal Gold Candidate',
 };
@@ -113,6 +114,7 @@ function FeaturedEditorialPanel({
   updatedAt,
   category,
   heroImage,
+  heroImageAlt,
   headline,
   slug,
   byline,
@@ -124,6 +126,7 @@ function FeaturedEditorialPanel({
   updatedAt?: string;
   category: string;
   heroImage?: string;
+  heroImageAlt?: string;
   headline: string;
   slug?: string;
   byline?: string;
@@ -142,10 +145,13 @@ function FeaturedEditorialPanel({
       {/* Featured visual */}
       {heroImage ? (
         <Link href={href} className="block group aspect-[16/10] rounded-xl overflow-hidden relative bg-neutral-900 border border-neutral-800">
-          <img
+          <Image
             src={heroImage}
-            alt={headline}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            alt={heroImageAlt || ""}
+            fill
+            sizes="(max-width: 1024px) 100vw, 420px"
+            priority={isLeadStory}
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         </Link>
       ) : (
@@ -310,6 +316,7 @@ export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProp
             updatedAt={leadStory?.updatedAt}
             category={category}
             heroImage={leadStory?.heroImage}
+            heroImageAlt={leadStory?.heroImageAlt}
             headline={headline}
             slug={leadStory?.slug}
             byline={leadStory?.byline}

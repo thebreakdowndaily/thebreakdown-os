@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getOrganization } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 
 export async function GET(
   _request: NextRequest,
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const org = getOrganization(slug);
+  const services = bootstrapServices();
+  const org = await services.entities.getEntityBySlug(slug);
 
-  if (!org) {
+  if (!org || org.type !== 'organization') {
     return NextResponse.json({ error: `Organization not found: ${slug}`, status: 404 }, { status: 404 });
   }
 

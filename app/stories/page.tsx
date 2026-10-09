@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getPublicStories } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import StoriesArchive from '@/components/stories/StoriesArchive';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
@@ -22,8 +22,9 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default function StoriesPage() {
-  const { data: stories } = getPublicStories({ pageSize: 100 });
+export default async function StoriesPage() {
+  const services = bootstrapServices({ publicOnly: true });
+  const { data: stories } = await services.stories.getPublicStories({ pageSize: 100 });
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">

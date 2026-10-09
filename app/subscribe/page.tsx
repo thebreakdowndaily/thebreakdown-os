@@ -3,7 +3,7 @@ import Container from '@/components/layout/Container';
 import { SubscribeForm } from '@/components/newsletter/SubscribeForm';
 
 export const metadata: Metadata = {
-  title: 'Subscribe — The Breakdown Brief — The Breakdown',
+  title: 'Subscribe — The Breakdown Brief',
   description: 'Subscribe to The Breakdown Brief — what changed, why it matters, and the evidence behind it. Weekly, free, evidence-first.',
   openGraph: { title: 'Subscribe — The Breakdown Brief', url: 'https://thebreakdown.in/subscribe' },
 };

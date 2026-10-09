@@ -3,10 +3,10 @@ import Container from '@/components/layout/Container';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Founding Edition v1.0 — The Breakdown',
+  title: 'Founding Edition v1.0',
   description: 'The Breakdown Knowledge Library — Founding Edition. An evidence-first, versioned, transparent reference work. Includes Founding Monograph 001.',
-  openGraph: { title: 'Founding Edition v1.0 — The Breakdown', description: 'The Breakdown Knowledge Library — Founding Edition. Evidence-first, versioned, transparent.', url: 'https://thebreakdown.in/founding-edition' },
-  twitter: { card: 'summary_large_image', title: 'Founding Edition v1.0 — The Breakdown', description: 'The Breakdown Knowledge Library — Founding Edition. Evidence-first, versioned, transparent.' },
+  openGraph: { title: 'Founding Edition v1.0', description: 'The Breakdown Knowledge Library — Founding Edition. Evidence-first, versioned, transparent.', url: 'https://thebreakdown.in/founding-edition' },
+  twitter: { card: 'summary_large_image', title: 'Founding Edition v1.0', description: 'The Breakdown Knowledge Library — Founding Edition. Evidence-first, versioned, transparent.' },
   alternates: { canonical: 'https://thebreakdown.in/founding-edition' },
 };
 

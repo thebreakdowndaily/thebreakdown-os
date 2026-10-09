@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { NewsletterTracker } from '@/components/newsletter/NewsletterTracker';
 
 export const metadata: Metadata = {
-  title: 'The Breakdown Brief — The Breakdown',
+  title: 'The Breakdown Brief',
   description: 'The Breakdown Brief — what changed, why it matters, and the evidence behind it. A weekly, evidence-first analysis of Indian policy and politics.',
   openGraph: { title: 'The Breakdown Brief', url: 'https://thebreakdown.in/newsletter' },
 };

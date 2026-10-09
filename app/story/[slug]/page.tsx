@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { StoryShell } from '@/components/rxs/StoryShell';
+import { ClientStoryExperience } from '@/components/rxs/ClientStoryExperience';
 import { buildStoryMetadata } from '@/lib/story/metadata';
 import { resolveStory, getAllStoryAndChapterSlugs } from '@/lib/story/resolver';
 import { isCanonicalStoryPublic } from '@/lib/story/publication';
 import { createStoryJsonLd } from '@/lib/seo/jsonld-story';
 import { buildStoryPresentationModel } from '@/lib/story/presentation-model';
-import { applyReadingModePolicy } from '@/lib/story/reading-mode-policy';
 import StoryMemoryWriter from '@/components/narrative/StoryMemoryWriter';
-import type { ReadingMode, Story } from '@/types/canonical';
-import { getTopic } from '@/utils/data-layer/store';
-import { getEntityById } from '@/utils/data-layer/entity-index';
+import { bootstrapServices } from '@/lib/bootstrap';
 import { listPublishedCorrections } from '@/services/editorial/corrections-service';
+import { resolveNextBestUnderstanding } from '@/lib/comprehension/next-best-understanding';
+import { getFixesForStory } from '@/lib/fix-helpers';
+import type { Story, Fix } from '@/types/canonical';
 
 interface StoryEntityRef {
   id?: string;
@@ -20,7 +20,6 @@ interface StoryEntityRef {
   name?: string;
   title?: string;
 }
-
 
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
@@ -43,15 +42,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function StoryPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { slug } = await params;
-  const resolvedSearchParams = await searchParams;
-  const rawMode = (resolvedSearchParams.mode as string) || 'standard';
-  const mode: ReadingMode = rawMode === 'quick' || rawMode === 'deep' ? rawMode : 'standard';
 
   const resolution = await resolveStory(slug);
   if (resolution.type === 'not_found') notFound();
@@ -78,13 +72,14 @@ export default async function StoryPage({
 
   // TASK-08 EXP-05: internal-link strip — only emit links to topics/entities
   // that resolve to real pages (no 404 links). One variable: adding the links.
+  const services = bootstrapServices();
   const topicLinks: { slug: string; name: string }[] = [];
   const seenTopics = new Set<string>();
   for (const id of canonicalStory.relatedTopicIds ?? []) {
     if (topicLinks.length >= 6 || seenTopics.has(id)) continue;
     seenTopics.add(id);
-    const topic = getTopic(id);
-    if (topic) topicLinks.push({ slug: id, name: topic.name });
+    const topic = (await services.topics.getTopicBySlug(id)) || (await services.topics.getTopic(id));
+    if (topic) topicLinks.push({ slug: topic.slug || id, name: topic.name });
   }
 
   const entityLinks: { slug: string; name: string }[] = [];
@@ -97,10 +92,10 @@ export default async function StoryPage({
   const seenEntitySlugs = new Set<string>();
   for (const idOrSlug of allEntityCandidates) {
     if (!idOrSlug) continue;
-    const resolved = getEntityById(idOrSlug);
+    const resolved = (await services.entities.getEntityBySlug(idOrSlug)) || (await services.entities.getEntity(idOrSlug));
     if (resolved && !seenEntitySlugs.has(resolved.slug)) {
       seenEntitySlugs.add(resolved.slug);
-      const name = resolved.title ?? resolved.name ?? resolved.slug;
+      const name = resolved.name || (resolved as any).title || resolved.slug;
       resolvedEntities.push({ slug: resolved.slug, name });
       if (entityLinks.length < 6) {
         entityLinks.push({ slug: resolved.slug, name });
@@ -115,22 +110,35 @@ export default async function StoryPage({
     resolution.relatedStories
   );
 
-  // 2. Apply Reading Mode Policy for progressive disclosure
-  const visibleExperience = applyReadingModePolicy(presentationModel, mode);
-
   // 3. Fetch published editorial errata/corrections for this story (GAP-VS8-01)
   const publishedCorrections = await listPublishedCorrections(slug);
+
+  // 3a. Resolve Fixes and Next Best Understanding plan via Service Layer
+  let relatedFixes: Fix[] = [];
+  let nextBestPlan;
+  try {
+    const fixesRes = await services.fixes.getFixes();
+    const allFixes = fixesRes?.data || [];
+    relatedFixes = getFixesForStory(slug, allFixes);
+    nextBestPlan = resolveNextBestUnderstanding(slug, {
+      story: canonicalStory,
+      fixes: allFixes,
+      otherStories: resolution.relatedStories as unknown as Story[],
+      entityLookup: (id: string) => {
+        const match = resolvedEntities.find((e) => e.slug === id);
+        return match ? { slug: match.slug, name: match.name, title: match.name } : undefined;
+      },
+    });
+  } catch {
+    // Fail-open for client-side fallback if fixes service is unavailable
+  }
 
   // 4. Build JSON-LD — after corrections and entities are resolved so schema is enriched
   const jsonLd = createStoryJsonLd(canonicalStory, {
     entities: resolvedEntities,
     corrections: publishedCorrections?.map((c) => ({
-      timestamp: (c as { timestamp?: string; created_at?: string }).timestamp
-        ?? (c as { timestamp?: string; created_at?: string }).created_at
-        ?? new Date().toISOString(),
-      description: (c as { description?: string; summary?: string }).description
-        ?? (c as { description?: string; summary?: string }).summary
-        ?? '',
+      timestamp: c.createdAt || c.updatedAt || canonicalStory.updatedAt || canonicalStory.publishedAt,
+      description: c.explanation || c.correctedWording || '',
     })),
   });
 
@@ -149,12 +157,16 @@ export default async function StoryPage({
         />
       ))}
 
-      <StoryShell
-        visibleExperience={visibleExperience}
-        relatedTopicLinks={topicLinks}
-        relatedEntityLinks={entityLinks}
-        publishedCorrections={publishedCorrections}
-      />
+      <Suspense fallback={null}>
+        <ClientStoryExperience
+          presentationModel={presentationModel}
+          relatedTopicLinks={topicLinks}
+          relatedEntityLinks={entityLinks}
+          publishedCorrections={publishedCorrections}
+          nextBestPlan={nextBestPlan}
+          relatedFixes={relatedFixes}
+        />
+      </Suspense>
     </>
   );
 }

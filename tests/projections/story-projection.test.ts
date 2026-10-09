@@ -30,6 +30,7 @@ function runStoryProjectionTests() {
     headline: 'How 1947 choices shape modern diplomacy',
     summary: 'Detailed examination of Indian non-alignment origins.',
     heroImage: '/images/hero.jpg',
+    heroImageAlt: 'Foundations of Strategic Autonomy hero image',
     author: 'Editorial Bureau',
     category: 'Foreign Policy',
     status: 'published',

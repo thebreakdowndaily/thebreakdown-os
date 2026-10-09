@@ -1,3 +1,4 @@
+import type { CellAddress } from './canonical-table';
 // ─── The Breakdown OS — Canonical Data Models ──────────────────────────────
 // Single source of truth for every content type. No other file defines these shapes.
 // Everything else (services, view models, API, graph) derives from these.
@@ -120,6 +121,10 @@ export type VerificationState =
 export type ReadingMode = 'quick' | 'standard' | 'deep';
 
 export interface Story {
+  isTestArtifact?: boolean;
+  version?: number;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   id: string;
   title: string;
   slug: string;
@@ -731,6 +736,9 @@ export type CounterArgument =
     };
 
 export interface Claim {
+  isLegacy?: boolean;
+  archiveId?: string;
+  cellAddress?: CellAddress;
   id: string;
   claim: string;
   data: string;
@@ -1663,6 +1671,9 @@ export interface ChapterVersion {
 }
 
 export interface ChapterMetadata {
+  heroImage?: string;
+  heroImageAlt?: string;
+  heroImageIsDecorative?: boolean;
   editor?: string;
   reviewer?: string;
   wordCount?: number;

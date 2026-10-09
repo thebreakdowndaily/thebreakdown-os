@@ -5,13 +5,16 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import FixHubClient from '@/components/fix/FixHubClient';
 
 export const metadata: Metadata = {
-  title: 'The Fix Hub — Evidence-Based Policy Solutions — The Breakdown',
+  title: 'The Fix Hub — Evidence-Based Policy Solutions',
   description: 'Search, filter, and explore evidence-backed policy solutions — statutory reforms, administrative blueprints, and institutional interventions for India\'s systemic challenges.',
+  alternates: {
+    canonical: 'https://thebreakdown.in/fix',
+  },
   openGraph: {
-    title: 'The Fix Hub — The Breakdown Knowledge Platform',
+    title: 'The Fix Hub — Evidence-Based Policy Solutions',
     description: 'Search and filter evidence-backed policy frameworks, global precedents, and administrative reform blueprints.',
     type: 'website',
-    url: 'https://thebreakdown.gov/fix',
+    url: 'https://thebreakdown.in/fix',
   },
 };
 

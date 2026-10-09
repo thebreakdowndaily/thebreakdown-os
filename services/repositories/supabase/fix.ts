@@ -21,7 +21,7 @@ export class SupabaseFixRepository implements FixService {
 
   async getFix(id: string) {
     const { data, error } = await sb().select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
     return data ? rowToFix(data) : undefined;
   }
 
@@ -49,6 +49,30 @@ export class SupabaseFixRepository implements FixService {
   }
 }
 
+function parseAction(item: any): FixAction {
+  let val = item;
+  if (typeof val === 'string') {
+    try {
+      val = JSON.parse(val);
+    } catch {
+      return { title: val, description: '', priority: 'medium', timeframe: 'medium-term', actors: [] };
+    }
+  }
+  if (typeof val === 'object' && val !== null) {
+    if (typeof val.title === 'object' && val.title !== null) {
+      return parseAction(val.title);
+    }
+    return {
+      title: typeof val.title === 'string' ? val.title : String(val.name || ''),
+      description: typeof val.description === 'string' ? val.description : '',
+      priority: val.priority || 'medium',
+      timeframe: val.timeframe || 'medium-term',
+      actors: Array.isArray(val.actors) ? val.actors : [],
+    };
+  }
+  return { title: String(val || ''), description: '', priority: 'medium', timeframe: 'medium-term', actors: [] };
+}
+
 function rowToFix(row: FixRow): Fix {
   return {
     id: row.id,
@@ -70,9 +94,9 @@ function rowToFix(row: FixRow): Fix {
     stakeholders: [],
     existingSolutions: (row.existing_solutions?.map(s => typeof s === 'string' ? JSON.parse(s) : s) as ExistingSolution[]) || [],
     globalExamples: (row.global_examples?.map(g => typeof g === 'string' ? JSON.parse(g) : g) as GlobalExample[]) || [],
-    recommendedActions: (row.recommended_actions?.map(r => typeof r === 'string' ? JSON.parse(r) : r) as FixAction[]) || [],
-    citizenActions: (row.citizen_actions?.map(c => typeof c === 'string' ? JSON.parse(c) : { title: c, description: '', priority: 'medium', timeframe: 'medium-term', actors: [] }) as FixAction[]) || [],
-    governmentActions: (row.government_actions?.map(g => typeof g === 'string' ? JSON.parse(g) : { title: g, description: '', priority: 'medium', timeframe: 'medium-term', actors: [] }) as FixAction[]) || [],
+    recommendedActions: (row.recommended_actions?.map(parseAction) as FixAction[]) || [],
+    citizenActions: (row.citizen_actions?.map(parseAction) as FixAction[]) || [],
+    governmentActions: (row.government_actions?.map(parseAction) as FixAction[]) || [],
     metricsToTrack: (row.metrics as FixMetric[]) || [],
     relatedStories: [],
     relatedEntities: [],

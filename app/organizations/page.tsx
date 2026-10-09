@@ -1,17 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getOrganizations } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/layout/Container';
 
 export const metadata: Metadata = {
-  title: 'Organizations — The Breakdown',
+  title: 'Organizations',
   description: 'Key organizations tracked by The Breakdown — ministries, regulators, and institutions.',
   openGraph: { title: 'Organizations — The Breakdown', url: 'https://thebreakdown.in/organizations' },
   alternates: { canonical: 'https://thebreakdown.in/organizations' },
 };
 
-export default function OrganizationsPage() {
-  const { data: orgs } = getOrganizations({ pageSize: 50 });
+export default async function OrganizationsPage() {
+  const services = bootstrapServices();
+  const orgs = await services.entities.getEntitiesByType('organization');
   return (
     <Container>
       <div className="py-8">

@@ -1,4 +1,4 @@
-import { getPublicStories } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 
 export const dynamic = 'force-static';
 
@@ -7,14 +7,15 @@ function escapeXml(s: string): string {
 }
 
 export async function GET() {
-  const { data: stories } = getPublicStories({ pageSize: 20 });
+  const services = bootstrapServices({ publicOnly: true });
+  const { data: stories } = await services.stories.getPublicStories({ pageSize: 100, sort: 'publishedAt' });
   const items = stories.map((s) => `
     <item>
       <title>${escapeXml(s.headline)}</title>
       <link>https://thebreakdown.in/story/${s.slug}</link>
       <description>${escapeXml(s.summary)}</description>
       <pubDate>${new Date(s.publishedAt).toUTCString()}</pubDate>
-      <guid>https://thebreakdown.in/story/${s.slug}</guid>
+      <guid isPermaLink="true">https://thebreakdown.in/story/${s.slug}</guid>
       <category>${escapeXml(s.category)}</category>
     </item>`).join('');
 

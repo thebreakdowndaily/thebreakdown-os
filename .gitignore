@@ -15,6 +15,8 @@ build/
 .env.local
 .env.*.local
 .env.test
+.env.production
+.env.production.local
 
 # Logs
 npm-debug.log*
@@ -31,6 +33,7 @@ Thumbs.db
 
 # Newsroom Intelligence state (runtime persistence)
 data/newsroom/
+.radar-state*.json
 
 # Test snapshots & scratch
 snapshots/
@@ -47,7 +50,7 @@ audit_reports/
 screenshots/
 dist-static/
 .open-next/
-coverage/
+/coverage/
 lint-results.json
 lint*.txt
 *.log

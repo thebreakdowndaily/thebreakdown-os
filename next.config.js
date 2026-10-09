@@ -7,6 +7,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   outputFileTracingRoot: path.resolve(__dirname),
+  serverExternalPackages: ['pg', 'pg-connection-string'],
 
   images: {
     remotePatterns: [
@@ -119,6 +120,21 @@ nextConfig.redirects = async () => [
   {
     source: '/tracking',
     destination: '/trackers',
+    permanent: true,
+  },
+  {
+    source: '/corrections',
+    destination: '/transparency/corrections',
+    permanent: true,
+  },
+  {
+    source: '/entity/eci',
+    destination: '/entity/election-commission',
+    permanent: true,
+  },
+  {
+    source: '/entity/sc',
+    destination: '/entity/supreme-court-of-india',
     permanent: true,
   },
 ];

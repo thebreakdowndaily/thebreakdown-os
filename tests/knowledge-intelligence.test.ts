@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { SemanticReasoningEngine } from '../lib/intelligence/semantic-reasoning-engine';
 import { EvidenceProvenanceEngine } from '../lib/intelligence/evidence-provenance-engine';
 import { CrossDomainDiscoveryEngine } from '../lib/intelligence/cross-domain-discovery';
@@ -55,10 +55,13 @@ describe('TEST-KNOWLEDGE-INTEL: Knowledge Intelligence & Semantic Reasoning (Pha
   });
 
   it('TEST-KNOWLEDGE-INTEL-07: Deterministic Repeated Inference Rule Stability Check', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-10-03T12:00:00Z'));
     const rels1 = SemanticReasoningEngine.inferRelationships();
     const rels2 = SemanticReasoningEngine.inferRelationships();
 
     expect(JSON.stringify(rels1)).toBe(JSON.stringify(rels2));
+    vi.useRealTimers();
   });
 
   it('TEST-KNOWLEDGE-INTEL-08: Cyclic Reasoning Prevention Guard', () => {
