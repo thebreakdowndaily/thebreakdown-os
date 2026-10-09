@@ -1,0 +1,12 @@
+export { DeskSummaryHeader, type DeskSummaryHeaderProps } from './DeskSummaryHeader';
+export { QueueTabBar, type QueueTabBarProps } from './QueueTabBar';
+export { DeskSignalCard, type DeskSignalCardProps } from './DeskSignalCard';
+export { SourceHealthBadge, type SourceHealthBadgeProps } from './SourceHealthBadge';
+export { MutationLineagePanel, type MutationLineagePanelProps } from './MutationLineagePanel';
+export { LatencyTracePanel, type LatencyTracePanelProps } from './LatencyTracePanel';
+export { AuditHistoryView, type AuditHistoryViewProps } from './AuditHistoryView';
+export { ItemDossierView, type ItemDossierViewProps } from './ItemDossierView';
+export { ActionControlDock, type ActionControlDockProps } from './ActionControlDock';
+export { ActionConfirmationModal, type ActionConfirmationModalProps } from './ActionConfirmationModal';
+export { ConflictResolutionModal, type ConflictResolutionModalProps, type PreservedDraftContext } from './ConflictResolutionModal';
+export { EditorialDeskWorkspace, type EditorialDeskWorkspaceProps } from './EditorialDeskWorkspace';

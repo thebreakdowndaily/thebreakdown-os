@@ -35,6 +35,7 @@ function runReaderProductSurfaceTests() {
     headline: 'How early post-independence choices shape modern diplomacy',
     summary: 'An exhaustive examination of India foreign policy post-1947.',
     heroImage: '/images/lead.jpg',
+    heroImageAlt: 'Foundations of Indian Strategic Autonomy lead photograph',
     author: 'Editorial Bureau',
     category: 'Foreign Policy',
     status: 'published',

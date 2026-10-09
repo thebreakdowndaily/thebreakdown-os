@@ -52,6 +52,9 @@ const BOOTSTRAP_SQL = `
     IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'service_role') THEN
       CREATE ROLE service_role NOLOGIN NOINHERIT BYPASSRLS;
     END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
+      CREATE ROLE authenticator NOLOGIN NOINHERIT;
+    END IF;
   END $$;
 
   CREATE SCHEMA IF NOT EXISTS auth;
@@ -74,6 +77,27 @@ const BOOTSTRAP_SQL = `
   );
   GRANT SELECT ON auth.users TO anon, authenticated, service_role;
   GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+
+  CREATE SCHEMA IF NOT EXISTS storage;
+  GRANT USAGE ON SCHEMA storage TO anon, authenticated, service_role;
+  CREATE TABLE IF NOT EXISTS storage.buckets (
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    public boolean DEFAULT false,
+    file_size_limit bigint,
+    allowed_mime_types text[]
+  );
+  CREATE TABLE IF NOT EXISTS storage.objects (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    bucket_id text REFERENCES storage.buckets(id),
+    name text,
+    owner uuid,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    metadata jsonb
+  );
+  ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+  GRANT ALL ON ALL TABLES IN SCHEMA storage TO anon, authenticated, service_role;
 `;
 
 async function actAs(client: Client, role: 'anon' | 'authenticated' | 'service_role', claims: Record<string, unknown> = {}) {
@@ -157,10 +181,10 @@ async function runDirectDatabaseTests() {
     const draftStoryId = '11111111-0000-0000-0000-000000000002';
 
     await client.query(`
-      INSERT INTO public.stories (id, slug, title, status)
+      INSERT INTO public.stories (id, slug, title, status, published_at)
       VALUES 
-        ('${publishedStoryId}', 'published-test-story', 'Published Story', 'published'),
-        ('${draftStoryId}', 'draft-test-story', 'Draft Story', 'draft')
+        ('${publishedStoryId}', 'published-test-story', 'Published Story', 'published', NOW()),
+        ('${draftStoryId}', 'draft-test-story', 'Draft Story', 'draft', NULL)
       ON CONFLICT (id) DO NOTHING;
     `);
 

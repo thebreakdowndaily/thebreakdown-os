@@ -28,6 +28,7 @@ import {
   fetchPibReleases,
   pibReleaseToObservation,
   pullPibObservations,
+  stripHtml,
   PibFeedError,
   type FeedFetcher,
 } from '@/lib/intelligence/pib-adapter';
@@ -181,5 +182,55 @@ describe('NEWSROOM INTELLIGENCE OS — PIB PRODUCTION INGESTION ADAPTER', () => 
     expect(signals).toHaveLength(3);
     expect(signals.every((s) => s.observationCount >= 1)).toBe(true);
     expect(signals.every((s) => s.priority === 'P0' || s.priority === 'P1' || s.priority === 'P2' || s.priority === 'P3')).toBe(true);
+  });
+
+  it('PIB-08: raw HTML documents encoded in description are correctly stripped without leaking head/scripts', async () => {
+    const xml = `<?xml version="1.0"?>
+<rss version="2.0"><channel>
+  <item>
+    <title>HTML Issue</title>
+    <link>https://pib.gov.in/PRID=123</link>
+    <guid>https://pib.gov.in/PRID=123</guid>
+    <pubDate>Tue, 12 Aug 2026 10:30:00 GMT</pubDate>
+    <description>&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;quot;hi-IN&amp;quot;&amp;gt; &amp;lt;head&amp;gt;&amp;lt;title&amp;gt;Inner Title&amp;lt;/title&amp;gt;&amp;lt;style&amp;gt;body{color:red}&amp;lt;/style&amp;gt;&amp;lt;script&amp;gt;console.log('leak')&amp;lt;/script&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;Real content here.&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;</description>
+  </item>
+</channel></rss>`;
+    const fetcher: FeedFetcher = async () => ({ ok: true, text: async () => xml });
+
+    const releases = await fetchPibReleases({ fetcher });
+    expect(releases).toHaveLength(1);
+    expect(releases[0].snippet).toBe('Real content here.');
+    expect(releases[0].snippet).not.toContain('Inner Title');
+    expect(releases[0].snippet).not.toContain('body{color:red}');
+    expect(releases[0].snippet).not.toContain('console.log');
+  });
+
+  it('PIB-09: stripHtml handles nested entities, malformed tags, and multi-pass decodes', () => {
+    // Normal HTML
+    expect(stripHtml('<p>Cabinet approves <strong>Rs 5,000 cr</strong> scheme.</p>')).toBe('Cabinet approves Rs 5,000 cr scheme.');
+
+    // Entity-encoded HTML
+    expect(stripHtml('&lt;p&gt;RBI cuts repo rate.&lt;/p&gt;')).toBe('RBI cuts repo rate.');
+
+    // Nested entity encoding (&amp;lt; => &lt; => <)
+    expect(stripHtml('&amp;lt;p&amp;gt;Deep nested markup&amp;lt;/p&amp;gt;')).toBe('Deep nested markup');
+
+    // Malformed HTML
+    expect(stripHtml('<p>Unclosed paragraph <div>unclosed div')).toBe('Unclosed paragraph unclosed div');
+
+    // Empty content / whitespace
+    expect(stripHtml('')).toBe('');
+    expect(stripHtml('   ')).toBe('');
+    expect(stripHtml('&nbsp;   &nbsp;')).toBe('');
+    expect(stripHtml('<p></p>')).toBe('');
+
+    // Document with head and style outside body
+    const doc = '<!DOCTYPE html><html><head><style>p{font-size:12px;}</style></head><body>Actual text here</body></html>';
+    expect(stripHtml(doc)).toBe('Actual text here');
+  });
+
+  it('PIB-10: non-empty document with empty body does not fabricate false text', () => {
+    const emptyDoc = '<!DOCTYPE html><html><head><title>Test</title></head><body></body></html>';
+    expect(stripHtml(emptyDoc)).toBe('');
   });
 });

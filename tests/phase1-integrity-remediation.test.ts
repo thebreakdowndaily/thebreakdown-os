@@ -102,6 +102,7 @@ describe('Phase 1 Integrity Remediation', () => {
         headline: 'Test Headline',
         summary: 'Test summary.',
         heroImage: '/images/hero.jpg',
+        heroImageAlt: 'Test hero image alt text',
         author: 'Staff Writer',
         category: 'policy',
         status: 'published',

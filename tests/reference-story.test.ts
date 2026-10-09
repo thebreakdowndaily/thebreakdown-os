@@ -32,6 +32,7 @@ function runReferenceStoryTests() {
     headline: 'How early post-independence choices created a resilient diplomatic stance',
     summary: 'An exhaustive examination of India foreign policy post-1947.',
     heroImage: '/assets/images/chapter1-hero.jpg',
+    heroImageAlt: 'Foundations of Indian Strategic Autonomy historical archival photograph',
     author: 'Editorial Bureau & History Panel',
     category: 'Foreign Policy',
     status: 'published',

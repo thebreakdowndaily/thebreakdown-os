@@ -80,7 +80,10 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         .maybeSingle();
 
       if (error) {
-        console.error('[SupabaseStateRepository] Load error:', error);
+        console.warn('[SupabaseStateRepository] Load notice:', error.message);
+        if (['PGRST106', 'PGRST205', 'PGRST116'].includes(error.code) || error.message.includes('schema cache') || error.message.includes('Invalid schema')) {
+          return null;
+        }
         throw new Error(`Supabase state load failed: ${error.message}`);
       }
 
@@ -115,7 +118,10 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
           .maybeSingle();
 
         if (fetchErr) {
-          console.error('[SupabaseStateRepository] Fetch remote version error:', fetchErr);
+          console.warn('[SupabaseStateRepository] Fetch remote version notice:', fetchErr.message);
+          if (['PGRST106', 'PGRST205'].includes(fetchErr.code) || fetchErr.message.includes('schema cache') || fetchErr.message.includes('Invalid schema')) {
+            return;
+          }
           throw new Error(`Supabase state write failed: ${fetchErr.message}`);
         }
 
@@ -158,6 +164,13 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
             .select();
           resError = error;
           resData = data;
+        }
+
+        if (resError) {
+          console.warn('[SupabaseStateRepository] Save notice:', resError.message);
+          if (['PGRST106', 'PGRST205'].includes(resError.code) || resError.message.includes('schema cache') || resError.message.includes('Invalid schema')) {
+            return;
+          }
         }
 
         if (!resError && resData && resData.length > 0) {

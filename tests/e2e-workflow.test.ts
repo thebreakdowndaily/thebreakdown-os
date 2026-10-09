@@ -134,6 +134,7 @@ function runE2EWorkflowTests() {
       headline: 'Historical analysis of Indian non-alignment',
       summary: 'Detailed examination of 1947-1962 choices.',
       heroImage: '/images/hero.jpg',
+      heroImageAlt: 'Foundations of Indian Strategic Autonomy archive photograph',
       author: 'Editorial Bureau',
       category: 'Foreign Policy',
       status: 'published',
