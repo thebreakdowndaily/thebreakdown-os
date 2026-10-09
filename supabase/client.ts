@@ -18,12 +18,16 @@ export type TypedDatabase = {
 };
 
 function getConfig() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co';
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy-key';
-  
-  if (process.env.NODE_ENV !== 'production' && (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)) {
-    console.warn('Supabase environment variables are missing. Using mock values.');
-  }
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const rawAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  const url = (rawUrl && typeof rawUrl === 'string' && rawUrl.trim() !== '' && rawUrl.startsWith('http'))
+    ? rawUrl.trim()
+    : 'https://mskyhaunnlwtwvsqcmav.supabase.co';
+
+  const anonKey = (rawAnonKey && typeof rawAnonKey === 'string' && rawAnonKey.trim() !== '' && rawAnonKey.length > 20)
+    ? rawAnonKey.trim()
+    : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1za3loYXVubmx3dHd2c3FjbWF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTc0MTUsImV4cCI6MjEwNjQzMzQxNX0.WmzLxHK_PujLsB57JW4qzosd4iOVKLOOU0acEoqb9_s';
   
   return { url, anonKey };
 }
