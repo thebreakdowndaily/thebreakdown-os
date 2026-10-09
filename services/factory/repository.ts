@@ -25,6 +25,9 @@ import { SupabaseDatasetRepository } from '../repositories/supabase/dataset';
 import { MemoryInvestigationRepository } from '../repositories/memory/investigation';
 import { MemoryKnowledgeLibraryRepository } from '../repositories/memory/knowledge-library';
 import { MemoryCitationService } from '../repositories/memory/citation';
+import type { EvidenceVaultService } from '../intelligence/evidence-vault.service';
+
+declare const __non_webpack_require__: typeof require | undefined;
 
 function getProvider(): 'memory' | 'supabase' {
   const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
@@ -32,10 +35,35 @@ function getProvider(): 'memory' | 'supabase' {
 }
 
 export class RepositoryFactory {
+  private static customVault?: EvidenceVaultService;
+
+  static setEvidenceVault(vault: EvidenceVaultService): void {
+    this.customVault = vault;
+  }
+
   static getStoryRepository(initialData: any[] = []): StoryService {
     const provider = getProvider();
-    if (provider === 'supabase') return new SupabaseStoryRepository();
-    return new MemoryStoryService(initialData);
+    let vault: EvidenceVaultService | undefined = this.customVault;
+    if (!vault && typeof window === 'undefined') {
+      try {
+        const req = typeof __non_webpack_require__ !== 'undefined' ? __non_webpack_require__ : (typeof require !== 'undefined' ? require : null);
+        if (req) {
+          const { getEvidenceVaultService } = req('../intelligence/evidence-vault.service');
+          vault = getEvidenceVaultService();
+        }
+      } catch {
+        // Vault initialization fallback if offline/mocking
+      }
+    }
+
+    if (provider === 'supabase') {
+      const repo = new SupabaseStoryRepository();
+      if (vault) repo.setEvidenceVault(vault);
+      return repo;
+    }
+    const repo = new MemoryStoryService(initialData);
+    if (vault) repo.setEvidenceVault(vault);
+    return repo;
   }
 
   static getTopicRepository(initialData: any[] = []): TopicService {

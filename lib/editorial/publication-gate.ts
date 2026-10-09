@@ -23,8 +23,41 @@ import type { Story, StoryStatus } from '@/types/canonical';
 import type { GateCheck, PublicationGateResult, PublicationGateInput } from '@/types/editorial-calendar';
 import { evaluateGoldStandardPass, type GoldStandardAuditRecord } from './gold-standard-review';
 import { getSource } from '@/lib/knowledge/source-registry';
+import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
+import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
+
+/**
+ * Full Async Publication Gate — evaluates Gates 1-12 plus Gate 13 (Evidence Vault Reconstructibility).
+ */
+export async function validateStoryForPublicationAsync(
+  input: PublicationGateInput,
+  story: Story | undefined,
+  vault?: EvidenceVaultService,
+  now: Date = new Date(),
+): Promise<PublicationGateResult> {
+  const syncResult = validateStoryForPublication(input, story, now);
+  const checks = [...syncResult.checks];
+
+  if (!syncResult.passed || !story) {
+    return { ...syncResult, checks };
+  }
+
+  // Gate 13: Evidence Vault Completeness & Cryptographic Reconstructibility (Article III & IV)
+  const evidenceRes = await validateStoryEvidenceCompleteness(story, vault);
+  checks.push({
+    name: 'evidence_preservation_vault',
+    passed: evidenceRes.valid,
+    reason: evidenceRes.valid
+      ? `All ${story.claims?.length || 0} claims backed by verified, intact vault evidence`
+      : `Evidence Guard blocked publication: ${evidenceRes.violations.join('; ')}`,
+    details: evidenceRes.violations.length > 0 ? evidenceRes.violations.join('\n') : undefined,
+  });
+
+  const allPassed = checks.every(c => c.passed);
+  return buildResult(input, checks, allPassed, now);
+}
 
 export function validateStoryForPublication(
   input: PublicationGateInput,

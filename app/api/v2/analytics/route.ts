@@ -1,6 +1,20 @@
 import { NextResponse } from 'next/server';
 import { db, serverError } from '@/lib/api-v2';
 
+interface AnalyticsStory {
+  id: string;
+  status: string;
+  category: string;
+  published_at: string | null;
+  slug: string;
+  title: string;
+}
+
+interface AnalyticsEntity {
+  id: string;
+  type: string;
+}
+
 export async function GET() {
   try {
     const [storiesRes, topicsRes, entitiesRes, timelinesRes, fixesRes] = await Promise.all([
@@ -11,8 +25,8 @@ export async function GET() {
       db().from('fixes').select('id', { count: 'exact' }),
     ]);
 
-    const stories = storiesRes.data || [];
-    const entities = entitiesRes.data || [];
+    const stories = (storiesRes.data || []) as AnalyticsStory[];
+    const entities = (entitiesRes.data || []) as AnalyticsEntity[];
 
     const drafts = stories.filter(s => s.status === 'draft').length;
     const review = stories.filter(s => s.status === 'review').length;
@@ -25,29 +39,32 @@ export async function GET() {
       if (s.category) storiesByCategory[s.category] = (storiesByCategory[s.category] || 0) + 1;
     }
 
-    const avgEvidenceScore = 0; // Removed since evidence_score doesn't exist on stories
-
     const entitiesByType: Record<string, number> = {};
     for (const e of entities) {
-      entitiesByType[e.type] = (entitiesByType[e.type] || 0) + 1;
+      if (e.type) entitiesByType[e.type] = (entitiesByType[e.type] || 0) + 1;
     }
 
-    const stats = {
-      totalStories: storiesRes.count || 0,
-      totalTopics: topicsRes.count || 0,
-      totalEntities: entitiesRes.count || 0,
-      totalTimelines: timelinesRes.count || 0,
-      totalFixes: fixesRes.count || 0,
-      drafts,
-      review,
-      factCheck,
-      scheduled,
-      published,
-      storiesByCategory,
-      entitiesByType,
-      averageEvidenceScore: Math.round(avgEvidenceScore * 10) / 10,
-    };
-
-    return NextResponse.json({ data: stats });
-  } catch (e) { return serverError(e); }
+    return NextResponse.json({
+      data: {
+        totals: {
+          stories: storiesRes.count || 0,
+          topics: topicsRes.count || 0,
+          entities: entitiesRes.count || 0,
+          timelines: timelinesRes.count || 0,
+          fixes: fixesRes.count || 0,
+        },
+        storyStatus: {
+          drafts,
+          review,
+          factCheck,
+          scheduled,
+          published,
+        },
+        storiesByCategory,
+        entitiesByType,
+      },
+    });
+  } catch (error) {
+    return serverError(error);
+  }
 }

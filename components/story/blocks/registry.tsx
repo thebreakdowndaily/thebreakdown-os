@@ -37,6 +37,18 @@ import { normalizeChartBlockData } from '@/lib/story/chart-contract';
 
 import PartitionSankeyBlock from './PartitionSankeyBlock';
 
+import { LearningBlock } from '@/components/knowledge-library/blocks/LearningBlock';
+import { ListBlock } from '@/components/knowledge-library/blocks/ListBlock';
+import { DocumentBlock } from '@/components/knowledge-library/blocks/DocumentBlock';
+
+import { DecisionMatrixBlock } from '@/components/knowledge-library/blocks/DecisionMatrixBlock';
+import { ThinkerBlock } from '@/components/knowledge-library/blocks/ThinkerBlock';
+import { RelationshipCardBlock } from '@/components/knowledge-library/blocks/RelationshipCardBlock';
+import { HistoriographyBlock } from '@/components/knowledge-library/blocks/HistoriographyBlock';
+import { CounterfactualBlock } from '@/components/knowledge-library/blocks/CounterfactualBlock';
+
+
+
 const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = {
   'executive-summary': ExecutiveSummaryBlock,
   'evidence': EvidencePanelBlock,
@@ -90,6 +102,16 @@ const blockComponents: { [K in BlockType]: React.ComponentType<BlockMap[K]> } = 
   'documentary-evidence': (props: BlockMap['documentary-evidence']) => <DocumentaryEvidenceBlock {...props} />,
   'sources-methodology': (props: BlockMap['sources-methodology']) => <SourcesMethodologyBlock {...props} />,
   'claim': (props: BlockMap['claim']) => <ClaimBlock id="claim-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+
+  'learning': (props: BlockMap['learning']) => <LearningBlock id="learning-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+  'list': (props: BlockMap['list']) => <ListBlock id="list-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+  'document': (props: BlockMap['document']) => <DocumentBlock id="document-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+
+  'decision-matrix': (props: BlockMap['decision-matrix']) => <DecisionMatrixBlock id="decision-matrix-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+  'thinker': (props: BlockMap['thinker']) => <ThinkerBlock id="thinker-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+  'relationship-card': (props: BlockMap['relationship-card']) => <RelationshipCardBlock id="relationship-card-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+  'historiography': (props: BlockMap['historiography']) => <HistoriographyBlock id="historiography-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
+  'counterfactual': (props: BlockMap['counterfactual']) => <CounterfactualBlock id="counterfactual-block" data={props as unknown as Record<string, unknown>} depth="explorer" />,
 };
 
 export function getBlockComponent(type: string): React.ComponentType<any> | null {

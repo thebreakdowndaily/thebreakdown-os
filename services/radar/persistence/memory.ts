@@ -11,6 +11,7 @@ import type {
   RadarPipelineRunRecord,
 } from '../types';
 import type { RadarPersistenceRepository } from './types';
+import { mergeLatencyRecord } from '../latency-tracker';
 
 export class MemoryRadarRepository implements RadarPersistenceRepository {
   readonly kind = 'memory' as const;
@@ -18,7 +19,7 @@ export class MemoryRadarRepository implements RadarPersistenceRepository {
   private fingerprints: Map<string, ContentFingerprint> = new Map();
   private healthMap: Map<string, RadarSourceHealth> = new Map();
   private runs: RadarPipelineRunRecord[] = [];
-  private latencyRecords: RadarLatencyRecord[] = [];
+  private latencyMap: Map<string, RadarLatencyRecord> = new Map();
   private locks: Map<string, { ownerId: string; expiresAt: number }> = new Map();
 
   async loadFingerprints(): Promise<Map<string, ContentFingerprint>> {
@@ -59,7 +60,18 @@ export class MemoryRadarRepository implements RadarPersistenceRepository {
   }
 
   async recordLatency(record: RadarLatencyRecord): Promise<void> {
-    this.latencyRecords.push({ ...record });
+    const existing = this.latencyMap.get(record.clusterId) || null;
+    const merged = mergeLatencyRecord(existing, record);
+    this.latencyMap.set(merged.clusterId, merged);
+  }
+
+  async getLatencyRecord(clusterId: string): Promise<RadarLatencyRecord | null> {
+    const rec = this.latencyMap.get(clusterId);
+    return rec ? { ...rec } : null;
+  }
+
+  async getLatencyRecords(): Promise<RadarLatencyRecord[]> {
+    return Array.from(this.latencyMap.values()).map(r => ({ ...r }));
   }
 
   async acquireLock(lockKey: string, ownerId: string, ttlMs: number): Promise<boolean> {
@@ -85,7 +97,7 @@ export class MemoryRadarRepository implements RadarPersistenceRepository {
     this.fingerprints.clear();
     this.healthMap.clear();
     this.runs = [];
-    this.latencyRecords = [];
+    this.latencyMap.clear();
     this.locks.clear();
   }
 }

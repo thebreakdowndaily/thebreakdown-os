@@ -4,9 +4,10 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { APIStory } from '@/utils/data-layer/types';
+import type { Story } from '@/types/canonical';
 
 interface StoriesArchiveProps {
-  initialStories: APIStory[];
+  initialStories: (APIStory | Story)[];
 }
 
 const CATEGORIES = [

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getCountries } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/layout/Container';
 
 export const metadata: Metadata = {
@@ -10,8 +10,9 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://thebreakdown.in/countries' },
 };
 
-export default function CountriesPage() {
-  const { data: countries } = getCountries({ pageSize: 50 });
+export default async function CountriesPage() {
+  const services = bootstrapServices();
+  const countries = await services.entities.getEntitiesByType('country');
   return (
     <Container>
       <div className="py-8">

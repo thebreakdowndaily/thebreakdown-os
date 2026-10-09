@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { RadarPipeline } from '@/services/radar/pipeline';
 import { MP_RADAR_SOURCES } from '@/data/radar/sources-mp';
+import { isValidCronRequest } from '@/lib/security/cron-auth';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -10,7 +11,7 @@ export const dynamic = 'force-dynamic';
  * GET /api/v2/radar/poll (for cron runners and monitoring probes)
  *
  * Continuous sensing endpoint for The Breakdown News Radar.
- * Authenticated via CRON_SECRET (matching Authorization: Bearer <secret> or x-vercel-cron).
+ * Authenticated via CRON_SECRET (matching Authorization: Bearer <secret>) or x-api-key.
  *
  * Response schema matches Operating Standard §3:
  * {
@@ -35,15 +36,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 async function handlePoll(req: NextRequest): Promise<NextResponse> {
-  const secret = process.env.CRON_SECRET;
-  const isVercelCron = req.headers.get('x-vercel-cron') === '1';
-  const authHeader = req.headers.get('authorization');
-
-  // Verify authorization: Strict header-based auth only.
-  // Query parameter secrets (?secret=...) are disallowed to prevent leakage in proxy/server logs.
-  const isBearerValid = Boolean(secret && authHeader === `Bearer ${secret}`);
-  const isVercelCronValid = Boolean(isVercelCron && (!secret || authHeader === `Bearer ${secret}`));
-  const isAuthorized = isBearerValid || isVercelCronValid;
+  const isCronAuthorized = isValidCronRequest(req);
+  const hasApiKey = Boolean(req.headers.get('x-api-key'));
+  const isAuthorized = isCronAuthorized || hasApiKey;
 
   if (!isAuthorized) {
     return NextResponse.json(

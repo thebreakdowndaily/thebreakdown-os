@@ -18,6 +18,7 @@ import type {
   RadarPipelineRunRecord,
 } from '../types';
 import type { RadarPersistenceRepository } from './types';
+import { mergeLatencyRecord } from '../latency-tracker';
 
 export class SupabaseRadarRepository implements RadarPersistenceRepository {
   readonly kind = 'supabase' as const;
@@ -233,18 +234,67 @@ export class SupabaseRadarRepository implements RadarPersistenceRepository {
     };
   }
 
+  async getLatencyRecord(clusterId: string): Promise<RadarLatencyRecord | null> {
+    const client = this.ensureClient();
+    const { data, error } = await client
+      .from('radar_latency_records')
+      .select('*')
+      .eq('cluster_id', clusterId)
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    return {
+      clusterId: data.cluster_id,
+      sourcePublishedAt: data.source_published_at || undefined,
+      firstSeenAt: data.first_seen_at,
+      firstDetectedAt: data.first_detected_at,
+      firstVerifiedAt: data.first_verified_at || undefined,
+      publishedAt: data.published_at || undefined,
+      detectionLatencyMs: data.detection_latency_ms !== null ? Number(data.detection_latency_ms) : undefined,
+      verificationLatencyMs: data.verification_latency_ms !== null ? Number(data.verification_latency_ms) : undefined,
+      publicationLatencyMs: data.publication_latency_ms !== null ? Number(data.publication_latency_ms) : undefined,
+    };
+  }
+
+  async getLatencyRecords(): Promise<RadarLatencyRecord[]> {
+    const client = this.ensureClient();
+    const { data, error } = await client
+      .from('radar_latency_records')
+      .select('*')
+      .order('first_detected_at', { ascending: false });
+
+    if (error || !data) return [];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data.map((d: any) => ({
+      clusterId: d.cluster_id,
+      sourcePublishedAt: d.source_published_at || undefined,
+      firstSeenAt: d.first_seen_at,
+      firstDetectedAt: d.first_detected_at,
+      firstVerifiedAt: d.first_verified_at || undefined,
+      publishedAt: d.published_at || undefined,
+      detectionLatencyMs: d.detection_latency_ms !== null ? Number(d.detection_latency_ms) : undefined,
+      verificationLatencyMs: d.verification_latency_ms !== null ? Number(d.verification_latency_ms) : undefined,
+      publicationLatencyMs: d.publication_latency_ms !== null ? Number(d.publication_latency_ms) : undefined,
+    }));
+  }
+
   async recordLatency(record: RadarLatencyRecord): Promise<void> {
     const client = this.ensureClient();
+    const existing = await this.getLatencyRecord(record.clusterId);
+    const merged = mergeLatencyRecord(existing, record);
+
     const { error } = await client.from('radar_latency_records').upsert({
-      cluster_id: record.clusterId,
-      source_published_at: record.sourcePublishedAt || null,
-      first_seen_at: record.firstSeenAt,
-      first_detected_at: record.firstDetectedAt,
-      first_verified_at: record.firstVerifiedAt || null,
-      published_at: record.publishedAt || null,
-      detection_latency_ms: record.detectionLatencyMs || null,
-      verification_latency_ms: record.verificationLatencyMs || null,
-      publication_latency_ms: record.publicationLatencyMs || null,
+      cluster_id: merged.clusterId,
+      source_published_at: merged.sourcePublishedAt || null,
+      first_seen_at: merged.firstSeenAt,
+      first_detected_at: merged.firstDetectedAt,
+      first_verified_at: merged.firstVerifiedAt || null,
+      published_at: merged.publishedAt || null,
+      detection_latency_ms: merged.detectionLatencyMs ?? null,
+      verification_latency_ms: merged.verificationLatencyMs ?? null,
+      publication_latency_ms: merged.publicationLatencyMs ?? null,
     }, { onConflict: 'cluster_id' });
 
     if (error) {

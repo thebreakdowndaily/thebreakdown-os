@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      'application/rss+xml': 'https://thebreakdown.in/rss',
+      'application/rss+xml': 'https://thebreakdown.in/api/feed',
     },
   },
   // DNS TXT verification completed via Cloudflare
@@ -110,7 +110,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       width: 1024,
       height: 1024,
     },
-    sameAs: [],
     description: 'Independent, evidence-backed journalism on Indian policy, politics, and society.',
     publishingPrinciples: 'https://thebreakdown.in/editorial-constitution',
     ethicsPolicy: 'https://thebreakdown.in/methodology',

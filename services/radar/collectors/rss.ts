@@ -115,6 +115,9 @@ export class RssCollector implements RadarCollector {
             }
           }
 
+          const itemPayload = Buffer.from(rawContent || content, 'utf-8');
+          const rawSha256 = createHash('sha256').update(itemPayload).digest('hex');
+
           result.artifacts.push({
             sourceId: source.id,
             url: rawLink,
@@ -124,6 +127,9 @@ export class RssCollector implements RadarCollector {
             content,
             contentHash,
             contentLength: content.length,
+            rawPayload: itemPayload,
+            rawSha256,
+            mimeType: 'application/rss+xml',
             metadata: {
               guid: item.guid?.['#text'] || item.guid || item.id,
               author: item.author || item['dc:creator']

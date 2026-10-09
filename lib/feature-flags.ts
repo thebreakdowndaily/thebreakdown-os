@@ -13,8 +13,8 @@ export interface FeatureFlags {
  */
 export const CANONICAL_ELIGIBILITY_REGISTRY: Record<string, CanonicalEligibilityStatus> = {
   'indias-inheritance': 'ELIGIBLE',
-  'mgnrega-reform': 'NEEDS_REVIEW',
-  'rbi-repo-rate': 'NEEDS_REVIEW',
+  'mgnrega-reform': 'ELIGIBLE',
+  'rbi-repo-rate': 'ELIGIBLE',
   // Non-migrated / audit targets
   'digital-payments-boom': 'NEEDS_REVIEW',
   'pm-fasal-bima-claims': 'NEEDS_REVIEW',

@@ -128,15 +128,45 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
   // block a second time after safely projecting its supported image field.
   const blocks: StoryBlock[] = chapter.content.filter((kb) => kb !== heroBlock).map((kb) => {
     let canonicalType = kb.type as string;
-    if (canonicalType === 'heading') canonicalType = 'chapter-heading';
-    else if (canonicalType === 'paragraph') canonicalType = 'text';
-    else if (canonicalType === 'evidence-summary') canonicalType = 'evidence';
+    let blockData = kb.data || {};
+
+    if (canonicalType === 'heading') {
+      canonicalType = 'chapter-heading';
+    } else if (canonicalType === 'paragraph') {
+      canonicalType = 'text';
+    } else if (canonicalType === 'evidence-summary') {
+      canonicalType = 'evidence';
+      // Fix contract mismatch: EvidenceEngine expects EvidencePanelData shape
+      const isEstablished = blockData.evidenceLevel === 'established';
+      const confidenceScore = isEstablished ? 95 : 75;
+      const sourceList = Array.isArray(blockData.sources) ? blockData.sources : [];
+      
+      blockData = {
+        overallScore: confidenceScore,
+        verifiedClaims: isEstablished ? 1 : 0,
+        primarySources: sourceList.length,
+        claims: [
+          {
+            id: kb.id,
+            text: String(blockData.claim || ''),
+            confidence: confidenceScore,
+            status: isEstablished ? 'verified' : 'moderate',
+            sources: sourceList.map((s) => ({
+              name: String(s),
+              url: '',
+              group: 'primary'
+            })),
+            supportingEvidence: blockData.explanation ? [String(blockData.explanation)] : []
+          }
+        ]
+      };
+    }
 
     return {
       id: kb.id,
       type: canonicalType,
       region: 'main',
-      data: kb.data || {},
+      data: blockData,
     };
   });
 
@@ -205,6 +235,12 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
   const relatedEntityIds = chapter.relatedEntityIds || [];
   const relatedEntities = (chapter as any).relatedEntities || relatedEntityIds.map((id) => ({ id, slug: id }));
 
+  const chapterHeroImageAlt = (chapter as any).heroImageAlt || (chapter.metadata as any)?.heroImageAlt;
+  const heroImageAlt = typeof chapterHeroImageAlt === 'string' ? chapterHeroImageAlt : heroData?.heroImageAlt as string | undefined;
+  
+  const chapterHeroImageIsDecorative = (chapter as any).heroImageIsDecorative || (chapter.metadata as any)?.heroImageIsDecorative;
+  const heroImageIsDecorative = typeof chapterHeroImageIsDecorative === 'boolean' ? chapterHeroImageIsDecorative : heroData?.heroImageIsDecorative as boolean | undefined;
+
   return {
     id: chapter.id,
     title: chapter.title,
@@ -212,6 +248,8 @@ export function chapterToCanonicalAdapter(chapter: Chapter): Story {
     headline: chapter.title,
     summary: chapter.summary,
     heroImage,
+    heroImageAlt,
+    heroImageIsDecorative,
     author: 'The Breakdown Editorial',
     category: chapter.collectionSlug,
     status: canonicalStatus,
@@ -250,6 +288,8 @@ export function dbStoryToCanonicalAdapter(dbRecord: Record<string, unknown>): St
     headline: String(dbRecord.headline || dbRecord.title || ''),
     summary: String(dbRecord.summary || ''),
     heroImage: String(dbRecord.heroImage || ''),
+    heroImageAlt: typeof dbRecord.heroImageAlt === 'string' ? dbRecord.heroImageAlt : undefined,
+    heroImageIsDecorative: typeof dbRecord.heroImageIsDecorative === 'boolean' ? dbRecord.heroImageIsDecorative : undefined,
     author: String(dbRecord.author || 'The Breakdown'),
     category: String(dbRecord.category || 'general'),
     status: canonicalStatus,

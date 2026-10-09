@@ -11,7 +11,7 @@ function sb() { return getSupabaseClient().from('media_items'); }
 export class SupabaseMediaRepository implements MediaService {
   async getMedia(params?: APIListParams): Promise<APIResponse<MediaItem[]>> {
     let query = sb().select('*', { count: 'exact' });
-    if (params?.search) query = query.ilike('title', `%${params.search}%`);
+    if (params?.search) query = query.ilike('caption', `%${params.search}%`);
     if (params?.page && params?.pageSize) query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
     query = query.order('created_at', { ascending: false });
     const { data, count, error } = await query;
@@ -61,7 +61,7 @@ function rowToMediaItem(row: MediaRow): MediaItem {
   };
 }
 
-function rowFromMediaItem(item: MediaItem): MediaInsert {
+function rowFromMediaItem(item: MediaItem): any {
   return {
     id: item.id,
     type: item.type,
@@ -74,7 +74,5 @@ function rowFromMediaItem(item: MediaItem): MediaInsert {
     height: item.height,
     file_size: item.fileSize,
     version: item.version ?? 1,
-    title: item.caption || '',
-    url: item.src || '',
   };
 }

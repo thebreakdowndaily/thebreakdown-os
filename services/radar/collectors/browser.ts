@@ -130,6 +130,9 @@ export class BrowserCollector implements RadarCollector {
         content: normalizedText,
         contentHash,
         contentLength: normalizedText.length,
+        rawPayload: Buffer.from(rawBody, 'utf-8'),
+        rawSha256: createHash('sha256').update(rawBody).digest('hex'),
+        mimeType: 'text/html',
         metadata: {
           isDynamic: true,
           sandboxed: true,

@@ -4,7 +4,7 @@ export interface StoryBlock<T = unknown> {
   data: T;
 }
 
-/* ── Individual block data shapes ────────────────────────── */
+/* ?????? Individual block data shapes ?????????????????????????????????????????????????????????????????????????????? */
 
 export interface ExecutiveSummaryData {
   summary: string;
@@ -307,6 +307,7 @@ export interface BlockMap {
   'quote': { text: string; attribution?: string };
   'dataset-reference': import('./DatasetReferenceBlock').DatasetReferenceData;
   'hero': HeroBlockData;
+    'claim': import('@/types/canonical').ClaimBlockData;
   'author-box': AuthorBoxBlockData;
   'story-snapshot': StorySnapshotBlockData;
   'confidence-meter': ConfidenceMeterBlockData;
@@ -318,7 +319,15 @@ export interface BlockMap {
   'case-evidence': CaseEvidenceCardData;
   'mgnrega-ledger': MgnregaLedgerData;
   'documentary-evidence': DocumentaryEvidenceData;
-  'sources-methodology': SourcesMethodologyData;
+      'sources-methodology': SourcesMethodologyData;
+  'learning': import('@/types/canonical').LearningBlockData;
+  'list': import('@/types/canonical').ListBlockData;
+  'document': import('@/types/canonical').DocumentBlockData;
+  'decision-matrix': import('@/types/canonical').DecisionMatrixBlockData;
+  'thinker': import('@/types/canonical').ThinkerBlockData;
+  'relationship-card': import('@/types/canonical').RelationshipCardData;
+  'historiography': import('@/types/canonical').HistoriographyBlockData;
+  'counterfactual': import('@/types/canonical').CounterfactualBlockData;
 }
 
 export interface AccountabilityChainData {

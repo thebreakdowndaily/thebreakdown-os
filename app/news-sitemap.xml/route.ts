@@ -18,7 +18,7 @@
  * Google News XML namespace. This route returns raw XML.
  */
 
-import { getPublicStories } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 
 const SITE_URL = 'https://thebreakdown.in';
 const PUBLICATION_NAME = 'The Breakdown';
@@ -31,9 +31,9 @@ export async function GET(): Promise<Response> {
   const now = Date.now();
   const cutoff = new Date(now - NEWS_WINDOW_MS);
 
-  // Fetch published stories from the data layer
-  // getPublicStories returns seed data; in production this should be a live DB query.
-  const allStories = getPublicStories({ pageSize: 200 }).data;
+  // Fetch published stories from the service layer
+  const services = bootstrapServices({ publicOnly: true });
+  const allStories = (await services.stories.getPublicStories({ pageSize: 200 })).data;
 
   // Filter to only stories published within the news window
   const recentStories = allStories.filter((story) => {

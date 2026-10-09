@@ -83,7 +83,10 @@ export async function PUT(
         updatedBy: principal.userId,
       };
 
-      const decision = evaluatePublicationContract(existingStory, targetStory, principal);
+      const { evaluatePublicationContractAsync } = await import('@/lib/editorial/canonical-publication');
+      const { RepositoryFactory } = await import('@/services/factory/repository');
+
+      const decision = await evaluatePublicationContractAsync(existingStory, targetStory, principal);
       if (!decision.allowed) {
         return NextResponse.json(
           { error: decision.error, details: decision.gateResult },
@@ -91,21 +94,10 @@ export async function PUT(
         );
       }
 
-      const { data, error } = await db()
-        .from('stories')
-        .update({
-          ...body,
-          status: 'published',
-          published_at: decision.updatedStory?.publishedAt || new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        } as import('@/supabase/schema').Database['public']['Tables']['stories']['Update'])
-        .eq('slug', slug)
-        .select()
-        .single();
-
-      if (error) throw error;
+      const repo = RepositoryFactory.getStoryRepository();
+      const saved = await repo.saveStory(decision.updatedStory!, { publicationToken: decision.publicationToken });
       executePostPublicationEffects(decision.updatedStory!, principal, decision.gateResult);
-      return ok(data);
+      return ok(saved as any);
     }
 
     const { data, error } = await db()

@@ -237,47 +237,87 @@ async function validateAndPublishEntry(
   // ── Convert story row to canonical Story shape for validation
   const story = rowToStory(storyRow);
 
-  // ── Run the publication gate
-  const result = validateStoryForPublication(
-    { storyId, scheduleId, triggeredBy: 'cron' },
+  // ── Run Canonical Publication Contract (All 12 Gates + Gate 13 Evidence Vault)
+  const { evaluatePublicationContractAsync, executePostPublicationEffects } = await import('@/lib/editorial/canonical-publication');
+  const { RepositoryFactory } = await import('@/services/factory/repository');
+
+  const schedulerPrincipal = {
+    userId: 'system-scheduler',
+    email: 'scheduler@breakdown.local',
+    name: 'Editorial Scheduler',
+    role: 'owner' as const,
+    isSuperAdmin: true,
+    status: 'active' as const,
+    organizationId: null,
+  };
+
+  const decision = await evaluatePublicationContractAsync(
     story,
-    now,
+    story,
+    schedulerPrincipal,
+    { scheduleId, triggeredBy: 'cron', now }
   );
+
+  const result: PublicationGateResult = decision.gateResult || {
+    storyId,
+    scheduleId,
+    passed: decision.allowed,
+    checks: [],
+    checkedAt: now.toISOString(),
+    triggeredBy: 'cron',
+  };
 
   // ── Log the gate check
   await logGateResult(result);
 
-  if (result.passed) {
-    // ── PUBLISH with atomic guard: only update if story is NOT already published
+  if (decision.allowed && decision.publicationToken) {
+    // ── PUBLISH via Story Repository with validated Publication Token
+    const repo = RepositoryFactory.getStoryRepository();
     const publishedAt = now.toISOString();
-    const { count } = await db
-      .from('stories')
-      .update({
-        status: 'published',
-        published_at: publishedAt,
-        updated_at: publishedAt,
-      } as never)
-      .eq('id', storyId)
-      .neq('status', 'published');  // idempotency: skip if already published
 
-    if (count === 0) {
-      // Another worker published this story between our claim and publish
+    try {
+      await repo.saveStory(
+        {
+          ...decision.updatedStory!,
+          status: 'published',
+          publicationStatus: 'published',
+          publishedAt,
+          updatedAt: publishedAt,
+        },
+        { publicationToken: decision.publicationToken }
+      );
+
+      executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
+
+      // Update schedule entry
+      await db
+        .from('editorial_schedule')
+        .update({
+          status: 'published',
+          published_at: publishedAt,
+          updated_at: publishedAt,
+        } as never)
+        .eq('id', scheduleId);
+    } catch (publishErr: any) {
+      result.passed = false;
       result.checks.push({
-        name: 'concurrent_publish_prevented',
-        passed: true,
-        reason: 'Another worker published this story concurrently — no duplicate',
+        name: 'repository_publish_failed',
+        passed: false,
+        reason: publishErr?.message || 'Repository rejected publication',
       });
-    }
+      await logGateResult(result);
 
-    // Update schedule entry
-    await db
-      .from('editorial_schedule')
-      .update({
-        status: 'published',
-        published_at: publishedAt,
-        updated_at: publishedAt,
-      } as never)
-      .eq('id', scheduleId);
+      await db
+        .from('editorial_schedule')
+        .update({
+          status: 'blocked',
+          block_reason: publishErr?.message || 'Repository rejected publication',
+          blocked_at: now.toISOString(),
+          updated_at: now.toISOString(),
+        } as never)
+        .eq('id', scheduleId);
+      return result;
+    }
   } else {
     // ── BLOCK the schedule entry
     const failedChecks = result.checks.filter(c => !c.passed);

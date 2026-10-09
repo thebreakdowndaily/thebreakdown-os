@@ -1,23 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getEntities } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const pageRaw = searchParams.get('page');
   const pageSizeRaw = searchParams.get('pageSize');
   const orderRaw = searchParams.get('order');
-  const order: 'asc' | 'desc' | undefined = orderRaw === 'asc' || orderRaw === 'desc' ? orderRaw : undefined;
+  const sortOrder: 'asc' | 'desc' | undefined = orderRaw === 'asc' || orderRaw === 'desc' ? orderRaw : undefined;
 
   const params = {
     page: pageRaw ? parseInt(pageRaw, 10) : undefined,
     pageSize: pageSizeRaw ? parseInt(pageSizeRaw, 10) : undefined,
-    sort: searchParams.get('sort') || undefined,
-    order,
+    sortBy: searchParams.get('sort') || undefined,
+    sortOrder,
     search: searchParams.get('search') || undefined,
-    type: searchParams.get('type') || undefined,
   };
 
-  const result = getEntities(params);
+  const services = bootstrapServices();
+  const typeFilter = searchParams.get('type');
+  if (typeFilter) {
+    const data = await services.entities.getEntitiesByType(typeFilter as any);
+    return NextResponse.json({
+      data,
+      meta: { total: data.length, page: 1, pageSize: data.length, totalPages: 1 },
+    });
+  }
+
+  const result = await services.entities.getEntities(params);
   return NextResponse.json(result);
 }

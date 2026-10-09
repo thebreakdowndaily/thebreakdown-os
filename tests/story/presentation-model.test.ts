@@ -1,5 +1,5 @@
 /**
- * THE BREAKDOWN — Presentation Model & Predicates Unit Tests
+ * THE BREAKDOWN ??? Presentation Model & Predicates Unit Tests
  *
  * Validates:
  * 1. Semantic Trust Signal Predicates (distinct claim conclusions, aggregate state, no score thresholds, no timestamp-only update badge).
@@ -41,9 +41,11 @@ async function runTests() {
     id: 'indian-education-crisis',
     slug: 'indian-education-crisis',
     title: "India's Education Paradox",
-    headline: "India's Education Paradox: Rising Enrolment, Falling Learning — What Went Wrong?",
+    headline: "India's Education Paradox: Rising Enrolment, Falling Learning ??? What Went Wrong?",
     summary: 'Investigation into primary education learning poverty.',
     heroImage: '/images/test.jpg',
+    heroImageAlt: 'image description',
+    heroImageIsDecorative: false,
     author: 'The Breakdown Editorial',
     category: 'policy',
     status: 'published',

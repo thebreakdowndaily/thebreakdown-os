@@ -72,7 +72,7 @@ export function StoryOrientation({ orientation, prerequisite }: StoryOrientation
       )}
 
       {keyNumbers && keyNumbers.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-neutral-800/80">
+        <div className="hidden lg:grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-neutral-800/80">
           {keyNumbers.map((num, i) => (
             <div key={i} className="bg-neutral-950/60 border border-neutral-800/50 rounded-xl p-3.5 text-center">
               <span className="block text-2xl font-bold font-mono text-emerald-400 mb-0.5">{num.value}</span>

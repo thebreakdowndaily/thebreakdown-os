@@ -55,6 +55,8 @@ export interface StoryRow {
     headline: string;
     summary: string;
     hero_image: string;
+    hero_image_alt?: string;
+    hero_image_is_decorative?: boolean;
     author: string;
     category: string;
     status: string;
@@ -70,6 +72,7 @@ export interface StoryRow {
     related_story_ids: string[];
     related_entity_ids: string[];
     related_topic_ids: string[];
+    is_test_artifact: boolean;
     notes: string | null;
     version: number;
     published_at: string | null;
@@ -90,6 +93,8 @@ export interface StoryRow {
     headline?: string;
     summary?: string;
     hero_image?: string;
+    hero_image_alt?: string;
+    hero_image_is_decorative?: boolean;
     author?: string;
     category?: string;
     status?: string;
@@ -105,6 +110,7 @@ export interface StoryRow {
     related_story_ids?: string[];
     related_entity_ids?: string[];
     related_topic_ids?: string[];
+    is_test_artifact?: boolean;
     notes?: string | null;
     version?: number;
     published_at?: string | null;
@@ -125,6 +131,8 @@ export interface StoryRow {
     headline?: string;
     summary?: string;
     hero_image?: string;
+    hero_image_alt?: string;
+    hero_image_is_decorative?: boolean;
     author?: string;
     category?: string;
     status?: string;
@@ -140,6 +148,7 @@ export interface StoryRow {
     related_story_ids?: string[];
     related_entity_ids?: string[];
     related_topic_ids?: string[];
+    is_test_artifact?: boolean;
     notes?: string | null;
     version?: number;
     published_at?: string | null;

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getTopics } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
@@ -22,8 +22,9 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default function TopicsPage() {
-  const { data: topics } = getTopics({ pageSize: 100 });
+export default async function TopicsPage() {
+  const services = bootstrapServices();
+  const { data: topics } = await services.topics.getTopics({ pageSize: 100 });
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
@@ -51,8 +52,9 @@ export default function TopicsPage() {
         {/* Topics Grid */}
         <main id="topics-grid" aria-label="Topics Directory" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map((topic) => {
-            const stories = topic.stories || [];
-            const storyCount = topic.storyCount || stories.length;
+            const topicItem = topic as typeof topic & { stories?: Array<{ slug: string; headline: string }>; storyCount?: number };
+            const stories = topicItem.stories || [];
+            const storyCount = topicItem.storyCount || topic.storyIds?.length || stories.length;
 
             return (
               <div

@@ -28,6 +28,7 @@ function chapterStory(slug: string, ch: typeof ngChapters[0], extra: Partial<API
     headline: `Chapter ${ch.order}: ${ch.title}`,
     summary: extra.summary || ch.subtitle || `Chapter ${ch.order} of the Namami Gange investigation.`,
     heroImage: '/images/stories/groundwater-depletion.jpg',
+    heroImageAlt: 'Dry riverbed highlighting groundwater depletion in Northern India',
     publishedAt: '2026-07-15T06:00:00Z',
     updatedAt: '2026-07-15T06:00:00Z',
     readingTime: 8,
@@ -317,6 +318,7 @@ export const namamiGangeInvestigation: APIInvestigation = {
   subtitle: '₹20,000+ Crore to Clean India\'s Holiest River — Why Is the Ganga Still Polluted?',
   summary: 'An evidence-based investigation into delays, underperforming sewage treatment plants, planning failures, procurement issues, and the governance challenges behind India\'s flagship river-cleaning mission. Twelve years and ₹26,824 crore into the programme, the Ganga is cleaner in stretches — but 37 river stretches remain biologically dead, and the communities the programme was meant to serve have been displaced by the very infrastructure built in their name.',
   heroImage: '/images/stories/groundwater-depletion.jpg',
+  heroImageAlt: 'Dry riverbed highlighting groundwater depletion in Northern India',
   publishedAt: '2026-07-15T06:00:00Z',
   updatedAt: '2026-07-15T06:00:00Z',
   chapters: ngChapters.map((ch) => ({

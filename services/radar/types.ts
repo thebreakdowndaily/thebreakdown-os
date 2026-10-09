@@ -97,6 +97,10 @@ export interface RawArtifact {
   contentHash: string; // SHA-256 of NFKC-normalized content
   contentLength: number;
   metadata: Record<string, unknown>;
+  // Phase 4B-2B Evidence Vault additions:
+  rawPayload?: Buffer | Uint8Array | string;
+  rawSha256?: string;
+  mimeType?: string;
 }
 
 // ── 5. Change Detection ──────────────────────────────────────────────────────
@@ -146,7 +150,7 @@ export const DEFAULT_COLLECTOR_CONFIG: CollectorConfig = {
   allowPrivateIps: false,
 };
 
-// ── 7. Source Health ─────────────────────────────────────────────────────────
+// ── 7. Source Health & Alerting ──────────────────────────────────────────────
 
 export type RadarSourceHealthStatus =
   | 'healthy'
@@ -157,6 +161,41 @@ export type RadarSourceHealthStatus =
   | 'unavailable'
   | 'disputed'
   | 'unknown';
+
+export type SourceFailureClass =
+  | 'HTTP_ERROR'
+  | 'NETWORK_TIMEOUT'
+  | 'DNS_NETWORK_ERROR'
+  | 'PARSER_FAILURE'
+  | 'EMPTY_FEED_ANOMALY'
+  | 'STALE_SOURCE_SILENCE'
+  | 'AUTHENTICATION_FAILURE'
+  | 'UNKNOWN';
+
+export interface RadarSourceAlert {
+  id: string;                      // Deterministic alert ID
+  sourceId: string;                // SOURCE
+  sourceName?: string;
+  severity: 'info' | 'warning' | 'error' | 'critical';
+  currentState: RadarSourceHealthStatus; // CURRENT STATE
+  failureClass: SourceFailureClass;// LIKELY FAILURE CLASS
+  lastSuccessAt?: string;          // LAST SUCCESS
+  lastObservationAt?: string;      // LAST OBSERVATION
+  lastNewContentAt?: string;       // LAST NEW CONTENT
+  consecutiveFailures: number;     // CONSECUTIVE FAILURES
+  consecutiveEmptyRuns: number;    // CONSECUTIVE EMPTY FETCHES
+  lastHttpStatus?: number;         // LAST HTTP STATUS
+  expectedCadenceMinutes: number;  // EXPECTED CADENCE
+  observedDelayMinutes: number;    // OBSERVED DELAY
+  message: string;                 // DIAGNOSTIC SUMMARY
+  recommendedAction: string;       // RECOMMENDED HUMAN ACTION
+  detectedAt: string;              // ISO timestamp
+  acknowledged: boolean;
+  acknowledgedAt?: string;
+  acknowledgedBy?: string;
+  idempotencyKey: string;          // Deduplication key
+  resolvedAt?: string;             // ISO timestamp when source recovered
+}
 
 export interface RadarSourceHealth {
   sourceId: string;
@@ -175,6 +214,11 @@ export interface RadarSourceHealth {
   scheduleState?: RadarSourceScheduleState;
   nextEligiblePollAt?: string;
   backoffMinutes?: number;
+  // Milestone 4: Silent Feed Monitoring & Source Health Alerting
+  consecutiveEmptyRuns?: number;
+  lastObservationAt?: string;
+  silentFailureSuspected?: boolean;
+  failureClass?: SourceFailureClass;
 }
 
 // ── 8. Precision Latency Measurement ─────────────────────────────────────────
@@ -189,6 +233,20 @@ export interface RadarLatencyRecord {
   detectionLatencyMs?: number;   // firstDetectedAt - sourcePublishedAt
   verificationLatencyMs?: number;// firstVerifiedAt - firstDetectedAt
   publicationLatencyMs?: number; // publishedAt - firstVerifiedAt
+  observationLatencyMs?: number; // firstSeenAt - sourcePublishedAt
+  detectionProcessingLatencyMs?: number; // firstDetectedAt - firstSeenAt
+  endToEndPublicationLatencyMs?: number; // publishedAt - sourcePublishedAt
+}
+
+export interface DerivedLatencyMetrics {
+  detectionLatencyMs: number | null;          // firstDetectedAt - sourcePublishedAt
+  observationLatencyMs: number | null;        // firstSeenAt - sourcePublishedAt
+  detectionProcessingLatencyMs: number | null;// firstDetectedAt - firstSeenAt
+  verificationLatencyMs: number | null;       // firstVerifiedAt - firstDetectedAt
+  editorialToPublicationLatencyMs: number | null; // publishedAt - firstVerifiedAt
+  endToEndPublicationLatencyMs: number | null;// publishedAt - sourcePublishedAt
+  isValidChronology: boolean;
+  chronologyViolations: string[];
 }
 
 // ── 9. Pipeline Runs & Operational Metrics ───────────────────────────────────

@@ -60,7 +60,8 @@ export function buildEvidenceGraph(stories: any[]): EvidenceGraph {
     }
   };
 
-  const hashText = (text: string) => {
+  const hashText = (text?: string) => {
+    if (!text) return 'hash-0';
     let hash = 0;
     for (let i = 0; i < text.length; i++) {
       hash = (hash << 5) - hash + text.charCodeAt(i);
@@ -75,15 +76,17 @@ export function buildEvidenceGraph(stories: any[]): EvidenceGraph {
 
     const sources = story.sources || [];
     for (const src of sources) {
-      const srcId = src.id || src.url || hashText(src.name);
-      addNode({ id: srcId, type: 'source', label: src.name, url: src.url });
+      const srcName = src.name || src.title || 'Source';
+      const srcId = src.id || src.url || hashText(srcName);
+      addNode({ id: srcId, type: 'source', label: srcName, url: src.url });
       addEdge(storyId, srcId, 'references');
     }
 
     const citations = story.citations || [];
     for (const cite of citations) {
-      const citeId = cite.id || cite.url || hashText(cite.title);
-      addNode({ id: citeId, type: 'citation', label: cite.title, url: cite.url });
+      const citeTitle = cite.title || cite.name || 'Citation';
+      const citeId = cite.id || cite.url || hashText(citeTitle);
+      addNode({ id: citeId, type: 'citation', label: citeTitle, url: cite.url });
       addEdge(storyId, citeId, 'references');
     }
 
@@ -105,8 +108,9 @@ export function buildEvidenceGraph(stories: any[]): EvidenceGraph {
       }
 
       if (claim.source) {
-        const srcId = hashText(String(claim.source));
-        addNode({ id: srcId, type: 'source', label: String(claim.source) });
+        const srcText = typeof claim.source === 'string' ? claim.source : (claim.source.name || claim.source.title || '');
+        const srcId = hashText(srcText);
+        addNode({ id: srcId, type: 'source', label: srcText });
         if (evId !== '') {
           addEdge(evId, srcId, 'cites');
         } else {

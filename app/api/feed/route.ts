@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPublicStories } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
+import type { Story } from '@/types/canonical';
 
 function escapeXml(s: string): string {
   return s
@@ -10,9 +11,14 @@ function escapeXml(s: string): string {
     .replace(/'/g, '&apos;');
 }
 
-function buildRssFeed(): string {
-  const items = getPublicStories({ pageSize: 100 })
-    .data.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+function getAuthorName(story: Story): string {
+  if (typeof story.author === 'string') return story.author;
+  if ((story.author as any)?.name) return (story.author as any).name;
+  return 'The Breakdown';
+}
+
+function buildRssFeed(stories: Story[]): string {
+  const items = stories
     .map(
       (story) => `    <item>
       <title>${escapeXml(story.headline)}</title>
@@ -20,7 +26,7 @@ function buildRssFeed(): string {
       <guid isPermaLink="true">https://thebreakdown.in/story/${story.slug}</guid>
       <description>${escapeXml(story.summary)}</description>
       <pubDate>${new Date(story.publishedAt).toUTCString()}</pubDate>
-      <author>${escapeXml(story.author.name)}</author>
+      <author>${escapeXml(getAuthorName(story))}</author>
       <category>${escapeXml(story.category)}</category>
     </item>`
     )
@@ -45,7 +51,7 @@ ${items}
 </rss>`;
 }
 
-function buildJsonFeed() {
+function buildJsonFeed(stories: Story[]) {
   return {
     version: 'https://jsonfeed.org/version/1.1',
     title: 'The Breakdown',
@@ -55,31 +61,35 @@ function buildJsonFeed() {
     language: 'en-IN',
     icon: 'https://thebreakdown.in/images/og-home.jpg',
     authors: [{ name: 'The Breakdown', url: 'https://thebreakdown.in/about' }],
-    items: getPublicStories({ pageSize: 100 })
-      .data.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-      .map((story) => ({
-        id: `https://thebreakdown.in/story/${story.slug}`,
-        url: `https://thebreakdown.in/story/${story.slug}`,
-        title: story.headline,
-        summary: story.summary,
-        date_published: story.publishedAt,
-        authors: [{ name: story.author.name }],
-        tags: [story.category],
-      })),
+    items: stories.map((story) => ({
+      id: `https://thebreakdown.in/story/${story.slug}`,
+      url: `https://thebreakdown.in/story/${story.slug}`,
+      title: story.headline,
+      summary: story.summary,
+      date_published: story.publishedAt,
+      authors: [{ name: getAuthorName(story) }],
+      tags: [story.category],
+    })),
   };
 }
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const format = searchParams.get('format') || 'rss';
 
+  const services = bootstrapServices({ publicOnly: true });
+  const { data: stories } = await services.stories.getPublicStories({ pageSize: 100 });
+  const sortedStories = [...stories].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+
   if (format === 'json') {
-    return NextResponse.json(buildJsonFeed(), {
+    return NextResponse.json(buildJsonFeed(sortedStories), {
       headers: { 'Content-Type': 'application/feed+json' },
     });
   }
 
-  return new NextResponse(buildRssFeed(), {
+  return new NextResponse(buildRssFeed(sortedStories), {
     headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' },
   });
 }

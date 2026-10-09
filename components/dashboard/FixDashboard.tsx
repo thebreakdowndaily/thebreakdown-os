@@ -2,15 +2,35 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { getFixes } from '@/utils/data-layer/store';
+
+export interface SerializedFixAction {
+  priority: string;
+}
+
+export interface SerializedFix {
+  slug: string;
+  evidenceScore: number;
+  publishedAt: string;
+  readingTime: number;
+  headline: string;
+  summary: string;
+  metricsToTrack: unknown[];
+  recommendedActions: SerializedFixAction[];
+  citizenActions: unknown[];
+  governmentActions: unknown[];
+  stakeholders: unknown[];
+}
+
+export interface FixDashboardProps {
+  fixes?: SerializedFix[];
+}
 
 const priorityColors: Record<string, string> = {
   critical: '#ef4444', high: '#f59e0b', medium: '#3b82f6', low: '#6b7280',
 };
 
-export default function FixDashboard() {
-  // In a real app this would use live data via API/SWR
-  const fixes = getFixes({ pageSize: 50 });
+export default function FixDashboard({ fixes: propFixes = [] }: FixDashboardProps = {}) {
+  const fixes = { data: propFixes };
   const [sortBy, setSortBy] = useState<'score' | 'date' | 'priority'>('score');
 
   const totalMetrics = fixes.data.reduce((sum, f) => sum + f.metricsToTrack.length, 0);

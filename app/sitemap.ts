@@ -1,34 +1,42 @@
 import type { MetadataRoute } from 'next';
-import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
+import { bootstrapServices } from '@/lib/bootstrap';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
+  const services = bootstrapServices();
 
-  const stories = getPublicStories({ pageSize: 100 }).data.map((s) => ({
+  const [storiesRes, entitiesRes, topicsRes, fixesRes] = await Promise.all([
+    services.stories.getPublicStories({ pageSize: 100 }),
+    services.entities.getEntities({ pageSize: 100 }),
+    services.topics.getTopics({ pageSize: 100 }),
+    services.fixes.getFixes({ pageSize: 100 }),
+  ]);
+
+  const stories = storiesRes.data.map((s) => ({
     url: `${siteUrl}/story/${s.slug}`,
     lastModified: new Date(s.updatedAt || s.publishedAt),
     changeFrequency: 'daily' as const,
     priority: 0.9,
   }));
 
-  const entities = getEntities({ pageSize: 100 }).data.map((e) => ({
+  const entities = entitiesRes.data.map((e) => ({
     url: `${siteUrl}/entity/${e.slug}`,
-    lastModified: new Date(e.updatedAt),
+    lastModified: new Date(e.updatedAt || e.createdAt),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
 
-  const topics = getTopics({ pageSize: 100 }).data.map((t) => ({
+  const topics = topicsRes.data.map((t) => ({
     url: `${siteUrl}/topic/${t.slug}`,
-    lastModified: new Date(t.updatedAt),
+    lastModified: new Date(t.updatedAt || t.createdAt),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
-  const fixes = getFixes({ pageSize: 100 }).data.map((f) => ({
+  const fixes = fixesRes.data.map((f) => ({
     url: `${siteUrl}/fix/${f.slug}`,
-    lastModified: new Date(f.updatedAt),
+    lastModified: new Date(f.updatedAt || f.publishedAt),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));

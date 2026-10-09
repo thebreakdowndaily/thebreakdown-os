@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { captureEvent } from '@/lib/analytics/capture';
 import type { VisibleStoryExperience } from '@/lib/story/reading-mode-policy';
-import type { Chapter } from '@/types/canonical';
+import type { Chapter, Fix } from '@/types/canonical';
 import type { ChapterGraph } from '@/lib/knowledge/knowledge-graph';
 import { StoryHeroCanonical } from '@/components/story/StoryHeroCanonical';
 import { StoryOrientation } from '@/components/story/StoryOrientation';
@@ -12,7 +12,8 @@ import { StoryResearchAppendix } from '@/components/story/StoryResearchAppendix'
 import { BlockRenderer } from '@/components/story/blocks/registry';
 import NextExploration from '@/components/story/NextExploration';
 import NextBestUnderstanding from '@/components/story/NextBestUnderstanding';
-import { resolveNextBestUnderstanding } from '@/lib/comprehension/next-best-understanding';
+import { MobileStoryContext } from '@/components/story/MobileStoryContext';
+import { resolveNextBestUnderstanding, type NextBestUnderstandingPlan } from '@/lib/comprehension/next-best-understanding';
 import ExploreConnections from '@/components/story/ExploreConnections';
 import { StoryProgress, StoryProgressBar } from '@/components/rxs/StoryProgress';
 import { ReadingRegion } from '@/components/rxs/regions/ReadingRegion';
@@ -36,6 +37,8 @@ import CorrectionNoticeBanner from '@/components/story/CorrectionNoticeBanner';
 interface StoryShellProps {
   visibleExperience?: VisibleStoryExperience;
   publishedCorrections?: PublishedCorrection[];
+  nextBestPlan?: NextBestUnderstandingPlan;
+  relatedFixes?: Fix[];
   // Legacy chapter support props
   chapter?: Chapter;
   collectionSlug?: string;
@@ -56,6 +59,8 @@ interface StoryShellProps {
 export function StoryShell({
   visibleExperience,
   publishedCorrections,
+  nextBestPlan: propNextBestPlan,
+  relatedFixes: propRelatedFixes,
   chapter,
   collectionSlug,
   volumeSlug,
@@ -171,7 +176,7 @@ export function StoryShell({
     }));
     const matchingTrackers = getTrackersForStory(storySlug);
     const relatedTracker = matchingTrackers.length > 0 ? matchingTrackers[0] : undefined;
-    const nextBestPlan = resolveNextBestUnderstanding(storySlug);
+    const nextBestPlan = propNextBestPlan || resolveNextBestUnderstanding(storySlug);
     const prereqStep = nextBestPlan.steps.find((s) => s.type === 'prerequisite');
 
     return (
@@ -362,7 +367,7 @@ export function StoryShell({
 
                   {/* Timeline (render standalone only if not already rendered inline in narrative) */}
                   {showTimeline && !hasInlineTimeline && timeline && timeline.events.length > 0 && (
-                    <section id="timeline" className="my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-6">
+                    <section id="timeline" className="hidden lg:block my-12 p-6 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 space-y-6">
                       <h3 className="text-lg font-bold text-white flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
                         Relevant Chronology & Timeline
@@ -392,6 +397,7 @@ export function StoryShell({
                   <div id="continue-exploring" className="my-12 pt-8 border-t border-neutral-800">
                       <NextExploration
                         storySlug={storySlug}
+                        relatedFixes={propRelatedFixes}
                         stories={relatedStories?.map((rs) => ({
                           id: rs.slug,
                           slug: rs.slug,
@@ -474,6 +480,8 @@ export function StoryShell({
                   )}
                 </>
               )}
+              
+              <MobileStoryContext timeline={timeline} keyNumbers={orientation?.keyNumbers} />
             </article>
           </div>
         </main>

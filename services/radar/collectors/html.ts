@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { RadarCollector, sanitizeHtml } from './interface';
 import { RadarSourceDefinition, CollectorResult, RawArtifact, CollectorConfig, DEFAULT_COLLECTOR_CONFIG } from '../types';
 import { isSafeExternalUrl } from './security';
+import { extractHtmlTables } from '../tables/html-extractor';
 
 export class HtmlCollector implements RadarCollector {
   readonly type = 'html';
@@ -126,6 +127,15 @@ export class HtmlCollector implements RadarCollector {
       const htmlContent = new TextDecoder('utf-8').decode(combined);
       
       const sanitizedHtml = sanitizeHtml(htmlContent);
+      const rawSha256 = createHash('sha256').update(combined).digest('hex');
+
+      // Phase 4B-3B: Extract structured tables BEFORE HTML flattening
+      const tables = extractHtmlTables(sanitizedHtml, {
+        archiveId: rawSha256,
+        sourceId: source.id,
+        sourceUrl: finalResponse.url,
+      });
+
       const textContent = sanitizedHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       const normalizedText = textContent.normalize('NFKC');
       
@@ -175,9 +185,13 @@ export class HtmlCollector implements RadarCollector {
         content: sanitizedHtml,
         contentHash,
         contentLength: normalizedText.length,
+        rawPayload: Buffer.from(combined),
+        rawSha256,
+        mimeType: contentType.split(';')[0].trim() || 'text/html',
         metadata: {
           allLinks: uniqueLinks.length > 100 ? uniqueLinks.slice(0, 100) : uniqueLinks,
-          documentLinks
+          documentLinks,
+          tables: tables.length > 0 ? tables : undefined,
         }
       });
 

@@ -48,7 +48,10 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
     
     if (image) {
       try {
-        getServices().media.saveMediaItem(image);
+        const mediaService = getServices().media;
+        if (mediaService?.saveMediaItem) {
+          Promise.resolve(mediaService.saveMediaItem(image)).catch(() => {});
+        }
       } catch {
         // Services may not be initialized in test or offline harness
       }

@@ -6,7 +6,7 @@ import type { CMSStory } from '@/utils/cms-data';
 import type { Story, StoryBlock } from '@/types/canonical';
 import { getCurrentPrincipal } from '@/features/auth/principal';
 import { can } from '@/features/auth/policy';
-import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
+import { evaluatePublicationContract, evaluatePublicationContractAsync, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 
 export async function saveStoryAction(cmsStory: CMSStory) {
   const principal = await getCurrentPrincipal();
@@ -59,7 +59,7 @@ export async function saveStoryAction(cmsStory: CMSStory) {
       };
     }
 
-    const decision = evaluatePublicationContract(existing, updatedStory, principal);
+    const decision = await evaluatePublicationContractAsync(existing, updatedStory, principal);
     if (!decision.allowed) {
       return {
         success: false,
@@ -68,7 +68,7 @@ export async function saveStoryAction(cmsStory: CMSStory) {
       };
     }
 
-    await services.stories.saveStory(decision.updatedStory!);
+    await services.stories.saveStory(decision.updatedStory!, { publicationToken: decision.publicationToken });
     executePostPublicationEffects(decision.updatedStory!, principal, decision.gateResult);
 
     revalidateTag('stories');

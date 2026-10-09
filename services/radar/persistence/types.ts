@@ -37,6 +37,8 @@ export interface RadarPersistenceRepository {
 
   // Latency Records
   recordLatency(record: RadarLatencyRecord): Promise<void>;
+  getLatencyRecord(clusterId: string): Promise<RadarLatencyRecord | null>;
+  getLatencyRecords(): Promise<RadarLatencyRecord[]>;
 
   // Distributed Concurrency Lock
   acquireLock(lockKey: string, ownerId: string, ttlMs: number): Promise<boolean>;

@@ -31,7 +31,8 @@ import type {
   StoryCluster,
 } from '@/types/newsroom-intelligence';
 import { newsroomIntelligenceCore, NewsroomIntelligenceCore } from '@/services/intelligence/newsroom';
-import { ChangeDetectionEngine } from './change-detection';
+import { ChangeDetectionEngine, resolveDocumentChangeState, detectDocumentMutationMarkers } from './change-detection';
+import type { EditorialTask } from '@/types/canonical';
 import { RadarSourceHealthMonitor } from './source-health';
 import { SourceScheduler } from './source-scheduler';
 import { RssCollector } from './collectors/rss';
@@ -48,11 +49,15 @@ import { createHash } from 'node:crypto';
 import { ChangeDetector } from '@/services/lifecycle/change-detector/ChangeDetector';
 import { ImpactAnalyzer } from '@/services/lifecycle/impact-analyzer/ImpactAnalyzer';
 import { globalEditorialQueue } from '@/services/lifecycle/queue/EditorialQueue';
+import { AlertDispatcher, createAlertDispatcher, globalAlertDispatcher } from '@/services/notifications';
+import { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 import type { NormalizedDocument } from '@/services/lifecycle/providers/SourceProvider';
 
 export interface RadarPipelineOptions {
   repository?: RadarPersistenceRepository;
   customCore?: NewsroomIntelligenceCore;
+  alertDispatcher?: AlertDispatcher;
+  evidenceVault?: EvidenceVaultService;
   forceAllSources?: boolean; // Override scheduler (e.g. for testing)
   lockTtlMs?: number;        // Default 120,000ms (2 minutes)
 }
@@ -68,6 +73,8 @@ export class RadarPipeline {
   private repository: RadarPersistenceRepository;
   private lifecycleChangeDetector = new ChangeDetector();
   private lifecycleImpactAnalyzer = new ImpactAnalyzer();
+  private alertDispatcher: AlertDispatcher;
+  private evidenceVault?: EvidenceVaultService;
   private isInitialized = false;
 
   constructor(
@@ -78,6 +85,15 @@ export class RadarPipeline {
     this.core = options?.customCore || newsroomIntelligenceCore;
     this.changeDetection = new ChangeDetectionEngine(this.repository);
     this.healthMonitor = new RadarSourceHealthMonitor(this.repository);
+    this.alertDispatcher = options?.alertDispatcher || createAlertDispatcher();
+    this.evidenceVault = options?.evidenceVault;
+  }
+
+  /**
+   * Returns the pipeline's alert dispatcher instance.
+   */
+  public getAlertDispatcher(): AlertDispatcher {
+    return this.alertDispatcher;
   }
 
   /**
@@ -200,13 +216,32 @@ export class RadarPipeline {
             this.healthMonitor.recordFailure(
               source.id,
               result.httpStatus || 500,
-              result.errors.join('; ')
+              result.errors.join('; '),
+              undefined,
+              source
+            );
+            continue;
+          }
+
+          if (result.artifacts.length === 0) {
+            // Successful HTTP connection but zero artifacts extracted (empty feed or broken selector)
+            successful++;
+            this.healthMonitor.recordEmptyFetch(
+              source.id,
+              fetchDurationMs,
+              source.pollIntervalMinutes,
+              source
             );
             continue;
           }
 
           successful++;
-          this.healthMonitor.recordSuccess(source.id, fetchDurationMs, source.pollIntervalMinutes);
+          this.healthMonitor.recordSuccess(
+            source.id,
+            fetchDurationMs,
+            source.pollIntervalMinutes,
+            result.artifacts.length
+          );
 
           for (const artifact of result.artifacts) {
             const changeResult = this.changeDetection.detect(artifact);
@@ -227,6 +262,30 @@ export class RadarPipeline {
             const geoNodes = resolvedGeo ? getGeoHierarchy(resolvedGeo.id) : [];
             const geoSpread = geoNodes.map((g) => g.id);
 
+            let impactTasks: EditorialTask[] = [];
+
+            // Detect legal / document mutation markers (corrigendum, amendment, withdrawal)
+            const mutationMarkers = detectDocumentMutationMarkers(combinedText);
+            const mergedMetadata = {
+              ...artifact.metadata,
+              isCorrigendum: Boolean(artifact.metadata?.isCorrigendum || mutationMarkers.isCorrigendum),
+              isAmendment: Boolean(artifact.metadata?.isAmendment || mutationMarkers.isAmendment),
+              isWithdrawn: Boolean(artifact.metadata?.isWithdrawn || mutationMarkers.isWithdrawn),
+            };
+
+            const changeState = resolveDocumentChangeState(
+              changeResult.changeType,
+              mergedMetadata,
+              result.httpStatus
+            );
+
+            // Find immediate prior observation for this document if available
+            const priorObservation = this.core.getObservations().find(
+              (o) =>
+                (o.canonicalUrl && o.canonicalUrl === artifact.url) ||
+                (changeResult.previousHash && o.contentHash === changeResult.previousHash)
+            );
+
             if (changeResult.changeType === 'new') {
               newArtifacts++;
             } else if (changeResult.changeType === 'changed') {
@@ -235,11 +294,11 @@ export class RadarPipeline {
                 const oldDoc: NormalizedDocument = {
                   id: `doc-${source.id}-prev`,
                   sourceId: source.id,
-                  title: source.name,
-                  content: '',
-                  claims: [],
-                  entities: entityIds,
-                  publishedAt: artifact.publishedAt || artifact.retrievedAt,
+                  title: priorObservation?.title || source.name,
+                  content: priorObservation?.snippet || '',
+                  claims: priorObservation?.snippet ? [{ text: priorObservation.snippet }] : [],
+                  entities: priorObservation?.entities || entityIds,
+                  publishedAt: priorObservation?.publicationTimestamp || artifact.publishedAt || artifact.retrievedAt,
                   url: artifact.url,
                 };
                 const newDoc: NormalizedDocument = {
@@ -254,8 +313,8 @@ export class RadarPipeline {
                 };
                 const diff = await this.lifecycleChangeDetector.compare(oldDoc, newDoc);
                 if (diff.hasChanges) {
-                  const tasks = await this.lifecycleImpactAnalyzer.analyze(diff);
-                  for (const t of tasks) {
+                  impactTasks = await this.lifecycleImpactAnalyzer.analyze(diff);
+                  for (const t of impactTasks) {
                     globalEditorialQueue.enqueue(t);
                   }
                 }
@@ -264,8 +323,30 @@ export class RadarPipeline {
               }
             }
 
-            // Build canonical NewsroomObservation
+            // Build canonical NewsroomObservation preserving full mutation lineage
             const obsId = `obs-radar-${createHash('sha256').update(artifact.url + artifact.contentHash).digest('hex').substring(0, 16)}`;
+
+            // Phase 4B-2B & Phase 4B-2E: Preserve raw artifact in Evidence Vault (fail-safe)
+            let archiveId: string | undefined;
+            let archivalState: 'staged' | 'archive_failed' = 'staged';
+            if (this.evidenceVault) {
+              try {
+                const archiveRecord = await this.evidenceVault.archiveArtifact(artifact, {
+                  sourceRevisionId: `rev-${obsId}`,
+                  observationId: obsId,
+                  captureProvenance: {
+                    changeType: changeState,
+                    detectedAt: changeResult.detectedAt,
+                  },
+                });
+                archiveId = archiveRecord.id;
+                archivalState = 'staged';
+              } catch (vaultErr) {
+                console.error('[RadarPipeline] Evidence Vault preservation notice (fail-safe):', vaultErr);
+                archivalState = 'archive_failed';
+              }
+            }
+
             const observation: NewsroomObservation = {
               id: obsId,
               sourceId: source.id,
@@ -277,8 +358,27 @@ export class RadarPipeline {
               entities: entityIds,
               isPrimarySource: source.primarySource,
               duplicateState: 'unique',
+              duplicateOfId: priorObservation?.id,
               ingestionTimestamp: artifact.retrievedAt,
               publicationTimestamp: artifact.publishedAt || artifact.retrievedAt,
+              archiveId,
+              archivalState,
+              metadata: {
+                ...mergedMetadata,
+                changeType: changeState,
+                previousHash: changeResult.previousHash,
+                newContentHash: artifact.contentHash,
+                detectedAt: changeResult.detectedAt,
+                previousObservationId: priorObservation?.id,
+                previousRetrievalTimestamp: priorObservation?.ingestionTimestamp,
+                newRetrievalTimestamp: artifact.retrievedAt,
+                mutationId: `mut-${obsId}`,
+                archiveId,
+                impactTaskIds: impactTasks.map((t) => t.id),
+                diffSummary: impactTasks.map((t) => t.evidence?.diffSummary).filter(Boolean).join('; '),
+                affectedStories: Array.from(new Set(impactTasks.flatMap((t) => t.affectedContent?.stories || []))),
+                isMutation: changeResult.changeType === 'changed',
+              },
             };
 
             this.core.ingestObservation(observation);
@@ -295,21 +395,32 @@ export class RadarPipeline {
               },
             ]);
 
-            const clusterId = `cluster-radar-${obsId}`;
+            // Reconcile with existing cluster if prior observation was already clustered
+            const existingCluster = priorObservation
+              ? this.core.getClusters().find((c) => c.observationIds.includes(priorObservation.id))
+              : undefined;
+
+            const clusterId = existingCluster ? existingCluster.id : `cluster-radar-${obsId}`;
+            const clusterObsIds = existingCluster
+              ? (existingCluster.observationIds.includes(obsId)
+                  ? existingCluster.observationIds
+                  : [...existingCluster.observationIds, obsId])
+              : [obsId];
+
             const cluster: StoryCluster = {
               id: clusterId,
-              title: artifact.title || source.name,
+              title: artifact.title || existingCluster?.title || source.name,
               summary: artifact.content.substring(0, 500),
-              firstDetectedAt: artifact.retrievedAt,
+              firstDetectedAt: existingCluster?.firstDetectedAt || artifact.retrievedAt,
               lastUpdatedAt: new Date().toISOString(),
-              observationIds: [obsId],
-              sourceIds: [source.id],
-              claimIds: [],
-              entities: entityIds,
-              geographicSpread: geoSpread,
+              observationIds: clusterObsIds,
+              sourceIds: Array.from(new Set([...(existingCluster?.sourceIds || []), source.id])),
+              claimIds: existingCluster?.claimIds || [],
+              entities: Array.from(new Set([...(existingCluster?.entities || []), ...entityIds])),
+              geographicSpread: Array.from(new Set([...(existingCluster?.geographicSpread || []), ...geoSpread])),
               status: 'active',
-              primarySourceCount: corroboration.primarySourceCount,
-              independentSourceCount: corroboration.independentSourceCount,
+              primarySourceCount: Math.max(existingCluster?.primarySourceCount || 0, corroboration.primarySourceCount),
+              independentSourceCount: Math.max(existingCluster?.independentSourceCount || 0, corroboration.independentSourceCount),
             };
 
             this.core.upsertCluster(cluster);
@@ -319,7 +430,7 @@ export class RadarPipeline {
             let detectionLatencyMs: number | undefined;
             if (artifact.publishedAt) {
               const pubMs = new Date(artifact.publishedAt).getTime();
-              const detMs = new Date(artifact.retrievedAt).getTime();
+              const detMs = new Date(cluster.firstDetectedAt).getTime();
               if (!isNaN(pubMs) && !isNaN(detMs) && detMs >= pubMs) {
                 detectionLatencyMs = detMs - pubMs;
                 latencyRecords.push(detectionLatencyMs);
@@ -330,10 +441,33 @@ export class RadarPipeline {
               clusterId,
               sourcePublishedAt: artifact.publishedAt,
               firstSeenAt: artifact.retrievedAt,
-              firstDetectedAt: artifact.retrievedAt,
+              firstDetectedAt: cluster.firstDetectedAt,
               detectionLatencyMs,
             };
             await this.repository.recordLatency(latencyRecord);
+
+            // If this is a document mutation, also record a discrete revision latency record
+            if (changeResult.changeType === 'changed') {
+              const revNum = ((priorObservation?.metadata?.revisionNumber as number) || 1) + 1;
+              const mutationClusterId = `${clusterId}:rev:${revNum}`;
+              let mutationDetLatencyMs: number | undefined;
+              if (artifact.publishedAt) {
+                const pubMs = new Date(artifact.publishedAt).getTime();
+                const detMs = new Date(artifact.retrievedAt).getTime();
+                if (!isNaN(pubMs) && !isNaN(detMs) && detMs >= pubMs) {
+                  mutationDetLatencyMs = detMs - pubMs;
+                }
+              }
+
+              const mutationLatencyRecord: RadarLatencyRecord = {
+                clusterId: mutationClusterId,
+                sourcePublishedAt: artifact.publishedAt,
+                firstSeenAt: artifact.retrievedAt,
+                firstDetectedAt: artifact.retrievedAt,
+                detectionLatencyMs: mutationDetLatencyMs,
+              };
+              await this.repository.recordLatency(mutationLatencyRecord);
+            }
           }
         } catch (err) {
           failed++;
@@ -350,6 +484,19 @@ export class RadarPipeline {
         this.changeDetection.flush(),
         this.healthMonitor.flush(),
       ]);
+
+      // Phase 4B-1: Outbound notification dispatch (failure-isolated)
+      if (this.alertDispatcher) {
+        try {
+          await this.alertDispatcher.dispatchPipelineAlerts(
+            this.healthMonitor,
+            this.core.getSignals()
+          );
+        } catch (err) {
+          // Failure isolation: notification delivery failure must NEVER fail the radar polling cycle
+          console.error('[RadarPipeline] Outbound notification failure (isolated):', err instanceof Error ? err.message : String(err));
+        }
+      }
 
       const cycleDurationMs = Date.now() - cycleStart;
       const sortedLatency = [...latencyRecords].sort((a, b) => a - b);
@@ -399,6 +546,10 @@ export class RadarPipeline {
 
   public getHealthMonitor(): RadarSourceHealthMonitor {
     return this.healthMonitor;
+  }
+
+  public getSourceAlerts(activeOnly = true) {
+    return this.healthMonitor.getAlerts(activeOnly);
   }
 
   public getChangeDetection(): ChangeDetectionEngine {

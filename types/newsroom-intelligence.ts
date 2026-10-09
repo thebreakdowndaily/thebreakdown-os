@@ -30,6 +30,8 @@ export interface NewsroomObservation {
   duplicateState: 'unique' | 'exact_duplicate' | 'near_duplicate';
   duplicateOfId?: string;
   entities: string[];
+  archiveId?: string;
+  archivalState?: 'pending' | 'staged' | 'archive_failed' | 'corrupted';
   metadata?: Record<string, unknown>;
 }
 
@@ -64,6 +66,7 @@ export interface NewsroomExtractedClaim {
   epistemicStatus: NewsroomClaimEpistemicStatus;
   confidence: number; // 0.0 - 1.0
   verificationState: NewsroomClaimVerificationState;
+  isLegacy?: boolean;
   contradictingClaimIds?: string[];
   supportingEvidenceIds?: string[];
 }
@@ -377,6 +380,7 @@ export interface NewsroomAuditLogRecord {
   clusterId?: string;
   actorId: string;
   actorName: string;
+  actorRole?: string;
   action: NewsroomTriageAction | 'ALERT_ACK' | 'SYSTEM_STATE_TRANSITION';
   previousState?: string;
   newState?: string;

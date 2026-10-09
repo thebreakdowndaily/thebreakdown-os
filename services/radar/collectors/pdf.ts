@@ -97,6 +97,8 @@ export class PdfCollector implements RadarCollector {
       const parsed = parsePdfBuffer(pdfBuffer);
       const contentHash = createHash('sha256').update(parsed.normalizedText || pdfBuffer).digest('hex');
 
+      const rawSha256 = createHash('sha256').update(pdfBuffer).digest('hex');
+
       result.artifacts.push({
         sourceId: source.id,
         url: response.url || source.url,
@@ -105,6 +107,9 @@ export class PdfCollector implements RadarCollector {
         content: parsed.normalizedText,
         contentHash,
         contentLength: parsed.normalizedText.length,
+        rawPayload: pdfBuffer,
+        rawSha256,
+        mimeType: 'application/pdf',
         metadata: {
           isPdf: true,
           pdfVersion: parsed.pdfVersion,

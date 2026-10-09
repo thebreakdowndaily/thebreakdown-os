@@ -14,6 +14,7 @@ import type {
   RadarPipelineRunRecord,
 } from '../types';
 import type { RadarPersistenceRepository } from './types';
+import { mergeLatencyRecord } from '../latency-tracker';
 
 export const DEFAULT_RADAR_STATE_FILE = path.resolve(process.cwd(), '.radar-state.json');
 
@@ -112,11 +113,30 @@ export class FileRadarRepository implements RadarPersistenceRepository {
 
   async recordLatency(record: RadarLatencyRecord): Promise<void> {
     const state = await this.readState();
-    state.latencyRecords.push({ ...record });
+    const existingIndex = state.latencyRecords.findIndex((r) => r.clusterId === record.clusterId);
+    const existing = existingIndex >= 0 ? state.latencyRecords[existingIndex] : null;
+    const merged = mergeLatencyRecord(existing, record);
+
+    if (existingIndex >= 0) {
+      state.latencyRecords[existingIndex] = merged;
+    } else {
+      state.latencyRecords.push(merged);
+    }
     if (state.latencyRecords.length > 500) {
       state.latencyRecords = state.latencyRecords.slice(-500);
     }
     await this.writeState(state);
+  }
+
+  async getLatencyRecord(clusterId: string): Promise<RadarLatencyRecord | null> {
+    const state = await this.readState();
+    const record = state.latencyRecords.find((r) => r.clusterId === clusterId);
+    return record ? { ...record } : null;
+  }
+
+  async getLatencyRecords(): Promise<RadarLatencyRecord[]> {
+    const state = await this.readState();
+    return [...state.latencyRecords];
   }
 
   async acquireLock(lockKey: string, ownerId: string, ttlMs: number): Promise<boolean> {

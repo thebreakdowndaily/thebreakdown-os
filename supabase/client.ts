@@ -121,6 +121,13 @@ export function getServiceClient(): SupabaseClient<TypedDatabase> {
 }
 
 /**
+ * Injects a service client instance for testing or server initialization.
+ */
+export function setServiceClient(client: SupabaseClient<TypedDatabase> | null): void {
+  adminClient = client;
+}
+
+/**
  * Standard data-access client.
  * Enforces PostgreSQL Row-Level Security (RLS) by routing to user/anon scope.
  * Silent escalation to service_role is permanently eliminated.

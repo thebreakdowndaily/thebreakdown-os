@@ -36,6 +36,7 @@ export interface PublicationContext {
   publicationStatus?: PublicationStatus;
   publishedAt?: string;
   scheduledAt?: string;
+  isTestArtifact?: boolean;
 }
 
 /**
@@ -43,6 +44,7 @@ export interface PublicationContext {
  *
  * Fail-closed rules:
  *   missing publicationStatus → false
+ *   isTestArtifact === true → false (quarantined test artifact)
  *   draft / review / archived → false
  *   published + valid past publishedAt → true
  *   published + future publishedAt → false
@@ -53,6 +55,8 @@ export function isPubliclyPublished(
   ctx: PublicationContext,
   now: Date = new Date(),
 ): boolean {
+  if (ctx.isTestArtifact === true) return false;
+
   const ps = ctx.publicationStatus;
 
   if (ps !== 'published') return false;
@@ -99,6 +103,7 @@ export function storyPublicationContext(story: Story): PublicationContext {
   return {
     publicationStatus: (story as Story & { publicationStatus?: PublicationStatus }).publicationStatus,
     publishedAt: story.publishedAt,
+    isTestArtifact: story.isTestArtifact,
   };
 }
 

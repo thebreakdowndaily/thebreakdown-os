@@ -18,9 +18,8 @@
  * - False Connection Safeguards (blocks broad country/generic-tag false edges)
  */
 
-import { getStore } from '@/utils/data-layer/store';
+import type { Story, Fix } from '@/types/canonical';
 import { getEntityById } from '@/utils/data-layer/entity-index';
-import { CANONICAL_FIXTURES } from '@/fixtures/fixes';
 import { getFixesForStory } from '@/lib/fix-helpers';
 
 export type CognitiveRelationshipType =
@@ -399,17 +398,23 @@ function isFalseConnection(sourceSlug: string, step: CognitiveStep, overrideRule
   return false;
 }
 
+export interface NextBestUnderstandingContext {
+  story?: Story;
+  fixes?: Fix[];
+  otherStories?: Story[];
+  entityLookup?: (id: string) => { name?: string; title?: string; slug: string } | undefined;
+}
+
 /**
  * Resolves the deterministic Next Best Understanding plan for a story.
  * Prioritizes curated editorial plans; applies human-in-the-loop overrides;
  * falls back to deterministic graph resolution using primary entities, related topics, and matched policy fixes.
  */
-export function resolveNextBestUnderstanding(storySlug: string): NextBestUnderstandingPlan {
-  const store = getStore();
-  const story = Array.from(store.stories.values()).find(
-    (s) => s.slug === storySlug || s.id === storySlug
-  );
-
+export function resolveNextBestUnderstanding(
+  storySlug: string,
+  context?: NextBestUnderstandingContext
+): NextBestUnderstandingPlan {
+  const story = context?.story;
   const storyTitle = story?.headline || storySlug;
   const override = getEditorialOverride(storySlug);
 
@@ -455,7 +460,9 @@ export function resolveNextBestUnderstanding(storySlug: string): NextBestUnderst
 
   // Vector A: Institutional Actor (Primary Entity)
   if (story?.primaryEntityId) {
-    const entity = getEntityById(story.primaryEntityId);
+    const entity = context?.entityLookup
+      ? context.entityLookup(story.primaryEntityId)
+      : getEntityById(story.primaryEntityId);
     if (entity && entity.slug !== 'india') {
       candidateSteps.push({
         type: 'institutional_actor',
@@ -473,7 +480,7 @@ export function resolveNextBestUnderstanding(storySlug: string): NextBestUnderst
   }
 
   // Vector B: Structural Policy Fix
-  const fixes = getFixesForStory(storySlug, CANONICAL_FIXTURES);
+  const fixes = context?.fixes ? getFixesForStory(storySlug, context.fixes) : [];
   if (fixes.length > 0) {
     const fix = fixes[0];
     candidateSteps.push({
@@ -508,7 +515,7 @@ export function resolveNextBestUnderstanding(storySlug: string): NextBestUnderst
   }
 
   // Vector D: Continuing Exploration
-  const otherStories = Array.from(store.stories.values()).filter(
+  const otherStories = (context?.otherStories || []).filter(
     (s) => s.slug !== storySlug && (s.category === story?.category || s.relatedTopicIds?.some((t) => story?.relatedTopicIds?.includes(t)))
   );
   if (otherStories.length > 0) {

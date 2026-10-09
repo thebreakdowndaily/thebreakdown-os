@@ -15,6 +15,57 @@ export function computeContentHash(content: string): string {
   return createHash('sha256').update(content).digest('hex');
 }
 
+export type CanonicalDocumentChangeState =
+  | 'NEW'
+  | 'UPDATED'
+  | 'CORRECTED'
+  | 'WITHDRAWN'
+  | 'SUPERSEDED'
+  | 'DUPLICATE'
+  | 'UNKNOWN';
+
+export interface DocumentChangeStateMetadata {
+  isPdf?: boolean;
+  isAmendment?: boolean;
+  isCorrigendum?: boolean;
+  isWithdrawn?: boolean;
+  orderNumber?: string;
+  versionMarker?: string;
+  [key: string]: unknown;
+}
+
+export function detectDocumentMutationMarkers(text: string): {
+  isCorrigendum: boolean;
+  isAmendment: boolean;
+  isWithdrawn: boolean;
+} {
+  const isCorrigendum = /corrigendum|शुद्धिपत्र|errat(?:um|a)/i.test(text);
+  const isAmendment = /amendment|संशोधन|revised\s+order|supersedes|superseded/i.test(text);
+  const isWithdrawn = /withdrawn|recalled|रद्द|वापस\s+लिया/i.test(text);
+  return { isCorrigendum, isAmendment, isWithdrawn };
+}
+
+export function resolveDocumentChangeState(
+  changeType: 'new' | 'changed' | 'unchanged',
+  metadata?: DocumentChangeStateMetadata,
+  httpStatus?: number,
+  duplicateOf?: boolean
+): CanonicalDocumentChangeState {
+  if (duplicateOf || changeType === 'unchanged') return 'DUPLICATE';
+  if (httpStatus === 404 || httpStatus === 410 || metadata?.isWithdrawn) return 'WITHDRAWN';
+  if (changeType === 'new') {
+    if (metadata?.isCorrigendum) return 'CORRECTED';
+    if (metadata?.isAmendment) return 'SUPERSEDED';
+    return 'NEW';
+  }
+  if (changeType === 'changed') {
+    if (metadata?.isCorrigendum) return 'CORRECTED';
+    if (metadata?.isAmendment) return 'SUPERSEDED';
+    return 'UPDATED';
+  }
+  return 'UNKNOWN';
+}
+
 export class ChangeDetectionEngine {
   private fingerprints: Map<string, ContentFingerprint> = new Map();
   private dirtyKeys: Set<string> = new Set();

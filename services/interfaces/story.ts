@@ -4,7 +4,8 @@ export interface StoryService {
   getStories(params?: APIListParams): Promise<APIResponse<Story[]>>;
   getStory(id: string): Promise<Story | undefined>;
   getStoryBySlug(slug: string): Promise<Story | undefined>;
-  saveStory(story: Story): Promise<Story>;
+  saveStory(story: Story, options?: { publicationToken?: string }): Promise<Story>;
+  saveStoryOCC?(story: Story, expectedVersion: number, options?: { publicationToken?: string }): Promise<Story>;
   deleteStory(id: string): Promise<void>;
   publishStory(id: string): Promise<Story | undefined>;
   count(): Promise<number>;

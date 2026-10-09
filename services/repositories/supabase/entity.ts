@@ -20,7 +20,7 @@ export class SupabaseEntityRepository implements RawEntityRepository {
 
   async getEntity(id: string) {
     const { data, error } = await e().select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
     return data ? rowToEntity(data) : undefined;
   }
 
@@ -55,6 +55,13 @@ export class SupabaseEntityRepository implements RawEntityRepository {
 }
 
 function rowToEntity(row: EntityRow): Entity {
+  const rawStats = row.statistics as any;
+  const statistics: import('@/types/canonical').StatItem[] = Array.isArray(rawStats)
+    ? rawStats
+    : (rawStats && typeof rawStats === 'object')
+    ? Object.entries(rawStats).map(([label, value]) => ({ label, value: String(value) }))
+    : [];
+
   return {
     id: row.id,
     slug: row.slug,
@@ -68,7 +75,7 @@ function rowToEntity(row: EntityRow): Entity {
     relatedEntityIds: row.related_entity_ids ?? [],
     relatedStoryIds: row.related_story_ids ?? [],
     relatedTopicIds: row.related_topic_ids ?? [],
-    statistics: (row.statistics as import('@/types/canonical').StatItem[]) ?? [],
+    statistics,
     timeline: (row.timeline as import('@/types/canonical').TimelineEvent[]) ?? [],
     faq: (row.faq as import('@/types/canonical').FAQItem[]) ?? [],
     createdAt: row.created_at,
