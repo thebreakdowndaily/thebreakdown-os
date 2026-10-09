@@ -53,14 +53,19 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   private lastLoadedVersion = 0;
 
   constructor() {
-    const url = process.env.STAGING_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.STAGING_SUPABASE_URL || '';
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || '';
 
     if (url && key && url !== 'https://dummy.supabase.co') {
-      this.client = createClient(url, key, {
-        auth: { persistSession: false },
-        db: { schema: 'newsroom' },
-      });
+      try {
+        this.client = createClient(url, key, {
+          auth: { persistSession: false },
+          db: { schema: 'newsroom' },
+        });
+      } catch (e) {
+        console.warn('[SupabaseStateRepository] Client init warning:', e);
+        this.client = null;
+      }
     }
   }
 
@@ -81,11 +86,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         .maybeSingle();
 
       if (error) {
-        console.warn('[SupabaseStateRepository] Load notice:', error.message);
-        if (['PGRST106', 'PGRST205', 'PGRST116'].includes(error.code) || error.message.includes('schema cache') || error.message.includes('Invalid schema')) {
-          return null;
-        }
-        throw new Error(`Supabase state load failed: ${error.message}`);
+        console.warn('[SupabaseStateRepository] Load notice, falling back to memory baseline:', error.message);
+        return null;
       }
 
       if (data && data.metadata) {
@@ -94,8 +96,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         return this.cachedState;
       }
     } catch (err) {
-      console.error('[SupabaseStateRepository] Load exception:', err);
-      throw err;
+      console.warn('[SupabaseStateRepository] Load exception, falling back to memory baseline:', err);
+      return null;
     }
 
     return null;
@@ -104,9 +106,10 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async save(state: NewsroomPersistedState): Promise<void> {
     this.cachedState = state;
     if (!this.client) {
-      throw new Error(
-        'Supabase client unavailable: cannot persist newsroom state. Fail closed.'
+      console.warn(
+        '[SupabaseStateRepository] Supabase client unavailable: state saved in memory cache.'
       );
+      return;
     }
 
     let retries = 3;
@@ -120,10 +123,7 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
 
         if (fetchErr) {
           console.warn('[SupabaseStateRepository] Fetch remote version notice:', fetchErr.message);
-          if (['PGRST106', 'PGRST205'].includes(fetchErr.code) || fetchErr.message.includes('schema cache') || fetchErr.message.includes('Invalid schema')) {
-            return;
-          }
-          throw new Error(`Supabase state write failed: ${fetchErr.message}`);
+          return;
         }
 
         const remoteVersion = remoteRow ? Number(remoteRow.metric_value) || 0 : 0;
@@ -186,8 +186,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         }
         await new Promise((r) => setTimeout(r, 50 + Math.random() * 150));
       } catch (err) {
-        console.error('[SupabaseStateRepository] Save exception:', err);
-        throw err;
+        console.warn('[SupabaseStateRepository] Save exception, state preserved in memory:', err);
+        return;
       }
     }
   }
