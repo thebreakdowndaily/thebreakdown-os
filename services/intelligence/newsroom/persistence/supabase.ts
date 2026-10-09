@@ -53,8 +53,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   private lastLoadedVersion = 0;
 
   constructor() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+    const url = process.env.STAGING_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || '';
 
     if (url && key && url !== 'https://dummy.supabase.co') {
       this.client = createClient(url, key, {
@@ -67,9 +67,10 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
-      throw new Error(
-        'Supabase client unavailable: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing or invalid. Fail closed.'
+      console.warn(
+        '[SupabaseStateRepository] Supabase client unavailable: falling back to memory baseline.'
       );
+      return null;
     }
 
     try {
