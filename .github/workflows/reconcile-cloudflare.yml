@@ -1,0 +1,67 @@
+name: Reconcile Cloudflare Integration
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Read-only audit mode (default: true). Must explicitly uncheck for mutation.'
+        required: true
+        type: boolean
+        default: true
+      target_project:
+        description: 'Project name to decommission (must be in DECOMMISSION_ALLOWLIST)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  audit-cloudflare:
+    name: 1. Read-Only Cloudflare Audit (Dry-Run)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Safe Cloudflare Audit
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DRY_RUN: 'true'
+          TARGET_PROJECT: ${{ github.event.inputs.target_project }}
+        run: npx tsx scripts/reconcile-cloudflare-integration.ts
+
+  decommission-target:
+    name: 2. Decommission Target Project (Environment Gated)
+    needs: audit-cloudflare
+    if: ${{ github.event.inputs.dry_run == false || github.event.inputs.dry_run == 'false' }}
+    environment: production-operations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Execute Authenticated Decommissioning
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DRY_RUN: 'false'
+          TARGET_PROJECT: ${{ github.event.inputs.target_project }}
+        run: npx tsx scripts/reconcile-cloudflare-integration.ts

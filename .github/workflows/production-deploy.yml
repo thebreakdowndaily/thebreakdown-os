@@ -48,11 +48,15 @@ jobs:
           npx tsx tests/production-readiness.test.ts
           npx tsx tests/data-integrity.test.ts
 
+      - name: Release-Control Safety & Deployment Health Suites
+        run: |
+          npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts
+
       - name: Next.js Production Build Verification
         run: npm run build
 
   deploy-staging:
-    name: 2. Deploy to Staging Environment
+    name: 2. Verify Staging Deployment Health
     needs: validate-and-test
     if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
@@ -60,18 +64,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js (v22)
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Execute Staging Deployment
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Execute Live Staging Edge Verification
+        env:
+          DEPLOYMENT_URL: ${{ secrets.STAGING_DEPLOYMENT_URL || 'https://thebreakdown-os-git-staging-bholebababhakti108-makers-projects.vercel.app' }}
+          EXPECTED_COMMIT_SHA: ${{ github.sha }}
         run: |
-          echo "Deploying to Staging Environment..."
-          echo "Environment validation complete."
+          echo "Verifying Staging Deployment Health at $DEPLOYMENT_URL..."
+          npx tsx scripts/verify-deployment-health.ts --url "$DEPLOYMENT_URL" --attempts 18 --interval 10
 
   deploy-production:
-    name: 3. Deploy to Production (Zero-Downtime & Automatic Rollback)
+    name: 3. Verify Production Edge Health & Canary Gate
     needs: validate-and-test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -79,16 +90,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js (v22)
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Execute Deterministic Production Deployment
-        run: |
-          echo "Deploying to Production Edge..."
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Post-Deployment Health Check & Automatic Rollback Verification
+      - name: Execute Live Production Edge Verification
+        env:
+          DEPLOYMENT_URL: 'https://thebreakdown.in'
+          EXPECTED_COMMIT_SHA: ${{ github.sha }}
         run: |
-          echo "Verifying /api/health endpoint..."
-          echo "Health check healthy. Production deployment confirmed."
+          echo "Verifying Production Deployment Health at $DEPLOYMENT_URL..."
+          npx tsx scripts/verify-deployment-health.ts --url "$DEPLOYMENT_URL" --commit "$EXPECTED_COMMIT_SHA" --attempts 24 --interval 10
+
+      - name: Run Production Release Integrity Smoke Suite
+        env:
+          PROD_SMOKE_BASE: 'https://thebreakdown.in'
+        run: |
+          echo "Running production smoke tests against live edge..."
+          npx tsx tests/production-deployment.test.ts
