@@ -78,7 +78,7 @@ test.describe('Newsroom Intelligence Desk — Production Live Deployment Verific
 
     // ── 4. Search and Section Filters ────────────────────────────────────
     console.log('[PROD STEP 4]: Testing search and queue tabs...');
-    const searchInput = page.locator('input[type="search"]');
+    const searchInput = page.locator('input[placeholder*="Search"]');
     if (await searchInput.isVisible()) {
       await searchInput.fill('Cabinet');
       await page.waitForTimeout(500);
@@ -86,16 +86,16 @@ test.describe('Newsroom Intelligence Desk — Production Live Deployment Verific
       await page.waitForTimeout(500);
     }
 
-    // Switch Queue Tabs
-    const fastTrackTab = page.locator('button:has-text("Fast Track")');
-    if (await fastTrackTab.isVisible()) {
-      await fastTrackTab.click();
+    // Switch Canonical Queue Tabs
+    const importantTab = page.locator('#queue-tab-P1_IMPORTANT');
+    if (await importantTab.isVisible()) {
+      await importantTab.click();
       await page.waitForTimeout(500);
     }
 
-    const allSignalsTab = page.locator('button:has-text("All Signals")');
-    if (await allSignalsTab.isVisible()) {
-      await allSignalsTab.click();
+    const verificationTab = page.locator('#queue-tab-NEEDS_VERIFICATION');
+    if (await verificationTab.isVisible()) {
+      await verificationTab.click();
       await page.waitForTimeout(500);
     }
 

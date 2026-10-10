@@ -55,7 +55,7 @@ describe('diagnostic route exposure', () => {
   });
 
   test('health returns operational health and subsystem status', async () => {
-    const res = await healthGet();
+    const res = await healthGet(new NextRequest('https://thebreakdown.in/api/health'));
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.status).toBe('healthy');
