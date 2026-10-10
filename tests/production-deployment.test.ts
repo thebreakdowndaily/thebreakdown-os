@@ -48,11 +48,21 @@ const EXPECTED_LEGACY_ROUTES: ExpectedRoute[] = [
   { path: '/problems', validStatuses: [308, 404], reason: 'legacy route (308 redirect to /fix or legacy 404)' },
 ];
 
+const requestHeaders: Record<string, string> = {
+  'User-Agent': 'TheBreakdown-ProductionSmoke/1.0',
+};
+if (process.env.VERCEL_PROTECTION_BYPASS || process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+  requestHeaders['x-vercel-protection-bypass'] = (
+    process.env.VERCEL_PROTECTION_BYPASS || process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+  )!;
+}
+
 async function statusOf(path: string): Promise<number> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     const res = await fetch(`${BASE}${path}`, {
+      headers: requestHeaders,
       signal: controller.signal,
       redirect: 'manual',
     });
@@ -101,7 +111,12 @@ async function runTests() {
 
   // Sitemap completeness: all four flagship trackers must be present.
   try {
-    const sitemap = await (await fetch(`${BASE}/sitemap.xml`, { signal: AbortSignal.timeout(TIMEOUT_MS) })).text();
+    const sitemap = await (
+      await fetch(`${BASE}/sitemap.xml`, {
+        headers: requestHeaders,
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      })
+    ).text();
     for (const t of ['/trackers/mgnrega', '/trackers/upi', '/trackers/semiconductor', '/trackers/pmfby']) {
       assert(sitemap.includes(`https://thebreakdown.in${t}`), `sitemap contains ${t}`);
     }
@@ -111,7 +126,12 @@ async function runTests() {
 
   // Robots must reference the sitemap and allow public content.
   try {
-    const robots = await (await fetch(`${BASE}/robots.txt`, { signal: AbortSignal.timeout(TIMEOUT_MS) })).text();
+    const robots = await (
+      await fetch(`${BASE}/robots.txt`, {
+        headers: requestHeaders,
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      })
+    ).text();
     assert(robots.includes('Sitemap:'), 'robots.txt references a Sitemap');
     assert(robots.includes('Allow: /trackers'), 'robots.txt allows /trackers');
   } catch (e) {
@@ -120,7 +140,10 @@ async function runTests() {
 
   // Security: HSTS present on homepage.
   try {
-    const res = await fetch(`${BASE}/`, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+    const res = await fetch(`${BASE}/`, {
+      headers: requestHeaders,
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
     const hsts = res.headers.get('strict-transport-security') ?? '';
     assert(hsts.includes('max-age'), 'homepage sends Strict-Transport-Security');
   } catch (e) {
