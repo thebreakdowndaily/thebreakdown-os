@@ -50,6 +50,8 @@ export function createNewsroomStateRepository(options?: {
 }
 
 export type { NewsroomStateRepository, NewsroomPersistedState } from './state';
+export { NewsroomPersistenceError } from './state';
 export { MemoryStateRepository } from './memory';
 export { FileStateRepository } from './file';
 export { SupabaseStateRepository } from './supabase';
+

@@ -140,8 +140,31 @@ export function emptyBeatFatigue(): BeatFatigueSnapshot {
   };
 }
 
+export class NewsroomPersistenceError extends Error {
+  readonly code:
+    | 'PERSISTENCE_FAILED'
+    | 'PERSISTENCE_UNAVAILABLE'
+    | 'PERSISTENCE_CONFLICT'
+    | 'PERSISTENCE_DEGRADED_READONLY';
+
+  constructor(
+    message: string,
+    code:
+      | 'PERSISTENCE_FAILED'
+      | 'PERSISTENCE_UNAVAILABLE'
+      | 'PERSISTENCE_CONFLICT'
+      | 'PERSISTENCE_DEGRADED_READONLY' = 'PERSISTENCE_FAILED'
+  ) {
+    super(message);
+    this.name = 'NewsroomPersistenceError';
+    this.code = code;
+  }
+}
+
 export interface NewsroomStateRepository {
   readonly kind: 'memory' | 'file' | 'supabase';
+  readonly isDegradedReadOnly?: boolean;
   load(): NewsroomPersistedState | null | Promise<NewsroomPersistedState | null>;
   save(state: NewsroomPersistedState): void | Promise<void>;
 }
+

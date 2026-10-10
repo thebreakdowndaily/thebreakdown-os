@@ -179,7 +179,9 @@ module.exports = {
       'services/radar/__tests__/dossier-builder.test.ts',
       'services/radar/__tests__/decision-engine.test.ts',
       'services/radar/__tests__/review-orchestrator.test.ts',
+      'tests/newsroom-persistence-durability.test.ts',
     ],
+
     exclude: ['node_modules/**', 'tests/e2e/**'],
   },
   resolve: {

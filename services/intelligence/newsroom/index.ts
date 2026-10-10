@@ -29,8 +29,13 @@ import { CoverageGapEngine, MonitoredTopicExpectation } from './coverage-gap-eng
 import { EditorialCalibrationService } from './calibration-service';
 import { beatRoutingService } from './beat-routing-service';
 import { NewsroomAuditService } from './audit-service';
-import { NewsroomPersistedState, NewsroomStateRepository } from './persistence/state';
+import {
+  NewsroomPersistedState,
+  NewsroomStateRepository,
+  NewsroomPersistenceError,
+} from './persistence/state';
 import { createNewsroomStateRepository } from './persistence';
+
 import { computeNewsroomScorecard } from './scorecard-service';
 import { loadNewsroomScorecardBaseline } from '@/lib/intelligence/newsroom-scorecard-baseline';
 import type { RadarLatencyRecord } from '@/services/radar/types';
@@ -198,9 +203,16 @@ export class NewsroomIntelligenceCore {
     this.isLoaded = true;
   }
 
-  /** Builds and persists the current authoritative snapshot. */
-  public persist(): void {
-    const state: NewsroomPersistedState = {
+  public isDegradedReadOnly(): boolean {
+    return Boolean(this.persistence.isDegradedReadOnly);
+  }
+
+  public getPersistenceStatus(): 'authoritative' | 'degraded_readonly' {
+    return this.persistence.isDegradedReadOnly ? 'degraded_readonly' : 'authoritative';
+  }
+
+  public buildPersistedState(): NewsroomPersistedState {
+    return {
       version: 1,
       savedAt: new Date().toISOString(),
       observations: Array.from(this.observations.values()),
@@ -218,7 +230,23 @@ export class NewsroomIntelligenceCore {
       sourceReputations: this.workflowService.snapshotReputations(),
       engine: this.alertEngine.snapshotEngine(),
     };
+  }
 
+  /**
+   * Asynchronously commits the current authoritative snapshot to persistence.
+   * Throws if persistence fails or if the repository is in read-only degraded mode.
+   */
+  public async persistAsync(): Promise<void> {
+    const state = this.buildPersistedState();
+    const res = this.persistence.save(state);
+    if (res instanceof Promise) {
+      await res;
+    }
+  }
+
+  /** Builds and persists the current authoritative snapshot (best-effort async). */
+  public persist(): void {
+    const state = this.buildPersistedState();
     const res = this.persistence.save(state);
     if (res instanceof Promise) {
       res.catch((err: unknown) => {
@@ -226,6 +254,7 @@ export class NewsroomIntelligenceCore {
       });
     }
   }
+
 
   // ── Ingestion & Clustering ──────────────────────────────────────────────────
 
@@ -469,7 +498,117 @@ export class NewsroomIntelligenceCore {
     return this.executeAction(payload, userRole);
   }
 
+  /**
+   * Asynchronously executes an editorial action with full transactional durability:
+   * 1. Validates preconditions (RBAC, evidence vault archives).
+   * 2. Snapshots previous signal state and audit count.
+   * 3. Applies the mutation in memory.
+   * 4. Awaits authoritative database commit via persistAsync().
+   * 5. If persistence fails: rolls back the in-memory signal, rolls back the audit log,
+   *    does NOT advance signal version, and rethrows NewsroomPersistenceError.
+   * 6. If persistence succeeds: triggers research bridge & latency metrics and returns updated signal.
+   */
+  public async executeActionAsync(
+    payload: NewsroomActionPayload,
+    userRole?: string
+  ): Promise<NewsroomSignal | null> {
+    if (this.persistence.isDegradedReadOnly) {
+      throw new NewsroomPersistenceError(
+        'Database persistence unavailable: Newsroom is in read-only degraded mode. Editorial mutations cannot be committed.',
+        'PERSISTENCE_DEGRADED_READONLY'
+      );
+    }
+
+    const signal = this.signals.get(payload.signalId);
+    if (!signal) return null;
+
+    if (userRole) {
+      const hasAccess = beatRoutingService.checkUserAccess(
+        { id: payload.actorId, role: userRole },
+        signal
+      );
+      if (!hasAccess) {
+        throw new Error('Access denied to execute action on unauthorized beat.');
+      }
+    }
+
+    // Phase 4B-2E: Evidence Provenance Verification Gate
+    if (payload.action === 'VERIFY') {
+      if (signal.clusterId) {
+        const cluster = this.clusters.get(signal.clusterId);
+        if (cluster && cluster.observationIds && cluster.observationIds.length > 0) {
+          for (const obsId of cluster.observationIds) {
+            const obs = this.observations.get(obsId);
+            if (!obs) continue;
+            if (!obs.archiveId || obs.archivalState === 'archive_failed' || obs.archivalState === 'corrupted') {
+              throw new VerificationPreconditionError(
+                `Cannot verify signal ${signal.id}: Observation ${obs.id} lacks a verified archive artifact.`
+              );
+            }
+            if (this.evidenceVault) {
+              void this.evidenceVault.lockRetention(obs.archiveId, {
+                signalId: signal.id,
+                verifierId: payload.actorId,
+                reason: `Verified by editor ${payload.actorName || payload.actorId}`,
+              }).catch((err) => {
+                console.error('[NewsroomIntelligenceCore] failed to lock evidence retention:', err);
+              });
+            }
+          }
+        }
+      }
+    }
+
+    // Snapshot state for atomic rollback if persistence fails
+    const previousSignal = { ...signal };
+    const auditCountBefore = NewsroomAuditService.getAllRecords().length;
+
+    const updated = this.workflowService.applyAction(signal, payload);
+    this.signals.set(updated.id, updated);
+
+    // Commit to authoritative persistence before declaring success
+    try {
+      await this.persistAsync();
+    } catch (persistErr) {
+      // Transactional rollback: restore prior signal state and discard audit record
+      this.signals.set(signal.id, previousSignal);
+      NewsroomAuditService.rollbackTo(auditCountBefore);
+      console.error('[NewsroomIntelligenceCore] Action persistence failed, rolled back in-memory mutation:', persistErr);
+      throw persistErr;
+    }
+
+    // If human editor explicitly promoted signal to research, trigger the bridge
+    if (payload.action === 'PROMOTE_TO_RESEARCH' && this.researchBridge) {
+      try {
+        void this.researchBridge(updated);
+      } catch (err) {
+        console.error('[NewsroomIntelligenceCore] research bridge promotion error:', err);
+      }
+    }
+
+    // Bridge human verification into radar latency measurement
+    if ((payload.action === 'VERIFY' || payload.action === 'REVIEW') && signal.clusterId) {
+      const isHuman = userRole ? userRole !== 'system' && userRole !== 'crawler' : true;
+      void this.recordVerification(
+        signal.clusterId,
+        { id: payload.actorId, role: userRole || 'editor', isHuman },
+        new Date().toISOString()
+      ).catch((err) => {
+        console.error('[NewsroomIntelligenceCore] failed to record verification latency:', err);
+      });
+    }
+
+    return updated;
+  }
+
   public executeAction(payload: NewsroomActionPayload, userRole?: string): NewsroomSignal | null {
+    if (this.persistence.isDegradedReadOnly) {
+      throw new NewsroomPersistenceError(
+        'Database persistence unavailable: Newsroom is in read-only degraded mode. Editorial mutations cannot be committed.',
+        'PERSISTENCE_DEGRADED_READONLY'
+      );
+    }
+
     const signal = this.signals.get(payload.signalId);
     if (!signal) return null;
 
@@ -537,6 +676,7 @@ export class NewsroomIntelligenceCore {
     this.persist();
     return updated;
   }
+
 
   // ── End-to-End Latency Instrumentation ──────────────────────────────────────
 
@@ -765,6 +905,7 @@ export class NewsroomIntelligenceCore {
 
 export const newsroomIntelligenceCore = NewsroomIntelligenceCore.getInstance();
 
+export { NewsroomPersistenceError } from './persistence/state';
 export { NewsroomDeskService, newsroomDeskService } from './desk-service';
 export type {
   NewsroomDeskItem,
@@ -773,3 +914,4 @@ export type {
   NewsroomDeskSummary,
   NewsroomDeskActionInput,
 } from './desk-service';
+

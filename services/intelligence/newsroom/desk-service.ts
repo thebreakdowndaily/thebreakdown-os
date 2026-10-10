@@ -142,7 +142,10 @@ export interface NewsroomDeskSummary {
   resolvedCount: number;
   activeAlertsCount: number;
   failingSourcesCount: number;
+  persistenceStatus?: 'authoritative' | 'degraded_readonly';
+  isDegradedReadOnly?: boolean;
 }
+
 
 export interface NewsroomDeskActionInput {
   signalId: string;
@@ -534,8 +537,8 @@ export class NewsroomDeskService {
       }
     }
 
-    // Execute via core workflow service (enforces optimistic expectedVersion locking)
-    const updated = this.core.executeAction(
+    // Execute via core workflow service with atomic database persistence
+    const updated = await this.core.executeActionAsync(
       {
         ...payload,
         actorId: userContext.id,
@@ -582,8 +585,11 @@ export class NewsroomDeskService {
       resolvedCount: queue.RESOLVED.length,
       activeAlertsCount: activeAlerts.length,
       failingSourcesCount: failingCount,
+      persistenceStatus: this.core.getPersistenceStatus(),
+      isDegradedReadOnly: this.core.isDegradedReadOnly(),
     };
   }
+
 }
 
 export const newsroomDeskService = new NewsroomDeskService();

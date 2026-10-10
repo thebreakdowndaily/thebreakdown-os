@@ -26,6 +26,8 @@ import {
   NewsroomDeskFilter,
   NewsroomDeskActionInput,
 } from '@/services/intelligence/newsroom/desk-service';
+import { NewsroomPersistenceError } from '@/services/intelligence/newsroom';
+
 import type {
   NewsroomTriageAction,
   NewsroomActionPayload,
@@ -230,16 +232,36 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Action execution failed';
 
-    if (message.includes('Signal not found')) {
-      return NextResponse.json({ error: message }, { status: 404 });
-    }
-    if (message.includes('Version conflict')) {
-      return NextResponse.json({ error: message }, { status: 409 });
-    }
-    if (message.includes('Forbidden') || message.includes('not permitted')) {
-      return NextResponse.json({ error: message }, { status: 403 });
+    if (
+      err instanceof NewsroomPersistenceError ||
+      message.includes('persistence') ||
+      message.includes('Database write') ||
+      message.includes('read-only degraded')
+    ) {
+      return NextResponse.json(
+        {
+          error: `Authoritative persistence failed: ${message}`,
+          code: err instanceof NewsroomPersistenceError ? err.code : 'PERSISTENCE_FAILED',
+        },
+        { status: 503 }
+      );
     }
 
-    return NextResponse.json({ error: message }, { status: 400 });
+    if (message.includes('Signal not found')) {
+      return NextResponse.json({ error: message, code: 'NOT_FOUND' }, { status: 404 });
+    }
+    if (message.includes('Version conflict') || message.includes('concurrency')) {
+      return NextResponse.json({ error: message, code: 'CONFLICT' }, { status: 409 });
+    }
+    if (
+      message.includes('Forbidden') ||
+      message.includes('not permitted') ||
+      message.includes('Access denied')
+    ) {
+      return NextResponse.json({ error: message, code: 'FORBIDDEN' }, { status: 403 });
+    }
+
+    return NextResponse.json({ error: message, code: 'BAD_REQUEST' }, { status: 400 });
   }
+
 }
