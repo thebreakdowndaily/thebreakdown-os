@@ -36,7 +36,7 @@ describe('Deployment Health Verification Suite', () => {
             editorialState: 'operational',
             researchPlatform: 'operational',
           },
-        }), { status: 200 }));
+        }), { status: 200, headers: { 'content-type': 'application/json' } }));
       }
       if (url.endsWith('/newsroom')) {
         return Promise.resolve(new Response(null, {
@@ -80,7 +80,7 @@ describe('Deployment Health Verification Suite', () => {
   it('fails closed when protected route does not redirect to /login', async () => {
     const fetchMock = vi.fn().mockImplementation((url: string) => {
       if (url.includes('/api/health')) {
-        return Promise.resolve(new Response(JSON.stringify({ status: 'healthy' }), { status: 200 }));
+        return Promise.resolve(new Response(JSON.stringify({ status: 'healthy' }), { status: 200, headers: { 'content-type': 'application/json' } }));
       }
       if (url.endsWith('/newsroom')) {
         // Simulating unprotected leak
