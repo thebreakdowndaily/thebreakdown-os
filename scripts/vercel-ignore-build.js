@@ -73,6 +73,12 @@ function isNonProductionFile(file) {
 
 function evaluateBuild() {
   try {
+    // On production release branch (main), always build to ensure the edge deployment matches the exact git revision
+    if (process.env.VERCEL_GIT_COMMIT_REF === 'main' || process.env.VERCEL_ENV === 'production') {
+      console.log('🚀 Production release branch (main): PROCEED WITH BUILD (Exit Code 1).');
+      process.exit(1);
+    }
+
     // Use Vercel's previous/current SHA when available, otherwise compare HEAD~1 HEAD
     let diffCmd = 'git diff HEAD~1 HEAD --name-only';
     if (process.env.VERCEL_GIT_PREVIOUS_SHA && process.env.VERCEL_GIT_COMMIT_SHA) {
