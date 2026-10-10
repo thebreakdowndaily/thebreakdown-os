@@ -59,6 +59,7 @@ jobs:
     name: 2. Verify Staging Deployment Health
     needs: validate-and-test
     if: github.ref == 'refs/heads/staging'
+    environment: Preview
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -77,14 +78,16 @@ jobs:
         env:
           DEPLOYMENT_URL: ${{ secrets.STAGING_DEPLOYMENT_URL || 'https://thebreakdown-os-git-staging-bholebababhakti108-makers-projects.vercel.app' }}
           EXPECTED_COMMIT_SHA: ${{ github.sha }}
+          VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS || secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           echo "Verifying Staging Deployment Health at $DEPLOYMENT_URL..."
-          npx tsx scripts/verify-deployment-health.ts --url "$DEPLOYMENT_URL" --attempts 18 --interval 10
+          npx tsx scripts/verify-deployment-health.ts --url "$DEPLOYMENT_URL" --commit "$EXPECTED_COMMIT_SHA" --attempts 18 --interval 10
 
   deploy-production:
     name: 3. Verify Production Edge Health & Canary Gate
     needs: validate-and-test
     if: github.ref == 'refs/heads/main'
+    environment: Production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -103,6 +106,7 @@ jobs:
         env:
           DEPLOYMENT_URL: 'https://thebreakdown.in'
           EXPECTED_COMMIT_SHA: ${{ github.sha }}
+          VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS || secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           echo "Verifying Production Deployment Health at $DEPLOYMENT_URL..."
           npx tsx scripts/verify-deployment-health.ts --url "$DEPLOYMENT_URL" --commit "$EXPECTED_COMMIT_SHA" --attempts 24 --interval 10
