@@ -305,8 +305,36 @@ export function EditorialDeskWorkspace({
         hideMetrics={workspaceArea !== 'diagnostics'}
       />
 
+      {/* ── Degraded Read-Only Alert Banner ─────────────────────────────────── */}
+      {summary?.isDegradedReadOnly && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          style={{
+            backgroundColor: '#fef2f2',
+            border: '1px solid #f87171',
+            borderRadius: 'var(--radius-md, 8px)',
+            padding: '12px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            color: '#991b1b',
+            fontSize: '14px',
+          }}
+        >
+          <span style={{ fontSize: '20px', flexShrink: 0 }} aria-hidden="true">
+            ⚠️
+          </span>
+          <div>
+            <strong>READ-ONLY DEGRADED MODE:</strong> Authoritative database storage is unreachable.
+            Signals and queues remain available for inspection, but mutations (verifications, assignments, escalations) are blocked to prevent uncommitted changes.
+          </div>
+        </div>
+      )}
+
       {/* ── Tier 1.5: Workspace Navigation ────────────────────────────── */}
       <nav
+
         aria-label="Workspace Areas"
         style={{
           display: 'flex',
@@ -556,7 +584,9 @@ export function EditorialDeskWorkspace({
                   item={selectedItem}
                   onActionSuccess={handleActionSuccess}
                   onReloadRequested={handleReloadItem}
+                  disabled={Boolean(summary?.isDegradedReadOnly)}
                 />
+
               </>
             ) : (
               <div

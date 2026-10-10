@@ -295,7 +295,14 @@ export function ActionControlDock({
             message: 'Rate limit exceeded. Please wait a moment before trying again.',
           });
           onActionError?.(new Error('Rate limit exceeded'), 429);
+        } else if (status === 503 || errMessage.toLowerCase().includes('persistence')) {
+          setActionError({
+            code: 503,
+            message: `Database Persistence Error: ${errMessage}. No changes were committed to the database. Your draft has been preserved.`,
+          });
+          onActionError?.(new Error(errMessage), 503);
         } else {
+
           setActionError({
             code: status,
             message: errMessage,

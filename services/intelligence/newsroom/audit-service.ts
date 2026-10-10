@@ -41,6 +41,16 @@ export class NewsroomAuditService {
     this.records = [];
   }
 
+  /**
+   * Transactional rollback: rolls back the ledger to a prior count if persistence fails.
+   * Guarantees no false audit claims are recorded for failed transactions.
+   */
+  public static rollbackTo(count: number): void {
+    if (count >= 0 && count < this.records.length) {
+      this.records = this.records.slice(0, count);
+    }
+  }
+
   /** Append-only ledger snapshot for persistence (Operating Standard §20). */
   public static getAllRecords(): readonly NewsroomAuditLogRecord[] {
     return Object.freeze([...this.records]);
@@ -51,3 +61,4 @@ export class NewsroomAuditService {
     this.records = records.map((r) => Object.freeze({ ...r }));
   }
 }
+
