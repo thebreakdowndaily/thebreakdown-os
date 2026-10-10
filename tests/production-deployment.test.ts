@@ -57,19 +57,32 @@ if (process.env.VERCEL_PROTECTION_BYPASS || process.env.VERCEL_AUTOMATION_BYPASS
   )!;
 }
 
-async function statusOf(path: string): Promise<number> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    const res = await fetch(`${BASE}${path}`, {
-      headers: requestHeaders,
-      signal: controller.signal,
-      redirect: 'manual',
-    });
-    return res.status;
-  } finally {
-    clearTimeout(timer);
+async function statusOf(path: string, retries = 3): Promise<number> {
+  let lastStatus = 0;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    try {
+      const res = await fetch(`${BASE}${path}`, {
+        headers: requestHeaders,
+        signal: controller.signal,
+        redirect: 'manual',
+      });
+      lastStatus = res.status;
+      if (res.status === 200 || res.status === 301 || res.status === 307 || res.status === 308) {
+        return res.status;
+      }
+      if (attempt < retries) {
+        await new Promise((r) => setTimeout(r, 1000 * attempt));
+      }
+    } catch (err) {
+      if (attempt === retries) throw err;
+      await new Promise((r) => setTimeout(r, 1000 * attempt));
+    } finally {
+      clearTimeout(timer);
+    }
   }
+  return lastStatus;
 }
 
 async function runTests() {
