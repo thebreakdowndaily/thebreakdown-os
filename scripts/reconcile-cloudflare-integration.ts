@@ -261,7 +261,11 @@ export async function runReconciliationAudit(options: {
   };
 }
 
-if (import.meta.url === `file://${process.argv[1]?.replace(/\\/g, '/')}`) {
+const isDirectCliExecution =
+  (typeof require !== 'undefined' && require.main === module) ||
+  (process.argv[1] && process.argv[1].replace(/\\/g, '/').endsWith('reconcile-cloudflare-integration.ts'));
+
+if (isDirectCliExecution) {
   runReconciliationAudit().catch((err) => {
     console.error('Fatal reconciliation audit failure:', err.message);
     process.exit(1);
