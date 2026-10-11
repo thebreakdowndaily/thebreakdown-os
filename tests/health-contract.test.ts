@@ -176,6 +176,107 @@ describe('Health Contract & Commit Parity Specification', () => {
       expect(data.subsystems.editorialState).toBe('not_checked');
       expect(data.subsystems.researchPlatform).toBe('not_checked');
     });
+
+    it('6b. Adversarial test: spoofed x-forwarded-host on production cannot force staging credentials', async () => {
+      // Platform is deployed in production
+      process.env.VERCEL_ENV = 'production';
+      process.env.SUPABASE_URL = 'https://mskyhaunnlwtwvsqcmav.supabase.co';
+      process.env.SUPABASE_SERVICE_ROLE_KEY = 'prod-key';
+      delete process.env.STAGING_SUPABASE_URL;
+      delete process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY;
+
+      global.fetch = vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ swagger: '2.0' }), {
+          status: 200,
+          headers: { 'content-type': 'application/openapi+json' },
+        }),
+      );
+
+      // Caller sends spoofed x-forwarded-host attempting to make production select staging DB
+      const spoofedReq = new NextRequest('https://thebreakdown.in/api/health?type=readiness', {
+        headers: {
+          'x-forwarded-host': 'thebreakdown-os-staging.vercel.app',
+          'host': 'thebreakdown-os-staging.vercel.app',
+        },
+      });
+
+      const res = await healthGet(spoofedReq);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.status).toBe('healthy');
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('mskyhaunnlwtwvsqcmav.supabase.co'),
+        expect.anything(),
+      );
+      expect(data.environment).toBe('production');
+    });
+
+    it('6c. Adversarial test: spoofed x-forwarded-host on staging cannot force production credentials', async () => {
+      // Platform is deployed in staging
+      process.env.VERCEL_ENV = 'preview';
+      process.env.STAGING_SUPABASE_URL = 'https://lvfovvidtowadmnggzzf.supabase.co';
+      process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY = 'staging-key';
+      delete process.env.SUPABASE_URL;
+      delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+      global.fetch = vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ swagger: '2.0' }), {
+          status: 200,
+          headers: { 'content-type': 'application/openapi+json' },
+        }),
+      );
+
+      // Caller sends spoofed x-forwarded-host attempting to make staging select production DB
+      const spoofedReq = new NextRequest('https://thebreakdown-os-staging.vercel.app/api/health?type=readiness', {
+        headers: {
+          'x-forwarded-host': 'thebreakdown.in',
+          'host': 'thebreakdown.in',
+        },
+      });
+
+      const res = await healthGet(spoofedReq);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.status).toBe('healthy');
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('lvfovvidtowadmnggzzf.supabase.co'),
+        expect.anything(),
+      );
+      expect(data.environment).toBe('staging');
+    });
+
+    it('6d. Adversarial test: fallback URL host inspection ignores spoofed x-forwarded-host and Host headers', async () => {
+      delete process.env.VERCEL_ENV;
+      delete process.env.APP_ENV;
+      delete process.env.TARGET_ENV;
+      delete process.env.TEST_TARGET_ENV;
+
+      process.env.SUPABASE_URL = 'https://mskyhaunnlwtwvsqcmav.supabase.co';
+      process.env.SUPABASE_SERVICE_ROLE_KEY = 'prod-key';
+
+      global.fetch = vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ swagger: '2.0' }), {
+          status: 200,
+          headers: { 'content-type': 'application/openapi+json' },
+        }),
+      );
+
+      // Request to canonical production URL with conflicting spoofed x-forwarded-host header
+      const spoofedReq = new NextRequest('https://thebreakdown.in/api/health?type=readiness', {
+        headers: {
+          'x-forwarded-host': 'thebreakdown-os-staging.vercel.app',
+        },
+      });
+
+      const res = await healthGet(spoofedReq);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.environment).toBe('production');
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('mskyhaunnlwtwvsqcmav.supabase.co'),
+        expect.anything(),
+      );
+    });
   });
 
   describe('scripts/verify-deployment-health.ts commit parity', () => {
