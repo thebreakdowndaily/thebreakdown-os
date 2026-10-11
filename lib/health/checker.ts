@@ -71,10 +71,29 @@ export function isStagingHost(host?: string): boolean {
 export type TargetEnvironment = 'production' | 'staging' | 'development' | 'test';
 
 export function resolveEnvironment(req?: Request): TargetEnvironment {
+  // 1. Trusted platform deployment configuration ALWAYS takes absolute precedence.
+  // External callers must never be able to manipulate environment routing via headers.
+  if (process.env.VERCEL_ENV === 'production' || process.env.APP_ENV === 'production') {
+    return 'production';
+  }
+  if (process.env.VERCEL_ENV === 'preview' || process.env.APP_ENV === 'staging') {
+    return 'staging';
+  }
+
+  // 2. Explicit target environment variables (e.g. CI / build scripts)
+  if (process.env.TARGET_ENV === 'production' || process.env.TEST_TARGET_ENV === 'production') {
+    return 'production';
+  }
+  if (process.env.TARGET_ENV === 'staging' || process.env.TEST_TARGET_ENV === 'staging') {
+    return 'staging';
+  }
+
+  // 3. For local development or unit test requests without platform env vars,
+  // inspect ONLY the validated canonical request URL hostname (never untrusted x-forwarded-host).
   if (req) {
     try {
       const url = new URL(req.url);
-      const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || url.host;
+      const host = url.hostname.toLowerCase();
       if (isStagingHost(host)) return 'staging';
       if (isProductionHost(host)) return 'production';
     } catch {
@@ -82,24 +101,6 @@ export function resolveEnvironment(req?: Request): TargetEnvironment {
     }
   }
 
-  if (process.env.APP_ENV === 'staging' || process.env.NEXT_PUBLIC_APP_ENV === 'staging') {
-    return 'staging';
-  }
-  if (process.env.VERCEL_ENV === 'preview') {
-    return 'staging';
-  }
-  if (process.env.APP_ENV === 'production' || process.env.NEXT_PUBLIC_APP_ENV === 'production') {
-    return 'production';
-  }
-  if (process.env.VERCEL_ENV === 'production') {
-    return 'production';
-  }
-  if (process.env.TARGET_ENV === 'production' || process.env.TEST_TARGET_ENV === 'production') {
-    return 'production';
-  }
-  if (process.env.TARGET_ENV === 'staging' || process.env.TEST_TARGET_ENV === 'staging') {
-    return 'staging';
-  }
   if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
     return 'test';
   }
