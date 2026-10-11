@@ -208,4 +208,91 @@ describe('Deployment Health Verification & Parity Suite', () => {
     expect(callCount).toBe(2);
     expect(result.health.commitSha).toBe('610b48297bcdedbc6c0b2ea8e6ceff05005fd7a0');
   });
+
+  it('succeeds when full 40-character matching SHA is supplied', async () => {
+    const fullSha = 'c3ee9902948e35e14de06bfacab0039e3bcc48b8';
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes('/api/health')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          status: 'healthy',
+          commitSha: fullSha,
+        }), { status: 200, headers: { 'content-type': 'application/json' } }));
+      }
+      if (url.endsWith('/newsroom')) {
+        return Promise.resolve(new Response(null, {
+          status: 307,
+          headers: { location: 'https://thebreakdown.in/login' },
+        }));
+      }
+      return Promise.resolve(new Response('OK', {
+        status: 200,
+        headers: { 'strict-transport-security': 'max-age=63072000' },
+      }));
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await verifyDeployment({
+      baseUrl: 'https://thebreakdown.in',
+      expectedCommit: fullSha,
+      maxAttempts: 1,
+      intervalMs: 10,
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.health.commitSha).toBe(fullSha);
+  });
+
+  it('strictly fails verification when two different full SHAs share the first seven characters (prefix collision regression)', async () => {
+    // Both share the exact 7-character prefix: 'c3ee990'
+    const expectedSha = 'c3ee9902948e35e14de06bfacab0039e3bcc48b8';
+    const deployedSha = 'c3ee990fffffffffffffffffffffffffffff48b8';
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes('/api/health')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          status: 'healthy',
+          commitSha: deployedSha,
+        }), { status: 200, headers: { 'content-type': 'application/json' } }));
+      }
+      return Promise.resolve(new Response('OK', { status: 200 }));
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      verifyDeployment({
+        baseUrl: 'https://thebreakdown.in',
+        expectedCommit: expectedSha,
+        maxAttempts: 2,
+        intervalMs: 10,
+      }),
+    ).rejects.toThrow('Commit SHA mismatch');
+  });
+
+  it('fails verification when deployed SHA is abbreviated while full 40-character SHA is expected', async () => {
+    const fullExpectedSha = 'c3ee9902948e35e14de06bfacab0039e3bcc48b8';
+    const abbreviatedSha = 'c3ee990'; // Only 7 chars returned by edge
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes('/api/health')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          status: 'healthy',
+          commitSha: abbreviatedSha,
+        }), { status: 200, headers: { 'content-type': 'application/json' } }));
+      }
+      return Promise.resolve(new Response('OK', { status: 200 }));
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      verifyDeployment({
+        baseUrl: 'https://thebreakdown.in',
+        expectedCommit: fullExpectedSha,
+        maxAttempts: 1,
+        intervalMs: 10,
+      }),
+    ).rejects.toThrow('malformed or abbreviated SHA');
+  });
 });

@@ -114,6 +114,7 @@ jobs:
       - name: Run Production Release Integrity Smoke Suite
         env:
           PROD_SMOKE_BASE: 'https://thebreakdown.in'
+          VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS || secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           echo "Running production smoke tests against live edge..."
           npx tsx tests/production-deployment.test.ts
