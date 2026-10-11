@@ -173,15 +173,39 @@ export async function verifyDeployment(opts: VerificationOptions = {}): Promise<
             continue;
           }
 
-          const shortExpected = expectedCommit.trim().substring(0, 7).toLowerCase();
-          const shortDeployed = deployedSha.substring(0, 7).toLowerCase();
+          const trimmedExpected = expectedCommit.trim();
+          const isFullExpectedSha = /^[0-9a-fA-F]{40}$/.test(trimmedExpected);
+          const isFullDeployedSha = /^[0-9a-fA-F]{40}$/.test(deployedSha);
 
-          if (shortDeployed !== shortExpected && deployedSha.toLowerCase() !== expectedCommit.toLowerCase()) {
-            currentState = 'MISMATCHED_REVISION';
-            lastErrorDetail = `Expected revision ${shortExpected}, but edge reported revision ${shortDeployed}`;
-            console.log(`[Attempt ${attempt}/${maxAttempts}] State: MISMATCHED_REVISION (${lastErrorDetail}). Still deploying...`);
-            if (attempt < maxAttempts) await delay(intervalMs);
-            continue;
+          if (isFullExpectedSha) {
+            // Strict Full Commit SHA Verification: Deployed revision MUST also be full 40-char SHA
+            if (!isFullDeployedSha) {
+              currentState = 'MISSING_REVISION';
+              lastErrorDetail = `Expected full 40-character commit SHA (${trimmedExpected}), but deployed application reported malformed or abbreviated SHA: '${deployedSha}'`;
+              console.log(`[Attempt ${attempt}/${maxAttempts}] State: MISSING_REVISION (${lastErrorDetail}). Retrying...`);
+              if (attempt < maxAttempts) await delay(intervalMs);
+              continue;
+            }
+
+            if (deployedSha.toLowerCase() !== trimmedExpected.toLowerCase()) {
+              currentState = 'MISMATCHED_REVISION';
+              lastErrorDetail = `Full commit SHA mismatch: expected ${trimmedExpected}, but edge reported ${deployedSha}`;
+              console.log(`[Attempt ${attempt}/${maxAttempts}] State: MISMATCHED_REVISION (${lastErrorDetail}). Still deploying...`);
+              if (attempt < maxAttempts) await delay(intervalMs);
+              continue;
+            }
+          } else {
+            // Abbreviated SHA support only for explicit display or non-strict diagnostic use
+            const shortExpected = trimmedExpected.substring(0, 7).toLowerCase();
+            const shortDeployed = deployedSha.substring(0, 7).toLowerCase();
+
+            if (!deployedSha.toLowerCase().startsWith(trimmedExpected.toLowerCase()) && shortDeployed !== shortExpected) {
+              currentState = 'MISMATCHED_REVISION';
+              lastErrorDetail = `Expected revision ${shortExpected}, but edge reported revision ${shortDeployed}`;
+              console.log(`[Attempt ${attempt}/${maxAttempts}] State: MISMATCHED_REVISION (${lastErrorDetail}). Still deploying...`);
+              if (attempt < maxAttempts) await delay(intervalMs);
+              continue;
+            }
           }
         }
 
@@ -220,7 +244,7 @@ export async function verifyDeployment(opts: VerificationOptions = {}): Promise<
 
   if (currentState === 'MISMATCHED_REVISION') {
     throw new Error(
-      `Deployment verification failed: Commit SHA mismatch after ${maxAttempts} attempts. Expected revision '${expectedCommit?.substring(0, 7)}', but edge reported '${lastErrorDetail}'.`,
+      `Deployment verification failed: Commit SHA mismatch after ${maxAttempts} attempts (${lastErrorDetail}).`,
     );
   }
 

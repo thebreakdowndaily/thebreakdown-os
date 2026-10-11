@@ -182,6 +182,7 @@ module.exports = {
       'tests/newsroom-persistence-durability.test.ts',
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
+      'tests/health-contract.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

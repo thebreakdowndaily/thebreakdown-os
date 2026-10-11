@@ -54,16 +54,44 @@ describe('diagnostic route exposure', () => {
     expect(data.analytics).not.toBeNull();
   });
 
-  test('health returns operational health and subsystem status', async () => {
-    const res = await healthGet(new NextRequest('https://thebreakdown.in/api/health'));
+  test('health returns liveness without external dependencies', async () => {
+    const res = await healthGet(new NextRequest('https://thebreakdown.in/api/health?type=liveness'));
     expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.status).toBe('healthy');
-    expect(data.subsystems).toBeDefined();
-    expect(data.subsystems.editorialState).toBe('operational');
-    expect(data.subsystems.projectionEngine).toBe('operational');
-    expect(data.subsystems.domainRegistry).toBe('operational');
-    expect(data.subsystems.researchPlatform).toBe('operational');
+    expect(data.status).toBe('live');
+    expect(data.check).toBe('liveness');
+  });
+
+  test('health readiness reports verified persistence and not_checked for unverified subsystems', async () => {
+    const originalFetch = global.fetch;
+    const prevUrl = process.env.SUPABASE_URL;
+    const prevKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    try {
+      process.env.SUPABASE_URL = 'https://mskyhaunnlwtwvsqcmav.supabase.co';
+      process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key-test';
+
+      global.fetch = async () =>
+        new Response(JSON.stringify({ swagger: '2.0' }), {
+          status: 200,
+          headers: { 'content-type': 'application/openapi+json' },
+        });
+
+      const res = await healthGet(new NextRequest('https://thebreakdown.in/api/health'));
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.status).toBe('healthy');
+      expect(data.subsystems).toBeDefined();
+      expect(data.subsystems.persistence).toBe('verified');
+      expect(data.subsystems.editorialState).toBe('not_checked');
+      expect(data.subsystems.projectionEngine).toBe('not_checked');
+      expect(data.subsystems.domainRegistry).toBe('not_checked');
+      expect(data.subsystems.researchPlatform).toBe('not_checked');
+    } finally {
+      global.fetch = originalFetch;
+      process.env.SUPABASE_URL = prevUrl;
+      process.env.SUPABASE_SERVICE_ROLE_KEY = prevKey;
+    }
   });
 });
 
