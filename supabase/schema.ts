@@ -27,6 +27,8 @@ export interface Database {
       publication_gate_log: PublicationGateLogRow;
       api_keys: ApiKeyTableRow;
       rate_limit_buckets: RateLimitBucketRow;
+      reader_corrections: ReaderCorrectionRow;
+      corrections: CorrectionRow;
     };
     Functions: {
       increment_rate_limit: {
@@ -1060,6 +1062,96 @@ export interface RateLimitBucketRow {
     window_start?: string;
     request_count?: number;
     expires_at?: string;
+  };
+}
+
+export interface ReaderCorrectionRow {
+  Row: {
+    id: string;
+    story_id: string | null;
+    story_slug: string;
+    claim_id: string | null;
+    category: string;
+    passage_excerpt: string;
+    suggested_correction: string;
+    submitter_email: string | null;
+    supporting_evidence_url: string | null;
+    status: string;
+    created_at: string;
+    updated_at: string;
+  };
+  Insert: {
+    id?: string;
+    story_id?: string | null;
+    story_slug: string;
+    claim_id?: string | null;
+    category?: string;
+    passage_excerpt: string;
+    suggested_correction: string;
+    submitter_email?: string | null;
+    supporting_evidence_url?: string | null;
+    status?: string;
+    created_at?: string;
+    updated_at?: string;
+  };
+  Update: {
+    id?: string;
+    story_id?: string | null;
+    story_slug?: string;
+    claim_id?: string | null;
+    category?: string;
+    passage_excerpt?: string;
+    suggested_correction?: string;
+    submitter_email?: string | null;
+    supporting_evidence_url?: string | null;
+    status?: string;
+    created_at?: string;
+    updated_at?: string;
+  };
+}
+
+export interface CorrectionRow {
+  Row: {
+    id: string;
+    story_id: string;
+    story_version_id: string | null;
+    claim_id: string | null;
+    verification_event_id: string | null;
+    category: string;
+    previous_wording: string;
+    corrected_wording: string;
+    explanation: string;
+    superseded_by_id: string | null;
+    created_at: string;
+    updated_at: string;
+  };
+  Insert: {
+    id?: string;
+    story_id: string;
+    story_version_id?: string | null;
+    claim_id?: string | null;
+    verification_event_id?: string | null;
+    category: string;
+    previous_wording?: string;
+    corrected_wording?: string;
+    explanation: string;
+    superseded_by_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+  };
+  Update: {
+    id?: string;
+    story_id?: string;
+    story_version_id?: string | null;
+    claim_id?: string | null;
+    verification_event_id?: string | null;
+    category?: string;
+    previous_wording?: string;
+    corrected_wording?: string;
+    explanation?: string;
+    superseded_by_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
   };
 }
 
