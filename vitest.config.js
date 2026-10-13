@@ -109,6 +109,8 @@ module.exports = {
       'tests/vs6-operations-control-plane.test.ts',
       'tests/vs7-editorial-quality-and-corrections.test.ts',
       'tests/vs8-cross-system-corrections.test.ts',
+      'tests/reader-corrections-persistence.test.ts',
+      'tests/staging-corrections-smoke.test.ts',
       'tests/vs8-cross-vertical-integration.test.ts',
       'tests/image-asset-integrity.test.ts',
       'tests/story-image-context-gate.test.ts',
