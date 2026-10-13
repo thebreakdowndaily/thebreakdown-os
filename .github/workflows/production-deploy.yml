@@ -83,6 +83,16 @@ jobs:
           echo "Verifying Staging Deployment Health at $DEPLOYMENT_URL..."
           npx tsx scripts/verify-deployment-health.ts --url "$DEPLOYMENT_URL" --commit "$EXPECTED_COMMIT_SHA" --attempts 18 --interval 10
 
+      - name: Execute Staging Corrections Persistence Smoke Test
+        env:
+          STAGING_DEPLOYMENT_URL: ${{ secrets.STAGING_DEPLOYMENT_URL || 'https://thebreakdown-os-git-staging-bholebababhakti108-makers-projects.vercel.app' }}
+          VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS || secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          STAGING_SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL || 'https://lvfovvidtowadmnggzzf.supabase.co' }}
+          STAGING_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "Executing Staging Reader-Corrections Persistence Smoke Test..."
+          npx tsx scripts/verify-staging-corrections-smoke.ts
+
   deploy-production:
     name: 3. Verify Production Edge Health & Canary Gate
     needs: validate-and-test
