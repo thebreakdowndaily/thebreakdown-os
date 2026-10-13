@@ -242,6 +242,7 @@ describe('Staging Persistence Smoke Test — Execution Flow & Dependency Mocking
     expect(result.submissionId).toBe(submissionId);
     expect(result.persistedRecordVerified).toBe(true);
     expect(result.privacyVerified).toBe(true);
+    expect(result.cleanupVerified).toBe(true);
     expect(deleteCalled).toBe(true);
   });
 
@@ -293,12 +294,14 @@ describe('Staging Persistence Smoke Test — Execution Flow & Dependency Mocking
         if (table === 'reader_corrections') {
           return {
             select: vi.fn().mockReturnThis(),
-            eq: vi.fn().mockReturnValue({
-              single: vi.fn().mockResolvedValue({
-                data: null,
-                error: { message: 'Row not found' },
-              }),
-              then: (res: any) => res({ data: [], error: null }),
+            eq: vi.fn().mockImplementation((col: string, val: string) => {
+              return {
+                single: vi.fn().mockResolvedValue({
+                  data: null,
+                  error: { message: 'Row not found' },
+                }),
+                then: (res: any) => res({ data: [], error: null }),
+              };
             }),
             delete: vi.fn().mockReturnValue({
               eq: vi.fn().mockResolvedValue({ error: null }),
@@ -315,5 +318,230 @@ describe('Staging Persistence Smoke Test — Execution Flow & Dependency Mocking
         dbClient: mockDb as any,
       })
     ).rejects.toThrow('[PERSISTENCE_FAILED]');
+  });
+
+  it('4. Adversarial cleanup: Fails when deletion operation returns an error', async () => {
+    const submissionId = '00000000-0000-4000-a000-000000000991';
+    let dbRecord: any = null;
+
+    const mockFetch = vi.fn().mockImplementation(async (url: string, opts: any) => {
+      const body = JSON.parse(opts.body);
+      dbRecord = {
+        id: submissionId,
+        story_slug: body.storySlug,
+        passage_excerpt: body.passageExcerpt,
+        suggested_correction: body.suggestedCorrection,
+        status: 'received',
+      };
+      return {
+        status: 201,
+        text: async () => JSON.stringify({ success: true, submissionId }),
+      };
+    });
+
+    const mockDb: any = {
+      from: vi.fn().mockImplementation((table: string) => {
+        if (table === 'stories') {
+          return {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            limit: vi.fn().mockResolvedValue({ data: [{ slug: 'the-partition-and-its-legacies' }] }),
+          };
+        }
+        if (table === 'reader_corrections') {
+          return {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({ data: dbRecord, error: null }),
+            }),
+            delete: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({
+                error: { message: 'Database delete failed: permission denied' },
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    };
+
+    await expect(
+      runStagingPersistenceSmokeTest(baseConfig, {
+        fetchFn: mockFetch as any,
+        dbClient: mockDb as any,
+      })
+    ).rejects.toThrow('[CLEANUP_FAILED] Failed to delete synthetic record');
+  });
+
+  it('5. Adversarial cleanup: Fails when post-delete verification query returns an error', async () => {
+    const submissionId = '00000000-0000-4000-a000-000000000992';
+    let dbRecord: any = null;
+
+    const mockFetch = vi.fn().mockImplementation(async (url: string, opts: any) => {
+      const body = JSON.parse(opts.body);
+      dbRecord = {
+        id: submissionId,
+        story_slug: body.storySlug,
+        passage_excerpt: body.passageExcerpt,
+        suggested_correction: body.suggestedCorrection,
+        status: 'received',
+      };
+      return {
+        status: 201,
+        text: async () => JSON.stringify({ success: true, submissionId }),
+      };
+    });
+
+    const mockDb: any = {
+      from: vi.fn().mockImplementation((table: string) => {
+        if (table === 'stories') {
+          return {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            limit: vi.fn().mockResolvedValue({ data: [{ slug: 'the-partition-and-its-legacies' }] }),
+          };
+        }
+        if (table === 'reader_corrections') {
+          let isVerificationQuery = false;
+          return {
+            select: vi.fn().mockImplementation((cols: string) => {
+              if (cols === 'id') isVerificationQuery = true;
+              return {
+                eq: vi.fn().mockImplementation(() => {
+                  if (isVerificationQuery) {
+                    return Promise.resolve({
+                      data: null,
+                      error: { message: 'Postgres connection timeout' },
+                    });
+                  }
+                  return {
+                    single: vi.fn().mockResolvedValue({ data: dbRecord, error: null }),
+                  };
+                }),
+              };
+            }),
+            delete: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({ error: null }),
+            }),
+          };
+        }
+        return {};
+      }),
+    };
+
+    await expect(
+      runStagingPersistenceSmokeTest(baseConfig, {
+        fetchFn: mockFetch as any,
+        dbClient: mockDb as any,
+      })
+    ).rejects.toThrow('[CLEANUP_UNVERIFIED] Post-delete verification query failed');
+  });
+
+  it('6. Adversarial cleanup: Fails when synthetic row remains present after deletion', async () => {
+    const submissionId = '00000000-0000-4000-a000-000000000993';
+    let dbRecord: any = null;
+
+    const mockFetch = vi.fn().mockImplementation(async (url: string, opts: any) => {
+      const body = JSON.parse(opts.body);
+      dbRecord = {
+        id: submissionId,
+        story_slug: body.storySlug,
+        passage_excerpt: body.passageExcerpt,
+        suggested_correction: body.suggestedCorrection,
+        status: 'received',
+      };
+      return {
+        status: 201,
+        text: async () => JSON.stringify({ success: true, submissionId }),
+      };
+    });
+
+    const mockDb: any = {
+      from: vi.fn().mockImplementation((table: string) => {
+        if (table === 'stories') {
+          return {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            limit: vi.fn().mockResolvedValue({ data: [{ slug: 'the-partition-and-its-legacies' }] }),
+          };
+        }
+        if (table === 'reader_corrections') {
+          return {
+            select: vi.fn().mockImplementation((cols: string) => {
+              if (cols === 'id') {
+                return {
+                  eq: vi.fn().mockResolvedValue({
+                    data: [{ id: submissionId }], // Row still present!
+                    error: null,
+                  }),
+                };
+              }
+              return {
+                eq: vi.fn().mockReturnValue({
+                  single: vi.fn().mockResolvedValue({ data: dbRecord, error: null }),
+                }),
+              };
+            }),
+            delete: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({ error: null }),
+            }),
+          };
+        }
+        return {};
+      }),
+    };
+
+    await expect(
+      runStagingPersistenceSmokeTest(baseConfig, {
+        fetchFn: mockFetch as any,
+        dbClient: mockDb as any,
+      })
+    ).rejects.toThrow('still present after cleanup deletion');
+  });
+
+  it('7. Adversarial cleanup: Surfaces both primary error and cleanup failure when both fail', async () => {
+    const submissionId = '00000000-0000-4000-a000-000000000994';
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      status: 201,
+      text: async () => JSON.stringify({ success: true, submissionId }),
+    });
+
+    const mockDb: any = {
+      from: vi.fn().mockImplementation((table: string) => {
+        if (table === 'stories') {
+          return {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            limit: vi.fn().mockResolvedValue({ data: [{ slug: 'the-partition-and-its-legacies' }] }),
+          };
+        }
+        if (table === 'reader_corrections') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: null,
+                  error: { message: 'Primary retrieval failed' },
+                }),
+              }),
+            }),
+            delete: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({
+                error: { message: 'Delete also failed' },
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    };
+
+    await expect(
+      runStagingPersistenceSmokeTest(baseConfig, {
+        fetchFn: mockFetch as any,
+        dbClient: mockDb as any,
+      })
+    ).rejects.toThrow('ADDITIONAL_CRITICAL_FAILURE');
   });
 });

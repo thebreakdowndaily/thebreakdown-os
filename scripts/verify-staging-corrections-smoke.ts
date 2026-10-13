@@ -177,6 +177,56 @@ export function verifyPrivacyProjection(
   return { valid: true };
 }
 
+export interface CleanupOutcome {
+  attempted: boolean;
+  success: boolean;
+  verified: boolean;
+  error?: string;
+}
+
+export async function cleanupSyntheticRecord(
+  db: SupabaseClient,
+  submissionId: string
+): Promise<CleanupOutcome> {
+  console.log(`[CLEANUP] Purging synthetic audit row '${submissionId}' from staging database...`);
+  try {
+    const { error: delErr } = await db
+      .from('reader_corrections')
+      .delete()
+      .eq('id', submissionId);
+
+    if (delErr) {
+      const msg = `[CLEANUP_FAILED] Failed to delete synthetic record '${submissionId}': ${delErr.message}`;
+      console.error(`✗ ${msg}`);
+      return { attempted: true, success: false, verified: false, error: msg };
+    }
+
+    const { data: checkRows, error: verifyErr } = await db
+      .from('reader_corrections')
+      .select('id')
+      .eq('id', submissionId);
+
+    if (verifyErr) {
+      const msg = `[CLEANUP_UNVERIFIED] Post-delete verification query failed for record '${submissionId}': ${verifyErr.message}`;
+      console.error(`✗ ${msg}`);
+      return { attempted: true, success: false, verified: false, error: msg };
+    }
+
+    if (checkRows && checkRows.length > 0) {
+      const msg = `[CLEANUP_FAILED] CRITICAL: Record '${submissionId}' still present after cleanup deletion!`;
+      console.error(`✗ ${msg}`);
+      return { attempted: true, success: false, verified: false, error: msg };
+    }
+
+    console.log(`✓ Cleanup verified: Synthetic row '${submissionId}' successfully purged.`);
+    return { attempted: true, success: true, verified: true };
+  } catch (err: any) {
+    const msg = `[CLEANUP_FAILED] Unexpected exception during cleanup of '${submissionId}': ${err?.message || err}`;
+    console.error(`✗ ${msg}`);
+    return { attempted: true, success: false, verified: false, error: msg };
+  }
+}
+
 export async function runStagingPersistenceSmokeTest(
   config: SmokeTestConfig = {},
   overrides: DependencyOverrides = {}
@@ -244,6 +294,9 @@ export async function runStagingPersistenceSmokeTest(
 
   let createdSubmissionId: string | undefined;
   let auditMarker: string | undefined;
+  let primaryError: Error | null = null;
+  let persistedRecordVerified = false;
+  let privacyVerified = false;
 
   try {
     // 2. Discover published story
@@ -301,6 +354,7 @@ export async function runStagingPersistenceSmokeTest(
     if (!privacyCheck.valid) {
       throw new Error(`[PRIVACY_VIOLATION] ${privacyCheck.error}`);
     }
+    privacyVerified = true;
     console.log('✓ Privacy verified: Submitter email and private fields stripped from acknowledgment.\n');
 
     // 5. Independently verify durable database persistence
@@ -327,46 +381,41 @@ export async function runStagingPersistenceSmokeTest(
       throw new Error(`[STATUS_MISMATCH] Expected initial status 'received', found '${row.status}'.`);
     }
 
+    persistedRecordVerified = true;
     console.log(`✓ Durable persistence verified: Row '${createdSubmissionId}' confirmed in staging PostgreSQL with status '${row.status}'.\n`);
-
-    return {
-      success: true,
-      deploymentUrl: stagingUrl,
-      submissionId: createdSubmissionId,
-      auditMarker,
-      persistedRecordVerified: true,
-      privacyVerified: true,
-      cleanupVerified: false, // will be finalized in finally
-    };
-  } finally {
-    // 6. Guaranteed Cleanup
-    if (createdSubmissionId) {
-      console.log(`[CLEANUP] Purging synthetic audit row '${createdSubmissionId}' from staging database...`);
-      try {
-        const { error: delErr } = await db
-          .from('reader_corrections')
-          .delete()
-          .eq('id', createdSubmissionId);
-
-        if (delErr) {
-          console.error(`✗ Cleanup delete error: ${delErr.message}`);
-        }
-
-        const { data: checkRows } = await db
-          .from('reader_corrections')
-          .select('id')
-          .eq('id', createdSubmissionId);
-
-        if (checkRows && checkRows.length > 0) {
-          console.error(`✗ CRITICAL: Record '${createdSubmissionId}' still present after cleanup deletion!`);
-        } else {
-          console.log(`✓ Cleanup verified: Synthetic row '${createdSubmissionId}' successfully purged.`);
-        }
-      } catch (cleanupErr: any) {
-        console.error(`✗ Cleanup exception: ${cleanupErr?.message || cleanupErr}`);
-      }
-    }
+  } catch (err: any) {
+    primaryError = err instanceof Error ? err : new Error(String(err));
   }
+
+  // 6. Mandatory Cleanup & Verification (if a submission was created)
+  let cleanupOutcome: CleanupOutcome = { attempted: false, success: false, verified: false };
+  if (createdSubmissionId) {
+    cleanupOutcome = await cleanupSyntheticRecord(db, createdSubmissionId);
+  }
+
+  // Handle errors: surface primary errors, combined errors, or standalone cleanup failures
+  if (primaryError) {
+    if (createdSubmissionId && !cleanupOutcome.verified) {
+      throw new Error(
+        `${primaryError.message}\nADDITIONAL_CRITICAL_FAILURE: ${cleanupOutcome.error || 'Cleanup verification failed.'}`
+      );
+    }
+    throw primaryError;
+  }
+
+  if (createdSubmissionId && !cleanupOutcome.verified) {
+    throw new Error(cleanupOutcome.error || '[CLEANUP_FAILED] Cleanup could not be verified.');
+  }
+
+  return {
+    success: true,
+    deploymentUrl: stagingUrl,
+    submissionId: createdSubmissionId,
+    auditMarker,
+    persistedRecordVerified,
+    privacyVerified,
+    cleanupVerified: cleanupOutcome.verified,
+  };
 }
 
 // ─── CLI Execution Entrypoint ─────────────────────────────────────────────────
@@ -374,12 +423,12 @@ export async function runStagingPersistenceSmokeTest(
 if (require.main === module) {
   runStagingPersistenceSmokeTest()
     .then((result) => {
-      if (!result.success) {
-        console.error(`\n❌ STAGING PERSISTENCE SMOKE TEST FAILED: ${result.error}`);
+      if (!result.success || !result.cleanupVerified) {
+        console.error(`\n❌ STAGING PERSISTENCE SMOKE TEST FAILED: ${result.error || 'Unverified cleanup'}`);
         process.exit(1);
       }
       console.log('\n═══════════════════════════════════════════════════════════');
-      console.log('✅ ALL STAGING PERSISTENCE SMOKE CHECKS PASSED');
+      console.log('✅ ALL STAGING PERSISTENCE SMOKE CHECKS PASSED (PERSISTENCE & CLEANUP VERIFIED)');
       console.log('═══════════════════════════════════════════════════════════');
       process.exit(0);
     })
