@@ -49,9 +49,17 @@ export async function POST(request: NextRequest) {
     );
 
     if (!result.success) {
+      let status = 400;
+      if (result.message.includes('Rate limit')) {
+        status = 429;
+      } else if (result.message.includes('unavailable')) {
+        status = 503;
+      } else if (result.message.includes('storage') || result.message.includes('error')) {
+        status = 500;
+      }
       return NextResponse.json(
         { success: false, message: result.message },
-        { status: result.message.includes('Rate limit') ? 429 : 400 }
+        { status }
       );
     }
 
