@@ -72,7 +72,7 @@ This is a proposal, not an accepted governance change.
 
 ## 3. Tracked Wrangler local state is a repository-hygiene risk
 
-The recursive tree contains **15 tracked files** under `.wrangler/state/v3/`, including Miniflare cache/D1 SQLite databases and their `-wal` / `-shm` companions. The root `.gitignore` does not currently ignore this state directory.
+The recursive tree contains **9 tracked files (15 tree entries including directories)** under `.wrangler/state/v3/`, including Miniflare cache/D1 SQLite databases and their `-wal` / `-shm` companions. The root `.gitignore` does not currently ignore this state directory.
 
 These are generated local runtime-state artifacts rather than source/configuration files. Committing SQLite WAL/SHM files can produce machine-specific, inconsistent, or unnecessary repository history. However, a local D1 database file can contain developer data, so it must not be deleted merely based on the filename.
 

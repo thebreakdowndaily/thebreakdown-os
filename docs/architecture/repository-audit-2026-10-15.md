@@ -77,7 +77,7 @@ Subtree counts indicate scale rather than directly-owned file counts. The larges
 
 
 ### F-08 — Tracked Wrangler runtime state is missing an ignore rule
-**Priority: medium-high.** The tree contains 15 tracked files under `.wrangler/state/v3/`, including Miniflare SQLite cache/D1 state and WAL/SHM companions. The root `.gitignore` did not ignore this directory.
+**Priority: medium-high.** The tree contains 9 tracked files (15 tree entries including directories) under `.wrangler/state/v3/`, including Miniflare SQLite cache/D1 state and WAL/SHM companions. The root `.gitignore` did not ignore this directory.
 
 **Action in this branch:** Ignore future `.wrangler/state/` writes. The already-tracked artifacts are deliberately not deleted in this pass: first determine whether any local D1 data needs to be exported or preserved, then remove generated runtime state from version control in a separate, reviewable cleanup.
 
