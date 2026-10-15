@@ -74,7 +74,7 @@ See [Repository Ownership Audit](./repository-ownership-audit-2026-10-15.md). Th
 
 ### Wrangler local state
 
-The repository tracks 9 files (15 tree entries including directories) under `.wrangler/state/v3/` despite `.gitignore` lacking an ignore rule. This state includes Miniflare SQLite/cache files and WAL/SHM companions. The next safe action is to ignore future state (done in this branch), then determine whether any local D1 database data requires export before untracking these generated files. Do not commit new local state.
+The repository tracks 9 files (14 tree entries including directories) under `.wrangler/state/v3/` despite `.gitignore` lacking an ignore rule. This state includes Miniflare SQLite/cache files and WAL/SHM companions. The next safe action is to ignore future state (done in this branch), then determine whether any local D1 database data requires export before untracking these generated files. Do not commit new local state.
 
 ### Root evidence/output files
 Classify each root artifact as source/config, maintained tool, durable evidence, fixture, reproducible output, transient log, or obsolete item. Search references and history before a move/deletion. Retain durable records in an established report/archive location; keep ephemeral logs local or as CI artifacts where compatible with project needs.
