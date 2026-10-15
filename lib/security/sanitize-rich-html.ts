@@ -11,7 +11,6 @@ const SAFE_TAGS = new Set([
 ]);
 const VOID_TAGS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
 const DROP_CONTENT = new Set(['applet', 'audio', 'button', 'canvas', 'embed', 'form', 'frame', 'frameset', 'head', 'iframe', 'math', 'meta', 'noscript', 'object', 'option', 'script', 'select', 'style', 'svg', 'template', 'textarea', 'title', 'video']);
-const ENTITY = /&(?:#(?:x[0-9a-f]{1,8}|\d{1,8})|amp|lt|gt|quot|apos|nbsp|mdash|ndash|hellip|rsquo|lsquo|ldquo|rdquo|bull|copy|reg|trade|euro|pound|times|divide);/i;
 const ATTR = /([a-z_:][a-z0-9_:.-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?/gi;
 
 function escapeText(value: string): string {
