@@ -30,7 +30,7 @@ export type ApiKeyDelegationDecision =
   | {
       allowed: false;
       status: 400 | 403;
-      code: 'INVALID_ROLE' | 'INVALID_PERMISSIONS' | 'INVALID_RATE_LIMIT_TIER' | 'ROLE_ESCALATION' | 'PERMISSION_ESCALATION' | 'RATE_LIMIT_ESCALATION';
+      code: 'INVALID_ROLE' | 'INVALID_PERMISSIONS' | 'INVALID_RATE_LIMIT_TIER' | 'ELEVATED_ROLE_WITH_SCOPES' | 'ROLE_ESCALATION' | 'PERMISSION_ESCALATION' | 'RATE_LIMIT_ESCALATION';
       message: string;
     };
 
@@ -87,13 +87,28 @@ export function authorizeApiKeyDelegation(
   }
 
   const rateLimitTier = input.rateLimitTier as ApiKeyRateLimitTier;
+  const permissions = [...new Set(rawPermissions as AppPermission[])];
   const canGrantElevatedRoles = principal.isSuperAdmin;
-  if ((role === 'admin' || role === 'owner') && !canGrantElevatedRoles) {
+  const elevatedRole = role === 'admin' || role === 'owner';
+
+  if (elevatedRole && !canGrantElevatedRoles) {
     return {
       allowed: false,
       status: 403,
       code: 'ROLE_ESCALATION',
       message: 'Only an owner can issue admin or owner API keys',
+    };
+  }
+
+  // Elevated roles are role-authorized principals, not explicitly scoped keys.
+  // Reject mixed inputs to avoid suggesting that their permission list limits
+  // the authority that owner/admin role resolution confers elsewhere.
+  if (elevatedRole && permissions.length > 0) {
+    return {
+      allowed: false,
+      status: 400,
+      code: 'ELEVATED_ROLE_WITH_SCOPES',
+      message: 'Use a non-elevated role when creating an explicitly scoped API key',
     };
   }
 
@@ -106,7 +121,6 @@ export function authorizeApiKeyDelegation(
     };
   }
 
-  const permissions = [...new Set(rawPermissions as AppPermission[])];
   const denied = permissions.find((permission) => !can(principal, permission));
   if (denied) {
     return {
