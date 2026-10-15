@@ -9,7 +9,7 @@
 import { randomUUID } from 'crypto';
 import { revalidatePath } from 'next/cache';
 import { eventBus } from '@/lib/events/event-bus';
-import { getServiceClient } from '@/supabase/client';
+import { getAnonClient, getServiceClient } from '@/supabase/client';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { TypedDatabase } from '@/supabase/client';
 import type {
@@ -102,6 +102,28 @@ export function getCorrectionsDbClient(): SupabaseClient<any> | null {
   }
 
   return null;
+}
+
+/**
+ * Public ledger reads must use the public/anon role, not require a
+ * service-role credential. Migration 013 explicitly grants anon SELECT on
+ * public.corrections. Private submissions and triage continue to use the
+ * privileged client through getCorrectionsDbClient().
+ */
+function getPublicCorrectionsReadClient(): SupabaseClient<any> | null {
+  // Preserve the injected client used by deterministic tests and offline mocks.
+  if (customDbClient) return customDbClient;
+
+  // Outside production, preserve the explicit in-memory fixture fallback.
+  if (process.env.NODE_ENV !== 'production' || typeof window !== 'undefined') {
+    return null;
+  }
+
+  try {
+    return getAnonClient() as unknown as SupabaseClient<any>;
+  } catch {
+    return null;
+  }
 }
 
 export interface MockCorrectionsStore {
@@ -1019,7 +1041,7 @@ export async function listVerificationHandoffs(correctionId?: string): Promise<V
 export async function listPublishedCorrections(
   storySlugOrId?: string
 ): Promise<PublishedCorrection[]> {
-  const db = getCorrectionsDbClient();
+  const db = getPublicCorrectionsReadClient();
   if (db) {
     const { data, error } = await db
       .from('corrections')
