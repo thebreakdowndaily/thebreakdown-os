@@ -7,6 +7,7 @@
  */
 
 import { randomUUID } from 'crypto';
+import { revalidatePath } from 'next/cache';
 import { eventBus } from '@/lib/events/event-bus';
 import { getServiceClient } from '@/supabase/client';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -815,6 +816,15 @@ export async function triageReaderCorrection(
     // Same-process cache only. Public reads use public.corrections when a DB
     // client is configured and never rely on this Map as production truth.
     memoryPublishedCorrections.set(publishedNotice.id, publishedNotice);
+
+    // Public pages use ISR. Revalidate the durable ledger and corrected story
+    // after the committed write so readers do not wait for a stale cache window.
+    try {
+      revalidatePath('/transparency/corrections');
+      revalidatePath(`/story/${record.storySlug}`);
+    } catch (err) {
+      console.error('[CorrectionsService] Durable correction saved but cache revalidation failed:', err);
+    }
 
     try {
       eventBus.publish({
