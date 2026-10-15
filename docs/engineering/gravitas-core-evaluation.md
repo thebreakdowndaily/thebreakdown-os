@@ -1,6 +1,6 @@
 # GRAVITAS Core — controlled evaluation protocol
 
-**Status:** Protocol prepared; agent trials not yet executed.  
+**Status:** Controlled trials are reported complete; the submitted summary is provisional pending publication and review of the original run artifacts. See [evaluation results review](./gravitas-core-evaluation-results-review.md).  
 **Owner:** The Breakdown OS maintainer / human evaluator.  
 **Scope:** Core skill only, using the repository-pinned snapshot merged by [PR #24](https://github.com/thebreakdowndaily/thebreakdown-os/pull/24).  
 **Decision:** Keep Core optional, recommend broader use, extend the test, or roll it back. This protocol does not authorize Native hooks, runtime installation, permission changes, production changes, or automatic merge.
@@ -149,17 +149,17 @@ Recommend broader **optional** Core use only when:
 
 Otherwise, keep the skill optional and narrow the claim, extend testing, or roll it back. The human maintainer owns the final decision.
 
-## 7. Empty result ledger
+## 7. Authoritative results ledger — pending raw-evidence audit
 
-No trial results are included in this initial ledger. Do not fill a row until the run was actually observed and linked.
+An evaluator-submitted summary reports five paired tasks and ten runs; its numbers are transcribed in [evaluation results review](./gravitas-core-evaluation-results-review.md). The original run records and full validator outputs are not yet available in this repository. The table below intentionally distinguishes report-received status from evidence-audited status. Do not promote the reported numbers to authoritative results until original artifacts are committed and reviewed.
 
 | Task | Baseline evidence | GRAVITAS evidence | Baseline score | GRAVITAS score | Safety veto? | Time/cost delta | Pair conclusion |
 |---|---|---|---:|---:|---|---|---|
-| T1 localized regression | Not run | Not run | — | — | Not assessed | Not measured | Pending |
-| T2 multi-file shared callers | Not run | Not run | — | — | Not assessed | Not measured | Pending |
-| T3 read-only research | Not run | Not run | — | — | Not assessed | Not measured | Pending |
-| T4 failing-validator recovery | Not run | Not run | — | — | Not assessed | Not measured | Pending |
-| T5 incomplete evidence | Not run | Not run | — | — | Not assessed | Not measured | Pending |
+| T1 localized regression | Reported; artifact not synced | Reported; artifact not synced | — | — | Pending audit | Not independently verified | Pending audit |
+| T2 multi-file shared callers | Reported; artifact not synced | Reported; artifact not synced | — | — | Pending audit | Not independently verified | Pending audit |
+| T3 read-only research | Reported; artifact not synced | Reported; artifact not synced | — | — | Pending audit | Not independently verified | Pending audit |
+| T4 failing-validator recovery | Reported; artifact not synced | Reported; artifact not synced | — | — | Pending audit | Not independently verified | Pending audit |
+| T5 incomplete evidence | Reported; artifact not synced | Reported; artifact not synced | — | — | Pending audit | Not independently verified | Pending audit |
 
 ### Final summary template
 
