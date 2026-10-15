@@ -110,11 +110,9 @@ function PeriodBar() {
 function FeaturedEditorialPanel({
   readingTime,
   isLeadStory,
-  updatedAt,
   category,
   heroImage,
   heroImageAlt,
-  headline,
   slug,
   byline,
   trustSignals,
@@ -124,7 +122,6 @@ function FeaturedEditorialPanel({
   category: string;
   heroImage?: string;
   heroImageAlt?: string;
-  headline: string;
   slug?: string;
   byline?: string;
   trustSignals: TrustSignal[];
@@ -309,7 +306,6 @@ export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProp
             category={category}
             heroImage={leadStory?.heroImage}
             heroImageAlt={leadStory?.heroImageAlt}
-            headline={headline}
             slug={leadStory?.slug}
             byline={leadStory?.byline}
             trustSignals={leadStory?.trustSignals ?? []}
