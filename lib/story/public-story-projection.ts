@@ -49,6 +49,8 @@ export const PUBLIC_STORY_SELECT = [
   'headline',
   'summary',
   'hero_image',
+  'hero_image_alt',
+  'hero_image_is_decorative',
   'author',
   'category',
   'status',
