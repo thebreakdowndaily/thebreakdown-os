@@ -369,6 +369,43 @@ const memoryPublishedCorrections = new Map<string, PublishedCorrection>(
 );
 const memoryVerificationHandoffs = new Map<string, VerificationHandoffRecord>();
 
+/**
+ * Test-only fixture adapter. In production, public corrections come only from
+ * public.corrections. These seed examples are not silently treated as durable
+ * production records.
+ */
+function createDefaultCorrectionsMock(includeInitialPublished: boolean = true): any {
+  const client = createMockCorrectionsClient();
+  if (includeInitialPublished) {
+    for (const correction of INITIAL_PUBLISHED_CORRECTIONS) {
+      client._store.corrections.push({
+        id: correction.id,
+        story_id: correction.storyId,
+        story_slug: correction.storySlug,
+        story_title: correction.storyTitle,
+        story_version_id: correction.storyVersionId || null,
+        claim_id: correction.claimId || null,
+        verification_event_id: correction.verificationEventId || null,
+        category: correction.category,
+        previous_wording: correction.previousWording,
+        corrected_wording: correction.correctedWording,
+        explanation: correction.explanation,
+        superseded_by_id: correction.supersededById || null,
+        created_at: correction.createdAt,
+        updated_at: correction.updatedAt,
+        stories: correction.storySlug
+          ? { slug: correction.storySlug, title: correction.storyTitle }
+          : null,
+      });
+    }
+  }
+  return client;
+}
+
+if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
+  customDbClient = createDefaultCorrectionsMock(true);
+}
+
 // Rate-limiting tracker: IP -> timestamps[]
 const rateLimitWindowMs = 10 * 60 * 1000; // 10 minutes
 const maxRequestsPerWindow = 5;
@@ -385,7 +422,7 @@ export function resetCorrectionsMemoryStore(includeInitialPublished: boolean = t
   memoryVerificationHandoffs.clear();
   ipRequestTimestamps.clear();
   if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
-    customDbClient = createMockCorrectionsClient();
+    customDbClient = createDefaultCorrectionsMock(includeInitialPublished);
   }
 }
 
