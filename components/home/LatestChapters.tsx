@@ -72,7 +72,7 @@ const statusStyles = {
   planned: {
     bg:     'var(--color-bg-tertiary)',
     border: 'var(--color-border-default)',
-    text:   'var(--color-earth-dust)',
+    text:   'var(--color-text-secondary)',
   },
 };
 
@@ -153,7 +153,7 @@ export default function LatestChapters({ trustMetrics }: LatestChaptersProps = {
                   className="text-6xl font-bold leading-none tracking-tight shrink-0 select-none"
                   style={{
                     fontFamily: 'var(--font-playfair), Georgia, serif',
-                    color: 'var(--color-border-hover)',
+                    color: 'var(--color-earth-dust)',
                     lineHeight: '0.8',
                   }}
                   aria-hidden="true"
@@ -240,7 +240,7 @@ export default function LatestChapters({ trustMetrics }: LatestChaptersProps = {
                       className="text-2xl font-bold leading-none"
                       style={{
                         fontFamily: 'var(--font-playfair), Georgia, serif',
-                        color: 'var(--color-border-hover)',
+                        color: 'var(--color-earth-dust)',
                       }}
                       aria-hidden="true"
                     >
