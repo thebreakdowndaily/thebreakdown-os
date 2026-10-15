@@ -22,3 +22,6 @@ Evidence and scope; scorecard with rubric and rationale; top three issues; propo
 
 ## Safety
 Never request passwords, session cookies, or recovery codes. Do not access account data or change profile settings.
+
+## Publication gate
+Drafts remain drafts until an authorized human explicitly approves publication. This skill never schedules or publishes.
