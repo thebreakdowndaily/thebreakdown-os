@@ -15,8 +15,6 @@
       "**": false,
       "main": true,
       "staging": true,
-      "feature/*": true,
-      "feat/*": true,
       "preview/*": true,
       "fix/durable-correction-publishing-2026-10-15": true,
       "dev": true,
