@@ -5,11 +5,11 @@
  * chapters. Preserve that established mapping, but centralize it so routes,
  * metadata, sitemaps and trust metrics cannot drift independently.
  */
-import type { Chapter, PublicationStatus } from '@/types/canonical';
-import { isPubliclyPublished } from '@/lib/story/publication';
+import type { Chapter } from '@/types/canonical';
+import { isPubliclyPublished, type PublicationContext } from '@/lib/story/publication';
 
 type ChapterPublicationFields = Chapter & {
-  publicationStatus?: PublicationStatus;
+  publicationStatus?: PublicationContext['publicationStatus'];
   publishedAt?: string;
   isTestArtifact?: boolean;
 };
