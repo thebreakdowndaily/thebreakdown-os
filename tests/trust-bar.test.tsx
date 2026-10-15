@@ -21,5 +21,6 @@ describe('TrustBar metric labels', () => {
 
     expect(html).toContain('Published Chapters:');
     expect(html).toContain('—');
+    expect(html).not.toContain('✓');
   });
 });
