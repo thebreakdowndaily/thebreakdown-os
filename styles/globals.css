@@ -418,3 +418,8 @@
   overflow-x: auto !important;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Dark keyboard hints using legacy hard-coded utilities must retain WCAG AA contrast. */
+html[data-theme='dark'] kbd[class~="text-[#737373]"][class~="bg-[#0A0A0A]"] {
+  color: var(--color-text-secondary);
+}
