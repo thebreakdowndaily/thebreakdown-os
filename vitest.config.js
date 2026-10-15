@@ -131,6 +131,7 @@ module.exports = {
       'tests/wave1-public-surfaces.test.ts',
       'tests/wave2-api-routes.test.ts',
       'tests/public-topic-summary.test.ts',
+      'tests/home-topic-hubs.test.ts',
       'tests/public-v1-story-api.test.ts',
       'tests/public-v2-story-api.test.ts',
       'tests/sanitize-rich-html.test.ts',
