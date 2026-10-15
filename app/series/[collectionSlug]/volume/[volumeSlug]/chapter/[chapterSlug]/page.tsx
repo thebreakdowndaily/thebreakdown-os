@@ -21,7 +21,7 @@ export async function generateStaticParams() {
     for (const col of lib.collections) {
       for (const vol of col.volumes) {
         for (const chap of vol.chapters) {
-          if (chap.status === 'published' || chap.status === 'verified') {
+          if (isChapterPubliclyPublished(chap)) {
             params.push({
               collectionSlug: col.slug,
               volumeSlug: vol.slug,
