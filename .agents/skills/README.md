@@ -7,7 +7,7 @@ This directory contains reusable, independently maintained agent workflows used 
 GRAVITAS adds a structured engineering workflow for coding agents: inspect before editing, scope changes, adapt planning depth to risk, verify with repository-declared checks, recover from failures, and report only evidence-backed outcomes.
 
 - Entry point: [`gravitas/SKILL.md`](gravitas/SKILL.md)
-- Integration and evaluation plan: [`docs/engineering/gravitas-core-pilot.md`](../../../docs/engineering/gravitas-core-pilot.md)
+- Integration and evaluation plan: [`docs/engineering/gravitas-core-pilot.md`](../../docs/engineering/gravitas-core-pilot.md)
 - Upstream source and license pin: [`gravitas/UPSTREAM.md`](gravitas/UPSTREAM.md)
 - Pilot status: **not yet approved for broad rollout**. Core is behavioral guidance, not mechanical enforcement. The optional Native plugin and runtime are not installed by this change.
 
