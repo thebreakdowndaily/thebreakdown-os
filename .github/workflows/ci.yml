@@ -1,9 +1,11 @@
 name: CI Pipeline
 
 on:
+  # Validate feature branches once through pull_request; validate direct main updates through push.
+  # This avoids running the full suite twice for each commit on an open PR branch.
   push:
-    branches-ignore:
-      - 'dependabot/**'
+    branches:
+      - main
   pull_request:
 
 jobs:
