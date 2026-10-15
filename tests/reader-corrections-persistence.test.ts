@@ -268,4 +268,137 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(allReceived.length).toBe(1);
     expect(allReceived[0].id).toBe(submissionId);
   });
+
+  it('8. Published corrections commit to the durable public table and survive a cold-start cache reset', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      category: 'factual',
+      passageExcerpt: 'The border was permanently demarcated in the early 1960s.',
+      suggestedCorrection: 'The Line of Actual Control remains undemarcated in several sectors.',
+      submitterEmail: 'private-reader@example.com',
+    });
+    expect(submission.success).toBe(true);
+    const submissionId = submission.submissionId!;
+
+    await triageReaderCorrection({
+      correctionId: submissionId,
+      status: 'resolved',
+      triageNotes: 'Checked the official boundary records.',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'The border was permanently demarcated in the early 1960s.',
+        correctedWording: 'The Line of Actual Control remains undemarcated in several sectors.',
+        explanation: 'The claim overstated the status of demarcation and has been corrected.',
+      },
+    }, { userId: 'editor-1', role: 'editor' });
+
+    expect(mockStore.corrections).toHaveLength(1);
+    expect(mockStore.corrections[0].id).toBe(submissionId);
+    expect(mockStore.corrections[0].story_id).toBe('11111111-1111-1111-1111-111111111111');
+    expect(mockStore.readerCorrections[0].status).toBe('resolved');
+    expect(mockStore.readerCorrections[0].resolved_correction_id).toBe(submissionId);
+
+    const beforeRestart = await listPublishedCorrections('india-china-border-lac');
+    expect(beforeRestart).toHaveLength(1);
+    expect(beforeRestart[0].id).toBe(submissionId);
+    expect(beforeRestart[0].storySlug).toBe('india-china-border-lac');
+    expect((beforeRestart[0] as unknown as { submitterEmail?: string }).submitterEmail).toBeUndefined();
+    expect((beforeRestart[0] as unknown as { triageNotes?: string }).triageNotes).toBeUndefined();
+
+    // Clear process-local caches but retain the shared durable backing store.
+    const nextInstance = createMockCorrectionsClient({ store: mockStore });
+    resetCorrectionsMemoryStore(false);
+    setCorrectionsDbClient(nextInstance);
+
+    const afterRestart = await listPublishedCorrections('india-china-border-lac');
+    expect(afterRestart).toHaveLength(1);
+    expect(afterRestart[0].id).toBe(submissionId);
+    expect(afterRestart[0].correctedWording).toBe('The Line of Actual Control remains undemarcated in several sectors.');
+  });
+
+  it('9. Retried publication is idempotent and does not create duplicate public records', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'kashmir-the-first-test',
+      category: 'clarification',
+      passageExcerpt: 'The report states that the first plebiscite took place.',
+      suggestedCorrection: 'No plebiscite was held.',
+    });
+    expect(submission.success).toBe(true);
+
+    const triageInput = {
+      correctionId: submission.submissionId!,
+      status: 'resolved' as const,
+      triageNotes: 'Checked UN primary documentation.',
+      publishedCorrection: {
+        category: 'clarification' as const,
+        previousWording: 'The report states that the first plebiscite took place.',
+        correctedWording: 'No plebiscite was held.',
+        explanation: 'The earlier wording incorrectly described the historical record.',
+      },
+    };
+
+    await triageReaderCorrection(triageInput, { userId: 'editor-2', role: 'editor' });
+    await triageReaderCorrection(triageInput, { userId: 'editor-2', role: 'editor' });
+
+    expect(mockStore.corrections).toHaveLength(1);
+    expect(mockStore.readerCorrections[0].resolved_correction_id).toBe(submission.submissionId);
+    expect((await listPublishedCorrections('kashmir-the-first-test'))).toHaveLength(1);
+  });
+
+  it('10. A durable publication failure does not resolve the submission or leak a memory-only public notice', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      category: 'factual',
+      passageExcerpt: 'An excerpt requiring correction from a published story.',
+      suggestedCorrection: 'A corrected and more precise factual statement.',
+    });
+    expect(submission.success).toBe(true);
+
+    setCorrectionsDbClient(createMockCorrectionsClient({
+      store: mockStore,
+      shouldFailPublish: true,
+    }));
+
+    await expect(triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'resolved',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'An excerpt requiring correction from a published story.',
+        correctedWording: 'A corrected and more precise factual statement.',
+        explanation: 'A verified correction explaining the difference.',
+      },
+    }, { userId: 'editor-3', role: 'editor' })).rejects.toThrow(/durable ledger/);
+
+    expect(mockStore.corrections).toHaveLength(0);
+    expect(mockStore.readerCorrections[0].status).toBe('received');
+    expect(mockStore.readerCorrections[0].resolved_correction_id).toBeFalsy();
+    expect(await listPublishedCorrections('india-china-border-lac')).toHaveLength(0);
+  });
+
+  it('11. A correction without a resolvable canonical story cannot be published', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'story-not-present-in-canonical-store',
+      category: 'factual',
+      passageExcerpt: 'A passage for a story slug that does not exist.',
+      suggestedCorrection: 'A replacement claim that cannot yet be linked to a story.',
+    });
+    expect(submission.success).toBe(true);
+
+    await expect(triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'resolved',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'A passage for a story slug that does not exist.',
+        correctedWording: 'A replacement claim that cannot yet be linked to a story.',
+        explanation: 'No canonical story identity was found for this correction.',
+      },
+    }, { userId: 'editor-4', role: 'editor' })).rejects.toThrow(/durable ledger/);
+
+    expect(mockStore.corrections).toHaveLength(0);
+    expect(mockStore.readerCorrections[0].status).toBe('received');
+    expect(mockStore.readerCorrections[0].resolved_correction_id).toBeFalsy();
+  });
+
 });
