@@ -151,6 +151,50 @@ async function runDirectDatabaseTests() {
     }
     console.log('All migrations applied successfully!\n');
 
+    // Check correction-table ACLs BEFORE the broad privileges used by later legacy
+    // RLS fixtures. This prevents the test harness from masking missing migration grants.
+    console.log('Verifying explicit Supabase API grants before test-harness grants...');
+    const correctionPrivileges = await client.query(`
+      SELECT
+        has_table_privilege('anon', 'public.stories', 'SELECT') AS anon_read_stories,
+        has_table_privilege('authenticated', 'public.stories', 'SELECT') AS auth_read_stories,
+        has_table_privilege('anon', 'public.corrections', 'SELECT') AS anon_read_corrections,
+        has_table_privilege('authenticated', 'public.corrections', 'SELECT') AS auth_read_corrections,
+        has_table_privilege('authenticated', 'public.corrections', 'INSERT') AS auth_insert_corrections,
+        has_table_privilege('authenticated', 'public.corrections', 'UPDATE') AS auth_update_corrections,
+        has_table_privilege('service_role', 'public.corrections', 'INSERT') AS service_insert_corrections,
+        has_table_privilege('service_role', 'public.corrections', 'UPDATE') AS service_update_corrections,
+        has_table_privilege('service_role', 'public.corrections', 'DELETE') AS service_delete_corrections,
+        has_table_privilege('anon', 'public.reader_corrections', 'INSERT') AS anon_insert_reader_corrections,
+        has_table_privilege('anon', 'public.reader_corrections', 'SELECT') AS anon_read_reader_corrections,
+        has_table_privilege('authenticated', 'public.reader_corrections', 'SELECT') AS auth_read_reader_corrections,
+        has_table_privilege('authenticated', 'public.reader_corrections', 'INSERT') AS auth_insert_reader_corrections,
+        has_table_privilege('authenticated', 'public.reader_corrections', 'UPDATE') AS auth_update_reader_corrections,
+        has_table_privilege('service_role', 'public.reader_corrections', 'SELECT') AS service_read_reader_corrections,
+        has_table_privilege('service_role', 'public.reader_corrections', 'INSERT') AS service_insert_reader_corrections,
+        has_table_privilege('service_role', 'public.reader_corrections', 'UPDATE') AS service_update_reader_corrections,
+        has_table_privilege('service_role', 'public.reader_corrections', 'DELETE') AS service_delete_reader_corrections
+    `);
+    const acl = correctionPrivileges.rows[0];
+    assert(acl.anon_read_stories, 'Anonymous API role can resolve published story metadata');
+    assert(acl.auth_read_stories, 'Authenticated API role can resolve published story metadata');
+    assert(acl.anon_read_corrections, 'Anonymous API role can read the public corrections ledger');
+    assert(acl.auth_read_corrections, 'Authenticated API role can read the public corrections ledger');
+    assert(acl.auth_insert_corrections, 'Authenticated editorial role has insert privilege (RLS still enforces role claims)');
+    assert(acl.auth_update_corrections, 'Authenticated editorial role has update privilege (RLS still enforces role claims)');
+    assert(acl.service_insert_corrections, 'Service role can publish correction records');
+    assert(acl.service_update_corrections, 'Service role can update supersession metadata');
+    assert(!acl.service_delete_corrections, 'Service role cannot delete append-only public correction records');
+    assert(acl.anon_insert_reader_corrections, 'Anonymous API role can submit reader corrections');
+    assert(!acl.anon_read_reader_corrections, 'Anonymous API role cannot read the private reader-corrections queue');
+    assert(acl.auth_read_reader_corrections, 'Authenticated API role has read privilege for RLS-gated editorial triage');
+    assert(acl.auth_insert_reader_corrections, 'Authenticated API role can submit reader corrections');
+    assert(acl.auth_update_reader_corrections, 'Authenticated API role has update privilege for RLS-gated editorial triage');
+    assert(acl.service_read_reader_corrections, 'Service role can read submissions for triage');
+    assert(acl.service_insert_reader_corrections, 'Service role can insert submission records');
+    assert(acl.service_update_reader_corrections, 'Service role can update submission state');
+    assert(acl.service_delete_reader_corrections, 'Service role can clean up isolated synthetic staging smoke records');
+
     // Grant default privileges on all created tables to test roles
     await client.query('GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role');
     await client.query('GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role');
