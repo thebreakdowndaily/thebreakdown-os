@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getReaderTrustSignals } from '../../lib/story/trust-signals';
+import { getReaderTrustSignals, getStoryEvidenceSummary } from '../../lib/story/trust-signals';
 
 describe('getReaderTrustSignals', () => {
   it('fails closed when publication status is missing', () => {
@@ -59,5 +59,31 @@ describe('getReaderTrustSignals', () => {
       label: 'Partially verified',
       type: 'partial',
     });
+  });
+});
+
+describe('getStoryEvidenceSummary review state', () => {
+  it('does not claim an unknown lifecycle is published', () => {
+    expect(getStoryEvidenceSummary({
+      evidenceScore: 50,
+      sources: [],
+      claims: [],
+    }).reviewStatus).toBe('Unknown');
+  });
+
+  it('preserves explicit draft and published states', () => {
+    expect(getStoryEvidenceSummary({
+      publicationStatus: 'draft',
+      evidenceScore: 50,
+      sources: [],
+      claims: [],
+    }).reviewStatus).toBe('Draft');
+
+    expect(getStoryEvidenceSummary({
+      publicationStatus: 'published',
+      evidenceScore: 50,
+      sources: [],
+      claims: [],
+    }).reviewStatus).toBe('Published');
   });
 });
