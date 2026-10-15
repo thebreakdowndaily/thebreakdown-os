@@ -3,10 +3,10 @@ name: gravitas
 description: >
   Use for software implementation, debugging, refactoring, review, migration,
   and other repository-changing engineering work where correctness must be
-  verified. Enforces scoped reconnaissance, adaptive planning, evidence-backed
-  verification, requirement tracking, failure recovery, and budget-aware
-  delegation. Model-agnostic reliability runtime for coding agents --
-  measured, not claimed.
+  verified. Guides the agent through scoped reconnaissance, adaptive planning,
+  evidence-backed verification, requirement tracking, failure recovery, and
+  budget-aware delegation. Portable Core policy; mechanical enforcement is
+  limited to the separately installed Native runtime.
 license: MIT
 ---
 
