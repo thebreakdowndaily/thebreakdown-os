@@ -34,7 +34,7 @@ Core has the lowest integration surface and can be reviewed as project-local gui
 
 ### Checkpoint 2 — CI and compatibility
 
-- [ ] Existing skill validator passes.
+- [ ] CI runs `python3 scripts/validate-skills.py` and passes.
 - [ ] Existing unit, lint, typecheck, security, migration, and build workflows remain green.
 - [ ] Reviewer confirms no production code or architecture change.
 
