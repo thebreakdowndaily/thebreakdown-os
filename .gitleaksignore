@@ -1,0 +1,4 @@
+# Only add exact, manually reviewed finding fingerprints here.
+# Format: <commit-sha>:<path>:<rule-id>:<line-number>
+# Do not add secrets, wildcard paths, or broad directory exclusions.
+# No findings are suppressed until a real scan result is verified as a false positive.
