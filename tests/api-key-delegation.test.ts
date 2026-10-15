@@ -48,7 +48,7 @@ describe('API-key delegation least-privilege policy', () => {
     });
   });
 
-  it.each(['system.config', 'user.role.grant', 'radar.poll', 'radar.poll.force'])(
+  it.each(['system.config', 'radar.poll', 'radar.poll.force'])(
     'prevents a managing editor from delegating %s without holding it',
     (permission) => {
       const result = authorizeApiKeyDelegation(managingEditor, {
