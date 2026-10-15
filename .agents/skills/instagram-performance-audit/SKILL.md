@@ -23,3 +23,6 @@ Baseline and data-quality notes; metrics/formulas; strongest and weakest posts w
 
 ## Safety
 Never invent missing Insights, scrape accounts at scale, log in, or expose private individual-level audience information.
+
+## Publication gate
+Drafts remain drafts until an authorized human explicitly approves publication. This skill never schedules or publishes.
