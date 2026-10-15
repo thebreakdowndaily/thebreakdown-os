@@ -77,7 +77,7 @@ export default function MissionBar() {
                 className="text-4xl font-bold leading-none select-none"
                 style={{
                   fontFamily: 'var(--font-playfair), Georgia, serif',
-                  color: 'var(--color-border-hover)',
+                  color: 'var(--color-earth-dust)',
                 }}
                 aria-hidden="true"
               >
