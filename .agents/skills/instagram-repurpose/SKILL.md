@@ -20,3 +20,6 @@ A repurposing map with source section/claim, candidate angle, audience question,
 
 ## Safety
 Do not make one personal story look like multiple independent sources. Never fabricate visuals or quotations. No automatic publication.
+
+## Publication gate
+Drafts remain drafts until an authorized human explicitly approves publication. This skill never schedules or publishes.
