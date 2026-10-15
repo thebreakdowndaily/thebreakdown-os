@@ -1,0 +1,54 @@
+name: Prepare Next.js 15.5 patch lockfile (temporary)
+
+on:
+  push:
+    branches:
+      - chore/prepare-next-1555-patch-lock
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate and validate npm lockfile with npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Resolve patched Next.js 15.5 release with npm
+        run: npm install next@15.5.27 --save-prefix="^" --ignore-scripts --no-audit --no-fund
+
+      - name: Validate manifest-lock consistency and pinned version
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const declared = pkg.dependencies?.next;
+          const locked = lock.packages?.['node_modules/next']?.version;
+          const rootLockSpec = lock.packages?.['']?.dependencies?.next;
+          if (declared !== '^15.5.27') throw new Error('Expected next range ^15.5.27, got ' + declared);
+          if (rootLockSpec !== declared) throw new Error('Root lock spec disagrees: ' + rootLockSpec);
+          if (locked !== '15.5.27') throw new Error('Expected locked Next 15.5.27, got ' + locked);
+          console.log({ declared, rootLockSpec, locked });
+          NODE
+          npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Upload npm-generated files for review
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: next-15.5.27-npm-generated-lock
+          path: |
+            package.json
+            package-lock.json
+          if-no-files-found: error
+          retention-days: 3
