@@ -6,7 +6,7 @@ on:
       - chore/prepare-next-1555-patch-lock
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -42,6 +42,19 @@ jobs:
           console.log({ declared, rootLockSpec, locked });
           NODE
           npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Commit npm-generated files on this temporary branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "npm generated no file changes"
+          else
+            git commit -m "chore(deps): patch Next.js to 15.5.27"
+            git push origin HEAD:refs/heads/chore/prepare-next-1555-patch-lock
+          fi
 
       - name: Upload npm-generated files for review
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
