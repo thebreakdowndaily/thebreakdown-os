@@ -27,7 +27,8 @@ See the [audit snapshot](./repository-audit-2026-10-15.md) for evidence and limi
 | `plugins/` | Extension-oriented modules | Depend on stable extension contracts, not another module's implementation details. |
 | `types/`, `schemas/` | Shared types and data contracts | Locate canonical definitions first; avoid parallel types/schemas. |
 | `stories/`, `data/`, `registry/` | Story/content data and registries | Decide whether the change belongs in canonical data, a registry, service logic, or presentation before editing. |
-| `supabase/`, `migrations/` | DB client/configuration and migration assets | **Two migration roots exist.** Map scripts/order/deployment consumers before adding or moving migrations. |
+| `supabase/` and `supabase/migrations/` | Supabase client and Postgres migration chain | Current migration validator and standard CI target this chain. Preserve its order and applied migration history. |
+| Root `migrations/` | Four D1/SQLite-oriented SQL migrations | A separate D1-oriented chain with a manual `scripts/seed-d1.ts` helper; current operational status is unverified. Do not merge with Supabase migrations or delete without checking any external D1 environment. |
 | `tests/` | Cross-module, integration, security, and end-to-end tests | Preserve critical invariants and failure-path coverage. |
 | `scripts/` | Maintained developer/CI verification and operational utilities | Treat scripts as infrastructure until references/history prove otherwise. |
 | `audit/` | Audit framework code, scripts, data, and related assets | Keep executable tooling distinct from static evidence and transient outputs. |
@@ -66,10 +67,14 @@ Respect actual Next.js server/client behavior and legitimate domain dependencies
 ## Ownership questions to resolve before structural moves
 
 ### Migrations
-Inventory `migrations/`, `supabase/migrations/`, `scripts/verify-migrations.ts`, schema validators, CI, and deployment config. Establish which paths are historical, currently applied, generated, or consumed by tooling. Leave both intact until then.
+See [Repository Ownership Audit](./repository-ownership-audit-2026-10-15.md). The evidence shows distinct purposes: root `migrations/` is D1/SQLite-oriented; `supabase/migrations/` is the Postgres chain checked by `scripts/verify-migrations.ts` and CI. The D1 chain's present operational status is unverified. Preserve both until D1 usage is confirmed; do not treat them as duplicate migrations.
 
 ### ADRs
-Inventory `adr/`, `docs/adr/`, `docs/architecture/adr-index.md`, and links from architecture docs. Determine whether these directories have distinct domains or competing indexes. Do not merge or renumber records in this foundation pass.
+See [Repository Ownership Audit](./repository-ownership-audit-2026-10-15.md). The two file-backed ADR collections cover partly distinct topics but reuse IDs; the root README/architecture docs point to `adr/`, while `docs/adr/README.md` demands new structural ADRs there. The narrative `docs/architecture/adr-index.md` further overlaps. Preserve accepted files and numbers; reconcile creation policy before adding a new ADR.
+
+### Wrangler local state
+
+The repository tracks 15 files under `.wrangler/state/v3/` despite `.gitignore` lacking an ignore rule. This state includes Miniflare SQLite/cache files and WAL/SHM companions. The next safe action is to ignore future state (done in this branch), then determine whether any local D1 database data requires export before untracking these generated files. Do not commit new local state.
 
 ### Root evidence/output files
 Classify each root artifact as source/config, maintained tool, durable evidence, fixture, reproducible output, transient log, or obsolete item. Search references and history before a move/deletion. Retain durable records in an established report/archive location; keep ephemeral logs local or as CI artifacts where compatible with project needs.

@@ -10,6 +10,9 @@ build/
 .next/
 *.tsbuildinfo
 
+# Wrangler / Miniflare generated local runtime state
+/.wrangler/state/
+
 # Environment
 .env
 .env.local

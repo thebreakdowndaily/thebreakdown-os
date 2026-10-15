@@ -9,7 +9,7 @@ last_updated: 2026-10-15
 
 ## Status and scope
 
-**Structural inventory complete; code-level architecture audit remains pending.**
+**Structural inventory and focused migration/ADR/CI ownership audit complete; source-level import graph and runtime ownership checks remain pending.**
 
 This baseline is based on Git's recursive repository tree and the root README, `package.json`, and CI workflow definitions at commit `9f4ae81e5b9014614f4397a2022e7025243861ec` on `main`. On 2026-10-15, GitHub Actions reported successful `CI Pipeline`, `Security Scans`, `Audit Framework Verification`, and `POP-1.0 Production Infrastructure Pipeline` runs for that commit.
 
@@ -55,10 +55,10 @@ Subtree counts indicate scale rather than directly-owned file counts. The larges
 
 **Action:** Build an import/reference graph, inspect actual callers and exports, and assign explicit ownership before code moves or boundary enforcement.
 
-### F-04 — Migration and decision-record ownership needs an explicit map
-**Priority: high.** Both `migrations/` and `supabase/migrations/` contain migration assets. Likewise, `adr/` and `docs/adr/` exist, and architecture documentation has an ADR index. These may have distinct scopes, but the canonical home for new migrations and decisions is not obvious from paths alone.
+### F-04 — Database migration and ADR ownership must be described separately
+**Priority: high.** Follow-up inspection confirms that `migrations/` contains a D1/SQLite-oriented SQL chain, while `supabase/migrations/` contains the Postgres migration chain used by the current migration verifier and CI. They are not interchangeable duplicates, but the D1 chain is not wired into the inspected standard scripts/workflows and its operational status is unverified. Separately, `adr/`, `docs/adr/`, and `docs/architecture/adr-index.md` contain overlapping or contradictory decision-record conventions.
 
-**Action:** Inventory contents, scripts, migration ordering, CI references, and document links. Do not merge directories, renumber, remove, or rewrite historical migrations in this phase.
+**Action:** See [the focused ownership audit](./repository-ownership-audit-2026-10-15.md). Keep migration files intact until D1 ownership is confirmed. Reconcile ADR creation guidance before moving or renumbering accepted records.
 
 ### F-05 — CI definitions repeat several validation gates
 **Priority: medium-high.** `.github/workflows/ci.yml` and `.github/workflows/production-deploy.yml` both validate PRs targeting `main`; both install dependencies and run type-checking, lint, security regression, migration safety, and a build. They also have different additional checks: the production workflow includes domain/projection, workflow, data-integrity, release-control, and deployment-specific gates. `.gitlab-ci.yml` declares another overlapping path, though its presence does not prove the pipeline is active.
@@ -75,12 +75,23 @@ Subtree counts indicate scale rather than directly-owned file counts. The larges
 
 **Action in this change:** Align the README runtime/install guidance and architecture deployment summary with the package and current workflow configuration.
 
+
+### F-08 — Tracked Wrangler runtime state is missing an ignore rule
+**Priority: medium-high.** The tree contains 15 tracked files under `.wrangler/state/v3/`, including Miniflare SQLite cache/D1 state and WAL/SHM companions. The root `.gitignore` did not ignore this directory.
+
+**Action in this branch:** Ignore future `.wrangler/state/` writes. The already-tracked artifacts are deliberately not deleted in this pass: first determine whether any local D1 data needs to be exported or preserved, then remove generated runtime state from version control in a separate, reviewable cleanup.
+
+### F-09 — ADR creation instructions are contradictory
+**Priority: high.** Root `adr/README.md` and architecture docs direct readers to `adr/`, while `docs/adr/README.md` says all structural changes must be recorded there. `docs/architecture/adr-index.md` adds a third narrative register, and ADR identifiers collide across the two file-backed collections.
+
+**Action:** Define the two existing scopes without renumbering historical records, then establish one clear creation policy and cross-link it from each register. See the [focused ownership audit](./repository-ownership-audit-2026-10-15.md).
+
 ## Prioritized next steps
 
 1. **Foundation in this branch:** compact agent entry point with verbatim legacy archive; repository snapshot and boundary/change map; developer workflow and feature-to-test index; consistent documentation indexes and runtime guidance.
-2. **Code-level audit:** enumerate import/reference edges among `app/`, `components/`, `features/`, `services/`, `lib/`, `packages/`, and `plugins/`; locate duplicated rules/cycles; establish migration and ADR ownership.
-3. **Measured velocity pass:** confirm consumers of scripts/workflows; record focused and full-test timings; remove only proven redundancies; classify and relocate root reports/generated outputs only after reference/history review.
+2. **Source dependency audit:** build a verified import/call graph across `app/`, `components/`, `features/`, `services/`, `lib/`, `packages/`, and `plugins/`; check cycles, duplicate rules, and boundaries.
+3. **Measured cleanup:** decide whether D1 remains operational, resolve ADR governance, retain or remove tracked Wrangler state safely, and capture test/workflow timings before simplifying validation.
 
 ## Explicit non-findings
 
-This snapshot does not claim that any root artifact is dead, that either migration tree is obsolete, that a circular dependency exists, or that duplicate CI gates can be removed safely. Those conclusions require source-level references, active GitHub configuration, test results, and timing data.
+This audit does not claim that the D1 chain is dead, that tracked Wrangler state is safe to discard without review, that circular dependencies exist, or that CI gates can be removed safely. The focused owner/path findings are documented in [Repository Ownership Audit](./repository-ownership-audit-2026-10-15.md); a complete source-level import graph and elapsed-time baseline remain outstanding.

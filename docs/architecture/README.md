@@ -11,7 +11,7 @@ Technical architecture documentation for The Breakdown OS.
 
 ## Purpose
 
-This directory captures the *how* of system design — data flows, service boundaries, component diagrams, and integration contracts. Architectural decisions are tracked separately in [`/adr`](../../adr/).
+This directory captures the *how* of system design — data flows, service boundaries, component diagrams, and integration contracts. ADR governance is currently split between [`/adr`](../../adr/), [`/docs/adr/`](../adr/), and a narrative [architecture ADR register](./adr-index.md); see the repository ownership audit before creating or moving records.
 
 ## Index
 
@@ -20,6 +20,7 @@ This directory captures the *how* of system design — data flows, service bound
 | [Knowledge Graph Architecture](./graph.md) | Details the projection-based graph architecture | active |
 | [Repository Audit — 2026-10-15](./repository-audit-2026-10-15.md) | Evidence-backed structural baseline and prioritized follow-up work | baseline |
 | [Repository Boundaries and Change Map](./repository-boundaries-and-change-map.md) | Folder map, proposed ownership boundaries, and migration sequence | proposed |
+| [Repository Ownership Audit — 2026-10-15](./repository-ownership-audit-2026-10-15.md) | Evidence-backed migration/ADR ownership, tracked local state, and CI findings | focused-audit |
 
 ## Conventions
 

@@ -168,7 +168,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Architecture Decisions
 
-See [adr/](./adr/) for the full ADR log.
+Architecture decisions currently exist across [`adr/`](./adr/), [`docs/adr/`](./docs/adr/), and [the architecture ADR register](./docs/architecture/adr-index.md). Their scopes and creation policy are being reconciled; see the [repository ownership audit](./docs/architecture/repository-ownership-audit-2026-10-15.md) before adding or moving an ADR.
 
 ## Roadmap
 
