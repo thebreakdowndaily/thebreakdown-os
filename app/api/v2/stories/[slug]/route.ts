@@ -4,7 +4,7 @@ import { requireApiPermission } from '@/features/auth/require-role';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 import type { Story, StoryStatus } from '@/types/canonical';
-import { PUBLIC_STORY_SELECT, stripInternalStoryFields } from '@/lib/story/public-story-projection';
+import { PUBLIC_STORY_SELECT, toPublicDatabaseStory } from '@/lib/story/public-story-projection';
 
 export async function GET(
   _request: NextRequest,
@@ -23,7 +23,7 @@ export async function GET(
       .maybeSingle();
     if (error) throw error;
     if (!data) return notFound('Story');
-    return ok(stripInternalStoryFields(data));
+    return ok(toPublicDatabaseStory(data));
   } catch (e) { return serverError(e); }
 }
 
