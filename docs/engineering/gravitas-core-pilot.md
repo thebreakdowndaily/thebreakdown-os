@@ -1,6 +1,6 @@
 # GRAVITAS Core pilot — The Breakdown OS
 
-**Status:** Merged on 2026-10-15. Structural integration and repository CI compatibility checks passed; controlled effectiveness evaluation is **pending**.  \
+**Status:** Merged on 2026-10-15. Structural integration and repository CI compatibility checks passed; controlled trials are **reported complete**, with raw evidence publication and independent audit still pending.  \
 **Pilot PR:** [#24](https://github.com/thebreakdowndaily/thebreakdown-os/pull/24)  \
 **Upstream:** [`udaysharmadev/Gravitas`](https://github.com/udaysharmadev/Gravitas)  \
 **Pinned source commit:** [`5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5`](https://github.com/udaysharmadev/Gravitas/commit/5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5)  \
@@ -22,6 +22,10 @@ Evaluate whether GRAVITAS Core improves the consistency of Gemini / Antigravity 
 ## Why Core-only first
 
 Core has the lowest integration surface and can be reviewed as project-local guidance. Native is a separate Antigravity plugin with hook-based checks. It is intentionally out of scope until Core demonstrates useful improvement and Native receives a separate security and compatibility review.
+
+## Evaluation result
+
+A preliminary evaluator summary reports equal ceiling scores for Baseline and GRAVITAS Core, with elapsed-time overhead for GRAVITAS. The details and outstanding evidence gaps are recorded in [the evaluation results review](./gravitas-core-evaluation-results-review.md). This is not a verified effectiveness claim until the raw run artifacts and scoring evidence are committed and reviewed.
 
 ## Validation checkpoints
 
