@@ -30,3 +30,6 @@ VERIFIED; PARTIALLY VERIFIED; ATTRIBUTED ONLY; CONTESTED; UNVERIFIED.
 
 ## Safety
 Never invent sources, quotations, numbers, or dates. Do not expose private personal data. Apply stronger corroboration and careful attribution to allegations about identifiable people, legal matters, elections, health, finance, or public safety. Stop at the evidence brief; do not publish or contact subjects.
+
+## Publication gate
+This skill outputs an evidence brief only. Drafting and publication require separate human review; never publish automatically.
