@@ -132,6 +132,7 @@ module.exports = {
       'tests/wave2-api-routes.test.ts',
       'tests/public-topic-summary.test.ts',
       'tests/public-v1-story-api.test.ts',
+      'tests/public-v2-story-api.test.ts',
       'tests/wave3-remaining-paths.test.ts',
       'tests/phase2b1-reconciliation.test.ts',
       'tests/continuous-newsroom-os.test.ts',

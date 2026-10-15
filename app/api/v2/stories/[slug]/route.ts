@@ -11,7 +11,15 @@ export async function GET(
 ) {
   try {
     const { slug } = await context.params;
-    const { data, error } = await db().from('stories').select('*').eq('slug', slug).single();
+    // Public route: only return currently published, non-test stories.
+    const { data, error } = await db()
+      .from('stories')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .eq('is_test_artifact', false)
+      .lte('published_at', new Date().toISOString())
+      .maybeSingle();
     if (error) throw error;
     if (!data) return notFound('Story');
     return ok(data);

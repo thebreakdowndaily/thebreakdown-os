@@ -12,13 +12,17 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
     const search = searchParams.get('search') || '';
     const category = searchParams.get('category') || '';
-    const status = searchParams.get('status') || '';
-
     let query = db().from('stories').select('*', { count: 'exact' });
 
     if (search) query = query.or(`title.ilike.%${search}%,summary.ilike.%${search}%`);
     if (category) query = query.eq('category', category);
-    if (status) query = query.eq('status', status);
+
+    // This unauthenticated GET is a public discovery surface. Enforce the
+    // canonical visibility boundary in the query as defense in depth to RLS.
+    query = query
+      .eq('status', 'published')
+      .eq('is_test_artifact', false)
+      .lte('published_at', new Date().toISOString());
 
     const { data, count, error } = await query
       .order('published_at', { ascending: false })
