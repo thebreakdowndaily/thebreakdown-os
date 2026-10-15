@@ -26,7 +26,6 @@ const TOPIC_ACCENTS: Record<string, string> = {
 };
 
 
-
 interface TopicHubsProps {
   topics: HomepageTopic[];
 }
