@@ -191,15 +191,11 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                 <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
                 {totalStories} Published {totalStories === 1 ? 'Investigation' : 'Investigations'}
               </span>
-              <span>•</span>
-              <span className="text-neutral-300">Primary Sourced & Verified</span>
-
               {topic.freshness && (
                 <>
                   <span>•</span>
-                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Verified {topic.freshness.lastVerified}
+                  <span className="text-xs font-mono text-neutral-300">
+                    Freshness: {topic.freshness.status} · Last verified {topic.freshness.lastVerified}
                   </span>
                 </>
               )}
