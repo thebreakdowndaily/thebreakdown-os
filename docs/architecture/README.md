@@ -2,7 +2,7 @@
 title: Architecture
 status: draft
 owner: engineering
-last_updated: 2026-07-09
+last_updated: 2026-10-15
 ---
 
 # Architecture
@@ -18,6 +18,8 @@ This directory captures the *how* of system design — data flows, service bound
 | Document | Description | Status |
 |----------|-------------|--------|
 | [Knowledge Graph Architecture](./graph.md) | Details the projection-based graph architecture | active |
+| [Repository Audit — 2026-10-15](./repository-audit-2026-10-15.md) | Evidence-backed structural baseline and prioritized follow-up work | baseline |
+| [Repository Boundaries and Change Map](./repository-boundaries-and-change-map.md) | Folder map, proposed ownership boundaries, and migration sequence | proposed |
 
 ## Conventions
 
@@ -33,7 +35,7 @@ This directory captures the *how* of system design — data flows, service bound
 | Language | TypeScript |
 | Styling | Tailwind CSS |
 | Data | In-memory services (Memory* pattern) |
-| Deployment | Cloudflare Pages (static) |
+| Deployment | Vercel (Next.js) with Cloudflare Edge integration; verify exact behavior in active deployment configuration |
 | API | REST — `/app/api/v1/` |
 | Graph | `lib/graph/graphService.ts` — SVG force-directed |
 | Events | `lib/events/event-bus.ts` — typed pub/sub |

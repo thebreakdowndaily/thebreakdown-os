@@ -2,7 +2,7 @@
 title: Engineering Guides
 status: draft
 owner: engineering
-last_updated: 2026-07-09
+last_updated: 2026-10-15
 ---
 
 # Engineering
@@ -13,7 +13,12 @@ Developer guides, onboarding docs, and operational runbooks for The Breakdown OS
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| _(none yet)_ | — | — |
+| [Developer Workflow](./developer-workflow.md) | Common commands, focused tests, CI behavior, and PR checklist | active |
+| [Feature-to-Module and Test Map](./feature-module-test-map.md) | Initial navigation from change intent to implementation candidates and tests | provisional |
+
+## Maintenance rule
+
+Keep this index short. Before adding a new guide, search for an existing owner and link to it rather than duplicating architecture or operational policy.
 
 ## Suggested Documents
 

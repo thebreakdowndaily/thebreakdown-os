@@ -32,3 +32,7 @@ owner: team or person
 last_updated: YYYY-MM-DD
 ---
 ```
+
+## Engineering start here
+
+For everyday changes, start with [the current repository engineering contract](../AGENTS.md). Use the [repository audit snapshot](./architecture/repository-audit-2026-10-15.md) to understand known structural questions, the [boundary and change map](./architecture/repository-boundaries-and-change-map.md) to locate likely ownership, and the [developer workflow](./engineering/developer-workflow.md) to choose verification commands. The [feature-to-module/test map](./engineering/feature-module-test-map.md) is provisional until code-level import tracing is complete.
