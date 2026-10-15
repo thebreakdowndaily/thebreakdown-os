@@ -112,16 +112,17 @@ export interface MockCorrectionsStore {
 export function createMockCorrectionsClient(options: {
   store?: MockCorrectionsStore;
   shouldFailInsert?: boolean;
+  shouldFailPublish?: boolean;
   shouldThrow?: boolean;
 } = {}): any {
   const store = options.store || {
     readerCorrections: [],
     stories: [
-      { id: '11111111-1111-1111-1111-111111111111', slug: 'india-china-border-lac' },
-      { id: '22222222-2222-2222-2222-222222222222', slug: 'kashmir-the-first-test' },
-      { id: '33333333-3333-3333-3333-333333333333', slug: 'the-partition-and-its-legacies' },
-      { id: '44444444-4444-4444-4444-444444444444', slug: 'electoral-bonds' },
-      { id: '55555555-5555-5555-5555-555555555555', slug: 'mgnrega-reform' },
+      { id: '11111111-1111-1111-1111-111111111111', slug: 'india-china-border-lac', title: 'India–China Border LAC' },
+      { id: '22222222-2222-2222-2222-222222222222', slug: 'kashmir-the-first-test', title: 'Kashmir: The First Test' },
+      { id: '33333333-3333-3333-3333-333333333333', slug: 'the-partition-and-its-legacies', title: 'The Partition and Its Legacies' },
+      { id: '44444444-4444-4444-4444-444444444444', slug: 'electoral-bonds', title: 'The Electoral Bond Ledger' },
+      { id: '55555555-5555-5555-5555-555555555555', slug: 'mgnrega-reform', title: 'Reforming MGNREGA' },
     ],
     corrections: [],
   };
@@ -129,10 +130,117 @@ export function createMockCorrectionsClient(options: {
   return {
     _isMock: true,
     _store: store,
+    rpc: async (functionName: string, args: Record<string, any>) => {
+      if (options.shouldThrow) {
+        throw new Error('Database connection failed');
+      }
+      if (functionName !== 'publish_reader_correction') {
+        return { data: null, error: { message: `Unknown RPC: ${functionName}` } };
+      }
+      if (options.shouldFailPublish) {
+        return { data: null, error: { message: 'Correction publication transaction failed' } };
+      }
+
+      const submissionId = args.p_reader_correction_id;
+      const reader = store.readerCorrections.find((r: any) => r.id === submissionId);
+      if (!reader) {
+        return { data: null, error: { message: 'Reader correction not found' } };
+      }
+
+      if (reader.resolved_correction_id) {
+        const existing = store.corrections.find((c: any) => c.id === reader.resolved_correction_id);
+        return existing
+          ? { data: [existing], error: null }
+          : { data: null, error: { message: 'Resolved correction reference is inconsistent' } };
+      }
+
+      if (reader.status === 'rejected') {
+        return { data: null, error: { message: 'A rejected reader correction cannot be published' } };
+      }
+
+      if (store.corrections.some((c: any) => c.id === submissionId)) {
+        return { data: null, error: { message: 'Correction id exists without submission linkage' } };
+      }
+
+      const story = reader.story_id
+        ? store.stories.find((s: any) => s.id === reader.story_id)
+        : store.stories.find((s: any) => s.slug === reader.story_slug);
+      if (!story?.id) {
+        return { data: null, error: { message: 'Reader correction does not resolve to a canonical story' } };
+      }
+      if (!args.p_category || !['factual', 'source', 'interpretive', 'clarification', 'context_update', 'retraction'].includes(args.p_category)) {
+        return { data: null, error: { message: 'Invalid correction category' } };
+      }
+      if (typeof args.p_corrected_wording !== 'string' || !args.p_corrected_wording.trim()) {
+        return { data: null, error: { message: 'Corrected wording is required' } };
+      }
+      if (typeof args.p_explanation !== 'string' || !args.p_explanation.trim()) {
+        return { data: null, error: { message: 'Correction explanation is required' } };
+      }
+
+      const now = new Date().toISOString();
+      const notice = {
+        id: submissionId,
+        story_id: story.id,
+        story_slug: story.slug,
+        story_title: story.title,
+        story_version_id: null,
+        claim_id: reader.claim_id || null,
+        verification_event_id: null,
+        category: args.p_category,
+        previous_wording: args.p_previous_wording || '',
+        corrected_wording: args.p_corrected_wording.trim(),
+        explanation: args.p_explanation.trim(),
+        superseded_by_id: null,
+        created_at: now,
+        updated_at: now,
+        stories: { slug: story.slug, title: story.title },
+      };
+
+      // Model the database transaction: only mutate either table after every
+      // validation gate has passed and the public notice can be committed.
+      store.corrections.push(notice);
+      reader.status = 'resolved';
+      reader.triage_notes = args.p_triage_notes || reader.triage_notes || null;
+      reader.resolved_correction_id = notice.id;
+      reader.updated_at = now;
+      return { data: [notice], error: null };
+    },
     from: (table: string) => {
       let filterFn = (r: any) => true;
       let insertedPayload: any = null;
       let updatedPayload: any = null;
+      let orderColumn: string | null = null;
+      let orderAscending = true;
+
+      const decorateCorrection = (row: any) => {
+        const story = row.stories || store.stories.find((s: any) => s.id === row.story_id);
+        return {
+          ...row,
+          stories: story ? { slug: story.slug, title: story.title } : null,
+        };
+      };
+
+      const getRows = () => {
+        const source = table === 'reader_corrections'
+          ? store.readerCorrections
+          : table === 'corrections'
+          ? store.corrections
+          : table === 'stories'
+          ? store.stories
+          : [];
+        let rows = source.filter(filterFn);
+        if (table === 'corrections') rows = rows.map(decorateCorrection);
+        if (orderColumn) {
+          rows = [...rows].sort((a: any, b: any) => {
+            const left = a[orderColumn!];
+            const right = b[orderColumn!];
+            const cmp = String(left ?? '').localeCompare(String(right ?? ''));
+            return orderAscending ? cmp : -cmp;
+          });
+        }
+        return rows;
+      };
 
       const builder: any = {
         select: (_cols?: string) => builder,
@@ -141,7 +249,11 @@ export function createMockCorrectionsClient(options: {
           filterFn = (r: any) => prev(r) && r[col] === val;
           return builder;
         },
-        order: (_col: string, _opts?: { ascending?: boolean }) => builder,
+        order: (col: string, opts?: { ascending?: boolean }) => {
+          orderColumn = col;
+          orderAscending = opts?.ascending ?? true;
+          return builder;
+        },
         insert: (payload: any) => {
           insertedPayload = payload;
           return builder;
@@ -158,10 +270,11 @@ export function createMockCorrectionsClient(options: {
             return { data: null, error: { message: 'Database insert constraint violation' } };
           }
           if (table === 'reader_corrections' && insertedPayload) {
+            const now = new Date().toISOString();
             const row = {
               ...insertedPayload,
-              created_at: insertedPayload.created_at || new Date().toISOString(),
-              updated_at: insertedPayload.updated_at || new Date().toISOString(),
+              created_at: insertedPayload.created_at || now,
+              updated_at: insertedPayload.updated_at || now,
             };
             store.readerCorrections.push(row);
             return { data: row, error: null };
@@ -176,33 +289,19 @@ export function createMockCorrectionsClient(options: {
           if (options.shouldThrow) {
             throw new Error('Database connection failed');
           }
-          if (table === 'stories') {
-            const found = store.stories.find(filterFn);
-            return { data: found || null, error: null };
-          }
-          if (table === 'reader_corrections') {
-            const found = store.readerCorrections.find(filterFn);
-            return { data: found || null, error: null };
-          }
-          return { data: null, error: null };
+          const found = getRows()[0];
+          return { data: found || null, error: null };
         },
         then: (resolve: any, reject: any) => {
           if (options.shouldThrow) {
             return Promise.reject(new Error('Database connection failed')).catch(reject);
           }
-          if (table === 'reader_corrections') {
-            if (updatedPayload) {
-              for (const r of store.readerCorrections) {
-                if (filterFn(r)) {
-                  Object.assign(r, updatedPayload);
-                }
-              }
-              return Promise.resolve({ data: null, error: null }).then(resolve);
-            }
-            const matching = store.readerCorrections.filter(filterFn);
+          if (updatedPayload && table === 'reader_corrections') {
+            const matching = getRows();
+            for (const row of matching) Object.assign(row, updatedPayload);
             return Promise.resolve({ data: matching, error: null }).then(resolve);
           }
-          return Promise.resolve({ data: [], error: null }).then(resolve);
+          return Promise.resolve({ data: getRows(), error: null }).then(resolve);
         },
       };
 
@@ -210,11 +309,6 @@ export function createMockCorrectionsClient(options: {
     },
   };
 }
-
-if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
-  customDbClient = createMockCorrectionsClient();
-}
-
 
 // ─── In-Memory Fallback Store (for offline / test / local execution) ───────────
 
