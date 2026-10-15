@@ -92,6 +92,14 @@ describe('v1 public story API visibility', () => {
       status: 'published',
       publicationStatus: 'published',
       isTestArtifact: false,
+      notes: 'internal editorial note',
+      updatedBy: 'editor-uuid',
+      version: 3,
+      scheduledAt: '2026-11-01T00:00:00.000Z',
+      scheduledBy: 'editor-uuid',
+      blockReason: 'internal block detail',
+      blockedAt: '2026-10-01T00:00:00.000Z',
+      fallbackStoryId: 'internal-fallback-id',
     };
     repository.getPublicStoryBySlug.mockResolvedValue(publishedStory);
 
