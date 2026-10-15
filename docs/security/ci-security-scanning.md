@@ -8,9 +8,9 @@
 Workflow: `.github/workflows/security-scans.yml`.
 
 - Pull requests run the official OSV-Scanner differential reusable workflow, pinned to commit `b1d267aea5211fa648d9d442fa64b90dbdcbdd36` (v2.7.0).
-- The pull-request scan recursively checks supported dependency manifests/lockfiles and fails if the PR introduces a new known vulnerability.
+- The pull-request scan recursively checks supported dependency manifests/lockfiles (using the official action's documented `-r ./` syntax) and fails if the PR introduces a new known vulnerability. SARIF upload is disabled on PR runs to avoid requiring code-scanning write access for fork-originated PRs; the blocking scan still runs.
 - Pushes to `main`, a weekly schedule, or manual workflow dispatch run a full dependency inventory and publish SARIF results to GitHub code scanning.
-- The baseline scan does not fail on already-existing vulnerabilities until maintainers triage the inventory. This does not weaken the PR differential gate.
+- The baseline scan does not fail on already-existing vulnerabilities until maintainers triage the inventory. Its SARIF is uploaded on trusted main/scheduled/manual runs. This does not weaken the PR differential gate.
 - Job permissions are restricted to reading repository contents/actions and writing security scan results.
 
 Reference: [official OSV-Scanner GitHub Action documentation](https://google.github.io/osv-scanner/github-action/).

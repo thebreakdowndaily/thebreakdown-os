@@ -24,9 +24,9 @@ jobs:
     uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
     with:
       scan-args: |-
-        --recursive
-        ./
+        -r ./
       fail-on-vuln: true
+      upload-sarif: false
 
   osv-baseline:
     name: OSV — scheduled/current dependency inventory
@@ -38,8 +38,7 @@ jobs:
     uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
     with:
       scan-args: |-
-        --recursive
-        ./
+        -r ./
       # Establish and publish the existing baseline without failing main on pre-existing CVEs.
       # The PR differential scan remains the blocking gate for newly introduced vulnerabilities.
       fail-on-vuln: false
