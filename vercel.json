@@ -18,7 +18,9 @@
       "feature/*": true,
       "feat/*": true,
       "preview/*": true,
-      "fix/durable-correction-publishing-2026-10-15": true
+      "fix/durable-correction-publishing-2026-10-15": true,
+      "dev": true,
+      "release/*": true
     }
   }
 }
