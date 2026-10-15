@@ -1,5 +1,6 @@
 'use client';
 
+import { sanitizeRichHtml } from '@/lib/security/sanitize-rich-html';
 import React, { useState, useCallback } from 'react';
 import type { CMSStory, Block, BlockType, BlockData, HeroBlockData, TextBlockData, QuoteBlockData, CalloutBlockData, EvidenceBlockData, StatisticsBlockData } from '@/utils/cms-data';
 import { reorderBlocks, updateBlock, removeBlock, addBlock, duplicateBlock, getBlockIcon, getBlockLabel } from '@/utils/cms-data';
@@ -348,7 +349,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
               </div>
             )}
                   {block.type === 'text' && (
-                    <div dangerouslySetInnerHTML={{ __html: (block.data as TextBlockData).html || '' }} style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)' }} />
+                    <div dangerouslySetInnerHTML={{ __html: sanitizeRichHtml((block.data as TextBlockData).html || '') }} style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--color-text-primary)' }} />
                   )}
                   {block.type === 'quote' && (
                     <blockquote style={{ borderLeft: '4px solid var(--color-amber-500)', paddingLeft: '20px', margin: '20px 0', fontStyle: 'italic', fontSize: '18px', color: 'var(--color-text-primary)' }}>
