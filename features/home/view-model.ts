@@ -64,6 +64,17 @@ export interface HomepageTopic {
   storyCount?: number;
 }
 
+/**
+ * Homepage topic navigation must come from the canonical topic registry.
+ * Never substitute guessed/static slugs: topic pages intentionally return
+ * 404 when the canonical service cannot resolve a slug.
+ */
+export function selectHomepageTopics(topics: readonly HomepageTopic[]): HomepageTopic[] {
+  return topics
+    .filter((topic) => topic.slug.trim().length > 0 && topic.name.trim().length > 0)
+    .slice(0, 6);
+}
+
 export interface HomepageUpdate {
   slug: string;
   headline: string;
