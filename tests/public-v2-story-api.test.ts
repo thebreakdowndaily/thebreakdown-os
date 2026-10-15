@@ -30,6 +30,15 @@ const publishedStory = {
   status: 'published',
   is_test_artifact: false,
   published_at: '2026-10-01T00:00:00.000Z',
+  notes: 'internal editorial note',
+  updated_by: 'editor-uuid',
+  version: 3,
+  scheduled_at: '2026-11-01T00:00:00.000Z',
+  scheduled_by: 'editor-uuid',
+  block_reason: 'internal block detail',
+  blocked_at: '2026-10-01T00:00:00.000Z',
+  fallback_story_id: 'internal-fallback-id',
+  legacy_id: 'legacy-id',
 };
 
 describe('v2 public story API visibility', () => {
@@ -52,7 +61,16 @@ describe('v2 public story API visibility', () => {
     expect(state.builder.eq).toHaveBeenCalledWith('is_test_artifact', false);
     expect(state.builder.lte).toHaveBeenCalledWith('published_at', expect.any(String));
     expect(state.builder.eq).not.toHaveBeenCalledWith('status', 'draft');
-    expect(await response.json()).toMatchObject({ data: [publishedStory], meta: { total: 1 } });
+    const payload = await response.json();
+    expect(payload).toMatchObject({ data: [{ id: 'published-1', slug: 'published-story', status: 'published' }], meta: { total: 1 } });
+    for (const field of ['notes', 'updated_by', 'version', 'scheduled_at', 'scheduled_by', 'block_reason', 'blocked_at', 'fallback_story_id', 'legacy_id', 'is_test_artifact']) {
+      expect(payload.data[0]).not.toHaveProperty(field);
+    }
+    const selectedColumns = String(state.builder.select.mock.calls[0]?.[0] ?? '');
+    expect(selectedColumns).toContain('slug');
+    for (const field of ['notes', 'updated_by', 'version', 'scheduled_at', 'scheduled_by', 'block_reason', 'blocked_at', 'fallback_story_id', 'legacy_id', 'is_test_artifact']) {
+      expect(selectedColumns).not.toContain(field);
+    }
   });
 
   it('returns 404 for a story that does not pass the public query boundary', async () => {
@@ -77,6 +95,15 @@ describe('v2 public story API visibility', () => {
     );
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ data: publishedStory });
+    const payload = await response.json();
+    expect(payload).toMatchObject({ data: { id: 'published-1', slug: 'published-story', status: 'published' } });
+    for (const field of ['notes', 'updated_by', 'version', 'scheduled_at', 'scheduled_by', 'block_reason', 'blocked_at', 'fallback_story_id', 'legacy_id', 'is_test_artifact']) {
+      expect(payload.data).not.toHaveProperty(field);
+    }
+    const selectedColumns = String(state.builder.select.mock.calls[0]?.[0] ?? '');
+    expect(selectedColumns).toContain('slug');
+    for (const field of ['notes', 'updated_by', 'version', 'scheduled_at', 'scheduled_by', 'block_reason', 'blocked_at', 'fallback_story_id', 'legacy_id', 'is_test_artifact']) {
+      expect(selectedColumns).not.toContain(field);
+    }
   });
 });
