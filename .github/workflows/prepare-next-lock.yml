@@ -21,70 +21,23 @@ jobs:
       - name: Audit tracked source for MapLibre imports/references
         shell: bash
         run: |
-          set +e
-          files="$(git ls-files | grep -E '\\.(ts|tsx|js|jsx|mjs|cjs)
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-
-      - name: Resolve patched Next.js 15.5 release with npm
-        run: npm install next@15.5.27 --save-prefix="^" --ignore-scripts --no-audit --no-fund
-
-      - name: Validate manifest-lock consistency and pinned version
-        run: |
-          node <<'NODE'
-          const fs = require('node:fs');
-          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-          const declared = pkg.dependencies?.next;
-          const locked = lock.packages?.['node_modules/next']?.version;
-          const rootLockSpec = lock.packages?.['']?.dependencies?.next;
-          if (declared !== '^15.5.27') throw new Error('Expected next range ^15.5.27, got ' + declared);
-          if (rootLockSpec !== declared) throw new Error('Root lock spec disagrees: ' + rootLockSpec);
-          if (locked !== '15.5.27') throw new Error('Expected locked Next 15.5.27, got ' + locked);
-          console.log({ declared, rootLockSpec, locked });
-          NODE
-          npm ci --ignore-scripts --no-audit --no-fund
-
-      - name: Commit npm-generated files on this temporary branch
-        run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          if git diff --cached --quiet; then
-            echo "npm generated no file changes"
-          else
-            git commit -m "chore(deps): patch Next.js to 15.5.27"
-            git push origin HEAD:refs/heads/chore/prepare-next-1555-patch-lock
-          fi
-
-      - name: Upload npm-generated files for review
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: next-15.5.27-npm-generated-lock
-          path: |
-            package.json
-            package-lock.json
-          if-no-files-found: error
-          retention-days: 3
-)"
-          if [[ -z "$files" ]]; then
+          mapfile -t source_files < <(git ls-files | grep -E '[.](ts|tsx|js|jsx|mjs|cjs)$' || true)
+          if (("${#source_files[@]}" == 0)); then
             echo "BLOCKED: no tracked source files were discovered"
             exit 2
           fi
-          # Package manifests are excluded; this tests actual code references.
-          matches="$(git grep -n -i -E 'maplibre(-gl)?' -- $files 2>/dev/null)"
-          rc=$?
-          if [[ "$rc" -eq 0 ]]; then
+          if matches="$(git grep -n -i -E 'maplibre(-gl)?' -- "${source_files[@]}")"; then
             echo "MAPLIBRE_SOURCE_REFERENCES_FOUND"
             printf '%s\n' "$matches"
-          elif [[ "$rc" -eq 1 ]]; then
-            echo "NO_TRACKED_SOURCE_REFERENCES_TO_MAPLIBRE"
           else
-            echo "BLOCKED: git grep returned $rc"
-            exit "$rc"
+            rc=$?
+            if [[ "$rc" -eq 1 ]]; then
+              echo "NO_TRACKED_SOURCE_REFERENCES_TO_MAPLIBRE"
+            else
+              echo "BLOCKED: git grep returned $rc"
+              exit "$rc"
+            fi
           fi
 
       - name: Setup Node.js 22
