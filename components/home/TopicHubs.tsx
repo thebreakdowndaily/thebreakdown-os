@@ -12,7 +12,7 @@
  */
 
 import Link from 'next/link';
-import type { HomepageTopic } from '@/features/home/view-model';
+import { selectHomepageTopics, type HomepageTopic } from '@/features/home/view-model';
 
 // Earth-grounded topic accent — each topic gets a mineral color
 // that distinguishes it without making the UI a rainbow.
@@ -25,38 +25,7 @@ const TOPIC_ACCENTS: Record<string, string> = {
   'judiciary':      'var(--color-earth-stone)',
 };
 
-const STATIC_TOPICS: HomepageTopic[] = [
-  {
-    slug: 'foreign-policy',
-    name: 'Foreign Policy',
-    description: "Non-Alignment, bilateral relations, border disputes, and India's strategic doctrine since 1947.",
-  },
-  {
-    slug: 'economy',
-    name: 'Indian Economy',
-    description: 'Planning, liberalisation, growth, inequality, fiscal policy, and structural reform.',
-  },
-  {
-    slug: 'constitution',
-    name: 'Constitution',
-    description: 'The founding document — its framers, Constituent Assembly debates, amendments, and interpretations.',
-  },
-  {
-    slug: 'elections',
-    name: 'Elections',
-    description: 'Electoral systems, results data, coalition politics, and the evolution of Indian democracy.',
-  },
-  {
-    slug: 'climate',
-    name: 'Climate',
-    description: "India's climate vulnerability, energy transition, agricultural risk, and international commitments.",
-  },
-  {
-    slug: 'judiciary',
-    name: 'Judiciary',
-    description: 'Supreme Court, landmark judgements, judicial appointments, and rule of law debates.',
-  },
-];
+
 
 interface TopicHubsProps {
   topics: HomepageTopic[];
@@ -116,7 +85,7 @@ function TopicTile({ topic }: { topic: HomepageTopic }) {
 }
 
 export default function TopicHubs({ topics }: TopicHubsProps) {
-  const displayTopics = topics.length >= 3 ? topics.slice(0, 6) : STATIC_TOPICS;
+  const displayTopics = selectHomepageTopics(topics);
 
   return (
     <section
@@ -151,16 +120,26 @@ export default function TopicHubs({ topics }: TopicHubsProps) {
           </Link>
         </div>
 
-        {/* Topic grid — horizontal strip on desktop */}
-        <nav aria-label="Topic navigation">
-          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 list-none p-0 m-0">
-            {displayTopics.map((topic) => (
-              <li key={topic.slug} className="min-w-0">
-                <TopicTile topic={topic} />
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {/* Topic grid — only link to topics returned by the canonical service */}
+        {displayTopics.length > 0 ? (
+          <nav aria-label="Topic navigation">
+            <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 list-none p-0 m-0">
+              {displayTopics.map((topic) => (
+                <li key={topic.slug} className="min-w-0">
+                  <TopicTile topic={topic} />
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : (
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+            Topics are being organized. Browse the{' '}
+            <Link href="/stories" className="underline underline-offset-4 hover:text-[var(--color-brand-400)]">
+              story archive
+            </Link>{' '}
+            in the meantime.
+          </p>
+        )}
 
       </div>
     </section>
