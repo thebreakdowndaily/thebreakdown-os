@@ -1,0 +1,57 @@
+/**
+ * Legacy public-slug compatibility manifest.
+ *
+ * This is a publication-visibility policy input consumed by legacy fallback
+ * paths. Membership is not sufficient on its own: callers are expected to
+ * apply their publication-date checks as well.
+ *
+ * Treat edits as publication-policy changes. Before adding or removing a slug,
+ * inspect every consumer and test public visibility through each relevant
+ * read path. Prefer explicit canonical publication status for new content.
+ */
+export const LEGACY_PUBLIC_SLUGS: ReadonlySet<string> = new Set([
+  'mgnrega-reform',
+  'digital-payments-boom',
+  'pm-fasal-bima-claims',
+  'semiconductor-pli',
+  'dpdp-bill',
+  'rbi-repo-rate',
+  'climate-finance',
+  'education-budget',
+  'groundwater-depletion',
+  'ews-quota-upsc-investigation',
+  'us-iran-relations',
+  'indian-education-crisis',
+  'income-inequality-india',
+  'india-china-border-tensions',
+  'indias-foreign-policy',
+  'satluj-ban',
+  'india-us-relations',
+  'india-indonesia-relations',
+  'india-china-relations',
+  'india-europe-relations',
+  'india-uk-relations',
+  'india-russia-relations',
+  '81-crore-data-breach',
+  'bjp-mission-360',
+  'india-5g-rollout',
+  'india-ev-paradox',
+  'ayushman-bharat',
+  'electoral-bonds',
+  'who-cancer-report-2026',
+  'us-iran-war-strait-of-hormuz',
+  'epf-scheme-2026',
+  'youth-mental-health-crisis',
+  'gig-worker-rights',
+  'namami-gange-under-fire',
+  'india-china-border-lac',
+  'kashmir-the-first-test',
+  'fix-air-pollution',
+  'fix-farm-income',
+  'fix-judicial-pendency',
+  'supply-chain-shift',
+  'anganwadi-icds',
+  'ration-digitization',
+  'ethanol-backlash',
+  'accountability-in-india',
+]);

@@ -90,7 +90,7 @@ Subtree counts indicate scale rather than directly-owned file counts. The larges
 
 1. **Foundation in this branch:** compact agent entry point with verbatim legacy archive; repository snapshot and boundary/change map; developer workflow and feature-to-test index; consistent documentation indexes and runtime guidance.
 2. **Source dependency audit:** build a verified import/call graph across `app/`, `components/`, `features/`, `services/`, `lib/`, `packages/`, and `plugins/`; check cycles, duplicate rules, and boundaries.
-3. **Measured cleanup:** decide whether D1 remains operational, resolve ADR governance, retain or remove tracked Wrangler state safely, and capture test/workflow timings before simplifying validation.
+3. **Measured cleanup:** decide whether D1 remains operational, resolve ADR governance, retain or remove tracked Wrangler state safely, and capture test/workflow timings before simplifying validation. The focused source findings and one behavior-preserving dependency reduction are recorded in [Repository Dependency Audit](./repository-dependency-audit-2026-10-15.md).
 
 ## Explicit non-findings
 

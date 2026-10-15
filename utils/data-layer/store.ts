@@ -13,6 +13,7 @@ import type {
 } from './types';
 import { investigationChapterStories, namamiGangeInvestigation } from './investigation-data';
 import { accountabilityStory } from './accountability-story';
+import { LEGACY_PUBLIC_SLUGS } from './legacy-public-slugs';
 
 /* ── Internal Store ────────────────────────────────────────────────── */
 
@@ -5263,67 +5264,8 @@ export function removeInvestigation(slug: string): void {
 
 /* ── Publication Lifecycle ────────────────────────────────────────────── */
 
-/**
- * Legacy visibility manifest.
- *
- * All stories that were publicly visible BEFORE P1A publication safety
- * was introduced. These slugs resolve as "legacy-resolved published"
- * regardless of whether they carry an explicit `publicationStatus`.
- *
- * Every entry here has a valid past `publishedAt` date.
- * Future-dated stories (ration-digitization, anganwadi-icds,
- * supply-chain-shift, ethanol-backlash) carry `publicationStatus: 'draft'`
- * and are intentionally NOT in this allowlist.
- *
- * To add a new public story: give it `publicationStatus: 'published'`
- * and a valid past `publishedAt`. Do NOT add it to this list.
- */
-export const LEGACY_PUBLIC_SLUGS: ReadonlySet<string> = new Set([
-  'mgnrega-reform',
-  'digital-payments-boom',
-  'pm-fasal-bima-claims',
-  'semiconductor-pli',
-  'dpdp-bill',
-  'rbi-repo-rate',
-  'climate-finance',
-  'education-budget',
-  'groundwater-depletion',
-  'ews-quota-upsc-investigation',
-  'us-iran-relations',
-  'indian-education-crisis',
-  'income-inequality-india',
-  'india-china-border-tensions',
-  'indias-foreign-policy',
-  'satluj-ban',
-  'india-us-relations',
-  'india-indonesia-relations',
-  'india-china-relations',
-  'india-europe-relations',
-  'india-uk-relations',
-  'india-russia-relations',
-  '81-crore-data-breach',
-  'bjp-mission-360',
-  'india-5g-rollout',
-  'india-ev-paradox',
-  'ayushman-bharat',
-  'electoral-bonds',
-  'who-cancer-report-2026',
-  'us-iran-war-strait-of-hormuz',
-  'epf-scheme-2026',
-  'youth-mental-health-crisis',
-  'gig-worker-rights',
-  'namami-gange-under-fire',
-  'india-china-border-lac',
-  'kashmir-the-first-test',
-  'fix-air-pollution',
-  'fix-farm-income',
-  'fix-judicial-pendency',
-  'supply-chain-shift',
-  'anganwadi-icds',
-  'ration-digitization',
-  'ethanol-backlash',
-  'accountability-in-india',
-]);
+// Compatibility export. New consumers should import the focused manifest directly.
+export { LEGACY_PUBLIC_SLUGS };
 
 import type { PublicationStatus } from './types';
 import {

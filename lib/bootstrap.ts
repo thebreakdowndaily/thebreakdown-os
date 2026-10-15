@@ -1,4 +1,4 @@
-import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations, LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
+import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
 import { getFixtureBySlug } from '../fixtures/fixes/index';
 import { getServices } from '@/services/registry';

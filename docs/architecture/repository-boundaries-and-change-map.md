@@ -11,7 +11,7 @@ last_updated: 2026-10-15
 
 Use this map to locate likely ownership before editing. The descriptions follow current paths and repository docs; they are **ownership hypotheses**, not a claim that all imports already follow these boundaries. Validate dependency edges in source before moving code or adding enforcement.
 
-See the [audit snapshot](./repository-audit-2026-10-15.md) for evidence and limits, and [Developer Workflow](../engineering/developer-workflow.md) for commands.
+See the [audit snapshot](./repository-audit-2026-10-15.md), the [focused source dependency audit](./repository-dependency-audit-2026-10-15.md), and [Developer Workflow](../engineering/developer-workflow.md).
 
 ## Current directory map
 
@@ -34,6 +34,10 @@ See the [audit snapshot](./repository-audit-2026-10-15.md) for evidence and limi
 | `audit/` | Audit framework code, scripts, data, and related assets | Keep executable tooling distinct from static evidence and transient outputs. |
 | `docs/`, `adr/`, `rfc/`, `specs/` | Guides, decision records, proposals, specifications | Use the existing index; both `adr/` and `docs/adr/` exist, so do not create another ADR home. |
 | `.agents/`, `.ai/`, `.opencode/` | Coding-agent adapters, skills, and specialist guidance | Keep tool-specific files concise and consistent with root `AGENTS.md`. |
+
+## Source-level dependency findings
+
+The initial source trace found one actionable coupling: `services/repositories/memory/story.ts` imported the slug-only `LEGACY_PUBLIC_SLUGS` constant from the 542 KB `utils/data-layer/store.ts` content/store module. The constant now lives in `utils/data-layer/legacy-public-slugs.ts`; `store.ts` re-exports it for compatibility, and the new regression test preserves the 44-entry manifest. The unused import in `lib/bootstrap.ts` was removed. Full graph/cycle analysis is still pending. See the [source dependency audit](./repository-dependency-audit-2026-10-15.md).
 
 ## Proposed dependency direction
 

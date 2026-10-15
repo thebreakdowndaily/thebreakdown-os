@@ -21,6 +21,7 @@ This directory captures the *how* of system design — data flows, service bound
 | [Repository Audit — 2026-10-15](./repository-audit-2026-10-15.md) | Evidence-backed structural baseline and prioritized follow-up work | baseline |
 | [Repository Boundaries and Change Map](./repository-boundaries-and-change-map.md) | Folder map, proposed ownership boundaries, and migration sequence | proposed |
 | [Repository Ownership Audit — 2026-10-15](./repository-ownership-audit-2026-10-15.md) | Evidence-backed migration/ADR ownership, tracked local state, and CI findings | focused-audit |
+| [Repository Dependency Audit — 2026-10-15](./repository-dependency-audit-2026-10-15.md) | Selected source-level import traces, change-coupling findings, and conservative remediation | focused-audit |
 
 ## Conventions
 

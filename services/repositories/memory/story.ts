@@ -1,7 +1,7 @@
 import type { Story, APIListParams, APIResponse } from '@/types/canonical';
 import type { StoryService } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
-import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
+import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/legacy-public-slugs';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
