@@ -1009,14 +1009,41 @@ export async function listVerificationHandoffs(correctionId?: string): Promise<V
 export async function listPublishedCorrections(
   storySlugOrId?: string
 ): Promise<PublishedCorrection[]> {
-  let list = Array.from(memoryPublishedCorrections.values());
+  const db = getCorrectionsDbClient();
+  if (db) {
+    const { data, error } = await db
+      .from('corrections')
+      .select('*, stories(slug,title)')
+      .order('created_at', { ascending: false });
 
-  if (storySlugOrId) {
-    list = list.filter(
-      p => p.storySlug === storySlugOrId || p.storyId === storySlugOrId
-    );
+    if (error) {
+      console.error('[CorrectionsService] Failed to read durable public corrections ledger:', error.message);
+      // Do not fall back to an in-memory copy and misrepresent it as the
+      // institutional ledger when the configured source of truth is failing.
+      throw new Error('Durable public corrections ledger is unavailable.');
+    }
+
+    let list = Array.isArray(data) ? data.map((row: any) => rowToPublishedCorrection(row)) : [];
+    if (storySlugOrId) {
+      list = list.filter((correction) =>
+        correction.storySlug === storySlugOrId || correction.storyId === storySlugOrId,
+      );
+    }
+    return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Durable public corrections ledger storage is not configured.');
+  }
+
+  // Explicit offline/test fallback only. This map is never used as production
+  // evidence that the correction ledger has been durably published.
+  let list = Array.from(memoryPublishedCorrections.values());
+  if (storySlugOrId) {
+    list = list.filter(
+      (correction) => correction.storySlug === storySlugOrId || correction.storyId === storySlugOrId,
+    );
+  }
   return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
@@ -1032,39 +1059,46 @@ export interface CorrectionsHealthMetrics {
 export async function getCorrectionsHealthMetrics(): Promise<CorrectionsHealthMetrics> {
   const db = getCorrectionsDbClient();
   if (db) {
-    try {
-      const { data, error } = await db.from('reader_corrections').select('status, created_at');
-      if (!error && data && Array.isArray(data)) {
-        const pending = data.filter((r: any) => r.status === 'received').length;
-        const inReview = data.filter((r: any) => r.status === 'in_review').length;
-        const lastSubmission = data.length > 0
-          ? data.reduce((latest: string, r: any) => (r.created_at > latest ? r.created_at : latest), data[0].created_at)
-          : 'UNKNOWN';
+    const [queueResult, publishedResult] = await Promise.all([
+      db.from('reader_corrections').select('status, created_at'),
+      db.from('corrections').select('id'),
+    ]);
 
-        return {
-          pendingQueueDepth: pending,
-          inReviewCount: inReview,
-          publishedErrataCount: memoryPublishedCorrections.size,
-          lastSubmissionAt: lastSubmission,
-        };
-      }
-    } catch {
-      // Fall through to memory
+    if (queueResult.error || publishedResult.error) {
+      console.error('[CorrectionsService] Failed to calculate durable correction metrics:', {
+        queueError: queueResult.error?.message,
+        publishedError: publishedResult.error?.message,
+      });
+      throw new Error('Correction health metrics are unavailable.');
     }
+
+    const queue = Array.isArray(queueResult.data) ? queueResult.data : [];
+    const published = Array.isArray(publishedResult.data) ? publishedResult.data : [];
+    const lastSubmission = queue.length > 0
+      ? queue.reduce((latest: string, row: any) => (row.created_at > latest ? row.created_at : latest), queue[0].created_at)
+      : 'UNKNOWN';
+
+    return {
+      pendingQueueDepth: queue.filter((row: any) => row.status === 'received').length,
+      inReviewCount: queue.filter((row: any) => row.status === 'in_review').length,
+      publishedErrataCount: published.length,
+      lastSubmissionAt: lastSubmission,
+    };
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Correction health metrics require durable storage.');
   }
 
   const all = Array.from(memoryReaderCorrections.values());
-  const pending = all.filter(r => r.status === 'received').length;
-  const inReview = all.filter(r => r.status === 'in_review').length;
-  const published = memoryPublishedCorrections.size;
   const lastSubmission = all.length > 0
-    ? all.reduce((latest, r) => (r.createdAt > latest ? r.createdAt : latest), all[0].createdAt)
+    ? all.reduce((latest, record) => (record.createdAt > latest ? record.createdAt : latest), all[0].createdAt)
     : 'UNKNOWN';
 
   return {
-    pendingQueueDepth: pending,
-    inReviewCount: inReview,
-    publishedErrataCount: published,
+    pendingQueueDepth: all.filter((record) => record.status === 'received').length,
+    inReviewCount: all.filter((record) => record.status === 'in_review').length,
+    publishedErrataCount: memoryPublishedCorrections.size,
     lastSubmissionAt: lastSubmission,
   };
 }
