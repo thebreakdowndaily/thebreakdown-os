@@ -60,9 +60,8 @@ const FeaturedStory: React.FC<StoryCardProps> = ({ story }) => (
             {story.summary}
           </p>
         </div>
-        <div className="flex items-center justify-between border-t border-border pt-4 mt-auto">
+        <div className="border-t border-border pt-4 mt-auto">
           <span className="text-xs text-text-muted font-mono uppercase">{story.readingTime} min read</span>
-          <span className="text-xs font-mono text-emerald-400 font-medium">Fact-Checked</span>
         </div>
       </div>
     </a>
@@ -130,9 +129,8 @@ const DefaultStory: React.FC<StoryCardProps> = ({ story }) => (
         <p className="text-sm text-text-secondary line-clamp-2 mb-4 flex-1">
           {story.summary}
         </p>
-        <div className="flex items-center justify-between border-t border-border pt-3 mt-auto">
-          <span className="text-xs text-text-muted font-mono uppercase tracking-wider">{story.readingTime} min</span>
-          <span className="text-xs font-mono text-emerald-400 font-medium">Fact-Checked</span>
+        <div className="border-t border-border pt-3 mt-auto">
+          <span className="text-xs text-text-muted font-mono uppercase tracking-wider">{story.readingTime} min read</span>
         </div>
       </div>
     </a>
