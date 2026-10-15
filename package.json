@@ -39,7 +39,7 @@
     "test:plugin-sdk": "npx tsx packages/plugin-sdk/tests/compatibility.test.ts",
     "test:research": "jest --config jest.research.config.js",
     "test:vitest": "vitest run",
-    "test:security": "npx tsx scripts/verify-migrations.ts && npx tsx tests/security/auth-regression.test.ts && npx tsx tests/security/rls.test.ts && npx tsx tests/security/api-security.test.ts && npx tsx tests/intel-auth.test.ts",
+    "test:security": "npx tsx scripts/verify-migrations.ts && npx tsx tests/security/auth-regression.test.ts && npx tsx tests/security/rls.test.ts && npx tsx tests/security/api-security.test.ts && npx tsx tests/intel-auth.test.ts && npx vitest run tests/cron-auth.test.ts",
     "test:migration": "npx tsx scripts/verify-migrations.ts && npx tsx tests/security/database-enforcement.test.ts",
     "test:a11y": "npx tsx tests/accessibility.test.ts",
     "test:e2e": "playwright test",
