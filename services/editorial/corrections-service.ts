@@ -624,9 +624,9 @@ export async function submitReaderCorrection(
   // 6. Record successfully stored submission
   const record: ReaderCorrection = {
     id: submissionId,
-    storyId: input.storyId || resolvedStoryId || undefined,
+    storyId: resolvedStoryId || undefined,
     storySlug: input.storySlug.trim().toLowerCase(),
-    claimId: input.claimId || resolvedClaimId || undefined,
+    claimId: resolvedClaimId || undefined,
     category: input.category || 'factual',
     passageExcerpt: input.passageExcerpt.trim(),
     suggestedCorrection: input.suggestedCorrection.trim(),
@@ -680,19 +680,21 @@ const AUTHORIZED_STAFF_ROLES = new Set(['staff', 'researcher', 'reviewer', 'edit
 export async function getReaderCorrectionById(id: string): Promise<ReaderCorrection | undefined> {
   const db = getCorrectionsDbClient();
   if (db) {
-    try {
-      const { data, error } = await db
-        .from('reader_corrections')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
+    const { data, error } = await db
+      .from('reader_corrections')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
 
-      if (!error && data) {
-        return rowToReaderCorrection(data);
-      }
-    } catch {
-      // Fall through to memory
+    if (error) {
+      console.error('[CorrectionsService] Failed to read reader correction from durable storage:', error.message);
+      throw new Error('Reader correction storage is unavailable.');
     }
+    return data ? rowToReaderCorrection(data) : undefined;
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction storage is not configured.');
   }
   return memoryReaderCorrections.get(id);
 }
@@ -702,31 +704,30 @@ export async function listReaderCorrections(
 ): Promise<ReaderCorrection[]> {
   const db = getCorrectionsDbClient();
   if (db) {
-    try {
-      let query = db.from('reader_corrections').select('*');
-      if (options.status) {
-        query = query.eq('status', options.status);
-      }
-      if (options.storySlug) {
-        query = query.eq('story_slug', options.storySlug.toLowerCase());
-      }
-      const { data, error } = await query.order('created_at', { ascending: false });
-      if (!error && data && Array.isArray(data)) {
-        return data.map(rowToReaderCorrection);
-      }
-    } catch {
-      // Fall through to memory
+    let query = db.from('reader_corrections').select('*');
+    if (options.status) {
+      query = query.eq('status', options.status);
     }
+    if (options.storySlug) {
+      query = query.eq('story_slug', options.storySlug.toLowerCase());
+    }
+    const { data, error } = await query.order('created_at', { ascending: false });
+    if (error) {
+      console.error('[CorrectionsService] Failed to list reader corrections from durable storage:', error.message);
+      throw new Error('Reader correction storage is unavailable.');
+    }
+    return Array.isArray(data) ? data.map(rowToReaderCorrection) : [];
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction storage is not configured.');
   }
 
   let list = Array.from(memoryReaderCorrections.values());
-
-  if (options.status) {
-    list = list.filter(r => r.status === options.status);
-  }
+  if (options.status) list = list.filter((r) => r.status === options.status);
   if (options.storySlug) {
     const targetSlug = options.storySlug.toLowerCase();
-    list = list.filter(r => r.storySlug === targetSlug);
+    list = list.filter((r) => r.storySlug === targetSlug);
   }
 
   return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -736,40 +737,23 @@ export async function triageReaderCorrection(
   input: TriageCorrectionInput,
   staffContext: StaffContext
 ): Promise<{ success: boolean; updatedStatus: string; handoffRecord?: VerificationHandoffRecord }> {
-  // Authorization Gate
   if (!AUTHORIZED_STAFF_ROLES.has(staffContext.role)) {
     throw new Error(`Unauthorized: User role '${staffContext.role}' cannot triage reader corrections.`);
   }
 
-  const record = (await getReaderCorrectionById(input.correctionId)) || memoryReaderCorrections.get(input.correctionId);
+  const db = getCorrectionsDbClient();
+  if (!db && process.env.NODE_ENV === 'production') {
+    throw new Error('Correction triage requires durable storage.');
+  }
+
+  const record = await getReaderCorrectionById(input.correctionId);
   if (!record) {
     throw new Error(`Correction submission not found: ${input.correctionId}`);
   }
 
-  const now = new Date().toISOString();
-  record.status = input.status;
-  record.updatedAt = now;
-  if (input.triageNotes) {
-    record.triageNotes = input.triageNotes;
-  }
-
-  // Update durable store if available
-  const db = getCorrectionsDbClient();
-  if (db) {
-    try {
-      await db
-        .from('reader_corrections')
-        .update({
-          status: input.status,
-          updated_at: now,
-        })
-        .eq('id', input.correctionId);
-    } catch (err) {
-      console.error('[CorrectionsService] Failed to update reader correction status in database:', err);
-    }
-  }
-
-  // Automated claim-level verification handoff (GAP-VS8-04)
+  // This handoff is currently an in-memory workflow record, not a durable
+  // verification event. It is deliberately not misrepresented as a foreign
+  // key in public.corrections.
   let handoffRecord: VerificationHandoffRecord | undefined;
   if (input.verificationHandoff) {
     const handoffResult = await handoffCorrectionToVerification(
@@ -783,38 +767,88 @@ export async function triageReaderCorrection(
     handoffRecord = handoffResult.handoffRecord;
   }
 
-  // If resolved with published correction, append to public.corrections projection
-  if (input.status === 'resolved' && input.publishedCorrection) {
-    const publishedId = randomUUID();
-    const publishedNotice: PublishedCorrection = {
-      id: publishedId,
-      storyId: record.storyId || record.storySlug,
-      storySlug: record.storySlug,
-      claimId: handoffRecord?.claimId || record.claimId,
-      verificationEventId: handoffRecord?.handoffId,
-      category: input.publishedCorrection.category || record.category,
-      previousWording: input.publishedCorrection.previousWording,
-      correctedWording: input.publishedCorrection.correctedWording,
-      explanation: input.publishedCorrection.explanation,
-      createdAt: now,
-      updatedAt: now,
-    };
+  const now = new Date().toISOString();
+  const shouldPublish = input.status === 'resolved' && Boolean(input.publishedCorrection);
+  let publishedNotice: PublishedCorrection | undefined;
 
-    memoryPublishedCorrections.set(publishedId, publishedNotice);
-    record.resolvedCorrectionId = publishedId;
+  if (shouldPublish) {
+    if (!db || !input.publishedCorrection) {
+      throw new Error('Publishing a correction requires durable storage.');
+    }
+
+    const { data, error } = await db.rpc('publish_reader_correction', {
+      p_reader_correction_id: record.id,
+      p_triage_notes: input.triageNotes?.trim() || null,
+      p_category: input.publishedCorrection.category || record.category,
+      p_previous_wording: input.publishedCorrection.previousWording ?? '',
+      p_corrected_wording: input.publishedCorrection.correctedWording,
+      p_explanation: input.publishedCorrection.explanation,
+    });
+
+    if (error) {
+      console.error('[CorrectionsService] Durable correction publication failed:', {
+        correctionId: record.id,
+        error: error.message || error,
+      });
+      // The RPC is transactional. Do not mark the submission resolved, add a
+      // process-local public notice, or emit a success event after a failed write.
+      throw new Error('Failed to publish correction to the durable ledger. The submission was not resolved.');
+    }
+
+    const publishedRow = Array.isArray(data) ? data[0] : data;
+    if (!publishedRow) {
+      throw new Error('Durable correction publication returned no record.');
+    }
+
+    publishedNotice = rowToPublishedCorrection(publishedRow, {
+      storySlug: record.storySlug,
+    });
+    record.status = 'resolved';
+    record.updatedAt = publishedNotice.updatedAt || now;
+    if (input.triageNotes) record.triageNotes = input.triageNotes;
+    record.resolvedCorrectionId = publishedNotice.id;
+    memoryReaderCorrections.set(record.id, record);
+
+    // Same-process cache only. Public reads use public.corrections when a DB
+    // client is configured and never rely on this Map as production truth.
+    memoryPublishedCorrections.set(publishedNotice.id, publishedNotice);
 
     try {
       eventBus.publish({
         type: 'correction:published',
         payload: {
-          publishedId,
-          storySlug: record.storySlug,
+          publishedId: publishedNotice.id,
+          storySlug: publishedNotice.storySlug || record.storySlug,
           category: publishedNotice.category,
         },
       });
     } catch (err) {
       console.error('[CorrectionsService] Failed to publish correction:published event:', err);
     }
+  } else {
+    if (db) {
+      const { error } = await db
+        .from('reader_corrections')
+        .update({
+          status: input.status,
+          triage_notes: input.triageNotes?.trim() || record.triageNotes || null,
+          updated_at: now,
+        })
+        .eq('id', record.id);
+
+      if (error) {
+        console.error('[CorrectionsService] Failed to persist triage state:', {
+          correctionId: record.id,
+          error: error.message || error,
+        });
+        throw new Error('Failed to save correction triage state.');
+      }
+    }
+
+    record.status = input.status;
+    record.updatedAt = now;
+    if (input.triageNotes) record.triageNotes = input.triageNotes;
+    memoryReaderCorrections.set(record.id, record);
   }
 
   try {
