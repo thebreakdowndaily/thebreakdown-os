@@ -139,9 +139,12 @@ export function getStoryEvidenceSummary(story: any): StoryEvidenceSummary {
 
   const reviewStatus =
     raw.publicationStatus === 'published' ? 'Published'
+    : raw.publicationStatus === 'draft' || raw.status === 'draft' ? 'Draft'
     : raw.status === 'fact_check' ? 'Fact-Checked'
-    : raw.status === 'review' ? 'In Editorial Review'
-    : 'Published';
+    : raw.status === 'review' || raw.publicationStatus === 'review' ? 'In Editorial Review'
+    : raw.publicationStatus === 'scheduled' ? 'Scheduled'
+    : raw.publicationStatus === 'archived' ? 'Archived'
+    : 'Unknown';
 
   return {
     claimsTotal: claims.length,
