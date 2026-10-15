@@ -1,8 +1,9 @@
 # GRAVITAS Core pilot — The Breakdown OS
 
-**Status:** Evaluation-only proposal on branch `feat/gravitas-core-pilot`  
-**Upstream:** [`udaysharmadev/Gravitas`](https://github.com/udaysharmadev/Gravitas)  
-**Pinned source commit:** [`5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5`](https://github.com/udaysharmadev/Gravitas/commit/5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5)  
+**Status:** Merged on 2026-10-15. Structural integration and repository CI compatibility checks passed; controlled effectiveness evaluation is **pending**.  \
+**Pilot PR:** [#24](https://github.com/thebreakdowndaily/thebreakdown-os/pull/24)  \
+**Upstream:** [`udaysharmadev/Gravitas`](https://github.com/udaysharmadev/Gravitas)  \
+**Pinned source commit:** [`5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5`](https://github.com/udaysharmadev/Gravitas/commit/5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5)  \
 **License:** MIT; see the accompanying upstream license text and attribution record.
 
 ## Goal
@@ -26,21 +27,28 @@ Core has the lowest integration surface and can be reviewed as project-local gui
 
 ### Checkpoint 1 — Structural integration
 
-- [ ] The skill's frontmatter `name` matches its directory name (`gravitas`).
-- [ ] Required `name` and `description` fields are present.
-- [ ] Existing project-local skills and registries remain intact.
-- [ ] Upstream pin, license, and adaptations are documented.
-- [ ] No optional Native plugin, runtime, permissions, or hooks are introduced.
+- [x] The skill's frontmatter `name` matches its directory name (`gravitas`).
+- [x] Required `name` and `description` fields are present.
+- [x] Existing project-local skills and registries remain intact.
+- [x] Upstream pin, license, and adaptations are documented.
+- [x] No optional Native plugin, runtime, permissions, or hooks are introduced.
 
 ### Checkpoint 2 — CI and compatibility
 
-- [ ] CI runs `python3 scripts/validate-skills.py` and passes.
-- [ ] Existing unit, lint, typecheck, security, migration, and build workflows remain green.
-- [ ] Reviewer confirms no production code or architecture change.
+- [x] CI runs `python3 scripts/validate-skills.py` and passes.
+- [x] Repository CI recorded passing results for clean dependency installation, strict typecheck, lint, security regression, database/migration safety, unit/domain tests, accessibility, and production build.
+- [x] The merged change is limited to the GRAVITAS skill/docs/registry and one existing CI validator step; no application code, package dependencies, database, or hosting configuration were changed.
+
+Evidence checked on 2026-10-15:
+- [PR #24 CI run](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/38693696220): all listed gates passed, including Validate Agent Skills.
+- [PR #24 production infrastructure workflow](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/38693696098): CI validation job passed; staging and production health jobs were skipped. This is **not** evidence of a deployment or production-health check.
+- [PR #24 audit workflow](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/38693696152): verification job passed.
 
 ### Checkpoint 3 — Controlled task comparison (required before broad adoption)
 
-Run representative, comparable tasks both with the repository's baseline agent instructions and with Gravitas Core enabled. Use the same model/effort where feasible and record version, task, duration, token/cost if available, verification outputs, and changed files.
+The protocol and scorecard live in [`gravitas-core-evaluation.md`](./gravitas-core-evaluation.md). The paired agent trials have **not** yet been recorded. Repository CI proves integration compatibility; it does not prove model-level effectiveness.
+
+Run representative, comparable tasks both with the repository's baseline agent instructions and with GRAVITAS Core enabled. Use the same model/effort where feasible and record model/version, task, duration, token/cost if available, verification outputs, and changed files.
 
 Representative tasks:
 1. A localized defect with an existing regression test.
@@ -54,7 +62,7 @@ Measure: acceptance-criterion coverage, test/verification pass rate, unintended 
 ## Acceptance criteria
 
 A pilot can be recommended for wider use only if:
-- baseline and Gravitas runs are documented rather than estimated;
+- baseline and GRAVITAS runs are documented rather than estimated;
 - the same acceptance rubric is used for both;
 - there is no increase in unsupported completion claims or out-of-scope edits;
 - project validators are run after the final relevant mutation;
