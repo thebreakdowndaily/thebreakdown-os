@@ -1,7 +1,7 @@
 # CI Security and Browser Accessibility Scanning
 
-**Status:** proposed in PR `feat/ci-security-a11y-hardening`  
-**Scope:** CI/workflow hardening only; no application code or runtime dependency changes.
+**Status:** active in `main`; security-scanning behavior is being hardened from observed CI results.  
+**Scope:** workflow and documentation hardening; no application runtime-code change.
 
 ## 1. Dependency vulnerability scanning (OSV-Scanner)
 
@@ -17,17 +17,16 @@ Reference: [official OSV-Scanner GitHub Action documentation](https://google.git
 
 ## 2. Secret detection (Gitleaks)
 
-- The Gitleaks Action is pinned to immutable commit `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e` (v3.0.0), with the CLI version explicitly pinned to `8.30.1`.
-- It runs on pull requests and pushes to `main`, scanning the affected commits. Historical full-repository secret-history remediation is a separate one-time exercise and is not claimed to be solved by this change.
-- PR comments are disabled; the action has read-only contents and pull-request permissions.
-- `.gitleaksignore` intentionally starts without suppressions. It documents the required exact fingerprint format. Add a fingerprint only after a reviewer inspects the finding and verifies the string is a non-secret test fixture. Never suppress whole test directories or patterns by default.
-- If the scan identifies a potentially real credential, revoke/rotate it immediately before treating the code finding as resolved. Removing a credential from the current tree does not remove it from Git history.
+Workflow: `.github/workflows/security-scans.yml`.
 
-### Licensing note
+- The workflow installs Gitleaks CLI `8.30.1` directly from the upstream release and verifies its published SHA-256 checksum before execution.
+- Pull requests scan the explicit two-dot range `base.sha..head.sha`; pushes scan `before..after`. Weekly and manual runs scan all reachable history with `--all`.
+- The scanner does not use the Gitleaks Action's implicit `--no-merges --first-parent` range. That action reported zero commits on the post-merge push for this repository, so its success did not establish scan coverage. See the [upstream documented merge-history coverage issue](https://github.com/gitleaks/gitleaks-action/issues/236).
+- The scanner redacts findings and uploads the SARIF report as a seven-day workflow artifact, including on scan failure when a report was produced. It has read-only repository permissions; it does not post PR comments or alter files.
+- `.gitleaksignore` intentionally starts without suppressions. Add a fingerprint only after a reviewer inspects the finding and verifies the string is a non-secret test fixture. Never suppress whole test directories or patterns by default.
+- A green differential scan only covers the event's explicit range. The scheduled/manual `--all` scan is the broader historical check. Neither is a substitute for credential rotation when a real secret is found.
 
-The Gitleaks **Action** is governed by the upstream GITLEAKS-ACTION End-User License Agreement; it is not MIT-licensed. Upstream documents that no license key is required when scanning repositories owned by a personal GitHub account. If this repository moves to a GitHub Organization account, obtain/review the required license before relying on the action. The Gitleaks CLI has a separate license; do not conflate the two.
-
-Reference: [Gitleaks Action v3.0.0 license and usage](https://github.com/gitleaks/gitleaks-action/tree/v3.0.0).
+Reference: [Gitleaks CLI documentation](https://github.com/gitleaks/gitleaks).
 
 ## 3. Browser-level accessibility CI
 
@@ -44,6 +43,7 @@ Reference: [Playwright browser installation in CI](https://playwright.dev/docs/b
 
 - No new npm dependencies.
 - No application, database, migration, environment, hosting, or production-code change.
-- All third-party workflows/actions are pinned to full commit SHAs.
-- A successful run means the configured checks passed; it does not prove there are no undiscovered vulnerabilities, secrets elsewhere in historical commits, or accessibility issues outside the five tested routes and selected browser profiles.
-- Keep the initial scan output as evidence. Do not invent ignore fingerprints or describe existing vulnerabilities as fixed without remediation.
+- All third-party actions and reusable workflows are pinned to full commit SHAs; the Gitleaks CLI version is pinned and its release checksum is checked.
+- A successful run means the configured checks passed; it does not prove there are no undiscovered vulnerabilities, secrets outside the scanned commit range/history, or accessibility issues outside the five tested routes and selected browser profiles.
+- The first main-branch inventory on 2026-10-15 reported **85 known dependency-vulnerability occurrences across 29 affected packages** (8 critical, 52 high, 25 medium). This is an unresolved baseline, not a clean security result. Track and remediate those findings separately; do not describe them as fixed.
+- Keep scan outputs as evidence. Do not invent ignore fingerprints or describe existing vulnerabilities as fixed without remediation.
