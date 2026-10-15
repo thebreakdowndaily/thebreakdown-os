@@ -62,7 +62,7 @@ async function runTests() {
     console.log('\n── Fallback Boundaries ──');
     const invalidDateMetrics = await getCanonicalTrustMetrics(new Date('invalid-date'));
     assert(invalidDateMetrics !== null, 'getCanonicalTrustMetrics handles invalid dates gracefully without crashing', r);
-    assertEqual(invalidDateMetrics.publishedChapters, 1, 'handles invalid date fallback for published chapters count', r);
+    assertEqual(invalidDateMetrics.publishedChapters, 0, 'does not invent a published chapter when no chapter has a valid public publication state', r);
 
   } catch (err) {
     console.error('Test execution failed with error:', err);
