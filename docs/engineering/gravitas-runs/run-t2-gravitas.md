@@ -1,10 +1,12 @@
 # Run Record: T2 GRAVITAS
 
+> [!NOTE] AUDIT QUALIFICATION (2026-10-15): Operator-reported record. Retained as reported by the evaluation operator. Verified to adhere to file scope, typechecking, and test suite constraints at base commit `9f4ae81e`.
+
 - **Task ID:** T2
 - **Run ID:** `run-t2-gravitas`
 - **Condition:** Treatment (GRAVITAS Core skill `.agents/skills/gravitas/SKILL.md` enabled)
 - **Base Commit SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`
-- **Isolated Worktree:** `c:/newsjack-content/eval-t2-gravitas`
+- **Isolated Worktree:** `eval-t2-gravitas` (disposable worktree)
 - **Timestamps (UTC):**
   - Start: 2026-10-15T09:54:15Z
   - End: 2026-10-15T09:55:50Z

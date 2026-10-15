@@ -1,10 +1,12 @@
 # Run Record: T5 GRAVITAS
 
+> [!NOTE] AUDIT QUALIFICATION (2026-10-15): Task Contract Discrepancy noted. The frozen contract incorrectly asserted that migrations in the repository stopped at 027. In fact, migrations up to 032 (including `028_legacy_cohort_demarcation.sql`) were present at the base commit `9f4ae81e`. Both conditions correctly discovered migration 028 locally and accurately reported that live production database execution status was unverified due to lack of credentials.
+
 - **Task ID:** T5
 - **Run ID:** `run-t5-gravitas`
 - **Condition:** Treatment (GRAVITAS Core skill `.agents/skills/gravitas/SKILL.md` enabled)
 - **Base Commit SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`
-- **Isolated Worktree:** `c:/newsjack-content/eval-t5-gravitas`
+- **Isolated Worktree:** `eval-t5-gravitas` (disposable worktree)
 - **Timestamps (UTC):**
   - Start: 2026-10-15T10:08:15Z
   - End: 2026-10-15T10:09:45Z

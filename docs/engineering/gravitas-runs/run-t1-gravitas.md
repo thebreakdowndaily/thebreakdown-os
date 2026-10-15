@@ -1,10 +1,12 @@
 # Run Record: T1 GRAVITAS
 
+> [!WARNING] AUDIT QUALIFICATION (2026-10-15): Task T1 is classified as INVALID / UNSUBSTANTIATED. Independent empirical re-testing against the unmodified base commit (`9f4ae81e`) demonstrated that `scripts/validate-skills.py` already handles CRLF line endings without error because Python's `Path.read_text(encoding="utf-8")` automatically translates `\r\n` to `\n` via universal newline mode. An unchanged base validator passes synthetic CRLF files with exit code 0. Furthermore, `tests/validate-skills-crlf.py` was authored during the session and its source code was not preserved. This run record is retained solely as an operator-reported historical artifact and is excluded from validated evaluation aggregates.
+
 - **Task ID:** T1
 - **Run ID:** `run-t1-gravitas`
 - **Condition:** Treatment (GRAVITAS Core skill `.agents/skills/gravitas/SKILL.md` enabled)
 - **Base Commit SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`
-- **Isolated Worktree:** `c:/newsjack-content/eval-t1-gravitas`
+- **Isolated Worktree:** `eval-t1-gravitas` (disposable worktree)
 - **Timestamps (UTC):**
   - Start: 2026-10-15T09:52:15Z
   - End: 2026-10-15T09:53:50Z

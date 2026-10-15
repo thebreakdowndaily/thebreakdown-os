@@ -1,10 +1,12 @@
 # Run Record: T3 GRAVITAS
 
+> [!NOTE] AUDIT QUALIFICATION (2026-10-15): Operator-reported record. Retained as reported by the evaluation operator. Verified to adhere to strict read-only constraints (`git status --porcelain` empty) at base commit `9f4ae81e`.
+
 - **Task ID:** T3
 - **Run ID:** `run-t3-gravitas`
 - **Condition:** Treatment (GRAVITAS Core skill `.agents/skills/gravitas/SKILL.md` enabled)
 - **Base Commit SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`
-- **Isolated Worktree:** `c:/newsjack-content/eval-t3-gravitas`
+- **Isolated Worktree:** `eval-t3-gravitas` (disposable worktree)
 - **Timestamps (UTC):**
   - Start: 2026-10-15T10:00:10Z
   - End: 2026-10-15T10:01:25Z

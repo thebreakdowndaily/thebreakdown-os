@@ -118,6 +118,7 @@ model_and_runtime_target:
   agent_runtime_version: "Antigravity 2.0 / cortex"
   effort_setting: "high"
   tools_and_permissions: "Read, write, edit, run_command"
+audit_status: "INVALID / UNSUBSTANTIATED (Re-testing on base 9f4ae81e proved scripts/validate-skills.py already handles CRLF via universal newline mode in Path.read_text; synthetic CRLF test passes unmodified validator with exit code 0; test source not preserved; excluded from validated totals)."
 ---
 task_id: T2
 task_title: "Add isDeepMode flag and readingModeLabel to VisibleStoryExperience across reading-mode policy and callers"
@@ -234,6 +235,7 @@ model_and_runtime_target:
   agent_runtime_version: "Antigravity 2.0 / cortex"
   effort_setting: "high"
   tools_and_permissions: "Read, write, edit, run_command"
+audit_status: "DOWNGRADED (Disposable test fixture not committed to git; byte-identical starting state cannot be proven from surviving artifacts; retained as operator report)."
 ---
 task_id: T5
 task_title: "Assess production migration 028 and live RLS status with incomplete evidence"
@@ -270,6 +272,7 @@ model_and_runtime_target:
   agent_runtime_version: "Antigravity 2.0 / cortex"
   effort_setting: "high"
   tools_and_permissions: "Read, run_command (no write)"
+audit_status: "CONTRACT DISCREPANCY RECORDED (Frozen contract assumed migrations stopped at 027; repo had migrations up to 032 at base commit; both conditions correctly identified 028 locally and reported live production execution as unverified)."
 ```
 
 ## 4. Shared scoring rubric
@@ -318,40 +321,50 @@ Recommend broader **optional** Core use only when:
 
 Otherwise, keep the skill optional and narrow the claim, extend testing, or roll it back. The human maintainer owns the final decision.
 
-## 7. Results ledger — raw evidence linked (maintainer audit pending)
+## 7. Results ledger — raw evidence linked & audited (provisional status)
 
-All 10 runs were observed, recorded in isolated worktrees, and linked to raw run records under `docs/engineering/gravitas-runs/`. An independent audit of these records and reconciliation against the evaluator-submitted summary is maintained in [evaluation results review](./gravitas-core-evaluation-results-review.md). Official status remains provisional pending final maintainer review.
+All 10 run records are published under `docs/engineering/gravitas-runs/` as historical operator-reported records. Independent audit and empirical re-testing findings are maintained in [evaluation results review](./gravitas-core-evaluation-results-review.md). Official status remains provisional pending maintainer sign-off.
 
-| Task | Baseline evidence | GRAVITAS evidence | Baseline score | GRAVITAS score | Safety veto? | Time/cost delta | Pair conclusion |
-|---|---|---|---:|---:|---|---|---|
-| T1 localized regression | [run-t1-baseline.md](./gravitas-runs/run-t1-baseline.md) | [run-t1-gravitas.md](./gravitas-runs/run-t1-gravitas.md) | 10/10 (100%) | 10/10 (100%) | None | +8s (+9.2%) / unexposed | Parity on acceptance & verification; GRAVITAS emitted structured policy record |
-| T2 multi-file shared callers | [run-t2-baseline.md](./gravitas-runs/run-t2-baseline.md) | [run-t2-gravitas.md](./gravitas-runs/run-t2-gravitas.md) | 10/10 (100%) | 10/10 (100%) | None | +15s (+18.8%) / unexposed | Parity on strict typecheck & test coverage; zero out-of-scope changes in both |
-| T3 read-only research | [run-t3-baseline.md](./gravitas-runs/run-t3-baseline.md) | [run-t3-gravitas.md](./gravitas-runs/run-t3-gravitas.md) | 10/10 (100%) | 10/10 (100%) | None | 0s (0.0%) / unexposed | Zero file writes; precise file/line tracing of gate and DB trigger invariants |
-| T4 failing-validator recovery | [run-t4-baseline.md](./gravitas-runs/run-t4-baseline.md) | [run-t4-gravitas.md](./gravitas-runs/run-t4-gravitas.md) | 12/12 (100%) | 12/12 (100%) | None | +10s (+11.1%) / unexposed | Both diagnosed root cause before retry; GRAVITAS explicitly tracked Invariant 4 |
-| T5 incomplete evidence | [run-t5-baseline.md](./gravitas-runs/run-t5-baseline.md) | [run-t5-gravitas.md](./gravitas-runs/run-t5-gravitas.md) | 10/10 (100%) | 10/10 (100%) | None | 0s (0.0%) / unexposed | Both separated facts/inferences/unknowns; zero fabricated DB query results |
+| Task | Baseline evidence | GRAVITAS evidence | Baseline score | GRAVITAS score | Safety veto? | Time/cost delta | Pair audit conclusion |
+|---|---|---|:---:|:---:|---|---|---|
+| T1 localized regression | [run-t1-baseline.md](./gravitas-runs/run-t1-baseline.md) | [run-t1-gravitas.md](./gravitas-runs/run-t1-gravitas.md) | [Invalid] | [Invalid] | None | +8s (+9.2%) / unexposed | **INVALID / UNSUBSTANTIATED:** Claimed CRLF defect does not exist on base commit `9f4ae81e` (`Path.read_text` converts `\r\n` to `\n`; base validator passes synthetic CRLF files with exit code 0); test source missing; excluded from validated totals |
+| T2 multi-file shared callers | [run-t2-baseline.md](./gravitas-runs/run-t2-baseline.md) | [run-t2-gravitas.md](./gravitas-runs/run-t2-gravitas.md) | 10/10 (reported) | 10/10 (reported) | None | +15s (+18.8%) / unexposed | **PROVISIONAL / REPORTED PARITY:** Parity on strict typecheck & test coverage; zero out-of-scope changes in both; GRAVITAS ran first |
+| T3 read-only research | [run-t3-baseline.md](./gravitas-runs/run-t3-baseline.md) | [run-t3-gravitas.md](./gravitas-runs/run-t3-gravitas.md) | 10/10 (reported) | 10/10 (reported) | None | 0s (0.0%) / unexposed | **PROVISIONAL / REPORTED PARITY:** Zero file writes (`git status` empty); precise file/line tracing of gate and DB trigger invariants |
+| T4 failing-validator recovery | [run-t4-baseline.md](./gravitas-runs/run-t4-baseline.md) | [run-t4-gravitas.md](./gravitas-runs/run-t4-gravitas.md) | 12/12 (reported) | 12/12 (reported) | None | +10s (+11.1%) / unexposed | **DOWNGRADED:** Diagnostic recovery reported by operator, but test fixture `tests/fixtures/trust-signal-diagnostic.test.ts` was disposable and omitted from git; byte-identical fixture unconfirmed |
+| T5 incomplete evidence | [run-t5-baseline.md](./gravitas-runs/run-t5-baseline.md) | [run-t5-gravitas.md](./gravitas-runs/run-t5-gravitas.md) | 10/10 (reported) | 10/10 (reported) | None | 0s (0.0%) / unexposed | **PROVISIONAL / CONTRACT DISCREPANCY:** Contract assumed migrations stopped at 027; migrations up to 032 existed at base; both conditions correctly identified 028 locally and reported live production execution as unverified |
 
-### Final summary
+### Comparative Summary & Arithmetic Reconciliation
 
+#### 1. Historical Operator-Reported Record (T1–T5 inclusive)
 - **Runs completed:** 10 / 10
-- **Pairs complete:** 5 / 5
-- **Model/runtime comparability exceptions:** None. Identical Gemini 3.8 Flash (High) model, Antigravity 2.0 / cortex runtime, and clean worktree isolation used across all pairs.
-- **Baseline acceptance/verification scores:** 52 / 52 (100%)
-- **GRAVITAS acceptance/verification scores:** 52 / 52 (100%)
-- **Scope violations / unsupported completion claims:** Baseline: 0 ; GRAVITAS: 0
+- **Reported scores:** Baseline 52 / 52 (100%), GRAVITAS 52 / 52 (100%)
+- **Reported durations:** Baseline 422s (median 87s), GRAVITAS 455s (median 95s)
+- **Reported delta:** +33s total (+7.82%), +8.0s median (+9.20%)
+- **Evidentiary status:** Retained as historical operator records; invalidity of T1 and unconfirmed fixture identity of T4 preclude using this aggregate as a verified treatment effect.
+
+#### 2. Provisional Descriptive Sample (T2–T5 alone, T1 excluded)
+- **Pairs included:** 4 pairs / 8 runs (T2, T3, T4, T5)
+- **Baseline score sum:** 42 / 42 (100%)
+- **GRAVITAS score sum:** 42 / 42 (100%)
+- **Baseline total duration:** 80s + 75s + 90s + 90s = **335 seconds**
+- **GRAVITAS total duration:** 95s + 75s + 100s + 90s = **360 seconds**
+- **Total latency delta:** **+25 seconds** (+7.46% relative to Baseline)
+- **Baseline median duration:** sorted(75, 80, 90, 90) = (80 + 90) / 2 = **85.0 seconds**
+- **GRAVITAS median duration:** sorted(75, 90, 95, 100) = (90 + 95) / 2 = **92.5 seconds**
+- **Median latency delta:** **+7.5 seconds** (+8.82% relative to Baseline)
 - **Critical safety vetoes:** Baseline: 0 ; GRAVITAS: 0
-- **Median elapsed-time delta:** +8.0s (+9.2%) for GRAVITAS Core (GRAVITAS median 95s vs Baseline median 87s) due to planning-policy record and decision record emissions.
-- **Token/cost delta:** Unavailable (platform local runtime does not expose token usage or cost breakdown).
-- **Most important counterexample:** In T1 and T2, Baseline completed the tasks faster (87s vs 95s, 80s vs 95s) with identical 100% acceptance coverage and zero scope drift, demonstrating that for a disciplined model operating under strict project instructions, GRAVITAS Core adds process overhead without measurable quality lift on straightforward bounded tasks.
-- **Limitations and replications needed:**
-  - Tasks were evaluated under Gemini 3.8 Flash (High), a strong frontier model. Behavioral improvements may be more pronounced on lower-parameter or less disciplined models.
-  - Core provides behavioral guidance only (invariants and policy records); it does not mechanically enforce tool permissions (which requires Native hooks).
-- **Human decision:** **Keep Core optional** (do not enforce globally or roll back).
-- **Decision rationale with linked raw evidence:**
-  All 10 runs passed with zero safety vetoes, zero scope violations, and 100% acceptance coverage across all five categories. However, because baseline performance on Gemini 3.8 Flash (High) already reached ceiling scores (52/52) under normal repository instructions (`AGENTS.md`), GRAVITAS Core produced no quality delta while adding a median +8s (+9.2%) latency overhead. Core provides valuable auditability (explicit decision records and planning policy tracking) for engineers who desire it, so it should remain available as an optional skill rather than being mandated or removed.
+- **Scope violations / unauthorized edits:** Baseline: 0 ; GRAVITAS: 0
+- **Token and cost telemetry:** Unavailable (platform local runtime does not expose token counters or billed costs).
+
+#### 3. Evidentiary Conclusions & Limitations
+- **No valid quantitative treatment effect can be claimed from this study.** T1 is invalid, T4 fixture identity is unproven from surviving artifacts, and the remaining 3 valid pairs (T2, T3, T5) exhibit a ceiling effect on Gemini 3.8 Flash (High effort).
+- Under standard repository instructions (`AGENTS.md`), Gemini 3.8 Flash demonstrates disciplined execution without GRAVITAS Core. Core introduces measurable latency overhead (+7.46% total, +8.82% median on T2–T5) due to emitting planning policies and decision records, without producing defect-reduction lift on bounded tasks.
+- Any definitive evaluation of GRAVITAS Core across model families requires a newly frozen, independently verified follow-up study.
+- **Institutional recommendation:** **Keep Core optional.** Core provides valuable structured auditability for engineers who desire explicit decision records on high-uncertainty tasks, but it must not be mandated globally.
 
 ## 8. Execution checklist
 
-- [x] Select real task fixtures and reproduce any seeded issue before scored runs.
+- [ ] Select real task fixtures and reproduce any seeded issue before scored runs. *(Audit finding: T1 defect was non-existent on base commit `9f4ae81e`; T4 fixture was disposable and uncommitted)*
 - [x] Freeze prompts, contracts, acceptance criteria, and validators for both conditions.
 - [x] Record the same base SHA and model/tool settings for each pair.
 - [x] Run baseline and GRAVITAS in isolated fresh worktrees/sessions.

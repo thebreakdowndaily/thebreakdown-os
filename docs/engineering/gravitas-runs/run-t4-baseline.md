@@ -1,10 +1,12 @@
 # Run Record: T4 Baseline
 
+> [!WARNING] AUDIT QUALIFICATION (2026-10-15): Evidentiary status is DOWNGRADED to operator-reported / unconfirmed fixture identity. The diagnostic test fixture `tests/fixtures/trust-signal-diagnostic.test.ts` was created as a disposable file and was not committed to version control. No cryptographic hash or preserved source survives to prove byte-identical initial fixtures between Baseline and GRAVITAS conditions. While both scorecards report consistent diagnostic recovery, this record represents an operator report rather than an independently verified comparative trial.
+
 - **Task ID:** T4
 - **Run ID:** `run-t4-baseline`
 - **Condition:** Baseline (standard repository instructions, GRAVITAS Core not loaded/activated)
 - **Base Commit SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`
-- **Isolated Worktree:** `c:/newsjack-content/eval-t4-baseline`
+- **Isolated Worktree:** `eval-t4-baseline` (disposable worktree)
 - **Timestamps (UTC):**
   - Start: 2026-10-15T10:04:00Z
   - End: 2026-10-15T10:05:30Z

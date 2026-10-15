@@ -1,10 +1,12 @@
 # Run Record: T3 Baseline
 
+> [!NOTE] AUDIT QUALIFICATION (2026-10-15): Operator-reported record. Retained as reported by the evaluation operator. Verified to adhere to strict read-only constraints (`git status --porcelain` empty) at base commit `9f4ae81e`.
+
 - **Task ID:** T3
 - **Run ID:** `run-t3-baseline`
 - **Condition:** Baseline (standard repository instructions, GRAVITAS Core not loaded/activated)
 - **Base Commit SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`
-- **Isolated Worktree:** `c:/newsjack-content/eval-t3-baseline`
+- **Isolated Worktree:** `eval-t3-baseline` (disposable worktree)
 - **Timestamps (UTC):**
   - Start: 2026-10-15T09:58:00Z
   - End: 2026-10-15T09:59:15Z
