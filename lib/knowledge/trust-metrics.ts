@@ -1,11 +1,10 @@
 import { seedAll, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
-import { isPubliclyPublished } from '@/lib/story/publication';
+import { isChapterPubliclyPublished } from '@/lib/knowledge/chapter-publication';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { listPublishedCorrections } from '@/services/editorial/corrections-service';
-import type { CanonicalClaim, CanonicalSource, Chapter, KnowledgeLibrary } from '@/types/canonical';
-import type { PublicationContext } from '@/lib/story/publication';
+import type { CanonicalClaim, CanonicalSource } from '@/types/canonical';
 
 export interface ChapterEvidenceCounts {
   claims: number;
@@ -33,28 +32,6 @@ export function getChapterEvidenceCounts(
   };
 }
 
-type ChapterWithPublicationMetadata = Chapter & {
-  publicationStatus?: PublicationContext['publicationStatus'];
-  publishedAt?: string;
-  isTestArtifact?: boolean;
-};
-
-/**
- * A chapter's "verified" state is not itself a publication transition.
- * A verified chapter counts as public only when its explicit publication
- * lifecycle and publication timestamp satisfy the centralized policy.
- */
-export function isChapterCountedAsPublished(chapter: Chapter, now: Date = new Date()): boolean {
-  if (chapter.status === 'published') return true;
-  if (chapter.status !== 'verified') return false;
-
-  const metadata = chapter as ChapterWithPublicationMetadata;
-  return isPubliclyPublished({
-    publicationStatus: metadata.publicationStatus,
-    publishedAt: metadata.publishedAt,
-    isTestArtifact: metadata.isTestArtifact,
-  }, now);
-}
 
 export interface TrustMetrics {
   publishedChapters: number;
@@ -91,7 +68,7 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
       for (const col of lib.collections) {
         for (const vol of col.volumes) {
           for (const chap of vol.chapters) {
-            if (isChapterCountedAsPublished(chap, now)) {
+            if (isChapterPubliclyPublished(chap, now)) {
               publishedChaptersCount++;
             } else if (chap.status === 'review') {
               chaptersInReviewCount++;
