@@ -100,17 +100,44 @@ describe('API-key delegation least-privilege policy', () => {
     });
   });
 
-  it('allows an owner to grant intended Radar scopes and the elevated role/tier', () => {
+  it('allows an owner to grant Radar scopes to a scoped key and the unlimited tier', () => {
     const owner = principal('owner', true);
     expect(authorizeApiKeyDelegation(owner, {
-      role: 'owner',
+      role: 'reader',
       permissions: ['radar.poll', 'radar.poll.force'],
       rateLimitTier: 'unlimited',
     })).toEqual({
       allowed: true,
-      role: 'owner',
+      role: 'reader',
       permissions: ['radar.poll', 'radar.poll.force'],
       rateLimitTier: 'unlimited',
+    });
+  });
+
+  it('rejects misleading explicit scopes on an elevated owner key', () => {
+    const owner = principal('owner', true);
+    expect(authorizeApiKeyDelegation(owner, {
+      role: 'owner',
+      permissions: ['radar.poll'],
+      rateLimitTier: 'standard',
+    })).toMatchObject({
+      allowed: false,
+      status: 400,
+      code: 'ELEVATED_ROLE_WITH_SCOPES',
+    });
+  });
+
+  it('allows an owner to issue an owner key without a misleading scope list', () => {
+    const owner = principal('owner', true);
+    expect(authorizeApiKeyDelegation(owner, {
+      role: 'owner',
+      permissions: [],
+      rateLimitTier: 'standard',
+    })).toEqual({
+      allowed: true,
+      role: 'owner',
+      permissions: [],
+      rateLimitTier: 'standard',
     });
   });
 
