@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, type ClipboardEvent } from 'react';
+import { escapeHtmlText, sanitizeRichHtml } from '@/lib/security/sanitize-rich-html';
 import type { Block, TextBlockData } from '@/utils/cms-data';
 
 interface TextBlockProps {
@@ -27,14 +28,32 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
     editorRef.current?.focus();
     setTimeout(() => {
       if (editorRef.current) {
-        onUpdate({ html: editorRef.current.innerHTML });
+        onUpdate({ html: sanitizeRichHtml(editorRef.current.innerHTML) });
       }
     }, 0);
   }, [onUpdate]);
 
   const handleInput = useCallback(() => {
     if (editorRef.current) {
-      onUpdate({ html: editorRef.current.innerHTML });
+      onUpdate({ html: sanitizeRichHtml(editorRef.current.innerHTML) });
+    }
+  }, [onUpdate]);
+
+  const handlePaste = useCallback((event: ClipboardEvent<HTMLDivElement>) => {
+    // Intercept clipboard markup before it is inserted into the editor.
+    event.preventDefault();
+    const clipboardHtml = event.clipboardData.getData('text/html');
+    const clipboardText = event.clipboardData.getData('text/plain');
+    const safeHtml = clipboardHtml
+      ? sanitizeRichHtml(clipboardHtml)
+      : escapeHtmlText(clipboardText).replace(/\r?\n/g, '<br />');
+
+    if (safeHtml) {
+      const doc = document as unknown as Record<string, (command: string, show: boolean, value?: string) => boolean>;
+      doc['execCommand']('insertHTML', false, safeHtml);
+    }
+    if (editorRef.current) {
+      onUpdate({ html: sanitizeRichHtml(editorRef.current.innerHTML) });
     }
   }, [onUpdate]);
 
@@ -89,7 +108,8 @@ export default function TextBlock({ block, onUpdate }: TextBlockProps) {
         suppressContentEditableWarning
         onInput={handleInput}
         onBlur={handleInput}
-        dangerouslySetInnerHTML={{ __html: d.html || '<p>Start writing...</p>' }}
+        onPaste={handlePaste}
+        dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(d.html || '<p>Start writing...</p>') }}
         style={{
           border: '1px solid var(--color-border-subtle)',
           borderRadius: '0 0 8px 8px',
