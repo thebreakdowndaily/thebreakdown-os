@@ -18,19 +18,19 @@ const pillars = [
     id:       'evidence-first',
     number:   '01',
     headline: 'Evidence Before Conclusions',
-    body:     'Every claim is sourced. Every source is cited. Every citation links to the primary document. We show you exactly how we know what we say we know.',
+    body:     'We connect claims to their sources and link to primary documents where available. Readers can inspect the evidence behind our reporting and see where the record remains incomplete.',
   },
   {
     id:       'uncertainty-visible',
     number:   '02',
     headline: 'Uncertainty Always Visible',
-    body:     'Where historians disagree, we say so. Where evidence is incomplete, we mark it. Where we are uncertain, we tell you. No false certainty. No editorial courage.',
+    body:     'Where historians disagree, we show competing interpretations. Where evidence is incomplete, we mark it. Where we are uncertain, we say so. No manufactured certainty or unsupported confidence.',
   },
   {
     id:       'reasoning-shown',
     number:   '03',
     headline: 'Reasoning Always Shown',
-    body:     'We show our work. Claim → Evidence → Source → Document. Every reader can verify every step independently. That is the promise.',
+    body:     'We make the reasoning traceable: Claim → Evidence → Source → Document, where those records are available. Our goal is to let readers inspect each step independently.',
   },
 ] as const;
 
