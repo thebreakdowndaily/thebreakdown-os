@@ -12,7 +12,7 @@
  * 7. Submissions persist across instances connected to the same store.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 import { POST } from '@/app/api/corrections/submit/route';
 import {
@@ -27,6 +27,18 @@ import {
   type MockCorrectionsStore,
 } from '@/services/editorial/corrections-service';
 import type { ReaderCorrectionSubmissionInput } from '@/types/corrections';
+
+const { getAnonClientMock } = vi.hoisted(() => ({
+  getAnonClientMock: vi.fn(),
+}));
+
+vi.mock('@/supabase/client', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/supabase/client')>();
+  return {
+    ...actual,
+    getAnonClient: getAnonClientMock,
+  };
+});
 
 describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
   let mockStore: MockCorrectionsStore;
@@ -401,4 +413,71 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(mockStore.readerCorrections[0].resolved_correction_id).toBeFalsy();
   });
 
+});
+
+ 
+describe('Public corrections ledger read-client routing', () => {
+  const originalNodeEnv = process.env.NODE_ENV;
+  const originalServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  beforeEach(() => {
+    process.env.NODE_ENV = 'production';
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    setCorrectionsDbClient(null);
+    resetCorrectionsMemoryStore(false);
+    getAnonClientMock.mockReset();
+  });
+
+  afterEach(() => {
+    if (originalNodeEnv === undefined) {
+      delete process.env.NODE_ENV;
+    } else {
+      process.env.NODE_ENV = originalNodeEnv;
+    }
+    if (originalServiceRoleKey === undefined) {
+      delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    } else {
+      process.env.SUPABASE_SERVICE_ROLE_KEY = originalServiceRoleKey;
+    }
+    setCorrectionsDbClient(null);
+    resetCorrectionsMemoryStore(true);
+    getAnonClientMock.mockReset();
+  });
+
+  it('reads the public ledger through the anonymous client without a service-role key', async () => {
+    const query = {
+      select: vi.fn().mockReturnThis(),
+      order: vi.fn().mockResolvedValue({ data: [], error: null }),
+    };
+    const anonClient = {
+      from: vi.fn().mockReturnValue(query),
+    };
+    getAnonClientMock.mockReturnValue(anonClient);
+
+    await expect(listPublishedCorrections()).resolves.toEqual([]);
+
+    expect(getAnonClientMock).toHaveBeenCalledTimes(1);
+    expect(anonClient.from).toHaveBeenCalledWith('corrections');
+    expect(query.select).toHaveBeenCalledWith('*, stories(slug,title)');
+    expect(query.order).toHaveBeenCalledWith('created_at', { ascending: false });
+  });
+
+  it('reports anonymous ledger read failures instead of falling back to memory data', async () => {
+    const query = {
+      select: vi.fn().mockReturnThis(),
+      order: vi.fn().mockResolvedValue({
+        data: null,
+        error: { message: 'RLS denied' },
+      }),
+    };
+    const anonClient = {
+      from: vi.fn().mockReturnValue(query),
+    };
+    getAnonClientMock.mockReturnValue(anonClient);
+
+    await expect(listPublishedCorrections()).rejects.toThrow(
+      'Durable public corrections ledger is unavailable.',
+    );
+    expect(getAnonClientMock).toHaveBeenCalledTimes(1);
+  });
 });
