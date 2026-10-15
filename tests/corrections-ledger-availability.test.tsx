@@ -23,7 +23,7 @@ describe('public corrections ledger availability state', () => {
 
   it('describes an empty durable ledger without inferring that all stories passed review', async () => {
     listPublishedCorrectionsMock.mockResolvedValue([]);
-    const html = renderToStaticMarkup(createElement(await CorrectionsPage()));
+    const html = renderToStaticMarkup(await CorrectionsPage());
 
     expect(html).toContain('No Published Corrections Listed');
     expect(html).toContain('An empty ledger is not, by itself, proof');
