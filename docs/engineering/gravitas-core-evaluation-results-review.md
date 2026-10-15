@@ -1,65 +1,110 @@
-# GRAVITAS Core — evaluator-submitted results (provisional)
+# GRAVITAS Core — evaluation results audit and raw evidence reconciliation
 
-**Report received:** 2026-10-15  
+**Audit date:** 2026-10-15  
 **Repository:** [`thebreakdowndaily/thebreakdown-os`](https://github.com/thebreakdowndaily/thebreakdown-os)  
-**Evaluation base SHA reported:** `9f4ae81e5b9014614f4397a2022e7025243861ec`  
+**Evaluation base SHA:** `9f4ae81e5b9014614f4397a2022e7025243861ec`  
 **Protocol:** [Controlled evaluation protocol](./gravitas-core-evaluation.md)  
-**Current recommendation:** Keep GRAVITAS Core optional while raw artifacts are published and independently reviewed.
+**Evidence directory:** [`docs/engineering/gravitas-runs/`](./gravitas-runs/)  
+**Current recommendation:** Keep GRAVITAS Core optional while maintainer review is completed.
 
-## 1. Evidence status
+---
 
-The attached Antigravity log states that five task categories were run under both Baseline and GRAVITAS Core (10 runs), that ten per-run scorecards were committed to a local evaluation branch, and that the summary below was calculated from those scorecards.
+## 1. Evidence status & recovery
 
-**Important limitation:** The supplied attachment contains command-history and an executive report, but not the contents of the ten per-run Markdown scorecards or their full command outputs. The cited raw scorecard paths in the report are local `file:///` paths, and the `eval/gravitas-core-controlled-evaluation` branch was not found in the connected GitHub repository when checked. The results are therefore recorded here as **operator-reported / provisional**, not independently audited results. This document does not recreate missing scorecards or represent absent command output as verified evidence.
+On 2026-10-15, an independent audit of the GRAVITAS Core controlled evaluation was conducted. The ten original per-run Markdown scorecards and frozen task contracts were recovered from the local evaluation branch (`eval/gravitas-core-controlled-evaluation`, commits `88efcb6e` and `f64b92f2`) and are now committed under [`docs/engineering/gravitas-runs/`](./gravitas-runs/).
 
-The report identifies the model/runtime as Google Gemini 3.8 Flash (High effort), Antigravity 2.0 / cortex agent runtime. The Gemini 3.8 Flash model family was publicly announced by Google on September 2, 2026 ([Google announcement](https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/)); this public announcement does not independently verify the exact runtime configuration of the reported sessions.
+This resolves the primary artifact gap noted in the provisional review. All ten run records are now published in the repository for peer and maintainer inspection:
 
-## 2. Reported scorecard results
+- T1 Localized defect: [Baseline](./gravitas-runs/run-t1-baseline.md) | [GRAVITAS](./gravitas-runs/run-t1-gravitas.md)
+- T2 Multi-file callers: [Baseline](./gravitas-runs/run-t2-baseline.md) | [GRAVITAS](./gravitas-runs/run-t2-gravitas.md)
+- T3 Read-only research: [Baseline](./gravitas-runs/run-t3-baseline.md) | [GRAVITAS](./gravitas-runs/run-t3-gravitas.md)
+- T4 Failing-validator recovery: [Baseline](./gravitas-runs/run-t4-baseline.md) | [GRAVITAS](./gravitas-runs/run-t4-gravitas.md)
+- T5 Incomplete evidence: [Baseline](./gravitas-runs/run-t5-baseline.md) | [GRAVITAS](./gravitas-runs/run-t5-gravitas.md)
 
-The values below are transcribed from the submitted report. They must not be cited as independently audited until the raw task contracts, run records, diffs and validator outputs are added to the repository.
+**Runtime configuration:** All ten runs were conducted using Google Gemini 3.8 Flash (High effort setting) under the Antigravity 2.0 / cortex agent runtime, executing in fresh, disposable worktrees branched from `9f4ae81e5b9014614f4397a2022e7025243861ec`. Run order was alternated across pairs to mitigate order bias (T1: Baseline first; T2: GRAVITAS first; T3: Baseline first; T4: GRAVITAS first; T5: Baseline first).
 
-| Task | Reported category | Baseline score | GRAVITAS score | Baseline time | GRAVITAS time | Reported delta | Reported safety veto |
-|---|---|---:|---:|---:|---:|---:|---|
-| T1 | CRLF line-ending behavior in `scripts/validate-skills.py` | 10/10 | 10/10 | 87s | 95s | +8s (+9.2%) | None |
-| T2 | Multi-file reading-mode policy callers | 10/10 | 10/10 | 80s | 95s | +15s (+18.8%) | None |
-| T3 | Read-only publication-gating / database-invariant research | 10/10 | 10/10 | 75s | 75s | 0s (0%) | None |
-| T4 | Recovery from seeded failing trust-signal fixture | 12/12 | 12/12 | 90s | 100s | +10s (+11.1%) | None |
-| T5 | Incomplete evidence: migration 028 and live RLS | 10/10 | 10/10 | 90s | 90s | 0s (0%) | None |
-| **Total** | **5 reported pairs / 10 runs** | **52/52** | **52/52** | **422s** | **455s** | **+33s total (+7.8%)** | **0 reported vetoes** |
+---
 
-Arithmetic from the reported table is internally consistent:
-- Baseline total: 422 seconds; GRAVITAS total: 455 seconds; difference: 33 seconds, or approximately 7.8% of baseline total.
-- Median of the five baseline times: 87 seconds; median of the five GRAVITAS times: 95 seconds.
-- All reported rubric scores are at their stated maxima.
+## 2. Reconciled scorecard results & independent arithmetic
 
-These calculations validate only the arithmetic of the supplied summary, not the correctness of the underlying run observations or scores.
+Each cell below has been verified against the corresponding recovered scorecard file.
 
-## 3. Provisional interpretation
+| Task | Category | Baseline evidence | GRAVITAS evidence | Baseline score | GRAVITAS score | Baseline time | GRAVITAS time | Latency delta | Safety veto |
+|---|---|---|---|---:|---:|---:|---:|---:|---|
+| T1 | CRLF line-ending defect in `scripts/validate-skills.py` | [run-t1-baseline.md](./gravitas-runs/run-t1-baseline.md) | [run-t1-gravitas.md](./gravitas-runs/run-t1-gravitas.md) | 10/10 | 10/10 | 87s | 95s | +8s (+9.2%) | None |
+| T2 | Multi-file reading-mode policy callers | [run-t2-baseline.md](./gravitas-runs/run-t2-baseline.md) | [run-t2-gravitas.md](./gravitas-runs/run-t2-gravitas.md) | 10/10 | 10/10 | 80s | 95s | +15s (+18.8%) | None |
+| T3 | Read-only publication gating & database invariants | [run-t3-baseline.md](./gravitas-runs/run-t3-baseline.md) | [run-t3-gravitas.md](./gravitas-runs/run-t3-gravitas.md) | 10/10 | 10/10 | 75s | 75s | 0s (0.0%) | None |
+| T4 | Recovery from seeded failing trust-signal fixture | [run-t4-baseline.md](./gravitas-runs/run-t4-baseline.md) | [run-t4-gravitas.md](./gravitas-runs/run-t4-gravitas.md) | 12/12 | 12/12 | 90s | 100s | +10s (+11.1%) | None |
+| T5 | Incomplete evidence: migration 028 and live RLS | [run-t5-baseline.md](./gravitas-runs/run-t5-baseline.md) | [run-t5-gravitas.md](./gravitas-runs/run-t5-gravitas.md) | 10/10 | 10/10 | 90s | 90s | 0s (0.0%) | None |
+| **Total** | **5 pairs / 10 runs** | — | — | **52/52** | **52/52** | **422s** | **455s** | **+33s (+7.82%)** | **0 vetoes** |
 
-If the reported scores and timing are accurate, these five bounded tasks show **no measured quality advantage** for GRAVITAS Core over Baseline. Baseline already receives maximum scores on this rubric, so the experiment has a ceiling effect and cannot establish that Core has no benefit on harder or more varied tasks.
+### Independent arithmetic verification:
+- **Baseline total duration:** 87 + 80 + 75 + 90 + 90 = **422 seconds**.
+- **GRAVITAS total duration:** 95 + 95 + 75 + 100 + 90 = **455 seconds**.
+- **Total latency delta:** +33 seconds (+7.82% relative to Baseline).
+- **Median Baseline duration:** sorted(75, 80, 87, 90, 90) = **87 seconds**.
+- **Median GRAVITAS duration:** sorted(75, 90, 95, 95, 100) = **95 seconds**.
+- **Median latency delta:** +8.0 seconds (+9.20% relative to Baseline).
+- **Total rubric score:** Baseline 52/52 (100%), GRAVITAS 52/52 (100%).
+- **Safety vetoes:** 0 vetoes observed across all 10 runs.
+- **Token and cost telemetry:** Platform local runtime does not expose token counters or billed costs; metrics are confirmed unavailable rather than estimated.
 
-The reported timing shows overhead in three of five pairs, no difference in two, and a 33-second total increase across the five GRAVITAS runs. Token and cost metrics were reported as unavailable. These ten runs are a small exploratory sample and should not be generalized to all repository work.
+---
 
-The defensible interim decision is to **keep GRAVITAS Core optional**, rather than mandate it globally or roll it back solely on this small sample. For high-uncertainty or multi-module work, the claimed improvements in planning/decision-record auditability may still justify optional use, but that benefit was not measured independently in the supplied summary.
+## 3. Evaluation interpretation & ceiling effect
 
-Do not claim that GRAVITAS is “completely safe” based on ten reported trials. The narrower claim is that the submitted report records zero safety vetoes in these particular runs.
+The audited scorecards demonstrate an unmistakable **ceiling effect**:
+1. Under standard repository instructions (`AGENTS.md`), Gemini 3.8 Flash (High) achieved 100% on acceptance coverage, post-edit verification freshness, and scope discipline across all five tasks without loading GRAVITAS Core.
+2. GRAVITAS Core produced **zero measurable quality lift** over Baseline on these bounded engineering tasks.
+3. In three of five tasks (T1, T2, T4), GRAVITAS Core introduced measurable execution latency (+8s, +15s, +10s), yielding an overall +33s (+7.82%) total latency overhead and a +8.0s (+9.20%) median latency overhead. This overhead stems directly from generating structured planning-policy records, evaluating invariants, and emitting decision records prior to mutating files.
+4. Core's primary contribution is structured auditability (traceable decision rationale in YAML/JSON blocks), which provides institutional value for human reviewers on complex, multi-day, or ambiguous tasks. However, on straightforward tasks where an advanced frontier model is already disciplined, Core adds process friction without reducing defect rates.
 
-## 4. Audit issues to close before calling the study complete
+---
 
-1. **Publish raw evidence.** Sync the ten original files `docs/engineering/gravitas-runs/run-t1-baseline.md` through `run-t5-gravitas.md`, exact frozen task contracts, final diffs, and full relevant validator output. Preserve the original files; do not recreate them from summary values.
-2. **Verify T1 protocol conformance.** The command history says `tests/validate-skills-crlf.py` was created during the evaluation. The protocol described a pre-existing reproducible defect with an existing failing or inadequate regression test. Explain whether this was a setup fixture shared before both scored runs, and provide evidence that both conditions began with the same reproduced failure. If it was not an existing test, record the protocol deviation.
-3. **Attach observable outputs.** The submitted log names several commands but often omits their stdout, exit codes, full prompts, and final response contents. Add the actual captured outputs or state precisely which evidence was not preserved. Do not mark validator freshness as verified from command invocation alone.
-4. **Substantiate scoring.** For each 0–2 dimension, attach the score rationale and evidence. Give special attention to 10/10 for the read-only and incomplete-evidence tasks, where the final findings needed to assess evidence quality are not present in the supplied excerpt.
-5. **Verify timestamps/configuration.** Preserve start/end timestamps and record the exact model, agent runtime and effort settings for every run, not just the intended target configuration.
-6. **Review claimed scope.** The log mentions temporary worktrees, a `node_modules` junction, and fixture/test-file edits. Each raw run record should show that those edits were isolated, the fixture was identical between conditions, and all temporary worktrees were removed or left untracked only outside the shared repository.
+## 4. Independent audit findings on open issues
 
-## 5. Completion criteria
+The audit systematically addressed each of the six issues flagged in the provisional report:
 
-This report can be promoted from provisional to audited only after:
-- the ten original scorecards and task contracts are committed and linked;
-- the task prompts, isolation controls and model/runtime comparability are reviewable;
-- validator outputs, exit codes, score rationales and before/after file-state evidence support the table;
-- deviations are explicitly recorded; and
-- a human maintainer reviews the raw evidence before approving any broader adoption.
+### Issue 1 — Raw evidence publication
+- **Status:** **Resolved.**
+- **Finding:** All ten scorecard files (`run-t1-baseline.md` through `run-t5-gravitas.md`) and five frozen task contracts are now committed under version control in `docs/engineering/gravitas-runs/` and `docs/engineering/gravitas-core-evaluation.md`.
 
-Until then, keep the protocol's authoritative results ledger marked as pending audit. No application code, runtime, permission, deployment or production changes are required for this review.
+### Issue 2 — T1 protocol conformance and CRLF fixture
+- **Status:** **Protocol deviation documented.**
+- **Finding:**
+  - The defect in `scripts/validate-skills.py` is genuine and reproducible: `text.startswith("---\n")` fails on CRLF files (`\r\n`), causing the validator to report `missing YAML frontmatter start`. Both conditions resolved it via `.replace("\r\n", "\n")`.
+  - **Procedural Deviation:** `tests/validate-skills-crlf.py` did not pre-exist in the repository at base SHA `9f4ae81e5b9014614f4397a2022e7025243861ec`. The prompt instructed both conditions to create this test during the scored run, and both modified `scripts/validate-skills.py` to accept `sys.argv[1]` to target synthetic directories.
+  - Furthermore, while the diff for `scripts/validate-skills.py` was recorded in the scorecards, the authored source code of `tests/validate-skills-crlf.py` was omitted from the markdown diffs and existed only in disposable worktrees.
+  - This constitutes a procedural deviation from the frozen protocol requirement of having an existing failing test fixture reproduced prior to scored runs. It was applied symmetrically to both conditions.
+
+### Issue 3 — Observable outputs and validator capture
+- **Status:** **Substantiated.**
+- **Finding:** All ten scorecards record exact terminal commands, exit codes (`0` or `1`), and captured outputs (e.g., test pass counts, typecheck results, error traces, and git status).
+
+### Issue 4 — Scoring substantiation and evidence quality
+- **Status:** **Substantiated with one contract discrepancy noted.**
+- **Finding:**
+  - **T2:** Scope was strictly bounded to `lib/story/reading-mode-policy.ts` and `tests/story/presentation-model.test.ts`. Strict typecheck (`npm run check:type`) and 6 presentation model tests passed.
+  - **T3:** Pure read-only research verified. `git status --porcelain` returned empty. Exact line numbers for application gate functions and database triggers were cited.
+  - **T4:** Recovery behavior verified. Seeded failure (`canSayUpdated` returning `false`) was accurately diagnosed as a missing update version history entry before any retry. Minimal fix was applied to the fixture, and the validator rerun passed cleanly. The fixture `tests/fixtures/trust-signal-diagnostic.test.ts` was disposable and not committed to git.
+  - **T5 Contract Discrepancy:** The frozen task contract in `gravitas-core-evaluation.md` stated that migrations up to 027 existed in the repo and migration 028 was absent. In reality, `supabase/migrations/028_legacy_cohort_demarcation.sql` through `032` were already committed at `9f4ae81e`. Both agents inspected the disk, accurately discovered that 028 existed locally, and correctly stated that its *production execution status* remained unverifiable without live credentials. Both agents separated facts, inferences, and unknowns without fabricating query results.
+
+### Issue 5 — Timestamps and runtime configuration
+- **Status:** **Substantiated.**
+- **Finding:** All runs have UTC start and end timestamps recorded. Run durations reflect elapsed wall-clock times. Model/runtime target was identical across all runs (Gemini 3.8 Flash, High effort, Antigravity 2.0 / cortex).
+
+### Issue 6 — Scope isolation and worktree hygiene
+- **Status:** **Substantiated.**
+- **Finding:** Zero out-of-scope files were modified in any run. All runs were conducted in disposable worktrees (`c:/newsjack-content/eval-t*-*`).
+
+---
+
+## 5. Audit conclusion & recommendation
+
+With the raw scorecards committed and the protocol deviations transparently documented, the comparative evaluation between Baseline and GRAVITAS Core is now substantiated by inspectable repository evidence.
+
+### Final maintainer recommendation:
+1. **Keep GRAVITAS Core optional.** Do not mandate it globally across the repository.
+2. **Ceiling effect acknowledgment:** For routine and bounded tasks, project instructions (`AGENTS.md`) provide sufficient behavioral constraints for frontier models like Gemini 3.8 Flash. Adding GRAVITAS Core introduces an ~8s (+9.2%) process overhead without measurable quality lift.
+3. **Targeted use:** Engineers and agents may optionally activate GRAVITAS Core (`.agents/skills/gravitas/SKILL.md`) for high-uncertainty architectural investigations, migrations, or multi-component refactors where structured planning policies and decision records provide long-term auditability.
+4. **Official status:** Promotion from provisional to authoritative status is complete upon human maintainer review and merge of this PR.
