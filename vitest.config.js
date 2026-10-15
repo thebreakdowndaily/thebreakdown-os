@@ -94,6 +94,7 @@ module.exports = {
       'tests/trust-layer-panel.test.tsx',
       'tests/trust-bar.test.tsx',
       'tests/latest-chapters-trust-language.test.tsx',
+      'tests/homepage-source-count.test.ts',
       'tests/public-trust-copy.test.tsx',
       'tests/corrections-ledger-empty-state.test.tsx',
       'tests/story/timeline-duplication.test.ts',
