@@ -34,15 +34,42 @@ function rowToReaderCorrection(row: any): ReaderCorrection {
   const mem = memoryReaderCorrections.get(row.id);
   return {
     id: row.id,
-    storyId: mem?.storyId || row.story_id || undefined,
+    // Database identity wins over cached values; do not surface a legacy slug
+    // or non-UUID fixture as a foreign key on a durable correction record.
+    storyId: row.story_id || (isValidUuid(mem?.storyId) ? mem?.storyId : undefined),
     storySlug: row.story_slug,
-    claimId: mem?.claimId || row.claim_id || undefined,
+    claimId: row.claim_id || (isValidUuid(mem?.claimId) ? mem?.claimId : undefined),
     category: row.category as CorrectionCategory,
     passageExcerpt: row.passage_excerpt,
     suggestedCorrection: row.suggested_correction,
     submitterEmail: row.submitter_email || undefined,
     supportingEvidenceUrl: row.supporting_evidence_url || undefined,
     status: row.status,
+    triageNotes: row.triage_notes ?? mem?.triageNotes,
+    resolvedCorrectionId: row.resolved_correction_id ?? mem?.resolvedCorrectionId,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function rowToPublishedCorrection(
+  row: any,
+  fallback: Partial<PublishedCorrection> = {},
+): PublishedCorrection {
+  const relatedStory = Array.isArray(row.stories) ? row.stories[0] : row.stories;
+  return {
+    id: row.id,
+    storyId: row.story_id || fallback.storyId || '',
+    storyTitle: relatedStory?.title || row.story_title || fallback.storyTitle,
+    storySlug: relatedStory?.slug || row.story_slug || fallback.storySlug,
+    storyVersionId: row.story_version_id || undefined,
+    claimId: row.claim_id || undefined,
+    verificationEventId: row.verification_event_id || undefined,
+    category: row.category as CorrectionCategory,
+    previousWording: row.previous_wording || '',
+    correctedWording: row.corrected_wording || '',
+    explanation: row.explanation,
+    supersededById: row.superseded_by_id || undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
