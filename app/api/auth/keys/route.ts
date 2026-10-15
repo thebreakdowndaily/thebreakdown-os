@@ -3,8 +3,6 @@ import type { NextRequest } from 'next/server';
 import { getCurrentPrincipal, type Principal } from '@/features/auth/principal';
 import { can } from '@/features/auth/policy';
 import { verifyApiKey, createApiKey, listApiKeys } from '@/features/auth/api-keys/service';
-import type { ApiKeyRole, ApiKeyRateLimitTier } from '@/features/auth/api-keys/types';
-import type { AppPermission } from '@/features/auth/permissions';
 import { authorizeApiKeyDelegation } from '@/features/auth/api-keys/delegation';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
 import type { IntelRole } from '@/features/auth/roles';
