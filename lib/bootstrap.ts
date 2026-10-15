@@ -1,3 +1,4 @@
+import { escapeHtmlText } from '@/lib/security/sanitize-rich-html';
 import { getStories, getPublicStories, getTopics, getEntities, getTimelines, getFixes, getInvestigations, LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 import { initDefaultServices } from '@/services/init';
 import { getFixtureBySlug } from '../fixtures/fixes/index';
@@ -101,16 +102,16 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
   const takeaway = (s as any).takeaway;
 
   if (s.summary) {
-    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200 text-lg mb-4">${s.summary}</p>`);
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200 text-lg mb-4">${escapeHtmlText(s.summary)}</p>`);
   }
   if (whyItMatters && whyItMatters !== s.summary) {
-    contextParagraphs.push(`<p class="leading-relaxed text-neutral-300 mt-2">${whyItMatters}</p>`);
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-300 mt-2">${escapeHtmlText(String(whyItMatters))}</p>`);
   }
   if (takeaway && takeaway !== s.summary && takeaway !== whyItMatters) {
-    contextParagraphs.push(`<blockquote class="border-l-2 border-emerald-500 pl-4 py-2 my-4 text-white font-medium italic bg-neutral-900/40 rounded-r-lg">${takeaway}</blockquote>`);
+    contextParagraphs.push(`<blockquote class="border-l-2 border-emerald-500 pl-4 py-2 my-4 text-white font-medium italic bg-neutral-900/40 rounded-r-lg">${escapeHtmlText(String(takeaway))}</blockquote>`);
   }
   if (contextParagraphs.length === 0 && s.keyPoints && s.keyPoints.length > 0) {
-    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${s.keyPoints[0]}</p>`);
+    contextParagraphs.push(`<p class="leading-relaxed text-neutral-200">${escapeHtmlText(s.keyPoints[0])}</p>`);
   }
 
   blocks.push({
@@ -135,7 +136,7 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
 
     const developmentsHtml = [
       '<ul class="space-y-3 my-4 list-disc pl-5">',
-      ...keyPoints.map((kp) => `<li class="leading-relaxed text-neutral-200">${kp}</li>`),
+      ...keyPoints.map((kp) => `<li class="leading-relaxed text-neutral-200">${escapeHtmlText(kp)}</li>`),
       '</ul>',
     ].join('\n');
 
@@ -163,10 +164,10 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
           <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950/50 border border-emerald-800/40">
             ${c.verification === 'false' ? 'Common Misconception' : 'Verified Finding'}
           </span>
-          ${c.source ? `<span class="text-xs font-mono text-neutral-400">Source: ${c.source}</span>` : ''}
+          ${c.source ? `<span class="text-xs font-mono text-neutral-400">Source: ${escapeHtmlText(c.source)}</span>` : ''}
         </div>
-        <h4 class="text-base font-semibold text-white leading-snug">${c.claim}</h4>
-        <p class="text-sm text-neutral-300 leading-relaxed">${c.explanation}</p>
+        <h4 class="text-base font-semibold text-white leading-snug">${escapeHtmlText(c.claim)}</h4>
+        <p class="text-sm text-neutral-300 leading-relaxed">${escapeHtmlText(c.explanation)}</p>
       </div>
     `).join('\n');
 
@@ -220,8 +221,8 @@ export function createBlocksFromStory(s: APIStory): StoryBlock[] {
     const faqHtml = s.faq
       .map((item) => `
         <div class="my-4 p-4 rounded-xl bg-neutral-900/50 border border-neutral-800">
-          <h4 class="font-bold text-white text-base mb-1.5">${item.question}</h4>
-          <p class="text-sm text-neutral-300 leading-relaxed">${item.answer}</p>
+          <h4 class="font-bold text-white text-base mb-1.5">${escapeHtmlText(item.question)}</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed">${escapeHtmlText(item.answer)}</p>
         </div>
       `)
       .join('\n');
