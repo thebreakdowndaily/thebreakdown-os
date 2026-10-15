@@ -9,5 +9,16 @@
       "path": "/api/v2/radar/poll",
       "schedule": "0 18 * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "main": true,
+      "staging": true,
+      "feature/*": true,
+      "feat/*": true,
+      "preview/*": true,
+      "fix/durable-correction-publishing-2026-10-15": true
+    }
+  }
 }
