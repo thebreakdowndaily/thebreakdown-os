@@ -16,7 +16,7 @@ Evaluate whether GRAVITAS Core improves the consistency of Gemini / Antigravity 
 - Adapt statements that would otherwise overstate Core-mode enforcement. In Core mode, policy is expressed as instructions; it does not mechanically intercept tools or gate completion.
 - Retain the upstream MIT license and note local adaptations.
 - Do not install the optional GRAVITAS Native plugin, add hooks, change host permissions, install a CLI/runtime, run install scripts, or execute upstream verification scripts.
-- Do not modify application code, database, migrations, CI configuration, environment variables, hosting, or production.
+- Do not modify application code, dependencies, database, migrations, environment variables, hosting, or production. The only CI change is a step to run the existing, dependency-free agent-skill validator.
 
 ## Why Core-only first
 
