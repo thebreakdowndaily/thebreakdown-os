@@ -44,12 +44,11 @@ jobs:
       fail-on-vuln: false
 
   gitleaks:
-    name: Gitleaks — scan changed commits for secrets
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    name: Gitleaks — scan changed commits and periodically audit history
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
     steps:
       - name: Checkout full commit history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -57,10 +56,75 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Gitleaks secret scan
-        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+      - name: Install pinned Gitleaks CLI and verify checksum
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_VERSION: "8.30.1"
-          GITLEAKS_ENABLE_COMMENTS: "false"
-          GITLEAKS_ENABLE_SUMMARY: "true"
+        run: |
+          set -euo pipefail
+          install_dir="$RUNNER_TEMP/gitleaks"
+          mkdir -p "$install_dir"
+          cd "$install_dir"
+
+          archive="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          checksums="gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          release_url="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+
+          curl --fail --silent --show-error --location --output "$archive" "$release_url/$archive"
+          curl --fail --silent --show-error --location --output "$checksums" "$release_url/$checksums"
+          awk -v name="$archive" '$2 == name { print }' "$checksums" > selected-checksum.txt
+          test -s selected-checksum.txt
+          sha256sum --check selected-checksum.txt
+          tar -xzf "$archive" gitleaks
+          echo "$install_dir" >> "$GITHUB_PATH"
+
+      - name: Resolve explicit scan range
+        id: scan-range
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            [[ "$PR_BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+            [[ "$PR_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+            log_opts="${PR_BASE_SHA}..${PR_HEAD_SHA}"
+          elif [[ "$EVENT_NAME" == "push" && "$BEFORE_SHA" =~ ^0{40}$ ]]; then
+            log_opts="--all"
+          elif [[ "$EVENT_NAME" == "push" ]]; then
+            [[ "$BEFORE_SHA" =~ ^[0-9a-f]{40}$ ]]
+            [[ "$AFTER_SHA" =~ ^[0-9a-f]{40}$ ]]
+            log_opts="${BEFORE_SHA}..${AFTER_SHA}"
+          else
+            # Weekly/manual runs deliberately scan all reachable history, including merges.
+            log_opts="--all"
+          fi
+
+          echo "log_opts=$log_opts" >> "$GITHUB_OUTPUT"
+          echo "Gitleaks git-log range: $log_opts"
+
+      - name: Scan commits for secrets
+        env:
+          GITLEAKS_LOG_OPTS: ${{ steps.scan-range.outputs.log_opts }}
+        run: |
+          set -euo pipefail
+          gitleaks detect \
+            --source . \
+            --redact \
+            --verbose \
+            --exit-code 2 \
+            --report-format sarif \
+            --report-path results.sarif \
+            --log-opts="$GITLEAKS_LOG_OPTS"
+
+      - name: Upload Gitleaks SARIF evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v4.4.3
+        with:
+          name: gitleaks-results
+          path: results.sarif
+          if-no-files-found: ignore
+          retention-days: 7
