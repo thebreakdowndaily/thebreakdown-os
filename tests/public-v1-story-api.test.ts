@@ -31,6 +31,14 @@ describe('v1 public story API visibility', () => {
       status: 'published',
       publicationStatus: 'published',
       isTestArtifact: false,
+      notes: 'internal editorial note',
+      updatedBy: 'editor-uuid',
+      version: 3,
+      scheduledAt: '2026-11-01T00:00:00.000Z',
+      scheduledBy: 'editor-uuid',
+      blockReason: 'internal block detail',
+      blockedAt: '2026-10-01T00:00:00.000Z',
+      fallbackStoryId: 'internal-fallback-id',
     };
     repository.getPublicStories.mockResolvedValue({
       data: [publishedStory],
@@ -42,7 +50,11 @@ describe('v1 public story API visibility', () => {
     );
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ data: [publishedStory] });
+    const payload = await response.json();
+    expect(payload).toMatchObject({ data: [{ id: 'published-1', slug: 'published-story', status: 'published' }] });
+    for (const field of ['notes', 'updatedBy', 'isTestArtifact', 'version', 'scheduledAt', 'scheduledBy', 'blockReason', 'blockedAt', 'fallbackStoryId']) {
+      expect(payload.data[0]).not.toHaveProperty(field);
+    }
     expect(repository.getPublicStories).toHaveBeenCalledWith({
       page: 1,
       pageSize: 10,
@@ -89,7 +101,11 @@ describe('v1 public story API visibility', () => {
     );
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ data: publishedStory });
+    const payload = await response.json();
+    expect(payload).toMatchObject({ data: { id: 'published-1', slug: 'published-story', status: 'published' } });
+    for (const field of ['notes', 'updatedBy', 'isTestArtifact', 'version', 'scheduledAt', 'scheduledBy', 'blockReason', 'blockedAt', 'fallbackStoryId']) {
+      expect(payload.data).not.toHaveProperty(field);
+    }
     expect(repository.getPublicStoryBySlug).toHaveBeenCalledWith('published-story');
     expect(repository.getStoryBySlug).not.toHaveBeenCalled();
   });
