@@ -33,7 +33,7 @@ describe('public corrections ledger availability state', () => {
   it('reports storage unavailability instead of presenting it as zero corrections', async () => {
     listPublishedCorrectionsMock.mockRejectedValue(new Error('storage offline'));
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    const html = renderToStaticMarkup(createElement(await CorrectionsPage()));
+    const html = renderToStaticMarkup(await CorrectionsPage());
 
     expect(html).toContain('Corrections Ledger Temporarily Unavailable');
     expect(html).toContain('no conclusion about the presence or absence of corrections can be drawn');
