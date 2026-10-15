@@ -750,6 +750,9 @@ export async function triageReaderCorrection(
   if (!record) {
     throw new Error(`Correction submission not found: ${input.correctionId}`);
   }
+  // Keep the cache aligned with the durable row before the optional in-memory
+  // verification handoff uses it.
+  memoryReaderCorrections.set(record.id, record);
 
   // This handoff is currently an in-memory workflow record, not a durable
   // verification event. It is deliberately not misrepresented as a foreign
@@ -888,10 +891,11 @@ export async function handoffCorrectionToVerification(
     throw new Error(`Unauthorized: User role '${staffContext.role}' cannot execute verification handoff.`);
   }
 
-  const record = memoryReaderCorrections.get(input.correctionId);
+  const record = (await getReaderCorrectionById(input.correctionId)) || memoryReaderCorrections.get(input.correctionId);
   if (!record) {
     throw new Error(`Correction submission not found: ${input.correctionId}`);
   }
+  memoryReaderCorrections.set(record.id, record);
 
   const now = new Date().toISOString();
   const storySlug = input.storySlug || record.storySlug;
