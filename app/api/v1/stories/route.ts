@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await repo.getStories(params);
+  const result = await repo.getPublicStories(params);
   return NextResponse.json(result);
 }
 

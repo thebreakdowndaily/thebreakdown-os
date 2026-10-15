@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { buildPublicTopicSummaries } from '@/features/topic/public-topic-summary';
 
 export const metadata: Metadata = {
   title: 'Topic Directory',
@@ -23,8 +24,28 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function TopicsPage() {
-  const services = bootstrapServices();
-  const { data: topics } = await services.topics.getTopics({ pageSize: 100 });
+  const services = bootstrapServices({ publicOnly: true });
+  const storyPageSize = 100;
+  const [{ data: topics }, firstStoriesPage] = await Promise.all([
+    services.topics.getTopics({ pageSize: 100 }),
+    services.stories.getPublicStories({ page: 1, pageSize: storyPageSize }),
+  ]);
+
+  // Reconcile topic relationships against the actual public story set. Stored
+  // topic ID arrays alone can be stale or incomplete, so counts and previews
+  // also use the canonical story-side relatedTopicIds relationship.
+  const totalPublicStories = firstStoriesPage.meta?.total ?? firstStoriesPage.data.length;
+  const storyPageCount = Math.ceil(totalPublicStories / storyPageSize);
+  const remainingStoryPages = await Promise.all(
+    Array.from({ length: Math.max(0, storyPageCount - 1) }, (_, index) =>
+      services.stories.getPublicStories({ page: index + 2, pageSize: storyPageSize }),
+    ),
+  );
+  const publicStories = [
+    ...firstStoriesPage.data,
+    ...remainingStoryPages.flatMap((page) => page.data),
+  ];
+  const topicSummaries = buildPublicTopicSummaries(topics, publicStories);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
@@ -52,9 +73,8 @@ export default async function TopicsPage() {
         {/* Topics Grid */}
         <main id="topics-grid" aria-label="Topics Directory" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map((topic) => {
-            const topicItem = topic as typeof topic & { stories?: Array<{ slug: string; headline: string }>; storyCount?: number };
-            const stories = topicItem.stories || [];
-            const storyCount = topicItem.storyCount || topic.storyIds?.length || stories.length;
+            const summary = topicSummaries.get(topic.slug) ?? { storyCount: 0, stories: [] };
+            const { storyCount, stories } = summary;
 
             return (
               <div
