@@ -191,15 +191,95 @@ describe('Phase 2F — Cron Authentication & Remediation', () => {
       expect(json.runId).toBe('mock-radar-run');
     });
 
-    it('accepts request when authenticated via x-api-key', async () => {
+    it('rejects an invalid API key with 401 without polling', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue(null);
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
       const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
         method: 'GET',
-        headers: { 'x-api-key': 'tb_live_test_api_key' },
+        headers: { 'x-api-key': 'tb_live_invalid_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(401);
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('rejects a valid key without radar.poll permission with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_readonly',
+        name: 'Read-only key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['story.read'],
+      } as any);
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_readonly_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('rejects forced polling without radar.poll.force permission', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_poll_only',
+        name: 'Poll-only key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['radar.poll'],
+      } as any);
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll?force=true', {
+        method: 'POST',
+        headers: { 'x-api-key': 'tb_live_poll_only_key' },
+      });
+      const res = await radarPOST(req);
+      expect(res.status).toBe(403);
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('accepts an API key explicitly granted radar.poll', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_poll',
+        name: 'Radar poll key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['radar.poll'],
+      } as any);
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_poll_key' },
       });
       const res = await radarGET(req);
       expect(res.status).toBe(200);
       const json = await res.json();
       expect(json.runId).toBe('mock-radar-run');
+    });
+
+    it('accepts forced polling only with both poll scopes', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_force',
+        name: 'Radar forced poll key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['radar.poll', 'radar.poll.force'],
+      } as any);
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll?force=true', {
+        method: 'POST',
+        headers: { 'x-api-key': 'tb_live_force_key' },
+      });
+      const res = await radarPOST(req);
+      expect(res.status).toBe(200);
+      expect(RadarPipeline.prototype.poll).toHaveBeenCalledWith({ forceAll: true });
     });
   });
 
@@ -261,12 +341,15 @@ describe('Phase 2F — Cron Authentication & Remediation', () => {
       expect(res.status === 200 || res.headers.get('x-middleware-next') === '1').toBe(true);
     });
 
-    it('radar poll: allows valid x-api-key through API key gate', async () => {
+    it('radar poll: allows a scoped x-api-key through the API key gate', async () => {
       vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
-        id: 'key-123',
         key: 'tb_live_test_key',
-        tier: 'standard_api',
-        allowed: true,
+        name: 'Radar poll key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['radar.poll'],
       } as any);
 
       const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
@@ -277,7 +360,45 @@ describe('Phase 2F — Cron Authentication & Remediation', () => {
       expect(res.status === 200 || res.headers.get('x-middleware-next') === '1').toBe(true);
     });
 
-    it('radar poll: rejects invalid x-api-key with 403', async () => {
+    it('radar poll: rejects a valid key without scope with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_readonly',
+        name: 'Read-only key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['story.read'],
+      } as any);
+
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_readonly_key' },
+      });
+      const res = await middleware(req);
+      expect(res.status).toBe(403);
+    });
+
+    it('radar poll: rejects forced polling without force scope with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_poll_only',
+        name: 'Poll-only key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['radar.poll'],
+      } as any);
+
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll?force=true', {
+        method: 'POST',
+        headers: { 'x-api-key': 'tb_live_poll_only_key' },
+      });
+      const res = await middleware(req);
+      expect(res.status).toBe(403);
+    });
+
+    it('radar poll: rejects invalid x-api-key with 401', async () => {
       vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue(null);
 
       const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
@@ -285,7 +406,7 @@ describe('Phase 2F — Cron Authentication & Remediation', () => {
         headers: { 'x-api-key': 'tb_live_bad_key' },
       });
       const res = await middleware(req);
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(401);
     });
   });
 });
