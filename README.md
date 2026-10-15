@@ -2,7 +2,7 @@
 
 > An AI-powered Editorial Operating System for investigative journalism, data journalism, and evidence-based storytelling.
 
-[![Build](https://github.com/thebreakdowndaily/thebreakdown-os/actions/workflows/deploy.yml/badge.svg)](https://github.com/thebreakdowndaily/thebreakdown-os/actions)
+[![Build](https://github.com/thebreakdowndaily/thebreakdown-os/actions/workflows/production-deploy.yml/badge.svg)](https://github.com/thebreakdowndaily/thebreakdown-os/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org)
 [![Deployed on Vercel](https://img.shields.io/badge/deployed-Vercel-black)](https://thebreakdown.in)
