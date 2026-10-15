@@ -21,7 +21,16 @@ export const metadata: Metadata = {
 export const revalidate = 3600; // 1 hour ISR
 
 export default async function CorrectionsPage() {
-  const corrections = await listPublishedCorrections();
+  let corrections: Awaited<ReturnType<typeof listPublishedCorrections>> = [];
+  let ledgerUnavailable = false;
+
+  try {
+    corrections = await listPublishedCorrections();
+  } catch (error) {
+    // An unavailable source of truth is not equivalent to an empty ledger.
+    console.error('[CorrectionsPage] Unable to load the durable corrections ledger:', error);
+    ledgerUnavailable = true;
+  }
 
   return (
     <main className="min-h-screen bg-surface-primary text-text-primary">
@@ -61,19 +70,23 @@ export default async function CorrectionsPage() {
         <div className="space-y-6">
           <div className="flex items-center justify-between border-b border-border pb-4">
             <h2 className="text-lg font-serif font-bold text-text-primary">
-              Published Corrections ({corrections.length})
+              Published Corrections ({ledgerUnavailable ? 'unavailable' : corrections.length})
             </h2>
             <span className="text-xs text-text-muted font-mono">Immutable Public Projection</span>
           </div>
 
-          {corrections.length === 0 ? (
-            <div className="p-12 text-center border border-dashed border-border rounded-xl">
-              <svg className="w-8 h-8 text-text-muted mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h3 className="text-sm font-semibold text-text-primary">Zero Unresolved Errata</h3>
-              <p className="text-xs text-text-muted mt-1 max-w-sm mx-auto">
-                All currently published knowledge objects have passed the Gold Standard Review with zero open factual challenges.
+          {ledgerUnavailable ? (
+            <div role="alert" className="p-8 text-center border border-amber-500/30 rounded-xl">
+              <h3 className="text-sm font-semibold text-text-primary">Corrections Ledger Temporarily Unavailable</h3>
+              <p className="text-xs text-text-muted mt-2 max-w-sm mx-auto">
+                The durable ledger could not be verified at this time. Please try again shortly; no conclusion about the presence or absence of corrections can be drawn.
+              </p>
+            </div>
+          ) : corrections.length === 0 ? (
+            <div className="p-8 text-center border border-dashed border-border rounded-xl">
+              <h3 className="text-sm font-semibold text-text-primary">No Published Corrections Listed</h3>
+              <p className="text-xs text-text-muted mt-2 max-w-sm mx-auto">
+                This ledger lists formal corrections approved for publication. An empty ledger is not, by itself, proof that every story has passed every review gate or that no questions remain.
               </p>
             </div>
           ) : (
