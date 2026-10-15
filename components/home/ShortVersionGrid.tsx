@@ -30,7 +30,7 @@ function getCategoryColor(category: string): string {
   const cat = category.toLowerCase();
   if (cat.includes('economy') || cat.includes('data'))       return 'var(--color-earth-moss)';
   if (cat.includes('govern') || cat.includes('policy'))      return 'var(--color-earth-atmosphere)';
-  if (cat.includes('foreign') || cat.includes('geopolit'))   return 'var(--color-earth-clay)';
+  if (cat.includes('foreign') || cat.includes('geopolit'))   return 'var(--color-earth-ochre)';
   return 'var(--color-earth-ochre)';
 }
 
@@ -53,7 +53,7 @@ function BriefItem({
         <span
           className="text-2xl font-bold font-mono leading-none"
           style={{
-            color: 'var(--color-border-hover)',
+            color: 'var(--color-earth-dust)',
             fontFamily: 'var(--font-playfair), Georgia, serif',
           }}
           aria-hidden="true"

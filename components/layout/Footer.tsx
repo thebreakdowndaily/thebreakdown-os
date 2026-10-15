@@ -225,7 +225,7 @@ const Footer: React.FC = () => (
         </p>
         <p
           className="text-xs font-mono"
-          style={{ color: 'var(--color-earth-dust)', opacity: 0.6 }}
+          style={{ color: 'var(--color-earth-dust)' }}
         >
           Every claim sourced. Every source linked.
         </p>
