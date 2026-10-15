@@ -89,6 +89,7 @@ module.exports = {
       'tests/solution-comparison.test.ts',
       // 'tests/story/canonical-adapter.test.ts', // Excluded: mgnrega-reform & rbi-repo-rate decommissioned to NEEDS_REVIEW
       'tests/story/chart-contract.test.ts',
+      'tests/trust-metrics-contract.test.ts',
       'tests/story/timeline-duplication.test.ts',
       'tests/diagnostic-routes.test.ts',
       'tests/certification/canonical-certification.test.ts',
