@@ -119,7 +119,7 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
     let averageTrustScore: number | undefined = undefined;
     try {
       const services = bootstrapServices({ publicOnly: true });
-      const storiesRes = await services.stories.getStories({ pageSize: 100 });
+      const storiesRes = await services.stories.getPublicStories({ pageSize: 100 });
       const allStories = storiesRes.data;
       const scoreStories = allStories.filter(s => typeof s.evidenceScore === 'number' && s.evidenceScore > 0);
       if (scoreStories.length > 0) {
