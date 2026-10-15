@@ -13,7 +13,7 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
-  const story = await repo.getStoryBySlug(slug);
+  const story = await repo.getPublicStoryBySlug(slug);
 
   if (!story) {
     return NextResponse.json({ error: `Story not found: ${slug}` }, { status: 404 });
