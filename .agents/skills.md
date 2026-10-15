@@ -12,6 +12,7 @@ A skill is a discrete, composable capability that one or more agents can invoke.
 
 | Skill ID | Description | Used By | Status |
 |----------|-------------|---------|--------|
+| gravitas | Reliability workflow for scoped reconnaissance, adaptive planning, verification, recovery, and evidence-backed completion. | Gemini / Google Antigravity / compatible Agent Skills hosts | pilot |
 | instagram-brand-voice | Apply The Breakdown's evidence-led, accessible brand voice. | Instagram editorial workflow | draft |
 | instagram-source-research | Build a claim-level source ledger and verified social angles. | Instagram editorial workflow | draft |
 | instagram-caption | Write and check searchable, platform-native Instagram captions. | Instagram editorial workflow | draft |
