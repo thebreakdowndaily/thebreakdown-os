@@ -2,7 +2,7 @@
 
 > An AI-powered Editorial Operating System for investigative journalism, data journalism, and evidence-based storytelling.
 
-[![Build](https://github.com/thebreakdowndaily/thebreakdown-os/actions/workflows/deploy.yml/badge.svg)](https://github.com/thebreakdowndaily/thebreakdown-os/actions)
+[![Build](https://github.com/thebreakdowndaily/thebreakdown-os/actions/workflows/production-deploy.yml/badge.svg)](https://github.com/thebreakdowndaily/thebreakdown-os/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-gold.svg)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org)
 [![Deployed on Vercel](https://img.shields.io/badge/deployed-Vercel-black)](https://thebreakdown.in)
@@ -47,83 +47,41 @@ The Breakdown OS transforms raw information into structured, interconnected know
 
 ## Project Structure
 
-```
-thebreakdown-os/
-│
-├── app/                        # Next.js App Router
-│   ├── (public)/               # Public-facing pages
-│   │   ├── page.tsx            # Homepage
-│   │   ├── story/[slug]/       # Story pages (SSG)
-│   │   ├── topic/[slug]/       # Topic intelligence pages
-│   │   ├── entity/[slug]/      # Entity intelligence pages
-│   │   ├── fix/[slug]/         # "The Fix" explainers
-│   │   ├── organization/[slug]/
-│   │   ├── country/[slug]/
-│   │   ├── graph/              # Full-page knowledge graph explorer
-│   │   ├── search/             # Unified search
-│   │   └── workspace/          # Research workspace (power users)
-│   ├── cms/                    # Editorial CMS (14 pages)
-│   └── api/v1/                 # 14 REST endpoints
-│
-├── components/
-│   ├── ui/                     # Design system primitives
-│   │   └── Container, Card, Badge, Button, Heading, Stack, Grid, Divider, Skeleton, SectionHeader
-│   ├── story/
-│   │   ├── blocks/             # StoryBlock<T> registry + BlockRenderer
-│   │   └── evidence/           # EvidenceEngine, VerificationSummary, EnhancedClaimCard
-│   └── [section components]
-│
-├── types/
-│   └── canonical.ts            # Single source of truth — all domain types
-│
-├── services/                   # Domain services (Memory* pattern)
-│   ├── registry.ts             # Service locator singleton
-│   ├── init.ts                 # Wire all Memory* services
-│   └── {stories,topics,entities,timelines,fixes,media,search,analytics}/service.ts
-│
-├── features/                   # Business logic (not UI)
-│   ├── {home,story,topic,entity,search,cms}/view-model.ts
-│   ├── ai/
-│   │   ├── editorial.ts        # EditorialAI — 6 suggestion engines
-│   │   └── reader.ts           # ReaderAI — 5 reading modes
-│   └── workspace/view-model.ts
-│
-├── lib/
-│   ├── bootstrap.ts            # bootstrapServices() — idempotent init
-│   ├── events/event-bus.ts     # Typed pub/sub — 20 event types
-│   ├── graph/graphService.ts   # Knowledge graph — BFS, shortest path, trending
-│   └── mappers/                # canonical ↔ API type converters
-│
-├── docs/                       # Documentation hub
-│   ├── blueprints/             # Product blueprints
-│   ├── architecture/           # Architecture docs & diagrams
-│   ├── engineering/            # Developer guides & runbooks
-│   ├── editorial/              # Newsroom standards & playbooks
-│   ├── operations/             # Deploy, monitoring, incidents
-│   └── innovation/             # Experiments & future thinking
-│
-├── adr/                        # Architecture Decision Records
-├── rfc/                        # Request for Comments
-├── specs/                      # Feature specifications
-├── workflows/                  # Workflow definitions
-├── prompts/                    # AI prompt templates
-├── wiki/                       # Internal knowledge base
-└── .agents/                    # Agent & skill registries
+The repository includes application, platform, research, audit, and agent-tooling modules. Use the [repository boundary and change map](docs/architecture/repository-boundaries-and-change-map.md) for the more complete navigation guide.
+
+```text
+app/                  Next.js App Router entry points
+components/           Reusable UI components
+design-system/        Shared visual tokens
+features/             Feature-oriented logic and view models
+services/             Domain/application service layer
+lib/                  Shared infrastructure and utilities
+packages/             Package-like modules and dedicated tests
+plugins/              Extension-oriented modules
+types/ schemas/       Shared domain and data contracts
+stories/ data/ registry/
+                      Story data, domain data, and registries
+supabase/ migrations/ Database clients and migration assets
+tests/ scripts/       Test suites and developer/CI tooling
+audit/                Audit framework/tooling
+docs/ adr/ rfc/       Documentation and decision records
+.agents/ .ai/ .opencode/
+                      Coding-agent instructions and skills
 ```
 
----
+These labels are navigation hints, not proof that every import follows these boundaries. Verify callers before moving code. Multiple migration and ADR locations exist; do not create parallel homes.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js ≥ 20
+- Node.js ≥ 22 (matches `package.json`, `.nvmrc`, and CI)
 - npm ≥ 10
 
 ### Install
 
 ```bash
-npm install
+npm ci
 ```
 
 ### Run locally
@@ -196,13 +154,21 @@ The platform exclusively uses the `GraphProjectionService` to dynamically projec
 
 ---
 
+## Engineering Navigation
+
+- [Current agent and engineering contract](./AGENTS.md)
+- [Repository architecture audit](./docs/architecture/repository-audit-2026-10-15.md)
+- [Repository boundaries and change map](./docs/architecture/repository-boundaries-and-change-map.md)
+- [Developer workflow and verification commands](./docs/engineering/developer-workflow.md)
+- [Feature-to-module and test map](./docs/engineering/feature-module-test-map.md)
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Architecture Decisions
 
-See [adr/](./adr/) for the full ADR log.
+Architecture decisions currently exist across [`adr/`](./adr/), [`docs/adr/`](./docs/adr/), and [the architecture ADR register](./docs/architecture/adr-index.md). Their scopes and creation policy are being reconciled; see the [repository ownership audit](./docs/architecture/repository-ownership-audit-2026-10-15.md) before adding or moving an ADR.
 
 ## Roadmap
 
