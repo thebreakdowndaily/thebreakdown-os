@@ -21,7 +21,7 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    optimizePackageImports: ['d3', 'maplibre-gl', 'three'],
+    optimizePackageImports: ['d3', 'three'],
   },
 
   async headers() {
