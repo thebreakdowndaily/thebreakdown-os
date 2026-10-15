@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { listPublishedCorrections } from '@/services/editorial/corrections-service';
+import { getCorrectionsLedgerViewModel } from '@/services/editorial/corrections-ledger-view-model';
 
 export const metadata: Metadata = {
   title: 'Corrections & Errata Ledger',
@@ -31,6 +32,11 @@ export default async function CorrectionsPage() {
     console.error('[CorrectionsPage] Unable to load the durable corrections ledger:', error);
     ledgerUnavailable = true;
   }
+
+  const ledgerView = getCorrectionsLedgerViewModel({
+    unavailable: ledgerUnavailable,
+    correctionCount: corrections.length,
+  });
 
   return (
     <main className="min-h-screen bg-surface-primary text-text-primary">
@@ -70,23 +76,23 @@ export default async function CorrectionsPage() {
         <div className="space-y-6">
           <div className="flex items-center justify-between border-b border-border pb-4">
             <h2 className="text-lg font-serif font-bold text-text-primary">
-              Published Corrections ({ledgerUnavailable ? 'unavailable' : corrections.length})
+              Published Corrections ({ledgerView.countLabel})
             </h2>
             <span className="text-xs text-text-muted font-mono">Immutable Public Projection</span>
           </div>
 
           {ledgerUnavailable ? (
             <div role="alert" className="p-8 text-center border border-amber-500/30 rounded-xl">
-              <h3 className="text-sm font-semibold text-text-primary">Corrections Ledger Temporarily Unavailable</h3>
+              <h3 className="text-sm font-semibold text-text-primary">{ledgerView.title}</h3>
               <p className="text-xs text-text-muted mt-2 max-w-sm mx-auto">
-                The durable ledger could not be verified at this time. Please try again shortly; no conclusion about the presence or absence of corrections can be drawn.
+                {ledgerView.description}
               </p>
             </div>
           ) : corrections.length === 0 ? (
             <div className="p-8 text-center border border-dashed border-border rounded-xl">
-              <h3 className="text-sm font-semibold text-text-primary">No Published Corrections Listed</h3>
+              <h3 className="text-sm font-semibold text-text-primary">{ledgerView.title}</h3>
               <p className="text-xs text-text-muted mt-2 max-w-sm mx-auto">
-                This ledger lists formal corrections approved for publication. An empty ledger is not, by itself, proof that every story has passed every review gate or that no questions remain.
+                {ledgerView.description}
               </p>
             </div>
           ) : (

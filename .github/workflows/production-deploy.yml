@@ -50,7 +50,7 @@ jobs:
 
       - name: Release-Control Safety & Deployment Health Suites
         run: |
-          npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts tests/corrections-ledger-availability.test.tsx
+          npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts tests/corrections-ledger-availability.test.ts
 
       - name: Next.js Production Build Verification
         run: npm run build
