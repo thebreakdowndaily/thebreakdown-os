@@ -148,7 +148,7 @@ export default function StoryNewsletterCTA({
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 shrink-0 disabled:opacity-50"
+                className="px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 shrink-0 disabled:opacity-50"
               >
                 {status === 'loading' ? 'Subscribing...' : 'Subscribe Free'}
               </button>

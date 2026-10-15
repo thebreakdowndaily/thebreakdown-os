@@ -33,7 +33,7 @@ export function SocialSharePanel({ storySlug, storyTitle }: SocialSharePanelProp
 
   return (
     <div className="flex items-center gap-4 py-4" aria-label="Social share panel">
-      <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Share</span>
+      <span className="text-sm font-medium text-gray-400 uppercase tracking-wide">Share</span>
       <div className="flex gap-2">
         <a
           href={xUrl}
