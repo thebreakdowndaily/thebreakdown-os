@@ -4,7 +4,7 @@ import { requireApiPermission } from '@/features/auth/require-role';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 import type { Story } from '@/types/canonical';
-import { PUBLIC_STORY_SELECT, stripInternalStoryFields } from '@/lib/story/public-story-projection';
+import { PUBLIC_STORY_SELECT, toPublicDatabaseStory } from '@/lib/story/public-story-projection';
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (error) throw error;
-    return list((data || []).map(stripInternalStoryFields), count || 0, page, pageSize);
+    return list((data || []).map(toPublicDatabaseStory), count || 0, page, pageSize);
   } catch (e) { return serverError(e); }
 }
 
