@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { CanonicalClaim, CanonicalSource, Chapter } from '../types/canonical';
-import { getChapterEvidenceCounts, isChapterCountedAsPublished } from '../lib/knowledge/trust-metrics';
+import { getChapterEvidenceCounts } from '../lib/knowledge/trust-metrics';
+import { isChapterPubliclyPublished } from '../lib/knowledge/chapter-publication';
 
 function makeClaim(overrides: Partial<CanonicalClaim> = {}): CanonicalClaim {
   return {
@@ -67,13 +68,18 @@ describe('trust metrics data lineage', () => {
     expect(getChapterEvidenceCounts('kl-ch-1', [], sources)).toEqual({ claims: 0, sources: 1 });
   });
 
-  it('does not count a verified-only chapter as publicly published', () => {
-    const chapter = {
+  it('uses the same established visibility rule as chapter routes', () => {
+    const verifiedChapter = {
       status: 'verified',
       createdAt: '2026-01-01T00:00:00.000Z',
     } as Chapter;
+    const draftChapter = {
+      status: 'draft',
+      createdAt: '2026-01-01T00:00:00.000Z',
+    } as Chapter;
 
-    expect(isChapterCountedAsPublished(chapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(false);
+    expect(isChapterPubliclyPublished(verifiedChapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(true);
+    expect(isChapterPubliclyPublished(draftChapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(false);
   });
 
   it('requires a past explicit publication date for verified chapters', () => {
@@ -82,17 +88,17 @@ describe('trust metrics data lineage', () => {
       publicationStatus: 'published',
     } as unknown as Chapter;
 
-    expect(isChapterCountedAsPublished({
+    expect(isChapterPubliclyPublished({
       ...base,
       publishedAt: '2026-10-14T00:00:00.000Z',
     }, new Date('2026-10-15T00:00:00.000Z'))).toBe(true);
 
-    expect(isChapterCountedAsPublished({
+    expect(isChapterPubliclyPublished({
       ...base,
       publishedAt: '2026-10-16T00:00:00.000Z',
     }, new Date('2026-10-15T00:00:00.000Z'))).toBe(false);
 
-    expect(isChapterCountedAsPublished({
+    expect(isChapterPubliclyPublished({
       ...base,
       publishedAt: 'not-a-date',
     }, new Date('2026-10-15T00:00:00.000Z'))).toBe(false);
@@ -106,7 +112,7 @@ describe('trust metrics data lineage', () => {
       isTestArtifact: true,
     } as unknown as Chapter;
 
-    expect(isChapterCountedAsPublished(chapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(false);
+    expect(isChapterPubliclyPublished(chapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(false);
   });
 
   it('counts an explicitly published chapter without synthesizing a minimum elsewhere', () => {
@@ -115,6 +121,6 @@ describe('trust metrics data lineage', () => {
       createdAt: '2026-01-01T00:00:00.000Z',
     } as Chapter;
 
-    expect(isChapterCountedAsPublished(chapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(true);
+    expect(isChapterPubliclyPublished(chapter, new Date('2026-10-15T00:00:00.000Z'))).toBe(true);
   });
 });
