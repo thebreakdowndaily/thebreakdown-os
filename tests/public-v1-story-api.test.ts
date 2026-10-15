@@ -39,6 +39,8 @@ describe('v1 public story API visibility', () => {
       blockReason: 'internal block detail',
       blockedAt: '2026-10-01T00:00:00.000Z',
       fallbackStoryId: 'internal-fallback-id',
+      confidenceBreakdown: { overallScore: 99 },
+      internalFutureField: 'must not become public by default',
     };
     repository.getPublicStories.mockResolvedValue({
       data: [publishedStory],
@@ -52,7 +54,7 @@ describe('v1 public story API visibility', () => {
     expect(response.status).toBe(200);
     const payload = await response.json();
     expect(payload).toMatchObject({ data: [{ id: 'published-1', slug: 'published-story', status: 'published' }] });
-    for (const field of ['notes', 'updatedBy', 'isTestArtifact', 'version', 'scheduledAt', 'scheduledBy', 'blockReason', 'blockedAt', 'fallbackStoryId']) {
+    for (const field of ['notes', 'updatedBy', 'isTestArtifact', 'version', 'scheduledAt', 'scheduledBy', 'blockReason', 'blockedAt', 'fallbackStoryId', 'confidenceBreakdown', 'internalFutureField']) {
       expect(payload.data[0]).not.toHaveProperty(field);
     }
     expect(repository.getPublicStories).toHaveBeenCalledWith({
@@ -100,6 +102,8 @@ describe('v1 public story API visibility', () => {
       blockReason: 'internal block detail',
       blockedAt: '2026-10-01T00:00:00.000Z',
       fallbackStoryId: 'internal-fallback-id',
+      confidenceBreakdown: { overallScore: 99 },
+      internalFutureField: 'must not become public by default',
     };
     repository.getPublicStoryBySlug.mockResolvedValue(publishedStory);
 
@@ -111,7 +115,7 @@ describe('v1 public story API visibility', () => {
     expect(response.status).toBe(200);
     const payload = await response.json();
     expect(payload).toMatchObject({ data: { id: 'published-1', slug: 'published-story', status: 'published' } });
-    for (const field of ['notes', 'updatedBy', 'isTestArtifact', 'version', 'scheduledAt', 'scheduledBy', 'blockReason', 'blockedAt', 'fallbackStoryId']) {
+    for (const field of ['notes', 'updatedBy', 'isTestArtifact', 'version', 'scheduledAt', 'scheduledBy', 'blockReason', 'blockedAt', 'fallbackStoryId', 'confidenceBreakdown', 'internalFutureField']) {
       expect(payload.data).not.toHaveProperty(field);
     }
     expect(repository.getPublicStoryBySlug).toHaveBeenCalledWith('published-story');
