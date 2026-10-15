@@ -92,6 +92,7 @@ module.exports = {
       'tests/story/trust-signals.test.ts',
       'tests/story/story-card-trust-language.test.tsx',
       'tests/trust-layer-panel.test.tsx',
+      'tests/trust-bar.test.tsx',
       'tests/story/timeline-duplication.test.ts',
       'tests/diagnostic-routes.test.ts',
       'tests/certification/canonical-certification.test.ts',
