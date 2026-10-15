@@ -132,8 +132,21 @@ export async function middleware(request: NextRequest) {
       );
     }
 
-    // The middleware is the first authorization boundary; the route repeats
-    // this check so direct handler invocation and future routing changes fail closed.
+    const rate = await rateLimiter.checkLimit({
+      key: `apikey:${key.key}`,
+      tier: 'standard_api',
+      endpoint: pathname,
+      ip: clientIp,
+    });
+
+    if (!rate.allowed) {
+      const resp = rateLimiter.create429Response(rate);
+      Object.entries(SECURITY_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
+      return resp;
+    }
+
+    // Count authenticated attempts before enforcing the scope, so repeated
+    // underprivileged requests are also subject to the existing rate limit.
     if (pathname === '/api/v2/radar/poll') {
       const authorization = authorizeRadarPoll({
         isCronAuthorized: false,
@@ -151,19 +164,6 @@ export async function middleware(request: NextRequest) {
           { status: authorization.status, headers: SECURITY_HEADERS as HeadersInit }
         );
       }
-    }
-
-    const rate = await rateLimiter.checkLimit({
-      key: `apikey:${key.key}`,
-      tier: 'standard_api',
-      endpoint: pathname,
-      ip: clientIp,
-    });
-
-    if (!rate.allowed) {
-      const resp = rateLimiter.create429Response(rate);
-      Object.entries(SECURITY_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
-      return resp;
     }
 
     const response = NextResponse.next();
