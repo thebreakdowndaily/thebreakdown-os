@@ -21,3 +21,6 @@ Goal and reader; three opening lines and selection rationale; final caption; one
 
 ## Do not
 Do not invent quotations, statistics, citations, trending hashtags, reach forecasts, or algorithm claims. Do not describe a non-clickable caption URL as clickable. Never schedule or publish.
+
+## Publication gate
+Drafts remain drafts until an authorized human explicitly approves publication. This skill never schedules or publishes.
