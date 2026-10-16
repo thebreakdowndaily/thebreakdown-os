@@ -23,5 +23,16 @@ export async function getPersistentWriteClient(principal: Principal): Promise<
     };
   }
 
-  return { client: await createUserScopedClient() };
+  try {
+    return {
+      client: await createUserScopedClient({ fallbackToAnon: false }),
+    };
+  } catch {
+    return {
+      response: NextResponse.json(
+        { error: 'Authenticated database session unavailable' },
+        { status: 503 },
+      ),
+    };
+  }
 }
