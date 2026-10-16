@@ -40,15 +40,15 @@ export function seedClaims(): void {
   const seed: CanonicalClaim[] = [
     {
       id: 'claim.partition.security-consciousness',
-      statement: 'The Partition violence created a permanent security consciousness in India\'s foreign policy establishment that persisted long after the immediate refugee crisis ended.',
-      confidence: 'established',
+      statement: "Partition's violence, displacement, and unresolved borders contributed to a durable but evolving security consciousness in Indian policy, interacting with colonial legacies, later wars, and other strategic challenges.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'The trauma of Partition embedded a deep sensitivity to any external force that could exacerbate internal religious divisions.' },
         { sourceId: 's3', relevance: 'supporting', excerpt: 'India\'s approach to Pakistan has been framed by the unfinished business of Partition from the very first day of independence.' },
         { sourceId: 's10', relevance: 'contextual', excerpt: 'Zamindar traces how Partition displacement, borders, and postcolonial state interventions continued to shape South Asian political life.' },
       ],
       counterArguments: ['Some historians argue India\'s security consciousness predates Partition and stems from colonial-era foreign domination.'],
-      sourceIds: ['s1', 's3', 's19'],
+      sourceIds: ['s1', 's3', 's10'],
       documentIds: ['doc-nehru-tryst'],
       entityIds: ['india', 'pakistan', 'partition'],
       conceptIds: ['con-partition', 'con-two-nation-theory'],
@@ -56,13 +56,13 @@ export function seedClaims(): void {
         { contentType: 'chapter', contentId: 'kl-ch-1', contentTitle: 'India\'s Inheritance: The Partition and Its Legacies' },
       ],
       createdAt: '2026-07-12T00:00:00Z',
-      updatedAt: '2026-07-12T00:00:00Z',
-      lastVerifiedAt: '2026-07-12T00:00:00Z',
+      updatedAt: '2026-10-16T00:00:00Z',
+      lastVerifiedAt: '2026-10-16T00:00:00Z',
     },
     {
       id: 'claim.kashmir.un-referral',
-      statement: 'India\'s decision to take the Kashmir dispute to the UN reflected both Nehru\'s idealist faith in international institutions and a calculated diplomatic move to legitimize India\'s position.',
-      confidence: 'established',
+      statement: "India's referral of the Kashmir dispute to the UN reflected a mix of legal and diplomatic strategy and Nehru's confidence in international institutions; its consequences remain debated.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Nehru believed the UN would recognize the validity of Kashmir\'s accession to India under international law.' },
         { sourceId: 's3', relevance: 'contextual', excerpt: 'Jinnah\'s Pakistan viewed the accession as fraudulent and expected the international community to support self-determination.' },
@@ -77,7 +77,8 @@ export function seedClaims(): void {
         { contentType: 'chapter', contentId: 'kl-ch-1', contentTitle: 'India\'s Inheritance: The Partition and Its Legacies' },
       ],
       createdAt: '2026-07-12T00:00:00Z',
-      updatedAt: '2026-07-12T00:00:00Z',
+      updatedAt: '2026-10-16T00:00:00Z',
+      lastVerifiedAt: '2026-10-16T00:00:00Z',
     },
     {
       id: 'claim.nonalignment.strategic-autonomy',
@@ -141,8 +142,8 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.refugee-crisis',
-      statement: 'The mass displacement of 12-20 million people during Partition created a refugee crisis that overwhelmed India\'s administrative capacity and shaped its domestic and foreign policy for decades.',
-      confidence: 'established',
+      statement: "An estimated 12–20 million people crossed the new borders during Partition, creating an acute refugee crisis that strained administrative and financial resources and influenced domestic and foreign policy for decades.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'An estimated 12 to 15 million people crossed the new borders in both directions, making Partition the largest mass migration in human history.' },
         { sourceId: 's16', relevance: 'supporting', excerpt: 'The refugee crisis strained India\'s limited administrative and financial resources at the very moment of independence.' },
@@ -157,13 +158,13 @@ export function seedClaims(): void {
         { contentType: 'chapter', contentId: 'kl-ch-1', contentTitle: 'India\'s Inheritance: Partition and Its Strategic Legacy (1947)' },
       ],
       createdAt: '2026-07-12T00:00:00Z',
-      updatedAt: '2026-07-12T00:00:00Z',
-      lastVerifiedAt: '2026-07-12T00:00:00Z',
+      updatedAt: '2026-10-16T00:00:00Z',
+      lastVerifiedAt: '2026-10-16T00:00:00Z',
     },
     {
       id: 'claim.partition.princely-states',
       statement: "The accession and integration of princely states required negotiation; Partition intensified disputes where rulers' choices, population composition, and strategic interests diverged, notably in Kashmir, Junagadh, and Hyderabad.",
-      confidence: 'established',
+      confidence: 'debated',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Sardar Patel and V.P. Menon orchestrated the integration of princely states through a combination of diplomacy, incentives, and the occasional use of force.' },
         { sourceId: 's14', relevance: 'supporting', excerpt: 'The Instrument of Accession provided a legal mechanism for integration, but the process was fraught with political complications arising from Partition.' },
@@ -178,8 +179,8 @@ export function seedClaims(): void {
         { contentType: 'chapter', contentId: 'kl-ch-1', contentTitle: 'India\'s Inheritance: Partition and Its Strategic Legacy (1947)' },
       ],
       createdAt: '2026-07-12T00:00:00Z',
-      updatedAt: '2026-07-12T00:00:00Z',
-      lastVerifiedAt: '2026-07-12T00:00:00Z',
+      updatedAt: '2026-10-16T00:00:00Z',
+      lastVerifiedAt: '2026-10-16T00:00:00Z',
     },
     {
       id: 'claim.partition.division-of-assets',
