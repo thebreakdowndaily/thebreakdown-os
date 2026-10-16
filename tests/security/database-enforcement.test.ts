@@ -284,13 +284,13 @@ async function runDirectDatabaseTests() {
     // ─────────────────────────────────────────────────────────────────
     console.log('\n2. Direct RLS: Public vs Draft Stories');
     const publishedStoryId = '11111111-0000-0000-0000-000000000001';
-    const topicAggregationDraftStoryId = '11111111-0000-0000-0000-000000000002';
+    const draftStoryId = '11111111-0000-0000-0000-000000000002';
 
     await client.query(`
       INSERT INTO public.stories (id, slug, title, status, published_at)
       VALUES 
         ('${publishedStoryId}', 'published-test-story', 'Published Story', 'published', NOW()),
-        ('${topicAggregationDraftStoryId}', 'draft-test-story', 'Draft Story', 'draft', NULL)
+        ('${draftStoryId}', 'draft-test-story', 'Draft Story', 'draft', NULL)
       ON CONFLICT (id) DO NOTHING;
     `);
 
@@ -300,7 +300,7 @@ async function runDirectDatabaseTests() {
     const anonPublished = await client.query(`SELECT id FROM public.stories WHERE id = '${publishedStoryId}'`);
     assert(anonPublished.rowCount === 1, 'Anonymous caller can read published story');
 
-    const anonDraft = await client.query(`SELECT id FROM public.stories WHERE id = '${topicAggregationDraftStoryId}'`);
+    const anonDraft = await client.query(`SELECT id FROM public.stories WHERE id = '${draftStoryId}'`);
     assert(anonDraft.rowCount === 0, 'Anonymous caller CANNOT read draft story (0 rows returned)');
 
     // Attempt insert by anonymous
