@@ -297,12 +297,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-3', type: 'paragraph',
     data: {
-      text: 'The violence that accompanied this migration was genocidal in its intensity. Entire trainloads of refugees were massacred. Villages were destroyed, women were abducted and raped, religious sites were desecrated, and children were orphaned by the tens of thousands. The British Indian Army, itself being divided between the two new states, was overwhelmed and in many cases unwilling to intervene. Estimates of the death toll range from 200,000 to 2 million, with the most careful scholarly calculations placing the figure at around 800,000 to 1 million killed in the first year alone.',
+      text: 'The violence that accompanied this migration was genocidal in its intensity. Entire trainloads of refugees were massacred. Villages were destroyed, women were abducted and raped, religious sites were desecrated, and children were orphaned by the tens of thousands. The British Indian Army, itself being divided between the two new states, was overwhelmed and in many cases unwilling to intervene. Estimates of the death toll vary widely—from several hundred thousand to perhaps two million—because records are incomplete and definitions differ. Some widely cited estimates cluster around 800,000 to one million deaths, but no single figure is definitive.',
       citations: ['s19', 's16', 's27'],
     },
   },
   // Visual: death toll estimates — what the evidence shows
-  { id: 'b-vis-chart-1', type: 'chart', data: { title: 'Casualties of Partition — death toll estimates by source', caption: 'Death toll estimates from official, press, and scholarly sources, with consensus range 800k-1M.', chartType: 'bar', dataSource: 'Scholarly aggregates across cited historical sources', url: '/images/library/chapter-1/charts/chart-death-toll-estimates.svg', provenance: { source: 'Synthesis of cited estimates' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.death-toll'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — range/bar chart illustrating variance across sources' } } },
+  { id: 'b-vis-chart-1', type: 'chart', data: { title: 'Casualties of Partition — death toll estimates by source', caption: 'Death-toll estimates vary substantially across sources; the chart illustrates the range rather than asserting a single consensus figure.', chartType: 'bar', dataSource: 'Scholarly aggregates across cited historical sources', url: '/images/library/chapter-1/charts/chart-death-toll-estimates.svg', provenance: { source: 'Synthesis of cited estimates' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.death-toll'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — range/bar chart illustrating variance across sources' } } },
   {
     id: 'b-p-narr-4', type: 'paragraph',
     data: {
@@ -1172,7 +1172,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       mainEntitySlug: 'india-pakistan-relations',
       relationships: [
         { entity: 'Kashmir', entitySlug: 'kashmir', relationshipType: 'disputed_territory', description: 'The Kashmir dispute has been the central territorial conflict between India and Pakistan since 1947, resulting in two major wars and numerous military crises.' },
-        { entity: 'Partition of India', entitySlug: 'partition', relationshipType: 'root_cause', description: 'The unfinished business of Partition — including competing claims to Kashmir, the status of minorities, and the very legitimacy of the two-nation theory — created the framework for permanent rivalry.' },
+        { entity: 'Partition of India', entitySlug: 'partition', relationshipType: 'root_cause', description: 'Partition's legacies—including competing claims over Kashmir, minority-rights concerns, and competing national narratives—have repeatedly shaped India–Pakistan relations, though the intensity of rivalry has varied over time.' },
         { entity: 'UN Security Council', entitySlug: 'un-security-council', relationshipType: 'mediator', description: 'The UN attempted to mediate the Kashmir dispute through Resolution 47, but the failure to implement the plebiscite left both sides dissatisfied and the issue unresolved.' },
         { entity: 'Liaquat Ali Khan', entitySlug: 'liaquat-ali-khan', relationshipType: 'negotiated_with', description: 'Pakistan\'s first Prime Minister signed the Liaquat-Nehru Pact of 1950, the only major bilateral agreement on minority rights between the two countries.' },
       ],
@@ -1549,7 +1549,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-why-matters', type: 'callout',
     data: {
       variant: 'info',
-      text: 'The founding conditions of 1947 continue to shape Indian foreign policy in the twenty-first century. The security paradigm created by Partition — viewing Pakistan as an existential threat, prioritising the western border, and maintaining strategic autonomy — has proven remarkably durable, surviving the end of the Cold War, the rise of China, and the transformation of the global order. The Kashmir dispute, unresolved since 1947, remains the single most dangerous flashpoint in South Asia and a potential nuclear flashpoint. India\'s relationship with Pakistan is still defined by the unfinished business of Partition: competing claims to Kashmir, mutual suspicion, and the refusal of either state to accept the other\'s foundational narrative. Understanding how these patterns were set in the crucible of 1947 is not merely a historical exercise — it is essential for understanding why India approaches the world the way it does today, and for evaluating whether those foundational assumptions still serve India\'s interests.',
+      text: "The conditions of 1947 remain one important influence on Indian foreign policy, alongside later wars, domestic political change, economic priorities, and China's rise. Partition and subsequent India–Pakistan conflicts helped sustain a focus on the western border and strategic autonomy, but that focus has coexisted with other security challenges and has shifted across governments and periods. Kashmir remains a serious and potentially dangerous flashpoint. Partition's legacies—including competing claims over Kashmir, minority-rights concerns, and mutual suspicion—continue to shape India–Pakistan relations, although periods of dialogue show that the relationship is not fixed or explained by 1947 alone. Understanding these patterns is useful for assessing how historical assumptions influence current choices, without treating them as inevitable.",
     },
   },
   // ── Evidence Challenges (Constitution v1.1 required section) ──
@@ -1575,9 +1575,9 @@ const chapter1Blocks: KnowledgeBlock[] = [
     data: {
       variant: 'key-takeaways',
       items: [
-        { text: 'Partition was not merely a political division but a foundational trauma that created a permanent security consciousness in India\'s foreign policy, shaping every major strategic decision for decades.', sources: ['s1', 's3'] },
-        { text: 'The integration of 565 princely states, achieved primarily through diplomacy by Patel and Menon, was one of the most successful state-building projects of the twentieth century.', sources: ['s1', 's18'] },
-        { text: 'India\'s decision to refer the Kashmir dispute to the UN internationalised a conflict India was winning, creating a diplomatic framework that Pakistan exploited for seven decades.', sources: ['s1', 's6', 's22'] },
+        { text: 'Partition was both a political division and a major source of trauma; its effects on Indian security thinking interacted with colonial legacies, domestic politics, later wars, and regional change.', sources: ['s1', 's3'] },
+        { text: 'The integration of princely states, led by Sardar Patel and V. P. Menon, combined negotiation with administrative consolidation; cases such as Junagadh, Hyderabad, and Kashmir also involved coercion or military force and remain contested in historical interpretation.', sources: ['s1', 's18'] },
+        { text: 'India\'s decision to refer Kashmir to the UN internationalised the dispute and created a diplomatic process that India and Pakistan have interpreted differently; the consequences remain debated.', sources: ['s1', 's6', 's22'] },
         { text: 'The contradictory experiences of Partition — the trauma of division and the triumph of integration — created an enduring tension in India\'s strategic culture between assertive nationalism and internationalist idealism.', sources: ['s1', 's7', 's22'] },
         { text: 'India\'s secular nationalism, forged in explicit opposition to the Two-Nation theory, became both a domestic constitutional commitment and a foreign policy asset, particularly in relations with the Muslim world.', sources: ['s1', 's4'] },
       ],
