@@ -99,6 +99,15 @@ export function normalizeIntelRole(role: string | null | undefined): IntelRole {
   return r in ROLE_RANK ? r : 'guest';
 }
 
+/**
+ * A database role row is authoritative for super-admin status. Unlike the
+ * legacy app_metadata fallback, it must not retain privilege from a stale
+ * is_super_admin boolean after a database role downgrade.
+ */
+export function isDatabaseRoleSuperAdmin(role: string | null | undefined): boolean {
+  return normalizeIntelRole(role) === 'owner';
+}
+
 export function intelRoleRank(role: string | null | undefined): number {
   return ROLE_RANK[normalizeIntelRole(role)];
 }
