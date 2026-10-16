@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { authorizeApiKeyDelegation } from '@/features/auth/api-keys/delegation';
 import { apiKeyRecordToPrincipal, mapApiKeyRoleToIntelRole } from '@/features/auth/api-keys/principal';
 import { can } from '@/features/auth/policy';
@@ -285,5 +287,15 @@ describe('API-key principal projection', () => {
       permissions: 'api_key.create' as never,
     });
     expect(resolved).toBeNull();
+  });
+
+  it('uses canonical fail-closed role projection in the API-key revoke route', () => {
+    const source = readFileSync(
+      resolve(process.cwd(), 'app/api/auth/keys/[keyId]/route.ts'),
+      'utf8',
+    );
+
+    expect(source).toContain('return apiKeyRecordToPrincipal(res.key);');
+    expect(source).not.toContain('role: res.key.role as IntelRole');
   });
 });
