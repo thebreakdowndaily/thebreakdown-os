@@ -145,7 +145,7 @@ export function seedClaims(): void {
       statement: "An estimated 12–20 million people crossed the new borders during Partition, creating an acute refugee crisis that strained administrative and financial resources and influenced domestic and foreign policy for decades.",
       confidence: 'debated',
       evidence: [
-        { sourceId: 's1', relevance: 'direct', excerpt: 'An estimated 12 to 15 million people crossed the new borders in both directions, making Partition the largest mass migration in human history.' },
+        { sourceId: 's1', relevance: 'direct', excerpt: 'An estimated 12 to 15 million people crossed the new borders in both directions, one of the largest mass migrations in modern history.' },
         { sourceId: 's16', relevance: 'supporting', excerpt: 'The refugee crisis strained India\'s limited administrative and financial resources at the very moment of independence.' },
         { sourceId: 's31', relevance: 'direct', excerpt: 'Punjab and Bengal bore the brunt of the displacement, with entire communities uprooted and forced to rebuild from nothing.' },
       ],
