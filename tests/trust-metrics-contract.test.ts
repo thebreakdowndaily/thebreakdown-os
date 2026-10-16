@@ -80,7 +80,7 @@ describe('trust metrics data lineage', () => {
     const chapterLinkedSources = registrySources.filter((source) => source.chapterIds?.includes('kl-ch-1'));
 
     expect(uniqueCitedSourceIds.size).toBe(34);
-    expect(metadata?.sourceCount).toBe(uniqueCitedSourceIds.size);
+    expect(metadata?.sourceCount).toBe(chapterLinkedSources.length);
     expect(missingCitedSources).toEqual([]);
     expect(registryIds.has('s32')).toBe(true);
     expect(registryIds.has('s33')).toBe(true);
