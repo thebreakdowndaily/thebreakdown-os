@@ -321,8 +321,8 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-6', type: 'paragraph',
     data: {
-      text: 'The division of the British Indian Army was particularly consequential for national security. Of the approximately 1.2 million soldiers in undivided India\'s armed forces, roughly two-thirds went to India and one-third to Pakistan. The officer corps was divided proportionally, but individual soldiers were given the choice of which dominion to serve, leading to months of administrative chaos as troops redeployed across the new borders. The division of military hardware — tanks, aircraft, naval vessels, and ammunition stockpiles — was equally contentious, with Pakistan receiving a smaller share than it had demanded.',
-      citations: ['s1', 's11', 's35'],
+      text: 'The division of the British Indian Army was consequential for both successor states. The National Army Museum records that around 260,000 men, mainly Hindus and Sikhs, went to India and around 140,000, mainly Muslims, went to Pakistan; individual units were split, and the Brigade of Gurkhas was divided between India and Britain. The broader division of government assets and liabilities—including administrative departments, records, armed forces, and financial settlements—required extensive negotiation through Partition-era councils. This was not simply a chaotic allocation: the surviving scholarship documents both attempts at orderly division and disputes over what should be divided and how.',
+      citations: ['s1', 's11', 's35', 's36'],
     },
   },
   // Visual: military balance — the arithmetic of national security
