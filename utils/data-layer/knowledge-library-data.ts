@@ -298,7 +298,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-narr-3', type: 'paragraph',
     data: {
       text: 'The violence that accompanied this migration was genocidal in its intensity. Entire trainloads of refugees were massacred. Villages were destroyed, women were abducted and raped, religious sites were desecrated, and children were orphaned by the tens of thousands. The British Indian Army, itself being divided between the two new states, was overwhelmed and in many cases unwilling to intervene. Estimates of the death toll range from 200,000 to 2 million, with the most careful scholarly calculations placing the figure at around 800,000 to 1 million killed in the first year alone.',
-      citations: ['s10', 's16', 's27'],
+      citations: ['s19', 's16', 's27'],
     },
   },
   // Visual: death toll estimates — what the evidence shows
@@ -322,7 +322,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-narr-6', type: 'paragraph',
     data: {
       text: 'The division of the British Indian Army was particularly consequential for national security. Of the approximately 1.2 million soldiers in undivided India\'s armed forces, roughly two-thirds went to India and one-third to Pakistan. The officer corps was divided proportionally, but individual soldiers were given the choice of which dominion to serve, leading to months of administrative chaos as troops redeployed across the new borders. The division of military hardware — tanks, aircraft, naval vessels, and ammunition stockpiles — was equally contentious, with Pakistan receiving a smaller share than it had demanded.',
-      citations: ['s1', 's29'],
+      citations: ['s1', 's11', 's35'],
     },
   },
   // Visual: military balance — the arithmetic of national security
@@ -599,7 +599,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
         {
           id: 'ev-tl-5', date: 'Aug–Dec 1947', title: 'Partition Violence Peak',
           description: 'Mass communal violence across Punjab and Bengal. Up to 1 million killed.',
-          categories: ['conflict', 'social'], sources: ['s10', 's27'], entities: ['Punjab', 'Bengal'], documents: [], significance: 5,
+          categories: ['conflict', 'social'], sources: ['s19', 's27'], entities: ['Punjab', 'Bengal'], documents: [], significance: 5,
         },
         {
           id: 'ev-tl-6', date: 'Aug 1947 – Mar 1948', title: 'Princely States Integration',
@@ -1475,7 +1475,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-strategic-fail-3', type: 'paragraph',
     data: {
       text: 'Third, India failed to learn that neighbourhood management requires sustained diplomatic engagement. Partition had left India with a complex neighbourhood — Pakistan as a hostile rival, Nepal and Burma as carefully neutral neighbours, Sri Lanka as a Dominion with its own ethnic tensions, and the Himalayan states of Bhutan and Sikkim as dependent buffer states. India\'s approach to these relationships was often reactive, moralising, and inconsistent. The failure to develop a coherent neighbourhood policy would have consequences that India would grapple with for decades.',
-      citations: ['s1', 's10'],
+      citations: ['s1', 's19'],
     },
   },
   {
@@ -1509,14 +1509,14 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-strategic-legacy-1', type: 'paragraph',
     data: {
       text: 'The strategic legacy of Partition is not merely historical — it is visible in every major dimension of contemporary Indian foreign policy. India\'s relationship with Pakistan remains defined by the unresolved questions of 1947: Kashmir, cross-border terrorism, water sharing, and the fundamental dispute over the legitimacy of the two-nation theory. India\'s approach to China is coloured by the trauma of 1962, which itself was partly rooted in Nehru\'s post-Partition focus on Pakistan at the expense of Himalayan border security. India\'s insistence on strategic autonomy in its relationships with the United States, Russia, and China is a direct inheritance of Nehru\'s non-alignment, which was itself a response to the experience of Partition and the betrayal of British arbitration.',
-      citations: ['s1', 's4', 's9', 's10', 's21'],
+      citations: ['s1', 's4', 's9', 's19', 's21'],
     },
   },
   {
     id: 'b-p-strategic-legacy-2', type: 'paragraph',
     data: {
       text: 'Understanding the strategic lessons of Partition does not provide neat policy prescriptions. History does not repeat itself, and the world of the 2020s is fundamentally different from that of the 1940s. But the patterns of strategic thinking established in the crucible of Partition — the suspicion of great powers, the commitment to autonomy, the sensitivity to sovereignty, the prioritisation of unity over diversity of opinion — continue to shape how Indian policymakers perceive threats, evaluate alliances, and make choices. A nation that understands why it made the choices it did is better equipped to make the choices that lie ahead.',
-      citations: ['s1', 's4', 's9', 's10', 's21'],
+      citations: ['s1', 's4', 's9', 's19', 's21'],
     },
   },
   // ── 9. Counterfactual ──
@@ -1558,14 +1558,14 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-evidence-challenges-1', type: 'paragraph',
     data: {
       text: 'The evidence base for Partition is deep but uneven. Colonial and post-colonial state records are extensive for administration, law, and demography, but they were produced by governments with their own interests and are silent on lived experience, particularly for women, the poor, and the displaced. The precise scale of mortality and displacement remains debated because contemporary counts were partial, politically charged, and often compiled after the fact; scholars therefore cite ranges rather than precise figures.',
-      citations: ['s10', 's27', 's26'],
+      citations: ['s19', 's27', 's26'],
     },
   },
   {
     id: 'b-p-evidence-challenges-2', type: 'paragraph',
     data: {
       text: 'Several specific challenges constrain confidence. First, records from the princely states and from the Radcliffe boundary commission remain partly closed or selectively released. Second, the violence of 1947 left few neutral contemporaneous accounts; much of what we know comes from memoir, oral history, and later commission reports, each with its own bias. Third, the demography of the border regions was altered by the very Partition it was meant to describe, making pre- and post-Partition comparisons difficult. Fourth, Pakistani and Indian national archives have at times restricted material that complicates the official foundational narratives of either state. Where a claim in this chapter depends on such contested material, it is flagged as interpretation and the disagreement is recorded.',
-      citations: ['s10', 's27', 's29', 's31'],
+      citations: ['s19', 's27', 's29', 's31'],
     },
   },
   // ── 11. Learning ──
@@ -3357,7 +3357,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 { question: 'Why is the India-China border still unsettled after 75 years?', answer: 'Three structural reasons: irreconcilable territorial claims, strategic utility to both sides, and incompatible historical narratives. India sees the McMahon Line as a settled treaty; China sees it as a colonial imposition.', sources: ['s1', 's3'] },
                 { question: 'Could the 1962 war have been avoided?', answer: 'Scholars disagree. Maxwell argues India\'s Forward Policy provoked Chinese retaliation. The Indian official position holds that China planned to attack regardless. The evidence supports both interpretations.', sources: ['s12', 's1'] },
                 { question: 'Why did China withdraw in 1962?', answer: 'Two explanations: strategic (China demonstrated dominance without provoking wider war) and logistical (Chinese supply lines were overstretched). The evidence supports both.', sources: ['s12', 's5'] },
-                { question: 'Has the dispute management system worked?', answer: 'The 1993/1996 CBMs reduced crisis frequency for decades. But Galwan 2020 demonstrated the system\'s limits — the old model of managed conflict is no longer sufficient.', sources: ['s9', 's10'] },
+                { question: 'Has the dispute management system worked?', answer: 'The 1993/1996 CBMs reduced crisis frequency for decades. But Galwan 2020 demonstrated the system\'s limits — the old model of managed conflict is no longer sufficient.', sources: ['s9', 's19'] },
                 { question: 'Will the border ever be settled?', answer: 'A final settlement appears unlikely in the foreseeable future. Both sides\' positions are deeply entrenched, and neither can politically afford the concessions a settlement would require.', sources: ['s1', 's3', 's14'] },
               ],
               misconceptions: [
