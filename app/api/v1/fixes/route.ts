@@ -1,4 +1,5 @@
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseFixRepository } from '@/services/repositories/supabase/fix';
 import type { Fix, APIResponse, APIListParams } from '@/types/canonical';
@@ -21,6 +22,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const auth = await requireApiPermission('fix.create', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseFixRepository(write.client);
   const body = (await request.json()) as Partial<Fix>;
 
   const now = new Date().toISOString();
@@ -52,7 +56,7 @@ export async function POST(request: NextRequest) {
     sources: body.sources || [],
   };
 
-  const saved = await repo.saveFix(fix);
+  const saved = await writeRepo.saveFix(fix);
   syncFix(saved);
   const res: APIResponse<Fix> = { data: saved };
   return NextResponse.json(res, { status: 201 });
