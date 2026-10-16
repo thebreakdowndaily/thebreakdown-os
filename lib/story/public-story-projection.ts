@@ -60,6 +60,11 @@ const PUBLIC_TIMELINE_FIELDS = [
 ] as const;
 
 const PUBLIC_FAQ_FIELDS = ['question', 'answer'] as const;
+const PUBLIC_METADATA_FIELDS = ['classification', 'type', 'location', 'impactLevel'] as const;
+const PUBLIC_FRESHNESS_FIELDS = [
+  'status', 'lastVerified', 'confidence', 'primarySourcesCount',
+  'secondarySourcesCount', 'nextCheckAt', 'pendingUpdates',
+] as const;
 
 const PUBLIC_CHART_FIELDS = [
   'type', 'chartType', 'chart_type', 'title', 'description', 'data',
@@ -136,6 +141,13 @@ function projectPublicBlocks(value: unknown): unknown {
 function projectNestedStoryFields(story: Record<string, unknown>): Record<string, unknown> {
   const projected = { ...story };
   if ('blocks' in projected) projected.blocks = projectPublicBlocks(projected.blocks);
+  if ('metadata' in projected) projected.metadata = projectObjectFields(projected.metadata, PUBLIC_METADATA_FIELDS);
+  if ('freshness' in projected) projected.freshness = projectObjectFields(projected.freshness, PUBLIC_FRESHNESS_FIELDS);
+  if ('versionHistory' in projected) {
+    projected.versionHistory = Array.isArray(projected.versionHistory)
+      ? projected.versionHistory.map((item) => projectObjectFields(item, ['date', 'description'])).filter(Boolean)
+      : [];
+  }
   if ('sources' in projected) {
     projected.sources = Array.isArray(projected.sources)
       ? projected.sources.map((item) => projectObjectFields(item, PUBLIC_SOURCE_FIELDS)).filter(Boolean)
