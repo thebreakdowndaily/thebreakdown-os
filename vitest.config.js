@@ -132,6 +132,7 @@ module.exports = {
       'tests/wave2-api-routes.test.ts',
       'tests/public-topic-summary.test.ts',
       'tests/topic-story-aggregator.test.ts',
+      'tests/memory-story-topic-parity.test.ts',
       'tests/supabase-identifier-resolution.test.ts',
       'tests/public-v1-story-api.test.ts',
       'tests/public-v2-story-api.test.ts',
