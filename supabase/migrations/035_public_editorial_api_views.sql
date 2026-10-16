@@ -121,6 +121,24 @@ GRANT USAGE ON SCHEMA editorial TO anon, authenticated;
 GRANT SELECT ON editorial.claims, editorial.sources, editorial.claim_citations, editorial.story_claims
   TO anon, authenticated;
 
+-- Preserve authenticated staff read access to internal editorial records while
+-- keeping the public views constrained to published evidence relationships.
+DROP POLICY IF EXISTS staff_read_editorial_claims ON editorial.claims;
+CREATE POLICY staff_read_editorial_claims ON editorial.claims
+  FOR SELECT TO authenticated USING (public.is_staff());
+
+DROP POLICY IF EXISTS staff_read_editorial_sources ON editorial.sources;
+CREATE POLICY staff_read_editorial_sources ON editorial.sources
+  FOR SELECT TO authenticated USING (public.is_staff());
+
+DROP POLICY IF EXISTS staff_read_editorial_claim_citations ON editorial.claim_citations;
+CREATE POLICY staff_read_editorial_claim_citations ON editorial.claim_citations
+  FOR SELECT TO authenticated USING (public.is_staff());
+
+DROP POLICY IF EXISTS staff_read_editorial_story_claims ON editorial.story_claims;
+CREATE POLICY staff_read_editorial_story_claims ON editorial.story_claims
+  FOR SELECT TO authenticated USING (public.is_staff());
+
 CREATE OR REPLACE VIEW public.claims
 WITH (security_invoker = true)
 AS
