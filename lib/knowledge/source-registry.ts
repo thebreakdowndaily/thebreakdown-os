@@ -558,8 +558,8 @@ export function seedSources(): void {
     },
     {
       id: 's31',
-      title: 'Divided Cities: Partition and Its Aftermath in Lahore and Amritsar',
-      url: 'https://example.com/divided-cities',
+      title: 'Divided Cities: Partition and its Aftermath in Lahore and Amritsar, 1947-1957',
+      url: 'https://eprints.soton.ac.uk/40935/',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -570,6 +570,8 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
+      lastVerifiedAt: '2026-07-12',
+      verificationStatus: 'verified',
     },
     {
       id: 's32',
