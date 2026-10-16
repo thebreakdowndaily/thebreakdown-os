@@ -2,17 +2,21 @@ import type { Principal } from '../principal';
 import { can } from '../policy';
 import { APP_PERMISSIONS, isAppPermission, type AppPermission } from '../permissions';
 import type { ApiKeyRateLimitTier, ApiKeyRole } from './types';
+import { mapApiKeyRoleToIntelRole } from './principal';
 
-const API_KEY_ROLES: readonly ApiKeyRole[] = [
+export const SUPPORTED_API_KEY_ROLES: readonly ApiKeyRole[] = [
   'reader',
-  'contributor',
   'reporter',
   'editor',
-  'admin',
   'owner',
 ];
 
-const API_KEY_RATE_LIMIT_TIERS: readonly ApiKeyRateLimitTier[] = [
+export const UNSUPPORTED_API_KEY_ROLES: readonly ApiKeyRole[] = [
+  'admin',
+  'contributor',
+];
+
+export const API_KEY_RATE_LIMIT_TIERS: readonly ApiKeyRateLimitTier[] = [
   'tier_low',
   'standard',
   'tier_high',
@@ -29,15 +33,22 @@ export type ApiKeyDelegationDecision =
   | {
       allowed: false;
       status: 400 | 403;
-      code: 'INVALID_ROLE' | 'INVALID_PERMISSIONS' | 'INVALID_RATE_LIMIT_TIER' | 'ELEVATED_ROLE_WITH_SCOPES' | 'ROLE_ESCALATION' | 'PERMISSION_ESCALATION' | 'RATE_LIMIT_ESCALATION';
+      code:
+        | 'INVALID_ROLE'
+        | 'UNSUPPORTED_ROLE'
+        | 'INVALID_PERMISSIONS'
+        | 'INVALID_RATE_LIMIT_TIER'
+        | 'ELEVATED_ROLE_WITH_SCOPES'
+        | 'ROLE_ESCALATION'
+        | 'PERMISSION_ESCALATION'
+        | 'RATE_LIMIT_ESCALATION';
       message: string;
     };
 
 /**
- * Ensures an API-key creator cannot delegate authority that they do not hold.
- * Non-empty explicit scopes replace role defaults at authorization time. With
- * no explicit scopes, the target key receives the permissions implied by its
- * role, so those role defaults must be bounded by the creator's authority too.
+ * Ensures an API-key creator cannot delegate authority they do not hold.
+ * The allowlist matches the persisted-role-to-principal mapping. Legacy
+ * 'admin' and 'contributor' labels are rejected rather than guessed.
  */
 export function authorizeApiKeyDelegation(
   principal: Principal,
@@ -47,7 +58,25 @@ export function authorizeApiKeyDelegation(
     rateLimitTier: unknown;
   }
 ): ApiKeyDelegationDecision {
-  if (typeof input.role !== 'string' || !API_KEY_ROLES.includes(input.role as ApiKeyRole)) {
+  if (typeof input.role !== 'string') {
+    return {
+      allowed: false,
+      status: 400,
+      code: 'INVALID_ROLE',
+      message: 'The requested API key role is invalid',
+    };
+  }
+
+  if (UNSUPPORTED_API_KEY_ROLES.includes(input.role as ApiKeyRole)) {
+    return {
+      allowed: false,
+      status: 400,
+      code: 'UNSUPPORTED_ROLE',
+      message: `API key role '${input.role}' is unsupported; use a policy-approved canonical role ('owner', 'editor', 'reporter', 'reader')`,
+    };
+  }
+
+  if (!SUPPORTED_API_KEY_ROLES.includes(input.role as ApiKeyRole)) {
     return {
       allowed: false,
       status: 400,
@@ -57,6 +86,15 @@ export function authorizeApiKeyDelegation(
   }
 
   const role = input.role as ApiKeyRole;
+  const mappedRole = mapApiKeyRoleToIntelRole(role);
+  if (!mappedRole) {
+    return {
+      allowed: false,
+      status: 400,
+      code: 'INVALID_ROLE',
+      message: 'The requested API key role cannot be mapped to a canonical role',
+    };
+  }
 
   if (input.permissions !== undefined && !Array.isArray(input.permissions)) {
     return {
@@ -67,7 +105,7 @@ export function authorizeApiKeyDelegation(
     };
   }
 
-  const rawPermissions = input.permissions === undefined ? [] : input.permissions as unknown[];
+  const rawPermissions = input.permissions === undefined ? [] : (input.permissions as unknown[]);
   if (!rawPermissions.every(isAppPermission)) {
     return {
       allowed: false,
@@ -77,7 +115,10 @@ export function authorizeApiKeyDelegation(
     };
   }
 
-  if (typeof input.rateLimitTier !== 'string' || !API_KEY_RATE_LIMIT_TIERS.includes(input.rateLimitTier as ApiKeyRateLimitTier)) {
+  if (
+    typeof input.rateLimitTier !== 'string' ||
+    !API_KEY_RATE_LIMIT_TIERS.includes(input.rateLimitTier as ApiKeyRateLimitTier)
+  ) {
     return {
       allowed: false,
       status: 400,
@@ -88,21 +129,19 @@ export function authorizeApiKeyDelegation(
 
   const rateLimitTier = input.rateLimitTier as ApiKeyRateLimitTier;
   const permissions = [...new Set(rawPermissions as AppPermission[])];
-  const canGrantElevatedRoles = principal.isSuperAdmin;
-  const elevatedRole = role === 'admin' || role === 'owner';
+  const elevatedRole = role === 'owner';
 
-  if (elevatedRole && !canGrantElevatedRoles) {
+  if (elevatedRole && !principal.isSuperAdmin) {
     return {
       allowed: false,
       status: 403,
       code: 'ROLE_ESCALATION',
-      message: 'Only an owner can issue admin or owner API keys',
+      message: 'Only an owner can issue owner API keys',
     };
   }
 
-  // Elevated roles are role-authorized principals, not explicitly scoped keys.
-  // Reject mixed inputs to avoid suggesting that their permission list limits
-  // the authority that owner/admin role resolution confers elsewhere.
+  // Owner keys are privileged by role and must not carry a misleading scope
+  // list that callers might assume limits owner-level capabilities.
   if (elevatedRole && permissions.length > 0) {
     return {
       allowed: false,
@@ -121,16 +160,13 @@ export function authorizeApiKeyDelegation(
     };
   }
 
-  // Calculate effective grants with the same central policy used at runtime.
-  // Explicit non-empty permissions on the creator are honoured by can().
+  // Evaluate delegation against the same central permission policy used at runtime.
   const creatorPermissions = new Set(
     APP_PERMISSIONS.filter((permission) => can(principal, permission))
   );
 
-  // An elevated key is privileged independently of the normal role policy.
-  // Only a superadmin can issue one, so model its effective set conservatively.
-  // For a non-elevated key with explicit scopes, the scopes are its effective
-  // permissions; otherwise, evaluate role defaults exactly as can() will.
+  // A non-empty explicit scope list replaces role defaults. An empty list
+  // delegates the canonical defaults of the mapped runtime role.
   const targetPermissions = elevatedRole
     ? [...APP_PERMISSIONS]
     : permissions.length > 0
@@ -139,7 +175,7 @@ export function authorizeApiKeyDelegation(
           can(
             {
               ...principal,
-              role: role as Principal['role'],
+              role: mappedRole,
               isSuperAdmin: false,
               permissions: undefined,
             },
