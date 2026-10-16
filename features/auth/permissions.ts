@@ -37,3 +37,50 @@ export type AppPermission =
   | 'user.role.revoke'
   | 'audit.read'
   | 'system.config';
+
+/**
+ * Canonical runtime allowlist for permission values accepted from request bodies
+ * and persistent API-key records. Keep this synchronized with AppPermission.
+ */
+export const APP_PERMISSIONS = [
+  'story.read',
+  'story.create',
+  'story.update',
+  'story.publish',
+  'story.delete',
+  'investigation.read',
+  'investigation.write',
+  'citation.create',
+  'citation.modify',
+  'editorial.schedule',
+  'intel.dashboard',
+  'intel.watchlist',
+  'intel.predictions',
+  'intel.scenarios',
+  'intel.candidates',
+  'intel.media',
+  'intel.research',
+  'intel.toolkit',
+  'intel.editorial',
+  'intel.story_builder',
+  'intel.verification',
+  'intel.rti',
+  'intel.tasks',
+  'intel.newsroom',
+  'intel.demand',
+  'radar.poll',
+  'radar.poll.force',
+  'api_key.read',
+  'api_key.create',
+  'api_key.revoke',
+  'user.role.grant',
+  'user.role.revoke',
+  'audit.read',
+  'system.config',
+] as const satisfies readonly AppPermission[];
+
+const APP_PERMISSION_SET: ReadonlySet<string> = new Set(APP_PERMISSIONS);
+
+export function isAppPermission(value: unknown): value is AppPermission {
+  return typeof value === 'string' && APP_PERMISSION_SET.has(value);
+}
