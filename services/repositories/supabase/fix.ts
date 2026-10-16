@@ -35,8 +35,9 @@ export class SupabaseFixRepository implements FixService {
 
   async saveFix(fix: Fix) {
     const id = fix.id || crypto.randomUUID();
-    await this.sb().upsert(rowFromFix(fix, id)).select().single();
-    return fix;
+    const { data, error } = await this.sb().upsert(rowFromFix(fix, id)).select().single();
+    if (error) throw error;
+    return data ? rowToFix(data) : fix;
   }
 
   async deleteFix(id: string) {
