@@ -151,6 +151,54 @@ async function runDirectDatabaseTests() {
     }
     console.log('All migrations applied successfully!\n');
 
+    // Exercise the bounded topic aggregation against actual PostgreSQL rows.
+    console.log('Verifying bounded public topic aggregation...');
+    const topicId = '77777777-7777-4777-8777-777777777701';
+    const publicStoryIds = [
+      '77777777-7777-4777-8777-777777777711',
+      '77777777-7777-4777-8777-777777777712',
+      '77777777-7777-4777-8777-777777777713',
+    ];
+    const testArtifactId = '77777777-7777-4777-8777-777777777714';
+    const draftStoryId = '77777777-7777-4777-8777-777777777715';
+    await client.query('BEGIN');
+    await client.query(
+      `INSERT INTO public.topics (id, slug, name, story_ids)
+       VALUES ($1, 'topic-aggregation-test', 'Topic aggregation test', ARRAY[$2]::text[])`,
+      [topicId, 'topic-story-3'],
+    );
+    await client.query(
+      `INSERT INTO public.stories (id, slug, title, status, published_at, is_test_artifact, related_topic_ids)
+       VALUES
+         ($1, 'topic-story-1', 'Public story one', 'published', now() - interval '3 days', false, ARRAY[$5]::text[]),
+         ($2, 'topic-story-2', 'Public story two', 'published', now() - interval '2 days', false, '{}'::text[]),
+         ($3, 'topic-story-3', 'Public story three', 'published', now() - interval '1 day', false, '{}'::text[]),
+         ($4, 'topic-test-artifact', 'Test artifact', 'published', now(), true, ARRAY[$5]::text[]),
+         ($6, 'topic-draft', 'Draft story', 'draft', NULL, false, ARRAY[$5]::text[])`,
+      [publicStoryIds[0], publicStoryIds[1], publicStoryIds[2], testArtifactId, topicId, draftStoryId],
+    );
+    await client.query(
+      'INSERT INTO public.story_topics (story_id, topic_id) VALUES ($1, $2)',
+      [publicStoryIds[1], topicId],
+    );
+    const topicSummary = await client.query(
+      `SELECT story_count, recent_stories
+       FROM public.list_public_topic_summaries(100)
+       WHERE topic_slug = 'topic-aggregation-test'`,
+    );
+    assert(topicSummary.rows.length === 1, 'Bounded topic RPC returns the canonical topic');
+    if (topicSummary.rows.length === 1) {
+      const row = topicSummary.rows[0];
+      const recent = typeof row.recent_stories === 'string' ? JSON.parse(row.recent_stories) : row.recent_stories;
+      assert(Number(row.story_count) === 3, 'Topic aggregation counts only public non-test published stories');
+      assert(Array.isArray(recent) && recent.length === 2, 'Topic aggregation returns at most two recent previews');
+      assert(
+        Array.isArray(recent) && recent.every((story: { slug?: string }) => !['topic-test-artifact', 'topic-draft'].includes(story.slug ?? '')),
+        'Topic previews exclude test artifacts and drafts',
+      );
+    }
+    await client.query('ROLLBACK');
+
     // Check correction-table ACLs BEFORE the broad privileges used by later legacy
     // RLS fixtures. This prevents the test harness from masking missing migration grants.
     console.log('Verifying explicit Supabase API grants before test-harness grants...');
