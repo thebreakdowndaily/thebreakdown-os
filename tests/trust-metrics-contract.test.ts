@@ -101,7 +101,7 @@ describe('trust metrics data lineage', () => {
     const placeholderUrls = registrySources.filter((source) => source.url.includes('example.com'));
     expect(placeholderUrls).toEqual([]);
     const verifiedSourceIds = [
-      's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12', 's13', 's14', 's15',
+      's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12', 's13', 's14', 's15', 's19',
       's21', 's28', 's29', 's30', 's31', 's32', 's33', 's34', 's35', 's36', 's65',
     ];
     for (const id of verifiedSourceIds) {
@@ -110,6 +110,9 @@ describe('trust metrics data lineage', () => {
       expect(source?.url).not.toContain('example.com');
       expect(source?.lastVerifiedAt).toBe('2026-10-16');
     }
+    expect(chapterLinkedSources.every((source) =>
+      source.verificationStatus === 'verified' || source.verificationStatus === 'unverified',
+    )).toBe(true);
     const pendingEditorialReviewIds = [
       's16', 's17', 's18', 's19', 's20', 's22', 's23', 's24', 's25', 's26', 's27',
     ];
