@@ -193,7 +193,7 @@ export function seedClaims(): void {
       ],
       counterArguments: ['India inherited the bulk of the military assets, civil service institutions, and financial reserves, and the division arguably gave India a stronger institutional foundation than many post-colonial states.'],
       sourceIds: ['s1', 's11', 's35', 's36'],
-      documentIds: ['doc-independence-act', 'doc-radcliffe-award'],
+      documentIds: ['doc-independence-act'],
       entityIds: ['india', 'pakistan', 'partition', 'indian-army'],
       conceptIds: ['con-partition'],
       appearsIn: [
