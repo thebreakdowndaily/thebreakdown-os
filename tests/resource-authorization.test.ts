@@ -35,6 +35,12 @@ vi.mock('@/supabase/client', () => ({
   createUserScopedClient: dbClientMocks.createUserScopedClient,
 }));
 
+vi.mock('next/headers', () => ({
+  cookies: vi.fn(async () => {
+    throw new Error('cookies unavailable in this runtime');
+  }),
+}));
+
 
 function apiKey(permissions: unknown, role = 'editor') {
   return {
@@ -163,5 +169,13 @@ describe('persistent write client boundary', () => {
         error: 'Authenticated database session unavailable',
       });
     }
+  });
+
+  it('makes the strict Supabase session-client option throw when request cookies are unavailable', async () => {
+    const actual = await vi.importActual<typeof import('@/supabase/client')>('@/supabase/client');
+
+    await expect(
+      actual.createUserScopedClient({ fallbackToAnon: false }),
+    ).rejects.toThrow('Authenticated Supabase request context unavailable');
   });
 });
