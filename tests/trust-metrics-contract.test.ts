@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { CanonicalClaim, CanonicalSource, Chapter } from '../types/canonical';
 import { getChapterEvidenceCounts } from '../lib/knowledge/trust-metrics';
 import { isChapterPubliclyPublished } from '../lib/knowledge/chapter-publication';
+import { getKnowledgeLibrarySeedData } from '../utils/data-layer/knowledge-library-data';
 
 function makeClaim(overrides: Partial<CanonicalClaim> = {}): CanonicalClaim {
   return {
@@ -37,7 +38,46 @@ function makeSource(overrides: Partial<CanonicalSource> = {}): CanonicalSource {
   };
 }
 
+function findById(value: unknown, targetId: string): Record<string, unknown> | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  if (!Array.isArray(value)) {
+    const record = value as Record<string, unknown>;
+    if (record.id === targetId) return record;
+    for (const nested of Object.values(record)) {
+      const found = findById(nested, targetId);
+      if (found) return found;
+    }
+  } else {
+    for (const nested of value) {
+      const found = findById(nested, targetId);
+      if (found) return found;
+    }
+  }
+  return undefined;
+}
+
+function collectSourceIds(value: unknown, result = new Set<string>()): Set<string> {
+  if (typeof value === 'string' && /^s\\d+$/.test(value)) result.add(value);
+  else if (Array.isArray(value)) value.forEach((nested) => collectSourceIds(nested, result));
+  else if (value && typeof value === 'object') {
+    Object.values(value as Record<string, unknown>).forEach((nested) => collectSourceIds(nested, result));
+  }
+  return result;
+}
+
 describe('trust metrics data lineage', () => {
+  it('keeps founding chapter source metadata aligned with unique source IDs cited in content', () => {
+    const library = getKnowledgeLibrarySeedData();
+    const chapter = findById(library, 'kl-ch-1');
+    expect(chapter).toBeDefined();
+    const content = chapter?.content;
+    const uniqueCitedSourceIds = collectSourceIds(content);
+    const metadata = chapter?.metadata as { sourceCount?: number } | undefined;
+    expect(uniqueCitedSourceIds.size).toBe(32);
+    expect(metadata?.sourceCount).toBe(uniqueCitedSourceIds.size);
+  });
+
+
   it('counts only claims explicitly associated with the target chapter', () => {
     const claims = [
       makeClaim({
