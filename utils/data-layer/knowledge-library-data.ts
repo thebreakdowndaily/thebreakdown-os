@@ -288,7 +288,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-2', type: 'paragraph',
     data: {
-      text: 'The scale of the migration was staggering. An estimated 14.5 million people crossed the new borders between August and December 1947 alone — the largest forced migration in human history up to that point, and one of the largest of any era. columns of refugees stretching for miles moved in both directions: Muslims heading west into Pakistan, Hindus and Sikhs heading east into India. The migration was particularly concentrated in Punjab, where the entire non-Muslim population of the western districts — some 5.5 million people — departed, while the entire Muslim population of the eastern districts — some 4.5 million — fled in the opposite direction.',
+      text: "The scale of the migration was staggering. Estimates of the number crossing the new borders vary, often ranging from roughly 12 to 20 million; about 14.5 million is one widely cited estimate. It was one of the largest forced migrations in modern history. Columns of refugees moved in both directions: many Muslims headed west into Pakistan, while many Hindus and Sikhs headed east into India. Punjab saw some of the most complete population exchanges: large non-Muslim communities left western districts and large Muslim communities left eastern districts, although exact numbers and patterns varied by locality.",
       citations: ['s1', 's31'],
     },
   },
