@@ -149,12 +149,8 @@ export async function middleware(request: NextRequest) {
   const isProtectedPage = AUTHENTICATED_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'));
 
   if (isProtectedPage) {
-    // Supabase SSR may refresh session cookies during getUser(). Keep one
-    // mutable response so refreshed cookies are sent to the browser as well
-    // as made available to downstream Server Components on this request.
-    let response = NextResponse.next({ request });
-
     try {
+      const response = NextResponse.next();
       const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key',
@@ -163,10 +159,6 @@ export async function middleware(request: NextRequest) {
             getAll: () => request.cookies.getAll(),
             setAll: (cookiesToSet) => {
               cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-              response = NextResponse.next({ request });
-              cookiesToSet.forEach(({ name, value, options }) => {
-                response.cookies.set(name, value, options);
-              });
             },
           },
         }
