@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { unstable_cache } from 'next/cache';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { db } from '@/lib/api-v2';
@@ -21,20 +22,32 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export const revalidate = 60;
+// The public summary RPC is deployed through a database migration. Keep this
+// page request-rendered so a missing RPC cannot break the production build;
+// cache the bounded database result for 60 seconds once the migration is live.
+export const dynamic = 'force-dynamic';
+
+const getCachedPublicTopicSummaries = unstable_cache(
+  async () => {
+    const { data, error } = await db().rpc('list_public_topic_summaries', { p_limit: 100 });
+    if (error) throw error;
+    return data ?? [];
+  },
+  ['public-topic-summaries-v1'],
+  { revalidate: 60 },
+);
 
 export default async function TopicsPage() {
   const services = bootstrapServices({ publicOnly: true });
-  const [{ data: topics }, { data: summaryRows, error }] = await Promise.all([
+  const [{ data: topics }, summaryRows] = await Promise.all([
     services.topics.getTopics({ pageSize: 100 }),
-    db().rpc('list_public_topic_summaries', { p_limit: 100 }),
+    getCachedPublicTopicSummaries(),
   ]);
 
   // The database returns exact counts and at most two public previews per
   // topic. Never load the full public story corpus to render this directory.
-  if (error) throw error;
   const topicSummaries = new Map(
-    (summaryRows ?? []).map((row) => [
+    summaryRows.map((row) => [
       row.topic_slug,
       {
         storyCount: Number(row.story_count),
