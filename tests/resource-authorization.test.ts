@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { can } from '@/features/auth/policy';
 import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 const authState = vi.hoisted(() => ({
   principal: null as unknown,
   keyResult: {
@@ -111,5 +112,23 @@ describe('requireApiPermission route boundary', () => {
       new NextRequest('http://localhost/api/v2/topics', { headers: { 'x-api-key': 'valid-key' } }),
     );
     expect('principal' in result).toBe(true);
+  });
+});
+
+
+describe('persistent write client boundary', () => {
+  it('fails closed for API-key principals until a service-to-service RLS contract exists', async () => {
+    const result = await getPersistentWriteClient({
+      userId: 'key-id',
+      email: 'api_key:test key',
+      name: 'test key',
+      role: 'editor',
+      isSuperAdmin: false,
+      status: 'active',
+      organizationId: null,
+      permissions: ['topic.create'],
+    });
+    expect('response' in result).toBe(true);
+    if ('response' in result) expect(result.response.status).toBe(403);
   });
 });
