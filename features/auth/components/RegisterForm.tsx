@@ -2,30 +2,37 @@
 
 import { useState } from 'react';
 import { supabase } from '../auth-client';
+import { safeRedirectPath } from '../redirect';
 
 export function RegisterForm({ onSuccess, onLoginClick }: { onSuccess?: () => void; onLoginClick?: () => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    const { error: err } = await supabase.auth.signUp({
+    const requested = new URLSearchParams(window.location.search).get('redirect');
+    const callbackUrl = new URL('/auth/callback', window.location.origin);
+    callbackUrl.searchParams.set('next', safeRedirectPath(requested));
+    const { data, error: err } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { name },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: callbackUrl.toString(),
       },
     });
     if (err) {
       setError(err.message);
-    } else {
+    } else if (data.session) {
       onSuccess?.();
+    } else {
+      setNotice('Account registration was submitted. Check your email for a confirmation link before signing in.');
     }
     setLoading(false);
   };
@@ -35,7 +42,10 @@ export function RegisterForm({ onSuccess, onLoginClick }: { onSuccess?: () => vo
       <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--spacing-6)', color: 'var(--color-text-primary)' }}>Create Account</h1>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
         {error && (
-          <div style={{ padding: 'var(--spacing-3)', background: 'color-mix(in srgb, var(--color-red-500) 10%, transparent)', borderRadius: 'var(--radius-md)', color: 'var(--color-red-400)', fontSize: 'var(--text-sm)' }}>{error}</div>
+          <div role="alert" style={{ padding: 'var(--spacing-3)', background: 'color-mix(in srgb, var(--color-red-500) 10%, transparent)', borderRadius: 'var(--radius-md)', color: 'var(--color-red-400)', fontSize: 'var(--text-sm)' }}>{error}</div>
+        )}
+        {notice && (
+          <div role="status" style={{ padding: 'var(--spacing-3)', background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-md)', color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)' }}>{notice}</div>
         )}
         <div>
           <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-1)' }}>Name</label>
