@@ -13,7 +13,9 @@ test.describe('Accessibility (WCAG AA)', () => {
 
   for (const route of routesToTest) {
     test(`should not have any automatically detectable accessibility issues on ${route}`, async ({ page }) => {
-      await page.goto(route);
+      const response = await page.goto(route);
+      expect(response, `navigation to ${route} should return a response`).not.toBeNull();
+      expect(response!.status(), `route ${route} should render successfully, not an error document`).toBe(200);
       
       const accessibilityScanResults = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
