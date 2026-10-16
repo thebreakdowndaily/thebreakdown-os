@@ -110,18 +110,7 @@ describe('trust metrics data lineage', () => {
       expect(source?.url).not.toContain('example.com');
       expect(source?.lastVerifiedAt).toBe('2026-10-16');
     }
-    expect(chapterLinkedSources.every((source) =>
-      source.verificationStatus === 'verified' || source.verificationStatus === 'unverified',
-    )).toBe(true);
-    const pendingEditorialReviewIds = [
-      's16', 's17', 's18', 's19', 's20', 's22', 's23', 's24', 's25', 's26', 's27',
-    ];
-    for (const id of pendingEditorialReviewIds) {
-      const source = registrySources.find((item) => item.id === id);
-      expect(source?.verificationStatus).toBe('unverified');
-      expect(source?.lastVerifiedAt).toBeUndefined();
-      expect(source?.url).toBeTruthy();
-    }
+    expect(chapterLinkedSources.every((source) => source.verificationStatus === 'verified')).toBe(true);
   });
 
 
