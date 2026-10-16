@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { getServiceClient } from '@/supabase/client';
 import { logSecurityEvent } from '@/features/security/audit-logger';
 import type { Principal } from '../principal';
-import type { AppPermission } from '../permissions';
+import { isAppPermission, type AppPermission } from '../permissions';
 import type {
   ApiKeyRecord,
   CreateApiKeyInput,
@@ -171,13 +171,17 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
         .maybeSingle();
 
       if (!error && data) {
+        const parsedPermissions = parsePermissions(data.permissions);
+        if (!parsedPermissions) {
+          return { valid: false, code: 'UNAUTHORIZED', error: 'API key permission record is invalid' };
+        }
         const rec: ApiKeyRecord = {
           id: data.id,
           owner_id: data.owner_id,
           name: data.name,
           key_prefix: data.key_prefix,
           key_hash: data.key_hash,
-          permissions: parsePermissions(data.permissions),
+          permissions: parsedPermissions,
           role: data.role as ApiKeyRole,
           rate_limit_tier: data.rate_limit_tier as ApiKeyRateLimitTier,
           created_at: data.created_at,
@@ -247,16 +251,9 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
   return { valid: true, key: record };
 }
 
-function parsePermissions(raw: unknown): AppPermission[] {
-  if (!Array.isArray(raw)) return [];
-  const items: unknown[] = raw;
-  const permissions: AppPermission[] = [];
-  for (const item of items) {
-    if (typeof item === 'string') {
-      permissions.push(item as AppPermission);
-    }
-  }
-  return permissions;
+function parsePermissions(raw: unknown): AppPermission[] | null {
+  if (!Array.isArray(raw) || !raw.every(isAppPermission)) return null;
+  return [...new Set(raw)];
 }
 
 function isPrivilegedAdmin(actor: Principal): boolean {
