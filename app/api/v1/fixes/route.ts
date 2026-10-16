@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseFixRepository } from '@/services/repositories/supabase/fix';
 import type { Fix, APIResponse, APIListParams } from '@/types/canonical';
@@ -18,6 +19,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('fix.create', request);
+  if ('response' in auth) return auth.response;
   const body = (await request.json()) as Partial<Fix>;
 
   const now = new Date().toISOString();
