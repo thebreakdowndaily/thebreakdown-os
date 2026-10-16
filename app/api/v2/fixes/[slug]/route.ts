@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { requireApiPermission } from '@/features/auth/require-role';
 import { db, ok, notFound, serverError } from '@/lib/api-v2';
 
 export async function GET(
@@ -19,6 +20,8 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const auth = await requireApiPermission('fix.update', request);
+    if ('response' in auth) return auth.response;
     const { slug } = await context.params;
     const body = await request.json();
     const { data, error } = await db().from('fixes').update(body as import('@/supabase/schema').Database['public']['Tables']['fixes']['Update']).eq('slug', slug).select().single();
@@ -33,6 +36,8 @@ export async function DELETE(
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const auth = await requireApiPermission('fix.delete', _request);
+    if ('response' in auth) return auth.response;
     const { slug } = await context.params;
     const { error } = await db().from('fixes').delete().eq('slug', slug);
     if (error) throw error;
