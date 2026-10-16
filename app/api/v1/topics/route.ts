@@ -1,3 +1,5 @@
+import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTopicRepository } from '@/services/repositories/supabase/topic';
 import type { Topic, APIResponse, APIListParams } from '@/types/canonical';
@@ -18,6 +20,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('topic.create', request);
+  if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseTopicRepository(write.client);
   const body = (await request.json()) as Partial<Topic>;
 
   const now = new Date().toISOString();
@@ -39,7 +46,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.saveTopic(topic);
+  const saved = await writeRepo.saveTopic(topic);
   syncTopic(saved);
   const res: APIResponse<Topic> = { data: saved };
   return NextResponse.json(res, { status: 201 });

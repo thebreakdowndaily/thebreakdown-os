@@ -1,16 +1,18 @@
 import type { MediaItem, APIListParams, APIResponse } from '@/types/canonical';
 import { getSupabaseClient } from '@/supabase/client';
 import type { TypedDatabase } from '@/supabase/client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { MediaService } from '../../interfaces/media';
 
 type MediaRow = TypedDatabase['public']['Tables']['media_items']['Row'];
 type MediaInsert = TypedDatabase['public']['Tables']['media_items']['Insert'];
 
-function sb() { return getSupabaseClient().from('media_items'); }
-
 export class SupabaseMediaRepository implements MediaService {
+  constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
+
+  private sb() { return (this.client ?? getSupabaseClient()).from('media_items'); }
   async getMedia(params?: APIListParams): Promise<APIResponse<MediaItem[]>> {
-    let query = sb().select('*', { count: 'exact' });
+    let query = this.sb().select('*', { count: 'exact' });
     if (params?.search) query = query.ilike('caption', `%${params.search}%`);
     if (params?.page && params?.pageSize) query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
     query = query.order('created_at', { ascending: false });
@@ -20,25 +22,25 @@ export class SupabaseMediaRepository implements MediaService {
   }
 
   async getMediaItem(id: string) {
-    const { data, error } = await sb().select('*').eq('id', id).single();
+    const { data, error } = await this.sb().select('*').eq('id', id).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToMediaItem(data) : undefined;
   }
 
   async getMediaByTags(tags: string[]) {
-    const { data, error } = await sb().select('*').contains('tags', tags);
+    const { data, error } = await this.sb().select('*').contains('tags', tags);
     if (error) throw error;
     return (data || []).map(rowToMediaItem);
   }
 
   async saveMediaItem(item: MediaItem) {
-    const { data, error } = await sb().upsert(rowFromMediaItem(item)).select().single();
+    const { data, error } = await this.sb().upsert(rowFromMediaItem(item)).select().single();
     if (error) throw error;
     return rowToMediaItem(data);
   }
 
   async deleteMediaItem(id: string) {
-    const { error } = await sb().delete().eq('id', id);
+    const { error } = await this.sb().delete().eq('id', id);
     if (error) throw error;
   }
 }

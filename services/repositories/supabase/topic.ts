@@ -1,20 +1,18 @@
 import type { Topic, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
 import type { TypedDatabase } from '@/supabase/client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { TopicService } from '../../interfaces/topic';
 
 type TopicRow = TypedDatabase['public']['Tables']['topics']['Row'];
 type TopicInsert = TypedDatabase['public']['Tables']['topics']['Insert'];
 
-const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
-
-function isUuid(value: string): boolean {
-  return UUID_PATTERN.test(value);
-}
-
 export class SupabaseTopicRepository implements TopicService {
+  constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
+
+  private table() { return (this.client ?? db()).from('topics'); }
   async getTopics(params?: APIListParams): Promise<APIResponse<Topic[]>> {
-    let query = db().from('topics').select('*', { count: 'exact' });
+    let query = this.table().select('*', { count: 'exact' });
     if (params?.search) query = query.or(`name.ilike.%${params.search}%,description.ilike.%${params.search}%`);
     if (params?.page && params?.pageSize) {
       query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
@@ -25,33 +23,30 @@ export class SupabaseTopicRepository implements TopicService {
   }
 
   async getTopic(id: string) {
-    // Callers historically pass both UUIDs and slugs. Do not send a slug to
-    // the UUID-typed id column: PostgreSQL rejects it with 22P02.
-    const column = isUuid(id) ? 'id' : 'slug';
-    const { data, error } = await db().from('topics').select('*').eq(column, id).maybeSingle();
-    if (error) throw error;
+    const { data, error } = await this.table().select('*').eq('id', id).single();
+    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
     return data ? rowToTopic(data) : undefined;
   }
 
   async getTopicBySlug(slug: string) {
-    const { data, error } = await db().from('topics').select('*').eq('slug', slug).single();
+    const { data, error } = await this.table().select('*').eq('slug', slug).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToTopic(data) : undefined;
   }
 
   async saveTopic(topic: Topic) {
-    const { data, error } = await db().from('topics').upsert(rowFromTopic(topic)).select().single();
+    const { data, error } = await this.table().upsert(rowFromTopic(topic)).select().single();
     if (error) throw error;
     return rowToTopic(data);
   }
 
   async deleteTopic(id: string) {
-    const { error } = await db().from('topics').delete().eq('id', id);
+    const { error } = await this.table().delete().eq('id', id);
     if (error) throw error;
   }
 
   async count() {
-    const { count, error } = await db().from('topics').select('*', { count: 'exact', head: true });
+    const { count, error } = await this.table().select('*', { count: 'exact', head: true });
     if (error) throw error;
     return count || 0;
   }

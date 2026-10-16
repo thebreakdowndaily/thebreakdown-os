@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { normalizeIntelRole } from '@/features/auth/roles';
 import {
   authorizeApiKeyDelegation,
   SUPPORTED_API_KEY_ROLES,
@@ -474,5 +477,25 @@ describe('API-key principal projection and role mapping', () => {
         permissions: 'api_key.create' as never,
       })
     ).toBeNull();
+  });
+});
+
+
+describe('adversarial API-key role labels', () => {
+  it.each(['constructor', 'toString', '__proto__'])(
+    'rejects prototype-like role labels safely: %s',
+    (role) => {
+      expect(mapApiKeyRoleToIntelRole(role)).toBeNull();
+      expect(normalizeIntelRole(role)).toBe('guest');
+    },
+  );
+
+  it('uses canonical fail-closed role projection in the API-key revoke route', () => {
+    const source = readFileSync(
+      resolve(process.cwd(), 'app/api/auth/keys/[keyId]/route.ts'),
+      'utf8',
+    );
+    expect(source).toContain('return apiKeyRecordToPrincipal(res.key);');
+    expect(source).not.toContain('role: res.key.role as IntelRole');
   });
 });

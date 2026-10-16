@@ -1,30 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { SupabaseDatasetRepository } from '@/services/repositories/supabase/dataset';
+import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import type { Dataset, APIResponse, APIListParams } from '@/types/canonical';
+
+const repo = new SupabaseDatasetRepository();
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const services = getServices();
-
   const params: APIListParams = {
     page: searchParams.has('page') ? parseInt(searchParams.get('page') ?? '', 10) : undefined,
     pageSize: searchParams.has('pageSize') ? parseInt(searchParams.get('pageSize') ?? '', 10) : undefined,
     search: searchParams.get('search') || undefined,
   };
 
-  const result = await services.datasets.getDatasets(params);
+  const result = await repo.getDatasets(params);
   return NextResponse.json(result);
 }
 
 export async function POST(request: NextRequest) {
-  const services = getServices();
+  const auth = await requireApiPermission('dataset.create', request);
+  if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseDatasetRepository(write.client);
+
   const body = (await request.json()) as Partial<Dataset>;
+  if (!body.slug?.trim() || !body.title?.trim()) {
+    return NextResponse.json({ error: 'slug and title are required' }, { status: 400 });
+  }
 
   const now = new Date().toISOString();
   const dataset: Dataset = {
     id: body.id || crypto.randomUUID(),
-    slug: body.slug || '',
-    title: body.title || '',
+    slug: body.slug.trim(),
+    title: body.title.trim(),
     description: body.description || '',
     category: body.category || 'economy',
     frequency: body.frequency || 'annual',
@@ -44,7 +54,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await services.datasets.saveDataset(dataset);
+  const saved = await writeRepo.saveDataset(dataset);
   const res: APIResponse<Dataset> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

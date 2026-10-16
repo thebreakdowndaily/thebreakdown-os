@@ -96,7 +96,7 @@ const ROLE_LABEL: Record<IntelRole, string> = {
 
 export function normalizeIntelRole(role: string | null | undefined): IntelRole {
   const r = (role ?? 'guest').toLowerCase().replace(/[\s-]+/g, '_') as IntelRole;
-  return r in ROLE_RANK ? r : 'guest';
+  return Object.prototype.hasOwnProperty.call(ROLE_RANK, r) ? r : 'guest';
 }
 
 /**

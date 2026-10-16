@@ -1,3 +1,5 @@
+import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseMediaRepository } from '@/services/repositories/supabase/media';
 import type { MediaItem, APIResponse, APIListParams } from '@/types/canonical';
@@ -29,6 +31,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('media.create', request);
+  if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseMediaRepository(write.client);
   const body = (await request.json()) as Partial<MediaItem>;
 
   const now = new Date().toISOString();
@@ -48,7 +55,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.saveMediaItem(item);
+  const saved = await writeRepo.saveMediaItem(item);
   const res: APIResponse<MediaItem> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }

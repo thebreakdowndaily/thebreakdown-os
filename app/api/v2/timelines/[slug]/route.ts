@@ -1,4 +1,6 @@
 import type { NextRequest } from 'next/server';
+import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { db, ok, notFound, serverError } from '@/lib/api-v2';
 
 export async function GET(
@@ -19,9 +21,13 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const auth = await requireApiPermission('timeline.update', request);
+    if ('response' in auth) return auth.response;
+    const write = await getPersistentWriteClient(auth.principal);
+    if ('response' in write) return write.response;
     const { slug } = await context.params;
     const body = await request.json();
-    const { data, error } = await db().from('timelines').update(body as import('@/supabase/schema').Database['public']['Tables']['timelines']['Update']).eq('id', slug).select().single();
+    const { data, error } = await write.client.from('timelines').update(body as import('@/supabase/schema').Database['public']['Tables']['timelines']['Update']).eq('id', slug).select().single();
     if (error) throw error;
     if (!data) return notFound('Timeline');
     return ok(data);
@@ -33,8 +39,12 @@ export async function DELETE(
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const auth = await requireApiPermission('timeline.delete', _request);
+    if ('response' in auth) return auth.response;
+    const write = await getPersistentWriteClient(auth.principal);
+    if ('response' in write) return write.response;
     const { slug } = await context.params;
-    const { error } = await db().from('timelines').delete().eq('id', slug);
+    const { error } = await write.client.from('timelines').delete().eq('id', slug);
     if (error) throw error;
     return new Response(null, { status: 204 });
   } catch (e) { return serverError(e); }
