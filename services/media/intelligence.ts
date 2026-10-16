@@ -1,4 +1,3 @@
-import { getServices } from '../registry';
 import type { MediaItem, Story } from '@/types/canonical';
 import { getPlaceholder } from '@/lib/image-intelligence/registry';
 
@@ -46,17 +45,10 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
       };
     }
     
-    if (image) {
-      try {
-        const mediaService = getServices().media;
-        if (mediaService?.saveMediaItem) {
-          Promise.resolve(mediaService.saveMediaItem(image)).catch(() => {});
-        }
-      } catch {
-        // Services may not be initialized in test or offline harness
-      }
-    }
-    
+    // Image resolution is used on public reader paths. It must stay read-only:
+    // persisting a discovered or placeholder image here turns page rendering
+    // into an anonymous write and creates noisy permission errors. Durable media
+    // writes belong in an authorized editorial/background ingestion workflow.
     return image;
   }
 
