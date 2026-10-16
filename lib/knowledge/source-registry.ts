@@ -350,6 +350,7 @@ export function seedSources(): void {
       url: 'https://www.penguin.co.in/book/the-great-partition/',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.founding-trauma',
         'claim.partition.refugee-crisis',
@@ -368,6 +369,7 @@ export function seedSources(): void {
       url: 'https://www.cambridge.org/core/books/sole-spokesman/53629540A69011A6E2719E347AA80E91',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.avoidable',
         'claim.partition.nehru-patel-dynamic',
@@ -384,6 +386,7 @@ export function seedSources(): void {
       url: 'https://books.google.com/books/about/Integration_of_the_Indian_States.html?id=TnpwngEACAAJ',
       tier: 2,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: ['claim.partition.princely-states'],
       documentIds: ['doc-integration-states'],
       chapterIds: ['kl-ch-1'],
@@ -397,6 +400,7 @@ export function seedSources(): void {
       url: 'https://books.google.com/books?id=cHwLPAAACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.violence-civil-society',
         'claim.partition.memory',
@@ -413,6 +417,7 @@ export function seedSources(): void {
       url: 'https://www.penguin.co.in/book/the-other-side-of-silence/',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.violence-civil-society',
         'claim.partition.gender',
@@ -448,6 +453,7 @@ export function seedSources(): void {
       url: 'https://books.google.com/books/about/Jawaharlal_Nehru.html?id=eVygAAAAMAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.nehru-patel-dynamic',
         'claim.partition.founding-trauma',
@@ -465,6 +471,7 @@ export function seedSources(): void {
       url: 'https://cup.columbia.edu/book/conflict-unending/9780231123686/',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.security-paradigm',
         'claim.partition.kashmir-unfinished',
@@ -482,6 +489,7 @@ export function seedSources(): void {
       url: 'https://books.google.com/books/about/Crossing_the_Rubicon.html?id=l8ZQPgAACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.nonalignment.strategic-autonomy',
         'claim.partition.security-paradigm',
@@ -498,6 +506,7 @@ export function seedSources(): void {
       url: 'https://www.brookings.edu/books/india-emerging-power/',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.security-paradigm',
         'claim.partition.relations-pakistan-permanent',
@@ -514,6 +523,7 @@ export function seedSources(): void {
       url: 'https://books.google.com/books?id=pt5nQgAACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.avoidable',
         'claim.partition.demographic-impact',
@@ -530,6 +540,7 @@ export function seedSources(): void {
       url: 'https://books.google.com/books?id=EtW-tAEACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
+      verificationStatus: 'unverified',
       claimIds: [
         'claim.partition.violence-civil-society',
         'claim.partition.demographic-impact',
