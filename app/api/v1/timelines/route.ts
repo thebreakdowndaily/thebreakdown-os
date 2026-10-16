@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTimelineRepository } from '@/services/repositories/supabase/timeline';
 import type { Timeline, APIResponse, APIListParams } from '@/types/canonical';
@@ -18,6 +19,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('timeline.create', request);
+  if ('response' in auth) return auth.response;
   const body = (await request.json()) as Partial<Timeline>;
 
   const now = new Date().toISOString();
