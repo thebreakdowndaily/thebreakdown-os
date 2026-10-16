@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '../auth-client';
 import { isDemoMode, enableDemoSession } from '../demo';
+import { safeRedirectPath } from '../redirect';
 
 export function LoginForm({ onSuccess, onRegisterClick }: { onSuccess?: () => void; onRegisterClick?: () => void }) {
   const [email, setEmail] = useState('');
@@ -24,7 +25,20 @@ export function LoginForm({ onSuccess, onRegisterClick }: { onSuccess?: () => vo
   };
 
   const handleOAuth = async (provider: 'google' | 'github') => {
-    await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: `${window.location.origin}/auth/callback` } });
+    setError('');
+    const requested = new URLSearchParams(window.location.search).get('redirect');
+    const callbackUrl = new URL('/auth/callback', window.location.origin);
+    callbackUrl.searchParams.set('next', safeRedirectPath(requested));
+
+    try {
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: callbackUrl.toString() },
+      });
+      if (oauthError) setError(oauthError.message);
+    } catch {
+      setError('Could not start sign-in. Please try again.');
+    }
   };
 
   return (
