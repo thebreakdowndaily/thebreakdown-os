@@ -34,6 +34,7 @@ const nestedStory = {
       text: 'Reader-facing paragraph',
       scheduledAt: '2026-11-01T00:00:00.000Z',
       internalNotes: 'do not expose',
+      internal_future_field: 'future private data',
       nested: { updated_by: 'editor-secret', text: 'public nested text' },
     },
   }],
@@ -98,6 +99,7 @@ describe('nested public story projection', () => {
     expect(result.blocks[0].data).toMatchObject({ text: 'Reader-facing paragraph' });
     expect(result.blocks[0].data).not.toHaveProperty('scheduledAt');
     expect(result.blocks[0].data).not.toHaveProperty('internalNotes');
+    expect(result.blocks[0].data).not.toHaveProperty('internal_future_field');
     expect(result.blocks[0].data.nested).not.toHaveProperty('updated_by');
 
     expect(result.sources[0]).toMatchObject({ id: 'source-1', title: 'Official report', url: 'https://example.gov/report' });
