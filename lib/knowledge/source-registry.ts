@@ -230,6 +230,21 @@ export function seedSources(): void {
     {
       
     {
+      id: 's10',
+      title: 'The Long Partition and the Making of Modern South Asia: Refugees, Boundaries, Histories',
+      url: 'https://cup.columbia.edu/book/the-long-partition-and-the-making-of-modern-south-asia/9780231511018/',
+      tier: 3,
+      accessedAt: '2026-10-16',
+      claimIds: ['claim.partition.security-consciousness', 'claim.partition.violence-civil-society'],
+      documentIds: [],
+      chapterIds: ['kl-ch-1'],
+      thinkerIds: [],
+      storyIds: [],
+      datasetIds: [],
+      lastVerifiedAt: '2026-10-16',
+      verificationStatus: 'verified',
+    },
+    {
       id: 's11',
       title: 'Indian Independence Act, 1947',
       url: 'https://www.legislation.gov.uk/ukpga/Geo6/10-11/30',
