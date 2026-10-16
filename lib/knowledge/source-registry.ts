@@ -221,7 +221,7 @@ export function seedSources(): void {
     {
       id: 's11',
       title: 'Indian Independence Act, 1947',
-      url: 'https://example.com/indian-independence-act-1947',
+      url: 'https://www.legislation.gov.uk/ukpga/Geo6/10-11/30',
       tier: 1,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -234,7 +234,7 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
-      lastVerifiedAt: '2026-07-14',
+      lastVerifiedAt: '2026-10-16',
       verificationStatus: 'verified',
     },
     {
@@ -291,7 +291,7 @@ export function seedSources(): void {
     {
       id: 's15',
       title: 'Liaquat-Nehru Pact, 1950',
-      url: 'https://example.com/liaquat-nehru-pact',
+      url: 'https://mea.gov.in/Portal/LegalTreatiesDoc/PA50B1228.pdf',
       tier: 1,
       accessedAt: '2026-07-12',
       claimIds: ['claim.partition.minorities'],
@@ -300,7 +300,7 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
-      lastVerifiedAt: '2026-07-14',
+      lastVerifiedAt: '2026-10-16',
       verificationStatus: 'verified',
     },
     {
@@ -320,7 +320,7 @@ export function seedSources(): void {
     {
       id: 's16',
       title: 'The Great Partition: The Making of India and Pakistan',
-      url: 'https://example.com/great-partition',
+      url: 'https://www.penguin.co.in/book/the-great-partition/',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -338,7 +338,7 @@ export function seedSources(): void {
     {
       id: 's17',
       title: 'The Sole Spokesman: Jinnah, the Muslim League and the Demand for Pakistan',
-      url: 'https://example.com/sole-spokesman',
+      url: 'https://www.cambridge.org/core/books/sole-spokesman/53629540A69011A6E2719E347AA80E91',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -354,7 +354,7 @@ export function seedSources(): void {
     {
       id: 's18',
       title: 'The Story of the Integration of the Indian States',
-      url: 'https://example.com/integration-indian-states',
+      url: 'https://books.google.com/books/about/Integration_of_the_Indian_States.html?id=TnpwngEACAAJ',
       tier: 2,
       accessedAt: '2026-07-12',
       claimIds: ['claim.partition.princely-states'],
@@ -367,7 +367,7 @@ export function seedSources(): void {
     {
       id: 's19',
       title: 'Remembering Partition: Violence, Nationalism and History in India',
-      url: 'https://example.com/remembering-partition',
+      url: 'https://books.google.com/books?id=cHwLPAAACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -383,7 +383,7 @@ export function seedSources(): void {
     {
       id: 's20',
       title: 'The Other Side of Silence: Voices from the Partition of India',
-      url: 'https://example.com/other-side-silence',
+      url: 'https://www.penguin.co.in/book/the-other-side-of-silence/',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -416,7 +416,7 @@ export function seedSources(): void {
     {
       id: 's22',
       title: 'Jawaharlal Nehru: A Biography (3 vols)',
-      url: 'https://example.com/s-gopal-nehru',
+      url: 'https://books.google.com/books/about/Jawaharlal_Nehru.html?id=eVygAAAAMAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -433,7 +433,7 @@ export function seedSources(): void {
     {
       id: 's23',
       title: 'Conflict Unending: India-Pakistan Tensions Since 1947',
-      url: 'https://example.com/conflict-unending',
+      url: 'https://cup.columbia.edu/book/conflict-unending/9780231123686/',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -450,7 +450,7 @@ export function seedSources(): void {
     {
       id: 's24',
       title: 'Crossing the Rubicon: The Shaping of India\'s New Foreign Policy',
-      url: 'https://example.com/crossing-rubicon',
+      url: 'https://books.google.com/books/about/Crossing_the_Rubicon.html?id=l8ZQPgAACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -466,7 +466,7 @@ export function seedSources(): void {
     {
       id: 's25',
       title: 'India: Emerging Power',
-      url: 'https://example.com/india-emerging-power',
+      url: 'https://www.brookings.edu/books/india-emerging-power/',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -482,7 +482,7 @@ export function seedSources(): void {
     {
       id: 's26',
       title: 'Bengal Divided: Hindu Communalism and Partition, 1932-1947',
-      url: 'https://example.com/bengal-divided',
+      url: 'https://books.google.com/books?id=pt5nQgAACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
@@ -498,7 +498,7 @@ export function seedSources(): void {
     {
       id: 's27',
       title: 'The Punjab Bloodied, Partitioned and Cleansed',
-      url: 'https://example.com/punjab-bloodied',
+      url: 'https://books.google.com/books?id=EtW-tAEACAAJ',
       tier: 3,
       accessedAt: '2026-07-12',
       claimIds: [
