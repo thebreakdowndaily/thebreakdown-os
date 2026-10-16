@@ -5,6 +5,9 @@ BEGIN;
 CREATE INDEX IF NOT EXISTS idx_stories_related_topic_ids_gin
   ON public.stories USING GIN (related_topic_ids);
 
+CREATE INDEX IF NOT EXISTS idx_story_topics_topic_story
+  ON public.story_topics (topic_id, story_id);
+
 CREATE OR REPLACE FUNCTION public.list_public_topic_summaries(p_limit INTEGER DEFAULT 100)
 RETURNS TABLE (
   topic_id UUID,
