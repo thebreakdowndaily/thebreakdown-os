@@ -1,4 +1,5 @@
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTimelineRepository } from '@/services/repositories/supabase/timeline';
 import type { Timeline, APIResponse, APIListParams } from '@/types/canonical';
@@ -21,6 +22,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const auth = await requireApiPermission('timeline.create', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseTimelineRepository(write.client);
   const body = (await request.json()) as Partial<Timeline>;
 
   const now = new Date().toISOString();
@@ -37,7 +41,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.saveTimeline(timeline);
+  const saved = await writeRepo.saveTimeline(timeline);
   syncTimeline(saved);
   const res: APIResponse<Timeline> = { data: saved };
   return NextResponse.json(res, { status: 201 });
