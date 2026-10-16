@@ -553,7 +553,8 @@ export function seedSources(): void {
       url: 'https://books.google.com/books/about/Making_Sense_of_Pakistan.html?id=k9vnugAACAAJ',
       tier: 3,
       accessedAt: '2026-10-16',
-      verificationStatus: 'unverified',
+      lastVerifiedAt: '2026-10-16',
+      verificationStatus: 'verified',
       claimIds: [
         'claim.partition.relations-pakistan-permanent',
       ],
