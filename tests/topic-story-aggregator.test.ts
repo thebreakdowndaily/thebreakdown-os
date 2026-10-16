@@ -79,7 +79,7 @@ describe('StoryAggregator', () => {
     mocks.getServices.mockReset();
   });
 
-  it('populates a topic when topic.storyIds is empty using reverse links and exact categories', async () => {
+  it('populates a topic from reverse links without inferring membership from categories', async () => {
     const topic = makeTopic();
     const byUuid = makeStory({ id: 'uuid-linked', slug: 'uuid-linked', relatedTopicIds: [topic.id] });
     const bySlug = makeStory({ id: 'slug-linked', slug: 'slug-linked', relatedTopicIds: [topic.slug] });
@@ -93,8 +93,30 @@ describe('StoryAggregator', () => {
     expect(result.storyGroups?.latest.map((story) => story.id)).toEqual([
       'uuid-linked',
       'slug-linked',
-      'category-linked',
     ]);
+  });
+
+  it('uses the topic-scoped repository read when available', async () => {
+    const topic = makeTopic();
+    const linked = makeStory({
+      id: 'linked-by-query',
+      slug: 'linked-by-query',
+      relatedTopicIds: [topic.id],
+    });
+    const getPublicStories = vi.fn();
+    const getPublicStoriesForTopic = vi.fn().mockResolvedValue({
+      data: [linked],
+      meta: { total: 1, page: 1, pageSize: 1 },
+    });
+    mocks.getServices.mockReturnValue({
+      stories: { getPublicStories, getPublicStoriesForTopic },
+    });
+
+    const result = await new StoryAggregator().aggregate(topic, { topic });
+
+    expect(getPublicStoriesForTopic).toHaveBeenCalledWith(topic);
+    expect(getPublicStories).not.toHaveBeenCalled();
+    expect(result.storyGroups?.latest.map((story) => story.id)).toEqual(['linked-by-query']);
   });
 
   it('deduplicates a story that matches multiple relationship paths', async () => {
