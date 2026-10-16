@@ -153,19 +153,19 @@ async function runDirectDatabaseTests() {
 
     // Exercise the bounded topic aggregation against actual PostgreSQL rows.
     console.log('Verifying bounded public topic aggregation...');
-    const topicId = '77777777-7777-4777-8777-777777777701';
-    const publicStoryIds = [
+    const topicAggregationId = '77777777-7777-4777-8777-777777777701';
+    const topicAggregationPublicStoryIds = [
       '77777777-7777-4777-8777-777777777711',
       '77777777-7777-4777-8777-777777777712',
       '77777777-7777-4777-8777-777777777713',
     ];
-    const testArtifactId = '77777777-7777-4777-8777-777777777714';
-    const draftStoryId = '77777777-7777-4777-8777-777777777715';
+    const topicAggregationTestArtifactId = '77777777-7777-4777-8777-777777777714';
+    const topicAggregationDraftStoryId = '77777777-7777-4777-8777-777777777715';
     await client.query('BEGIN');
     await client.query(
       `INSERT INTO public.topics (id, slug, name, story_ids)
        VALUES ($1, 'topic-aggregation-test', 'Topic aggregation test', ARRAY[$2]::text[])`,
-      [topicId, 'topic-story-3'],
+      [topicAggregationId, 'topic-story-3'],
     );
     await client.query(
       `INSERT INTO public.stories (id, slug, title, status, published_at, is_test_artifact, related_topic_ids)
@@ -175,11 +175,11 @@ async function runDirectDatabaseTests() {
          ($3, 'topic-story-3', 'Public story three', 'published', now() - interval '1 day', false, '{}'::text[]),
          ($4, 'topic-test-artifact', 'Test artifact', 'published', now(), true, ARRAY[$5]::text[]),
          ($6, 'topic-draft', 'Draft story', 'draft', NULL, false, ARRAY[$5]::text[])`,
-      [publicStoryIds[0], publicStoryIds[1], publicStoryIds[2], testArtifactId, topicId, draftStoryId],
+      [topicAggregationPublicStoryIds[0], topicAggregationPublicStoryIds[1], topicAggregationPublicStoryIds[2], topicAggregationTestArtifactId, topicAggregationId, topicAggregationDraftStoryId],
     );
     await client.query(
       'INSERT INTO public.story_topics (story_id, topic_id) VALUES ($1, $2)',
-      [publicStoryIds[1], topicId],
+      [topicAggregationPublicStoryIds[1], topicAggregationId],
     );
     const topicSummary = await client.query(
       `SELECT story_count, recent_stories
@@ -284,13 +284,13 @@ async function runDirectDatabaseTests() {
     // ─────────────────────────────────────────────────────────────────
     console.log('\n2. Direct RLS: Public vs Draft Stories');
     const publishedStoryId = '11111111-0000-0000-0000-000000000001';
-    const draftStoryId = '11111111-0000-0000-0000-000000000002';
+    const topicAggregationDraftStoryId = '11111111-0000-0000-0000-000000000002';
 
     await client.query(`
       INSERT INTO public.stories (id, slug, title, status, published_at)
       VALUES 
         ('${publishedStoryId}', 'published-test-story', 'Published Story', 'published', NOW()),
-        ('${draftStoryId}', 'draft-test-story', 'Draft Story', 'draft', NULL)
+        ('${topicAggregationDraftStoryId}', 'draft-test-story', 'Draft Story', 'draft', NULL)
       ON CONFLICT (id) DO NOTHING;
     `);
 
@@ -300,7 +300,7 @@ async function runDirectDatabaseTests() {
     const anonPublished = await client.query(`SELECT id FROM public.stories WHERE id = '${publishedStoryId}'`);
     assert(anonPublished.rowCount === 1, 'Anonymous caller can read published story');
 
-    const anonDraft = await client.query(`SELECT id FROM public.stories WHERE id = '${draftStoryId}'`);
+    const anonDraft = await client.query(`SELECT id FROM public.stories WHERE id = '${topicAggregationDraftStoryId}'`);
     assert(anonDraft.rowCount === 0, 'Anonymous caller CANNOT read draft story (0 rows returned)');
 
     // Attempt insert by anonymous
