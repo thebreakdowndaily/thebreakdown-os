@@ -7,6 +7,12 @@ import type { TopicService } from '../../interfaces/topic';
 type TopicRow = TypedDatabase['public']['Tables']['topics']['Row'];
 type TopicInsert = TypedDatabase['public']['Tables']['topics']['Insert'];
 
+const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
+function isUuid(value: string): boolean {
+  return UUID_PATTERN.test(value);
+}
+
 export class SupabaseTopicRepository implements TopicService {
   constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
 
@@ -23,8 +29,11 @@ export class SupabaseTopicRepository implements TopicService {
   }
 
   async getTopic(id: string) {
-    const { data, error } = await this.table().select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
+    // Callers historically pass both UUIDs and slugs. Do not send a slug to
+    // the UUID-typed id column: PostgreSQL rejects it with 22P02.
+    const column = isUuid(id) ? 'id' : 'slug';
+    const { data, error } = await this.table().select('*').eq(column, id).maybeSingle();
+    if (error) throw error;
     return data ? rowToTopic(data) : undefined;
   }
 

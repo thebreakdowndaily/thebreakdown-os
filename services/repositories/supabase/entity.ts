@@ -7,6 +7,12 @@ import type { RawEntityRepository } from '../../interfaces/entity';
 type EntityRow = TypedDatabase['public']['Tables']['entities']['Row'];
 type EntityInsert = TypedDatabase['public']['Tables']['entities']['Insert'];
 
+const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
+function isUuid(value: string): boolean {
+  return UUID_PATTERN.test(value);
+}
+
 export class SupabaseEntityRepository implements RawEntityRepository {
   constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
 
@@ -21,8 +27,11 @@ export class SupabaseEntityRepository implements RawEntityRepository {
   }
 
   async getEntity(id: string) {
-    const { data, error } = await this.e().select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
+    // Entity consumers pass slugs in some page-resolution paths. Select the
+    // correct column before querying so non-UUID slugs never cause 22P02.
+    const column = isUuid(id) ? 'id' : 'slug';
+    const { data, error } = await this.e().select('*').eq(column, id).maybeSingle();
+    if (error) throw error;
     return data ? rowToEntity(data) : undefined;
   }
 
@@ -45,7 +54,7 @@ export class SupabaseEntityRepository implements RawEntityRepository {
   }
 
   async delete(id: string) {
-    const { error } = await this.e().delete().eq('id', id);
+    const { error } = await this.e().deletthis.e().eq('id', id);
     if (error) throw error;
   }
 
@@ -102,6 +111,6 @@ function rowFromEntity(e: Entity): EntityInsert {
     statistics: e.statistics,
     timeline: e.timeline,
     faq: e.faq,
-    updated_at: new Date().toISOString(),
+    updated_at: new Datthis.e().toISOString(),
   };
 }
