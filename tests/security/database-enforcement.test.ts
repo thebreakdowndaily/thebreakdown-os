@@ -221,7 +221,14 @@ async function runDirectDatabaseTests() {
         has_table_privilege('service_role', 'public.reader_corrections', 'SELECT') AS service_read_reader_corrections,
         has_table_privilege('service_role', 'public.reader_corrections', 'INSERT') AS service_insert_reader_corrections,
         has_table_privilege('service_role', 'public.reader_corrections', 'UPDATE') AS service_update_reader_corrections,
-        has_table_privilege('service_role', 'public.reader_corrections', 'DELETE') AS service_delete_reader_corrections
+        has_table_privilege('service_role', 'public.reader_corrections', 'DELETE') AS service_delete_reader_corrections,
+        has_table_privilege('anon', 'public.claims', 'INSERT') AS anon_insert_public_claims,
+        has_table_privilege('authenticated', 'public.claims', 'INSERT') AS auth_insert_public_claims,
+        has_table_privilege('anon', 'public.sources', 'INSERT') AS anon_insert_public_sources,
+        has_table_privilege('authenticated', 'public.sources', 'INSERT') AS auth_insert_public_sources,
+        has_function_privilege('anon', 'public.create_editorial_claim(text,text,text,text)', 'EXECUTE') AS anon_create_claim_rpc,
+        has_function_privilege('authenticated', 'public.create_editorial_claim(text,text,text,text)', 'EXECUTE') AS auth_create_claim_rpc,
+        has_function_privilege('anon', 'public.list_public_topic_summaries(integer)', 'EXECUTE') AS anon_read_topic_summaries
     `);
     const acl = correctionPrivileges.rows[0];
     assert(acl.anon_read_stories, 'Anonymous API role can resolve published story metadata');
@@ -233,6 +240,13 @@ async function runDirectDatabaseTests() {
     assert(acl.service_insert_corrections, 'Service role can publish correction records');
     assert(acl.service_update_corrections, 'Service role can update supersession metadata');
     assert(!acl.service_delete_corrections, 'Service role cannot delete append-only public correction records');
+    assert(!acl.anon_insert_public_claims, 'Anonymous callers cannot insert through the public claims view');
+    assert(!acl.auth_insert_public_claims, 'Authenticated callers cannot bypass the claim creation RPC');
+    assert(!acl.anon_insert_public_sources, 'Anonymous callers cannot insert through the public sources view');
+    assert(!acl.auth_insert_public_sources, 'Authenticated callers cannot bypass the source creation RPC');
+    assert(!acl.anon_create_claim_rpc, 'Anonymous callers cannot execute the editorial claim creation RPC');
+    assert(acl.auth_create_claim_rpc, 'Authenticated callers can invoke the claim RPC, which enforces staff role in SQL');
+    assert(acl.anon_read_topic_summaries, 'Anonymous callers can execute the bounded public topic summary RPC');
     assert(acl.anon_insert_reader_corrections, 'Anonymous API role can submit reader corrections');
     assert(!acl.anon_read_reader_corrections, 'Anonymous API role cannot read the private reader-corrections queue');
     assert(acl.auth_read_reader_corrections, 'Authenticated API role has read privilege for RLS-gated editorial triage');
