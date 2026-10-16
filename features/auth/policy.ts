@@ -5,6 +5,7 @@ import { normalizeIntelRole, type IntelRole } from './roles';
 const ROLE_PERMISSIONS: Record<IntelRole, Set<AppPermission>> = {
   owner: new Set<AppPermission>([
     'story.read', 'story.create', 'story.update', 'story.publish', 'story.delete',
+    'topic.create', 'topic.update', 'topic.delete', 'entity.create', 'entity.update', 'entity.delete', 'fix.create', 'fix.update', 'fix.delete', 'timeline.create', 'timeline.update', 'timeline.delete', 'media.create', 'dataset.create', 'dataset.update', 'dataset.delete',
     'investigation.read', 'investigation.write', 'citation.create', 'citation.modify', 'editorial.schedule',
     'intel.dashboard', 'intel.watchlist', 'intel.predictions', 'intel.scenarios', 'intel.candidates',
     'intel.media', 'intel.research', 'intel.toolkit', 'intel.editorial', 'intel.story_builder',
@@ -15,6 +16,7 @@ const ROLE_PERMISSIONS: Record<IntelRole, Set<AppPermission>> = {
 
   managing_editor: new Set<AppPermission>([
     'story.read', 'story.create', 'story.update', 'story.publish', 'story.delete',
+    'topic.create', 'topic.update', 'topic.delete', 'entity.create', 'entity.update', 'entity.delete', 'fix.create', 'fix.update', 'fix.delete', 'timeline.create', 'timeline.update', 'timeline.delete', 'media.create', 'dataset.create', 'dataset.update', 'dataset.delete',
     'investigation.read', 'investigation.write', 'citation.create', 'citation.modify', 'editorial.schedule',
     'intel.dashboard', 'intel.watchlist', 'intel.predictions', 'intel.scenarios', 'intel.candidates',
     'intel.media', 'intel.research', 'intel.toolkit', 'intel.editorial', 'intel.story_builder',
@@ -25,6 +27,7 @@ const ROLE_PERMISSIONS: Record<IntelRole, Set<AppPermission>> = {
 
   editor: new Set<AppPermission>([
     'story.read', 'story.create', 'story.update', 'story.publish',
+    'topic.create', 'topic.update', 'entity.create', 'entity.update', 'fix.create', 'fix.update', 'timeline.create', 'timeline.update', 'media.create',
     'investigation.read', 'investigation.write', 'citation.create', 'citation.modify', 'editorial.schedule',
     'intel.dashboard', 'intel.watchlist', 'intel.predictions', 'intel.scenarios', 'intel.candidates',
     'intel.media', 'intel.research', 'intel.toolkit', 'intel.editorial', 'intel.story_builder',

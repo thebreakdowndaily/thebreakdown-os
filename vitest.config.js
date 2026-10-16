@@ -193,6 +193,8 @@ module.exports = {
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
+      'tests/resource-authorization.test.ts',
+      'tests/api-v1-cold-start.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

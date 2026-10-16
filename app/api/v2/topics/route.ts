@@ -1,4 +1,6 @@
 import type { NextRequest } from 'next/server';
+import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { db, list, created, serverError } from '@/lib/api-v2';
 
 export async function GET(request: NextRequest) {
@@ -22,8 +24,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireApiPermission('topic.create', request);
+    if ('response' in auth) return auth.response;
+    const write = await getPersistentWriteClient(auth.principal);
+    if ('response' in write) return write.response;
     const body = await request.json();
-    const { data, error } = await db().from('topics').insert(body as import('@/supabase/schema').Database['public']['Tables']['topics']['Insert']).select().single();
+    const { data, error } = await write.client.from('topics').insert(body as import('@/supabase/schema').Database['public']['Tables']['topics']['Insert']).select().single();
     if (error) throw error;
     return created(data);
   } catch (e) { return serverError(e); }

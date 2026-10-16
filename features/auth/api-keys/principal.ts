@@ -1,19 +1,12 @@
 import type { Principal } from '../principal';
 import { isAppPermission } from '../permissions';
-import type { ApiKeyRecord } from './types';
 import type { IntelRole } from '../roles';
+import type { ApiKeyRecord } from './types';
 
 /**
- * Policy-approved mapping from ApiKeyRole to canonical IntelRole.
- * - 'owner' maps to 'owner' (superadmin)
- * - 'editor' maps to 'editor'
- * - 'reporter' maps to 'reporter'
- * - 'reader' maps to 'guest' (read-only baseline)
- *
- * Unsupported or ambiguous labels ('admin', 'contributor') are NOT guessed
- * as owner and do not silently receive elevated or broader permissions.
- * They fail closed (returning null) to ensure only policy-approved keys
- * can be projected into active principals.
+ * Policy-approved mapping from persisted API-key roles into the canonical
+ * application authorization roles. Legacy or ambiguous role labels are not
+ * guessed into active principals.
  */
 export const API_KEY_ROLE_MAPPING: Readonly<Record<string, IntelRole>> = Object.freeze({
   owner: 'owner',
@@ -23,14 +16,16 @@ export const API_KEY_ROLE_MAPPING: Readonly<Record<string, IntelRole>> = Object.
 });
 
 export function mapApiKeyRoleToIntelRole(role: string): IntelRole | null {
+  if (!Object.prototype.hasOwnProperty.call(API_KEY_ROLE_MAPPING, role)) {
+    return null;
+  }
   return API_KEY_ROLE_MAPPING[role] ?? null;
 }
 
 /**
  * Projects a verified API-key record into an authorization principal.
- * Invalid legacy scope values fail closed instead of being discarded and
- * accidentally restoring role-derived permissions.
- * Unsupported role labels fail closed instead of guessing privileges.
+ * Invalid scopes and unsupported legacy roles fail closed rather than being
+ * discarded or normalized into a principal with guessed permissions.
  */
 export function apiKeyRecordToPrincipal(
   key: Pick<ApiKeyRecord, 'id' | 'owner_id' | 'name' | 'role' | 'revoked_at' | 'permissions'>

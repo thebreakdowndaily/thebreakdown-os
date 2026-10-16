@@ -1,3 +1,5 @@
+import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTimelineRepository } from '@/services/repositories/supabase/timeline';
 import type { Timeline, APIResponse } from '@/types/canonical';
@@ -22,29 +24,41 @@ export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireApiPermission('timeline.update', request);
+  if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseTimelineRepository(write.client);
+
   const { id } = await context.params;
-  const existing = await repo.getTimeline(id);
+  const existing = await writeRepo.getTimeline(id);
   if (!existing) {
     return NextResponse.json({ error: `Timeline not found: ${id}` }, { status: 404 });
   }
   const body = (await request.json()) as Partial<Timeline>;
   const updated: Timeline = { ...existing, ...body, id: existing.id, updatedAt: new Date().toISOString() };
-  const saved = await repo.saveTimeline(updated);
+  const saved = await writeRepo.saveTimeline(updated);
   syncTimeline(saved);
   const res: APIResponse<Timeline> = { data: saved };
   return NextResponse.json(res);
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireApiPermission('timeline.delete', request);
+  if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseTimelineRepository(write.client);
+
   const { id } = await context.params;
-  const timeline = await repo.getTimeline(id);
+  const timeline = await writeRepo.getTimeline(id);
   if (!timeline) {
     return NextResponse.json({ error: `Timeline not found: ${id}` }, { status: 404 });
   }
-  await repo.deleteTimeline(id);
+  await writeRepo.deleteTimeline(id);
   deleteTimeline(id);
   return new NextResponse(null, { status: 204 });
 }

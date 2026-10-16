@@ -1,6 +1,7 @@
 import type { Dataset, APIListParams, APIResponse, DatasetVersion, Series, DatasetCategory, DatasetFrequency } from '@/types/canonical';
 import { getSupabaseClient } from '@/supabase/client';
 import type { TypedDatabase } from '@/supabase/client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DatasetService } from '../../interfaces/dataset';
 import type { ValidationResult } from '../../datasets/validator';
 import { DatasetValidator } from '../../datasets/validator';
@@ -8,13 +9,14 @@ import { DatasetValidator } from '../../datasets/validator';
 type DatasetRow = TypedDatabase['public']['Tables']['datasets']['Row'];
 type DatasetInsert = TypedDatabase['public']['Tables']['datasets']['Insert'];
 
-function sb() { return getSupabaseClient().from('datasets'); }
-
 export class SupabaseDatasetRepository implements DatasetService {
+  constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
+
+  private sb() { return (this.client ?? getSupabaseClient()).from('datasets'); }
   private validator = new DatasetValidator();
 
   async getDatasets(params?: APIListParams): Promise<APIResponse<Dataset[]>> {
-    let query = sb().select('*', { count: 'exact' });
+    let query = this.sb().select('*', { count: 'exact' });
     if (params?.search) query = query.or(`title.ilike.%${params.search}%,description.ilike.%${params.search}%`);
     if (params?.page && params?.pageSize) query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
     query = query.order('created_at', { ascending: false });
@@ -24,37 +26,37 @@ export class SupabaseDatasetRepository implements DatasetService {
   }
 
   async getDataset(id: string) {
-    const { data, error } = await sb().select('*').eq('id', id).single();
+    const { data, error } = await this.sb().select('*').eq('id', id).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToDataset(data) : undefined;
   }
 
   async getDatasetBySlug(slug: string) {
-    const { data, error } = await sb().select('*').eq('slug', slug).single();
+    const { data, error } = await this.sb().select('*').eq('slug', slug).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToDataset(data) : undefined;
   }
 
   async saveDataset(dataset: Dataset) {
-    const { data, error } = await sb().upsert(rowFromDataset(dataset)).select().single();
+    const { data, error } = await this.sb().upsert(rowFromDataset(dataset)).select().single();
     if (error) throw error;
     return rowToDataset(data);
   }
 
   async updateDataset(id: string, updates: Partial<Dataset>) {
-    const { data, error } = await sb().update({ ...rowFromDataset(updates as Dataset), updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    const { data, error } = await this.sb().update({ ...rowFromDataset(updates as Dataset), updated_at: new Date().toISOString() }).eq('id', id).select().single();
     if (error) throw error;
     return rowToDataset(data);
   }
 
   async deleteDataset(id: string) {
-    const { error } = await sb().delete().eq('id', id);
+    const { error } = await this.sb().delete().eq('id', id);
     if (error) throw error;
     return true;
   }
 
   async count() {
-    const { count, error } = await sb().select('*', { count: 'exact', head: true });
+    const { count, error } = await this.sb().select('*', { count: 'exact', head: true });
     if (error) throw error;
     return count || 0;
   }
@@ -67,7 +69,7 @@ export class SupabaseDatasetRepository implements DatasetService {
     const dataset = await this.getDataset(datasetId);
     if (!dataset) throw new Error(`Dataset ${datasetId} not found`);
     const versions = [...dataset.versions, { ...version, id: `v${dataset.versions.length + 1}`, publishedAt: new Date().toISOString() }];
-    const { error } = await sb().update({ updated_at: new Date().toISOString() } as any).eq('id', datasetId);
+    const { error } = await this.sb().update({ updated_at: new Date().toISOString() } as any).eq('id', datasetId);
     if (error) throw error;
     return versions[versions.length - 1];
   }

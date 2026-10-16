@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server';
 import { getCurrentPrincipal, type Principal } from '@/features/auth/principal';
 import { can } from '@/features/auth/policy';
 import { verifyApiKey, revokeApiKey, deleteApiKey } from '@/features/auth/api-keys/service';
+import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
-import type { IntelRole } from '@/features/auth/roles';
 
 async function resolveRequestPrincipal(request: NextRequest): Promise<Principal | null> {
   const sessionPrincipal = await getCurrentPrincipal();
@@ -14,15 +14,7 @@ async function resolveRequestPrincipal(request: NextRequest): Promise<Principal 
   if (apiKeyHeader) {
     const res = await verifyApiKey(apiKeyHeader);
     if (res.valid && res.key) {
-      return {
-        userId: res.key.owner_id || res.key.id,
-        email: `api_key:${res.key.name}`,
-        name: res.key.name,
-        role: res.key.role as IntelRole,
-        isSuperAdmin: res.key.role === 'owner',
-        status: res.key.revoked_at ? 'suspended' : 'active',
-        organizationId: null,
-      };
+      return apiKeyRecordToPrincipal(res.key);
     }
   }
 

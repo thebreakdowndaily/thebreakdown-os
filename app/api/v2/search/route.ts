@@ -13,7 +13,10 @@ export async function GET(request: NextRequest) {
       return list([], 0, page, pageSize);
     }
 
-    let query = db().from('index_entries').select('*', { count: 'exact' });
+    // The canonical index lives in the private `search` schema, not `public`.
+    // Keep this schema hop explicit; migration/API exposure must be validated in staging.
+    const searchSchema = (db() as unknown as { schema: (name: string) => { from: (table: string) => any } }).schema('search');
+    let query = searchSchema.from('index_entries').select('*', { count: 'exact' });
 
     const tsq = q.split(/\s+/).filter(Boolean).join(' & ');
     if (tsq) {

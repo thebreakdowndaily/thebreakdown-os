@@ -1,16 +1,18 @@
 import type { Timeline, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
 import type { TypedDatabase } from '@/supabase/client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { TimelineService } from '../../interfaces/timeline';
 
 type TimelineRow = TypedDatabase['public']['Tables']['timelines']['Row'];
 type TimelineInsert = TypedDatabase['public']['Tables']['timelines']['Insert'];
 
-function e() { return db().from('timelines'); }
-
 export class SupabaseTimelineRepository implements TimelineService {
+  constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
+
+  private e() { return (this.client ?? db()).from('timelines'); }
   async getTimelines(params?: APIListParams): Promise<APIResponse<Timeline[]>> {
-    let query = e().select('*', { count: 'exact' });
+    let query = this.e().select('*', { count: 'exact' });
     if (params?.search) query = query.or(`title.ilike.%${params.search}%,description.ilike.%${params.search}%`);
     if (params?.page && params?.pageSize) query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
     const { data, count, error } = await query.order('title');
@@ -19,24 +21,24 @@ export class SupabaseTimelineRepository implements TimelineService {
   }
 
   async getTimeline(id: string) {
-    const { data, error } = await e().select('*').eq('id', id).single();
+    const { data, error } = await this.e().select('*').eq('id', id).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToTimeline(data) : undefined;
   }
 
   async saveTimeline(timeline: Timeline) {
-    const { data, error } = await e().upsert(rowFromTimeline(timeline)).select().single();
+    const { data, error } = await this.e().upsert(rowFromTimeline(timeline)).select().single();
     if (error) throw error;
     return rowToTimeline(data);
   }
 
   async deleteTimeline(id: string) {
-    const { error } = await e().delete().eq('id', id);
+    const { error } = await this.e().delete().eq('id', id);
     if (error) throw error;
   }
 
   async count() {
-    const { count, error } = await e().select('*', { count: 'exact', head: true });
+    const { count, error } = await this.e().select('*', { count: 'exact', head: true });
     if (error) throw error;
     return count || 0;
   }
