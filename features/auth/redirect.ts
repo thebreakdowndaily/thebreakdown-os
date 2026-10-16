@@ -2,6 +2,14 @@
  * Accept only same-origin, root-relative destinations for post-auth redirects.
  * Never pass user-provided absolute URLs to NextResponse.redirect or router.push.
  */
+function hasControlCharacters(value: string): boolean {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code <= 0x1f || code === 0x7f) return true;
+  }
+  return false;
+}
+
 export function safeRedirectPath(
   destination: string | null | undefined,
   fallback = '/newsroom'
@@ -11,7 +19,7 @@ export function safeRedirectPath(
     !destination.startsWith('/') ||
     destination.startsWith('//') ||
     destination.includes('\\') ||
-    /[\u0000-\u001f\u007f]/.test(destination)
+    hasControlCharacters(destination)
   ) {
     return fallback;
   }
