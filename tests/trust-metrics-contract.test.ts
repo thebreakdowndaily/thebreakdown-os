@@ -86,10 +86,13 @@ describe('trust metrics data lineage', () => {
     expect(registryIds.has('s33')).toBe(true);
     expect(registryIds.has('s34')).toBe(true);
     expect(registrySources.find((source) => source.id === 's31')?.url).toBe('https://eprints.soton.ac.uk/40935/');
-    // s30 is additionally linked through a canonical claim's evidence even
-    // though it is not a direct block citation, so registry relationships can
-    // legitimately exceed the unique direct-citation count by one.
+    // Three chapter-linked records (s10, s30, s36) are intentionally
+    // retained through canonical evidence/registry relationships rather than
+    // direct block citations. Direct citations and registry relationships are
+    // separate measures and must not be forced to the same count.
+    expect(chapterLinkedSources.some((source) => source.id === 's10')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's30')).toBe(true);
+    expect(chapterLinkedSources.some((source) => source.id === 's36')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's32')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's33')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's34')).toBe(true);
