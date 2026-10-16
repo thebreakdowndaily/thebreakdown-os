@@ -385,7 +385,7 @@ export function seedSources(): void {
     {
       id: 's18',
       title: 'The Story of the Integration of the Indian States',
-      url: 'https://books.google.com/books/about/Integration_of_the_Indian_States.html?id=TnpwngEACAAJ',
+      url: 'https://books.google.com/books/about/The_Story_of_the_Integration_of_the_Indi.html?id=TujOQwAACAAJ',
       tier: 2,
       accessedAt: '2026-10-16',
       lastVerifiedAt: '2026-10-16',
@@ -493,7 +493,7 @@ export function seedSources(): void {
     {
       id: 's24',
       title: 'Crossing the Rubicon: The Shaping of India\'s New Foreign Policy',
-      url: 'https://books.google.com/books/about/Crossing_the_Rubicon.html?id=l8ZQPgAACAAJ',
+      url: 'https://books.google.com/books/about/Crossing_the_Rubicon.html?id=SAtuAAAAMAAJ',
       tier: 3,
       accessedAt: '2026-10-16',
       lastVerifiedAt: '2026-10-16',
@@ -511,7 +511,7 @@ export function seedSources(): void {
     {
       id: 's25',
       title: 'India: Emerging Power',
-      url: 'https://books.google.com/books?id=-bgWMQAACAAJ',
+      url: 'https://www.brookings.edu/books/india-emerging-power/',
       tier: 3,
       accessedAt: '2026-10-16',
       lastVerifiedAt: '2026-10-16',
@@ -546,8 +546,8 @@ export function seedSources(): void {
     },
     {
       id: 's27',
-      title: 'The Punjab Bloodied, Partitioned and Cleansed',
-      url: 'https://books.google.com/books?id=EtW-tAEACAAJ',
+      title: "The Punjab Bloodied, Partitioned and Cleansed: Unravelling the 1947 Tragedy Through Secret British Reports and First-person Accounts",
+      url: 'https://books.google.com/books/about/The_Punjab_Bloodied_Partitioned_and_Clea.html?id=EtW-tAEACAAJ',
       tier: 3,
       accessedAt: '2026-10-16',
       lastVerifiedAt: '2026-10-16',
