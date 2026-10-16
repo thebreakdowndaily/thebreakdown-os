@@ -42,8 +42,18 @@ $$;
 ALTER FUNCTION public.enforce_story_publication_invariants()
   SET search_path = pg_catalog, pg_temp;
 
-ALTER FUNCTION newsroom.prevent_archived_artifact_mutation()
-  SET search_path = pg_catalog, pg_temp;
+DO $
+BEGIN
+  IF to_regprocedure('newsroom.prevent_archived_artifact_mutation()') IS NOT NULL THEN
+    EXECUTE 'ALTER FUNCTION newsroom.prevent_archived_artifact_mutation() SET search_path = pg_catalog, pg_temp';
+  END IF;
+  -- This trigger-only helper may be present in long-lived projects even when
+  -- it is not part of the reproducible root migration chain.
+  IF to_regprocedure('public.rls_auto_enable()') IS NOT NULL THEN
+    EXECUTE 'REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM PUBLIC, anon, authenticated';
+  END IF;
+END;
+$;
 
 ALTER FUNCTION public.increment_rate_limit(text, integer, integer)
   SET search_path = pg_catalog, pg_temp;
@@ -82,7 +92,11 @@ REVOKE EXECUTE ON FUNCTION public.set_updated_at() FROM PUBLIC, anon, authentica
 REVOKE EXECUTE ON FUNCTION public.bump_story_version() FROM PUBLIC, anon, authenticated;
 REVOKE EXECUTE ON FUNCTION public.enforce_completed_protocol_for_not_found() FROM PUBLIC, anon, authenticated;
 REVOKE EXECUTE ON FUNCTION public.enforce_story_publication_invariants() FROM PUBLIC, anon, authenticated;
-REVOKE EXECUTE ON FUNCTION newsroom.prevent_archived_artifact_mutation() FROM PUBLIC, anon, authenticated;
+DO $ BEGIN
+  IF to_regprocedure('newsroom.prevent_archived_artifact_mutation()') IS NOT NULL THEN
+    EXECUTE 'REVOKE EXECUTE ON FUNCTION newsroom.prevent_archived_artifact_mutation() FROM PUBLIC, anon, authenticated';
+  END IF;
+END; $;
 
 -- Privileged worker RPCs retain their explicit least-privilege role grants.
 REVOKE EXECUTE ON FUNCTION public.fn_claim_due_schedule_entry() FROM PUBLIC, anon, authenticated;
