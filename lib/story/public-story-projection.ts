@@ -52,7 +52,7 @@ const PUBLIC_CLAIM_FIELDS = [
   'id', 'claim', 'data', 'source', 'sourceUrl', 'source_url', 'tier',
   'evidenceTier', 'evidence_tier', 'confidence', 'status',
   'verificationLevel', 'verification_level', 'verifiedAt', 'verified_at',
-  'sourceCount', 'source_count',
+  'sourceCount', 'source_count', 'counterArguments',
 ] as const;
 
 const PUBLIC_TIMELINE_FIELDS = [
@@ -155,7 +155,19 @@ function projectNestedStoryFields(story: Record<string, unknown>): Record<string
   }
   if ('claims' in projected) {
     projected.claims = Array.isArray(projected.claims)
-      ? projected.claims.map((item) => projectObjectFields(item, PUBLIC_CLAIM_FIELDS)).filter(Boolean)
+      ? projected.claims.map((item) => {
+          const claim = projectObjectFields(item, PUBLIC_CLAIM_FIELDS);
+          if (!claim || typeof claim !== 'object' || Array.isArray(claim)) return undefined;
+          const projectedClaim = claim as Record<string, unknown>;
+          const sourceClaim = item as Record<string, unknown>;
+          if (Array.isArray(sourceClaim.counterArguments)) {
+            projectedClaim.counterArguments = sourceClaim.counterArguments.slice(0, 100).map((argument) => {
+              if (typeof argument === 'string') return argument;
+              return projectObjectFields(argument, ['title', 'argument', 'source', 'confidence']);
+            }).filter((argument) => argument !== undefined);
+          }
+          return projectedClaim;
+        }).filter(Boolean)
       : [];
   }
   if ('timeline' in projected) {
