@@ -138,6 +138,7 @@ module.exports = {
       'tests/phase2b1-reconciliation.test.ts',
       'tests/api-key-delegation.test.ts',
       'tests/resource-authorization.test.ts',
+      'tests/api-v1-cold-start.test.ts',
       'tests/continuous-newsroom-os.test.ts',
       'services/radar/__tests__/change-detection.test.ts',
       'services/radar/__tests__/document-mutation-reconciliation.test.ts',
