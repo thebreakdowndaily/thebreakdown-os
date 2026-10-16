@@ -11,7 +11,10 @@ export interface TrustLayerPanelProps {
   totalClaims: number;
   verifiedClaims: number;
   primarySourcesCount: number;
+  /** Render only when this exact verification label is backed by real review data. */
   verificationBadge?: string;
+  /** A recorded audit outcome; omitted means no audit result is displayed. */
+  auditStatus?: 'pass' | 'review' | 'fail';
   versionHistory?: Array<{ date: string; description: string }>;
 }
 
@@ -20,7 +23,8 @@ export function TrustLayerPanel({
   totalClaims,
   verifiedClaims,
   primarySourcesCount,
-  verificationBadge = 'Verified Primary Evidence',
+  verificationBadge,
+  auditStatus,
   versionHistory = [],
 }: TrustLayerPanelProps) {
   return (
@@ -38,12 +42,13 @@ export function TrustLayerPanel({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#059669' }} />
-          <strong style={{ color: '#0f172a', fontWeight: 600 }}>{verificationBadge}</strong>
-        </div>
+        {verificationBadge ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <strong style={{ color: '#0f172a', fontWeight: 600 }}>{verificationBadge}</strong>
+          </div>
+        ) : null}
         <span style={{ color: '#64748b', fontSize: '0.8125rem' }}>
-          Last Verified: {lastUpdated}
+          Last updated: {lastUpdated}
         </span>
       </div>
 
@@ -56,10 +61,20 @@ export function TrustLayerPanel({
           <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Primary Sources</div>
           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0f172a' }}>{primarySourcesCount}</div>
         </div>
-        <div style={{ padding: '0.75rem', backgroundColor: '#ffffff', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
-          <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Gold Standard Audit</div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#059669' }}>PASS</div>
-        </div>
+        {auditStatus ? (
+          <div style={{ padding: '0.75rem', backgroundColor: '#ffffff', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
+            <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Editorial audit</div>
+            <div
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                color: auditStatus === 'pass' ? '#047857' : auditStatus === 'fail' ? '#b91c1c' : '#92400e',
+              }}
+            >
+              {auditStatus === 'pass' ? 'Pass' : auditStatus === 'fail' ? 'Fail' : 'Review required'}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {versionHistory.length > 0 && (
