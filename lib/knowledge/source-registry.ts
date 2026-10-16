@@ -249,8 +249,7 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
-      lastVerifiedAt: '2026-07-14',
-      verificationStatus: 'verified',
+      verificationStatus: 'unverified',
     },
     {
       id: 's13',
@@ -267,8 +266,7 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
-      lastVerifiedAt: '2026-07-14',
-      verificationStatus: 'verified',
+      verificationStatus: 'unverified',
     },
     {
       id: 's14',
@@ -285,8 +283,7 @@ export function seedSources(): void {
       thinkerIds: [],
       storyIds: [],
       datasetIds: [],
-      lastVerifiedAt: '2026-07-14',
-      verificationStatus: 'verified',
+      verificationStatus: 'unverified',
     },
     {
       id: 's15',
