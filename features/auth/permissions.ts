@@ -5,6 +5,22 @@ export type AppPermission =
   | 'story.update'
   | 'story.publish'
   | 'story.delete'
+  | 'topic.create'
+  | 'topic.update'
+  | 'topic.delete'
+  | 'entity.create'
+  | 'entity.update'
+  | 'entity.delete'
+  | 'fix.create'
+  | 'fix.update'
+  | 'fix.delete'
+  | 'timeline.create'
+  | 'timeline.update'
+  | 'timeline.delete'
+  | 'media.create'
+  | 'dataset.create'
+  | 'dataset.update'
+  | 'dataset.delete'
   | 'investigation.read'
   | 'investigation.write'
   | 'citation.create'
@@ -48,6 +64,22 @@ export const APP_PERMISSIONS = [
   'story.update',
   'story.publish',
   'story.delete',
+  'topic.create',
+  'topic.update',
+  'topic.delete',
+  'entity.create',
+  'entity.update',
+  'entity.delete',
+  'fix.create',
+  'fix.update',
+  'fix.delete',
+  'timeline.create',
+  'timeline.update',
+  'timeline.delete',
+  'media.create',
+  'dataset.create',
+  'dataset.update',
+  'dataset.delete',
   'investigation.read',
   'investigation.write',
   'citation.create',
