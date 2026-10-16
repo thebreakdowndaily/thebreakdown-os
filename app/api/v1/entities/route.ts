@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseEntityRepository } from '@/services/repositories/supabase/entity';
 import type { Entity, EntityKind, APIResponse, APIListParams } from '@/types/canonical';
@@ -34,6 +35,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('entity.create', request);
+  if ('response' in auth) return auth.response;
   const body = (await request.json()) as Partial<Entity>;
 
   const now = new Date().toISOString();
