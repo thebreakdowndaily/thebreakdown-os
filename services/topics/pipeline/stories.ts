@@ -3,34 +3,50 @@ import type { KnowledgeTopic, TopicAggregator } from './builder';
 import { getServices } from '@/services/registry';
 import { canPubliclyViewStory, storyPublicationContext } from '@/lib/story/publication';
 
-function normalizeTopicKey(value: string | undefined | null): string {
-  return (value ?? '')
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+const FALLBACK_PUBLIC_STORY_PAGE_SIZE = 100;
+
+async function loadPublicStoriesForTopic(topic: Topic): Promise<Story[]> {
+  const storyService = getServices().stories;
+
+  // Supabase production reads should use a database relationship filter.
+  // Other service providers retain a paginated compatibility path.
+  if (storyService.getPublicStoriesForTopic) {
+    const { data } = await storyService.getPublicStoriesForTopic(topic);
+    return data;
+  }
+
+  const firstPage = await storyService.getPublicStories({
+    page: 1,
+    pageSize: FALLBACK_PUBLIC_STORY_PAGE_SIZE,
+  });
+  const stories = [...firstPage.data];
+  const total = firstPage.meta?.total ?? firstPage.data.length;
+  const pageCount = Math.ceil(total / FALLBACK_PUBLIC_STORY_PAGE_SIZE);
+
+  for (let page = 2; page <= pageCount; page += 1) {
+    const nextPage = await storyService.getPublicStories({
+      page,
+      pageSize: FALLBACK_PUBLIC_STORY_PAGE_SIZE,
+    });
+    stories.push(...nextPage.data);
+  }
+
+  return stories;
 }
 
 export class StoryAggregator implements TopicAggregator {
   async aggregate(topic: Topic, _currentKnowledge: KnowledgeTopic): Promise<KnowledgeTopic> {
-    // The canonical topic.storyIds array is not reliably populated in older
-    // production records. Use the public story feed as the source of truth,
-    // then reconcile forward references, reverse links, and exact categories.
-    // getPublicStories already enforces publication eligibility at the
-    // repository boundary; the second check remains defense in depth.
-    const { data: publicStories } = await getServices().stories.getPublicStories();
+    // Topic membership comes only from explicit canonical relationships.
+    // Categories and tags describe content but do not establish topic links.
+    // Production repositories support a targeted public relationship query;
+    // the local check is defense in depth for provider parity.
+    const publicStories = await loadPublicStoriesForTopic(topic);
 
     const storedStoryRefs = new Set([
       ...(topic.storyIds ?? []),
       ...(topic.featuredStoryIds ?? []),
     ]);
     const topicRefs = new Set([topic.id, topic.slug]);
-    const categoryKeys = new Set(
-      [topic.slug, topic.name]
-        .map(normalizeTopicKey)
-        .filter((key) => key.length > 0),
-    );
 
     const stories = publicStories.filter((story: Story) => {
       if (!canPubliclyViewStory(storyPublicationContext(story))) return false;
@@ -38,9 +54,8 @@ export class StoryAggregator implements TopicAggregator {
       const matchesStoredReference =
         storedStoryRefs.has(story.id) || storedStoryRefs.has(story.slug);
       const matchesReverseReference = (story.relatedTopicIds ?? []).some((id) => topicRefs.has(id));
-      const matchesExactCategory = categoryKeys.has(normalizeTopicKey(story.category));
 
-      return matchesStoredReference || matchesReverseReference || matchesExactCategory;
+      return matchesStoredReference || matchesReverseReference;
     });
 
     // De-duplicate by canonical story ID when multiple relationships match.
