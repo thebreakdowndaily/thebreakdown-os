@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { requireApiPermission } from '@/features/auth/require-role';
 import { db, list, created, serverError } from '@/lib/api-v2';
 
 export async function GET(request: NextRequest) {
@@ -24,6 +25,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireApiPermission('fix.create', request);
+    if ('response' in auth) return auth.response;
     const body = await request.json();
     const { data, error } = await db().from('fixes').insert(body as import('@/supabase/schema').Database['public']['Tables']['fixes']['Insert']).select().single();
     if (error) throw error;
