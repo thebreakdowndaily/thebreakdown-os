@@ -1172,7 +1172,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       mainEntitySlug: 'india-pakistan-relations',
       relationships: [
         { entity: 'Kashmir', entitySlug: 'kashmir', relationshipType: 'disputed_territory', description: 'The Kashmir dispute has been the central territorial conflict between India and Pakistan since 1947, resulting in two major wars and numerous military crises.' },
-        { entity: 'Partition of India', entitySlug: 'partition', relationshipType: 'root_cause', description: 'Partition's legacies—including competing claims over Kashmir, minority-rights concerns, and competing national narratives—have repeatedly shaped India–Pakistan relations, though the intensity of rivalry has varied over time.' },
+        { entity: 'Partition of India', entitySlug: 'partition', relationshipType: 'root_cause', description: 'Partition\'s legacies—including competing claims over Kashmir, minority-rights concerns, and competing national narratives—have repeatedly shaped India–Pakistan relations, though the intensity of rivalry has varied over time.' },
         { entity: 'UN Security Council', entitySlug: 'un-security-council', relationshipType: 'mediator', description: 'The UN attempted to mediate the Kashmir dispute through Resolution 47, but the failure to implement the plebiscite left both sides dissatisfied and the issue unresolved.' },
         { entity: 'Liaquat Ali Khan', entitySlug: 'liaquat-ali-khan', relationshipType: 'negotiated_with', description: 'Pakistan\'s first Prime Minister signed the Liaquat-Nehru Pact of 1950, the only major bilateral agreement on minority rights between the two countries.' },
       ],
