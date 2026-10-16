@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { createUserScopedClient } from '@/supabase/client';
-import type { Principal } from '@/features/auth/principal';
+import type { Principal } from './principal';
 
 /**
- * Use the caller's Supabase JWT for persistent writes so database RLS remains
- * an independent authorization layer. API-key writes are denied until there is
- * a service-to-service contract that can safely carry a scoped principal.
+ * Obtains a database client carrying the authenticated user's Supabase JWT so
+ * PostgreSQL RLS remains an independent write authorization boundary.
+ *
+ * API-key principals do not carry a Supabase user JWT. They must not silently
+ * fall back to the anonymous client for persistent writes; a dedicated
+ * service-to-service write contract is required before enabling that path.
  */
 export async function getPersistentWriteClient(principal: Principal): Promise<
   { client: Awaited<ReturnType<typeof createUserScopedClient>> } |
@@ -19,5 +22,6 @@ export async function getPersistentWriteClient(principal: Principal): Promise<
       ),
     };
   }
+
   return { client: await createUserScopedClient() };
 }
