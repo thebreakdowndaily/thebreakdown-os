@@ -100,11 +100,20 @@ describe('trust metrics data lineage', () => {
     expect(verifiedPlaceholderSources).toEqual([]);
     const placeholderUrls = registrySources.filter((source) => source.url.includes('example.com'));
     expect(placeholderUrls).toEqual([]);
-    for (const id of ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's11', 's12', 's13', 's14', 's16', 's17', 's18', 's19', 's20', 's21', 's22', 's23', 's24', 's25', 's26', 's27', 's28', 's30', 's31', 's32', 's33', 's34', 's35', 's36', 's65']) {
+    for (const id of ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12', 's13', 's14', 's16', 's17', 's18', 's19', 's20', 's21', 's22', 's23', 's24', 's25', 's26', 's27', 's28', 's29', 's30', 's31', 's32', 's33', 's34', 's35', 's36', 's65']) {
       const source = registrySources.find((item) => item.id === id);
       expect(source?.verificationStatus).toBe('verified');
       expect(source?.url).not.toContain('example.com');
       expect(source?.lastVerifiedAt).toBe('2026-10-16');
+    }
+    const exactUrls: Record<string, string> = {
+      s10: 'https://cup.columbia.edu/book/the-long-partition-and-the-making-of-modern-south-asia/9780231511018/',
+      s29: 'https://search.worldcat.org/title/57043090',
+      s35: 'https://journals.sagepub.com/doi/10.1177/0019464614550767',
+      s36: 'https://www.nam.ac.uk/explore/independence-and-partition-1947',
+    };
+    for (const [id, url] of Object.entries(exactUrls)) {
+      expect(registrySources.find((source) => source.id === id)?.url).toBe(url);
     }
   });
 
