@@ -145,6 +145,28 @@ describe('Vercel Deployment Policy & Git Allowlist Suite', () => {
       expect(isBranchDeploymentEnabled('random-push', currentConfig)).toBe(false);
     });
 
+    it('enables deployment when any matching Vercel rule is true', () => {
+      const overlapping: VercelConfig = {
+        git: {
+          deploymentEnabled: {
+            '**': false,
+            'feature/*': false,
+            'feature/approved': true,
+          },
+        },
+      };
+
+      expect(isBranchDeploymentEnabled('feature/approved', overlapping)).toBe(true);
+      expect(isBranchDeploymentEnabled('feature/blocked', overlapping)).toBe(false);
+    });
+
+    it('defaults to enabled when no configured branch pattern matches', () => {
+      const config: VercelConfig = {
+        git: { deploymentEnabled: { 'release/*': false } },
+      };
+      expect(isBranchDeploymentEnabled('main', config)).toBe(true);
+    });
+
     it('falls back to true if no git.deploymentEnabled configuration exists', () => {
       const unconfigured: VercelConfig = {
         ignoreCommand: 'node scripts/vercel-ignore-build.js',
