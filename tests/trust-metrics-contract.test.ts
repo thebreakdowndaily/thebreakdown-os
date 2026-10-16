@@ -93,7 +93,7 @@ describe('trust metrics data lineage', () => {
     expect(chapterLinkedSources.some((source) => source.id === 's32')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's33')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's34')).toBe(true);
-    expect(chapterLinkedSources.length).toBe(36);
+    expect(chapterLinkedSources.length).toBe(37);
     const verifiedPlaceholderSources = registrySources.filter(
       (source) => source.url.includes('example.com') && source.verificationStatus === 'verified',
     );
