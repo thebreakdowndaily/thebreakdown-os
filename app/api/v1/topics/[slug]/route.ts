@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTopicRepository } from '@/services/repositories/supabase/topic';
 import type { Topic, APIResponse } from '@/types/canonical';
@@ -22,7 +23,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ slug: string }> }
+  context: {
+  const auth = await requireApiPermission('topic.update', request);
+  if ('response' in auth) return auth.response; params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
   const existing = await repo.getTopicBySlug(slug);
@@ -41,7 +44,9 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  context: { params: Promise<{ slug: string }> }
+  context: {
+  const auth = await requireApiPermission('topic.delete', _request);
+  if ('response' in auth) return auth.response; params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
   const topic = await repo.getTopicBySlug(slug);
