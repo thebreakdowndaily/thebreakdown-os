@@ -45,7 +45,7 @@ export class SupabaseEntityRepository implements RawEntityRepository {
   }
 
   async delete(id: string) {
-    const { error } = await this.e().deletthis.e().eq('id', id);
+    const { error } = await this.e().delete().eq('id', id);
     if (error) throw error;
   }
 
@@ -102,6 +102,6 @@ function rowFromEntity(e: Entity): EntityInsert {
     statistics: e.statistics,
     timeline: e.timeline,
     faq: e.faq,
-    updated_at: new Datthis.e().toISOString(),
+    updated_at: new Date().toISOString(),
   };
 }
