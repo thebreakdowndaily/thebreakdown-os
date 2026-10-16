@@ -4,13 +4,36 @@ import { isDemoMode, DEMO_USER } from './demo';
 
 export async function getSupabaseAuth() {
   const cookieStore = await cookies();
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_anon_key';
-  return createServerClient(
-    url,
-    anonKey,
-    { cookies: { getAll: () => cookieStore.getAll() } }
-  );
+  const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const configuredKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Never silently connect a production deployment to placeholder credentials.
+  // Local tests/demo mode retain an inert placeholder client when Auth is absent.
+  if (!configuredUrl || !configuredKey) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('Supabase Auth is not configured: set NEXT_PUBLIC_SUPABASE_URL and a publishable/anon key.');
+    }
+    return createServerClient(
+      'https://placeholder.supabase.co',
+      'placeholder-key-for-development-only',
+      { cookies: { getAll: () => cookieStore.getAll() } }
+    );
+  }
+
+  return createServerClient(configuredUrl, configuredKey, {
+    cookies: {
+      getAll: () => cookieStore.getAll(),
+      setAll: (cookiesToSet) => {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+        } catch {
+          // Server Components can be read-only; middleware refreshes sessions.
+        }
+      },
+    },
+  });
 }
 
 export interface AuthSession {
