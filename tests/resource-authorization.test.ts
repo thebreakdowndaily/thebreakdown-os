@@ -1,6 +1,31 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NextRequest } from 'next/server';
 import { can } from '@/features/auth/policy';
 import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
+import { requireApiPermission } from '@/features/auth/require-role';
+const authState = vi.hoisted(() => ({
+  principal: null as unknown,
+  keyResult: {
+    valid: true,
+    key: {
+      id: 'key-id',
+      owner_id: 'owner-id',
+      name: 'test key',
+      role: 'editor',
+      revoked_at: null,
+      permissions: ['story.read'],
+    } as unknown,
+  },
+}));
+
+vi.mock('@/features/auth/principal', () => ({
+  getCurrentPrincipal: vi.fn(async () => authState.principal),
+}));
+
+vi.mock('@/features/auth/api-keys/service', () => ({
+  verifyApiKey: vi.fn(async () => authState.keyResult),
+}));
+
 
 function apiKey(permissions: unknown, role = 'editor') {
   return {
@@ -40,5 +65,51 @@ describe('resource-specific authorization contracts', () => {
     expect(can(null, 'topic.create')).toBe(false);
     expect(can(null, 'entity.delete')).toBe(false);
     expect(can(null, 'dataset.create')).toBe(false);
+  });
+});
+
+
+describe('requireApiPermission route boundary', () => {
+  beforeEach(() => {
+    authState.principal = null;
+    authState.keyResult = {
+      valid: true,
+      key: {
+        id: 'key-id',
+        owner_id: 'owner-id',
+        name: 'test key',
+        role: 'editor',
+        revoked_at: null,
+        permissions: ['story.read'],
+      },
+    };
+  });
+
+  it('denies a scoped API key at a resource mutation boundary', async () => {
+    const result = await requireApiPermission(
+      'topic.create',
+      new NextRequest('http://localhost/api/v2/topics', { headers: { 'x-api-key': 'valid-key' } }),
+    );
+    expect('response' in result).toBe(true);
+    if ('response' in result) expect(result.response.status).toBe(403);
+  });
+
+  it('allows a scoped API key only when the requested permission is present', async () => {
+    authState.keyResult = {
+      valid: true,
+      key: {
+        id: 'key-id',
+        owner_id: 'owner-id',
+        name: 'test key',
+        role: 'editor',
+        revoked_at: null,
+        permissions: ['topic.create'],
+      },
+    };
+    const result = await requireApiPermission(
+      'topic.create',
+      new NextRequest('http://localhost/api/v2/topics', { headers: { 'x-api-key': 'valid-key' } }),
+    );
+    expect('principal' in result).toBe(true);
   });
 });
