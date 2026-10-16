@@ -40,7 +40,7 @@ export default async function TopicsPage() {
         storyCount: Number(row.story_count),
         stories: (row.recent_stories ?? []).map(({ slug, headline }) => ({ slug, headline })),
       },
-    ]),
+    ] as const),
   );
 
   return (
