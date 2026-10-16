@@ -4,6 +4,7 @@ import { requireApiPermission } from '@/features/auth/require-role';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 import type { Story } from '@/types/canonical';
+import { PUBLIC_STORY_SELECT, toPublicDatabaseStory } from '@/lib/story/public-story-projection';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
     const search = searchParams.get('search') || '';
     const category = searchParams.get('category') || '';
-    let query = db().from('stories').select('*', { count: 'exact' });
+    let query = db().from('stories').select(PUBLIC_STORY_SELECT, { count: 'exact' });
 
     if (search) query = query.or(`title.ilike.%${search}%,summary.ilike.%${search}%`);
     if (category) query = query.eq('category', category);
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
       .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (error) throw error;
-    return list(data || [], count || 0, page, pageSize);
+    return list((data || []).map(toPublicDatabaseStory), count || 0, page, pageSize);
   } catch (e) { return serverError(e); }
 }
 

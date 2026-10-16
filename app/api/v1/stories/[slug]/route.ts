@@ -5,6 +5,7 @@ import { syncStory, deleteStory } from '@/lib/data-sync';
 import { requireApiPermission } from '@/features/auth/require-role';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
+import { toPublicStory } from '@/lib/story/public-story-projection';
 
 const repo = RepositoryFactory.getStoryRepository();
 
@@ -19,7 +20,7 @@ export async function GET(
     return NextResponse.json({ error: `Story not found: ${slug}` }, { status: 404 });
   }
 
-  const res: APIResponse<Story> = { data: story };
+  const res: APIResponse<Story> = { data: toPublicStory(story) };
   return NextResponse.json(res);
 }
 
