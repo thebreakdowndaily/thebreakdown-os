@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { NextRequest } from 'next/server';
 import { can } from '@/features/auth/policy';
 import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
@@ -179,3 +181,65 @@ describe('persistent write client boundary', () => {
     ).rejects.toThrow('Authenticated Supabase request context unavailable');
   });
 });
+
+type ResourceMutationContract = {
+  path: string;
+  method: 'POST' | 'PUT' | 'DELETE';
+  permission: string;
+};
+
+const RESOURCE_MUTATION_CONTRACTS: ResourceMutationContract[] = [
+  { path: 'app/api/v1/topics/route.ts', method: 'POST', permission: 'topic.create' },
+  { path: 'app/api/v1/topics/[slug]/route.ts', method: 'PUT', permission: 'topic.update' },
+  { path: 'app/api/v1/topics/[slug]/route.ts', method: 'DELETE', permission: 'topic.delete' },
+  { path: 'app/api/v1/entities/route.ts', method: 'POST', permission: 'entity.create' },
+  { path: 'app/api/v1/entities/[slug]/route.ts', method: 'PUT', permission: 'entity.update' },
+  { path: 'app/api/v1/entities/[slug]/route.ts', method: 'DELETE', permission: 'entity.delete' },
+  { path: 'app/api/v1/fixes/route.ts', method: 'POST', permission: 'fix.create' },
+  { path: 'app/api/v1/fixes/[slug]/route.ts', method: 'PUT', permission: 'fix.update' },
+  { path: 'app/api/v1/fixes/[slug]/route.ts', method: 'DELETE', permission: 'fix.delete' },
+  { path: 'app/api/v1/timelines/route.ts', method: 'POST', permission: 'timeline.create' },
+  { path: 'app/api/v1/timelines/[id]/route.ts', method: 'PUT', permission: 'timeline.update' },
+  { path: 'app/api/v1/timelines/[id]/route.ts', method: 'DELETE', permission: 'timeline.delete' },
+  { path: 'app/api/v1/media/route.ts', method: 'POST', permission: 'media.create' },
+  { path: 'app/api/v1/datasets/route.ts', method: 'POST', permission: 'dataset.create' },
+  { path: 'app/api/v2/topics/route.ts', method: 'POST', permission: 'topic.create' },
+  { path: 'app/api/v2/topics/[slug]/route.ts', method: 'PUT', permission: 'topic.update' },
+  { path: 'app/api/v2/topics/[slug]/route.ts', method: 'DELETE', permission: 'topic.delete' },
+  { path: 'app/api/v2/entities/route.ts', method: 'POST', permission: 'entity.create' },
+  { path: 'app/api/v2/entities/[slug]/route.ts', method: 'PUT', permission: 'entity.update' },
+  { path: 'app/api/v2/entities/[slug]/route.ts', method: 'DELETE', permission: 'entity.delete' },
+  { path: 'app/api/v2/fixes/route.ts', method: 'POST', permission: 'fix.create' },
+  { path: 'app/api/v2/fixes/[slug]/route.ts', method: 'PUT', permission: 'fix.update' },
+  { path: 'app/api/v2/fixes/[slug]/route.ts', method: 'DELETE', permission: 'fix.delete' },
+  { path: 'app/api/v2/timelines/route.ts', method: 'POST', permission: 'timeline.create' },
+  { path: 'app/api/v2/timelines/[slug]/route.ts', method: 'PUT', permission: 'timeline.update' },
+  { path: 'app/api/v2/timelines/[slug]/route.ts', method: 'DELETE', permission: 'timeline.delete' },
+];
+
+function extractExportedMutationHandler(source: string, method: ResourceMutationContract['method']): string {
+  const expression = new RegExp(`export\\s+async\\s+function\\s+${method}\\s*\\(`);
+  const match = expression.exec(source);
+  if (!match) return '';
+
+  const start = match.index;
+  const remainder = source.slice(start + match[0].length);
+  const nextHandler = remainder.search(/export\\s+async\\s+function\\s+(?:GET|POST|PUT|PATCH|DELETE)\\s*\\(/);
+  return nextHandler < 0 ? source.slice(start) : source.slice(start, start + match[0].length + nextHandler);
+}
+
+describe('resource mutation route guard coverage', () => {
+  it.each(RESOURCE_MUTATION_CONTRACTS)(
+    '$method $path requires $permission and a request-scoped write client',
+    ({ path, method, permission }) => {
+      const source = readFileSync(resolve(process.cwd(), path), 'utf8');
+      const handler = extractExportedMutationHandler(source, method);
+
+      expect(handler, `exported ${method} handler must exist in ${path}`).not.toBe('');
+      expect(handler).toContain(`requireApiPermission('${permission}'`);
+      expect(handler).toContain('getPersistentWriteClient(');
+      expect(handler.includes('write.client') || handler.includes('writeRepo.')).toBe(true);
+    },
+  );
+});
+
