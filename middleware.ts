@@ -195,9 +195,45 @@ export async function middleware(request: NextRequest) {
 
       const intelModule = intelModuleFromPath(pathname);
       if (intelModule) {
-        // app_metadata is server-controlled; user_metadata is deliberately not trusted for roles.
+        // Mirror the principal resolver: database roles/status are authoritative when
+        // present, app_metadata is only a server-controlled fallback, and user_metadata
+        // is never trusted for privileges.
+        const { data: roleRecord, error: roleLookupError } = await supabase
+          .from('user_roles')
+          .select('role, status')
+          .eq('user_id', claims.sub)
+          .maybeSingle();
+
+        // A failed lookup cannot safely establish that a staff account is active.
+        if (roleLookupError) {
+          return new NextResponse('Authorization service unavailable', {
+            status: 503,
+            headers: {
+              ...SECURITY_HEADERS,
+              'Cache-Control': 'private, no-store',
+              'X-Robots-Tag': 'noindex, nofollow',
+            } as HeadersInit,
+          });
+        }
+
+        if (roleRecord?.status && roleRecord.status !== 'active') {
+          return new NextResponse('Forbidden', {
+            status: 403,
+            headers: {
+              ...SECURITY_HEADERS,
+              'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+              'X-Robots-Tag': 'noindex, nofollow',
+            } as HeadersInit,
+          });
+        }
+
         const appMetadata = claims.app_metadata as Record<string, unknown> | undefined;
-        const authoritativeRole = typeof appMetadata?.role === 'string' ? appMetadata.role : null;
+        const authoritativeRole =
+          typeof roleRecord?.role === 'string'
+            ? roleRecord.role
+            : typeof appMetadata?.role === 'string'
+              ? appMetadata.role
+              : null;
         const role = normalizeIntelRole(authoritativeRole);
         if (!canAccessIntelModule(role, intelModule)) {
           return new NextResponse('Forbidden', {
