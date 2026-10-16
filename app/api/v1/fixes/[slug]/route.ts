@@ -1,4 +1,5 @@
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseFixRepository } from '@/services/repositories/supabase/fix';
 import type { Fix, APIResponse } from '@/types/canonical';
@@ -27,9 +28,12 @@ export async function PUT(
 ) {
   const auth = await requireApiPermission('fix.update', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseFixRepository(write.client);
 
   const { slug } = await context.params;
-  const existing = await repo.getFixBySlug(slug);
+  const existing = await writeRepo.getFixBySlug(slug);
 
   if (!existing) {
     return NextResponse.json({ error: `Fix not found: ${slug}` }, { status: 404 });
@@ -37,7 +41,7 @@ export async function PUT(
 
   const body = (await request.json()) as Partial<Fix>;
   const updated: Fix = { ...existing, ...body, slug: existing.slug, id: existing.id, updatedAt: new Date().toISOString() };
-  const saved = await repo.saveFix(updated);
+  const saved = await writeRepo.saveFix(updated);
   syncFix(saved);
   const res: APIResponse<Fix> = { data: saved };
   return NextResponse.json(res);
@@ -49,15 +53,18 @@ export async function DELETE(
 ) {
   const auth = await requireApiPermission('fix.delete', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseFixRepository(write.client);
 
   const { slug } = await context.params;
-  const fix = await repo.getFixBySlug(slug);
+  const fix = await writeRepo.getFixBySlug(slug);
 
   if (!fix) {
     return NextResponse.json({ error: `Fix not found: ${slug}` }, { status: 404 });
   }
 
-  await repo.deleteFix(fix.id);
+  await writeRepo.deleteFix(fix.id);
   deleteFix(slug);
   return new NextResponse(null, { status: 204 });
 }
