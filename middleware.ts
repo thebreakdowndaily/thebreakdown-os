@@ -216,7 +216,7 @@ export async function middleware(request: NextRequest) {
           });
         }
 
-        if (roleRecord?.status && roleRecord.status !== 'active') {
+        if (roleRecord && roleRecord.status !== 'active') {
           return new NextResponse('Forbidden', {
             status: 403,
             headers: {
