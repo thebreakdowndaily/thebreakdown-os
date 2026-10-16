@@ -183,7 +183,7 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.division-of-assets',
-      statement: 'The partition of the British Indian Army, civil service, financial reserves, and railway system crippled India\'s institutional capacity at the moment of independence and required urgent reconstruction of national institutions.',
+      statement: 'The partition of the British Indian Army, civil service, financial reserves, and railway system required a complex division of inherited institutions and assets, disrupted administrative continuity, and required both successor states to establish separate national institutions.',
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'supporting', excerpt: 'Partition required both successor states to divide inherited military, administrative, and financial assets while establishing separate national institutions.' },
