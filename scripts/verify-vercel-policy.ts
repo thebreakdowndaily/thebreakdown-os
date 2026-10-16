@@ -97,26 +97,22 @@ export function isBranchDeploymentEnabled(
   }
 
   const rules = config.git.deploymentEnabled;
+  const matchingRules = Object.entries(rules).filter(([pattern]) =>
+    branchPatternToRegex(pattern).test(branch)
+  );
 
-  // 1. Exact literal match
-  if (Object.prototype.hasOwnProperty.call(rules, branch)) {
-    return Boolean(rules[branch]);
+  // Vercel enables deployment if any matching rule is true, even when another
+  // matching rule (such as the catch-all "**": false) is false.
+  if (matchingRules.some(([, enabled]) => enabled === true)) {
+    return true;
   }
 
-  // 2. Specific globs (not '**')
-  for (const [pattern, enabled] of Object.entries(rules)) {
-    if (pattern === '**' || pattern === branch) continue;
-    const regex = branchPatternToRegex(pattern);
-    if (regex.test(branch)) {
-      return Boolean(enabled);
-    }
+  // If one or more rules matched and every matching rule is false, block it.
+  if (matchingRules.length > 0) {
+    return false;
   }
 
-  // 3. Fallback catch-all '**'
-  if (Object.prototype.hasOwnProperty.call(rules, '**')) {
-    return Boolean(rules['**']);
-  }
-
+  // Vercel defaults to enabled when no rule matches the branch.
   return true;
 }
 
