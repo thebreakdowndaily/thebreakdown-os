@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { authorizeApiKeyDelegation } from '@/features/auth/api-keys/delegation';
+import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
+import { can } from '@/features/auth/policy';
 import type { Principal } from '@/features/auth/principal';
 
 function principal(
@@ -31,6 +33,19 @@ describe('API-key delegation least-privilege policy', () => {
       allowed: true,
       role: 'editor',
       permissions: ['story.read', 'story.update'],
+      rateLimitTier: 'standard',
+    });
+  });
+
+  it('allows a managing editor to delegate editor role defaults that are within their grants', () => {
+    expect(authorizeApiKeyDelegation(managingEditor, {
+      role: 'editor',
+      permissions: [],
+      rateLimitTier: 'standard',
+    })).toMatchObject({
+      allowed: true,
+      role: 'editor',
+      permissions: [],
       rateLimitTier: 'standard',
     });
   });
@@ -141,7 +156,20 @@ describe('API-key delegation least-privilege policy', () => {
     });
   });
 
-  it('bounds delegation by a scoped principal explicit permission set', () => {
+  it('rejects role defaults outside a scoped creator permission set', () => {
+    const scopedManager = principal('managing_editor', false, ['api_key.create']);
+    expect(authorizeApiKeyDelegation(scopedManager, {
+      role: 'editor',
+      permissions: [],
+      rateLimitTier: 'standard',
+    })).toMatchObject({
+      allowed: false,
+      status: 403,
+      code: 'PERMISSION_ESCALATION',
+    });
+  });
+
+  it('rejects explicit scopes outside a scoped creator permission set', () => {
     const scopedManager = principal('managing_editor', false, ['api_key.create']);
     expect(authorizeApiKeyDelegation(scopedManager, {
       role: 'reader',
@@ -151,6 +179,20 @@ describe('API-key delegation least-privilege policy', () => {
       allowed: false,
       status: 403,
       code: 'PERMISSION_ESCALATION',
+    });
+  });
+
+  it('allows a scoped creator to delegate only the permissions they hold', () => {
+    const scopedManager = principal('managing_editor', false, ['api_key.create']);
+    expect(authorizeApiKeyDelegation(scopedManager, {
+      role: 'reader',
+      permissions: ['api_key.create'],
+      rateLimitTier: 'standard',
+    })).toMatchObject({
+      allowed: true,
+      role: 'reader',
+      permissions: ['api_key.create'],
+      rateLimitTier: 'standard',
     });
   });
 
@@ -166,5 +208,39 @@ describe('API-key delegation least-privilege policy', () => {
       permissions: [],
       rateLimitTier: 'unlimited-forever',
     })).toMatchObject({ allowed: false, status: 400, code: 'INVALID_RATE_LIMIT_TIER' });
+  });
+});
+
+describe('API-key principal projection', () => {
+  const key = {
+    id: 'key-id',
+    owner_id: 'owner-id',
+    name: 'scoped-key',
+    role: 'editor' as const,
+    revoked_at: null,
+    permissions: ['api_key.create'] as const,
+  };
+
+  it('preserves explicit stored scopes in the principal', () => {
+    const resolved = apiKeyRecordToPrincipal({ ...key, permissions: [...key.permissions] });
+    expect(resolved?.permissions).toEqual(['api_key.create']);
+    expect(resolved && can(resolved, 'api_key.create')).toBe(true);
+    expect(resolved && can(resolved, 'story.read')).toBe(false);
+  });
+
+  it('fails closed for a legacy record containing an unknown permission', () => {
+    const resolved = apiKeyRecordToPrincipal({
+      ...key,
+      permissions: ['api_key.create', 'system.root.shell'] as never,
+    });
+    expect(resolved).toBeNull();
+  });
+
+  it('returns null when the stored permission payload is not an array', () => {
+    const resolved = apiKeyRecordToPrincipal({
+      ...key,
+      permissions: 'api_key.create' as never,
+    });
+    expect(resolved).toBeNull();
   });
 });
