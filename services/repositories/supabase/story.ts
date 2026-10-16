@@ -7,6 +7,12 @@ import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPubli
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
+const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
+function isUuid(value: string): boolean {
+  return UUID_PATTERN.test(value);
+}
+
 export class SupabaseStoryRepository implements StoryService {
   private evidenceVault?: EvidenceVaultService;
 
@@ -30,8 +36,11 @@ export class SupabaseStoryRepository implements StoryService {
   }
 
   async getStory(id: string) {
-    const { data, error } = await db().from('stories').select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
+    // Story references are persisted as either UUIDs or slugs in legacy
+    // topic/story data. Route each value to the correctly typed column.
+    const column = isUuid(id) ? 'id' : 'slug';
+    const { data, error } = await db().from('stories').select('*').eq(column, id).maybeSingle();
+    if (error) throw error;
     return data ? rowToStory(data) : undefined;
   }
 
