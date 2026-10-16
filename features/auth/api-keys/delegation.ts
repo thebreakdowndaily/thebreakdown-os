@@ -1,7 +1,6 @@
 import type { Principal } from '../principal';
 import { can } from '../policy';
-import type { AppPermission } from '../permissions';
-import { isAppPermission } from '../permissions';
+import { APP_PERMISSIONS, isAppPermission, type AppPermission } from '../permissions';
 import type { ApiKeyRateLimitTier, ApiKeyRole } from './types';
 
 const API_KEY_ROLES: readonly ApiKeyRole[] = [
@@ -36,8 +35,9 @@ export type ApiKeyDelegationDecision =
 
 /**
  * Ensures an API-key creator cannot delegate authority that they do not hold.
- * Role grants and permission grants are checked independently because roles
- * can confer capabilities even when an explicit permission list is empty.
+ * Non-empty explicit scopes replace role defaults at authorization time. With
+ * no explicit scopes, the target key receives the permissions implied by its
+ * role, so those role defaults must be bounded by the creator's authority too.
  */
 export function authorizeApiKeyDelegation(
   principal: Principal,
@@ -121,13 +121,38 @@ export function authorizeApiKeyDelegation(
     };
   }
 
-  const denied = permissions.find((permission) => !can(principal, permission));
-  if (denied) {
+  // Calculate effective grants with the same central policy used at runtime.
+  // Explicit non-empty permissions on the creator are honoured by can().
+  const creatorPermissions = new Set(
+    APP_PERMISSIONS.filter((permission) => can(principal, permission))
+  );
+
+  // An elevated key is privileged independently of the normal role policy.
+  // Only a superadmin can issue one, so model its effective set conservatively.
+  // For a non-elevated key with explicit scopes, the scopes are its effective
+  // permissions; otherwise, evaluate role defaults exactly as can() will.
+  const targetPermissions = elevatedRole
+    ? [...APP_PERMISSIONS]
+    : permissions.length > 0
+      ? permissions
+      : APP_PERMISSIONS.filter((permission) =>
+          can(
+            {
+              ...principal,
+              role: role as Principal['role'],
+              isSuperAdmin: false,
+              permissions: undefined,
+            },
+            permission
+          )
+        );
+
+  if (targetPermissions.some((permission) => !creatorPermissions.has(permission))) {
     return {
       allowed: false,
       status: 403,
       code: 'PERMISSION_ESCALATION',
-      message: 'You cannot delegate permissions you do not hold',
+      message: 'You cannot delegate role defaults or permissions you do not hold',
     };
   }
 
