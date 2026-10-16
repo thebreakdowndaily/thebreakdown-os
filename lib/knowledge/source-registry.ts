@@ -228,8 +228,6 @@ export function seedSources(): void {
       verificationStatus: 'verified',
     },
     {
-      
-    {
       id: 's10',
       title: 'The Long Partition and the Making of Modern South Asia: Refugees, Boundaries, Histories',
       url: 'https://cup.columbia.edu/book/the-long-partition-and-the-making-of-modern-south-asia/9780231511018/',
