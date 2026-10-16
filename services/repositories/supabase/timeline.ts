@@ -33,7 +33,7 @@ export class SupabaseTimelineRepository implements TimelineService {
   }
 
   async deleteTimeline(id: string) {
-    const { error } = await this.e().deletthis.e().eq('id', id);
+    const { error } = await this.e().delete().eq('id', id);
     if (error) throw error;
   }
 
@@ -69,6 +69,6 @@ function rowFromTimeline(t: Timeline): TimelineInsert {
     entity_ids: t.entityIds,
     topic_ids: t.topicIds,
     events: t.events,
-    updated_at: new Datthis.e().toISOString(),
+    updated_at: new Date().toISOString(),
   };
 }
