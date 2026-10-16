@@ -1339,8 +1339,8 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-histo-raghavan-2', type: 'paragraph',
     data: {
-      text: 'Raghavan\'s evidence base is exceptional in its breadth: he draws on Indian, British, American, and Pakistani archival sources, in multiple languages, to reconstruct the strategic calculations behind key decisions. His treatment of the Kashmir UN referral is a model of balanced analysis, situating Nehru\'s decision within the constraints of limited military capability, the need for international legitimacy, and the hope that the UN would pressure Pakistan to withdraw its forces. Critics from the nationalist school argue that Raghavan understates the normative dimension of Indian foreign policy — the genuine commitment to anti-colonialism and international law that Nehru articulated. From the realist side, critics contend that he overstates the coherence of Indian strategy, which was often reactive and improvised rather than planned. Regardless, War and Peace in Modern India is widely considered the definitive account of the subject, and Raghavan\'s later work — India\'s War: The Making of Modern South Asia, 1939-1945 (2016) and The Most Dangerous Place: A History of the United States in South Asia (2024) — has cemented his reputation as the leading historian of Indian international relations.',
-      citations: ['s32'],
+      text: 'Raghavan\'s evidence base is exceptional in its breadth: he draws on Indian, British, American, and Pakistani archival sources, in multiple languages, to reconstruct the strategic calculations behind key decisions. His treatment of the Kashmir UN referral is a model of balanced analysis, situating Nehru\'s decision within the constraints of limited military capability, the need for international legitimacy, and the hope that the UN would pressure Pakistan to withdraw its forces. Critics from the nationalist school argue that Raghavan understates the normative dimension of Indian foreign policy — the genuine commitment to anti-colonialism and international law that Nehru articulated. From the realist side, critics contend that he overstates the coherence of Indian strategy, which was often reactive and improvised rather than planned. Regardless, War and Peace in Modern India is widely considered the definitive account of the subject, and Raghavan\'s later work — India\'s War: The Making of Modern South Asia, 1939-1945 (2016) and The Most Dangerous Place: A History of the United States in South Asia (2018) — has cemented his reputation as the leading historian of Indian international relations.',
+      citations: ['s32', 's33', 's34'],
     },
   },
   // ── Ramachandra Guha ──
@@ -3065,7 +3065,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
               order: 1,
               difficulty: 2,
               version: { major: 1, minor: 0, patch: 0, label: 'initial' },
-              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 32, heroImageAlt: 'India map and historical documents' },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 34, heroImageAlt: 'India map and historical documents' },
               readingTime: { explorer: 30, scholar: 75, researcher: 200 },
               studyTime: { explorer: 45, scholar: 120, researcher: 480 },
               content: chapter1Blocks,
