@@ -1,6 +1,6 @@
 import { getSupabaseAuth } from './auth-server';
 import { isDemoMode, DEMO_USER } from './demo';
-import { extractAuthoritativeRole, normalizeIntelRole, type IntelRole } from './roles';
+import { extractAuthoritativeRole, isDatabaseRoleSuperAdmin, normalizeIntelRole, type IntelRole } from './roles';
 import type { User } from '@supabase/supabase-js';
 import type { AppPermission } from './permissions';
 
@@ -108,7 +108,7 @@ export async function getCurrentPrincipal(): Promise<Principal | null> {
     // 1. Authoritative database lookup
     const dbRole = await fetchUserRoleFromDatabase(user.id);
     if (dbRole) {
-      const isSuperAdmin = dbRole.role === 'owner' || user.app_metadata.is_super_admin === true;
+      const isSuperAdmin = isDatabaseRoleSuperAdmin(dbRole.role);
       const isBanned = Boolean(user.banned_until && new Date(user.banned_until) > new Date());
       const status = (dbRole.status === 'suspended' || isBanned) ? 'suspended' : 'active';
 
