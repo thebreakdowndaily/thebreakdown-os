@@ -21,10 +21,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: {
-  const auth = await requireApiPermission('timeline.update', request);
-  if ('response' in auth) return auth.response; params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireApiPermission('timeline.update', request);
+  if ('response' in auth) return auth.response;
+
   const { id } = await context.params;
   const existing = await repo.getTimeline(id);
   if (!existing) {
@@ -39,11 +40,12 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: NextRequest,
-  context: {
-  const auth = await requireApiPermission('timeline.delete', _request);
-  if ('response' in auth) return auth.response; params: Promise<{ id: string }> }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireApiPermission('timeline.delete', request);
+  if ('response' in auth) return auth.response;
+
   const { id } = await context.params;
   const timeline = await repo.getTimeline(id);
   if (!timeline) {
