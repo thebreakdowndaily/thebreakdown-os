@@ -3,6 +3,7 @@ import type { CanonicalClaim, CanonicalSource, Chapter } from '../types/canonica
 import { getChapterEvidenceCounts } from '../lib/knowledge/trust-metrics';
 import { isChapterPubliclyPublished } from '../lib/knowledge/chapter-publication';
 import { getKnowledgeLibrarySeedData } from '../utils/data-layer/knowledge-library-data';
+import { getKnowledgeCore } from '../lib/knowledge/knowledge-core';
 
 function makeClaim(overrides: Partial<CanonicalClaim> = {}): CanonicalClaim {
   return {
@@ -73,8 +74,21 @@ describe('trust metrics data lineage', () => {
     const content = chapter?.content;
     const uniqueCitedSourceIds = collectSourceIds(content);
     const metadata = chapter?.metadata as { sourceCount?: number } | undefined;
+    const registrySources = getKnowledgeCore().sources.all();
+    const registryIds = new Set(registrySources.map((source) => source.id));
+    const missingCitedSources = [...uniqueCitedSourceIds].filter((id) => !registryIds.has(id));
+    const chapterLinkedSources = registrySources.filter((source) => source.chapterIds?.includes('kl-ch-1'));
+
     expect(uniqueCitedSourceIds.size).toBe(32);
     expect(metadata?.sourceCount).toBe(uniqueCitedSourceIds.size);
+    expect(missingCitedSources).toEqual([]);
+    expect(registryIds.has('s32')).toBe(true);
+    // s30 is additionally linked through a canonical claim's evidence even
+    // though it is not a direct block citation, so registry relationships can
+    // legitimately exceed the unique direct-citation count by one.
+    expect(chapterLinkedSources.some((source) => source.id === 's30')).toBe(true);
+    expect(chapterLinkedSources.some((source) => source.id === 's32')).toBe(true);
+    expect(chapterLinkedSources.length).toBe(33);
   });
 
 
