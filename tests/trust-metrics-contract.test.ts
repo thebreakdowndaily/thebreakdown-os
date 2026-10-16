@@ -94,6 +94,13 @@ describe('trust metrics data lineage', () => {
     expect(chapterLinkedSources.some((source) => source.id === 's33')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's34')).toBe(true);
     expect(chapterLinkedSources.length).toBe(35);
+    const verifiedPlaceholderSources = registrySources.filter(
+      (source) => source.url.includes('example.com') && source.verificationStatus === 'verified',
+    );
+    expect(verifiedPlaceholderSources).toEqual([]);
+    for (const id of ['s12', 's13', 's14', 's21', 's28', 's29', 's30']) {
+      expect(registrySources.find((source) => source.id === id)?.verificationStatus).toBe('unverified');
+    }
   });
 
 
