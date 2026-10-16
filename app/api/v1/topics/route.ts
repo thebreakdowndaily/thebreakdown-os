@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTopicRepository } from '@/services/repositories/supabase/topic';
 import type { Topic, APIResponse, APIListParams } from '@/types/canonical';
@@ -18,6 +19,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('topic.create', request);
+  if ('response' in auth) return auth.response;
   const body = (await request.json()) as Partial<Topic>;
 
   const now = new Date().toISOString();
