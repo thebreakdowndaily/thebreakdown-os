@@ -24,6 +24,9 @@ const nestedStory = {
   relatedEntityIds: [],
   relatedTopicIds: [],
   notes: 'top-level private note',
+  metadata: { classification: 'governance', location: 'India', staffId: 'secret', internal_notes: 'secret' },
+  freshness: { status: 'Fresh', lastVerified: '2026-10-01T00:00:00.000Z', confidence: 0.9, primarySourcesCount: 2, internal_review_id: 'secret' },
+  versionHistory: [{ date: '2026-10-01', description: 'Public correction', staffNotes: 'secret' }],
   blocks: [{
     id: 'block-1',
     type: 'paragraph',
@@ -95,6 +98,10 @@ describe('nested public story projection', () => {
   it('allowlists typed nested fields and strips known private keys recursively', () => {
     const result = toPublicStory(nestedStory) as unknown as Record<string, any>;
     expect(result).not.toHaveProperty('notes');
+    expect(result.metadata).toEqual({ classification: 'governance', location: 'India' });
+    expect(result.freshness).toMatchObject({ status: 'Fresh', primarySourcesCount: 2 });
+    expect(result.freshness).not.toHaveProperty('internal_review_id');
+    expect(result.versionHistory).toEqual([{ date: '2026-10-01', description: 'Public correction' }]);
     expect(result.blocks[0]).not.toHaveProperty('staffId');
     expect(result.blocks[0].data).toMatchObject({ text: 'Reader-facing paragraph' });
     expect(result.blocks[0].data).not.toHaveProperty('scheduledAt');
