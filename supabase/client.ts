@@ -68,7 +68,9 @@ export function getAnonClient(): SupabaseClient<TypedDatabase> {
  * Returns an authoritative user-scoped Supabase client that preserves JWT context
  * and is constrained by PostgreSQL Row Level Security (RLS).
  */
-export async function createUserScopedClient(): Promise<SupabaseClient<TypedDatabase>> {
+export async function createUserScopedClient(
+  options: { fallbackToAnon?: boolean } = {},
+): Promise<SupabaseClient<TypedDatabase>> {
   if (typeof window !== 'undefined') {
     return getBrowserClient();
   }
@@ -92,7 +94,11 @@ export async function createUserScopedClient(): Promise<SupabaseClient<TypedData
       },
     });
   } catch {
-    // Outside request context (e.g. build-time or background execution)
+    // Request-bound write paths can opt out of anonymous fallback and fail closed.
+    if (options.fallbackToAnon === false) {
+      throw new Error('Authenticated Supabase request context unavailable');
+    }
+    // Preserve the existing fallback for non-strict callers (e.g. build-time work).
     return getAnonClient();
   }
 }
