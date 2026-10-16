@@ -79,16 +79,20 @@ describe('trust metrics data lineage', () => {
     const missingCitedSources = [...uniqueCitedSourceIds].filter((id) => !registryIds.has(id));
     const chapterLinkedSources = registrySources.filter((source) => source.chapterIds?.includes('kl-ch-1'));
 
-    expect(uniqueCitedSourceIds.size).toBe(32);
+    expect(uniqueCitedSourceIds.size).toBe(34);
     expect(metadata?.sourceCount).toBe(uniqueCitedSourceIds.size);
     expect(missingCitedSources).toEqual([]);
     expect(registryIds.has('s32')).toBe(true);
+    expect(registryIds.has('s33')).toBe(true);
+    expect(registryIds.has('s34')).toBe(true);
     // s30 is additionally linked through a canonical claim's evidence even
     // though it is not a direct block citation, so registry relationships can
     // legitimately exceed the unique direct-citation count by one.
     expect(chapterLinkedSources.some((source) => source.id === 's30')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's32')).toBe(true);
-    expect(chapterLinkedSources.length).toBe(33);
+    expect(chapterLinkedSources.some((source) => source.id === 's33')).toBe(true);
+    expect(chapterLinkedSources.some((source) => source.id === 's34')).toBe(true);
+    expect(chapterLinkedSources.length).toBe(35);
   });
 
 
