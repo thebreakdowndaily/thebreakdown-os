@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseEntityRepository } from '@/services/repositories/supabase/entity';
 import type { Entity, APIResponse } from '@/types/canonical';
@@ -22,7 +23,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ slug: string }> }
+  context: {
+  const auth = await requireApiPermission('entity.update', request);
+  if ('response' in auth) return auth.response; params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
   const existing = await repo.getEntityBySlug(slug);
@@ -41,7 +44,9 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  context: { params: Promise<{ slug: string }> }
+  context: {
+  const auth = await requireApiPermission('entity.delete', _request);
+  if ('response' in auth) return auth.response; params: Promise<{ slug: string }> }
 ) {
   const { slug } = await context.params;
   const entity = await repo.getEntityBySlug(slug);
