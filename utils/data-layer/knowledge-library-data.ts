@@ -79,7 +79,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-exec-summary', type: 'callout',
     data: {
       variant: 'info',
-      text: '• FOUNDATIONAL TRAUMA: India began its independent existence in August 1947 amid the trauma of Partition — the largest forced migration in human history, displacing 14.5 million people and claiming 800,000 to 1 million lives.\n• STRATEGIC VULNERABILITY: The immediate outbreak of war in Kashmir and its subsequent referral to the United Nations Security Council in 1948 created a permanent diplomatic and territorial friction point with Pakistan.\n• GEOPOLITICAL ALIGNMENT: To secure domestic unity and preserve its newly won sovereignty, India adopted a civic model of constitutional secularism and pursued strategic autonomy through Non-Alignment.',
+      text: "• FOUNDATIONAL TRAUMA: India became independent amid Partition's mass displacement and communal violence. Estimates vary, but roughly 12–20 million people crossed the new borders and deaths are commonly estimated in the hundreds of thousands to around one million.\n• STRATEGIC VULNERABILITY: The 1947–48 Kashmir war and India's referral to the UN created an enduring territorial and diplomatic dispute with Pakistan; the legal and political implications remain contested.\n• GEOPOLITICAL ALIGNMENT: India adopted constitutional secularism and pursued strategic autonomy through Non-Alignment, shaped by anti-colonial politics and the emerging Cold War as well as Partition.",
     },
   },
   // ── 2. Evidence Summaries ──
@@ -91,7 +91,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       confidence: 'established',
       primarySources: [
         { sourceId: 's11', relevance: 'direct', excerpt: 'The Indian Independence Act dissolved the British Indian Empire and transferred power to two dominions, creating the legal framework for the largest forced migration of the twentieth century.' },
-        { sourceId: 's13', relevance: 'direct', excerpt: 'The Radcliffe Award\'s borders were drawn in just five weeks by a commission that had never visited India, slicing through villages, irrigation systems, and communities.' },
+        { sourceId: 's13', relevance: 'direct', excerpt: 'The Radcliffe Award was produced under an exceptionally compressed timetable of about five weeks. Radcliffe himself had never previously visited India; the boundary lines cut through villages, irrigation systems, and communities.' },
       ],
       secondarySources: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Guha documents how Partition\'s violence created an immediate security crisis that consumed the new government\'s attention and shaped its institutional priorities.' },
@@ -134,7 +134,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-evidence-demographic', type: 'evidence-summary', depth: ['scholar', 'researcher'],
     data: {
       claim: 'The mass migration of 14.5 million people constituted the largest forced migration of the twentieth century and permanently transformed the demographic landscape of South Asia',
-      evidenceSummary: 'Between August and December 1947, approximately 14.5 million people crossed the new borders between India and Pakistan. The migration was concentrated in Punjab, where whole districts emptied and refilled within weeks. The 1951 Census documented the scale of the transformation: West Punjab\'s non-Muslim population fell from 16% to less than 1%; East Punjab\'s Muslim population fell from 33% to less than 5%. The exchange of populations was not planned by any government and was driven entirely by violence and fear. The demographic transformation created permanent constituencies of refugee voters in both countries whose political influence ensured that Partition grievances remained politically salient for generations.',
+      evidenceSummary: 'Between August and December 1947, approximately 14.5 million people crossed the new borders between India and Pakistan. The migration was concentrated in Punjab, where whole districts emptied and refilled within weeks. The 1951 Census documented the scale of the transformation: West Punjab\'s non-Muslim population fell from 16% to less than 1%; East Punjab\'s Muslim population fell from 33% to less than 5%. The population movements did not follow a single, comprehensive exchange plan. They unfolded through violence, fear, local decisions, and administrative responses as people sought safety across the new borders. The demographic transformation helped create long-lived refugee communities and political constituencies in both countries, keeping Partition memories and grievances salient for generations.',
       confidence: 'established',
       primarySources: [
         { sourceId: 's9', relevance: 'direct', excerpt: 'The 1941 Census provides the baseline demographic data against which the 1951 Census measured the transformation caused by Partition migration.' },
@@ -253,7 +253,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-empire-11', type: 'paragraph',
     data: {
-      text: 'The Mountbatten Plan, announced on 3 June 1947, proposed the partition of British India into two independent dominions: India and Pakistan. Punjab and Bengal, the two provinces with mixed Hindu-Muslim populations, would be divided. A Boundary Commission chaired by Sir Cyril Radcliffe, a British lawyer who had never visited India, would demarcate the borders. The princely states would be released from British paramountcy and left free to accede to either dominion. The entire transfer of power was scheduled for 15 August 1947 — just ten weeks after the plan\'s announcement. It was the fastest negotiated end to an empire in modern history.',
+      text: 'The Mountbatten Plan, announced on 3 June 1947, proposed the partition of British India into two independent dominions: India and Pakistan. Punjab and Bengal, the two provinces with mixed Hindu-Muslim populations, would be divided. A Boundary Commission chaired by Sir Cyril Radcliffe, a British lawyer who had never visited India, would demarcate the borders. The princely states would be released from British paramountcy and left free to accede to either dominion. The entire transfer of power was scheduled for 15 August 1947 — just ten weeks after the plan\'s announcement. It was among the most compressed negotiated transfers of imperial power in modern history.',
       citations: ['s1', 's11', 's12'],
     },
   },
@@ -394,7 +394,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-15', type: 'paragraph',
     data: {
-      text: 'The internationalisation of Kashmir would prove deeply controversial in Indian strategic discourse. Critics argued that Nehru\'s faith in international institutions was naive and that by taking the case to the UN, India had voluntarily given Pakistan a seat at the table on a question India considered legally settled. The plebiscite demanded by Resolution 47 was never held — because, India later argued, Pakistan never withdrew its forces as required by the resolution — but the demand for it became the central plank of Pakistan\'s diplomatic position for the next seven decades.',
+      text: 'The internationalisation of Kashmir would prove deeply controversial in Indian strategic discourse. Critics argued that Nehru\'s faith in international institutions was naive and that by taking the case to the UN, India had voluntarily given Pakistan a seat at the table on a question India considered legally settled. The plebiscite envisaged by Resolution 47 was never held. India has cited Pakistan\'s failure to withdraw first; later disagreements over demilitarisation, sequencing, and the resolution\'s implementation also shaped the dispute.',
       citations: ['s1', 's6'],
     },
   },
@@ -529,7 +529,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
           description: 'India would invoke Article 35 of the UN Charter, referring the dispute to the Security Council while continuing military operations to defend Kashmir.',
           proponents: ['Jawaharlal Nehru', 'V.K. Krishna Menon', 'G.S. Bajpai'],
           opponents: ['Sardar Patel', 'The Hindu nationalist press', 'Some Congress hawks'],
-          outcome: 'The UN passed Resolution 47 calling for a ceasefire and plebiscite. The plebiscite was never held, but the resolution became the diplomatic foundation of Pakistan\'s position for 75 years.',
+          outcome: 'The UN Security Council adopted Resolution 47, setting out a ceasefire and a conditional process for a plebiscite. The conditions were not fully implemented, and the resolution remains central to competing Indian and Pakistani diplomatic narratives.',
           counterfactual: 'If India had not internationalised the dispute, Pakistan might have faced a purely bilateral military confrontation that it was losing, potentially leading to a more decisive Indian victory and a settlement on Indian terms.',
         },
         {
@@ -715,7 +715,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
         },
         {
           title: 'Naive Internationalisation of Kashmir',
-          summary: 'By taking the Kashmir dispute to the UN, Nehru voluntarily internationalised a conflict that India was winning on the ground, giving Pakistan a diplomatic platform it would not otherwise have had and subjecting India to international pressure for a plebiscite that became a permanent diplomatic liability.',
+          summary: 'By taking the Kashmir dispute to the UN, Nehru internationalised a conflict in the expectation that international institutions would support India\'s position. Critics see this as a strategic error; others emphasize the immediate military context and the attempt to secure an international response. The long-term consequences remain debated.',
           counterarguments: [
             { sourceId: 's1', relevance: 'supporting', excerpt: 'Nehru genuinely believed the UN would recognise the validity of India\'s position, and the UN\'s failure to enforce its own resolution was a failure of the institution, not of India\'s approach.' },
           ],
@@ -941,7 +941,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       arguments: [
         {
           title: 'Accelerated Timetable',
-          summary: 'Mountbatten\'s single most consequential decision was to advance the date of British withdrawal from June 1948 to August 1947 — a compression of the transition from eleven months to three. He calculated that a longer transition would allow communal violence to spread, that the British political will for maintaining order was exhausted, and that the Indian parties would never agree on a united constitutional framework. The accelerated timetable, however, meant that the Radcliffe Boundary Commission had only five weeks to draw the borders of two new nations, with catastrophic consequences for the millions whose villages, irrigation systems, and communities were divided by a line drawn in haste by a British lawyer who had never visited India.',
+          summary: 'One of Mountbatten\'s most consequential decisions was to advance British withdrawal from June 1948 to August 1947, cutting the planned transition by roughly ten months. He calculated that a longer transition would allow communal violence to spread, that the British political will for maintaining order was exhausted, and that the Indian parties would never agree on a united constitutional framework. The accelerated timetable, however, meant that the Radcliffe Boundary Commission had only five weeks to draw the borders of two new nations, with catastrophic consequences for the millions whose villages, irrigation systems, and communities were divided by a line drawn in haste by a British lawyer who had never visited India.',
           supportingEvidence: [
             { sourceId: 's5', relevance: 'direct', excerpt: 'Freedom at Midnight documents Mountbatten\'s decision to advance the transfer of power and the chaotic process of boundary demarcation.' },
             { sourceId: 's16', relevance: 'direct', excerpt: 'Khan argues that the accelerated timetable was a direct cause of the administrative collapse that enabled Partition violence.' },
@@ -1443,7 +1443,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-strategic-learned-4', type: 'paragraph',
     data: {
-      text: 'Fourth, Partition showed that borders matter — and that uncertain borders are a permanent source of conflict. The Radcliffe Line, drawn in five weeks by a British lawyer who had never visited India, left the subcontinent with indefensible borders, divided river systems, separated villages from their markets, and created one of the world\'s most intractable territorial disputes in Kashmir. India\'s subsequent insistence on well-defined, internationally recognised borders — and its reluctance to enter into territorial negotiations that might reopen unsettled questions — reflects this painful lesson.',
+      text: 'Fourth, Partition showed that borders matter—and that disputed or poorly understood borders can become recurring sources of conflict. The Radcliffe Line, drawn in five weeks by a British lawyer who had never visited India, left the subcontinent with indefensible borders, divided river systems, separated villages from their markets, and created one of the world\'s most intractable territorial disputes in Kashmir. India\'s subsequent insistence on well-defined, internationally recognised borders — and its reluctance to enter into territorial negotiations that might reopen unsettled questions — reflects this painful lesson.',
       citations: ['s1', 's5'],
     },
   },
@@ -1508,7 +1508,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-strategic-legacy-1', type: 'paragraph',
     data: {
-      text: 'The strategic legacy of Partition is not merely historical — it is visible in every major dimension of contemporary Indian foreign policy. India\'s relationship with Pakistan remains defined by the unresolved questions of 1947: Kashmir, cross-border terrorism, water sharing, and the fundamental dispute over the legitimacy of the two-nation theory. India\'s approach to China is coloured by the trauma of 1962, which itself was partly rooted in Nehru\'s post-Partition focus on Pakistan at the expense of Himalayan border security. India\'s insistence on strategic autonomy in its relationships with the United States, Russia, and China is a direct inheritance of Nehru\'s non-alignment, which was itself a response to the experience of Partition and the betrayal of British arbitration.',
+      text: 'Partition remains one influence on contemporary Indian foreign policy, particularly in relations with Pakistan and the dispute over Kashmir. Its effects interact with later conflicts, cross-border terrorism, water-sharing disputes, China's rise, domestic political change, and economic interests. Strategic autonomy also draws on the anti-colonial experience and Cold War non-alignment, so it should not be attributed to Partition alone.',
       citations: ['s1', 's4', 's9', 's19', 's21'],
     },
   },
@@ -3140,7 +3140,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 },
                 {
                   misconception: 'The Radcliffe Line was drawn with care to minimise disruption.',
-                  correction: 'The boundary was drawn in five weeks by a British lawyer who had never visited India, deliberately kept unaware of the political implications of his decisions.',
+                  correction: 'The boundary was drawn under a five-week timetable by a British lawyer who had not previously visited India. Claims about what he understood or intended should be distinguished from documented facts.',
                   explanation: 'Radcliffe had no expertise in Indian geography or demography. The boundary split villages from their water sources, separated families from their land, and left key infrastructure on the wrong side of the border.',
                 },
                 {
@@ -3300,7 +3300,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 { misconception: 'The tribal invasion was a spontaneous uprising of Pathan tribesmen acting alone.', correction: 'The invasion was planned and supported by Pakistan\'s political and military leadership.', explanation: 'Lamb and Jha\'s research demonstrates logistical coordination, arms supply, and the presence of Pakistani military personnel with the tribal forces.' },
                 { misconception: 'The Instrument of Accession was signed under duress and is therefore invalid.', correction: 'While signed under extreme military pressure, the accession was legally valid under the Indian Independence Act. The question is political, not strictly legal.', explanation: 'International law does not require accession to be free of pressure. The UN itself accepted India\'s right to administer Kashmir pending a plebiscite.' },
                 { misconception: 'India prevented the plebiscite because it knew it would lose.', correction: 'India\'s position was that Pakistan had not fulfilled the preconditions (withdrawal of forces) that the UN itself had established.', explanation: 'UNSCR 47 required Pakistan\'s withdrawal before the plebiscite. Pakistan never withdrew. India\'s objection was consistent with the UN resolution.' },
-                { misconception: 'The Line of Control is a temporary ceasefire line.', correction: 'The 1949 ceasefire line became the de facto permanent border, formalised as the LoC in the 1972 Simla Agreement.', explanation: 'What began as a temporary ceasefire line has been the border for 75+ years and has survived four wars and an insurgency.' },
+                { misconception: 'The Line of Control is a temporary ceasefire line.', correction: 'The 1949 ceasefire line was renamed the Line of Control under the 1972 Simla Agreement. It remains a line of control, not a mutually accepted final international border.', explanation: 'What began as a temporary ceasefire line has been the border for 75+ years and has survived four wars and an insurgency.' },
                 { misconception: 'Sheikh Abdullah was an Indian puppet.', correction: 'Abdullah had his own vision for Kashmir\'s autonomy and was imprisoned by India for 11 years (1953-1964) when he pursued independence.', explanation: 'Abdullah\'s relationship with India was complex — he chose accession to India but consistently demanded the autonomy guaranteed by Article 370 of the Indian Constitution.' },
               ],
               keyTerms: [
