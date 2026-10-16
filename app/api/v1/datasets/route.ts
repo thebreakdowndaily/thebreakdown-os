@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseDatasetRepository } from '@/services/repositories/supabase/dataset';
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import type { Dataset, APIResponse, APIListParams } from '@/types/canonical';
 
 const repo = new SupabaseDatasetRepository();
@@ -20,6 +21,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const auth = await requireApiPermission('dataset.create', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseDatasetRepository(write.client);
 
   const body = (await request.json()) as Partial<Dataset>;
   if (!body.slug?.trim() || !body.title?.trim()) {
@@ -50,7 +54,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.saveDataset(dataset);
+  const saved = await writeRepo.saveDataset(dataset);
   const res: APIResponse<Dataset> = { data: saved };
   return NextResponse.json(res, { status: 201 });
 }
