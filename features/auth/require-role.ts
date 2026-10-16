@@ -6,6 +6,7 @@ import type { AppPermission } from './permissions';
 import { intelRoleRank, type IntelRole } from './roles';
 import { ForbiddenError, UnauthorizedError } from './require-auth';
 import { verifyApiKey } from './api-keys/service';
+import { apiKeyRecordToPrincipal } from './api-keys/principal';
 
 /**
  * Ensures the current caller holds the required permission, throwing ForbiddenError if unauthorized.
@@ -38,15 +39,7 @@ export async function requireApiPermission(
     if (apiKeyHeader) {
       const res = await verifyApiKey(apiKeyHeader);
       if (res.valid && res.key) {
-        principal = {
-          userId: res.key.owner_id || res.key.id,
-          email: `api_key:${res.key.name}`,
-          name: res.key.name,
-          role: res.key.role as IntelRole,
-          isSuperAdmin: res.key.role === 'owner',
-          status: res.key.revoked_at ? 'suspended' : 'active',
-          organizationId: null,
-        };
+        principal = apiKeyRecordToPrincipal(res.key);
       }
     }
   }
