@@ -224,7 +224,7 @@ function extractExportedMutationHandler(source: string, method: ResourceMutation
 
   const start = match.index;
   const remainder = source.slice(start + match[0].length);
-  const nextHandler = remainder.search(/export\\s+async\\s+function\\s+(?:GET|POST|PUT|PATCH|DELETE)\\s*\\(/);
+  const nextHandler = remainder.search(/export\s+async\s+function\s+(?:GET|POST|PUT|PATCH|DELETE)\s*\(/);
   return nextHandler < 0 ? source.slice(start) : source.slice(start, start + match[0].length + nextHandler);
 }
 
