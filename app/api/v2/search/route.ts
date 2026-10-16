@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     const tsq = q.split(/\s+/).filter(Boolean).join(' & ');
     if (tsq) {
-      query = query.textSearch('idx_search_entries_fts', tsq, { config: 'english' });
+      query = query.textSearch('search_vector', tsq, { config: 'english' });
     } else {
       query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
     }
