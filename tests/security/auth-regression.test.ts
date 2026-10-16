@@ -10,7 +10,7 @@
  * 6. Centralized policy guards throw appropriate 401/403 errors.
  */
 
-import { extractAuthoritativeRole, type IntelRole } from '../../features/auth/roles';
+import { extractAuthoritativeRole, isDatabaseRoleSuperAdmin, type IntelRole } from '../../features/auth/roles';
 import { resolvePrincipalFromUser, type Principal } from '../../features/auth/principal';
 import { can } from '../../features/auth/policy';
 import { requirePermission, requireRole } from '../../features/auth/require-role';
@@ -91,6 +91,14 @@ async function runSecuritySuite() {
     assert(ownerPrincipal.isSuperAdmin === true, 'Owner is marked as superadmin');
     assert(can(ownerPrincipal, 'api_key.create') === true, 'Owner can create API keys');
     assert(can(ownerPrincipal, 'user.role.grant') === true, 'Owner can grant roles');
+  }
+
+  // Database role must override stale server-side super-admin metadata.
+  console.log('\n2a. Database Role Downgrade Must Revoke Super-Admin');
+  {
+    assert(isDatabaseRoleSuperAdmin('owner') === true, 'Database owner role grants super-admin status');
+    assert(isDatabaseRoleSuperAdmin('editor') === false, 'Database editor role revokes stale app_metadata.is_super_admin privilege');
+    assert(isDatabaseRoleSuperAdmin('guest') === false, 'Database guest role cannot retain super-admin status');
   }
 
   // 3. Suspended Principal Isolation
