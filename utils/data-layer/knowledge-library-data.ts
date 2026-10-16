@@ -3065,7 +3065,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
               order: 1,
               difficulty: 2,
               version: { major: 1, minor: 0, patch: 0, label: 'initial' },
-              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 34, heroImageAlt: 'India map and historical documents' },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 35, heroImageAlt: 'India map and historical documents' },
               readingTime: { explorer: 30, scholar: 75, researcher: 200 },
               studyTime: { explorer: 45, scholar: 120, researcher: 480 },
               content: chapter1Blocks,
