@@ -1996,8 +1996,8 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-claim-integration', type: 'claim',
     data: {
-      statement: 'The integration of 565 princely states through Patel\'s diplomacy was one of the most successful state-building projects of the twentieth century.',
-      confidence: 'established',
+      statement: "The integration of princely states, led by Patel and Menon, combined negotiation with administrative consolidation; cases such as Junagadh, Hyderabad, and Kashmir also involved coercion or military force and remain contested in historical interpretation.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's18', relevance: 'direct', excerpt: 'Menon\'s insider account details how Patel used diplomatic persuasion, financial pressure, and military threat.' },
         { sourceId: 's1', relevance: 'direct', excerpt: 'Guha documents the integration campaign as a critical success of India\'s founding period.' },
