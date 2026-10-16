@@ -119,7 +119,7 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.founding-trauma',
-      statement: 'The Partition of 1947 constituted a foundational trauma that shaped India\'s national identity, security doctrine, and foreign policy priorities from the moment of independence.',
+      statement: "Partition's violence and displacement became a major formative influence on India's national identity and security thinking, alongside colonial institutions, domestic politics, and later regional conflicts.",
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'The trauma of Partition embedded a deep sensitivity to any external force that could exacerbate internal religious divisions.' },
@@ -162,7 +162,7 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.princely-states',
-      statement: 'The integration of 565 princely states into the Indian Union was a diplomatic and administrative achievement that was directly complicated by the Partition, as rulers of Muslim-majority states faced conflicting pressures.',
+      statement: "The accession and integration of princely states required negotiation; Partition intensified disputes where rulers' choices, population composition, and strategic interests diverged, notably in Kashmir, Junagadh, and Hyderabad.",
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Sardar Patel and V.P. Menon orchestrated the integration of princely states through a combination of diplomacy, incentives, and the occasional use of force.' },
@@ -183,13 +183,13 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.division-of-assets',
-      statement: 'The partition of the British Indian Army, civil service, financial reserves, and railway system required a complex division of inherited institutions and assets, disrupted administrative continuity, and required both successor states to establish separate national institutions.',
+      statement: "Partition required the division of inherited military, administrative, financial, and transport assets. The process disrupted continuity and required both successor states to establish separate institutions, though the effects were not identical in India and Pakistan.",
       confidence: 'established',
       evidence: [
         { sourceId: 's1', relevance: 'supporting', excerpt: 'Partition required both successor states to divide inherited military, administrative, and financial assets while establishing separate national institutions.' },
         { sourceId: 's11', relevance: 'supporting', excerpt: 'The Indian Independence Act established the legal framework for the division into two dominions.' },
-        { sourceId: 's35', relevance: 'direct', excerpt: 'A scholarly study examines the division of assets between India and Pakistan at Partition.' },
-        { sourceId: 's36', relevance: 'direct', excerpt: 'The National Army Museum documents the division of the Indian Army at independence.' },
+        { sourceId: 's35', relevance: 'direct', excerpt: 'The process of dividing the government assets and liabilities between India and Pakistan' },
+        { sourceId: 's36', relevance: 'direct', excerpt: 'Around 260,000 men, mainly Hindus and Sikhs, went to India. And 140,000 men, mainly Muslims, went to Pakistan.' },
       ],
       counterArguments: ['India inherited the bulk of the military assets, civil service institutions, and financial reserves, and the division arguably gave India a stronger institutional foundation than many post-colonial states.'],
       sourceIds: ['s1', 's11', 's35', 's36'],
@@ -205,8 +205,8 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.security-paradigm',
-      statement: 'Partition created a security paradigm that viewed Pakistan as an existential threat and directed India\'s military posture, intelligence priorities, and diplomatic strategy toward the western border for the next seven decades.',
-      confidence: 'established',
+      statement: "Conflict with Pakistan, including the Kashmir dispute and subsequent wars, became a major influence on India's western-front defence planning and intelligence priorities, while China and other regional challenges also shaped Indian security policy.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's21', relevance: 'direct', excerpt: 'The western border became the primary theatre of Indian military planning from 1947 onward, a reality that persisted through four wars and multiple crises.' },
         { sourceId: 's23', relevance: 'direct', excerpt: 'India\'s intelligence apparatus and military deployments were overwhelmingly oriented toward the Pakistan threat for decades after Partition.' },
@@ -226,10 +226,10 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.relations-pakistan-permanent',
-      statement: 'The unresolved issues of Partition — Kashmir, minority rights, water-sharing, and the very legitimacy of the two-nation theory — created a permanent state of hostility between India and Pakistan that no government on either side has been able to overcome.',
-      confidence: 'established',
+      statement: "The unresolved legacies of Partition—especially Kashmir, minority rights, and water-sharing—have repeatedly strained India–Pakistan relations, although periods of dialogue and détente show that hostility has not been constant or inevitable.",
+      confidence: 'debated',
       evidence: [
-        { sourceId: 's23', relevance: 'direct', excerpt: 'Every major India-Pakistan confrontation — 1947, 1965, 1971, 1999, 2001, 2016 — can be traced directly to the unresolved legacies of Partition.' },
+        { sourceId: 's23', relevance: 'direct', excerpt: 'The nations of India and Pakistan have been locked in a seemingly endless spiral of hostility over the disputed territory of Kashmir.' },
         { sourceId: 's28', relevance: 'supporting', excerpt: 'Water-sharing disputes over the Indus system remained a source of tension despite the Indus Waters Treaty of 1960.' },
         { sourceId: 's30', relevance: 'contextual', excerpt: 'The two-nation theory that justified Partition continued to undermine the possibility of normalized relations by denying the shared heritage of both nations.' },
       ],
@@ -247,14 +247,14 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.kashmir-unfinished',
-      statement: 'Kashmir became the unfinished business of Partition — a territorial dispute that symbolized the failure of both the two-nation theory and the secular nationalist vision, and that has defied resolution for over seven decades.',
-      confidence: 'established',
+      statement: "Kashmir remained one of Partition's most enduring unresolved territorial disputes and became central to competing Indian and Pakistani national narratives; its legal status and political resolution have been interpreted differently by the parties and international actors.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's21', relevance: 'direct', excerpt: 'Kashmir\'s contested status was a direct consequence of Partition\'s incomplete resolution of the communal question in princely states.' },
         { sourceId: 's23', relevance: 'supporting', excerpt: 'The Kashmir dispute has been the primary irritant in India-Pakistan relations and the most persistent legacy of Partition.' },
         { sourceId: 's6', relevance: 'supporting', excerpt: 'UN Security Council Resolution 47 called for a plebiscite, entrenching the international dimension of the dispute.' },
       ],
-      counterArguments: ['India maintains that the Instrument of Accession resolved the legal status of Kashmir and that Pakistan\'s claim is based on an illegitimate invasion. From this perspective, there is no "unfinished business" — only Pakistan\'s refusal to accept reality.'],
+      counterArguments: ['India’s official position is that accession was legally valid and settled the state’s status; Pakistan’s position and other interpretations emphasize the dispute’s unresolved political dimension and the subsequent UN process.'],
       sourceIds: ['s1', 's6', 's8', 's21', 's23'],
       documentIds: ['doc-kashmir-accession', 'doc-un-res-47'],
       entityIds: ['kashmir', 'india', 'pakistan', 'hari-singh', 'sheikh-abdullah', 'jawaharlal-nehru'],
@@ -442,7 +442,7 @@ export function seedClaims(): void {
         { sourceId: 's14', relevance: 'supporting', excerpt: 'India argued the accession was legally valid under the Indian Independence Act, while Pakistan maintained it was coerced and did not reflect the will of Kashmir\'s Muslim majority.' },
         { sourceId: 's6', relevance: 'contextual', excerpt: 'The UN Security Council resolution of 1948 complicated the legal picture by calling for a plebiscite, implicitly questioning the finality of the accession.' },
       ],
-      counterArguments: ['International legal opinion has generally supported the validity of the accession, while noting that the UN Security Council resolution 47 complicated matters by calling for a plebiscite.'],
+      counterArguments: ['India maintains that the Instrument of Accession was legally valid. Pakistan disputes India’s position and emphasizes the unresolved political status of the territory and the UN process; Resolution 47 should be read in its stated conditions rather than treated as a blanket ruling on accession.'],
       sourceIds: ['s1', 's6', 's14', 's8'],
       documentIds: ['doc-kashmir-accession', 'doc-un-res-47'],
       entityIds: ['kashmir', 'india', 'pakistan', 'hari-singh', 'jawaharlal-nehru'],
