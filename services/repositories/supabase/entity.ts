@@ -1,16 +1,18 @@
 import type { Entity, EntityKind, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
 import type { TypedDatabase } from '@/supabase/client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { RawEntityRepository } from '../../interfaces/entity';
 
 type EntityRow = TypedDatabase['public']['Tables']['entities']['Row'];
 type EntityInsert = TypedDatabase['public']['Tables']['entities']['Insert'];
 
-function e() { return db().from('entities'); }
-
 export class SupabaseEntityRepository implements RawEntityRepository {
+  constructor(private readonly client?: SupabaseClient<TypedDatabase>) {}
+
+  private e() { return (this.client ?? db()).from('entities'); }
   async getEntities(params?: APIListParams): Promise<APIResponse<Entity[]>> {
-    let query = e().select('*', { count: 'exact' });
+    let query = this.e().select('*', { count: 'exact' });
     if (params?.search) query = query.or(`name.ilike.%${params.search}%,description.ilike.%${params.search}%`);
     if (params?.page && params?.pageSize) query = query.range((params.page - 1) * params.pageSize, params.page * params.pageSize - 1);
     const { data, count, error } = await query.order('name');
@@ -19,36 +21,36 @@ export class SupabaseEntityRepository implements RawEntityRepository {
   }
 
   async getEntity(id: string) {
-    const { data, error } = await e().select('*').eq('id', id).single();
+    const { data, error } = await this.e().select('*').eq('id', id).single();
     if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
     return data ? rowToEntity(data) : undefined;
   }
 
   async getEntityBySlug(slug: string) {
-    const { data, error } = await e().select('*').eq('slug', slug).single();
+    const { data, error } = await this.e().select('*').eq('slug', slug).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToEntity(data) : undefined;
   }
 
   async getEntitiesByType(type: EntityKind) {
-    const { data, error } = await e().select('*').eq('type', type);
+    const { data, error } = await this.e().select('*').eq('type', type);
     if (error) throw error;
     return (data || []).map(rowToEntity);
   }
 
   async save(entity: Entity) {
-    const { data, error } = await e().upsert(rowFromEntity(entity)).select().single();
+    const { data, error } = await this.e().upsert(rowFromEntity(entity)).select().single();
     if (error) throw error;
     return rowToEntity(data);
   }
 
   async delete(id: string) {
-    const { error } = await e().delete().eq('id', id);
+    const { error } = await this.e().deletthis.e().eq('id', id);
     if (error) throw error;
   }
 
   async count() {
-    const { count, error } = await e().select('*', { count: 'exact', head: true });
+    const { count, error } = await this.e().select('*', { count: 'exact', head: true });
     if (error) throw error;
     return count || 0;
   }
@@ -100,6 +102,6 @@ function rowFromEntity(e: Entity): EntityInsert {
     statistics: e.statistics,
     timeline: e.timeline,
     faq: e.faq,
-    updated_at: new Date().toISOString(),
+    updated_at: new Datthis.e().toISOString(),
   };
 }
