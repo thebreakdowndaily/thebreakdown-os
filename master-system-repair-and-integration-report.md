@@ -1,13 +1,14 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3, 4 & 5A: Post-Merge Deployment Recovery, Release Hygiene & Radar Authorization Boundary Remediation
+## Missions 3, 4, 5A & 5B: Post-Merge Deployment Recovery, Release Hygiene, Radar Authorization Remediation & API Key Role Consistency
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
 **Production URL:** [https://thebreakdown.in](https://thebreakdown.in)  
 **Primary Released PR:** [PR #86](https://github.com/thebreakdowndaily/thebreakdown-os/pull/86) (`MERGED` at commit `4d83560851552c7a5826261a0ffa13848feb0420`)  
-**Mission 3/4/5 Documentation PR:** [PR #87](https://github.com/thebreakdowndaily/thebreakdown-os/pull/87) (`OPEN` / `DRAFT`)  
+**Mission Documentation PR:** [PR #87](https://github.com/thebreakdowndaily/thebreakdown-os/pull/87) (`OPEN` / `DRAFT`)  
 **Vercel Deployment Policy PR:** [PR #69](https://github.com/thebreakdowndaily/thebreakdown-os/pull/69) (`OPEN` / `DRAFT`, rebased on `4d835608`)  
 **Radar Authorization Remediation PR:** [PR #72](https://github.com/thebreakdowndaily/thebreakdown-os/pull/72) (`OPEN` / `DRAFT`, rebased on `4d835608`, head `2402c18e`, closes #67)  
+**API Key Role Consistency PR:** [PR #74](https://github.com/thebreakdowndaily/thebreakdown-os/pull/74) (`OPEN` / `DRAFT`, rebased on `2402c18e`, head `6b57dc4f`, closes #73)  
 **Working Branch:** `mission/post-merge-verification-2026-10-16`  
 **Workspace:** `C:\newsjack-content\thebreakdown-os-master-repair`  
 **Overall Status:** **VERIFIED, PROTECTED & OPERATIONAL**  
@@ -181,9 +182,67 @@ The test suite was expanded to 44 automated tests covering:
 
 ---
 
-## 6. Next Engineering Workstream Roadmap & Dependency Matrix
+## 6. Mission 5B — Cloudflare Provider-Gate Recovery and API-Key Role Consistency (Issues #70, #73 / PR #74)
 
-The remaining engineering backlog has been updated following the remediation of Issue #67:
+### A. Cloudflare Workers Builds Diagnosis & Root Cause Analysis (Issue #70)
+Forensic inspection of Cloudflare build triggers across PR #74 runs (`thebreakdown-website`: `59d0aa82-6121-4f65-85fb-e28e3643c422`, `thebreakdown-os`: `494c6bf5-036c-4b54-aadd-ff775b16949f`):
+
+1. **`thebreakdown-website` (Orphaned Worker Trigger)**:
+   - **Historical Evolution**: On 2026-07-11 (`9ff26d82`), `@opennextjs/cloudflare` and `wrangler` were removed from root `package.json` when SSR hosting was consolidated onto Vercel. On 2026-10-10 (`8c79b29b`), `thebreakdown-website` Pages project was deleted via the Cloudflare Pages API.
+   - **Root Cause**: An obsolete Workers Builds GitHub trigger remained connected to the repository. It attempts to run legacy build command `npm run cf:build` / `npx @opennextjs/cloudflare build`, failing immediately because OpenNext is no longer a dependency.
+   - **Action Required**: Disconnect or decommission the obsolete `thebreakdown-website` Workers Builds trigger in the Cloudflare dashboard or via API (`DELETE /accounts/:id/workers/scripts/thebreakdown-website/builds/triggers`).
+
+2. **`thebreakdown-os` (Scheduled Worker Misconfiguration & OOM)**:
+   - **Scope**: Active worker for scheduled publishing (`workers/scheduled-publish`).
+   - **Root Cause**: The Cloudflare Workers Builds trigger was configured with default root directory `/` and build command `npm run build` (`next build`), instead of targeting the worker's lightweight script (`npm run build:scheduled-worker` -> `node workers/scheduled-publish/build.mjs`, which builds `workers/scheduled-publish/dist/index.js` in 135ms). The Cloudflare build environment runs out of memory attempting to build the entire Next.js SSR application.
+   - **Watch Paths**: The trigger watches `**`, causing every markdown change, doc update, and web app commit to trigger an unnecessary worker build.
+
+3. **Provider Configuration Plan (Read-Only Specification)**:
+   - **`thebreakdown-website`**: Decommission / disconnect GitHub trigger.
+   - **`thebreakdown-os`**:
+     - Root Directory: `workers/scheduled-publish` (or keep `/` and set Build Command to `npm run build:scheduled-worker`).
+     - Deploy Branch: `main` only (exclude preview / feature branches).
+     - Build Watch Paths: `workers/scheduled-publish/**`, `package.json`, `package-lock.json`.
+
+### B. API-Key Role Consistency & Privilege Delegation (Issue #73 / PR #74)
+- **Canonical Role Model**: `IntelRole` (`owner | managing_editor | editor | reporter | researcher | analyst | fact_checker | guest`) is the canonical role hierarchy.
+- **Vulnerability Remediated**:
+  - `ApiKeyRole` in the Postgres schema (`reader | contributor | reporter | editor | admin | owner`) had potential ambiguities.
+  - Conflating `admin` with `owner` was an escalation risk.
+  - Stored explicit scopes risked falling back to broader role defaults when empty.
+- **Architectural Solution**:
+  1. `features/auth/api-keys/principal.ts`: Defined `API_KEY_ROLE_MAPPING` (`owner` -> `owner`, `editor` -> `editor`, `reporter` -> `reporter`, `reader` -> `guest`). Fails closed (returns `null` principal) for unsupported roles (`admin`, `contributor`).
+  2. `features/auth/api-keys/delegation.ts`: Disallow issuance of `admin` and `contributor` keys with `400 UNSUPPORTED_ROLE`.
+  3. Elevation strictly restricted to `role === 'owner'` (for issuing `owner` keys or `unlimited` tier keys).
+  4. Explicit permissions are strictly preserved; explicit scopes never regain broader role defaults.
+  5. Effective target permissions are strictly bounded by creator effective permissions.
+  6. Malformed legacy scope records fail closed at verification.
+
+### C. Test Matrix (`tests/api-key-delegation.test.ts` — 29/29 PASSED)
+The 29 Vitest tests verify:
+- Creation and principal projection for supported roles (`reader`, `reporter`, `editor`, `owner`).
+- Fail-closed rejection of unsupported roles (`admin`, `contributor`) at creation and principal projection.
+- Scope retention: explicit scopes never regain broader role defaults.
+- Elevation boundaries: non-owners cannot issue `owner` keys or `unlimited` rate limits.
+- Creator permission containment: target keys cannot exceed creator's effective permissions.
+- Malformed legacy scope format rejection.
+
+### D. Verification Summary
+- Rebased cleanly onto PR #69 (`2402c18e44f8b58fd8fa4a1b834ea88a503ad0a8`). Commit head: `6b57dc4f`.
+- `tests/api-key-delegation.test.ts`: **29/29 PASSED** in Vitest.
+- `npm run test:security`: **PASSED** (75 RLS, 45 API security, 1205 Intel auth, 29 API key delegation, 44 Cron auth).
+- `npm run check:type`: **PASSED** with 0 errors.
+- `npm run check:lint`: **PASSED** with 0 errors.
+- `npm run check:build`: **PASSED** with 0 errors.
+- Pushed to `origin/fix/api-key-delegation-authorization-2026-10-16` with `--force-with-lease`.
+- PR #74 updated in DRAFT state.
+- Production Loopback Check: **PASSED** (production at `4d835608` confirmed healthy).
+
+---
+
+## 7. Next Engineering Workstream Roadmap & Dependency Matrix
+
+The remaining engineering backlog has been updated following the remediation of Issues #67 and #73:
 
 ```mermaid
 flowchart TD
@@ -194,7 +253,7 @@ flowchart TD
     
     PR86 -.-> PR69["PR #69 (Quota Recovery / Issue #71)\n[DRAFT - Validated]"]
     PR86 -.-> PR72["PR #72 (Issue #67 Scoped Radar Poll)\n[DRAFT - Validated 44 Tests]"]
-    PR72 -.-> PR74["PR #74 (API Key Delegation Escalation)\n[Stacked on PR #72]"]
+    PR72 -.-> PR74["PR #74 (API Key Delegation Escalation)\n[DRAFT - Validated 29 Tests / Rebased on PR #72]"]
     PR86 -.-> ISS57["Issue #57 (Mutating Handlers Auth)"]
     PR86 -.-> ISS56["Issue #56 (v1 Cold-Start getServices)"]
 ```
@@ -234,13 +293,13 @@ flowchart TD
 #### Standalone Priority Security & Reliability Streams
 1. **Issue #71 / PR #69 (Vercel Quota Recovery)**: Branch allowlist verified with unit tests and rebased on `4d835608`; ready for review.
 2. **Issue #67 / PR #72 (Radar Scoped Permission)**: Remediated, rebased on `4d835608`, passed 44 tests, full security test and build suites; draft PR updated awaiting review.
-3. **PR #74 (API Key Delegation Privilege Escalation)**: Stacked on PR #72; to be rebased and verified once PR #72 is merged.
+3. **Issue #73 / PR #74 (API Key Delegation Privilege Escalation)**: Canonical role mapping, 29 Vitest tests, rebased on PR #72 (`2402c18e`), full security and build suites passed; draft PR updated awaiting review.
 4. **Issue #57 (Mutating Handlers Authorization)**: Enforce explicit `requireApiPermission` checks on `v1/media`, `v1/datasets`, `v2/topics`, `v2/entities`, `v2/fixes`, `v2/timelines`.
 5. **Issue #56 (v1 Search & Datasets Cold Start)**: Wrap process-local `getServices()` calls with explicit bootstrap guards to eliminate lambda cold-start failures.
 
 ---
 
-## 7. Database Boundary & Safety Standard
+## 8. Database Boundary & Safety Standard
 
 > [!CAUTION]
 > **Production Database Immutability Protocol**:
@@ -251,7 +310,7 @@ flowchart TD
 
 ---
 
-## 8. Definition of Done & Verification Audit Checklist
+## 9. Definition of Done & Verification Audit Checklist
 
 | Item | Requirement | Verification Method | Status |
 |---|---|---|---|
@@ -262,6 +321,8 @@ flowchart TD
 | 5 | PR #69 rebase & policy tests | Rebased on `4d835608`, 22 Vitest tests passing | **SATISFIED** |
 | 6 | Cloudflare build controls | Documented branch control & watch paths | **SATISFIED** |
 | 7 | Radar authorization remediation | PR #72 rebased on `4d835608`, 44 Vitest tests passing | **SATISFIED** |
-| 8 | Security & build suites clean | `test:security`, `check:type`, `check:lint`, `check:build` pass with 0 errors | **SATISFIED** |
-| 9 | Engineering roadmap | 5-phase dependency tree mapped and documented | **SATISFIED** |
-| 10 | Workspace preservation | `git status` clean, primary repo untouched | **SATISFIED** |
+| 8 | API key role consistency & delegation | PR #74 rebased on PR #72 (`2402c18e`), 29 Vitest tests passing | **SATISFIED** |
+| 9 | Security & build suites clean | `test:security`, `check:type`, `check:lint`, `check:build` pass with 0 errors | **SATISFIED** |
+| 10 | Engineering roadmap | 5-phase dependency tree mapped and documented | **SATISFIED** |
+| 11 | Workspace preservation | `git status` clean, primary repo untouched | **SATISFIED** |
+
