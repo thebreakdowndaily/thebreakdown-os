@@ -21,6 +21,7 @@ import {
 import type { ApiKeyRole, ApiKeyRecord } from '@/features/auth/api-keys/types';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
 import type { Principal } from '@/features/auth/principal';
+import type { AppPermission } from '@/features/auth/permissions';
 
 export interface ApiKey {
   key: string;
@@ -29,6 +30,7 @@ export interface ApiKey {
   createdAt: string;
   lastUsed: string | null;
   enabled: boolean;
+  permissions?: AppPermission[];
 }
 
 // In-memory synchronous fast-cache for synchronous callers (e.g. legacy tests)
@@ -63,6 +65,7 @@ export async function validateApiKeyAsync(rawKey: string): Promise<ApiKey | null
     createdAt: result.key.created_at,
     lastUsed: result.key.last_used_at,
     enabled: !result.key.revoked_at,
+    permissions: result.key.permissions ?? [],
   };
 
   syncCache.set(rawKey, entry);
@@ -140,6 +143,7 @@ export async function createApiKeyAsync(
     createdAt: result.created_at,
     lastUsed: null,
     enabled: true,
+    permissions: result.permissions,
   };
   syncCache.set(result.raw_key, entry);
 
@@ -164,6 +168,7 @@ export function createApiKey(name: string, role: 'admin' | 'editor' | 'reader' =
     createdAt: now,
     lastUsed: null,
     enabled: true,
+    permissions: [],
   };
 
   syncCache.set(rawKey, entry);
