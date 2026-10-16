@@ -1,4 +1,5 @@
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTopicRepository } from '@/services/repositories/supabase/topic';
 import type { Topic, APIResponse } from '@/types/canonical';
@@ -27,9 +28,12 @@ export async function PUT(
 ) {
   const auth = await requireApiPermission('topic.update', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseTopicRepository(write.client);
 
   const { slug } = await context.params;
-  const existing = await repo.getTopicBySlug(slug);
+  const existing = await writeRepo.getTopicBySlug(slug);
 
   if (!existing) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
@@ -37,7 +41,7 @@ export async function PUT(
 
   const body = (await request.json()) as Partial<Topic>;
   const updated: Topic = { ...existing, ...body, slug: existing.slug, id: existing.id, updatedAt: new Date().toISOString() };
-  const saved = await repo.saveTopic(updated);
+  const saved = await writeRepo.saveTopic(updated);
   syncTopic(saved);
   const res: APIResponse<Topic> = { data: saved };
   return NextResponse.json(res);
@@ -49,15 +53,18 @@ export async function DELETE(
 ) {
   const auth = await requireApiPermission('topic.delete', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseTopicRepository(write.client);
 
   const { slug } = await context.params;
-  const topic = await repo.getTopicBySlug(slug);
+  const topic = await writeRepo.getTopicBySlug(slug);
 
   if (!topic) {
     return NextResponse.json({ error: `Topic not found: ${slug}` }, { status: 404 });
   }
 
-  await repo.deleteTopic(topic.id);
+  await writeRepo.deleteTopic(topic.id);
   deleteTopic(slug);
   return new NextResponse(null, { status: 204 });
 }
