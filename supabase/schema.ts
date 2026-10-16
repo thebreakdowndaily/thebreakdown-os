@@ -886,6 +886,8 @@ export interface SourceRow {
 
 export interface IndexEntryRow {
   Row: {
+    id: string;
+    search_vector: string;
     ref_id: string;
     ref_type: string;
     ref_slug: string;
