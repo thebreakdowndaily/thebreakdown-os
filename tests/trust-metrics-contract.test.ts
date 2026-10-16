@@ -79,17 +79,22 @@ describe('trust metrics data lineage', () => {
     const missingCitedSources = [...uniqueCitedSourceIds].filter((id) => !registryIds.has(id));
     const chapterLinkedSources = registrySources.filter((source) => source.chapterIds?.includes('kl-ch-1'));
 
-    expect(uniqueCitedSourceIds.size).toBe(34);
+    expect(uniqueCitedSourceIds.size).toBe(35);
     expect(metadata?.sourceCount).toBe(chapterLinkedSources.length);
     expect(missingCitedSources).toEqual([]);
+    const armyParagraph = findById(content, 'b-p-narr-6');
+    const armyData = armyParagraph?.data as { text?: string; citations?: string[] } | undefined;
+    expect(armyData?.text).toContain('260,000 men');
+    expect(armyData?.text).toContain('140,000');
+    expect(armyData?.text).not.toContain('1.2 million');
+    expect(armyData?.citations).toContain('s36');
     expect(registryIds.has('s32')).toBe(true);
     expect(registryIds.has('s33')).toBe(true);
     expect(registryIds.has('s34')).toBe(true);
     expect(registrySources.find((source) => source.id === 's31')?.url).toBe('https://eprints.soton.ac.uk/40935/');
-    // Three chapter-linked records (s10, s30, s36) are intentionally
-    // retained through canonical evidence/registry relationships rather than
-    // direct block citations. Direct citations and registry relationships are
-    // separate measures and must not be forced to the same count.
+    // Two chapter-linked records (s10 and s30) are linked through
+    // canonical claim evidence rather than direct block citations. Direct
+    // citations and registry relationships are separate measures.
     expect(chapterLinkedSources.some((source) => source.id === 's10')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's30')).toBe(true);
     expect(chapterLinkedSources.some((source) => source.id === 's36')).toBe(true);
