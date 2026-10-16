@@ -397,9 +397,10 @@ export function seedSources(): void {
     {
       id: 's19',
       title: 'Remembering Partition: Violence, Nationalism and History in India',
-      url: 'https://books.google.com/books?id=cHwLPAAACAAJ',
+      url: 'https://www.cambridge.org/core/books/remembering-partition/ED57B78748253FB6138193246912683D',
       tier: 3,
       accessedAt: '2026-10-16',
+      lastVerifiedAt: '2026-10-16',
       verificationStatus: 'verified',
       claimIds: [
         'claim.partition.violence-civil-society',
