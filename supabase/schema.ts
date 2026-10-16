@@ -44,6 +44,17 @@ export interface Database {
           reset_seconds: number;
         }[];
       };
+      list_public_topic_summaries: {
+        Args: { p_limit?: number };
+        Returns: {
+          topic_id: string;
+          topic_slug: string;
+          topic_name: string;
+          topic_description: string;
+          story_count: number;
+          recent_stories: { slug: string; headline: string; published_at: string }[];
+        }[];
+      };
       publish_reader_correction: {
         Args: {
           p_reader_correction_id: string;
