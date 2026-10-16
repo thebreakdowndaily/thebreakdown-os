@@ -311,8 +311,8 @@ export function seedClaims(): void {
     },
     {
       id: 'claim.partition.violence-civil-society',
-      statement: 'The genocidal violence of Partition — including mass killing, sexual violence, forced conversion, and abduction — destroyed the pluralistic social fabric of mixed communities and created lasting trauma that continues to affect India-Pakistan relations.',
-      confidence: 'established',
+      statement: "The mass violence of Partition—including killings, sexual violence, forced conversion, and abduction—destroyed many mixed communities and created lasting trauma, especially in Punjab and Bengal; its scale and local patterns varied across regions.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's19', relevance: 'direct', excerpt: 'Partition violence claimed an estimated one to two million lives and left an indelible mark on the collective memory of both nations.' },
         { sourceId: 's20', relevance: 'direct', excerpt: 'The scale of sexual violence during Partition — estimated at 75,000 to 100,000 women abducted — created a gendered trauma that shaped state policy on both sides.' },
@@ -320,7 +320,7 @@ export function seedClaims(): void {
         { sourceId: 's27', relevance: 'supporting', excerpt: 'The destruction of mixed communities in Punjab and Bengal eliminated the lived experience of coexistence that had sustained pluralistic society for centuries.' },
       ],
       counterArguments: ['Some historians caution against overstating the scale of violence, noting that large parts of India (the south, the west coast, most of the central provinces) experienced no communal violence during Partition.'],
-      sourceIds: ['s19', 's16', 's19', 's20', 's27'],
+      sourceIds: ['s19', 's20', 's10', 's27'],
       documentIds: [],
       entityIds: ['india', 'pakistan', 'partition', 'punjab', 'bengal'],
       conceptIds: ['con-partition'],
@@ -328,8 +328,8 @@ export function seedClaims(): void {
         { contentType: 'chapter', contentId: 'kl-ch-1', contentTitle: 'India\'s Inheritance: Partition and Its Strategic Legacy (1947)' },
       ],
       createdAt: '2026-07-12T00:00:00Z',
-      updatedAt: '2026-07-12T00:00:00Z',
-      lastVerifiedAt: '2026-07-12T00:00:00Z',
+      updatedAt: '2026-10-16T00:00:00Z',
+      lastVerifiedAt: '2026-10-16T00:00:00Z',
     },
     {
       id: 'claim.partition.nehru-patel-dynamic',
