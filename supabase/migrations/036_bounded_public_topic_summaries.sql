@@ -20,7 +20,7 @@ SECURITY DEFINER
 SET search_path = pg_catalog, public
 AS $$
   WITH topic_rows AS (
-    SELECT t.id, t.slug, t.name, t.description, t.story_ids, t.featured_story_ids, t.related_story_ids
+    SELECT t.id, t.slug, t.name, t.description, t.story_ids, t.featured_story_ids
     FROM public.topics t
     ORDER BY t.name
     LIMIT GREATEST(1, LEAST(COALESCE(p_limit, 100), 100))
@@ -44,8 +44,6 @@ AS $$
           OR t.story_ids @> ARRAY[s.slug]
           OR t.featured_story_ids @> ARRAY[s.id::text]
           OR t.featured_story_ids @> ARRAY[s.slug]
-          OR t.related_story_ids @> ARRAY[s.id::text]
-          OR t.related_story_ids @> ARRAY[s.slug]
           OR EXISTS (
             SELECT 1
             FROM public.story_topics st
@@ -77,8 +75,6 @@ AS $$
             OR t.story_ids @> ARRAY[s.slug]
             OR t.featured_story_ids @> ARRAY[s.id::text]
             OR t.featured_story_ids @> ARRAY[s.slug]
-            OR t.related_story_ids @> ARRAY[s.id::text]
-            OR t.related_story_ids @> ARRAY[s.slug]
             OR EXISTS (
               SELECT 1
               FROM public.story_topics st
