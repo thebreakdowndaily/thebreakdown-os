@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServices } from '@/services/registry';
+import { bootstrapServices } from '@/lib/bootstrap';
 import type { APIListParams } from '@/types/canonical';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const services = getServices();
+  const services = bootstrapServices({ publicOnly: true });
 
   const query = searchParams.get('q') || '';
   const typeFilter = searchParams.get('type') || '';
