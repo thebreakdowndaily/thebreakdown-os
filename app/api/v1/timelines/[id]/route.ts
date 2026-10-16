@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseTimelineRepository } from '@/services/repositories/supabase/timeline';
 import type { Timeline, APIResponse } from '@/types/canonical';
@@ -20,7 +21,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: {
+  const auth = await requireApiPermission('timeline.update', request);
+  if ('response' in auth) return auth.response; params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
   const existing = await repo.getTimeline(id);
@@ -37,7 +40,9 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: {
+  const auth = await requireApiPermission('timeline.delete', _request);
+  if ('response' in auth) return auth.response; params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
   const timeline = await repo.getTimeline(id);
