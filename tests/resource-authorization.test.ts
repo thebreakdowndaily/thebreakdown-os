@@ -27,6 +27,14 @@ vi.mock('@/features/auth/api-keys/service', () => ({
   verifyApiKey: vi.fn(async () => authState.keyResult),
 }));
 
+const dbClientMocks = vi.hoisted(() => ({
+  createUserScopedClient: vi.fn(),
+}));
+
+vi.mock('@/supabase/client', () => ({
+  createUserScopedClient: dbClientMocks.createUserScopedClient,
+}));
+
 
 function apiKey(permissions: unknown, role = 'editor') {
   return {
@@ -130,5 +138,30 @@ describe('persistent write client boundary', () => {
     });
     expect('response' in result).toBe(true);
     if ('response' in result) expect(result.response.status).toBe(403);
+  });
+
+  it('returns 503 instead of downgrading to the anonymous client when session context is unavailable', async () => {
+    dbClientMocks.createUserScopedClient.mockRejectedValueOnce(
+      new Error('Authenticated Supabase request context unavailable'),
+    );
+
+    const result = await getPersistentWriteClient({
+      userId: 'session-user',
+      email: 'editor@example.invalid',
+      name: 'Editor',
+      role: 'editor',
+      isSuperAdmin: false,
+      status: 'active',
+      organizationId: null,
+    });
+
+    expect(dbClientMocks.createUserScopedClient).toHaveBeenCalledWith({ fallbackToAnon: false });
+    expect('response' in result).toBe(true);
+    if ('response' in result) {
+      expect(result.response.status).toBe(503);
+      expect(await result.response.json()).toEqual({
+        error: 'Authenticated database session unavailable',
+      });
+    }
   });
 });
