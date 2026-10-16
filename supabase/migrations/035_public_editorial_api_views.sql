@@ -38,7 +38,7 @@ SELECT
 FROM search.index_entries;
 
 GRANT SELECT ON public.index_entries TO anon, authenticated;
-REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER
+REVOKE INSERT, UPDATE, DELETE, REFERENCES, TRIGGER
   ON public.index_entries FROM anon, authenticated;
 
 -- The canonical editorial tables are not directly exposed as public API tables.
@@ -196,7 +196,7 @@ WHERE EXISTS (
 );
 
 GRANT SELECT ON public.claims, public.sources TO anon, authenticated;
-REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER
+REVOKE INSERT, UPDATE, DELETE, REFERENCES, TRIGGER
   ON public.claims, public.sources FROM anon, authenticated;
 
 -- Writes are deliberately narrow, session-authenticated and never publish a
