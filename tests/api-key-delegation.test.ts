@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { authorizeApiKeyDelegation } from '@/features/auth/api-keys/delegation';
 import { apiKeyRecordToPrincipal, mapApiKeyRoleToIntelRole } from '@/features/auth/api-keys/principal';
+import { normalizeIntelRole } from '@/features/auth/roles';
 import { can } from '@/features/auth/policy';
 import type { Principal } from '@/features/auth/principal';
 
@@ -255,6 +256,14 @@ describe('API-key principal projection', () => {
     expect(mapApiKeyRoleToIntelRole('contributor')).toBeNull();
     expect(mapApiKeyRoleToIntelRole('unknown')).toBeNull();
   });
+
+  it.each(['constructor', 'toString', '__proto__'])(
+    'rejects prototype-like role labels safely: %s',
+    (role) => {
+      expect(mapApiKeyRoleToIntelRole(role)).toBeNull();
+      expect(normalizeIntelRole(role)).toBe('guest');
+    },
+  );
 
   it.each(['admin', 'contributor'])('fails closed when a stored key uses legacy role %s', (role) => {
     const resolved = apiKeyRecordToPrincipal({

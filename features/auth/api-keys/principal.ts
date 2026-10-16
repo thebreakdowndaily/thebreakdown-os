@@ -16,6 +16,9 @@ export const API_KEY_ROLE_MAPPING: Readonly<Record<string, IntelRole>> = Object.
 });
 
 export function mapApiKeyRoleToIntelRole(role: string): IntelRole | null {
+  if (!Object.prototype.hasOwnProperty.call(API_KEY_ROLE_MAPPING, role)) {
+    return null;
+  }
   return API_KEY_ROLE_MAPPING[role] ?? null;
 }
 
