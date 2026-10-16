@@ -108,7 +108,7 @@ function projectDynamicPublicValue(value: unknown, depth = 0): unknown {
     const projected: Record<string, unknown> = {};
     for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
       const normalized = key.replace(/[-_]/g, '').toLowerCase();
-      if (PRIVATE_NESTED_KEYS.has(key) || PRIVATE_NESTED_KEYS.has(normalized)) continue;
+      if (PRIVATE_NESTED_KEYS.has(key) || PRIVATE_NESTED_KEYS.has(normalized) || /^(internal|private|staff|debug|moderation|editorial|admin|secret|token|scheduled|blocked|fallback|archive|raw)/.test(normalized)) continue;
       const safeValue = projectDynamicPublicValue(nested, depth + 1);
       if (safeValue !== undefined) projected[key] = safeValue;
     }
