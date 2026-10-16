@@ -18,18 +18,30 @@ export type TypedDatabase = {
 };
 
 function getConfig() {
-  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const rawAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const configuredKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  const url = (rawUrl && typeof rawUrl === 'string' && rawUrl.trim() !== '' && rawUrl.startsWith('http'))
-    ? rawUrl.trim()
-    : 'https://mskyhaunnlwtwvsqcmav.supabase.co';
+  if (
+    configuredUrl &&
+    /^https?:\/\//.test(configuredUrl) &&
+    configuredKey &&
+    configuredKey.trim().length > 20
+  ) {
+    return { url: configuredUrl.trim(), anonKey: configuredKey.trim() };
+  }
 
-  const anonKey = (rawAnonKey && typeof rawAnonKey === 'string' && rawAnonKey.trim() !== '' && rawAnonKey.length > 20)
-    ? rawAnonKey.trim()
-    : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1za3loYXVubmx3dHd2c3FjbWF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTc0MTUsImV4cCI6MjEwNjQzMzQxNX0.WmzLxHK_PujLsB57JW4qzosd4iOVKLOOU0acEoqb9_s';
-  
-  return { url, anonKey };
+  // In production, misconfiguration must fail closed. In development/test, use
+  // inert placeholders so demo mode and unit imports never touch live production.
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Supabase is not configured: set NEXT_PUBLIC_SUPABASE_URL and a publishable/anon key.');
+  }
+
+  return {
+    url: 'https://placeholder.supabase.co',
+    anonKey: 'placeholder-key-for-development-only',
+  };
 }
 
 let browserClient: ReturnType<typeof createBrowserClient<TypedDatabase>> | null = null;
