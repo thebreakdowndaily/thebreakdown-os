@@ -45,6 +45,7 @@ export function seedClaims(): void {
       evidence: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'The trauma of Partition embedded a deep sensitivity to any external force that could exacerbate internal religious divisions.' },
         { sourceId: 's3', relevance: 'supporting', excerpt: 'India\'s approach to Pakistan has been framed by the unfinished business of Partition from the very first day of independence.' },
+        { sourceId: 's10', relevance: 'contextual', excerpt: 'Zamindar traces how Partition displacement, borders, and postcolonial state interventions continued to shape South Asian political life.' },
       ],
       counterArguments: ['Some historians argue India\'s security consciousness predates Partition and stems from colonial-era foreign domination.'],
       sourceIds: ['s1', 's3', 's19'],
@@ -314,6 +315,7 @@ export function seedClaims(): void {
       evidence: [
         { sourceId: 's19', relevance: 'direct', excerpt: 'Partition violence claimed an estimated one to two million lives and left an indelible mark on the collective memory of both nations.' },
         { sourceId: 's20', relevance: 'direct', excerpt: 'The scale of sexual violence during Partition — estimated at 75,000 to 100,000 women abducted — created a gendered trauma that shaped state policy on both sides.' },
+        { sourceId: 's10', relevance: 'supporting', excerpt: 'Zamindar analyzes Partition displacement, refugee property, and the continuing consequences of border-making for affected communities.' },
         { sourceId: 's27', relevance: 'supporting', excerpt: 'The destruction of mixed communities in Punjab and Bengal eliminated the lived experience of coexistence that had sustained pluralistic society for centuries.' },
       ],
       counterArguments: ['Some historians caution against overstating the scale of violence, noting that large parts of India (the south, the west coast, most of the central provinces) experienced no communal violence during Partition.'],
