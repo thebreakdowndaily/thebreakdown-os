@@ -16,7 +16,7 @@ export async function GET(
   const story = await repo.getPublicStoryBySlug(slug);
 
   if (!story) {
-    return NextResponse.json({ error: `Story not found: ${slug}` }, { status: 404 });
+    return NextResponse.json({ error: `Story not found: ${slug}`, status: 404 }, { status: 404 });
   }
 
   const res: APIResponse<Story> = { data: story };

@@ -1,4 +1,4 @@
-import type { Story, APIListParams, APIResponse } from '@/types/canonical';
+import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
 import type { StoryService } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
@@ -127,4 +127,36 @@ export class MemoryStoryService implements StoryService {
     if (!story) return undefined;
     return this.isPublic(story, new Date()) ? story : undefined;
   }
+
+  async getPublicStoriesForTopic(
+    topic: Pick<Topic, 'id' | 'slug' | 'storyIds' | 'featuredStoryIds'>,
+  ): Promise<APIResponse<Story[]>> {
+    const now = new Date();
+    const storedStoryRefs = new Set([
+      ...(topic.storyIds ?? []),
+      ...(topic.featuredStoryIds ?? []),
+    ]);
+    const topicRefs = new Set([topic.id, topic.slug]);
+
+    const matchingStories = Array.from(this.stories.values()).filter((story) => {
+      if (!this.isPublic(story, now)) return false;
+
+      const matchesStoredReference =
+        storedStoryRefs.has(story.id) || storedStoryRefs.has(story.slug);
+      const matchesReverseReference = (story.relatedTopicIds ?? []).some((id) => topicRefs.has(id));
+
+      return matchesStoredReference || matchesReverseReference;
+    });
+
+    const uniqueStories = [...new Map(matchingStories.map((story) => [story.id, story])).values()];
+    uniqueStories.sort(
+      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    );
+
+    return {
+      data: uniqueStories,
+      meta: { total: uniqueStories.length, page: 1, pageSize: uniqueStories.length },
+    };
+  }
 }
+

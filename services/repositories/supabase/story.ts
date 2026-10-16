@@ -1,4 +1,4 @@
-import type { Story, APIListParams, APIResponse } from '@/types/canonical';
+import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
 import type { StoryService } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
@@ -6,6 +6,12 @@ import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/public
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
+
+const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
+function isUuid(value: string): boolean {
+  return UUID_PATTERN.test(value);
+}
 
 export class SupabaseStoryRepository implements StoryService {
   private evidenceVault?: EvidenceVaultService;
@@ -30,8 +36,11 @@ export class SupabaseStoryRepository implements StoryService {
   }
 
   async getStory(id: string) {
-    const { data, error } = await db().from('stories').select('*').eq('id', id).single();
-    if (error && error.code !== 'PGRST116' && error.code !== '22P02') throw error;
+    // Story references are persisted as either UUIDs or slugs in legacy
+    // topic/story data. Route each value to the correctly typed column.
+    const column = isUuid(id) ? 'id' : 'slug';
+    const { data, error } = await db().from('stories').select('*').eq(column, id).maybeSingle();
+    if (error) throw error;
     return data ? rowToStory(data) : undefined;
   }
 
@@ -114,6 +123,81 @@ export class SupabaseStoryRepository implements StoryService {
     const { data, count, error } = await query.order('published_at', { ascending: false });
     if (error) throw error;
     return { data: (data || []).map(rowToStory), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
+  }
+
+
+  /**
+   * Fetch only public stories connected to this topic by explicit canonical
+   * references. Each database request is paginated; unrelated public stories
+   * are never scanned by the topic-page path.
+   */
+  async getPublicStoriesForTopic(
+    topic: Pick<Topic, 'id' | 'slug' | 'storyIds' | 'featuredStoryIds'>,
+  ): Promise<APIResponse<Story[]>> {
+    const now = new Date().toISOString();
+    const buildPublicQuery = () => db()
+      .from('stories')
+      .select('*', { count: 'exact' })
+      .eq('status', 'published')
+      .eq('is_test_artifact', false)
+      .lte('published_at', now)
+      .order('published_at', { ascending: false });
+
+    const storedRefs = [...new Set([
+      ...(topic.storyIds ?? []),
+      ...(topic.featuredStoryIds ?? []),
+    ].filter((value): value is string => typeof value === 'string' && value.length > 0))];
+    const uuidRefs = storedRefs.filter(isUuid);
+    const slugRefs = storedRefs.filter((value) => !isUuid(value));
+
+    const queryFactories: Array<() => ReturnType<typeof buildPublicQuery>> = [];
+    if (uuidRefs.length > 0) {
+      queryFactories.push(() => buildPublicQuery().in('id', uuidRefs));
+    }
+    if (slugRefs.length > 0) {
+      queryFactories.push(() => buildPublicQuery().in('slug', slugRefs));
+    }
+    for (const reference of new Set([topic.id, topic.slug])) {
+      queryFactories.push(() => buildPublicQuery().contains('related_topic_ids', [reference]));
+    }
+
+    const readAllPages = async (
+      makeQuery: () => ReturnType<typeof buildPublicQuery>,
+    ): Promise<Story[]> => {
+      const pageSize = 250;
+      const stories: Story[] = [];
+      let page = 0;
+
+      while (true) {
+        const start = page * pageSize;
+        const { data, count, error } = await makeQuery().range(start, start + pageSize - 1);
+        if (error) throw error;
+
+        const rows = (data ?? []).map(rowToStory);
+        stories.push(...rows);
+        if (
+          rows.length < pageSize ||
+          (count !== null && count !== undefined && stories.length >= count)
+        ) {
+          break;
+        }
+        page += 1;
+      }
+
+      return stories;
+    };
+
+    const results = await Promise.all(queryFactories.map(readAllPages));
+    const uniqueStories = new Map<string, Story>();
+    for (const story of results.flat()) uniqueStories.set(story.id, story);
+    const data = [...uniqueStories.values()].sort(
+      (left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt),
+    );
+
+    return {
+      data,
+      meta: { total: data.length, page: 1, pageSize: data.length },
+    };
   }
 
   async getPublicStoryBySlug(slug: string): Promise<Story | undefined> {

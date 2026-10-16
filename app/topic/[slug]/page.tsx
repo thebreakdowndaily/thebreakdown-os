@@ -57,6 +57,8 @@ const entityTypeLabel: Record<string, string> = {
   country: 'Countries',
 };
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const services = bootstrapServices({ publicOnly: true });
   return (await services.topics.getTopics({ pageSize: 100 })).data.map((t) => ({ slug: t.slug }));

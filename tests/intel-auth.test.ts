@@ -308,7 +308,12 @@ function testMiddlewareEnforcement() {
   const content = fs.readFileSync(file, 'utf8');
   assert(content.includes('intelModuleFromPath'), 'middleware derives module from path');
   assert(content.includes('canAccessIntelModule'), 'middleware checks module permission');
-  assert(content.includes('user_metadata.role'), 'middleware resolves role from session metadata');
+  assert(content.includes("claims.app_metadata"), 'middleware supports server-controlled app_metadata role fallback');
+  assert(content.includes(".from('user_roles')"), 'middleware resolves authoritative role from the database');
+  assert(
+    !content.includes('claims.user_metadata') && !content.includes('user_metadata?.role'),
+    'middleware does not authorize from user-editable metadata'
+  );
   assert(content.includes("status: 403"), 'middleware returns 403 on forbidden module');
 }
 

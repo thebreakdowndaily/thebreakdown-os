@@ -10,7 +10,6 @@ import {
 } from './lib/infrastructure/cache-policy';
 import { intelModuleFromPath } from './features/auth/intel-auth';
 import { normalizeIntelRole, canAccessIntelModule } from './features/auth/roles';
-
 import { isValidCronRequest } from './lib/security/cron-auth';
 
 const PUBLIC_API_PATHS = [
@@ -38,13 +37,27 @@ const AUTHENTICATED_PAGES = [
   '/performance',
   '/settings',
   '/editor',
+  '/newsroom',
   '/intel',
 ];
+
+function hasSupabaseConfig() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  return Boolean(url && /^https:\/\//.test(url) && key && key.trim().length > 20);
+}
+
+function loginRedirect(request: NextRequest, pathname: string) {
+  const loginUrl = new URL('/login', request.url);
+  // Preserve pathname only; do not accept a caller-supplied absolute redirect URL.
+  loginUrl.searchParams.set('redirect', pathname);
+  return NextResponse.redirect(loginUrl);
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Legacy canonical route redirects (Phase 0/3 cleanup -> 308 permanent redirect)
+  // 1. Legacy canonical route redirects.
   if (pathname === '/tracking' || pathname.startsWith('/tracking/')) {
     return NextResponse.redirect(new URL('/trackers', request.url), 308);
   }
@@ -58,15 +71,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/fix', request.url), 308);
   }
 
-  // 2. API Authentication & Rate Limiting
+  // 2. API authentication & rate limiting (preserves existing API-key and cron gates).
   if (pathname.startsWith('/api/')) {
-    // Vercel Cron Ingestion Security Gate (Operating Standard A 21)
     if (pathname === '/api/v2/newsroom/observations/pull' || pathname === '/api/v2/radar/poll') {
-      if (isValidCronRequest(request)) {
-        return NextResponse.next();
-      }
+      if (isValidCronRequest(request)) return NextResponse.next();
 
-      // Newsroom observations pull is strictly cron-authenticated
       if (pathname === '/api/v2/newsroom/observations/pull') {
         return NextResponse.json(
           { error: 'Unauthorized', message: 'Invalid or missing cron credentials' },
@@ -74,8 +83,6 @@ export async function middleware(request: NextRequest) {
         );
       }
 
-      // Radar poll: If not authenticated via cron Bearer secret, check if an x-api-key is supplied.
-      // If no x-api-key is present, reject immediately as unauthorized.
       const apiKey = request.headers.get('x-api-key');
       if (!apiKey) {
         return NextResponse.json(
@@ -83,18 +90,25 @@ export async function middleware(request: NextRequest) {
           { status: 401, headers: SECURITY_HEADERS as HeadersInit }
         );
       }
-      // If x-api-key is present, fall through to standard API key validation below
     }
 
-    // Inbound HMAC-authenticated webhook endpoints (Phase 4B-1)
-    // Authenticated cryptographically via X-Breakdown-Signature at the route boundary
+    // These endpoints perform their own HMAC signature verification at the route boundary.
     if (pathname === '/api/v2/newsroom/alerts/webhook' || pathname === '/api/editorial/publish-due') {
       return NextResponse.next();
     }
 
     const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
 
-    if (PUBLIC_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    const isPublicRead = (request.method === 'GET' || request.method === 'HEAD') && (
+      pathname === '/api/topics' || pathname.startsWith('/api/topics/') ||
+      pathname === '/api/stories' || pathname.startsWith('/api/stories/') ||
+      pathname === '/api/entities' || pathname.startsWith('/api/entities/') ||
+      pathname === '/api/v1/topics' || pathname.startsWith('/api/v1/topics/') ||
+      pathname === '/api/v1/stories' || pathname.startsWith('/api/v1/stories/') ||
+      pathname === '/api/v1/entities' || pathname.startsWith('/api/v1/entities/')
+    );
+
+    if (isPublicRead || PUBLIC_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
       const publicRate = await rateLimiter.checkLimit({
         key: `public:${clientIp}`,
         tier: 'public_api',
@@ -133,7 +147,6 @@ export async function middleware(request: NextRequest) {
       endpoint: pathname,
       ip: clientIp,
     });
-
     if (!rate.allowed) {
       const resp = rateLimiter.create429Response(rate);
       Object.entries(SECURITY_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
@@ -145,41 +158,91 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // 3. Authenticated Route Guards (/editorial, /research, /admin, /cms, etc.)
+  // 3. Protect internal app routes. Public story/topic/entity pages remain public.
   const isProtectedPage = AUTHENTICATED_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'));
-
   if (isProtectedPage) {
+    // Fail closed on production misconfiguration; never silently construct a client with fake credentials.
+    if (!hasSupabaseConfig()) {
+      if (process.env.NODE_ENV === 'production') {
+        return new NextResponse('Authentication service unavailable', {
+          status: 503,
+          headers: {
+            ...SECURITY_HEADERS,
+            'Cache-Control': 'private, no-store',
+            'X-Robots-Tag': 'noindex, nofollow',
+          } as HeadersInit,
+        });
+      }
+      return loginRedirect(request, pathname);
+    }
+
     try {
-      const response = NextResponse.next();
+      let response = NextResponse.next({ request });
       const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key',
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)!,
         {
           cookies: {
             getAll: () => request.cookies.getAll(),
-            setAll: (cookiesToSet) => {
+            setAll: (cookiesToSet, headers) => {
+              // Keep request cookies in sync for downstream Server Components.
               cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+              response = NextResponse.next({ request });
+              cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+              Object.entries(headers ?? {}).forEach(([name, value]) => response.headers.set(name, value));
             },
           },
         }
       );
 
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-      if (userError || !user) {
-        const loginUrl = new URL('/login', request.url);
-        loginUrl.searchParams.set('redirect', pathname);
-        return NextResponse.redirect(loginUrl);
+      // Verify the JWT signature/claims server-side; never authorize based on getSession().
+      const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
+      const claims = claimsData?.claims;
+      if (claimsError || !claims || typeof claims.sub !== 'string') {
+        return loginRedirect(request, pathname);
       }
 
-      // Intelligence boundary — module-level authorization at the edge.
-      // Runs before any page is served, so unauthorized requests never reach
-      // a Server Component and no payload is computed or streamed.
       const intelModule = intelModuleFromPath(pathname);
       if (intelModule) {
-        // Authoritative role: derived strictly from server-controlled app_metadata.
-        // Note: user_metadata.role is client-writable in Supabase and strictly ignored for authorization.
-        const authoritativeRole = (user.app_metadata.role as string | undefined) ?? null;
+        // Mirror the principal resolver: database roles/status are authoritative when
+        // present, app_metadata is only a server-controlled fallback, and user_metadata
+        // is never trusted for privileges.
+        const { data: roleRecord, error: roleLookupError } = await supabase
+          .from('user_roles')
+          .select('role, status')
+          .eq('user_id', claims.sub)
+          .maybeSingle();
+
+        // A failed lookup cannot safely establish that a staff account is active.
+        if (roleLookupError) {
+          return new NextResponse('Authorization service unavailable', {
+            status: 503,
+            headers: {
+              ...SECURITY_HEADERS,
+              'Cache-Control': 'private, no-store',
+              'X-Robots-Tag': 'noindex, nofollow',
+            } as HeadersInit,
+          });
+        }
+
+        if (roleRecord && roleRecord.status !== 'active') {
+          return new NextResponse('Forbidden', {
+            status: 403,
+            headers: {
+              ...SECURITY_HEADERS,
+              'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+              'X-Robots-Tag': 'noindex, nofollow',
+            } as HeadersInit,
+          });
+        }
+
+        const appMetadata = claims.app_metadata as Record<string, unknown> | undefined;
+        const authoritativeRole =
+          typeof roleRecord?.role === 'string'
+            ? roleRecord.role
+            : typeof appMetadata?.role === 'string'
+              ? appMetadata.role
+              : null;
         const role = normalizeIntelRole(authoritativeRole);
         if (!canAccessIntelModule(role, intelModule)) {
           return new NextResponse('Forbidden', {
@@ -193,27 +256,23 @@ export async function middleware(request: NextRequest) {
         }
       }
 
-      // Apply authenticated security headers
-      Object.entries(AUTHENTICATED_HEADER_POLICY).forEach(([k, v]) => {
-        response.headers.set(k, v);
-      });
+      Object.entries(AUTHENTICATED_HEADER_POLICY).forEach(([k, v]) => response.headers.set(k, v));
+      response.headers.set('Cache-Control', 'private, no-store, max-age=0');
+      response.headers.set('X-Robots-Tag', 'noindex, nofollow');
       return response;
     } catch {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(loginUrl);
+      // Fail closed if Auth cannot be checked.
+      return loginRedirect(request, pathname);
     }
   }
 
-  // 4. Public Reader Surfaces & Unindexed Utility Pages
+  // 4. Public reader surfaces and unindexed utility pages.
   const response = NextResponse.next();
-
   if (pathname.startsWith('/reader/') || pathname.startsWith('/rss')) {
-    Object.entries(PUBLIC_UNINDEXED_HEADER).forEach(([k, v]) => { response.headers.set(k, v); });
+    Object.entries(PUBLIC_UNINDEXED_HEADER).forEach(([k, v]) => response.headers.set(k, v));
   } else {
-    Object.entries(PUBLIC_CACHE_POLICY).forEach(([k, v]) => { response.headers.set(k, v); });
+    Object.entries(PUBLIC_CACHE_POLICY).forEach(([k, v]) => response.headers.set(k, v));
   }
-
   return response;
 }
 
@@ -233,6 +292,7 @@ export const config = {
     '/tracking/:path*',
     '/settings/:path*',
     '/editor/:path*',
+    '/newsroom/:path*',
     '/intel/:path*',
     '/reader/:path*',
     '/problems/:path*',

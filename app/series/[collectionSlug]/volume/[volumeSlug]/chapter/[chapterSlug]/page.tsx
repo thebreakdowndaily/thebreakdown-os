@@ -140,7 +140,7 @@ export default async function ChapterRoute({ params }: { params: Promise<{ colle
       updatedAt: chapter.updatedAt,
       authorName: 'The Breakdown Editorial',
       authorUrl: 'https://thebreakdown.in',
-      wordCount: chapter.content?.reduce((sum, b) => sum + (JSON.stringify(b).length / 5), 0) || 0,
+      wordCount: Math.round(chapter.content?.reduce((sum, b) => sum + (JSON.stringify(b).length / 5), 0) || 0),
       category: collection?.title,
       tags: chapter.relatedConceptIds,
       aboutEntities: aboutEntities.length > 0 ? aboutEntities : undefined,

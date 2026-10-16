@@ -3,7 +3,11 @@ import type { Session } from './auth-client';
 const DEMO_FLAG = 'tb_demo_session';
 
 export function isDemoMode(): boolean {
-  const noSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const hasPublicKey = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+  const noSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || !hasPublicKey;
   return noSupabase && process.env.NODE_ENV !== 'production';
 }
 
