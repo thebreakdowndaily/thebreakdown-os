@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
-import { buildPublicTopicSummaries } from '@/features/topic/public-topic-summary';
+import { db } from '@/lib/api-v2';
 
 export const metadata: Metadata = {
   title: 'Topic Directory',
@@ -25,27 +25,23 @@ export const revalidate = 60;
 
 export default async function TopicsPage() {
   const services = bootstrapServices({ publicOnly: true });
-  const storyPageSize = 100;
-  const [{ data: topics }, firstStoriesPage] = await Promise.all([
+  const [{ data: topics }, { data: summaryRows, error }] = await Promise.all([
     services.topics.getTopics({ pageSize: 100 }),
-    services.stories.getPublicStories({ page: 1, pageSize: storyPageSize }),
+    db().rpc('list_public_topic_summaries', { p_limit: 100 }),
   ]);
 
-  // Reconcile topic relationships against the actual public story set. Stored
-  // topic ID arrays alone can be stale or incomplete, so counts and previews
-  // also use the canonical story-side relatedTopicIds relationship.
-  const totalPublicStories = firstStoriesPage.meta?.total ?? firstStoriesPage.data.length;
-  const storyPageCount = Math.ceil(totalPublicStories / storyPageSize);
-  const remainingStoryPages = await Promise.all(
-    Array.from({ length: Math.max(0, storyPageCount - 1) }, (_, index) =>
-      services.stories.getPublicStories({ page: index + 2, pageSize: storyPageSize }),
-    ),
+  // The database returns exact counts and at most two public previews per
+  // topic. Never load the full public story corpus to render this directory.
+  if (error) throw error;
+  const topicSummaries = new Map(
+    (summaryRows ?? []).map((row) => [
+      row.topic_slug,
+      {
+        storyCount: Number(row.story_count),
+        stories: (row.recent_stories ?? []).map(({ slug, headline }) => ({ slug, headline })),
+      },
+    ]),
   );
-  const publicStories = [
-    ...firstStoriesPage.data,
-    ...remainingStoryPages.flatMap((page) => page.data),
-  ];
-  const topicSummaries = buildPublicTopicSummaries(topics, publicStories);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
