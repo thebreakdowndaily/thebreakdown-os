@@ -44,6 +44,17 @@ export interface Database {
           reset_seconds: number;
         }[];
       };
+      publish_reader_correction: {
+        Args: {
+          p_reader_correction_id: string;
+          p_triage_notes: string | null;
+          p_category: string;
+          p_previous_wording: string | null;
+          p_corrected_wording: string;
+          p_explanation: string;
+        };
+        Returns: CorrectionRow['Row'][];
+      };
     };
   };
 }
@@ -1077,6 +1088,8 @@ export interface ReaderCorrectionRow {
     submitter_email: string | null;
     supporting_evidence_url: string | null;
     status: string;
+    triage_notes: string | null;
+    resolved_correction_id: string | null;
     created_at: string;
     updated_at: string;
   };
@@ -1091,6 +1104,8 @@ export interface ReaderCorrectionRow {
     submitter_email?: string | null;
     supporting_evidence_url?: string | null;
     status?: string;
+    triage_notes?: string | null;
+    resolved_correction_id?: string | null;
     created_at?: string;
     updated_at?: string;
   };
@@ -1105,6 +1120,8 @@ export interface ReaderCorrectionRow {
     submitter_email?: string | null;
     supporting_evidence_url?: string | null;
     status?: string;
+    triage_notes?: string | null;
+    resolved_correction_id?: string | null;
     created_at?: string;
     updated_at?: string;
   };
