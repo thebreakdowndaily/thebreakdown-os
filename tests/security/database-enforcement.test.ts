@@ -151,6 +151,54 @@ async function runDirectDatabaseTests() {
     }
     console.log('All migrations applied successfully!\n');
 
+    // Exercise the bounded topic aggregation against actual PostgreSQL rows.
+    console.log('Verifying bounded public topic aggregation...');
+    const topicAggregationId = '77777777-7777-4777-8777-777777777701';
+    const topicAggregationPublicStoryIds = [
+      '77777777-7777-4777-8777-777777777711',
+      '77777777-7777-4777-8777-777777777712',
+      '77777777-7777-4777-8777-777777777713',
+    ];
+    const topicAggregationTestArtifactId = '77777777-7777-4777-8777-777777777714';
+    const topicAggregationDraftStoryId = '77777777-7777-4777-8777-777777777715';
+    await client.query('BEGIN');
+    await client.query(
+      `INSERT INTO public.topics (id, slug, name, story_ids)
+       VALUES ($1, 'topic-aggregation-test', 'Topic aggregation test', ARRAY[$2]::text[])`,
+      [topicAggregationId, 'topic-story-3'],
+    );
+    await client.query(
+      `INSERT INTO public.stories (id, slug, title, status, published_at, is_test_artifact, related_topic_ids)
+       VALUES
+         ($1, 'topic-story-1', 'Public story one', 'published', now() - interval '3 days', false, ARRAY[$5]::text[]),
+         ($2, 'topic-story-2', 'Public story two', 'published', now() - interval '2 days', false, '{}'::text[]),
+         ($3, 'topic-story-3', 'Public story three', 'published', now() - interval '1 day', false, '{}'::text[]),
+         ($4, 'topic-test-artifact', 'Test artifact', 'published', now(), true, ARRAY[$5]::text[]),
+         ($6, 'topic-draft', 'Draft story', 'draft', NULL, false, ARRAY[$5]::text[])`,
+      [topicAggregationPublicStoryIds[0], topicAggregationPublicStoryIds[1], topicAggregationPublicStoryIds[2], topicAggregationTestArtifactId, topicAggregationId, topicAggregationDraftStoryId],
+    );
+    await client.query(
+      'INSERT INTO public.story_topics (story_id, topic_id) VALUES ($1, $2)',
+      [topicAggregationPublicStoryIds[1], topicAggregationId],
+    );
+    const topicSummary = await client.query(
+      `SELECT story_count, recent_stories
+       FROM public.list_public_topic_summaries(100)
+       WHERE topic_slug = 'topic-aggregation-test'`,
+    );
+    assert(topicSummary.rows.length === 1, 'Bounded topic RPC returns the canonical topic');
+    if (topicSummary.rows.length === 1) {
+      const row = topicSummary.rows[0];
+      const recent = typeof row.recent_stories === 'string' ? JSON.parse(row.recent_stories) : row.recent_stories;
+      assert(Number(row.story_count) === 3, 'Topic aggregation counts only public non-test published stories');
+      assert(Array.isArray(recent) && recent.length === 2, 'Topic aggregation returns at most two recent previews');
+      assert(
+        Array.isArray(recent) && recent.every((story: { slug?: string }) => !['topic-test-artifact', 'topic-draft'].includes(story.slug ?? '')),
+        'Topic previews exclude test artifacts and drafts',
+      );
+    }
+    await client.query('ROLLBACK');
+
     // Check correction-table ACLs BEFORE the broad privileges used by later legacy
     // RLS fixtures. This prevents the test harness from masking missing migration grants.
     console.log('Verifying explicit Supabase API grants before test-harness grants...');
@@ -173,7 +221,14 @@ async function runDirectDatabaseTests() {
         has_table_privilege('service_role', 'public.reader_corrections', 'SELECT') AS service_read_reader_corrections,
         has_table_privilege('service_role', 'public.reader_corrections', 'INSERT') AS service_insert_reader_corrections,
         has_table_privilege('service_role', 'public.reader_corrections', 'UPDATE') AS service_update_reader_corrections,
-        has_table_privilege('service_role', 'public.reader_corrections', 'DELETE') AS service_delete_reader_corrections
+        has_table_privilege('service_role', 'public.reader_corrections', 'DELETE') AS service_delete_reader_corrections,
+        has_table_privilege('anon', 'public.claims', 'INSERT') AS anon_insert_public_claims,
+        has_table_privilege('authenticated', 'public.claims', 'INSERT') AS auth_insert_public_claims,
+        has_table_privilege('anon', 'public.sources', 'INSERT') AS anon_insert_public_sources,
+        has_table_privilege('authenticated', 'public.sources', 'INSERT') AS auth_insert_public_sources,
+        has_function_privilege('anon', 'public.create_editorial_claim(text,text,text,text)', 'EXECUTE') AS anon_create_claim_rpc,
+        has_function_privilege('authenticated', 'public.create_editorial_claim(text,text,text,text)', 'EXECUTE') AS auth_create_claim_rpc,
+        has_function_privilege('anon', 'public.list_public_topic_summaries(integer)', 'EXECUTE') AS anon_read_topic_summaries
     `);
     const acl = correctionPrivileges.rows[0];
     assert(acl.anon_read_stories, 'Anonymous API role can resolve published story metadata');
@@ -185,6 +240,13 @@ async function runDirectDatabaseTests() {
     assert(acl.service_insert_corrections, 'Service role can publish correction records');
     assert(acl.service_update_corrections, 'Service role can update supersession metadata');
     assert(!acl.service_delete_corrections, 'Service role cannot delete append-only public correction records');
+    assert(!acl.anon_insert_public_claims, 'Anonymous callers cannot insert through the public claims view');
+    assert(!acl.auth_insert_public_claims, 'Authenticated callers cannot bypass the claim creation RPC');
+    assert(!acl.anon_insert_public_sources, 'Anonymous callers cannot insert through the public sources view');
+    assert(!acl.auth_insert_public_sources, 'Authenticated callers cannot bypass the source creation RPC');
+    assert(!acl.anon_create_claim_rpc, 'Anonymous callers cannot execute the editorial claim creation RPC');
+    assert(acl.auth_create_claim_rpc, 'Authenticated callers can invoke the claim RPC, which enforces staff role in SQL');
+    assert(acl.anon_read_topic_summaries, 'Anonymous callers can execute the bounded public topic summary RPC');
     assert(acl.anon_insert_reader_corrections, 'Anonymous API role can submit reader corrections');
     assert(!acl.anon_read_reader_corrections, 'Anonymous API role cannot read the private reader-corrections queue');
     assert(acl.auth_read_reader_corrections, 'Authenticated API role has read privilege for RLS-gated editorial triage');
