@@ -23,10 +23,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: {
-  const auth = await requireApiPermission('topic.update', request);
-  if ('response' in auth) return auth.response; params: Promise<{ slug: string }> }
+  context: { params: Promise<{ slug: string }> }
 ) {
+  const auth = await requireApiPermission('topic.update', request);
+  if ('response' in auth) return auth.response;
+
   const { slug } = await context.params;
   const existing = await repo.getTopicBySlug(slug);
 
@@ -43,11 +44,12 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: NextRequest,
-  context: {
-  const auth = await requireApiPermission('topic.delete', _request);
-  if ('response' in auth) return auth.response; params: Promise<{ slug: string }> }
+  request: NextRequest,
+  context: { params: Promise<{ slug: string }> }
 ) {
+  const auth = await requireApiPermission('topic.delete', request);
+  if ('response' in auth) return auth.response;
+
   const { slug } = await context.params;
   const topic = await repo.getTopicBySlug(slug);
 
