@@ -264,6 +264,9 @@ BEGIN
   IF p_title IS NULL OR length(btrim(p_title)) = 0 OR p_url IS NULL OR length(btrim(p_url)) = 0 THEN
     RAISE EXCEPTION 'Source title and URL are required' USING ERRCODE = '22023';
   END IF;
+  IF btrim(p_url) !~* '^https?://' THEN
+    RAISE EXCEPTION 'Source URL must use HTTP or HTTPS' USING ERRCODE = '22023';
+  END IF;
   IF p_tier NOT IN ('t1', 't2', 't3', 't4', 't5') THEN
     RAISE EXCEPTION 'Invalid source tier' USING ERRCODE = '22023';
   END IF;
