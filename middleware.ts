@@ -178,6 +178,7 @@ export async function middleware(request: NextRequest) {
           { status: authorization.status, headers: SECURITY_HEADERS as HeadersInit }
         );
       }
+    }
 
     const response = NextResponse.next();
     rateLimiter.applyHeaders(response.headers, rate);
