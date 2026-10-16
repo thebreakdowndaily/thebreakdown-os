@@ -104,7 +104,7 @@ export const ImageBlock: FC<BlockComponentProps> = ({ data }) => {
   return (
     <figure className="my-12 md:my-16 p-4 md:p-6 bg-gray-50/40 rounded-xl border border-gray-200/50" data-visual-block="image">
       <div
-        className="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50"
+        className="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 min-h-[220px] md:min-h-[320px]"
         onClick={lightbox.open}
       >
         {isPdf ? (
@@ -123,6 +123,8 @@ export const ImageBlock: FC<BlockComponentProps> = ({ data }) => {
               alt={altText || title}
               className="w-full h-auto object-contain cursor-pointer"
               loading="lazy"
+              width={1200}
+              height={675}
             />
             {isAiGenerated && (
               <span className="absolute top-2 right-2 px-2 py-0.5 text-xs font-medium rounded bg-purple-100 text-purple-700 border border-purple-200">

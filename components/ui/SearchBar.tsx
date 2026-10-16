@@ -65,7 +65,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onChange, placeholder =
   }, [onChange]);
 
   return (
-    <form onSubmit={handleSubmit} role="search" className="w-full max-w-2xl">
+    <form action="/search" method="GET" onSubmit={handleSubmit} role="search" className="w-full max-w-2xl">
       <div className="relative flex items-center">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <SearchIcon />
@@ -73,6 +73,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onChange, placeholder =
         <input
           ref={inputRef}
           type="search"
+          name="q"
           value={query}
           onChange={handleChange}
           placeholder={placeholder}

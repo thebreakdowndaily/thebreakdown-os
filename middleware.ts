@@ -99,7 +99,16 @@ export async function middleware(request: NextRequest) {
 
     const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
 
-    if (PUBLIC_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    const isPublicRead = (request.method === 'GET' || request.method === 'HEAD') && (
+      pathname === '/api/topics' || pathname.startsWith('/api/topics/') ||
+      pathname === '/api/stories' || pathname.startsWith('/api/stories/') ||
+      pathname === '/api/entities' || pathname.startsWith('/api/entities/') ||
+      pathname === '/api/v1/topics' || pathname.startsWith('/api/v1/topics/') ||
+      pathname === '/api/v1/stories' || pathname.startsWith('/api/v1/stories/') ||
+      pathname === '/api/v1/entities' || pathname.startsWith('/api/v1/entities/')
+    );
+
+    if (isPublicRead || PUBLIC_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
       const publicRate = await rateLimiter.checkLimit({
         key: `public:${clientIp}`,
         tier: 'public_api',

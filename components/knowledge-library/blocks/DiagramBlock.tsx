@@ -41,12 +41,14 @@ export const DiagramBlock: FC<BlockComponentProps> = ({ data }) => {
 
   return (
     <figure className="my-12 md:my-16 p-4 md:p-6 bg-gray-50/40 rounded-xl border border-gray-200/50" data-visual-block="diagram">
-      <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white p-2">
+      <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white p-2 min-h-[220px] md:min-h-[320px]">
         <img
           src={url}
           alt={altText || title}
           className="w-full h-auto object-contain cursor-pointer"
           loading="lazy"
+          width={1200}
+          height={675}
           onClick={lightbox.open}
         />
       </div>
