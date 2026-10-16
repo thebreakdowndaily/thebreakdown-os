@@ -64,7 +64,7 @@ const nestedStory = {
     archiveId: 'private-archive-id',
     cellAddress: 'internal-cell',
     evidenceId: 'internal-evidence-id',
-    counterArguments: [{ internalNotes: 'not reader content' }],
+    counterArguments: [{ argument: 'A documented counterpoint', source: 'Official response', confidence: 'medium', internalNotes: 'not reader content' }],
   }],
   timeline: [{
     id: 'event-1',
@@ -114,9 +114,10 @@ describe('nested public story projection', () => {
     expect(result.sources[0]).not.toHaveProperty('metadata');
 
     expect(result.claims[0]).toMatchObject({ id: 'claim-1', status: 'verified', confidence: 0.9 });
-    for (const field of ['archiveId', 'cellAddress', 'evidenceId', 'counterArguments']) {
+    for (const field of ['archiveId', 'cellAddress', 'evidenceId']) {
       expect(result.claims[0]).not.toHaveProperty(field);
     }
+    expect(result.claims[0].counterArguments).toEqual([{ argument: 'A documented counterpoint', source: 'Official response', confidence: 'medium' }]);
 
     expect(result.timeline[0]).toMatchObject({ id: 'event-1', title: 'Policy announced' });
     for (const field of ['storyId', 'evidenceId', 'confidence']) {
