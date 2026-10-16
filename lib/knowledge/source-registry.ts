@@ -285,10 +285,7 @@ export function seedSources(): void {
       tier: 1,
       accessedAt: '2026-10-16',
       lastVerifiedAt: '2026-10-16',
-      claimIds: [
-        'claim.partition.founding-trauma',
-        'claim.partition.division-of-assets',
-      ],
+      claimIds: [],
       documentIds: ['doc-radcliffe-award'],
       chapterIds: ['kl-ch-1'],
       thinkerIds: [],
