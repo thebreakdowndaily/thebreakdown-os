@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { authorizeApiKeyDelegation } from '@/features/auth/api-keys/delegation';
-import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
+import { apiKeyRecordToPrincipal, mapApiKeyRoleToIntelRole } from '@/features/auth/api-keys/principal';
 import { can } from '@/features/auth/policy';
 import type { Principal } from '@/features/auth/principal';
 
@@ -50,13 +50,36 @@ describe('API-key delegation least-privilege policy', () => {
     });
   });
 
-  it.each(['admin', 'owner'])('prevents a managing editor from issuing a %s API key', (role) => {
-    const result = authorizeApiKeyDelegation(managingEditor, {
-      role,
+  it('rejects the unsupported legacy admin role instead of treating it as a canonical key role', () => {
+    expect(authorizeApiKeyDelegation(managingEditor, {
+      role: 'admin',
       permissions: [],
       rateLimitTier: 'standard',
+    })).toMatchObject({
+      allowed: false,
+      status: 400,
+      code: 'UNSUPPORTED_ROLE',
     });
-    expect(result).toMatchObject({
+  });
+
+  it('rejects the unsupported legacy contributor role instead of guessing its privileges', () => {
+    expect(authorizeApiKeyDelegation(managingEditor, {
+      role: 'contributor',
+      permissions: [],
+      rateLimitTier: 'standard',
+    })).toMatchObject({
+      allowed: false,
+      status: 400,
+      code: 'UNSUPPORTED_ROLE',
+    });
+  });
+
+  it('prevents a managing editor from issuing an elevated owner API key', () => {
+    expect(authorizeApiKeyDelegation(managingEditor, {
+      role: 'owner',
+      permissions: [],
+      rateLimitTier: 'standard',
+    })).toMatchObject({
       allowed: false,
       status: 403,
       code: 'ROLE_ESCALATION',
@@ -220,6 +243,26 @@ describe('API-key principal projection', () => {
     revoked_at: null,
     permissions: ['api_key.create'] as const,
   };
+
+  it('maps only policy-approved stored roles into canonical runtime roles', () => {
+    expect(mapApiKeyRoleToIntelRole('owner')).toBe('owner');
+    expect(mapApiKeyRoleToIntelRole('editor')).toBe('editor');
+    expect(mapApiKeyRoleToIntelRole('reporter')).toBe('reporter');
+    expect(mapApiKeyRoleToIntelRole('reader')).toBe('guest');
+    expect(mapApiKeyRoleToIntelRole('admin')).toBeNull();
+    expect(mapApiKeyRoleToIntelRole('contributor')).toBeNull();
+    expect(mapApiKeyRoleToIntelRole('unknown')).toBeNull();
+  });
+
+  it.each(['admin', 'contributor'])('fails closed when a stored key uses legacy role %s', (role) => {
+    const resolved = apiKeyRecordToPrincipal({
+      ...key,
+      role: role as never,
+      permissions: [...key.permissions],
+    });
+    expect(resolved).toBeNull();
+  });
+
 
   it('preserves explicit stored scopes in the principal', () => {
     const resolved = apiKeyRecordToPrincipal({ ...key, permissions: [...key.permissions] });
