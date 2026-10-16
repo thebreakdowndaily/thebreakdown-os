@@ -1,4 +1,5 @@
 import { requireApiPermission } from '@/features/auth/require-role';
+import { getPersistentWriteClient } from '@/features/auth/persistent-write-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseEntityRepository } from '@/services/repositories/supabase/entity';
 import type { Entity, EntityKind, APIResponse, APIListParams } from '@/types/canonical';
@@ -37,6 +38,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const auth = await requireApiPermission('entity.create', request);
   if ('response' in auth) return auth.response;
+  const write = await getPersistentWriteClient(auth.principal);
+  if ('response' in write) return write.response;
+  const writeRepo = new SupabaseEntityRepository(write.client);
   const body = (await request.json()) as Partial<Entity>;
 
   const now = new Date().toISOString();
@@ -60,7 +64,7 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
 
-  const saved = await repo.save(entity);
+  const saved = await writeRepo.save(entity);
   syncEntity(saved);
   const res: APIResponse<Entity> = { data: saved };
   return NextResponse.json(res, { status: 201 });
