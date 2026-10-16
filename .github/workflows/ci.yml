@@ -10,6 +10,14 @@ jobs:
   lint-and-build:
     name: Continuous Integration & Release Gates
     runs-on: ubuntu-latest
+    # Browser E2E uses the explicit in-memory data provider. Give client
+    # imports inert local Supabase config so production-mode startup does not
+    # fail merely because CI has no production credentials. Nothing listens on
+    # this loopback port; these values must never be copied to deployment env.
+    env:
+      DATA_PROVIDER: memory
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-only-placeholder-anon-key-not-valid-for-production
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
