@@ -198,7 +198,7 @@ AS $$
 DECLARE
   row_data editorial.claims;
 BEGIN
-  IF auth.uid() IS NULL OR NOT public.is_editor() THEN
+  IF auth.uid() IS NULL OR NOT public.is_staff() THEN
     RAISE EXCEPTION 'Insufficient privileges' USING ERRCODE = '42501';
   END IF;
   IF p_claim IS NULL OR length(btrim(p_claim)) = 0 THEN
