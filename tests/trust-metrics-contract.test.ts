@@ -85,6 +85,7 @@ describe('trust metrics data lineage', () => {
     expect(registryIds.has('s32')).toBe(true);
     expect(registryIds.has('s33')).toBe(true);
     expect(registryIds.has('s34')).toBe(true);
+    expect(registrySources.find((source) => source.id === 's31')?.url).toBe('https://eprints.soton.ac.uk/40935/');
     // s30 is additionally linked through a canonical claim's evidence even
     // though it is not a direct block citation, so registry relationships can
     // legitimately exceed the unique direct-citation count by one.
