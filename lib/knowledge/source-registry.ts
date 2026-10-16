@@ -550,7 +550,7 @@ export function seedSources(): void {
     {
       id: 's30',
       title: "Making Sense of Pakistan",
-      url: 'https://ciaotest.cc.columbia.edu/book/cup/0017110/f_0017110_14634.pdf',
+      url: 'https://books.google.com/books/about/Making_Sense_of_Pakistan.html?id=k9vnugAACAAJ',
       tier: 3,
       accessedAt: '2026-10-16',
       lastVerifiedAt: '2026-10-16',
