@@ -37,6 +37,7 @@ const AUTHENTICATED_PAGES = [
   '/performance',
   '/settings',
   '/editor',
+  '/newsroom',
   '/intel',
 ];
 
@@ -246,6 +247,7 @@ export const config = {
     '/tracking/:path*',
     '/settings/:path*',
     '/editor/:path*',
+    '/newsroom/:path*',
     '/intel/:path*',
     '/reader/:path*',
     '/problems/:path*',
