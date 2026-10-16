@@ -1,3 +1,4 @@
+import { requireApiPermission } from '@/features/auth/require-role';
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseMediaRepository } from '@/services/repositories/supabase/media';
 import type { MediaItem, APIResponse, APIListParams } from '@/types/canonical';
@@ -29,6 +30,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireApiPermission('media.create', request);
+  if ('response' in auth) return auth.response;
   const body = (await request.json()) as Partial<MediaItem>;
 
   const now = new Date().toISOString();
