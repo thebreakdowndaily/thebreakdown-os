@@ -76,7 +76,7 @@ const PRIVATE_NESTED_KEYS = new Set([
   'confidence_breakdown', 'archiveid', 'archive_id', 'celladdress',
   'cell_address', 'evidenceid', 'evidence_id', 'verifiedby', 'verified_by',
   'staffid', 'staff_id', 'staffids', 'staff_ids', 'ownerid', 'owner_id',
-  'internal', 'internalnotes', 'internal_notes', 'private', 'privateNotes',
+  'internal', 'internalnotes', 'internal_notes', 'internalsourceid', 'internal_source_id', 'private', 'privatenotes', 'privateNotes',
   'private_notes', 'debug', 'rawpayload', 'raw_payload', 'rawdata', 'raw_data',
   'apikey', 'api_key', 'token', 'secret', 'moderationnotes', 'moderation_notes',
   'reviewnotes', 'review_notes', 'editorialnotes', 'editorial_notes',
