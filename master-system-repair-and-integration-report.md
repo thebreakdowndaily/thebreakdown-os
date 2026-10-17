@@ -1,5 +1,5 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3–12: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate & Staging Economics
+## Missions 3–13: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate & Cost Model Reconciliation
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
@@ -471,20 +471,44 @@ RELEASE GATE DECISION: BLOCKED — STAGING TARGET NOT VERIFIED
   - Staging CI / QA: **MODERATE IMPACT** (`deploy-staging` workflow and direct tests require retargeting).
 - **Reversibility**: Pausing preserves all 175 stories and schemas; guaranteed 90-day restore window via dashboard.
 
-### C. Financial Comparison
-1. **Option A (Upgrade to Pro)**:
+### C. Financial Comparison (Reconciled with Official Provider Policy)
+1. **Option A (Upgrade to Pro — All Projects in Pro Org)**:
    - Base Pro subscription: $25.00/mo.
-   - Dedicated Micro Compute (3 projects @ $10/mo less $10 credit): $20.00/mo.
-   - Total Recurring Cost: **$45.00/month** (~₹3,780/mo + GST) for 3 active projects, or **$35.00/month** (~₹2,940/mo + GST) if fact-check is paused.
-   - Adds automated daily backups, eliminates inactivity pauses, and provisions permanent staging in `ap-south-1`.
-2. **Option B (Free Quota Route)**:
+   - Dedicated Micro Compute (3 active projects @ $10/mo less $10 credit): $20.00/mo.
+   - Total Recurring Cost: **$45.00/month** (~₹3,782/mo + GST, total ~₹4,463/mo).
+   - Zero downtime, automated daily backups for production, permanent staging in `ap-south-1`.
+2. **Option B (Pro Upgrade with Fact-Check Transfer to Free Org)**:
+   - Pro subscription for Org 1 (prod + staging): $25.00/mo base + $10.00/mo net compute = **$35.00/month** (~₹2,942/mo + GST).
+   - Free Org 2 (fact-check): $0.00/mo.
+   - *Policy Invariant*: Projects inside a Pro organization cannot be paused directly; to avoid the $10/mo compute charge, fact-checking must be transferred to a Free organization.
+3. **Option C (Free Quota Route — Pause Fact-Check)**:
    - Total Cost: **$0.00/month**.
-   - Pause `lvfovvidtowadmnggzzf` via Supabase dashboard (freeing Slot 2).
+   - Pause `lvfovvidtowadmnggzzf` in Supabase dashboard (freeing Slot 2).
    - Provision `thebreakdown-staging` in `ap-south-1` within free quota.
-   - Retarget CI references to the new project.
+   - Production remains exposed without automated daily backups.
 
-### D. Human Decision Required
-The decision to either commit to monthly cloud expenses ($45/mo or $35/mo) or pause the legacy fact-check project ($0/mo) requires explicit human authorization before any provider mutations can take place. Full runbook and decision matrix recorded in `docs/remediation/PHASE12_STAGING_ECONOMICS_AND_PROVISIONING_DECISION.md`.
+---
+
+## 16. Phase 13: Supabase Cost Model Reconciliation & Final Staging Decision
+
+### A. Official Provider Policy Invariants
+1. **Paused Free Project Restore Window**: Verified at **90 days** from date of pausing via dashboard Studio. After 90 days, direct one-click restore expires, but backups and storage objects remain downloadable.
+2. **Pro Organization Pausing Prohibition**: Under official Supabase policy, projects belonging to a Pro organization **cannot be paused directly**. Paid compute runs continuously. To pause a project, it must first be transferred to a Free organization.
+3. **Project Transfer Feasibility**: Requires Owner role, no active GitHub integration, no log drains. Transferring between paid and free tiers incurs a brief **1–2 minute downtime window**. Region cannot be changed via transfer.
+4. **Free Quota Scope**: 2 active free projects allowed account-wide across all organizations where the user is an Owner or Administrator.
+
+### B. Telemetry & Dependency Finding: Render Polling Worker
+- External Node worker on Render (`74.220.49.18`) continuously polls `lvfovvidtowadmnggzzf` for `publish_at` every 60–120s, returning `400 Bad Request`.
+- Confirmed to be an **orphaned background worker** from an early June 2026 prototype.
+- **Zero production dependencies**: Production scheduled publishing was refactored in PR #92 to use Cloudflare Worker `thebreakdown-scheduled-publish` calling `/api/editorial/publish-due` against `mskyhaunnlwtwvsqcmav`.
+
+### C. Final Recommendation
+- **Preferred Route**: **Option A ($45.00/month)**. Upgrades organization `pwfzmsccchpaqwwimoih` to Pro, launches staging in Mumbai (`ap-south-1`), enables automated daily backups for production, avoids all transfer downtime, and keeps fact-checking operational.
+- **Lower-Cost Fallback**: **Option B ($35.00/month)**. Upgrades production and staging to Pro ($35/mo) while transferring fact-checking to a separate Free organization. Saves $10/mo at the expense of transfer downtime (1–2 min) and multi-org management.
+- **Emergency Zero-Cost**: **Option C ($0.00/month)**. Pauses fact-checking to stay within free quota. Disqualified for production standards due to lack of production automated backups.
+
+Full detailed analysis, pricing tables, and human-approval checklist recorded in `docs/remediation/PHASE13_STAGING_DECISION_FINALIZATION.md`.
+
 
 
 

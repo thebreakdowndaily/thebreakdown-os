@@ -28,8 +28,8 @@ Phase 12 resolves the operational and financial decision blocker identified in P
    - Active telemetry demonstrates an external background service on **Render** (IP `74.220.49.18`) continuously querying `https://lvfovvidtowadmnggzzf.supabase.co/rest/v1/stories` every 1–2 minutes (currently failing with HTTP 400 due to column discrepancies).
    - Pausing `lvfovvidtowadmnggzzf` has **zero impact on production**, but **moderate impact on staging CI/QA smoke suites**.
 5. **Accurate Economics**:
-   - A Pro upgrade is **not** a flat $25/month. Each project runs on dedicated compute ($10/mo Micro). With 1 included project covered by $10 credits, running 3 active projects costs **$45.00/month** (approx. ₹3,780/mo + GST). Running 2 active projects (with fact-check paused) costs **$35.00/month** (approx. ₹2,940/mo + GST).
-   - The free route (pausing `lvfovvidtowadmnggzzf`) costs **$0.00/month** and preserves all data with a 90-day restore guarantee.
+   - A Pro upgrade is **not** a flat $25/month. Each project runs on dedicated compute ($10/mo Micro). With 1 included project covered by $10 credits, running 3 active projects in the Pro organization costs **$45.00/month** (approx. ₹3,780/mo + GST). Running 2 active projects costs **$35.00/month** (approx. ₹2,940/mo + GST), which requires transferring the fact-check project to a separate Free organization (since projects in a Pro organization cannot be paused directly).
+   - The free route (pausing `lvfovvidtowadmnggzzf` within the Free tier) costs **$0.00/month** and preserves all data with a 90-day restore guarantee.
 
 ---
 
@@ -163,7 +163,7 @@ Official Supabase billing mechanics for organization `pwfzmsccchpaqwwimoih`:
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-*Cost Reduction Variation*: If `lvfovvidtowadmnggzzf` is paused, Net Compute is $10.00, reducing the monthly total to **$35.00/month** (~₹2,940/mo + GST).
+*Cost Reduction Variation (Option B)*: If `lvfovvidtowadmnggzzf` is transferred to a separate Free organization, Net Compute in the Pro organization is $10.00, reducing the Pro monthly total to **$35.00/month** (~₹2,940/mo + GST). *Note: Projects within a Pro organization cannot be paused directly; to stop compute charges, the project must be transferred to a Free organization.*
 
 ---
 
@@ -208,15 +208,20 @@ To proceed, the project owner/administrator must choose and authorize one of the
 HUMAN APPROVAL REQUIRED: SELECT STAGING PROVISIONING PATH
 ═══════════════════════════════════════════════════════════════════════════════
 
-[ ] CHOICE 1: AUTHORIZE PRO UPGRADE (OPTION A)
-    - Action: Upgrade organization pwfzmsccchpaqwwimoih to Supabase Pro.
-    - Financial Commitment: $45.00/mo (3 active projects) or $35.00/mo (if fact-check paused).
-    - Result: Provision thebreakdown-staging in ap-south-1 without disturbing lvfovvidtowadmnggzzf.
+[ ] CHOICE 1: AUTHORIZE PRO UPGRADE — ALL PROJECTS IN PRO (OPTION A)
+    - Action: Upgrade organization pwfzmsccchpaqwwimoih to Supabase Pro ($25/mo).
+    - Financial Commitment: $45.00/mo ($25 base + $20 net compute for 3 projects) (~₹3,782/mo + GST).
+    - Result: Provision thebreakdown-staging in ap-south-1. Keeps lvfovvidtowadmnggzzf running. Automated daily backups for production.
 
-[ ] CHOICE 2: AUTHORIZE FREE-QUOTA PROVISIONING (OPTION B)
-    - Action: Pause lvfovvidtowadmnggzzf (the-breakdown-fact-check) in Supabase Dashboard.
+[ ] CHOICE 2: AUTHORIZE PRO UPGRADE WITH FACT-CHECK TRANSFER (OPTION B)
+    - Action: Upgrade pwfzmsccchpaqwwimoih to Pro ($25/mo), create Free Org 2, transfer lvfovvidtowadmnggzzf to Org 2.
+    - Financial Commitment: $35.00/mo ($25 base + $10 net compute for 2 projects) (~₹2,942/mo + GST).
+    - Result: Provision thebreakdown-staging in ap-south-1. Keeps fact-checking running at $0 in Org 2. 1-2 min transfer downtime.
+
+[ ] CHOICE 3: AUTHORIZE FREE-QUOTA PROVISIONING (OPTION C)
+    - Action: Keep pwfzmsccchpaqwwimoih on Free tier. Pause lvfovvidtowadmnggzzf in Supabase Dashboard.
     - Financial Commitment: $0.00/mo.
-    - Result: Provision thebreakdown-staging in ap-south-1 within free quota; retarget CI workflows.
+    - Result: Provision thebreakdown-staging in ap-south-1 within free quota; retarget CI workflows. Production has no automated backups.
 ═══════════════════════════════════════════════════════════════════════════════
 ```
 
