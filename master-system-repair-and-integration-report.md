@@ -1,5 +1,5 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3, 4, 5A & 5B: Post-Merge Deployment Recovery, Release Hygiene, Radar Authorization Remediation & API Key Role Consistency
+## Missions 3–8: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety & Database Security Audit
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
@@ -9,6 +9,9 @@
 **Vercel Deployment Policy PR:** [PR #69](https://github.com/thebreakdowndaily/thebreakdown-os/pull/69) (`OPEN` / `DRAFT`, rebased on `4d835608`)  
 **Radar Authorization Remediation PR:** [PR #72](https://github.com/thebreakdowndaily/thebreakdown-os/pull/72) (`OPEN` / `DRAFT`, rebased on `4d835608`, head `2402c18e`, closes #67)  
 **API Key Role Consistency PR:** [PR #74](https://github.com/thebreakdowndaily/thebreakdown-os/pull/74) (`OPEN` / `DRAFT`, rebased on `2402c18e`, head `6b57dc4f`, closes #73)  
+**Cloudflare OpenNext Compatibility PR:** [PR #88](https://github.com/thebreakdowndaily/thebreakdown-os/pull/88) (`OPEN` / `DRAFT`, head `e77c608f`, closes #51, #70)  
+**API Resource Authorization & Cold-Start PR:** [PR #89](https://github.com/thebreakdowndaily/thebreakdown-os/pull/89) (`OPEN` / `DRAFT`, head `bea8179d`, closes #56, #57)  
+**Scheduled Publishing Fail-Closed PR:** [PR #92](https://github.com/thebreakdowndaily/thebreakdown-os/pull/92) (`OPEN` / `DRAFT`, head `6d5dd8bc`, closes #91)  
 **Working Branch:** `mission/post-merge-verification-2026-10-16`  
 **Workspace:** `C:\newsjack-content\thebreakdown-os-master-repair`  
 **Overall Status:** **VERIFIED, PROTECTED & OPERATIONAL**  
@@ -17,11 +20,16 @@
 
 ## 1. Executive Summary & Current Production Status
 
-Following the successful merge of **PR #86** into `main` (`4d83560851552c7a5826261a0ffa13848feb0420`), three coordinated engineering missions were executed:
+Following the successful merge of **PR #86** into `main` (`4d83560851552c7a5826261a0ffa13848feb0420`), a series of controlled engineering missions was executed:
 
 1. **Mission 3 (Post-Merge Recovery & Live Proof)**: Verified live edge deployment parity, ran the canary suite, and proved end-to-end functionality across 22 production endpoints.
-2. **Mission 4 (Deployment Hygiene, Quota Recovery & Release-Control Verification)**: Eliminated avoidable preview deployment attempts by rebasing and validating PR #69 (`vercel.json` branch allowlist), performed Cloudflare build-control forensics, verified the healthy production baseline, and mapped the ranked engineering dependency plan for pending streams (PRs #66, #76, #80, #84 and associated issues).
-3. **Mission 5A (Radar Authorization Boundary Remediation — Issue #67 / PR #72)**: Remediated the least-privilege vulnerability where valid read-only API keys could invoke heavy Radar polling pipelines or force complete re-ingestion (`?force=true`). Introduced explicit permissions `radar.poll` and `radar.poll.force`, enforced dual-boundary protection in middleware and route handlers, placed rate-limiting ahead of permission rejection, and proved zero-regression via 44 automated tests and full typecheck/lint/build passes.
+2. **Mission 4 (Deployment Hygiene, Quota Recovery & Release-Control Verification)**: Eliminated avoidable preview deployment attempts by rebasing and validating PR #69 (`vercel.json` branch allowlist), performed Cloudflare build-control forensics, verified the healthy production baseline, and mapped the ranked engineering dependency plan for pending streams.
+3. **Mission 5A (Radar Authorization Boundary Remediation — Issue #67 / PR #72)**: Remediated the least-privilege vulnerability where valid read-only API keys could invoke heavy Radar polling pipelines or force complete re-ingestion (`?force=true`). Introduced explicit permissions `radar.poll` and `radar.poll.force`, enforced dual-boundary protection in middleware and route handlers, and verified via 44 tests.
+4. **Mission 5B (Cloudflare Provider-Gate Recovery & API-Key Role Consistency — Issues #70, #73 / PR #74)**: Diagnosed Cloudflare build triggers across `thebreakdown-website` and `thebreakdown-os`, eliminated `admin`/`owner` role-mapping ambiguities, enforced canonical `IntelRole` projection with fail-closed behavior for unsupported roles, strictly preserved explicit scopes, and verified 29 Vitest tests passing with zero errors.
+5. **Mission 6 (Cloudflare OpenNext Runtime Compatibility — Issues #51, #70 / PR #88)**: Removed unsupported `export const runtime = 'edge'` from Next.js App Router copilot route, resolving the OpenNext Cloudflare bundle blocker. Added regression guard `tests/cloudflare-opennext-compatibility.test.ts` registered in `vitest.config.js`. All CI workflows passed.
+6. **Mission 7 (API Resource Authorization & Cold-Start Persistence — Issues #56, #57 / PR #89)**: Added canonical permissions for entities, topics, fixes, timelines, media, and datasets. Standardized authorization across v1 and v2 API routes. Resolved server cold-start persistence via `features/auth/persistent-write-client.ts`. Verified 37 automated tests passing.
+7. **Mission 8 (Scheduled Publishing Fail-Closed Architecture — Issue #91 / PR #92)**: Completely removed raw database RPC fallback (`fn_claim_due_schedule_entry`, `fn_publish_story_with_audit`) from `workers/scheduled-publish`. Enforced canonical authority via HTTPS `APP_URL/api/editorial/publish-due` with `CRON_SECRET`. Corrected response shape parsing. Removed secret placeholders from `wrangler.toml` `[vars]`. Verified 10 adversarial unit tests passing.
+8. **Mission 9 (Database RLS, PostgREST Exposure & Function Path Audit — Issue #90)**: Completed read-only security assessment across `thebreakdown-production` and `the-breakdown-fact-check`. Confirmed production database remains immutable on migration 032 baseline with zero unapplied SQL migrations.
 
 ### Production Proof Highlights
 - **Live Deployment Parity**: `https://thebreakdown.in/api/health` confirms commit `4d83560851552c7a5826261a0ffa13848feb0420` is actively serving production traffic.
@@ -240,89 +248,163 @@ The 29 Vitest tests verify:
 
 ---
 
-## 7. Next Engineering Workstream Roadmap & Dependency Matrix
+## 7. Cloudflare OpenNext Runtime Compatibility (Issues #51, #70 / PR #88)
 
-The remaining engineering backlog has been updated following the remediation of Issues #67 and #73:
+### A. Root Cause Analysis
+- Cloudflare Workers Builds on PR branches failed because `@opennextjs/cloudflare` cannot bundle Next.js App Router route handlers that declare `export const runtime = 'edge'`.
+- Codebase audit across all `app/**/route.ts` handlers revealed an isolated edge runtime declaration in `app/api/ai/copilot/route.ts`:
+  ```typescript
+  // Before:
+  export const runtime = 'edge';
+  ```
+- Removing `runtime = 'edge'` allows OpenNext to compile the copilot route under the default Node.js-compatible Cloudflare worker environment without breaking streaming or model execution.
 
-```mermaid
-flowchart TD
-    PR86["PR #86 (Merged: Baseline 4d83560)"] --> PR66["Rank 1: PR #66\nDurable Corrections\n(Migrations 033-034)"]
-    PR66 --> PR76["Rank 2: PR #76\nEditorial & Search Projections\n(Migration 035 / Issues #54, #55)"]
-    PR76 --> PR80["Rank 3: PR #80\nBounded Topics Aggregation\n(Migration 036)"]
-    PR80 --> PR84["Rank 4: PR #84\nDB Function & RPC Hardening\n(Migration 037)"]
-    
-    PR86 -.-> PR69["PR #69 (Quota Recovery / Issue #71)\n[DRAFT - Validated]"]
-    PR86 -.-> PR72["PR #72 (Issue #67 Scoped Radar Poll)\n[DRAFT - Validated 44 Tests]"]
-    PR72 -.-> PR74["PR #74 (API Key Delegation Escalation)\n[DRAFT - Validated 29 Tests / Rebased on PR #72]"]
-    PR86 -.-> ISS57["Issue #57 (Mutating Handlers Auth)"]
-    PR86 -.-> ISS56["Issue #56 (v1 Cold-Start getServices)"]
-```
+### B. Implementation & Automated Regression Test
+- **Commit `b3cfa309`**: Removed `export const runtime = 'edge'` from `app/api/ai/copilot/route.ts`.
+- **Commit `3307a749`**: Created `tests/cloudflare-opennext-compatibility.test.ts` to scan all route files in `app/api/**` and assert zero routes export `runtime = 'edge'`.
+- **Commit `e77c608f`**: Registered `tests/cloudflare-opennext-compatibility.test.ts` in `vitest.config.js` explicit test allowlist.
 
-### Stream Rankings & Detailed Specifications
-
-#### Rank 1: PR #66 — Durable Correction Publication
-- **Scope**: Migration `033_durable_correction_publication.sql` (and 034 if stacked).
-- **Core Functionality**: Replaces in-memory correction fixture with atomic `SECURITY DEFINER` RPC `publish_correction_and_resolve_submission` in Supabase. Enforces idempotency via submission UUID, requires resolvable canonical story, and revalidates `/transparency/corrections` and `/story/[slug]`.
-- **Prerequisites**: Base `main` (migrations 001–032).
-- **Test Gates**: Migration safety check, `tests/reader-corrections-persistence.test.ts`, `tests/staging-corrections-smoke.test.ts`.
-- **Risks**: Modifies publication ledger; historical sample entries in `INITIAL_PUBLISHED_CORRECTIONS` must remain offline fixtures.
-
-#### Rank 2: PR #76 — Safe Editorial and Search Projections (Issues #54 & #55)
-- **Scope**: Migration `035_safe_editorial_search_projections.sql`.
-- **Core Functionality**:
-  - Resolves Issue #54: Creates public search-index compatibility view over canonical `search.index_entries` with generated search vector, excluding drafts and quarantined items.
-  - Resolves Issue #55: Reconciles `/api/v2/claims` and `/api/v2/sources` to query canonical `editorial.claims` and `editorial.sources` via constrained public views, replacing direct table writes with narrow session-authenticated RPCs.
-- **Prerequisites**: Stacked on PR #66.
-- **Test Gates**: `test:migration`, `tests/search.test.ts`, route tests for `/api/v2/claims` and `/api/v2/sources`.
-- **Risks**: Exposes views over `search` and `editorial` schemas; RLS policies must strictly enforce published-only filtering.
-
-#### Rank 3: PR #80 — Bound Public Directory Story Aggregation
-- **Scope**: Migration `036_bound_public_topic_aggregation.sql`.
-- **Core Functionality**: Implements `list_public_topic_summaries` RPC to return exact public story counts and at most two recent previews per topic, replacing the multi-page unbounded fetch in `/topics`. Adds composite and GIN indexes.
-- **Prerequisites**: Stacked on PR #76.
-- **Test Gates**: `tests/public-topic-summary.test.ts`, `tests/topic-story-aggregator.test.ts`.
-- **Risks**: Requires Postgres index creation; must verify EXPLAIN ANALYZE on staging.
-
-#### Rank 4: PR #84 — Harden Database Functions & RPC Grants
-- **Scope**: Migration `037_harden_function_paths_and_grants.sql`.
-- **Core Functionality**: Fixes mutable `SECURITY DEFINER` function search paths (`SET search_path = ''`) across all new RPCs and restricts worker-only RPC execution to service role.
-- **Prerequisites**: Stacked on PR #80.
-- **Test Gates**: `test:migration`, Supabase security advisors.
-- **Risks**: Function permission revocation must not break authorized application client calls.
-
-#### Standalone Priority Security & Reliability Streams
-1. **Issue #71 / PR #69 (Vercel Quota Recovery)**: Branch allowlist verified with unit tests and rebased on `4d835608`; ready for review.
-2. **Issue #67 / PR #72 (Radar Scoped Permission)**: Remediated, rebased on `4d835608`, passed 44 tests, full security test and build suites; draft PR updated awaiting review.
-3. **Issue #73 / PR #74 (API Key Delegation Privilege Escalation)**: Canonical role mapping, 29 Vitest tests, rebased on PR #72 (`2402c18e`), full security and build suites passed; draft PR updated awaiting review.
-4. **Issue #57 (Mutating Handlers Authorization)**: Enforce explicit `requireApiPermission` checks on `v1/media`, `v1/datasets`, `v2/topics`, `v2/entities`, `v2/fixes`, `v2/timelines`.
-5. **Issue #56 (v1 Search & Datasets Cold Start)**: Wrap process-local `getServices()` calls with explicit bootstrap guards to eliminate lambda cold-start failures.
+### C. Validation & CI Status
+- `npx vitest run tests/cloudflare-opennext-compatibility.test.ts`: **PASSED** (1 test, 0 edge routes found).
+- All PR #88 CI checks **PASSED**:
+  - `POP-1.0 Production Infrastructure Pipeline` (`1. Validate & Test (CI)`): **SUCCESS** (4m 41s).
+  - `CI Pipeline` (`Continuous Integration & Release Gates`): **SUCCESS** (5m 41s).
+  - `Security Scans` (`Gitleaks` & `OSV`): **SUCCESS**.
+  - `Audit Framework Verification` (`verify`): **SUCCESS**.
+  - `Vercel Preview`: **SUCCESS**.
+- Branch `fix/cloudflare-opennext-node-runtime-2026-10-16` preserved in DRAFT.
 
 ---
 
-## 8. Database Boundary & Safety Standard
+## 8. API Resource Authorization & Cold-Start Persistence (Issues #56, #57 / PR #89)
+
+### A. Problem Statement
+- **Issue #57 (Mutating Handlers Authorization)**: Legacy mutating API routes (`v1/entities`, `v1/fixes`, `v1/timelines`, `v1/topics`, `v1/media`, `v1/datasets`, `v2/*`) lacked fine-grained permission enforcement, risking unauthorized mutation or scope bypass.
+- **Issue #56 (v1 Cold-Start Failures)**: In stateless serverless/edge environments, process-local service caches (`getServices()`) could fail on fresh cold-starts when initializing Supabase write clients.
+
+### B. Implementation
+- **Permission Registry (`features/auth/permissions.ts`)**: Added canonical permissions:
+  - `entity.read`, `entity.write`
+  - `topic.read`, `topic.write`
+  - `fix.read`, `fix.write`
+  - `timeline.read`, `timeline.write`
+  - `media.read`, `media.write`
+  - `dataset.read`, `dataset.write`
+- **Route Authorization Boundary**: Applied explicit `requireApiPermission` checks across all v1 and v2 routes while preserving API-key scopes.
+- **Persistent Write Client (`features/auth/persistent-write-client.ts`)**: Implemented safe, resilient write client resolution for server cold starts.
+- **Repository Stabilization**: Standardized `dataset`, `entity`, `fix`, `media`, `timeline`, and `topic` repositories to safely resolve client instances without leaking memory or failing during cold starts.
+
+### C. Test Matrix & Validation
+- Added `tests/api-v1-cold-start.test.ts` (2 tests) and `tests/resource-authorization.test.ts` (35 tests).
+- `npx vitest run tests/api-v1-cold-start.test.ts tests/resource-authorization.test.ts`: **37/37 PASSED**.
+- `npm run test:security`: **PASSED** (114 Vitest tests, 75 RLS, 45 API security, 1205 Intel auth).
+- `npm run check:type`: **PASSED** (0 errors).
+- All PR #89 CI workflows **PASSED** (`CI Pipeline` 4m 30s, Vercel preview ready). Branch preserved in DRAFT.
+
+---
+
+## 9. Scheduled Publishing Fail-Closed Architecture (Issue #91 / PR #92)
+
+### A. Vulnerability & Design Defect
+- `workers/scheduled-publish/index.ts` and `services/editorial/schedule-cf.ts` contained an unsafe database RPC fallback (`fn_claim_due_schedule_entry` / `fn_publish_story_with_audit`) that executed when `APP_URL` or `CRON_SECRET` was missing, or when the canonical Next.js endpoint failed.
+- The direct database fallback bypassed the full application editorial and fact-check validation gates (`validateStoryForPublication`), risking publishing unverified content.
+- Response format mismatch: `app/api/editorial/publish-due/route.ts` returns `{ storyId, passed, checksCount, failedChecks }`, but the Worker attempted to access `r.checks.filter(...)`, throwing runtime errors on valid responses.
+- `workers/scheduled-publish/wrangler.toml` committed secret placeholders under plain `[vars]`.
+
+### B. Remediation
+1. **Total Fallback Elimination**: Completely removed all direct database RPC calls from the scheduled publish worker and dispatcher. If the canonical application endpoint fails, the Worker fails closed, logs the failure, and re-throws to mark the Cron run failed.
+2. **Canonical Authority**: Scheduled Worker is strictly a dispatcher. All publication authority resides exclusively in the Next.js `/api/editorial/publish-due` endpoint.
+3. **URL Validation**: `APP_URL` is validated strictly as an HTTPS origin (no path, auth, or query parameters permitted).
+4. **Contract Alignment**: Updated Worker to parse `{ timestamp, totalChecked, published, blocked, results }` with strict `{ storyId, passed, checksCount, failedChecks }` items.
+5. **Secret Hygiene**: Removed `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `CRON_SECRET` from `wrangler.toml` `[vars]`. Documented `wrangler secret put CRON_SECRET`.
+
+### C. Test Matrix (`tests/scheduled-publish-worker.test.ts` — 10/10 PASSED)
+The 10 automated unit tests verify:
+- Dispatch to HTTPS canonical endpoint and contract validation.
+- Fail-closed rejection when `CRON_SECRET` is missing (no request made).
+- Rejection of unsafe `APP_URL` values (HTTP, paths, credentials, query parameters).
+- Network errors fail closed without fallback.
+- Non-2xx HTTP responses fail closed.
+- Invalid JSON and malformed result shapes fail closed.
+- Counter inconsistencies between summary and items fail closed.
+
+### D. Validation & CI Status
+- `npm run test:security`: **PASSED** (includes scheduled publish worker suite).
+- `npm run check:type`: **PASSED** (0 errors).
+- `npm run check:lint`: **PASSED** (0 errors).
+- `npm run check:build`: **PASSED** (0 errors).
+- All PR #92 CI workflows **PASSED**: `Continuous Integration & Release Gates`, `Validate & Test (CI)`, `Gitleaks`, `OSV`, `verify`, `Vercel`. Branch preserved in DRAFT.
+
+---
+
+## 10. Database Security, Exposure & Function Path Audit (Issue #90)
+
+### A. Read-Only Audit Findings
+A comprehensive read-only audit of live Supabase projects was conducted on 2026-10-17:
+
+1. **`thebreakdown-production` (`mskyhaunnlwtwvsqcmav`)**:
+   - Security advisor flags RLS disabled on 8 tables: `editorial.sources`, `editorial.claims`, `editorial.claim_citations`, `editorial.story_claims`, `editorial.evidence_items`, `audit.story_versions`, `audit.activity_log`, and `search.index_entries`.
+   - **Crucial Qualification**: Direct privilege inspection confirmed `anon` and `authenticated` roles have **no table privileges** and no `USAGE` grants on these custom schemas. Therefore, they are not reachable via normal PostgREST endpoints.
+   - `SECURITY DEFINER` functions in `public` (`current_app_role`, `is_admin`, `is_editor`, `is_staff`, `increment_rate_limit`) were reviewed for caller inputs.
+   - `fn_claim_due_schedule_entry` and `fn_publish_story_with_audit` have no public EXECUTE grants.
+
+2. **`the-breakdown-fact-check` (`lvfovvidtowadmnggzzf`)**:
+   - `audit.published_story_snapshots` has RLS disabled with `anon`/`authenticated` SELECT.
+   - `editorial.*` tables have broad `USING (true)` read policies.
+   - Several mutation RPCs (`delete_story_cascading`, `publish_story_atomic`) require revocation of public execute.
+
+### B. Safety Protocol & Migration Sequence
+- **No SQL was executed against production**: The production database remains strictly on migration 032 baseline.
+- Remediation must be released only through reviewed migrations (PR #84 / Migration 037) following staging validation and scheduled maintenance.
+
+---
+
+## 11. Updated Engineering Workstream Roadmap & Dependency Matrix
+
+```mermaid
+flowchart TD
+    PR86["PR #86 (Merged Baseline: 4d83560)"] --> PR69["PR #69\nVercel Quota Policy\n[DRAFT - Validated]"]
+    PR86 --> PR88["PR #88\nCloudflare OpenNext Runtime\n[DRAFT - Validated / Closes #51, #70]"]
+    PR86 --> PR92["PR #92\nScheduled Publish Fail-Closed\n[DRAFT - Validated / Closes #91]"]
+    
+    PR86 --> PR72["PR #72\nScoped Radar Polling\n[DRAFT - Validated / Closes #67]"]
+    PR72 --> PR74["PR #74\nAPI Key Role Boundaries\n[DRAFT - Validated / Closes #73]"]
+    PR74 --> PR89["PR #89\nResource Auth & Cold Start\n[DRAFT - Validated / Closes #56, #57]"]
+    
+    PR86 --> PR66["Rank 1: PR #66\nDurable Corrections\n(Migrations 033-034 / Issue #65)"]
+    PR66 --> PR76["Rank 2: PR #76\nEditorial Projections\n(Migration 035 / Issues #54, #55)"]
+    PR76 --> PR80["Rank 3: PR #80\nBounded Topics Aggregation\n(Migration 036 / Issue #52)"]
+    PR80 --> PR84["Rank 4: PR #84\nDB Function & RPC Hardening\n(Migration 037 / Issue #90)"]
+```
+
+---
+
+## 12. Database Boundary & Safety Standard
 
 > [!CAUTION]
 > **Production Database Immutability Protocol**:
 > The live Supabase database (`mskyhaunnlwtwvsqcmav`) currently contains migrations 001–032. Migrations 033–037 exist strictly in isolated PR branches. Under no circumstances may migrations 033–037 be run against production without:
-> 1. Merging code in exact sequence: PR #66 → PR #76 → PR #80 → PR #84.
+> 1. Code review and merge in strict sequence: PR #66 → PR #76 → PR #80 → PR #84.
 > 2. Validation in an isolated staging environment.
 > 3. An explicitly authorized production maintenance window.
 
 ---
 
-## 9. Definition of Done & Verification Audit Checklist
+## 13. Definition of Done & Master Verification Audit Checklist
 
 | Item | Requirement | Verification Method | Status |
 |---|---|---|---|
 | 1 | Production baseline verified | `/api/health` reports commit `4d835608` | **SATISFIED** |
 | 2 | Live route sanity suite | 22/22 HTTP routes passing with content validation | **SATISFIED** |
-| 3 | PR #87 verification | CI, security, audit workflows passing | **SATISFIED** |
-| 4 | Vercel rate limit diagnosed | Identified webhook-level creation quota | **SATISFIED** |
-| 5 | PR #69 rebase & policy tests | Rebased on `4d835608`, 22 Vitest tests passing | **SATISFIED** |
-| 6 | Cloudflare build controls | Documented branch control & watch paths | **SATISFIED** |
-| 7 | Radar authorization remediation | PR #72 rebased on `4d835608`, 44 Vitest tests passing | **SATISFIED** |
-| 8 | API key role consistency & delegation | PR #74 rebased on PR #72 (`2402c18e`), 29 Vitest tests passing | **SATISFIED** |
-| 9 | Security & build suites clean | `test:security`, `check:type`, `check:lint`, `check:build` pass with 0 errors | **SATISFIED** |
-| 10 | Engineering roadmap | 5-phase dependency tree mapped and documented | **SATISFIED** |
-| 11 | Workspace preservation | `git status` clean, primary repo untouched | **SATISFIED** |
+| 3 | Continuous Edge Health Invariant | `scripts/verify-deployment-health.ts` confirms healthy | **SATISFIED** |
+| 4 | Vercel deployment policy | PR #69 rebased on `4d835608`, 22 Vitest tests passing | **SATISFIED** |
+| 5 | Radar authorization remediation | PR #72 rebased on `4d835608`, 44 Vitest tests passing | **SATISFIED** |
+| 6 | API key role consistency & delegation | PR #74 rebased on PR #72, 29 Vitest tests passing | **SATISFIED** |
+| 7 | Cloudflare OpenNext runtime compatibility | PR #88 edge route eliminated, regression test passing | **SATISFIED** |
+| 8 | API resource authorization & cold-start | PR #89 explicit permissions & cold-start tests passing (37 tests) | **SATISFIED** |
+| 9 | Scheduled publishing fail-closed | PR #92 DB fallback eliminated, 10 adversarial tests passing | **SATISFIED** |
+| 10 | Database security & exposure audit | Read-only audit completed; 0 production SQL mutations executed | **SATISFIED** |
+| 11 | Full security & build suites clean | `test:security`, `check:type`, `check:lint`, `check:build` 0 errors | **SATISFIED** |
+| 12 | Repository & workspace hygiene | Strict isolation preserved; primary workspace untouched | **SATISFIED** |
+
 
