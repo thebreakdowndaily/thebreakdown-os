@@ -6,9 +6,12 @@
  * is unavailable; a failure is safer than bypassing editorial/fact-check gates.
  */
 
+export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
+
 export interface EditorialPublishDispatchResult {
   storyId: string;
   passed: boolean;
+  outcome: EditorialPublishOutcome;
   checksCount: number;
   failedChecks: string[];
 }
@@ -17,7 +20,9 @@ export interface EditorialPublishDispatchSummary {
   timestamp: string;
   totalChecked: number;
   published: number;
+  alreadyPublished: number;
   blocked: number;
+  skipped: number;
   results: EditorialPublishDispatchResult[];
 }
 
@@ -30,7 +35,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-export const ALLOWED_PUBLISHING_HOSTS = ['thebreakdown.in', 'www.thebreakdown.in'] as const;
+export const ALLOWED_PUBLISHING_HOSTS = ['thebreakdown.in'] as const;
 
 function canonicalEndpoint(appUrl: string | undefined): string {
   if (!appUrl?.trim()) {
@@ -70,20 +75,26 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
     throw new Error('Canonical publishing endpoint returned an invalid response');
   }
 
-  const { timestamp, totalChecked, published, blocked, results } = payload;
+  const { timestamp, totalChecked, published, alreadyPublished, blocked, skipped, results } = payload;
   if (
     typeof timestamp !== 'string' ||
     !Number.isFinite(Date.parse(timestamp)) ||
     !Number.isInteger(totalChecked) ||
     !Number.isInteger(published) ||
+    !Number.isInteger(alreadyPublished) ||
     !Number.isInteger(blocked) ||
+    !Number.isInteger(skipped) ||
     (totalChecked as number) < 0 ||
     (published as number) < 0 ||
+    (alreadyPublished as number) < 0 ||
     (blocked as number) < 0 ||
+    (skipped as number) < 0 ||
     !Array.isArray(results)
   ) {
     throw new Error('Canonical publishing endpoint returned an invalid summary');
   }
+
+  const VALID_OUTCOMES = new Set(['published', 'already_published', 'blocked', 'skipped']);
 
   const normalized: EditorialPublishDispatchResult[] = results.map((item): EditorialPublishDispatchResult => {
     if (
@@ -91,6 +102,8 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
       typeof item.storyId !== 'string' ||
       item.storyId.length === 0 ||
       typeof item.passed !== 'boolean' ||
+      typeof item.outcome !== 'string' ||
+      !VALID_OUTCOMES.has(item.outcome) ||
       !Number.isInteger(item.checksCount) ||
       (item.checksCount as number) < 0 ||
       !Array.isArray(item.failedChecks) ||
@@ -102,18 +115,24 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
     return {
       storyId: item.storyId,
       passed: item.passed,
+      outcome: item.outcome as EditorialPublishOutcome,
       checksCount: item.checksCount as number,
       failedChecks: item.failedChecks as string[],
     };
   });
 
-  const passedCount = normalized.filter((item) => item.passed).length;
-  const blockedCount = normalized.length - passedCount;
+  const newlyPublishedCount = normalized.filter((item) => item.outcome === 'published').length;
+  const alreadyPublishedCount = normalized.filter((item) => item.outcome === 'already_published').length;
+  const blockedCount = normalized.filter((item) => item.outcome === 'blocked').length;
+  const skippedCount = normalized.filter((item) => item.outcome === 'skipped').length;
+
   if (
     normalized.length !== totalChecked ||
-    (published as number) !== passedCount ||
+    (published as number) !== newlyPublishedCount ||
+    (alreadyPublished as number) !== alreadyPublishedCount ||
     (blocked as number) !== blockedCount ||
-    (published as number) + (blocked as number) !== (totalChecked as number)
+    (skipped as number) !== skippedCount ||
+    (published as number) + (alreadyPublished as number) + (blocked as number) + (skipped as number) !== (totalChecked as number)
   ) {
     throw new Error('Canonical publishing endpoint returned inconsistent result counts');
   }
@@ -122,7 +141,9 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
     timestamp,
     totalChecked: totalChecked as number,
     published: published as number,
+    alreadyPublished: alreadyPublished as number,
     blocked: blocked as number,
+    skipped: skipped as number,
     results: normalized,
   };
 }

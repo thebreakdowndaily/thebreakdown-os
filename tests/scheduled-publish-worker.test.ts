@@ -15,12 +15,16 @@ const env = { APP_URL: 'https://thebreakdown.in', CRON_SECRET: 'test-cron-secret
 const summary = {
   ok: true,
   timestamp: '2026-10-17T00:00:00.000Z',
-  totalChecked: 2,
+  totalChecked: 4,
   published: 1,
+  alreadyPublished: 1,
   blocked: 1,
+  skipped: 1,
   results: [
-    { storyId: 'story-approved', passed: true, checksCount: 13, failedChecks: [] },
-    { storyId: 'story-blocked', passed: false, checksCount: 13, failedChecks: ['fact_check'] },
+    { storyId: 'story-approved', passed: true, outcome: 'published' as const, checksCount: 13, failedChecks: [] },
+    { storyId: 'story-existing', passed: true, outcome: 'already_published' as const, checksCount: 1, failedChecks: [] },
+    { storyId: 'story-blocked', passed: false, outcome: 'blocked' as const, checksCount: 13, failedChecks: ['fact_check'] },
+    { storyId: 'story-skipped', passed: false, outcome: 'skipped' as const, checksCount: 1, failedChecks: ['already_claimed'] },
   ],
 };
 
@@ -41,12 +45,16 @@ describe('scheduled publishing canonical dispatch', () => {
 
     await expect(publishDueStories(env)).resolves.toEqual({
       timestamp: summary.timestamp,
-      totalChecked: 2,
+      totalChecked: 4,
       published: 1,
+      alreadyPublished: 1,
       blocked: 1,
+      skipped: 1,
       results: [
-        { storyId: 'story-approved', passed: true, checksCount: 13, failedChecks: [] },
-        { storyId: 'story-blocked', passed: false, checksCount: 13, failedChecks: ['fact_check'] },
+        { storyId: 'story-approved', passed: true, outcome: 'published', checksCount: 13, failedChecks: [] },
+        { storyId: 'story-existing', passed: true, outcome: 'already_published', checksCount: 1, failedChecks: [] },
+        { storyId: 'story-blocked', passed: false, outcome: 'blocked', checksCount: 13, failedChecks: ['fact_check'] },
+        { storyId: 'story-skipped', passed: false, outcome: 'skipped', checksCount: 1, failedChecks: ['already_claimed'] },
       ],
     });
 
@@ -87,6 +95,7 @@ describe('scheduled publishing canonical dispatch', () => {
   });
 
   it.each([
+    'https://www.thebreakdown.in',
     'https://attacker.example.com',
     'https://staging.thebreakdown.in',
     'https://evil-thebreakdown.in',
@@ -96,19 +105,21 @@ describe('scheduled publishing canonical dispatch', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('accepts configured trusted host www.thebreakdown.in and dispatches GET request', async () => {
-    expect(ALLOWED_PUBLISHING_HOSTS).toContain('www.thebreakdown.in');
+  it('accepts configured trusted host thebreakdown.in and dispatches GET request', async () => {
+    expect(ALLOWED_PUBLISHING_HOSTS).toEqual(['thebreakdown.in']);
     fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({
       ok: true,
       timestamp: '2026-10-17T00:00:00.000Z',
       totalChecked: 0,
       published: 0,
+      alreadyPublished: 0,
       blocked: 0,
+      skipped: 0,
       results: [],
     }), { status: 200 }));
 
-    await expect(publishDueStories({ APP_URL: 'https://www.thebreakdown.in', CRON_SECRET: env.CRON_SECRET })).resolves.toBeDefined();
-    expect(fetchMock).toHaveBeenCalledWith('https://www.thebreakdown.in/api/editorial/publish-due', expect.objectContaining({
+    await expect(publishDueStories({ APP_URL: 'https://thebreakdown.in', CRON_SECRET: env.CRON_SECRET })).resolves.toBeDefined();
+    expect(fetchMock).toHaveBeenCalledWith('https://thebreakdown.in/api/editorial/publish-due', expect.objectContaining({
       method: 'GET',
       headers: { Authorization: 'Bearer test-cron-secret' },
     }));
@@ -141,7 +152,9 @@ describe('scheduled publishing canonical dispatch', () => {
       timestamp: '2026-10-17T00:00:00.000Z',
       totalChecked: 0,
       published: 0,
+      alreadyPublished: 0,
       blocked: 0,
+      skipped: 0,
       results: [],
     };
     fetchMock.mockResolvedValue(new Response(JSON.stringify(emptySummary), { status: 200 }));
@@ -150,7 +163,9 @@ describe('scheduled publishing canonical dispatch', () => {
       timestamp: emptySummary.timestamp,
       totalChecked: 0,
       published: 0,
+      alreadyPublished: 0,
       blocked: 0,
+      skipped: 0,
       results: [],
     });
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -168,17 +183,22 @@ describe('scheduled publishing canonical dispatch', () => {
       timestamp: '2026-10-17T00:00:00.000Z',
       totalChecked: 1,
       published: 0,
+      alreadyPublished: 0,
       blocked: 1,
+      skipped: 0,
       results: [
-        { storyId: 'story-failed-fact-check', passed: false, checksCount: 13, failedChecks: ['fact_check', 'evidence_vault'] },
+        { storyId: 'story-failed-fact-check', passed: false, outcome: 'blocked' as const, checksCount: 13, failedChecks: ['fact_check', 'evidence_vault'] },
       ],
     };
     fetchMock.mockResolvedValue(new Response(JSON.stringify(blockedOnly), { status: 200 }));
 
     const res = await publishDueStories(env);
     expect(res.published).toBe(0);
+    expect(res.alreadyPublished).toBe(0);
     expect(res.blocked).toBe(1);
+    expect(res.skipped).toBe(0);
     expect(res.results[0].passed).toBe(false);
+    expect(res.results[0].outcome).toBe('blocked');
     expect(res.results[0].failedChecks).toEqual(['fact_check', 'evidence_vault']);
   });
 
@@ -193,8 +213,14 @@ describe('scheduled publishing canonical dispatch', () => {
     await expect(publishDueStories(env)).rejects.toThrow(/invalid story result/);
   });
 
-  it('rejects summary counters inconsistent with the story results', async () => {
-    fetchMock.mockResolvedValue(new Response(JSON.stringify({ ...summary, published: 2 }), { status: 200 }));
+  it.each([
+    ['published count mismatch', { ...summary, published: 2 }],
+    ['alreadyPublished count mismatch', { ...summary, alreadyPublished: 0 }],
+    ['blocked count mismatch', { ...summary, blocked: 0 }],
+    ['skipped count mismatch', { ...summary, skipped: 0 }],
+    ['total sum mismatch', { ...summary, totalChecked: 5 }],
+  ])('rejects summary counters inconsistent with the story results (%s)', async (_label, invalidSummary) => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify(invalidSummary), { status: 200 }));
 
     await expect(publishDueStories(env)).rejects.toThrow(/inconsistent result counts/);
   });
@@ -270,7 +296,9 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       ok: true,
       totalChecked: 0,
       published: 0,
+      alreadyPublished: 0,
       blocked: 0,
+      skipped: 0,
       results: [],
     });
     expect(typeof body.timestamp).toBe('string');
@@ -283,9 +311,9 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
         storyId: 'story-passed-checks',
         passed: true,
         checks: [
-          { name: 'editorial_approval', passed: true },
-          { name: 'fact_check', passed: true },
-          { name: 'evidence_vault', passed: true },
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+          { name: 'evidence_vault', passed: true, reason: 'Vault archived' },
         ],
         checkedAt: new Date().toISOString(),
         triggeredBy: 'cron',
@@ -294,7 +322,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
         storyId: 'story-blocked-fact-check',
         passed: false,
         checks: [
-          { name: 'editorial_approval', passed: true },
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
           { name: 'fact_check', passed: false, reason: 'Pending senior fact check' },
           { name: 'evidence_vault', passed: false, reason: 'Source hash missing' },
         ],
@@ -314,17 +342,109 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
     expect(body.ok).toBe(true);
     expect(body.totalChecked).toBe(2);
     expect(body.published).toBe(1);
+    expect(body.alreadyPublished).toBe(0);
     expect(body.blocked).toBe(1);
+    expect(body.skipped).toBe(0);
     expect(body.results).toHaveLength(2);
 
     const blockedItem = body.results.find((r: { storyId: string }) => r.storyId === 'story-blocked-fact-check');
     expect(blockedItem.passed).toBe(false);
+    expect(blockedItem.outcome).toBe('blocked');
     expect(blockedItem.checksCount).toBe(3);
     expect(blockedItem.failedChecks).toEqual(['fact_check', 'evidence_vault']);
   });
 
-  it('catches and returns safe HTTP 500 when publishing service throws an error', async () => {
-    vi.mocked(validateAndPublishDueStories).mockRejectedValue(new Error('PostgreSQL connection timeout'));
+  it('correctly categorizes all 4 outcomes and reconciles all summary counters', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-new-pub',
+        passed: true,
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'story-prior-pub',
+        passed: true,
+        checks: [
+          { name: 'already_published', passed: true, reason: 'Story is already published — skipping' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'story-gate-blocked',
+        passed: false,
+        checks: [
+          { name: 'fact_check', passed: false, reason: 'Senior editor verification pending' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'story-worker-skipped',
+        passed: false,
+        checks: [
+          { name: 'already_claimed', passed: false, reason: 'Claimed by another concurrent worker' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.totalChecked).toBe(4);
+    expect(body.published).toBe(1);          // ONLY newly published
+    expect(body.alreadyPublished).toBe(1);   // Idempotent skip
+    expect(body.blocked).toBe(1);            // Content gate failure
+    expect(body.skipped).toBe(1);            // Worker concurrency claim skip
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+    expect(body.results).toHaveLength(4);
+
+    expect(body.results[0]).toEqual({
+      storyId: 'story-new-pub',
+      passed: true,
+      outcome: 'published',
+      checksCount: 2,
+      failedChecks: [],
+    });
+    expect(body.results[1]).toEqual({
+      storyId: 'story-prior-pub',
+      passed: true,
+      outcome: 'already_published',
+      checksCount: 1,
+      failedChecks: [],
+    });
+    expect(body.results[2]).toEqual({
+      storyId: 'story-gate-blocked',
+      passed: false,
+      outcome: 'blocked',
+      checksCount: 1,
+      failedChecks: ['fact_check'],
+    });
+    expect(body.results[3]).toEqual({
+      storyId: 'story-worker-skipped',
+      passed: false,
+      outcome: 'skipped',
+      checksCount: 1,
+      failedChecks: ['already_claimed'],
+    });
+  });
+
+  it('catches and returns safe generic HTTP 500 without disclosing internal exception details', async () => {
+    const sensitiveDbError = 'password authentication failed for user "postgres.mskyhaunnlwtwvsqcmav" at host db.supabase.co:5432';
+    vi.mocked(validateAndPublishDueStories).mockRejectedValue(new Error(sensitiveDbError));
     const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
       headers: { authorization: `Bearer ${ROUTE_SECRET}` },
     });
@@ -332,8 +452,13 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
     const res = await publishDueRoute(req);
     expect(res.status).toBe(500);
     const body = await res.json();
-    expect(body.ok).toBe(false);
-    expect(body.error).toBe('PostgreSQL connection timeout');
-    expect(typeof body.timestamp).toBe('string');
+    expect(body).toEqual({
+      ok: false,
+      error: 'An internal error occurred while processing scheduled publishing',
+      timestamp: expect.any(String),
+    });
+    expect(body.error).not.toContain('password');
+    expect(body.error).not.toContain('supabase.co');
+    expect(body.error).not.toContain(sensitiveDbError);
   });
 });

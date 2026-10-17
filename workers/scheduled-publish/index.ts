@@ -59,7 +59,9 @@ export default {
         duration,
         totalChecked: summary.totalChecked,
         published: summary.published,
+        alreadyPublished: summary.alreadyPublished,
         blocked: summary.blocked,
+        skipped: summary.skipped,
         details: summary.results,
       }));
     } catch (error) {
