@@ -1,196 +1,189 @@
 /**
- * Editorial Schedule - Cloudflare Worker variant
+ * Canonical publishing dispatcher for the Cloudflare Cron Worker.
  *
- * This module reuses the publication gate and audit logging from the main
- * service but accepts Cloudflare Worker environment bindings instead of
- * using the Next.js Supabase client singleton.
- *
- * One business logic path, two invocation surfaces:
- *   - services/editorial/schedule.ts (Next.js server actions / HTTP cron)
- *   - services/editorial/schedule-cf.ts (Cloudflare scheduled handler)
+ * The application endpoint is the single publication authority. This Worker
+ * must never publish directly through database RPCs when the canonical path
+ * is unavailable; a failure is safer than bypassing editorial/fact-check gates.
  */
 
-import { createClient } from '@supabase/supabase-js';
-import { validateStoryForPublication } from '@/lib/editorial/publication-gate';
-import type { PublicationGateResult } from '@/types/editorial-calendar';
-import type { TypedDatabase } from '@/supabase/client';
+export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
 
-type DbClient = ReturnType<typeof createClient<TypedDatabase>>;
-
-interface CfEnv {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
-  APP_URL: string;
-  CRON_SECRET: string;
+export interface EditorialPublishDispatchResult {
+  storyId: string;
+  passed: boolean;
+  outcome: EditorialPublishOutcome;
+  checksCount: number;
+  failedChecks: string[];
 }
 
-function getCfDb(env: CfEnv): DbClient {
-  return createClient<TypedDatabase>(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
+export interface EditorialPublishDispatchSummary {
+  timestamp: string;
+  totalChecked: number;
+  published: number;
+  alreadyPublished: number;
+  blocked: number;
+  skipped: number;
+  results: EditorialPublishDispatchResult[];
+}
+
+interface CfEnv {
+  APP_URL?: string;
+  CRON_SECRET?: string;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+export const ALLOWED_PUBLISHING_HOSTS = ['thebreakdown.in'] as const;
+
+function canonicalEndpoint(appUrl: string | undefined): string {
+  if (!appUrl?.trim()) {
+    throw new Error('Canonical publishing APP_URL is not configured');
+  }
+
+  let base: URL;
+  try {
+    base = new URL(appUrl);
+  } catch {
+    throw new Error('Canonical publishing APP_URL is invalid');
+  }
+
+  if (
+    base.protocol !== 'https:' ||
+    base.username !== '' ||
+    base.password !== '' ||
+    base.pathname !== '/' ||
+    base.search !== '' ||
+    base.hash !== '' ||
+    base.port !== ''
+  ) {
+    throw new Error('Canonical publishing APP_URL must be an HTTPS origin without credentials, path, query, or fragment');
+  }
+
+  const hostname = base.hostname.toLowerCase();
+  const isAllowedHost = (ALLOWED_PUBLISHING_HOSTS as readonly string[]).includes(hostname);
+  if (!isAllowedHost) {
+    throw new Error(`Canonical publishing APP_URL host "${base.hostname}" is not trusted`);
+  }
+
+  return new URL('/api/editorial/publish-due', base.origin).toString();
+}
+
+function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
+  if (!isRecord(payload) || payload.ok !== true) {
+    throw new Error('Canonical publishing endpoint returned an invalid response');
+  }
+
+  const { timestamp, totalChecked, published, alreadyPublished, blocked, skipped, results } = payload;
+  if (
+    typeof timestamp !== 'string' ||
+    !Number.isFinite(Date.parse(timestamp)) ||
+    !Number.isInteger(totalChecked) ||
+    !Number.isInteger(published) ||
+    !Number.isInteger(alreadyPublished) ||
+    !Number.isInteger(blocked) ||
+    !Number.isInteger(skipped) ||
+    (totalChecked as number) < 0 ||
+    (published as number) < 0 ||
+    (alreadyPublished as number) < 0 ||
+    (blocked as number) < 0 ||
+    (skipped as number) < 0 ||
+    !Array.isArray(results)
+  ) {
+    throw new Error('Canonical publishing endpoint returned an invalid summary');
+  }
+
+  const VALID_OUTCOMES = new Set(['published', 'already_published', 'blocked', 'skipped']);
+
+  const normalized: EditorialPublishDispatchResult[] = results.map((item): EditorialPublishDispatchResult => {
+    if (
+      !isRecord(item) ||
+      typeof item.storyId !== 'string' ||
+      item.storyId.length === 0 ||
+      typeof item.passed !== 'boolean' ||
+      typeof item.outcome !== 'string' ||
+      !VALID_OUTCOMES.has(item.outcome) ||
+      !Number.isInteger(item.checksCount) ||
+      (item.checksCount as number) < 0 ||
+      !Array.isArray(item.failedChecks) ||
+      !item.failedChecks.every((name) => typeof name === 'string')
+    ) {
+      throw new Error('Canonical publishing endpoint returned an invalid story result');
+    }
+
+    return {
+      storyId: item.storyId,
+      passed: item.passed,
+      outcome: item.outcome as EditorialPublishOutcome,
+      checksCount: item.checksCount as number,
+      failedChecks: item.failedChecks as string[],
+    };
+  });
+
+  const newlyPublishedCount = normalized.filter((item) => item.outcome === 'published').length;
+  const alreadyPublishedCount = normalized.filter((item) => item.outcome === 'already_published').length;
+  const blockedCount = normalized.filter((item) => item.outcome === 'blocked').length;
+  const skippedCount = normalized.filter((item) => item.outcome === 'skipped').length;
+
+  if (
+    normalized.length !== totalChecked ||
+    (published as number) !== newlyPublishedCount ||
+    (alreadyPublished as number) !== alreadyPublishedCount ||
+    (blocked as number) !== blockedCount ||
+    (skipped as number) !== skippedCount ||
+    (published as number) + (alreadyPublished as number) + (blocked as number) + (skipped as number) !== (totalChecked as number)
+  ) {
+    throw new Error('Canonical publishing endpoint returned inconsistent result counts');
+  }
+
+  return {
+    timestamp,
+    totalChecked: totalChecked as number,
+    published: published as number,
+    alreadyPublished: alreadyPublished as number,
+    blocked: blocked as number,
+    skipped: skipped as number,
+    results: normalized,
+  };
 }
 
 /**
- * Publish due stories - Cloudflare Worker entry point.
- *
- * In accordance with Phase 4B-2G/2H Unified Publication Authority,
- * Cloudflare Worker cron dispatches to the central Next.js publication API
- * which runs the authoritative Node.js EvidenceVaultService and canonical gates.
+ * Dispatches to the canonical application endpoint and fails closed on every
+ * configuration, transport, HTTP, or response-contract failure. There is
+ * deliberately no direct database/RPC fallback in this worker.
  */
 export async function publishDueStories(
   env: CfEnv,
-  now: Date = new Date(),
-): Promise<PublicationGateResult[]> {
-  const appUrl = env.APP_URL;
-  const cronSecret = env.CRON_SECRET;
-
-  if (cronSecret) {
-    try {
-      const resp = await fetch(`${appUrl}/api/editorial/publish-due`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${cronSecret}`,
-        },
-      });
-
-      if (resp.ok) {
-        const body = (await resp.json()) as any;
-        return body.results || [];
-      }
-      console.error(`[Cloudflare Scheduler] Canonical cron dispatch returned ${resp.status}`);
-    } catch (err) {
-      console.error('[Cloudflare Scheduler] Canonical cron dispatch failed:', err);
-    }
+): Promise<EditorialPublishDispatchSummary> {
+  if (!env.CRON_SECRET?.trim()) {
+    throw new Error('Canonical publishing CRON_SECRET is not configured');
   }
 
-  // If internal endpoint not configured or dispatch fails, fallback to RPC-based database transition
-  console.warn('[Cloudflare Scheduler] Canonical dispatch failed. Falling back to RPC execution.');
-  const db = getCfDb(env);
-  const results: PublicationGateResult[] = [];
-  
-  let hasMore = true;
-  while (hasMore) {
-    const result = await processNextEntry(db, now);
-    if (result) {
-      results.push(result);
-    } else {
-      hasMore = false;
-    }
+  const endpoint = canonicalEndpoint(env.APP_URL);
+  let response: Response;
+  try {
+    response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${env.CRON_SECRET.trim()}`,
+      },
+      redirect: 'error',
+    });
+  } catch {
+    throw new Error('Canonical publishing endpoint request failed');
   }
 
-  return results;
-}
-
-async function processNextEntry(
-  db: DbClient,
-  now: Date,
-): Promise<PublicationGateResult | null> {
-  // ⚡ ATOMIC CLAIM: transition next due schedule to 'validated' via RPC
-  const { data: claimed, error: claimError } = await (db as any).rpc('fn_claim_due_schedule_entry');
-
-  if (claimError || !claimed || !claimed.claimed_story_id) {
-    return null; // No more due entries or claim failed
+  if (!response.ok) {
+    throw new Error(`Canonical publishing endpoint returned HTTP ${response.status}`);
   }
 
-  const storyId = claimed.claimed_story_id as string;
-  const scheduleId = claimed.schedule_id as string;
-
-  // ⚡ Fetch the story
-  const { data: storyRow, error: storyError } = await db
-    .from('stories')
-    .select('*')
-    .eq('id', storyId)
-    .single();
-
-  if (storyError || !storyRow) {
-    // If the story doesn't exist, we just return a failure result without raw gate log mutation
-    // since the RPC contract does not expose direct INSERT to publication_gate_log
-    return {
-      storyId,
-      scheduleId,
-      passed: false,
-      checks: [{ name: 'story_exists', passed: false, reason: 'Story not found' }],
-      checkedAt: now.toISOString(),
-      triggeredBy: 'cron',
-    };
+  let payload: unknown;
+  try {
+    payload = await response.json();
+  } catch {
+    throw new Error('Canonical publishing endpoint returned invalid JSON');
   }
 
-  // ⚡ IDEMPOTENCY GUARD
-  if (storyRow.status === 'published') {
-    return {
-      storyId,
-      scheduleId,
-      passed: true,
-      checks: [{ name: 'already_published', passed: true, reason: 'Already published - skipping' }],
-      checkedAt: now.toISOString(),
-      triggeredBy: 'cron',
-    };
-  }
-
-  // ⚡ Convert to canonical Story shape
-  const status = (storyRow.status as string) || 'draft';
-  const publicationStatus =
-    status === 'published' ? 'published'
-    : status === 'scheduled' ? 'scheduled'
-    : status === 'review' ? 'review'
-    : 'draft';
-
-  const story = {
-    id: storyRow.id,
-    slug: storyRow.slug,
-    title: storyRow.title,
-    headline: storyRow.headline || storyRow.title,
-    summary: storyRow.summary || '',
-    heroImage: storyRow.hero_image || '',
-    author: storyRow.author || '',
-    category: storyRow.category || '',
-    status,
-    publicationStatus,
-    storyType: 'standard',
-    evidenceScore: storyRow.evidence_score || 0,
-    readingTime: storyRow.reading_time || 0,
-    publishedAt: storyRow.published_at || '',
-    createdAt: storyRow.created_at,
-    updatedAt: storyRow.updated_at,
-    updatedBy: storyRow.updated_by || undefined,
-    tags: storyRow.tags || [],
-    blocks: storyRow.blocks || [],
-    sources: storyRow.sources || [],
-    claims: storyRow.claims || [],
-    timeline: storyRow.timeline || [],
-    faq: storyRow.faq || [],
-    charts: storyRow.charts || [],
-    relatedStoryIds: storyRow.related_story_ids || [],
-    relatedEntityIds: storyRow.related_entity_ids || [],
-    relatedTopicIds: storyRow.related_topic_ids || [],
-    blockReason: storyRow.block_reason || undefined,
-  };
-
-  // ⚡ Run publication gate locally
-  const result = validateStoryForPublication(
-    { storyId, scheduleId, triggeredBy: 'cron' },
-    story as never,
-    now,
-  );
-
-  if (result.passed) {
-    // ⚡ PUBLISH via RPC (Atomically updates story to 'published' and inserts audit log)
-    const { error: publishError } = await (db as any).rpc('fn_publish_story_with_audit', { p_story_id: storyId });
-
-    if (publishError) {
-      result.passed = false;
-      result.checks.push({
-        name: 'rpc_publish_error',
-        passed: false,
-        reason: publishError.message,
-      });
-    } else {
-      result.publishedAt = now.toISOString();
-    }
-  } else {
-    // ⚡ BLOCK
-    // The RPC contract restricts updating editorial_schedule and raw INSERTs to publication_gate_log.
-    // The failed checks remain in the returned result object, but are not persisted to DB by this worker.
-    // This complies strictly with the privilege boundaries of Phase 6.
-  }
-
-  return result;
+  return parseSummary(payload);
 }

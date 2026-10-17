@@ -20,9 +20,25 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAndPublishDueStories } from '@/services/editorial/schedule';
+import type { PublicationGateResult } from '@/types/editorial-calendar';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
+
+export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
+
+function classifyGateResult(result: PublicationGateResult): EditorialPublishOutcome {
+  if (result.checks.some(c => c.name === 'already_published')) {
+    return 'already_published';
+  }
+  if (result.checks.some(c => c.name === 'already_claimed')) {
+    return 'skipped';
+  }
+  if (result.passed) {
+    return 'published';
+  }
+  return 'blocked';
+}
 
 export async function GET(request: NextRequest) {
   // MANDATORY: CRON_SECRET must be set in the environment.
@@ -43,30 +59,43 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const results = await validateAndPublishDueStories();
+    const rawResults = await validateAndPublishDueStories();
 
-    const published = results.filter(r => r.passed);
-    const blocked = results.filter(r => !r.passed);
+    const categorized = rawResults.map(r => ({
+      raw: r,
+      outcome: classifyGateResult(r),
+    }));
+
+    const newlyPublished = categorized.filter(c => c.outcome === 'published');
+    const alreadyPublished = categorized.filter(c => c.outcome === 'already_published');
+    const blocked = categorized.filter(c => c.outcome === 'blocked');
+    const skipped = categorized.filter(c => c.outcome === 'skipped');
 
     return NextResponse.json({
       ok: true,
       timestamp: new Date().toISOString(),
-      totalChecked: results.length,
-      published: published.length,
+      totalChecked: rawResults.length,
+      published: newlyPublished.length,
+      alreadyPublished: alreadyPublished.length,
       blocked: blocked.length,
-      results: results.map(r => ({
-        storyId: r.storyId,
-        passed: r.passed,
-        checksCount: r.checks.length,
-        failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
+      skipped: skipped.length,
+      results: categorized.map(c => ({
+        storyId: c.raw.storyId,
+        passed: c.raw.passed,
+        outcome: c.outcome,
+        checksCount: c.raw.checks.length,
+        failedChecks: c.raw.checks.filter(chk => !chk.passed).map(chk => chk.name),
       })),
     });
   } catch (error) {
-    console.error('[Editorial Cron] Error:', error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    const safeMsg = cronSecret ? errorMsg.replaceAll(cronSecret, '[REDACTED]') : errorMsg;
+    console.error('[Editorial Cron] Scheduled publishing run failed:', safeMsg);
+
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: 'An internal error occurred while processing scheduled publishing',
         timestamp: new Date().toISOString(),
       },
       { status: 500 },
