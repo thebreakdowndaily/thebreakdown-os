@@ -542,7 +542,7 @@ async function runDirectDatabaseTests() {
     `);
     for (const r of searchPathRes.rows) {
       const configStr = (r.proconfig || []).join(', ');
-      assert(configStr.includes('search_path=public, auth, pg_temp'), `${r.proname}() has immutable search_path`);
+      assert(configStr.includes('search_path=pg_catalog, pg_temp'), `${r.proname}() has restricted immutable search_path`);
     }
 
     // ─────────────────────────────────────────────────────────────────
