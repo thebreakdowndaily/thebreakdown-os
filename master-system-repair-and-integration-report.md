@@ -1,5 +1,5 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3–13: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate & Cost Model Reconciliation
+## Missions 3–14: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate, Cost Model Reconciliation & Free-First Validation
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
@@ -12,7 +12,7 @@
 **Cloudflare OpenNext Compatibility PR:** [PR #88](https://github.com/thebreakdowndaily/thebreakdown-os/pull/88) (`OPEN` / `DRAFT`, head `e77c608f`, closes #51, #70)  
 **API Resource Authorization & Cold-Start PR:** [PR #89](https://github.com/thebreakdowndaily/thebreakdown-os/pull/89) (`OPEN` / `DRAFT`, head `bea8179d`, closes #56, #57)  
 **Scheduled Publishing Fail-Closed PR:** [PR #92](https://github.com/thebreakdowndaily/thebreakdown-os/pull/92) (`OPEN` / `DRAFT`, head `6d5dd8bc`, closes #91)  
-**Database Security Hardening PR:** [PR #84](https://github.com/thebreakdowndaily/thebreakdown-os/pull/84) (`OPEN` / `DRAFT`, head `6d8989c8`, closes #90)  
+**Database Security Hardening PR:** [PR #84](https://github.com/thebreakdowndaily/thebreakdown-os/pull/84) (`OPEN` / `DRAFT`, head `3abb876c`, closes #90)  
 **Working Branch:** `fix/security-hardening-after-topic-migrations-2026-10-16` / `mission/post-merge-verification-2026-10-16`  
 **Workspace:** `C:\newsjack-content\thebreakdown-os-master-repair`  
 **Overall Status:** **VERIFIED, PROTECTED & OPERATIONAL (STAGING RELEASE GATE BLOCKED ON TARGET PROVISIONING)**  
@@ -508,6 +508,52 @@ RELEASE GATE DECISION: BLOCKED — STAGING TARGET NOT VERIFIED
 - **Emergency Zero-Cost**: **Option C ($0.00/month)**. Pauses fact-checking to stay within free quota. Disqualified for production standards due to lack of production automated backups.
 
 Full detailed analysis, pricing tables, and human-approval checklist recorded in `docs/remediation/PHASE13_STAGING_DECISION_FINALIZATION.md`.
+
+---
+
+## 17. Phase 14: Free-First Validation & Staging Recovery
+
+### A. Non-Negotiable Constraints Observed
+- Organization `pwfzmsccchpaqwwimoih` remained strictly on Free tier (`plan: "free"`, `tier: "tier_free"`). Zero dollars spent.
+- Zero managed projects were paused, transferred, deleted, or restored.
+- Migrations 033–037 were **NOT** applied to production (`mskyhaunnlwtwvsqcmav`) or fact-check (`lvfovvidtowadmnggzzf`).
+- Production deployment at `https://thebreakdown.in` preserved at `4d835608` with zero regressions.
+
+### B. Inactive Legacy Project Audit (`swektehukscmsgxdzymw`)
+- Created 2026-07-19 (`"thebreakdown/ 403"`), region `ap-northeast-2`.
+- Status `INACTIVE` (compute terminated).
+- Sits right at the 90-day restore limit, but **cannot be restored** under the Free plan because 2 active free projects (`mskyhaunnlwtwvsqcmav` and `lvfovvidtowadmnggzzf`) already consume the entire 2-project quota.
+- Region is permanently immutable (`ap-northeast-2` vs production `ap-south-1`).
+- **Verdict**: Unsuitable and disqualified for staging use.
+
+### C. Zero-Cost Local Validation (100% Pass)
+- Embedded PostgreSQL cluster validated:
+  - 37/37 migrations (`001_create_tables.sql` through `037_security_definer_search_path_and_rpc_grants.sql`) applied sequentially without error.
+  - 73/73 direct database enforcement tests passed (`database-enforcement.test.ts`).
+  - 1,356/1,356 security suite tests passed (`npm run test:security`).
+  - Reader corrections persistence passed (13/13).
+  - Public topic summaries passed (5/5).
+  - Editorial quality passed (10/10).
+  - Public story APIs v1 and v2 passed (6/6).
+- Documented invariants local testing cannot prove: PostgREST schema cache reloads (`NOTIFY pgrst`), Supavisor connection pooler queuing, GoTrue auth JWT cookie handling, Storage S3 integrations, and cross-region network latency.
+
+### D. Production End-to-End Functionality Audit
+- `npm run test:smoke-prod`: 25/25 production checks passed against `https://thebreakdown.in`.
+- Protected routes `/newsroom` and `/intel` enforce strict 307 redirects to login.
+- Unauthenticated `/api/editorial/publish-due` rejects with 401.
+- Public `/transparency/corrections` serves 200 OK.
+- Render polling worker (`74.220.49.18`) confirmed completely obsolete; production scheduled publishing runs via Cloudflare Worker `thebreakdown-scheduled-publish` calling `/api/editorial/publish-due` on Next.js.
+
+### E. Managed Staging Constraint & Recovery Plan
+- Free slots available: **0 (Zero)**.
+- To validate PostgREST schema reload on managed Supabase without upgrading to Pro:
+  1. Human approval required to temporarily pause fact-checking (`lvfovvidtowadmnggzzf`), opening Free Slot 2.
+  2. Provision ephemeral staging project `thebreakdown-staging` in `ap-south-1`.
+  3. Validate migrations 001–037 and PostgREST reload.
+  4. Release migrations 033–037 to Production (`mskyhaunnlwtwvsqcmav`).
+  5. Delete staging project and restore `lvfovvidtowadmnggzzf` (within 90-day restore window).
+
+Full comprehensive evidence and runbook recorded in `docs/remediation/PHASE14_FREE_FIRST_VALIDATION_AND_STAGING_RECOVERY.md`.
 
 
 
