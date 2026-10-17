@@ -3,16 +3,16 @@
  *
  * Governing document: AGENTS.md (Editorial Calendar + Autonomous Weekly Publishing)
  *
- * This is a standalone Cloudflare Worker that handles Cron Trigger events.
- * It reuses the existing publish-due service and publication gate from the
- * main application — zero duplicated business logic.
+ * This is a scheduler/dispatcher only. It never publishes from the Worker and
+ * never connects directly to the database. The canonical Next.js endpoint is
+ * the sole publication authority and applies the editorial/evidence gates.
  *
  * Architecture:
  *   Cloudflare Cron Trigger (hourly)
  *     → scheduled()
- *       → publishDueStories() from services/editorial/schedule.ts
- *         → publication gate (10 checks)
- *           → publish or block
+ *       → publishDueStories() in services/editorial/schedule-cf.ts
+ *         → HTTPS /api/editorial/publish-due
+ *           → canonical editorial, fact-check, evidence, and audit workflow
  *
  * Required bindings: APP_URL (non-secret HTTPS origin) and CRON_SECRET (Worker secret).
  */
