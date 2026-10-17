@@ -1,5 +1,5 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3–8: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety & Database Security Audit
+## Missions 3–11: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit & Staging Release Gate
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
@@ -12,9 +12,10 @@
 **Cloudflare OpenNext Compatibility PR:** [PR #88](https://github.com/thebreakdowndaily/thebreakdown-os/pull/88) (`OPEN` / `DRAFT`, head `e77c608f`, closes #51, #70)  
 **API Resource Authorization & Cold-Start PR:** [PR #89](https://github.com/thebreakdowndaily/thebreakdown-os/pull/89) (`OPEN` / `DRAFT`, head `bea8179d`, closes #56, #57)  
 **Scheduled Publishing Fail-Closed PR:** [PR #92](https://github.com/thebreakdowndaily/thebreakdown-os/pull/92) (`OPEN` / `DRAFT`, head `6d5dd8bc`, closes #91)  
-**Working Branch:** `mission/post-merge-verification-2026-10-16`  
+**Database Security Hardening PR:** [PR #84](https://github.com/thebreakdowndaily/thebreakdown-os/pull/84) (`OPEN` / `DRAFT`, head `6d8989c8`, closes #90)  
+**Working Branch:** `fix/security-hardening-after-topic-migrations-2026-10-16` / `mission/post-merge-verification-2026-10-16`  
 **Workspace:** `C:\newsjack-content\thebreakdown-os-master-repair`  
-**Overall Status:** **VERIFIED, PROTECTED & OPERATIONAL**  
+**Overall Status:** **VERIFIED, PROTECTED & OPERATIONAL (STAGING RELEASE GATE BLOCKED ON TARGET PROVISIONING)**  
 
 ---
 
@@ -405,6 +406,51 @@ flowchart TD
 | 9 | Scheduled publishing fail-closed | PR #92 DB fallback eliminated, 10 adversarial tests passing | **SATISFIED** |
 | 10 | Database security & exposure audit | Read-only audit completed; 0 production SQL mutations executed | **SATISFIED** |
 | 11 | Full security & build suites clean | `test:security`, `check:type`, `check:lint`, `check:build` 0 errors | **SATISFIED** |
-| 12 | Repository & workspace hygiene | Strict isolation preserved; primary workspace untouched | **SATISFIED** |
+| 13 | Phase 10 embedded PG enforcement | Migrations 001–037 validated; 75/75 RLS + 45 API sec tests passed | **SATISFIED** |
+| 14 | Phase 11 staging discovery (Case B) | Supabase inventory audited; provisioning & rollback runbook complete | **SATISFIED** |
+| 15 | Migration stack dependency audit | PRs #66, #76, #80, #84 dependencies verified; zero schema conflicts | **SATISFIED** |
+
+---
+
+## 14. Phase 10 & 11: Real Staging Validation & Migration-Stack Release Gate
+
+### A. Phase 10: Embedded PostgreSQL Storage & ACL Hardening
+- Executed direct storage validation via `EmbeddedPostgres` (`tests/security/database-enforcement.test.ts`).
+- Applied all 37 migrations in sequence from `001_initial_schema.sql` through `037_security_definer_search_path_and_rpc_grants.sql`.
+- Verified 75 database-level enforcement assertions covering user bookmark isolation, anonymous read constraints, editorial publication gates, and search path immutability.
+- Validated distributed rate limiting fail-closed behavior: `increment_rate_limit` restricted to `service_role`.
+- Full security suite passed: 75 DB RLS tests, 45 API security tests, 1,199 Intel auth tests with 0 failures.
+
+### B. Phase 11: Staging Target Discovery & Qualification (Case B)
+- **Supabase Organization Audit (`pwfzmsccchpaqwwimoih`)**:
+  - `mskyhaunnlwtwvsqcmav` (`thebreakdown-production`, `ap-south-1`, PG 17.11): Production baseline on migration 032. (Forbidden target)
+  - `lvfovvidtowadmnggzzf` (`the-breakdown-fact-check`, `ap-northeast-2`, PG 17.6): Divergent QA database (migrations 001, 030, 031 only). (Forbidden target)
+  - `swektehukscmsgxdzymw` (`thebreakdown/ 403`, `ap-northeast-2`, PG 17.6): Inactive legacy project. (Unusable)
+  - **Result**: No approved staging database exists. **Case B applies**.
+- **P0 Safety Compliance**:
+  - Zero SQL mutations executed against production or fact-check databases.
+  - Zero cloud resources provisioned without explicit human authorization.
+- **Case B Staging Provisioning & Validation Runbook**:
+  - Specification established for `thebreakdown-staging` in region `ap-south-1` (Mumbai).
+  - Schema bootstrap documented: sequential replay of migrations 001–032.
+  - Synthetic data fixtures and sequential migration validation (033 $\rightarrow$ 034 $\rightarrow$ 035 $\rightarrow$ 036 $\rightarrow$ 037) documented with explicit rollback scripts and PostgREST reload notifications.
+
+### C. Predecessor Stacked PR Audit
+- Stacked PR chain verified: PR #66 (033–034) $\rightarrow$ PR #76 (035) $\rightarrow$ PR #80 (036) $\rightarrow$ PR #84 (037).
+- Critical cross-PR dependency confirmed: Migration 037 sets `search_path = pg_catalog, pg_temp` on `publish_reader_correction` (created in 033). Strict ordering 033 $\rightarrow$ 037 is required.
+- Recommended merge strategy: Consolidated release PR targeting `staging` first to eliminate unhardened intermediate production windows.
+
+### D. Phase 11 Release-Gate Decision
+
+```
+═══════════════════════════════════════════════════════════════════════════════
+RELEASE GATE DECISION: BLOCKED — STAGING TARGET NOT VERIFIED
+═══════════════════════════════════════════════════════════════════════════════
+```
+
+**Human Review Action Required**:
+1. Authorize staging project provisioning (`thebreakdown-staging`, `ap-south-1`) under organization `pwfzmsccchpaqwwimoih`.
+2. Follow `docs/remediation/PHASE11_STAGING_VALIDATION_AND_RELEASE_GATE.md` to bootstrap baseline 032, validate migrations 033–037, and deploy the consolidated release PR.
+
 
 
