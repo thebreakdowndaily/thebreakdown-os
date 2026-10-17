@@ -14,9 +14,7 @@
  *         → publication gate (10 checks)
  *           → publish or block
  *
- * Environment variables required:
- *   SUPABASE_URL              — Supabase project URL
- *   SUPABASE_SERVICE_ROLE_KEY — Supabase service role key (bypasses RLS)
+ * Required bindings: APP_URL (non-secret HTTPS origin) and CRON_SECRET (Worker secret).
  */
 
 import { publishDueStories } from '../../services/editorial/schedule-cf';
@@ -32,8 +30,6 @@ interface ExecutionContext {
 }
 
 export interface Env {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
   CRON_SECRET: string;
   APP_URL: string;
 }
@@ -54,24 +50,17 @@ export default {
     }));
 
     try {
-      const results = await publishDueStories(env);
-
-      const published = results.filter(r => r.passed);
-      const blocked = results.filter(r => !r.passed);
+      const summary = await publishDueStories(env);
       const duration = Date.now() - startTime;
 
       console.log(JSON.stringify({
         event: 'editorial.publish_due.complete',
         timestamp: new Date().toISOString(),
         duration,
-        totalChecked: results.length,
-        published: published.length,
-        blocked: blocked.length,
-        details: results.map(r => ({
-          storyId: r.storyId,
-          passed: r.passed,
-          failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
-        })),
+        totalChecked: summary.totalChecked,
+        published: summary.published,
+        blocked: summary.blocked,
+        details: summary.results,
       }));
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -81,8 +70,9 @@ export default {
         duration,
         error: error instanceof Error ? error.message : 'Unknown error',
       }));
-      // Do not rethrow — Cloudflare will retry on unhandled exceptions,
-      // but we want bounded retries. Log and exit cleanly.
+      // Re-throw so the platform records the scheduled invocation as failed.
+      // The dispatcher has no lower-authority database fallback.
+      throw error;
     }
   },
 
