@@ -1,5 +1,5 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3–11: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit & Staging Release Gate
+## Missions 3–12: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate & Staging Economics
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
@@ -451,6 +451,41 @@ RELEASE GATE DECISION: BLOCKED — STAGING TARGET NOT VERIFIED
 **Human Review Action Required**:
 1. Authorize staging project provisioning (`thebreakdown-staging`, `ap-south-1`) under organization `pwfzmsccchpaqwwimoih`.
 2. Follow `docs/remediation/PHASE11_STAGING_VALIDATION_AND_RELEASE_GATE.md` to bootstrap baseline 032, validate migrations 033–037, and deploy the consolidated release PR.
+
+---
+
+## 15. Phase 12: Supabase Staging Economics, Dependency Audit & Provisioning Decision
+
+### A. Provider State & Quota Reality
+- **Organization Plan**: `pwfzmsccchpaqwwimoih` confirmed on Free Plan (`plan: "free"`, `tier: "tier_free"`).
+- **Free Quota Exhaustion**: 2 active free projects permitted per account across all organizations. Both slots are consumed:
+  1. `mskyhaunnlwtwvsqcmav` (`thebreakdown-production`, `ap-south-1`, PG 17.11): Active production baseline 032. (Slot 1)
+  2. `lvfovvidtowadmnggzzf` (`the-breakdown-fact-check`, `ap-northeast-2`, PG 17.6): Divergent QA database. (Slot 2)
+  3. `swektehukscmsgxdzymw` (`thebreakdown/ 403`, `ap-northeast-2`, PG 17.6): Inactive/paused. Does not count toward active quota. Deleting it frees 0 slots.
+
+### B. Fact-Check Dependency Audit (`lvfovvidtowadmnggzzf`)
+- **Codebase References**: 24 files reference `lvfovvidtowadmnggzzf` (referred to as `STAGING_SUPABASE_URL` and `KNOWN_STAGING_SUPABASE_REF`).
+- **Telemetry**: External Node worker on Render (`74.220.49.18`) continuously queries `lvfovvidtowadmnggzzf` every 1–2 minutes (currently failing with 400 Bad Request due to missing `publish_at` column).
+- **Impact Classification**:
+  - Production `https://thebreakdown.in`: **ZERO IMPACT**.
+  - Staging CI / QA: **MODERATE IMPACT** (`deploy-staging` workflow and direct tests require retargeting).
+- **Reversibility**: Pausing preserves all 175 stories and schemas; guaranteed 90-day restore window via dashboard.
+
+### C. Financial Comparison
+1. **Option A (Upgrade to Pro)**:
+   - Base Pro subscription: $25.00/mo.
+   - Dedicated Micro Compute (3 projects @ $10/mo less $10 credit): $20.00/mo.
+   - Total Recurring Cost: **$45.00/month** (~₹3,780/mo + GST) for 3 active projects, or **$35.00/month** (~₹2,940/mo + GST) if fact-check is paused.
+   - Adds automated daily backups, eliminates inactivity pauses, and provisions permanent staging in `ap-south-1`.
+2. **Option B (Free Quota Route)**:
+   - Total Cost: **$0.00/month**.
+   - Pause `lvfovvidtowadmnggzzf` via Supabase dashboard (freeing Slot 2).
+   - Provision `thebreakdown-staging` in `ap-south-1` within free quota.
+   - Retarget CI references to the new project.
+
+### D. Human Decision Required
+The decision to either commit to monthly cloud expenses ($45/mo or $35/mo) or pause the legacy fact-check project ($0/mo) requires explicit human authorization before any provider mutations can take place. Full runbook and decision matrix recorded in `docs/remediation/PHASE12_STAGING_ECONOMICS_AND_PROVISIONING_DECISION.md`.
+
 
 
 

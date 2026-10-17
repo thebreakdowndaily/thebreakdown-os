@@ -89,13 +89,23 @@ auth_settings:
     - "https://*-bholebababhakti108-makers-projects.vercel.app/**"
 ```
 
-### 3.2 Plan & Commercial Implications
-- Supabase Free Tier allows a maximum of 2 active projects per organization.
-- Currently, `mskyhaunnlwtwvsqcmav` (production) and `lvfovvidtowadmnggzzf` (fact-check) occupy the 2 active project slots.
+### 3.2 Plan & Commercial Implications (Reconciled with Phase 12 Provider Truth)
+- **Free Tier Policy**: Supabase grants 2 active projects per account across organizations. Paused projects do NOT consume active project quota.
+- **Current Active State**: `mskyhaunnlwtwvsqcmav` (production) and `lvfovvidtowadmnggzzf` (fact-check / legacy staging) consume both active project slots (2 of 2). Legacy project `swektehukscmsgxdzymw` is already `INACTIVE` (paused), so deleting it does not free an active project slot.
+- **Pro Tier Compute Economics (Not Flat $25/mo)**:
+  - Base Pro subscription: $25.00/month.
+  - Included Compute Credits: $10.00/month (covers 1 default Micro instance).
+  - Additional project compute: ~$10.00/month per active project on default Micro compute (billed hourly at ~$0.01344/hr).
+  - Running 3 active projects simultaneously (`mskyhaunnlwtwvsqcmav`, `lvfovvidtowadmnggzzf`, `thebreakdown-staging`) incurs:
+    $25 (base) + $30 (3 × Micro compute) - $10 (credits) = **$45.00/month** (plus applicable tax/GST).
+  - If `lvfovvidtowadmnggzzf` is paused, running 2 active projects incurs:
+    $25 (base) + $20 (2 × Micro compute) - $10 (credits) = **$35.00/month** (plus applicable tax/GST).
+  - Ephemeral compute (provisioning `thebreakdown-staging` for 48 hours to validate migrations 033–037, then pausing it): ~$0.65 compute overage.
 - **Options for Human Authorization**:
-  1. **Option A (Upgrade to Pro)**: Add Pro tier ($25/mo) allowing additional compute instances.
-  2. **Option B (Pause Fact-Check)**: Pause `lvfovvidtowadmnggzzf` (or delete legacy `swektehukscmsgxdzymw`) and create `thebreakdown-staging` within the free quota.
-  3. **Option C (Local Supabase CLI Docker Instance)**: Run local Supabase stack (`supabase start`) mimicking cloud staging for pre-merge validation.
+  1. **Option A (Upgrade to Pro Plan)**: $45.00/mo (3 active projects) or $35.00/mo (if fact-check paused). Provides continuous staging without pausing any active project and adds automated daily backups.
+  2. **Option B (Free-Quota Route via Pausing Fact-Check)**: $0.00/mo. Pause `lvfovvidtowadmnggzzf` (which frees 1 active slot, preserves all data, with a 90-day restore window) and launch `thebreakdown-staging` within the free quota. Note: QA smoke tests and external Render polling targeting `lvfovvidtowadmnggzzf` will be paused.
+  3. **Option C (Separate Billing / New Account)**: $0.00/mo but requires a separate owner account, as project quotas apply account-wide across all organizations where the user is Owner/Admin.
+  4. **Option D (Local Verification Only)**: Embedded PostgreSQL / Docker. Validates SQL logic (75/75 RLS tests passed), but cannot replicate cloud PostgREST reloading or network edge gates. Does not satisfy managed-Supabase release gate.
 
 ### 3.3 Initial Schema Bootstrap (001 $\rightarrow$ 032)
 Once the staging project is created, bootstrap it to the production baseline:
