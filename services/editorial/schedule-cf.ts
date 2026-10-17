@@ -30,6 +30,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+export const ALLOWED_PUBLISHING_HOSTS = ['thebreakdown.in', 'www.thebreakdown.in'] as const;
+
 function canonicalEndpoint(appUrl: string | undefined): string {
   if (!appUrl?.trim()) {
     throw new Error('Canonical publishing APP_URL is not configured');
@@ -48,9 +50,16 @@ function canonicalEndpoint(appUrl: string | undefined): string {
     base.password !== '' ||
     base.pathname !== '/' ||
     base.search !== '' ||
-    base.hash !== ''
+    base.hash !== '' ||
+    base.port !== ''
   ) {
     throw new Error('Canonical publishing APP_URL must be an HTTPS origin without credentials, path, query, or fragment');
+  }
+
+  const hostname = base.hostname.toLowerCase();
+  const isAllowedHost = (ALLOWED_PUBLISHING_HOSTS as readonly string[]).includes(hostname);
+  if (!isAllowedHost) {
+    throw new Error(`Canonical publishing APP_URL host "${base.hostname}" is not trusted`);
   }
 
   return new URL('/api/editorial/publish-due', base.origin).toString();
