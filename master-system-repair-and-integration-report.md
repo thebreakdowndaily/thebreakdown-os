@@ -1,5 +1,5 @@
 # THE BREAKDOWN OS — Master Mission Report
-## Missions 3–14: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate, Cost Model Reconciliation & Free-First Validation
+## Missions 3–15: Post-Merge Recovery, Cloudflare OpenNext Compatibility, Resource Auth, Scheduled Publishing Safety, Database Security Audit, Staging Release Gate, Cost Model Reconciliation, Free-First Validation & Scheduled Publishing Integrity
 
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
@@ -542,7 +542,7 @@ Full detailed analysis, pricing tables, and human-approval checklist recorded in
 - Protected routes `/newsroom` and `/intel` enforce strict 307 redirects to login.
 - Unauthenticated `/api/editorial/publish-due` rejects with 401.
 - Public `/transparency/corrections` serves 200 OK.
-- Render polling worker (`74.220.49.18`) confirmed completely obsolete; production scheduled publishing runs via Cloudflare Worker `thebreakdown-scheduled-publish` calling `/api/editorial/publish-due` on Next.js.
+- Render polling worker (`74.220.49.18`) confirmed completely obsolete; production scheduled publishing is designed around canonical `/api/editorial/publish-due` on Next.js, with Cloudflare scheduled Worker dispatcher remediated in PR #92 (deployment pending).
 
 ### E. Managed Staging Constraint & Recovery Plan
 - Free slots available: **0 (Zero)**.
@@ -554,6 +554,43 @@ Full detailed analysis, pricing tables, and human-approval checklist recorded in
   5. Delete staging project and restore `lvfovvidtowadmnggzzf` (within 90-day restore window).
 
 Full comprehensive evidence and runbook recorded in `docs/remediation/PHASE14_FREE_FIRST_VALIDATION_AND_STAGING_RECOVERY.md`.
+
+---
+
+## 18. Phase 15: Scheduled Publishing Integrity & Evidence Reconciliation
+
+### A. Adversarial Audit of PR #92 (Commit: `6d5dd8bc`)
+- **Root Cause Remediated (Issue #91)**: Prior worker implementation contained an unsafe fallback to database RPCs (`fn_claim_due_schedule_entry` and `fn_publish_story_with_audit`), which bypassed canonical fact-check and evidence gates whenever the canonical Next.js endpoint was unreachable or returned non-2xx.
+- **Fail-Closed Guarantees**:
+  - `canonicalEndpoint()` enforces HTTPS origin validation with zero credentials, paths, query params, or fragments.
+  - `fetch()` enforces `redirect: 'error'`, preventing token leakage on redirects.
+  - Missing `CRON_SECRET`, network timeouts, non-2xx responses, and malformed JSON fail closed immediately without fallback.
+  - `parseSummary()` validates mathematical consistency (`published + blocked === totalChecked`) and story result contract (`storyId`, `passed`, `checksCount`, `failedChecks`).
+  - Worker catch block re-throws errors (`throw error`) to guarantee observable failed Cron runs in Cloudflare telemetry.
+- **Dependency & Bundle Stripping**:
+  - Raw database RPC fallbacks completely excised; `@supabase/supabase-js` removed from worker.
+  - Built bundle size reduced from 798 KB to **4.6 KB**.
+  - `wrangler.toml` secret placeholders removed from `[vars]`.
+
+### B. Automated Verification Results on PR #92 HEAD
+- `tests/scheduled-publish-worker.test.ts`: **10/10 PASSED** in Vitest (covers 4 unsafe APP_URL variations, missing secret, network error, HTTP 503, invalid JSON, malformed result, and counter inconsistency).
+- `npm run test:security`: **1,386 assertions PASSED** (37 migration safety + 13 auth reg + 1 redirect + 75 RLS + 45 API sec + 1,205 Intel auth + 10 worker tests).
+- `npm run check:type`: **PASSED** (0 errors).
+- `npm run check:lint`: **PASSED** (0 errors).
+- `node workers/scheduled-publish/build.mjs`: **PASSED** (built `dist/index.js` in 43ms).
+- GitHub Actions CI: All jobs passed on commit `6d5dd8bc`.
+
+### C. Live Cloudflare Provider Reality
+- `wrangler whoami` reports expired auth token in non-interactive environment; no active `CLOUDFLARE_API_TOKEN` configured.
+- Deployment and Cron schedule of `thebreakdown-scheduled-publish` on Cloudflare is **UNVERIFIED**.
+- Scheduled autonomous publishing is classified as **NOT OPERATIONAL** in production until deployed and verified via live Cloudflare logs.
+
+### D. Tri-Part Status Determination
+1. **Code-Path Safety**: **PASS** (Zero database fallbacks; strict fail-closed contract).
+2. **Automated Testing**: **PASS** (10/10 worker tests, 1,386 security assertions pass).
+3. **Live Runtime Provider Deployment**: **BLOCKED / UNVERIFIED** (No active Cloudflare token; deployment unverified).
+
+Full comprehensive evidence and condition matrix recorded in `docs/remediation/PHASE15_SCHEDULED_PUBLISHING_INTEGRITY.md`.
 
 
 

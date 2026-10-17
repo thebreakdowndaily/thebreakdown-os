@@ -143,7 +143,7 @@ Route                               Status    Behavior
 
 ### C. Render Polling Worker Investigation (`74.220.49.18`)
 - **Tracing**: Continuous HTTP 400 requests to `lvfovvidtowadmnggzzf` (`the-breakdown-fact-check`) originate from an external Node worker hosted on Render (`74.220.49.18`).
-- **Production Independence**: Production scheduled publishing runs via Cloudflare Worker `thebreakdown-scheduled-publish` (configured in `workers/scheduled-publish`), which invokes `/api/editorial/publish-due` on `https://thebreakdown.in` with `Authorization: Bearer <CRON_SECRET>`.
+- **Production Independence**: Production scheduled publishing was designed to run via Cloudflare Worker `thebreakdown-scheduled-publish`, which invokes canonical `/api/editorial/publish-due` on `https://thebreakdown.in`. However, as established in Phase 15, the worker implementation in `main` contained an unsafe database fallback (Issue #91, remediated in PR #92), and live deployment/scheduling on Cloudflare is **unverified**.
 - **Verdict**: The Render worker is an **obsolete artifact from the June 2026 prototype**. It has **zero production dependencies**. In accordance with instructions, it has been left running without interference.
 
 ### D. Missing Configuration & Integration Audit
@@ -211,7 +211,7 @@ sequenceDiagram
    - 100% healthy at commit `4d83560851552c7a5826261a0ffa13848feb0420`.
    - 25/25 public and legacy routes passing.
    - Protected routes (`/newsroom`, `/intel`) correctly redirect unauthenticated traffic (HTTP 307).
-   - Autonomous scheduled publishing pipeline via Cloudflare Worker is operational.
+   - Autonomous scheduled publishing canonical endpoint (`/api/editorial/publish-due`) is verified on Next.js; scheduled Cloudflare Worker trigger is pending PR #92 merge and live provider deployment (see Phase 15).
 2. **Local Schema & Migration Pipeline**:
    - 37/37 migrations apply sequentially without errors on clean PostgreSQL.
    - 73/73 direct database enforcement tests passing.
