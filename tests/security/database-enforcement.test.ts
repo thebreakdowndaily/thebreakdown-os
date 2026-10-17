@@ -257,6 +257,36 @@ async function runDirectDatabaseTests() {
     assert(acl.service_update_reader_corrections, 'Service role can update submission state');
     assert(acl.service_delete_reader_corrections, 'Service role can clean up isolated synthetic staging smoke records');
 
+    console.log('Verifying SECURITY DEFINER search paths and RPC execution grants...');
+    const functionPrivileges = await client.query(`
+      SELECT
+        has_function_privilege('anon', 'public.increment_rate_limit(text,integer,integer)', 'EXECUTE') AS anon_increment_rate_limit,
+        has_function_privilege('authenticated', 'public.increment_rate_limit(text,integer,integer)', 'EXECUTE') AS auth_increment_rate_limit,
+        has_function_privilege('service_role', 'public.increment_rate_limit(text,integer,integer)', 'EXECUTE') AS service_increment_rate_limit,
+        has_function_privilege('anon', 'public.archive_story_version()', 'EXECUTE') AS anon_archive_story_version,
+        has_function_privilege('anon', 'public.set_updated_at()', 'EXECUTE') AS anon_set_updated_at,
+        has_function_privilege('publisher_worker', 'public.fn_claim_due_schedule_entry()', 'EXECUTE') AS publisher_claim_schedule,
+        has_function_privilege('anon', 'public.fn_claim_due_schedule_entry()', 'EXECUTE') AS anon_claim_schedule,
+        has_function_privilege('service_role', 'public.radar_claim_notification_delivery(text,text,text,text,text,integer,integer)', 'EXECUTE') AS service_claim_radar_delivery,
+        has_function_privilege('anon', 'public.radar_claim_notification_delivery(text,text,text,text,text,integer,integer)', 'EXECUTE') AS anon_claim_radar_delivery,
+        (SELECT proconfig @> ARRAY['search_path=pg_catalog, pg_temp']
+          FROM pg_proc WHERE oid = 'public.increment_rate_limit(text,integer,integer)'::regprocedure) AS hardened_rate_limit_path,
+        (SELECT proconfig @> ARRAY['search_path=pg_catalog, pg_temp']
+          FROM pg_proc WHERE oid = 'public.current_app_role()'::regprocedure) AS hardened_role_helper_path
+    `);
+    const functionAcl = functionPrivileges.rows[0];
+    assert(!functionAcl.anon_increment_rate_limit, 'Anonymous role cannot execute the privileged rate-limit RPC');
+    assert(!functionAcl.auth_increment_rate_limit, 'Authenticated role cannot execute the privileged rate-limit RPC');
+    assert(functionAcl.service_increment_rate_limit, 'Service role retains execution of the rate-limit RPC');
+    assert(!functionAcl.anon_archive_story_version, 'Anonymous role cannot execute the trigger-only archive function');
+    assert(!functionAcl.anon_set_updated_at, 'Anonymous role cannot execute the trigger-only updated-at function');
+    assert(functionAcl.publisher_claim_schedule, 'Publisher worker retains its schedule-claim RPC grant');
+    assert(!functionAcl.anon_claim_schedule, 'Anonymous role cannot execute the publisher schedule-claim RPC');
+    assert(functionAcl.service_claim_radar_delivery, 'Service role retains execution of the Radar delivery RPC');
+    assert(!functionAcl.anon_claim_radar_delivery, 'Anonymous role cannot execute the Radar delivery RPC');
+    assert(functionAcl.hardened_rate_limit_path, 'Rate-limit SECURITY DEFINER function has a fixed catalog-only search path');
+    assert(functionAcl.hardened_role_helper_path, 'Role helper SECURITY DEFINER function has a fixed catalog-only search path');
+
     // Grant default privileges on all created tables to test roles
     await client.query('GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role');
     await client.query('GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role');
@@ -512,7 +542,7 @@ async function runDirectDatabaseTests() {
     `);
     for (const r of searchPathRes.rows) {
       const configStr = (r.proconfig || []).join(', ');
-      assert(configStr.includes('search_path=public, auth, pg_temp'), `${r.proname}() has immutable search_path`);
+      assert(configStr.includes('search_path=pg_catalog, pg_temp'), `${r.proname}() has restricted immutable search_path`);
     }
 
     // ─────────────────────────────────────────────────────────────────

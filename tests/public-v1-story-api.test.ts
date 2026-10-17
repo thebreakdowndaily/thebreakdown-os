@@ -68,7 +68,7 @@ describe('v1 public story API visibility', () => {
     );
 
     expect(response.status).toBe(404);
-    expect(await response.json()).toMatchObject({ status: 404 });
+    expect(await response.json()).toMatchObject({ error: expect.stringContaining('not found') });
     expect(repository.getPublicStoryBySlug).toHaveBeenCalledWith('draft-story');
     expect(repository.getStoryBySlug).not.toHaveBeenCalled();
   });
