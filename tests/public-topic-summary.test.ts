@@ -97,7 +97,7 @@ describe('buildPublicTopicSummaries', () => {
 
     expect(summary?.storyCount).toBe(2);
     expect(summary?.stories.map((story) => story.slug)).toEqual([
-      'public-story',
+      'regular-story',
       'featured-story',
     ]);
   });

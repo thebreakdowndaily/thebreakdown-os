@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 const state = vi.hoisted(() => {
   const builder: Record<string, any> = {};
 
-  for (const method of ['select', 'eq', 'lte', 'or', 'order', 'range']) {
+  for (const method of ['from', 'select', 'eq', 'lte', 'or', 'order', 'range']) {
     builder[method] = vi.fn(() => builder);
   }
 
