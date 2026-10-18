@@ -4377,6 +4377,311 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       }
     });
   });
+
+  describe('Phase 40: Final RPC Response Contract Hardening', () => {
+    const baseValidRpcResponse = () => ({
+      success: true,
+      code: 'PUBLISHED',
+      story_id: 'story-p40-test',
+      schedule_id: 'sched-p40-test',
+      status: 'published',
+      version: 2,
+      published_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      updated_by: '00000000-0000-0000-0000-000000000001',
+      actor: 'system-scheduler',
+      scheduled_by: 'original-scheduler',
+    });
+
+    const setupRepoWithRpc = async (rpcData: any) => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: rpcData,
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-p40-test');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-p40-test',
+        storyId: 'story-p40-test',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-p40-test', title: 'Story P40' } as any,
+        publicationToken: token,
+      });
+
+      return { res, mockClient };
+    };
+
+    describe('Checkpoint A & B: Identity validation fails closed', () => {
+      it('1. success: true with story_id missing produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).story_id;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain('story_id mismatch or missing');
+      });
+
+      it('2. success: true with story_id: null produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), story_id: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain('story_id mismatch or missing');
+      });
+
+      it('3. success: true with schedule_id missing produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).schedule_id;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain('schedule_id mismatch or missing');
+      });
+
+      it('4. success: true with schedule_id: null produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), schedule_id: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain('schedule_id mismatch or missing');
+      });
+
+      it('5a. story_id supplied but mismatching requested ID produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), story_id: 'completely-different-story-id' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain('story_id mismatch or missing');
+      });
+
+      it('5b. schedule_id supplied but mismatching requested ID produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), schedule_id: 'completely-different-sched-id' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain('schedule_id mismatch or missing');
+      });
+    });
+
+    describe('Checkpoint B: Contradictory outcome validation fails closed', () => {
+      it('6a. success: false combined with code: PUBLISHED produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), success: false, code: 'PUBLISHED' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain("contradictory 'PUBLISHED' code with non-success status");
+      });
+
+      it('6b. missing success flag combined with code: PUBLISHED produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).success;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.story).toBeUndefined();
+        expect(res.error).toContain("contradictory 'PUBLISHED' code with non-success status");
+      });
+
+      it('6c. legitimate failure code (e.g. SCHEDULE_LEASE_LOST) is preserved as database rejection', async () => {
+        const payload = { success: false, code: 'SCHEDULE_LEASE_LOST', error: 'Lease lost' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+        expect(res.story).toBeUndefined();
+      });
+    });
+
+    describe('Checkpoint B: Mandatory outcome fields & attribution contracts', () => {
+      it('7a. Missing status produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).status;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("expected status 'published'");
+      });
+
+      it('7b. Contradictory status (draft) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), status: 'draft' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("expected status 'published'");
+      });
+
+      it('7c. Missing version produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).version;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain('is not expected increment');
+      });
+
+      it('7d. Non-incremented version produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), version: 1 }; // expectedVersion is 1, so increment is 2!
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain('is not expected increment (2)');
+      });
+
+      it('7e. Missing published_at produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).published_at;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain('invalid or missing published_at timestamp');
+      });
+
+      it('7f. Missing updated_at produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).updated_at;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain('invalid or missing updated_at timestamp');
+      });
+
+      it('7g. Legitimate nullable updated_by: null is accepted and preserved', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_by: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.status).toBe('published');
+        expect(res.story?.updatedBy).toBeUndefined();
+      });
+
+      it('7h. Legitimate nullable scheduled_by: null is accepted and preserved', async () => {
+        const payload = { ...baseValidRpcResponse(), scheduled_by: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.status).toBe('published');
+        expect(res.scheduledBy).toBeNull();
+      });
+
+      it('7i. Malformed attribution actor (non-string) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), actor: 12345 };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain('violates text schema contract');
+      });
+
+      it('7j. Malformed scheduled_by (non-string number) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), scheduled_by: 99999 };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain('violates text schema contract');
+      });
+    });
+
+    describe('Checkpoint B & C: End-to-end schedule service reconciliation fencing', () => {
+      it('proves that a reconciliation failure blocks publication and executes zero fallback writes', async () => {
+        const today = new Date().toISOString().split('T')[0];
+        const initialSchedule = [
+          { id: 'sched-p40-fence', story_id: 'story-p40-fence', status: 'ready', slot_date: today, priority: 10 },
+        ];
+        const initialStories = [
+          { id: 'story-p40-fence', slug: 'story-p40-fence', title: 'Fence Story', status: 'ready', version: 1 },
+        ];
+
+        const { mockDb } = createMockDb(initialStories, initialSchedule);
+        setServiceClient(mockDb);
+
+        mockEvaluatePublicationContract.mockResolvedValueOnce({
+          allowed: true,
+          publicationToken: 'valid-token-p40',
+          updatedStory: { id: 'story-p40-fence', slug: 'story-p40-fence', title: 'Fence Story' },
+        });
+
+        mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+          success: false,
+          code: 'RECONCILIATION_ERROR',
+          error: 'RPC response contract violation: story_id mismatch or missing',
+        });
+
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        try {
+          const results = await realValidateAndPublishDueStories(new Date());
+
+          expect(results).toHaveLength(1);
+          const r = results[0];
+          expect(r.passed).toBe(false);
+          expect(r.outcome).toBe('blocked');
+          expect(r.checks).toContainEqual(
+            expect.objectContaining({
+              name: 'authoritative_reconciliation',
+              passed: false,
+              reason: 'RPC response contract violation: story_id mismatch or missing',
+            })
+          );
+
+          // Verification of zero forbidden side effects:
+          expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+          expect(mockStoryRepository.saveStoryOCC).not.toHaveBeenCalled();
+          expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
+        } finally {
+          consoleErrorSpy.mockRestore();
+        }
+      });
+
+      it('proves that a fully valid response returns authoritative story, version, timestamps and attribution', async () => {
+        const payload = baseValidRpcResponse();
+        const { res } = await setupRepoWithRpc(payload);
+
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story).toBeDefined();
+        expect(res.story?.id).toBe('story-p40-test');
+        expect(res.story?.status).toBe('published');
+        expect(res.story?.version).toBe(2);
+        expect(res.story?.publishedAt).toBe(payload.published_at);
+        expect(res.story?.updatedAt).toBe(payload.updated_at);
+        expect(res.story?.updatedBy).toBe('00000000-0000-0000-0000-000000000001');
+        expect(res.actor).toBe('system-scheduler');
+        expect(res.scheduledBy).toBe('original-scheduler');
+      });
+    });
+  });
 });
 
 

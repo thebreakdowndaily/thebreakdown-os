@@ -148,11 +148,28 @@ export class SupabaseStoryRepository implements StoryService {
       scheduled_by?: string;
     };
 
-    if (!rpcResult || !rpcResult.success) {
+    if (!rpcResult || typeof rpcResult !== 'object') {
       return {
         success: false,
-        code: (rpcResult?.code as any) || 'DATABASE_ERROR',
-        error: rpcResult?.error || 'Atomic publish RPC returned failure',
+        code: 'DATABASE_ERROR',
+        error: 'Atomic publish RPC returned invalid or empty response',
+      };
+    }
+
+    // Contradictory outcome: code 'PUBLISHED' with success != true
+    if (rpcResult.code === 'PUBLISHED' && rpcResult.success !== true) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: "RPC response contract violation: contradictory 'PUBLISHED' code with non-success status",
+      };
+    }
+
+    if (!rpcResult.success) {
+      return {
+        success: false,
+        code: (rpcResult.code as any) || 'DATABASE_ERROR',
+        error: rpcResult.error || 'Atomic publish RPC returned failure',
       };
     }
 
@@ -169,23 +186,36 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    if (rpcResult.story_id && rpcResult.story_id !== params.storyId) {
+    // Exact identity validation: story_id must strictly equal params.storyId
+    if (
+      !rpcResult.story_id ||
+      typeof rpcResult.story_id !== 'string' ||
+      rpcResult.story_id.trim() === '' ||
+      rpcResult.story_id !== params.storyId
+    ) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
-        error: `RPC response contract violation: story_id mismatch (expected '${params.storyId}', got '${rpcResult.story_id}')`,
+        error: `RPC response contract violation: story_id mismatch or missing (expected '${params.storyId}', got '${rpcResult.story_id}')`,
       };
     }
 
-    if (rpcResult.schedule_id && rpcResult.schedule_id !== params.scheduleId) {
+    // Exact identity validation: schedule_id must strictly equal params.scheduleId
+    if (
+      !rpcResult.schedule_id ||
+      typeof rpcResult.schedule_id !== 'string' ||
+      rpcResult.schedule_id.trim() === '' ||
+      rpcResult.schedule_id !== params.scheduleId
+    ) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
-        error: `RPC response contract violation: schedule_id mismatch (expected '${params.scheduleId}', got '${rpcResult.schedule_id}')`,
+        error: `RPC response contract violation: schedule_id mismatch or missing (expected '${params.scheduleId}', got '${rpcResult.schedule_id}')`,
       };
     }
 
-    if (rpcResult.status !== 'published') {
+    // Mandatory publication status: must strictly equal 'published'
+    if (!rpcResult.status || rpcResult.status !== 'published') {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
@@ -193,6 +223,7 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
+    // Mandatory version: must strictly equal expectedVersion + 1
     if (
       typeof rpcResult.version !== 'number' ||
       !Number.isInteger(rpcResult.version) ||
@@ -205,7 +236,12 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    if (!rpcResult.published_at || isNaN(new Date(rpcResult.published_at).getTime())) {
+    // Mandatory published_at timestamp: must be valid ISO string
+    if (
+      typeof rpcResult.published_at !== 'string' ||
+      !rpcResult.published_at.trim() ||
+      isNaN(new Date(rpcResult.published_at).getTime())
+    ) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
@@ -213,7 +249,12 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    if (!rpcResult.updated_at || isNaN(new Date(rpcResult.updated_at).getTime())) {
+    // Mandatory updated_at timestamp: must be valid ISO string
+    if (
+      typeof rpcResult.updated_at !== 'string' ||
+      !rpcResult.updated_at.trim() ||
+      isNaN(new Date(rpcResult.updated_at).getTime())
+    ) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
@@ -232,16 +273,44 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // UUID attribution contract: updated_by must be UUID format or null/undefined
+    // Attribution contracts:
+    // updated_by: nullable UUID (permitted null, or valid UUID string)
     if (
       rpcResult.updated_by !== null &&
       rpcResult.updated_by !== undefined &&
-      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rpcResult.updated_by)
+      (typeof rpcResult.updated_by !== 'string' ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rpcResult.updated_by))
     ) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
         error: `RPC response contract violation: updated_by '${rpcResult.updated_by}' violates UUID schema contract`,
+      };
+    }
+
+    // actor: non-empty string if provided
+    if (
+      rpcResult.actor !== undefined &&
+      rpcResult.actor !== null &&
+      (typeof rpcResult.actor !== 'string' || rpcResult.actor.trim() === '')
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: actor '${rpcResult.actor}' violates text schema contract`,
+      };
+    }
+
+    // scheduled_by: nullable string (permitted null or string)
+    if (
+      rpcResult.scheduled_by !== undefined &&
+      rpcResult.scheduled_by !== null &&
+      typeof rpcResult.scheduled_by !== 'string'
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: scheduled_by '${rpcResult.scheduled_by}' violates text schema contract`,
       };
     }
 
