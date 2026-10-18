@@ -5163,6 +5163,276 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       });
     });
   });
+
+  describe('Phase 43: Database-Authoritative Leases, Clock Triggers & Post-Commit Outbox Recovery', () => {
+    let scheduleModule: typeof import('@/services/editorial/schedule');
+
+    beforeEach(async () => {
+      scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    });
+
+    it('1. processPendingPublicationOutbox drains cache_invalidation and event_dispatch effects', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const { eventBus } = await import('@/lib/events/event-bus');
+      const publishSpy = vi.spyOn(eventBus, 'publish').mockReturnValue();
+
+      const outboxItems = [
+        {
+          id: 'outbox-item-1',
+          effect_type: 'cache_invalidation',
+          payload: { story_id: 'story-outbox-1', slug: 'outbox-slug-1', published_at: new Date().toISOString() },
+        },
+        {
+          id: 'outbox-item-2',
+          effect_type: 'event_dispatch',
+          payload: { story_id: 'story-outbox-2', schedule_id: 'sched-outbox-2', version: 3, published_at: new Date().toISOString(), actor: 'cron-worker' },
+        },
+      ];
+
+      const rpcCalls: { fn: string; args: any }[] = [];
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string, args: any) => {
+          rpcCalls.push({ fn, args });
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: outboxItems, error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: null, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(2);
+      expect(summary.succeeded).toBe(2);
+      expect(summary.failed).toBe(0);
+      expect(summary.details).toHaveLength(2);
+      expect(summary.details[0]).toEqual({ id: 'outbox-item-1', effectType: 'cache_invalidation', status: 'completed' });
+      expect(summary.details[1]).toEqual({ id: 'outbox-item-2', effectType: 'event_dispatch', status: 'completed' });
+
+      expect(publishSpy).toHaveBeenCalledWith(expect.objectContaining({
+        type: 'story:published',
+        payload: expect.objectContaining({
+          storyId: 'story-outbox-2',
+          scheduleId: 'sched-outbox-2',
+          version: 3,
+        }),
+      }));
+
+      const completions = rpcCalls.filter(c => c.fn === 'fn_complete_publication_outbox');
+      expect(completions).toHaveLength(2);
+      expect(completions[0].args).toEqual({ p_outbox_id: 'outbox-item-1', p_status: 'completed' });
+      expect(completions[1].args).toEqual({ p_outbox_id: 'outbox-item-2', p_status: 'completed' });
+
+      publishSpy.mockRestore();
+    });
+
+    it('2. processPendingPublicationOutbox handles effect failure, records error, and marks item failed', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const { eventBus } = await import('@/lib/events/event-bus');
+      const publishSpy = vi.spyOn(eventBus, 'publish').mockImplementation(() => {
+        throw new Error('Connection refused by downstream webhook');
+      });
+
+      const outboxItems = [
+        {
+          id: 'outbox-fail-item',
+          effect_type: 'event_dispatch',
+          payload: { story_id: 'story-fail', schedule_id: 'sched-fail', version: 1 },
+        },
+      ];
+
+      const rpcCalls: { fn: string; args: any }[] = [];
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string, args: any) => {
+          rpcCalls.push({ fn, args });
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: outboxItems, error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: null, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(1);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.failed).toBe(1);
+      expect(summary.details[0].status).toBe('failed');
+      expect(summary.details[0].error).toContain('Connection refused by downstream webhook');
+
+      const failureCompletion = rpcCalls.find(c => c.fn === 'fn_complete_publication_outbox');
+      expect(failureCompletion).toBeDefined();
+      expect(failureCompletion!.args.p_outbox_id).toBe('outbox-fail-item');
+      expect(failureCompletion!.args.p_status).toBe('failed');
+      expect(failureCompletion!.args.p_error).toContain('Connection refused by downstream webhook');
+
+      publishSpy.mockRestore();
+    });
+
+    it('3. processPendingPublicationOutbox handles unknown effect_type gracefully', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+
+      const outboxItems = [
+        {
+          id: 'outbox-unknown-item',
+          effect_type: 'unsupported_future_action',
+          payload: {},
+        },
+      ];
+
+      const rpcCalls: { fn: string; args: any }[] = [];
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string, args: any) => {
+          rpcCalls.push({ fn, args });
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: outboxItems, error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: null, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(1);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.failed).toBe(1);
+      expect(summary.details[0].error).toContain('Unknown effect_type: unsupported_future_action');
+    });
+
+    it('4. processPendingPublicationOutbox returns zero counts when outbox is empty', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [], error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(0);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.failed).toBe(0);
+      expect(summary.details).toHaveLength(0);
+    });
+
+    it('5. Database-authoritative claim handles ALREADY_PUBLISHED from fn_claim_schedule_entry_fenced', async () => {
+      const { validateAndPublishDueStories } = scheduleModule;
+
+      const today = new Date().toISOString().split('T')[0];
+      const entry = {
+        id: 'sched-claimed-already-pub',
+        story_id: 'story-claimed-already-pub',
+        slot_date: today,
+        status: 'published',
+      };
+
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_schedule_entry_fenced') {
+            return Promise.resolve({
+              data: { success: false, code: 'ALREADY_PUBLISHED', error: 'Schedule entry is already published' },
+              error: null,
+            });
+          }
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [], error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+        from: (table: string) => ({
+          insert: vi.fn().mockReturnValue({ error: null }),
+          select: vi.fn().mockReturnThis(),
+          lte: vi.fn().mockReturnThis(),
+          in: vi.fn().mockReturnThis(),
+          order: vi.fn().mockReturnThis(),
+          eq: vi.fn().mockReturnThis(),
+          single: vi.fn().mockResolvedValue({
+            data: { id: 'story-claimed-already-pub', slug: 'already-pub', status: 'published', published_at: '2026-10-18T00:00:00Z' },
+            error: null,
+          }),
+          then: (resolve: any) => {
+            if (table === 'editorial_schedule') {
+              return resolve({ data: [entry], error: null });
+            }
+            return resolve({ data: [], error: null });
+          },
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const results = await validateAndPublishDueStories(new Date());
+      expect(results).toHaveLength(1);
+      expect(results[0].outcome).toBe('already_published');
+      expect(results[0].passed).toBe(true);
+    });
+
+    it('6. Database-authoritative claim handles SCHEDULE_LEASE_ACTIVE from fn_claim_schedule_entry_fenced', async () => {
+      const { validateAndPublishDueStories } = scheduleModule;
+
+      const today = new Date().toISOString().split('T')[0];
+      const entry = {
+        id: 'sched-competing-claim',
+        story_id: 'story-competing-claim',
+        slot_date: today,
+        status: 'validated',
+      };
+
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_schedule_entry_fenced') {
+            return Promise.resolve({
+              data: { success: false, code: 'SCHEDULE_LEASE_ACTIVE', error: 'Active schedule lease is held by another worker' },
+              error: null,
+            });
+          }
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [], error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+        from: (table: string) => ({
+          insert: vi.fn().mockReturnValue({ error: null }),
+          select: vi.fn().mockReturnThis(),
+          lte: vi.fn().mockReturnThis(),
+          in: vi.fn().mockReturnThis(),
+          order: vi.fn().mockReturnThis(),
+          eq: vi.fn().mockReturnThis(),
+          then: (resolve: any) => {
+            if (table === 'editorial_schedule') {
+              return resolve({ data: [entry], error: null });
+            }
+            return resolve({ data: [], error: null });
+          },
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const results = await validateAndPublishDueStories(new Date());
+      expect(results).toHaveLength(1);
+      expect(results[0].outcome).toBe('skipped');
+      expect(results[0].passed).toBe(false);
+      expect(results[0].checks[0].reason).toContain('Schedule entry already claimed or active lease held by another worker');
+    });
+  });
 });
 
 

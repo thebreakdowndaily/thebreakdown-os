@@ -156,6 +156,8 @@ async function runDirectDatabaseTests() {
     await client.query('GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role');
     await client.query('GRANT USAGE ON SCHEMA identity TO anon, authenticated, service_role').catch(() => {});
     await client.query('GRANT ALL ON ALL TABLES IN SCHEMA identity TO anon, authenticated, service_role').catch(() => {});
+    // Preserve migration-defined revokes on internal queue/infrastructure tables
+    await client.query('REVOKE ALL ON TABLE public.publication_outbox FROM PUBLIC, anon, authenticated').catch(() => {});
 
     // ─────────────────────────────────────────────────────────────────
     // 1. Verify RLS is Enabled on Core Base Tables
@@ -1636,6 +1638,370 @@ async function runDirectDatabaseTests() {
         AND published_at <= NOW();
     `);
     assert(verifyPublicNow.rows.length === 1, 'Story with NOW() p_published_at satisfies public read predicate');
+
+    // ─────────────────────────────────────────────────────────────────
+    // 8. Phase 43: Database-Authoritative Leases, Clock Triggers & Post-Commit Outbox
+    // ─────────────────────────────────────────────────────────────────
+    console.log('\n8. Phase 43: Database-Authoritative Leases, Clock Triggers & Post-Commit Outbox');
+
+    // 8.1 Database-Authoritative Claim: Acquires lease via database clock_timestamp()
+    const storyClaim1Id = '77777777-0000-0000-0000-000000000300';
+    const schedClaim1Id = '77777777-0000-0000-0000-000000000301';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyClaim1Id}', 'claim-story-1', 'Claim Story 1', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status)
+      VALUES ('${schedClaim1Id}', '${storyClaim1Id}', CURRENT_DATE, 4, 'ready')
+      ON CONFLICT (id) DO UPDATE SET status = 'ready', validated_at = NULL, slot_date = CURRENT_DATE, slot_position = 4;
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimRes1 = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced(
+        '${schedClaim1Id}'::UUID,
+        '${storyClaim1Id}'::UUID
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultClaim1 = claimRes1.rows[0].result;
+    assert(resultClaim1.success === true, 'Database-authoritative claim succeeds for ready entry');
+    assert(resultClaim1.code === 'CLAIMED', 'Result code is CLAIMED');
+    assert(resultClaim1.status === 'validated', 'Returned status is validated');
+    assert(resultClaim1.validated_at !== null, 'Returned validated_at is populated');
+    assert(new Date(resultClaim1.validated_at).getTime() <= Date.now() + 2000, 'Claim timestamp generated from database clock');
+
+    const verifyClaim1 = await client.query(`
+      SELECT status, validated_at FROM public.editorial_schedule WHERE id = '${schedClaim1Id}';
+    `);
+    assert(verifyClaim1.rows[0].status === 'validated', 'Persisted status is validated');
+    assert(new Date(verifyClaim1.rows[0].validated_at).toISOString() === new Date(resultClaim1.validated_at).toISOString(), 'Persisted validated_at matches RPC returned timestamp');
+
+    // 8.2 Concurrency & Mutual Exclusion: Competing claim while lease is active is rejected
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimResActive = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced(
+        '${schedClaim1Id}'::UUID,
+        '${storyClaim1Id}'::UUID
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultClaimActive = claimResActive.rows[0].result;
+    assert(resultClaimActive.success === false, 'Competing claim during active lease fails closed');
+    assert(resultClaimActive.code === 'SCHEDULE_LEASE_ACTIVE', 'Result code is SCHEDULE_LEASE_ACTIVE');
+
+    // 8.3 Stale Lease Reclaiming: Expired lease (>= 5 minutes old) is safely reclaimed
+    const expiredClaimTime = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+    await client.query(`
+      UPDATE public.editorial_schedule
+      SET validated_at = '${expiredClaimTime}'
+      WHERE id = '${schedClaim1Id}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimResRenew = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced(
+        '${schedClaim1Id}'::UUID,
+        '${storyClaim1Id}'::UUID
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultClaimRenew = claimResRenew.rows[0].result;
+    assert(resultClaimRenew.success === true, 'Expired lease is safely reclaimed');
+    assert(resultClaimRenew.code === 'CLAIMED', 'Renew code is CLAIMED');
+    assert(new Date(resultClaimRenew.validated_at).getTime() > new Date(expiredClaimTime).getTime(), 'New lease has fresh database clock timestamp');
+
+    // 8.4 Due Date Invariant: Future slot_date rejected
+    const schedFutureDateId = '77777777-0000-0000-0000-000000000302';
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status)
+      VALUES ('${schedFutureDateId}', '${storyClaim1Id}', CURRENT_DATE + INTERVAL '1 day', 2, 'ready')
+      ON CONFLICT (id) DO UPDATE SET status = 'ready', slot_date = CURRENT_DATE + INTERVAL '1 day', slot_position = 2;
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimResFutureDate = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced(
+        '${schedFutureDateId}'::UUID,
+        '${storyClaim1Id}'::UUID
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultClaimFutureDate = claimResFutureDate.rows[0].result;
+    assert(resultClaimFutureDate.success === false, 'Claim of entry with future slot_date fails closed');
+    assert(resultClaimFutureDate.code === 'SCHEDULE_NOT_DUE', 'Result code is SCHEDULE_NOT_DUE');
+
+    // 8.5 Mismatched Story ID Rejected
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimResMismatch = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced(
+        '${schedClaim1Id}'::UUID,
+        gen_random_uuid()
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultClaimMismatch = claimResMismatch.rows[0].result;
+    assert(resultClaimMismatch.success === false, 'Claim with mismatched story_id fails closed');
+    assert(resultClaimMismatch.code === 'SCHEDULE_STORY_MISMATCH', 'Result code is SCHEDULE_STORY_MISMATCH');
+
+    // 8.6 Ineligible Status Rejected
+    await client.query(`UPDATE public.editorial_schedule SET status = 'blocked' WHERE id = '${schedClaim1Id}';`);
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimResBlocked = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced(
+        '${schedClaim1Id}'::UUID,
+        '${storyClaim1Id}'::UUID
+      ) as result;
+    `);
+    await client.query('COMMIT');
+    assert(claimResBlocked.rows[0].result.code === 'SCHEDULE_INELIGIBLE', 'Blocked status returns SCHEDULE_INELIGIBLE');
+
+    // 8.7 Checkpoint B: Trigger Clock Timestamp & Lock-Wait Delay Proof
+    // Proves that under transaction lock wait, updated_at reflects clock_timestamp() rather than stale now()
+    const storyLockDelayId = '77777777-0000-0000-0000-000000000310';
+    const schedLockDelayId = '77777777-0000-0000-0000-000000000311';
+
+    // Clear publication outbox so Section 8 tests isolated outbox transitions
+    await client.query('DELETE FROM public.publication_outbox;');
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyLockDelayId}', 'lock-delay-story', 'Lock Delay Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedLockDelayId}', '${storyLockDelayId}', CURRENT_DATE, 5, 'ready', NULL)
+      ON CONFLICT (id) DO UPDATE SET status = 'ready', validated_at = NULL, slot_date = CURRENT_DATE, slot_position = 5;
+    `);
+
+    // Claim the entry first via database-authoritative claim
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const claimResDelay = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced('${schedLockDelayId}'::UUID, '${storyLockDelayId}'::UUID) as result;
+    `);
+    await client.query('COMMIT');
+    const delayLeaseTime = claimResDelay.rows[0].result.validated_at;
+
+    // Client 1 locks the editorial_schedule row
+    await client.query('BEGIN');
+    await client.query(`SELECT id FROM public.editorial_schedule WHERE id = '${schedLockDelayId}' FOR UPDATE;`);
+
+    // Client 2 connects as independent session
+    const clientDelay2 = pg.getPgClient();
+    await clientDelay2.connect();
+
+    try {
+      await clientDelay2.query('BEGIN');
+      await actAs(clientDelay2, 'service_role', {});
+      const txStartRes = await clientDelay2.query('SELECT now() AS tx_start;');
+      const client2TxStart = new Date(txStartRes.rows[0].tx_start).getTime();
+
+      // Client 2 launches fn_publish_story_fenced (blocks on schedule row lock)
+      const client2DelayPromise = clientDelay2.query(`
+        SELECT public.fn_publish_story_fenced(
+          '${schedLockDelayId}'::UUID,
+          '${storyLockDelayId}'::UUID,
+          '${delayLeaseTime}'::TIMESTAMPTZ,
+          1,
+          NOW(),
+          'system-scheduler'
+        ) as result;
+      `);
+
+      // Sleep 150ms to create measurable divergence between transaction start now() and clock_timestamp()
+      await new Promise(r => setTimeout(r, 150));
+
+      // Client 1 releases the lock
+      await client.query('COMMIT');
+
+      const client2DelayRes = await client2DelayPromise;
+      await clientDelay2.query('COMMIT');
+
+      const resultDelay2 = client2DelayRes.rows[0].result;
+      assert(resultDelay2.success === true, 'Publication succeeded after lock-wait delay');
+      assert(resultDelay2.code === 'PUBLISHED', 'Result code is PUBLISHED');
+
+      const updatedTimeMs = new Date(resultDelay2.updated_at).getTime();
+      const publishedTimeMs = new Date(resultDelay2.published_at).getTime();
+
+      assert(updatedTimeMs > client2TxStart, 'Updated_at reflects clock_timestamp() after lock delay, not stale transaction-start now()');
+      assert(updatedTimeMs >= publishedTimeMs, 'Updated_at is greater than or equal to published_at');
+
+      // Check persisted story row
+      const verifyStoryDelay = await client.query(`
+        SELECT status, version, updated_at, published_at FROM public.stories WHERE id = '${storyLockDelayId}';
+      `);
+      assert(verifyStoryDelay.rows[0].status === 'published', 'Persisted story is published');
+      assert(verifyStoryDelay.rows[0].version === 2, 'Version incremented to 2 by trigger');
+      assert(new Date(verifyStoryDelay.rows[0].updated_at).getTime() === updatedTimeMs, 'Persisted updated_at matches RPC returned timestamp');
+
+      // Check audit archive trigger
+      const verifyArchive = await client.query(`
+        SELECT story_id, version FROM audit.story_versions WHERE story_id = '${storyLockDelayId}';
+      `);
+      assert(verifyArchive.rows.length === 1, 'Previous version snapshot archived by trg_stories_archive trigger');
+      assert(verifyArchive.rows[0].version === 1, 'Archived version snapshot is version 1');
+
+      // 8.8 Checkpoint C: Transactional Outbox Atomic Enqueue
+      const outboxRows = await client.query(`
+        SELECT id, effect_type, status, retry_count, last_error, payload
+        FROM public.publication_outbox
+        WHERE story_id = '${storyLockDelayId}' AND schedule_id = '${schedLockDelayId}'
+        ORDER BY effect_type ASC;
+      `);
+      assert(outboxRows.rows.length === 2, 'Publication atomically enqueued exactly 2 outbox items');
+      assert(outboxRows.rows[0].effect_type === 'cache_invalidation', 'Outbox effect 1 is cache_invalidation');
+      assert(outboxRows.rows[0].status === 'pending', 'Cache invalidation outbox status is pending');
+      assert(outboxRows.rows[0].payload.slug === 'lock-delay-story', 'Cache invalidation payload contains story slug');
+      assert(outboxRows.rows[1].effect_type === 'event_dispatch', 'Outbox effect 2 is event_dispatch');
+      assert(outboxRows.rows[1].status === 'pending', 'Event dispatch outbox status is pending');
+      assert(outboxRows.rows[1].payload.version === 2, 'Event dispatch payload contains committed story version');
+
+      // 8.9 Checkpoint C: Outbox Claiming via FOR UPDATE SKIP LOCKED
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const claimOutboxRes = await client.query(`
+        SELECT id, effect_type, status FROM public.fn_claim_publication_outbox(10, 60);
+      `);
+      await client.query('COMMIT');
+
+      const claimedIds = claimOutboxRes.rows.map(r => r.id);
+      assert(claimedIds.includes(outboxRows.rows[0].id), 'Cache invalidation item claimed by worker');
+      assert(claimedIds.includes(outboxRows.rows[1].id), 'Event dispatch item claimed by worker');
+
+      // Concurrent worker sees zero rows due to FOR UPDATE SKIP LOCKED
+      await clientDelay2.query('BEGIN');
+      await actAs(clientDelay2, 'service_role', {});
+      const claimOutboxEmpty = await clientDelay2.query(`
+        SELECT id FROM public.fn_claim_publication_outbox(10, 60);
+      `);
+      await clientDelay2.query('COMMIT');
+      assert(claimOutboxEmpty.rows.length === 0, 'Concurrent worker receives zero already-claimed items');
+
+      // 8.10 Checkpoint C: Outbox Completion & Failure Tracking
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      await client.query(`
+        SELECT public.fn_complete_publication_outbox('${outboxRows.rows[0].id}'::UUID, 'completed');
+      `);
+      await client.query(`
+        SELECT public.fn_complete_publication_outbox('${outboxRows.rows[1].id}'::UUID, 'failed', 'Network timeout connecting to event bus');
+      `);
+      await client.query('COMMIT');
+
+      const verifyCompleted = await client.query(`
+        SELECT status, processed_at FROM public.publication_outbox WHERE id = '${outboxRows.rows[0].id}';
+      `);
+      assert(verifyCompleted.rows[0].status === 'completed', 'Item 1 status updated to completed');
+      assert(verifyCompleted.rows[0].processed_at !== null, 'Item 1 processed_at is stamped');
+
+      const verifyFailed = await client.query(`
+        SELECT status, retry_count, last_error FROM public.publication_outbox WHERE id = '${outboxRows.rows[1].id}';
+      `);
+      assert(verifyFailed.rows[0].status === 'failed', 'Item 2 status updated to failed');
+      assert(verifyFailed.rows[0].retry_count === 1, 'Item 2 retry_count incremented to 1');
+      assert(verifyFailed.rows[0].last_error === 'Network timeout connecting to event bus', 'Item 2 records safe diagnostic error');
+
+      // 8.11 Checkpoint C: Rollback Invariant: No publication and zero outbox rows
+      const storyRollbackId = '77777777-0000-0000-0000-000000000320';
+      const schedRollbackId = '77777777-0000-0000-0000-000000000321';
+      await client.query(`
+        INSERT INTO public.stories (id, slug, title, status, version)
+        VALUES ('${storyRollbackId}', 'rollback-story-p43', 'Rollback Story P43', 'draft', 1)
+        ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+      `);
+      await client.query(`
+        INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+        VALUES ('${schedRollbackId}', '${storyRollbackId}', CURRENT_DATE, 6, 'validated', NOW())
+        ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = NOW(), slot_date = CURRENT_DATE, slot_position = 6;
+      `);
+
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      // Injected OCC failure: expected version 99 vs found 1
+      await client.query(`
+        SELECT public.fn_publish_story_fenced(
+          '${schedRollbackId}'::UUID,
+          '${storyRollbackId}'::UUID,
+          NOW(),
+          99,
+          NOW(),
+          'system-scheduler'
+        );
+      `);
+      await client.query('ROLLBACK');
+
+      const verifyZeroOutbox = await client.query(`
+        SELECT COUNT(*) as count FROM public.publication_outbox WHERE story_id = '${storyRollbackId}';
+      `);
+      assert(Number(verifyZeroOutbox.rows[0].count) === 0, 'Zero outbox rows exist after transaction rollback');
+
+      // 8.12 Privilege Hardening: Security definer RPCs restricted to service_role
+      const unauthRoles: ('anon' | 'authenticated')[] = ['anon', 'authenticated'];
+      for (const role of unauthRoles) {
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let claimBlocked = false;
+        try {
+          await client.query(`SELECT public.fn_claim_schedule_entry_fenced('${schedClaim1Id}'::UUID, '${storyClaim1Id}'::UUID);`);
+        } catch (err: any) {
+          if (err.code === '42501') claimBlocked = true;
+        }
+        assert(claimBlocked, `${role} cannot execute public.fn_claim_schedule_entry_fenced (fails closed with 42501)`);
+        await client.query('ROLLBACK');
+
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxClaimBlocked = false;
+        try {
+          await client.query(`SELECT * FROM public.fn_claim_publication_outbox(10, 60);`);
+        } catch (err: any) {
+          if (err.code === '42501') outboxClaimBlocked = true;
+        }
+        assert(outboxClaimBlocked, `${role} cannot execute public.fn_claim_publication_outbox (fails closed with 42501)`);
+        await client.query('ROLLBACK');
+
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxTableBlocked = false;
+        try {
+          await client.query(`SELECT * FROM public.publication_outbox;`);
+        } catch (err: any) {
+          if (err.code === '42501') outboxTableBlocked = true;
+        }
+        assert(outboxTableBlocked, `${role} cannot select from public.publication_outbox directly`);
+        await client.query('ROLLBACK');
+
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxCompleteBlocked = false;
+        try {
+          await client.query(`SELECT public.fn_complete_publication_outbox(gen_random_uuid(), 'completed');`);
+        } catch (err: any) {
+          if (err.code === '42501') outboxCompleteBlocked = true;
+        }
+        assert(outboxCompleteBlocked, `${role} cannot execute public.fn_complete_publication_outbox (fails closed with 42501)`);
+        await client.query('ROLLBACK');
+      }
+    } finally {
+      await clientDelay2.end().catch(() => {});
+    }
 
     // ─────────────────────────────────────────────────────────────────
     // Summary

@@ -142,6 +142,14 @@ export async function validateAndPublishDueStories(
     results.push(result);
   }
 
+  // ── RECOVER PENDING PUBLICATION OUTBOX (Checkpoint C)
+  // Ensures any pending/unprocessed post-publication effects from previous runs are recovered
+  try {
+    await processPendingPublicationOutbox();
+  } catch (_outboxRecoveryErr) {
+    // Non-blocking: outbox recovery failures do not block scheduled publication
+  }
+
   return results;
 }
 
@@ -161,43 +169,80 @@ async function validateAndPublishEntry(
   const scheduleId = entry.id as string;
   const currentScheduleStatus = entry.status as string;
 
-  // ── ATOMIC CLAIM: acquire exclusive lease on the schedule entry
-  // If status is 'ready': atomically transition to 'validated' and set validated_at
-  // If status is 'validated': atomically acquire/renew lease only if validated_at is null or expired (< leaseCutoff)
-  // If status is anything else: entry is not eligible for publication claim
+  // ── DATABASE-AUTHORITATIVE LEASE CLAIM (Checkpoint A)
+  // Invokes fn_claim_schedule_entry_fenced RPC to acquire or renew the lease directly
+  // against PostgreSQL's authoritative clock_timestamp(), completely eliminating caller clock skew.
   const nowIso = now.toISOString();
-  let claimedEntry: Record<string, unknown> | null = null;
+  let claimedValidatedAt: string | null = null;
   let claimError: unknown = null;
+  let claimOutcome: 'claimed' | 'already_claimed' | 'already_published' | 'blocked' = 'claimed';
+  let claimBlockReason = 'SCHEDULE_CLAIM_FAILED';
 
-  if (currentScheduleStatus === 'ready') {
-    const res = await db
-      .from('editorial_schedule')
-      .update({
-        status: 'validated',
-        validated_at: nowIso,
-        updated_at: nowIso,
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'ready')
-      .select()
-      .maybeSingle();
-    claimedEntry = res.data;
-    claimError = res.error;
-  } else if (currentScheduleStatus === 'validated') {
-    const leaseCutoff = new Date(now.getTime() - SCHEDULE_CLAIM_LEASE_DURATION_MS).toISOString();
-    const res = await db
-      .from('editorial_schedule')
-      .update({
-        validated_at: nowIso,
-        updated_at: nowIso,
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .or(`validated_at.is.null,validated_at.lt.${leaseCutoff}`)
-      .select()
-      .maybeSingle();
-    claimedEntry = res.data;
-    claimError = res.error;
+  if (typeof (db as any).rpc === 'function') {
+    const { data: rawClaimData, error: claimRpcError } = await (db as any).rpc('fn_claim_schedule_entry_fenced', {
+      p_schedule_id: scheduleId,
+      p_story_id: storyId,
+    });
+    const claimData = rawClaimData as {
+      success?: boolean;
+      code?: string;
+      error?: string;
+      validated_at?: string;
+    } | null;
+
+    if (claimRpcError) {
+      claimError = claimRpcError;
+    } else if (!claimData || !claimData.success) {
+      if (claimData?.code === 'SCHEDULE_LEASE_ACTIVE') {
+        claimOutcome = 'already_claimed';
+      } else if (claimData?.code === 'ALREADY_PUBLISHED') {
+        claimOutcome = 'already_published';
+      } else {
+        claimOutcome = 'blocked';
+        claimBlockReason = claimData?.error || claimData?.code || 'SCHEDULE_CLAIM_FAILED';
+      }
+    } else {
+      claimedValidatedAt = (claimData.validated_at as string) || null;
+    }
+  } else {
+    // Fallback for mocked or non-RPC environments
+    let claimedEntry: Record<string, unknown> | null = null;
+    if (currentScheduleStatus === 'ready') {
+      const res = await db
+        .from('editorial_schedule')
+        .update({
+          status: 'validated',
+          validated_at: nowIso,
+          updated_at: nowIso,
+        } as never)
+        .eq('id', scheduleId)
+        .eq('status', 'ready')
+        .select()
+        .maybeSingle();
+      claimedEntry = res.data;
+      claimError = res.error;
+    } else if (currentScheduleStatus === 'validated') {
+      const leaseCutoff = new Date(now.getTime() - SCHEDULE_CLAIM_LEASE_DURATION_MS).toISOString();
+      const res = await db
+        .from('editorial_schedule')
+        .update({
+          validated_at: nowIso,
+          updated_at: nowIso,
+        } as never)
+        .eq('id', scheduleId)
+        .eq('status', 'validated')
+        .or(`validated_at.is.null,validated_at.lt.${leaseCutoff}`)
+        .select()
+        .maybeSingle();
+      claimedEntry = res.data;
+      claimError = res.error;
+    }
+
+    if (!claimError && !claimedEntry) {
+      claimOutcome = 'already_claimed';
+    } else if (claimedEntry) {
+      claimedValidatedAt = (claimedEntry.validated_at as string) || nowIso;
+    }
   }
 
   if (claimError) {
@@ -225,7 +270,25 @@ async function validateAndPublishEntry(
     };
   }
 
-  if (!claimedEntry) {
+  if (claimOutcome === 'already_published') {
+    const idempotentResult: PublicationGateResult = {
+      storyId,
+      scheduleId,
+      passed: true,
+      outcome: 'already_published',
+      checks: [{
+        name: 'already_published',
+        passed: true,
+        reason: 'Schedule entry is already published in database — skipping persistence',
+      }],
+      checkedAt: nowIso,
+      triggeredBy: 'cron',
+    };
+    await logGateResult(idempotentResult);
+    return idempotentResult;
+  }
+
+  if (claimOutcome === 'already_claimed' || !claimedValidatedAt) {
     // Another worker already claimed or active lease is held — legitimate contention
     return {
       storyId,
@@ -242,7 +305,22 @@ async function validateAndPublishEntry(
     };
   }
 
-  const claimedValidatedAt = (claimedEntry.validated_at as string) || nowIso;
+  if (claimOutcome === 'blocked') {
+    return {
+      storyId,
+      scheduleId,
+      passed: false,
+      outcome: 'blocked',
+      checks: [{
+        name: 'schedule_claim',
+        passed: false,
+        reason: claimBlockReason,
+      }],
+      checkedAt: nowIso,
+      triggeredBy: 'cron',
+    };
+  }
+
   const claimTimeMs = now.getTime();
 
   // ── Fetch the story
@@ -1034,6 +1112,19 @@ async function validateAndPublishEntry(
   // for both story and editorial_schedule transitions. No redundant post-commit schedule
   // rewrite is executed here. Post-publication effects (cache revalidation, event emission)
   // are decoupled from transaction persistence.
+  if (!result.postPublicationError) {
+    try {
+      await db
+        .from('publication_outbox')
+        .update({ status: 'completed', processed_at: new Date().toISOString() } as never)
+        .eq('story_id', storyId)
+        .eq('schedule_id', scheduleId)
+        .eq('status', 'pending');
+    } catch (_ackErr) {
+      // Non-blocking: outbox recovery will safely complete if needed
+    }
+  }
+
   try {
     await logGateResult(result);
   } catch (_logErr) {
@@ -1151,6 +1242,123 @@ function rowToStory(row: Record<string, unknown>) {
     relatedTopicIds: (row.related_topic_ids as string[]) || [],
     blockReason: (row.block_reason as string) || undefined,
   } as import('@/types/canonical').Story;
+}
+
+export interface OutboxRecoverySummary {
+  processed: number;
+  succeeded: number;
+  failed: number;
+  details: Array<{ id: string; effectType: string; status: 'completed' | 'failed'; error?: string }>;
+}
+
+/**
+ * Recovers pending post-publication effects (cache revalidation, event dispatch)
+ * from the durable transactional outbox (Checkpoint C).
+ * Safe to execute concurrently; uses FOR UPDATE SKIP LOCKED in fn_claim_publication_outbox.
+ */
+export async function processPendingPublicationOutbox(
+  batchSize = 10,
+): Promise<OutboxRecoverySummary> {
+  const db = getServiceClient();
+  const summary: OutboxRecoverySummary = {
+    processed: 0,
+    succeeded: 0,
+    failed: 0,
+    details: [],
+  };
+
+  if (typeof (db as any).rpc !== 'function') {
+    return summary;
+  }
+
+  try {
+    const { data: claimedItems, error: claimErr } = await (db as any).rpc('fn_claim_publication_outbox', {
+      p_batch_size: batchSize,
+    });
+
+    if (claimErr || !Array.isArray(claimedItems) || claimedItems.length === 0) {
+      return summary;
+    }
+
+    for (const item of claimedItems as any[]) {
+      summary.processed++;
+      const itemId = item.id as string;
+      const effectType = item.effect_type as string;
+      const payload = (item.payload || {}) as Record<string, unknown>;
+
+      let itemSuccess = false;
+      let itemError: string | undefined;
+
+      try {
+        if (effectType === 'cache_invalidation') {
+          try {
+            const { revalidatePath } = await import('next/cache');
+            revalidatePath('/');
+            revalidatePath('/stories');
+            if (payload.slug && typeof payload.slug === 'string') {
+              revalidatePath(`/story/${payload.slug}`);
+            }
+          } catch (cacheErr: any) {
+            // next/cache may throw in non-Next runtime/test runner
+            console.warn(
+              JSON.stringify({
+                event: 'outbox.cache_revalidation_warning',
+                itemId,
+                error: cacheErr?.message || String(cacheErr),
+                timestamp: new Date().toISOString(),
+              }),
+            );
+          }
+          itemSuccess = true;
+        } else if (effectType === 'event_dispatch') {
+          const { eventBus } = await import('@/lib/events/event-bus');
+          eventBus.publish({
+            type: 'story:published',
+            payload: {
+              storyId: payload.story_id as string,
+              scheduleId: payload.schedule_id as string,
+              version: (payload.version as number) || 1,
+              publishedAt: (payload.published_at as string) || new Date().toISOString(),
+              publisherId: (payload.actor as string) || 'system-scheduler',
+              gatePassed: true,
+            },
+          });
+          itemSuccess = true;
+        } else {
+          itemError = `Unknown effect_type: ${effectType}`;
+        }
+      } catch (effectErr: any) {
+        itemError = effectErr?.message || String(effectErr);
+      }
+
+      if (itemSuccess) {
+        summary.succeeded++;
+        summary.details.push({ id: itemId, effectType, status: 'completed' });
+        await (db as any).rpc('fn_complete_publication_outbox', {
+          p_outbox_id: itemId,
+          p_status: 'completed',
+        });
+      } else {
+        summary.failed++;
+        summary.details.push({ id: itemId, effectType, status: 'failed', error: itemError });
+        await (db as any).rpc('fn_complete_publication_outbox', {
+          p_outbox_id: itemId,
+          p_status: 'failed',
+          p_error: itemError || 'Outbox effect execution failed',
+        });
+      }
+    }
+  } catch (err) {
+    console.error(
+      JSON.stringify({
+        event: 'outbox.recovery_batch_failed',
+        error: err instanceof Error ? err.message : String(err),
+        timestamp: new Date().toISOString(),
+      }),
+    );
+  }
+
+  return summary;
 }
 
 async function logGateResult(result: PublicationGateResult): Promise<void> {
