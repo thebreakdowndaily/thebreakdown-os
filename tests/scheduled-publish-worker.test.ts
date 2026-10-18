@@ -4997,6 +4997,172 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       });
     });
   });
+
+  describe('Phase 42: Timestamp Future Boundary and Nullable Attribution Type Alignment', () => {
+    const baseValidRpcResponse = () => ({
+      success: true,
+      code: 'PUBLISHED',
+      story_id: 'story-p42-test',
+      schedule_id: 'sched-p42-test',
+      status: 'published',
+      version: 2,
+      published_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      updated_by: '00000000-0000-0000-0000-000000000001',
+      actor: 'system-scheduler',
+      scheduled_by: 'original-scheduler',
+    });
+
+    const setupRepoWithRpc = async (rpcData: any) => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: rpcData,
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-p42-test');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-p42-test',
+        storyId: 'story-p42-test',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-p42-test', title: 'Story P42' } as any,
+        publicationToken: token,
+      });
+
+      return { res, mockClient };
+    };
+
+    describe('Checkpoint A: Consistent timestamp future policy for updated_at', () => {
+      it('1. updated_at more than one minute in the future produces RECONCILIATION_ERROR', async () => {
+        const futureDate = new Date(Date.now() + 120000).toISOString(); // 2 minutes in future
+        const payload = { ...baseValidRpcResponse(), updated_at: futureDate };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain(`updated_at '${futureDate}' is in the future`);
+      });
+
+      it('2. updated_at within the 60-second future tolerance is accepted', async () => {
+        const skewDate = new Date(Date.now() + 30000).toISOString(); // 30 seconds in future
+        const payload = { ...baseValidRpcResponse(), updated_at: skewDate };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.updatedAt).toBe(skewDate);
+      });
+
+      it('3. valid historical updated_at is accepted', async () => {
+        const historicalDate = '2021-06-15T08:30:00Z';
+        const payload = { ...baseValidRpcResponse(), updated_at: historicalDate };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.updatedAt).toBe(historicalDate);
+      });
+
+      it('4. updated_at lacking timezone designator produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_at: '2026-10-18T12:00:00' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing updated_at timestamp');
+      });
+
+      it('5. updated_at with impossible calendar date (Feb 30) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_at: '2026-02-30T10:00:00Z' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing updated_at timestamp');
+      });
+
+      it('6. updated_at with non-ISO format produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_at: '2026-10-18 10:00:00' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing updated_at timestamp');
+      });
+    });
+
+    describe('Checkpoint B: Nullable attribution types and shared interface alignment', () => {
+      it('7. scheduledBy: null matches PublishScheduledStoryAtomicResult type contract', async () => {
+        const payload = { ...baseValidRpcResponse(), scheduled_by: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.scheduledBy).toBeNull();
+        const typedResult: import('@/services/interfaces/story').PublishScheduledStoryAtomicResult = res;
+        expect(typedResult.scheduledBy).toBeNull();
+      });
+
+      it('8. scheduledBy: string matches PublishScheduledStoryAtomicResult type contract', async () => {
+        const payload = { ...baseValidRpcResponse(), scheduled_by: 'lead-editor' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.scheduledBy).toBe('lead-editor');
+        const typedResult: import('@/services/interfaces/story').PublishScheduledStoryAtomicResult = res;
+        expect(typedResult.scheduledBy).toBe('lead-editor');
+      });
+
+      it('9. updated_by: null maps to undefined on Story while preserving strict non-null actor', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_by: null, actor: 'cron-worker' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.updatedBy).toBeUndefined();
+        expect(res.actor).toBe('cron-worker');
+      });
+
+      it('10. memory and Supabase repositories both conform to PublishScheduledStoryAtomicResult', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+        const memRepo = new MemoryStoryService();
+        await memRepo.saveStory({
+          id: 'story-mem-p42',
+          slug: 'story-mem-p42',
+          title: 'Memory Story P42',
+          status: 'ready',
+          publicationStatus: 'ready',
+          version: 1,
+        } as any);
+
+        const token = issuePublicationToken('story-mem-p42');
+        const res = await memRepo.publishScheduledStoryAtomic({
+          scheduleId: 'sched-mem-p42',
+          storyId: 'story-mem-p42',
+          expectedValidatedAt: new Date().toISOString(),
+          expectedVersion: 1,
+          publishedStory: { id: 'story-mem-p42', title: 'Memory Story P42' } as any,
+          publicationToken: token,
+          updatedBy: 'memory-scheduler',
+        });
+
+        const typedResult: import('@/services/interfaces/story').PublishScheduledStoryAtomicResult = res;
+        expect(typedResult.success).toBe(true);
+        expect(typedResult.code).toBe('PUBLISHED');
+        expect(typeof typedResult.scheduledBy === 'string' || typedResult.scheduledBy === null).toBe(true);
+      });
+    });
+  });
 });
 
 

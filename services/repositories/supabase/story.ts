@@ -181,7 +181,7 @@ export class SupabaseStoryRepository implements StoryService {
       updated_at?: string;
       updated_by?: string | null;
       actor?: string;
-      scheduled_by?: string;
+      scheduled_by?: string | null;
     };
 
     if (!rpcResult || typeof rpcResult !== 'object') {
@@ -290,14 +290,24 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // A published story must not have a future published_at that hides it from public queries
-    const publishedAtTime = new Date(rpcResult.published_at).getTime();
+    // Future clock skew policy: neither published_at nor updated_at may exceed the 1-minute tolerance
     const maxAllowedFuture = Date.now() + 60000; // allow at most 1m clock skew
+
+    const publishedAtTime = new Date(rpcResult.published_at).getTime();
     if (publishedAtTime > maxAllowedFuture) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
         error: `RPC response contract violation: published_at '${rpcResult.published_at}' is in the future`,
+      };
+    }
+
+    const updatedAtTime = new Date(rpcResult.updated_at).getTime();
+    if (updatedAtTime > maxAllowedFuture) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: updated_at '${rpcResult.updated_at}' is in the future`,
       };
     }
 

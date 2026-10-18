@@ -15,7 +15,7 @@ export interface PublishScheduledStoryAtomicResult {
   success: boolean;
   story?: Story;
   actor?: string;
-  scheduledBy?: string;
+  scheduledBy?: string | null;
   code:
     | 'PUBLISHED'
     | 'SCHEDULE_LEASE_LOST'
