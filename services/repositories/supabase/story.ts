@@ -14,6 +14,42 @@ function isUuid(value: string): boolean {
   return UUID_PATTERN.test(value);
 }
 
+export function isValidIsoTimestampWithTimezone(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const str = value.trim();
+  if (!str) return false;
+
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(?:Z|([+-]\d{2})(?::?(\d{2}))?)$/i.exec(str);
+  if (!match) return false;
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10);
+  const day = parseInt(match[3], 10);
+  const hour = parseInt(match[4], 10);
+  const min = parseInt(match[5], 10);
+  const sec = parseInt(match[6], 10);
+
+  if (month < 1 || month > 12) return false;
+  if (hour < 0 || hour > 23) return false;
+  if (min < 0 || min > 59) return false;
+  if (sec < 0 || sec > 59) return false;
+
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  if (day < 1 || day > daysInMonth) return false;
+
+  if (match[7] !== undefined) {
+    const tzHour = Math.abs(parseInt(match[7], 10));
+    if (tzHour > 23) return false;
+  }
+  if (match[8] !== undefined) {
+    const tzMin = parseInt(match[8], 10);
+    if (tzMin < 0 || tzMin > 59) return false;
+  }
+
+  const time = new Date(str).getTime();
+  return !isNaN(time);
+}
+
 export class SupabaseStoryRepository implements StoryService {
   private evidenceVault?: EvidenceVaultService;
 
@@ -236,12 +272,8 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // Mandatory published_at timestamp: must be valid ISO string
-    if (
-      typeof rpcResult.published_at !== 'string' ||
-      !rpcResult.published_at.trim() ||
-      isNaN(new Date(rpcResult.published_at).getTime())
-    ) {
+    // Mandatory published_at timestamp: must be valid ISO 8601 string with explicit timezone
+    if (!isValidIsoTimestampWithTimezone(rpcResult.published_at)) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
@@ -249,12 +281,8 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // Mandatory updated_at timestamp: must be valid ISO string
-    if (
-      typeof rpcResult.updated_at !== 'string' ||
-      !rpcResult.updated_at.trim() ||
-      isNaN(new Date(rpcResult.updated_at).getTime())
-    ) {
+    // Mandatory updated_at timestamp: must be valid ISO 8601 string with explicit timezone
+    if (!isValidIsoTimestampWithTimezone(rpcResult.updated_at)) {
       return {
         success: false,
         code: 'RECONCILIATION_ERROR',
@@ -273,13 +301,18 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // Attribution contracts:
-    // updated_by: nullable UUID (permitted null, or valid UUID string)
+    // Mandatory attribution contracts:
+    // updated_by: property must be present; permits null, or valid UUID string
+    if (!('updated_by' in rpcResult) || rpcResult.updated_by === undefined) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: missing updated_by property',
+      };
+    }
     if (
       rpcResult.updated_by !== null &&
-      rpcResult.updated_by !== undefined &&
-      (typeof rpcResult.updated_by !== 'string' ||
-        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rpcResult.updated_by))
+      (typeof rpcResult.updated_by !== 'string' || !isUuid(rpcResult.updated_by))
     ) {
       return {
         success: false,
@@ -288,11 +321,18 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // actor: non-empty string if provided
+    // actor: property must be present; non-empty string
+    if (!('actor' in rpcResult) || rpcResult.actor === undefined) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: missing actor property',
+      };
+    }
     if (
-      rpcResult.actor !== undefined &&
-      rpcResult.actor !== null &&
-      (typeof rpcResult.actor !== 'string' || rpcResult.actor.trim() === '')
+      rpcResult.actor === null ||
+      typeof rpcResult.actor !== 'string' ||
+      rpcResult.actor.trim() === ''
     ) {
       return {
         success: false,
@@ -301,9 +341,15 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    // scheduled_by: nullable string (permitted null or string)
+    // scheduled_by: property must be present; permits null, or string
+    if (!('scheduled_by' in rpcResult) || rpcResult.scheduled_by === undefined) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: missing scheduled_by property',
+      };
+    }
     if (
-      rpcResult.scheduled_by !== undefined &&
       rpcResult.scheduled_by !== null &&
       typeof rpcResult.scheduled_by !== 'string'
     ) {

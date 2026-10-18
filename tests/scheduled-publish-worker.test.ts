@@ -4682,6 +4682,321 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       });
     });
   });
+
+  describe('Phase 41: Required Attribution Fields and Strict Timestamp Contract', () => {
+    const baseValidRpcResponse = () => ({
+      success: true,
+      code: 'PUBLISHED',
+      story_id: 'story-p41-test',
+      schedule_id: 'sched-p41-test',
+      status: 'published',
+      version: 2,
+      published_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      updated_by: '00000000-0000-0000-0000-000000000001',
+      actor: 'system-scheduler',
+      scheduled_by: 'original-scheduler',
+    });
+
+    const setupRepoWithRpc = async (rpcData: any) => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: rpcData,
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-p41-test');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-p41-test',
+        storyId: 'story-p41-test',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-p41-test', title: 'Story P41' } as any,
+        publicationToken: token,
+      });
+
+      return { res, mockClient };
+    };
+
+    describe('Checkpoint A: Required attribution fields and legitimate null preservation', () => {
+      it('1. missing updated_by property produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).updated_by;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: missing updated_by property');
+      });
+
+      it('2. missing actor property produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).actor;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: missing actor property');
+      });
+
+      it('3. missing scheduled_by property produces RECONCILIATION_ERROR', async () => {
+        const payload = baseValidRpcResponse();
+        delete (payload as any).scheduled_by;
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: missing scheduled_by property');
+      });
+
+      it('4. legitimate updated_by: null is accepted and sets story.updatedBy to undefined', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_by: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.status).toBe('published');
+        expect(res.story?.updatedBy).toBeUndefined();
+      });
+
+      it('5. legitimate scheduled_by: null is accepted and preserved on result', async () => {
+        const payload = { ...baseValidRpcResponse(), scheduled_by: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.scheduledBy).toBeNull();
+      });
+
+      it('6. empty string actor produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), actor: '' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("actor '' violates text schema contract");
+      });
+
+      it('7. whitespace-only actor produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), actor: '   ' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("actor '   ' violates text schema contract");
+      });
+
+      it('8. null actor produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), actor: null };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("actor 'null' violates text schema contract");
+      });
+
+      it('9. malformed non-UUID updated_by produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_by: 'not-a-valid-uuid' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("updated_by 'not-a-valid-uuid' violates UUID schema contract");
+      });
+
+      it('10. non-string scheduled_by produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), scheduled_by: 12345 };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain("scheduled_by '12345' violates text schema contract");
+      });
+    });
+
+    describe('Checkpoint B: Strict ISO 8601 timestamp validation and future policy', () => {
+      it('11. published_at lacking timezone designator produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), published_at: '2026-10-18T10:00:00' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing published_at timestamp');
+      });
+
+      it('12. updated_at lacking timezone designator produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_at: '2026-10-18T10:00:00' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing updated_at timestamp');
+      });
+
+      it('13. published_at with space separator (non-ISO) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), published_at: '2026-10-18 10:00:00' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing published_at timestamp');
+      });
+
+      it('14. published_at with impossible calendar date (Feb 30) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), published_at: '2026-02-30T10:00:00Z' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing published_at timestamp');
+      });
+
+      it('15. published_at with impossible calendar date (Feb 29 on non-leap year) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), published_at: '2026-02-29T10:00:00Z' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing published_at timestamp');
+      });
+
+      it('16. published_at with impossible calendar date (April 31) produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), published_at: '2026-04-31T10:00:00Z' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing published_at timestamp');
+      });
+
+      it('17. published_at with impossible month 13 produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), published_at: '2026-13-01T10:00:00Z' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing published_at timestamp');
+      });
+
+      it('18. updated_at with impossible calendar date produces RECONCILIATION_ERROR', async () => {
+        const payload = { ...baseValidRpcResponse(), updated_at: '2026-02-30T10:00:00Z' };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toBe('RPC response contract violation: invalid or missing updated_at timestamp');
+      });
+
+      it('19. published_at with future timestamp beyond 1 minute tolerance produces RECONCILIATION_ERROR', async () => {
+        const futureDate = new Date(Date.now() + 120000).toISOString(); // 2 minutes in future
+        const payload = { ...baseValidRpcResponse(), published_at: futureDate };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('RECONCILIATION_ERROR');
+        expect(res.error).toContain(`published_at '${futureDate}' is in the future`);
+      });
+
+      it('20. published_at with timestamp within 1 minute future tolerance is accepted', async () => {
+        const skewDate = new Date(Date.now() + 30000).toISOString(); // 30 seconds in future
+        const payload = { ...baseValidRpcResponse(), published_at: skewDate };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.publishedAt).toBe(skewDate);
+      });
+
+      it('21. published_at with valid historical date is accepted', async () => {
+        const historical = '2020-05-15T12:00:00Z';
+        const payload = { ...baseValidRpcResponse(), published_at: historical };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.publishedAt).toBe(historical);
+      });
+
+      it('22. PostgreSQL-shaped timestamp with timezone offset is accepted', async () => {
+        const pgTimestamp = '2026-10-18T16:20:46.647+05:30';
+        const payload = { ...baseValidRpcResponse(), published_at: pgTimestamp, updated_at: pgTimestamp };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.publishedAt).toBe(pgTimestamp);
+        expect(res.story?.updatedAt).toBe(pgTimestamp);
+      });
+
+      it('23. Leap year Feb 29 date is accepted', async () => {
+        const leapDate = '2024-02-29T12:00:00Z';
+        const payload = { ...baseValidRpcResponse(), published_at: leapDate };
+
+        const { res } = await setupRepoWithRpc(payload);
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        expect(res.story?.publishedAt).toBe(leapDate);
+      });
+    });
+
+    describe('Checkpoint C: Zero fallback writes on reconciliation error', () => {
+      it('24. proves that attribution or timestamp reconciliation failure executes zero fallback writes', async () => {
+        const today = new Date().toISOString().split('T')[0];
+        const initialSchedule = [
+          { id: 'sched-p41-fence', story_id: 'story-p41-fence', status: 'ready', slot_date: today, priority: 10 },
+        ];
+        const initialStories = [
+          { id: 'story-p41-fence', slug: 'story-p41-fence', title: 'Fence Story P41', status: 'ready', version: 1 },
+        ];
+
+        const { mockDb } = createMockDb(initialStories, initialSchedule);
+        setServiceClient(mockDb);
+
+        mockEvaluatePublicationContract.mockResolvedValueOnce({
+          allowed: true,
+          publicationToken: 'valid-token-p41',
+          updatedStory: { id: 'story-p41-fence', slug: 'story-p41-fence', title: 'Fence Story P41' },
+        });
+
+        mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+          success: false,
+          code: 'RECONCILIATION_ERROR',
+          error: 'RPC response contract violation: missing updated_by property',
+        });
+
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        try {
+          const results = await realValidateAndPublishDueStories(new Date());
+
+          expect(results).toHaveLength(1);
+          const r = results[0];
+          expect(r.passed).toBe(false);
+          expect(r.outcome).toBe('blocked');
+          expect(r.checks).toContainEqual(
+            expect.objectContaining({
+              name: 'authoritative_reconciliation',
+              passed: false,
+              reason: 'RPC response contract violation: missing updated_by property',
+            })
+          );
+
+          // Verification of zero forbidden side effects:
+          expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+          expect(mockStoryRepository.saveStoryOCC).not.toHaveBeenCalled();
+          expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
+        } finally {
+          consoleErrorSpy.mockRestore();
+        }
+      });
+    });
+  });
 });
 
 
