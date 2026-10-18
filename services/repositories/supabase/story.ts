@@ -150,13 +150,25 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
+    if (
+      typeof rpcResult.version !== 'number' ||
+      !rpcResult.published_at ||
+      !rpcResult.updated_at
+    ) {
+      return {
+        success: false,
+        code: 'DATABASE_ERROR',
+        error: 'Atomic publish RPC succeeded but omitted required authoritative fields (version, published_at, updated_at)',
+      };
+    }
+
     const updatedStory: Story = {
       ...params.publishedStory,
       status: 'published',
       publicationStatus: 'published',
-      version: rpcResult.version ?? (params.expectedVersion + 1),
-      publishedAt: rpcResult.published_at || params.publishedAt || new Date().toISOString(),
-      updatedAt: rpcResult.updated_at || rpcResult.published_at || params.publishedAt || new Date().toISOString(),
+      version: rpcResult.version,
+      publishedAt: rpcResult.published_at,
+      updatedAt: rpcResult.updated_at,
       updatedBy: rpcResult.updated_by || params.updatedBy || 'system-scheduler',
     };
 

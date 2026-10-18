@@ -478,6 +478,71 @@ async function runDirectDatabaseTests() {
     assert(authRpcBlocked, 'Authenticated user direct RPC execution fails closed with 42501 (insufficient_privilege)');
     await client.query('ROLLBACK');
 
+    // 6.5 Direct execution rejection: publisher_worker cannot call fn_publish_story_fenced
+    const pubWorkerPrivRes = await client.query(`
+      SELECT has_function_privilege('publisher_worker', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+    `);
+    assert(pubWorkerPrivRes.rows[0].priv === false, 'publisher_worker has NO execute privilege on fn_publish_story_fenced');
+
+    await client.query('BEGIN');
+    await client.query('SET LOCAL role publisher_worker');
+    let pubWorkerRpcBlocked = false;
+    try {
+      await client.query(`
+        SELECT public.fn_publish_story_fenced(
+          gen_random_uuid(), gen_random_uuid(), NOW(), 1, NOW(), 'system-scheduler'
+        );
+      `);
+    } catch (err: any) {
+      if (err.code === '42501') pubWorkerRpcBlocked = true;
+    }
+    assert(pubWorkerRpcBlocked, 'publisher_worker direct execution of fn_publish_story_fenced fails closed with 42501');
+    await client.query('ROLLBACK');
+
+    // 6.6 Legacy RPC closure: fn_publish_story_with_audit cannot be called by untrusted roles
+    const legacyAnonPriv = await client.query(`
+      SELECT has_function_privilege('anon', 'public.fn_publish_story_with_audit(uuid)', 'execute') as priv;
+    `);
+    assert(legacyAnonPriv.rows[0].priv === false, 'anon has NO execute privilege on legacy fn_publish_story_with_audit');
+
+    const legacyAuthPriv = await client.query(`
+      SELECT has_function_privilege('authenticated', 'public.fn_publish_story_with_audit(uuid)', 'execute') as priv;
+    `);
+    assert(legacyAuthPriv.rows[0].priv === false, 'authenticated has NO execute privilege on legacy fn_publish_story_with_audit');
+
+    const legacyWorkerPriv = await client.query(`
+      SELECT has_function_privilege('publisher_worker', 'public.fn_publish_story_with_audit(uuid)', 'execute') as priv;
+    `);
+    assert(legacyWorkerPriv.rows[0].priv === false, 'publisher_worker has NO execute privilege on legacy fn_publish_story_with_audit');
+
+    await client.query('BEGIN');
+    await client.query('SET LOCAL role publisher_worker');
+    let legacyWorkerBlocked = false;
+    try {
+      await client.query(`SELECT public.fn_publish_story_with_audit(gen_random_uuid());`);
+    } catch (err: any) {
+      if (err.code === '42501') legacyWorkerBlocked = true;
+    }
+    assert(legacyWorkerBlocked, 'publisher_worker calling legacy fn_publish_story_with_audit fails closed with 42501');
+    await client.query('ROLLBACK');
+
+    // 6.7 Legacy claiming RPC closure: fn_claim_due_schedule_entry cannot be called by publisher_worker
+    const claimWorkerPriv = await client.query(`
+      SELECT has_function_privilege('publisher_worker', 'public.fn_claim_due_schedule_entry()', 'execute') as priv;
+    `);
+    assert(claimWorkerPriv.rows[0].priv === false, 'publisher_worker has NO execute privilege on legacy fn_claim_due_schedule_entry');
+
+    await client.query('BEGIN');
+    await client.query('SET LOCAL role publisher_worker');
+    let claimWorkerBlocked = false;
+    try {
+      await client.query(`SELECT public.fn_claim_due_schedule_entry();`);
+    } catch (err: any) {
+      if (err.code === '42501') claimWorkerBlocked = true;
+    }
+    assert(claimWorkerBlocked, 'publisher_worker calling legacy fn_claim_due_schedule_entry fails closed with 42501');
+    await client.query('ROLLBACK');
+
     // ─────────────────────────────────────────────────────────────────
     // 7. Atomic Transactional Fencing & Database-Enforced Lease Expiry Proof
     // ─────────────────────────────────────────────────────────────────
@@ -649,6 +714,279 @@ async function runDirectDatabaseTests() {
     const resultAlready = publishResAlready.rows[0].result;
     assert(resultAlready.success === false, 'Already published story fails closed');
     assert(resultAlready.code === 'ALREADY_PUBLISHED', 'Result code is ALREADY_PUBLISHED');
+
+    // 7.6 Distinct Timestamps Propagation
+    const storyDistinctId = '77777777-0000-0000-0000-000000000010';
+    const schedDistinctId = '77777777-0000-0000-0000-000000000011';
+    const originalPublishedAt = '2026-10-15T12:00:00.000Z';
+    const validLeaseTimeDistinct = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at)
+      VALUES ('${storyDistinctId}', 'distinct-ts-story', 'Distinct TS Story', 'draft', 1, '${originalPublishedAt}')
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = '${originalPublishedAt}';
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedDistinctId}', '${storyDistinctId}', '2026-10-20', 1, 'validated', '${validLeaseTimeDistinct}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseTimeDistinct}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResDistinct = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedDistinctId}'::UUID,
+        '${storyDistinctId}'::UUID,
+        '${validLeaseTimeDistinct}'::TIMESTAMPTZ,
+        1,
+        NULL,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultDistinct = publishResDistinct.rows[0].result;
+    assert(resultDistinct.success === true, 'Distinct timestamps publication succeeds');
+    assert(new Date(resultDistinct.published_at).toISOString() === originalPublishedAt, 'Story published_at preserved authoritative historical date');
+    assert(resultDistinct.published_at !== resultDistinct.updated_at, 'Story published_at and updated_at are distinct timestamps');
+    assert(new Date(resultDistinct.schedule_published_at).toISOString() === originalPublishedAt, 'Editorial schedule published_at matches authoritative story published_at');
+
+    const verifyStoryDistinct = await client.query(`SELECT published_at, updated_at FROM public.stories WHERE id = '${storyDistinctId}'`);
+    assert(new Date(verifyStoryDistinct.rows[0].published_at).toISOString() === originalPublishedAt, 'Persisted stories.published_at matches authoritative value');
+    assert(verifyStoryDistinct.rows[0].published_at.getTime() !== verifyStoryDistinct.rows[0].updated_at.getTime(), 'Persisted stories.published_at and updated_at are distinct');
+
+    const verifySchedDistinct = await client.query(`SELECT published_at, updated_at FROM public.editorial_schedule WHERE id = '${schedDistinctId}'`);
+    assert(new Date(verifySchedDistinct.rows[0].published_at).toISOString() === originalPublishedAt, 'Persisted schedule.published_at aligns with stories.published_at');
+
+    // 7.7 Exactly-Five-Minute Lease Boundary (SQL & App Alignment)
+    const storyExactExpiredId = '77777777-0000-0000-0000-000000000020';
+    const schedExactExpiredId = '77777777-0000-0000-0000-000000000021';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyExactExpiredId}', 'exact-expired-story', 'Exact Expired Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+
+    const exactBoundaryRow = (await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedExactExpiredId}', '${storyExactExpiredId}', '2026-10-21', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '5 minutes')
+      RETURNING validated_at::text as validated_at_text;
+    `)).rows[0];
+    const exactBoundaryTime = exactBoundaryRow.validated_at_text;
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResExact = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedExactExpiredId}'::UUID,
+        '${storyExactExpiredId}'::UUID,
+        '${exactBoundaryTime}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultExact = publishResExact.rows[0].result;
+    assert(resultExact.success === false, 'Lease exactly 5 minutes old is strictly expired');
+    assert(resultExact.code === 'SCHEDULE_LEASE_EXPIRED', 'Exact 5m boundary returns SCHEDULE_LEASE_EXPIRED');
+
+    // 4 minutes 59 seconds: NOT expired (should succeed)
+    const storyJustValidId = '77777777-0000-0000-0000-000000000030';
+    const schedJustValidId = '77777777-0000-0000-0000-000000000031';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyJustValidId}', 'just-valid-story', 'Just Valid Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+
+    const justValidRow = (await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedJustValidId}', '${storyJustValidId}', '2026-10-22', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '4 minutes 59 seconds')
+      RETURNING validated_at::text as validated_at_text;
+    `)).rows[0];
+    const justValidTime = justValidRow.validated_at_text;
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResJustValid = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedJustValidId}'::UUID,
+        '${storyJustValidId}'::UUID,
+        '${justValidTime}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultJustValid = publishResJustValid.rows[0].result;
+    assert(resultJustValid.success === true, 'Lease at 4m59s is within 5-minute lease and succeeds');
+    assert(resultJustValid.code === 'PUBLISHED', 'Result code is PUBLISHED');
+
+    // 7.8 Lock Wait Crosses Expiry (Real independent PostgreSQL session)
+    const storyLockWaitId = '77777777-0000-0000-0000-000000000040';
+    const schedLockWaitId = '77777777-0000-0000-0000-000000000041';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyLockWaitId}', 'lock-wait-story', 'Lock Wait Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+
+    const lockWaitRow = (await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedLockWaitId}', '${storyLockWaitId}', '2026-10-23', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '4 minutes 58 seconds')
+      RETURNING validated_at::text as validated_at_text;
+    `)).rows[0];
+    const lockWaitTime = lockWaitRow.validated_at_text;
+
+    await client.query('BEGIN');
+    await client.query(`SELECT id FROM public.editorial_schedule WHERE id = '${schedLockWaitId}' FOR UPDATE;`);
+
+    const client2 = pg.getPgClient();
+    await client2.connect();
+    await actAs(client2, 'service_role', {});
+
+    const client2Promise = client2.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedLockWaitId}'::UUID,
+        '${storyLockWaitId}'::UUID,
+        '${lockWaitTime}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+
+    // Wait 3 seconds so clock_timestamp() advances past the 5-minute threshold
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    // Client 1 releases the lock
+    await client.query('ROLLBACK');
+
+    const client2Res = await client2Promise;
+    await client2.end();
+
+    const resultLockWait = client2Res.rows[0].result;
+    assert(resultLockWait.success === false, 'Transaction blocked on row lock evaluates expiry after acquiring lock');
+    assert(resultLockWait.code === 'SCHEDULE_LEASE_EXPIRED', 'Lock contention crossing 5m returns SCHEDULE_LEASE_EXPIRED');
+
+    const verifyStoryLock = await client.query(`SELECT status, version FROM public.stories WHERE id = '${storyLockWaitId}'`);
+    assert(verifyStoryLock.rows[0].status === 'draft', 'Story remains draft after lock contention expiry');
+    assert(verifyStoryLock.rows[0].version === 1, 'Story version remains unchanged');
+
+    const verifySchedLock = await client.query(`SELECT status FROM public.editorial_schedule WHERE id = '${schedLockWaitId}'`);
+    assert(verifySchedLock.rows[0].status === 'validated', 'Editorial schedule remains validated');
+
+    // 7.9 Transactional Rollback Proof: Controlled abort after story update rolls back all mutations
+    const storyRollbackId = '77777777-0000-0000-0000-000000000050';
+    const schedRollbackId = '77777777-0000-0000-0000-000000000051';
+    const validLeaseRollback = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyRollbackId}', 'rollback-story', 'Rollback Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at, category)
+      VALUES ('${schedRollbackId}', '${storyRollbackId}', '2026-10-24', 1, 'validated', '${validLeaseRollback}', 'test-abort-trigger')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseRollback}', category = 'test-abort-trigger';
+    `);
+
+    await client.query(`
+      CREATE OR REPLACE FUNCTION public.fn_test_force_abort() RETURNS TRIGGER AS $$
+      BEGIN
+        IF NEW.category = 'test-abort-trigger' AND NEW.status = 'published' THEN
+          RAISE EXCEPTION 'CONTROLLED_TRANSACTION_FAILURE_INJECTED';
+        END IF;
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+      CREATE TRIGGER trg_test_abort_simulation
+        BEFORE UPDATE ON public.editorial_schedule
+        FOR EACH ROW EXECUTE FUNCTION public.fn_test_force_abort();
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    let rollbackThrown = false;
+    try {
+      await client.query(`
+        SELECT public.fn_publish_story_fenced(
+          '${schedRollbackId}'::UUID,
+          '${storyRollbackId}'::UUID,
+          '${validLeaseRollback}'::TIMESTAMPTZ,
+          1,
+          NOW(),
+          'system-scheduler'
+        );
+      `);
+    } catch (err: any) {
+      if (err.message.includes('CONTROLLED_TRANSACTION_FAILURE_INJECTED')) {
+        rollbackThrown = true;
+      }
+    }
+    await client.query('ROLLBACK');
+
+    await client.query('DROP TRIGGER IF EXISTS trg_test_abort_simulation ON public.editorial_schedule;');
+    await client.query('DROP FUNCTION IF EXISTS public.fn_test_force_abort();');
+
+    assert(rollbackThrown, 'Injected exception after story update throws in fn_publish_story_fenced');
+
+    const verifyStoryRollback = await client.query(`SELECT status, version FROM public.stories WHERE id = '${storyRollbackId}'`);
+    assert(verifyStoryRollback.rows[0].status === 'draft', 'Story update was rolled back atomically (remains draft)');
+    assert(verifyStoryRollback.rows[0].version === 1, 'Story version was rolled back atomically (remains 1)');
+
+    const verifySchedRollback = await client.query(`SELECT status FROM public.editorial_schedule WHERE id = '${schedRollbackId}'`);
+    assert(verifySchedRollback.rows[0].status === 'validated', 'Editorial schedule remains validated after rollback');
+
+    // 7.10 Story Version Bump Integrity: Verifies version increments exactly once per transition
+    const storyVersionCheckId = '77777777-0000-0000-0000-000000000060';
+    const schedVersionCheckId = '77777777-0000-0000-0000-000000000061';
+    const validLeaseVersionCheck = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyVersionCheckId}', 'version-check-story', 'Version Check Story', 'draft', 5)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 5;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedVersionCheckId}', '${storyVersionCheckId}', '2026-10-25', 1, 'validated', '${validLeaseVersionCheck}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseVersionCheck}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResVersion = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedVersionCheckId}'::UUID,
+        '${storyVersionCheckId}'::UUID,
+        '${validLeaseVersionCheck}'::TIMESTAMPTZ,
+        5,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultVersion = publishResVersion.rows[0].result;
+    assert(resultVersion.success === true, 'Publication at version 5 succeeds');
+    assert(resultVersion.version === 6, 'Version increments exactly once from 5 to 6');
+
+    const verifyStoryVersion = await client.query(`SELECT version FROM public.stories WHERE id = '${storyVersionCheckId}'`);
+    assert(verifyStoryVersion.rows[0].version === 6, 'Persisted database version is authoritatively 6');
 
     // ─────────────────────────────────────────────────────────────────
     // Summary

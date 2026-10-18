@@ -1997,7 +1997,7 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
     expect(allConsoleLogs).not.toContain('search.internal');
   });
 
-  it('Sink 2b: post-persistence schedule update failure sets SCHEDULE_STATUS_UPDATE_FAILED with zero secrets', async () => {
+  it('Sink 2b: a successful atomic repository call commits both entities in one transaction without redundant post-commit schedule writes', async () => {
     const today = new Date().toISOString().split('T')[0];
     const initialSchedule = [
       { id: 'sched-sink2b', story_id: 'story-sink2b', status: 'ready', slot_date: today, priority: 10 },
@@ -2006,8 +2006,7 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
       { id: 'story-sink2b', slug: 'story-sink2b', title: 'Sink 2b Story', status: 'ready' },
     ];
 
-    const failUpdateErr = new Error(`Connection dead: ${FAKE_CONNECTION_STRING}`);
-    const { mockDb } = createMockDb(initialStories, initialSchedule, [], failUpdateErr);
+    const { mockDb } = createMockDb(initialStories, initialSchedule, []);
     setServiceClient(mockDb);
 
     mockEvaluatePublicationContract.mockResolvedValueOnce({
@@ -2015,9 +2014,6 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
       publicationToken: 'valid-pub-token-sink2b',
       updatedStory: { id: 'story-sink2b', slug: 'story-sink2b', title: 'Sink 2b Story' },
     });
-    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-sink2b', status: 'published' });
-
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const results = await realValidateAndPublishDueStories(new Date());
 
@@ -2025,19 +2021,12 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
     const r = results[0];
     expect(r.passed).toBe(true);
     expect(r.outcome).toBe('published');
-    expect(r.postPublicationError).toBe(true);
-    expect(r.postPublicationErrorCategory).toBe('SCHEDULE_STATUS_UPDATE_FAILED');
+    expect(r.postPublicationError).toBeUndefined();
     expect(r.correlationId).toBeDefined();
 
-    const allConsoleLogs = consoleErrorSpy.mock.calls
-      .flat()
-      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
-      .join(' ');
-    expect(allConsoleLogs).toContain('SCHEDULE_STATUS_UPDATE_FAILED');
-    expect(allConsoleLogs).toContain(r.correlationId!);
-    expect(allConsoleLogs).not.toContain(FAKE_PASSWORD);
-    expect(allConsoleLogs).not.toContain(FAKE_TOKEN);
-    expect(allConsoleLogs).not.toContain(FAKE_HOST);
+    // Verify schedule entry in store was updated to published by the single atomic transaction
+    const finalSchedule = (mockDb as any).scheduleStore.find((s: any) => s.id === 'sched-sink2b');
+    expect(finalSchedule.status).toBe('published');
   });
 
   it('Sink 2c: post-persistence audit log failure sets AUDIT_LOG_FAILED with zero secrets', async () => {
@@ -3679,5 +3668,112 @@ describe('Phase 35: Atomic Publication Lease Fencing & Cross-Table TOCTOU Elimin
     }
   });
 });
+
+describe('Phase 37: Post-Commit Application Behavior & Schedule Immutability', () => {
+  let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
+
+  beforeEach(async () => {
+    vi.resetAllMocks();
+    setupDefaultMockRepository();
+    const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
+  });
+
+  afterEach(() => {
+    setServiceClient(null);
+  });
+
+  it('Test 7: A successful atomic repository call commits both entities in one transaction without redundant post-commit schedule writes', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-p37-test7', story_id: 'story-p37-test7', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-p37-test7', slug: 'story-p37-test7', title: 'Phase 37 Story', status: 'ready' },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule, []);
+    setServiceClient(mockDb);
+
+    const updateSpy = vi.fn();
+    const origFrom = mockDb.from.bind(mockDb);
+    mockDb.from = (table: string) => {
+      const builder = origFrom(table);
+      if (table === 'editorial_schedule') {
+        const origUpdate = builder.update.bind(builder);
+        builder.update = (...args: any[]) => {
+          updateSpy(...args);
+          return origUpdate(...args);
+        };
+      }
+      return builder;
+    };
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-p37',
+      updatedStory: { id: 'story-p37-test7', slug: 'story-p37-test7', title: 'Phase 37 Story' },
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    const r = results[0];
+    expect(r.passed).toBe(true);
+    expect(r.outcome).toBe('published');
+    expect(r.postPublicationError).toBeUndefined();
+
+    // Verify: exactly ONE schedule update was called before the transaction (the claim lease update).
+    // ZERO schedule updates were called AFTER the atomic publish succeeded!
+    expect(updateSpy).toHaveBeenCalledTimes(1);
+    expect(updateSpy).toHaveBeenCalledWith(expect.objectContaining({ status: 'validated' }));
+    expect(updateSpy).not.toHaveBeenCalledWith(expect.objectContaining({ status: 'published' }));
+
+    // Both entities in the stores are committed to published
+    const finalSchedule = (mockDb as any).scheduleStore.find((s: any) => s.id === 'sched-p37-test7');
+    expect(finalSchedule.status).toBe('published');
+    const finalStory = (mockDb as any).storiesStore.find((s: any) => s.id === 'story-p37-test7');
+    expect(finalStory.status).toBe('published');
+  });
+
+  it('Test 7b: Post-publication effects failures do not alter committed schedule state or roll back published outcome', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-p37-effects-fail', story_id: 'story-p37-effects-fail', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-p37-effects-fail', slug: 'story-p37-effects-fail', title: 'Phase 37 Effects Fail', status: 'ready' },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule, []);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-effects',
+      updatedStory: { id: 'story-p37-effects-fail', slug: 'story-p37-effects-fail', title: 'Phase 37 Effects Fail' },
+    });
+
+    mockExecutePostPublicationEffects.mockRejectedValueOnce(new Error('Event bus down'));
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      const results = await realValidateAndPublishDueStories(new Date());
+
+      expect(results).toHaveLength(1);
+      const r = results[0];
+      expect(r.passed).toBe(true);
+      expect(r.outcome).toBe('published');
+      expect(r.postPublicationError).toBe(true);
+      expect(r.postPublicationErrorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+
+      const finalSchedule = (mockDb as any).scheduleStore.find((s: any) => s.id === 'sched-p37-effects-fail');
+      expect(finalSchedule.status).toBe('published');
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
+  });
+});
+
 
 

@@ -344,6 +344,13 @@ async function validateAndPublishEntry(
     : 1;
 
   // ── IDEMPOTENCY GUARD: skip if already published
+  // Concurrency Semantics:
+  // If the story row is already in 'published' status in the database, this execution
+  // path safely aligns the editorial_schedule status to 'published' strictly conditioned
+  // on lease ownership (eq('validated_at', claimedValidatedAt)). It never mutates the
+  // story entity, ensuring no alternate publication route exists. If another claimant
+  // stole the schedule lease, isUpdated is false and the operation fails closed with
+  // SCHEDULE_LEASE_LOST / outcome='skipped'.
   if (storyRow.status === 'published') {
     const { data: updatedRows } = await db
       .from('editorial_schedule')
@@ -979,49 +986,10 @@ async function validateAndPublishEntry(
     );
   }
 
-  try {
-    const { data: schedRows, error: schedUpdateError } = await db
-      .from('editorial_schedule')
-      .update({
-        status: 'published',
-        published_at: publishedAt,
-        updated_at: publishedAt,
-      } as never)
-      .eq('id', scheduleId)
-      .eq('validated_at', claimedValidatedAt)
-      .select('id');
-
-    if (schedUpdateError) throw schedUpdateError;
-    const isSchedUpdated = Boolean(
-      Array.isArray(schedRows) ? schedRows.length > 0 : schedRows
-    );
-    if (!isSchedUpdated) {
-      result.postPublicationError = true;
-      result.postPublicationErrorCategory = 'SCHEDULE_STATUS_UPDATE_FAILED';
-      console.warn(
-        JSON.stringify({
-          event: 'editorial.schedule.lease_lost_post_persistence',
-          storyId,
-          scheduleId,
-          category: 'SCHEDULE_LEASE_LOST',
-          timestamp: new Date().toISOString(),
-        }),
-      );
-    }
-  } catch (_schedErr) {
-    result.postPublicationError = true;
-    result.postPublicationErrorCategory = result.postPublicationErrorCategory || 'SCHEDULE_STATUS_UPDATE_FAILED';
-    console.error(
-      JSON.stringify({
-        event: 'editorial.schedule.status_update_failed',
-        storyId,
-        correlationId,
-        category: 'SCHEDULE_STATUS_UPDATE_FAILED',
-        timestamp: new Date().toISOString(),
-      }),
-    );
-  }
-
+  // Note: The atomic transaction (publishScheduledStoryAtomic) is the single authority
+  // for both story and editorial_schedule transitions. No redundant post-commit schedule
+  // rewrite is executed here. Post-publication effects (cache revalidation, event emission)
+  // are decoupled from transaction persistence.
   try {
     await logGateResult(result);
   } catch (_logErr) {
