@@ -14,6 +14,7 @@ export interface EditorialPublishDispatchResult {
   outcome: EditorialPublishOutcome;
   checksCount: number;
   failedChecks: string[];
+  postPublicationError?: string;
 }
 
 export interface EditorialPublishDispatchSummary {
@@ -107,7 +108,8 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
       !Number.isInteger(item.checksCount) ||
       (item.checksCount as number) < 0 ||
       !Array.isArray(item.failedChecks) ||
-      !item.failedChecks.every((name) => typeof name === 'string')
+      !item.failedChecks.every((name) => typeof name === 'string') ||
+      (item.postPublicationError !== undefined && typeof item.postPublicationError !== 'string')
     ) {
       throw new Error('Canonical publishing endpoint returned an invalid story result');
     }
@@ -118,6 +120,7 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
       outcome: item.outcome as EditorialPublishOutcome,
       checksCount: item.checksCount as number,
       failedChecks: item.failedChecks as string[],
+      ...(typeof item.postPublicationError === 'string' ? { postPublicationError: item.postPublicationError } : {}),
     };
   });
 

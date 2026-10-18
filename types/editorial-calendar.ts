@@ -58,14 +58,18 @@ export interface GateCheck {
   details?: string;
 }
 
+export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
+
 export interface PublicationGateResult {
   storyId: string;
   scheduleId?: string;
   passed: boolean;
+  outcome?: EditorialPublishOutcome;
   checks: GateCheck[];
   checkedAt: string;
   triggeredBy: TriggeredBy;
   publishedAt?: string;
+  postPublicationError?: string;
 }
 
 export interface PublicationGateInput {

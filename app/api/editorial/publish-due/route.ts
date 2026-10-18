@@ -20,24 +20,77 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAndPublishDueStories } from '@/services/editorial/schedule';
-import type { PublicationGateResult } from '@/types/editorial-calendar';
+import type { EditorialPublishOutcome, PublicationGateResult } from '@/types/editorial-calendar';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
+export type { EditorialPublishOutcome };
 
 function classifyGateResult(result: PublicationGateResult): EditorialPublishOutcome {
-  if (result.checks.some(c => c.name === 'already_published')) {
+  if (result.outcome === 'already_published' || result.checks.some(c => c.name === 'already_published')) {
     return 'already_published';
   }
-  if (result.checks.some(c => c.name === 'already_claimed')) {
+  if (result.outcome === 'skipped' || result.checks.some(c => c.name === 'already_claimed')) {
     return 'skipped';
   }
-  if (result.passed) {
+  if (
+    result.outcome === 'published' &&
+    result.passed === true &&
+    !result.checks.some(c => !c.passed)
+  ) {
+    return 'published';
+  }
+  if (
+    !result.outcome &&
+    result.passed === true &&
+    result.checks.length > 0 &&
+    !result.checks.some(c => !c.passed)
+  ) {
     return 'published';
   }
   return 'blocked';
+}
+
+function categorizePublishingError(error: unknown): string {
+  if (!error) return 'UNKNOWN_ERROR';
+  const msg = (error instanceof Error ? error.message : String(error)).toLowerCase();
+
+  if (
+    msg.includes('password') ||
+    msg.includes('user "') ||
+    msg.includes('role "') ||
+    msg.includes('credential') ||
+    msg.includes('token') ||
+    msg.includes('secret') ||
+    msg.includes('auth')
+  ) {
+    return 'DATABASE_AUTH_ERROR';
+  }
+  if (
+    msg.includes('connect') ||
+    msg.includes('econnrefused') ||
+    msg.includes('etimedout') ||
+    msg.includes('host') ||
+    msg.includes('network') ||
+    msg.includes('socket')
+  ) {
+    return 'DATABASE_NETWORK_ERROR';
+  }
+  if (
+    msg.includes('syntax') ||
+    msg.includes('relation') ||
+    msg.includes('table') ||
+    msg.includes('column') ||
+    msg.includes('query') ||
+    msg.includes('sql')
+  ) {
+    return 'DATABASE_QUERY_ERROR';
+  }
+  if (error instanceof TypeError) {
+    return 'TYPE_ERROR';
+  }
+  return 'INTERNAL_PUBLISHING_ERROR';
 }
 
 export async function GET(request: NextRequest) {
@@ -85,17 +138,30 @@ export async function GET(request: NextRequest) {
         outcome: c.outcome,
         checksCount: c.raw.checks.length,
         failedChecks: c.raw.checks.filter(chk => !chk.passed).map(chk => chk.name),
+        ...(c.raw.postPublicationError ? { postPublicationError: c.raw.postPublicationError } : {}),
       })),
     });
   } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    const safeMsg = cronSecret ? errorMsg.replaceAll(cronSecret, '[REDACTED]') : errorMsg;
-    console.error('[Editorial Cron] Scheduled publishing run failed:', safeMsg);
+    const correlationId = request.headers.get('x-request-id') || crypto.randomUUID();
+    const category = categorizePublishingError(error);
+    const errorName = error instanceof Error ? error.name : 'UnknownError';
+
+    console.error(
+      '[Editorial Cron] Scheduled publishing run failed:',
+      JSON.stringify({
+        event: 'editorial.publish_due.failed',
+        correlationId,
+        category,
+        errorName,
+        timestamp: new Date().toISOString(),
+      }),
+    );
 
     return NextResponse.json(
       {
         ok: false,
         error: 'An internal error occurred while processing scheduled publishing',
+        correlationId,
         timestamp: new Date().toISOString(),
       },
       { status: 500 },

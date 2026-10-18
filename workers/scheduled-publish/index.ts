@@ -66,11 +66,13 @@ export default {
       }));
     } catch (error) {
       const duration = Date.now() - startTime;
+      const rawMsg = error instanceof Error ? error.message : 'Unknown error';
+      const safeMsg = env.CRON_SECRET ? rawMsg.replaceAll(env.CRON_SECRET, '[REDACTED]') : rawMsg;
       console.error(JSON.stringify({
         event: 'editorial.publish_due.failed',
         timestamp: new Date().toISOString(),
         duration,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: safeMsg,
       }));
       // Re-throw so the platform records the scheduled invocation as failed.
       // The dispatcher has no lower-authority database fallback.

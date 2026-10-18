@@ -176,6 +176,7 @@ async function validateAndPublishEntry(
       storyId,
       scheduleId,
       passed: false,
+      outcome: 'skipped',
       checks: [{
         name: 'already_claimed',
         passed: false,
@@ -198,6 +199,7 @@ async function validateAndPublishEntry(
       storyId,
       scheduleId,
       passed: false,
+      outcome: 'blocked',
       checks: [{
         name: 'story_exists',
         passed: false,
@@ -216,6 +218,7 @@ async function validateAndPublishEntry(
       storyId,
       scheduleId,
       passed: true,
+      outcome: 'already_published',
       checks: [{
         name: 'already_published',
         passed: true,
@@ -223,6 +226,7 @@ async function validateAndPublishEntry(
       }],
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
+      publishedAt: storyRow.published_at || storyRow.updated_at || now.toISOString(),
     };
     await logGateResult(result);
     // Update schedule to 'published' if not already
@@ -267,61 +271,23 @@ async function validateAndPublishEntry(
     triggeredBy: 'cron',
   };
 
-  // ── Log the gate check
-  await logGateResult(result);
+  // ── Handle gate blockage or missing publication token
+  if (!decision.allowed || !decision.publicationToken) {
+    result.passed = false;
+    result.outcome = 'blocked';
 
-  if (decision.allowed && decision.publicationToken) {
-    // ── PUBLISH via Story Repository with validated Publication Token
-    const repo = RepositoryFactory.getStoryRepository();
-    const publishedAt = now.toISOString();
-
-    try {
-      await repo.saveStory(
-        {
-          ...decision.updatedStory!,
-          status: 'published',
-          publicationStatus: 'published',
-          publishedAt,
-          updatedAt: publishedAt,
-        },
-        { publicationToken: decision.publicationToken }
-      );
-
-      executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
-
-      // Update schedule entry
-      await db
-        .from('editorial_schedule')
-        .update({
-          status: 'published',
-          published_at: publishedAt,
-          updated_at: publishedAt,
-        } as never)
-        .eq('id', scheduleId);
-    } catch (publishErr: any) {
-      result.passed = false;
+    if (decision.allowed && !decision.publicationToken) {
       result.checks.push({
-        name: 'repository_publish_failed',
+        name: 'missing_publication_token',
         passed: false,
-        reason: publishErr?.message || 'Repository rejected publication',
+        reason: 'Publication decision allowed but publication token is absent',
       });
-      await logGateResult(result);
-
-      await db
-        .from('editorial_schedule')
-        .update({
-          status: 'blocked',
-          block_reason: publishErr?.message || 'Repository rejected publication',
-          blocked_at: now.toISOString(),
-          updated_at: now.toISOString(),
-        } as never)
-        .eq('id', scheduleId);
-      return result;
     }
-  } else {
-    // ── BLOCK the schedule entry
+
+    await logGateResult(result);
+
     const failedChecks = result.checks.filter(c => !c.passed);
-    const blockReason = failedChecks.map(c => c.reason).join('; ');
+    const blockReason = failedChecks.map(c => c.reason).join('; ') || 'Publication gate failed or publication token missing';
 
     await db
       .from('editorial_schedule')
@@ -343,7 +309,89 @@ async function validateAndPublishEntry(
         updated_at: now.toISOString(),
       } as never)
       .eq('id', storyId)
-      .neq('status', 'published');  // never un-publish
+      .neq('status', 'published'); // never un-publish
+
+    return result;
+  }
+
+  // ── PUBLISH via Story Repository with validated Publication Token
+  const repo = RepositoryFactory.getStoryRepository();
+  const publishedAt = now.toISOString();
+
+  // 1. PERSISTENCE PHASE
+  try {
+    await repo.saveStory(
+      {
+        ...decision.updatedStory!,
+        status: 'published',
+        publicationStatus: 'published',
+        publishedAt,
+        updatedAt: publishedAt,
+      },
+      { publicationToken: decision.publicationToken }
+    );
+  } catch (publishErr: any) {
+    // Failure before persistence: story was not published
+    result.passed = false;
+    result.outcome = 'blocked';
+    result.checks.push({
+      name: 'repository_publish_failed',
+      passed: false,
+      reason: publishErr?.message || 'Repository rejected publication',
+    });
+    await logGateResult(result);
+
+    await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: publishErr?.message || 'Repository rejected publication',
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId);
+
+    return result;
+  }
+
+  // ── AT THIS POINT: PERSISTENCE SUCCEEDED!
+  result.passed = true;
+  result.outcome = 'published';
+  result.publishedAt = publishedAt;
+
+  // 2. POST-PERSISTENCE HOUSEKEEPING & POST-PUBLICATION EFFECTS:
+  // Distinguish publication persistence from subsequent housekeeping.
+  // A failure after successful publication must not falsely report that the story
+  // was never published. Preserve the error signal separately.
+  try {
+    executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
+  } catch (postErr: any) {
+    const effectMsg = postErr?.message || 'Post-publication effects failed';
+    result.postPublicationError = effectMsg;
+    console.error(`[Editorial Schedule] Post-publication effects error for story ${storyId}:`, effectMsg);
+  }
+
+  try {
+    await db
+      .from('editorial_schedule')
+      .update({
+        status: 'published',
+        published_at: publishedAt,
+        updated_at: publishedAt,
+      } as never)
+      .eq('id', scheduleId);
+  } catch (schedErr: any) {
+    const schedMsg = schedErr?.message || 'Failed updating schedule entry to published';
+    result.postPublicationError = result.postPublicationError
+      ? `${result.postPublicationError}; ${schedMsg}`
+      : schedMsg;
+    console.error(`[Editorial Schedule] Schedule status update error for story ${storyId}:`, schedMsg);
+  }
+
+  try {
+    await logGateResult(result);
+  } catch (logErr: any) {
+    console.error(`[Editorial Schedule] Gate result audit logging error for story ${storyId}:`, logErr?.message || logErr);
   }
 
   return result;

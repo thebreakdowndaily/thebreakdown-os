@@ -4,9 +4,27 @@ import worker from '@/workers/scheduled-publish/index';
 import { GET as publishDueRoute } from '@/app/api/editorial/publish-due/route';
 import { NextRequest } from 'next/server';
 import { validateAndPublishDueStories } from '@/services/editorial/schedule';
+import { setServiceClient } from '@/supabase/client';
 
 vi.mock('@/services/editorial/schedule', () => ({
   validateAndPublishDueStories: vi.fn(),
+}));
+
+const mockEvaluatePublicationContract = vi.fn();
+const mockExecutePostPublicationEffects = vi.fn();
+vi.mock('@/lib/editorial/canonical-publication', () => ({
+  evaluatePublicationContractAsync: (...args: unknown[]) => mockEvaluatePublicationContract(...args),
+  executePostPublicationEffects: (...args: unknown[]) => mockExecutePostPublicationEffects(...args),
+}));
+
+const mockStoryRepository = {
+  saveStory: vi.fn(),
+  getStory: vi.fn(),
+};
+vi.mock('@/services/factory/repository', () => ({
+  RepositoryFactory: {
+    getStoryRepository: () => mockStoryRepository,
+  },
 }));
 
 const endpoint = 'https://thebreakdown.in/api/editorial/publish-due';
@@ -442,23 +460,514 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
     });
   });
 
-  it('catches and returns safe generic HTTP 500 without disclosing internal exception details', async () => {
-    const sensitiveDbError = 'password authentication failed for user "postgres.mskyhaunnlwtwvsqcmav" at host db.supabase.co:5432';
+  it('suppresses sensitive database credentials and connection strings from both response and server logs', async () => {
+    const sensitiveDbError = 'password authentication failed for user "postgres.mock_project_42" at host db.fake-supabase.co:5432 with secret P@ssw0rd!123 and url postgres://mock_user:P@ssw0rd!123@db.fake-supabase.co:5432/postgres';
     vi.mocked(validateAndPublishDueStories).mockRejectedValue(new Error(sensitiveDbError));
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
     const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
       headers: { authorization: `Bearer ${ROUTE_SECRET}` },
     });
 
     const res = await publishDueRoute(req);
     expect(res.status).toBe(500);
+
     const body = await res.json();
+    // 1. Verify caller response is sanitized and includes correlationId
     expect(body).toEqual({
       ok: false,
       error: 'An internal error occurred while processing scheduled publishing',
+      correlationId: expect.any(String),
       timestamp: expect.any(String),
     });
     expect(body.error).not.toContain('password');
-    expect(body.error).not.toContain('supabase.co');
-    expect(body.error).not.toContain(sensitiveDbError);
+    expect(body.error).not.toContain('fake-supabase.co');
+    expect(body.error).not.toContain('P@ssw0rd!123');
+    expect(body.error).not.toContain('mock_project_42');
+
+    // 2. Verify server logs are sanitized
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    const allLoggedArgs = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+
+    expect(allLoggedArgs).not.toContain('P@ssw0rd!123');
+    expect(allLoggedArgs).not.toContain('password authentication failed');
+    expect(allLoggedArgs).not.toContain('mock_project_42');
+    expect(allLoggedArgs).not.toContain('db.fake-supabase.co');
+    expect(allLoggedArgs).toContain('DATABASE_AUTH_ERROR');
+    expect(allLoggedArgs).toContain(body.correlationId);
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('preserves published outcome when post-publication effects fail after successful persistence', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-persisted-housekeeping-failed',
+        passed: true,
+        outcome: 'published',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+        publishedAt: new Date().toISOString(),
+        postPublicationError: 'Webhook delivery failed: HTTP 504 Gateway Timeout',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.totalChecked).toBe(1);
+    expect(body.published).toBe(1); // Story WAS persisted and published!
+    expect(body.alreadyPublished).toBe(0);
+    expect(body.blocked).toBe(0); // Not falsely reported as blocked
+    expect(body.skipped).toBe(0);
+
+    expect(body.results[0]).toEqual({
+      storyId: 'story-persisted-housekeeping-failed',
+      passed: true,
+      outcome: 'published',
+      checksCount: 2,
+      failedChecks: [],
+      postPublicationError: 'Webhook delivery failed: HTTP 504 Gateway Timeout',
+    });
+  });
+
+  it('marks story blocked when repository save fails before persistence', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-repo-save-failed',
+        passed: false,
+        outcome: 'blocked',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'repository_publish_failed', passed: false, reason: 'Database unique constraint violation on slug' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.totalChecked).toBe(1);
+    expect(body.published).toBe(0);
+    expect(body.blocked).toBe(1);
+    expect(body.results[0]).toEqual({
+      storyId: 'story-repo-save-failed',
+      passed: false,
+      outcome: 'blocked',
+      checksCount: 2,
+      failedChecks: ['repository_publish_failed'],
+    });
+  });
+
+  it('marks story blocked when decision was allowed but publication token was absent', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-missing-token',
+        passed: false,
+        outcome: 'blocked',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'missing_publication_token', passed: false, reason: 'Publication decision allowed but publication token is absent' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.totalChecked).toBe(1);
+    expect(body.published).toBe(0);
+    expect(body.blocked).toBe(1);
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.results[0].passed).toBe(false);
+    expect(body.results[0].failedChecks).toContain('missing_publication_token');
+  });
+
+  it('refuses to classify story as published if passed is true but checks have failure', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-corrupted-passed-flag',
+        passed: true,
+        outcome: undefined,
+        checks: [
+          { name: 'fact_check', passed: false, reason: 'Verification failed' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0);
+    expect(body.blocked).toBe(1);
+    expect(body.results[0].outcome).toBe('blocked');
+  });
+});
+
+describe('editorial schedule service publication lifecycle and invariants', () => {
+  let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
+
+  beforeEach(async () => {
+    vi.resetAllMocks();
+    const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
+  });
+
+  afterEach(() => {
+    setServiceClient(null);
+  });
+
+  function createMockDb(initialStories: any[] = [], initialSchedule: any[] = [], failAtomicClaimIds: string[] = []) {
+    const scheduleStore = initialSchedule.map(s => ({ ...s }));
+    const storiesStore = initialStories.map(s => ({ ...s }));
+    const logsStore: any[] = [];
+
+    const mockDb: any = {
+      from: (table: string) => {
+        let currentFilter: (row: any) => boolean = () => true;
+        let updatePayload: any = null;
+        let isEqScheduleId: string | null = null;
+
+        const builder: any = {
+          select: () => builder,
+          eq: (col: string, val: any) => {
+            const prev = currentFilter;
+            currentFilter = (r: any) => prev(r) && r[col] === val;
+            if (table === 'editorial_schedule' && col === 'id') {
+              isEqScheduleId = val;
+            }
+            return builder;
+          },
+          neq: (col: string, val: any) => {
+            const prev = currentFilter;
+            currentFilter = (r: any) => prev(r) && r[col] !== val;
+            return builder;
+          },
+          in: (col: string, vals: any[]) => {
+            const prev = currentFilter;
+            currentFilter = (r: any) => prev(r) && vals.includes(r[col]);
+            return builder;
+          },
+          lte: (col: string, val: any) => {
+            const prev = currentFilter;
+            currentFilter = (r: any) => prev(r) && r[col] <= val;
+            return builder;
+          },
+          order: () => builder,
+          limit: () => builder,
+          single: async () => {
+            if (table === 'editorial_schedule' && isEqScheduleId && failAtomicClaimIds.includes(isEqScheduleId)) {
+              return { data: null, error: new Error('Claim race lost: 0 rows affected') };
+            }
+            const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
+            const row = store.find(currentFilter);
+            if (row && updatePayload) {
+              Object.assign(row, updatePayload);
+            }
+            return { data: row || null, error: row ? null : new Error('Not found') };
+          },
+          maybeSingle: async () => {
+            const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
+            const row = store.find(currentFilter);
+            if (row && updatePayload) {
+              Object.assign(row, updatePayload);
+            }
+            return { data: row || null, error: null };
+          },
+          insert: (data: any) => {
+            const row = { id: data.id || 'log-' + Math.random(), ...data };
+            logsStore.push(row);
+            return {
+              select: () => ({
+                single: async () => ({ data: row, error: null }),
+              }),
+            };
+          },
+          update: (data: any) => {
+            updatePayload = data;
+            return builder;
+          },
+          then: (resolve: any) => {
+            const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
+            if (updatePayload) {
+              store.filter(currentFilter).forEach(r => Object.assign(r, updatePayload));
+            }
+            const rows = store.filter(currentFilter);
+            return resolve({ data: rows, error: null });
+          },
+        };
+        return builder;
+      },
+    };
+
+    return { mockDb, scheduleStore, storiesStore, logsStore };
+  }
+
+  it('handles concurrent-worker skips with outcome="skipped" and passed=false', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-race-1', story_id: 'story-race-1', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-race-1', slug: 'story-race-1', title: 'Race Story', status: 'ready' },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule, ['sched-race-1']);
+    setServiceClient(mockDb);
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-race-1');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('skipped');
+    expect(results[0].checks[0].name).toBe('already_claimed');
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+  });
+
+  it('handles idempotent skips with outcome="already_published" and passed=true', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-idem-1', story_id: 'story-idem-1', status: 'validated', slot_date: today, priority: 5 },
+    ];
+    const initialStories = [
+      { id: 'story-idem-1', slug: 'story-idem-1', title: 'Already Published Story', status: 'published', published_at: '2026-10-15T10:00:00.000Z' },
+    ];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-idem-1');
+    expect(results[0].passed).toBe(true);
+    expect(results[0].outcome).toBe('already_published');
+    expect(results[0].checks[0].name).toBe('already_published');
+    expect(results[0].publishedAt).toBe('2026-10-15T10:00:00.000Z');
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+    expect(scheduleStore[0].status).toBe('published');
+  });
+
+  it('handles gate failure with outcome="blocked" and passed=false', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-gate-1', story_id: 'story-gate-1', status: 'ready', slot_date: today, priority: 8 },
+    ];
+    const initialStories = [
+      { id: 'story-gate-1', slug: 'story-gate-1', title: 'Gate Failed Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: false,
+      error: 'Fact check pending verification',
+      gateResult: {
+        storyId: 'story-gate-1',
+        passed: false,
+        checks: [{ name: 'fact_check', passed: false, reason: 'Pending senior editor review' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-gate-1');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks[0].name).toBe('fact_check');
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+    expect(scheduleStore[0].status).toBe('blocked');
+    expect(storiesStore[0].status).toBe('review');
+  });
+
+  it('handles missing publication token when decision allowed with outcome="blocked"', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-token-1', story_id: 'story-token-1', status: 'ready', slot_date: today, priority: 9 },
+    ];
+    const initialStories = [
+      { id: 'story-token-1', slug: 'story-token-1', title: 'Token Missing Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: undefined,
+      updatedStory: { id: 'story-token-1', slug: 'story-token-1', title: 'Token Missing Story' },
+      gateResult: {
+        storyId: 'story-token-1',
+        passed: true,
+        checks: [{ name: 'editorial_check', passed: true, reason: 'Passed' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-token-1');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks.some(c => c.name === 'missing_publication_token' && !c.passed)).toBe(true);
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+    expect(scheduleStore[0].status).toBe('blocked');
+    expect(storiesStore[0].status).toBe('review');
+  });
+
+  it('handles failure before persistence (repository rejection) with outcome="blocked"', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-repo-1', story_id: 'story-repo-1', status: 'ready', slot_date: today, priority: 7 },
+    ];
+    const initialStories = [
+      { id: 'story-repo-1', slug: 'story-repo-1', title: 'Repo Reject Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-123',
+      updatedStory: { id: 'story-repo-1', slug: 'story-repo-1', title: 'Repo Reject Story' },
+    });
+
+    mockStoryRepository.saveStory.mockRejectedValueOnce(new Error('Unique constraint violation: slug conflict'));
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-repo-1');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks.some(c => c.name === 'repository_publish_failed' && !c.passed)).toBe(true);
+    expect(scheduleStore[0].status).toBe('blocked');
+  });
+
+  it('handles failure after persistence (post-publication error) with outcome="published"', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-post-1', story_id: 'story-post-1', status: 'ready', slot_date: today, priority: 6 },
+    ];
+    const initialStories = [
+      { id: 'story-post-1', slug: 'story-post-1', title: 'Post Effects Error Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-456',
+      updatedStory: { id: 'story-post-1', slug: 'story-post-1', title: 'Post Effects Error Story' },
+    });
+
+    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-post-1', status: 'published' });
+    mockExecutePostPublicationEffects.mockImplementationOnce(() => {
+      throw new Error('Search index webhook HTTP 504 Gateway Timeout');
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-post-1');
+    expect(results[0].passed).toBe(true);
+    expect(results[0].outcome).toBe('published'); // Persistence succeeded!
+    expect(results[0].postPublicationError).toContain('Search index webhook HTTP 504 Gateway Timeout');
+    expect(scheduleStore[0].status).toBe('published');
+  });
+
+  it('reconciles all 4 outcomes in a single run: published + alreadyPublished + blocked + skipped === totalChecked', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-all-1', story_id: 'story-pub', status: 'ready', slot_date: today, priority: 10 },
+      { id: 'sched-all-2', story_id: 'story-idem', status: 'ready', slot_date: today, priority: 9 },
+      { id: 'sched-all-3', story_id: 'story-block', status: 'ready', slot_date: today, priority: 8 },
+      { id: 'sched-all-4', story_id: 'story-skip', status: 'ready', slot_date: today, priority: 7 },
+    ];
+    const initialStories = [
+      { id: 'story-pub', slug: 'story-pub', title: 'Pub Story', status: 'ready' },
+      { id: 'story-idem', slug: 'story-idem', title: 'Idem Story', status: 'published', published_at: '2026-10-16T00:00:00Z' },
+      { id: 'story-block', slug: 'story-block', title: 'Block Story', status: 'ready' },
+      { id: 'story-skip', slug: 'story-skip', title: 'Skip Story', status: 'ready' },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule, ['sched-all-4']);
+    setServiceClient(mockDb);
+
+    // story-pub succeeds
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-token-all',
+      updatedStory: { id: 'story-pub', slug: 'story-pub' },
+    });
+    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-pub', status: 'published' });
+
+    // story-block fails gate
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: false,
+      error: 'Evidence missing',
+      gateResult: {
+        storyId: 'story-block',
+        passed: false,
+        checks: [{ name: 'evidence_vault', passed: false, reason: 'No archived artifact' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+    expect(results).toHaveLength(4);
+
+    const published = results.filter(r => r.outcome === 'published').length;
+    const alreadyPublished = results.filter(r => r.outcome === 'already_published').length;
+    const blocked = results.filter(r => r.outcome === 'blocked').length;
+    const skipped = results.filter(r => r.outcome === 'skipped').length;
+
+    expect(published).toBe(1);
+    expect(alreadyPublished).toBe(1);
+    expect(blocked).toBe(1);
+    expect(skipped).toBe(1);
+    expect(published + alreadyPublished + blocked + skipped).toBe(4);
+    expect(results.length).toBe(4);
   });
 });
