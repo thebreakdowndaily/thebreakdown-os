@@ -36,6 +36,27 @@ export interface Env {
 
 export const SCHEDULED_PUBLISH_PROPAGATED_ERROR = 'Scheduled publishing request failed';
 
+export const APPROVED_CANONICAL_ERROR_MESSAGES = new Set([
+  'Canonical publishing APP_URL is not configured',
+  'Canonical publishing APP_URL is invalid',
+  'Canonical publishing APP_URL must be an HTTPS origin without credentials, path, query, or fragment',
+  'Canonical publishing APP_URL host is not trusted',
+  'Canonical publishing CRON_SECRET is not configured',
+  'Canonical publishing endpoint request failed',
+  'Canonical publishing endpoint returned invalid JSON',
+  'Canonical publishing endpoint returned an invalid response',
+  'Canonical publishing endpoint returned an invalid summary',
+  'Canonical publishing endpoint returned an invalid story result',
+  'Canonical publishing endpoint returned inconsistent result counts',
+]);
+
+export function isApprovedDiagnosticMessage(msg: string): boolean {
+  if (APPROVED_CANONICAL_ERROR_MESSAGES.has(msg)) {
+    return true;
+  }
+  return /^Canonical publishing endpoint returned HTTP \d{3}$/.test(msg);
+}
+
 export default {
   async scheduled(
     controller: ScheduledController,
@@ -69,16 +90,9 @@ export default {
     } catch (error) {
       const duration = Date.now() - startTime;
       const rawMsg = error instanceof Error ? error.message : 'Unknown error';
-      let safeMsg = env.CRON_SECRET ? rawMsg.replaceAll(env.CRON_SECRET, '[REDACTED]') : rawMsg;
-      safeMsg = safeMsg.replace(/\/\/([^:]+):([^@]+)@/g, '//$1:[REDACTED]@');
-      if (
-        !safeMsg.startsWith('Canonical publishing ') ||
-        /(?:password|passwd|pwd|user=|postgres:\/\/|bearer\s+|token[=:]|secret[=:]|key[=:]|auth|:\d{2,5}|\.internal|\.local|localhost|@)/i.test(
-          safeMsg,
-        )
-      ) {
-        safeMsg = 'Scheduled publishing request failed due to an upstream error';
-      }
+      const safeMsg = isApprovedDiagnosticMessage(rawMsg)
+        ? rawMsg
+        : 'Scheduled publishing request failed due to an upstream error';
 
       console.error(JSON.stringify({
         event: 'editorial.publish_due.failed',

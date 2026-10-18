@@ -72,7 +72,7 @@ function canonicalEndpoint(appUrl: string | undefined): string {
   const hostname = base.hostname.toLowerCase();
   const isAllowedHost = (ALLOWED_PUBLISHING_HOSTS as readonly string[]).includes(hostname);
   if (!isAllowedHost) {
-    throw new Error(`Canonical publishing APP_URL host "${base.hostname}" is not trusted`);
+    throw new Error('Canonical publishing APP_URL host is not trusted');
   }
 
   return new URL('/api/editorial/publish-due', base.origin).toString();

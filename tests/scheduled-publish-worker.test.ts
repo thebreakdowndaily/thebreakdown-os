@@ -1908,4 +1908,108 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
 
     publishDueStoriesSpy.mockRestore();
   });
+
+  it('Sink 5d: worker error logging never discloses untrusted APP_URL hostnames when origin is rejected', async () => {
+    const syntheticOrigin = 'https://staging-preview.example.com';
+    const syntheticEnv = {
+      APP_URL: syntheticOrigin,
+      CRON_SECRET: 'test-cron-secret-value-1234',
+    };
+    const controller = { cron: '0 * * * *', scheduledTime: Date.now() };
+    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() };
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    try {
+      let propagatedError: unknown;
+      try {
+        await worker.scheduled(controller, syntheticEnv as never, ctx as never);
+      } catch (err) {
+        propagatedError = err;
+      }
+
+      // 1. The origin is rejected with generic failure
+      expect(propagatedError).toBeDefined();
+      expect(propagatedError).toBeInstanceOf(Error);
+      expect((propagatedError as Error).message).toBe('Scheduled publishing request failed');
+      expect((propagatedError as Error).cause).toBeUndefined();
+
+      // 2. No network dispatch occurs
+      expect(fetchMock).not.toHaveBeenCalled();
+
+      // 3. The hostname does not appear in console.error, console.warn, or telemetry
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const loggedErrorText = consoleErrorSpy.mock.calls
+        .flat()
+        .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+        .join(' ');
+
+      const loggedWarnText = consoleWarnSpy.mock.calls
+        .flat()
+        .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+        .join(' ');
+
+      expect(loggedErrorText).not.toContain('staging-preview.example.com');
+      expect(loggedErrorText).not.toContain('example.com');
+      expect(loggedWarnText).not.toContain('staging-preview.example.com');
+
+      // 4. Safe fixed diagnostic message is logged
+      expect(loggedErrorText).toContain('DISPATCH_ERROR');
+      expect(loggedErrorText).toContain('Canonical publishing APP_URL host is not trusted');
+    } finally {
+      consoleErrorSpy.mockRestore();
+      consoleWarnSpy.mockRestore();
+    }
+  });
+
+  it('Sink 5e: worker error logging never discloses credentials or synthetic URLs from malformed origins', async () => {
+    const syntheticCredentials = 'mock-user:mock-password';
+    const syntheticOrigin = `https://${syntheticCredentials}@staging-preview.example.com/malicious-path`;
+    const syntheticEnv = {
+      APP_URL: syntheticOrigin,
+      CRON_SECRET: 'test-cron-secret-value-1234',
+    };
+    const controller = { cron: '0 * * * *', scheduledTime: Date.now() };
+    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() };
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    try {
+      let propagatedError: unknown;
+      try {
+        await worker.scheduled(controller, syntheticEnv as never, ctx as never);
+      } catch (err) {
+        propagatedError = err;
+      }
+
+      // 1. Invocation fails closed
+      expect(propagatedError).toBeDefined();
+      expect(propagatedError).toBeInstanceOf(Error);
+      expect((propagatedError as Error).message).toBe('Scheduled publishing request failed');
+      expect((propagatedError as Error).cause).toBeUndefined();
+
+      // 2. No network dispatch occurs
+      expect(fetchMock).not.toHaveBeenCalled();
+
+      // 3. Neither credentials, path, nor hostname appear in console output
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const loggedErrorText = consoleErrorSpy.mock.calls
+        .flat()
+        .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+        .join(' ');
+
+      expect(loggedErrorText).not.toContain('mock-user');
+      expect(loggedErrorText).not.toContain('mock-password');
+      expect(loggedErrorText).not.toContain('staging-preview.example.com');
+      expect(loggedErrorText).not.toContain('malicious-path');
+
+      // 4. Safe fixed diagnostic message is logged
+      expect(loggedErrorText).toContain('Canonical publishing APP_URL must be an HTTPS origin without credentials, path, query, or fragment');
+    } finally {
+      consoleErrorSpy.mockRestore();
+      consoleWarnSpy.mockRestore();
+    }
+  });
 });
