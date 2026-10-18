@@ -50,7 +50,7 @@ export class SupabaseStoryRepository implements StoryService {
     return data ? rowToStory(data) : undefined;
   }
 
-  async saveStory(story: Story, options?: { publicationToken?: string }) {
+  async saveStory(story: Story, options?: { publicationToken?: string; expectedVersion?: number }) {
     // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
     if (story.status === 'published' || story.publicationStatus === 'published') {
       const token = options?.publicationToken || (story as any)._publicationToken;
@@ -61,8 +61,45 @@ export class SupabaseStoryRepository implements StoryService {
       }
     }
 
+    if (options?.expectedVersion !== undefined) {
+      return this.saveStoryOCC(story, options.expectedVersion, options);
+    }
+
     const { data, error } = await db().from('stories').upsert(rowFromStory(story)).select().single();
     if (error) throw error;
+    return rowToStory(data);
+  }
+
+  async saveStoryOCC(story: Story, expectedVersion: number, options?: { publicationToken?: string }): Promise<Story> {
+    if (story.status === 'published' || story.publicationStatus === 'published') {
+      const token = options?.publicationToken || (story as any)._publicationToken;
+      if (!token || !consumePublicationToken(token, story.id)) {
+        throw new DirectPublicationForbiddenError(
+          `Direct saveStoryOCC with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
+        );
+      }
+    }
+
+    const row = rowFromStory(story);
+    row.version = (expectedVersion || 0) + 1;
+
+    let query = db()
+      .from('stories')
+      .update(row)
+      .eq('id', story.id)
+      .eq('version', expectedVersion || 0);
+
+    if (story.status === 'published') {
+      query = query.neq('status', 'published');
+    }
+
+    const { data, error } = await query.select().maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error(`OCC_FAILURE: Story ${story.id} has been modified concurrently or already published.`);
+    }
+
     return rowToStory(data);
   }
 

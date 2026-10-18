@@ -209,22 +209,31 @@ export async function GET(request: NextRequest) {
       alreadyPublished: alreadyPublished.length,
       blocked: blocked.length,
       skipped: skipped.length,
-      results: categorized.map(c => ({
-        storyId: c.raw.storyId,
-        passed: c.raw.passed,
-        outcome: c.outcome,
-        checksCount: c.raw.checks.length,
-        failedChecks: c.raw.checks.filter(chk => !chk.passed).map(chk => chk.name),
-        ...(c.raw.postPublicationError
-          ? {
-              postPublicationError: true,
-              ...(c.raw.postPublicationErrorCategory
-                ? { postPublicationErrorCategory: c.raw.postPublicationErrorCategory }
-                : {}),
-              ...(c.raw.correlationId ? { correlationId: c.raw.correlationId } : {}),
-            }
-          : {}),
-      })),
+      results: categorized.map(c => {
+        const passed = c.outcome === 'published' || c.outcome === 'already_published';
+        let failedChecks = c.raw.checks.filter(chk => !chk.passed).map(chk => chk.name);
+        if (c.outcome === 'blocked' && failedChecks.length === 0) {
+          failedChecks = ['gate_blocked'];
+        } else if (c.outcome === 'published' || c.outcome === 'already_published') {
+          failedChecks = [];
+        }
+        return {
+          storyId: c.raw.storyId,
+          passed,
+          outcome: c.outcome,
+          checksCount: c.raw.checks.length,
+          failedChecks,
+          ...(c.raw.postPublicationError
+            ? {
+                postPublicationError: true,
+                ...(c.raw.postPublicationErrorCategory
+                  ? { postPublicationErrorCategory: c.raw.postPublicationErrorCategory }
+                  : {}),
+                ...(c.raw.correlationId ? { correlationId: c.raw.correlationId } : {}),
+              }
+            : {}),
+        };
+      }),
     });
   } catch (error) {
     const correlationId = request.headers.get('x-request-id') || crypto.randomUUID();

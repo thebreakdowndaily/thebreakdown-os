@@ -19,6 +19,7 @@ vi.mock('@/lib/editorial/canonical-publication', () => ({
 
 const mockStoryRepository = {
   saveStory: vi.fn(),
+  saveStoryOCC: vi.fn(),
   getStory: vi.fn(),
 };
 vi.mock('@/services/factory/repository', () => ({
@@ -51,6 +52,9 @@ const fetchMock = vi.fn();
 beforeEach(() => {
   fetchMock.mockReset();
   vi.stubGlobal('fetch', fetchMock);
+  mockStoryRepository.saveStoryOCC.mockImplementation((story, version, opts) =>
+    mockStoryRepository.saveStory(story, { ...opts, expectedVersion: version }),
+  );
 });
 
 afterEach(() => {
@@ -1132,9 +1136,12 @@ function createMockDb(
   initialSchedule: any[] = [],
   failAtomicClaimIds: string[] = [],
   failPublishedUpdateError?: Error | null,
+  options?: {
+    prePersistenceStoryError?: Error | null;
+  },
 ) {
   const scheduleStore = initialSchedule.map(s => ({ ...s }));
-  const storiesStore = initialStories.map(s => ({ ...s }));
+  const storiesStore = initialStories.map(s => ({ version: 1, ...s }));
   const logsStore: any[] = [];
 
   const mockDb: any = {
@@ -1203,6 +1210,9 @@ function createMockDb(
           if (table === 'editorial_schedule' && isEqScheduleId && failAtomicClaimIds.includes(isEqScheduleId)) {
             return { data: null, error: null };
           }
+          if (table === 'stories' && options?.prePersistenceStoryError) {
+            return { data: null, error: options.prePersistenceStoryError };
+          }
           const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
           const row = store.find(currentFilter);
           if (row && updatePayload) {
@@ -1248,6 +1258,9 @@ describe('editorial schedule service publication lifecycle and invariants', () =
 
   beforeEach(async () => {
     vi.resetAllMocks();
+    mockStoryRepository.saveStoryOCC.mockImplementation((story, version, opts) =>
+      mockStoryRepository.saveStory(story, { ...opts, expectedVersion: version }),
+    );
     const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
     realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
   });
@@ -1721,7 +1734,7 @@ describe('editorial schedule service publication lifecycle and invariants', () =
       checks: [],
     };
 
-    const res = actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal, dummyGateResult);
+    const res = await actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal, dummyGateResult);
 
     expect(res.eventBusEmitted).toBe(false);
     expect(res.errorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
@@ -1747,6 +1760,9 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
 
   beforeEach(async () => {
     vi.resetAllMocks();
+    mockStoryRepository.saveStoryOCC.mockImplementation((story, version, opts) =>
+      mockStoryRepository.saveStory(story, { ...opts, expectedVersion: version }),
+    );
     process.env.CRON_SECRET = ROUTE_AUTH_SECRET;
     const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
     realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
@@ -2276,3 +2292,445 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
     }
   });
 });
+
+describe('Phase 32: Fenced Publication Ownership, Fail-Closed Pre-Persistence, and Truthful Contract', () => {
+  const ROUTE_SECRET = 'route-secret-phase32';
+  const originalEnvSecret = process.env.CRON_SECRET;
+  let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
+
+  beforeEach(async () => {
+    process.env.CRON_SECRET = ROUTE_SECRET;
+    vi.resetAllMocks();
+    mockStoryRepository.saveStoryOCC.mockImplementation((story, version, opts) =>
+      mockStoryRepository.saveStory(story, { ...opts, expectedVersion: version }),
+    );
+    const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
+  });
+
+  afterEach(() => {
+    process.env.CRON_SECRET = originalEnvSecret;
+    setServiceClient(null);
+  });
+
+  it('1. Fenced claimant: stale claimant cannot overwrite concurrent publication on success path', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-fenced-p32', story_id: 'story-fenced-p32', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-fenced-p32', slug: 'story-fenced-p32', title: 'Fenced Story', status: 'ready', version: 1 },
+    ];
+
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    // During Claimant A's evaluation, Claimant B publishes concurrently in the database
+    mockEvaluatePublicationContract.mockImplementationOnce(async () => {
+      // Claimant B took ownership, published story, and marked schedule published
+      scheduleStore[0].status = 'published';
+      scheduleStore[0].validated_at = '2026-10-18T10:05:00.000Z';
+      scheduleStore[0].published_at = '2026-10-18T10:05:00.000Z';
+      storiesStore[0].status = 'published';
+      storiesStore[0].version = 2;
+      storiesStore[0].published_at = '2026-10-18T10:05:00.000Z';
+
+      return {
+        allowed: true,
+        publicationToken: 'claimant-a-token',
+        updatedStory: { id: 'story-fenced-p32', slug: 'story-fenced-p32', title: 'Fenced Story' },
+      };
+    });
+
+    // Claimant A runs
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-fenced-p32');
+    expect(results[0].passed).toBe(true);
+    expect(results[0].outcome).toBe('already_published');
+
+    // Zero repository writes attempted
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+    expect(mockStoryRepository.saveStoryOCC).not.toHaveBeenCalled();
+
+    // Claimant B's published records remain intact
+    expect(scheduleStore[0].status).toBe('published');
+    expect(scheduleStore[0].validated_at).toBe('2026-10-18T10:05:00.000Z');
+    expect(storiesStore[0].status).toBe('published');
+    expect(storiesStore[0].version).toBe(2);
+  });
+
+  it('2. Fenced claimant: expired claimant whose gates fail is fenced from updating schedule or stories', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    // Lease held 10 minutes ago
+    const staleLeaseTime = new Date(now.getTime() - 10 * 60 * 1000).toISOString();
+
+    const initialSchedule = [
+      {
+        id: 'sched-fenced-gate-fail',
+        story_id: 'story-fenced-gate-fail',
+        status: 'validated',
+        slot_date: today,
+        priority: 10,
+        validated_at: staleLeaseTime,
+      },
+    ];
+    const initialStories = [
+      { id: 'story-fenced-gate-fail', slug: 'story-fenced-gate-fail', title: 'Fenced Gate Fail', status: 'ready', version: 1 },
+    ];
+
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    const claimantBLeaseTime = new Date(now.getTime() - 60 * 1000).toISOString();
+
+    // Gate evaluation fails, and during evaluation Claimant B takes the lease
+    mockEvaluatePublicationContract.mockImplementationOnce(async () => {
+      // Simulate that during gate validation, Claimant B took the lease and updated validated_at
+      scheduleStore[0].validated_at = claimantBLeaseTime;
+
+      return {
+        allowed: false,
+        error: 'Senior editor verification missing',
+        gateResult: {
+          storyId: 'story-fenced-gate-fail',
+          passed: false,
+          checks: [{ name: 'editorial_check', passed: false, reason: 'Pending review' }],
+          checkedAt: now.toISOString(),
+          triggeredBy: 'cron',
+        },
+      };
+    });
+
+    const results = await realValidateAndPublishDueStories(now);
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-fenced-gate-fail');
+    // Claimant A was fenced and skipped cleanly
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('skipped');
+    expect(results[0].checks[0].name).toBe('lease_fenced');
+
+    // Claimant A was prevented from setting status='blocked' on schedule or status='review' on stories
+    expect(scheduleStore[0].status).toBe('validated');
+    expect(scheduleStore[0].validated_at).toBe(claimantBLeaseTime);
+    expect(storiesStore[0].status).toBe('ready');
+  });
+
+  it('3. OCC Persistence Fencing: concurrent version conflict throws and prevents story overwrite', async () => {
+    const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+    const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+    const memRepo = new MemoryStoryService([
+      {
+        id: 'story-occ-test',
+        slug: 'story-occ-test',
+        title: 'OCC Test Story',
+        headline: 'Headline',
+        summary: 'Summary',
+        heroImage: '/img.jpg',
+        author: 'Author',
+        category: 'explainer',
+        status: 'ready',
+        storyType: 'explainer',
+        evidenceScore: 90,
+        readingTime: 5,
+        blocks: [],
+        sources: [],
+        claims: [],
+        timeline: [],
+        faq: [],
+        charts: [],
+        tags: [],
+        version: 2, // version was bumped to 2 by concurrent editor
+      } as any,
+    ]);
+
+    const token = issuePublicationToken('story-occ-test');
+
+    // Attempting to save with expectedVersion: 1 must throw OCC_FAILURE
+    await expect(
+      memRepo.saveStoryOCC(
+        {
+          id: 'story-occ-test',
+          slug: 'story-occ-test',
+          title: 'OCC Test Story Stale Update',
+          status: 'published',
+          publicationStatus: 'published',
+          publishedAt: new Date().toISOString(),
+        } as any,
+        1, // stale expected version
+        { publicationToken: token },
+      ),
+    ).rejects.toThrow(/OCC_FAILURE/);
+
+    // Verify repository content remained at version 2 with status 'ready'
+    const stored = await memRepo.getStory('story-occ-test');
+    expect(stored?.version).toBe(2);
+    expect(stored?.status).toBe('ready');
+  });
+
+  it('4. Fail-closed pre-persistence state verification: DB error fails closed with zero repo calls', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-verify-err', story_id: 'story-verify-err', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-verify-err', slug: 'story-verify-err', title: 'Verify Error Story', status: 'ready', version: 1 },
+    ];
+
+    const dbQueryError = new Error('PostgreSQL connection terminated unexpectedly (ECONNRESET)');
+    const { mockDb, scheduleStore } = createMockDb(
+      initialStories,
+      initialSchedule,
+      [],
+      null,
+      { prePersistenceStoryError: dbQueryError },
+    );
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-token-p32-err',
+      updatedStory: { id: 'story-verify-err', slug: 'story-verify-err', title: 'Verify Error Story' },
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-verify-err');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks[0].name).toBe('pre_persistence_verification');
+    expect(results[0].checks[0].reason).toContain('ECONNRESET');
+
+    // ZERO repository save calls occurred
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+    expect(mockStoryRepository.saveStoryOCC).not.toHaveBeenCalled();
+
+    // Schedule entry was transitioned to 'blocked'
+    expect(scheduleStore[0].status).toBe('blocked');
+    expect(scheduleStore[0].block_reason).toContain('ECONNRESET');
+  });
+
+  it('5. Fail-closed pre-persistence state verification: missing story row fails closed with zero repo calls', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-verify-missing', story_id: 'story-verify-missing', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    // Story row does not exist in storiesStore (was deleted or missing)
+    const initialStories: any[] = [];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    expect(results[0].storyId).toBe('story-verify-missing');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks[0].name).toBe('story_exists');
+
+    // ZERO repository save calls occurred
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+    expect(mockStoryRepository.saveStoryOCC).not.toHaveBeenCalled();
+
+    // Schedule was safely marked blocked rather than left in validated or published
+    expect(scheduleStore[0].status).toBe('blocked');
+    expect(scheduleStore[0].block_reason).toBe('Story not found in database');
+  });
+
+  it('6. Truthful post-publication effects: reports accurate revalidationStatus and enforces bounded timeout', async () => {
+    const actualCanonical = await vi.importActual<typeof import('@/lib/editorial/canonical-publication')>('@/lib/editorial/canonical-publication');
+    const { eventBus } = await vi.importActual<typeof import('@/lib/events/event-bus')>('@/lib/events/event-bus');
+
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const dummyStory: any = {
+      id: 'story-effects-truthful',
+      slug: 'story-effects-truthful',
+      title: 'Truthful Effects Story',
+      status: 'published',
+      publishedAt: new Date().toISOString(),
+      author: 'Test Author',
+    };
+    const dummyPrincipal: any = {
+      userId: 'user-p32',
+      role: 'owner',
+      name: 'Owner Principal',
+    };
+    const dummyGateResult: any = {
+      storyId: dummyStory.id,
+      passed: true,
+      outcome: 'published',
+      checks: [],
+    };
+
+    // Case 6a: Normal execution without Next.js runtime throws in revalidatePath
+    const resA = await actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal, dummyGateResult);
+    expect(resA.eventBusEmitted).toBe(true);
+    expect(resA.revalidationStatus).toBe('failed'); // In Vitest test runtime, next/cache throws
+    expect(resA.revalidationTriggered).toBe(false);
+
+    // Case 6b: Event bus throws -> sets errorCategory
+    vi.spyOn(eventBus, 'publish').mockImplementationOnce(() => {
+      throw new Error('EventBus connection failed');
+    });
+    const resB = await actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal, dummyGateResult);
+    expect(resB.eventBusEmitted).toBe(false);
+    expect(resB.errorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+
+    // Case 6c: Bounded timeout guarantees completion without hanging
+    const resC = await actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal, dummyGateResult, {
+      timeoutMs: 50,
+      delayForTestingMs: 200,
+    });
+    expect(resC.revalidationStatus).toBe('failed');
+    expect(resC.errorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+  });
+
+  it('7. Normalized API result contract: route normalizes passed flag to strictly match outcome invariant', async () => {
+    // Test mixed contradictory, missing, and valid inputs
+    vi.mocked(validateAndPublishDueStories).mockResolvedValueOnce([
+      // Contradictory input: passed is true, but outcome is blocked
+      {
+        storyId: 'story-contradiction-1',
+        passed: true,
+        outcome: 'blocked',
+        checks: [{ name: 'fact_check', passed: false, reason: 'Pending audit' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      // Contradictory input: passed is false, but outcome is published (classified to blocked)
+      {
+        storyId: 'story-contradiction-2',
+        passed: false,
+        outcome: 'published',
+        checks: [{ name: 'editorial_check', passed: true, reason: 'Passed' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+        publishedAt: new Date().toISOString(),
+      },
+      // Blocked with empty checks
+      {
+        storyId: 'story-contradiction-3',
+        passed: false,
+        outcome: 'blocked',
+        checks: [],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      // Fully valid published story
+      {
+        storyId: 'story-valid-pub-p32',
+        passed: true,
+        outcome: 'published',
+        checks: [{ name: 'editorial_check', passed: true, reason: 'Passed' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+        publishedAt: new Date().toISOString(),
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.results).toHaveLength(4);
+
+    // Result 1: passed normalized to false
+    expect(body.results[0].passed).toBe(false);
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.results[0].failedChecks).toEqual(['fact_check']);
+
+    // Result 2: contradictory outcome normalized to blocked with passed: false
+    expect(body.results[1].passed).toBe(false);
+    expect(body.results[1].outcome).toBe('blocked');
+    expect(body.results[1].failedChecks.length).toBeGreaterThan(0);
+
+    // Result 3: failedChecks populated with fallback
+    expect(body.results[2].passed).toBe(false);
+    expect(body.results[2].outcome).toBe('blocked');
+    expect(body.results[2].failedChecks).toEqual(['gate_blocked']);
+
+    // Result 4: valid published item has passed: true and empty failedChecks
+    expect(body.results[3].passed).toBe(true);
+    expect(body.results[3].outcome).toBe('published');
+    expect(body.results[3].failedChecks).toEqual([]);
+  });
+
+  it('8. Dispatcher contract invariant: rejects contradictory payloads from endpoint', async () => {
+    // Contradictory payload: passed: true with outcome: 'blocked'
+    const contradictoryPayload1 = {
+      ok: true,
+      timestamp: '2026-10-18T00:00:00.000Z',
+      totalChecked: 1,
+      published: 0,
+      alreadyPublished: 0,
+      blocked: 1,
+      skipped: 0,
+      results: [
+        { storyId: 'story-c1', passed: true, outcome: 'blocked', checksCount: 1, failedChecks: ['fact_check'] },
+      ],
+    };
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(contradictoryPayload1), { status: 200 }));
+    await expect(publishDueStories(env)).rejects.toThrow(/contradictory passed and outcome values/);
+
+    // Contradictory payload: passed: false with outcome: 'published'
+    const contradictoryPayload2 = {
+      ok: true,
+      timestamp: '2026-10-18T00:00:00.000Z',
+      totalChecked: 1,
+      published: 1,
+      alreadyPublished: 0,
+      blocked: 0,
+      skipped: 0,
+      results: [
+        { storyId: 'story-c2', passed: false, outcome: 'published', checksCount: 1, failedChecks: [] },
+      ],
+    };
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(contradictoryPayload2), { status: 200 }));
+    await expect(publishDueStories(env)).rejects.toThrow(/contradictory passed and outcome values/);
+
+    // Contradictory payload: outcome: 'blocked' with empty failedChecks
+    const contradictoryPayload3 = {
+      ok: true,
+      timestamp: '2026-10-18T00:00:00.000Z',
+      totalChecked: 1,
+      published: 0,
+      alreadyPublished: 0,
+      blocked: 1,
+      skipped: 0,
+      results: [
+        { storyId: 'story-c3', passed: false, outcome: 'blocked', checksCount: 0, failedChecks: [] },
+      ],
+    };
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(contradictoryPayload3), { status: 200 }));
+    await expect(publishDueStories(env)).rejects.toThrow(/blocked outcome without failed checks/);
+
+    // Contradictory payload: outcome: 'published' with failedChecks
+    const contradictoryPayload4 = {
+      ok: true,
+      timestamp: '2026-10-18T00:00:00.000Z',
+      totalChecked: 1,
+      published: 1,
+      alreadyPublished: 0,
+      blocked: 0,
+      skipped: 0,
+      results: [
+        { storyId: 'story-c4', passed: true, outcome: 'published', checksCount: 1, failedChecks: ['error'] },
+      ],
+    };
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(contradictoryPayload4), { status: 200 }));
+    await expect(publishDueStories(env)).rejects.toThrow(/passing outcome with failed checks/);
+  });
+});
+

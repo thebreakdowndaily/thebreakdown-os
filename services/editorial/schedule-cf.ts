@@ -129,6 +129,17 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
       throw new Error('Canonical publishing endpoint returned an invalid story result');
     }
 
+    const expectedPassed = item.outcome === 'published' || item.outcome === 'already_published';
+    if (item.passed !== expectedPassed) {
+      throw new Error('Canonical publishing endpoint returned contradictory passed and outcome values');
+    }
+    if (item.outcome === 'blocked' && (item.failedChecks as string[]).length === 0) {
+      throw new Error('Canonical publishing endpoint returned blocked outcome without failed checks');
+    }
+    if ((item.outcome === 'published' || item.outcome === 'already_published') && (item.failedChecks as string[]).length > 0) {
+      throw new Error('Canonical publishing endpoint returned passing outcome with failed checks');
+    }
+
     return {
       storyId: item.storyId,
       passed: item.passed,

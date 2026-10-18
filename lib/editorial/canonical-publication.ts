@@ -270,57 +270,62 @@ export function evaluatePublicationContract(
 
 export interface PostPublicationEffectsResult {
   eventBusEmitted: boolean;
+  revalidationStatus: 'succeeded' | 'failed' | 'skipped';
   revalidationTriggered: boolean;
   errorCategory?: 'POST_PUBLICATION_EFFECTS_FAILED';
 }
 
 /**
  * Executes post-publication side-effects (eventBus emission, ISR cache invalidation).
+ * Synchronously/asynchronously bounded to prevent unhandled rejections or indefinite hangs.
  */
-export function executePostPublicationEffects(
+export async function executePostPublicationEffects(
   story: Story,
   principal: Principal,
-  gateResult?: PublicationGateResult
-): PostPublicationEffectsResult {
-  let eventBusEmitted = false;
-  let errorCategory: 'POST_PUBLICATION_EFFECTS_FAILED' | undefined;
+  gateResult?: PublicationGateResult,
+  options?: { timeoutMs?: number; delayForTestingMs?: number }
+): Promise<PostPublicationEffectsResult> {
+  const timeoutMs = options?.timeoutMs ?? 5000;
 
-  // 1. Emit publication event
-  try {
-    eventBus.publish({
-      type: 'story:published',
-      payload: {
-        storyId: story.id,
-        slug: story.slug,
-        title: story.title,
-        publishedAt: story.publishedAt,
-        author: story.author,
-        publisherId: principal.userId,
-        gatePassed: gateResult?.passed ?? true,
-      },
-    });
-    eventBusEmitted = true;
-  } catch (err) {
-    const errorName = err instanceof Error ? err.name : 'UnknownError';
-    errorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
-    if (gateResult) {
-      gateResult.postPublicationError = true;
-      gateResult.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+  const runEffects = async (): Promise<PostPublicationEffectsResult> => {
+    let eventBusEmitted = false;
+    let revalidationStatus: 'succeeded' | 'failed' | 'skipped' = 'skipped';
+    let errorCategory: 'POST_PUBLICATION_EFFECTS_FAILED' | undefined;
+
+    // 1. Emit publication event
+    try {
+      eventBus.publish({
+        type: 'story:published',
+        payload: {
+          storyId: story.id,
+          slug: story.slug,
+          title: story.title,
+          publishedAt: story.publishedAt,
+          author: story.author,
+          publisherId: principal.userId,
+          gatePassed: gateResult?.passed ?? true,
+        },
+      });
+      eventBusEmitted = true;
+    } catch (err) {
+      const errorName = err instanceof Error ? err.name : 'UnknownError';
+      errorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+      if (gateResult) {
+        gateResult.postPublicationError = true;
+        gateResult.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+      }
+      console.error(
+        JSON.stringify({
+          event: 'canonical_publication.event_publish_failed',
+          storyId: story.id,
+          category: 'EVENT_BUS_PUBLISH_FAILED',
+          errorName,
+          timestamp: new Date().toISOString(),
+        }),
+      );
     }
-    console.error(
-      JSON.stringify({
-        event: 'canonical_publication.event_publish_failed',
-        storyId: story.id,
-        category: 'EVENT_BUS_PUBLISH_FAILED',
-        errorName,
-        timestamp: new Date().toISOString(),
-      }),
-    );
-  }
 
-  // 2. Invalidate Next.js ISR caches dynamically (server-safe boundary)
-  let revalidationTriggered = false;
-  void (async () => {
+    // 2. Invalidate Next.js ISR caches dynamically (server-safe boundary, properly awaited)
     try {
       const { revalidatePath } = await import('next/cache');
       revalidatePath('/');
@@ -328,15 +333,72 @@ export function executePostPublicationEffects(
       if (story.slug) {
         revalidatePath(`/story/${story.slug}`);
       }
-      revalidationTriggered = true;
-    } catch {
-      // In test runners or worker contexts, revalidatePath may not be available
+      revalidationStatus = 'succeeded';
+    } catch (err) {
+      revalidationStatus = 'failed';
+      // In test runners or non-Next server runtimes, next/cache may throw. Bounded and safe logging:
+      const errorName = err instanceof Error ? err.name : 'UnknownError';
+      console.warn(
+        JSON.stringify({
+          event: 'canonical_publication.revalidation_failed',
+          storyId: story.id,
+          category: 'CACHE_REVALIDATION_FAILED',
+          errorName,
+          timestamp: new Date().toISOString(),
+        }),
+      );
     }
-  })();
 
-  return {
-    eventBusEmitted,
-    revalidationTriggered,
-    ...(errorCategory ? { errorCategory } : {}),
+    if (options?.delayForTestingMs) {
+      await new Promise(resolve => setTimeout(resolve, options.delayForTestingMs));
+    }
+
+    if (revalidationStatus === 'failed' || !eventBusEmitted) {
+      errorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+      if (gateResult) {
+        gateResult.postPublicationError = true;
+        gateResult.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+      }
+    }
+
+    return {
+      eventBusEmitted,
+      revalidationStatus,
+      revalidationTriggered: revalidationStatus === 'succeeded',
+      ...(errorCategory ? { errorCategory } : {}),
+    };
   };
+
+  try {
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error(`Post-publication effects timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
+      if (typeof timer.unref === 'function') timer.unref();
+    });
+
+    return await Promise.race([runEffects(), timeoutPromise]);
+  } catch (err) {
+    if (gateResult) {
+      gateResult.postPublicationError = true;
+      gateResult.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+    }
+    const errorName = err instanceof Error ? err.name : 'UnknownError';
+    console.error(
+      JSON.stringify({
+        event: 'canonical_publication.effects_timeout_or_fatal',
+        storyId: story.id,
+        category: 'POST_PUBLICATION_EFFECTS_FAILED',
+        errorName,
+        timestamp: new Date().toISOString(),
+      }),
+    );
+    return {
+      eventBusEmitted: false,
+      revalidationStatus: 'failed',
+      revalidationTriggered: false,
+      errorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+    };
+  }
 }
+

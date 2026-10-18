@@ -217,6 +217,9 @@ async function validateAndPublishEntry(
     };
   }
 
+  const claimedValidatedAt = (claimedEntry.validated_at as string) || nowIso;
+  const claimTimeMs = now.getTime();
+
   // ── Fetch the story
   const { data: storyRow, error: storyError } = await db
     .from('stories')
@@ -239,8 +242,23 @@ async function validateAndPublishEntry(
       triggeredBy: 'cron',
     };
     await logGateResult(result);
+    await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: 'Story not found in database',
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt);
     return result;
   }
+
+  const expectedVersion = typeof (storyRow as { version?: number })?.version === 'number'
+    ? (storyRow as { version?: number }).version!
+    : 1;
 
   // ── IDEMPOTENCY GUARD: skip if already published
   if (storyRow.status === 'published') {
@@ -259,12 +277,13 @@ async function validateAndPublishEntry(
       publishedAt: storyRow.published_at || storyRow.updated_at || now.toISOString(),
     };
     await logGateResult(result);
-    // Update schedule to 'published' if not already
+    // Update schedule to 'published' if not already (fenced by current lease)
     await db
       .from('editorial_schedule')
       .update({ status: 'published', published_at: now.toISOString(), updated_at: now.toISOString() } as never)
       .eq('id', scheduleId)
-      .neq('status', 'published');
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt);
     return result;
   }
 
@@ -314,12 +333,30 @@ async function validateAndPublishEntry(
       });
     }
 
+    const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+    if (isLeaseExpired) {
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_expired',
+          passed: false,
+          reason: 'Schedule claim lease expired during gate validation',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
     await logGateResult(result);
 
     const failedChecks = result.checks.filter(c => !c.passed);
     const blockReason = failedChecks.map(c => c.reason).join('; ') || 'Publication gate failed or publication token missing';
 
-    await db
+    // Atomically transition schedule to 'blocked' ONLY if this worker still holds the lease
+    const { data: blockedSched } = await db
       .from('editorial_schedule')
       .update({
         status: 'blocked',
@@ -327,10 +364,31 @@ async function validateAndPublishEntry(
         blocked_at: now.toISOString(),
         updated_at: now.toISOString(),
       } as never)
-      .eq('id', scheduleId);
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt)
+      .select()
+      .maybeSingle();
 
-    // Also block the story (revert to review)
-    await db
+    if (!blockedSched) {
+      // Lease was stolen or superseded by another claimant — fence cleanly
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: 'Schedule claim lease was preempted by another claimant during gate validation',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
+    // Also block the story (revert to review) with version fencing to prevent overwriting concurrent updates
+    let storyBlockQuery = db
       .from('stories')
       .update({
         status: 'review',
@@ -341,6 +399,13 @@ async function validateAndPublishEntry(
       .eq('id', storyId)
       .neq('status', 'published'); // never un-publish
 
+    const currentStoryVersion = (storyRow as { version?: number })?.version;
+    if (typeof currentStoryVersion === 'number') {
+      storyBlockQuery = storyBlockQuery.eq('version', currentStoryVersion);
+    }
+
+    await storyBlockQuery;
+
     return result;
   }
 
@@ -348,14 +413,67 @@ async function validateAndPublishEntry(
   const repo = RepositoryFactory.getStoryRepository();
   const publishedAt = now.toISOString();
 
-  // ── PRE-PERSISTENCE IDEMPOTENCY RE-CHECK: verify story is not already published
-  const { data: latestStoryRow } = await db
+  // ── Check local lease expiry before pre-persistence phase
+  if (Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS) {
+    return {
+      storyId,
+      scheduleId,
+      passed: false,
+      outcome: 'skipped',
+      checks: [{
+        name: 'lease_expired_pre_persistence',
+        passed: false,
+        reason: 'Schedule claim lease expired before persistence phase',
+      }],
+      checkedAt: now.toISOString(),
+      triggeredBy: 'cron',
+    };
+  }
+
+  // ── PRE-PERSISTENCE STATE VERIFICATION: Fail closed on DB error or missing row
+  const { data: latestStoryRow, error: storyVerifyError } = await db
     .from('stories')
-    .select('status, published_at')
+    .select('id, status, published_at, version')
     .eq('id', storyId)
     .maybeSingle();
 
-  if (latestStoryRow && (latestStoryRow as { status?: string }).status === 'published') {
+  if (storyVerifyError || !latestStoryRow) {
+    const verifyFailReason = storyVerifyError
+      ? `Database error during pre-persistence story verification: ${storyVerifyError.message || 'unknown error'}`
+      : 'Story not found in database during pre-persistence verification';
+    const blockedResult: PublicationGateResult = {
+      storyId,
+      scheduleId,
+      passed: false,
+      outcome: 'blocked',
+      checks: [{
+        name: 'pre_persistence_verification',
+        passed: false,
+        reason: verifyFailReason,
+      }],
+      checkedAt: now.toISOString(),
+      triggeredBy: 'cron',
+    };
+    await logGateResult(blockedResult);
+
+    // Only update schedule if we still own the lease
+    await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: verifyFailReason,
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt);
+
+    return blockedResult;
+  }
+
+  // Idempotency check: skip persistence if already published in DB
+  if ((latestStoryRow as { status?: string }).status === 'published') {
     const publishedTimestamp = (latestStoryRow as { published_at?: string }).published_at || publishedAt;
     const idempotentResult: PublicationGateResult = {
       storyId,
@@ -376,22 +494,72 @@ async function validateAndPublishEntry(
       .from('editorial_schedule')
       .update({ status: 'published', published_at: publishedTimestamp, updated_at: publishedAt } as never)
       .eq('id', scheduleId)
-      .neq('status', 'published');
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt);
     return idempotentResult;
   }
 
-  // 1. PERSISTENCE PHASE
+  // Re-verify schedule lease immediately before persistence
+  const { data: currentScheduleCheck, error: schedCheckErr } = await db
+    .from('editorial_schedule')
+    .select('status, validated_at')
+    .eq('id', scheduleId)
+    .maybeSingle();
+
+  if (
+    schedCheckErr ||
+    !currentScheduleCheck ||
+    currentScheduleCheck.validated_at !== claimedValidatedAt ||
+    currentScheduleCheck.status !== 'validated'
+  ) {
+    return {
+      storyId,
+      scheduleId,
+      passed: false,
+      outcome: 'skipped',
+      checks: [{
+        name: 'lease_lost_pre_persistence',
+        passed: false,
+        reason: 'Schedule claim lease was preempted or lost prior to persistence',
+      }],
+      checkedAt: now.toISOString(),
+      triggeredBy: 'cron',
+    };
+  }
+
+  const storyVersionToUse = typeof (latestStoryRow as { version?: number }).version === 'number'
+    ? (latestStoryRow as { version?: number }).version!
+    : expectedVersion;
+
+  // 1. PERSISTENCE PHASE (OCC fenced)
   try {
-    await repo.saveStory(
-      {
-        ...decision.updatedStory!,
-        status: 'published',
-        publicationStatus: 'published',
-        publishedAt,
-        updatedAt: publishedAt,
-      },
-      { publicationToken: decision.publicationToken }
-    );
+    if (typeof repo.saveStoryOCC === 'function') {
+      await repo.saveStoryOCC(
+        {
+          ...decision.updatedStory!,
+          status: 'published',
+          publicationStatus: 'published',
+          publishedAt,
+          updatedAt: publishedAt,
+        },
+        storyVersionToUse,
+        { publicationToken: decision.publicationToken }
+      );
+    } else {
+      await repo.saveStory(
+        {
+          ...decision.updatedStory!,
+          status: 'published',
+          publicationStatus: 'published',
+          publishedAt,
+          updatedAt: publishedAt,
+        },
+        {
+          publicationToken: decision.publicationToken,
+          expectedVersion: storyVersionToUse,
+        } as never
+      );
+    }
   } catch (_publishErr) {
     // Failure before persistence: story was not published
     result.passed = false;
@@ -403,15 +571,20 @@ async function validateAndPublishEntry(
     });
     await logGateResult(result);
 
-    await db
-      .from('editorial_schedule')
-      .update({
-        status: 'blocked',
-        block_reason: 'Repository rejected publication persistence',
-        blocked_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      } as never)
-      .eq('id', scheduleId);
+    const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+    if (!isLeaseExpired) {
+      await db
+        .from('editorial_schedule')
+        .update({
+          status: 'blocked',
+          block_reason: 'Repository rejected publication persistence',
+          blocked_at: now.toISOString(),
+          updated_at: now.toISOString(),
+        } as never)
+        .eq('id', scheduleId)
+        .eq('status', 'validated')
+        .eq('validated_at', claimedValidatedAt);
+    }
 
     return result;
   }
@@ -429,8 +602,8 @@ async function validateAndPublishEntry(
   result.correlationId = correlationId;
 
   try {
-    const postEffectsRes = executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
-    if (postEffectsRes && (!postEffectsRes.eventBusEmitted || postEffectsRes.errorCategory)) {
+    const postEffectsRes = await executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
+    if (postEffectsRes && (!postEffectsRes.eventBusEmitted || postEffectsRes.revalidationStatus === 'failed' || postEffectsRes.errorCategory)) {
       result.postPublicationError = true;
       result.postPublicationErrorCategory = postEffectsRes.errorCategory || 'POST_PUBLICATION_EFFECTS_FAILED';
     }
@@ -457,7 +630,8 @@ async function validateAndPublishEntry(
         updated_at: publishedAt,
       } as never)
       .eq('id', scheduleId)
-      .eq('status', 'validated');
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt);
     if (schedUpdateError) throw schedUpdateError;
   } catch (_schedErr) {
     result.postPublicationError = true;
