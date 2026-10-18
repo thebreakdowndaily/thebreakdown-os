@@ -328,6 +328,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       {
         storyId: 'story-passed-checks',
         passed: true,
+        outcome: 'published',
         checks: [
           { name: 'editorial_approval', passed: true, reason: 'Approved' },
           { name: 'fact_check', passed: true, reason: 'Verified' },
@@ -339,6 +340,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       {
         storyId: 'story-blocked-fact-check',
         passed: false,
+        outcome: 'blocked',
         checks: [
           { name: 'editorial_approval', passed: true, reason: 'Approved' },
           { name: 'fact_check', passed: false, reason: 'Pending senior fact check' },
@@ -377,6 +379,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       {
         storyId: 'story-new-pub',
         passed: true,
+        outcome: 'published',
         checks: [
           { name: 'editorial_approval', passed: true, reason: 'Approved' },
           { name: 'fact_check', passed: true, reason: 'Verified' },
@@ -387,6 +390,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       {
         storyId: 'story-prior-pub',
         passed: true,
+        outcome: 'already_published',
         checks: [
           { name: 'already_published', passed: true, reason: 'Story is already published — skipping' },
         ],
@@ -396,6 +400,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       {
         storyId: 'story-gate-blocked',
         passed: false,
+        outcome: 'blocked',
         checks: [
           { name: 'fact_check', passed: false, reason: 'Senior editor verification pending' },
         ],
@@ -405,6 +410,7 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       {
         storyId: 'story-worker-skipped',
         passed: false,
+        outcome: 'skipped',
         checks: [
           { name: 'already_claimed', passed: false, reason: 'Claimed by another concurrent worker' },
         ],
@@ -458,6 +464,55 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       checksCount: 1,
       failedChecks: ['already_claimed'],
     });
+  });
+
+  it('never counts a result with passed: true and passing checks as newly published if outcome is missing', async () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-missing-explicit-outcome',
+        passed: true,
+        outcome: undefined,
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+          { name: 'evidence_vault', passed: true, reason: 'Vault archived' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.totalChecked).toBe(1);
+    expect(body.published).toBe(0);          // NEVER counted as newly published
+    expect(body.alreadyPublished).toBe(0);
+    expect(body.blocked).toBe(1);            // Fails closed to blocked
+    expect(body.skipped).toBe(0);
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+    expect(body.results[0].outcome).toBe('blocked');
+
+    // Emitted a safe diagnostic
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const loggedJson = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(loggedJson).toMatchObject({
+      event: 'editorial.publish_due.unknown_outcome',
+      storyId: 'story-missing-explicit-outcome',
+      passed: true,
+      outcome: null,
+      classification: 'blocked',
+    });
+
+    consoleWarnSpy.mockRestore();
   });
 
   it('suppresses sensitive database credentials and connection strings from both response and server logs', async () => {
@@ -618,6 +673,8 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
   });
 
   it('refuses to classify story as published if passed is true but checks have failure', async () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.mocked(validateAndPublishDueStories).mockResolvedValue([
       {
         storyId: 'story-corrupted-passed-flag',
@@ -642,6 +699,8 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
     expect(body.published).toBe(0);
     expect(body.blocked).toBe(1);
     expect(body.results[0].outcome).toBe('blocked');
+
+    consoleWarnSpy.mockRestore();
   });
 });
 

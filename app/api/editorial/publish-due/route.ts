@@ -41,14 +41,22 @@ function classifyGateResult(result: PublicationGateResult): EditorialPublishOutc
   ) {
     return 'published';
   }
-  if (
-    !result.outcome &&
-    result.passed === true &&
-    result.checks.length > 0 &&
-    !result.checks.some(c => !c.passed)
-  ) {
-    return 'published';
+  if (result.outcome === 'blocked') {
+    return 'blocked';
   }
+
+  // Fail closed for unknown, missing, or unverified outcomes and emit safe diagnostic
+  console.warn(
+    JSON.stringify({
+      event: 'editorial.publish_due.unknown_outcome',
+      storyId: result.storyId,
+      scheduleId: result.scheduleId,
+      passed: result.passed,
+      outcome: result.outcome ?? null,
+      classification: 'blocked',
+      timestamp: new Date().toISOString(),
+    }),
+  );
   return 'blocked';
 }
 
