@@ -719,78 +719,168 @@ async function validateAndPublishEntry(
     return idempotentResult;
   }
 
-  // Re-verify schedule lease immediately before persistence
-  const { data: currentScheduleCheck, error: schedCheckErr } = await db
-    .from('editorial_schedule')
-    .select('status, validated_at')
-    .eq('id', scheduleId)
-    .maybeSingle();
-
-  if (
-    schedCheckErr ||
-    !currentScheduleCheck ||
-    currentScheduleCheck.validated_at !== claimedValidatedAt ||
-    currentScheduleCheck.status !== 'validated'
-  ) {
-    console.warn(
+  // 1. ATOMIC PERSISTENCE PHASE (Fenced cross-table transaction)
+  // Scheduled publishing requires atomic cross-table fencing. If the repository
+  // does not support publishScheduledStoryAtomic, fail closed without fallback.
+  if (typeof repo.publishScheduledStoryAtomic !== 'function') {
+    console.error(
       JSON.stringify({
-        event: 'editorial.schedule.lease_lost',
+        event: 'editorial.schedule.atomic_persistence_unavailable',
         storyId,
         scheduleId,
-        category: 'SCHEDULE_LEASE_LOST',
+        category: 'ATOMIC_PERSISTENCE_UNAVAILABLE',
         timestamp: now.toISOString(),
       }),
     );
-    return {
-      storyId,
-      scheduleId,
+
+    const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+    if (!isLeaseExpired) {
+      await db
+        .from('editorial_schedule')
+        .update({
+          status: 'blocked',
+          block_reason: 'Repository does not support atomic scheduled publication fencing',
+          blocked_at: now.toISOString(),
+          updated_at: now.toISOString(),
+        } as never)
+        .eq('id', scheduleId)
+        .eq('status', 'validated')
+        .eq('validated_at', claimedValidatedAt);
+    }
+
+    result.passed = false;
+    result.outcome = 'blocked';
+    result.checks.push({
+      name: 'atomic_persistence_unavailable',
       passed: false,
-      outcome: 'skipped',
-      checks: [{
-        name: 'lease_lost_pre_persistence',
-        passed: false,
-        reason: 'SCHEDULE_LEASE_LOST',
-      }],
-      checkedAt: now.toISOString(),
-      triggeredBy: 'cron',
+      reason: 'Repository does not support atomic scheduled publication fencing',
+    });
+    await logGateResult(result);
+    return result;
+  }
+
+  let atomicRes: import('@/services/interfaces/story').PublishScheduledStoryAtomicResult;
+  try {
+    atomicRes = await repo.publishScheduledStoryAtomic({
+      scheduleId,
+      storyId,
+      expectedValidatedAt: claimedValidatedAt,
+      expectedVersion,
+      publishedStory: decision.updatedStory!,
+      publicationToken: decision.publicationToken,
+      publishedAt,
+      updatedBy: schedulerPrincipal.userId,
+    });
+  } catch (atomicErr: any) {
+    atomicRes = {
+      success: false,
+      code: 'DATABASE_ERROR',
+      error: atomicErr?.message || String(atomicErr),
     };
   }
 
-  const storyVersionToUse = typeof (latestStoryRow as { version?: number }).version === 'number'
-    ? (latestStoryRow as { version?: number }).version!
-    : expectedVersion;
-
-  // 1. PERSISTENCE PHASE (OCC fenced)
-  try {
-    if (typeof repo.saveStoryOCC === 'function') {
-      await repo.saveStoryOCC(
-        {
-          ...decision.updatedStory!,
-          status: 'published',
-          publicationStatus: 'published',
-          publishedAt,
-          updatedAt: publishedAt,
-        },
-        storyVersionToUse,
-        { publicationToken: decision.publicationToken }
+  if (!atomicRes.success) {
+    if (
+      atomicRes.code === 'SCHEDULE_LEASE_LOST' ||
+      atomicRes.code === 'SCHEDULE_NOT_VALIDATED' ||
+      atomicRes.code === 'SCHEDULE_LEASE_EXPIRED'
+    ) {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: atomicRes.code,
+          timestamp: now.toISOString(),
+        }),
       );
-    } else {
-      await repo.saveStory(
-        {
-          ...decision.updatedStory!,
-          status: 'published',
-          publicationStatus: 'published',
-          publishedAt,
-          updatedAt: publishedAt,
-        },
-        {
-          publicationToken: decision.publicationToken,
-          expectedVersion: storyVersionToUse,
-        } as never
-      );
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: atomicRes.code,
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
     }
-  } catch (_publishErr) {
-    // Failure before persistence: story was not published
+
+    if (atomicRes.code === 'ALREADY_PUBLISHED') {
+      const idempotentResult: PublicationGateResult = {
+        storyId,
+        scheduleId,
+        passed: true,
+        outcome: 'already_published',
+        checks: [{
+          name: 'already_published',
+          passed: true,
+          reason: 'Story is already published in database — skipping persistence',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+        publishedAt,
+      };
+      await logGateResult(idempotentResult);
+      return idempotentResult;
+    }
+
+    if (atomicRes.code === 'STORY_VERSION_CONFLICT') {
+      const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+      if (!isLeaseExpired) {
+        await db
+          .from('editorial_schedule')
+          .update({
+            status: 'blocked',
+            block_reason: 'Story version conflict during publication',
+            blocked_at: now.toISOString(),
+            updated_at: now.toISOString(),
+          } as never)
+          .eq('id', scheduleId)
+          .eq('status', 'validated')
+          .eq('validated_at', claimedValidatedAt);
+      }
+      result.passed = false;
+      result.outcome = 'blocked';
+      result.checks.push({
+        name: 'version_conflict',
+        passed: false,
+        reason: 'Story version conflict during publication',
+      });
+      await logGateResult(result);
+      return result;
+    }
+
+    if (atomicRes.code === 'TOKEN_INVALID') {
+      const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+      if (!isLeaseExpired) {
+        await db
+          .from('editorial_schedule')
+          .update({
+            status: 'blocked',
+            block_reason: 'Invalid or missing publication token',
+            blocked_at: now.toISOString(),
+            updated_at: now.toISOString(),
+          } as never)
+          .eq('id', scheduleId)
+          .eq('status', 'validated')
+          .eq('validated_at', claimedValidatedAt);
+      }
+      result.passed = false;
+      result.outcome = 'blocked';
+      result.checks.push({
+        name: 'token_invalid',
+        passed: false,
+        reason: 'Invalid or missing publication token',
+      });
+      await logGateResult(result);
+      return result;
+    }
+
+    // Generic repository / database error
     console.error(
       JSON.stringify({
         event: 'editorial.schedule.persistence_failed',
@@ -859,20 +949,18 @@ async function validateAndPublishEntry(
     return result;
   }
 
-  // ── AT THIS POINT: PERSISTENCE SUCCEEDED!
+  // ── AT THIS POINT: ATOMIC PERSISTENCE SUCCEEDED!
+  // Both stories and editorial_schedule committed simultaneously in a single transaction.
   result.passed = true;
   result.outcome = 'published';
   result.publishedAt = publishedAt;
 
   // 2. POST-PERSISTENCE HOUSEKEEPING & POST-PUBLICATION EFFECTS:
-  // Distinguish publication persistence from subsequent housekeeping.
-  // A failure after successful publication must not falsely report that the story
-  // was never published. Preserve the error signal separately with structured diagnostics.
   const correlationId = crypto.randomUUID();
   result.correlationId = correlationId;
 
   try {
-    const postEffectsRes = await executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
+    const postEffectsRes = await executePostPublicationEffects(atomicRes.story || decision.updatedStory!, schedulerPrincipal, result);
     if (postEffectsRes && (!postEffectsRes.eventBusEmitted || postEffectsRes.revalidationStatus === 'failed' || postEffectsRes.errorCategory)) {
       result.postPublicationError = true;
       result.postPublicationErrorCategory = postEffectsRes.errorCategory || 'POST_PUBLICATION_EFFECTS_FAILED';
@@ -900,7 +988,6 @@ async function validateAndPublishEntry(
         updated_at: publishedAt,
       } as never)
       .eq('id', scheduleId)
-      .eq('status', 'validated')
       .eq('validated_at', claimedValidatedAt)
       .select('id');
 

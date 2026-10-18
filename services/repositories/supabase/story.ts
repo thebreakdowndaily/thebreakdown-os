@@ -1,6 +1,6 @@
 import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
-import type { StoryService } from '../../interfaces/story';
+import type { StoryService, PublishScheduledStoryAtomicParams, PublishScheduledStoryAtomicResult } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
@@ -101,6 +101,59 @@ export class SupabaseStoryRepository implements StoryService {
     }
 
     return rowToStory(data);
+  }
+
+  async publishScheduledStoryAtomic(
+    params: PublishScheduledStoryAtomicParams,
+  ): Promise<PublishScheduledStoryAtomicResult> {
+    if (!params.publicationToken || !consumePublicationToken(params.publicationToken, params.storyId)) {
+      return {
+        success: false,
+        code: 'TOKEN_INVALID',
+        error: `Invalid or already consumed publication token for story ${params.storyId}`,
+      };
+    }
+
+    const { data, error } = await (db() as any).rpc('fn_publish_story_fenced', {
+      p_schedule_id: params.scheduleId,
+      p_story_id: params.storyId,
+      p_expected_validated_at: params.expectedValidatedAt,
+      p_expected_version: params.expectedVersion,
+      p_published_at: params.publishedAt || new Date().toISOString(),
+      p_updated_by: params.updatedBy || 'system-scheduler',
+    });
+
+    if (error) {
+      return {
+        success: false,
+        code: 'DATABASE_ERROR',
+        error: error.message,
+      };
+    }
+
+    const rpcResult = data as { success?: boolean; code?: string; error?: string; version?: number };
+    if (!rpcResult || !rpcResult.success) {
+      return {
+        success: false,
+        code: (rpcResult?.code as any) || 'DATABASE_ERROR',
+        error: rpcResult?.error || 'Atomic publish RPC returned failure',
+      };
+    }
+
+    const updatedStory: Story = {
+      ...params.publishedStory,
+      status: 'published',
+      publicationStatus: 'published',
+      version: rpcResult.version ?? (params.expectedVersion + 1),
+      publishedAt: params.publishedAt || new Date().toISOString(),
+      updatedAt: params.publishedAt || new Date().toISOString(),
+    };
+
+    return {
+      success: true,
+      code: 'PUBLISHED',
+      story: updatedStory,
+    };
   }
 
   async deleteStory(id: string) {

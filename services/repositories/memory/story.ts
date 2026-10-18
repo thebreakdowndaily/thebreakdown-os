@@ -1,5 +1,5 @@
 import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
-import type { StoryService } from '../../interfaces/story';
+import type { StoryService, PublishScheduledStoryAtomicParams, PublishScheduledStoryAtomicResult } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 
@@ -10,6 +10,7 @@ import type { EvidenceVaultService } from '@/services/intelligence/evidence-vaul
 export class MemoryStoryService implements StoryService {
   private stories: Map<string, Story>;
   private evidenceVault?: EvidenceVaultService;
+  private schedules = new Map<string, any>();
 
   constructor(stories: Story[] = [], evidenceVault?: EvidenceVaultService) {
     this.stories = new Map(stories.map(s => [s.id, s]));
@@ -22,6 +23,10 @@ export class MemoryStoryService implements StoryService {
 
   public getEvidenceVault(): EvidenceVaultService | undefined {
     return this.evidenceVault;
+  }
+
+  public setSchedule(entry: { id: string; status: string; validated_at?: string; story_id: string; [key: string]: any }): void {
+    this.schedules.set(entry.id, { ...entry });
   }
 
   async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
@@ -88,6 +93,143 @@ export class MemoryStoryService implements StoryService {
     };
     this.stories.set(story.id, updated);
     return updated;
+  }
+
+  async publishScheduledStoryAtomic(
+    params: PublishScheduledStoryAtomicParams,
+  ): Promise<PublishScheduledStoryAtomicResult> {
+    if (!params.publicationToken || !consumePublicationToken(params.publicationToken, params.storyId)) {
+      return {
+        success: false,
+        code: 'TOKEN_INVALID',
+        error: `Invalid or already consumed publication token for story ${params.storyId}`,
+      };
+    }
+
+    // 1. Resolve and verify schedule lease entity
+    let scheduleEntry = this.schedules.get(params.scheduleId);
+    let dbClient: any = null;
+
+    if (!scheduleEntry) {
+      try {
+        const { getServiceClient } = await import('@/supabase/client');
+        dbClient = getServiceClient();
+        if (dbClient) {
+          const { data } = await dbClient
+            .from('editorial_schedule')
+            .select('*')
+            .eq('id', params.scheduleId)
+            .maybeSingle();
+          if (data) {
+            scheduleEntry = data;
+          }
+        }
+      } catch {
+        // DB client optional in disconnected memory mode
+      }
+    }
+
+    if (scheduleEntry) {
+      if (scheduleEntry.status !== 'validated') {
+        return {
+          success: false,
+          code: 'SCHEDULE_NOT_VALIDATED',
+          error: `Schedule entry status is ${scheduleEntry.status}, expected validated`,
+        };
+      }
+      if (scheduleEntry.validated_at !== params.expectedValidatedAt) {
+        return {
+          success: false,
+          code: 'SCHEDULE_LEASE_LOST',
+          error: 'Schedule lease was claimed or modified by another worker',
+        };
+      }
+      if (scheduleEntry.validated_at && Date.now() - new Date(scheduleEntry.validated_at).getTime() >= 5 * 60 * 1000) {
+        return {
+          success: false,
+          code: 'SCHEDULE_LEASE_EXPIRED',
+          error: 'Schedule lease has expired (> 5 minutes)',
+        };
+      }
+      if (scheduleEntry.story_id && scheduleEntry.story_id !== params.storyId) {
+        return {
+          success: false,
+          code: 'SCHEDULE_STORY_MISMATCH',
+          error: 'Schedule entry references a different story_id',
+        };
+      }
+    }
+
+    // 2. Resolve and verify story entity
+    const existing = this.stories.get(params.storyId);
+    if (!existing) {
+      return {
+        success: false,
+        code: 'STORY_NOT_FOUND',
+        error: `Story ${params.storyId} not found in repository`,
+      };
+    }
+
+    if (existing.status === 'published' || existing.publicationStatus === 'published') {
+      return {
+        success: false,
+        code: 'ALREADY_PUBLISHED',
+        error: 'Story is already published',
+      };
+    }
+
+    const currentVersion = existing.version ?? 1;
+    if (currentVersion !== params.expectedVersion) {
+      return {
+        success: false,
+        code: 'STORY_VERSION_CONFLICT',
+        error: `Story version conflict: expected ${params.expectedVersion}, found ${currentVersion}`,
+      };
+    }
+
+    // 3. Atomic commit: both schedule and story transition simultaneously
+    const newVersion = currentVersion + 1;
+    const publishedAt = params.publishedAt || new Date().toISOString();
+
+    const updatedStory: Story = {
+      ...params.publishedStory,
+      status: 'published',
+      publicationStatus: 'published',
+      version: newVersion,
+      publishedAt,
+      updatedAt: publishedAt,
+    };
+    this.stories.set(params.storyId, updatedStory);
+
+    if (this.schedules.has(params.scheduleId)) {
+      const s = this.schedules.get(params.scheduleId)!;
+      s.status = 'published';
+      s.published_at = publishedAt;
+      s.updated_at = publishedAt;
+    }
+
+    if (dbClient) {
+      try {
+        await dbClient
+          .from('editorial_schedule')
+          .update({
+            status: 'published',
+            published_at: publishedAt,
+            updated_at: publishedAt,
+          })
+          .eq('id', params.scheduleId)
+          .eq('status', 'validated')
+          .eq('validated_at', params.expectedValidatedAt);
+      } catch {
+        // Ignore client sync errors if DB was just a backing mock
+      }
+    }
+
+    return {
+      success: true,
+      code: 'PUBLISHED',
+      story: updatedStory,
+    };
   }
 
   async deleteStory(id: string) {
