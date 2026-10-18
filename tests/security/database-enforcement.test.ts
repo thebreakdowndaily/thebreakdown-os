@@ -478,11 +478,16 @@ async function runDirectDatabaseTests() {
     assert(authRpcBlocked, 'Authenticated user direct RPC execution fails closed with 42501 (insufficient_privilege)');
     await client.query('ROLLBACK');
 
-    // 6.5 Direct execution rejection: publisher_worker cannot call fn_publish_story_fenced
+    // 6.5 Direct execution rejection: publisher_worker and authenticator cannot call fn_publish_story_fenced
     const pubWorkerPrivRes = await client.query(`
       SELECT has_function_privilege('publisher_worker', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
     `);
     assert(pubWorkerPrivRes.rows[0].priv === false, 'publisher_worker has NO execute privilege on fn_publish_story_fenced');
+
+    const authRolePrivRes = await client.query(`
+      SELECT has_function_privilege('authenticator', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+    `);
+    assert(authRolePrivRes.rows[0].priv === false, 'authenticator has NO execute privilege on fn_publish_story_fenced');
 
     await client.query('BEGIN');
     await client.query('SET LOCAL role publisher_worker');
@@ -499,7 +504,7 @@ async function runDirectDatabaseTests() {
     assert(pubWorkerRpcBlocked, 'publisher_worker direct execution of fn_publish_story_fenced fails closed with 42501');
     await client.query('ROLLBACK');
 
-    // 6.6 Legacy RPC closure: fn_publish_story_with_audit cannot be called by untrusted roles
+    // 6.6 Legacy RPC closure: fn_publish_story_with_audit cannot be called by untrusted roles or authenticator
     const legacyAnonPriv = await client.query(`
       SELECT has_function_privilege('anon', 'public.fn_publish_story_with_audit(uuid)', 'execute') as priv;
     `);
@@ -515,6 +520,11 @@ async function runDirectDatabaseTests() {
     `);
     assert(legacyWorkerPriv.rows[0].priv === false, 'publisher_worker has NO execute privilege on legacy fn_publish_story_with_audit');
 
+    const legacyAuthenticatorPriv = await client.query(`
+      SELECT has_function_privilege('authenticator', 'public.fn_publish_story_with_audit(uuid)', 'execute') as priv;
+    `);
+    assert(legacyAuthenticatorPriv.rows[0].priv === false, 'authenticator has NO execute privilege on legacy fn_publish_story_with_audit');
+
     await client.query('BEGIN');
     await client.query('SET LOCAL role publisher_worker');
     let legacyWorkerBlocked = false;
@@ -526,11 +536,16 @@ async function runDirectDatabaseTests() {
     assert(legacyWorkerBlocked, 'publisher_worker calling legacy fn_publish_story_with_audit fails closed with 42501');
     await client.query('ROLLBACK');
 
-    // 6.7 Legacy claiming RPC closure: fn_claim_due_schedule_entry cannot be called by publisher_worker
+    // 6.7 Legacy claiming RPC closure: fn_claim_due_schedule_entry cannot be called by untrusted roles
     const claimWorkerPriv = await client.query(`
       SELECT has_function_privilege('publisher_worker', 'public.fn_claim_due_schedule_entry()', 'execute') as priv;
     `);
     assert(claimWorkerPriv.rows[0].priv === false, 'publisher_worker has NO execute privilege on legacy fn_claim_due_schedule_entry');
+
+    const claimAuthenticatorPriv = await client.query(`
+      SELECT has_function_privilege('authenticator', 'public.fn_claim_due_schedule_entry()', 'execute') as priv;
+    `);
+    assert(claimAuthenticatorPriv.rows[0].priv === false, 'authenticator has NO execute privilege on legacy fn_claim_due_schedule_entry');
 
     await client.query('BEGIN');
     await client.query('SET LOCAL role publisher_worker');
@@ -584,6 +599,9 @@ async function runDirectDatabaseTests() {
     assert(resultA.code === 'PUBLISHED', 'Result code is PUBLISHED');
     assert(resultA.version === 2, 'Story version incremented authoritatively to 2 by trigger');
     assert(resultA.status === 'published', 'Returned status is published');
+    assert(resultA.updated_by === '00000000-0000-0000-0000-000000000001', 'RPC JSON updated_by returns persisted UUID');
+    assert(resultA.actor === 'system-scheduler', 'RPC JSON actor returns logical scheduler label');
+    assert(resultA.scheduled_by === 'system-scheduler', 'RPC JSON scheduled_by returns persisted label');
 
     // Verify persisted database rows
     const verifyStoryA = await client.query(`SELECT status, version, updated_by, scheduled_by FROM public.stories WHERE id = '${storyAId}'`);
@@ -830,7 +848,7 @@ async function runDirectDatabaseTests() {
     assert(resultJustValid.success === true, 'Lease at 4m59s is within 5-minute lease and succeeds');
     assert(resultJustValid.code === 'PUBLISHED', 'Result code is PUBLISHED');
 
-    // 7.8 Lock Wait Crosses Expiry (Real independent PostgreSQL session)
+    // 7.8 Lock Wait Crosses Expiry (Real independent PostgreSQL session with transaction-scoped service_role)
     const storyLockWaitId = '77777777-0000-0000-0000-000000000040';
     const schedLockWaitId = '77777777-0000-0000-0000-000000000041';
 
@@ -847,13 +865,19 @@ async function runDirectDatabaseTests() {
     `)).rows[0];
     const lockWaitTime = lockWaitRow.validated_at_text;
 
+    // Client 1 opens a transaction and acquires the exclusive row lock on the schedule record
     await client.query('BEGIN');
     await client.query(`SELECT id FROM public.editorial_schedule WHERE id = '${schedLockWaitId}' FOR UPDATE;`);
 
+    // Client 2 connects as an independent PostgreSQL session
     const client2 = pg.getPgClient();
     await client2.connect();
-    await actAs(client2, 'service_role', {});
 
+    // Client 2 opens an explicit transaction and sets role to service_role WITHIN this transaction
+    await client2.query('BEGIN');
+    await actAs(client2, 'service_role', { sub: '00000000-0000-0000-0000-000000000001' });
+
+    // Client 2 launches fn_publish_story_fenced inside its transaction (blocks waiting for Client 1)
     const client2Promise = client2.query(`
       SELECT public.fn_publish_story_fenced(
         '${schedLockWaitId}'::UUID,
@@ -865,13 +889,31 @@ async function runDirectDatabaseTests() {
       ) as result;
     `);
 
+    // Observable bounded synchronization: verify that client2 is actively waiting on the lock in pg_locks
+    let lockWaitObserved = false;
+    for (let i = 0; i < 20; i++) {
+      const lockCheck = await client.query(`
+        SELECT count(*) as waiting_locks
+        FROM pg_locks
+        WHERE NOT granted;
+      `);
+      if (Number(lockCheck.rows[0].waiting_locks) > 0) {
+        lockWaitObserved = true;
+        break;
+      }
+      await new Promise(r => setTimeout(r, 50));
+    }
+    assert(lockWaitObserved, 'Client 2 is confirmed waiting on schedule row lock in pg_locks');
+
     // Wait 3 seconds so clock_timestamp() advances past the 5-minute threshold
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    // Client 1 releases the lock
+    // Client 1 releases the lock by rolling back
     await client.query('ROLLBACK');
 
+    // Client 2 unblocks, acquires lock, evaluates lease expiry, and returns
     const client2Res = await client2Promise;
+    await client2.query('COMMIT');
     await client2.end();
 
     const resultLockWait = client2Res.rows[0].result;
@@ -987,6 +1029,248 @@ async function runDirectDatabaseTests() {
 
     const verifyStoryVersion = await client.query(`SELECT version FROM public.stories WHERE id = '${storyVersionCheckId}'`);
     assert(verifyStoryVersion.rows[0].version === 6, 'Persisted database version is authoritatively 6');
+
+    // 7.11 published_at Contract: Draft with no prior timestamp receives publication instant
+    const storyNoTsId = '77777777-0000-0000-0000-000000000070';
+    const schedNoTsId = '77777777-0000-0000-0000-000000000071';
+    const leaseNoTs = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyNoTsId}', 'no-ts-story', 'No Prior TS Story', 'draft', 1, NULL, false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = NULL, is_test_artifact = false;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedNoTsId}', '${storyNoTsId}', '2026-10-26', 1, 'validated', '${leaseNoTs}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNoTs}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResNoTs = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedNoTsId}'::UUID,
+        '${storyNoTsId}'::UUID,
+        '${leaseNoTs}'::TIMESTAMPTZ,
+        1,
+        '2026-10-18T12:00:00.000Z'::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultNoTs = publishResNoTs.rows[0].result;
+    assert(resultNoTs.success === true, 'Publication of story without prior published_at succeeds');
+    assert(new Date(resultNoTs.published_at).toISOString() === '2026-10-18T12:00:00.000Z', 'Published_at assigned transaction publish time');
+
+    const verifyPublicNoTs = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyNoTsId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicNoTs.rows.length === 1, 'Story with freshly assigned published_at satisfies public read predicate');
+
+    // 7.12 published_at Contract: Preserves non-null historical timestamp
+    const storyHistId = '77777777-0000-0000-0000-000000000080';
+    const schedHistId = '77777777-0000-0000-0000-000000000081';
+    const leaseHist = new Date().toISOString();
+    const historicalTime = '2024-05-10T10:00:00.000Z';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyHistId}', 'hist-story', 'Historical Story', 'draft', 1, '${historicalTime}', false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = '${historicalTime}', is_test_artifact = false;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedHistId}', '${storyHistId}', '2026-10-27', 1, 'validated', '${leaseHist}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseHist}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResHist = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedHistId}'::UUID,
+        '${storyHistId}'::UUID,
+        '${leaseHist}'::TIMESTAMPTZ,
+        1,
+        '2026-10-18T14:00:00.000Z'::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultHist = publishResHist.rows[0].result;
+    assert(resultHist.success === true, 'Publication of story with historical timestamp succeeds');
+    assert(new Date(resultHist.published_at).toISOString() === historicalTime, 'Historical published_at is strictly preserved');
+    assert(new Date(resultHist.updated_at).getTime() > new Date(historicalTime).getTime(), 'Updated_at is current and distinct from historical published_at');
+    assert(new Date(resultHist.schedule_published_at).toISOString() === historicalTime, 'Editorial schedule published_at aligns with historical story date');
+
+    const verifyPublicHist = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyHistId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicHist.rows.length === 1, 'Historical published story satisfies public query predicate');
+
+    // 7.13 published_at Contract: Normalizes future timestamp to transaction publish time
+    const storyFutureId = '77777777-0000-0000-0000-000000000090';
+    const schedFutureId = '77777777-0000-0000-0000-000000000091';
+    const leaseFuture = new Date().toISOString();
+    const futureTime = '2030-01-01T00:00:00.000Z';
+    const txPublishTime = '2026-10-18T15:00:00.000Z';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyFutureId}', 'future-story', 'Future Story', 'draft', 1, '${futureTime}', false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = '${futureTime}', is_test_artifact = false;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedFutureId}', '${storyFutureId}', '2026-10-28', 1, 'validated', '${leaseFuture}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseFuture}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResFuture = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedFutureId}'::UUID,
+        '${storyFutureId}'::UUID,
+        '${leaseFuture}'::TIMESTAMPTZ,
+        1,
+        '${txPublishTime}'::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultFuture = publishResFuture.rows[0].result;
+    assert(resultFuture.success === true, 'Publication of story with future timestamp succeeds');
+    assert(new Date(resultFuture.published_at).toISOString() === txPublishTime, 'Future timestamp normalized to transaction publish time');
+
+    const verifyPublicFuture = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyFutureId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicFuture.rows.length === 1, 'Normalized story is immediately visible to public queries (not hidden in future)');
+
+    // 7.14 Principal & Scheduler Attribution Contract: UUID storage vs Actor Label
+    const storyAttrId = '77777777-0000-0000-0000-000000000100';
+    const schedAttrId = '77777777-0000-0000-0000-000000000101';
+    const leaseAttr = new Date().toISOString();
+    const editorUuid = '11111111-2222-3333-4444-555555555555';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyAttrId}', 'attr-story', 'Attribution Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedAttrId}', '${storyAttrId}', '2026-10-29', 1, 'validated', '${leaseAttr}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseAttr}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResAttr = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedAttrId}'::UUID,
+        '${storyAttrId}'::UUID,
+        '${leaseAttr}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        '${editorUuid}'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultAttr = publishResAttr.rows[0].result;
+    assert(resultAttr.success === true, 'Publication with editor UUID succeeds');
+    assert(resultAttr.updated_by === editorUuid, 'RPC JSON updated_by returns editor UUID');
+    assert(resultAttr.actor === editorUuid, 'RPC JSON actor returns editor UUID');
+    assert(resultAttr.scheduled_by === editorUuid, 'RPC JSON scheduled_by returns editor UUID');
+
+    const verifyStoryAttr = await client.query(`SELECT updated_by, scheduled_by FROM public.stories WHERE id = '${storyAttrId}'`);
+    assert(verifyStoryAttr.rows[0].updated_by === editorUuid, 'Database persisted updated_by matches editor UUID column');
+    assert(verifyStoryAttr.rows[0].scheduled_by === editorUuid, 'Database persisted scheduled_by matches editor UUID label');
+
+    // Untrusted arbitrary string attribution fails safe (does NOT map to trusted user)
+    const storyMalId = '77777777-0000-0000-0000-000000000110';
+    const schedMalId = '77777777-0000-0000-0000-000000000111';
+    const leaseMal = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyMalId}', 'mal-story', 'Malformed Attribution Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedMalId}', '${storyMalId}', '2026-10-30', 1, 'validated', '${leaseMal}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseMal}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResMal = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedMalId}'::UUID,
+        '${storyMalId}'::UUID,
+        '${leaseMal}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'untrusted-actor-label'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultMal = publishResMal.rows[0].result;
+    assert(resultMal.success === true, 'Publication with non-UUID actor succeeds');
+    assert(resultMal.updated_by === null, 'Non-UUID input does not map to any trusted UUID (updated_by is null)');
+    assert(resultMal.actor === 'untrusted-actor-label', 'Logical actor label preserved in actor field');
+    assert(resultMal.scheduled_by === 'untrusted-actor-label', 'Persisted scheduled_by records non-UUID label');
+
+    const verifyStoryMal = await client.query(`SELECT updated_by, scheduled_by FROM public.stories WHERE id = '${storyMalId}'`);
+    assert(verifyStoryMal.rows[0].updated_by === null, 'Database persisted updated_by is NULL for untrusted string');
+    assert(verifyStoryMal.rows[0].scheduled_by === 'untrusted-actor-label', 'Database persisted scheduled_by stores label');
+
+    // 7.15 Complete Effective Privilege Matrix across all 5 roles
+    const roles = ['anon', 'authenticated', 'publisher_worker', 'authenticator', 'service_role'] as const;
+    const fencedFp = 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)';
+    const auditFp = 'public.fn_publish_story_with_audit(uuid)';
+    const claimFp = 'public.fn_claim_due_schedule_entry()';
+
+    for (const r of roles) {
+      const fencedRes = await client.query(`SELECT has_function_privilege('${r}', '${fencedFp}', 'execute') as p;`);
+      const auditRes = await client.query(`SELECT has_function_privilege('${r}', '${auditFp}', 'execute') as p;`);
+      const claimRes = await client.query(`SELECT has_function_privilege('${r}', '${claimFp}', 'execute') as p;`);
+
+      if (r === 'service_role') {
+        assert(fencedRes.rows[0].p === true, `service_role HAS execute on ${fencedFp}`);
+        assert(auditRes.rows[0].p === false, `service_role has NO execute on legacy ${auditFp}`);
+        assert(claimRes.rows[0].p === false, `service_role has NO execute on legacy ${claimFp}`);
+      } else {
+        assert(fencedRes.rows[0].p === false, `${r} has NO execute on ${fencedFp}`);
+        assert(auditRes.rows[0].p === false, `${r} has NO execute on legacy ${auditFp}`);
+        assert(claimRes.rows[0].p === false, `${r} has NO execute on legacy ${claimFp}`);
+      }
+    }
 
     // ─────────────────────────────────────────────────────────────────
     // Summary

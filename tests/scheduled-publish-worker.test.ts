@@ -3775,5 +3775,237 @@ describe('Phase 37: Post-Commit Application Behavior & Schedule Immutability', (
   });
 });
 
+describe('Phase 38: Authoritative publication result, contract fidelity, and post-publication effects', () => {
+  const ROUTE_SECRET = ['route', 'auth', 'fixture', 'phase38'].join('-');
+  const originalEnvSecret = process.env.CRON_SECRET;
+  let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
+
+  beforeEach(async () => {
+    process.env.CRON_SECRET = ROUTE_SECRET;
+    vi.resetAllMocks();
+    setupDefaultMockRepository();
+    const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
+  });
+
+  afterEach(() => {
+    process.env.CRON_SECRET = originalEnvSecret;
+    setServiceClient(null);
+  });
+
+  it('Test 1: result.publishedAt and post-publication effects use exact authoritative database-committed story', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-p38-authoritative', story_id: 'story-p38-authoritative', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-p38-authoritative', slug: 'story-p38-authoritative', title: 'Authoritative Story', status: 'ready', version: 1 },
+    ];
+
+    const { mockDb, logsStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    const committedPublishedAt = '2026-10-18T11:45:00.000Z';
+    const committedVersion = 7;
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-token-p38',
+      updatedStory: { id: 'story-p38-authoritative', slug: 'story-p38-authoritative', title: 'Authoritative Story' },
+    });
+
+    // Mock publishScheduledStoryAtomic to return a distinct committed version and publishedAt
+    mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+      success: true,
+      code: 'PUBLISHED',
+      story: {
+        id: 'story-p38-authoritative',
+        slug: 'story-p38-authoritative',
+        title: 'Authoritative Story',
+        status: 'published',
+        publicationStatus: 'published',
+        version: committedVersion,
+        publishedAt: committedPublishedAt,
+      },
+    });
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    const r = results[0];
+    expect(r.passed).toBe(true);
+    expect(r.outcome).toBe('published');
+    // Result matches authoritative timestamp exactly
+    expect(r.publishedAt).toBe(committedPublishedAt);
+
+    // executePostPublicationEffects received exact authoritative story with database version & publishedAt
+    expect(mockExecutePostPublicationEffects).toHaveBeenCalledTimes(1);
+    expect(mockExecutePostPublicationEffects).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'story-p38-authoritative',
+        version: committedVersion,
+        publishedAt: committedPublishedAt,
+      }),
+      expect.anything(),
+      expect.anything(),
+    );
+
+    // publication_gate_log recorded authoritative timestamp
+    const gateLog = logsStore.find((l: any) => l.story_id === 'story-p38-authoritative' && l.gate_result === 'pass');
+    expect(gateLog).toBeDefined();
+    expect(gateLog.published_at).toBe(committedPublishedAt);
+  });
+
+  it('Test 2: Contract violation — missing story in atomic success blocks publication and records contract error', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-p38-missing-story', story_id: 'story-p38-missing-story', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-p38-missing-story', slug: 'story-p38-missing-story', title: 'Missing Story Test', status: 'ready', version: 1 },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-token-p38-missing',
+      updatedStory: { id: 'story-p38-missing-story', slug: 'story-p38-missing-story', title: 'Missing Story Test' },
+    });
+
+    // Atomic success returns true but omits story
+    mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+      success: true,
+      code: 'PUBLISHED',
+      // story omitted!
+    });
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      const results = await realValidateAndPublishDueStories(new Date());
+
+      expect(results).toHaveLength(1);
+      const r = results[0];
+      expect(r.passed).toBe(false);
+      expect(r.outcome).toBe('blocked');
+      expect(r.checks).toContainEqual(
+        expect.objectContaining({
+          name: 'authoritative_contract',
+          passed: false,
+          reason: 'Atomic publish succeeded but omitted authoritative committed story object or required fields',
+        })
+      );
+
+      // Post publication effects are NOT invoked
+      expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
+  });
+
+  it('Test 3: Contract violation — missing publishedAt in atomic result story blocks publication', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-p38-missing-pubat', story_id: 'story-p38-missing-pubat', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-p38-missing-pubat', slug: 'story-p38-missing-pubat', title: 'Missing PubAt Test', status: 'ready', version: 1 },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-token-p38-pubat',
+      updatedStory: { id: 'story-p38-missing-pubat', slug: 'story-p38-missing-pubat', title: 'Missing PubAt Test' },
+    });
+
+    mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+      success: true,
+      code: 'PUBLISHED',
+      story: {
+        id: 'story-p38-missing-pubat',
+        version: 2,
+        // publishedAt missing!
+      } as any,
+    });
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      const results = await realValidateAndPublishDueStories(new Date());
+
+      expect(results).toHaveLength(1);
+      const r = results[0];
+      expect(r.passed).toBe(false);
+      expect(r.outcome).toBe('blocked');
+      expect(r.checks).toContainEqual(
+        expect.objectContaining({
+          name: 'authoritative_contract',
+          passed: false,
+          reason: 'Atomic publish succeeded but omitted authoritative committed story object or required fields',
+        })
+      );
+      expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
+  });
+
+  it('Test 4: Contract violation — invalid story version in atomic result blocks publication', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-p38-invalid-ver', story_id: 'story-p38-invalid-ver', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-p38-invalid-ver', slug: 'story-p38-invalid-ver', title: 'Invalid Ver Test', status: 'ready', version: 1 },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-token-p38-ver',
+      updatedStory: { id: 'story-p38-invalid-ver', slug: 'story-p38-invalid-ver', title: 'Invalid Ver Test' },
+    });
+
+    mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+      success: true,
+      code: 'PUBLISHED',
+      story: {
+        id: 'story-p38-invalid-ver',
+        publishedAt: new Date().toISOString(),
+        version: 'two' as any, // non-number version!
+      } as any,
+    });
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      const results = await realValidateAndPublishDueStories(new Date());
+
+      expect(results).toHaveLength(1);
+      const r = results[0];
+      expect(r.passed).toBe(false);
+      expect(r.outcome).toBe('blocked');
+      expect(r.checks).toContainEqual(
+        expect.objectContaining({
+          name: 'authoritative_contract',
+          passed: false,
+          reason: 'Atomic publish succeeded but omitted authoritative committed story object or required fields',
+        })
+      );
+      expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
+  });
+});
+
+
 
 

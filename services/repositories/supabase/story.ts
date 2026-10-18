@@ -141,6 +141,8 @@ export class SupabaseStoryRepository implements StoryService {
       published_at?: string;
       updated_at?: string;
       updated_by?: string;
+      actor?: string;
+      scheduled_by?: string;
     };
     if (!rpcResult || !rpcResult.success) {
       return {
@@ -169,13 +171,15 @@ export class SupabaseStoryRepository implements StoryService {
       version: rpcResult.version,
       publishedAt: rpcResult.published_at,
       updatedAt: rpcResult.updated_at,
-      updatedBy: rpcResult.updated_by || params.updatedBy || 'system-scheduler',
+      updatedBy: rpcResult.updated_by || undefined,
     };
 
     return {
       success: true,
       code: 'PUBLISHED',
       story: updatedStory,
+      actor: rpcResult.actor,
+      scheduledBy: rpcResult.scheduled_by,
     };
   }
 

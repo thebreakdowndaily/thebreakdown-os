@@ -958,16 +958,38 @@ async function validateAndPublishEntry(
 
   // ── AT THIS POINT: ATOMIC PERSISTENCE SUCCEEDED!
   // Both stories and editorial_schedule committed simultaneously in a single transaction.
+  if (!atomicRes.story || !atomicRes.story.publishedAt || typeof atomicRes.story.version !== 'number') {
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.atomic_contract_violation',
+        storyId,
+        scheduleId,
+        category: 'CONTRACT_VIOLATION_MISSING_AUTHORITATIVE_STORY',
+        timestamp: now.toISOString(),
+      }),
+    );
+    result.passed = false;
+    result.outcome = 'blocked';
+    result.checks.push({
+      name: 'authoritative_contract',
+      passed: false,
+      reason: 'Atomic publish succeeded but omitted authoritative committed story object or required fields',
+    });
+    await logGateResult(result);
+    return result;
+  }
+
+  const authoritativeStory = atomicRes.story;
   result.passed = true;
   result.outcome = 'published';
-  result.publishedAt = publishedAt;
+  result.publishedAt = authoritativeStory.publishedAt;
 
   // 2. POST-PERSISTENCE HOUSEKEEPING & POST-PUBLICATION EFFECTS:
   const correlationId = crypto.randomUUID();
   result.correlationId = correlationId;
 
   try {
-    const postEffectsRes = await executePostPublicationEffects(atomicRes.story || decision.updatedStory!, schedulerPrincipal, result);
+    const postEffectsRes = await executePostPublicationEffects(authoritativeStory, schedulerPrincipal, result);
     if (postEffectsRes && (!postEffectsRes.eventBusEmitted || postEffectsRes.revalidationStatus === 'failed' || postEffectsRes.errorCategory)) {
       result.postPublicationError = true;
       result.postPublicationErrorCategory = postEffectsRes.errorCategory || 'POST_PUBLICATION_EFFECTS_FAILED';

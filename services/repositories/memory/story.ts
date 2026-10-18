@@ -189,7 +189,18 @@ export class MemoryStoryService implements StoryService {
 
     // 3. Atomic commit: both schedule and story transition simultaneously
     const newVersion = currentVersion + 1;
-    const publishedAt = params.publishedAt || new Date().toISOString();
+    const nowIso = new Date().toISOString();
+    // published_at contract: preserve historical past date; clamp future date or null to now
+    const existingPublishedAt = existing.publishedAt;
+    const publishedAt = (existingPublishedAt && existingPublishedAt <= nowIso)
+      ? existingPublishedAt
+      : (params.publishedAt && params.publishedAt <= nowIso ? params.publishedAt : nowIso);
+
+    const updatedByUuid = params.updatedBy === 'system-scheduler'
+      ? '00000000-0000-0000-0000-000000000001'
+      : (params.updatedBy && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(params.updatedBy)
+          ? params.updatedBy
+          : '00000000-0000-0000-0000-000000000001');
 
     const updatedStory: Story = {
       ...params.publishedStory,
@@ -197,8 +208,8 @@ export class MemoryStoryService implements StoryService {
       publicationStatus: 'published',
       version: newVersion,
       publishedAt,
-      updatedAt: publishedAt,
-      updatedBy: params.updatedBy || 'system-scheduler',
+      updatedAt: nowIso,
+      updatedBy: updatedByUuid,
     };
     this.stories.set(params.storyId, updatedStory);
 
@@ -206,7 +217,7 @@ export class MemoryStoryService implements StoryService {
       const s = this.schedules.get(params.scheduleId)!;
       s.status = 'published';
       s.published_at = publishedAt;
-      s.updated_at = publishedAt;
+      s.updated_at = nowIso;
     }
 
     if (dbClient) {
@@ -216,7 +227,7 @@ export class MemoryStoryService implements StoryService {
           .update({
             status: 'published',
             published_at: publishedAt,
-            updated_at: publishedAt,
+            updated_at: nowIso,
           })
           .eq('id', params.scheduleId)
           .eq('status', 'validated')
@@ -230,6 +241,8 @@ export class MemoryStoryService implements StoryService {
       success: true,
       code: 'PUBLISHED',
       story: updatedStory,
+      actor: params.updatedBy || 'system-scheduler',
+      scheduledBy: params.updatedBy || 'system-scheduler',
     };
   }
 
