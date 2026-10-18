@@ -20,43 +20,112 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAndPublishDueStories } from '@/services/editorial/schedule';
-import type { EditorialPublishOutcome, PostPublicationErrorCategory, PublicationGateResult } from '@/types/editorial-calendar';
+import {
+  RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES,
+  type EditorialPublishOutcome,
+  type PostPublicationErrorCategory,
+  type PublicationGateResult,
+} from '@/types/editorial-calendar';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 export type { EditorialPublishOutcome, PostPublicationErrorCategory };
 
-function classifyGateResult(result: PublicationGateResult): EditorialPublishOutcome {
-  if (result.outcome === 'already_published' || result.checks.some(c => c.name === 'already_published')) {
-    return 'already_published';
-  }
-  if (result.outcome === 'skipped' || result.checks.some(c => c.name === 'already_claimed')) {
-    return 'skipped';
-  }
-  if (
-    result.outcome === 'published' &&
-    result.passed === true &&
-    !result.checks.some(c => !c.passed)
-  ) {
-    return 'published';
-  }
-  if (result.outcome === 'blocked') {
-    return 'blocked';
-  }
-
-  // Fail closed for unknown, missing, or unverified outcomes and emit safe diagnostic
+function logOutcomeAnomaly(
+  result: PublicationGateResult,
+  event: 'editorial.publish_due.unknown_outcome' | 'editorial.publish_due.inconsistent_outcome',
+  reason: string,
+): void {
   console.warn(
     JSON.stringify({
-      event: 'editorial.publish_due.unknown_outcome',
+      event,
       storyId: result.storyId,
       scheduleId: result.scheduleId,
       passed: result.passed,
       outcome: result.outcome ?? null,
+      reason,
       classification: 'blocked',
       timestamp: new Date().toISOString(),
     }),
   );
+}
+
+function classifyGateResult(result: PublicationGateResult): EditorialPublishOutcome {
+  const { outcome, passed, checks } = result;
+
+  // 1. Missing or unrecognized outcome -> fail closed to 'blocked'
+  if (!outcome || !RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES.includes(outcome as EditorialPublishOutcome)) {
+    logOutcomeAnomaly(
+      result,
+      'editorial.publish_due.unknown_outcome',
+      !outcome ? 'missing_outcome' : 'unrecognized_outcome',
+    );
+    return 'blocked';
+  }
+
+  const hasFailedCheck = checks.some(c => !c.passed);
+  const hasAlreadyPublishedMarker = checks.some(c => c.name === 'already_published');
+  const hasAlreadyClaimedMarker = checks.some(c => c.name === 'already_claimed');
+
+  // 2. Explicit 'blocked' outcome:
+  // Must NEVER be overridden by check names (e.g. already_published or already_claimed).
+  // If contradictory markers exist or passed is true, log inconsistency and remain blocked.
+  if (outcome === 'blocked') {
+    if (passed === true || hasAlreadyPublishedMarker || hasAlreadyClaimedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'blocked_with_contradictory_state_or_markers',
+      );
+    }
+    return 'blocked';
+  }
+
+  // 3. Explicit 'published' outcome:
+  // Requires passed === true, zero failed checks, and no conflicting markers.
+  if (outcome === 'published') {
+    if (passed !== true || hasFailedCheck || hasAlreadyPublishedMarker || hasAlreadyClaimedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'published_with_failed_checks_or_invalid_state',
+      );
+      return 'blocked';
+    }
+    return 'published';
+  }
+
+  // 4. Explicit 'already_published' outcome:
+  // Requires passed === true, zero failed checks, and no conflicting skipped markers.
+  if (outcome === 'already_published') {
+    if (passed !== true || hasFailedCheck || hasAlreadyClaimedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'already_published_with_inconsistent_state',
+      );
+      return 'blocked';
+    }
+    return 'already_published';
+  }
+
+  // 5. Explicit 'skipped' outcome:
+  // Requires passed === false (did not publish) and no conflicting already_published markers.
+  if (outcome === 'skipped') {
+    if (passed !== false || hasAlreadyPublishedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'skipped_with_inconsistent_state',
+      );
+      return 'blocked';
+    }
+    return 'skipped';
+  }
+
+  // Fall-through safety (unreachable due to RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES guard)
+  logOutcomeAnomaly(result, 'editorial.publish_due.unknown_outcome', 'unhandled_outcome_branch');
   return 'blocked';
 }
 

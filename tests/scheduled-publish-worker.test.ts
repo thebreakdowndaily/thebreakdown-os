@@ -704,6 +704,429 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
   });
 });
 
+describe('Phase 23: Strict Outcome Consistency & Adversarial Contract Enforcement', () => {
+  const ROUTE_SECRET = 'route-test-cron-secret-token-p23';
+  const originalEnvSecret = process.env.CRON_SECRET;
+  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    process.env.CRON_SECRET = ROUTE_SECRET;
+    vi.mocked(validateAndPublishDueStories).mockReset();
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    process.env.CRON_SECRET = originalEnvSecret;
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('1. missing outcome with passed: true and all checks passing classifies as blocked', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-missing-outcome',
+        passed: true,
+        outcome: undefined,
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0);
+    expect(body.blocked).toBe(1);
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const log = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(log).toMatchObject({
+      event: 'editorial.publish_due.unknown_outcome',
+      storyId: 'story-p23-missing-outcome',
+      classification: 'blocked',
+      reason: 'missing_outcome',
+    });
+  });
+
+  it('2. unknown outcome with otherwise successful-looking data classifies as blocked', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-unknown-outcome',
+        passed: true,
+        outcome: 'auto_publish_success' as never,
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0);
+    expect(body.blocked).toBe(1);
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const log = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(log).toMatchObject({
+      event: 'editorial.publish_due.unknown_outcome',
+      storyId: 'story-p23-unknown-outcome',
+      outcome: 'auto_publish_success',
+      classification: 'blocked',
+      reason: 'unrecognized_outcome',
+    });
+  });
+
+  it('3. explicit blocked outcome plus an already_published check marker remains blocked', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-blocked-already-pub-marker',
+        passed: false,
+        outcome: 'blocked',
+        checks: [
+          { name: 'already_published', passed: true, reason: 'Story is already published — skipping' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0);
+    expect(body.alreadyPublished).toBe(0); // MUST NOT be inferred as already_published!
+    expect(body.blocked).toBe(1);          // Explicit blocked is preserved
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const log = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(log).toMatchObject({
+      event: 'editorial.publish_due.inconsistent_outcome',
+      storyId: 'story-p23-blocked-already-pub-marker',
+      classification: 'blocked',
+      reason: 'blocked_with_contradictory_state_or_markers',
+    });
+  });
+
+  it('4. explicit blocked outcome plus an already_claimed marker remains blocked', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-blocked-already-claimed-marker',
+        passed: false,
+        outcome: 'blocked',
+        checks: [
+          { name: 'already_claimed', passed: false, reason: 'Claimed by another worker' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0);
+    expect(body.skipped).toBe(0);  // MUST NOT be inferred as skipped!
+    expect(body.blocked).toBe(1);  // Explicit blocked is preserved
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const log = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(log).toMatchObject({
+      event: 'editorial.publish_due.inconsistent_outcome',
+      storyId: 'story-p23-blocked-already-claimed-marker',
+      classification: 'blocked',
+      reason: 'blocked_with_contradictory_state_or_markers',
+    });
+  });
+
+  it('5. explicit published outcome with passed: false classifies as blocked', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-published-passed-false',
+        passed: false,
+        outcome: 'published',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0); // Inconsistent passed: false cannot be published
+    expect(body.blocked).toBe(1);
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const log = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(log).toMatchObject({
+      event: 'editorial.publish_due.inconsistent_outcome',
+      storyId: 'story-p23-published-passed-false',
+      classification: 'blocked',
+      reason: 'published_with_failed_checks_or_invalid_state',
+    });
+  });
+
+  it('6. explicit published outcome with any failed check classifies as blocked', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-published-failed-check',
+        passed: true,
+        outcome: 'published',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: false, reason: 'Unverified primary claims' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.published).toBe(0); // Failed check blocks publication regardless of passed: true
+    expect(body.blocked).toBe(1);
+    expect(body.results[0].outcome).toBe('blocked');
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const log = JSON.parse(consoleWarnSpy.mock.calls[0][0]);
+    expect(log).toMatchObject({
+      event: 'editorial.publish_due.inconsistent_outcome',
+      storyId: 'story-p23-published-failed-check',
+      classification: 'blocked',
+      reason: 'published_with_failed_checks_or_invalid_state',
+    });
+  });
+
+  it('7. valid, internally consistent examples of all 4 outcomes retain their intended classifications', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-valid-pub',
+        passed: true,
+        outcome: 'published',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'story-valid-already-pub',
+        passed: true,
+        outcome: 'already_published',
+        checks: [
+          { name: 'already_published', passed: true, reason: 'Story is already published — skipping' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'story-valid-skipped',
+        passed: false,
+        outcome: 'skipped',
+        checks: [
+          { name: 'already_claimed', passed: false, reason: 'Claimed by concurrent worker' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'story-valid-blocked',
+        passed: false,
+        outcome: 'blocked',
+        checks: [
+          { name: 'fact_check', passed: false, reason: 'Senior editor verification pending' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.totalChecked).toBe(4);
+    expect(body.published).toBe(1);
+    expect(body.alreadyPublished).toBe(1);
+    expect(body.skipped).toBe(1);
+    expect(body.blocked).toBe(1);
+
+    expect(body.results.map((r: { outcome: string }) => r.outcome)).toEqual([
+      'published',
+      'already_published',
+      'skipped',
+      'blocked',
+    ]);
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+    // Zero warning logs for completely consistent legitimate entries
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  it('8. strictly preserves the four-way counter invariant across mixed valid, missing, and contradictory inputs', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'mixed-1-valid-pub',
+        passed: true,
+        outcome: 'published',
+        checks: [{ name: 'fact_check', passed: true, reason: 'OK' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'mixed-2-missing-outcome',
+        passed: true,
+        outcome: undefined,
+        checks: [{ name: 'fact_check', passed: true, reason: 'OK' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'mixed-3-unknown-outcome',
+        passed: true,
+        outcome: 'bogus' as never,
+        checks: [{ name: 'fact_check', passed: true, reason: 'OK' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'mixed-4-contradictory-blocked',
+        passed: false,
+        outcome: 'blocked',
+        checks: [{ name: 'already_published', passed: true, reason: 'Marker' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'mixed-5-valid-skipped',
+        passed: false,
+        outcome: 'skipped',
+        checks: [{ name: 'already_claimed', passed: false, reason: 'Claimed' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+      {
+        storyId: 'mixed-6-contradictory-pub',
+        passed: true,
+        outcome: 'published',
+        checks: [{ name: 'fact_check', passed: false, reason: 'Fail' }],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.totalChecked).toBe(6);
+    expect(body.published).toBe(1);          // only mixed-1
+    expect(body.alreadyPublished).toBe(0);
+    expect(body.skipped).toBe(1);            // only mixed-5
+    expect(body.blocked).toBe(4);            // mixed-2, mixed-3, mixed-4, mixed-6
+
+    expect(body.published + body.alreadyPublished + body.blocked + body.skipped).toBe(body.totalChecked);
+    expect(body.results).toHaveLength(6);
+  });
+
+  it('9. contradictory and unknown cases emit structured diagnostics without exposing sensitive credentials', async () => {
+    const SENSITIVE_TOKEN = ['tok', 'adversarial', 'fixture', 'p23', 'secret'].join('_');
+    const SENSITIVE_DB_URL = 'postgres://postgres:SuperSecretP23Pass@db.fake-supabase.co:5432/postgres';
+
+    vi.mocked(validateAndPublishDueStories).mockResolvedValue([
+      {
+        storyId: 'story-p23-sensitive-data',
+        scheduleId: 'sched-p23-456',
+        passed: true,
+        outcome: undefined,
+        checks: [
+          { name: 'token_check', passed: false, reason: `Token expired: ${SENSITIVE_TOKEN}`, details: SENSITIVE_DB_URL },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_SECRET}` },
+    });
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.blocked).toBe(1);
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    const rawLogged = consoleWarnSpy.mock.calls[0][0];
+    expect(rawLogged).not.toContain(SENSITIVE_TOKEN);
+    expect(rawLogged).not.toContain(SENSITIVE_DB_URL);
+    expect(rawLogged).not.toContain('SuperSecretP23Pass');
+
+    const parsedLog = JSON.parse(rawLogged);
+    expect(parsedLog).toEqual({
+      event: 'editorial.publish_due.unknown_outcome',
+      storyId: 'story-p23-sensitive-data',
+      scheduleId: 'sched-p23-456',
+      passed: true,
+      outcome: null,
+      reason: 'missing_outcome',
+      classification: 'blocked',
+      timestamp: expect.any(String),
+    });
+  });
+});
+
 function createMockDb(
   initialStories: any[] = [],
   initialSchedule: any[] = [],

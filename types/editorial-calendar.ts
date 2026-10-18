@@ -60,6 +60,13 @@ export interface GateCheck {
 
 export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
 
+export const RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES: readonly EditorialPublishOutcome[] = [
+  'published',
+  'already_published',
+  'blocked',
+  'skipped',
+] as const;
+
 export type PostPublicationErrorCategory =
   | 'POST_PUBLICATION_EFFECTS_FAILED'
   | 'SCHEDULE_STATUS_UPDATE_FAILED'
