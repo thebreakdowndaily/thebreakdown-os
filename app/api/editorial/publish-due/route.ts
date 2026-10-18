@@ -20,12 +20,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAndPublishDueStories } from '@/services/editorial/schedule';
-import type { EditorialPublishOutcome, PublicationGateResult } from '@/types/editorial-calendar';
+import type { EditorialPublishOutcome, PostPublicationErrorCategory, PublicationGateResult } from '@/types/editorial-calendar';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-export type { EditorialPublishOutcome };
+export type { EditorialPublishOutcome, PostPublicationErrorCategory };
 
 function classifyGateResult(result: PublicationGateResult): EditorialPublishOutcome {
   if (result.outcome === 'already_published' || result.checks.some(c => c.name === 'already_published')) {
@@ -138,7 +138,15 @@ export async function GET(request: NextRequest) {
         outcome: c.outcome,
         checksCount: c.raw.checks.length,
         failedChecks: c.raw.checks.filter(chk => !chk.passed).map(chk => chk.name),
-        ...(c.raw.postPublicationError ? { postPublicationError: c.raw.postPublicationError } : {}),
+        ...(c.raw.postPublicationError
+          ? {
+              postPublicationError: true,
+              ...(c.raw.postPublicationErrorCategory
+                ? { postPublicationErrorCategory: c.raw.postPublicationErrorCategory }
+                : {}),
+              ...(c.raw.correlationId ? { correlationId: c.raw.correlationId } : {}),
+            }
+          : {}),
       })),
     });
   } catch (error) {

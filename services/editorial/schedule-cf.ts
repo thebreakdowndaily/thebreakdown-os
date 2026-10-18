@@ -8,13 +8,20 @@
 
 export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
 
+export type PostPublicationErrorCategory =
+  | 'POST_PUBLICATION_EFFECTS_FAILED'
+  | 'SCHEDULE_STATUS_UPDATE_FAILED'
+  | 'AUDIT_LOG_FAILED';
+
 export interface EditorialPublishDispatchResult {
   storyId: string;
   passed: boolean;
   outcome: EditorialPublishOutcome;
   checksCount: number;
   failedChecks: string[];
-  postPublicationError?: string;
+  postPublicationError?: boolean;
+  postPublicationErrorCategory?: PostPublicationErrorCategory;
+  correlationId?: string;
 }
 
 export interface EditorialPublishDispatchSummary {
@@ -96,6 +103,11 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
   }
 
   const VALID_OUTCOMES = new Set(['published', 'already_published', 'blocked', 'skipped']);
+  const VALID_ERROR_CATEGORIES = new Set([
+    'POST_PUBLICATION_EFFECTS_FAILED',
+    'SCHEDULE_STATUS_UPDATE_FAILED',
+    'AUDIT_LOG_FAILED',
+  ]);
 
   const normalized: EditorialPublishDispatchResult[] = results.map((item): EditorialPublishDispatchResult => {
     if (
@@ -109,7 +121,10 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
       (item.checksCount as number) < 0 ||
       !Array.isArray(item.failedChecks) ||
       !item.failedChecks.every((name) => typeof name === 'string') ||
-      (item.postPublicationError !== undefined && typeof item.postPublicationError !== 'string')
+      (item.postPublicationError !== undefined && typeof item.postPublicationError !== 'boolean') ||
+      (item.postPublicationErrorCategory !== undefined &&
+        (typeof item.postPublicationErrorCategory !== 'string' || !VALID_ERROR_CATEGORIES.has(item.postPublicationErrorCategory))) ||
+      (item.correlationId !== undefined && typeof item.correlationId !== 'string')
     ) {
       throw new Error('Canonical publishing endpoint returned an invalid story result');
     }
@@ -120,7 +135,11 @@ function parseSummary(payload: unknown): EditorialPublishDispatchSummary {
       outcome: item.outcome as EditorialPublishOutcome,
       checksCount: item.checksCount as number,
       failedChecks: item.failedChecks as string[],
-      ...(typeof item.postPublicationError === 'string' ? { postPublicationError: item.postPublicationError } : {}),
+      ...(item.postPublicationError ? { postPublicationError: true } : {}),
+      ...(typeof item.postPublicationErrorCategory === 'string'
+        ? { postPublicationErrorCategory: item.postPublicationErrorCategory as PostPublicationErrorCategory }
+        : {}),
+      ...(typeof item.correlationId === 'string' ? { correlationId: item.correlationId } : {}),
     };
   });
 

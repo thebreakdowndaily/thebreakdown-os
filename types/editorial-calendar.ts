@@ -60,6 +60,11 @@ export interface GateCheck {
 
 export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
 
+export type PostPublicationErrorCategory =
+  | 'POST_PUBLICATION_EFFECTS_FAILED'
+  | 'SCHEDULE_STATUS_UPDATE_FAILED'
+  | 'AUDIT_LOG_FAILED';
+
 export interface PublicationGateResult {
   storyId: string;
   scheduleId?: string;
@@ -69,7 +74,9 @@ export interface PublicationGateResult {
   checkedAt: string;
   triggeredBy: TriggeredBy;
   publishedAt?: string;
-  postPublicationError?: string;
+  postPublicationError?: boolean;
+  postPublicationErrorCategory?: PostPublicationErrorCategory;
+  correlationId?: string;
 }
 
 export interface PublicationGateInput {

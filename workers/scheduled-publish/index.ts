@@ -34,6 +34,8 @@ export interface Env {
   APP_URL: string;
 }
 
+export const SCHEDULED_PUBLISH_PROPAGATED_ERROR = 'Scheduled publishing request failed';
+
 export default {
   async scheduled(
     controller: ScheduledController,
@@ -67,16 +69,28 @@ export default {
     } catch (error) {
       const duration = Date.now() - startTime;
       const rawMsg = error instanceof Error ? error.message : 'Unknown error';
-      const safeMsg = env.CRON_SECRET ? rawMsg.replaceAll(env.CRON_SECRET, '[REDACTED]') : rawMsg;
+      let safeMsg = env.CRON_SECRET ? rawMsg.replaceAll(env.CRON_SECRET, '[REDACTED]') : rawMsg;
+      safeMsg = safeMsg.replace(/\/\/([^:]+):([^@]+)@/g, '//$1:[REDACTED]@');
+      if (
+        !safeMsg.startsWith('Canonical publishing ') ||
+        /(?:password|passwd|pwd|user=|postgres:\/\/|bearer\s+|token[=:]|secret[=:]|key[=:]|auth|:\d{2,5}|\.internal|\.local|localhost|@)/i.test(
+          safeMsg,
+        )
+      ) {
+        safeMsg = 'Scheduled publishing request failed due to an upstream error';
+      }
+
       console.error(JSON.stringify({
         event: 'editorial.publish_due.failed',
         timestamp: new Date().toISOString(),
         duration,
+        category: 'DISPATCH_ERROR',
         error: safeMsg,
       }));
-      // Re-throw so the platform records the scheduled invocation as failed.
-      // The dispatcher has no lower-authority database fallback.
-      throw error;
+      // Propagate a sanitized generic error without attaching the raw original exception or cause.
+      // This ensures runtime unhandled exception records never disclose sensitive connection info,
+      // while still failing the scheduled invocation so Cloudflare monitors the invocation as failed.
+      throw new Error(SCHEDULED_PUBLISH_PROPAGATED_ERROR);
     }
   },
 

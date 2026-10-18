@@ -516,7 +516,9 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
         checkedAt: new Date().toISOString(),
         triggeredBy: 'cron',
         publishedAt: new Date().toISOString(),
-        postPublicationError: 'Webhook delivery failed: HTTP 504 Gateway Timeout',
+        postPublicationError: true,
+        postPublicationErrorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+        correlationId: 'corr-test-id-123',
       },
     ]);
 
@@ -541,7 +543,9 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
       outcome: 'published',
       checksCount: 2,
       failedChecks: [],
-      postPublicationError: 'Webhook delivery failed: HTTP 504 Gateway Timeout',
+      postPublicationError: true,
+      postPublicationErrorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+      correlationId: 'corr-test-id-123',
     });
   });
 
@@ -641,6 +645,101 @@ describe('canonical publishing route GET /api/editorial/publish-due', () => {
   });
 });
 
+function createMockDb(
+  initialStories: any[] = [],
+  initialSchedule: any[] = [],
+  failAtomicClaimIds: string[] = [],
+  failPublishedUpdateError?: Error | null,
+) {
+  const scheduleStore = initialSchedule.map(s => ({ ...s }));
+  const storiesStore = initialStories.map(s => ({ ...s }));
+  const logsStore: any[] = [];
+
+  const mockDb: any = {
+    from: (table: string) => {
+      let currentFilter: (row: any) => boolean = () => true;
+      let updatePayload: any = null;
+      let isEqScheduleId: string | null = null;
+
+      const builder: any = {
+        select: () => builder,
+        eq: (col: string, val: any) => {
+          const prev = currentFilter;
+          currentFilter = (r: any) => prev(r) && r[col] === val;
+          if (table === 'editorial_schedule' && col === 'id') {
+            isEqScheduleId = val;
+          }
+          return builder;
+        },
+        neq: (col: string, val: any) => {
+          const prev = currentFilter;
+          currentFilter = (r: any) => prev(r) && r[col] !== val;
+          return builder;
+        },
+        in: (col: string, vals: any[]) => {
+          const prev = currentFilter;
+          currentFilter = (r: any) => prev(r) && vals.includes(r[col]);
+          return builder;
+        },
+        lte: (col: string, val: any) => {
+          const prev = currentFilter;
+          currentFilter = (r: any) => prev(r) && r[col] <= val;
+          return builder;
+        },
+        order: () => builder,
+        limit: () => builder,
+        single: async () => {
+          if (table === 'editorial_schedule' && isEqScheduleId && failAtomicClaimIds.includes(isEqScheduleId)) {
+            return { data: null, error: new Error('Claim race lost: 0 rows affected') };
+          }
+          const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
+          const row = store.find(currentFilter);
+          if (row && updatePayload) {
+            Object.assign(row, updatePayload);
+          }
+          return { data: row || null, error: row ? null : new Error('Not found') };
+        },
+        maybeSingle: async () => {
+          const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
+          const row = store.find(currentFilter);
+          if (row && updatePayload) {
+            Object.assign(row, updatePayload);
+          }
+          return { data: row || null, error: null };
+        },
+        insert: (data: any) => {
+          const row = { id: data.id || 'log-' + Math.random(), ...data };
+          logsStore.push(row);
+          return {
+            select: () => ({
+              single: async () => ({ data: row, error: null }),
+            }),
+            then: (resolve: any) => resolve({ data: [row], error: null }),
+          };
+        },
+        update: (data: any) => {
+          updatePayload = data;
+          return builder;
+        },
+        then: (resolve: any) => {
+          if (table === 'editorial_schedule' && updatePayload?.status === 'published' && failPublishedUpdateError) {
+            return resolve({ data: null, error: failPublishedUpdateError });
+          }
+          const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
+          if (updatePayload) {
+            store.filter(currentFilter).forEach(r => Object.assign(r, updatePayload));
+          }
+          const rows = store.filter(currentFilter);
+          return resolve({ data: rows, error: null });
+        },
+      };
+      return builder;
+    },
+  };
+
+  return { mockDb, scheduleStore, storiesStore, logsStore };
+}
+
 describe('editorial schedule service publication lifecycle and invariants', () => {
   let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
 
@@ -653,92 +752,6 @@ describe('editorial schedule service publication lifecycle and invariants', () =
   afterEach(() => {
     setServiceClient(null);
   });
-
-  function createMockDb(initialStories: any[] = [], initialSchedule: any[] = [], failAtomicClaimIds: string[] = []) {
-    const scheduleStore = initialSchedule.map(s => ({ ...s }));
-    const storiesStore = initialStories.map(s => ({ ...s }));
-    const logsStore: any[] = [];
-
-    const mockDb: any = {
-      from: (table: string) => {
-        let currentFilter: (row: any) => boolean = () => true;
-        let updatePayload: any = null;
-        let isEqScheduleId: string | null = null;
-
-        const builder: any = {
-          select: () => builder,
-          eq: (col: string, val: any) => {
-            const prev = currentFilter;
-            currentFilter = (r: any) => prev(r) && r[col] === val;
-            if (table === 'editorial_schedule' && col === 'id') {
-              isEqScheduleId = val;
-            }
-            return builder;
-          },
-          neq: (col: string, val: any) => {
-            const prev = currentFilter;
-            currentFilter = (r: any) => prev(r) && r[col] !== val;
-            return builder;
-          },
-          in: (col: string, vals: any[]) => {
-            const prev = currentFilter;
-            currentFilter = (r: any) => prev(r) && vals.includes(r[col]);
-            return builder;
-          },
-          lte: (col: string, val: any) => {
-            const prev = currentFilter;
-            currentFilter = (r: any) => prev(r) && r[col] <= val;
-            return builder;
-          },
-          order: () => builder,
-          limit: () => builder,
-          single: async () => {
-            if (table === 'editorial_schedule' && isEqScheduleId && failAtomicClaimIds.includes(isEqScheduleId)) {
-              return { data: null, error: new Error('Claim race lost: 0 rows affected') };
-            }
-            const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
-            const row = store.find(currentFilter);
-            if (row && updatePayload) {
-              Object.assign(row, updatePayload);
-            }
-            return { data: row || null, error: row ? null : new Error('Not found') };
-          },
-          maybeSingle: async () => {
-            const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
-            const row = store.find(currentFilter);
-            if (row && updatePayload) {
-              Object.assign(row, updatePayload);
-            }
-            return { data: row || null, error: null };
-          },
-          insert: (data: any) => {
-            const row = { id: data.id || 'log-' + Math.random(), ...data };
-            logsStore.push(row);
-            return {
-              select: () => ({
-                single: async () => ({ data: row, error: null }),
-              }),
-            };
-          },
-          update: (data: any) => {
-            updatePayload = data;
-            return builder;
-          },
-          then: (resolve: any) => {
-            const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
-            if (updatePayload) {
-              store.filter(currentFilter).forEach(r => Object.assign(r, updatePayload));
-            }
-            const rows = store.filter(currentFilter);
-            return resolve({ data: rows, error: null });
-          },
-        };
-        return builder;
-      },
-    };
-
-    return { mockDb, scheduleStore, storiesStore, logsStore };
-  }
 
   it('handles concurrent-worker skips with outcome="skipped" and passed=false', async () => {
     const today = new Date().toISOString().split('T')[0];
@@ -912,7 +925,9 @@ describe('editorial schedule service publication lifecycle and invariants', () =
     expect(results[0].storyId).toBe('story-post-1');
     expect(results[0].passed).toBe(true);
     expect(results[0].outcome).toBe('published'); // Persistence succeeded!
-    expect(results[0].postPublicationError).toContain('Search index webhook HTTP 504 Gateway Timeout');
+    expect(results[0].postPublicationError).toBe(true);
+    expect(results[0].postPublicationErrorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+    expect(results[0].correlationId).toBeDefined();
     expect(scheduleStore[0].status).toBe('published');
   });
 
@@ -969,5 +984,446 @@ describe('editorial schedule service publication lifecycle and invariants', () =
     expect(skipped).toBe(1);
     expect(published + alreadyPublished + blocked + skipped).toBe(4);
     expect(results.length).toBe(4);
+  });
+});
+
+describe('Phase 20 & 21: end-to-end post-publication error redaction across all 5 sinks', () => {
+  // Deterministic runtime-constructed fixtures for adversarial leak-detection testing
+  // Constructed via array joins to prevent false-positive static secret scanner findings
+  const FAKE_PASSWORD = ['FakeP', 'ssword!999'].join('@');
+  const FAKE_TOKEN = ['tok', 'adversarial', 'synthetic', 'leak', 'fixture', '12345'].join('_');
+  const FAKE_HOST = ['secret', 'db', 'internal:5432'].join('.');
+  const FAKE_WEBHOOK_SECRET = ['whsec', 'adversarial', 'synthetic', 'leak', 'fixture', 'abc987'].join('_');
+  const FAKE_CONNECTION_STRING = `postgres://app_user:${FAKE_PASSWORD}@${FAKE_HOST}/prod_db?token=${FAKE_TOKEN}`;
+  const ROUTE_AUTH_SECRET = ['cron', 'route', 'synthetic', 'secret', 'phase21'].join('-');
+
+  let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
+  const originalEnvSecret = process.env.CRON_SECRET;
+
+  beforeEach(async () => {
+    vi.resetAllMocks();
+    process.env.CRON_SECRET = ROUTE_AUTH_SECRET;
+    const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
+  });
+
+  afterEach(() => {
+    process.env.CRON_SECRET = originalEnvSecret;
+    setServiceClient(null);
+    vi.restoreAllMocks();
+  });
+
+  it('Sink 1: pre-persistence repo failure redacts secrets from checks, schedule table, and logs', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-sink1', story_id: 'story-sink1', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-sink1', slug: 'story-sink1', title: 'Sink 1 Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-sink1',
+      updatedStory: { id: 'story-sink1', slug: 'story-sink1', title: 'Sink 1 Story' },
+    });
+
+    const repoError = new Error(`Database connection failed: ${FAKE_CONNECTION_STRING}`);
+    mockStoryRepository.saveStory.mockRejectedValueOnce(repoError);
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    const r = results[0];
+    expect(r.passed).toBe(false);
+    expect(r.outcome).toBe('blocked');
+    expect(r.checks).toContainEqual({
+      name: 'repository_publish_failed',
+      passed: false,
+      reason: 'Repository rejected publication persistence',
+    });
+
+    // Schedule entry block_reason is strictly the constant safe reason
+    expect(scheduleStore[0].status).toBe('blocked');
+    expect(scheduleStore[0].block_reason).toBe('Repository rejected publication persistence');
+
+    // Verify none of the secrets leaked into the return structure or any console calls
+    const serializedResults = JSON.stringify(results);
+    expect(serializedResults).not.toContain(FAKE_PASSWORD);
+    expect(serializedResults).not.toContain(FAKE_TOKEN);
+    expect(serializedResults).not.toContain(FAKE_HOST);
+
+    const allConsoleLogs = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+    expect(allConsoleLogs).not.toContain(FAKE_PASSWORD);
+    expect(allConsoleLogs).not.toContain(FAKE_TOKEN);
+    expect(allConsoleLogs).not.toContain(FAKE_HOST);
+  });
+
+  it('Sink 2a: post-persistence effects failure sets boolean error & category without leaking webhook secret', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-sink2a', story_id: 'story-sink2a', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-sink2a', slug: 'story-sink2a', title: 'Sink 2a Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-sink2a',
+      updatedStory: { id: 'story-sink2a', slug: 'story-sink2a', title: 'Sink 2a Story' },
+    });
+    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-sink2a', status: 'published' });
+
+    mockExecutePostPublicationEffects.mockImplementationOnce(() => {
+      throw new Error(`Webhook push failed: https://search.internal/hook?token=${FAKE_WEBHOOK_SECRET}&db_pass=${FAKE_PASSWORD}`);
+    });
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    const r = results[0];
+    // Critical: outcome is published because persistence succeeded!
+    expect(r.passed).toBe(true);
+    expect(r.outcome).toBe('published');
+    expect(r.postPublicationError).toBe(true);
+    expect(r.postPublicationErrorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+    expect(r.correlationId).toBeDefined();
+    expect(typeof r.correlationId).toBe('string');
+    expect(scheduleStore[0].status).toBe('published');
+
+    // Verify secrets are redacted from results object
+    const serializedResults = JSON.stringify(results);
+    expect(serializedResults).not.toContain(FAKE_WEBHOOK_SECRET);
+    expect(serializedResults).not.toContain(FAKE_PASSWORD);
+    expect(serializedResults).not.toContain('search.internal');
+
+    // Verify console.error received structured JSON with zero secrets
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    const allConsoleLogs = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+    expect(allConsoleLogs).toContain('POST_PUBLICATION_EFFECTS_FAILED');
+    expect(allConsoleLogs).toContain(r.correlationId!);
+    expect(allConsoleLogs).not.toContain(FAKE_WEBHOOK_SECRET);
+    expect(allConsoleLogs).not.toContain(FAKE_PASSWORD);
+    expect(allConsoleLogs).not.toContain('search.internal');
+  });
+
+  it('Sink 2b: post-persistence schedule update failure sets SCHEDULE_STATUS_UPDATE_FAILED with zero secrets', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-sink2b', story_id: 'story-sink2b', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-sink2b', slug: 'story-sink2b', title: 'Sink 2b Story', status: 'ready' },
+    ];
+
+    const failUpdateErr = new Error(`Connection dead: ${FAKE_CONNECTION_STRING}`);
+    const { mockDb } = createMockDb(initialStories, initialSchedule, [], failUpdateErr);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-sink2b',
+      updatedStory: { id: 'story-sink2b', slug: 'story-sink2b', title: 'Sink 2b Story' },
+    });
+    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-sink2b', status: 'published' });
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    const r = results[0];
+    expect(r.passed).toBe(true);
+    expect(r.outcome).toBe('published');
+    expect(r.postPublicationError).toBe(true);
+    expect(r.postPublicationErrorCategory).toBe('SCHEDULE_STATUS_UPDATE_FAILED');
+    expect(r.correlationId).toBeDefined();
+
+    const allConsoleLogs = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+    expect(allConsoleLogs).toContain('SCHEDULE_STATUS_UPDATE_FAILED');
+    expect(allConsoleLogs).toContain(r.correlationId!);
+    expect(allConsoleLogs).not.toContain(FAKE_PASSWORD);
+    expect(allConsoleLogs).not.toContain(FAKE_TOKEN);
+    expect(allConsoleLogs).not.toContain(FAKE_HOST);
+  });
+
+  it('Sink 2c: post-persistence audit log failure sets AUDIT_LOG_FAILED with zero secrets', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-sink2c', story_id: 'story-sink2c', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-sink2c', slug: 'story-sink2c', title: 'Sink 2c Story', status: 'ready' },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule);
+    // Intercept insert on publication_gate_log to fail post-persistence
+    const origFrom = mockDb.from;
+    mockDb.from = (table: string) => {
+      const b = origFrom(table);
+      if (table === 'publication_gate_log') {
+        b.insert = () => ({
+          ...b,
+          then: (resolve: any) => resolve({ data: null, error: new Error(`Log insert dead: ${FAKE_CONNECTION_STRING}`) }),
+        });
+      }
+      return b;
+    };
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-pub-token-sink2c',
+      updatedStory: { id: 'story-sink2c', slug: 'story-sink2c', title: 'Sink 2c Story' },
+    });
+    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-sink2c', status: 'published' });
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const results = await realValidateAndPublishDueStories(new Date());
+
+    expect(results).toHaveLength(1);
+    const r = results[0];
+    expect(r.passed).toBe(true);
+    expect(r.outcome).toBe('published');
+    expect(r.postPublicationError).toBe(true);
+    expect(r.postPublicationErrorCategory).toBe('AUDIT_LOG_FAILED');
+    expect(r.correlationId).toBeDefined();
+
+    const allConsoleLogs = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+    expect(allConsoleLogs).toContain('AUDIT_LOG_FAILED');
+    expect(allConsoleLogs).toContain(r.correlationId!);
+    expect(allConsoleLogs).not.toContain(FAKE_PASSWORD);
+    expect(allConsoleLogs).not.toContain(FAKE_TOKEN);
+    expect(allConsoleLogs).not.toContain(FAKE_HOST);
+  });
+
+  it('Sink 3: route response serializes postPublicationError safely with zero raw error text', async () => {
+    vi.mocked(validateAndPublishDueStories).mockResolvedValueOnce([
+      {
+        storyId: 'story-sink3-safe',
+        passed: true,
+        outcome: 'published',
+        checks: [
+          { name: 'editorial_approval', passed: true, reason: 'Approved' },
+          { name: 'fact_check', passed: true, reason: 'Verified' },
+        ],
+        checkedAt: new Date().toISOString(),
+        triggeredBy: 'cron',
+        publishedAt: new Date().toISOString(),
+        postPublicationError: true,
+        postPublicationErrorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+        correlationId: 'sink3-corr-id-uuid',
+      },
+    ]);
+
+    const req = new NextRequest('https://thebreakdown.in/api/editorial/publish-due', {
+      headers: { authorization: `Bearer ${ROUTE_AUTH_SECRET}` },
+    });
+
+    const res = await publishDueRoute(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+
+    expect(body.ok).toBe(true);
+    expect(body.published).toBe(1);
+    expect(body.results[0]).toEqual({
+      storyId: 'story-sink3-safe',
+      passed: true,
+      outcome: 'published',
+      checksCount: 2,
+      failedChecks: [],
+      postPublicationError: true,
+      postPublicationErrorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+      correlationId: 'sink3-corr-id-uuid',
+    });
+    // Ensure no raw error details or exception stack leaked
+    expect(JSON.stringify(body)).not.toContain('error:');
+    expect(JSON.stringify(body)).not.toContain('Exception');
+  });
+
+  it('Sink 4: canonical publication eventBus failure logs structured error and does not leak secrets', async () => {
+    const actualCanonical = await vi.importActual<typeof import('@/lib/editorial/canonical-publication')>('@/lib/editorial/canonical-publication');
+    const { eventBus } = await vi.importActual<typeof import('@/lib/events/event-bus')>('@/lib/events/event-bus');
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const publishSpy = vi.spyOn(eventBus, 'publish').mockImplementation(() => {
+      throw new Error(`Kafka broker rejected message with credentials redis://stream_admin:${FAKE_PASSWORD}@eventstream.internal:6379`);
+    });
+
+    const dummyStory: any = {
+      id: 'story-sink4',
+      slug: 'story-sink4-slug',
+      title: 'Sink 4 Story',
+      status: 'published',
+      publishedAt: new Date().toISOString(),
+      author: 'author-1',
+    };
+    const dummyPrincipal: any = {
+      userId: 'user-sink4',
+      role: 'owner',
+      name: 'Owner Principal',
+    };
+
+    // Must not throw
+    expect(() => {
+      actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal);
+    }).not.toThrow();
+
+    expect(publishSpy).toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalled();
+
+    const allConsoleLogs = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+
+    expect(allConsoleLogs).toContain('EVENT_BUS_PUBLISH_FAILED');
+    expect(allConsoleLogs).toContain('canonical_publication.event_publish_failed');
+    expect(allConsoleLogs).not.toContain(FAKE_PASSWORD);
+    expect(allConsoleLogs).not.toContain('eventstream.internal');
+    expect(allConsoleLogs).not.toContain('stream_admin');
+  });
+
+  it('Sink 5a: worker success telemetry safely logs postPublicationError diagnostics with zero secrets', async () => {
+    const successPayload = {
+      ok: true,
+      timestamp: new Date().toISOString(),
+      totalChecked: 1,
+      published: 1,
+      alreadyPublished: 0,
+      blocked: 0,
+      skipped: 0,
+      results: [
+        {
+          storyId: 'story-sink5a',
+          passed: true,
+          outcome: 'published' as const,
+          checksCount: 2,
+          failedChecks: [],
+          postPublicationError: true,
+          postPublicationErrorCategory: 'POST_PUBLICATION_EFFECTS_FAILED' as const,
+          correlationId: 'corr-worker-telemetry-5a',
+        },
+      ],
+    };
+
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(successPayload), { status: 200 }));
+
+    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const controller = { cron: '0 * * * *', scheduledTime: Date.now() };
+    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() };
+
+    await worker.scheduled(controller, env as never, ctx as never);
+
+    expect(consoleLogSpy).toHaveBeenCalled();
+    const completedLogCall = consoleLogSpy.mock.calls.find(call => {
+      const str = typeof call[0] === 'string' ? call[0] : JSON.stringify(call[0]);
+      return str.includes('editorial.publish_due.complete');
+    });
+    expect(completedLogCall).toBeDefined();
+    const completedJson = JSON.parse(completedLogCall![0] as string);
+    expect(completedJson.published).toBe(1);
+    expect(completedJson.details[0]).toEqual({
+      storyId: 'story-sink5a',
+      passed: true,
+      outcome: 'published',
+      checksCount: 2,
+      failedChecks: [],
+      postPublicationError: true,
+      postPublicationErrorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+      correlationId: 'corr-worker-telemetry-5a',
+    });
+  });
+
+  it('Sink 5b: worker telemetry redacts sensitive fetch rejections to safe canonical message', async () => {
+    const controller = { cron: '0 * * * *', scheduledTime: Date.now() };
+    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() };
+
+    fetchMock.mockRejectedValue(new Error(`Fetch failed to https://admin:${FAKE_PASSWORD}@thebreakdown.in/api/editorial/publish-due?token=${FAKE_TOKEN}`));
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(worker.scheduled(controller, env as never, ctx as never)).rejects.toThrow(/request failed/);
+
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    const loggedJson = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+
+    expect(loggedJson).toContain('DISPATCH_ERROR');
+    expect(loggedJson).not.toContain(FAKE_PASSWORD);
+    expect(loggedJson).not.toContain(FAKE_TOKEN);
+    expect(loggedJson).not.toContain('admin:');
+    expect(loggedJson).toContain('Canonical publishing endpoint request failed');
+  });
+
+  it('Sink 5c: worker catch block redacts sensitive error messages and propagates only approved generic error without cause', async () => {
+    const controller = { cron: '0 * * * *', scheduledTime: Date.now() };
+    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() };
+
+    const cfModule = await import('@/services/editorial/schedule-cf');
+    const publishDueStoriesSpy = vi.spyOn(cfModule, 'publishDueStories');
+    // Inject a fake error containing credentials, a hostname and a connection URI
+    publishDueStoriesSpy.mockRejectedValueOnce(
+      new Error(`Internal driver failure: credentials=${FAKE_PASSWORD}&token=${FAKE_TOKEN} at host=${FAKE_HOST} via uri=${FAKE_CONNECTION_STRING}`)
+    );
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    // Confirm the scheduled invocation still rejects so the platform records failure
+    let propagatedError: unknown;
+    try {
+      await worker.scheduled(controller, env as never, ctx as never);
+    } catch (err) {
+      propagatedError = err;
+    }
+
+    expect(propagatedError).toBeDefined();
+    expect(propagatedError).toBeInstanceOf(Error);
+    // Confirm the propagated rejection contains ONLY the approved generic message
+    expect((propagatedError as Error).message).toBe('Scheduled publishing request failed');
+    // Confirm the raw exception was not attached as cause
+    expect((propagatedError as Error).cause).toBeUndefined();
+
+    // Confirm the explicit worker log contains none of credentials, hostname, or connection URI
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    const loggedJson = consoleErrorSpy.mock.calls
+      .flat()
+      .map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+      .join(' ');
+
+    expect(loggedJson).toContain('DISPATCH_ERROR');
+    expect(loggedJson).not.toContain(FAKE_PASSWORD);
+    expect(loggedJson).not.toContain(FAKE_TOKEN);
+    expect(loggedJson).not.toContain(FAKE_HOST);
+    expect(loggedJson).not.toContain('postgres://');
+    expect(loggedJson).toContain('Scheduled publishing request failed due to an upstream error');
+
+    publishDueStoriesSpy.mockRestore();
   });
 });

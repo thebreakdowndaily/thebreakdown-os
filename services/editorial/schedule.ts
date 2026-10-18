@@ -330,14 +330,14 @@ async function validateAndPublishEntry(
       },
       { publicationToken: decision.publicationToken }
     );
-  } catch (publishErr: any) {
+  } catch (_publishErr) {
     // Failure before persistence: story was not published
     result.passed = false;
     result.outcome = 'blocked';
     result.checks.push({
       name: 'repository_publish_failed',
       passed: false,
-      reason: publishErr?.message || 'Repository rejected publication',
+      reason: 'Repository rejected publication persistence',
     });
     await logGateResult(result);
 
@@ -345,7 +345,7 @@ async function validateAndPublishEntry(
       .from('editorial_schedule')
       .update({
         status: 'blocked',
-        block_reason: publishErr?.message || 'Repository rejected publication',
+        block_reason: 'Repository rejected publication persistence',
         blocked_at: now.toISOString(),
         updated_at: now.toISOString(),
       } as never)
@@ -362,17 +362,28 @@ async function validateAndPublishEntry(
   // 2. POST-PERSISTENCE HOUSEKEEPING & POST-PUBLICATION EFFECTS:
   // Distinguish publication persistence from subsequent housekeeping.
   // A failure after successful publication must not falsely report that the story
-  // was never published. Preserve the error signal separately.
+  // was never published. Preserve the error signal separately with structured diagnostics.
+  const correlationId = crypto.randomUUID();
+  result.correlationId = correlationId;
+
   try {
     executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
-  } catch (postErr: any) {
-    const effectMsg = postErr?.message || 'Post-publication effects failed';
-    result.postPublicationError = effectMsg;
-    console.error(`[Editorial Schedule] Post-publication effects error for story ${storyId}:`, effectMsg);
+  } catch (_postErr) {
+    result.postPublicationError = true;
+    result.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.post_effects_failed',
+        storyId,
+        correlationId,
+        category: 'POST_PUBLICATION_EFFECTS_FAILED',
+        timestamp: new Date().toISOString(),
+      }),
+    );
   }
 
   try {
-    await db
+    const { error: schedUpdateError } = await db
       .from('editorial_schedule')
       .update({
         status: 'published',
@@ -380,18 +391,35 @@ async function validateAndPublishEntry(
         updated_at: publishedAt,
       } as never)
       .eq('id', scheduleId);
-  } catch (schedErr: any) {
-    const schedMsg = schedErr?.message || 'Failed updating schedule entry to published';
-    result.postPublicationError = result.postPublicationError
-      ? `${result.postPublicationError}; ${schedMsg}`
-      : schedMsg;
-    console.error(`[Editorial Schedule] Schedule status update error for story ${storyId}:`, schedMsg);
+    if (schedUpdateError) throw schedUpdateError;
+  } catch (_schedErr) {
+    result.postPublicationError = true;
+    result.postPublicationErrorCategory = result.postPublicationErrorCategory || 'SCHEDULE_STATUS_UPDATE_FAILED';
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.status_update_failed',
+        storyId,
+        correlationId,
+        category: 'SCHEDULE_STATUS_UPDATE_FAILED',
+        timestamp: new Date().toISOString(),
+      }),
+    );
   }
 
   try {
     await logGateResult(result);
-  } catch (logErr: any) {
-    console.error(`[Editorial Schedule] Gate result audit logging error for story ${storyId}:`, logErr?.message || logErr);
+  } catch (_logErr) {
+    result.postPublicationError = true;
+    result.postPublicationErrorCategory = result.postPublicationErrorCategory || 'AUDIT_LOG_FAILED';
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.gate_log_failed',
+        storyId,
+        correlationId,
+        category: 'AUDIT_LOG_FAILED',
+        timestamp: new Date().toISOString(),
+      }),
+    );
   }
 
   return result;
@@ -499,7 +527,7 @@ function rowToStory(row: Record<string, unknown>) {
 
 async function logGateResult(result: PublicationGateResult): Promise<void> {
   const db = getServiceClient();
-  await db.from('publication_gate_log').insert({
+  const { error } = await db.from('publication_gate_log').insert({
     story_id: result.storyId,
     schedule_id: result.scheduleId || null,
     gate_result: result.passed ? 'pass' : 'fail',
@@ -508,6 +536,7 @@ async function logGateResult(result: PublicationGateResult): Promise<void> {
     published_at: result.publishedAt || null,
     triggered_by: result.triggeredBy,
   });
+  if (error) throw error;
 }
 
 function formatDate(d: Date): string {

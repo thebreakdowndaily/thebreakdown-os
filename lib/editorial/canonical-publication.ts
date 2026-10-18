@@ -291,7 +291,16 @@ export function executePostPublicationEffects(
       },
     });
   } catch (err) {
-    console.error('[CanonicalPublication] Failed to publish event:', err);
+    const errorName = err instanceof Error ? err.name : 'UnknownError';
+    console.error(
+      JSON.stringify({
+        event: 'canonical_publication.event_publish_failed',
+        storyId: story.id,
+        category: 'EVENT_BUS_PUBLISH_FAILED',
+        errorName,
+        timestamp: new Date().toISOString(),
+      }),
+    );
   }
 
   // 2. Invalidate Next.js ISR caches dynamically (server-safe boundary)
