@@ -58,14 +58,32 @@ export interface GateCheck {
   details?: string;
 }
 
+export type EditorialPublishOutcome = 'published' | 'already_published' | 'blocked' | 'skipped';
+
+export const RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES: readonly EditorialPublishOutcome[] = [
+  'published',
+  'already_published',
+  'blocked',
+  'skipped',
+] as const;
+
+export type PostPublicationErrorCategory =
+  | 'POST_PUBLICATION_EFFECTS_FAILED'
+  | 'SCHEDULE_STATUS_UPDATE_FAILED'
+  | 'AUDIT_LOG_FAILED';
+
 export interface PublicationGateResult {
   storyId: string;
   scheduleId?: string;
   passed: boolean;
+  outcome?: EditorialPublishOutcome;
   checks: GateCheck[];
   checkedAt: string;
   triggeredBy: TriggeredBy;
   publishedAt?: string;
+  postPublicationError?: boolean;
+  postPublicationErrorCategory?: PostPublicationErrorCategory;
+  correlationId?: string;
 }
 
 export interface PublicationGateInput {

@@ -46,7 +46,11 @@ export class MemoryStoryService implements StoryService {
     return Array.from(this.stories.values()).find(s => s.slug === slug);
   }
 
-  async saveStory(story: Story, options?: { publicationToken?: string }) {
+  async saveStory(story: Story, options?: { publicationToken?: string; expectedVersion?: number }) {
+    if (options?.expectedVersion !== undefined) {
+      return this.saveStoryOCC(story, options.expectedVersion, options);
+    }
+
     // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
     if (story.status === 'published' || story.publicationStatus === 'published') {
       const token = options?.publicationToken || (story as any)._publicationToken;
@@ -59,6 +63,31 @@ export class MemoryStoryService implements StoryService {
 
     this.stories.set(story.id, { ...story, updatedAt: new Date().toISOString() });
     return this.stories.get(story.id)!;
+  }
+
+  async saveStoryOCC(story: Story, expectedVersion: number, options?: { publicationToken?: string }): Promise<Story> {
+    if (story.status === 'published' || story.publicationStatus === 'published') {
+      const token = options?.publicationToken || (story as any)._publicationToken;
+      if (!token || !consumePublicationToken(token, story.id)) {
+        throw new DirectPublicationForbiddenError(
+          `Direct saveStoryOCC with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
+        );
+      }
+    }
+
+    const existing = this.stories.get(story.id);
+    const currentVersion = existing?.version ?? 1;
+    if (!existing || currentVersion !== expectedVersion || existing.status === 'published') {
+      throw new Error(`OCC_FAILURE: Story ${story.id} has been modified concurrently (expected version ${expectedVersion}) or already published.`);
+    }
+
+    const updated = {
+      ...story,
+      version: currentVersion + 1,
+      updatedAt: new Date().toISOString(),
+    };
+    this.stories.set(story.id, updated);
+    return updated;
   }
 
   async deleteStory(id: string) {

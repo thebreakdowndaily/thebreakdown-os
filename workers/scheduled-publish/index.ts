@@ -3,20 +3,18 @@
  *
  * Governing document: AGENTS.md (Editorial Calendar + Autonomous Weekly Publishing)
  *
- * This is a standalone Cloudflare Worker that handles Cron Trigger events.
- * It reuses the existing publish-due service and publication gate from the
- * main application — zero duplicated business logic.
+ * This is a scheduler/dispatcher only. It never publishes from the Worker and
+ * never connects directly to the database. The canonical Next.js endpoint is
+ * the sole publication authority and applies the editorial/evidence gates.
  *
  * Architecture:
  *   Cloudflare Cron Trigger (hourly)
  *     → scheduled()
- *       → publishDueStories() from services/editorial/schedule.ts
- *         → publication gate (10 checks)
- *           → publish or block
+ *       → publishDueStories() in services/editorial/schedule-cf.ts
+ *         → HTTPS /api/editorial/publish-due
+ *           → canonical editorial, fact-check, evidence, and audit workflow
  *
- * Environment variables required:
- *   SUPABASE_URL              — Supabase project URL
- *   SUPABASE_SERVICE_ROLE_KEY — Supabase service role key (bypasses RLS)
+ * Required bindings: APP_URL (non-secret HTTPS origin) and CRON_SECRET (Worker secret).
  */
 
 import { publishDueStories } from '../../services/editorial/schedule-cf';
@@ -32,10 +30,31 @@ interface ExecutionContext {
 }
 
 export interface Env {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
   CRON_SECRET: string;
   APP_URL: string;
+}
+
+export const SCHEDULED_PUBLISH_PROPAGATED_ERROR = 'Scheduled publishing request failed';
+
+export const APPROVED_CANONICAL_ERROR_MESSAGES = new Set([
+  'Canonical publishing APP_URL is not configured',
+  'Canonical publishing APP_URL is invalid',
+  'Canonical publishing APP_URL must be an HTTPS origin without credentials, path, query, or fragment',
+  'Canonical publishing APP_URL host is not trusted',
+  'Canonical publishing CRON_SECRET is not configured',
+  'Canonical publishing endpoint request failed',
+  'Canonical publishing endpoint returned invalid JSON',
+  'Canonical publishing endpoint returned an invalid response',
+  'Canonical publishing endpoint returned an invalid summary',
+  'Canonical publishing endpoint returned an invalid story result',
+  'Canonical publishing endpoint returned inconsistent result counts',
+]);
+
+export function isApprovedDiagnosticMessage(msg: string): boolean {
+  if (APPROVED_CANONICAL_ERROR_MESSAGES.has(msg)) {
+    return true;
+  }
+  return /^Canonical publishing endpoint returned HTTP \d{3}$/.test(msg);
 }
 
 export default {
@@ -54,35 +73,38 @@ export default {
     }));
 
     try {
-      const results = await publishDueStories(env);
-
-      const published = results.filter(r => r.passed);
-      const blocked = results.filter(r => !r.passed);
+      const summary = await publishDueStories(env);
       const duration = Date.now() - startTime;
 
       console.log(JSON.stringify({
         event: 'editorial.publish_due.complete',
         timestamp: new Date().toISOString(),
         duration,
-        totalChecked: results.length,
-        published: published.length,
-        blocked: blocked.length,
-        details: results.map(r => ({
-          storyId: r.storyId,
-          passed: r.passed,
-          failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
-        })),
+        totalChecked: summary.totalChecked,
+        published: summary.published,
+        alreadyPublished: summary.alreadyPublished,
+        blocked: summary.blocked,
+        skipped: summary.skipped,
+        details: summary.results,
       }));
     } catch (error) {
       const duration = Date.now() - startTime;
+      const rawMsg = error instanceof Error ? error.message : 'Unknown error';
+      const safeMsg = isApprovedDiagnosticMessage(rawMsg)
+        ? rawMsg
+        : 'Scheduled publishing request failed due to an upstream error';
+
       console.error(JSON.stringify({
         event: 'editorial.publish_due.failed',
         timestamp: new Date().toISOString(),
         duration,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        category: 'DISPATCH_ERROR',
+        error: safeMsg,
       }));
-      // Do not rethrow — Cloudflare will retry on unhandled exceptions,
-      // but we want bounded retries. Log and exit cleanly.
+      // Propagate a sanitized generic error without attaching the raw original exception or cause.
+      // This ensures runtime unhandled exception records never disclose sensitive connection info,
+      // while still failing the scheduled invocation so Cloudflare monitors the invocation as failed.
+      throw new Error(SCHEDULED_PUBLISH_PROPAGATED_ERROR);
     }
   },
 
