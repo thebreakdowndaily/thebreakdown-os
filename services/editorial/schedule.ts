@@ -200,8 +200,33 @@ async function validateAndPublishEntry(
     claimError = res.error;
   }
 
-  if (claimError || !claimedEntry) {
-    // Another worker already claimed or active lease is held — skip
+  if (claimError) {
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.claim_query_failed',
+        storyId,
+        scheduleId,
+        category: 'SCHEDULE_CLAIM_FAILED',
+        timestamp: nowIso,
+      }),
+    );
+    return {
+      storyId,
+      scheduleId,
+      passed: false,
+      outcome: 'blocked',
+      checks: [{
+        name: 'schedule_claim',
+        passed: false,
+        reason: 'SCHEDULE_CLAIM_FAILED',
+      }],
+      checkedAt: nowIso,
+      triggeredBy: 'cron',
+    };
+  }
+
+  if (!claimedEntry) {
+    // Another worker already claimed or active lease is held — legitimate contention
     return {
       storyId,
       scheduleId,
@@ -225,34 +250,92 @@ async function validateAndPublishEntry(
     .from('stories')
     .select('*')
     .eq('id', storyId)
-    .single();
+    .maybeSingle();
 
   if (storyError || !storyRow) {
+    const isDbError = Boolean(storyError);
+    const safeReason = isDbError
+      ? 'STORY_VERIFICATION_QUERY_FAILED'
+      : 'STORY_MISSING_PRE_PERSISTENCE';
+
+    if (isDbError) {
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.story_fetch_failed',
+          storyId,
+          scheduleId,
+          category: 'STORY_VERIFICATION_QUERY_FAILED',
+          timestamp: now.toISOString(),
+        }),
+      );
+    } else {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.story_not_found',
+          storyId,
+          scheduleId,
+          category: 'STORY_MISSING_PRE_PERSISTENCE',
+          timestamp: now.toISOString(),
+        }),
+      );
+    }
+
+    const { data: updatedRows } = await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: safeReason,
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt)
+      .select('id');
+
+    const isUpdated = Boolean(
+      Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
+    );
+
+    if (!isUpdated) {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: now.toISOString(),
+        }),
+      );
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: 'SCHEDULE_LEASE_LOST',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
     const result: PublicationGateResult = {
       storyId,
       scheduleId,
       passed: false,
       outcome: 'blocked',
       checks: [{
-        name: 'story_exists',
+        name: isDbError ? 'story_verification' : 'story_exists',
         passed: false,
-        reason: 'Story not found in database',
+        reason: safeReason,
       }],
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
     };
     await logGateResult(result);
-    await db
-      .from('editorial_schedule')
-      .update({
-        status: 'blocked',
-        block_reason: 'Story not found in database',
-        blocked_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt);
     return result;
   }
 
@@ -262,6 +345,43 @@ async function validateAndPublishEntry(
 
   // ── IDEMPOTENCY GUARD: skip if already published
   if (storyRow.status === 'published') {
+    const { data: updatedRows } = await db
+      .from('editorial_schedule')
+      .update({ status: 'published', published_at: now.toISOString(), updated_at: now.toISOString() } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt)
+      .select('id');
+
+    const isUpdated = Boolean(
+      Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
+    );
+
+    if (!isUpdated) {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: now.toISOString(),
+        }),
+      );
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: 'SCHEDULE_LEASE_LOST',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
     const result: PublicationGateResult = {
       storyId,
       scheduleId,
@@ -274,16 +394,9 @@ async function validateAndPublishEntry(
       }],
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
-      publishedAt: storyRow.published_at || storyRow.updated_at || now.toISOString(),
+      publishedAt: (storyRow as { published_at?: string }).published_at || (storyRow as { updated_at?: string }).updated_at || now.toISOString(),
     };
     await logGateResult(result);
-    // Update schedule to 'published' if not already (fenced by current lease)
-    await db
-      .from('editorial_schedule')
-      .update({ status: 'published', published_at: now.toISOString(), updated_at: now.toISOString() } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt);
     return result;
   }
 
@@ -367,11 +480,24 @@ async function validateAndPublishEntry(
       .eq('id', scheduleId)
       .eq('status', 'validated')
       .eq('validated_at', claimedValidatedAt)
-      .select()
+      .select('id')
       .maybeSingle();
 
-    if (!blockedSched) {
+    const isBlockedUpdated = Boolean(
+      Array.isArray(blockedSched) ? blockedSched.length > 0 : blockedSched
+    );
+
+    if (!isBlockedUpdated) {
       // Lease was stolen or superseded by another claimant — fence cleanly
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: now.toISOString(),
+        }),
+      );
       return {
         storyId,
         scheduleId,
@@ -380,7 +506,7 @@ async function validateAndPublishEntry(
         checks: [{
           name: 'lease_fenced',
           passed: false,
-          reason: 'Schedule claim lease was preempted by another claimant during gate validation',
+          reason: 'SCHEDULE_LEASE_LOST',
         }],
         checkedAt: now.toISOString(),
         triggeredBy: 'cron',
@@ -415,15 +541,24 @@ async function validateAndPublishEntry(
 
   // ── Check local lease expiry before pre-persistence phase
   if (Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS) {
+    console.warn(
+      JSON.stringify({
+        event: 'editorial.schedule.lease_lost',
+        storyId,
+        scheduleId,
+        category: 'SCHEDULE_LEASE_LOST',
+        timestamp: now.toISOString(),
+      }),
+    );
     return {
       storyId,
       scheduleId,
       passed: false,
       outcome: 'skipped',
       checks: [{
-        name: 'lease_expired_pre_persistence',
+        name: 'lease_fenced',
         passed: false,
-        reason: 'Schedule claim lease expired before persistence phase',
+        reason: 'SCHEDULE_LEASE_LOST',
       }],
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
@@ -438,9 +573,76 @@ async function validateAndPublishEntry(
     .maybeSingle();
 
   if (storyVerifyError || !latestStoryRow) {
-    const verifyFailReason = storyVerifyError
-      ? `Database error during pre-persistence story verification: ${storyVerifyError.message || 'unknown error'}`
-      : 'Story not found in database during pre-persistence verification';
+    const isDbError = Boolean(storyVerifyError);
+    const safeReason = isDbError
+      ? 'STORY_VERIFICATION_QUERY_FAILED'
+      : 'STORY_MISSING_PRE_PERSISTENCE';
+
+    if (isDbError) {
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.story_verify_failed',
+          storyId,
+          scheduleId,
+          category: 'STORY_VERIFICATION_QUERY_FAILED',
+          timestamp: now.toISOString(),
+        }),
+      );
+    } else {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.story_missing_pre_persistence',
+          storyId,
+          scheduleId,
+          category: 'STORY_MISSING_PRE_PERSISTENCE',
+          timestamp: now.toISOString(),
+        }),
+      );
+    }
+
+    // Only update schedule if we still own the lease
+    const { data: updatedRows } = await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: safeReason,
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt)
+      .select('id');
+
+    const isUpdated = Boolean(
+      Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
+    );
+
+    if (!isUpdated) {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: now.toISOString(),
+        }),
+      );
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: 'SCHEDULE_LEASE_LOST',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
     const blockedResult: PublicationGateResult = {
       storyId,
       scheduleId,
@@ -449,25 +651,12 @@ async function validateAndPublishEntry(
       checks: [{
         name: 'pre_persistence_verification',
         passed: false,
-        reason: verifyFailReason,
+        reason: safeReason,
       }],
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
     };
     await logGateResult(blockedResult);
-
-    // Only update schedule if we still own the lease
-    await db
-      .from('editorial_schedule')
-      .update({
-        status: 'blocked',
-        block_reason: verifyFailReason,
-        blocked_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt);
 
     return blockedResult;
   }
@@ -475,6 +664,43 @@ async function validateAndPublishEntry(
   // Idempotency check: skip persistence if already published in DB
   if ((latestStoryRow as { status?: string }).status === 'published') {
     const publishedTimestamp = (latestStoryRow as { published_at?: string }).published_at || publishedAt;
+    const { data: updatedRows } = await db
+      .from('editorial_schedule')
+      .update({ status: 'published', published_at: publishedTimestamp, updated_at: publishedAt } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .eq('validated_at', claimedValidatedAt)
+      .select('id');
+
+    const isUpdated = Boolean(
+      Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
+    );
+
+    if (!isUpdated) {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: now.toISOString(),
+        }),
+      );
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: 'SCHEDULE_LEASE_LOST',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
     const idempotentResult: PublicationGateResult = {
       storyId,
       scheduleId,
@@ -490,12 +716,6 @@ async function validateAndPublishEntry(
       publishedAt: publishedTimestamp,
     };
     await logGateResult(idempotentResult);
-    await db
-      .from('editorial_schedule')
-      .update({ status: 'published', published_at: publishedTimestamp, updated_at: publishedAt } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt);
     return idempotentResult;
   }
 
@@ -512,6 +732,15 @@ async function validateAndPublishEntry(
     currentScheduleCheck.validated_at !== claimedValidatedAt ||
     currentScheduleCheck.status !== 'validated'
   ) {
+    console.warn(
+      JSON.stringify({
+        event: 'editorial.schedule.lease_lost',
+        storyId,
+        scheduleId,
+        category: 'SCHEDULE_LEASE_LOST',
+        timestamp: now.toISOString(),
+      }),
+    );
     return {
       storyId,
       scheduleId,
@@ -520,7 +749,7 @@ async function validateAndPublishEntry(
       checks: [{
         name: 'lease_lost_pre_persistence',
         passed: false,
-        reason: 'Schedule claim lease was preempted or lost prior to persistence',
+        reason: 'SCHEDULE_LEASE_LOST',
       }],
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
@@ -562,18 +791,21 @@ async function validateAndPublishEntry(
     }
   } catch (_publishErr) {
     // Failure before persistence: story was not published
-    result.passed = false;
-    result.outcome = 'blocked';
-    result.checks.push({
-      name: 'repository_publish_failed',
-      passed: false,
-      reason: 'Repository rejected publication persistence',
-    });
-    await logGateResult(result);
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.persistence_failed',
+        storyId,
+        scheduleId,
+        category: 'REPOSITORY_PERSISTENCE_FAILED',
+        timestamp: now.toISOString(),
+      }),
+    );
 
     const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+    let updateSucceeded = false;
+
     if (!isLeaseExpired) {
-      await db
+      const { data: updatedRows } = await db
         .from('editorial_schedule')
         .update({
           status: 'blocked',
@@ -583,9 +815,47 @@ async function validateAndPublishEntry(
         } as never)
         .eq('id', scheduleId)
         .eq('status', 'validated')
-        .eq('validated_at', claimedValidatedAt);
+        .eq('validated_at', claimedValidatedAt)
+        .select('id');
+
+      updateSucceeded = Boolean(
+        Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
+      );
     }
 
+    if (!updateSucceeded) {
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: now.toISOString(),
+        }),
+      );
+      return {
+        storyId,
+        scheduleId,
+        passed: false,
+        outcome: 'skipped',
+        checks: [{
+          name: 'lease_fenced',
+          passed: false,
+          reason: 'SCHEDULE_LEASE_LOST',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      };
+    }
+
+    result.passed = false;
+    result.outcome = 'blocked';
+    result.checks.push({
+      name: 'repository_publish_failed',
+      passed: false,
+      reason: 'Repository rejected publication persistence',
+    });
+    await logGateResult(result);
     return result;
   }
 
@@ -622,7 +892,7 @@ async function validateAndPublishEntry(
   }
 
   try {
-    const { error: schedUpdateError } = await db
+    const { data: schedRows, error: schedUpdateError } = await db
       .from('editorial_schedule')
       .update({
         status: 'published',
@@ -631,8 +901,26 @@ async function validateAndPublishEntry(
       } as never)
       .eq('id', scheduleId)
       .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt);
+      .eq('validated_at', claimedValidatedAt)
+      .select('id');
+
     if (schedUpdateError) throw schedUpdateError;
+    const isSchedUpdated = Boolean(
+      Array.isArray(schedRows) ? schedRows.length > 0 : schedRows
+    );
+    if (!isSchedUpdated) {
+      result.postPublicationError = true;
+      result.postPublicationErrorCategory = 'SCHEDULE_STATUS_UPDATE_FAILED';
+      console.warn(
+        JSON.stringify({
+          event: 'editorial.schedule.lease_lost_post_persistence',
+          storyId,
+          scheduleId,
+          category: 'SCHEDULE_LEASE_LOST',
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    }
   } catch (_schedErr) {
     result.postPublicationError = true;
     result.postPublicationErrorCategory = result.postPublicationErrorCategory || 'SCHEDULE_STATUS_UPDATE_FAILED';
