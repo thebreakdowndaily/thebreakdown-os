@@ -27,6 +27,7 @@ export interface PublishScheduledStoryAtomicResult {
     | 'STORY_VERSION_CONFLICT'
     | 'ALREADY_PUBLISHED'
     | 'TOKEN_INVALID'
+    | 'RECONCILIATION_ERROR'
     | 'DATABASE_ERROR';
   error?: string;
 }

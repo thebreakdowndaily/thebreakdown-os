@@ -137,13 +137,17 @@ export class SupabaseStoryRepository implements StoryService {
       success?: boolean;
       code?: string;
       error?: string;
+      story_id?: string;
+      schedule_id?: string;
+      status?: string;
       version?: number;
       published_at?: string;
       updated_at?: string;
-      updated_by?: string;
+      updated_by?: string | null;
       actor?: string;
       scheduled_by?: string;
     };
+
     if (!rpcResult || !rpcResult.success) {
       return {
         success: false,
@@ -152,15 +156,92 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
+    // ── STRICT RPC RESPONSE SELF-CONSISTENCY VALIDATION ──
+    // Because the transaction may already have committed by the time this response
+    // is inspected, any violation is recorded as a RECONCILIATION_ERROR rather than
+    // a standard database error. Legacy fallback writes must NEVER be attempted.
+
+    if (rpcResult.code !== 'PUBLISHED') {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: expected code 'PUBLISHED', got '${rpcResult.code}'`,
+      };
+    }
+
+    if (rpcResult.story_id && rpcResult.story_id !== params.storyId) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: story_id mismatch (expected '${params.storyId}', got '${rpcResult.story_id}')`,
+      };
+    }
+
+    if (rpcResult.schedule_id && rpcResult.schedule_id !== params.scheduleId) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: schedule_id mismatch (expected '${params.scheduleId}', got '${rpcResult.schedule_id}')`,
+      };
+    }
+
+    if (rpcResult.status !== 'published') {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: expected status 'published', got '${rpcResult.status}'`,
+      };
+    }
+
     if (
       typeof rpcResult.version !== 'number' ||
-      !rpcResult.published_at ||
-      !rpcResult.updated_at
+      !Number.isInteger(rpcResult.version) ||
+      rpcResult.version !== params.expectedVersion + 1
     ) {
       return {
         success: false,
-        code: 'DATABASE_ERROR',
-        error: 'Atomic publish RPC succeeded but omitted required authoritative fields (version, published_at, updated_at)',
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: story version ${rpcResult.version} is not expected increment (${params.expectedVersion + 1})`,
+      };
+    }
+
+    if (!rpcResult.published_at || isNaN(new Date(rpcResult.published_at).getTime())) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: invalid or missing published_at timestamp',
+      };
+    }
+
+    if (!rpcResult.updated_at || isNaN(new Date(rpcResult.updated_at).getTime())) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: invalid or missing updated_at timestamp',
+      };
+    }
+
+    // A published story must not have a future published_at that hides it from public queries
+    const publishedAtTime = new Date(rpcResult.published_at).getTime();
+    const maxAllowedFuture = Date.now() + 60000; // allow at most 1m clock skew
+    if (publishedAtTime > maxAllowedFuture) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: published_at '${rpcResult.published_at}' is in the future`,
+      };
+    }
+
+    // UUID attribution contract: updated_by must be UUID format or null/undefined
+    if (
+      rpcResult.updated_by !== null &&
+      rpcResult.updated_by !== undefined &&
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rpcResult.updated_by)
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: updated_by '${rpcResult.updated_by}' violates UUID schema contract`,
       };
     }
 

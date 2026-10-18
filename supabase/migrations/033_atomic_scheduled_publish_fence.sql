@@ -50,15 +50,15 @@ DECLARE
     v_schedule_record RECORD;
     v_story_record RECORD;
     v_new_version INT;
-    v_publish_time TIMESTAMPTZ;
+    v_db_now TIMESTAMPTZ;
+    v_target_published_at TIMESTAMPTZ;
     v_story_published_at TIMESTAMPTZ;
     v_story_updated_at TIMESTAMPTZ;
     v_schedule_updated_at TIMESTAMPTZ;
     v_updated_by_uuid UUID;
     v_story_updated_by UUID;
+    v_story_scheduled_by TEXT;
 BEGIN
-    v_publish_time := COALESCE(p_published_at, clock_timestamp());
-
     -- Parse updated_by attribution safely into UUID
     IF p_updated_by IS NOT NULL AND p_updated_by ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' THEN
         v_updated_by_uuid := p_updated_by::UUID;
@@ -94,7 +94,17 @@ BEGIN
     END IF;
 
     -- Verify schedule lease ownership timestamp
-    IF v_schedule_record.validated_at IS DISTINCT FROM p_expected_validated_at THEN
+    -- Explicitly reject NULL timestamps for both caller parameter and locked row
+    IF p_expected_validated_at IS NULL OR v_schedule_record.validated_at IS NULL THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_LEASE_LOST',
+            'error', 'Schedule lease validation timestamp is missing or null'
+        );
+    END IF;
+
+    -- Verify schedule lease ownership timestamp exactly matches expected claim
+    IF v_schedule_record.validated_at <> p_expected_validated_at THEN
         RETURN jsonb_build_object(
             'success', false,
             'code', 'SCHEDULE_LEASE_LOST',
@@ -112,7 +122,7 @@ BEGIN
     END IF;
 
     -- 2. Lock target narrative row second (deterministic lock order)
-    SELECT id, status, version
+    SELECT id, status, version, published_at
     INTO v_story_record
     FROM public.stories
     WHERE id = p_story_id
@@ -158,23 +168,35 @@ BEGIN
     END IF;
 
     -- 4. Atomic State Mutations
+    -- Evaluate authoritative database wall-clock time at the transaction boundary.
+    v_db_now := clock_timestamp();
+
+    -- Authoritative published_at selection:
+    -- 1. If the story already has an intentional historical published_at (<= v_db_now),
+    --    preserve it as part of the editorial archival data contract.
+    -- 2. Otherwise (story has NULL published_at or an erroneous future timestamp):
+    --    If caller provided p_published_at that is historical (<= v_db_now), accept it.
+    --    Otherwise normalize strictly to v_db_now. A caller-supplied future p_published_at
+    --    is never allowed to push publication into the future, guaranteeing immediate public visibility.
+    IF v_story_record.published_at IS NOT NULL AND v_story_record.published_at <= v_db_now THEN
+        v_target_published_at := v_story_record.published_at;
+    ELSIF p_published_at IS NOT NULL AND p_published_at <= v_db_now THEN
+        v_target_published_at := p_published_at;
+    ELSE
+        v_target_published_at := v_db_now;
+    END IF;
+
     -- Update story to published status with exact field mapping and update attribution.
     -- Version is authoritatively bumped by trg_stories_version_bump trigger.
-    -- published_at contract:
-    --   Preserves historical date if non-null and <= v_publish_time.
-    --   Normalizes NULL or future dates (> v_publish_time) to v_publish_time to guarantee immediate public visibility.
     UPDATE public.stories
     SET status = 'published'::public.story_status,
-        published_at = CASE
-            WHEN stories.published_at IS NOT NULL AND stories.published_at <= v_publish_time THEN stories.published_at
-            ELSE v_publish_time
-        END,
-        updated_at = v_publish_time,
+        published_at = v_target_published_at,
+        updated_at = v_db_now,
         updated_by = v_updated_by_uuid,
-        scheduled_by = COALESCE(scheduled_by, p_updated_by)
+        scheduled_by = COALESCE(stories.scheduled_by, p_updated_by)
     WHERE id = p_story_id
-    RETURNING version, published_at, updated_at, updated_by
-    INTO v_new_version, v_story_published_at, v_story_updated_at, v_story_updated_by;
+    RETURNING version, published_at, updated_at, updated_by, scheduled_by
+    INTO v_new_version, v_story_published_at, v_story_updated_at, v_story_updated_by, v_story_scheduled_by;
 
     -- Update editorial schedule to published status using authoritative story published_at
     UPDATE public.editorial_schedule
@@ -198,7 +220,7 @@ BEGIN
         'schedule_updated_at', v_schedule_updated_at,
         'updated_by', v_story_updated_by,
         'actor', p_updated_by,
-        'scheduled_by', p_updated_by
+        'scheduled_by', v_story_scheduled_by
     );
 END;
 $$;

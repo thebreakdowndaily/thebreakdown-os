@@ -887,6 +887,28 @@ async function validateAndPublishEntry(
       return result;
     }
 
+    if (atomicRes.code === 'RECONCILIATION_ERROR') {
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.reconciliation_error',
+          storyId,
+          scheduleId,
+          category: 'AUTHORITATIVE_RECONCILIATION_ERROR',
+          error: atomicRes.error,
+          timestamp: now.toISOString(),
+        }),
+      );
+      result.passed = false;
+      result.outcome = 'blocked';
+      result.checks.push({
+        name: 'authoritative_reconciliation',
+        passed: false,
+        reason: atomicRes.error || 'RPC response contract violation during atomic publication reconciliation',
+      });
+      await logGateResult(result);
+      return result;
+    }
+
     // Generic repository / database error
     console.error(
       JSON.stringify({

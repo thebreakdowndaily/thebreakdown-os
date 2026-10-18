@@ -137,6 +137,13 @@ export class MemoryStoryService implements StoryService {
           error: `Schedule entry status is ${scheduleEntry.status}, expected validated`,
         };
       }
+      if (!params.expectedValidatedAt || !scheduleEntry.validated_at) {
+        return {
+          success: false,
+          code: 'SCHEDULE_LEASE_LOST',
+          error: 'Schedule lease validation timestamp is missing or null',
+        };
+      }
       if (scheduleEntry.validated_at !== params.expectedValidatedAt) {
         return {
           success: false,
@@ -242,7 +249,7 @@ export class MemoryStoryService implements StoryService {
       code: 'PUBLISHED',
       story: updatedStory,
       actor: params.updatedBy || 'system-scheduler',
-      scheduledBy: params.updatedBy || 'system-scheduler',
+      scheduledBy: (existing as any).scheduled_by || (existing as any).scheduledBy || params.updatedBy || 'system-scheduler',
     };
   }
 

@@ -873,59 +873,69 @@ async function runDirectDatabaseTests() {
     const client2 = pg.getPgClient();
     await client2.connect();
 
-    // Client 2 opens an explicit transaction and sets role to service_role WITHIN this transaction
-    await client2.query('BEGIN');
-    await actAs(client2, 'service_role', { sub: '00000000-0000-0000-0000-000000000001' });
+    try {
+      // Record Client 2's specific PostgreSQL backend PID
+      const pidRes = await client2.query('SELECT pg_backend_pid() AS pid;');
+      const client2Pid = Number(pidRes.rows[0].pid);
 
-    // Client 2 launches fn_publish_story_fenced inside its transaction (blocks waiting for Client 1)
-    const client2Promise = client2.query(`
-      SELECT public.fn_publish_story_fenced(
-        '${schedLockWaitId}'::UUID,
-        '${storyLockWaitId}'::UUID,
-        '${lockWaitTime}'::TIMESTAMPTZ,
-        1,
-        NOW(),
-        'system-scheduler'
-      ) as result;
-    `);
+      // Client 2 opens an explicit transaction and sets role to service_role WITHIN this transaction
+      await client2.query('BEGIN');
+      await actAs(client2, 'service_role', { sub: '00000000-0000-0000-0000-000000000001' });
 
-    // Observable bounded synchronization: verify that client2 is actively waiting on the lock in pg_locks
-    let lockWaitObserved = false;
-    for (let i = 0; i < 20; i++) {
-      const lockCheck = await client.query(`
-        SELECT count(*) as waiting_locks
-        FROM pg_locks
-        WHERE NOT granted;
+      // Client 2 launches fn_publish_story_fenced inside its transaction (blocks waiting for Client 1)
+      const client2Promise = client2.query(`
+        SELECT public.fn_publish_story_fenced(
+          '${schedLockWaitId}'::UUID,
+          '${storyLockWaitId}'::UUID,
+          '${lockWaitTime}'::TIMESTAMPTZ,
+          1,
+          NOW(),
+          'system-scheduler'
+        ) as result;
       `);
-      if (Number(lockCheck.rows[0].waiting_locks) > 0) {
-        lockWaitObserved = true;
-        break;
+
+      // Observable bounded synchronization: verify that client2's specific PID is waiting on ungranted lock in pg_locks
+      let lockWaitObserved = false;
+      for (let i = 0; i < 50; i++) {
+        const lockCheck = await client.query(`
+          SELECT count(*)::int as waiting_locks
+          FROM pg_locks
+          WHERE pid = ${client2Pid}
+            AND NOT granted;
+        `);
+        if (Number(lockCheck.rows[0].waiting_locks) > 0) {
+          lockWaitObserved = true;
+          break;
+        }
+        await new Promise(r => setTimeout(r, 40));
       }
-      await new Promise(r => setTimeout(r, 50));
+      assert(lockWaitObserved, 'Client 2 session (verified PID) is confirmed waiting on schedule row lock in pg_locks');
+
+      // Wait 3 seconds so clock_timestamp() advances past the 5-minute threshold
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      // Client 1 releases the lock by rolling back
+      await client.query('ROLLBACK');
+
+      // Client 2 unblocks, acquires lock, evaluates lease expiry against database clock, and returns
+      const client2Res = await client2Promise;
+      await client2.query('COMMIT');
+
+      const resultLockWait = client2Res.rows[0].result;
+      assert(resultLockWait.success === false, 'Transaction blocked on row lock evaluates expiry after acquiring lock');
+      assert(resultLockWait.code === 'SCHEDULE_LEASE_EXPIRED', 'Lock contention crossing 5m returns SCHEDULE_LEASE_EXPIRED');
+
+      const verifyStoryLock = await client.query(`SELECT status, version FROM public.stories WHERE id = '${storyLockWaitId}'`);
+      assert(verifyStoryLock.rows[0].status === 'draft', 'Story remains draft after lock contention expiry');
+      assert(verifyStoryLock.rows[0].version === 1, 'Story version remains unchanged');
+
+      const verifySchedLock = await client.query(`SELECT status FROM public.editorial_schedule WHERE id = '${schedLockWaitId}'`);
+      assert(verifySchedLock.rows[0].status === 'validated', 'Editorial schedule remains validated');
+    } finally {
+      try { await client.query('ROLLBACK'); } catch {}
+      try { await client2.query('ROLLBACK'); } catch {}
+      try { await client2.end(); } catch {}
     }
-    assert(lockWaitObserved, 'Client 2 is confirmed waiting on schedule row lock in pg_locks');
-
-    // Wait 3 seconds so clock_timestamp() advances past the 5-minute threshold
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    // Client 1 releases the lock by rolling back
-    await client.query('ROLLBACK');
-
-    // Client 2 unblocks, acquires lock, evaluates lease expiry, and returns
-    const client2Res = await client2Promise;
-    await client2.query('COMMIT');
-    await client2.end();
-
-    const resultLockWait = client2Res.rows[0].result;
-    assert(resultLockWait.success === false, 'Transaction blocked on row lock evaluates expiry after acquiring lock');
-    assert(resultLockWait.code === 'SCHEDULE_LEASE_EXPIRED', 'Lock contention crossing 5m returns SCHEDULE_LEASE_EXPIRED');
-
-    const verifyStoryLock = await client.query(`SELECT status, version FROM public.stories WHERE id = '${storyLockWaitId}'`);
-    assert(verifyStoryLock.rows[0].status === 'draft', 'Story remains draft after lock contention expiry');
-    assert(verifyStoryLock.rows[0].version === 1, 'Story version remains unchanged');
-
-    const verifySchedLock = await client.query(`SELECT status FROM public.editorial_schedule WHERE id = '${schedLockWaitId}'`);
-    assert(verifySchedLock.rows[0].status === 'validated', 'Editorial schedule remains validated');
 
     // 7.9 Transactional Rollback Proof: Controlled abort after story update rolls back all mutations
     const storyRollbackId = '77777777-0000-0000-0000-000000000050';
@@ -1271,6 +1281,361 @@ async function runDirectDatabaseTests() {
         assert(claimRes.rows[0].p === false, `${r} has NO execute on legacy ${claimFp}`);
       }
     }
+
+    // 7.16 Null expected lease timestamp rejection: p_expected_validated_at = NULL -> SCHEDULE_LEASE_LOST
+    const storyNullExpId = '77777777-0000-0000-0000-000000000120';
+    const schedNullExpId = '77777777-0000-0000-0000-000000000121';
+    const leaseValid16 = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyNullExpId}', 'null-exp-story', 'Null Expected Lease Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedNullExpId}', '${storyNullExpId}', '2026-10-31', 1, 'validated', '${leaseValid16}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseValid16}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResNullExp = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedNullExpId}'::UUID,
+        '${storyNullExpId}'::UUID,
+        NULL::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultNullExp = publishResNullExp.rows[0].result;
+    assert(resultNullExp.success === false, 'NULL p_expected_validated_at fails closed');
+    assert(resultNullExp.code === 'SCHEDULE_LEASE_LOST', 'Returns SCHEDULE_LEASE_LOST when caller provides NULL lease');
+
+    // 7.17 Null stored lease timestamp rejection: locked row validated_at = NULL -> SCHEDULE_LEASE_LOST
+    const storyNullStoredId = '77777777-0000-0000-0000-000000000130';
+    const schedNullStoredId = '77777777-0000-0000-0000-000000000131';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyNullStoredId}', 'null-stored-story', 'Null Stored Lease Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedNullStoredId}', '${storyNullStoredId}', '2026-11-01', 1, 'validated', NULL)
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = NULL;
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResNullStored = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedNullStoredId}'::UUID,
+        '${storyNullStoredId}'::UUID,
+        NULL::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultNullStored = publishResNullStored.rows[0].result;
+    assert(resultNullStored.success === false, 'NULL stored validated_at fails closed even if parameter is also NULL');
+    assert(resultNullStored.code === 'SCHEDULE_LEASE_LOST', 'Returns SCHEDULE_LEASE_LOST when stored lease is NULL');
+
+    // 7.18 Persisted scheduled_by: story with pre-existing scheduled_by preserves stored value
+    const storySchedPreserveId = '77777777-0000-0000-0000-000000000140';
+    const schedSchedPreserveId = '77777777-0000-0000-0000-000000000141';
+    const leasePreserve18 = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, scheduled_by)
+      VALUES ('${storySchedPreserveId}', 'sched-preserve-story', 'Preserve Scheduled By', 'draft', 1, 'original-scheduler-user')
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, scheduled_by = 'original-scheduler-user';
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedSchedPreserveId}', '${storySchedPreserveId}', '2026-11-02', 1, 'validated', '${leasePreserve18}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leasePreserve18}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResPreserve = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedSchedPreserveId}'::UUID,
+        '${storySchedPreserveId}'::UUID,
+        '${leasePreserve18}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'worker-override-actor'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultPreserve = publishResPreserve.rows[0].result;
+    assert(resultPreserve.success === true, 'Publication with pre-existing scheduled_by succeeds');
+    assert(resultPreserve.actor === 'worker-override-actor', 'RPC JSON actor reports calling actor');
+    assert(resultPreserve.scheduled_by === 'original-scheduler-user', 'RPC JSON scheduled_by preserves pre-existing label');
+
+    const verifyPreserve = await client.query(`SELECT scheduled_by FROM public.stories WHERE id = '${storySchedPreserveId}'`);
+    assert(verifyPreserve.rows[0].scheduled_by === 'original-scheduler-user', 'Database row preserves pre-existing scheduled_by');
+
+    // 7.19 Persisted scheduled_by: story with NULL scheduled_by receives input label
+    const storySchedNullId = '77777777-0000-0000-0000-000000000150';
+    const schedSchedNullId = '77777777-0000-0000-0000-000000000151';
+    const leaseNull19 = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, scheduled_by)
+      VALUES ('${storySchedNullId}', 'sched-null-story', 'Null Scheduled By', 'draft', 1, NULL)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, scheduled_by = NULL;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedSchedNullId}', '${storySchedNullId}', '2026-11-03', 1, 'validated', '${leaseNull19}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNull19}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResPopulate = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedSchedNullId}'::UUID,
+        '${storySchedNullId}'::UUID,
+        '${leaseNull19}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'first-time-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultPopulate = publishResPopulate.rows[0].result;
+    assert(resultPopulate.success === true, 'Publication of story with NULL scheduled_by succeeds');
+    assert(resultPopulate.scheduled_by === 'first-time-scheduler', 'RPC JSON scheduled_by receives input label');
+
+    const verifyPopulate = await client.query(`SELECT scheduled_by FROM public.stories WHERE id = '${storySchedNullId}'`);
+    assert(verifyPopulate.rows[0].scheduled_by === 'first-time-scheduler', 'Database row stores input label in scheduled_by');
+
+    // 7.20 Caller-supplied timestamp boundary: draft with NULL published_at and future p_published_at clamps to database time
+    const storyClampId = '77777777-0000-0000-0000-000000000160';
+    const schedClampId = '77777777-0000-0000-0000-000000000161';
+    const leaseClamp20 = new Date().toISOString();
+    const farFuture = '2035-08-01T00:00:00.000Z';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyClampId}', 'clamp-story', 'Future Timestamp Clamped Story', 'draft', 1, NULL, false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = NULL, is_test_artifact = false;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedClampId}', '${storyClampId}', '2026-11-04', 1, 'validated', '${leaseClamp20}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseClamp20}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResClamp = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedClampId}'::UUID,
+        '${storyClampId}'::UUID,
+        '${leaseClamp20}'::TIMESTAMPTZ,
+        1,
+        '${farFuture}'::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultClamp = publishResClamp.rows[0].result;
+    assert(resultClamp.success === true, 'Publication with caller future timestamp succeeds');
+    assert(new Date(resultClamp.published_at).getTime() < new Date(farFuture).getTime(), 'Caller future timestamp was clamped to database clock');
+    assert(new Date(resultClamp.published_at).getTime() <= Date.now() + 5000, 'Clamped published_at is not in the future relative to wall clock');
+
+    const verifyPublicClamp = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyClampId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicClamp.rows.length === 1, 'Clamped story satisfies public read predicate (published_at <= NOW())');
+
+    // 7.21 Caller-supplied timestamp boundary: story with historical published_at and future p_published_at preserves historical timestamp
+    const storyHistFutureId = '77777777-0000-0000-0000-000000000170';
+    const schedHistFutureId = '77777777-0000-0000-0000-000000000171';
+    const leaseHistFuture21 = new Date().toISOString();
+    const historicalDate21 = '2023-04-15T08:30:00.000Z';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyHistFutureId}', 'hist-future-story', 'Historical Story With Future Param', 'draft', 1, '${historicalDate21}', false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = '${historicalDate21}', is_test_artifact = false;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedHistFutureId}', '${storyHistFutureId}', '2026-11-05', 1, 'validated', '${leaseHistFuture21}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseHistFuture21}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResHistFuture = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedHistFutureId}'::UUID,
+        '${storyHistFutureId}'::UUID,
+        '${leaseHistFuture21}'::TIMESTAMPTZ,
+        1,
+        '${farFuture}'::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultHistFuture = publishResHistFuture.rows[0].result;
+    assert(resultHistFuture.success === true, 'Publication of historical story with future parameter succeeds');
+    assert(new Date(resultHistFuture.published_at).toISOString() === historicalDate21, 'Historical published_at is preserved despite caller future parameter');
+
+    // 7.22 Caller-supplied timestamp boundary: story with future published_at and future p_published_at clamps to database time
+    const storyFutureBothId = '77777777-0000-0000-0000-000000000180';
+    const schedFutureBothId = '77777777-0000-0000-0000-000000000181';
+    const leaseBoth22 = new Date().toISOString();
+    const futureRowDate = '2032-06-01T00:00:00.000Z';
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyFutureBothId}', 'future-both-story', 'Both Future Story', 'draft', 1, '${futureRowDate}', false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = '${futureRowDate}', is_test_artifact = false;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedFutureBothId}', '${storyFutureBothId}', '2026-11-06', 1, 'validated', '${leaseBoth22}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseBoth22}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResBoth = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedFutureBothId}'::UUID,
+        '${storyFutureBothId}'::UUID,
+        '${leaseBoth22}'::TIMESTAMPTZ,
+        1,
+        '${farFuture}'::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultBoth = publishResBoth.rows[0].result;
+    assert(resultBoth.success === true, 'Publication of story with future row and future param succeeds');
+    assert(new Date(resultBoth.published_at).getTime() < new Date(futureRowDate).getTime(), 'Future published_at from story row was not accepted');
+    assert(new Date(resultBoth.published_at).getTime() < new Date(farFuture).getTime(), 'Future published_at from caller param was not accepted');
+
+    const verifyPublicBoth = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyFutureBothId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicBoth.rows.length === 1, 'Clamped both-future story is immediately visible to public query');
+
+    // 7.23 Caller-supplied timestamp boundary: p_published_at = NULL sets database time
+    const storyParamNullId = '77777777-0000-0000-0000-000000000190';
+    const schedParamNullId = '77777777-0000-0000-0000-000000000191';
+    const leaseParamNull23 = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyParamNullId}', 'param-null-story', 'Param NULL Story', 'draft', 1, NULL, false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = NULL, is_test_artifact = false;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedParamNullId}', '${storyParamNullId}', '2026-11-07', 1, 'validated', '${leaseParamNull23}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseParamNull23}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResParamNull = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedParamNullId}'::UUID,
+        '${storyParamNullId}'::UUID,
+        '${leaseParamNull23}'::TIMESTAMPTZ,
+        1,
+        NULL::TIMESTAMPTZ,
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultParamNull = publishResParamNull.rows[0].result;
+    assert(resultParamNull.success === true, 'Publication with NULL p_published_at succeeds');
+    assert(resultParamNull.published_at !== null, 'Published_at is assigned authoritative database clock time');
+    assert(new Date(resultParamNull.published_at).getTime() <= Date.now() + 5000, 'Assigned time is not in the future');
+
+    const verifyPublicParamNull = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyParamNullId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicParamNull.rows.length === 1, 'Story with NULL p_published_at satisfies public read predicate');
+
+    // 7.24 Caller-supplied timestamp boundary: p_published_at = NOW() sets valid timestamp
+    const storyNowParamId = '77777777-0000-0000-0000-000000000200';
+    const schedNowParamId = '77777777-0000-0000-0000-000000000201';
+    const leaseNowParam24 = new Date().toISOString();
+
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version, published_at, is_test_artifact)
+      VALUES ('${storyNowParamId}', 'now-param-story', 'Now Param Story', 'draft', 1, NULL, false)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1, published_at = NULL, is_test_artifact = false;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${schedNowParamId}', '${storyNowParamId}', '2026-11-08', 1, 'validated', '${leaseNowParam24}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNowParam24}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const publishResNow = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedNowParamId}'::UUID,
+        '${storyNowParamId}'::UUID,
+        '${leaseNowParam24}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+
+    const resultNow = publishResNow.rows[0].result;
+    assert(resultNow.success === true, 'Publication with NOW() p_published_at succeeds');
+    assert(resultNow.published_at !== null, 'Published_at is assigned valid timestamp');
+    assert(new Date(resultNow.published_at).getTime() <= Date.now() + 5000, 'Assigned time is not in the future');
+
+    const verifyPublicNow = await client.query(`
+      SELECT id FROM public.stories
+      WHERE id = '${storyNowParamId}'
+        AND status = 'published'
+        AND is_test_artifact = false
+        AND published_at <= NOW();
+    `);
+    assert(verifyPublicNow.rows.length === 1, 'Story with NOW() p_published_at satisfies public read predicate');
 
     // ─────────────────────────────────────────────────────────────────
     // Summary

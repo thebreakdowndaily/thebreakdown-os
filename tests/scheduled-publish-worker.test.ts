@@ -60,7 +60,7 @@ function setupDefaultMockRepository() {
       if (schedule.status !== 'validated') {
         return { success: false, code: 'SCHEDULE_NOT_VALIDATED', error: `Schedule status is ${schedule.status}` };
       }
-      if (schedule.validated_at !== params.expectedValidatedAt) {
+      if (!params.expectedValidatedAt || !schedule.validated_at || schedule.validated_at !== params.expectedValidatedAt) {
         return { success: false, code: 'SCHEDULE_LEASE_LOST', error: 'Schedule lease lost' };
       }
       if (schedule.validated_at && Date.now() - new Date(schedule.validated_at).getTime() >= 5 * 60 * 1000) {
@@ -4005,6 +4005,380 @@ describe('Phase 38: Authoritative publication result, contract fidelity, and pos
     }
   });
 });
+
+describe('Phase 39: Database-clock authority, null-lease rejection, and strict RPC contract decoding', () => {
+  const ROUTE_SECRET = ['route', 'auth', 'fixture', 'phase39'].join('-');
+  const originalEnvSecret = process.env.CRON_SECRET;
+  let realValidateAndPublishDueStories: typeof import('@/services/editorial/schedule').validateAndPublishDueStories;
+
+  beforeEach(async () => {
+    process.env.CRON_SECRET = ROUTE_SECRET;
+    vi.resetAllMocks();
+    setupDefaultMockRepository();
+    const actualSchedule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+    realValidateAndPublishDueStories = actualSchedule.validateAndPublishDueStories;
+  });
+
+  afterEach(() => {
+    process.env.CRON_SECRET = originalEnvSecret;
+    setServiceClient(null);
+  });
+
+  describe('Checkpoint C: SupabaseStoryRepository RPC decoder contract validation', () => {
+    it('C1. Unexpected code with success: true fails contract verification with RECONCILIATION_ERROR', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'UNEXPECTED_CODE',
+            story_id: 'story-c1',
+            schedule_id: 'sched-c1',
+            status: 'published',
+            version: 2,
+            published_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c1');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c1',
+        storyId: 'story-c1',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c1', title: 'C1' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('RECONCILIATION_ERROR');
+      expect(res.error).toContain("expected code 'PUBLISHED'");
+    });
+
+    it('C2. Mismatched story ID or schedule ID fails contract verification', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'PUBLISHED',
+            story_id: 'wrong-story-id',
+            schedule_id: 'sched-c2',
+            status: 'published',
+            version: 2,
+            published_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c2');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c2',
+        storyId: 'story-c2',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c2', title: 'C2' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('RECONCILIATION_ERROR');
+      expect(res.error).toContain('story_id mismatch');
+    });
+
+    it('C3. Non-published returned status fails contract verification', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'PUBLISHED',
+            story_id: 'story-c3',
+            schedule_id: 'sched-c3',
+            status: 'draft', // non-published!
+            version: 2,
+            published_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c3');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c3',
+        storyId: 'story-c3',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c3', title: 'C3' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('RECONCILIATION_ERROR');
+      expect(res.error).toContain("expected status 'published'");
+    });
+
+    it('C4. Malformed or non-incremented version fails contract verification', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'PUBLISHED',
+            story_id: 'story-c4',
+            schedule_id: 'sched-c4',
+            status: 'published',
+            version: 5, // expectedVersion is 1, so expected increment is 2, not 5!
+            published_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c4');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c4',
+        storyId: 'story-c4',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c4', title: 'C4' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('RECONCILIATION_ERROR');
+      expect(res.error).toContain('is not expected increment (2)');
+    });
+
+    it('C5. Future or invalid timestamp fails contract verification', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const farFutureDate = new Date(Date.now() + 86400000 * 365).toISOString(); // 1 year in future
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'PUBLISHED',
+            story_id: 'story-c5',
+            schedule_id: 'sched-c5',
+            status: 'published',
+            version: 2,
+            published_at: farFutureDate,
+            updated_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c5');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c5',
+        storyId: 'story-c5',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c5', title: 'C5' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('RECONCILIATION_ERROR');
+      expect(res.error).toContain('is in the future');
+    });
+
+    it('C6. Non-UUID updated_by attribution fails schema contract verification', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'PUBLISHED',
+            story_id: 'story-c6',
+            schedule_id: 'sched-c6',
+            status: 'published',
+            version: 2,
+            published_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            updated_by: 'untrusted-raw-string-not-uuid', // invalid UUID!
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c6');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c6',
+        storyId: 'story-c6',
+        expectedValidatedAt: new Date().toISOString(),
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c6', title: 'C6' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('RECONCILIATION_ERROR');
+      expect(res.error).toContain('violates UUID schema contract');
+    });
+
+    it('C7. Valid database response preserves updated_by, actor, and scheduled_by as distinct concepts', async () => {
+      const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const validUuid = '00000000-0000-0000-0000-000000000001';
+      const nowIso = new Date().toISOString();
+      const mockClient = {
+        rpc: vi.fn().mockResolvedValue({
+          data: {
+            success: true,
+            code: 'PUBLISHED',
+            story_id: 'story-c7',
+            schedule_id: 'sched-c7',
+            status: 'published',
+            version: 2,
+            published_at: nowIso,
+            updated_at: nowIso,
+            updated_by: validUuid,
+            actor: 'system-scheduler',
+            scheduled_by: 'editor-alice',
+          },
+          error: null,
+        }),
+      };
+      setServiceClient(mockClient as any);
+
+      const repo = new SupabaseStoryRepository();
+      const token = issuePublicationToken('story-c7');
+      const res = await repo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-c7',
+        storyId: 'story-c7',
+        expectedValidatedAt: nowIso,
+        expectedVersion: 1,
+        publishedStory: { id: 'story-c7', title: 'C7' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(true);
+      expect(res.code).toBe('PUBLISHED');
+      expect(res.story?.updatedBy).toBe(validUuid);
+      expect(res.actor).toBe('system-scheduler');
+      expect(res.scheduledBy).toBe('editor-alice');
+    });
+  });
+
+  describe('Checkpoint B: MemoryStoryService null lease timestamp rejection', () => {
+    it('B1. Missing expectedValidatedAt or stored validated_at fails with SCHEDULE_LEASE_LOST', async () => {
+      const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+      const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+      const memRepo = new MemoryStoryService([
+        { id: 'story-b1', slug: 'story-b1', title: 'Story B1', status: 'ready', version: 1 } as any,
+      ]);
+
+      memRepo.setSchedule({
+        id: 'sched-b1',
+        story_id: 'story-b1',
+        status: 'validated',
+        validated_at: null as any, // null in storage!
+      });
+
+      const token = issuePublicationToken('story-b1');
+      const res = await memRepo.publishScheduledStoryAtomic({
+        scheduleId: 'sched-b1',
+        storyId: 'story-b1',
+        expectedValidatedAt: '2026-10-18T10:00:00.000Z',
+        expectedVersion: 1,
+        publishedStory: { id: 'story-b1', title: 'Story B1' } as any,
+        publicationToken: token,
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+      expect(res.error).toContain('missing or null');
+    });
+  });
+
+  describe('Checkpoint G: Schedule service handles RECONCILIATION_ERROR safely without legacy fallback', () => {
+    it('G1. RECONCILIATION_ERROR records authoritative_reconciliation failure and sets outcome blocked', async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const initialSchedule = [
+        { id: 'sched-p39-reconcile', story_id: 'story-p39-reconcile', status: 'ready', slot_date: today, priority: 10 },
+      ];
+      const initialStories = [
+        { id: 'story-p39-reconcile', slug: 'story-p39-reconcile', title: 'Reconcile Story', status: 'ready', version: 1 },
+      ];
+
+      const { mockDb } = createMockDb(initialStories, initialSchedule);
+      setServiceClient(mockDb);
+
+      mockEvaluatePublicationContract.mockResolvedValueOnce({
+        allowed: true,
+        publicationToken: 'valid-token-p39',
+        updatedStory: { id: 'story-p39-reconcile', slug: 'story-p39-reconcile', title: 'Reconcile Story' },
+      });
+
+      mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: story version mismatch',
+      });
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      try {
+        const results = await realValidateAndPublishDueStories(new Date());
+
+        expect(results).toHaveLength(1);
+        const r = results[0];
+        expect(r.passed).toBe(false);
+        expect(r.outcome).toBe('blocked');
+        expect(r.checks).toContainEqual(
+          expect.objectContaining({
+            name: 'authoritative_reconciliation',
+            passed: false,
+            reason: 'RPC response contract violation: story version mismatch',
+          })
+        );
+
+        // Crucial: Zero saveStory or legacy fallback writes called
+        expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+        expect(mockStoryRepository.saveStoryOCC).not.toHaveBeenCalled();
+        expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
+      } finally {
+        consoleErrorSpy.mockRestore();
+      }
+    });
+  });
+});
+
 
 
 
