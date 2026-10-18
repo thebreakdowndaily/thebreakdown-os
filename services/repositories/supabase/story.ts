@@ -1,5 +1,6 @@
 import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
+import { getServiceClient } from '@/supabase/client';
 import type { StoryService, PublishScheduledStoryAtomicParams, PublishScheduledStoryAtomicResult } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 
@@ -114,7 +115,8 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    const { data, error } = await (db() as any).rpc('fn_publish_story_fenced', {
+    const client = getServiceClient();
+    const { data, error } = await (client as any).rpc('fn_publish_story_fenced', {
       p_schedule_id: params.scheduleId,
       p_story_id: params.storyId,
       p_expected_validated_at: params.expectedValidatedAt,
@@ -131,7 +133,15 @@ export class SupabaseStoryRepository implements StoryService {
       };
     }
 
-    const rpcResult = data as { success?: boolean; code?: string; error?: string; version?: number };
+    const rpcResult = data as {
+      success?: boolean;
+      code?: string;
+      error?: string;
+      version?: number;
+      published_at?: string;
+      updated_at?: string;
+      updated_by?: string;
+    };
     if (!rpcResult || !rpcResult.success) {
       return {
         success: false,
@@ -145,8 +155,9 @@ export class SupabaseStoryRepository implements StoryService {
       status: 'published',
       publicationStatus: 'published',
       version: rpcResult.version ?? (params.expectedVersion + 1),
-      publishedAt: params.publishedAt || new Date().toISOString(),
-      updatedAt: params.publishedAt || new Date().toISOString(),
+      publishedAt: rpcResult.published_at || params.publishedAt || new Date().toISOString(),
+      updatedAt: rpcResult.updated_at || rpcResult.published_at || params.publishedAt || new Date().toISOString(),
+      updatedBy: rpcResult.updated_by || params.updatedBy || 'system-scheduler',
     };
 
     return {

@@ -198,6 +198,7 @@ export class MemoryStoryService implements StoryService {
       version: newVersion,
       publishedAt,
       updatedAt: publishedAt,
+      updatedBy: params.updatedBy || 'system-scheduler',
     };
     this.stories.set(params.storyId, updatedStory);
 

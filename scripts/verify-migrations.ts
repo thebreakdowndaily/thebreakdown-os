@@ -108,6 +108,15 @@ export function verifyMigrations(migrationsDir?: string): { success: boolean; re
           overallSuccess = false;
         }
       }
+
+      // Check Unapproved Privilege Grants on Sensitive Publication Functions
+      const grantMatch = line.match(/GRANT\s+EXECUTE\s+ON\s+FUNCTION\s+.*?fn_publish_story_fenced\b.*?\s+TO\s+([^;]+)/i);
+      if (grantMatch && /\b(anon|authenticated|PUBLIC)\b/i.test(grantMatch[1])) {
+        errors.push(
+          `Line ${i + 1}: Unapproved GRANT EXECUTE on fn_publish_story_fenced to public/anon/authenticated detected. Function must be restricted strictly to service_role.`
+        );
+        overallSuccess = false;
+      }
     }
 
     results.push({

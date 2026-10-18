@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- The Breakdown OS - Migration 033
--- Atomic Scheduled Publication Lease Fence (Phase 35 Candidate Release)
+-- Atomic Scheduled Publication Lease Fence & RPC Authority Hardening (Phase 36)
 --
 -- STATUS: UNAPPLIED
 -- This is a candidate release design artifact. DO NOT apply to live production
@@ -17,6 +17,16 @@
 -- DETERMINISTIC LOCK ORDERING:
 -- 1. editorial_schedule (parent schedule lease entity) FOR UPDATE
 -- 2. stories (child narrative entity) FOR UPDATE
+--
+-- RPC AUTHORITY HARDENING:
+-- - Revokes EXECUTE from PUBLIC, anon, and authenticated.
+-- - Grants EXECUTE strictly to service_role (trusted server-side execution context).
+-- - Direct RPC publication bypasses by standard authenticated users are impossible.
+--
+-- LEASE EXPIRY AT TRANSACTION BOUNDARY:
+-- - Evaluates lease validity against authoritative database clock (clock_timestamp())
+--   AFTER acquiring row locks, ensuring lock contention delays cannot allow an
+--   expired lease to commit.
 -- ==============================================================================
 
 CREATE OR REPLACE FUNCTION public.fn_publish_story_fenced(
@@ -30,13 +40,27 @@ CREATE OR REPLACE FUNCTION public.fn_publish_story_fenced(
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 AS $$
 DECLARE
     v_schedule_record RECORD;
     v_story_record RECORD;
     v_new_version INT;
+    v_commit_time TIMESTAMPTZ;
+    v_updated_by_uuid UUID;
 BEGIN
+    v_commit_time := COALESCE(p_published_at, clock_timestamp());
+
+    -- Parse updated_by attribution safely into UUID
+    IF p_updated_by IS NOT NULL AND p_updated_by ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' THEN
+        v_updated_by_uuid := p_updated_by::UUID;
+    ELSIF p_updated_by = 'system-scheduler' THEN
+        -- Standard deterministic system scheduler UUID
+        v_updated_by_uuid := '00000000-0000-0000-0000-000000000001'::UUID;
+    ELSE
+        v_updated_by_uuid := NULL;
+    END IF;
+
     -- 1. Lock parent lease entity first (deterministic lock order)
     SELECT id, status, validated_at, story_id
     INTO v_schedule_record
@@ -79,7 +103,7 @@ BEGIN
         );
     END IF;
 
-    -- 2. Lock target narrative row second
+    -- 2. Lock target narrative row second (deterministic lock order)
     SELECT id, status, version
     INTO v_story_record
     FROM public.stories
@@ -99,7 +123,8 @@ BEGIN
         RETURN jsonb_build_object(
             'success', false,
             'code', 'ALREADY_PUBLISHED',
-            'error', 'Story is already published'
+            'error', 'Story is already published in database',
+            'version', v_story_record.version
         );
     END IF;
 
@@ -108,26 +133,39 @@ BEGIN
         RETURN jsonb_build_object(
             'success', false,
             'code', 'STORY_VERSION_CONFLICT',
-            'error', format('Story version conflict: expected %s, found %s', p_expected_version, v_story_record.version)
+            'error', format('Story version conflict: expected %s, found %s', p_expected_version, v_story_record.version),
+            'version', v_story_record.version
         );
     END IF;
 
-    -- 3. Atomic State Mutations
-    v_new_version := v_story_record.version + 1;
+    -- 3. Check authoritative lease expiry against database wall-clock time AFTER acquiring row locks
+    -- Evaluated after acquiring row locks so any lock contention delay does not let an expired lease commit
+    IF v_schedule_record.validated_at < (clock_timestamp() - INTERVAL '5 minutes') THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_LEASE_EXPIRED',
+            'error', 'Schedule lease expired (> 5 minutes old)'
+        );
+    END IF;
 
-    -- Update story to published status with incremented version
+    -- 4. Atomic State Mutations
+    -- Update story to published status with exact field mapping and update attribution.
+    -- Version is authoritatively bumped by trg_stories_version_bump trigger.
     UPDATE public.stories
     SET status = 'published'::public.story_status,
-        published_at = p_published_at,
-        version = v_new_version,
-        updated_at = p_published_at
-    WHERE id = p_story_id;
+        published_at = v_commit_time,
+        updated_at = v_commit_time,
+        updated_by = v_updated_by_uuid,
+        scheduled_by = COALESCE(scheduled_by, p_updated_by)
+    WHERE id = p_story_id
+    RETURNING version, published_at, updated_at
+    INTO v_new_version, v_commit_time, v_commit_time;
 
     -- Update editorial schedule to published status
     UPDATE public.editorial_schedule
     SET status = 'published',
-        published_at = p_published_at,
-        updated_at = p_published_at
+        published_at = v_commit_time,
+        updated_at = v_commit_time
     WHERE id = p_schedule_id;
 
     RETURN jsonb_build_object(
@@ -135,20 +173,31 @@ BEGIN
         'code', 'PUBLISHED',
         'story_id', p_story_id,
         'schedule_id', p_schedule_id,
+        'status', 'published',
         'version', v_new_version,
-        'published_at', p_published_at
+        'published_at', v_commit_time,
+        'updated_at', v_commit_time,
+        'updated_by', p_updated_by
     );
 END;
 $$;
 
--- 4. Apply strict execution privileges
-REVOKE EXECUTE ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) TO authenticated, service_role;
+-- 5. Apply strict execution privileges
+-- Revoke execution from PUBLIC, anon, and authenticated to eliminate direct RPC bypasses.
+REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) FROM PUBLIC, anon, authenticated;
 
+-- Grant execution strictly to service_role (the trusted server-side execution context)
+GRANT EXECUTE ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) TO service_role;
+
+-- Revoke execution from legacy publishing RPC if present
 DO $$
 BEGIN
-    IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'publisher_worker') THEN
-        GRANT EXECUTE ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) TO publisher_worker;
+    IF EXISTS (
+        SELECT 1 FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'public' AND p.proname = 'fn_publish_story_with_audit'
+    ) THEN
+        REVOKE ALL ON FUNCTION public.fn_publish_story_with_audit(UUID) FROM PUBLIC, anon, authenticated;
     END IF;
 END
 $$;
