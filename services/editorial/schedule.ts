@@ -23,6 +23,8 @@ import type {
   WeeklySlot,
 } from '@/types/editorial-calendar';
 
+export const SCHEDULE_CLAIM_LEASE_DURATION_MS = 5 * 60 * 1000; // 5-minute lease duration
+
 // ─── Schedule CRUD ───────────────────────────────────────────────────────────
 
 export async function createScheduleEntry(
@@ -159,19 +161,47 @@ async function validateAndPublishEntry(
   const scheduleId = entry.id as string;
   const currentScheduleStatus = entry.status as string;
 
-  // ── ATOMIC CLAIM: transition schedule from current status → 'validated'
-  // Only one worker can win this race. If another already claimed it,
-  // this update affects 0 rows.
-  const { data: claimedEntry, error: claimError } = await db
-    .from('editorial_schedule')
-    .update({ status: 'validated', updated_at: now.toISOString() } as never)
-    .eq('id', scheduleId)
-    .eq('status', currentScheduleStatus)  // atomic: only if still in expected state
-    .select()
-    .single();
+  // ── ATOMIC CLAIM: acquire exclusive lease on the schedule entry
+  // If status is 'ready': atomically transition to 'validated' and set validated_at
+  // If status is 'validated': atomically acquire/renew lease only if validated_at is null or expired (< leaseCutoff)
+  // If status is anything else: entry is not eligible for publication claim
+  const nowIso = now.toISOString();
+  let claimedEntry: Record<string, unknown> | null = null;
+  let claimError: unknown = null;
+
+  if (currentScheduleStatus === 'ready') {
+    const res = await db
+      .from('editorial_schedule')
+      .update({
+        status: 'validated',
+        validated_at: nowIso,
+        updated_at: nowIso,
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'ready')
+      .select()
+      .maybeSingle();
+    claimedEntry = res.data;
+    claimError = res.error;
+  } else if (currentScheduleStatus === 'validated') {
+    const leaseCutoff = new Date(now.getTime() - SCHEDULE_CLAIM_LEASE_DURATION_MS).toISOString();
+    const res = await db
+      .from('editorial_schedule')
+      .update({
+        validated_at: nowIso,
+        updated_at: nowIso,
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'validated')
+      .or(`validated_at.is.null,validated_at.lt.${leaseCutoff}`)
+      .select()
+      .maybeSingle();
+    claimedEntry = res.data;
+    claimError = res.error;
+  }
 
   if (claimError || !claimedEntry) {
-    // Another worker already claimed or status changed — skip
+    // Another worker already claimed or active lease is held — skip
     return {
       storyId,
       scheduleId,
@@ -180,9 +210,9 @@ async function validateAndPublishEntry(
       checks: [{
         name: 'already_claimed',
         passed: false,
-        reason: `Schedule entry already processed by another worker (current status: ${currentScheduleStatus})`,
+        reason: `Schedule entry already claimed or active lease held by another worker (current status: ${currentScheduleStatus})`,
       }],
-      checkedAt: now.toISOString(),
+      checkedAt: nowIso,
       triggeredBy: 'cron',
     };
   }
@@ -318,6 +348,38 @@ async function validateAndPublishEntry(
   const repo = RepositoryFactory.getStoryRepository();
   const publishedAt = now.toISOString();
 
+  // ── PRE-PERSISTENCE IDEMPOTENCY RE-CHECK: verify story is not already published
+  const { data: latestStoryRow } = await db
+    .from('stories')
+    .select('status, published_at')
+    .eq('id', storyId)
+    .maybeSingle();
+
+  if (latestStoryRow && (latestStoryRow as { status?: string }).status === 'published') {
+    const publishedTimestamp = (latestStoryRow as { published_at?: string }).published_at || publishedAt;
+    const idempotentResult: PublicationGateResult = {
+      storyId,
+      scheduleId,
+      passed: true,
+      outcome: 'already_published',
+      checks: [{
+        name: 'already_published',
+        passed: true,
+        reason: 'Story is already published in database — skipping persistence',
+      }],
+      checkedAt: now.toISOString(),
+      triggeredBy: 'cron',
+      publishedAt: publishedTimestamp,
+    };
+    await logGateResult(idempotentResult);
+    await db
+      .from('editorial_schedule')
+      .update({ status: 'published', published_at: publishedTimestamp, updated_at: publishedAt } as never)
+      .eq('id', scheduleId)
+      .neq('status', 'published');
+    return idempotentResult;
+  }
+
   // 1. PERSISTENCE PHASE
   try {
     await repo.saveStory(
@@ -367,7 +429,11 @@ async function validateAndPublishEntry(
   result.correlationId = correlationId;
 
   try {
-    executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
+    const postEffectsRes = executePostPublicationEffects(decision.updatedStory!, schedulerPrincipal, result);
+    if (postEffectsRes && (!postEffectsRes.eventBusEmitted || postEffectsRes.errorCategory)) {
+      result.postPublicationError = true;
+      result.postPublicationErrorCategory = postEffectsRes.errorCategory || 'POST_PUBLICATION_EFFECTS_FAILED';
+    }
   } catch (_postErr) {
     result.postPublicationError = true;
     result.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
@@ -390,7 +456,8 @@ async function validateAndPublishEntry(
         published_at: publishedAt,
         updated_at: publishedAt,
       } as never)
-      .eq('id', scheduleId);
+      .eq('id', scheduleId)
+      .eq('status', 'validated');
     if (schedUpdateError) throw schedUpdateError;
   } catch (_schedErr) {
     result.postPublicationError = true;

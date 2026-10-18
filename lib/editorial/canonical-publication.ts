@@ -268,6 +268,12 @@ export function evaluatePublicationContract(
   };
 }
 
+export interface PostPublicationEffectsResult {
+  eventBusEmitted: boolean;
+  revalidationTriggered: boolean;
+  errorCategory?: 'POST_PUBLICATION_EFFECTS_FAILED';
+}
+
 /**
  * Executes post-publication side-effects (eventBus emission, ISR cache invalidation).
  */
@@ -275,7 +281,10 @@ export function executePostPublicationEffects(
   story: Story,
   principal: Principal,
   gateResult?: PublicationGateResult
-): void {
+): PostPublicationEffectsResult {
+  let eventBusEmitted = false;
+  let errorCategory: 'POST_PUBLICATION_EFFECTS_FAILED' | undefined;
+
   // 1. Emit publication event
   try {
     eventBus.publish({
@@ -290,8 +299,14 @@ export function executePostPublicationEffects(
         gatePassed: gateResult?.passed ?? true,
       },
     });
+    eventBusEmitted = true;
   } catch (err) {
     const errorName = err instanceof Error ? err.name : 'UnknownError';
+    errorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+    if (gateResult) {
+      gateResult.postPublicationError = true;
+      gateResult.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+    }
     console.error(
       JSON.stringify({
         event: 'canonical_publication.event_publish_failed',
@@ -304,6 +319,7 @@ export function executePostPublicationEffects(
   }
 
   // 2. Invalidate Next.js ISR caches dynamically (server-safe boundary)
+  let revalidationTriggered = false;
   void (async () => {
     try {
       const { revalidatePath } = await import('next/cache');
@@ -312,8 +328,15 @@ export function executePostPublicationEffects(
       if (story.slug) {
         revalidatePath(`/story/${story.slug}`);
       }
+      revalidationTriggered = true;
     } catch {
       // In test runners or worker contexts, revalidatePath may not be available
     }
   })();
+
+  return {
+    eventBusEmitted,
+    revalidationTriggered,
+    ...(errorCategory ? { errorCategory } : {}),
+  };
 }

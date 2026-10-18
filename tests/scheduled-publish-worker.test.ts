@@ -1168,6 +1168,24 @@ function createMockDb(
           currentFilter = (r: any) => prev(r) && r[col] <= val;
           return builder;
         },
+        or: (clause: string) => {
+          const prev = currentFilter;
+          const parts = clause.split(',');
+          currentFilter = (r: any) => {
+            if (!prev(r)) return false;
+            for (const part of parts) {
+              if (part.endsWith('.is.null')) {
+                const col = part.replace('.is.null', '');
+                if (r[col] === null || r[col] === undefined) return true;
+              } else if (part.includes('.lt.')) {
+                const [col, val] = part.split('.lt.');
+                if (!r[col] || new Date(r[col]).getTime() < new Date(val).getTime()) return true;
+              }
+            }
+            return false;
+          };
+          return builder;
+        },
         order: () => builder,
         limit: () => builder,
         single: async () => {
@@ -1182,6 +1200,9 @@ function createMockDb(
           return { data: row || null, error: row ? null : new Error('Not found') };
         },
         maybeSingle: async () => {
+          if (table === 'editorial_schedule' && isEqScheduleId && failAtomicClaimIds.includes(isEqScheduleId)) {
+            return { data: null, error: null };
+          }
           const store = table === 'editorial_schedule' ? scheduleStore : storiesStore;
           const row = store.find(currentFilter);
           if (row && updatePayload) {
@@ -1466,6 +1487,248 @@ describe('editorial schedule service publication lifecycle and invariants', () =
     expect(skipped).toBe(1);
     expect(published + alreadyPublished + blocked + skipped).toBe(4);
     expect(results.length).toBe(4);
+  });
+
+  it('Phase 31: two concurrent workers racing on a ready entry produce exactly one winner and one skipped loser', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const initialSchedule = [
+      { id: 'sched-concurrent-race', story_id: 'story-concurrent-race', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-concurrent-race', slug: 'story-concurrent-race', title: 'Concurrent Race Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValue({
+      allowed: true,
+      publicationToken: 'valid-concurrent-token',
+      updatedStory: { id: 'story-concurrent-race', slug: 'story-concurrent-race' },
+    });
+    mockStoryRepository.saveStory.mockImplementation(async (story: any) => {
+      const existing = storiesStore.find(s => s.id === story.id);
+      if (existing) Object.assign(existing, story);
+      return story;
+    });
+
+    // Run Worker 1 and Worker 2 against the same database instance
+    const [worker1Results, worker2Results] = await Promise.all([
+      realValidateAndPublishDueStories(new Date()),
+      realValidateAndPublishDueStories(new Date()),
+    ]);
+
+    const allResults = [...worker1Results, ...worker2Results];
+    const publishedResults = allResults.filter(r => r.outcome === 'published');
+    const skippedResults = allResults.filter(r => r.outcome === 'skipped');
+
+    // Exactly one worker won and published
+    expect(publishedResults).toHaveLength(1);
+    expect(publishedResults[0].passed).toBe(true);
+
+    // Exactly one worker lost the atomic claim race and skipped cleanly
+    expect(skippedResults).toHaveLength(1);
+    expect(skippedResults[0].passed).toBe(false);
+    expect(skippedResults[0].checks[0].name).toBe('already_claimed');
+
+    // Exactly one repository persistence operation occurred
+    expect(mockStoryRepository.saveStory).toHaveBeenCalledTimes(1);
+
+    // Final database state is published
+    expect(scheduleStore[0].status).toBe('published');
+    expect(storiesStore[0].status).toBe('published');
+  });
+
+  it('Phase 31: an entry in validated status with an active unexpired lease cannot be claimed by another worker', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    // Lease held 1 minute ago (lease is 5 minutes, so still active for 4 more minutes)
+    const activeLeaseTime = new Date(now.getTime() - 60 * 1000).toISOString();
+
+    const initialSchedule = [
+      {
+        id: 'sched-active-lease',
+        story_id: 'story-active-lease',
+        status: 'validated',
+        slot_date: today,
+        priority: 10,
+        validated_at: activeLeaseTime,
+      },
+    ];
+    const initialStories = [
+      { id: 'story-active-lease', slug: 'story-active-lease', title: 'Active Lease Story', status: 'ready' },
+    ];
+
+    const { mockDb } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    const results = await realValidateAndPublishDueStories(now);
+    expect(results).toHaveLength(1);
+    expect(results[0].outcome).toBe('skipped');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].checks[0].name).toBe('already_claimed');
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+  });
+
+  it('Phase 31: safe recovery from crashed worker when lease has expired (> 5 minutes)', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    // Lease held 10 minutes ago (lease is 5 minutes, so expired 5 minutes ago)
+    const expiredLeaseTime = new Date(now.getTime() - 10 * 60 * 1000).toISOString();
+
+    const initialSchedule = [
+      {
+        id: 'sched-expired-lease',
+        story_id: 'story-crashed-recovery',
+        status: 'validated',
+        slot_date: today,
+        priority: 10,
+        validated_at: expiredLeaseTime,
+      },
+    ];
+    const initialStories = [
+      { id: 'story-crashed-recovery', slug: 'story-crashed-recovery', title: 'Crashed Worker Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-recovery-token',
+      updatedStory: { id: 'story-crashed-recovery', slug: 'story-crashed-recovery' },
+    });
+    mockStoryRepository.saveStory.mockImplementation(async (story: any) => {
+      const existing = storiesStore.find(s => s.id === story.id);
+      if (existing) Object.assign(existing, story);
+      return story;
+    });
+
+    const results = await realValidateAndPublishDueStories(now);
+    expect(results).toHaveLength(1);
+    expect(results[0].outcome).toBe('published');
+    expect(results[0].passed).toBe(true);
+    expect(mockStoryRepository.saveStory).toHaveBeenCalledTimes(1);
+
+    // Lease was renewed and publication completed
+    expect(scheduleStore[0].status).toBe('published');
+    expect(storiesStore[0].status).toBe('published');
+  });
+
+  it('Phase 31: pre-persistence re-check stops worker if story was published concurrently before saveStory', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+
+    const initialSchedule = [
+      { id: 'sched-concurrent-pub', story_id: 'story-concurrent-pub', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-concurrent-pub', slug: 'story-concurrent-pub', title: 'Concurrent Pub Story', status: 'ready' },
+    ];
+
+    const { mockDb, storiesStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockImplementation(async () => {
+      // Out-of-band publish occurs during contract evaluation
+      storiesStore[0].status = 'published';
+      storiesStore[0].published_at = new Date(now.getTime() - 1000).toISOString();
+      return {
+        allowed: true,
+        publicationToken: 'valid-interim-token',
+        updatedStory: { id: 'story-concurrent-pub', slug: 'story-concurrent-pub' },
+      };
+    });
+
+    const results = await realValidateAndPublishDueStories(now);
+    expect(results).toHaveLength(1);
+    expect(results[0].outcome).toBe('already_published');
+    expect(results[0].passed).toBe(true);
+    // saveStory was NOT invoked because pre-persistence check caught the out-of-band publication
+    expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
+  });
+
+  it('Phase 31: truthful post-publication error reporting when eventBus fails', async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+
+    const initialSchedule = [
+      { id: 'sched-truth-post', story_id: 'story-truth-post', status: 'ready', slot_date: today, priority: 10 },
+    ];
+    const initialStories = [
+      { id: 'story-truth-post', slug: 'story-truth-post', title: 'Truth Post Story', status: 'ready' },
+    ];
+
+    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    setServiceClient(mockDb);
+
+    mockEvaluatePublicationContract.mockResolvedValueOnce({
+      allowed: true,
+      publicationToken: 'valid-truth-token',
+      updatedStory: { id: 'story-truth-post', slug: 'story-truth-post' },
+    });
+    mockStoryRepository.saveStory.mockResolvedValueOnce({ id: 'story-truth-post', status: 'published' });
+
+    mockExecutePostPublicationEffects.mockImplementationOnce((_story, _principal, gateResult) => {
+      if (gateResult) {
+        gateResult.postPublicationError = true;
+        gateResult.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
+      }
+      return {
+        eventBusEmitted: false,
+        revalidationTriggered: false,
+        errorCategory: 'POST_PUBLICATION_EFFECTS_FAILED',
+      };
+    });
+
+    const results = await realValidateAndPublishDueStories(now);
+    expect(results).toHaveLength(1);
+    expect(results[0].passed).toBe(true);
+    expect(results[0].outcome).toBe('published');
+    expect(results[0].postPublicationError).toBe(true);
+    expect(results[0].postPublicationErrorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+
+    // Schedule status was updated to published despite post-effects failure
+    expect(scheduleStore[0].status).toBe('published');
+  });
+
+  it('Phase 31: direct executePostPublicationEffects call populates gateResult and returns failure diagnostics when eventBus throws', async () => {
+    const actualCanonical = await vi.importActual<typeof import('@/lib/editorial/canonical-publication')>('@/lib/editorial/canonical-publication');
+    const { eventBus } = await vi.importActual<typeof import('@/lib/events/event-bus')>('@/lib/events/event-bus');
+
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(eventBus, 'publish').mockImplementation(() => {
+      throw new Error('Kafka event bus connection refused');
+    });
+
+    const dummyStory: any = {
+      id: 'story-effects-direct',
+      slug: 'story-effects-direct',
+      title: 'Direct Effects Story',
+      status: 'published',
+      publishedAt: new Date().toISOString(),
+      author: 'author-effects',
+    };
+    const dummyPrincipal: any = {
+      userId: 'user-effects',
+      role: 'owner',
+      name: 'Owner Principal',
+    };
+    const dummyGateResult: any = {
+      storyId: dummyStory.id,
+      passed: true,
+      outcome: 'published',
+      checks: [],
+    };
+
+    const res = actualCanonical.executePostPublicationEffects(dummyStory, dummyPrincipal, dummyGateResult);
+
+    expect(res.eventBusEmitted).toBe(false);
+    expect(res.errorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+    expect(dummyGateResult.postPublicationError).toBe(true);
+    expect(dummyGateResult.postPublicationErrorCategory).toBe('POST_PUBLICATION_EFFECTS_FAILED');
+    expect(dummyGateResult.outcome).toBe('published');
+    expect(dummyGateResult.passed).toBe(true);
   });
 });
 
