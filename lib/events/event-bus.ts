@@ -15,13 +15,20 @@ export interface IdempotentHandlerOptions {
   maxEntries?: number;
   /** Time-to-live for processed keys in milliseconds. Defaults to 10 minutes (600,000 ms). */
   ttlMs?: number;
+  /** Timeout for handler execution in milliseconds. Defaults to 30,000 ms. Set to 0 to disable. */
+  timeoutMs?: number;
 }
 
 /**
  * Wraps an event handler with idempotency enforcement.
- * If an event with an already-processed key is received within ttlMs,
- * duplicate delivery is skipped without re-executing non-idempotent business logic.
- * If the handler fails, the key is evicted so retries can execute.
+ *
+ * Guarantees:
+ * 1. Concurrent In-Flight Deduplication: Multiple concurrent deliveries with the same key
+ *    await the single running execution rather than executing concurrently.
+ * 2. Strict LRU Capacity: Enforces maxEntries via true LRU eviction (expired entries first,
+ *    then least-recently-used).
+ * 3. Failure Eviction: Failed or timed-out handler executions evict the key so retries can execute.
+ * 4. Success Memorization: Successful completions are recorded with TTL.
  */
 export function createIdempotentHandler(
   handler: EventHandler,
@@ -29,7 +36,24 @@ export function createIdempotentHandler(
 ): EventHandler {
   const maxEntries = options.maxEntries ?? 1000;
   const ttlMs = options.ttlMs ?? 600000; // 10 minutes default
+  const timeoutMs = options.timeoutMs ?? 30000; // 30 seconds default
   const processedKeys = new Map<string, number>();
+  const inFlight = new Map<string, Promise<void>>();
+
+  const prune = (now: number) => {
+    // 1. Evict expired entries
+    for (const [k, timestamp] of processedKeys.entries()) {
+      if (now - timestamp > ttlMs) {
+        processedKeys.delete(k);
+      }
+    }
+    // 2. Strict capacity enforcement: evict oldest keys until under maxEntries
+    while (processedKeys.size >= maxEntries) {
+      const oldestKey = processedKeys.keys().next().value;
+      if (oldestKey === undefined) break;
+      processedKeys.delete(oldestKey);
+    }
+  };
 
   return async (event: Event): Promise<void> => {
     const key =
@@ -39,37 +63,71 @@ export function createIdempotentHandler(
 
     const now = Date.now();
 
-    // Periodic eviction of expired keys if map grows beyond limit
-    if (processedKeys.size > maxEntries) {
-      for (const [k, timestamp] of processedKeys.entries()) {
-        if (now - timestamp > ttlMs) {
-          processedKeys.delete(k);
+    if (key) {
+      // Check in-flight executions: deduplicate concurrent delivery within this runtime
+      const activePromise = inFlight.get(key);
+      if (activePromise) {
+        await activePromise;
+        return;
+      }
+
+      // Check memorized processed keys: deduplicate completed deliveries
+      const lastSeen = processedKeys.get(key);
+      if (lastSeen !== undefined) {
+        if (now - lastSeen < ttlMs) {
+          // Refresh LRU position
+          processedKeys.delete(key);
+          processedKeys.set(key, lastSeen);
+          return;
+        } else {
+          processedKeys.delete(key);
         }
       }
     }
 
-    if (key) {
-      const lastSeen = processedKeys.get(key);
-      if (lastSeen !== undefined && now - lastSeen < ttlMs) {
-        // Duplicate delivery detected: skip re-execution of non-idempotent action
-        return;
+    const task = (async () => {
+      let timerId: ReturnType<typeof setTimeout> | undefined;
+      try {
+        const handlerPromise = Promise.resolve(handler(event));
+        if (timeoutMs > 0) {
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            timerId = setTimeout(() => {
+              reject(new Error(`Handler execution timed out after ${timeoutMs}ms`));
+            }, timeoutMs);
+          });
+          await Promise.race([handlerPromise, timeoutPromise]);
+        } else {
+          await handlerPromise;
+        }
+
+        if (key) {
+          prune(Date.now());
+          processedKeys.set(key, Date.now());
+        }
+      } catch (err) {
+        if (key) {
+          processedKeys.delete(key);
+        }
+        throw err;
+      } finally {
+        if (timerId) clearTimeout(timerId);
       }
+    })();
+
+    if (key) {
+      // Attach a silent catch handler to avoid unhandledRejection events in Node/V8
+      inFlight.set(
+        key,
+        task.catch(() => {}),
+      );
     }
 
     try {
-      const result = handler(event);
-      if (result instanceof Promise) {
-        await result;
-      }
+      await task;
+    } finally {
       if (key) {
-        processedKeys.set(key, now);
+        inFlight.delete(key);
       }
-    } catch (err) {
-      // If handler throws, evict the key so retry attempts can re-execute
-      if (key) {
-        processedKeys.delete(key);
-      }
-      throw err;
     }
   };
 }
@@ -144,17 +202,20 @@ export class EventBus {
     dispatch('*');
 
     if (asyncHandlers.length > 0) {
-      Promise.all(asyncHandlers).catch((err) => {
-        const errorName = err instanceof Error ? err.name : 'UnknownError';
-        const safeMsg = sanitizeDiagnosticError(err);
-        console.error(
-          JSON.stringify({
-            event: 'event_bus.async_handler_error',
-            errorName,
-            error: safeMsg,
-            timestamp: new Date().toISOString(),
-          }),
-        );
+      Promise.allSettled(asyncHandlers).then((settled) => {
+        for (const res of settled) {
+          if (res.status === 'rejected') {
+            const err = res.reason;
+            console.error(
+              JSON.stringify({
+                event: 'event_bus.async_handler_error',
+                errorName: err instanceof Error ? err.name : 'UnknownError',
+                error: sanitizeDiagnosticError(err),
+                timestamp: new Date().toISOString(),
+              }),
+            );
+          }
+        }
       });
     }
   }
@@ -167,36 +228,58 @@ export class EventBus {
       this.history = this.history.slice(-MAX_HISTORY);
     }
 
-    const promises: Promise<void>[] = [];
+    const handlersToRun: EventHandler[] = [];
 
-    const dispatch = (key: string) => {
+    const collect = (key: string) => {
       const set = this.handlers.get(key);
       if (!set) return;
       for (const handler of set) {
-        try {
-          const result = handler(fullEvent);
-          if (result instanceof Promise) {
-            promises.push(result);
-          }
-        } catch (syncErr) {
-          throw createSanitizedError(syncErr, 'HandlerError');
-        }
+        handlersToRun.push(handler);
       }
     };
 
-    try {
-      dispatch(event.type);
-      dispatch('*');
-    } catch (dispatchErr) {
-      throw createSanitizedError(dispatchErr);
+    collect(event.type);
+    collect('*');
+
+    if (handlersToRun.length === 0) {
+      return;
     }
 
-    if (promises.length > 0) {
-      try {
-        await Promise.all(promises);
-      } catch (err) {
-        throw createSanitizedError(err);
+    // Invoke all handlers concurrently and settle all started promises without abandoning any
+    const settled = await Promise.allSettled(
+      handlersToRun.map(async (handler) => {
+        await handler(fullEvent);
+      }),
+    );
+
+    const errors: unknown[] = [];
+    for (const res of settled) {
+      if (res.status === 'rejected') {
+        errors.push(res.reason);
       }
+    }
+
+    if (errors.length > 0) {
+      for (const err of errors) {
+        console.error(
+          JSON.stringify({
+            event: 'event_bus.async_handler_error',
+            errorName: err instanceof Error ? err.name : 'UnknownError',
+            error: sanitizeDiagnosticError(err),
+            timestamp: new Date().toISOString(),
+          }),
+        );
+      }
+
+      const primary = errors[0];
+      const safeMsg =
+        errors.length === 1
+          ? sanitizeDiagnosticError(primary)
+          : `${sanitizeDiagnosticError(primary)} (and ${errors.length - 1} more handler failure${errors.length > 2 ? 's' : ''})`;
+
+      const errToThrow = new Error(safeMsg);
+      errToThrow.name = primary instanceof Error && primary.name ? primary.name : 'HandlerError';
+      throw errToThrow;
     }
   }
 

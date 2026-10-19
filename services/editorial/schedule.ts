@@ -1292,8 +1292,9 @@ export async function processPendingPublicationOutbox(
     return summary;
   }
 
+  let claimedItems: unknown;
   try {
-    const { data: claimedItems, error: claimErr } = await (db as any).rpc('fn_claim_publication_outbox', {
+    const { data, error: claimErr } = await (db as any).rpc('fn_claim_publication_outbox', {
       p_batch_size: batchSize,
     });
 
@@ -1312,33 +1313,105 @@ export async function processPendingPublicationOutbox(
       );
       return summary;
     }
+    claimedItems = data;
+  } catch (claimEx) {
+    summary.state = 'claim_error';
+    summary.errorCategory = 'OUTBOX_CLAIM_FAILED';
+    summary.error = sanitizeDiagnosticError(claimEx);
+    console.error(
+      JSON.stringify({
+        event: 'outbox.claim_failed',
+        correlationId,
+        category: 'OUTBOX_CLAIM_FAILED',
+        error: summary.error,
+        timestamp: new Date().toISOString(),
+      }),
+    );
+    return summary;
+  }
 
-    if (claimedItems === null || !Array.isArray(claimedItems)) {
-      summary.state = 'malformed_claim_response';
-      summary.errorCategory = 'OUTBOX_CLAIM_MALFORMED';
-      summary.error = 'Claim RPC returned malformed non-array response';
-      console.error(
-        JSON.stringify({
-          event: 'outbox.claim_malformed_response',
-          correlationId,
-          category: 'OUTBOX_CLAIM_MALFORMED',
-          timestamp: new Date().toISOString(),
-        }),
-      );
-      return summary;
-    }
+  if (claimedItems === null || !Array.isArray(claimedItems)) {
+    summary.state = 'malformed_claim_response';
+    summary.errorCategory = 'OUTBOX_CLAIM_MALFORMED';
+    summary.error = 'Claim RPC returned malformed non-array response';
+    console.error(
+      JSON.stringify({
+        event: 'outbox.claim_malformed_response',
+        correlationId,
+        category: 'OUTBOX_CLAIM_MALFORMED',
+        timestamp: new Date().toISOString(),
+      }),
+    );
+    return summary;
+  }
 
-    if (claimedItems.length === 0) {
-      summary.state = 'empty';
-      return summary;
-    }
+  if (claimedItems.length === 0) {
+    summary.state = 'empty';
+    return summary;
+  }
 
-    for (const item of claimedItems as any[]) {
+  try {
+    for (const rawItem of claimedItems) {
       summary.processed++;
-      const itemId = item.id as string;
-      const claimToken = (item.claim_token || item.claimToken) as string;
-      const effectType = item.effect_type as string;
-      const payload = (item.payload || {}) as Record<string, unknown>;
+
+      // Strict structural validation of claimed outbox item
+      if (!rawItem || typeof rawItem !== 'object' || Array.isArray(rawItem)) {
+        summary.failed++;
+        summary.details.push({
+          id: 'unknown',
+          effectType: 'unknown',
+          status: 'failed',
+          error: 'MALFORMED_OUTBOX_ITEM: item is not an object',
+        });
+        console.warn(
+          JSON.stringify({
+            event: 'outbox.item_malformed',
+            category: 'OUTBOX_ITEM_MALFORMED',
+            correlationId,
+            timestamp: new Date().toISOString(),
+          }),
+        );
+        continue;
+      }
+
+      const item = rawItem as Record<string, unknown>;
+      const itemId = typeof item.id === 'string' ? item.id.trim() : '';
+      const claimToken =
+        typeof item.claim_token === 'string'
+          ? item.claim_token.trim()
+          : typeof item.claimToken === 'string'
+            ? item.claimToken.trim()
+            : '';
+      const effectType = typeof item.effect_type === 'string' ? item.effect_type.trim() : '';
+      const rawPayload = item.payload;
+      const payload =
+        rawPayload && typeof rawPayload === 'object' && !Array.isArray(rawPayload)
+          ? (rawPayload as Record<string, unknown>)
+          : {};
+
+      if (!itemId || !claimToken) {
+        summary.failed++;
+        const reason = !itemId
+          ? 'MALFORMED_OUTBOX_ITEM: missing or empty id'
+          : 'MALFORMED_OUTBOX_ITEM: missing or empty claim_token';
+        summary.details.push({
+          id: itemId || 'unknown',
+          effectType: effectType || 'unknown',
+          status: 'failed',
+          error: reason,
+        });
+        console.warn(
+          JSON.stringify({
+            event: 'outbox.item_malformed',
+            itemId: itemId || 'unknown',
+            category: 'OUTBOX_ITEM_MALFORMED',
+            error: reason,
+            correlationId,
+            timestamp: new Date().toISOString(),
+          }),
+        );
+        continue;
+      }
 
       let itemSuccess = false;
       let itemError: string | undefined;

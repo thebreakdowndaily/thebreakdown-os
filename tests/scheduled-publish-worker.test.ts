@@ -6780,6 +6780,387 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       expect(capturedPayload.version).toBe(2);
     });
   });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Phase 47: Production Consumer Idempotency, Safe Async Dispatch, and Robust Outbox Classification
+  // ═══════════════════════════════════════════════════════════════════════════
+  describe('Phase 47: Production Consumer Idempotency, Safe Async Dispatch, and Robust Outbox Classification', () => {
+    let scheduleModule: typeof import('@/services/editorial/schedule');
+
+    beforeEach(async () => {
+      scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+      setMockRevalidatePathHandler(() => {});
+    });
+
+    afterEach(() => {
+      setMockRevalidatePathHandler(null);
+    });
+
+    // ── Subsection B: Idempotency Design (Concurrency, LRU, Expiry, Restart, Production) ──
+    it('B1. Simultaneous deliveries with the same idempotency key are executed exactly once', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let executionCount = 0;
+      const slowAction = vi.fn(async () => {
+        executionCount++;
+        await new Promise((r) => setTimeout(r, 20));
+      });
+
+      const handler = createIdempotentHandler(slowAction);
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'concurrent-key-1', storyId: 'story-1' },
+        timestamp: new Date().toISOString(),
+      };
+
+      // Launch 3 simultaneous calls with same key
+      await Promise.all([handler(event), handler(event), handler(event)]);
+      expect(executionCount).toBe(1);
+      expect(slowAction).toHaveBeenCalledTimes(1);
+    });
+
+    it('B2. Simultaneous deliveries with different keys execute independently', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      const executedKeys: string[] = [];
+      const action = vi.fn(async (e: any) => {
+        executedKeys.push(e.payload.idempotencyKey);
+        await new Promise((r) => setTimeout(r, 10));
+      });
+
+      const handler = createIdempotentHandler(action);
+      const eventA: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'diff-key-A', storyId: 'story-A' },
+        timestamp: new Date().toISOString(),
+      };
+      const eventB: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'diff-key-B', storyId: 'story-B' },
+        timestamp: new Date().toISOString(),
+      };
+
+      await Promise.all([handler(eventA), handler(eventB)]);
+      expect(executedKeys).toContain('diff-key-A');
+      expect(executedKeys).toContain('diff-key-B');
+      expect(action).toHaveBeenCalledTimes(2);
+    });
+
+    it('B3. Strict LRU capacity enforcement evicts oldest entries when maxEntries is exceeded', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      const executed: string[] = [];
+      const action = vi.fn((e: any) => {
+        executed.push(e.payload.idempotencyKey);
+      });
+
+      // maxEntries = 2
+      const handler = createIdempotentHandler(action, { maxEntries: 2, ttlMs: 60000 });
+
+      const makeEvent = (k: string) => ({
+        type: 'story:published',
+        payload: { idempotencyKey: k },
+        timestamp: new Date().toISOString(),
+      });
+
+      // 1. Deliver key1 and key2 (cache size = 2)
+      await handler(makeEvent('k1'));
+      await handler(makeEvent('k2'));
+      expect(executed).toEqual(['k1', 'k2']);
+
+      // 2. Deliver key3 -> exceeds maxEntries (2), so k1 (oldest) must be evicted!
+      await handler(makeEvent('k3'));
+      expect(executed).toEqual(['k1', 'k2', 'k3']);
+
+      // 3. Deliver key2 and key3 again -> still in cache, deduplicated!
+      await handler(makeEvent('k2'));
+      await handler(makeEvent('k3'));
+      expect(executed).toEqual(['k1', 'k2', 'k3']);
+
+      // 4. Deliver key1 again -> was evicted by LRU capacity! Must re-execute!
+      await handler(makeEvent('k1'));
+      expect(executed).toEqual(['k1', 'k2', 'k3', 'k1']);
+    });
+
+    it('B4. Expiry: key is re-executed after ttlMs has elapsed', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let calls = 0;
+      const action = vi.fn(() => { calls++; });
+      const handler = createIdempotentHandler(action, { ttlMs: 30 });
+
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'expiring-key' },
+        timestamp: new Date().toISOString(),
+      };
+
+      await handler(event);
+      expect(calls).toBe(1);
+
+      // Immediate redelivery is deduplicated
+      await handler(event);
+      expect(calls).toBe(1);
+
+      // Wait for ttlMs to elapse
+      await new Promise((r) => setTimeout(r, 45));
+
+      // After ttlMs, delivery executes
+      await handler(event);
+      expect(calls).toBe(2);
+    });
+
+    it('B5. Handler timeout evicts key and permits subsequent retry', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let attempt = 0;
+      const slowAction = vi.fn(async () => {
+        attempt++;
+        if (attempt === 1) {
+          // Hang longer than timeout
+          await new Promise((r) => setTimeout(r, 60));
+        }
+      });
+
+      const handler = createIdempotentHandler(slowAction, { timeoutMs: 20 });
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'timeout-key' },
+        timestamp: new Date().toISOString(),
+      };
+
+      // Attempt 1 times out
+      await expect(handler(event)).rejects.toThrow(/timed out/i);
+      expect(attempt).toBe(1);
+
+      // Attempt 2 (retry) succeeds because key was evicted on timeout
+      await handler(event);
+      expect(attempt).toBe(2);
+    });
+
+    it('B6. Simulated process restart / cold start creates clean in-memory state allowing redelivery', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let runCount = 0;
+      const businessAction = () => { runCount++; };
+
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'restart-key' },
+        timestamp: new Date().toISOString(),
+      };
+
+      // Runtime 1
+      const runtime1Handler = createIdempotentHandler(businessAction);
+      await runtime1Handler(event);
+      await runtime1Handler(event); // deduplicated
+      expect(runCount).toBe(1);
+
+      // Runtime 2 (simulated process restart / new worker isolate)
+      const runtime2Handler = createIdempotentHandler(businessAction);
+      await runtime2Handler(event);
+      expect(runCount).toBe(2);
+    });
+
+    it('B7. Production Integration: MemoryGraphProjectionService subscribeToEvents uses subscribeIdempotent to deduplicate events', async () => {
+      const { MemoryGraphProjectionService } = await import('@/services/graph/service');
+      const { eventBus } = await import('@/lib/events/event-bus');
+
+      const graphService = new MemoryGraphProjectionService({} as any);
+      const invalidateSpy = vi.spyOn(graphService, 'invalidate');
+
+      const unsubscribe = graphService.subscribeToEvents();
+      try {
+        const payload = {
+          storyId: 'story-graph-dedup-1',
+          idempotencyKey: 'outbox:graph-item-1',
+        };
+
+        // First dispatch invalidates graph
+        await eventBus.publishAsync({
+          type: 'story:published',
+          payload,
+        });
+        expect(invalidateSpy).toHaveBeenCalledTimes(1);
+
+        // Second dispatch with same idempotency key is deduplicated
+        await eventBus.publishAsync({
+          type: 'story:published',
+          payload,
+        });
+        expect(invalidateSpy).toHaveBeenCalledTimes(1);
+      } finally {
+        unsubscribe();
+        invalidateSpy.mockRestore();
+      }
+    });
+
+    // ── Subsection C: Safe Async Dispatch Failure Semantics ───────────────────
+    it('C1. publishAsync settles ALL started handlers before throwing; no promise is abandoned', async () => {
+      const { eventBus } = await import('@/lib/events/event-bus');
+      let asyncWorkCompleted = false;
+
+      // Handler 1: Async, takes 25ms, records completion
+      const slowAsyncHandler = vi.fn(async () => {
+        await new Promise((r) => setTimeout(r, 25));
+        asyncWorkCompleted = true;
+      });
+
+      // Handler 2: Throws synchronously with a sensitive credential string
+      const syncFailingHandler = vi.fn(() => {
+        throw new Error('Sync handler exploded with password=' + ['s3cr3t', 'pass', '123'].join('_'));
+      });
+
+      // Handler 3: Rejects asynchronously
+      const asyncFailingHandler = vi.fn(async () => {
+        await new Promise((r) => setTimeout(r, 10));
+        throw new Error('Async handler rejected with token=' + ['tok', 'failed', '999'].join('_'));
+      });
+
+      const unsub1 = eventBus.subscribe('story:published', slowAsyncHandler);
+      const unsub2 = eventBus.subscribe('story:published', syncFailingHandler);
+      const unsub3 = eventBus.subscribe('story:published', asyncFailingHandler);
+
+      try {
+        let thrownError: Error | undefined;
+        try {
+          await eventBus.publishAsync({
+            type: 'story:published',
+            payload: { storyId: 'story-all-settled-test' },
+          });
+        } catch (err: any) {
+          thrownError = err;
+        }
+
+        expect(thrownError).toBeDefined();
+        // Crucial invariant: Slow async handler's promise MUST have settled before publishAsync threw!
+        expect(asyncWorkCompleted).toBe(true);
+        expect(slowAsyncHandler).toHaveBeenCalledTimes(1);
+        expect(syncFailingHandler).toHaveBeenCalledTimes(1);
+        expect(asyncFailingHandler).toHaveBeenCalledTimes(1);
+
+        // Errors thrown must be sanitized
+        expect(thrownError!.message).not.toContain('s3cr3t_pass_123');
+        expect(thrownError!.message).not.toContain('tok_failed_999');
+        expect(thrownError!.message).toContain('[REDACTED_SECRET]');
+      } finally {
+        unsub1();
+        unsub2();
+        unsub3();
+      }
+    });
+
+    // ── Subsection D: Complete Outbox Failure Classification ──────────────────
+    it('D1. Outbox claim RPC returning a rejected promise is classified as claim_error without crashing', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const mockDb: any = {
+        rpc: vi.fn().mockRejectedValue(new Error('Postgres connection pool exhausted (network error)')),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('claim_error');
+      expect(summary.errorCategory).toBe('OUTBOX_CLAIM_FAILED');
+      expect(summary.processed).toBe(0);
+      expect(summary.failed).toBe(0);
+      expect(summary.error).toBeDefined();
+      expect(summary.error).toContain('Postgres connection pool exhausted');
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const emitted = JSON.parse(consoleErrorSpy.mock.calls[0][0]);
+      expect(emitted.event).toBe('outbox.claim_failed');
+      expect(emitted.category).toBe('OUTBOX_CLAIM_FAILED');
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('D2. Outbox claim RPC returning non-object or malformed items classifies items as failed without crashing', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const malformedBatch = [
+        null,
+        'non-object-string-item',
+        12345,
+        { /* missing id */ claim_token: 'tok-1', effect_type: 'cache_invalidation' },
+        { id: 'item-no-token', /* missing claim_token */ effect_type: 'cache_invalidation' },
+      ];
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: malformedBatch, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('partial_failure');
+      expect(summary.errorCategory).toBe('OUTBOX_PARTIAL_FAILURE');
+      expect(summary.processed).toBe(5);
+      expect(summary.failed).toBe(5);
+      expect(summary.succeeded).toBe(0);
+
+      // Verify each malformed item was safely caught and classified
+      for (const detail of summary.details) {
+        expect(detail.status).toBe('failed');
+        expect(detail.error).toContain('MALFORMED_OUTBOX_ITEM');
+      }
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    it('D3. End-to-end integration: Outbox claims and delivers event_dispatch to idempotent subscriber; redelivery is deduplicated', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const { eventBus } = await import('@/lib/events/event-bus');
+
+      let businessActionCount = 0;
+      const subscriberAction = vi.fn(() => {
+        businessActionCount++;
+      });
+
+      const unsubscribe = eventBus.subscribeIdempotent('story:published', subscriberAction);
+
+      const outboxItem = {
+        id: 'outbox-integration-item-77',
+        claim_token: 'claim-tok-77',
+        effect_type: 'event_dispatch',
+        payload: {
+          story_id: 'story-integration-77',
+          slug: 'story-integration-77-slug',
+          version: 1,
+        },
+      };
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [outboxItem], error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: { success: true, code: 'COMPLETED' }, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+      setServiceClient(mockDb);
+
+      try {
+        // First outbox processing: succeeds and triggers subscriber
+        const summary1 = await processPendingPublicationOutbox(10);
+        expect(summary1.state).toBe('claimed');
+        expect(summary1.succeeded).toBe(1);
+        expect(businessActionCount).toBe(1);
+
+        // Second outbox processing (simulating redelivery of same outbox item within runtime):
+        // Outbox dispatches event, but idempotent subscriber deduplicates and does not re-execute business action!
+        const summary2 = await processPendingPublicationOutbox(10);
+        expect(summary2.state).toBe('claimed');
+        expect(summary2.succeeded).toBe(1);
+        expect(businessActionCount).toBe(1); // STILL 1!
+      } finally {
+        unsubscribe();
+      }
+    });
+  });
 });
 
 

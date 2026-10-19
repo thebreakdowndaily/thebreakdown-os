@@ -130,7 +130,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     ];
 
     for (const evt of contentEvents) {
-      this.unsubscribers.push(bus.subscribe(evt, invalidate));
+      this.unsubscribers.push(bus.subscribeIdempotent(evt, invalidate));
     }
 
     const unsubscribe = () => {
