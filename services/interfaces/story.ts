@@ -9,6 +9,9 @@ export interface PublishScheduledStoryAtomicParams {
   publicationToken: string;
   publishedAt?: string;
   updatedBy?: string;
+  gateChecks?: unknown;
+  gateCheckedAt?: string;
+  triggeredBy?: 'cron' | 'manual' | 'fallback';
 }
 
 export interface PublishScheduledStoryAtomicResult {
@@ -28,6 +31,7 @@ export interface PublishScheduledStoryAtomicResult {
     | 'ALREADY_PUBLISHED'
     | 'TOKEN_INVALID'
     | 'RECONCILIATION_ERROR'
+    | 'AUDIT_LOG_FAILED'
     | 'DATABASE_ERROR';
   error?: string;
 }

@@ -239,6 +239,18 @@ export class MemoryStoryService implements StoryService {
           .eq('id', params.scheduleId)
           .eq('status', 'validated')
           .eq('validated_at', params.expectedValidatedAt);
+
+        await dbClient
+          .from('publication_gate_log')
+          .insert({
+            story_id: params.storyId,
+            schedule_id: params.scheduleId,
+            gate_result: 'pass',
+            checks: params.gateChecks ?? [],
+            checked_at: params.gateCheckedAt || nowIso,
+            published_at: publishedAt,
+            triggered_by: params.triggeredBy || 'cron',
+          });
       } catch {
         // Ignore client sync errors if DB was just a backing mock
       }

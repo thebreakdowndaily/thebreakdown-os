@@ -133,14 +133,41 @@ SET search_path = public, pg_temp
 AS $$
 DECLARE
     v_now TIMESTAMPTZ := clock_timestamp();
-    v_lease_interval INTERVAL := (p_lease_seconds || ' seconds')::INTERVAL;
+    v_lease_interval INTERVAL;
 BEGIN
+    -- Validate arguments safely
+    IF p_batch_size IS NULL OR p_batch_size < 1 OR p_batch_size > 500 THEN
+        RAISE EXCEPTION 'INVALID_ARGUMENT: p_batch_size must be an integer between 1 and 500';
+    END IF;
+
+    IF p_lease_seconds IS NULL OR p_lease_seconds < 1 OR p_lease_seconds > 86400 THEN
+        RAISE EXCEPTION 'INVALID_ARGUMENT: p_lease_seconds must be an integer between 1 and 86400';
+    END IF;
+
+    v_lease_interval := (p_lease_seconds || ' seconds')::INTERVAL;
+
+    -- 1. Mark expired processing rows that have exhausted their retry budget as terminal 'failed'
+    -- This ensures crashed workers cannot endlessly reclaim items beyond the configured ceiling.
+    UPDATE public.publication_outbox po
+    SET status = 'failed',
+        claim_token = NULL,
+        retry_count = CASE WHEN po.retry_count < po.max_retries THEN po.retry_count + 1 ELSE po.retry_count END,
+        last_error = 'Worker lease expired; attempt ceiling exhausted',
+        updated_at = v_now
+    WHERE po.status = 'processing'
+      AND po.updated_at < (v_now - v_lease_interval)
+      AND (po.retry_count + 1 >= po.max_retries);
+
+    -- 2. Claim claimable rows:
+    -- - pending rows (initial attempt, retry_count = 0)
+    -- - expired processing rows below ceiling (reclaimed with incremented retry_count)
+    -- - failed rows with retries remaining and backoff lease elapsed
     RETURN QUERY
     WITH claimable AS (
         SELECT o.id
         FROM public.publication_outbox o
         WHERE o.status = 'pending'
-           OR (o.status = 'processing' AND o.updated_at < (v_now - v_lease_interval))
+           OR (o.status = 'processing' AND o.updated_at < (v_now - v_lease_interval) AND (o.retry_count + 1 < o.max_retries))
            OR (o.status = 'failed' AND o.retry_count < o.max_retries AND o.updated_at < (v_now - v_lease_interval))
         ORDER BY o.created_at ASC
         LIMIT p_batch_size
@@ -149,6 +176,14 @@ BEGIN
     UPDATE public.publication_outbox target
     SET status = 'processing',
         claim_token = gen_random_uuid(),
+        retry_count = CASE
+            WHEN target.status = 'processing' THEN target.retry_count + 1
+            ELSE target.retry_count
+        END,
+        last_error = CASE
+            WHEN target.status = 'processing' THEN 'Worker lease expired; reclaimed for retry'
+            ELSE target.last_error
+        END,
         updated_at = v_now
     FROM claimable
     WHERE target.id = claimable.id
@@ -430,13 +465,19 @@ GRANT EXECUTE ON FUNCTION public.fn_claim_schedule_entry_fenced(UUID, UUID) TO s
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 4. ATOMIC PUBLICATION LEASE FENCE & OUTBOX ENQUEUE
 -- ═══════════════════════════════════════════════════════════════════════════
+-- Drop legacy 6-argument overload if present
+DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT);
+
 CREATE OR REPLACE FUNCTION public.fn_publish_story_fenced(
     p_schedule_id UUID,
     p_story_id UUID,
     p_expected_validated_at TIMESTAMPTZ,
     p_expected_version INT,
     p_published_at TIMESTAMPTZ,
-    p_updated_by TEXT DEFAULT 'system-scheduler'
+    p_updated_by TEXT DEFAULT 'system-scheduler',
+    p_gate_checks JSONB DEFAULT '[]'::jsonb,
+    p_gate_checked_at TIMESTAMPTZ DEFAULT NULL,
+    p_triggered_by TEXT DEFAULT 'cron'
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -618,7 +659,30 @@ BEGIN
     RETURNING updated_at
     INTO v_schedule_updated_at;
 
-    -- 5. Enqueue pending post-publication effects atomically in publication_outbox
+    -- 5. Atomically record mandatory publication gate audit log in publication_gate_log
+    -- If writing the mandatory audit record fails, the entire transaction rolls back, guaranteeing fail-closed audit integrity.
+    INSERT INTO public.publication_gate_log (
+        story_id,
+        schedule_id,
+        gate_result,
+        checks,
+        checked_at,
+        published_at,
+        triggered_by
+    ) VALUES (
+        p_story_id,
+        p_schedule_id,
+        'pass',
+        COALESCE(p_gate_checks, '[]'::jsonb),
+        COALESCE(p_gate_checked_at, v_db_now),
+        v_story_published_at,
+        CASE
+            WHEN p_triggered_by IN ('cron', 'manual', 'fallback') THEN p_triggered_by
+            ELSE 'cron'
+        END
+    );
+
+    -- 6. Enqueue pending post-publication effects atomically in publication_outbox
     INSERT INTO public.publication_outbox (story_id, schedule_id, effect_type, payload)
     VALUES
         (p_story_id, p_schedule_id, 'cache_invalidation', jsonb_build_object(
@@ -656,18 +720,18 @@ $$;
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 5. APPLY STRICT EXECUTION PRIVILEGES
 -- ═══════════════════════════════════════════════════════════════════════════
-REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) FROM PUBLIC, anon, authenticated;
 
 DO $$ BEGIN
     IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
-        REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) FROM publisher_worker;
+        REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) FROM publisher_worker;
     END IF;
     IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
-        REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) FROM authenticator;
+        REVOKE ALL ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) FROM authenticator;
     END IF;
 END $$;
 
-GRANT EXECUTE ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) TO service_role;
+GRANT EXECUTE ON FUNCTION public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) TO service_role;
 
 -- Revoke execution from legacy publishing and claiming RPCs if present
 DO $$

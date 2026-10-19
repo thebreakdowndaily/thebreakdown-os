@@ -41,6 +41,14 @@ const mockStoryRepository = {
 vi.mock('@/services/factory/repository', () => ({
   RepositoryFactory: {
     getStoryRepository: () => mockStoryRepository,
+    getTopicRepository: () => ({}),
+    getEntityRepository: () => ({}),
+    getTimelineRepository: () => ({}),
+    getFixRepository: () => ({}),
+    getDatasetRepository: () => ({}),
+    getMediaRepository: () => ({}),
+    getInvestigationRepository: () => ({}),
+    getCitationRepository: () => ({}),
   },
 }));
 
@@ -94,6 +102,26 @@ function setupDefaultMockRepository() {
         return { success: false, code: 'STORY_VERSION_CONFLICT', error: `Version conflict: expected ${params.expectedVersion}, got ${curVersion}` };
       }
 
+      // Phase 50 Finding C: Mandatory transactional audit log inside single commit
+      if (client.from) {
+        const { error: logErr } = await client.from('publication_gate_log').insert({
+          story_id: params.storyId,
+          schedule_id: params.scheduleId,
+          gate_result: 'pass',
+          checks: params.gateChecks || [],
+          checked_at: params.gateCheckedAt || new Date().toISOString(),
+          published_at: params.publishedAt || new Date().toISOString(),
+          triggered_by: params.triggeredBy || 'cron',
+        });
+        if (logErr) {
+          return {
+            success: false,
+            code: 'AUDIT_LOG_FAILED',
+            error: `Mandatory publication_gate_log insert failed: ${logErr.message || logErr}`,
+          };
+        }
+      }
+
       // Atomic commit
       story.status = 'published';
       story.version = curVersion + 1;
@@ -103,6 +131,19 @@ function setupDefaultMockRepository() {
       schedule.status = 'published';
       schedule.published_at = story.published_at;
       schedule.updated_at = story.published_at;
+
+      if (client.logsStore && !client.from) {
+        client.logsStore.push({
+          id: crypto.randomUUID(),
+          story_id: params.storyId,
+          schedule_id: params.scheduleId,
+          gate_result: 'pass',
+          checks: params.gateChecks || [],
+          checked_at: params.gateCheckedAt || story.published_at,
+          published_at: story.published_at,
+          triggered_by: params.triggeredBy || 'cron',
+        });
+      }
 
       return {
         success: true,
@@ -154,12 +195,14 @@ const summary = {
 
 const fetchMock = vi.fn();
 
-beforeEach(() => {
+beforeEach(async () => {
   fetchMock.mockReset();
   mockRevalidatePath.mockReset();
   customRevalidatePathHandler = null;
   vi.stubGlobal('fetch', fetchMock);
   setupDefaultMockRepository();
+  const { eventBus } = await import('@/lib/events/event-bus');
+  eventBus.subscribe('story:published', () => {});
 });
 
 afterEach(() => {
@@ -1604,7 +1647,7 @@ describe('editorial schedule service publication lifecycle and invariants', () =
     expect(scheduleStore[0].status).toBe('blocked');
   });
 
-  it('handles failure after persistence (post-publication error) with outcome="published"', async () => {
+  it('Phase 50 Finding C: failure to write transactional publication_gate_log fails closed without publishing story', async () => {
     const today = new Date().toISOString().split('T')[0];
     const initialSchedule = [
       { id: 'sched-post-1', story_id: 'story-post-1', status: 'ready', slot_date: today, priority: 6 },
@@ -1613,7 +1656,7 @@ describe('editorial schedule service publication lifecycle and invariants', () =
       { id: 'story-post-1', slug: 'story-post-1', title: 'Post Effects Error Story', status: 'ready' },
     ];
 
-    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
     setServiceClient(mockDb);
 
     mockEvaluatePublicationContract.mockResolvedValueOnce({
@@ -1638,12 +1681,11 @@ describe('editorial schedule service publication lifecycle and invariants', () =
     const results = await realValidateAndPublishDueStories(new Date());
     expect(results).toHaveLength(1);
     expect(results[0].storyId).toBe('story-post-1');
-    expect(results[0].passed).toBe(true);
-    expect(results[0].outcome).toBe('published'); // Persistence succeeded!
-    expect(results[0].postPublicationError).toBe(true);
-    expect(results[0].postPublicationErrorCategory).toBe('AUDIT_LOG_FAILED');
-    expect(results[0].correlationId).toBeDefined();
-    expect(scheduleStore[0].status).toBe('published');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks.some(c => c.name === 'transactional_audit_log' && !c.passed)).toBe(true);
+    expect(scheduleStore[0].status).not.toBe('published');
+    expect(storiesStore[0].status).not.toBe('published');
     expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
   });
 
@@ -1861,7 +1903,7 @@ describe('editorial schedule service publication lifecycle and invariants', () =
     expect(mockStoryRepository.saveStory).not.toHaveBeenCalled();
   });
 
-  it('Phase 31: truthful post-publication error reporting when eventBus fails', async () => {
+  it('Phase 50 Finding C: transactional audit log failure aborts publication and fails closed', async () => {
     const today = new Date().toISOString().split('T')[0];
     const now = new Date();
 
@@ -1872,7 +1914,7 @@ describe('editorial schedule service publication lifecycle and invariants', () =
       { id: 'story-truth-post', slug: 'story-truth-post', title: 'Truth Post Story', status: 'ready' },
     ];
 
-    const { mockDb, scheduleStore } = createMockDb(initialStories, initialSchedule);
+    const { mockDb, scheduleStore, storiesStore } = createMockDb(initialStories, initialSchedule);
     setServiceClient(mockDb);
 
     mockEvaluatePublicationContract.mockResolvedValueOnce({
@@ -1895,14 +1937,14 @@ describe('editorial schedule service publication lifecycle and invariants', () =
 
     const results = await realValidateAndPublishDueStories(now);
     expect(results).toHaveLength(1);
-    expect(results[0].passed).toBe(true);
-    expect(results[0].outcome).toBe('published');
-    expect(results[0].postPublicationError).toBe(true);
-    expect(results[0].postPublicationErrorCategory).toBe('AUDIT_LOG_FAILED');
+    expect(results[0].passed).toBe(false);
+    expect(results[0].outcome).toBe('blocked');
+    expect(results[0].checks.some(c => c.name === 'transactional_audit_log' && !c.passed)).toBe(true);
     expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
 
-    // Schedule status was updated to published despite post-effects failure
-    expect(scheduleStore[0].status).toBe('published');
+    // Schedule status was NOT updated to published because audit failure rolled back transaction
+    expect(scheduleStore[0].status).not.toBe('published');
+    expect(storiesStore[0].status).not.toBe('published');
   });
 
   it('Phase 31: direct executePostPublicationEffects call populates gateResult and returns failure diagnostics when eventBus throws', async () => {
@@ -2065,14 +2107,13 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
 
     expect(results).toHaveLength(1);
     const r = results[0];
-    // Critical: outcome is published because persistence succeeded!
-    expect(r.passed).toBe(true);
-    expect(r.outcome).toBe('published');
-    expect(r.postPublicationError).toBe(true);
-    expect(r.postPublicationErrorCategory).toBe('AUDIT_LOG_FAILED');
+    // Under Phase 50 Finding C: transactional audit log failure aborts publication (fail closed)
+    expect(r.passed).toBe(false);
+    expect(r.outcome).toBe('blocked');
+    expect(r.checks.some(c => c.name === 'transactional_audit_log' && !c.passed)).toBe(true);
     expect(r.correlationId).toBeDefined();
     expect(typeof r.correlationId).toBe('string');
-    expect(scheduleStore[0].status).toBe('published');
+    expect(scheduleStore[0].status).not.toBe('published');
     expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
 
     // Verify secrets are redacted from results object
@@ -2163,10 +2204,9 @@ describe('Phase 20 & 21: end-to-end post-publication error redaction across all 
 
     expect(results).toHaveLength(1);
     const r = results[0];
-    expect(r.passed).toBe(true);
-    expect(r.outcome).toBe('published');
-    expect(r.postPublicationError).toBe(true);
-    expect(r.postPublicationErrorCategory).toBe('AUDIT_LOG_FAILED');
+    expect(r.passed).toBe(false);
+    expect(r.outcome).toBe('blocked');
+    expect(r.checks.some(c => c.name === 'transactional_audit_log' && !c.passed)).toBe(true);
     expect(r.correlationId).toBeDefined();
 
     const allConsoleLogs = consoleErrorSpy.mock.calls
@@ -3868,14 +3908,14 @@ describe('Phase 37: Post-Commit Application Behavior & Schedule Immutability', (
 
       expect(results).toHaveLength(1);
       const r = results[0];
-      expect(r.passed).toBe(true);
-      expect(r.outcome).toBe('published');
-      expect(r.postPublicationError).toBe(true);
-      expect(r.postPublicationErrorCategory).toBe('AUDIT_LOG_FAILED');
+      // Under Phase 50 Finding C: transactional audit log failure aborts publication (fail closed)
+      expect(r.passed).toBe(false);
+      expect(r.outcome).toBe('blocked');
+      expect(r.checks.some(c => c.name === 'transactional_audit_log' && !c.passed)).toBe(true);
       expect(mockExecutePostPublicationEffects).not.toHaveBeenCalled();
 
       const finalSchedule = (mockDb as any).scheduleStore.find((s: any) => s.id === 'sched-p37-effects-fail');
-      expect(finalSchedule.status).toBe('published');
+      expect(finalSchedule.status).not.toBe('published');
     } finally {
       consoleErrorSpy.mockRestore();
     }
@@ -3921,19 +3961,31 @@ describe('Phase 38: Authoritative publication result, contract fidelity, and pos
       updatedStory: { id: 'story-p38-authoritative', slug: 'story-p38-authoritative', title: 'Authoritative Story' },
     });
 
-    // Mock publishScheduledStoryAtomic to return a distinct committed version and publishedAt
-    mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
-      success: true,
-      code: 'PUBLISHED',
-      story: {
-        id: 'story-p38-authoritative',
-        slug: 'story-p38-authoritative',
-        title: 'Authoritative Story',
-        status: 'published',
-        publicationStatus: 'published',
-        version: committedVersion,
-        publishedAt: committedPublishedAt,
-      },
+    // Mock publishScheduledStoryAtomic to return a distinct committed version and publishedAt and record gate log
+    mockStoryRepository.publishScheduledStoryAtomic.mockImplementationOnce(async (params: any) => {
+      logsStore.push({
+        id: crypto.randomUUID(),
+        story_id: params.storyId,
+        schedule_id: params.scheduleId,
+        gate_result: 'pass',
+        checks: params.gateChecks || [],
+        checked_at: params.gateCheckedAt || committedPublishedAt,
+        published_at: committedPublishedAt,
+        triggered_by: params.triggeredBy || 'cron',
+      });
+      return {
+        success: true,
+        code: 'PUBLISHED',
+        story: {
+          id: 'story-p38-authoritative',
+          slug: 'story-p38-authoritative',
+          title: 'Authoritative Story',
+          status: 'published',
+          publicationStatus: 'published',
+          version: committedVersion,
+          publishedAt: committedPublishedAt,
+        },
+      };
     });
 
     const results = await realValidateAndPublishDueStories(new Date());
@@ -5274,7 +5326,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       const { processPendingPublicationOutbox } = scheduleModule;
       const { eventBus } = await import('@/lib/events/event-bus');
       setMockRevalidatePathHandler(() => {});
-      const publishAsyncSpy = vi.spyOn(eventBus, 'publishAsync').mockResolvedValue();
+      const publishAsyncSpy = vi.spyOn(eventBus, 'publishAsync').mockResolvedValue({ deliveredCount: 1, event: {} as any });
 
       const outboxItems = [
         {
@@ -5319,14 +5371,17 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       expect(mockRevalidatePath).toHaveBeenCalledWith('/stories');
       expect(mockRevalidatePath).toHaveBeenCalledWith('/story/outbox-slug-1');
 
-      expect(publishAsyncSpy).toHaveBeenCalledWith(expect.objectContaining({
-        type: 'story:published',
-        payload: expect.objectContaining({
-          storyId: 'story-outbox-2',
-          scheduleId: 'sched-outbox-2',
-          version: 3,
+      expect(publishAsyncSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'story:published',
+          payload: expect.objectContaining({
+            storyId: 'story-outbox-2',
+            scheduleId: 'sched-outbox-2',
+            version: 3,
+          }),
         }),
-      }));
+        expect.objectContaining({ minSubscribers: 1 }),
+      );
 
       const completions = rpcCalls.filter(c => c.fn === 'fn_complete_publication_outbox');
       expect(completions).toHaveLength(2);
@@ -5843,6 +5898,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         if (attempt === 1) {
           throw new Error('Temporary downstream webhook outage (HTTP 503)');
         }
+        return { deliveredCount: 1, event: {} as any };
       });
 
       const outboxItem = {
@@ -5898,7 +5954,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
     it('4. Outbox idempotency: repeated processing of cache invalidation and event dispatch causes no corruption', async () => {
       const { processPendingPublicationOutbox } = scheduleModule;
       const { eventBus } = await import('@/lib/events/event-bus');
-      const publishAsyncSpy = vi.spyOn(eventBus, 'publishAsync').mockResolvedValue();
+      const publishAsyncSpy = vi.spyOn(eventBus, 'publishAsync').mockResolvedValue({ deliveredCount: 1, event: {} as any });
 
       const outboxItems = [
         {
@@ -7401,6 +7457,142 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       await expect(handler(event)).rejects.toThrow(/timed out/i);
       expect(aborted).toBe(true);
       expect(workEndedPrematurely).toBe(true);
+    });
+  });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Phase 50: Security Review Remediation — Event Verification & Diagnostic Closure
+  // ═══════════════════════════════════════════════════════════════════════════
+  describe('Phase 50: Security Review Remediation — Event Verification & Diagnostic Closure', () => {
+    describe('Finding B: Event Consumer Verification & Fallback Prevention', () => {
+      it('B1. publishAsync throws NO_EVENT_CONSUMERS when minSubscribers is 1 and 0 consumers registered', async () => {
+        const { EventBus } = await import('@/lib/events/event-bus');
+        const bus = new EventBus();
+
+        await expect(
+          bus.publishAsync(
+            {
+              type: 'story:published',
+              payload: { storyId: 'test-story-no-sub' },
+            },
+            { minSubscribers: 1 },
+          ),
+        ).rejects.toThrow(/NO_EVENT_CONSUMERS/);
+      });
+
+      it('B2. publishAsync delivers to registered consumers and returns deliveredCount >= minSubscribers', async () => {
+        const { EventBus } = await import('@/lib/events/event-bus');
+        const bus = new EventBus();
+        const handler = vi.fn().mockResolvedValue(undefined);
+        bus.subscribe('story:published', handler);
+
+        const res = await bus.publishAsync(
+          {
+            type: 'story:published',
+            payload: { storyId: 'test-story-with-sub' },
+          },
+          { minSubscribers: 1 },
+        );
+
+        expect(res.deliveredCount).toBe(1);
+        expect(handler).toHaveBeenCalledTimes(1);
+      });
+
+      it('B3. processPendingPublicationOutbox fails closed when event_dispatch has 0 consumers', async () => {
+        const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+        const { processPendingPublicationOutbox } = scheduleModule;
+        const { eventBus } = await import('@/lib/events/event-bus');
+
+        const outboxItem = {
+          id: 'outbox-item-no-consumers',
+          effect_type: 'event_dispatch',
+          payload: { story_id: 'story-no-cons', schedule_id: 'sched-no-cons' },
+          claim_token: 'claim-token-b3',
+          claimToken: 'claim-token-b3',
+        };
+
+        const rpcCalls: Array<{ fn: string; args: any }> = [];
+        const mockDb: any = {
+          rpc: vi.fn().mockImplementation((fn: string, args: any) => {
+            rpcCalls.push({ fn, args });
+            if (fn === 'fn_claim_publication_outbox') {
+              return Promise.resolve({ data: [outboxItem], error: null });
+            }
+            if (fn === 'fn_complete_publication_outbox') {
+              return Promise.resolve({ data: { success: true, code: args.p_status.toUpperCase() }, error: null });
+            }
+            return Promise.resolve({ data: null, error: null });
+          }),
+        };
+        setServiceClient(mockDb);
+
+        const publishSpy = vi.spyOn(eventBus, 'publishAsync').mockRejectedValueOnce(
+          new Error('NO_EVENT_CONSUMERS: Event "story:published" dispatched with 0 consumers, expected at least 1'),
+        );
+
+        const summary = await processPendingPublicationOutbox(10);
+        expect(summary.processed).toBe(1);
+        expect(summary.failed).toBe(1);
+        expect(summary.succeeded).toBe(0);
+
+        const failedCompletion = rpcCalls.find(c => c.fn === 'fn_complete_publication_outbox' && c.args.p_status === 'failed');
+        expect(failedCompletion).toBeDefined();
+        expect(failedCompletion?.args.p_error).toContain('NO_EVENT_CONSUMERS');
+
+        publishSpy.mockRestore();
+      });
+
+      it('B4. Platform initialization wires canonical graph event subscriptions to eventBus', async () => {
+        const { initCanonicalServices } = await import('@/services/init');
+        const { eventBus } = await import('@/lib/events/event-bus');
+        const subscribeSpy = vi.spyOn(eventBus, 'subscribeIdempotent');
+
+        initCanonicalServices();
+
+        expect(subscribeSpy).toHaveBeenCalledWith('story:published', expect.any(Function));
+
+        subscribeSpy.mockRestore();
+      });
+    });
+
+    describe('Finding D: Secret Redaction & Sanitization Closure', () => {
+      it('D1. Redacts SUPABASE_SERVICE_ROLE_KEY and SERVICE_ROLE_KEY across formats and casings', async () => {
+        const { sanitizeDiagnosticError } = await import('@/lib/security/diagnostic-sanitizer');
+
+        const testCases = [
+          'SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.mock_secret_signature',
+          'supabase_service_role_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.mock_secret_signature"',
+          'SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.mock_secret_signature',
+          'service-role-key = secret_key_non_jwt_format_12345',
+          'NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY=sensitive_admin_token_abcdef',
+        ];
+
+        for (const input of testCases) {
+          const sanitized = sanitizeDiagnosticError(input);
+          expect(sanitized).not.toContain('mock_secret_signature');
+          expect(sanitized).not.toContain('secret_key_non_jwt_format_12345');
+          expect(sanitized).not.toContain('sensitive_admin_token_abcdef');
+          expect(sanitized).toContain('[REDACTED_SECRET]');
+        }
+      });
+
+      it('D2. Redacts service role secrets within stack traces and complex error payloads', async () => {
+        const { sanitizeDiagnosticError, createSanitizedError } = await import('@/lib/security/diagnostic-sanitizer');
+
+        const complexError = new Error(
+          'PostgREST error: connection failed with SUPABASE_SERVICE_ROLE_KEY=super_secret_jwt_payload_98765 at db.project.supabase.co:5432',
+        );
+
+        const sanitized = sanitizeDiagnosticError(complexError);
+        expect(sanitized).not.toContain('super_secret_jwt_payload_98765');
+        expect(sanitized).not.toContain('db.project.supabase.co');
+        expect(sanitized).toContain('[REDACTED_SECRET]');
+        expect(sanitized).toContain('[REDACTED_HOST]');
+
+        const safeErrInstance = createSanitizedError(complexError);
+        expect(safeErrInstance.message).not.toContain('super_secret_jwt_payload_98765');
+        expect(safeErrInstance.message).not.toContain('db.project.supabase.co');
+      });
     });
   });
 });

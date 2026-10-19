@@ -159,6 +159,9 @@ export class SupabaseStoryRepository implements StoryService {
       p_expected_version: params.expectedVersion,
       p_published_at: params.publishedAt || new Date().toISOString(),
       p_updated_by: params.updatedBy || 'system-scheduler',
+      p_gate_checks: params.gateChecks ?? [],
+      p_gate_checked_at: params.gateCheckedAt || null,
+      p_triggered_by: params.triggeredBy || 'cron',
     });
 
     if (error) {

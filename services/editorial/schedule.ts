@@ -876,6 +876,9 @@ async function validateAndPublishEntry(
       publicationToken: decision.publicationToken,
       publishedAt,
       updatedBy: schedulerPrincipal.userId,
+      gateChecks: result.checks,
+      gateCheckedAt: result.checkedAt,
+      triggeredBy: result.triggeredBy || 'cron',
     });
   } catch (atomicErr: any) {
     atomicRes = {
@@ -1008,6 +1011,30 @@ async function validateAndPublishEntry(
       return result;
     }
 
+    if (atomicRes.code === 'AUDIT_LOG_FAILED') {
+      const sanitizedErr = sanitizeDiagnosticError(atomicRes.error);
+      const correlationId = result.correlationId || crypto.randomUUID();
+      result.correlationId = correlationId;
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.gate_log_failed',
+          storyId,
+          correlationId,
+          category: 'AUDIT_LOG_FAILED',
+          error: sanitizedErr,
+          timestamp: now.toISOString(),
+        }),
+      );
+      result.passed = false;
+      result.outcome = 'blocked';
+      result.checks.push({
+        name: 'transactional_audit_log',
+        passed: false,
+        reason: sanitizedErr,
+      });
+      return result;
+    }
+
     // Generic repository / database error
     console.error(
       JSON.stringify({
@@ -1114,21 +1141,11 @@ async function validateAndPublishEntry(
   const correlationId = crypto.randomUUID();
   result.correlationId = correlationId;
 
-  try {
-    await logGateResult(result);
-  } catch (_logErr) {
-    result.postPublicationError = true;
-    result.postPublicationErrorCategory = result.postPublicationErrorCategory || 'AUDIT_LOG_FAILED';
-    console.error(
-      JSON.stringify({
-        event: 'editorial.schedule.gate_log_failed',
-        storyId,
-        correlationId,
-        category: 'AUDIT_LOG_FAILED',
-        timestamp: new Date().toISOString(),
-      }),
-    );
-  }
+  // 3. ATOMIC AUDIT INTEGRITY:
+  // The mandatory publication gate audit record is atomically written inside the
+  // single database transaction by fn_publish_story_fenced (Phase 50 Finding C).
+  // No post-commit application insert is performed here, eliminating the risk of
+  // a published story lacking an audit record or generating duplicate gate entries.
 
   return result;
 }
@@ -1429,22 +1446,30 @@ export async function processPendingPublicationOutbox(
           }
           itemSuccess = true;
         } else if (effectType === 'event_dispatch') {
+          ensureCanonicalEventConsumers();
           const { eventBus } = await import('@/lib/events/event-bus');
           const idempotencyKey = `outbox:${itemId}`;
-          await eventBus.publishAsync({
-            type: 'story:published',
-            payload: {
-              storyId: (payload.story_id || payload.storyId) as string,
-              scheduleId: (payload.schedule_id || payload.scheduleId) as string,
-              slug: (payload.slug as string) || undefined,
-              version: (payload.version as number) || 1,
-              publishedAt: (payload.published_at || payload.publishedAt) as string || new Date().toISOString(),
-              publisherId: (payload.actor || payload.publisherId) as string || 'system-scheduler',
-              gatePassed: true,
-              idempotencyKey,
-              outboxId: itemId,
+          const publishRes = await eventBus.publishAsync(
+            {
+              type: 'story:published',
+              payload: {
+                storyId: (payload.story_id || payload.storyId) as string,
+                scheduleId: (payload.schedule_id || payload.scheduleId) as string,
+                slug: (payload.slug as string) || undefined,
+                version: (payload.version as number) || 1,
+                publishedAt: (payload.published_at || payload.publishedAt) as string || new Date().toISOString(),
+                publisherId: (payload.actor || payload.publisherId) as string || 'system-scheduler',
+                gatePassed: true,
+                idempotencyKey,
+                outboxId: itemId,
+              },
             },
-          });
+            { minSubscribers: 1 },
+          );
+
+          if (!publishRes || publishRes.deliveredCount === 0) {
+            throw new Error('NO_EVENT_CONSUMERS: event_dispatch delivered to 0 consumers');
+          }
           itemSuccess = true;
         } else {
           itemError = `Unknown effect_type: ${effectType}`;
@@ -1609,3 +1634,20 @@ function addDays(dateStr: string, days: number): string {
   d.setUTCDate(d.getUTCDate() + days);
   return formatDate(d);
 }
+
+/**
+ * Ensures that canonical platform event consumers (such as GraphProjectionService)
+ * are initialized and subscribed to the EventBus.
+ */
+export function ensureCanonicalEventConsumers(): void {
+  try {
+    const { getServices } = require('@/services/registry');
+    const services = getServices();
+    if (services?.graph && typeof services.graph.subscribeToEvents === 'function') {
+      services.graph.subscribeToEvents();
+    }
+  } catch {
+    // Services may not be initialized in isolated test harness
+  }
+}
+

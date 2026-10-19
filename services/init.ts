@@ -42,6 +42,7 @@ function buildWithGraph(base: Omit<Services, 'graph' | 'monitoring'>): Services 
   const services: Services = { ...partial, graph };
   initServices(services);
   graph.setServices(services);
+  graph.subscribeToEvents();
   return services;
 }
 

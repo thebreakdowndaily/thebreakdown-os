@@ -5,6 +5,20 @@ export type EventHandler = (event: Event, signal?: AbortSignal) => void | Promis
 
 const MAX_HISTORY = 500;
 
+export interface PublishOptions {
+  /**
+   * Minimum number of active handlers required for dispatch to be considered successful.
+   * If the number of matching registered handlers is less than minSubscribers,
+   * publishAsync will reject with a NO_EVENT_CONSUMERS error.
+   */
+  minSubscribers?: number;
+}
+
+export interface PublishResult {
+  deliveredCount: number;
+  event: Event;
+}
+
 export interface IdempotentHandlerOptions {
   /**
    * Custom function to extract an idempotency key from an event.
@@ -271,7 +285,10 @@ export class EventBus {
     }
   }
 
-  async publishAsync(event: Omit<Event, 'timestamp'>): Promise<void> {
+  async publishAsync(
+    event: Omit<Event, 'timestamp'>,
+    options?: PublishOptions,
+  ): Promise<PublishResult> {
     const fullEvent: Event = { ...event, timestamp: new Date().toISOString() };
 
     this.history.push(fullEvent);
@@ -292,8 +309,14 @@ export class EventBus {
     collect(event.type);
     collect('*');
 
+    if (options?.minSubscribers !== undefined && handlersToRun.length < options.minSubscribers) {
+      throw new Error(
+        `NO_EVENT_CONSUMERS: Event "${event.type}" dispatched with ${handlersToRun.length} consumers, expected at least ${options.minSubscribers}`,
+      );
+    }
+
     if (handlersToRun.length === 0) {
-      return;
+      return { deliveredCount: 0, event: fullEvent };
     }
 
     // Invoke all handlers concurrently and settle all started promises without abandoning any
@@ -332,6 +355,8 @@ export class EventBus {
       errToThrow.name = primary instanceof Error && primary.name ? primary.name : 'HandlerError';
       throw errToThrow;
     }
+
+    return { deliveredCount: handlersToRun.length, event: fullEvent };
   }
 
   getHistory(limit?: number): Event[] {

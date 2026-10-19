@@ -431,22 +431,22 @@ async function runDirectDatabaseTests() {
 
     // 6.2 Privilege checks via has_function_privilege
     const anonPrivRes = await client.query(`
-      SELECT has_function_privilege('anon', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+      SELECT has_function_privilege('anon', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)', 'execute') as priv;
     `);
     assert(anonPrivRes.rows[0].priv === false, 'anon has NO execute privilege on fn_publish_story_fenced');
 
     const authPrivRes = await client.query(`
-      SELECT has_function_privilege('authenticated', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+      SELECT has_function_privilege('authenticated', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)', 'execute') as priv;
     `);
     assert(authPrivRes.rows[0].priv === false, 'authenticated has NO execute privilege on fn_publish_story_fenced');
 
     const pubPrivRes = await client.query(`
-      SELECT has_function_privilege('public', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+      SELECT has_function_privilege('public', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)', 'execute') as priv;
     `);
     assert(pubPrivRes.rows[0].priv === false, 'public has NO execute privilege on fn_publish_story_fenced');
 
     const svcPrivRes = await client.query(`
-      SELECT has_function_privilege('service_role', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+      SELECT has_function_privilege('service_role', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)', 'execute') as priv;
     `);
     assert(svcPrivRes.rows[0].priv === true, 'service_role HAS execute privilege on fn_publish_story_fenced');
 
@@ -484,12 +484,12 @@ async function runDirectDatabaseTests() {
 
     // 6.5 Direct execution rejection: publisher_worker and authenticator cannot call fn_publish_story_fenced
     const pubWorkerPrivRes = await client.query(`
-      SELECT has_function_privilege('publisher_worker', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+      SELECT has_function_privilege('publisher_worker', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)', 'execute') as priv;
     `);
     assert(pubWorkerPrivRes.rows[0].priv === false, 'publisher_worker has NO execute privilege on fn_publish_story_fenced');
 
     const authRolePrivRes = await client.query(`
-      SELECT has_function_privilege('authenticator', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)', 'execute') as priv;
+      SELECT has_function_privilege('authenticator', 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)', 'execute') as priv;
     `);
     assert(authRolePrivRes.rows[0].priv === false, 'authenticator has NO execute privilege on fn_publish_story_fenced');
 
@@ -1266,7 +1266,7 @@ async function runDirectDatabaseTests() {
 
     // 7.15 Complete Effective Privilege Matrix across all 5 roles
     const roles = ['anon', 'authenticated', 'publisher_worker', 'authenticator', 'service_role'] as const;
-    const fencedFp = 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text)';
+    const fencedFp = 'public.fn_publish_story_fenced(uuid,uuid,timestamptz,integer,timestamptz,text,jsonb,timestamptz,text)';
     const auditFp = 'public.fn_publish_story_with_audit(uuid)';
     const claimFp = 'public.fn_claim_due_schedule_entry()';
 
@@ -2496,8 +2496,244 @@ async function runDirectDatabaseTests() {
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // Summary
+    // 10. Phase 50: Outbox Retry Ceilings & Transactional Audit Integrity
     // ─────────────────────────────────────────────────────────────────
+    console.log('\n10. Phase 50: Outbox Retry Ceilings, Crash Recovery & Transactional Audit Integrity');
+
+    // 10.1 Invalid RPC arguments fail closed
+    let invalidBatchFailed = false;
+    try {
+      await client.query('SELECT * FROM public.fn_claim_publication_outbox(0, 60);');
+    } catch (err: any) {
+      if (err.message && err.message.includes('INVALID_ARGUMENT')) invalidBatchFailed = true;
+    }
+    assert(invalidBatchFailed, 'fn_claim_publication_outbox rejects p_batch_size = 0 with INVALID_ARGUMENT');
+
+    let invalidLeaseFailed = false;
+    try {
+      await client.query('SELECT * FROM public.fn_claim_publication_outbox(10, 0);');
+    } catch (err: any) {
+      if (err.message && err.message.includes('INVALID_ARGUMENT')) invalidLeaseFailed = true;
+    }
+    assert(invalidLeaseFailed, 'fn_claim_publication_outbox rejects p_lease_seconds = 0 with INVALID_ARGUMENT');
+
+    // Setup stories and schedule entries for outbox and audit tests
+    const p50StoryId = '11111111-5050-4000-8000-000000000001';
+    const p50ScheduleId = '11111111-5050-4000-8000-000000000002';
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${p50StoryId}', 'P50 Audit Test Story', 'p50-audit-test-story', 'draft', 1, 'editor-1')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${p50ScheduleId}', '${p50StoryId}', CURRENT_DATE - INTERVAL '100 days', 1, 'validated', NOW())
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    // 10.2 Normal failed attempt increments retry_count
+    const p50OutboxItem1 = '22222222-5050-4000-8000-000000000001';
+    await client.query(`
+      INSERT INTO public.publication_outbox (id, story_id, schedule_id, effect_type, payload, status, retry_count, max_retries)
+      VALUES ('${p50OutboxItem1}', '${p50StoryId}', '${p50ScheduleId}', 'cache_invalidation', '{}'::jsonb, 'pending', 0, 3)
+      ON CONFLICT (id) DO UPDATE SET status = 'pending', retry_count = 0, claim_token = NULL;
+    `);
+
+    // Claim the item
+    const claimedP50_1 = await client.query('SELECT id, claim_token FROM public.fn_claim_publication_outbox(10, 60);');
+    const myItem1 = claimedP50_1.rows.find((r: any) => r.id === p50OutboxItem1);
+    assert(Boolean(myItem1), 'Pending outbox item claimed by worker');
+    assert(Boolean(myItem1?.claim_token), 'Claimed item received non-null claim token');
+
+    // Complete as failed
+    const failRes1 = await client.query(`
+      SELECT public.fn_complete_publication_outbox('${p50OutboxItem1}'::UUID, '${myItem1.claim_token}'::UUID, 'failed', 'Temporary network failure') as res;
+    `);
+    assert(failRes1.rows[0].res.success === true, 'Completion with failed status succeeds');
+    const checkFailed1 = await client.query(`SELECT status, retry_count, last_error FROM public.publication_outbox WHERE id = '${p50OutboxItem1}'`);
+    assert(checkFailed1.rows[0].status === 'failed', 'Item transitioned to failed status');
+    assert(checkFailed1.rows[0].retry_count === 1, 'retry_count incremented to 1 on normal failure');
+
+    // 10.3 Stale processing item below retry ceiling can be reclaimed and increments retry_count
+    const p50CrashItem = '33333333-5050-4000-8000-000000000001';
+    await client.query(`
+      INSERT INTO public.publication_outbox (id, story_id, schedule_id, effect_type, payload, status, claim_token, retry_count, max_retries, updated_at)
+      VALUES ('${p50CrashItem}', '${p50StoryId}', '${p50ScheduleId}', 'cache_invalidation', '{}'::jsonb, 'processing', gen_random_uuid(), 0, 3, NOW() - INTERVAL '120 seconds')
+      ON CONFLICT (id) DO UPDATE SET status = 'processing', claim_token = gen_random_uuid(), retry_count = 0, updated_at = NOW() - INTERVAL '120 seconds';
+    `);
+
+    // Claim - should reclaim the crashed processing item and increment retry_count to 1
+    const reclaim1 = await client.query('SELECT id, retry_count, claim_token FROM public.fn_claim_publication_outbox(10, 60);');
+    const reclaimedRow1 = reclaim1.rows.find((r: any) => r.id === p50CrashItem);
+    assert(Boolean(reclaimedRow1), 'Stale processing item below ceiling reclaimed safely');
+    assert(reclaimedRow1?.retry_count === 1, 'Reclaiming crashed processing item increments retry_count to 1');
+
+    // 10.4 Repeated worker crashes eventually exhaust attempt budget and transition terminally to failed
+    // Simulate second crash (expire lease while processing with retry_count = 1)
+    await client.query(`
+      UPDATE public.publication_outbox
+      SET updated_at = NOW() - INTERVAL '120 seconds'
+      WHERE id = '${p50CrashItem}';
+    `);
+    // Reclaim second time -> retry_count becomes 2
+    const reclaim2 = await client.query('SELECT id, retry_count FROM public.fn_claim_publication_outbox(10, 60);');
+    const reclaimedRow2 = reclaim2.rows.find((r: any) => r.id === p50CrashItem);
+    assert(reclaimedRow2?.retry_count === 2, 'Second crash reclaim increments retry_count to 2');
+
+    // Simulate third crash: expire lease while in processing with retry_count = 2 (max_retries is 3, so 2 + 1 >= 3)
+    await client.query(`
+      UPDATE public.publication_outbox
+      SET updated_at = NOW() - INTERVAL '120 seconds'
+      WHERE id = '${p50CrashItem}';
+    `);
+
+    // Next claim: should terminalize this row to 'failed' and NOT return it
+    const reclaim3 = await client.query('SELECT id FROM public.fn_claim_publication_outbox(10, 60);');
+    const reclaimedRow3 = reclaim3.rows.find((r: any) => r.id === p50CrashItem);
+    assert(!reclaimedRow3, 'Exhausted item is NOT reclaimed into processing');
+
+    // Verify row in database: terminal failed, retry_count = 3, claim_token = NULL
+    const verifyExhausted = await client.query(`
+      SELECT status, retry_count, max_retries, claim_token, last_error
+      FROM public.publication_outbox
+      WHERE id = '${p50CrashItem}';
+    `);
+    assert(verifyExhausted.rows[0].status === 'failed', 'Exhausted crashed item terminally transitioned to failed');
+    assert(verifyExhausted.rows[0].retry_count === 3, 'Exhausted item retry_count is 3 (equal to max_retries)');
+    assert(verifyExhausted.rows[0].claim_token === null, 'Exhausted item claim_token is NULL');
+    assert(verifyExhausted.rows[0].last_error.includes('ceiling exhausted'), 'Exhausted item records diagnostic last_error');
+
+    // 10.5 Exhausted item cannot be endlessly reclaimed on subsequent claim runs
+    const reclaim4 = await client.query('SELECT id FROM public.fn_claim_publication_outbox(10, 60);');
+    const reclaimedRow4 = reclaim4.rows.find((r: any) => r.id === p50CrashItem);
+    assert(!reclaimedRow4, 'Subsequent claim run does NOT reclaim exhausted item');
+
+    // 10.6 Transactional Publication Gate Audit Integrity (Finding C)
+    const p50AuditStoryId = '44444444-5050-4000-8000-000000000001';
+    const p50AuditSchedId = '44444444-5050-4000-8000-000000000002';
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${p50AuditStoryId}', 'Transactional Audit Test', 'trans-audit-test', 'draft', 1, 'editor-1')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    const p50AuditLeaseTime = new Date().toISOString();
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${p50AuditSchedId}', '${p50AuditStoryId}', CURRENT_DATE - INTERVAL '101 days', 1, 'validated', '${p50AuditLeaseTime}')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    // Call fn_publish_story_fenced with gate checks and audit parameters
+    const gateChecksPayload = JSON.stringify([
+      { name: 'evidence_provenance', passed: true },
+      { name: 'editorial_review', passed: true }
+    ]);
+
+    const publishAtomicRes = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${p50AuditSchedId}'::UUID,
+        '${p50AuditStoryId}'::UUID,
+        '${p50AuditLeaseTime}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler',
+        '${gateChecksPayload}'::JSONB,
+        NOW(),
+        'cron'
+      ) as res;
+    `);
+    assert(publishAtomicRes.rows[0].res.success === true, 'fn_publish_story_fenced with audit parameters succeeds');
+    assert(publishAtomicRes.rows[0].res.code === 'PUBLISHED', 'Result code is PUBLISHED');
+
+    // Verify publication_gate_log was written atomically in the SAME transaction
+    const gateLogVerify = await client.query(`
+      SELECT story_id, schedule_id, gate_result, checks, triggered_by, published_at
+      FROM public.publication_gate_log
+      WHERE story_id = '${p50AuditStoryId}';
+    `);
+    assert(gateLogVerify.rowCount === 1, 'Mandatory publication_gate_log record exists for published story');
+    assert(gateLogVerify.rows[0].gate_result === 'pass', 'Gate log gate_result is pass');
+    assert(gateLogVerify.rows[0].schedule_id === p50AuditSchedId, 'Gate log references correct schedule_id');
+    assert(gateLogVerify.rows[0].triggered_by === 'cron', 'Gate log triggered_by is cron');
+    assert(gateLogVerify.rows[0].checks.length === 2, 'Gate log preserves complete gate checks payload');
+
+    // Verify outbox was also atomically populated
+    const outboxVerify = await client.query(`
+      SELECT effect_type FROM public.publication_outbox WHERE story_id = '${p50AuditStoryId}' ORDER BY effect_type;
+    `);
+    assert(outboxVerify.rowCount === 2, 'Publication atomically enqueued exactly 2 outbox items');
+
+    // 10.7 Injected failure writing audit record rolls back the entire transaction (fail closed)
+    const p50FailStoryId = '55555555-5050-4000-8000-000000000001';
+    const p50FailSchedId = '55555555-5050-4000-8000-000000000002';
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${p50FailStoryId}', 'Audit Fail Test', 'audit-fail-test', 'draft', 1, 'editor-1')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    const p50FailLeaseTime = new Date().toISOString();
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${p50FailSchedId}', '${p50FailStoryId}', CURRENT_DATE - INTERVAL '102 days', 1, 'validated', '${p50FailLeaseTime}')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    // Temporarily attach a trigger on publication_gate_log that aborts the transaction
+    await client.query(`
+      CREATE OR REPLACE FUNCTION public.test_abort_gate_log()
+      RETURNS TRIGGER LANGUAGE plpgsql AS $$
+      BEGIN
+        IF NEW.story_id = '${p50FailStoryId}' THEN
+          RAISE EXCEPTION 'INJECTED_AUDIT_LOG_FAILURE: simulated disk/audit failure';
+        END IF;
+        RETURN NEW;
+      END;
+      $$;
+      DROP TRIGGER IF EXISTS trg_test_abort_gate_log ON public.publication_gate_log;
+      CREATE TRIGGER trg_test_abort_gate_log
+        BEFORE INSERT ON public.publication_gate_log
+        FOR EACH ROW EXECUTE FUNCTION public.test_abort_gate_log();
+    `);
+
+    let auditInsertFailed = false;
+    try {
+      await client.query(`
+        SELECT public.fn_publish_story_fenced(
+          '${p50FailSchedId}'::UUID,
+          '${p50FailStoryId}'::UUID,
+          '${p50FailLeaseTime}'::TIMESTAMPTZ,
+          1,
+          NOW(),
+          'system-scheduler',
+          '[]'::JSONB,
+          NOW(),
+          'cron'
+        );
+      `);
+    } catch (err: any) {
+      if (err.message && err.message.includes('INJECTED_AUDIT_LOG_FAILURE')) {
+        auditInsertFailed = true;
+      }
+    }
+    assert(auditInsertFailed, 'fn_publish_story_fenced aborts when audit log insert fails');
+
+    // Clean up trigger
+    await client.query('DROP TRIGGER IF EXISTS trg_test_abort_gate_log ON public.publication_gate_log;');
+    await client.query('DROP FUNCTION IF EXISTS public.test_abort_gate_log();');
+
+    // Verify fail-closed transaction rollback
+    const verifyStoryDraft = await client.query(`SELECT status, version FROM public.stories WHERE id = '${p50FailStoryId}'`);
+    assert(verifyStoryDraft.rows[0].status === 'draft', 'Story remains in draft status after audit log failure');
+    assert(verifyStoryDraft.rows[0].version === 1, 'Story version remains 1 after audit log failure');
+
+    const verifySchedValid = await client.query(`SELECT status FROM public.editorial_schedule WHERE id = '${p50FailSchedId}'`);
+    assert(verifySchedValid.rows[0].status === 'validated', 'Schedule remains validated after audit log failure');
+
+    const verifyZeroOutbox = await client.query(`SELECT COUNT(*) as cnt FROM public.publication_outbox WHERE story_id = '${p50FailStoryId}'`);
+    assert(parseInt(verifyZeroOutbox.rows[0].cnt, 10) === 0, 'Zero outbox rows exist after audit failure transaction rollback');
+
+    const verifyZeroGateLog = await client.query(`SELECT COUNT(*) as cnt FROM public.publication_gate_log WHERE story_id = '${p50FailStoryId}'`);
+    assert(parseInt(verifyZeroGateLog.rows[0].cnt, 10) === 0, 'Zero gate log rows exist after audit failure transaction rollback');
     console.log('\n───────────────────────────────────────────────────────');
     console.log(`Direct Database Tests Completed: ${passed} passed, ${failed} failed`);
     console.log('───────────────────────────────────────────────────────');

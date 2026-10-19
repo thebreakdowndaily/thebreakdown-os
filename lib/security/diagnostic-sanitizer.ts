@@ -41,8 +41,9 @@ const CLUSTER_HOST_REGEX = /[a-zA-Z0-9_.-]+\.cluster\.local(?::\d+)?/gi;
 // Standard JWT: eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+ or general 3-part base64url
 const JWT_TOKEN_REGEX = /(?:(?:bearer|token)[=:\s]+)?\bey[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]+\b/gi;
 
-// 4. Sensitive keyword-value pairs (passwords, tokens, api keys, webhook secrets)
-const SENSITIVE_KV_REGEX = /(?:bearer|token|secret|password|passwd|pwd|api[_-]?key|access[_-]?key|credential|whsec|service[_-]?role)[=:\s]+[^\s,;&"'`]+/gi;
+// 4. Sensitive keyword-value pairs (passwords, tokens, api keys, webhook secrets, service-role keys)
+const SENSITIVE_KV_REGEX =
+  /\b(?:(?:next_public[_-]?|app[_-]?|supabase[_-]?)*(?:service[_-]?role(?:[_-]?key)?|anon[_-]?key|bearer|token|secret|password|passwd|pwd|api[_-]?key|access[_-]?key|credential|whsec))[=:\s]+["']?[^\s,;&"'`]+["']?/gi;
 const WHSEC_PREFIX_REGEX = /\bwhsec_[a-zA-Z0-9_]+\b/gi;
 
 /**
