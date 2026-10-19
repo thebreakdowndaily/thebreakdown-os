@@ -6197,6 +6197,589 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       consoleWarnSpy.mockRestore();
     });
   });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Phase 46: Outbox Failure Visibility, Complete Error Redaction, and RPC Contract Hardening
+  // ═══════════════════════════════════════════════════════════════════════════
+  describe('Phase 46: Outbox Failure Visibility, Complete Error Redaction, and RPC Contract Hardening', () => {
+    const FAKE_JWT = ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', 'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0', 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'].join('.');
+    const FAKE_SUPABASE_HOST = 'custom-project-id.supabase.co';
+    const FAKE_INTERNAL_HOST = 'db-backend.internal';
+    const FAKE_QUERY_TOKEN = ['synthetic', 'query', 'token', 'abc123xyz'].join('_');
+    const FAKE_CONN_URI = `postgres://scheduler_admin:Sup3rS3cr3tP@ss!@custom-project-id.supabase.co:5432/production?sslmode=require&token=${FAKE_QUERY_TOKEN}`;
+    const FAKE_API_KEY = ['synthetic', 'api', 'key', '999888777'].join('_');
+
+    let scheduleModule: typeof import('@/services/editorial/schedule');
+
+    beforeEach(async () => {
+      scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+      setMockRevalidatePathHandler(() => {});
+    });
+
+    afterEach(() => {
+      setMockRevalidatePathHandler(null);
+    });
+
+    // ── Objective A: Observable Outbox Claim Failures ─────────────────────────
+    it('A1. Genuinely empty queue returns state: empty without claim error', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const mockDb: any = {
+        rpc: vi.fn().mockResolvedValue({ data: [], error: null }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('empty');
+      expect(summary.processed).toBe(0);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.failed).toBe(0);
+      expect(summary.correlationId).toBeDefined();
+      expect(summary.error).toBeUndefined();
+    });
+
+    it('A2. Claim RPC rejection or error returns state: claim_error with bounded category and correlation ID', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const mockDb: any = {
+        rpc: vi.fn().mockResolvedValue({
+          data: null,
+          error: { message: `connection to ${FAKE_CONN_URI} timed out` },
+        }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('claim_error');
+      expect(summary.errorCategory).toBe('OUTBOX_CLAIM_FAILED');
+      expect(summary.processed).toBe(0);
+      expect(summary.failed).toBe(0);
+      expect(summary.correlationId).toBeDefined();
+      expect(summary.error).toBeDefined();
+      expect(summary.error).toContain('[REDACTED_URI]');
+      expect(summary.error).not.toContain('Sup3rS3cr3tP@ss!');
+
+      // Structured telemetry was emitted
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const emittedLog = JSON.parse(consoleErrorSpy.mock.calls[0][0]);
+      expect(emittedLog.event).toBe('outbox.claim_failed');
+      expect(emittedLog.category).toBe('OUTBOX_CLAIM_FAILED');
+      expect(emittedLog.correlationId).toBe(summary.correlationId);
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('A3. Missing or malformed claim response returns state: malformed_claim_response', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const mockDb: any = {
+        rpc: vi.fn().mockResolvedValue({ data: 'unexpected-string-not-array', error: null }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('malformed_claim_response');
+      expect(summary.errorCategory).toBe('OUTBOX_CLAIM_MALFORMED');
+      expect(summary.processed).toBe(0);
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const emittedLog = JSON.parse(consoleErrorSpy.mock.calls[0][0]);
+      expect(emittedLog.event).toBe('outbox.claim_malformed_response');
+      expect(emittedLog.category).toBe('OUTBOX_CLAIM_MALFORMED');
+      expect(emittedLog.correlationId).toBe(summary.correlationId);
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('A4. Successfully claimed batch with all successes returns state: claimed', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const item = {
+        id: 'outbox-item-success-1',
+        claim_token: 'tok-success-1',
+        effect_type: 'cache_invalidation',
+        payload: { slug: 'story-success-slug' },
+      };
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [item], error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: { success: true, code: 'COMPLETED' }, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('claimed');
+      expect(summary.processed).toBe(1);
+      expect(summary.succeeded).toBe(1);
+      expect(summary.failed).toBe(0);
+      expect(summary.details[0].status).toBe('completed');
+    });
+
+    it('A5. Partial batch processing failure returns state: partial_failure', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const { eventBus } = await import('@/lib/events/event-bus');
+      vi.spyOn(eventBus, 'publishAsync').mockRejectedValueOnce(new Error('Downstream webhook timeout'));
+
+      const itemSuccess = {
+        id: 'outbox-item-succ',
+        claim_token: 'tok-succ',
+        effect_type: 'cache_invalidation',
+        payload: { slug: 'story-succ' },
+      };
+      const itemFail = {
+        id: 'outbox-item-fail',
+        claim_token: 'tok-fail',
+        effect_type: 'event_dispatch',
+        payload: { story_id: 'story-fail', schedule_id: 'sched-fail', version: 1 },
+      };
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string, args: any) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [itemSuccess, itemFail], error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            if (args.p_status === 'completed') {
+              return Promise.resolve({ data: { success: true, code: 'COMPLETED' }, error: null });
+            }
+            if (args.p_status === 'failed') {
+              return Promise.resolve({ data: { success: true, code: 'FAILED' }, error: null });
+            }
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.state).toBe('partial_failure');
+      expect(summary.errorCategory).toBe('OUTBOX_PARTIAL_FAILURE');
+      expect(summary.processed).toBe(2);
+      expect(summary.succeeded).toBe(1);
+      expect(summary.failed).toBe(1);
+    });
+
+    it('A6. Committed story remains published even when outbox claim fails with database error', async () => {
+      const { validateAndPublishDueStories } = scheduleModule;
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const dueEntry = {
+        id: 'sched-published-invariance',
+        story_id: 'story-published-invariance',
+        slot_date: '2026-10-19',
+        slot_position: 1,
+        priority: 1,
+        category: 'national',
+        status: 'validated',
+        validated_at: '2026-10-19T00:00:00Z',
+      };
+
+      mockEvaluatePublicationContract.mockResolvedValueOnce({
+        allowed: true,
+        gateResult: {
+          storyId: 'story-published-invariance',
+          scheduleId: 'sched-published-invariance',
+          passed: true,
+          outcome: 'published',
+          checks: [],
+          checkedAt: '2026-10-19T00:00:00.000Z',
+          triggeredBy: 'cron',
+        },
+        publicationToken: 'test-token',
+        updatedStory: {
+          id: 'story-published-invariance',
+          slug: 'story-published-invariance',
+          title: 'Published Invariance Story',
+          status: 'published',
+          publicationStatus: 'published',
+          version: 2,
+          publishedAt: '2026-10-19T00:00:00.000Z',
+        },
+      });
+
+      mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+        success: true,
+        code: 'PUBLISHED',
+        story: {
+          id: 'story-published-invariance',
+          slug: 'story-published-invariance',
+          publishedAt: '2026-10-19T00:00:00.000Z',
+          version: 2,
+          updatedBy: 'system-scheduler',
+          actor: 'system-scheduler',
+        },
+      });
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_discover_due_schedule_entries') {
+            return Promise.resolve({ data: [dueEntry], error: null });
+          }
+          if (fn === 'fn_claim_schedule_entry_fenced') {
+            return Promise.resolve({
+              data: { success: true, code: 'CLAIMED', validated_at: '2026-10-19T00:00:00Z' },
+              error: null,
+            });
+          }
+          if (fn === 'fn_claim_publication_outbox') {
+            // Outbox claim crashes with database error
+            return Promise.resolve({ data: null, error: { message: 'Outbox DB connection pool exhausted' } });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+        from: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnThis(),
+          eq: vi.fn().mockReturnThis(),
+          maybeSingle: vi.fn().mockResolvedValue({
+            data: { id: 'story-published-invariance', status: 'review', version: 1 },
+            error: null,
+          }),
+          insert: vi.fn().mockResolvedValue({ data: null, error: null }),
+          update: vi.fn().mockReturnThis(),
+        }),
+      };
+      setServiceClient(mockDb);
+
+      const results = await validateAndPublishDueStories();
+      expect(results.length).toBe(1);
+      // Story was published by repository/gate
+      expect(results[0].outcome).toBe('published');
+      expect(results[0].passed).toBe(true);
+
+      // Outbox claim failure was logged distinctly without failing the publication
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const claimErrorLog = consoleErrorSpy.mock.calls.find(c => {
+        try {
+          return JSON.parse(c[0]).event === 'editorial.schedule.outbox_claim_error';
+        } catch {
+          return false;
+        }
+      });
+      expect(claimErrorLog).toBeDefined();
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    // ── Objective B: Complete and Shared Diagnostic Sanitizer ─────────────────
+    it('B1. Central sanitizeDiagnosticError redacts bare JWTs, Bearer JWTs, database hostnames, connection URIs, and passwords', async () => {
+      const { sanitizeDiagnosticError } = await import('@/lib/security/diagnostic-sanitizer');
+
+      // 1. Bare JWT without Bearer
+      const bareJwtMsg = `Authentication error with token ${FAKE_JWT} expired`;
+      const sanitizedBareJwt = sanitizeDiagnosticError(bareJwtMsg);
+      expect(sanitizedBareJwt).not.toContain(FAKE_JWT);
+      expect(sanitizedBareJwt).toContain('[REDACTED_TOKEN]');
+
+      // 2. Bearer prefixed JWT
+      const bearerJwtMsg = `Request failed: Bearer ${FAKE_JWT}`;
+      const sanitizedBearerJwt = sanitizeDiagnosticError(bearerJwtMsg);
+      expect(sanitizedBearerJwt).not.toContain(FAKE_JWT);
+      expect(sanitizedBearerJwt).toContain('[REDACTED_TOKEN]');
+
+      // 3. Supabase database hostname outside URI
+      const hostMsg = `Failed to resolve host ${FAKE_SUPABASE_HOST}:5432 in pool`;
+      const sanitizedHost = sanitizeDiagnosticError(hostMsg);
+      expect(sanitizedHost).not.toContain(FAKE_SUPABASE_HOST);
+      expect(sanitizedHost).toContain('[REDACTED_HOST]');
+
+      // 4. Internal cluster host outside URI
+      const internalHostMsg = `Connection to ${FAKE_INTERNAL_HOST} refused`;
+      const sanitizedInternalHost = sanitizeDiagnosticError(internalHostMsg);
+      expect(sanitizedInternalHost).not.toContain(FAKE_INTERNAL_HOST);
+      expect(sanitizedInternalHost).toContain('[REDACTED_HOST]');
+
+      // 5. Connection string with credentials and query token
+      const uriMsg = `Database crashed while connecting to ${FAKE_CONN_URI}`;
+      const sanitizedUri = sanitizeDiagnosticError(uriMsg);
+      expect(sanitizedUri).not.toContain('Sup3rS3cr3tP@ss!');
+      expect(sanitizedUri).not.toContain('scheduler_admin');
+      expect(sanitizedUri).not.toContain(FAKE_QUERY_TOKEN);
+      expect(sanitizedUri).toContain('[REDACTED_URI]');
+
+      // 6. Sensitive key-value pair and api key
+      const kvMsg = `apiKey=${FAKE_API_KEY} password=super_secret_999`;
+      const sanitizedKv = sanitizeDiagnosticError(kvMsg);
+      expect(sanitizedKv).not.toContain(FAKE_API_KEY);
+      expect(sanitizedKv).not.toContain('super_secret_999');
+      expect(sanitizedKv).toContain('[REDACTED_SECRET]');
+
+      // 7. Combination test: all in a single error message
+      const combinedMsg = `Error at ${FAKE_SUPABASE_HOST}: password=mypass token=${FAKE_JWT} uri=${FAKE_CONN_URI}`;
+      const sanitizedCombined = sanitizeDiagnosticError(combinedMsg);
+      expect(sanitizedCombined).not.toContain(FAKE_SUPABASE_HOST);
+      expect(sanitizedCombined).not.toContain('mypass');
+      expect(sanitizedCombined).not.toContain(FAKE_JWT);
+      expect(sanitizedCombined).not.toContain('Sup3rS3cr3tP@ss!');
+    });
+
+    it('B2. EventBus.publish handles synchronous handler exception without leaking credentials', async () => {
+      const { eventBus } = await import('@/lib/events/event-bus');
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const syncHandler = () => {
+        throw new Error(`Sync failure with password=s3cr3t_pass at ${FAKE_SUPABASE_HOST}`);
+      };
+
+      const unsubscribe = eventBus.subscribe('story:published', syncHandler);
+      try {
+        eventBus.publish({
+          type: 'story:published',
+          payload: { storyId: 'story-sync-test', publisherId: 'test', gatePassed: true },
+        });
+      } finally {
+        unsubscribe();
+      }
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const allLogs = consoleErrorSpy.mock.calls.map(c => JSON.stringify(c)).join(' ');
+      expect(allLogs).not.toContain('s3cr3t_pass');
+      expect(allLogs).not.toContain(FAKE_SUPABASE_HOST);
+      expect(allLogs).toContain('[REDACTED_SECRET]');
+      expect(allLogs).toContain('[REDACTED_HOST]');
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('B3. EventBus.publish handles asynchronous handler rejection without leaking credentials', async () => {
+      const { eventBus } = await import('@/lib/events/event-bus');
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const asyncHandler = async () => {
+        throw new Error(`Async failure token ${FAKE_JWT} on ${FAKE_CONN_URI}`);
+      };
+
+      const unsubscribe = eventBus.subscribe('story:published', asyncHandler);
+      try {
+        eventBus.publish({
+          type: 'story:published',
+          payload: { storyId: 'story-async-test', publisherId: 'test', gatePassed: true },
+        });
+        // Give event loop tick for Promise.all catch block
+        await new Promise(resolve => setTimeout(resolve, 10));
+      } finally {
+        unsubscribe();
+      }
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      const allLogs = consoleErrorSpy.mock.calls.map(c => JSON.stringify(c)).join(' ');
+      expect(allLogs).not.toContain(FAKE_JWT);
+      expect(allLogs).not.toContain('Sup3rS3cr3tP@ss!');
+      expect(allLogs).toContain('[REDACTED_TOKEN]');
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('B4. EventBus.publishAsync rethrows sanitized exception for both sync and async failures', async () => {
+      const { eventBus } = await import('@/lib/events/event-bus');
+
+      const adversarialHandler = async () => {
+        throw new Error(`publishAsync dead with ${FAKE_CONN_URI} and token ${FAKE_JWT}`);
+      };
+
+      const unsubscribe = eventBus.subscribe('story:published', adversarialHandler);
+      let caught: Error | null = null;
+      try {
+        await eventBus.publishAsync({
+          type: 'story:published',
+          payload: { storyId: 'story-rethrow', publisherId: 'test', gatePassed: true },
+        });
+      } catch (err: any) {
+        caught = err;
+      } finally {
+        unsubscribe();
+      }
+
+      expect(caught).toBeDefined();
+      expect(caught!.message).not.toContain('Sup3rS3cr3tP@ss!');
+      expect(caught!.message).not.toContain(FAKE_JWT);
+      expect(caught!.message).toContain('[REDACTED_URI]');
+    });
+
+    // ── Objective C: RPC Contract Hardening for fn_complete_publication_outbox ─
+    it('C1. fn_complete_publication_outbox returning INVALID_STATUS causes truthful failure attribution', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const item = {
+        id: 'outbox-item-c1',
+        claim_token: 'claim-tok-c1',
+        effect_type: 'cache_invalidation',
+        payload: { slug: 'story-slug-c1' },
+      };
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [item], error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            // Simulated RPC rejecting invalid status argument
+            return Promise.resolve({
+              data: { success: false, code: 'INVALID_STATUS', error: 'p_status must be either completed or failed' },
+              error: null,
+            });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+      setServiceClient(mockDb);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(1);
+      expect(summary.failed).toBe(1);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.details[0].status).toBe('failed');
+      expect(summary.details[0].error).toBe('INVALID_STATUS');
+    });
+
+    // ── Objective D: Retry and Idempotency Semantics ──────────────────────────
+    it('D1. createIdempotentHandler deduplicates repeated deliveries with the same idempotencyKey', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let executionCount = 0;
+
+      const nonIdempotentAction = vi.fn(() => {
+        executionCount++;
+      });
+
+      const idempotentHandler = createIdempotentHandler(nonIdempotentAction);
+
+      const eventPayload = {
+        storyId: 'story-dedup-1',
+        idempotencyKey: 'outbox:item-12345',
+        version: 1,
+      };
+
+      // First delivery attempt
+      await idempotentHandler({
+        type: 'story:published',
+        payload: eventPayload,
+        timestamp: new Date().toISOString(),
+      });
+
+      expect(executionCount).toBe(1);
+      expect(nonIdempotentAction).toHaveBeenCalledTimes(1);
+
+      // Duplicate redelivery with identical idempotencyKey
+      await idempotentHandler({
+        type: 'story:published',
+        payload: eventPayload,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Business action was NOT executed a second time
+      expect(executionCount).toBe(1);
+      expect(nonIdempotentAction).toHaveBeenCalledTimes(1);
+
+      // Distinct event with different idempotencyKey executes
+      await idempotentHandler({
+        type: 'story:published',
+        payload: { ...eventPayload, idempotencyKey: 'outbox:item-67890' },
+        timestamp: new Date().toISOString(),
+      });
+
+      expect(executionCount).toBe(2);
+      expect(nonIdempotentAction).toHaveBeenCalledTimes(2);
+    });
+
+    it('D2. createIdempotentHandler re-executes when initial attempt throws, allowing retries to succeed', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let attempt = 0;
+
+      const flakyAction = vi.fn(() => {
+        attempt++;
+        if (attempt === 1) {
+          throw new Error('Transient network glitch on attempt 1');
+        }
+      });
+
+      const idempotentHandler = createIdempotentHandler(flakyAction);
+
+      const eventPayload = {
+        storyId: 'story-retry-1',
+        idempotencyKey: 'outbox:item-flaky-999',
+        version: 1,
+      };
+
+      // Attempt 1 fails
+      await expect(
+        idempotentHandler({
+          type: 'story:published',
+          payload: eventPayload,
+          timestamp: new Date().toISOString(),
+        }),
+      ).rejects.toThrow();
+      expect(attempt).toBe(1);
+
+      // Attempt 2 (retry) must not be suppressed by the prior failure
+      await idempotentHandler({
+        type: 'story:published',
+        payload: eventPayload,
+        timestamp: new Date().toISOString(),
+      });
+      expect(attempt).toBe(2);
+
+      // Attempt 3 (duplicate after success) is deduplicated
+      await idempotentHandler({
+        type: 'story:published',
+        payload: eventPayload,
+        timestamp: new Date().toISOString(),
+      });
+      expect(attempt).toBe(2);
+    });
+
+    it('D3. Outbox event_dispatch provides idempotencyKey and outboxId to eventBus consumers', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      const { eventBus } = await import('@/lib/events/event-bus');
+
+      let capturedPayload: any = null;
+      const unsubscribe = eventBus.subscribe('story:published', (event) => {
+        capturedPayload = event.payload;
+      });
+
+      const item = {
+        id: 'outbox-idemp-key-test',
+        claim_token: 'claim-tok-d3',
+        effect_type: 'event_dispatch',
+        payload: {
+          story_id: 'story-d3',
+          schedule_id: 'sched-d3',
+          slug: 'test-d3-slug',
+          version: 2,
+        },
+      };
+
+      const mockDb: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [item], error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: { success: true, code: 'COMPLETED' }, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+      setServiceClient(mockDb);
+
+      try {
+        await processPendingPublicationOutbox(10);
+      } finally {
+        unsubscribe();
+      }
+
+      expect(capturedPayload).toBeDefined();
+      expect(capturedPayload.idempotencyKey).toBe('outbox:outbox-idemp-key-test');
+      expect(capturedPayload.outboxId).toBe('outbox-idemp-key-test');
+      expect(capturedPayload.storyId).toBe('story-d3');
+      expect(capturedPayload.slug).toBe('test-d3-slug');
+      expect(capturedPayload.version).toBe(2);
+    });
+  });
 });
 
 

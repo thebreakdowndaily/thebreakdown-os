@@ -2308,6 +2308,189 @@ async function runDirectDatabaseTests() {
       const srvOutboxSelect = await client.query('SELECT COUNT(*) FROM public.publication_outbox;');
       assert(srvOutboxSelect.rows.length === 1, 'service_role has authorized SELECT on public.publication_outbox');
       await client.query('COMMIT');
+
+      // ─────────────────────────────────────────────────────────────────
+      // 9. Phase 46: Outbox Status Argument Validation & Fenced Completion Hardening
+      // ─────────────────────────────────────────────────────────────────
+      console.log('\n9. Phase 46: Outbox Status Argument Validation & Fenced Completion Hardening');
+
+      const outboxTestStoryId = '77777777-0000-0000-0000-000000000400';
+      const outboxTestSchedId = '77777777-0000-0000-0000-000000000401';
+      const outboxItemP46 = '77777777-0000-0000-0000-000000000402';
+      const outboxTokenP46 = '77777777-0000-0000-0000-000000000403';
+      const staleTokenP46 = '77777777-0000-0000-0000-000000000404';
+
+      await client.query(`
+        INSERT INTO public.stories (id, slug, title, status, version, published_at)
+        VALUES ('${outboxTestStoryId}', 'outbox-status-story', 'Outbox Status Test Story', 'published', 2, NOW())
+        ON CONFLICT (id) DO NOTHING;
+      `);
+      await client.query(`
+        INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at, published_at)
+        VALUES ('${outboxTestSchedId}', '${outboxTestStoryId}', CURRENT_DATE, 7, 'published', NOW(), NOW())
+        ON CONFLICT (id) DO NOTHING;
+      `);
+
+      // Helper to reset test row to 'processing' with outboxTokenP46
+      const resetOutboxRow = async () => {
+        await client.query(`
+          INSERT INTO public.publication_outbox (id, story_id, schedule_id, effect_type, payload, status, claim_token, retry_count)
+          VALUES (
+            '${outboxItemP46}'::UUID,
+            '${outboxTestStoryId}'::UUID,
+            '${outboxTestSchedId}'::UUID,
+            'cache_invalidation',
+            '{"slug":"outbox-status-story"}'::JSONB,
+            'processing',
+            '${outboxTokenP46}'::UUID,
+            0
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            status = 'processing',
+            claim_token = '${outboxTokenP46}'::UUID,
+            retry_count = 0,
+            last_error = NULL,
+            processed_at = NULL;
+        `);
+      };
+
+      // 9.1 fn_complete_publication_outbox accepts 'completed'
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resCompleted = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${outboxTokenP46}'::UUID,
+          'completed'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resCompleted.rows[0].result.success === true, 'fn_complete_publication_outbox succeeds with completed status');
+      assert(resCompleted.rows[0].result.code === 'COMPLETED', 'Result code is COMPLETED');
+      const verifyRowCompleted = await client.query(`SELECT status, processed_at FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowCompleted.rows[0].status === 'completed', 'Row status transitioned to completed');
+      assert(verifyRowCompleted.rows[0].processed_at !== null, 'Row processed_at is populated');
+
+      // 9.2 fn_complete_publication_outbox accepts 'failed'
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resFailed = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${outboxTokenP46}'::UUID,
+          'failed',
+          'Downstream cache invalidation timeout'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resFailed.rows[0].result.success === true, 'fn_complete_publication_outbox succeeds with failed status');
+      assert(resFailed.rows[0].result.code === 'FAILED', 'Result code is FAILED');
+      const verifyRowFailed = await client.query(`SELECT status, retry_count, last_error FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowFailed.rows[0].status === 'failed', 'Row status transitioned to failed');
+      assert(verifyRowFailed.rows[0].retry_count === 1, 'retry_count incremented to 1');
+      assert(verifyRowFailed.rows[0].last_error === 'Downstream cache invalidation timeout', 'last_error recorded');
+
+      // 9.3 fn_complete_publication_outbox rejects NULL status without mutating row
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resNullStatus = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${outboxTokenP46}'::UUID,
+          NULL
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resNullStatus.rows[0].result.success === false, 'NULL status is rejected');
+      assert(resNullStatus.rows[0].result.code === 'INVALID_STATUS', 'Returns INVALID_STATUS code for NULL status');
+      const verifyRowNull = await client.query(`SELECT status, retry_count FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowNull.rows[0].status === 'processing', 'Row status remains processing after NULL status rejected');
+      assert(verifyRowNull.rows[0].retry_count === 0, 'retry_count unchanged after NULL status rejected');
+
+      // 9.4 fn_complete_publication_outbox rejects 'pending' without mutating row
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resPendingStatus = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${outboxTokenP46}'::UUID,
+          'pending'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resPendingStatus.rows[0].result.success === false, 'pending status is rejected');
+      assert(resPendingStatus.rows[0].result.code === 'INVALID_STATUS', 'Returns INVALID_STATUS code for pending status');
+      const verifyRowPending = await client.query(`SELECT status FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowPending.rows[0].status === 'processing', 'Row status remains processing after pending status rejected');
+
+      // 9.5 fn_complete_publication_outbox rejects 'processing' without mutating row
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resProcessingStatus = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${outboxTokenP46}'::UUID,
+          'processing'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resProcessingStatus.rows[0].result.success === false, 'processing status is rejected');
+      assert(resProcessingStatus.rows[0].result.code === 'INVALID_STATUS', 'Returns INVALID_STATUS code for processing status');
+      const verifyRowProcessing = await client.query(`SELECT status FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowProcessing.rows[0].status === 'processing', 'Row status remains processing after processing status rejected');
+
+      // 9.6 fn_complete_publication_outbox rejects arbitrary invalid status without mutating row
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resInvalidStatus = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${outboxTokenP46}'::UUID,
+          'arbitrary_status'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resInvalidStatus.rows[0].result.success === false, 'arbitrary invalid status is rejected');
+      assert(resInvalidStatus.rows[0].result.code === 'INVALID_STATUS', 'Returns INVALID_STATUS code for arbitrary status');
+      const verifyRowInvalid = await client.query(`SELECT status FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowInvalid.rows[0].status === 'processing', 'Row status remains processing after arbitrary status rejected');
+
+      // 9.7 fn_complete_publication_outbox rejects stale or mismatched claim token
+      await resetOutboxRow();
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resStaleToken = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxItemP46}'::UUID,
+          '${staleTokenP46}'::UUID,
+          'completed'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resStaleToken.rows[0].result.success === false, 'Mismatched claim token is rejected');
+      assert(resStaleToken.rows[0].result.code === 'OUTBOX_LEASE_LOST', 'Returns OUTBOX_LEASE_LOST for mismatched token');
+      const verifyRowStale = await client.query(`SELECT status FROM public.publication_outbox WHERE id = '${outboxItemP46}'`);
+      assert(verifyRowStale.rows[0].status === 'processing', 'Row status remains processing when claim token mismatches');
+
+      // 9.8 fn_complete_publication_outbox rejects missing/null outbox id or claim token
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const resNullArgs = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          NULL,
+          '${outboxTokenP46}'::UUID,
+          'completed'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(resNullArgs.rows[0].result.success === false, 'Null outbox ID is rejected');
+      assert(resNullArgs.rows[0].result.code === 'INVALID_ARGUMENT', 'Returns INVALID_ARGUMENT for null ID');
     } finally {
       await clientDelay2.end().catch(() => {});
     }

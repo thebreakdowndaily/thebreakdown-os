@@ -207,6 +207,14 @@ BEGIN
         );
     END IF;
 
+    IF p_status IS NULL OR p_status NOT IN ('completed', 'failed') THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'INVALID_STATUS',
+            'error', 'p_status must be either completed or failed'
+        );
+    END IF;
+
     SELECT id, status, claim_token, retry_count
     INTO v_row
     FROM public.publication_outbox

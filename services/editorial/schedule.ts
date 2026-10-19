@@ -156,10 +156,31 @@ export async function validateAndPublishDueStories(
   // Delivery is at-least-once; side-effect consumers are idempotent.
   try {
     const recoverySummary = await processPendingPublicationOutbox();
-    if (recoverySummary.processed > 0) {
+    if (recoverySummary.state === 'claim_error') {
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.outbox_claim_error',
+          correlationId: recoverySummary.correlationId,
+          category: 'OUTBOX_CLAIM_FAILED',
+          error: recoverySummary.error,
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    } else if (recoverySummary.state === 'malformed_claim_response') {
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.outbox_claim_malformed',
+          correlationId: recoverySummary.correlationId,
+          category: 'OUTBOX_CLAIM_MALFORMED',
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    } else if (recoverySummary.processed > 0) {
       console.log(
         JSON.stringify({
           event: 'editorial.schedule.outbox_recovery_summary',
+          state: recoverySummary.state,
+          correlationId: recoverySummary.correlationId,
           processed: recoverySummary.processed,
           succeeded: recoverySummary.succeeded,
           failed: recoverySummary.failed,
@@ -1212,54 +1233,24 @@ function rowToStory(row: Record<string, unknown>) {
   } as import('@/types/canonical').Story;
 }
 
-/**
- * Sanitizes and redacts diagnostic error strings across all sinks (console, outbox column,
- * API responses, and thrown errors) so no credentials, tokens, DB URLs, or internal hosts leak.
- */
-export function sanitizeDiagnosticError(error: unknown): string {
-  if (!error) return 'UNKNOWN_ERROR';
-  let message: string;
-  if (typeof error === 'string') {
-    message = error;
-  } else if (error instanceof Error) {
-    message = error.message;
-  } else if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as any).message === 'string') {
-    message = (error as any).message;
-  } else {
-    message = String(error);
-  }
+import { sanitizeDiagnosticError } from '@/lib/security/diagnostic-sanitizer';
+export { sanitizeDiagnosticError };
 
-  // 1. Connection strings and protocol URIs with potential credentials: e.g. postgres://user:pass@host:5432/db?token=...
-  message = message.replace(/(postgres|postgresql|mysql|mongodb|redis|https?):\/\/[^\s"'`]+/gi, '[REDACTED_URI]');
-
-  // 2. Sensitive keywords and auth tokens (Bearer, password, token, secret, api_key, credential, whsec)
-  message = message.replace(/(?:bearer|token|secret|password|passwd|api[_-]?key|credential|whsec)[=:\s]+[^\s,;&]+/gi, '[REDACTED_SECRET]');
-
-  // 3. URLs with query parameters
-  message = message.replace(/https?:\/\/[^\s"'`]+/gi, (url) => {
-    try {
-      const parsed = new URL(url);
-      return `${parsed.protocol}//${parsed.hostname}${parsed.pathname}`;
-    } catch {
-      return '[REDACTED_URL]';
-    }
-  });
-
-  // 4. Internal hostnames or ports: e.g. secret.db.internal:5432
-  message = message.replace(/[a-zA-Z0-9.-]+\.internal(?::\d+)?/gi, '[REDACTED_HOST]');
-
-  // 5. Length bounding (prevent denial-of-service / buffer bloating)
-  if (message.length > 256) {
-    message = message.slice(0, 253) + '...';
-  }
-
-  return message;
-}
+export type OutboxRecoveryState =
+  | 'empty'
+  | 'claim_error'
+  | 'malformed_claim_response'
+  | 'claimed'
+  | 'partial_failure';
 
 export interface OutboxRecoverySummary {
+  state: OutboxRecoveryState;
   processed: number;
   succeeded: number;
   failed: number;
+  correlationId: string;
+  errorCategory?: string;
+  error?: string;
   details: Array<{
     id: string;
     effectType: string;
@@ -1284,14 +1275,20 @@ export async function processPendingPublicationOutbox(
   batchSize = 10,
 ): Promise<OutboxRecoverySummary> {
   const db = getServiceClient();
+  const correlationId = crypto.randomUUID();
   const summary: OutboxRecoverySummary = {
+    state: 'empty',
     processed: 0,
     succeeded: 0,
     failed: 0,
+    correlationId,
     details: [],
   };
 
   if (typeof (db as any).rpc !== 'function') {
+    summary.state = 'claim_error';
+    summary.errorCategory = 'OUTBOX_CLAIM_FAILED';
+    summary.error = 'Database RPC interface unavailable for claiming outbox items';
     return summary;
   }
 
@@ -1300,7 +1297,39 @@ export async function processPendingPublicationOutbox(
       p_batch_size: batchSize,
     });
 
-    if (claimErr || !Array.isArray(claimedItems) || claimedItems.length === 0) {
+    if (claimErr) {
+      summary.state = 'claim_error';
+      summary.errorCategory = 'OUTBOX_CLAIM_FAILED';
+      summary.error = sanitizeDiagnosticError(claimErr);
+      console.error(
+        JSON.stringify({
+          event: 'outbox.claim_failed',
+          correlationId,
+          category: 'OUTBOX_CLAIM_FAILED',
+          error: summary.error,
+          timestamp: new Date().toISOString(),
+        }),
+      );
+      return summary;
+    }
+
+    if (claimedItems === null || !Array.isArray(claimedItems)) {
+      summary.state = 'malformed_claim_response';
+      summary.errorCategory = 'OUTBOX_CLAIM_MALFORMED';
+      summary.error = 'Claim RPC returned malformed non-array response';
+      console.error(
+        JSON.stringify({
+          event: 'outbox.claim_malformed_response',
+          correlationId,
+          category: 'OUTBOX_CLAIM_MALFORMED',
+          timestamp: new Date().toISOString(),
+        }),
+      );
+      return summary;
+    }
+
+    if (claimedItems.length === 0) {
+      summary.state = 'empty';
       return summary;
     }
 
@@ -1328,6 +1357,7 @@ export async function processPendingPublicationOutbox(
           itemSuccess = true;
         } else if (effectType === 'event_dispatch') {
           const { eventBus } = await import('@/lib/events/event-bus');
+          const idempotencyKey = `outbox:${itemId}`;
           await eventBus.publishAsync({
             type: 'story:published',
             payload: {
@@ -1338,6 +1368,8 @@ export async function processPendingPublicationOutbox(
               publishedAt: (payload.published_at || payload.publishedAt) as string || new Date().toISOString(),
               publisherId: (payload.actor || payload.publisherId) as string || 'system-scheduler',
               gatePassed: true,
+              idempotencyKey,
+              outboxId: itemId,
             },
           });
           itemSuccess = true;
@@ -1452,12 +1484,23 @@ export async function processPendingPublicationOutbox(
         }
       }
     }
+
+    if (summary.failed > 0) {
+      summary.state = 'partial_failure';
+      summary.errorCategory = 'OUTBOX_PARTIAL_FAILURE';
+    } else {
+      summary.state = 'claimed';
+    }
   } catch (err) {
+    summary.state = 'partial_failure';
+    summary.errorCategory = 'OUTBOX_RECOVERY_FAILED';
+    summary.error = sanitizeDiagnosticError(err);
     console.error(
       JSON.stringify({
         event: 'outbox.recovery_batch_failed',
+        correlationId,
         category: 'OUTBOX_RECOVERY_FAILED',
-        error: sanitizeDiagnosticError(err),
+        error: summary.error,
         timestamp: new Date().toISOString(),
       }),
     );

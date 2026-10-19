@@ -1,8 +1,78 @@
 import type { Event, EventType } from '@/types/canonical';
+import { sanitizeDiagnosticError, createSanitizedError } from '@/lib/security/diagnostic-sanitizer';
 
 export type EventHandler = (event: Event) => void | Promise<void>;
 
 const MAX_HISTORY = 500;
+
+export interface IdempotentHandlerOptions {
+  /**
+   * Custom function to extract an idempotency key from an event.
+   * Defaults to event.payload.idempotencyKey or outbox:${event.payload.outboxId}.
+   */
+  getIdempotencyKey?: (event: Event) => string | undefined;
+  /** Maximum number of processed keys to retain in memory. Defaults to 1,000. */
+  maxEntries?: number;
+  /** Time-to-live for processed keys in milliseconds. Defaults to 10 minutes (600,000 ms). */
+  ttlMs?: number;
+}
+
+/**
+ * Wraps an event handler with idempotency enforcement.
+ * If an event with an already-processed key is received within ttlMs,
+ * duplicate delivery is skipped without re-executing non-idempotent business logic.
+ * If the handler fails, the key is evicted so retries can execute.
+ */
+export function createIdempotentHandler(
+  handler: EventHandler,
+  options: IdempotentHandlerOptions = {},
+): EventHandler {
+  const maxEntries = options.maxEntries ?? 1000;
+  const ttlMs = options.ttlMs ?? 600000; // 10 minutes default
+  const processedKeys = new Map<string, number>();
+
+  return async (event: Event): Promise<void> => {
+    const key =
+      options.getIdempotencyKey?.(event) ??
+      (event.payload?.idempotencyKey as string | undefined) ??
+      (event.payload?.outboxId ? `outbox:${event.payload.outboxId}` : undefined);
+
+    const now = Date.now();
+
+    // Periodic eviction of expired keys if map grows beyond limit
+    if (processedKeys.size > maxEntries) {
+      for (const [k, timestamp] of processedKeys.entries()) {
+        if (now - timestamp > ttlMs) {
+          processedKeys.delete(k);
+        }
+      }
+    }
+
+    if (key) {
+      const lastSeen = processedKeys.get(key);
+      if (lastSeen !== undefined && now - lastSeen < ttlMs) {
+        // Duplicate delivery detected: skip re-execution of non-idempotent action
+        return;
+      }
+    }
+
+    try {
+      const result = handler(event);
+      if (result instanceof Promise) {
+        await result;
+      }
+      if (key) {
+        processedKeys.set(key, now);
+      }
+    } catch (err) {
+      // If handler throws, evict the key so retry attempts can re-execute
+      if (key) {
+        processedKeys.delete(key);
+      }
+      throw err;
+    }
+  };
+}
 
 export class EventBus {
   private static instance: EventBus;
@@ -29,6 +99,15 @@ export class EventBus {
     };
   }
 
+  subscribeIdempotent(
+    type: EventType | '*',
+    handler: EventHandler,
+    options?: IdempotentHandlerOptions,
+  ): () => void {
+    const idempotentHandler = createIdempotentHandler(handler, options);
+    return this.subscribe(type, idempotentHandler);
+  }
+
   publish(event: Omit<Event, 'timestamp'>): void {
     const fullEvent: Event = { ...event, timestamp: new Date().toISOString() };
 
@@ -43,9 +122,20 @@ export class EventBus {
       const set = this.handlers.get(key);
       if (!set) return;
       for (const handler of set) {
-        const result = handler(fullEvent);
-        if (result instanceof Promise) {
-          asyncHandlers.push(result);
+        try {
+          const result = handler(fullEvent);
+          if (result instanceof Promise) {
+            asyncHandlers.push(result);
+          }
+        } catch (syncErr) {
+          console.error(
+            JSON.stringify({
+              event: 'event_bus.handler_error',
+              errorName: syncErr instanceof Error ? syncErr.name : 'HandlerError',
+              error: sanitizeDiagnosticError(syncErr),
+              timestamp: new Date().toISOString(),
+            }),
+          );
         }
       }
     };
@@ -56,12 +146,7 @@ export class EventBus {
     if (asyncHandlers.length > 0) {
       Promise.all(asyncHandlers).catch((err) => {
         const errorName = err instanceof Error ? err.name : 'UnknownError';
-        const rawMsg = err instanceof Error ? err.message : String(err);
-        const safeMsg = rawMsg
-          .replace(/(postgres|postgresql|mysql|mongodb|redis|https?):\/\/[^\s"'`]+/gi, '[REDACTED_URI]')
-          .replace(/(?:bearer|token|secret|password|passwd|api[_-]?key|credential|whsec)[=:\s]+[^\s,;&]+/gi, '[REDACTED_SECRET]')
-          .replace(/[a-zA-Z0-9.-]+\.internal(?::\d+)?/gi, '[REDACTED_HOST]')
-          .slice(0, 256);
+        const safeMsg = sanitizeDiagnosticError(err);
         console.error(
           JSON.stringify({
             event: 'event_bus.async_handler_error',
@@ -88,30 +173,29 @@ export class EventBus {
       const set = this.handlers.get(key);
       if (!set) return;
       for (const handler of set) {
-        const result = handler(fullEvent);
-        if (result instanceof Promise) {
-          promises.push(result);
+        try {
+          const result = handler(fullEvent);
+          if (result instanceof Promise) {
+            promises.push(result);
+          }
+        } catch (syncErr) {
+          throw createSanitizedError(syncErr, 'HandlerError');
         }
       }
     };
 
-    dispatch(event.type);
-    dispatch('*');
+    try {
+      dispatch(event.type);
+      dispatch('*');
+    } catch (dispatchErr) {
+      throw createSanitizedError(dispatchErr);
+    }
 
     if (promises.length > 0) {
       try {
         await Promise.all(promises);
       } catch (err) {
-        const errorName = err instanceof Error ? err.name : 'Error';
-        const rawMsg = err instanceof Error ? err.message : String(err);
-        const safeMsg = rawMsg
-          .replace(/(postgres|postgresql|mysql|mongodb|redis|https?):\/\/[^\s"'`]+/gi, '[REDACTED_URI]')
-          .replace(/(?:bearer|token|secret|password|passwd|api[_-]?key|credential|whsec)[=:\s]+[^\s,;&]+/gi, '[REDACTED_SECRET]')
-          .replace(/[a-zA-Z0-9.-]+\.internal(?::\d+)?/gi, '[REDACTED_HOST]')
-          .slice(0, 256);
-        const sanitizedErr = new Error(safeMsg);
-        sanitizedErr.name = errorName;
-        throw sanitizedErr;
+        throw createSanitizedError(err);
       }
     }
   }
