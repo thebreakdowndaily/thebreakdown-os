@@ -67,7 +67,7 @@ Resolution: env var > config file > `full`.
 
 ## Update
 
-Enable auto-update once: open `/plugin`, go to Marketplaces, pick ponytail, Enable auto-update. Claude Code then pulls new versions at startup (run `/reload-plugins` when it prompts). Manual refresh: `/plugin marketplace update ponytail` then `/reload-plugins`.
+Enable auto-update once: open `/plugin`, go to Marketplaces, pick ponytail, Enable auto-update. Claude Code then pulls new versions at startup (run `/reload-plugins` when it prompts). Manual refresh: `/plugin marketplace update ponytail` then `/reload-plugins`. For Antigravity, re-run `agy plugin install https://github.com/DietrichGebert/ponytail` or update the pinned vendored files in `.agents/skills/`.
 
 ## More
 
