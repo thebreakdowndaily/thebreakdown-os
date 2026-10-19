@@ -7558,11 +7558,12 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
     describe('Finding D: Secret Redaction & Sanitization Closure', () => {
       it('D1. Redacts SUPABASE_SERVICE_ROLE_KEY and SERVICE_ROLE_KEY across formats and casings', async () => {
         const { sanitizeDiagnosticError } = await import('@/lib/security/diagnostic-sanitizer');
+        const mockJwt = ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', 'eyJpc3MiOiJzdXBhYmFzZSJ9', 'mock_secret_signature'].join('.');
 
         const testCases = [
-          'SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.mock_secret_signature',
-          'supabase_service_role_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.mock_secret_signature"',
-          'SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.mock_secret_signature',
+          `SUPABASE_SERVICE_ROLE_KEY=${mockJwt}`,
+          `supabase_service_role_key="${mockJwt}"`,
+          `SERVICE_ROLE_KEY: ${mockJwt}`,
           'service-role-key = secret_key_non_jwt_format_12345',
           'NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY=sensitive_admin_token_abcdef',
         ];
