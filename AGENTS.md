@@ -86,3 +86,21 @@ The root `test` script is a manually chained selection, not proof every reposito
 - Git/PR/deployment status is reported truthfully.
 
 **Operating principle:** Optimize for low change propagation, clear module ownership, fast relevant verification, and correctness—not for files moved or abstractions introduced.
+
+## 7. Lean engineering & Ponytail integration
+
+Ponytail skills and lean-engineering heuristics (`ponytail`, `ponytail-review`, `ponytail-audit`, `ponytail-debt`, `ponytail-gain`, `ponytail-help` located in [`.agents/skills/`](.agents/skills/)) provide subordinate engineering guidance to keep changes minimal, verified, and maintainable:
+
+- **Smallest complete change:** Prefer the smallest complete change that satisfies the actual requirement.
+- **Pattern reuse:** Reuse existing project patterns, services, and dependencies before introducing new ones.
+- **Impact tracing:** Trace affected callers, data flow, interfaces, configuration, and tests before editing or deleting code.
+- **No speculative code:** Avoid speculative abstractions, unnecessary wrappers, unused options, and dependencies added for trivial functionality.
+- **Preserve safeguards:** Preserve validation, error handling, security, accessibility, and correct edge-case behavior.
+- **Proportional testing:** Test non-trivial changes in proportion to their risk.
+- **Evidence-backed review:** Require concrete, reproducible evidence for code-review and audit findings.
+- **Honest reporting:** Report skipped checks and remaining risks honestly at the conclusion of tasks.
+
+### Instruction precedence & boundaries
+
+- **Editorial authority:** The Editorial Constitution (`docs/editorial/editorial-constitution.md`) and applicable editorial standards strictly supersede all lean-code heuristics. No lean rule justifies bypassing source verification, editorial review, fact-checking, publication eligibility, audit records, or test-artifact exclusion.
+- **Security & release integrity:** Authentication, authorization, RLS, database migration safety, atomic publication controls (`fn_publish_story_fenced`), secret handling, and release gates cannot be bypassed or weakened. "Simpler" or "lazy" is never permission to remove an essential safeguard.

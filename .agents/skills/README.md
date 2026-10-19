@@ -19,6 +19,21 @@ Recommended chain:
 
 Use `instagram-content-calendar` and `instagram-repurpose` for planning. Use `instagram-profile-audit` and `instagram-performance-audit` when the user supplies profile snapshots, post examples, or native Insights data.
 
+## Ponytail (lean engineering skills)
+
+Ponytail provides lean coding, review, audit, and technical debt tracking capabilities. Upstream repository: `https://github.com/DietrichGebert/ponytail` (MIT License).
+
+- Core skill: [`ponytail/SKILL.md`](ponytail/SKILL.md) — lean implementation guidance (smallest complete change, pattern reuse, no bloat).
+- Review skill: [`ponytail-review/SKILL.md`](ponytail-review/SKILL.md) — correctness, safety, load, tests, speed, and lean diff review.
+- Audit skill: [`ponytail-audit/SKILL.md`](ponytail-audit/SKILL.md) — repo-wide audit for bugs, risk, load, missing tests, and bloat.
+- Debt skill: [`ponytail-debt/SKILL.md`](ponytail-debt/SKILL.md) — scans `shortcut:` and `ponytail:` comments into a tracked ledger.
+- Gain skill: [`ponytail-gain/SKILL.md`](ponytail-gain/SKILL.md) — benchmark savings scoreboard.
+- Help skill: [`ponytail-help/SKILL.md`](ponytail-help/SKILL.md) — quick reference card.
+- Upstream source, commit pin, and attribution: [`ponytail/UPSTREAM.md`](ponytail/UPSTREAM.md).
+
+### Precedence & boundaries
+Ponytail is subordinate to the root `AGENTS.md` and `docs/editorial/editorial-constitution.md`. Lean heuristics never override editorial verification, RLS, migration safety, atomic publication controls, or release gates.
+
 ## Operating rules
 
 - Read canonical project instructions and the existing command/formatter before editing.
