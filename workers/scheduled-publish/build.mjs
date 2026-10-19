@@ -1,9 +1,9 @@
 /**
  * esbuild config for the scheduled-publish Cloudflare Worker.
  *
- * Bundles the Worker entry point and all transitive imports (publication gate,
- * schedule service, Supabase client, canonical types) into a single file
- * suitable for Cloudflare Workers V8 runtime.
+ * Bundles the Worker entry point and its canonical endpoint dispatcher into a
+ * single ESM file suitable for the Cloudflare Workers runtime. The dispatcher
+ * deliberately has no database client or publication RPC fallback.
  *
  * Usage: node workers/scheduled-publish/build.mjs
  */
