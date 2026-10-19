@@ -151,12 +151,32 @@ export async function validateAndPublishDueStories(
     results.push(result);
   }
 
-  // ── RECOVER PENDING PUBLICATION OUTBOX (Checkpoint C)
-  // Ensures any pending/unprocessed post-publication effects from previous runs are recovered
+  // ── RECOVER PENDING PUBLICATION OUTBOX (Single Authority & At-Least-Once Delivery)
+  // Ensures pending post-publication effects are processed through the single authoritative outbox path.
+  // Delivery is at-least-once; side-effect consumers are idempotent.
   try {
-    await processPendingPublicationOutbox();
-  } catch (_outboxRecoveryErr) {
-    // Non-blocking: outbox recovery failures do not block scheduled publication
+    const recoverySummary = await processPendingPublicationOutbox();
+    if (recoverySummary.processed > 0) {
+      console.log(
+        JSON.stringify({
+          event: 'editorial.schedule.outbox_recovery_summary',
+          processed: recoverySummary.processed,
+          succeeded: recoverySummary.succeeded,
+          failed: recoverySummary.failed,
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    }
+  } catch (outboxRecoveryErr) {
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.outbox_recovery_error',
+        category: 'OUTBOX_RECOVERY_FAILED',
+        error: sanitizeDiagnosticError(outboxRecoveryErr),
+        timestamp: new Date().toISOString(),
+      }),
+    );
+    // Non-blocking: outbox recovery failures do not alter published status of committed stories
   }
 
   return results;
@@ -469,7 +489,7 @@ async function validateAndPublishEntry(
   const story = rowToStory(storyRow);
 
   // ── Run Canonical Publication Contract (All 12 Gates + Gate 13 Evidence Vault)
-  const { evaluatePublicationContractAsync, executePostPublicationEffects } = await import('@/lib/editorial/canonical-publication');
+  const { evaluatePublicationContractAsync } = await import('@/lib/editorial/canonical-publication');
   const { RepositoryFactory } = await import('@/services/factory/repository');
 
   const schedulerPrincipal = {
@@ -1064,32 +1084,14 @@ async function validateAndPublishEntry(
   result.outcome = 'published';
   result.publishedAt = authoritativeStory.publishedAt;
 
-  // 2. POST-PERSISTENCE HOUSEKEEPING & POST-PUBLICATION EFFECTS:
+  // 2. SINGLE AUTHORITATIVE DELIVERY VIA TRANSACTIONAL OUTBOX:
+  // Scheduled publishing side-effects (cache invalidation, event dispatch) are atomically
+  // enqueued into publication_outbox by fn_publish_story_fenced. The durable outbox
+  // is the single authoritative delivery path for scheduled publication; inline side effects
+  // are NOT executed here to prevent duplicate executions in the same invocation.
+  // Delivery is at-least-once through processPendingPublicationOutbox(); effect handlers must be idempotent.
   const correlationId = crypto.randomUUID();
   result.correlationId = correlationId;
-
-  try {
-    const postEffectsRes = await executePostPublicationEffects(authoritativeStory, schedulerPrincipal, result);
-    if (postEffectsRes && (!postEffectsRes.eventBusEmitted || postEffectsRes.revalidationStatus === 'failed' || postEffectsRes.errorCategory)) {
-      result.postPublicationError = true;
-      result.postPublicationErrorCategory = postEffectsRes.errorCategory || 'POST_PUBLICATION_EFFECTS_FAILED';
-    }
-  } catch (_postErr) {
-    result.postPublicationError = true;
-    result.postPublicationErrorCategory = 'POST_PUBLICATION_EFFECTS_FAILED';
-    console.error(
-      JSON.stringify({
-        event: 'editorial.schedule.post_effects_failed',
-        storyId,
-        correlationId,
-        category: 'POST_PUBLICATION_EFFECTS_FAILED',
-        timestamp: new Date().toISOString(),
-      }),
-    );
-  }
-
-  // Post-publication effects are decoupled from transaction persistence and managed
-  // through the single authoritative outbox recovery lifecycle (processPendingPublicationOutbox).
 
   try {
     await logGateResult(result);
@@ -1210,17 +1212,73 @@ function rowToStory(row: Record<string, unknown>) {
   } as import('@/types/canonical').Story;
 }
 
+/**
+ * Sanitizes and redacts diagnostic error strings across all sinks (console, outbox column,
+ * API responses, and thrown errors) so no credentials, tokens, DB URLs, or internal hosts leak.
+ */
+export function sanitizeDiagnosticError(error: unknown): string {
+  if (!error) return 'UNKNOWN_ERROR';
+  let message: string;
+  if (typeof error === 'string') {
+    message = error;
+  } else if (error instanceof Error) {
+    message = error.message;
+  } else if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as any).message === 'string') {
+    message = (error as any).message;
+  } else {
+    message = String(error);
+  }
+
+  // 1. Connection strings and protocol URIs with potential credentials: e.g. postgres://user:pass@host:5432/db?token=...
+  message = message.replace(/(postgres|postgresql|mysql|mongodb|redis|https?):\/\/[^\s"'`]+/gi, '[REDACTED_URI]');
+
+  // 2. Sensitive keywords and auth tokens (Bearer, password, token, secret, api_key, credential, whsec)
+  message = message.replace(/(?:bearer|token|secret|password|passwd|api[_-]?key|credential|whsec)[=:\s]+[^\s,;&]+/gi, '[REDACTED_SECRET]');
+
+  // 3. URLs with query parameters
+  message = message.replace(/https?:\/\/[^\s"'`]+/gi, (url) => {
+    try {
+      const parsed = new URL(url);
+      return `${parsed.protocol}//${parsed.hostname}${parsed.pathname}`;
+    } catch {
+      return '[REDACTED_URL]';
+    }
+  });
+
+  // 4. Internal hostnames or ports: e.g. secret.db.internal:5432
+  message = message.replace(/[a-zA-Z0-9.-]+\.internal(?::\d+)?/gi, '[REDACTED_HOST]');
+
+  // 5. Length bounding (prevent denial-of-service / buffer bloating)
+  if (message.length > 256) {
+    message = message.slice(0, 253) + '...';
+  }
+
+  return message;
+}
+
 export interface OutboxRecoverySummary {
   processed: number;
   succeeded: number;
   failed: number;
-  details: Array<{ id: string; effectType: string; status: 'completed' | 'failed'; error?: string }>;
+  details: Array<{
+    id: string;
+    effectType: string;
+    status: 'completed' | 'failed';
+    error?: string;
+    failureRecordError?: string;
+  }>;
 }
 
 /**
  * Recovers pending post-publication effects (cache revalidation, event dispatch)
  * from the durable transactional outbox (Checkpoint C).
  * Safe to execute concurrently; uses FOR UPDATE SKIP LOCKED in fn_claim_publication_outbox.
+ *
+ * Single-Authority & At-Least-Once Delivery:
+ * The transactional outbox is the single authoritative delivery path for scheduled publication.
+ * Scheduled publication side effects are enqueued during the database publication transaction
+ * and executed here. If an effect fails or times out, it is retried up to max_retries.
+ * Handlers must be idempotent.
  */
 export async function processPendingPublicationOutbox(
   batchSize = 10,
@@ -1259,12 +1317,13 @@ export async function processPendingPublicationOutbox(
       try {
         if (effectType === 'cache_invalidation') {
           // In Next.js runtime, revalidatePath revalidates routes.
-          // Errors are NOT swallowed (Checkpoint C); failures mark the item failed for retry.
+          // Errors are NOT swallowed; failures mark the item failed for retry.
           const { revalidatePath } = await import('next/cache');
           revalidatePath('/');
           revalidatePath('/stories');
-          if (payload.slug && typeof payload.slug === 'string') {
-            revalidatePath(`/story/${payload.slug}`);
+          const slug = (payload.slug as string) || undefined;
+          if (slug) {
+            revalidatePath(`/story/${slug}`);
           }
           itemSuccess = true;
         } else if (effectType === 'event_dispatch') {
@@ -1272,11 +1331,12 @@ export async function processPendingPublicationOutbox(
           await eventBus.publishAsync({
             type: 'story:published',
             payload: {
-              storyId: payload.story_id as string,
-              scheduleId: payload.schedule_id as string,
+              storyId: (payload.story_id || payload.storyId) as string,
+              scheduleId: (payload.schedule_id || payload.scheduleId) as string,
+              slug: (payload.slug as string) || undefined,
               version: (payload.version as number) || 1,
-              publishedAt: (payload.published_at as string) || new Date().toISOString(),
-              publisherId: (payload.actor as string) || 'system-scheduler',
+              publishedAt: (payload.published_at || payload.publishedAt) as string || new Date().toISOString(),
+              publisherId: (payload.actor || payload.publisherId) as string || 'system-scheduler',
               gatePassed: true,
             },
           });
@@ -1284,41 +1344,120 @@ export async function processPendingPublicationOutbox(
         } else {
           itemError = `Unknown effect_type: ${effectType}`;
         }
-      } catch (effectErr: any) {
-        itemError = effectErr?.message || String(effectErr);
+      } catch (effectErr: unknown) {
+        itemError = sanitizeDiagnosticError(effectErr);
         itemSuccess = false;
       }
 
       if (itemSuccess) {
-        const { data: completeData } = await (db as any).rpc('fn_complete_publication_outbox', {
-          p_outbox_id: itemId,
-          p_claim_token: claimToken,
-          p_status: 'completed',
-        });
-        const completeResult = completeData as { success?: boolean; code?: string } | null;
-        if (completeResult && completeResult.code === 'OUTBOX_LEASE_LOST') {
-          summary.failed++;
-          summary.details.push({ id: itemId, effectType, status: 'failed', error: 'OUTBOX_LEASE_LOST' });
-        } else {
+        let completeResult: { success?: boolean; code?: string } | null = null;
+        let completeRpcErr: unknown = null;
+        try {
+          const { data, error } = await (db as any).rpc('fn_complete_publication_outbox', {
+            p_outbox_id: itemId,
+            p_claim_token: claimToken,
+            p_status: 'completed',
+          });
+          completeResult = data as { success?: boolean; code?: string } | null;
+          completeRpcErr = error;
+        } catch (rpcEx) {
+          completeRpcErr = rpcEx;
+        }
+
+        const isExplicitCompleted =
+          !completeRpcErr &&
+          completeResult !== null &&
+          typeof completeResult === 'object' &&
+          completeResult.success === true &&
+          completeResult.code === 'COMPLETED';
+
+        if (isExplicitCompleted) {
           summary.succeeded++;
           summary.details.push({ id: itemId, effectType, status: 'completed' });
+        } else {
+          summary.failed++;
+          const failureReason = completeRpcErr
+            ? 'RPC_COMPLETION_ERROR'
+            : (completeResult?.code || 'MALFORMED_COMPLETION_RESPONSE');
+          summary.details.push({
+            id: itemId,
+            effectType,
+            status: 'failed',
+            error: failureReason,
+          });
+          console.warn(
+            JSON.stringify({
+              event: 'outbox.completion_failed',
+              itemId,
+              effectType,
+              category: 'OUTBOX_COMPLETION_FAILED',
+              code: failureReason,
+              timestamp: new Date().toISOString(),
+            }),
+          );
         }
       } else {
         summary.failed++;
-        summary.details.push({ id: itemId, effectType, status: 'failed', error: itemError });
-        await (db as any).rpc('fn_complete_publication_outbox', {
-          p_outbox_id: itemId,
-          p_claim_token: claimToken,
-          p_status: 'failed',
-          p_error: itemError || 'Outbox effect execution failed',
-        });
+        const sanitizedItemError = sanitizeDiagnosticError(itemError || 'Outbox effect execution failed');
+        let failRecordResult: { success?: boolean; code?: string } | null = null;
+        let failRecordRpcErr: unknown = null;
+        try {
+          const { data, error } = await (db as any).rpc('fn_complete_publication_outbox', {
+            p_outbox_id: itemId,
+            p_claim_token: claimToken,
+            p_status: 'failed',
+            p_error: sanitizedItemError,
+          });
+          failRecordResult = data as { success?: boolean; code?: string } | null;
+          failRecordRpcErr = error;
+        } catch (rpcEx) {
+          failRecordRpcErr = rpcEx;
+        }
+
+        const isFailureRecorded =
+          !failRecordRpcErr &&
+          failRecordResult !== null &&
+          typeof failRecordResult === 'object' &&
+          failRecordResult.success === true &&
+          failRecordResult.code === 'FAILED';
+
+        if (isFailureRecorded) {
+          summary.details.push({
+            id: itemId,
+            effectType,
+            status: 'failed',
+            error: sanitizedItemError,
+          });
+        } else {
+          const recordingFailureReason = failRecordRpcErr
+            ? 'FAILURE_RECORDING_RPC_ERROR'
+            : (failRecordResult?.code ? `FAILURE_RECORDING_${failRecordResult.code}` : 'FAILURE_RECORDING_MALFORMED_RESPONSE');
+          summary.details.push({
+            id: itemId,
+            effectType,
+            status: 'failed',
+            error: `${sanitizedItemError} [recording_error: ${recordingFailureReason}]`,
+            failureRecordError: recordingFailureReason,
+          });
+          console.warn(
+            JSON.stringify({
+              event: 'outbox.failure_recording_failed',
+              itemId,
+              effectType,
+              category: 'OUTBOX_COMPLETION_FAILED',
+              code: recordingFailureReason,
+              timestamp: new Date().toISOString(),
+            }),
+          );
+        }
       }
     }
   } catch (err) {
     console.error(
       JSON.stringify({
         event: 'outbox.recovery_batch_failed',
-        error: err instanceof Error ? err.message : String(err),
+        category: 'OUTBOX_RECOVERY_FAILED',
+        error: sanitizeDiagnosticError(err),
         timestamp: new Date().toISOString(),
       }),
     );

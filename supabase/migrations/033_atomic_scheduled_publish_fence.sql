@@ -621,6 +621,7 @@ BEGIN
         (p_story_id, p_schedule_id, 'event_dispatch', jsonb_build_object(
             'story_id', p_story_id,
             'schedule_id', p_schedule_id,
+            'slug', v_story_slug,
             'version', v_new_version,
             'published_at', v_story_published_at,
             'actor', p_updated_by

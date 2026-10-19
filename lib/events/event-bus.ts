@@ -54,9 +54,23 @@ export class EventBus {
     dispatch('*');
 
     if (asyncHandlers.length > 0) {
-      Promise.all(asyncHandlers).catch((err) =>
-        console.error('[EventBus] async handler error:', err)
-      );
+      Promise.all(asyncHandlers).catch((err) => {
+        const errorName = err instanceof Error ? err.name : 'UnknownError';
+        const rawMsg = err instanceof Error ? err.message : String(err);
+        const safeMsg = rawMsg
+          .replace(/(postgres|postgresql|mysql|mongodb|redis|https?):\/\/[^\s"'`]+/gi, '[REDACTED_URI]')
+          .replace(/(?:bearer|token|secret|password|passwd|api[_-]?key|credential|whsec)[=:\s]+[^\s,;&]+/gi, '[REDACTED_SECRET]')
+          .replace(/[a-zA-Z0-9.-]+\.internal(?::\d+)?/gi, '[REDACTED_HOST]')
+          .slice(0, 256);
+        console.error(
+          JSON.stringify({
+            event: 'event_bus.async_handler_error',
+            errorName,
+            error: safeMsg,
+            timestamp: new Date().toISOString(),
+          }),
+        );
+      });
     }
   }
 
@@ -85,7 +99,20 @@ export class EventBus {
     dispatch('*');
 
     if (promises.length > 0) {
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch (err) {
+        const errorName = err instanceof Error ? err.name : 'Error';
+        const rawMsg = err instanceof Error ? err.message : String(err);
+        const safeMsg = rawMsg
+          .replace(/(postgres|postgresql|mysql|mongodb|redis|https?):\/\/[^\s"'`]+/gi, '[REDACTED_URI]')
+          .replace(/(?:bearer|token|secret|password|passwd|api[_-]?key|credential|whsec)[=:\s]+[^\s,;&]+/gi, '[REDACTED_SECRET]')
+          .replace(/[a-zA-Z0-9.-]+\.internal(?::\d+)?/gi, '[REDACTED_HOST]')
+          .slice(0, 256);
+        const sanitizedErr = new Error(safeMsg);
+        sanitizedErr.name = errorName;
+        throw sanitizedErr;
+      }
     }
   }
 
