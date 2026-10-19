@@ -60,7 +60,8 @@ export function getServerClient(getAll: GetAllCookies, setAll?: SetAllCookies) {
   });
 }
 
-let adminClient: ReturnType<typeof createClient<TypedDatabase>> | null = null;
+let injectedServiceClient: SupabaseClient<TypedDatabase> | null = null;
+let cachedServiceClient: ReturnType<typeof createClient<TypedDatabase>> | null = null;
 let anonServerClient: ReturnType<typeof createClient<TypedDatabase>> | null = null;
 
 export function getAnonClient(): SupabaseClient<TypedDatabase> {
@@ -124,7 +125,8 @@ export function getServiceClient(): SupabaseClient<TypedDatabase> {
   if (typeof window !== 'undefined') {
     throw new Error('getServiceClient() is strictly forbidden in client/browser environments.');
   }
-  if (adminClient) return adminClient;
+  if (injectedServiceClient) return injectedServiceClient;
+  if (cachedServiceClient) return cachedServiceClient;
   const { url } = getConfig();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-admin-key';
   
@@ -132,22 +134,25 @@ export function getServiceClient(): SupabaseClient<TypedDatabase> {
     console.warn('SUPABASE_SERVICE_ROLE_KEY is missing. Using mock values.');
   }
   
-  adminClient = createClient<TypedDatabase>(url, key);
-  return adminClient;
+  cachedServiceClient = createClient<TypedDatabase>(url, key);
+  return cachedServiceClient;
 }
 
 /**
  * Injects a service client instance for testing or server initialization.
+ * Explicitly separates deliberate test injection from lazy default client creation.
  */
 export function setServiceClient(client: SupabaseClient<TypedDatabase> | null): void {
-  adminClient = client;
+  injectedServiceClient = client;
+  cachedServiceClient = null;
 }
 
 /**
- * Returns the currently injected service client instance, or null if none is set.
+ * Returns the currently injected service client instance, or null if none was deliberately injected.
+ * Never returns lazily created or default-cached service clients.
  */
 export function getInjectedServiceClient(): SupabaseClient<TypedDatabase> | null {
-  return adminClient;
+  return injectedServiceClient;
 }
 
 /**

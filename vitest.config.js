@@ -177,6 +177,7 @@ module.exports = {
       'services/intelligence/newsroom/__tests__/desk-service.test.ts',
       'tests/cron-auth.test.ts',
       'tests/scheduled-publish-worker.test.ts',
+      'tests/supabase-client-provenance.test.ts',
       'tests/notifications/alert-dispatcher.test.ts',
       'tests/notifications/stage-b-transport-verification.test.ts',
       'tests/notifications/durable-idempotency.test.ts',

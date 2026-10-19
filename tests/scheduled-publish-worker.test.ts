@@ -7903,15 +7903,80 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
     });
 
     describe('Phase 50.2: Memory Repository Audit Fail-Open Path Closure', () => {
-      it('1. generic audit insert error fails closed with AUDIT_LOG_FAILED without mutating story', async () => {
+      it('1. database-backed schedule with client lacking canonical atomic RPC fails closed without mutating story', async () => {
         const { MemoryStoryService } = await import('@/services/repositories/memory/story');
         const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
         const nowIso = new Date().toISOString();
 
         const repo = new MemoryStoryService([
           {
-            id: 'story-generic-audit-fail',
-            title: 'Generic Audit Fail Story',
+            id: 'story-no-rpc-fail',
+            title: 'No RPC Client Story',
+            status: 'review',
+            publicationStatus: 'draft',
+            version: 1,
+          } as any,
+        ]);
+
+        // Database client has .from() to look up schedule, but lacks .rpc()
+        const mockDb: any = {
+          from: vi.fn().mockImplementation((table: string) => {
+            if (table === 'editorial_schedule') {
+              return {
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'sched-no-rpc-fail',
+                    story_id: 'story-no-rpc-fail',
+                    status: 'validated',
+                    validated_at: nowIso,
+                  },
+                  error: null,
+                }),
+              };
+            }
+            return {};
+          }),
+        };
+        setServiceClient(mockDb);
+
+        const token = issuePublicationToken('story-no-rpc-fail');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-no-rpc-fail',
+          scheduleId: 'sched-no-rpc-fail',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+          updatedStory: {
+            id: 'story-no-rpc-fail',
+            status: 'published',
+            version: 2,
+          } as any,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('DATABASE_ERROR');
+        expect(res.error).toContain('fn_publish_story_fenced');
+        expect(res.error).toContain('non-atomic direct-table fallback is forbidden');
+
+        const storyAfter = await repo.getStory('story-no-rpc-fail');
+        expect(storyAfter?.status).toBe('review');
+        expect(storyAfter?.version).toBe(1);
+
+        setServiceClient(null);
+      });
+
+      it('2. database-backed schedule with RPC failure during audit logging fails closed with AUDIT_LOG_FAILED and does not mutate story', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+
+        const repo = new MemoryStoryService([
+          {
+            id: 'story-rpc-audit-fail',
+            title: 'RPC Audit Fail Story',
             status: 'review',
             publicationStatus: 'draft',
             version: 1,
@@ -7926,39 +7991,34 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
                 eq: vi.fn().mockReturnThis(),
                 maybeSingle: vi.fn().mockResolvedValue({
                   data: {
-                    id: 'sched-generic-audit-fail',
-                    story_id: 'story-generic-audit-fail',
+                    id: 'sched-rpc-audit-fail',
+                    story_id: 'story-rpc-audit-fail',
                     status: 'validated',
                     validated_at: nowIso,
                   },
                   error: null,
                 }),
-                update: vi.fn().mockResolvedValue({ data: null, error: null }),
-              };
-            }
-            if (table === 'publication_gate_log') {
-              return {
-                insert: vi.fn().mockResolvedValue({
-                  data: null,
-                  error: { message: 'disk full on partition /var/lib/postgresql/data' },
-                }),
               };
             }
             return {};
           }),
+          rpc: vi.fn().mockResolvedValue({
+            data: null,
+            error: { message: 'AUDIT_LOG_FAILED: disk full on partition /var/lib/postgresql/data' },
+          }),
         };
         setServiceClient(mockDb);
 
-        const token = issuePublicationToken('story-generic-audit-fail');
+        const token = issuePublicationToken('story-rpc-audit-fail');
         const res = await repo.publishScheduledStoryAtomic({
-          storyId: 'story-generic-audit-fail',
-          scheduleId: 'sched-generic-audit-fail',
+          storyId: 'story-rpc-audit-fail',
+          scheduleId: 'sched-rpc-audit-fail',
           expectedVersion: 1,
           expectedValidatedAt: nowIso,
           publishedAt: nowIso,
           publicationToken: token,
           updatedStory: {
-            id: 'story-generic-audit-fail',
+            id: 'story-rpc-audit-fail',
             status: 'published',
             version: 2,
           } as any,
@@ -7968,22 +8028,22 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         expect(res.code).toBe('AUDIT_LOG_FAILED');
         expect(res.error).toContain('disk full');
 
-        const storyAfter = await repo.getStory('story-generic-audit-fail');
+        const storyAfter = await repo.getStory('story-rpc-audit-fail');
         expect(storyAfter?.status).toBe('review');
         expect(storyAfter?.version).toBe(1);
 
         setServiceClient(null);
       });
 
-      it('2. thrown exception during audit insert fails closed and is not swallowed', async () => {
+      it('3. thrown exception during RPC execution fails closed with DATABASE_ERROR and does not mutate story', async () => {
         const { MemoryStoryService } = await import('@/services/repositories/memory/story');
         const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
         const nowIso = new Date().toISOString();
 
         const repo = new MemoryStoryService([
           {
-            id: 'story-thrown-audit-fail',
-            title: 'Thrown Audit Fail Story',
+            id: 'story-rpc-thrown-fail',
+            title: 'Thrown RPC Fail Story',
             status: 'review',
             publicationStatus: 'draft',
             version: 1,
@@ -7998,8 +8058,8 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
                 eq: vi.fn().mockReturnThis(),
                 maybeSingle: vi.fn().mockResolvedValue({
                   data: {
-                    id: 'sched-thrown-audit-fail',
-                    story_id: 'story-thrown-audit-fail',
+                    id: 'sched-rpc-thrown-fail',
+                    story_id: 'story-rpc-thrown-fail',
                     status: 'validated',
                     validated_at: nowIso,
                   },
@@ -8007,105 +8067,22 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
                 }),
               };
             }
-            if (table === 'publication_gate_log') {
-              return {
-                insert: vi.fn().mockRejectedValue(new Error('network socket disconnected abruptly')),
-              };
-            }
             return {};
           }),
+          rpc: vi.fn().mockRejectedValue(new Error('network socket disconnected abruptly')),
         };
         setServiceClient(mockDb);
 
-        const token = issuePublicationToken('story-thrown-audit-fail');
+        const token = issuePublicationToken('story-rpc-thrown-fail');
         const res = await repo.publishScheduledStoryAtomic({
-          storyId: 'story-thrown-audit-fail',
-          scheduleId: 'sched-thrown-audit-fail',
+          storyId: 'story-rpc-thrown-fail',
+          scheduleId: 'sched-rpc-thrown-fail',
           expectedVersion: 1,
           expectedValidatedAt: nowIso,
           publishedAt: nowIso,
           publicationToken: token,
           updatedStory: {
-            id: 'story-thrown-audit-fail',
-            status: 'published',
-            version: 2,
-          } as any,
-        });
-
-        expect(res.success).toBe(false);
-        expect(res.code).toBe('AUDIT_LOG_FAILED');
-        expect(res.error).toContain('network socket disconnected abruptly');
-
-        const storyAfter = await repo.getStory('story-thrown-audit-fail');
-        expect(storyAfter?.status).toBe('review');
-        expect(storyAfter?.version).toBe(1);
-
-        setServiceClient(null);
-      });
-
-      it('3. failed database schedule update does not leave story published in memory', async () => {
-        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
-        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
-        const nowIso = new Date().toISOString();
-
-        const repo = new MemoryStoryService([
-          {
-            id: 'story-sched-update-fail',
-            title: 'Schedule Update Fail Story',
-            status: 'review',
-            publicationStatus: 'draft',
-            version: 1,
-          } as any,
-        ]);
-
-        const mockDb: any = {
-          from: vi.fn().mockImplementation((table: string) => {
-            if (table === 'editorial_schedule') {
-              return {
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({
-                  data: {
-                    id: 'sched-update-fail',
-                    story_id: 'story-sched-update-fail',
-                    status: 'validated',
-                    validated_at: nowIso,
-                  },
-                  error: null,
-                }),
-                update: vi.fn().mockImplementation(() => {
-                  const chain: any = {
-                    eq: vi.fn().mockImplementation(() => chain),
-                    then: (onfulfilled: any, onrejected: any) =>
-                      Promise.resolve({
-                        data: null,
-                        error: { message: 'concurrent lease conflict: status is no longer validated' },
-                      }).then(onfulfilled, onrejected),
-                  };
-                  return chain;
-                }),
-              };
-            }
-            if (table === 'publication_gate_log') {
-              return {
-                insert: vi.fn().mockResolvedValue({ data: null, error: null }),
-              };
-            }
-            return {};
-          }),
-        };
-        setServiceClient(mockDb);
-
-        const token = issuePublicationToken('story-sched-update-fail');
-        const res = await repo.publishScheduledStoryAtomic({
-          storyId: 'story-sched-update-fail',
-          scheduleId: 'sched-update-fail',
-          expectedVersion: 1,
-          expectedValidatedAt: nowIso,
-          publishedAt: nowIso,
-          publicationToken: token,
-          updatedStory: {
-            id: 'story-sched-update-fail',
+            id: 'story-rpc-thrown-fail',
             status: 'published',
             version: 2,
           } as any,
@@ -8113,9 +8090,9 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
 
         expect(res.success).toBe(false);
         expect(res.code).toBe('DATABASE_ERROR');
-        expect(res.error).toContain('concurrent lease conflict');
+        expect(res.error).toContain('network socket disconnected abruptly');
 
-        const storyAfter = await repo.getStory('story-sched-update-fail');
+        const storyAfter = await repo.getStory('story-rpc-thrown-fail');
         expect(storyAfter?.status).toBe('review');
         expect(storyAfter?.version).toBe(1);
 

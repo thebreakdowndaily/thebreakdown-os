@@ -261,122 +261,73 @@ export class MemoryStoryService implements StoryService {
 
     let rpcResult: any = null;
 
-    if (isDatabaseBacked && dbClient) {
+    if (isDatabaseBacked) {
+      if (!dbClient || typeof dbClient.rpc !== 'function') {
+        return {
+          success: false,
+          code: 'DATABASE_ERROR',
+          error: 'MemoryStoryService requires canonical atomic RPC fn_publish_story_fenced for database-backed publication; non-atomic direct-table fallback is forbidden',
+        };
+      }
+
       // When a publication involves database-backed schedule state, use the canonical
       // atomic publication RPC (fn_publish_story_fenced) to guarantee single-transaction
-      // atomicity across schedule, audit log, and outbox, OR safely handle database operations.
-      if (typeof dbClient.rpc === 'function') {
-        try {
-          const { data, error: rpcError } = await dbClient.rpc('fn_publish_story_fenced', {
-            p_schedule_id: params.scheduleId,
-            p_story_id: params.storyId,
-            p_expected_validated_at: params.expectedValidatedAt,
-            p_expected_version: params.expectedVersion,
-            p_published_at: publishedAt,
-            p_updated_by: params.updatedBy || 'system-scheduler',
-            p_gate_checks: params.gateChecks ?? [],
-            p_gate_checked_at: params.gateCheckedAt || null,
-            p_triggered_by: params.triggeredBy || 'cron',
-          });
+      // atomicity across schedule, audit log, and outbox.
+      try {
+        const { data, error: rpcError } = await dbClient.rpc('fn_publish_story_fenced', {
+          p_schedule_id: params.scheduleId,
+          p_story_id: params.storyId,
+          p_expected_validated_at: params.expectedValidatedAt,
+          p_expected_version: params.expectedVersion,
+          p_published_at: publishedAt,
+          p_updated_by: params.updatedBy || 'system-scheduler',
+          p_gate_checks: params.gateChecks ?? [],
+          p_gate_checked_at: params.gateCheckedAt || null,
+          p_triggered_by: params.triggeredBy || 'cron',
+        });
 
-          if (rpcError) {
-            const isAuditSpecific = typeof rpcError.message === 'string' && (
-              rpcError.message.includes('AUDIT_LOG_FAILED') ||
-              rpcError.message.includes('INJECTED_AUDIT_LOG_FAILURE')
-            );
-            return {
-              success: false,
-              code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
-              error: sanitizeDiagnosticError(rpcError.message || 'Atomic publish RPC failed'),
-            };
-          }
-
-          if (!data || typeof data !== 'object') {
-            return {
-              success: false,
-              code: 'DATABASE_ERROR',
-              error: 'Atomic publish RPC returned invalid response',
-            };
-          }
-
-          if (!data.success) {
-            const isAuditSpecific = typeof data.error === 'string' && (
-              data.error.includes('AUDIT_LOG_FAILED') ||
-              data.error.includes('INJECTED_AUDIT_LOG_FAILURE')
-            );
-            return {
-              success: false,
-              code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : ((data.code as any) || 'DATABASE_ERROR'),
-              error: sanitizeDiagnosticError(data.error || 'Atomic publish RPC reported failure'),
-            };
-          }
-
-          rpcResult = data;
-        } catch (err: any) {
-          const isAuditSpecific = typeof err?.message === 'string' && (
-            err.message.includes('AUDIT_LOG_FAILED') ||
-            err.message.includes('INJECTED_AUDIT_LOG_FAILURE')
+        if (rpcError) {
+          const isAuditSpecific = typeof rpcError.message === 'string' && (
+            rpcError.message.includes('AUDIT_LOG_FAILED') ||
+            rpcError.message.includes('INJECTED_AUDIT_LOG_FAILURE')
           );
           return {
             success: false,
             code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
-            error: sanitizeDiagnosticError(err?.message || 'Database RPC invocation threw error'),
+            error: sanitizeDiagnosticError(rpcError.message || 'Atomic publish RPC failed'),
           };
         }
-      } else if (typeof dbClient.from === 'function') {
-        // Direct table client fallback (e.g. test doubles without RPC).
-        // Enforce strict fail-closed handling on both operations without swallow or fragile string-only matching.
-        try {
-          const { error: gateError } = await dbClient
-            .from('publication_gate_log')
-            .insert({
-              story_id: params.storyId,
-              schedule_id: params.scheduleId,
-              gate_result: 'pass',
-              checks: params.gateChecks ?? [],
-              checked_at: params.gateCheckedAt || nowIso,
-              published_at: publishedAt,
-              triggered_by: params.triggeredBy || 'cron',
-            });
 
-          if (gateError) {
-            return {
-              success: false,
-              code: 'AUDIT_LOG_FAILED',
-              error: sanitizeDiagnosticError(`AUDIT_LOG_FAILED: ${gateError.message || 'Audit log insert failed'}`),
-            };
-          }
-
-          const { error: scheduleError } = await dbClient
-            .from('editorial_schedule')
-            .update({
-              status: 'published',
-              published_at: publishedAt,
-              updated_at: nowIso,
-            })
-            .eq('id', params.scheduleId)
-            .eq('status', 'validated')
-            .eq('validated_at', params.expectedValidatedAt);
-
-          if (scheduleError) {
-            return {
-              success: false,
-              code: 'DATABASE_ERROR',
-              error: sanitizeDiagnosticError(`Database schedule update failed: ${scheduleError.message || scheduleError}`),
-            };
-          }
-        } catch (err: any) {
+        if (!data || typeof data !== 'object') {
           return {
             success: false,
-            code: 'AUDIT_LOG_FAILED',
-            error: sanitizeDiagnosticError(err?.message || 'Database audit operation threw error'),
+            code: 'DATABASE_ERROR',
+            error: 'Atomic publish RPC returned invalid response',
           };
         }
-      } else {
+
+        if (!data.success) {
+          const isAuditSpecific = typeof data.error === 'string' && (
+            data.error.includes('AUDIT_LOG_FAILED') ||
+            data.error.includes('INJECTED_AUDIT_LOG_FAILURE')
+          );
+          return {
+            success: false,
+            code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : ((data.code as any) || 'DATABASE_ERROR'),
+            error: sanitizeDiagnosticError(data.error || 'Atomic publish RPC reported failure'),
+          };
+        }
+
+        rpcResult = data;
+      } catch (err: any) {
+        const isAuditSpecific = typeof err?.message === 'string' && (
+          err.message.includes('AUDIT_LOG_FAILED') ||
+          err.message.includes('INJECTED_AUDIT_LOG_FAILURE')
+        );
         return {
           success: false,
-          code: 'DATABASE_ERROR',
-          error: 'MemoryStoryService cannot safely persist database-backed schedule without database client methods',
+          code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+          error: sanitizeDiagnosticError(err?.message || 'Database RPC invocation threw error'),
         };
       }
     }
