@@ -5,6 +5,7 @@ import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
+import { sanitizeDiagnosticError } from '@/lib/security/diagnostic-sanitizer';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
 export class MemoryStoryService implements StoryService {
@@ -114,23 +115,49 @@ export class MemoryStoryService implements StoryService {
     // 1. Resolve and verify schedule lease entity
     let scheduleEntry = this.schedules.get(params.scheduleId);
     let dbClient: any = null;
+    let isDatabaseBacked = false;
 
     if (!scheduleEntry) {
       try {
         const { getServiceClient } = await import('@/supabase/client');
         dbClient = getServiceClient();
-        if (dbClient) {
-          const { data } = await dbClient
+      } catch {
+        dbClient = null;
+      }
+
+      const isPlaceholder = !dbClient || (
+        typeof dbClient.supabaseUrl === 'string' &&
+        dbClient.supabaseUrl.includes('placeholder.supabase.co')
+      );
+
+      if (!isPlaceholder && typeof dbClient.from === 'function') {
+        try {
+          const { data, error: fetchErr } = await dbClient
             .from('editorial_schedule')
             .select('*')
             .eq('id', params.scheduleId)
             .maybeSingle();
+
+          if (fetchErr) {
+            return {
+              success: false,
+              code: 'DATABASE_ERROR',
+              error: sanitizeDiagnosticError(`Database schedule lookup failed: ${fetchErr.message || fetchErr}`),
+            };
+          }
           if (data) {
             scheduleEntry = data;
+            isDatabaseBacked = true;
           }
+        } catch (fetchEx: any) {
+          return {
+            success: false,
+            code: 'DATABASE_ERROR',
+            error: sanitizeDiagnosticError(fetchEx?.message || 'Database schedule lookup threw error'),
+          };
         }
-      } catch {
-        // DB client optional in disconnected memory mode
+      } else if (isPlaceholder) {
+        dbClient = null;
       }
     }
 
@@ -199,8 +226,15 @@ export class MemoryStoryService implements StoryService {
       };
     }
 
-    // 3. Atomic commit: both schedule and story transition simultaneously
-    const newVersion = currentVersion + 1;
+    // 3. Atomically record mandatory publication gate audit log before mutating state
+    if (this.simulateAuditFailure || (params as any)?.simulateAuditFailure) {
+      return {
+        success: false,
+        code: 'AUDIT_LOG_FAILED',
+        error: 'AUDIT_LOG_FAILED: simulated gate log write failure',
+      };
+    }
+
     const nowIso = new Date().toISOString();
     // published_at contract: preserve historical past date; clamp future date or null to now
     const existingPublishedAt = existing.publishedAt;
@@ -214,86 +248,162 @@ export class MemoryStoryService implements StoryService {
           ? params.updatedBy
           : '00000000-0000-0000-0000-000000000001');
 
-    // 3. Atomically record mandatory publication gate audit log before mutating state
-    if (this.simulateAuditFailure || (params as any)?.simulateAuditFailure) {
-      return {
-        success: false,
-        code: 'AUDIT_LOG_FAILED',
-        error: 'AUDIT_LOG_FAILED: simulated gate log write failure',
-      };
-    }
+    let rpcResult: any = null;
 
-    if (dbClient) {
-      try {
-        const { error: gateError } = await dbClient
-          .from('publication_gate_log')
-          .insert({
-            story_id: params.storyId,
-            schedule_id: params.scheduleId,
-            gate_result: 'pass',
-            checks: params.gateChecks ?? [],
-            checked_at: params.gateCheckedAt || nowIso,
-            published_at: publishedAt,
-            triggered_by: params.triggeredBy || 'cron',
+    if (isDatabaseBacked && dbClient) {
+      // When a publication involves database-backed schedule state, use the canonical
+      // atomic publication RPC (fn_publish_story_fenced) to guarantee single-transaction
+      // atomicity across schedule, audit log, and outbox, OR safely handle database operations.
+      if (typeof dbClient.rpc === 'function') {
+        try {
+          const { data, error: rpcError } = await dbClient.rpc('fn_publish_story_fenced', {
+            p_schedule_id: params.scheduleId,
+            p_story_id: params.storyId,
+            p_expected_validated_at: params.expectedValidatedAt,
+            p_expected_version: params.expectedVersion,
+            p_published_at: publishedAt,
+            p_updated_by: params.updatedBy || 'system-scheduler',
+            p_gate_checks: params.gateChecks ?? [],
+            p_gate_checked_at: params.gateCheckedAt || null,
+            p_triggered_by: params.triggeredBy || 'cron',
           });
 
-        if (gateError && (gateError.message?.includes('AUDIT_LOG_FAILED') || gateError.message?.includes('INJECTED_AUDIT_LOG_FAILURE'))) {
-          return {
-            success: false,
-            code: 'AUDIT_LOG_FAILED',
-            error: `AUDIT_LOG_FAILED: ${gateError.message}`,
-          };
-        }
+          if (rpcError) {
+            const isAuditSpecific = typeof rpcError.message === 'string' && (
+              rpcError.message.includes('AUDIT_LOG_FAILED') ||
+              rpcError.message.includes('INJECTED_AUDIT_LOG_FAILURE')
+            );
+            return {
+              success: false,
+              code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+              error: sanitizeDiagnosticError(rpcError.message || 'Atomic publish RPC failed'),
+            };
+          }
 
-        await dbClient
-          .from('editorial_schedule')
-          .update({
-            status: 'published',
-            published_at: publishedAt,
-            updated_at: nowIso,
-          })
-          .eq('id', params.scheduleId)
-          .eq('status', 'validated')
-          .eq('validated_at', params.expectedValidatedAt);
-      } catch (err: any) {
-        if (err && typeof err.message === 'string' && (err.message.includes('AUDIT_LOG_FAILED') || err.message.includes('INJECTED_AUDIT_LOG_FAILURE'))) {
+          if (!data || typeof data !== 'object') {
+            return {
+              success: false,
+              code: 'DATABASE_ERROR',
+              error: 'Atomic publish RPC returned invalid response',
+            };
+          }
+
+          if (!data.success) {
+            const isAuditSpecific = typeof data.error === 'string' && (
+              data.error.includes('AUDIT_LOG_FAILED') ||
+              data.error.includes('INJECTED_AUDIT_LOG_FAILURE')
+            );
+            return {
+              success: false,
+              code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : ((data.code as any) || 'DATABASE_ERROR'),
+              error: sanitizeDiagnosticError(data.error || 'Atomic publish RPC reported failure'),
+            };
+          }
+
+          rpcResult = data;
+        } catch (err: any) {
+          const isAuditSpecific = typeof err?.message === 'string' && (
+            err.message.includes('AUDIT_LOG_FAILED') ||
+            err.message.includes('INJECTED_AUDIT_LOG_FAILURE')
+          );
+          return {
+            success: false,
+            code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+            error: sanitizeDiagnosticError(err?.message || 'Database RPC invocation threw error'),
+          };
+        }
+      } else if (typeof dbClient.from === 'function') {
+        // Direct table client fallback (e.g. test doubles without RPC).
+        // Enforce strict fail-closed handling on both operations without swallow or fragile string-only matching.
+        try {
+          const { error: gateError } = await dbClient
+            .from('publication_gate_log')
+            .insert({
+              story_id: params.storyId,
+              schedule_id: params.scheduleId,
+              gate_result: 'pass',
+              checks: params.gateChecks ?? [],
+              checked_at: params.gateCheckedAt || nowIso,
+              published_at: publishedAt,
+              triggered_by: params.triggeredBy || 'cron',
+            });
+
+          if (gateError) {
+            return {
+              success: false,
+              code: 'AUDIT_LOG_FAILED',
+              error: sanitizeDiagnosticError(`AUDIT_LOG_FAILED: ${gateError.message || 'Audit log insert failed'}`),
+            };
+          }
+
+          const { error: scheduleError } = await dbClient
+            .from('editorial_schedule')
+            .update({
+              status: 'published',
+              published_at: publishedAt,
+              updated_at: nowIso,
+            })
+            .eq('id', params.scheduleId)
+            .eq('status', 'validated')
+            .eq('validated_at', params.expectedValidatedAt);
+
+          if (scheduleError) {
+            return {
+              success: false,
+              code: 'DATABASE_ERROR',
+              error: sanitizeDiagnosticError(`Database schedule update failed: ${scheduleError.message || scheduleError}`),
+            };
+          }
+        } catch (err: any) {
           return {
             success: false,
             code: 'AUDIT_LOG_FAILED',
-            error: err.message,
+            error: sanitizeDiagnosticError(err?.message || 'Database audit operation threw error'),
           };
         }
-        // DB client optional in disconnected memory mode
+      } else {
+        return {
+          success: false,
+          code: 'DATABASE_ERROR',
+          error: 'MemoryStoryService cannot safely persist database-backed schedule without database client methods',
+        };
       }
     }
 
     // 4. Commit atomic transition: both schedule and story state transition simultaneously
+    const storyData = params.publishedStory || (params as any).updatedStory || existing;
+    const newVersion = rpcResult?.version ?? (currentVersion + 1);
+    const storyPublishedAt = rpcResult?.published_at ?? publishedAt;
+    const storyUpdatedAt = rpcResult?.updated_at ?? nowIso;
+    const storyUpdatedBy = rpcResult?.updated_by ?? updatedByUuid;
+
     const updatedStory: Story = {
-      ...params.publishedStory,
+      ...storyData,
       status: 'published',
       publicationStatus: 'published',
       version: newVersion,
-      publishedAt,
-      updatedAt: nowIso,
-      updatedBy: updatedByUuid,
+      publishedAt: storyPublishedAt,
+      updatedAt: storyUpdatedAt,
+      updatedBy: storyUpdatedBy,
     };
     this.stories.set(params.storyId, updatedStory);
 
     if (this.schedules.has(params.scheduleId)) {
       const s = this.schedules.get(params.scheduleId)!;
       s.status = 'published';
-      s.published_at = publishedAt;
-      s.updated_at = nowIso;
+      s.published_at = storyPublishedAt;
+      s.updated_at = storyUpdatedAt;
     }
 
     return {
       success: true,
       code: 'PUBLISHED',
       story: updatedStory,
-      actor: params.updatedBy || 'system-scheduler',
-      scheduledBy: (existing as any).scheduled_by || (existing as any).scheduledBy || params.updatedBy || 'system-scheduler',
+      actor: rpcResult?.actor || params.updatedBy || 'system-scheduler',
+      scheduledBy: rpcResult?.scheduled_by ?? (existing as any).scheduled_by ?? (existing as any).scheduledBy ?? params.updatedBy ?? 'system-scheduler',
     };
   }
+
 
   async deleteStory(id: string) {
     this.stories.delete(id);
