@@ -688,7 +688,24 @@ async function validateAndPublishEntry(
       storyBlockQuery = storyBlockQuery.eq('version', currentStoryVersion);
     }
 
-    await storyBlockQuery;
+    const storyBlockResult = await storyBlockQuery;
+    if (storyBlockResult.error) {
+      console.error(
+        JSON.stringify({
+          event: 'editorial.schedule.story_block_failed',
+          storyId,
+          scheduleId,
+          error: storyBlockResult.error.message,
+          category: 'STORY_BLOCK_ERROR',
+          timestamp: now.toISOString(),
+        }),
+      );
+      result.checks.push({
+        name: 'story_block_revert',
+        passed: false,
+        reason: `Story status revert to review failed: ${storyBlockResult.error.message}`,
+      });
+    }
 
     return result;
   }

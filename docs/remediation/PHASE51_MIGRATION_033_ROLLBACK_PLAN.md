@@ -16,7 +16,7 @@ Migration 033 introduces the atomic publication fence, database-authoritative le
 If Migration 033 must be rolled back due to an unforeseen defect or operational emergency during staged deployment:
 1. **Worker Pre-emption:** Publisher workers (cron jobs and background runners executing `validateAndPublishDueStories` or `processPendingPublicationOutbox`) must be paused or stopped immediately before executing this rollback.
 2. **Transaction Isolation:** The entire rollback must be executed within a single transactional block (`BEGIN ... COMMIT`).
-3. **Trigger Restoration:** Dropping the atomic fence triggers (`trg_stories_atomic_fence` and `trg_editorial_schedule_atomic_fence`) leaves the tables without automatic `updated_at` timestamp updates unless baseline triggers from Migration 002 (`trg_stories_set_updated_at` and `trg_editorial_schedule_set_updated_at`) are restored. This rollback explicitly restores those baseline triggers.
+3. **Trigger Restoration:** Dropping the atomic fence triggers (`trg_stories_updated_at` and `trg_editorial_schedule_updated_at`, which Migration 033 replaced to call `set_updated_at_clock()`) leaves the tables without automatic `updated_at` timestamp updates unless the original triggers from Migration 002 (same names `trg_stories_updated_at` and `trg_editorial_schedule_updated_at`, but calling the original `set_updated_at()` function which uses `now()`) are restored. This rollback explicitly restores those baseline triggers and drops the `set_updated_at_clock()` helper introduced by Migration 033.
 
 ---
 
@@ -28,42 +28,67 @@ The following DDL has been adversarially verified against live PostgreSQL instan
 BEGIN;
 
 -- ============================================================================
--- 1. DROP MIGRATION 033 ATOMIC FENCE TRIGGERS
+-- 1. DROP MIGRATION 033 TRIGGERS (same names as originals, but calling set_updated_at_clock())
 -- ============================================================================
-DROP TRIGGER IF EXISTS trg_stories_atomic_fence ON public.stories;
-DROP TRIGGER IF EXISTS trg_editorial_schedule_atomic_fence ON public.editorial_schedule;
+DROP TRIGGER IF EXISTS trg_stories_updated_at ON public.stories;
+DROP TRIGGER IF EXISTS trg_editorial_schedule_updated_at ON public.editorial_schedule;
 
 -- ============================================================================
 -- 2. RESTORE BASELINE TRIGGERS FROM MIGRATION 002
+-- Original names: trg_<table>_updated_at, calling set_updated_at() which uses now()
 -- ============================================================================
--- Ensure set_updated_at() trigger function handles updated_at mutations
-CREATE TRIGGER trg_stories_set_updated_at
+CREATE TRIGGER trg_stories_updated_at
   BEFORE UPDATE ON public.stories
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TRIGGER trg_editorial_schedule_set_updated_at
+CREATE TRIGGER trg_editorial_schedule_updated_at
   BEFORE UPDATE ON public.editorial_schedule
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 -- ============================================================================
--- 3. DROP MIGRATION 033 STORED PROCEDURES & RPC FUNCTIONS
+-- 3. DROP MIGRATION 033 STORED PROCEDURES & RPC FUNCTIONS (exact signatures)
 -- ============================================================================
 DROP FUNCTION IF EXISTS public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
 DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
 DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT);
 DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID, UUID);
 DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID);
-DROP FUNCTION IF EXISTS public.fn_touch_updated_at_unfenced();
-DROP FUNCTION IF EXISTS public.fn_reap_abandoned_leases_fenced();
-DROP FUNCTION IF EXISTS public.fn_drain_publication_outbox_fenced(INT);
+DROP FUNCTION IF EXISTS public.fn_discover_due_schedule_entries(INT);
 DROP FUNCTION IF EXISTS public.fn_claim_publication_outbox(INT, INT);
-DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT, TEXT);
+DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT);
+DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT);
 
 -- ============================================================================
--- 4. DROP MIGRATION 033 OUTBOX TABLE AND ENUM
+-- 4. DROP MIGRATION 033 OUTBOX TABLE (uses CHECK constraint, not enum type)
 -- ============================================================================
 DROP TABLE IF EXISTS public.publication_outbox CASCADE;
-DROP TYPE IF EXISTS public.publication_outbox_status CASCADE;
+
+-- ============================================================================
+-- 5. DROP MIGRATION 033 HELPER FUNCTION
+-- ============================================================================
+DROP FUNCTION IF EXISTS public.set_updated_at_clock();
+
+-- ============================================================================
+-- 6. RESTORE LEGACY FUNCTION GRANTS (revoked by Migration 033 lines 886-917)
+-- ============================================================================
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
+    WHERE n.nspname = 'public' AND p.proname = 'fn_publish_story_with_audit'
+  ) THEN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+      GRANT EXECUTE ON FUNCTION public.fn_publish_story_with_audit(UUID) TO publisher_worker;
+    END IF;
+  END IF;
+  IF EXISTS (
+    SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
+    WHERE n.nspname = 'public' AND p.proname = 'fn_claim_due_schedule_entry'
+  ) THEN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+      GRANT EXECUTE ON FUNCTION public.fn_claim_due_schedule_entry() TO publisher_worker;
+    END IF;
+  END IF;
+END $$;
 
 COMMIT;
 ```
@@ -93,14 +118,13 @@ psql "$SUPABASE_DB_URL" -f rollback_migration_033.sql
 ### Step 3.3: Post-Rollback Verification Queries
 Run these verification assertions immediately after execution:
 
-1. **Verify outbox table and type are dropped:**
+1. **Verify outbox table is dropped:**
    ```sql
-   SELECT to_regclass('public.publication_outbox') AS table_exists,
-          to_regtype('public.publication_outbox_status') AS type_exists;
-   -- Expected: NULL, NULL
+   SELECT to_regclass('public.publication_outbox') AS table_exists;
+   -- Expected: NULL
    ```
 
-2. **Verify 033 RPC functions are dropped:**
+2. **Verify 033 RPC functions and helpers are dropped:**
    ```sql
    SELECT routine_name 
    FROM information_schema.routines 
@@ -109,8 +133,10 @@ Run these verification assertions immediately after execution:
        'fn_publish_story_fenced',
        'fn_block_schedule_entry_fenced',
        'fn_claim_schedule_entry_fenced',
+       'fn_discover_due_schedule_entries',
        'fn_claim_publication_outbox',
-       'fn_complete_publication_outbox'
+       'fn_complete_publication_outbox',
+       'set_updated_at_clock'
      );
    -- Expected: 0 rows returned
    ```
@@ -121,7 +147,7 @@ Run these verification assertions immediately after execution:
    FROM information_schema.triggers 
    WHERE trigger_schema = 'public' 
      AND event_object_table IN ('stories', 'editorial_schedule');
-   -- Expected: trg_stories_set_updated_at and trg_editorial_schedule_set_updated_at calling set_updated_at()
+   -- Expected: trg_stories_updated_at and trg_editorial_schedule_updated_at calling set_updated_at()
    ```
 
 4. **Verify baseline row update behavior:**
@@ -157,9 +183,10 @@ This rollback script is continuously verified in the repository test suite via:
 `tests/security/database-enforcement.test.ts` (Section 12: `Phase 51.3: Migration 033 Rollback Script Verification`).
 
 The automated test verifies:
-- Clean dropping of atomic fence triggers.
-- Clean restoration of baseline `set_updated_at` triggers.
-- Clean dropping of all 10 functions and overloads.
-- Clean cascade dropping of `publication_outbox` table and `publication_outbox_status` enum.
-- Correct execution of the restored baseline trigger on `stories` updates.
+- Clean dropping of Migration 033 triggers (`trg_stories_updated_at`, `trg_editorial_schedule_updated_at` calling `set_updated_at_clock()`).
+- Clean restoration of baseline triggers with correct original names calling `set_updated_at()` (not `set_updated_at_clock()`).
+- Exactly one `updated_at` trigger per table after rollback, verified by name and backing function.
+- Clean dropping of all Migration 033 functions including `fn_discover_due_schedule_entries`, `fn_complete_publication_outbox` (both overloads), `fn_claim_publication_outbox`, and `set_updated_at_clock()`.
+- Clean cascade dropping of `publication_outbox` table (no enum type to drop — uses CHECK constraint).
+- Correct execution of the restored baseline trigger on `stories` updates (timestamp actually advances).
 - Zero leftover database artifacts.

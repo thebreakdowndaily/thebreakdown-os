@@ -2944,34 +2944,56 @@ async function runDirectDatabaseTests() {
 
     // 12.1 Execute rollback DDL
     const rollbackDDL = `
-      -- 1. Drop Migration 033 Triggers
-      DROP TRIGGER IF EXISTS trg_stories_atomic_fence ON public.stories;
-      DROP TRIGGER IF EXISTS trg_editorial_schedule_atomic_fence ON public.editorial_schedule;
+      -- 1. Drop Migration 033 triggers (actual names from migration 033 lines 42, 48)
+      DROP TRIGGER IF EXISTS trg_stories_updated_at ON public.stories;
+      DROP TRIGGER IF EXISTS trg_editorial_schedule_updated_at ON public.editorial_schedule;
 
-      -- 2. Restore baseline set_updated_at triggers from Migration 002
-      CREATE TRIGGER trg_stories_set_updated_at
+      -- 2. Restore baseline triggers from Migration 002 (original names: trg_<table>_updated_at)
+      -- These call the original set_updated_at() function from migration 002, not set_updated_at_clock()
+      CREATE TRIGGER trg_stories_updated_at
         BEFORE UPDATE ON public.stories
         FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
-      CREATE TRIGGER trg_editorial_schedule_set_updated_at
+      CREATE TRIGGER trg_editorial_schedule_updated_at
         BEFORE UPDATE ON public.editorial_schedule
         FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
-      -- 3. Drop Migration 033 Functions
+      -- 3. Drop Migration 033 Functions (exact signatures from migration source)
       DROP FUNCTION IF EXISTS public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
       DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
       DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT);
       DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID, UUID);
       DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID);
-      DROP FUNCTION IF EXISTS public.fn_touch_updated_at_unfenced();
-      DROP FUNCTION IF EXISTS public.fn_reap_abandoned_leases_fenced();
-      DROP FUNCTION IF EXISTS public.fn_drain_publication_outbox_fenced(INT);
+      DROP FUNCTION IF EXISTS public.fn_discover_due_schedule_entries(INT);
       DROP FUNCTION IF EXISTS public.fn_claim_publication_outbox(INT, INT);
-      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT, TEXT);
+      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT);
+      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT);
 
-      -- 4. Drop Migration 033 Table and Type
+      -- 4. Drop Migration 033 Table (uses CHECK constraint, not enum type)
       DROP TABLE IF EXISTS public.publication_outbox CASCADE;
-      DROP TYPE IF EXISTS public.publication_outbox_status CASCADE;
+
+      -- 5. Drop Migration 033 helper function (created at line 27)
+      DROP FUNCTION IF EXISTS public.set_updated_at_clock();
+
+      -- 6. Restore legacy function grants from Migration 030 (revoked by 033 lines 886-917)
+      DO $$ BEGIN
+        IF EXISTS (
+          SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
+          WHERE n.nspname = 'public' AND p.proname = 'fn_publish_story_with_audit'
+        ) THEN
+          IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+            GRANT EXECUTE ON FUNCTION public.fn_publish_story_with_audit(UUID) TO publisher_worker;
+          END IF;
+        END IF;
+        IF EXISTS (
+          SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
+          WHERE n.nspname = 'public' AND p.proname = 'fn_claim_due_schedule_entry'
+        ) THEN
+          IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+            GRANT EXECUTE ON FUNCTION public.fn_claim_due_schedule_entry() TO publisher_worker;
+          END IF;
+        END IF;
+      END $$;
     `;
     await client.query(rollbackDDL);
 
@@ -2980,12 +3002,6 @@ async function runDirectDatabaseTests() {
       SELECT to_regclass('public.publication_outbox') as tbl;
     `);
     assert(checkOutboxTable.rows[0].tbl === null, 'Rollback successfully dropped publication_outbox table');
-
-    // Verify publication_outbox_status enum is gone
-    const checkOutboxType = await client.query(`
-      SELECT to_regtype('public.publication_outbox_status') as typ;
-    `);
-    assert(checkOutboxType.rows[0].typ === null, 'Rollback successfully dropped publication_outbox_status type');
 
     // Verify 033 functions are gone
     const checkBlockFn = await client.query(`
@@ -2997,6 +3013,65 @@ async function runDirectDatabaseTests() {
       SELECT to_regproc('public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT)') as proc;
     `);
     assert(checkPublishFn.rows[0].proc === null, 'Rollback successfully dropped fn_publish_story_fenced');
+
+    // Verify fn_discover_due_schedule_entries is dropped
+    const checkDiscoverFn = await client.query(`
+      SELECT to_regproc('public.fn_discover_due_schedule_entries(INT)') as proc;
+    `);
+    assert(checkDiscoverFn.rows[0].proc === null, 'Rollback successfully dropped fn_discover_due_schedule_entries');
+
+    // Verify fn_complete_publication_outbox is dropped (correct UUID,UUID,TEXT,TEXT signature)
+    const checkCompleteFn = await client.query(`
+      SELECT count(*) as cnt FROM pg_proc p
+      JOIN pg_namespace n ON p.pronamespace = n.oid
+      WHERE n.nspname = 'public' AND p.proname = 'fn_complete_publication_outbox';
+    `);
+    assert(parseInt(checkCompleteFn.rows[0].cnt) === 0, 'Rollback successfully dropped fn_complete_publication_outbox');
+
+    // Verify fn_claim_publication_outbox is dropped
+    const checkClaimFn = await client.query(`
+      SELECT count(*) as cnt FROM pg_proc p
+      JOIN pg_namespace n ON p.pronamespace = n.oid
+      WHERE n.nspname = 'public' AND p.proname = 'fn_claim_publication_outbox';
+    `);
+    assert(parseInt(checkClaimFn.rows[0].cnt) === 0, 'Rollback successfully dropped fn_claim_publication_outbox');
+
+    // Verify set_updated_at_clock() helper function is dropped
+    const checkClockFn = await client.query(`
+      SELECT count(*) as cnt FROM pg_proc p
+      JOIN pg_namespace n ON p.pronamespace = n.oid
+      WHERE n.nspname = 'public' AND p.proname = 'set_updated_at_clock';
+    `);
+    assert(parseInt(checkClockFn.rows[0].cnt) === 0, 'Rollback successfully dropped set_updated_at_clock helper function');
+
+    // Verify triggers use the correct original names and call set_updated_at() not set_updated_at_clock()
+    const checkStoriesTrigger = await client.query(`
+      SELECT t.tgname, p.proname as func_name
+      FROM pg_trigger t
+      JOIN pg_proc p ON t.tgfoid = p.oid
+      JOIN pg_class c ON t.tgrelid = c.oid
+      JOIN pg_namespace n ON c.relnamespace = n.oid
+      WHERE n.nspname = 'public' AND c.relname = 'stories'
+        AND t.tgname LIKE 'trg_stories_%updated%'
+        AND NOT t.tgisinternal;
+    `);
+    assert(checkStoriesTrigger.rows.length === 1, 'Exactly one updated_at trigger exists on stories after rollback');
+    assert(checkStoriesTrigger.rows[0].tgname === 'trg_stories_updated_at', 'Stories trigger has correct original name trg_stories_updated_at');
+    assert(checkStoriesTrigger.rows[0].func_name === 'set_updated_at', 'Stories trigger calls original set_updated_at() not set_updated_at_clock()');
+
+    const checkScheduleTrigger = await client.query(`
+      SELECT t.tgname, p.proname as func_name
+      FROM pg_trigger t
+      JOIN pg_proc p ON t.tgfoid = p.oid
+      JOIN pg_class c ON t.tgrelid = c.oid
+      JOIN pg_namespace n ON c.relnamespace = n.oid
+      WHERE n.nspname = 'public' AND c.relname = 'editorial_schedule'
+        AND t.tgname LIKE 'trg_editorial_schedule_%updated%'
+        AND NOT t.tgisinternal;
+    `);
+    assert(checkScheduleTrigger.rows.length === 1, 'Exactly one updated_at trigger exists on editorial_schedule after rollback');
+    assert(checkScheduleTrigger.rows[0].tgname === 'trg_editorial_schedule_updated_at', 'Schedule trigger has correct original name trg_editorial_schedule_updated_at');
+    assert(checkScheduleTrigger.rows[0].func_name === 'set_updated_at', 'Schedule trigger calls original set_updated_at() not set_updated_at_clock()');
 
     // Verify restored baseline trigger works: updates updated_at without fenced restrictions
     const testStoryRollbackId = '77777777-5151-4000-8000-000000000001';
