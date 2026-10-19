@@ -119,18 +119,31 @@ export class MemoryStoryService implements StoryService {
 
     if (!scheduleEntry) {
       try {
-        const { getServiceClient } = await import('@/supabase/client');
-        dbClient = getServiceClient();
+        const { getInjectedServiceClient, getServiceClient } = await import('@/supabase/client');
+        const injected = getInjectedServiceClient();
+        if (injected) {
+          dbClient = injected;
+        } else {
+          const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+          const isRealConfig = Boolean(
+            serviceRoleKey &&
+            serviceRoleKey !== 'dummy-admin-key' &&
+            supabaseUrl &&
+            !supabaseUrl.includes('placeholder.supabase.co') &&
+            !supabaseUrl.includes('127.0.0.1')
+          );
+          if (isRealConfig) {
+            dbClient = getServiceClient();
+          } else {
+            dbClient = null;
+          }
+        }
       } catch {
         dbClient = null;
       }
 
-      const isPlaceholder = !dbClient || (
-        typeof dbClient.supabaseUrl === 'string' &&
-        dbClient.supabaseUrl.includes('placeholder.supabase.co')
-      );
-
-      if (!isPlaceholder && typeof dbClient.from === 'function') {
+      if (dbClient && typeof dbClient.from === 'function') {
         try {
           const { data, error: fetchErr } = await dbClient
             .from('editorial_schedule')
@@ -156,8 +169,6 @@ export class MemoryStoryService implements StoryService {
             error: sanitizeDiagnosticError(fetchEx?.message || 'Database schedule lookup threw error'),
           };
         }
-      } else if (isPlaceholder) {
-        dbClient = null;
       }
     }
 
