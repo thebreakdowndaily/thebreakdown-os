@@ -85,6 +85,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
   private cache: { graph: Graph; version: number } | null = null;
   private version = 0;
   private unsubscribers: (() => void)[] = [];
+  private teardownSubscription: (() => void) | null = null;
 
   constructor(services: Services) {
     this.services = services;
@@ -116,6 +117,10 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
   }
 
   subscribeToEvents(): () => void {
+    if (this.teardownSubscription && this.unsubscribers.length > 0) {
+      return this.teardownSubscription;
+    }
+
     const bus = EventBus.getInstance();
     const invalidate = () => this.invalidate();
 
@@ -134,9 +139,19 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     }
 
     const unsubscribe = () => {
-      for (const unsub of this.unsubscribers) unsub();
+      const toTeardown = this.unsubscribers;
       this.unsubscribers = [];
+      this.teardownSubscription = null;
+      for (const unsub of toTeardown) {
+        try {
+          unsub();
+        } catch {
+          // ignore error during teardown
+        }
+      }
     };
+
+    this.teardownSubscription = unsubscribe;
     return unsubscribe;
   }
 

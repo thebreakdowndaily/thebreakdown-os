@@ -7595,6 +7595,312 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         expect(safeErrInstance.message).not.toContain('db.project.supabase.co');
       });
     });
+
+    describe('Finding E: Event Subscription Lifecycle Idempotency', () => {
+      it('E1. MemoryGraphProjectionService.subscribeToEvents is idempotent across multiple invocations', async () => {
+        const { MemoryGraphProjectionService } = await import('@/services/graph/service');
+        const { EventBus } = await import('@/lib/events/event-bus');
+        const bus = EventBus.getInstance();
+        const subscribeSpy = vi.spyOn(bus, 'subscribeIdempotent');
+
+        const graphService = new MemoryGraphProjectionService({} as any);
+        const teardown1 = graphService.subscribeToEvents();
+        const callCountAfterFirst = subscribeSpy.mock.calls.length;
+        expect(callCountAfterFirst).toBeGreaterThan(0);
+
+        // Repeated invocations return the same teardown callback and do NOT add new listeners
+        const teardown2 = graphService.subscribeToEvents();
+        const teardown3 = graphService.subscribeToEvents();
+        expect(subscribeSpy.mock.calls.length).toBe(callCountAfterFirst);
+        expect(teardown2).toBe(teardown1);
+        expect(teardown3).toBe(teardown1);
+
+        teardown1();
+        subscribeSpy.mockRestore();
+      });
+
+      it('E2. ensureCanonicalEventConsumers does not accumulate duplicate handlers on repeated calls', async () => {
+        const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+        const { ensureCanonicalEventConsumers } = scheduleModule;
+        const { initCanonicalServices } = await import('@/services/init');
+        const { EventBus } = await import('@/lib/events/event-bus');
+
+        initCanonicalServices();
+        const bus = EventBus.getInstance();
+        const handlersBefore = (bus as any).handlers.get('story:published')?.size ?? 0;
+
+        // Call ensureCanonicalEventConsumers multiple times (as would happen per outbox batch)
+        ensureCanonicalEventConsumers();
+        ensureCanonicalEventConsumers();
+        ensureCanonicalEventConsumers();
+
+        const handlersAfter = (bus as any).handlers.get('story:published')?.size ?? 0;
+        expect(handlersAfter).toBe(handlersBefore);
+      });
+
+      it('E3. Graph invalidation executes exactly once per published event despite multiple subscription calls', async () => {
+        const { MemoryGraphProjectionService } = await import('@/services/graph/service');
+        const { EventBus } = await import('@/lib/events/event-bus');
+        const bus = EventBus.getInstance();
+
+        const graphService = new MemoryGraphProjectionService({} as any);
+        const invalidateSpy = vi.spyOn(graphService, 'invalidate');
+
+        // Subscribe multiple times
+        const unsub = graphService.subscribeToEvents();
+        graphService.subscribeToEvents();
+        graphService.subscribeToEvents();
+
+        // Dispatch a story:published event
+        await bus.publishAsync({
+          type: 'story:published',
+          payload: { storyId: 'test-single-invalidation' },
+        });
+
+        // Invalidate must have been called exactly once
+        expect(invalidateSpy).toHaveBeenCalledTimes(1);
+
+        unsub();
+        invalidateSpy.mockRestore();
+      });
+
+      it('E4. Calling unsubscribe cleans up listeners and allows safe resubscription', async () => {
+        const { MemoryGraphProjectionService } = await import('@/services/graph/service');
+        const { EventBus } = await import('@/lib/events/event-bus');
+        const bus = EventBus.getInstance();
+
+        const graphService = new MemoryGraphProjectionService({} as any);
+        const unsub1 = graphService.subscribeToEvents();
+
+        const handlersDuring = (bus as any).handlers.get('story:published')?.size ?? 0;
+        expect(handlersDuring).toBeGreaterThan(0);
+
+        // Teardown
+        unsub1();
+        const handlersAfterUnsub = (bus as any).handlers.get('story:published')?.size ?? 0;
+        expect(handlersAfterUnsub).toBe(handlersDuring - 1);
+
+        // Resubscribe cleanly
+        const unsub2 = graphService.subscribeToEvents();
+        const handlersAfterResub = (bus as any).handlers.get('story:published')?.size ?? 0;
+        expect(handlersAfterResub).toBe(handlersDuring);
+
+        unsub2();
+      });
+    });
+
+    describe('Finding F: Transactional Audit Error Contract Reconciliation', () => {
+      it('F1. Supabase story repository maps AUDIT_LOG_FAILED RPC error to code AUDIT_LOG_FAILED', async () => {
+        const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const repo = new SupabaseStoryRepository();
+
+        const mockDb: any = {
+          rpc: vi.fn().mockResolvedValue({
+            data: null,
+            error: {
+              message: 'AUDIT_LOG_FAILED: duplicate key value violates unique constraint "publication_gate_log_pkey"',
+            },
+          }),
+        };
+        setServiceClient(mockDb);
+
+        const token = issuePublicationToken('story-audit-fail');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-audit-fail',
+          scheduleId: 'sched-audit-fail',
+          expectedVersion: 1,
+          expectedValidatedAt: new Date().toISOString(),
+          publishedAt: new Date().toISOString(),
+          publicationToken: token,
+          updatedStory: {
+            id: 'story-audit-fail',
+            status: 'published',
+            version: 2,
+          } as any,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('AUDIT_LOG_FAILED');
+        expect(res.error).toContain('AUDIT_LOG_FAILED');
+      });
+
+      it('F2. Supabase story repository maps generic database errors to code DATABASE_ERROR', async () => {
+        const { SupabaseStoryRepository } = await import('@/services/repositories/supabase/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const repo = new SupabaseStoryRepository();
+
+        const mockDb: any = {
+          rpc: vi.fn().mockResolvedValue({
+            data: null,
+            error: {
+              message: 'connection to server at "db.project.supabase.co" lost (0x0000274C/10060)',
+            },
+          }),
+        };
+        setServiceClient(mockDb);
+
+        const token = issuePublicationToken('story-db-fail');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-db-fail',
+          scheduleId: 'sched-db-fail',
+          expectedVersion: 1,
+          expectedValidatedAt: new Date().toISOString(),
+          publishedAt: new Date().toISOString(),
+          publicationToken: token,
+          updatedStory: {
+            id: 'story-db-fail',
+            status: 'published',
+            version: 2,
+          } as any,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('DATABASE_ERROR');
+        expect(res.code).not.toBe('AUDIT_LOG_FAILED');
+      });
+
+      it('F3. MemoryStoryService enforces transactional rollback and code AUDIT_LOG_FAILED on audit failure', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+        const repo = new MemoryStoryService([
+          {
+            id: 'story-audit-rollback',
+            title: 'Audit Rollback Story',
+            status: 'review',
+            publicationStatus: 'draft',
+            version: 1,
+          } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-audit-rollback',
+          story_id: 'story-audit-rollback',
+          status: 'validated',
+          validated_at: nowIso,
+        });
+        repo.setSimulateAuditFailure(true);
+
+        const token = issuePublicationToken('story-audit-rollback');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-audit-rollback',
+          scheduleId: 'sched-audit-rollback',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+          updatedStory: {
+            id: 'story-audit-rollback',
+            status: 'published',
+            version: 2,
+          } as any,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('AUDIT_LOG_FAILED');
+
+        // Verify state did NOT mutate (fail-closed transaction rollback)
+        const storyAfter = await repo.getStory('story-audit-rollback');
+        expect(storyAfter?.status).toBe('review');
+        expect(storyAfter?.version).toBe(1);
+      });
+
+      it('F4. validateAndPublishDueStories handles AUDIT_LOG_FAILED by blocking release and logging structured failure', async () => {
+        const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+        const { validateAndPublishDueStories } = scheduleModule;
+
+        const dueEntry = {
+          id: 'sched-audit-blocked',
+          story_id: 'story-audit-blocked',
+          slot_date: '2026-10-19T00:00:00Z',
+          status: 'validated',
+          validated_at: '2026-10-19T00:00:00Z',
+          stories: {
+            id: 'story-audit-blocked',
+            slug: 'audit-blocked-slug',
+            title: 'Audit Blocked Story',
+            status: 'review',
+            version: 1,
+          },
+        };
+
+        mockEvaluatePublicationContract.mockResolvedValueOnce({
+          allowed: true,
+          gateResult: {
+            storyId: 'story-audit-blocked',
+            scheduleId: 'sched-audit-blocked',
+            passed: true,
+            outcome: 'published',
+            checks: [],
+            checkedAt: '2026-10-19T00:00:00.000Z',
+            triggeredBy: 'cron',
+          },
+          publicationToken: 'test-token',
+          updatedStory: {
+            id: 'story-audit-blocked',
+            slug: 'audit-blocked-slug',
+            title: 'Audit Blocked Story',
+            status: 'published',
+            version: 2,
+          },
+        });
+
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        mockStoryRepository.publishScheduledStoryAtomic.mockResolvedValueOnce({
+          success: false,
+          code: 'AUDIT_LOG_FAILED',
+          error: 'AUDIT_LOG_FAILED: disk full while writing publication_gate_log',
+        });
+
+        const mockDb: any = {
+          rpc: vi.fn().mockImplementation((fn: string) => {
+            if (fn === 'fn_discover_due_schedule_entries') {
+              return Promise.resolve({ data: [dueEntry], error: null });
+            }
+            if (fn === 'fn_claim_schedule_entry_fenced') {
+              return Promise.resolve({
+                data: { success: true, code: 'CLAIMED', validated_at: '2026-10-19T00:00:00Z' },
+                error: null,
+              });
+            }
+            return Promise.resolve({ data: null, error: null });
+          }),
+          from: vi.fn().mockReturnValue({
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: { id: 'story-audit-blocked', status: 'review', version: 1 },
+              error: null,
+            }),
+            insert: vi.fn().mockResolvedValue({ data: null, error: null }),
+            update: vi.fn().mockReturnThis(),
+          }),
+        };
+        setServiceClient(mockDb);
+
+        const results = await validateAndPublishDueStories();
+        expect(results.length).toBe(1);
+        expect(results[0].outcome).toBe('blocked');
+        expect(results[0].passed).toBe(false);
+
+        const auditCheck = results[0].checks.find(c => c.name === 'transactional_audit_log');
+        expect(auditCheck).toBeDefined();
+        expect(auditCheck?.passed).toBe(false);
+
+        const auditErrorLog = consoleErrorSpy.mock.calls.find(c => {
+          try {
+            const parsed = JSON.parse(c[0]);
+            return parsed.event === 'editorial.schedule.gate_log_failed' && parsed.category === 'AUDIT_LOG_FAILED';
+          } catch {
+            return false;
+          }
+        });
+        expect(auditErrorLog).toBeDefined();
+
+        consoleErrorSpy.mockRestore();
+      });
+    });
   });
 });
 

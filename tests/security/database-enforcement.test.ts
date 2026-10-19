@@ -2696,6 +2696,7 @@ async function runDirectDatabaseTests() {
     `);
 
     let auditInsertFailed = false;
+    let auditPrefixPresent = false;
     try {
       await client.query(`
         SELECT public.fn_publish_story_fenced(
@@ -2714,8 +2715,12 @@ async function runDirectDatabaseTests() {
       if (err.message && err.message.includes('INJECTED_AUDIT_LOG_FAILURE')) {
         auditInsertFailed = true;
       }
+      if (err.message && err.message.includes('AUDIT_LOG_FAILED')) {
+        auditPrefixPresent = true;
+      }
     }
     assert(auditInsertFailed, 'fn_publish_story_fenced aborts when audit log insert fails');
+    assert(auditPrefixPresent, 'fn_publish_story_fenced raises exception prefixed with AUDIT_LOG_FAILED');
 
     // Clean up trigger
     await client.query('DROP TRIGGER IF EXISTS trg_test_abort_gate_log ON public.publication_gate_log;');

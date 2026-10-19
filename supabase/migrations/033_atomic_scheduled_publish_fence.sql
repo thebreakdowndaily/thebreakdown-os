@@ -661,26 +661,31 @@ BEGIN
 
     -- 5. Atomically record mandatory publication gate audit log in publication_gate_log
     -- If writing the mandatory audit record fails, the entire transaction rolls back, guaranteeing fail-closed audit integrity.
-    INSERT INTO public.publication_gate_log (
-        story_id,
-        schedule_id,
-        gate_result,
-        checks,
-        checked_at,
-        published_at,
-        triggered_by
-    ) VALUES (
-        p_story_id,
-        p_schedule_id,
-        'pass',
-        COALESCE(p_gate_checks, '[]'::jsonb),
-        COALESCE(p_gate_checked_at, v_db_now),
-        v_story_published_at,
-        CASE
-            WHEN p_triggered_by IN ('cron', 'manual', 'fallback') THEN p_triggered_by
-            ELSE 'cron'
-        END
-    );
+    BEGIN
+        INSERT INTO public.publication_gate_log (
+            story_id,
+            schedule_id,
+            gate_result,
+            checks,
+            checked_at,
+            published_at,
+            triggered_by
+        ) VALUES (
+            p_story_id,
+            p_schedule_id,
+            'pass',
+            COALESCE(p_gate_checks, '[]'::jsonb),
+            COALESCE(p_gate_checked_at, v_db_now),
+            v_story_published_at,
+            CASE
+                WHEN p_triggered_by IN ('cron', 'manual', 'fallback') THEN p_triggered_by
+                ELSE 'cron'
+            END
+        );
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'AUDIT_LOG_FAILED: %', SQLERRM;
+    END;
 
     -- 6. Enqueue pending post-publication effects atomically in publication_outbox
     INSERT INTO public.publication_outbox (story_id, schedule_id, effect_type, payload)

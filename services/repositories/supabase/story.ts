@@ -165,6 +165,13 @@ export class SupabaseStoryRepository implements StoryService {
     });
 
     if (error) {
+      if (typeof error.message === 'string' && error.message.includes('AUDIT_LOG_FAILED')) {
+        return {
+          success: false,
+          code: 'AUDIT_LOG_FAILED',
+          error: error.message,
+        };
+      }
       return {
         success: false,
         code: 'DATABASE_ERROR',

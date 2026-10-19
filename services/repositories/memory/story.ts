@@ -11,6 +11,7 @@ export class MemoryStoryService implements StoryService {
   private stories: Map<string, Story>;
   private evidenceVault?: EvidenceVaultService;
   private schedules = new Map<string, any>();
+  private simulateAuditFailure = false;
 
   constructor(stories: Story[] = [], evidenceVault?: EvidenceVaultService) {
     this.stories = new Map(stories.map(s => [s.id, s]));
@@ -27,6 +28,10 @@ export class MemoryStoryService implements StoryService {
 
   public setSchedule(entry: { id: string; status: string; validated_at?: string; story_id: string; [key: string]: any }): void {
     this.schedules.set(entry.id, { ...entry });
+  }
+
+  public setSimulateAuditFailure(simulate: boolean): void {
+    this.simulateAuditFailure = simulate;
   }
 
   async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
@@ -209,6 +214,60 @@ export class MemoryStoryService implements StoryService {
           ? params.updatedBy
           : '00000000-0000-0000-0000-000000000001');
 
+    // 3. Atomically record mandatory publication gate audit log before mutating state
+    if (this.simulateAuditFailure || (params as any)?.simulateAuditFailure) {
+      return {
+        success: false,
+        code: 'AUDIT_LOG_FAILED',
+        error: 'AUDIT_LOG_FAILED: simulated gate log write failure',
+      };
+    }
+
+    if (dbClient) {
+      try {
+        const { error: gateError } = await dbClient
+          .from('publication_gate_log')
+          .insert({
+            story_id: params.storyId,
+            schedule_id: params.scheduleId,
+            gate_result: 'pass',
+            checks: params.gateChecks ?? [],
+            checked_at: params.gateCheckedAt || nowIso,
+            published_at: publishedAt,
+            triggered_by: params.triggeredBy || 'cron',
+          });
+
+        if (gateError && (gateError.message?.includes('AUDIT_LOG_FAILED') || gateError.message?.includes('INJECTED_AUDIT_LOG_FAILURE'))) {
+          return {
+            success: false,
+            code: 'AUDIT_LOG_FAILED',
+            error: `AUDIT_LOG_FAILED: ${gateError.message}`,
+          };
+        }
+
+        await dbClient
+          .from('editorial_schedule')
+          .update({
+            status: 'published',
+            published_at: publishedAt,
+            updated_at: nowIso,
+          })
+          .eq('id', params.scheduleId)
+          .eq('status', 'validated')
+          .eq('validated_at', params.expectedValidatedAt);
+      } catch (err: any) {
+        if (err && typeof err.message === 'string' && (err.message.includes('AUDIT_LOG_FAILED') || err.message.includes('INJECTED_AUDIT_LOG_FAILURE'))) {
+          return {
+            success: false,
+            code: 'AUDIT_LOG_FAILED',
+            error: err.message,
+          };
+        }
+        // DB client optional in disconnected memory mode
+      }
+    }
+
+    // 4. Commit atomic transition: both schedule and story state transition simultaneously
     const updatedStory: Story = {
       ...params.publishedStory,
       status: 'published',
@@ -225,35 +284,6 @@ export class MemoryStoryService implements StoryService {
       s.status = 'published';
       s.published_at = publishedAt;
       s.updated_at = nowIso;
-    }
-
-    if (dbClient) {
-      try {
-        await dbClient
-          .from('editorial_schedule')
-          .update({
-            status: 'published',
-            published_at: publishedAt,
-            updated_at: nowIso,
-          })
-          .eq('id', params.scheduleId)
-          .eq('status', 'validated')
-          .eq('validated_at', params.expectedValidatedAt);
-
-        await dbClient
-          .from('publication_gate_log')
-          .insert({
-            story_id: params.storyId,
-            schedule_id: params.scheduleId,
-            gate_result: 'pass',
-            checks: params.gateChecks ?? [],
-            checked_at: params.gateCheckedAt || nowIso,
-            published_at: publishedAt,
-            triggered_by: params.triggeredBy || 'cron',
-          });
-      } catch {
-        // Ignore client sync errors if DB was just a backing mock
-      }
     }
 
     return {
