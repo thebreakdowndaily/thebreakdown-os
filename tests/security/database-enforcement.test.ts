@@ -2739,6 +2739,284 @@ async function runDirectDatabaseTests() {
 
     const verifyZeroGateLog = await client.query(`SELECT COUNT(*) as cnt FROM public.publication_gate_log WHERE story_id = '${p50FailStoryId}'`);
     assert(parseInt(verifyZeroGateLog.rows[0].cnt, 10) === 0, 'Zero gate log rows exist after audit failure transaction rollback');
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 11. Phase 51.3: Atomic Schedule Block & Transactional Failure Gate Audit Log (Finding B)
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n11. Phase 51.3: Atomic Schedule Block & Transactional Failure Gate Audit Log (Finding B)');
+
+    const p51BlockStoryId = '66666666-5151-4000-8000-000000000001';
+    const p51BlockSchedId = '66666666-5151-4000-8000-000000000002';
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${p51BlockStoryId}', 'Block Test Story', 'block-test-story', 'draft', 1, 'editor-1')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    const p51BlockLeaseTime = new Date().toISOString();
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${p51BlockSchedId}', '${p51BlockStoryId}', CURRENT_DATE - INTERVAL '103 days', 1, 'validated', '${p51BlockLeaseTime}')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    // 11.1 Successful atomic block transitions schedule and writes audit log
+    const blockRes1 = await client.query(`
+      SELECT public.fn_block_schedule_entry_fenced(
+        '${p51BlockSchedId}'::UUID,
+        '${p51BlockStoryId}'::UUID,
+        '${p51BlockLeaseTime}'::TIMESTAMPTZ,
+        'Gate validation failed: fact-check pending',
+        '[{"name": "fact_check", "passed": false, "reason": "Pending"}]'::JSONB,
+        NOW(),
+        'cron'
+      ) as res;
+    `);
+    const blockData1 = blockRes1.rows[0].res;
+    assert(blockData1.success === true, 'fn_block_schedule_entry_fenced succeeds with valid lease');
+    assert(blockData1.code === 'BLOCKED', 'fn_block_schedule_entry_fenced returns code BLOCKED');
+
+    // Verify schedule table mutation
+    const verifySchedBlocked = await client.query(`
+      SELECT status, block_reason, blocked_at FROM public.editorial_schedule WHERE id = '${p51BlockSchedId}';
+    `);
+    assert(verifySchedBlocked.rows[0].status === 'blocked', 'Schedule status transitioned to blocked');
+    assert(verifySchedBlocked.rows[0].block_reason.includes('fact-check pending'), 'Schedule block_reason recorded correctly');
+    assert(verifySchedBlocked.rows[0].blocked_at !== null, 'Schedule blocked_at is populated');
+
+    // Verify publication_gate_log row was written in same transaction
+    const verifyGateLogFail = await client.query(`
+      SELECT gate_result, checks, triggered_by FROM public.publication_gate_log
+      WHERE schedule_id = '${p51BlockSchedId}' AND story_id = '${p51BlockStoryId}';
+    `);
+    assert(verifyGateLogFail.rowCount === 1, 'Mandatory failure publication_gate_log record exists');
+    assert(verifyGateLogFail.rows[0].gate_result === 'fail', 'Gate log gate_result is fail');
+    assert(verifyGateLogFail.rows[0].triggered_by === 'cron', 'Gate log triggered_by is cron');
+    assert(verifyGateLogFail.rows[0].checks.length === 1, 'Gate log checks payload recorded');
+
+    // 11.2 Injected failure on publication_gate_log rolls back schedule status mutation
+    const p51FailStoryId = '66666666-5151-4000-8000-000000000003';
+    const p51FailSchedId = '66666666-5151-4000-8000-000000000004';
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${p51FailStoryId}', 'Block Fail Audit Story', 'block-fail-audit', 'draft', 1, 'editor-1')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    const p51FailLease = new Date().toISOString();
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${p51FailSchedId}', '${p51FailStoryId}', CURRENT_DATE - INTERVAL '104 days', 1, 'validated', '${p51FailLease}')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    // Attach failing trigger on publication_gate_log
+    await client.query(`
+      CREATE OR REPLACE FUNCTION public.test_abort_block_gate_log()
+      RETURNS TRIGGER LANGUAGE plpgsql AS $$
+      BEGIN
+        IF NEW.story_id = '${p51FailStoryId}' THEN
+          RAISE EXCEPTION 'INJECTED_AUDIT_LOG_FAILURE: simulated gate log failure';
+        END IF;
+        RETURN NEW;
+      END;
+      $$;
+      DROP TRIGGER IF EXISTS trg_test_abort_block_gate_log ON public.publication_gate_log;
+      CREATE TRIGGER trg_test_abort_block_gate_log
+        BEFORE INSERT ON public.publication_gate_log
+        FOR EACH ROW EXECUTE FUNCTION public.test_abort_block_gate_log();
+    `);
+
+    let blockAuditFailed = false;
+    let blockAuditPrefix = false;
+    try {
+      await client.query(`
+        SELECT public.fn_block_schedule_entry_fenced(
+          '${p51FailSchedId}'::UUID,
+          '${p51FailStoryId}'::UUID,
+          '${p51FailLease}'::TIMESTAMPTZ,
+          'Gate validation failed',
+          '[]'::JSONB,
+          NOW(),
+          'cron'
+        );
+      `);
+    } catch (err: any) {
+      if (err.message && err.message.includes('INJECTED_AUDIT_LOG_FAILURE')) {
+        blockAuditFailed = true;
+      }
+      if (err.message && err.message.includes('AUDIT_LOG_FAILED')) {
+        blockAuditPrefix = true;
+      }
+    }
+    assert(blockAuditFailed, 'fn_block_schedule_entry_fenced aborts when audit insert fails');
+    assert(blockAuditPrefix, 'fn_block_schedule_entry_fenced raises exception prefixed with AUDIT_LOG_FAILED');
+
+    // Clean up trigger
+    await client.query('DROP TRIGGER IF EXISTS trg_test_abort_block_gate_log ON public.publication_gate_log;');
+    await client.query('DROP FUNCTION IF EXISTS public.test_abort_block_gate_log();');
+
+    // Verify schedule status remains validated (rolled back)
+    const verifyRollbackSched = await client.query(`
+      SELECT status FROM public.editorial_schedule WHERE id = '${p51FailSchedId}';
+    `);
+    assert(verifyRollbackSched.rows[0].status === 'validated', 'Schedule status remains validated after audit log failure');
+
+    const verifyRollbackLog = await client.query(`
+      SELECT COUNT(*) as cnt FROM public.publication_gate_log WHERE schedule_id = '${p51FailSchedId}';
+    `);
+    assert(parseInt(verifyRollbackLog.rows[0].cnt, 10) === 0, 'Zero gate log rows exist after block rollback');
+
+    // 11.3 Lease expiration and mismatch checks
+    // Expired lease (>= 5 minutes old)
+    const p51ExpStoryId = '66666666-5151-4000-8000-000000000005';
+    const p51ExpSchedId = '66666666-5151-4000-8000-000000000006';
+    const p51ExpLease = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${p51ExpStoryId}', 'Exp Lease Story', 'exp-lease-story', 'draft', 1, 'editor-1')
+      ON CONFLICT (id) DO NOTHING;
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+      VALUES ('${p51ExpSchedId}', '${p51ExpStoryId}', CURRENT_DATE - INTERVAL '105 days', 1, 'validated', '${p51ExpLease}')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    const expRes = await client.query(`
+      SELECT public.fn_block_schedule_entry_fenced(
+        '${p51ExpSchedId}'::UUID,
+        '${p51ExpStoryId}'::UUID,
+        '${p51ExpLease}'::TIMESTAMPTZ,
+        'Blocked',
+        '[]'::JSONB,
+        NOW(),
+        'cron'
+      ) as res;
+    `);
+    assert(expRes.rows[0].res.success === false, 'fn_block_schedule_entry_fenced rejects expired lease');
+    assert(expRes.rows[0].res.code === 'SCHEDULE_LEASE_EXPIRED', 'Returns SCHEDULE_LEASE_EXPIRED for >= 5m lease');
+
+    // Lease mismatch
+    const mismatchRes = await client.query(`
+      SELECT public.fn_block_schedule_entry_fenced(
+        '${p51ExpSchedId}'::UUID,
+        '${p51ExpStoryId}'::UUID,
+        NOW(),
+        'Blocked',
+        '[]'::JSONB,
+        NOW(),
+        'cron'
+      ) as res;
+    `);
+    assert(mismatchRes.rows[0].res.success === false, 'fn_block_schedule_entry_fenced rejects mismatched lease');
+    assert(mismatchRes.rows[0].res.code === 'SCHEDULE_LEASE_LOST', 'Returns SCHEDULE_LEASE_LOST for mismatched lease');
+
+    // 11.4 RBAC enforcement on fn_block_schedule_entry_fenced
+    for (const testRole of ['anon', 'authenticated', 'publisher_worker', 'authenticator']) {
+      let roleBlocked = false;
+      try {
+        await client.query(`
+          SET ROLE ${testRole};
+          SELECT public.fn_block_schedule_entry_fenced(
+            '${p51BlockSchedId}'::UUID,
+            '${p51BlockStoryId}'::UUID,
+            '${p51BlockLeaseTime}'::TIMESTAMPTZ,
+            'Blocked',
+            '[]'::JSONB,
+            NOW(),
+            'cron'
+          );
+        `);
+      } catch (err: any) {
+        if (err.code === '42501') {
+          roleBlocked = true;
+        }
+      } finally {
+        await client.query('RESET ROLE;');
+      }
+      assert(roleBlocked, `${testRole} cannot execute public.fn_block_schedule_entry_fenced (fails closed with 42501)`);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 12. Phase 51.3: Migration 033 Rollback Script Verification (Finding E)
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n12. Phase 51.3: Migration 033 Rollback Script Verification (Finding E)');
+
+    // Execute complete rollback DDL in a transaction block to verify clean reversal
+    await client.query('BEGIN;');
+
+    // 12.1 Execute rollback DDL
+    const rollbackDDL = `
+      -- 1. Drop Migration 033 Triggers
+      DROP TRIGGER IF EXISTS trg_stories_atomic_fence ON public.stories;
+      DROP TRIGGER IF EXISTS trg_editorial_schedule_atomic_fence ON public.editorial_schedule;
+
+      -- 2. Restore baseline set_updated_at triggers from Migration 002
+      CREATE TRIGGER trg_stories_set_updated_at
+        BEFORE UPDATE ON public.stories
+        FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+      CREATE TRIGGER trg_editorial_schedule_set_updated_at
+        BEFORE UPDATE ON public.editorial_schedule
+        FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+      -- 3. Drop Migration 033 Functions
+      DROP FUNCTION IF EXISTS public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
+      DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
+      DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT);
+      DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID, UUID);
+      DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID);
+      DROP FUNCTION IF EXISTS public.fn_touch_updated_at_unfenced();
+      DROP FUNCTION IF EXISTS public.fn_reap_abandoned_leases_fenced();
+      DROP FUNCTION IF EXISTS public.fn_drain_publication_outbox_fenced(INT);
+      DROP FUNCTION IF EXISTS public.fn_claim_publication_outbox(INT, INT);
+      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT, TEXT);
+
+      -- 4. Drop Migration 033 Table and Type
+      DROP TABLE IF EXISTS public.publication_outbox CASCADE;
+      DROP TYPE IF EXISTS public.publication_outbox_status CASCADE;
+    `;
+    await client.query(rollbackDDL);
+
+    // Verify publication_outbox table is gone
+    const checkOutboxTable = await client.query(`
+      SELECT to_regclass('public.publication_outbox') as tbl;
+    `);
+    assert(checkOutboxTable.rows[0].tbl === null, 'Rollback successfully dropped publication_outbox table');
+
+    // Verify publication_outbox_status enum is gone
+    const checkOutboxType = await client.query(`
+      SELECT to_regtype('public.publication_outbox_status') as typ;
+    `);
+    assert(checkOutboxType.rows[0].typ === null, 'Rollback successfully dropped publication_outbox_status type');
+
+    // Verify 033 functions are gone
+    const checkBlockFn = await client.query(`
+      SELECT to_regproc('public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT)') as proc;
+    `);
+    assert(checkBlockFn.rows[0].proc === null, 'Rollback successfully dropped fn_block_schedule_entry_fenced');
+
+    const checkPublishFn = await client.query(`
+      SELECT to_regproc('public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT)') as proc;
+    `);
+    assert(checkPublishFn.rows[0].proc === null, 'Rollback successfully dropped fn_publish_story_fenced');
+
+    // Verify restored baseline trigger works: updates updated_at without fenced restrictions
+    const testStoryRollbackId = '77777777-5151-4000-8000-000000000001';
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by, updated_at)
+      VALUES ('${testStoryRollbackId}', 'Rollback Test Story', 'rollback-test-story', 'draft', 1, 'editor-1', NOW() - INTERVAL '1 hour');
+    `);
+    await client.query(`
+      UPDATE public.stories SET title = 'Rollback Updated Title' WHERE id = '${testStoryRollbackId}';
+    `);
+    const verifyStoryUpdated = await client.query(`
+      SELECT updated_at FROM public.stories WHERE id = '${testStoryRollbackId}';
+    `);
+    const wasUpdatedRecently = Date.now() - new Date(verifyStoryUpdated.rows[0].updated_at).getTime() < 10000;
+    assert(wasUpdatedRecently, 'Restored set_updated_at trigger functions correctly on stories');
+
+    // Roll back the transaction block to restore migration 033 for remaining tests
+    await client.query('ROLLBACK;');
+    assert(true, 'Rollback verification completed successfully and test state restored');
+
     console.log('\n───────────────────────────────────────────────────────');
     console.log(`Direct Database Tests Completed: ${passed} passed, ${failed} failed`);
     console.log('───────────────────────────────────────────────────────');

@@ -120,6 +120,7 @@ export async function getEntryByStoryId(
 export async function validateAndPublishDueStories(
   now: Date = new Date(),
 ): Promise<PublicationGateResult[]> {
+  ensureCanonicalEventConsumers();
   const db = getServiceClient();
   const results: PublicationGateResult[] = [];
 
@@ -379,48 +380,6 @@ async function validateAndPublishEntry(
       );
     }
 
-    const { data: updatedRows } = await db
-      .from('editorial_schedule')
-      .update({
-        status: 'blocked',
-        block_reason: safeReason,
-        blocked_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt)
-      .select('id');
-
-    const isUpdated = Boolean(
-      Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
-    );
-
-    if (!isUpdated) {
-      console.warn(
-        JSON.stringify({
-          event: 'editorial.schedule.lease_lost',
-          storyId,
-          scheduleId,
-          category: 'SCHEDULE_LEASE_LOST',
-          timestamp: now.toISOString(),
-        }),
-      );
-      return {
-        storyId,
-        scheduleId,
-        passed: false,
-        outcome: 'skipped',
-        checks: [{
-          name: 'lease_fenced',
-          passed: false,
-          reason: 'SCHEDULE_LEASE_LOST',
-        }],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      };
-    }
-
     const result: PublicationGateResult = {
       storyId,
       scheduleId,
@@ -434,7 +393,70 @@ async function validateAndPublishEntry(
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
     };
-    await logGateResult(result);
+
+    const blockRes = await blockScheduleEntryAtomic({
+      scheduleId,
+      storyId,
+      claimedValidatedAt,
+      claimTimeMs,
+      blockReason: safeReason,
+      result,
+      db,
+    });
+
+    if (!blockRes.success) {
+      if (
+        blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+        blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+        blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+      ) {
+        console.warn(
+          JSON.stringify({
+            event: 'editorial.schedule.lease_lost',
+            storyId,
+            scheduleId,
+            category: blockRes.code,
+            timestamp: now.toISOString(),
+          }),
+        );
+        return {
+          storyId,
+          scheduleId,
+          passed: false,
+          outcome: 'skipped',
+          checks: [{
+            name: 'lease_fenced',
+            passed: false,
+            reason: blockRes.code,
+          }],
+          checkedAt: now.toISOString(),
+          triggeredBy: 'cron',
+        };
+      }
+
+      if (blockRes.code === 'AUDIT_LOG_FAILED') {
+        const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+        const correlationId = result.correlationId || crypto.randomUUID();
+        result.correlationId = correlationId;
+        console.error(
+          JSON.stringify({
+            event: 'editorial.schedule.gate_log_failed',
+            storyId,
+            correlationId,
+            category: 'AUDIT_LOG_FAILED',
+            error: sanitizedErr,
+            timestamp: now.toISOString(),
+          }),
+        );
+        result.checks.push({
+          name: 'transactional_audit_log',
+          passed: false,
+          reason: sanitizedErr,
+        });
+        return result;
+      }
+    }
+
     return result;
   }
 
@@ -569,54 +591,84 @@ async function validateAndPublishEntry(
       };
     }
 
-    await logGateResult(result);
-
     const failedChecks = result.checks.filter(c => !c.passed);
     const blockReason = failedChecks.map(c => c.reason).join('; ') || 'Publication gate failed or publication token missing';
 
-    // Atomically transition schedule to 'blocked' ONLY if this worker still holds the lease
-    const { data: blockedSched } = await db
-      .from('editorial_schedule')
-      .update({
-        status: 'blocked',
-        block_reason: blockReason,
-        blocked_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt)
-      .select('id')
-      .maybeSingle();
+    // Atomically transition schedule to 'blocked' and persist audit log via transactional RPC
+    const blockRes = await blockScheduleEntryAtomic({
+      scheduleId,
+      storyId,
+      claimedValidatedAt,
+      claimTimeMs,
+      blockReason,
+      result,
+      db,
+    });
 
-    const isBlockedUpdated = Boolean(
-      Array.isArray(blockedSched) ? blockedSched.length > 0 : blockedSched
-    );
-
-    if (!isBlockedUpdated) {
-      // Lease was stolen or superseded by another claimant — fence cleanly
-      console.warn(
-        JSON.stringify({
-          event: 'editorial.schedule.lease_lost',
+    if (!blockRes.success) {
+      if (
+        blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+        blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+        blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+      ) {
+        // Lease was stolen, expired or superseded by another claimant — fence cleanly
+        console.warn(
+          JSON.stringify({
+            event: 'editorial.schedule.lease_lost',
+            storyId,
+            scheduleId,
+            category: blockRes.code,
+            timestamp: now.toISOString(),
+          }),
+        );
+        return {
           storyId,
           scheduleId,
-          category: 'SCHEDULE_LEASE_LOST',
-          timestamp: now.toISOString(),
-        }),
-      );
-      return {
-        storyId,
-        scheduleId,
-        passed: false,
-        outcome: 'skipped',
-        checks: [{
-          name: 'lease_fenced',
           passed: false,
-          reason: 'SCHEDULE_LEASE_LOST',
-        }],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      };
+          outcome: 'skipped',
+          checks: [{
+            name: 'lease_fenced',
+            passed: false,
+            reason: blockRes.code,
+          }],
+          checkedAt: now.toISOString(),
+          triggeredBy: 'cron',
+        };
+      }
+
+      if (blockRes.code === 'AUDIT_LOG_FAILED') {
+        const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+        const correlationId = result.correlationId || crypto.randomUUID();
+        result.correlationId = correlationId;
+        console.error(
+          JSON.stringify({
+            event: 'editorial.schedule.gate_log_failed',
+            storyId,
+            correlationId,
+            category: 'AUDIT_LOG_FAILED',
+            error: sanitizedErr,
+            timestamp: now.toISOString(),
+          }),
+        );
+        result.passed = false;
+        result.outcome = 'blocked';
+        result.checks.push({
+          name: 'transactional_audit_log',
+          passed: false,
+          reason: sanitizedErr,
+        });
+        return result;
+      }
+
+      // Generic database or RPC error blocking schedule
+      result.passed = false;
+      result.outcome = 'blocked';
+      result.checks.push({
+        name: 'gate_block_failed',
+        passed: false,
+        reason: blockRes.error || 'Failed to atomically block schedule entry',
+      });
+      return result;
     }
 
     // Also block the story (revert to review) with version fencing to prevent overwriting concurrent updates
@@ -706,49 +758,6 @@ async function validateAndPublishEntry(
       );
     }
 
-    // Only update schedule if we still own the lease
-    const { data: updatedRows } = await db
-      .from('editorial_schedule')
-      .update({
-        status: 'blocked',
-        block_reason: safeReason,
-        blocked_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      } as never)
-      .eq('id', scheduleId)
-      .eq('status', 'validated')
-      .eq('validated_at', claimedValidatedAt)
-      .select('id');
-
-    const isUpdated = Boolean(
-      Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
-    );
-
-    if (!isUpdated) {
-      console.warn(
-        JSON.stringify({
-          event: 'editorial.schedule.lease_lost',
-          storyId,
-          scheduleId,
-          category: 'SCHEDULE_LEASE_LOST',
-          timestamp: now.toISOString(),
-        }),
-      );
-      return {
-        storyId,
-        scheduleId,
-        passed: false,
-        outcome: 'skipped',
-        checks: [{
-          name: 'lease_fenced',
-          passed: false,
-          reason: 'SCHEDULE_LEASE_LOST',
-        }],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      };
-    }
-
     const blockedResult: PublicationGateResult = {
       storyId,
       scheduleId,
@@ -762,7 +771,69 @@ async function validateAndPublishEntry(
       checkedAt: now.toISOString(),
       triggeredBy: 'cron',
     };
-    await logGateResult(blockedResult);
+
+    const blockRes = await blockScheduleEntryAtomic({
+      scheduleId,
+      storyId,
+      claimedValidatedAt,
+      claimTimeMs,
+      blockReason: safeReason,
+      result: blockedResult,
+      db,
+    });
+
+    if (!blockRes.success) {
+      if (
+        blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+        blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+        blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+      ) {
+        console.warn(
+          JSON.stringify({
+            event: 'editorial.schedule.lease_lost',
+            storyId,
+            scheduleId,
+            category: blockRes.code,
+            timestamp: now.toISOString(),
+          }),
+        );
+        return {
+          storyId,
+          scheduleId,
+          passed: false,
+          outcome: 'skipped',
+          checks: [{
+            name: 'lease_fenced',
+            passed: false,
+            reason: blockRes.code,
+          }],
+          checkedAt: now.toISOString(),
+          triggeredBy: 'cron',
+        };
+      }
+
+      if (blockRes.code === 'AUDIT_LOG_FAILED') {
+        const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+        const correlationId = blockedResult.correlationId || crypto.randomUUID();
+        blockedResult.correlationId = correlationId;
+        console.error(
+          JSON.stringify({
+            event: 'editorial.schedule.gate_log_failed',
+            storyId,
+            correlationId,
+            category: 'AUDIT_LOG_FAILED',
+            error: sanitizedErr,
+            timestamp: now.toISOString(),
+          }),
+        );
+        blockedResult.checks.push({
+          name: 'transactional_audit_log',
+          passed: false,
+          reason: sanitizedErr,
+        });
+        return blockedResult;
+      }
+    }
 
     return blockedResult;
   }
@@ -839,21 +910,6 @@ async function validateAndPublishEntry(
       }),
     );
 
-    const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
-    if (!isLeaseExpired) {
-      await db
-        .from('editorial_schedule')
-        .update({
-          status: 'blocked',
-          block_reason: 'Repository does not support atomic scheduled publication fencing',
-          blocked_at: now.toISOString(),
-          updated_at: now.toISOString(),
-        } as never)
-        .eq('id', scheduleId)
-        .eq('status', 'validated')
-        .eq('validated_at', claimedValidatedAt);
-    }
-
     result.passed = false;
     result.outcome = 'blocked';
     result.checks.push({
@@ -861,7 +917,48 @@ async function validateAndPublishEntry(
       passed: false,
       reason: 'Repository does not support atomic scheduled publication fencing',
     });
-    await logGateResult(result);
+
+    const blockRes = await blockScheduleEntryAtomic({
+      scheduleId,
+      storyId,
+      claimedValidatedAt,
+      claimTimeMs,
+      blockReason: 'Repository does not support atomic scheduled publication fencing',
+      result,
+      db,
+    });
+
+    if (!blockRes.success) {
+      if (
+        blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+        blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+        blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+      ) {
+        return {
+          storyId,
+          scheduleId,
+          passed: false,
+          outcome: 'skipped',
+          checks: [{
+            name: 'lease_fenced',
+            passed: false,
+            reason: blockRes.code,
+          }],
+          checkedAt: now.toISOString(),
+          triggeredBy: 'cron',
+        };
+      }
+
+      if (blockRes.code === 'AUDIT_LOG_FAILED') {
+        const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+        result.checks.push({
+          name: 'transactional_audit_log',
+          passed: false,
+          reason: sanitizedErr,
+        });
+      }
+    }
+
     return result;
   }
 
@@ -938,20 +1035,6 @@ async function validateAndPublishEntry(
     }
 
     if (atomicRes.code === 'STORY_VERSION_CONFLICT') {
-      const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
-      if (!isLeaseExpired) {
-        await db
-          .from('editorial_schedule')
-          .update({
-            status: 'blocked',
-            block_reason: 'Story version conflict during publication',
-            blocked_at: now.toISOString(),
-            updated_at: now.toISOString(),
-          } as never)
-          .eq('id', scheduleId)
-          .eq('status', 'validated')
-          .eq('validated_at', claimedValidatedAt);
-      }
       result.passed = false;
       result.outcome = 'blocked';
       result.checks.push({
@@ -959,25 +1042,52 @@ async function validateAndPublishEntry(
         passed: false,
         reason: 'Story version conflict during publication',
       });
-      await logGateResult(result);
+
+      const blockRes = await blockScheduleEntryAtomic({
+        scheduleId,
+        storyId,
+        claimedValidatedAt,
+        claimTimeMs,
+        blockReason: 'Story version conflict during publication',
+        result,
+        db,
+      });
+
+      if (!blockRes.success) {
+        if (
+          blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+          blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+          blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+        ) {
+          return {
+            storyId,
+            scheduleId,
+            passed: false,
+            outcome: 'skipped',
+            checks: [{
+              name: 'lease_fenced',
+              passed: false,
+              reason: blockRes.code,
+            }],
+            checkedAt: now.toISOString(),
+            triggeredBy: 'cron',
+          };
+        }
+
+        if (blockRes.code === 'AUDIT_LOG_FAILED') {
+          const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+          result.checks.push({
+            name: 'transactional_audit_log',
+            passed: false,
+            reason: sanitizedErr,
+          });
+        }
+      }
+
       return result;
     }
 
     if (atomicRes.code === 'TOKEN_INVALID') {
-      const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
-      if (!isLeaseExpired) {
-        await db
-          .from('editorial_schedule')
-          .update({
-            status: 'blocked',
-            block_reason: 'Invalid or missing publication token',
-            blocked_at: now.toISOString(),
-            updated_at: now.toISOString(),
-          } as never)
-          .eq('id', scheduleId)
-          .eq('status', 'validated')
-          .eq('validated_at', claimedValidatedAt);
-      }
       result.passed = false;
       result.outcome = 'blocked';
       result.checks.push({
@@ -985,7 +1095,48 @@ async function validateAndPublishEntry(
         passed: false,
         reason: 'Invalid or missing publication token',
       });
-      await logGateResult(result);
+
+      const blockRes = await blockScheduleEntryAtomic({
+        scheduleId,
+        storyId,
+        claimedValidatedAt,
+        claimTimeMs,
+        blockReason: 'Invalid or missing publication token',
+        result,
+        db,
+      });
+
+      if (!blockRes.success) {
+        if (
+          blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+          blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+          blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+        ) {
+          return {
+            storyId,
+            scheduleId,
+            passed: false,
+            outcome: 'skipped',
+            checks: [{
+              name: 'lease_fenced',
+              passed: false,
+              reason: blockRes.code,
+            }],
+            checkedAt: now.toISOString(),
+            triggeredBy: 'cron',
+          };
+        }
+
+        if (blockRes.code === 'AUDIT_LOG_FAILED') {
+          const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+          result.checks.push({
+            name: 'transactional_audit_log',
+            passed: false,
+            reason: sanitizedErr,
+          });
+        }
+      }
+
       return result;
     }
 
@@ -1046,53 +1197,6 @@ async function validateAndPublishEntry(
       }),
     );
 
-    const isLeaseExpired = Date.now() - claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
-    let updateSucceeded = false;
-
-    if (!isLeaseExpired) {
-      const { data: updatedRows } = await db
-        .from('editorial_schedule')
-        .update({
-          status: 'blocked',
-          block_reason: 'Repository rejected publication persistence',
-          blocked_at: now.toISOString(),
-          updated_at: now.toISOString(),
-        } as never)
-        .eq('id', scheduleId)
-        .eq('status', 'validated')
-        .eq('validated_at', claimedValidatedAt)
-        .select('id');
-
-      updateSucceeded = Boolean(
-        Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
-      );
-    }
-
-    if (!updateSucceeded) {
-      console.warn(
-        JSON.stringify({
-          event: 'editorial.schedule.lease_lost',
-          storyId,
-          scheduleId,
-          category: 'SCHEDULE_LEASE_LOST',
-          timestamp: now.toISOString(),
-        }),
-      );
-      return {
-        storyId,
-        scheduleId,
-        passed: false,
-        outcome: 'skipped',
-        checks: [{
-          name: 'lease_fenced',
-          passed: false,
-          reason: 'SCHEDULE_LEASE_LOST',
-        }],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      };
-    }
-
     result.passed = false;
     result.outcome = 'blocked';
     result.checks.push({
@@ -1100,7 +1204,70 @@ async function validateAndPublishEntry(
       passed: false,
       reason: 'Repository rejected publication persistence',
     });
-    await logGateResult(result);
+
+    const blockRes = await blockScheduleEntryAtomic({
+      scheduleId,
+      storyId,
+      claimedValidatedAt,
+      claimTimeMs,
+      blockReason: 'Repository rejected publication persistence',
+      result,
+      db,
+    });
+
+    if (!blockRes.success) {
+      if (
+        blockRes.code === 'SCHEDULE_LEASE_LOST' ||
+        blockRes.code === 'SCHEDULE_LEASE_EXPIRED' ||
+        blockRes.code === 'SCHEDULE_NOT_VALIDATED'
+      ) {
+        console.warn(
+          JSON.stringify({
+            event: 'editorial.schedule.lease_lost',
+            storyId,
+            scheduleId,
+            category: blockRes.code,
+            timestamp: now.toISOString(),
+          }),
+        );
+        return {
+          storyId,
+          scheduleId,
+          passed: false,
+          outcome: 'skipped',
+          checks: [{
+            name: 'lease_fenced',
+            passed: false,
+            reason: blockRes.code,
+          }],
+          checkedAt: now.toISOString(),
+          triggeredBy: 'cron',
+        };
+      }
+
+      if (blockRes.code === 'AUDIT_LOG_FAILED') {
+        const sanitizedErr = sanitizeDiagnosticError(blockRes.error);
+        const correlationId = result.correlationId || crypto.randomUUID();
+        result.correlationId = correlationId;
+        console.error(
+          JSON.stringify({
+            event: 'editorial.schedule.gate_log_failed',
+            storyId,
+            correlationId,
+            category: 'AUDIT_LOG_FAILED',
+            error: sanitizedErr,
+            timestamp: now.toISOString(),
+          }),
+        );
+        result.checks.push({
+          name: 'transactional_audit_log',
+          passed: false,
+          reason: sanitizedErr,
+        });
+        return result;
+      }
+    }
+
     return result;
   }
 
@@ -1291,6 +1458,7 @@ export interface OutboxRecoverySummary {
 export async function processPendingPublicationOutbox(
   batchSize = 10,
 ): Promise<OutboxRecoverySummary> {
+  ensureCanonicalEventConsumers();
   const db = getServiceClient();
   const correlationId = crypto.randomUUID();
   const summary: OutboxRecoverySummary = {
@@ -1621,6 +1789,154 @@ async function logGateResult(result: PublicationGateResult): Promise<void> {
   if (error) throw error;
 }
 
+export interface BlockScheduleEntryAtomicParams {
+  scheduleId: string;
+  storyId: string;
+  claimedValidatedAt: string;
+  claimTimeMs: number;
+  blockReason: string;
+  result: PublicationGateResult;
+  db: ReturnType<typeof getServiceClient>;
+}
+
+export interface BlockScheduleEntryAtomicResult {
+  success: boolean;
+  code: string;
+  error?: string;
+}
+
+/**
+ * Atomically transitions an editorial schedule entry to 'blocked' status
+ * and persists the matching failure publication_gate_log audit record.
+ * Uses fn_block_schedule_entry_fenced in PostgreSQL to ensure the schedule
+ * mutation and audit log commit together in a single transaction.
+ */
+export async function blockScheduleEntryAtomic(
+  params: BlockScheduleEntryAtomicParams,
+): Promise<BlockScheduleEntryAtomicResult> {
+  const isLeaseExpired = Date.now() - params.claimTimeMs >= SCHEDULE_CLAIM_LEASE_DURATION_MS;
+  if (isLeaseExpired) {
+    return {
+      success: false,
+      code: 'SCHEDULE_LEASE_EXPIRED',
+      error: 'Schedule claim lease expired before block transition',
+    };
+  }
+
+  // 1. If database client exposes rpc (e.g. Supabase client), use canonical atomic RPC
+  if (params.db && typeof (params.db as any).rpc === 'function') {
+    try {
+      const { data, error } = await (params.db as any).rpc('fn_block_schedule_entry_fenced', {
+        p_schedule_id: params.scheduleId,
+        p_story_id: params.storyId,
+        p_expected_validated_at: params.claimedValidatedAt,
+        p_block_reason: params.blockReason,
+        p_gate_checks: params.result.checks,
+        p_gate_checked_at: params.result.checkedAt || new Date().toISOString(),
+        p_triggered_by: params.result.triggeredBy || 'cron',
+      });
+
+      if (error) {
+        const isAuditSpecific = typeof error.message === 'string' && error.message.includes('AUDIT_LOG_FAILED');
+        return {
+          success: false,
+          code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+          error: sanitizeDiagnosticError(error.message || 'Atomic block RPC failed'),
+        };
+      }
+
+      if (!data || typeof data !== 'object') {
+        return {
+          success: false,
+          code: 'DATABASE_ERROR',
+          error: 'Atomic block RPC returned invalid response',
+        };
+      }
+
+      if (!data.success) {
+        const isAuditSpecific = typeof data.error === 'string' && data.error.includes('AUDIT_LOG_FAILED');
+        return {
+          success: false,
+          code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : (data.code || 'DATABASE_ERROR'),
+          error: sanitizeDiagnosticError(data.error || 'Atomic block RPC reported failure'),
+        };
+      }
+
+      return {
+        success: true,
+        code: 'BLOCKED',
+      };
+    } catch (rpcEx: any) {
+      const isAuditSpecific = typeof rpcEx?.message === 'string' && rpcEx.message.includes('AUDIT_LOG_FAILED');
+      return {
+        success: false,
+        code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+        error: sanitizeDiagnosticError(rpcEx?.message || 'Atomic block RPC invocation threw exception'),
+      };
+    }
+  }
+
+  // 2. In memory / mock test environment where db.rpc is absent:
+  // Must insert gate log first; only if log succeeds, mutate schedule status.
+  try {
+    await logGateResult(params.result);
+  } catch (auditErr: any) {
+    return {
+      success: false,
+      code: 'AUDIT_LOG_FAILED',
+      error: sanitizeDiagnosticError(auditErr?.message || 'Failed to record gate result audit entry'),
+    };
+  }
+
+  if (params.db && typeof (params.db as any).from === 'function') {
+    try {
+      const nowIso = new Date().toISOString();
+      const { data: updatedRows, error: updateErr } = await (params.db as any)
+        .from('editorial_schedule')
+        .update({
+          status: 'blocked',
+          block_reason: params.blockReason,
+          blocked_at: nowIso,
+          updated_at: nowIso,
+        })
+        .eq('id', params.scheduleId)
+        .eq('status', 'validated')
+        .eq('validated_at', params.claimedValidatedAt)
+        .select('id');
+
+      if (updateErr) {
+        return {
+          success: false,
+          code: 'DATABASE_ERROR',
+          error: sanitizeDiagnosticError(updateErr.message || 'Database update failed'),
+        };
+      }
+
+      const isUpdated = Boolean(
+        Array.isArray(updatedRows) ? updatedRows.length > 0 : updatedRows
+      );
+      if (!isUpdated) {
+        return {
+          success: false,
+          code: 'SCHEDULE_LEASE_LOST',
+          error: 'Schedule lease was lost or already claimed by another worker',
+        };
+      }
+    } catch (dbEx: any) {
+      return {
+        success: false,
+        code: 'DATABASE_ERROR',
+        error: sanitizeDiagnosticError(dbEx?.message || 'Database update threw exception'),
+      };
+    }
+  }
+
+  return {
+    success: true,
+    code: 'BLOCKED',
+  };
+}
+
 function formatDate(d: Date): string {
   return d.toISOString().split('T')[0];
 }
@@ -1637,17 +1953,26 @@ function addDays(dateStr: string, days: number): string {
 
 /**
  * Ensures that canonical platform event consumers (such as GraphProjectionService)
- * are initialized and subscribed to the EventBus.
+ * are initialized and subscribed to the EventBus. If services have not yet been
+ * initialized in this runtime isolate, bootstraps canonical services first.
  */
 export function ensureCanonicalEventConsumers(): void {
+  let services: import('@/services/registry').Services | null = null;
   try {
     const { getServices } = require('@/services/registry');
-    const services = getServices();
-    if (services?.graph && typeof services.graph.subscribeToEvents === 'function') {
-      services.graph.subscribeToEvents();
-    }
+    services = getServices();
   } catch {
-    // Services may not be initialized in isolated test harness
+    // Services were not initialized in this process/isolate; bootstrap canonical services
+    try {
+      const { initCanonicalServices } = require('@/services/init');
+      services = initCanonicalServices();
+    } catch {
+      // Services may not be initialized in isolated test harness
+    }
+  }
+
+  if (services?.graph && typeof services.graph.subscribeToEvents === 'function') {
+    services.graph.subscribeToEvents();
   }
 }
 

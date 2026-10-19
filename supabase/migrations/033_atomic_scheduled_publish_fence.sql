@@ -412,7 +412,7 @@ BEGIN
         -- Finite lease policy: strictly non-null, within [v_now - 5 minutes, v_now + 10 seconds]
         -- Future-dated timestamps (> v_now + 10s) are invalid and immediately reclaimed.
         IF v_schedule_record.validated_at IS NOT NULL
-           AND v_schedule_record.validated_at >= (v_now - INTERVAL '5 minutes')
+           AND v_schedule_record.validated_at > (v_now - INTERVAL '5 minutes')
            AND v_schedule_record.validated_at <= (v_now + INTERVAL '10 seconds') THEN
             RETURN jsonb_build_object(
                 'success', false,
@@ -461,6 +461,151 @@ DO $$ BEGIN
     END IF;
 END $$;
 GRANT EXECUTE ON FUNCTION public.fn_claim_schedule_entry_fenced(UUID, UUID) TO service_role;
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 3b. ATOMIC SCHEDULE BLOCK & TRANSACTIONAL GATE AUDIT LOG (Finding B)
+-- Guarantees that transitioning a schedule entry to 'blocked' status and
+-- recording the mandatory publication_gate_log audit record commit together
+-- in a single database transaction. Failure to record the audit log rolls back
+-- the state transition.
+-- ═══════════════════════════════════════════════════════════════════════════
+CREATE OR REPLACE FUNCTION public.fn_block_schedule_entry_fenced(
+    p_schedule_id UUID,
+    p_story_id UUID,
+    p_expected_validated_at TIMESTAMPTZ,
+    p_block_reason TEXT,
+    p_gate_checks JSONB,
+    p_gate_checked_at TIMESTAMPTZ,
+    p_triggered_by TEXT DEFAULT 'cron'
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    v_schedule_record RECORD;
+    v_now TIMESTAMPTZ := clock_timestamp();
+BEGIN
+    IF p_schedule_id IS NULL OR p_story_id IS NULL THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'INVALID_ARGUMENT',
+            'error', 'p_schedule_id and p_story_id cannot be null'
+        );
+    END IF;
+
+    -- 1. Lock target schedule row FOR UPDATE
+    SELECT id, story_id, status, validated_at
+    INTO v_schedule_record
+    FROM public.editorial_schedule
+    WHERE id = p_schedule_id
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_NOT_FOUND',
+            'error', 'Editorial schedule entry not found'
+        );
+    END IF;
+
+    -- Verify schedule entry is in validated state
+    IF v_schedule_record.status <> 'validated' THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_NOT_VALIDATED',
+            'error', format('Schedule entry status is %s, expected validated', v_schedule_record.status)
+        );
+    END IF;
+
+    -- Verify lease ownership timestamp
+    IF p_expected_validated_at IS NULL OR v_schedule_record.validated_at IS NULL THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_LEASE_LOST',
+            'error', 'Schedule lease validation timestamp is missing or null'
+        );
+    END IF;
+
+    IF v_schedule_record.validated_at <> p_expected_validated_at THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_LEASE_LOST',
+            'error', 'Schedule lease was claimed or modified by another worker'
+        );
+    END IF;
+
+    -- Lease expiry check against database clock: age >= 5m or future > 10s is expired/invalid
+    IF v_schedule_record.validated_at <= (v_now - INTERVAL '5 minutes')
+       OR v_schedule_record.validated_at > (v_now + INTERVAL '10 seconds') THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_LEASE_EXPIRED',
+            'error', 'Schedule lease expired or invalid timestamp boundary'
+        );
+    END IF;
+
+    -- Verify story_id consistency
+    IF v_schedule_record.story_id <> p_story_id THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_STORY_MISMATCH',
+            'error', 'Schedule entry references a different story_id'
+        );
+    END IF;
+
+    -- 2. Update schedule to blocked status atomically
+    UPDATE public.editorial_schedule
+    SET status = 'blocked',
+        block_reason = COALESCE(p_block_reason, 'Gate check blocked publication'),
+        blocked_at = v_now,
+        updated_at = v_now
+    WHERE id = p_schedule_id;
+
+    -- 3. Insert into publication_gate_log inside the exact same database transaction
+    BEGIN
+        INSERT INTO public.publication_gate_log (
+            story_id,
+            schedule_id,
+            gate_result,
+            checks,
+            checked_at,
+            published_at,
+            triggered_by
+        ) VALUES (
+            p_story_id,
+            p_schedule_id,
+            'fail',
+            COALESCE(p_gate_checks, '[]'::jsonb),
+            COALESCE(p_gate_checked_at, v_now),
+            NULL,
+            COALESCE(p_triggered_by, 'cron')
+        );
+    EXCEPTION WHEN OTHERS THEN
+        RAISE EXCEPTION 'AUDIT_LOG_FAILED: %', SQLERRM;
+    END;
+
+    RETURN jsonb_build_object(
+        'success', true,
+        'code', 'BLOCKED',
+        'schedule_id', p_schedule_id,
+        'story_id', p_story_id,
+        'blocked_at', v_now
+    );
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) FROM PUBLIC, anon, authenticated;
+DO $$ BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+        REVOKE ALL ON FUNCTION public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) FROM publisher_worker;
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
+        REVOKE ALL ON FUNCTION public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) FROM authenticator;
+    END IF;
+END $$;
+GRANT EXECUTE ON FUNCTION public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) TO service_role;
 
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 4. ATOMIC PUBLICATION LEASE FENCE & OUTBOX ENQUEUE

@@ -8,6 +8,7 @@ import { setServiceClient } from '@/supabase/client';
 
 vi.mock('@/services/editorial/schedule', () => ({
   validateAndPublishDueStories: vi.fn(),
+  ensureCanonicalEventConsumers: vi.fn(),
 }));
 
 const mockEvaluatePublicationContract = vi.fn();
@@ -1477,6 +1478,56 @@ function createMockDb(
       }
       if (fn === 'fn_complete_publication_outbox') {
         return { data: { success: true, code: 'COMPLETED' }, error: null };
+      }
+      if (fn === 'fn_block_schedule_entry_fenced') {
+        const entry = scheduleStore.find(s => s.id === args.p_schedule_id);
+        if (!entry) {
+          return { data: { success: false, code: 'SCHEDULE_NOT_FOUND', error: 'Editorial schedule entry not found' }, error: null };
+        }
+        if (args.p_story_id && entry.story_id !== args.p_story_id) {
+          return { data: { success: false, code: 'SCHEDULE_STORY_MISMATCH', error: 'Schedule entry references a different story_id' }, error: null };
+        }
+        if (entry.status !== 'validated') {
+          return { data: { success: false, code: 'SCHEDULE_NOT_VALIDATED', error: `Schedule entry status is ${entry.status}, expected validated` }, error: null };
+        }
+        if (!args.p_expected_validated_at || !entry.validated_at) {
+          return { data: { success: false, code: 'SCHEDULE_LEASE_LOST', error: 'Schedule lease validation timestamp is missing or null' }, error: null };
+        }
+        if (entry.validated_at !== args.p_expected_validated_at) {
+          return { data: { success: false, code: 'SCHEDULE_LEASE_LOST', error: 'Schedule lease was claimed or modified by another worker' }, error: null };
+        }
+        const leaseAgeMs = Date.now() - new Date(entry.validated_at).getTime();
+        if (leaseAgeMs >= 5 * 60 * 1000) {
+          return { data: { success: false, code: 'SCHEDULE_LEASE_EXPIRED', error: 'Schedule lease expired' }, error: null };
+        }
+        if ((mockDb as any).failAuditLog || entry.failAuditLog) {
+          return { data: null, error: new Error('AUDIT_LOG_FAILED: injected audit failure') };
+        }
+        const nowIso = new Date().toISOString();
+        entry.status = 'blocked';
+        entry.block_reason = args.p_block_reason || 'Gate check blocked publication';
+        entry.blocked_at = nowIso;
+        entry.updated_at = nowIso;
+        logsStore.push({
+          id: 'log-' + Math.random(),
+          story_id: args.p_story_id,
+          schedule_id: args.p_schedule_id,
+          gate_result: 'fail',
+          checks: args.p_gate_checks || [],
+          checked_at: args.p_gate_checked_at || nowIso,
+          published_at: null,
+          triggered_by: args.p_triggered_by || 'cron',
+        });
+        return {
+          data: {
+            success: true,
+            code: 'BLOCKED',
+            schedule_id: entry.id,
+            story_id: entry.story_id,
+            blocked_at: nowIso,
+          },
+          error: null,
+        };
       }
       return { data: null, error: null };
     },
@@ -9157,6 +9208,249 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         const story = await repo.getStory('story-g2-types');
         expect(story?.status).toBe('ready');
         expect(story?.version).toBe(1);
+      });
+    });
+
+    describe('Phase 51.3: Adversarial Remediation of Publication-Fence Review Findings', () => {
+      describe('Finding A: Reliable event-consumer initialization', () => {
+        it('A1. ensureCanonicalEventConsumers bootstraps canonical services and registers story:published consumer', async () => {
+          const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+          const { ensureCanonicalEventConsumers } = scheduleModule;
+          const { eventBus } = await import('@/lib/events/event-bus');
+
+          expect(() => ensureCanonicalEventConsumers()).not.toThrow();
+
+          const publishRes = await eventBus.publishAsync(
+            {
+              type: 'story:published',
+              payload: {
+                storyId: 'story-consumer-test',
+                version: 1,
+                publishedAt: new Date().toISOString(),
+              },
+            },
+            { minSubscribers: 1 },
+          );
+          expect(publishRes.deliveredCount).toBeGreaterThanOrEqual(1);
+        });
+      });
+
+      describe('Finding B: Durable audit integrity on failure paths', () => {
+        it('B1. blockScheduleEntryAtomic with RPC delegates to fn_block_schedule_entry_fenced and returns BLOCKED', async () => {
+          const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+          const { blockScheduleEntryAtomic } = scheduleModule;
+
+          const testSchedId = 'sched-p51-b1';
+          const testStoryId = 'story-p51-b1';
+          const nowIso = new Date().toISOString();
+
+          const { mockDb, scheduleStore, logsStore } = createMockDb(
+            [{ id: testStoryId, status: 'ready', version: 1 }],
+            [{ id: testSchedId, story_id: testStoryId, status: 'validated', validated_at: nowIso }],
+          );
+
+          const res = await blockScheduleEntryAtomic({
+            scheduleId: testSchedId,
+            storyId: testStoryId,
+            claimedValidatedAt: nowIso,
+            claimTimeMs: Date.now(),
+            blockReason: 'Fact-check rejected',
+            result: {
+              storyId: testStoryId,
+              scheduleId: testSchedId,
+              passed: false,
+              outcome: 'blocked',
+              checks: [{ name: 'fact_check', passed: false, reason: 'Rejected' }],
+              checkedAt: nowIso,
+              triggeredBy: 'cron',
+            },
+            db: mockDb,
+          });
+
+          expect(res.success).toBe(true);
+          expect(res.code).toBe('BLOCKED');
+          expect(scheduleStore[0].status).toBe('blocked');
+          expect(scheduleStore[0].block_reason).toBe('Fact-check rejected');
+          expect(logsStore).toHaveLength(1);
+          expect(logsStore[0].gate_result).toBe('fail');
+        });
+
+        it('B2. blockScheduleEntryAtomic with RPC failure on audit log returns AUDIT_LOG_FAILED and preserves state', async () => {
+          const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+          const { blockScheduleEntryAtomic } = scheduleModule;
+
+          const testSchedId = 'sched-p51-b2';
+          const testStoryId = 'story-p51-b2';
+          const nowIso = new Date().toISOString();
+
+          const { mockDb, scheduleStore } = createMockDb(
+            [{ id: testStoryId, status: 'ready', version: 1 }],
+            [{ id: testSchedId, story_id: testStoryId, status: 'validated', validated_at: nowIso, failAuditLog: true }],
+          );
+
+          const res = await blockScheduleEntryAtomic({
+            scheduleId: testSchedId,
+            storyId: testStoryId,
+            claimedValidatedAt: nowIso,
+            claimTimeMs: Date.now(),
+            blockReason: 'Audit fail test',
+            result: {
+              storyId: testStoryId,
+              scheduleId: testSchedId,
+              passed: false,
+              outcome: 'blocked',
+              checks: [{ name: 'test', passed: false, reason: 'Failed' }],
+              checkedAt: nowIso,
+              triggeredBy: 'cron',
+            },
+            db: mockDb,
+          });
+
+          expect(res.success).toBe(false);
+          expect(res.code).toBe('AUDIT_LOG_FAILED');
+          expect(scheduleStore[0].status).toBe('validated');
+        });
+
+        it('B3. blockScheduleEntryAtomic in memory mode without RPC preserves schedule if audit log fails', async () => {
+          const scheduleModule = await vi.importActual<typeof import('@/services/editorial/schedule')>('@/services/editorial/schedule');
+          const { blockScheduleEntryAtomic } = scheduleModule;
+
+          const testSchedId = 'sched-p51-b3';
+          const testStoryId = 'story-p51-b3';
+          const nowIso = new Date().toISOString();
+
+          let scheduleUpdated = false;
+          const mockMemoryDb: any = {
+            from: (table: string) => {
+              if (table === 'publication_gate_log') {
+                return {
+                  insert: () => ({
+                    error: new Error('Simulated memory audit log write failure'),
+                  }),
+                };
+              }
+              if (table === 'editorial_schedule') {
+                return {
+                  update: () => {
+                    scheduleUpdated = true;
+                    return {
+                      eq: () => ({
+                        eq: () => ({
+                          eq: () => ({
+                            select: () => ({ data: [{ id: testSchedId }] }),
+                          }),
+                        }),
+                      }),
+                    };
+                  },
+                };
+              }
+              return {};
+            },
+          };
+
+          const res = await blockScheduleEntryAtomic({
+            scheduleId: testSchedId,
+            storyId: testStoryId,
+            claimedValidatedAt: nowIso,
+            claimTimeMs: Date.now(),
+            blockReason: 'Memory audit failure test',
+            result: {
+              storyId: testStoryId,
+              scheduleId: testSchedId,
+              passed: false,
+              outcome: 'blocked',
+              checks: [],
+              checkedAt: nowIso,
+              triggeredBy: 'cron',
+            },
+            db: mockMemoryDb,
+          });
+
+          expect(res.success).toBe(false);
+          expect(res.code).toBe('AUDIT_LOG_FAILED');
+          expect(scheduleUpdated).toBe(false);
+        });
+      });
+
+      describe('Finding C: Consistent lease expiration boundaries', () => {
+        it('C1. Claim lease treats exactly 5m old as expired, allowing reclaim', async () => {
+          const testSchedId = 'sched-p51-c1';
+          const testStoryId = 'story-p51-c1';
+          const exactly5mOld = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+
+          const { mockDb } = createMockDb(
+            [{ id: testStoryId, status: 'ready', version: 1 }],
+            [{ id: testSchedId, story_id: testStoryId, status: 'validated', validated_at: exactly5mOld, slot_date: new Date().toISOString().split('T')[0] }],
+          );
+
+          const { data } = await mockDb.rpc('fn_claim_schedule_entry_fenced', {
+            p_schedule_id: testSchedId,
+            p_story_id: testStoryId,
+          });
+
+          expect(data.success).toBe(true);
+          expect(data.code).toBe('CLAIMED');
+        });
+
+        it('C2. Claim lease treats 4m 59s old as actively held lease', async () => {
+          const testSchedId = 'sched-p51-c2';
+          const testStoryId = 'story-p51-c2';
+          const activeLease = new Date(Date.now() - (5 * 60 * 1000 - 1000)).toISOString();
+
+          const { mockDb } = createMockDb(
+            [{ id: testStoryId, status: 'ready', version: 1 }],
+            [{ id: testSchedId, story_id: testStoryId, status: 'validated', validated_at: activeLease, slot_date: new Date().toISOString().split('T')[0] }],
+          );
+
+          const { data } = await mockDb.rpc('fn_claim_schedule_entry_fenced', {
+            p_schedule_id: testSchedId,
+            p_story_id: testStoryId,
+          });
+
+          expect(data.success).toBe(false);
+          expect(data.code).toBe('SCHEDULE_LEASE_ACTIVE');
+        });
+      });
+
+      describe('Finding D: Expanded diagnostic secret redaction', () => {
+        it('D1. Redacts DATABASE_PASSWORD, DB_PASSWORD, PGPASSWORD, POSTGRES_PASSWORD, and DB_PASS', async () => {
+          const { sanitizeDiagnosticError } = await import('@/lib/security/diagnostic-sanitizer');
+
+          const sensitiveCases = [
+            'Connection failed: DATABASE_PASSWORD=super_secret_db_password_123 at host:5432',
+            'Connection failed: DB_PASSWORD="complex_p@ssword!999" at host:5432',
+            'Connection failed: PGPASSWORD=pg_top_secret_pass_xyz at host:5432',
+            'Connection failed: POSTGRES_PASSWORD="admin_postgres_pass_456" at host:5432',
+            'Connection failed: DB_PASS=db_secret_pass_789 at host:5432',
+          ];
+
+          for (const testCase of sensitiveCases) {
+            const sanitized = sanitizeDiagnosticError(testCase);
+            expect(sanitized).not.toContain('super_secret_db_password_123');
+            expect(sanitized).not.toContain('complex_p@ssword!999');
+            expect(sanitized).not.toContain('pg_top_secret_pass_xyz');
+            expect(sanitized).not.toContain('admin_postgres_pass_456');
+            expect(sanitized).not.toContain('db_secret_pass_789');
+            expect(sanitized).toContain('[REDACTED_SECRET]');
+          }
+        });
+
+        it('D2. Preserves error category identifiers like DATABASE_ERROR, DATABASE_NETWORK_ERROR, DATABASE_AUTH_ERROR', async () => {
+          const { sanitizeDiagnosticError } = await import('@/lib/security/diagnostic-sanitizer');
+
+          const categoryCases = [
+            'Worker failed with category: DATABASE_ERROR',
+            'Diagnostic classification: DATABASE_NETWORK_ERROR',
+            'Safe failure reporting: DATABASE_AUTH_ERROR',
+            'Error occurred: CATEGORY=DATABASE_ERROR',
+          ];
+
+          for (const catCase of categoryCases) {
+            const sanitized = sanitizeDiagnosticError(catCase);
+            expect(sanitized).toBe(catCase);
+          }
+        });
       });
     });
   });

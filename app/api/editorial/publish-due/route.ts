@@ -19,7 +19,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateAndPublishDueStories } from '@/services/editorial/schedule';
+import { validateAndPublishDueStories, ensureCanonicalEventConsumers } from '@/services/editorial/schedule';
 import {
   RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES,
   type EditorialPublishOutcome,
@@ -189,6 +189,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    if (typeof ensureCanonicalEventConsumers === 'function') {
+      ensureCanonicalEventConsumers();
+    }
     const rawResults = await validateAndPublishDueStories();
 
     const categorized = rawResults.map(r => ({
