@@ -1,7 +1,7 @@
 -- ==============================================================================
 -- The Breakdown OS - Migration 033
--- Atomic Scheduled Publication Lease Fence, Database-Authoritative Leases,
--- Timestamp Trigger Correctness & Durable Post-Commit Recovery (Phase 43)
+-- Atomic Scheduled Publication Lease Fence, Scheduler Clock Integrity,
+-- Lease Liveness & Durable Outbox Recovery (Phase 44)
 --
 -- STATUS: UNAPPLIED
 -- This is a candidate release design artifact. DO NOT apply to live production
@@ -11,14 +11,13 @@
 -- 1. Eliminates cross-table TOCTOU races between editorial_schedule lease
 --    verification and stories publication via atomic single-transaction commit.
 -- 2. Enforces deterministic lock ordering: editorial_schedule FOR UPDATE, then stories FOR UPDATE.
--- 3. Provides database-authoritative lease acquisition (fn_claim_schedule_entry_fenced)
---    eliminating caller clock skew and future-dated lease vulnerabilities.
--- 4. Replaces generic set_updated_at() trigger on stories and editorial_schedule
---    with set_updated_at_clock() to preserve authoritative database wall-clock
---    timestamps and prevent stale transaction-start now() overwrites.
--- 5. Implements a durable transactional outbox (publication_outbox) committed
---    atomically in the same transaction as publication, guaranteeing a resilient
---    recovery path for post-publication effects (cache revalidation, events).
+-- 3. Implements database-authoritative schedule discovery (fn_discover_due_schedule_entries)
+--    evaluating canonical UTC slot dates directly on the database clock.
+-- 4. Enforces finite lease policy in fn_claim_schedule_entry_fenced and fn_publish_story_fenced:
+--    active lease is strictly non-null and within [now() - 5m, now() + 10s];
+--    future-dated timestamps are invalid and immediately reclaimed.
+-- 5. Implements durable transactional outbox (publication_outbox) with RESTRICT foreign keys,
+--    claim tokens, and fenced completion (fn_complete_publication_outbox).
 -- 6. RPC authority hardening: restricts all sensitive functions strictly to service_role.
 -- ==============================================================================
 
@@ -56,17 +55,37 @@ CREATE TRIGGER trg_editorial_schedule_updated_at
 -- ═══════════════════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.publication_outbox (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    story_id UUID NOT NULL REFERENCES public.stories(id) ON DELETE CASCADE,
-    schedule_id UUID NOT NULL REFERENCES public.editorial_schedule(id) ON DELETE CASCADE,
+    story_id UUID NOT NULL REFERENCES public.stories(id) ON DELETE RESTRICT,
+    schedule_id UUID NOT NULL REFERENCES public.editorial_schedule(id) ON DELETE RESTRICT,
     effect_type TEXT NOT NULL,
     payload JSONB NOT NULL DEFAULT '{}'::jsonb,
     status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
     retry_count INT NOT NULL DEFAULT 0,
+    max_retries INT NOT NULL DEFAULT 5,
+    claim_token UUID,
     last_error TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
     processed_at TIMESTAMPTZ
 );
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'publication_outbox'
+    ) THEN
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'publication_outbox' AND column_name = 'claim_token'
+        ) THEN
+            ALTER TABLE public.publication_outbox ADD COLUMN claim_token UUID;
+        END IF;
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'publication_outbox' AND column_name = 'max_retries'
+        ) THEN
+            ALTER TABLE public.publication_outbox ADD COLUMN max_retries INT NOT NULL DEFAULT 5;
+        END IF;
+    END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_publication_outbox_queue
     ON public.publication_outbox (status, created_at)
@@ -88,34 +107,65 @@ DO $$ BEGIN
 END $$;
 GRANT ALL ON TABLE public.publication_outbox TO service_role;
 
--- Outbox worker claim function: uses FOR UPDATE SKIP LOCKED for non-blocking concurrent worker safety
+-- Outbox worker claim function: uses FOR UPDATE SKIP LOCKED with unique claim_token
 CREATE OR REPLACE FUNCTION public.fn_claim_publication_outbox(
     p_batch_size INT DEFAULT 10,
     p_lease_seconds INT DEFAULT 60
 )
-RETURNS SETOF public.publication_outbox
+RETURNS TABLE (
+    id UUID,
+    story_id UUID,
+    schedule_id UUID,
+    effect_type TEXT,
+    payload JSONB,
+    status TEXT,
+    retry_count INT,
+    max_retries INT,
+    claim_token UUID,
+    last_error TEXT,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ,
+    processed_at TIMESTAMPTZ
+)
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $$
+DECLARE
+    v_now TIMESTAMPTZ := clock_timestamp();
+    v_lease_interval INTERVAL := (p_lease_seconds || ' seconds')::INTERVAL;
 BEGIN
     RETURN QUERY
     WITH claimable AS (
-        SELECT id
-        FROM public.publication_outbox
-        WHERE status = 'pending'
-           OR (status = 'processing' AND updated_at < (clock_timestamp() - (p_lease_seconds || ' seconds')::INTERVAL))
-           OR (status = 'failed' AND retry_count < 5 AND updated_at < (clock_timestamp() - (p_lease_seconds || ' seconds')::INTERVAL))
-        ORDER BY created_at ASC
+        SELECT o.id
+        FROM public.publication_outbox o
+        WHERE o.status = 'pending'
+           OR (o.status = 'processing' AND o.updated_at < (v_now - v_lease_interval))
+           OR (o.status = 'failed' AND o.retry_count < o.max_retries AND o.updated_at < (v_now - v_lease_interval))
+        ORDER BY o.created_at ASC
         LIMIT p_batch_size
         FOR UPDATE SKIP LOCKED
     )
-    UPDATE public.publication_outbox o
+    UPDATE public.publication_outbox target
     SET status = 'processing',
-        updated_at = clock_timestamp()
+        claim_token = gen_random_uuid(),
+        updated_at = v_now
     FROM claimable
-    WHERE o.id = claimable.id
-    RETURNING o.*;
+    WHERE target.id = claimable.id
+    RETURNING
+        target.id,
+        target.story_id,
+        target.schedule_id,
+        target.effect_type,
+        target.payload,
+        target.status,
+        target.retry_count,
+        target.max_retries,
+        target.claim_token,
+        target.last_error,
+        target.created_at,
+        target.updated_at,
+        target.processed_at;
 END;
 $$;
 
@@ -130,38 +180,117 @@ DO $$ BEGIN
 END $$;
 GRANT EXECUTE ON FUNCTION public.fn_claim_publication_outbox(INT, INT) TO service_role;
 
--- Outbox worker completion function
+-- Drop legacy 3-argument overload if present
+DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT);
+
+-- Outbox worker completion function: fenced by claim_token and processing status
 CREATE OR REPLACE FUNCTION public.fn_complete_publication_outbox(
     p_outbox_id UUID,
+    p_claim_token UUID,
     p_status TEXT,
     p_error TEXT DEFAULT NULL
 )
-RETURNS VOID
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    v_row RECORD;
+    v_now TIMESTAMPTZ := clock_timestamp();
+BEGIN
+    IF p_outbox_id IS NULL OR p_claim_token IS NULL THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'INVALID_ARGUMENT',
+            'error', 'p_outbox_id and p_claim_token are required'
+        );
+    END IF;
+
+    SELECT id, status, claim_token, retry_count
+    INTO v_row
+    FROM public.publication_outbox
+    WHERE id = p_outbox_id
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'OUTBOX_ITEM_NOT_FOUND',
+            'error', 'Outbox item not found'
+        );
+    END IF;
+
+    IF v_row.status <> 'processing' OR v_row.claim_token IS DISTINCT FROM p_claim_token THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'OUTBOX_LEASE_LOST',
+            'error', 'Outbox lease was expired or claimed by another worker'
+        );
+    END IF;
+
+    UPDATE public.publication_outbox
+    SET status = p_status,
+        last_error = p_error,
+        retry_count = CASE WHEN p_status = 'failed' THEN retry_count + 1 ELSE retry_count END,
+        processed_at = CASE WHEN p_status = 'completed' THEN v_now ELSE processed_at END,
+        updated_at = v_now,
+        claim_token = CASE WHEN p_status = 'completed' THEN claim_token ELSE NULL END
+    WHERE id = p_outbox_id;
+
+    RETURN jsonb_build_object(
+        'success', true,
+        'code', CASE WHEN p_status = 'completed' THEN 'COMPLETED' ELSE 'FAILED' END,
+        'id', p_outbox_id,
+        'status', p_status
+    );
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT) FROM PUBLIC, anon, authenticated;
+DO $$ BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+        REVOKE ALL ON FUNCTION public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT) FROM publisher_worker;
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
+        REVOKE ALL ON FUNCTION public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT) FROM authenticator;
+    END IF;
+END $$;
+GRANT EXECUTE ON FUNCTION public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT) TO service_role;
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 2b. DATABASE-AUTHORITATIVE SCHEDULE ENTRY DISCOVERY (Checkpoint A)
+-- Canonical editorial scheduling timezone is UTC (UTC+00:00).
+-- ═══════════════════════════════════════════════════════════════════════════
+CREATE OR REPLACE FUNCTION public.fn_discover_due_schedule_entries(
+    p_limit INT DEFAULT 50
+)
+RETURNS SETOF public.editorial_schedule
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $$
 BEGIN
-    UPDATE public.publication_outbox
-    SET status = p_status,
-        last_error = p_error,
-        retry_count = CASE WHEN p_status = 'failed' THEN retry_count + 1 ELSE retry_count END,
-        processed_at = CASE WHEN p_status = 'completed' THEN clock_timestamp() ELSE processed_at END,
-        updated_at = clock_timestamp()
-    WHERE id = p_outbox_id;
+    RETURN QUERY
+    SELECT *
+    FROM public.editorial_schedule
+    WHERE status IN ('validated', 'ready')
+      AND slot_date <= (clock_timestamp() AT TIME ZONE 'UTC')::date
+    ORDER BY slot_date ASC, priority DESC, id ASC
+    LIMIT p_limit;
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.fn_complete_publication_outbox(UUID, TEXT, TEXT) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.fn_discover_due_schedule_entries(INT) FROM PUBLIC, anon, authenticated;
 DO $$ BEGIN
     IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
-        REVOKE ALL ON FUNCTION public.fn_complete_publication_outbox(UUID, TEXT, TEXT) FROM publisher_worker;
+        REVOKE ALL ON FUNCTION public.fn_discover_due_schedule_entries(INT) FROM publisher_worker;
     END IF;
     IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
-        REVOKE ALL ON FUNCTION public.fn_complete_publication_outbox(UUID, TEXT, TEXT) FROM authenticator;
+        REVOKE ALL ON FUNCTION public.fn_discover_due_schedule_entries(INT) FROM authenticator;
     END IF;
 END $$;
-GRANT EXECUTE ON FUNCTION public.fn_complete_publication_outbox(UUID, TEXT, TEXT) TO service_role;
+GRANT EXECUTE ON FUNCTION public.fn_discover_due_schedule_entries(INT) TO service_role;
 
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 3. DATABASE-AUTHORITATIVE SCHEDULE LEASE CLAIM (Checkpoint A)
@@ -213,17 +342,17 @@ BEGIN
         );
     END IF;
 
-    -- Due date check: must be due on or before database CURRENT_DATE
-    IF v_schedule_record.slot_date > CURRENT_DATE THEN
+    -- Authoritative database clock
+    v_now := clock_timestamp();
+
+    -- Due date check: must be due on or before database clock date in UTC
+    IF v_schedule_record.slot_date > (v_now AT TIME ZONE 'UTC')::date THEN
         RETURN jsonb_build_object(
             'success', false,
             'code', 'SCHEDULE_NOT_DUE',
             'error', format('Schedule slot_date %s is in the future', v_schedule_record.slot_date)
         );
     END IF;
-
-    -- Authoritative database clock
-    v_now := clock_timestamp();
 
     -- State & Lease checks
     IF v_schedule_record.status = 'published' THEN
@@ -236,15 +365,19 @@ BEGIN
         -- Eligible for initial claim
         NULL;
     ELSIF v_schedule_record.status = 'validated' THEN
-        -- Check if existing lease is still active (within 5 minutes of database clock)
-        IF v_schedule_record.validated_at IS NOT NULL AND v_schedule_record.validated_at > (v_now - INTERVAL '5 minutes') THEN
+        -- Check if existing lease is still active:
+        -- Finite lease policy: strictly non-null, within [v_now - 5 minutes, v_now + 10 seconds]
+        -- Future-dated timestamps (> v_now + 10s) are invalid and immediately reclaimed.
+        IF v_schedule_record.validated_at IS NOT NULL
+           AND v_schedule_record.validated_at >= (v_now - INTERVAL '5 minutes')
+           AND v_schedule_record.validated_at <= (v_now + INTERVAL '10 seconds') THEN
             RETURN jsonb_build_object(
                 'success', false,
                 'code', 'SCHEDULE_LEASE_ACTIVE',
                 'error', 'Active schedule lease is held by another worker'
             );
         END IF;
-        -- Otherwise lease is expired (or was null), so reclaiming is permitted
+        -- Otherwise lease is expired, invalid future timestamp, or null; reclaiming is permitted
     ELSE
         -- 'planned', 'in_progress', 'blocked', 'skipped'
         RETURN jsonb_build_object(
@@ -327,7 +460,7 @@ BEGIN
     END IF;
 
     -- 1. Lock parent lease entity first (deterministic lock order)
-    SELECT id, status, validated_at, story_id
+    SELECT id, status, validated_at, story_id, slot_date
     INTO v_schedule_record
     FROM public.editorial_schedule
     WHERE id = p_schedule_id
@@ -338,6 +471,15 @@ BEGIN
             'success', false,
             'code', 'SCHEDULE_NOT_FOUND',
             'error', 'Editorial schedule entry not found'
+        );
+    END IF;
+
+    -- Verify schedule due date in UTC
+    IF v_schedule_record.slot_date > (clock_timestamp() AT TIME ZONE 'UTC')::date THEN
+        RETURN jsonb_build_object(
+            'success', false,
+            'code', 'SCHEDULE_NOT_DUE',
+            'error', format('Schedule slot_date %s is in the future', v_schedule_record.slot_date)
         );
     END IF;
 
@@ -417,12 +559,13 @@ BEGIN
 
     -- 3. Check authoritative lease expiry against database wall-clock time AFTER acquiring row locks
     -- Evaluated after acquiring row locks so any lock contention delay does not let an expired lease commit
-    -- Boundary: age >= 5 minutes is strictly expired
-    IF v_schedule_record.validated_at <= (clock_timestamp() - INTERVAL '5 minutes') THEN
+    -- Boundary: age >= 5 minutes or future > 10 seconds is strictly expired / invalid
+    IF v_schedule_record.validated_at <= (clock_timestamp() - INTERVAL '5 minutes')
+       OR v_schedule_record.validated_at > (clock_timestamp() + INTERVAL '10 seconds') THEN
         RETURN jsonb_build_object(
             'success', false,
             'code', 'SCHEDULE_LEASE_EXPIRED',
-            'error', 'Schedule lease expired (>= 5 minutes old)'
+            'error', 'Schedule lease expired or invalid timestamp boundary'
         );
     END IF;
 

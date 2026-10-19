@@ -55,7 +55,13 @@ const BOOTSTRAP_SQL = `
     IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
       CREATE ROLE authenticator NOLOGIN NOINHERIT;
     END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'publisher_worker') THEN
+      CREATE ROLE publisher_worker NOLOGIN NOINHERIT;
+    END IF;
   END $$;
+
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
 
   CREATE SCHEMA IF NOT EXISTS auth;
   GRANT USAGE ON SCHEMA auth TO anon, authenticated, service_role;
@@ -100,7 +106,7 @@ const BOOTSTRAP_SQL = `
   GRANT ALL ON ALL TABLES IN SCHEMA storage TO anon, authenticated, service_role;
 `;
 
-async function actAs(client: Client, role: 'anon' | 'authenticated' | 'service_role', claims: Record<string, unknown> = {}) {
+async function actAs(client: Client, role: 'anon' | 'authenticated' | 'service_role' | 'publisher_worker' | 'authenticator', claims: Record<string, unknown> = {}) {
   await client.query(`SET LOCAL role ${role}`);
   await client.query("SELECT set_config('request.jwt.claims', $1, true)", [JSON.stringify(claims)]);
 }
@@ -151,13 +157,9 @@ async function runDirectDatabaseTests() {
     }
     console.log('All migrations applied successfully!\n');
 
-    // Grant default privileges on all created tables to test roles
-    await client.query('GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role');
-    await client.query('GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role');
+    // Identity schema test grants
     await client.query('GRANT USAGE ON SCHEMA identity TO anon, authenticated, service_role').catch(() => {});
     await client.query('GRANT ALL ON ALL TABLES IN SCHEMA identity TO anon, authenticated, service_role').catch(() => {});
-    // Preserve migration-defined revokes on internal queue/infrastructure tables
-    await client.query('REVOKE ALL ON TABLE public.publication_outbox FROM PUBLIC, anon, authenticated').catch(() => {});
 
     // ─────────────────────────────────────────────────────────────────
     // 1. Verify RLS is Enabled on Core Base Tables
@@ -717,8 +719,8 @@ async function runDirectDatabaseTests() {
     const schedA2Id = '77777777-0000-0000-0000-000000000003';
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedA2Id}', '${storyAId}', '2026-10-19', 1, 'validated', '${schedAPublishedTime}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${schedAPublishedTime}';
+      VALUES ('${schedA2Id}', '${storyAId}', CURRENT_DATE - INTERVAL '30 days', 1, 'validated', '${schedAPublishedTime}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${schedAPublishedTime}', slot_date = CURRENT_DATE - INTERVAL '30 days';
     `);
 
     const publishResAlready = await client.query(`
@@ -749,8 +751,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedDistinctId}', '${storyDistinctId}', '2026-10-20', 1, 'validated', '${validLeaseTimeDistinct}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseTimeDistinct}';
+      VALUES ('${schedDistinctId}', '${storyDistinctId}', CURRENT_DATE - INTERVAL '10 days', 1, 'validated', '${validLeaseTimeDistinct}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseTimeDistinct}', slot_date = CURRENT_DATE - INTERVAL '10 days';
     `);
 
     await client.query('BEGIN');
@@ -792,7 +794,7 @@ async function runDirectDatabaseTests() {
 
     const exactBoundaryRow = (await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedExactExpiredId}', '${storyExactExpiredId}', '2026-10-21', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '5 minutes')
+      VALUES ('${schedExactExpiredId}', '${storyExactExpiredId}', CURRENT_DATE - INTERVAL '11 days', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '5 minutes')
       RETURNING validated_at::text as validated_at_text;
     `)).rows[0];
     const exactBoundaryTime = exactBoundaryRow.validated_at_text;
@@ -827,7 +829,7 @@ async function runDirectDatabaseTests() {
 
     const justValidRow = (await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedJustValidId}', '${storyJustValidId}', '2026-10-22', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '4 minutes 59 seconds')
+      VALUES ('${schedJustValidId}', '${storyJustValidId}', CURRENT_DATE - INTERVAL '12 days', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '4 minutes 59 seconds')
       RETURNING validated_at::text as validated_at_text;
     `)).rows[0];
     const justValidTime = justValidRow.validated_at_text;
@@ -862,7 +864,7 @@ async function runDirectDatabaseTests() {
 
     const lockWaitRow = (await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedLockWaitId}', '${storyLockWaitId}', '2026-10-23', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '4 minutes 58 seconds')
+      VALUES ('${schedLockWaitId}', '${storyLockWaitId}', CURRENT_DATE - INTERVAL '13 days', 1, 'validated', date_trunc('milliseconds', clock_timestamp()) - INTERVAL '4 minutes 58 seconds')
       RETURNING validated_at::text as validated_at_text;
     `)).rows[0];
     const lockWaitTime = lockWaitRow.validated_at_text;
@@ -952,8 +954,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at, category)
-      VALUES ('${schedRollbackId}', '${storyRollbackId}', '2026-10-24', 1, 'validated', '${validLeaseRollback}', 'test-abort-trigger')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseRollback}', category = 'test-abort-trigger';
+      VALUES ('${schedRollbackId}', '${storyRollbackId}', CURRENT_DATE - INTERVAL '14 days', 1, 'validated', '${validLeaseRollback}', 'test-abort-trigger')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseRollback}', slot_date = CURRENT_DATE - INTERVAL '14 days', category = 'test-abort-trigger';
     `);
 
     await client.query(`
@@ -1017,8 +1019,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedVersionCheckId}', '${storyVersionCheckId}', '2026-10-25', 1, 'validated', '${validLeaseVersionCheck}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseVersionCheck}';
+      VALUES ('${schedVersionCheckId}', '${storyVersionCheckId}', CURRENT_DATE - INTERVAL '15 days', 1, 'validated', '${validLeaseVersionCheck}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${validLeaseVersionCheck}', slot_date = CURRENT_DATE - INTERVAL '15 days';
     `);
 
     await client.query('BEGIN');
@@ -1055,8 +1057,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedNoTsId}', '${storyNoTsId}', '2026-10-26', 1, 'validated', '${leaseNoTs}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNoTs}';
+      VALUES ('${schedNoTsId}', '${storyNoTsId}', CURRENT_DATE - INTERVAL '16 days', 1, 'validated', '${leaseNoTs}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNoTs}', slot_date = CURRENT_DATE - INTERVAL '16 days';
     `);
 
     await client.query('BEGIN');
@@ -1100,8 +1102,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedHistId}', '${storyHistId}', '2026-10-27', 1, 'validated', '${leaseHist}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseHist}';
+      VALUES ('${schedHistId}', '${storyHistId}', CURRENT_DATE - INTERVAL '17 days', 1, 'validated', '${leaseHist}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseHist}', slot_date = CURRENT_DATE - INTERVAL '17 days';
     `);
 
     await client.query('BEGIN');
@@ -1148,8 +1150,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedFutureId}', '${storyFutureId}', '2026-10-28', 1, 'validated', '${leaseFuture}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseFuture}';
+      VALUES ('${schedFutureId}', '${storyFutureId}', CURRENT_DATE - INTERVAL '18 days', 1, 'validated', '${leaseFuture}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseFuture}', slot_date = CURRENT_DATE - INTERVAL '18 days';
     `);
 
     await client.query('BEGIN');
@@ -1193,8 +1195,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedAttrId}', '${storyAttrId}', '2026-10-29', 1, 'validated', '${leaseAttr}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseAttr}';
+      VALUES ('${schedAttrId}', '${storyAttrId}', CURRENT_DATE - INTERVAL '19 days', 1, 'validated', '${leaseAttr}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseAttr}', slot_date = CURRENT_DATE - INTERVAL '19 days';
     `);
 
     await client.query('BEGIN');
@@ -1234,8 +1236,8 @@ async function runDirectDatabaseTests() {
 
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedMalId}', '${storyMalId}', '2026-10-30', 1, 'validated', '${leaseMal}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseMal}';
+      VALUES ('${schedMalId}', '${storyMalId}', CURRENT_DATE - INTERVAL '20 days', 1, 'validated', '${leaseMal}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseMal}', slot_date = CURRENT_DATE - INTERVAL '20 days';
     `);
 
     await client.query('BEGIN');
@@ -1296,8 +1298,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedNullExpId}', '${storyNullExpId}', '2026-10-31', 1, 'validated', '${leaseValid16}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseValid16}';
+      VALUES ('${schedNullExpId}', '${storyNullExpId}', CURRENT_DATE - INTERVAL '21 days', 1, 'validated', '${leaseValid16}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseValid16}', slot_date = CURRENT_DATE - INTERVAL '21 days';
     `);
 
     await client.query('BEGIN');
@@ -1329,8 +1331,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedNullStoredId}', '${storyNullStoredId}', '2026-11-01', 1, 'validated', NULL)
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = NULL;
+      VALUES ('${schedNullStoredId}', '${storyNullStoredId}', CURRENT_DATE - INTERVAL '22 days', 1, 'validated', NULL)
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = NULL, slot_date = CURRENT_DATE - INTERVAL '22 days';
     `);
 
     await client.query('BEGIN');
@@ -1363,8 +1365,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedSchedPreserveId}', '${storySchedPreserveId}', '2026-11-02', 1, 'validated', '${leasePreserve18}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leasePreserve18}';
+      VALUES ('${schedSchedPreserveId}', '${storySchedPreserveId}', CURRENT_DATE - INTERVAL '23 days', 1, 'validated', '${leasePreserve18}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leasePreserve18}', slot_date = CURRENT_DATE - INTERVAL '23 days';
     `);
 
     await client.query('BEGIN');
@@ -1401,8 +1403,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedSchedNullId}', '${storySchedNullId}', '2026-11-03', 1, 'validated', '${leaseNull19}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNull19}';
+      VALUES ('${schedSchedNullId}', '${storySchedNullId}', CURRENT_DATE - INTERVAL '24 days', 1, 'validated', '${leaseNull19}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNull19}', slot_date = CURRENT_DATE - INTERVAL '24 days';
     `);
 
     await client.query('BEGIN');
@@ -1439,8 +1441,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedClampId}', '${storyClampId}', '2026-11-04', 1, 'validated', '${leaseClamp20}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseClamp20}';
+      VALUES ('${schedClampId}', '${storyClampId}', CURRENT_DATE - INTERVAL '25 days', 1, 'validated', '${leaseClamp20}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseClamp20}', slot_date = CURRENT_DATE - INTERVAL '25 days';
     `);
 
     await client.query('BEGIN');
@@ -1484,8 +1486,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedHistFutureId}', '${storyHistFutureId}', '2026-11-05', 1, 'validated', '${leaseHistFuture21}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseHistFuture21}';
+      VALUES ('${schedHistFutureId}', '${storyHistFutureId}', CURRENT_DATE - INTERVAL '26 days', 1, 'validated', '${leaseHistFuture21}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseHistFuture21}', slot_date = CURRENT_DATE - INTERVAL '26 days';
     `);
 
     await client.query('BEGIN');
@@ -1519,8 +1521,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedFutureBothId}', '${storyFutureBothId}', '2026-11-06', 1, 'validated', '${leaseBoth22}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseBoth22}';
+      VALUES ('${schedFutureBothId}', '${storyFutureBothId}', CURRENT_DATE - INTERVAL '27 days', 1, 'validated', '${leaseBoth22}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseBoth22}', slot_date = CURRENT_DATE - INTERVAL '27 days';
     `);
 
     await client.query('BEGIN');
@@ -1563,8 +1565,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedParamNullId}', '${storyParamNullId}', '2026-11-07', 1, 'validated', '${leaseParamNull23}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseParamNull23}';
+      VALUES ('${schedParamNullId}', '${storyParamNullId}', CURRENT_DATE - INTERVAL '28 days', 1, 'validated', '${leaseParamNull23}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseParamNull23}', slot_date = CURRENT_DATE - INTERVAL '28 days';
     `);
 
     await client.query('BEGIN');
@@ -1607,8 +1609,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedNowParamId}', '${storyNowParamId}', '2026-11-08', 1, 'validated', '${leaseNowParam24}')
-      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNowParam24}';
+      VALUES ('${schedNowParamId}', '${storyNowParamId}', CURRENT_DATE - INTERVAL '29 days', 1, 'validated', '${leaseNowParam24}')
+      ON CONFLICT (id) DO UPDATE SET status = 'validated', validated_at = '${leaseNowParam24}', slot_date = CURRENT_DATE - INTERVAL '29 days';
     `);
 
     await client.query('BEGIN');
@@ -1655,8 +1657,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status)
-      VALUES ('${schedClaim1Id}', '${storyClaim1Id}', CURRENT_DATE, 4, 'ready')
-      ON CONFLICT (id) DO UPDATE SET status = 'ready', validated_at = NULL, slot_date = CURRENT_DATE, slot_position = 4;
+      VALUES ('${schedClaim1Id}', '${storyClaim1Id}', CURRENT_DATE, 1, 'ready')
+      ON CONFLICT (id) DO UPDATE SET status = 'ready', validated_at = NULL, slot_date = CURRENT_DATE, slot_position = 1;
     `);
 
     await client.query('BEGIN');
@@ -1770,6 +1772,77 @@ async function runDirectDatabaseTests() {
     await client.query('COMMIT');
     assert(claimResBlocked.rows[0].result.code === 'SCHEDULE_INELIGIBLE', 'Blocked status returns SCHEDULE_INELIGIBLE');
 
+    // 8.6b Checkpoint A: Database-Authoritative Discovery (UTC Slot Date Evaluation)
+    const storyUtcId = '77777777-0000-0000-0000-000000000304';
+    const schedUtcDueId = '77777777-0000-0000-0000-000000000305';
+    const schedUtcFutureId = '77777777-0000-0000-0000-000000000306';
+    await client.query(`
+      INSERT INTO public.stories (id, slug, title, status, version)
+      VALUES ('${storyUtcId}', 'utc-story', 'UTC Story', 'draft', 1)
+      ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+    `);
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status)
+      VALUES 
+        ('${schedUtcDueId}', '${storyUtcId}', (clock_timestamp() AT TIME ZONE 'UTC')::date, 2, 'ready'),
+        ('${schedUtcFutureId}', '${storyUtcId}', ((clock_timestamp() AT TIME ZONE 'UTC')::date + 1), 3, 'ready')
+      ON CONFLICT (id) DO UPDATE SET 
+        status = 'ready', 
+        slot_date = EXCLUDED.slot_date, 
+        slot_position = EXCLUDED.slot_position;
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const dueDiscoveryRes = await client.query(`
+      SELECT id FROM public.fn_discover_due_schedule_entries(50);
+    `);
+    await client.query('COMMIT');
+
+    const discoveredIds = dueDiscoveryRes.rows.map(r => r.id);
+    assert(discoveredIds.includes(schedUtcDueId), 'Due schedule entry matching UTC date is returned by discovery');
+    assert(!discoveredIds.includes(schedUtcFutureId), 'Future schedule entry beyond UTC date is omitted by discovery');
+
+    // 8.6c Checkpoint A: Finite Lease Bounds in Claim (Future validated_at > 10s is invalid and reclaimed)
+    await client.query(`
+      UPDATE public.editorial_schedule
+      SET status = 'validated', validated_at = clock_timestamp() + INTERVAL '1 minute'
+      WHERE id = '${schedUtcDueId}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const futureClaimRes = await client.query(`
+      SELECT public.fn_claim_schedule_entry_fenced('${schedUtcDueId}'::UUID, '${storyUtcId}'::UUID) as result;
+    `);
+    await client.query('COMMIT');
+    assert(futureClaimRes.rows[0].result.success === true, 'Future-dated lease timestamp is invalid and immediately reclaimed');
+    assert(futureClaimRes.rows[0].result.code === 'CLAIMED', 'Future lease reclaim returns CLAIMED');
+
+    // 8.6d Checkpoint A: Finite Lease Bounds in Publication (Future validated_at fails closed with SCHEDULE_LEASE_EXPIRED)
+    const futureLeaseTime = new Date(Date.now() + 60 * 1000).toISOString();
+    await client.query(`
+      UPDATE public.editorial_schedule
+      SET status = 'validated', validated_at = '${futureLeaseTime}'::TIMESTAMPTZ
+      WHERE id = '${schedUtcDueId}';
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'service_role', {});
+    const futurePublishRes = await client.query(`
+      SELECT public.fn_publish_story_fenced(
+        '${schedUtcDueId}'::UUID,
+        '${storyUtcId}'::UUID,
+        '${futureLeaseTime}'::TIMESTAMPTZ,
+        1,
+        NOW(),
+        'system-scheduler'
+      ) as result;
+    `);
+    await client.query('COMMIT');
+    assert(futurePublishRes.rows[0].result.success === false, 'Publication with future lease timestamp fails closed');
+    assert(futurePublishRes.rows[0].result.code === 'SCHEDULE_LEASE_EXPIRED', 'Result code is SCHEDULE_LEASE_EXPIRED');
+
     // 8.7 Checkpoint B: Trigger Clock Timestamp & Lock-Wait Delay Proof
     // Proves that under transaction lock wait, updated_at reflects clock_timestamp() rather than stale now()
     const storyLockDelayId = '77777777-0000-0000-0000-000000000310';
@@ -1785,8 +1858,8 @@ async function runDirectDatabaseTests() {
     `);
     await client.query(`
       INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
-      VALUES ('${schedLockDelayId}', '${storyLockDelayId}', CURRENT_DATE, 5, 'ready', NULL)
-      ON CONFLICT (id) DO UPDATE SET status = 'ready', validated_at = NULL, slot_date = CURRENT_DATE, slot_position = 5;
+      VALUES ('${schedLockDelayId}', '${storyLockDelayId}', CURRENT_DATE, 3, 'ready', NULL)
+      ON CONFLICT (id) DO UPDATE SET status = 'ready', validated_at = NULL, slot_date = CURRENT_DATE, slot_position = 3;
     `);
 
     // Claim the entry first via database-authoritative claim
@@ -1858,6 +1931,87 @@ async function runDirectDatabaseTests() {
       assert(verifyArchive.rows.length === 1, 'Previous version snapshot archived by trg_stories_archive trigger');
       assert(verifyArchive.rows[0].version === 1, 'Archived version snapshot is version 1');
 
+      // 8.7b Checkpoint B: Real PostgreSQL Lock-Wait Lease Expiry Under Row Contention
+      // Proves that when a transaction blocks on a row lock, if the remaining lease time
+      // expires before the lock is acquired, the publication fails closed with SCHEDULE_LEASE_EXPIRED
+      // and executes ZERO side effects.
+      const storyLockExpiryId = '77777777-0000-0000-0000-000000000315';
+      const schedLockExpiryId = '77777777-0000-0000-0000-000000000316';
+
+      const expiryLeaseTime = new Date(Date.now() - (4 * 60 * 1000 + 59 * 1000 + 850)).toISOString();
+      await client.query(`
+        INSERT INTO public.stories (id, slug, title, status, version)
+        VALUES ('${storyLockExpiryId}', 'lock-expiry-story', 'Lock Expiry Story', 'draft', 1)
+        ON CONFLICT (id) DO UPDATE SET status = 'draft', version = 1;
+      `);
+      await client.query(`
+        INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, validated_at)
+        VALUES (
+          '${schedLockExpiryId}', 
+          '${storyLockExpiryId}', 
+          CURRENT_DATE, 
+          4, 
+          'validated', 
+          '${expiryLeaseTime}'::TIMESTAMPTZ
+        )
+        ON CONFLICT (id) DO UPDATE SET 
+          status = 'validated', 
+          validated_at = '${expiryLeaseTime}'::TIMESTAMPTZ,
+          slot_date = CURRENT_DATE, 
+          slot_position = 4;
+      `);
+
+      // Session A (client) locks the stories row
+      await client.query('BEGIN');
+      await client.query(`SELECT id FROM public.stories WHERE id = '${storyLockExpiryId}' FOR UPDATE;`);
+
+      // Session B (clientDelay2) calls fn_publish_story_fenced (blocks on stories row lock)
+      await clientDelay2.query('BEGIN');
+      await actAs(clientDelay2, 'service_role', {});
+      const client2ExpiryPromise = clientDelay2.query(`
+        SELECT public.fn_publish_story_fenced(
+          '${schedLockExpiryId}'::UUID,
+          '${storyLockExpiryId}'::UUID,
+          '${expiryLeaseTime}'::TIMESTAMPTZ,
+          1,
+          NOW(),
+          'system-scheduler'
+        ) as result;
+      `);
+
+      // Sleep 300ms so the remaining 150ms on the lease expires while blocked on the lock
+      await new Promise(r => setTimeout(r, 300));
+
+      // Session A commits, releasing the row lock
+      await client.query('COMMIT');
+
+      // Session B unblocks, re-evaluates the lease, and detects SCHEDULE_LEASE_EXPIRED
+      const client2ExpiryRes = await client2ExpiryPromise;
+      await clientDelay2.query('COMMIT');
+
+      const resultExpiry = client2ExpiryRes.rows[0].result;
+      assert(resultExpiry.success === false, 'Publication blocked by lock wait until lease expiry fails closed');
+      assert(resultExpiry.code === 'SCHEDULE_LEASE_EXPIRED', 'Result code is SCHEDULE_LEASE_EXPIRED');
+
+      // Verify zero side effects on story
+      const verifyStoryUnchanged = await client.query(`
+        SELECT status, version FROM public.stories WHERE id = '${storyLockExpiryId}';
+      `);
+      assert(verifyStoryUnchanged.rows[0].status === 'draft', 'Story remains in draft status after lock-wait expiry');
+      assert(verifyStoryUnchanged.rows[0].version === 1, 'Story version remains 1 after lock-wait expiry');
+
+      // Verify zero outbox rows created
+      const verifyZeroOutboxExpiry = await client.query(`
+        SELECT COUNT(*) as count FROM public.publication_outbox WHERE story_id = '${storyLockExpiryId}';
+      `);
+      assert(Number(verifyZeroOutboxExpiry.rows[0].count) === 0, 'Zero outbox rows written when lease expires during lock wait');
+
+      // Verify zero audit version archives created
+      const verifyZeroArchiveExpiry = await client.query(`
+        SELECT COUNT(*) as count FROM audit.story_versions WHERE story_id = '${storyLockExpiryId}';
+      `);
+      assert(Number(verifyZeroArchiveExpiry.rows[0].count) === 0, 'Zero archive rows created when lease expires during lock wait');
+
       // 8.8 Checkpoint C: Transactional Outbox Atomic Enqueue
       const outboxRows = await client.query(`
         SELECT id, effect_type, status, retry_count, last_error, payload
@@ -1873,17 +2027,42 @@ async function runDirectDatabaseTests() {
       assert(outboxRows.rows[1].status === 'pending', 'Event dispatch outbox status is pending');
       assert(outboxRows.rows[1].payload.version === 2, 'Event dispatch payload contains committed story version');
 
-      // 8.9 Checkpoint C: Outbox Claiming via FOR UPDATE SKIP LOCKED
+      // 8.8b Checkpoint C: Foreign Key ON DELETE RESTRICT Proof
+      // Attempting to delete the referenced story or schedule entry while outbox rows exist
+      // MUST fail with foreign key restrict violation (PostgreSQL error code 23001 / 23503)
+      let storyDeleteBlocked = false;
+      try {
+        await client.query(`DELETE FROM public.stories WHERE id = '${storyLockDelayId}';`);
+      } catch (err: any) {
+        if (err.code === '23001' || err.code === '23503') storyDeleteBlocked = true;
+      }
+      assert(storyDeleteBlocked, 'Foreign key constraint prevents deletion of story referenced by publication_outbox (ON DELETE RESTRICT)');
+
+      let schedDeleteBlocked = false;
+      try {
+        await client.query(`DELETE FROM public.editorial_schedule WHERE id = '${schedLockDelayId}';`);
+      } catch (err: any) {
+        if (err.code === '23001' || err.code === '23503') schedDeleteBlocked = true;
+      }
+      assert(schedDeleteBlocked, 'Foreign key constraint prevents deletion of schedule entry referenced by publication_outbox (ON DELETE RESTRICT)');
+
+      // 8.9 Checkpoint C: Outbox Claiming via FOR UPDATE SKIP LOCKED & Unique Claim Token Assignment
       await client.query('BEGIN');
       await actAs(client, 'service_role', {});
       const claimOutboxRes = await client.query(`
-        SELECT id, effect_type, status FROM public.fn_claim_publication_outbox(10, 60);
+        SELECT id, effect_type, status, claim_token FROM public.fn_claim_publication_outbox(10, 60);
       `);
       await client.query('COMMIT');
 
       const claimedIds = claimOutboxRes.rows.map(r => r.id);
       assert(claimedIds.includes(outboxRows.rows[0].id), 'Cache invalidation item claimed by worker');
       assert(claimedIds.includes(outboxRows.rows[1].id), 'Event dispatch item claimed by worker');
+
+      const item1Claim = claimOutboxRes.rows.find(r => r.id === outboxRows.rows[0].id);
+      const item2Claim = claimOutboxRes.rows.find(r => r.id === outboxRows.rows[1].id);
+      assert(Boolean(item1Claim?.claim_token), 'Item 1 receives unique non-null claim_token');
+      assert(Boolean(item2Claim?.claim_token), 'Item 2 receives unique non-null claim_token');
+      assert(item1Claim?.claim_token !== item2Claim?.claim_token, 'Claim tokens across claimed outbox items are distinct');
 
       // Concurrent worker sees zero rows due to FOR UPDATE SKIP LOCKED
       await clientDelay2.query('BEGIN');
@@ -1894,14 +2073,38 @@ async function runDirectDatabaseTests() {
       await clientDelay2.query('COMMIT');
       assert(claimOutboxEmpty.rows.length === 0, 'Concurrent worker receives zero already-claimed items');
 
-      // 8.10 Checkpoint C: Outbox Completion & Failure Tracking
+      // 8.10 Checkpoint C: Outbox Completion & Failure Tracking with Claim Token Enforcement
+      // 8.10a Stale claim token rejection
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const staleTokenRes = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxRows.rows[0].id}'::UUID, 
+          gen_random_uuid(), 
+          'completed'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(staleTokenRes.rows[0].result.success === false, 'Completion with mismatched claim token fails closed');
+      assert(staleTokenRes.rows[0].result.code === 'OUTBOX_LEASE_LOST', 'Stale token receives OUTBOX_LEASE_LOST');
+
+      // 8.10b Valid completion with matching claim token
       await client.query('BEGIN');
       await actAs(client, 'service_role', {});
       await client.query(`
-        SELECT public.fn_complete_publication_outbox('${outboxRows.rows[0].id}'::UUID, 'completed');
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxRows.rows[0].id}'::UUID, 
+          '${item1Claim.claim_token}'::UUID, 
+          'completed'
+        );
       `);
       await client.query(`
-        SELECT public.fn_complete_publication_outbox('${outboxRows.rows[1].id}'::UUID, 'failed', 'Network timeout connecting to event bus');
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxRows.rows[1].id}'::UUID, 
+          '${item2Claim.claim_token}'::UUID, 
+          'failed', 
+          'Network timeout connecting to event bus'
+        );
       `);
       await client.query('COMMIT');
 
@@ -1917,6 +2120,20 @@ async function runDirectDatabaseTests() {
       assert(verifyFailed.rows[0].status === 'failed', 'Item 2 status updated to failed');
       assert(verifyFailed.rows[0].retry_count === 1, 'Item 2 retry_count incremented to 1');
       assert(verifyFailed.rows[0].last_error === 'Network timeout connecting to event bus', 'Item 2 records safe diagnostic error');
+
+      // 8.10c Completing non-processing item rejected
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const reCompleteRes = await client.query(`
+        SELECT public.fn_complete_publication_outbox(
+          '${outboxRows.rows[0].id}'::UUID, 
+          '${item1Claim.claim_token}'::UUID, 
+          'completed'
+        ) as result;
+      `);
+      await client.query('COMMIT');
+      assert(reCompleteRes.rows[0].result.success === false, 'Re-completing already-completed item fails closed');
+      assert(reCompleteRes.rows[0].result.code === 'OUTBOX_LEASE_LOST', 'Already completed item receives OUTBOX_LEASE_LOST');
 
       // 8.11 Checkpoint C: Rollback Invariant: No publication and zero outbox rows
       const storyRollbackId = '77777777-0000-0000-0000-000000000320';
@@ -1952,9 +2169,27 @@ async function runDirectDatabaseTests() {
       `);
       assert(Number(verifyZeroOutbox.rows[0].count) === 0, 'Zero outbox rows exist after transaction rollback');
 
-      // 8.12 Privilege Hardening: Security definer RPCs restricted to service_role
-      const unauthRoles: ('anon' | 'authenticated')[] = ['anon', 'authenticated'];
+      // 8.12 Privilege Hardening: Security definer RPCs & table access restricted to service_role (Checkpoint D)
+      const unauthRoles: ('anon' | 'authenticated' | 'publisher_worker' | 'authenticator')[] = [
+        'anon',
+        'authenticated',
+        'publisher_worker',
+        'authenticator',
+      ];
       for (const role of unauthRoles) {
+        // fn_discover_due_schedule_entries
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let discoveryBlocked = false;
+        try {
+          await client.query('SELECT * FROM public.fn_discover_due_schedule_entries(50);');
+        } catch (err: any) {
+          if (err.code === '42501') discoveryBlocked = true;
+        }
+        assert(discoveryBlocked, `${role} cannot execute public.fn_discover_due_schedule_entries (fails closed with 42501)`);
+        await client.query('ROLLBACK');
+
+        // fn_claim_schedule_entry_fenced
         await client.query('BEGIN');
         await actAs(client, role, {});
         let claimBlocked = false;
@@ -1966,39 +2201,113 @@ async function runDirectDatabaseTests() {
         assert(claimBlocked, `${role} cannot execute public.fn_claim_schedule_entry_fenced (fails closed with 42501)`);
         await client.query('ROLLBACK');
 
+        // fn_publish_story_fenced
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let publishBlocked = false;
+        try {
+          await client.query(`
+            SELECT public.fn_publish_story_fenced(
+              '${schedClaim1Id}'::UUID,
+              '${storyClaim1Id}'::UUID,
+              NOW(),
+              1,
+              NOW(),
+              'system-scheduler'
+            );
+          `);
+        } catch (err: any) {
+          if (err.code === '42501') publishBlocked = true;
+        }
+        assert(publishBlocked, `${role} cannot execute public.fn_publish_story_fenced (fails closed with 42501)`);
+        await client.query('ROLLBACK');
+
+        // fn_claim_publication_outbox
         await client.query('BEGIN');
         await actAs(client, role, {});
         let outboxClaimBlocked = false;
         try {
-          await client.query(`SELECT * FROM public.fn_claim_publication_outbox(10, 60);`);
+          await client.query('SELECT * FROM public.fn_claim_publication_outbox(10, 60);');
         } catch (err: any) {
           if (err.code === '42501') outboxClaimBlocked = true;
         }
         assert(outboxClaimBlocked, `${role} cannot execute public.fn_claim_publication_outbox (fails closed with 42501)`);
         await client.query('ROLLBACK');
 
-        await client.query('BEGIN');
-        await actAs(client, role, {});
-        let outboxTableBlocked = false;
-        try {
-          await client.query(`SELECT * FROM public.publication_outbox;`);
-        } catch (err: any) {
-          if (err.code === '42501') outboxTableBlocked = true;
-        }
-        assert(outboxTableBlocked, `${role} cannot select from public.publication_outbox directly`);
-        await client.query('ROLLBACK');
-
+        // fn_complete_publication_outbox
         await client.query('BEGIN');
         await actAs(client, role, {});
         let outboxCompleteBlocked = false;
         try {
-          await client.query(`SELECT public.fn_complete_publication_outbox(gen_random_uuid(), 'completed');`);
+          await client.query(`SELECT public.fn_complete_publication_outbox(gen_random_uuid(), gen_random_uuid(), 'completed');`);
         } catch (err: any) {
           if (err.code === '42501') outboxCompleteBlocked = true;
         }
         assert(outboxCompleteBlocked, `${role} cannot execute public.fn_complete_publication_outbox (fails closed with 42501)`);
         await client.query('ROLLBACK');
+
+        // Direct table access: SELECT
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxSelectBlocked = false;
+        try {
+          await client.query('SELECT * FROM public.publication_outbox;');
+        } catch (err: any) {
+          if (err.code === '42501') outboxSelectBlocked = true;
+        }
+        assert(outboxSelectBlocked, `${role} cannot SELECT from public.publication_outbox directly`);
+        await client.query('ROLLBACK');
+
+        // Direct table access: INSERT
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxInsertBlocked = false;
+        try {
+          await client.query(`
+            INSERT INTO public.publication_outbox (id, story_id, schedule_id, effect_type, payload)
+            VALUES (gen_random_uuid(), gen_random_uuid(), gen_random_uuid(), 'test', '{}');
+          `);
+        } catch (err: any) {
+          if (err.code === '42501') outboxInsertBlocked = true;
+        }
+        assert(outboxInsertBlocked, `${role} cannot INSERT into public.publication_outbox directly`);
+        await client.query('ROLLBACK');
+
+        // Direct table access: UPDATE
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxUpdateBlocked = false;
+        try {
+          await client.query("UPDATE public.publication_outbox SET status = 'completed';");
+        } catch (err: any) {
+          if (err.code === '42501') outboxUpdateBlocked = true;
+        }
+        assert(outboxUpdateBlocked, `${role} cannot UPDATE public.publication_outbox directly`);
+        await client.query('ROLLBACK');
+
+        // Direct table access: DELETE
+        await client.query('BEGIN');
+        await actAs(client, role, {});
+        let outboxDeleteBlocked = false;
+        try {
+          await client.query('DELETE FROM public.publication_outbox;');
+        } catch (err: any) {
+          if (err.code === '42501') outboxDeleteBlocked = true;
+        }
+        assert(outboxDeleteBlocked, `${role} cannot DELETE from public.publication_outbox directly`);
+        await client.query('ROLLBACK');
       }
+
+      // 8.13 service_role full authorization proof
+      await client.query('BEGIN');
+      await actAs(client, 'service_role', {});
+      const srvDiscovery = await client.query('SELECT COUNT(*) FROM public.fn_discover_due_schedule_entries(50);');
+      assert(srvDiscovery.rows.length === 1, 'service_role has authorized EXECUTE on fn_discover_due_schedule_entries');
+      const srvOutboxClaim = await client.query('SELECT COUNT(*) FROM public.fn_claim_publication_outbox(10, 60);');
+      assert(srvOutboxClaim.rows.length === 1, 'service_role has authorized EXECUTE on fn_claim_publication_outbox');
+      const srvOutboxSelect = await client.query('SELECT COUNT(*) FROM public.publication_outbox;');
+      assert(srvOutboxSelect.rows.length === 1, 'service_role has authorized SELECT on public.publication_outbox');
+      await client.query('COMMIT');
     } finally {
       await clientDelay2.end().catch(() => {});
     }

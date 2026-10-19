@@ -123,17 +123,26 @@ export async function validateAndPublishDueStories(
   const db = getServiceClient();
   const results: PublicationGateResult[] = [];
 
-  const today = formatDate(now);
+  // ── DATABASE-AUTHORITATIVE SCHEDULE ENTRY DISCOVERY (Checkpoint A)
+  // Canonical editorial scheduling timezone is UTC (UTC+00:00).
+  // Discovery evaluates due slot_date directly against database clock_timestamp() AT TIME ZONE 'UTC'
+  // via fn_discover_due_schedule_entries RPC, completely eliminating caller clock skew.
+  if (typeof (db as any).rpc !== 'function') {
+    console.error(
+      JSON.stringify({
+        event: 'editorial.schedule.discovery_rpc_unavailable',
+        category: 'SCHEDULE_CLAIM_FAILED',
+        error: 'RPC_UNAVAILABLE',
+        timestamp: now.toISOString(),
+      }),
+    );
+    throw new Error('Database RPC interface unavailable for authoritative schedule discovery (RPC_UNAVAILABLE)');
+  }
 
-  // Only pick entries with status 'validated' or 'ready' (ready = re-validate on cron).
-  // 'planned', 'in_progress', 'blocked', 'skipped', 'published' are NOT eligible.
-  const { data: dueEntries, error: fetchError } = await db
-    .from('editorial_schedule')
-    .select('*')
-    .in('status', ['validated', 'ready'])
-    .lte('slot_date', today)
-    .order('slot_date', { ascending: true })
-    .order('priority', { ascending: false });
+  const { data: dueEntries, error: fetchError } = await (db as any).rpc(
+    'fn_discover_due_schedule_entries',
+    { p_limit: 50 },
+  );
 
   if (fetchError) throw fetchError;
 
@@ -166,7 +175,7 @@ async function validateAndPublishEntry(
 ): Promise<PublicationGateResult> {
   const db = getServiceClient();
   const storyId = entry.story_id as string;
-  const scheduleId = entry.id as string;
+  const scheduleId = (entry.id || entry.schedule_id) as string;
   const currentScheduleStatus = entry.status as string;
 
   // ── DATABASE-AUTHORITATIVE LEASE CLAIM (Checkpoint A)
@@ -193,56 +202,27 @@ async function validateAndPublishEntry(
     if (claimRpcError) {
       claimError = claimRpcError;
     } else if (!claimData || !claimData.success) {
-      if (claimData?.code === 'SCHEDULE_LEASE_ACTIVE') {
-        claimOutcome = 'already_claimed';
-      } else if (claimData?.code === 'ALREADY_PUBLISHED') {
+      if (claimData?.code === 'ALREADY_PUBLISHED') {
         claimOutcome = 'already_published';
+      } else if (claimData?.code === 'SCHEDULE_LEASE_ACTIVE') {
+        claimOutcome = 'already_claimed';
       } else {
         claimOutcome = 'blocked';
-        claimBlockReason = claimData?.error || claimData?.code || 'SCHEDULE_CLAIM_FAILED';
+        claimBlockReason = claimData?.code
+          ? `${claimData.code}${claimData.error ? `: ${claimData.error}` : ''}`
+          : (claimData?.error || 'SCHEDULE_CLAIM_FAILED');
       }
+    } else if (claimData.validated_at && typeof claimData.validated_at === 'string') {
+      claimedValidatedAt = claimData.validated_at;
+      claimOutcome = 'claimed';
     } else {
-      claimedValidatedAt = (claimData.validated_at as string) || null;
+      claimOutcome = 'blocked';
+      claimBlockReason = 'CLAIM_MISSING_VALIDATED_AT';
     }
   } else {
-    // Fallback for mocked or non-RPC environments
-    let claimedEntry: Record<string, unknown> | null = null;
-    if (currentScheduleStatus === 'ready') {
-      const res = await db
-        .from('editorial_schedule')
-        .update({
-          status: 'validated',
-          validated_at: nowIso,
-          updated_at: nowIso,
-        } as never)
-        .eq('id', scheduleId)
-        .eq('status', 'ready')
-        .select()
-        .maybeSingle();
-      claimedEntry = res.data;
-      claimError = res.error;
-    } else if (currentScheduleStatus === 'validated') {
-      const leaseCutoff = new Date(now.getTime() - SCHEDULE_CLAIM_LEASE_DURATION_MS).toISOString();
-      const res = await db
-        .from('editorial_schedule')
-        .update({
-          validated_at: nowIso,
-          updated_at: nowIso,
-        } as never)
-        .eq('id', scheduleId)
-        .eq('status', 'validated')
-        .or(`validated_at.is.null,validated_at.lt.${leaseCutoff}`)
-        .select()
-        .maybeSingle();
-      claimedEntry = res.data;
-      claimError = res.error;
-    }
-
-    if (!claimError && !claimedEntry) {
-      claimOutcome = 'already_claimed';
-    } else if (claimedEntry) {
-      claimedValidatedAt = (claimedEntry.validated_at as string) || nowIso;
-    }
+    // Unsafe application-clock fallbacks are eliminated (Phase 44 Checkpoint A)
+    // Fail closed with SCHEDULE_CLAIM_FAILED (RPC_UNAVAILABLE)
+    claimError = new Error('RPC_UNAVAILABLE');
   }
 
   if (claimError) {
@@ -288,6 +268,22 @@ async function validateAndPublishEntry(
     return idempotentResult;
   }
 
+  if (claimOutcome === 'blocked') {
+    return {
+      storyId,
+      scheduleId,
+      passed: false,
+      outcome: 'blocked',
+      checks: [{
+        name: 'schedule_claim',
+        passed: false,
+        reason: claimBlockReason,
+      }],
+      checkedAt: nowIso,
+      triggeredBy: 'cron',
+    };
+  }
+
   if (claimOutcome === 'already_claimed' || !claimedValidatedAt) {
     // Another worker already claimed or active lease is held — legitimate contention
     return {
@@ -299,22 +295,6 @@ async function validateAndPublishEntry(
         name: 'already_claimed',
         passed: false,
         reason: `Schedule entry already claimed or active lease held by another worker (current status: ${currentScheduleStatus})`,
-      }],
-      checkedAt: nowIso,
-      triggeredBy: 'cron',
-    };
-  }
-
-  if (claimOutcome === 'blocked') {
-    return {
-      storyId,
-      scheduleId,
-      passed: false,
-      outcome: 'blocked',
-      checks: [{
-        name: 'schedule_claim',
-        passed: false,
-        reason: claimBlockReason,
       }],
       checkedAt: nowIso,
       triggeredBy: 'cron',
@@ -1108,22 +1088,8 @@ async function validateAndPublishEntry(
     );
   }
 
-  // Note: The atomic transaction (publishScheduledStoryAtomic) is the single authority
-  // for both story and editorial_schedule transitions. No redundant post-commit schedule
-  // rewrite is executed here. Post-publication effects (cache revalidation, event emission)
-  // are decoupled from transaction persistence.
-  if (!result.postPublicationError) {
-    try {
-      await db
-        .from('publication_outbox')
-        .update({ status: 'completed', processed_at: new Date().toISOString() } as never)
-        .eq('story_id', storyId)
-        .eq('schedule_id', scheduleId)
-        .eq('status', 'pending');
-    } catch (_ackErr) {
-      // Non-blocking: outbox recovery will safely complete if needed
-    }
-  }
+  // Post-publication effects are decoupled from transaction persistence and managed
+  // through the single authoritative outbox recovery lifecycle (processPendingPublicationOutbox).
 
   try {
     await logGateResult(result);
@@ -1283,6 +1249,7 @@ export async function processPendingPublicationOutbox(
     for (const item of claimedItems as any[]) {
       summary.processed++;
       const itemId = item.id as string;
+      const claimToken = (item.claim_token || item.claimToken) as string;
       const effectType = item.effect_type as string;
       const payload = (item.payload || {}) as Record<string, unknown>;
 
@@ -1291,28 +1258,18 @@ export async function processPendingPublicationOutbox(
 
       try {
         if (effectType === 'cache_invalidation') {
-          try {
-            const { revalidatePath } = await import('next/cache');
-            revalidatePath('/');
-            revalidatePath('/stories');
-            if (payload.slug && typeof payload.slug === 'string') {
-              revalidatePath(`/story/${payload.slug}`);
-            }
-          } catch (cacheErr: any) {
-            // next/cache may throw in non-Next runtime/test runner
-            console.warn(
-              JSON.stringify({
-                event: 'outbox.cache_revalidation_warning',
-                itemId,
-                error: cacheErr?.message || String(cacheErr),
-                timestamp: new Date().toISOString(),
-              }),
-            );
+          // In Next.js runtime, revalidatePath revalidates routes.
+          // Errors are NOT swallowed (Checkpoint C); failures mark the item failed for retry.
+          const { revalidatePath } = await import('next/cache');
+          revalidatePath('/');
+          revalidatePath('/stories');
+          if (payload.slug && typeof payload.slug === 'string') {
+            revalidatePath(`/story/${payload.slug}`);
           }
           itemSuccess = true;
         } else if (effectType === 'event_dispatch') {
           const { eventBus } = await import('@/lib/events/event-bus');
-          eventBus.publish({
+          await eventBus.publishAsync({
             type: 'story:published',
             payload: {
               storyId: payload.story_id as string,
@@ -1329,20 +1286,29 @@ export async function processPendingPublicationOutbox(
         }
       } catch (effectErr: any) {
         itemError = effectErr?.message || String(effectErr);
+        itemSuccess = false;
       }
 
       if (itemSuccess) {
-        summary.succeeded++;
-        summary.details.push({ id: itemId, effectType, status: 'completed' });
-        await (db as any).rpc('fn_complete_publication_outbox', {
+        const { data: completeData } = await (db as any).rpc('fn_complete_publication_outbox', {
           p_outbox_id: itemId,
+          p_claim_token: claimToken,
           p_status: 'completed',
         });
+        const completeResult = completeData as { success?: boolean; code?: string } | null;
+        if (completeResult && completeResult.code === 'OUTBOX_LEASE_LOST') {
+          summary.failed++;
+          summary.details.push({ id: itemId, effectType, status: 'failed', error: 'OUTBOX_LEASE_LOST' });
+        } else {
+          summary.succeeded++;
+          summary.details.push({ id: itemId, effectType, status: 'completed' });
+        }
       } else {
         summary.failed++;
         summary.details.push({ id: itemId, effectType, status: 'failed', error: itemError });
         await (db as any).rpc('fn_complete_publication_outbox', {
           p_outbox_id: itemId,
+          p_claim_token: claimToken,
           p_status: 'failed',
           p_error: itemError || 'Outbox effect execution failed',
         });

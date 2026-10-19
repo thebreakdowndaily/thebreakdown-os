@@ -60,6 +60,35 @@ export class EventBus {
     }
   }
 
+  async publishAsync(event: Omit<Event, 'timestamp'>): Promise<void> {
+    const fullEvent: Event = { ...event, timestamp: new Date().toISOString() };
+
+    this.history.push(fullEvent);
+    if (this.history.length > MAX_HISTORY) {
+      this.history = this.history.slice(-MAX_HISTORY);
+    }
+
+    const promises: Promise<void>[] = [];
+
+    const dispatch = (key: string) => {
+      const set = this.handlers.get(key);
+      if (!set) return;
+      for (const handler of set) {
+        const result = handler(fullEvent);
+        if (result instanceof Promise) {
+          promises.push(result);
+        }
+      }
+    };
+
+    dispatch(event.type);
+    dispatch('*');
+
+    if (promises.length > 0) {
+      await Promise.all(promises);
+    }
+  }
+
   getHistory(limit?: number): Event[] {
     if (limit && limit > 0) {
       return this.history.slice(-limit);

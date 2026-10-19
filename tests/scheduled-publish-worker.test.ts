@@ -17,6 +17,21 @@ vi.mock('@/lib/editorial/canonical-publication', () => ({
   executePostPublicationEffects: (...args: unknown[]) => mockExecutePostPublicationEffects(...args),
 }));
 
+let customRevalidatePathHandler: ((...args: unknown[]) => void) | null = null;
+export function setMockRevalidatePathHandler(handler: ((...args: unknown[]) => void) | null) {
+  customRevalidatePathHandler = handler;
+}
+export const mockRevalidatePath = vi.fn();
+vi.mock('next/cache', () => ({
+  revalidatePath: (...args: unknown[]) => {
+    mockRevalidatePath(...args);
+    if (customRevalidatePathHandler) {
+      return customRevalidatePathHandler(...args);
+    }
+    throw new Error('Invariant: static generation store missing in revalidatePath');
+  },
+}));
+
 const mockStoryRepository = {
   saveStory: vi.fn(),
   saveStoryOCC: vi.fn(),
@@ -141,11 +156,14 @@ const fetchMock = vi.fn();
 
 beforeEach(() => {
   fetchMock.mockReset();
+  mockRevalidatePath.mockReset();
+  customRevalidatePathHandler = null;
   vi.stubGlobal('fetch', fetchMock);
   setupDefaultMockRepository();
 });
 
 afterEach(() => {
+  customRevalidatePathHandler = null;
   vi.unstubAllGlobals();
 });
 
@@ -1359,6 +1377,65 @@ function createMockDb(
         },
       };
       return builder;
+    },
+    rpc: async (fn: string, args: any) => {
+      if (fn === 'fn_discover_due_schedule_entries') {
+        const todayUtc = new Date().toISOString().split('T')[0];
+        const due = scheduleStore
+          .filter(s => ['validated', 'ready'].includes(s.status) && s.slot_date <= todayUtc)
+          .sort((a, b) => (a.slot_date < b.slot_date ? -1 : a.slot_date > b.slot_date ? 1 : (b.priority || 0) - (a.priority || 0)));
+        return { data: due, error: null };
+      }
+      if (fn === 'fn_claim_schedule_entry_fenced') {
+        const entry = scheduleStore.find(s => s.id === args.p_schedule_id);
+        if (!entry) {
+          return { data: { success: false, code: 'SCHEDULE_NOT_FOUND', error: 'Not found' }, error: null };
+        }
+        if (args.p_story_id && entry.story_id !== args.p_story_id) {
+          return { data: { success: false, code: 'SCHEDULE_STORY_MISMATCH', error: 'Mismatch' }, error: null };
+        }
+        if (failAtomicClaimIds.includes(args.p_schedule_id)) {
+          return { data: { success: false, code: 'SCHEDULE_LEASE_ACTIVE', error: 'Active lease' }, error: null };
+        }
+        if (options?.claimQueryError) {
+          return { data: null, error: options.claimQueryError };
+        }
+        if (entry.status === 'published') {
+          return { data: { success: false, code: 'ALREADY_PUBLISHED', error: 'Already published' }, error: null };
+        }
+        if (entry.status === 'validated') {
+          const leaseAgeMs = entry.validated_at ? Date.now() - new Date(entry.validated_at).getTime() : Infinity;
+          if (leaseAgeMs < 5 * 60 * 1000) {
+            return { data: { success: false, code: 'SCHEDULE_LEASE_ACTIVE', error: 'Active schedule lease is held by another worker' }, error: null };
+          }
+        }
+        if (entry.status === 'blocked' || entry.status === 'in_progress' || entry.status === 'planned' || entry.status === 'skipped') {
+          return { data: { success: false, code: 'SCHEDULE_INELIGIBLE', error: `Status ${entry.status} ineligible` }, error: null };
+        }
+        const nowIso = new Date().toISOString();
+        entry.status = 'validated';
+        entry.validated_at = nowIso;
+        entry.updated_at = nowIso;
+        return {
+          data: {
+            success: true,
+            code: 'CLAIMED',
+            schedule_id: entry.id,
+            story_id: entry.story_id,
+            status: 'validated',
+            validated_at: nowIso,
+            updated_at: nowIso,
+          },
+          error: null,
+        };
+      }
+      if (fn === 'fn_claim_publication_outbox') {
+        return { data: [], error: null };
+      }
+      if (fn === 'fn_complete_publication_outbox') {
+        return { data: { success: true, code: 'COMPLETED' }, error: null };
+      }
+      return { data: null, error: null };
     },
   };
 
@@ -3723,10 +3800,9 @@ describe('Phase 37: Post-Commit Application Behavior & Schedule Immutability', (
     expect(r.outcome).toBe('published');
     expect(r.postPublicationError).toBeUndefined();
 
-    // Verify: exactly ONE schedule update was called before the transaction (the claim lease update).
-    // ZERO schedule updates were called AFTER the atomic publish succeeded!
-    expect(updateSpy).toHaveBeenCalledTimes(1);
-    expect(updateSpy).toHaveBeenCalledWith(expect.objectContaining({ status: 'validated' }));
+    // Verify: schedule claiming is executed via database-authoritative RPC
+    // ZERO client-side schedule updates were called (neither claim nor post-commit write)
+    expect(updateSpy).toHaveBeenCalledTimes(0);
     expect(updateSpy).not.toHaveBeenCalledWith(expect.objectContaining({ status: 'published' }));
 
     // Both entities in the stores are committed to published
@@ -5174,16 +5250,19 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
     it('1. processPendingPublicationOutbox drains cache_invalidation and event_dispatch effects', async () => {
       const { processPendingPublicationOutbox } = scheduleModule;
       const { eventBus } = await import('@/lib/events/event-bus');
-      const publishSpy = vi.spyOn(eventBus, 'publish').mockReturnValue();
+      setMockRevalidatePathHandler(() => {});
+      const publishAsyncSpy = vi.spyOn(eventBus, 'publishAsync').mockResolvedValue();
 
       const outboxItems = [
         {
           id: 'outbox-item-1',
+          claim_token: 'claim-token-1',
           effect_type: 'cache_invalidation',
           payload: { story_id: 'story-outbox-1', slug: 'outbox-slug-1', published_at: new Date().toISOString() },
         },
         {
           id: 'outbox-item-2',
+          claim_token: 'claim-token-2',
           effect_type: 'event_dispatch',
           payload: { story_id: 'story-outbox-2', schedule_id: 'sched-outbox-2', version: 3, published_at: new Date().toISOString(), actor: 'cron-worker' },
         },
@@ -5197,7 +5276,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
             return Promise.resolve({ data: outboxItems, error: null });
           }
           if (fn === 'fn_complete_publication_outbox') {
-            return Promise.resolve({ data: null, error: null });
+            return Promise.resolve({ data: { success: true, code: 'COMPLETED' }, error: null });
           }
           return Promise.resolve({ data: null, error: null });
         }),
@@ -5213,7 +5292,11 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       expect(summary.details[0]).toEqual({ id: 'outbox-item-1', effectType: 'cache_invalidation', status: 'completed' });
       expect(summary.details[1]).toEqual({ id: 'outbox-item-2', effectType: 'event_dispatch', status: 'completed' });
 
-      expect(publishSpy).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockRevalidatePath).toHaveBeenCalledWith('/');
+      expect(mockRevalidatePath).toHaveBeenCalledWith('/stories');
+      expect(mockRevalidatePath).toHaveBeenCalledWith('/story/outbox-slug-1');
+
+      expect(publishAsyncSpy).toHaveBeenCalledWith(expect.objectContaining({
         type: 'story:published',
         payload: expect.objectContaining({
           storyId: 'story-outbox-2',
@@ -5224,22 +5307,22 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
 
       const completions = rpcCalls.filter(c => c.fn === 'fn_complete_publication_outbox');
       expect(completions).toHaveLength(2);
-      expect(completions[0].args).toEqual({ p_outbox_id: 'outbox-item-1', p_status: 'completed' });
-      expect(completions[1].args).toEqual({ p_outbox_id: 'outbox-item-2', p_status: 'completed' });
+      expect(completions[0].args).toEqual({ p_outbox_id: 'outbox-item-1', p_claim_token: 'claim-token-1', p_status: 'completed' });
+      expect(completions[1].args).toEqual({ p_outbox_id: 'outbox-item-2', p_claim_token: 'claim-token-2', p_status: 'completed' });
 
-      publishSpy.mockRestore();
+      setMockRevalidatePathHandler(null);
+      publishAsyncSpy.mockRestore();
     });
 
     it('2. processPendingPublicationOutbox handles effect failure, records error, and marks item failed', async () => {
       const { processPendingPublicationOutbox } = scheduleModule;
       const { eventBus } = await import('@/lib/events/event-bus');
-      const publishSpy = vi.spyOn(eventBus, 'publish').mockImplementation(() => {
-        throw new Error('Connection refused by downstream webhook');
-      });
+      const publishAsyncSpy = vi.spyOn(eventBus, 'publishAsync').mockRejectedValue(new Error('Connection refused by downstream webhook'));
 
       const outboxItems = [
         {
           id: 'outbox-fail-item',
+          claim_token: 'claim-token-fail',
           effect_type: 'event_dispatch',
           payload: { story_id: 'story-fail', schedule_id: 'sched-fail', version: 1 },
         },
@@ -5253,7 +5336,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
             return Promise.resolve({ data: outboxItems, error: null });
           }
           if (fn === 'fn_complete_publication_outbox') {
-            return Promise.resolve({ data: null, error: null });
+            return Promise.resolve({ data: { success: true, code: 'FAILED' }, error: null });
           }
           return Promise.resolve({ data: null, error: null });
         }),
@@ -5271,10 +5354,59 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       const failureCompletion = rpcCalls.find(c => c.fn === 'fn_complete_publication_outbox');
       expect(failureCompletion).toBeDefined();
       expect(failureCompletion!.args.p_outbox_id).toBe('outbox-fail-item');
+      expect(failureCompletion!.args.p_claim_token).toBe('claim-token-fail');
       expect(failureCompletion!.args.p_status).toBe('failed');
       expect(failureCompletion!.args.p_error).toContain('Connection refused by downstream webhook');
 
-      publishSpy.mockRestore();
+      publishAsyncSpy.mockRestore();
+    });
+
+    it('2b. processPendingPublicationOutbox does NOT swallow cache invalidation failure', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+      setMockRevalidatePathHandler(() => {
+        throw new Error('Edge cache invalidation network timeout');
+      });
+
+      const outboxItems = [
+        {
+          id: 'outbox-cache-fail',
+          claim_token: 'claim-token-cache-fail',
+          effect_type: 'cache_invalidation',
+          payload: { story_id: 'story-cache-fail', slug: 'cache-slug' },
+        },
+      ];
+
+      const rpcCalls: { fn: string; args: any }[] = [];
+      const mockSupabaseWithRpc: any = {
+        rpc: vi.fn().mockImplementation((fn: string, args: any) => {
+          rpcCalls.push({ fn, args });
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: outboxItems, error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({ data: { success: true, code: 'FAILED' }, error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+
+      setServiceClient(mockSupabaseWithRpc);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(1);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.failed).toBe(1);
+      expect(summary.details[0].status).toBe('failed');
+      expect(summary.details[0].error).toContain('Edge cache invalidation network timeout');
+
+      const failureCompletion = rpcCalls.find(c => c.fn === 'fn_complete_publication_outbox');
+      expect(failureCompletion).toBeDefined();
+      expect(failureCompletion!.args.p_outbox_id).toBe('outbox-cache-fail');
+      expect(failureCompletion!.args.p_claim_token).toBe('claim-token-cache-fail');
+      expect(failureCompletion!.args.p_status).toBe('failed');
+      expect(failureCompletion!.args.p_error).toContain('Edge cache invalidation network timeout');
+
+      setMockRevalidatePathHandler(null);
     });
 
     it('3. processPendingPublicationOutbox handles unknown effect_type gracefully', async () => {
@@ -5283,6 +5415,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       const outboxItems = [
         {
           id: 'outbox-unknown-item',
+          claim_token: 'claim-token-unknown',
           effect_type: 'unsupported_future_action',
           payload: {},
         },
@@ -5296,7 +5429,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
             return Promise.resolve({ data: outboxItems, error: null });
           }
           if (fn === 'fn_complete_publication_outbox') {
-            return Promise.resolve({ data: null, error: null });
+            return Promise.resolve({ data: { success: true, code: 'FAILED' }, error: null });
           }
           return Promise.resolve({ data: null, error: null });
         }),
@@ -5345,6 +5478,9 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
 
       const mockSupabaseWithRpc: any = {
         rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_discover_due_schedule_entries') {
+            return Promise.resolve({ data: [entry], error: null });
+          }
           if (fn === 'fn_claim_schedule_entry_fenced') {
             return Promise.resolve({
               data: { success: false, code: 'ALREADY_PUBLISHED', error: 'Schedule entry is already published' },
@@ -5359,18 +5495,12 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         from: (table: string) => ({
           insert: vi.fn().mockReturnValue({ error: null }),
           select: vi.fn().mockReturnThis(),
-          lte: vi.fn().mockReturnThis(),
-          in: vi.fn().mockReturnThis(),
-          order: vi.fn().mockReturnThis(),
           eq: vi.fn().mockReturnThis(),
           single: vi.fn().mockResolvedValue({
             data: { id: 'story-claimed-already-pub', slug: 'already-pub', status: 'published', published_at: '2026-10-18T00:00:00Z' },
             error: null,
           }),
           then: (resolve: any) => {
-            if (table === 'editorial_schedule') {
-              return resolve({ data: [entry], error: null });
-            }
             return resolve({ data: [], error: null });
           },
         }),
@@ -5397,6 +5527,9 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
 
       const mockSupabaseWithRpc: any = {
         rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_discover_due_schedule_entries') {
+            return Promise.resolve({ data: [entry], error: null });
+          }
           if (fn === 'fn_claim_schedule_entry_fenced') {
             return Promise.resolve({
               data: { success: false, code: 'SCHEDULE_LEASE_ACTIVE', error: 'Active schedule lease is held by another worker' },
@@ -5411,14 +5544,8 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         from: (table: string) => ({
           insert: vi.fn().mockReturnValue({ error: null }),
           select: vi.fn().mockReturnThis(),
-          lte: vi.fn().mockReturnThis(),
-          in: vi.fn().mockReturnThis(),
-          order: vi.fn().mockReturnThis(),
           eq: vi.fn().mockReturnThis(),
           then: (resolve: any) => {
-            if (table === 'editorial_schedule') {
-              return resolve({ data: [entry], error: null });
-            }
             return resolve({ data: [], error: null });
           },
         }),
@@ -5431,6 +5558,154 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       expect(results[0].outcome).toBe('skipped');
       expect(results[0].passed).toBe(false);
       expect(results[0].checks[0].reason).toContain('Schedule entry already claimed or active lease held by another worker');
+    });
+
+    it('7. validateAndPublishDueStories fails closed when discovery RPC is unavailable or returns an error', async () => {
+      const { validateAndPublishDueStories } = scheduleModule;
+
+      // 7a. Missing db.rpc entirely
+      const mockSupabaseNoRpc: any = {
+        from: vi.fn(),
+      };
+      setServiceClient(mockSupabaseNoRpc);
+      await expect(validateAndPublishDueStories(new Date())).rejects.toThrow(/RPC_UNAVAILABLE/);
+
+      // 7b. Discovery RPC returns error
+      const mockSupabaseRpcError: any = {
+        rpc: vi.fn().mockResolvedValue({ data: null, error: new Error('PostgreSQL connection terminated') }),
+      };
+      setServiceClient(mockSupabaseRpcError);
+      await expect(validateAndPublishDueStories(new Date())).rejects.toThrow(/PostgreSQL connection terminated/);
+    });
+
+    it('8. validateAndPublishEntry fails closed when claim RPC is missing', async () => {
+      const { validateAndPublishDueStories } = scheduleModule;
+
+      // When db.rpc exists for discovery but throws for claim, or if validateAndPublishEntry has no rpc
+      const entry = {
+        id: 'sched-claim-no-rpc',
+        story_id: 'story-claim-no-rpc',
+        slot_date: new Date().toISOString().split('T')[0],
+        status: 'ready',
+      };
+
+      let rpcCallCount = 0;
+      const mockSupabase: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          rpcCallCount++;
+          if (fn === 'fn_discover_due_schedule_entries') {
+            return Promise.resolve({ data: [entry], error: null });
+          }
+          if (fn === 'fn_claim_schedule_entry_fenced') {
+            return Promise.resolve({ data: null, error: new Error('Database RPC unavailable') });
+          }
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [], error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+        from: vi.fn().mockReturnValue({
+          insert: vi.fn().mockReturnValue({ error: null }),
+        }),
+      };
+
+      setServiceClient(mockSupabase);
+
+      const results = await validateAndPublishDueStories(new Date());
+      expect(results).toHaveLength(1);
+      expect(results[0].passed).toBe(false);
+      expect(results[0].outcome).toBe('blocked');
+      expect(results[0].checks[0].name).toBe('schedule_claim');
+      expect(results[0].checks[0].reason).toBe('SCHEDULE_CLAIM_FAILED');
+    });
+
+    it('9. validateAndPublishEntry branch ordering ensures blocked claims with null validated_at are reported as blocked, never skipped', async () => {
+      const { validateAndPublishDueStories } = scheduleModule;
+
+      const entry = {
+        id: 'sched-blocked-ineligible',
+        story_id: 'story-blocked-ineligible',
+        slot_date: new Date().toISOString().split('T')[0],
+        status: 'planned',
+      };
+
+      const mockSupabase: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_discover_due_schedule_entries') {
+            return Promise.resolve({ data: [entry], error: null });
+          }
+          if (fn === 'fn_claim_schedule_entry_fenced') {
+            // Blocked claim returns success: false, code: SCHEDULE_INELIGIBLE, validated_at: null
+            return Promise.resolve({
+              data: {
+                success: false,
+                code: 'SCHEDULE_INELIGIBLE',
+                error: 'Schedule entry status planned is not eligible for publication claim',
+                validated_at: null,
+              },
+              error: null,
+            });
+          }
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: [], error: null });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+        from: vi.fn().mockReturnValue({
+          insert: vi.fn().mockReturnValue({ error: null }),
+        }),
+      };
+
+      setServiceClient(mockSupabase);
+
+      const results = await validateAndPublishDueStories(new Date());
+      expect(results).toHaveLength(1);
+      // MUST be blocked, NOT skipped
+      expect(results[0].passed).toBe(false);
+      expect(results[0].outcome).toBe('blocked');
+      expect(results[0].checks[0].name).toBe('schedule_claim');
+      expect(results[0].checks[0].reason).toContain('SCHEDULE_INELIGIBLE');
+    });
+
+    it('10. processPendingPublicationOutbox handles OUTBOX_LEASE_LOST from fn_complete_publication_outbox', async () => {
+      const { processPendingPublicationOutbox } = scheduleModule;
+
+      const outboxItems = [
+        {
+          id: 'outbox-lease-lost',
+          claim_token: 'stale-claim-token',
+          effect_type: 'event_dispatch',
+          payload: { story_id: 'story-1', schedule_id: 'sched-1', version: 1 },
+        },
+      ];
+
+      const mockSupabase: any = {
+        rpc: vi.fn().mockImplementation((fn: string) => {
+          if (fn === 'fn_claim_publication_outbox') {
+            return Promise.resolve({ data: outboxItems, error: null });
+          }
+          if (fn === 'fn_complete_publication_outbox') {
+            return Promise.resolve({
+              data: {
+                success: false,
+                code: 'OUTBOX_LEASE_LOST',
+                error: 'Outbox lease was expired or claimed by another worker',
+              },
+              error: null,
+            });
+          }
+          return Promise.resolve({ data: null, error: null });
+        }),
+      };
+
+      setServiceClient(mockSupabase);
+
+      const summary = await processPendingPublicationOutbox(10);
+      expect(summary.processed).toBe(1);
+      expect(summary.succeeded).toBe(0);
+      expect(summary.failed).toBe(1);
+      expect(summary.details[0].status).toBe('failed');
+      expect(summary.details[0].error).toBe('OUTBOX_LEASE_LOST');
     });
   });
 });
