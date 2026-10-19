@@ -8559,6 +8559,606 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         setServiceClient(null);
       });
     });
+
+    describe('Phase 51.1: Memory-Only Publication Guard (Findings G1 & G2)', () => {
+      const BASE_NOW = new Date('2026-10-19T12:00:00.000Z');
+
+      beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(BASE_NOW);
+        setServiceClient(null);
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+        setServiceClient(null);
+      });
+
+      // ── Finding G1: Lease Timestamp Validation (Tests 1-10) ──────────────
+
+      it('1. valid current lease with matching expected value follows intended memory-only path', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 10000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-ok', title: 'Story G1 OK', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-ok',
+          story_id: 'story-g1-ok',
+          status: 'validated',
+          validated_at: validLease,
+        });
+
+        const token = issuePublicationToken('story-g1-ok');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-ok',
+          scheduleId: 'sched-g1-ok',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        const story = await repo.getStory('story-g1-ok');
+        expect(story?.status).toBe('published');
+        expect(story?.version).toBe(2);
+      });
+
+      it('2. missing lease timestamp is rejected with SCHEDULE_LEASE_LOST and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-missing-ts', title: 'Story Missing TS', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-missing-ts',
+          story_id: 'story-g1-missing-ts',
+          status: 'validated',
+        });
+
+        const token = issuePublicationToken('story-g1-missing-ts');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-missing-ts',
+          scheduleId: 'sched-g1-missing-ts',
+          expectedVersion: 1,
+          expectedValidatedAt: BASE_NOW.toISOString(),
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+        expect(res.error).toContain('missing or null');
+        const story = await repo.getStory('story-g1-missing-ts');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('3. null lease timestamp is rejected with SCHEDULE_LEASE_LOST and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-null-ts', title: 'Story Null TS', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-null-ts',
+          story_id: 'story-g1-null-ts',
+          status: 'validated',
+          validated_at: null as any,
+        });
+
+        const token = issuePublicationToken('story-g1-null-ts');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-null-ts',
+          scheduleId: 'sched-g1-null-ts',
+          expectedVersion: 1,
+          expectedValidatedAt: BASE_NOW.toISOString(),
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+        expect(res.error).toContain('missing or null');
+        const story = await repo.getStory('story-g1-null-ts');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('4. empty lease timestamp is rejected with SCHEDULE_LEASE_LOST and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-empty-ts', title: 'Story Empty TS', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-empty-ts',
+          story_id: 'story-g1-empty-ts',
+          status: 'validated',
+          validated_at: '   ',
+        });
+
+        const token = issuePublicationToken('story-g1-empty-ts');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-empty-ts',
+          scheduleId: 'sched-g1-empty-ts',
+          expectedVersion: 1,
+          expectedValidatedAt: '   ',
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+        expect(res.error).toContain('missing or null');
+        const story = await repo.getStory('story-g1-empty-ts');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('5. invalid timestamp text is rejected with SCHEDULE_LEASE_LOST even when exactly matching expected string', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const invalidDateString = 'not-a-valid-iso-date';
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-invalid-text', title: 'Story Invalid Text', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-invalid-text',
+          story_id: 'story-g1-invalid-text',
+          status: 'validated',
+          validated_at: invalidDateString,
+        });
+
+        const token = issuePublicationToken('story-g1-invalid-text');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-invalid-text',
+          scheduleId: 'sched-g1-invalid-text',
+          expectedVersion: 1,
+          expectedValidatedAt: invalidDateString,
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+        expect(res.error).toContain('invalid or unparseable');
+        const story = await repo.getStory('story-g1-invalid-text');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('6. lease exactly at expiration boundary (5 minutes) is rejected with SCHEDULE_LEASE_EXPIRED', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const exactBoundaryLease = new Date(BASE_NOW.getTime() - 5 * 60 * 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-exact-exp', title: 'Story Exact Exp', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-exact-exp',
+          story_id: 'story-g1-exact-exp',
+          status: 'validated',
+          validated_at: exactBoundaryLease,
+        });
+
+        const token = issuePublicationToken('story-g1-exact-exp');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-exact-exp',
+          scheduleId: 'sched-g1-exact-exp',
+          expectedVersion: 1,
+          expectedValidatedAt: exactBoundaryLease,
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_EXPIRED');
+        expect(res.error).toContain('expired');
+        const story = await repo.getStory('story-g1-exact-exp');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('7. lease just within permitted boundary (4m 59s) succeeds', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const justWithinBoundaryLease = new Date(BASE_NOW.getTime() - 4 * 60 * 1000 - 59 * 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-within-exp', title: 'Story Within Exp', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-within-exp',
+          story_id: 'story-g1-within-exp',
+          status: 'validated',
+          validated_at: justWithinBoundaryLease,
+        });
+
+        const token = issuePublicationToken('story-g1-within-exp');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-within-exp',
+          scheduleId: 'sched-g1-within-exp',
+          expectedVersion: 1,
+          expectedValidatedAt: justWithinBoundaryLease,
+          publishedAt: justWithinBoundaryLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        const story = await repo.getStory('story-g1-within-exp');
+        expect(story?.status).toBe('published');
+        expect(story?.version).toBe(2);
+      });
+
+      it('8. future lease beyond allowed skew (> 10s) is rejected with SCHEDULE_LEASE_EXPIRED', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const excessiveFutureLease = new Date(BASE_NOW.getTime() + 11000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-fut-skew', title: 'Story Future Skew', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-fut-skew',
+          story_id: 'story-g1-fut-skew',
+          status: 'validated',
+          validated_at: excessiveFutureLease,
+        });
+
+        const token = issuePublicationToken('story-g1-fut-skew');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-fut-skew',
+          scheduleId: 'sched-g1-fut-skew',
+          expectedVersion: 1,
+          expectedValidatedAt: excessiveFutureLease,
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_EXPIRED');
+        expect(res.error).toContain('clock-skew');
+        const story = await repo.getStory('story-g1-fut-skew');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('9. permitted small future skew (<= 10s) follows documented policy and succeeds', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const allowedFutureLease = new Date(BASE_NOW.getTime() + 5000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-small-skew', title: 'Story Small Skew', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-small-skew',
+          story_id: 'story-g1-small-skew',
+          status: 'validated',
+          validated_at: allowedFutureLease,
+        });
+
+        const token = issuePublicationToken('story-g1-small-skew');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-small-skew',
+          scheduleId: 'sched-g1-small-skew',
+          expectedVersion: 1,
+          expectedValidatedAt: allowedFutureLease,
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        const story = await repo.getStory('story-g1-small-skew');
+        expect(story?.status).toBe('published');
+        expect(story?.version).toBe(2);
+      });
+
+      it('10. missing, invalid, or mismatched expected lease values are rejected with SCHEDULE_LEASE_LOST', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g1-exp-vals', title: 'Story Expected Values', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g1-exp-vals',
+          story_id: 'story-g1-exp-vals',
+          status: 'validated',
+          validated_at: validLease,
+        });
+
+        const token = issuePublicationToken('story-g1-exp-vals');
+
+        // 10a: Missing expectedValidatedAt
+        const resA = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-exp-vals',
+          scheduleId: 'sched-g1-exp-vals',
+          expectedVersion: 1,
+          expectedValidatedAt: '' as any,
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: issuePublicationToken('story-g1-exp-vals'),
+        });
+        expect(resA.success).toBe(false);
+        expect(resA.code).toBe('SCHEDULE_LEASE_LOST');
+
+        // 10b: Invalid expectedValidatedAt
+        const resB = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-exp-vals',
+          scheduleId: 'sched-g1-exp-vals',
+          expectedVersion: 1,
+          expectedValidatedAt: 'bad-iso-string',
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: issuePublicationToken('story-g1-exp-vals'),
+        });
+        expect(resB.success).toBe(false);
+        expect(resB.code).toBe('SCHEDULE_LEASE_LOST');
+
+        // 10c: Mismatched expectedValidatedAt
+        const resC = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g1-exp-vals',
+          scheduleId: 'sched-g1-exp-vals',
+          expectedVersion: 1,
+          expectedValidatedAt: new Date(BASE_NOW.getTime() - 2000).toISOString(),
+          publishedAt: BASE_NOW.toISOString(),
+          publicationToken: issuePublicationToken('story-g1-exp-vals'),
+        });
+        expect(resC.success).toBe(false);
+        expect(resC.code).toBe('SCHEDULE_LEASE_LOST');
+
+        const story = await repo.getStory('story-g1-exp-vals');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      // ── Finding G2: Strict Schedule/Story Identity Validation (Tests 11-16) ──
+
+      it('11. correct schedule/story identifiers satisfy identity check and succeed', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g2-correct', title: 'Story G2 Correct', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g2-correct',
+          story_id: 'story-g2-correct',
+          status: 'validated',
+          validated_at: validLease,
+        });
+
+        const token = issuePublicationToken('story-g2-correct');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-correct',
+          scheduleId: 'sched-g2-correct',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        const story = await repo.getStory('story-g2-correct');
+        expect(story?.status).toBe('published');
+        expect(story?.version).toBe(2);
+      });
+
+      it('12. different story ID is rejected with SCHEDULE_STORY_MISMATCH and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g2-target', title: 'Target Story', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+          { id: 'story-g2-other', title: 'Other Story', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g2-diff',
+          story_id: 'story-g2-other',
+          status: 'validated',
+          validated_at: validLease,
+        });
+
+        const token = issuePublicationToken('story-g2-target');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-target',
+          scheduleId: 'sched-g2-diff',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_STORY_MISMATCH');
+        const targetStory = await repo.getStory('story-g2-target');
+        expect(targetStory?.status).toBe('ready');
+        expect(targetStory?.version).toBe(1);
+        const otherStory = await repo.getStory('story-g2-other');
+        expect(otherStory?.status).toBe('ready');
+        expect(otherStory?.version).toBe(1);
+      });
+
+      it('13. missing story_id on schedule entry is rejected with SCHEDULE_STORY_MISMATCH and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g2-missing-id', title: 'Story Missing ID', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g2-missing-id',
+          status: 'validated',
+          validated_at: validLease,
+        } as any);
+
+        const token = issuePublicationToken('story-g2-missing-id');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-missing-id',
+          scheduleId: 'sched-g2-missing-id',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_STORY_MISMATCH');
+        const story = await repo.getStory('story-g2-missing-id');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('14. null story_id on schedule entry is rejected with SCHEDULE_STORY_MISMATCH and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g2-null-id', title: 'Story Null ID', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g2-null-id',
+          story_id: null as any,
+          status: 'validated',
+          validated_at: validLease,
+        });
+
+        const token = issuePublicationToken('story-g2-null-id');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-null-id',
+          scheduleId: 'sched-g2-null-id',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_STORY_MISMATCH');
+        const story = await repo.getStory('story-g2-null-id');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('15. empty story_id on schedule entry is rejected with SCHEDULE_STORY_MISMATCH and preserves state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g2-empty-id', title: 'Story Empty ID', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-g2-empty-id',
+          story_id: '   ',
+          status: 'validated',
+          validated_at: validLease,
+        });
+
+        const token = issuePublicationToken('story-g2-empty-id');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-empty-id',
+          scheduleId: 'sched-g2-empty-id',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_STORY_MISMATCH');
+        const story = await repo.getStory('story-g2-empty-id');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+
+      it('16. runtime values with invalid types for story_id are rejected with SCHEDULE_STORY_MISMATCH', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const validLease = new Date(BASE_NOW.getTime() - 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-g2-types', title: 'Story Invalid Types', status: 'ready', publicationStatus: 'ready', version: 1 } as any,
+        ]);
+
+        const token = issuePublicationToken('story-g2-types');
+
+        // 16a: Number story_id
+        repo.setSchedule({
+          id: 'sched-g2-num',
+          story_id: 12345 as any,
+          status: 'validated',
+          validated_at: validLease,
+        });
+        const resNum = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-types',
+          scheduleId: 'sched-g2-num',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: issuePublicationToken('story-g2-types'),
+        });
+        expect(resNum.success).toBe(false);
+        expect(resNum.code).toBe('SCHEDULE_STORY_MISMATCH');
+
+        // 16b: Object story_id
+        repo.setSchedule({
+          id: 'sched-g2-obj',
+          story_id: { id: 'story-g2-types' } as any,
+          status: 'validated',
+          validated_at: validLease,
+        });
+        const resObj = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-types',
+          scheduleId: 'sched-g2-obj',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: issuePublicationToken('story-g2-types'),
+        });
+        expect(resObj.success).toBe(false);
+        expect(resObj.code).toBe('SCHEDULE_STORY_MISMATCH');
+
+        // 16c: Boolean story_id
+        repo.setSchedule({
+          id: 'sched-g2-bool',
+          story_id: true as any,
+          status: 'validated',
+          validated_at: validLease,
+        });
+        const resBool = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-g2-types',
+          scheduleId: 'sched-g2-bool',
+          expectedVersion: 1,
+          expectedValidatedAt: validLease,
+          publishedAt: validLease,
+          publicationToken: issuePublicationToken('story-g2-types'),
+        });
+        expect(resBool.success).toBe(false);
+        expect(resBool.code).toBe('SCHEDULE_STORY_MISMATCH');
+
+        const story = await repo.getStory('story-g2-types');
+        expect(story?.status).toBe('ready');
+        expect(story?.version).toBe(1);
+      });
+    });
   });
 });
 

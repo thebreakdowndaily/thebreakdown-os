@@ -187,13 +187,33 @@ export class MemoryStoryService implements StoryService {
         error: `Schedule entry status is ${scheduleEntry.status}, expected validated`,
       };
     }
-    if (!params.expectedValidatedAt || !scheduleEntry.validated_at) {
+    // Finding G1: Strict lease timestamp validation
+    if (
+      !params.expectedValidatedAt ||
+      typeof params.expectedValidatedAt !== 'string' ||
+      params.expectedValidatedAt.trim() === '' ||
+      !scheduleEntry.validated_at ||
+      typeof scheduleEntry.validated_at !== 'string' ||
+      scheduleEntry.validated_at.trim() === ''
+    ) {
       return {
         success: false,
         code: 'SCHEDULE_LEASE_LOST',
         error: 'Schedule lease validation timestamp is missing or null',
       };
     }
+
+    const expectedTime = Date.parse(params.expectedValidatedAt);
+    const validatedTime = Date.parse(scheduleEntry.validated_at);
+
+    if (Number.isNaN(expectedTime) || Number.isNaN(validatedTime)) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_LOST',
+        error: 'Schedule lease validation timestamp is invalid or unparseable',
+      };
+    }
+
     if (scheduleEntry.validated_at !== params.expectedValidatedAt) {
       return {
         success: false,
@@ -201,18 +221,43 @@ export class MemoryStoryService implements StoryService {
         error: 'Schedule lease was claimed or modified by another worker',
       };
     }
-    if (scheduleEntry.validated_at && Date.now() - new Date(scheduleEntry.validated_at).getTime() >= 5 * 60 * 1000) {
+
+    const nowMs = Date.now();
+    const leaseAgeMs = nowMs - validatedTime;
+    const futureSkewMs = validatedTime - nowMs;
+
+    // Canonical finite lease boundary: age >= 5 minutes is expired (matches migration 033: validated_at <= clock_timestamp() - 5m)
+    if (leaseAgeMs >= 5 * 60 * 1000) {
       return {
         success: false,
         code: 'SCHEDULE_LEASE_EXPIRED',
-        error: 'Schedule lease has expired (> 5 minutes)',
+        error: 'Schedule lease has expired (>= 5 minutes)',
       };
     }
-    if (scheduleEntry.story_id && scheduleEntry.story_id !== params.storyId) {
+
+    // Canonical clock-skew boundary: future timestamp > 10 seconds is strictly invalid (matches migration 033: validated_at > clock_timestamp() + 10s)
+    if (futureSkewMs > 10 * 1000) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_EXPIRED',
+        error: 'Schedule lease timestamp is in the future beyond permitted clock-skew (10s)',
+      };
+    }
+
+    // Finding G2: Strict schedule/story identity validation
+    if (
+      !scheduleEntry.story_id ||
+      typeof scheduleEntry.story_id !== 'string' ||
+      scheduleEntry.story_id.trim() === '' ||
+      !params.storyId ||
+      typeof params.storyId !== 'string' ||
+      params.storyId.trim() === '' ||
+      scheduleEntry.story_id !== params.storyId
+    ) {
       return {
         success: false,
         code: 'SCHEDULE_STORY_MISMATCH',
-        error: 'Schedule entry references a different story_id',
+        error: 'Schedule entry references a different, missing, or invalid story_id',
       };
     }
 
