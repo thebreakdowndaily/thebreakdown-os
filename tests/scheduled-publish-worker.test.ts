@@ -5287,6 +5287,14 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
 
         const memRepo = new MemoryStoryService();
+        const nowIso = new Date().toISOString();
+        memRepo.setSchedule({
+          id: 'sched-mem-p42',
+          story_id: 'story-mem-p42',
+          status: 'validated',
+          validated_at: nowIso,
+        });
+
         await memRepo.saveStory({
           id: 'story-mem-p42',
           slug: 'story-mem-p42',
@@ -5300,7 +5308,7 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         const res = await memRepo.publishScheduledStoryAtomic({
           scheduleId: 'sched-mem-p42',
           storyId: 'story-mem-p42',
-          expectedValidatedAt: new Date().toISOString(),
+          expectedValidatedAt: nowIso,
           expectedVersion: 1,
           publishedStory: { id: 'story-mem-p42', title: 'Memory Story P42' } as any,
           publicationToken: token,
@@ -8299,6 +8307,254 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         expect(resB.code).not.toBe('AUDIT_LOG_FAILED');
         const storyB = await repoB.getStory('story-rpc-lock-err');
         expect(storyB?.status).toBe('review');
+
+        setServiceClient(null);
+      });
+    });
+
+    describe('Phase 50.3: Non-Atomic Fallback Removal & Schedule Integrity', () => {
+      it('1. missing schedule in both memory and database fails closed with SCHEDULE_NOT_FOUND', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-no-sched', title: 'Story Without Schedule', status: 'review', version: 1 } as any,
+        ]);
+
+        const token = issuePublicationToken('story-no-sched');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-no-sched',
+          scheduleId: 'non-existent-schedule-id',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_NOT_FOUND');
+        const story = await repo.getStory('story-no-sched');
+        expect(story?.status).toBe('review');
+      });
+
+      it('2. invalid schedule status is rejected fail-closed with SCHEDULE_NOT_VALIDATED', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-invalid-status', title: 'Story Status', status: 'review', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-invalid-status',
+          story_id: 'story-invalid-status',
+          status: 'queued',
+          validated_at: nowIso,
+        });
+
+        const token = issuePublicationToken('story-invalid-status');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-invalid-status',
+          scheduleId: 'sched-invalid-status',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_NOT_VALIDATED');
+        const story = await repo.getStory('story-invalid-status');
+        expect(story?.status).toBe('review');
+      });
+
+      it('3. mismatched schedule lease timestamp is rejected fail-closed with SCHEDULE_LEASE_LOST', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+        const otherIso = new Date(Date.now() - 10000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-lease-lost', title: 'Story Lease', status: 'review', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-lease-lost',
+          story_id: 'story-lease-lost',
+          status: 'validated',
+          validated_at: nowIso,
+        });
+
+        const token = issuePublicationToken('story-lease-lost');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-lease-lost',
+          scheduleId: 'sched-lease-lost',
+          expectedVersion: 1,
+          expectedValidatedAt: otherIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_LOST');
+        const story = await repo.getStory('story-lease-lost');
+        expect(story?.status).toBe('review');
+      });
+
+      it('4. expired schedule lease (> 5 minutes) is rejected fail-closed with SCHEDULE_LEASE_EXPIRED', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const expiredIso = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-lease-exp', title: 'Story Lease Expired', status: 'review', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-lease-exp',
+          story_id: 'story-lease-exp',
+          status: 'validated',
+          validated_at: expiredIso,
+        });
+
+        const token = issuePublicationToken('story-lease-exp');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-lease-exp',
+          scheduleId: 'sched-lease-exp',
+          expectedVersion: 1,
+          expectedValidatedAt: expiredIso,
+          publishedAt: new Date().toISOString(),
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_LEASE_EXPIRED');
+        const story = await repo.getStory('story-lease-exp');
+        expect(story?.status).toBe('review');
+      });
+
+      it('5. schedule story identity mismatch is rejected fail-closed with SCHEDULE_STORY_MISMATCH', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-real', title: 'Real Story', status: 'review', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-mismatch',
+          story_id: 'story-other',
+          status: 'validated',
+          validated_at: nowIso,
+        });
+
+        const token = issuePublicationToken('story-real');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-real',
+          scheduleId: 'sched-mismatch',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('SCHEDULE_STORY_MISMATCH');
+        const story = await repo.getStory('story-real');
+        expect(story?.status).toBe('review');
+      });
+
+      it('6. legitimate memory-only operation with valid schedule succeeds and mutates in-memory state', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-mem-ok', title: 'Memory OK Story', status: 'review', version: 1 } as any,
+        ]);
+        repo.setSchedule({
+          id: 'sched-mem-ok',
+          story_id: 'story-mem-ok',
+          status: 'validated',
+          validated_at: nowIso,
+        });
+
+        const token = issuePublicationToken('story-mem-ok');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-mem-ok',
+          scheduleId: 'sched-mem-ok',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(true);
+        expect(res.code).toBe('PUBLISHED');
+        const story = await repo.getStory('story-mem-ok');
+        expect(story?.status).toBe('published');
+        expect(story?.version).toBe(2);
+      });
+
+      it('7. database-backed schedule without canonical rpc() fails closed with DATABASE_ERROR and zero writes', async () => {
+        const { MemoryStoryService } = await import('@/services/repositories/memory/story');
+        const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
+        const nowIso = new Date().toISOString();
+
+        const repo = new MemoryStoryService([
+          { id: 'story-no-rpc', title: 'No RPC Story', status: 'review', version: 1 } as any,
+        ]);
+
+        const insertSpy = vi.fn();
+        const updateSpy = vi.fn();
+
+        const mockClientWithoutRpc: any = {
+          from: vi.fn().mockImplementation((table: string) => {
+            if (table === 'editorial_schedule') {
+              return {
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: {
+                    id: 'sched-db-no-rpc',
+                    story_id: 'story-no-rpc',
+                    status: 'validated',
+                    validated_at: nowIso,
+                  },
+                  error: null,
+                }),
+                update: updateSpy,
+              };
+            }
+            if (table === 'publication_gate_log') {
+              return {
+                insert: insertSpy,
+              };
+            }
+            return {};
+          }),
+        };
+
+        setServiceClient(mockClientWithoutRpc);
+
+        const token = issuePublicationToken('story-no-rpc');
+        const res = await repo.publishScheduledStoryAtomic({
+          storyId: 'story-no-rpc',
+          scheduleId: 'sched-db-no-rpc',
+          expectedVersion: 1,
+          expectedValidatedAt: nowIso,
+          publishedAt: nowIso,
+          publicationToken: token,
+        });
+
+        expect(res.success).toBe(false);
+        expect(res.code).toBe('DATABASE_ERROR');
+        expect(res.error).toContain('requires canonical atomic RPC fn_publish_story_fenced');
+        expect(insertSpy).not.toHaveBeenCalled();
+        expect(updateSpy).not.toHaveBeenCalled();
+
+        const story = await repo.getStory('story-no-rpc');
+        expect(story?.status).toBe('review');
+        expect(story?.version).toBe(1);
 
         setServiceClient(null);
       });

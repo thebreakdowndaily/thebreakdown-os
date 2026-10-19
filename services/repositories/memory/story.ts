@@ -172,42 +172,48 @@ export class MemoryStoryService implements StoryService {
       }
     }
 
-    if (scheduleEntry) {
-      if (scheduleEntry.status !== 'validated') {
-        return {
-          success: false,
-          code: 'SCHEDULE_NOT_VALIDATED',
-          error: `Schedule entry status is ${scheduleEntry.status}, expected validated`,
-        };
-      }
-      if (!params.expectedValidatedAt || !scheduleEntry.validated_at) {
-        return {
-          success: false,
-          code: 'SCHEDULE_LEASE_LOST',
-          error: 'Schedule lease validation timestamp is missing or null',
-        };
-      }
-      if (scheduleEntry.validated_at !== params.expectedValidatedAt) {
-        return {
-          success: false,
-          code: 'SCHEDULE_LEASE_LOST',
-          error: 'Schedule lease was claimed or modified by another worker',
-        };
-      }
-      if (scheduleEntry.validated_at && Date.now() - new Date(scheduleEntry.validated_at).getTime() >= 5 * 60 * 1000) {
-        return {
-          success: false,
-          code: 'SCHEDULE_LEASE_EXPIRED',
-          error: 'Schedule lease has expired (> 5 minutes)',
-        };
-      }
-      if (scheduleEntry.story_id && scheduleEntry.story_id !== params.storyId) {
-        return {
-          success: false,
-          code: 'SCHEDULE_STORY_MISMATCH',
-          error: 'Schedule entry references a different story_id',
-        };
-      }
+    if (!scheduleEntry) {
+      return {
+        success: false,
+        code: 'SCHEDULE_NOT_FOUND',
+        error: `Schedule entry ${params.scheduleId} not found`,
+      };
+    }
+
+    if (scheduleEntry.status !== 'validated') {
+      return {
+        success: false,
+        code: 'SCHEDULE_NOT_VALIDATED',
+        error: `Schedule entry status is ${scheduleEntry.status}, expected validated`,
+      };
+    }
+    if (!params.expectedValidatedAt || !scheduleEntry.validated_at) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_LOST',
+        error: 'Schedule lease validation timestamp is missing or null',
+      };
+    }
+    if (scheduleEntry.validated_at !== params.expectedValidatedAt) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_LOST',
+        error: 'Schedule lease was claimed or modified by another worker',
+      };
+    }
+    if (scheduleEntry.validated_at && Date.now() - new Date(scheduleEntry.validated_at).getTime() >= 5 * 60 * 1000) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_EXPIRED',
+        error: 'Schedule lease has expired (> 5 minutes)',
+      };
+    }
+    if (scheduleEntry.story_id && scheduleEntry.story_id !== params.storyId) {
+      return {
+        success: false,
+        code: 'SCHEDULE_STORY_MISMATCH',
+        error: 'Schedule entry references a different story_id',
+      };
     }
 
     // 2. Resolve and verify story entity

@@ -92,4 +92,42 @@ describe('Supabase Client Provenance & Test Isolation', () => {
       }
     }
   });
+
+  it('6. explicit injection, reset, and reinjection works without stale client reuse across test doubles', () => {
+    const mockClientA = { id: 'client-A', rpc: vi.fn() } as any;
+    const mockClientB = { id: 'client-B', rpc: vi.fn() } as any;
+
+    // First injection
+    setServiceClient(mockClientA);
+    expect(getInjectedServiceClient()).toBe(mockClientA);
+    expect(getServiceClient()).toBe(mockClientA);
+
+    // Reset
+    setServiceClient(null);
+    expect(getInjectedServiceClient()).toBeNull();
+
+    // Second injection with different mock
+    setServiceClient(mockClientB);
+    expect(getInjectedServiceClient()).toBe(mockClientB);
+    expect(getServiceClient()).toBe(mockClientB);
+    expect(getInjectedServiceClient()).not.toBe(mockClientA);
+
+    // Final reset
+    setServiceClient(null);
+    expect(getInjectedServiceClient()).toBeNull();
+  });
+
+  it('7. unconfigured environment uses inert placeholder URLs and does not misidentify as injected', () => {
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+    delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    setServiceClient(null);
+    expect(getInjectedServiceClient()).toBeNull();
+
+    const client = getServiceClient();
+    expect(client).toBeDefined();
+    // Provenance requirement: lazy client created with inert placeholder must NOT be reported as an injected test client
+    expect(getInjectedServiceClient()).toBeNull();
+  });
 });
