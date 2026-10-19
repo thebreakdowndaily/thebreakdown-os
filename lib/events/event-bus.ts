@@ -1,7 +1,7 @@
 import type { Event, EventType } from '@/types/canonical';
 import { sanitizeDiagnosticError, createSanitizedError } from '@/lib/security/diagnostic-sanitizer';
 
-export type EventHandler = (event: Event) => void | Promise<void>;
+export type EventHandler = (event: Event, signal?: AbortSignal) => void | Promise<void>;
 
 const MAX_HISTORY = 500;
 
@@ -20,15 +20,32 @@ export interface IdempotentHandlerOptions {
 }
 
 /**
- * Wraps an event handler with idempotency enforcement.
+ * Wraps an event handler with in-memory idempotency enforcement and concurrency control.
  *
- * Guarantees:
- * 1. Concurrent In-Flight Deduplication: Multiple concurrent deliveries with the same key
- *    await the single running execution rather than executing concurrently.
- * 2. Strict LRU Capacity: Enforces maxEntries via true LRU eviction (expired entries first,
- *    then least-recently-used).
- * 3. Failure Eviction: Failed or timed-out handler executions evict the key so retries can execute.
- * 4. Success Memorization: Successful completions are recorded with TTL.
+ * Operational Semantics:
+ * 1. Concurrent Deduplication & Failure Propagation:
+ *    Multiple concurrent deliveries with the same key join the single active in-flight
+ *    execution. If the execution succeeds, all joined callers resolve. If it fails, all
+ *    joined callers observe the failure faithfully (no swallowed rejections).
+ * 2. Timeout & Overlapping Execution Prevention:
+ *    A timeout does not cancel an arbitrary JavaScript promise. When timeoutMs expires,
+ *    an AbortSignal is signaled and the awaiting caller rejects with a timeout error.
+ *    However, the in-flight deduplication record remains held until the underlying
+ *    handler promise actually settles. This ensures that work from a timed-out attempt
+ *    cannot overlap with an immediate retry.
+ * 3. Cooperative Cancellation:
+ *    Handlers accepting the optional AbortSignal can abort network requests or database
+ *    operations immediately upon timeout, settling the in-flight lock promptly.
+ * 4. Strict LRU Capacity:
+ *    Enforces maxEntries via true LRU eviction (expired entries first, then least-recently-used).
+ * 5. Process Termination & Durability Boundary:
+ *    In-memory tracking is local to the current process runtime and does not survive restarts.
+ *    Authoritative at-least-once delivery, retry scheduling, and cross-restart durability
+ *    are guaranteed by the PostgreSQL transactional outbox.
+ * 6. Partial Success:
+ *    The in-memory wrapper does not rollback external side effects if a handler fails mid-way.
+ *    Handlers must either be naturally idempotent (such as cache invalidations) or provide
+ *    their own atomic transactions.
  */
 export function createIdempotentHandler(
   handler: EventHandler,
@@ -55,7 +72,7 @@ export function createIdempotentHandler(
     }
   };
 
-  return async (event: Event): Promise<void> => {
+  return async (event: Event, signal?: AbortSignal): Promise<void> => {
     const key =
       options.getIdempotencyKey?.(event) ??
       (event.payload?.idempotencyKey as string | undefined) ??
@@ -64,14 +81,28 @@ export function createIdempotentHandler(
     const now = Date.now();
 
     if (key) {
-      // Check in-flight executions: deduplicate concurrent delivery within this runtime
+      // 1. Check in-flight executions: joined callers await the running execution
       const activePromise = inFlight.get(key);
       if (activePromise) {
-        await activePromise;
+        if (timeoutMs > 0) {
+          let joinTimerId: ReturnType<typeof setTimeout> | undefined;
+          try {
+            const timeoutPromise = new Promise<never>((_, reject) => {
+              joinTimerId = setTimeout(() => {
+                reject(new Error(`Handler execution timed out after ${timeoutMs}ms`));
+              }, timeoutMs);
+            });
+            await Promise.race([activePromise, timeoutPromise]);
+          } finally {
+            if (joinTimerId) clearTimeout(joinTimerId);
+          }
+        } else {
+          await activePromise;
+        }
         return;
       }
 
-      // Check memorized processed keys: deduplicate completed deliveries
+      // 2. Check memorized processed keys: deduplicate completed deliveries
       const lastSeen = processedKeys.get(key);
       if (lastSeen !== undefined) {
         if (now - lastSeen < ttlMs) {
@@ -85,21 +116,29 @@ export function createIdempotentHandler(
       }
     }
 
-    const task = (async () => {
-      let timerId: ReturnType<typeof setTimeout> | undefined;
-      try {
-        const handlerPromise = Promise.resolve(handler(event));
-        if (timeoutMs > 0) {
-          const timeoutPromise = new Promise<never>((_, reject) => {
-            timerId = setTimeout(() => {
-              reject(new Error(`Handler execution timed out after ${timeoutMs}ms`));
-            }, timeoutMs);
-          });
-          await Promise.race([handlerPromise, timeoutPromise]);
-        } else {
-          await handlerPromise;
-        }
+    const controller = new AbortController();
+    if (signal) {
+      if (signal.aborted) {
+        controller.abort(signal.reason);
+      } else {
+        signal.addEventListener('abort', () => controller.abort(signal.reason), { once: true });
+      }
+    }
 
+    let timerId: ReturnType<typeof setTimeout> | undefined;
+
+    // Start raw handler execution, passing the abort signal for cooperative cancellation.
+    const rawHandlerPromise = (async () => {
+      await handler(event, controller.signal);
+    })();
+
+    // In-flight settlement promise:
+    // Tracks the underlying side effect until it finishes (resolves or rejects).
+    // It keeps `key` locked in `inFlight` until the underlying work actually settles,
+    // guaranteeing that immediate retries cannot overlap with still-running work.
+    const inFlightPromise = (async () => {
+      try {
+        await rawHandlerPromise;
         if (key) {
           prune(Date.now());
           processedKeys.set(key, Date.now());
@@ -110,24 +149,36 @@ export function createIdempotentHandler(
         }
         throw err;
       } finally {
-        if (timerId) clearTimeout(timerId);
+        if (key) {
+          inFlight.delete(key);
+        }
+        if (timerId) {
+          clearTimeout(timerId);
+        }
       }
     })();
 
+    // Attach silent rejection handler to inFlightPromise to suppress V8 unhandledRejection
+    // warnings when no caller is awaiting at the precise instant of failure.
+    // NOTE: This does NOT mutate inFlightPromise itself; callers awaiting inFlightPromise
+    // will still receive the rejection faithfully.
+    inFlightPromise.catch(() => {});
+
     if (key) {
-      // Attach a silent catch handler to avoid unhandledRejection events in Node/V8
-      inFlight.set(
-        key,
-        task.catch(() => {}),
-      );
+      inFlight.set(key, inFlightPromise);
     }
 
-    try {
-      await task;
-    } finally {
-      if (key) {
-        inFlight.delete(key);
-      }
+    // For the primary caller, apply timeoutMs if configured
+    if (timeoutMs > 0) {
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timerId = setTimeout(() => {
+          controller.abort(new Error(`Handler execution timed out after ${timeoutMs}ms`));
+          reject(new Error(`Handler execution timed out after ${timeoutMs}ms`));
+        }, timeoutMs);
+      });
+      await Promise.race([inFlightPromise, timeoutPromise]);
+    } else {
+      await inFlightPromise;
     }
   };
 }

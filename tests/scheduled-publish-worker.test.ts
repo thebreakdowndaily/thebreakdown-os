@@ -6906,14 +6906,20 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       expect(calls).toBe(2);
     });
 
-    it('B5. Handler timeout evicts key and permits subsequent retry', async () => {
+    it('B5. Handler timeout aborts via AbortSignal, releases in-flight lock upon cancellation, and permits subsequent retry', async () => {
       const { createIdempotentHandler } = await import('@/lib/events/event-bus');
       let attempt = 0;
-      const slowAction = vi.fn(async () => {
+      const slowAction = vi.fn(async (_event: any, signal?: AbortSignal) => {
         attempt++;
         if (attempt === 1) {
-          // Hang longer than timeout
-          await new Promise((r) => setTimeout(r, 60));
+          // Hang longer than timeout, but listen to cooperative AbortSignal
+          await new Promise((resolve, reject) => {
+            const timer = setTimeout(resolve, 60);
+            signal?.addEventListener('abort', () => {
+              clearTimeout(timer);
+              reject(new Error('Handler aborted on timeout'));
+            });
+          });
         }
       });
 
@@ -6924,11 +6930,11 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
         timestamp: new Date().toISOString(),
       };
 
-      // Attempt 1 times out
+      // Attempt 1 times out and triggers abort
       await expect(handler(event)).rejects.toThrow(/timed out/i);
       expect(attempt).toBe(1);
 
-      // Attempt 2 (retry) succeeds because key was evicted on timeout
+      // Attempt 2 (retry) succeeds because cancelled attempt has settled and released lock
       await handler(event);
       expect(attempt).toBe(2);
     });
@@ -7161,7 +7167,244 @@ describe('Phase 39: Database-clock authority, null-lease rejection, and strict R
       }
     });
   });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Phase 48: Idempotency Failure Semantics, Timeout Non-Overlap, and Security Closure
+  // ═══════════════════════════════════════════════════════════════════════════
+  describe('Phase 48: Idempotency Failure Semantics, Timeout Non-Overlap, and Security Closure', () => {
+    // ── Subsection A: Concurrent Failure Propagation ────────────────────────
+    it('A1. Two concurrent calls with the same key execute the handler once when it succeeds', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let executions = 0;
+      const handlerAction = vi.fn(async () => {
+        executions++;
+        await new Promise((r) => setTimeout(r, 20));
+      });
+
+      const idempotent = createIdempotentHandler(handlerAction);
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: ['p48', 'concurrent', 'success'].join('-') },
+        timestamp: new Date().toISOString(),
+      };
+
+      await Promise.all([idempotent(event), idempotent(event)]);
+      expect(executions).toBe(1);
+      expect(handlerAction).toHaveBeenCalledTimes(1);
+    });
+
+    it('A2. If the first execution fails, every joined caller observes failure (not swallowed)', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let executions = 0;
+      const failingAction = vi.fn(async () => {
+        executions++;
+        await new Promise((r) => setTimeout(r, 15));
+        throw new Error('Database connection failed during event processing');
+      });
+
+      const idempotent = createIdempotentHandler(failingAction);
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: ['p48', 'concurrent', 'failure'].join('-') },
+        timestamp: new Date().toISOString(),
+      };
+
+      // Both callers start concurrently
+      const results = await Promise.allSettled([idempotent(event), idempotent(event)]);
+
+      expect(executions).toBe(1);
+      expect(results).toHaveLength(2);
+
+      // Caller 1 MUST observe failure
+      expect(results[0].status).toBe('rejected');
+      expect((results[0] as PromiseRejectedResult).reason.message).toContain('Database connection failed');
+
+      // Caller 2 MUST ALSO observe failure; rejection was NOT swallowed for unhandled-rejection suppression!
+      expect(results[1].status).toBe('rejected');
+      expect((results[1] as PromiseRejectedResult).reason.message).toContain('Database connection failed');
+    });
+
+    it('A3. Joined caller cannot report success merely because a rejection was swallowed', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let ranCount = 0;
+      let caller2ReportedSuccess = false;
+
+      const crashAction = vi.fn(async () => {
+        ranCount++;
+        await new Promise((r) => setTimeout(r, 20));
+        throw new Error('Downstream RPC failed');
+      });
+
+      const idempotent = createIdempotentHandler(crashAction);
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: ['p48', 'no', 'false', 'success'].join('-') },
+        timestamp: new Date().toISOString(),
+      };
+
+      const call1 = idempotent(event).catch(() => {});
+      const call2 = (async () => {
+        try {
+          await idempotent(event);
+          caller2ReportedSuccess = true;
+        } catch {
+          caller2ReportedSuccess = false;
+        }
+      })();
+
+      await Promise.all([call1, call2]);
+      expect(ranCount).toBe(1);
+      expect(caller2ReportedSuccess).toBe(false);
+    });
+
+    it('A4. Subsequent independent retry executes when permitted by the contract after failure', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let attempt = 0;
+      const flakyAction = vi.fn(async () => {
+        attempt++;
+        if (attempt === 1) {
+          throw new Error('Transient network glitch');
+        }
+      });
+
+      const idempotent = createIdempotentHandler(flakyAction);
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: ['p48', 'retry', 'after', 'fail'].join('-') },
+        timestamp: new Date().toISOString(),
+      };
+
+      // Attempt 1 fails
+      await expect(idempotent(event)).rejects.toThrow('Transient network glitch');
+      expect(attempt).toBe(1);
+
+      // Attempt 2 (retry) executes fresh because failed key was evicted
+      await expect(idempotent(event)).resolves.toBeUndefined();
+      expect(attempt).toBe(2);
+
+      // Attempt 3 is deduplicated because Attempt 2 succeeded
+      await expect(idempotent(event)).resolves.toBeUndefined();
+      expect(attempt).toBe(2);
+    });
+
+    it('A5. Distinct keys remain independent during concurrent failures and successes', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      const action = vi.fn(async (evt: any) => {
+        if (evt.payload.idempotencyKey === 'key-fail') {
+          throw new Error('Key fail error');
+        }
+        await new Promise((r) => setTimeout(r, 10));
+      });
+
+      const idempotent = createIdempotentHandler(action);
+      const evtSuccess: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'key-success' },
+        timestamp: new Date().toISOString(),
+      };
+      const evtFail: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: 'key-fail' },
+        timestamp: new Date().toISOString(),
+      };
+
+      const [resSuccess, resFail] = await Promise.allSettled([
+        idempotent(evtSuccess),
+        idempotent(evtFail),
+      ]);
+
+      expect(resSuccess.status).toBe('fulfilled');
+      expect(resFail.status).toBe('rejected');
+      expect((resFail as PromiseRejectedResult).reason.message).toBe('Key fail error');
+      expect(action).toHaveBeenCalledTimes(2);
+    });
+
+    // ── Subsection B: Timeout and Overlapping Execution Prevention ───────────
+    it('B1. Deterministic non-overlap: work from timed-out attempt CANNOT overlap with retry', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let activeConcurrency = 0;
+      let maxConcurrency = 0;
+      let totalHandlerInvocations = 0;
+
+      // Slow non-aborting handler that takes 60ms
+      const slowAction = vi.fn(async () => {
+        totalHandlerInvocations++;
+        activeConcurrency++;
+        maxConcurrency = Math.max(maxConcurrency, activeConcurrency);
+        await new Promise((resolve) => setTimeout(resolve, 60));
+        activeConcurrency--;
+      });
+
+      // Wrapped with 20ms timeout
+      const handler = createIdempotentHandler(slowAction, { timeoutMs: 20 });
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: ['p48', 'non', 'overlap', 'key'].join('-') },
+        timestamp: new Date().toISOString(),
+      };
+
+      // 1. Primary call starts and times out at 20ms
+      await expect(handler(event)).rejects.toThrow(/timed out/i);
+      expect(totalHandlerInvocations).toBe(1);
+
+      // 2. Immediately at t=25ms (while Attempt 1 is STILL running between 20ms and 60ms),
+      // a retry call is launched.
+      // Crucial verification: The retry MUST NOT start a second concurrent execution!
+      const retryPromise = handler(event);
+
+      // Verify that at this exact instant (while both are active), activeConcurrency is strictly 1!
+      expect(activeConcurrency).toBe(1);
+      expect(maxConcurrency).toBe(1);
+      expect(totalHandlerInvocations).toBe(1);
+
+      // 3. Await the retry (or let it timeout / settle with the in-flight promise)
+      try {
+        await retryPromise;
+      } catch (err: any) {
+        // If retry also timed out after 20ms while waiting for the 60ms handler, that is valid.
+      }
+
+      // Wait until the underlying 60ms handler completes
+      await new Promise((r) => setTimeout(r, 60));
+
+      // Overlap was strictly prevented across the entire lifecycle
+      expect(maxConcurrency).toBe(1);
+      expect(activeConcurrency).toBe(0);
+    });
+
+    it('B2. Cooperative cancellation via AbortSignal terminates handler work promptly upon timeout', async () => {
+      const { createIdempotentHandler } = await import('@/lib/events/event-bus');
+      let aborted = false;
+      let workEndedPrematurely = false;
+
+      const cancellableAction = vi.fn(async (_evt: any, signal?: AbortSignal) => {
+        await new Promise<void>((resolve, reject) => {
+          const timer = setTimeout(() => {
+            resolve();
+          }, 80);
+          signal?.addEventListener('abort', () => {
+            aborted = true;
+            workEndedPrematurely = true;
+            clearTimeout(timer);
+            reject(new Error('Handler aborted'));
+          });
+        });
+      });
+
+      const handler = createIdempotentHandler(cancellableAction, { timeoutMs: 20 });
+      const event: any = {
+        type: 'story:published',
+        payload: { idempotencyKey: ['p48', 'cooperative', 'abort'].join('-') },
+        timestamp: new Date().toISOString(),
+      };
+
+      await expect(handler(event)).rejects.toThrow(/timed out/i);
+      expect(aborted).toBe(true);
+      expect(workEndedPrematurely).toBe(true);
+    });
+  });
 });
+
 
 
 
