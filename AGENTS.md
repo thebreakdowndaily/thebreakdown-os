@@ -82,8 +82,9 @@ The root `test` script is a manually chained selection, not proof every reposito
 - Relevant security, publication, database, SEO, or rendering contracts were checked.
 - The final diff contains no unrelated or generated noise.
 - Docs/ADRs are updated when the supported contract changes.
-- Reports distinguish passed, failed, skipped, unrun, and pre-existing failures.
-- Git/PR/deployment status is reported truthfully.
+- Reports distinguish passed, failed, skipped, unrun, blocked, and pre-existing failures; a skipped or early-returned test is never described as a pass.
+- Git/PR/deployment status is reported truthfully, against the exact final commit SHA.
+- Before declaring any non-trivial task complete, follow the mandatory [Evidence-First Completion & Adversarial Verification skill](.agents/skills/evidence-first-completion/SKILL.md). It is a completion gate, not optional advice. If the skill cannot be loaded, apply its acceptance checks inline and report the missing artifact.
 
 **Operating principle:** Optimize for low change propagation, clear module ownership, fast relevant verification, and correctness—not for files moved or abstractions introduced.
 
