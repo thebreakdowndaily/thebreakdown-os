@@ -8,9 +8,12 @@
  * 4. Persistence failure triggers transactional rollback: version does NOT advance, audit claims rolled back.
  * 5. Operating in read-only degraded mode blocks mutations fail-closed.
  * 6. Executed against isolated staging database (lvfovvidtowadmnggzzf), NOT production.
+ * 7. Live opt-in runs use isolated row IDs and enforce rigorous post-test cleanup verification.
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { createClient } from '@supabase/supabase-js';
+import * as crypto from 'crypto';
 import { SupabaseStateRepository, SNAPSHOT_ROW_ID } from '@/services/intelligence/newsroom/persistence/supabase';
 import {
   NewsroomIntelligenceCore,
@@ -27,10 +30,49 @@ import path from 'path';
 dotenv.config({ path: path.resolve(process.cwd(), '.env.preview.local') });
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-// Use isolated staging credentials from environment
-const stagingUrl = process.env.STAGING_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const stagingKey = process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+// Strictly require dedicated staging credentials; never fall back to NEXT_PUBLIC_ or generic production variables
+const stagingUrl = process.env.STAGING_SUPABASE_URL || '';
+const stagingKey = process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || '';
+const APPROVED_STAGING_PROJECT_REF = 'lvfovvidtowadmnggzzf';
 
+function createDisposableLocalDatabase() {
+  const store = new Map<string, { id: string; metric_value: number; metadata: any; recorded_at?: string }>();
+  return {
+    from: (_table: string) => ({
+      select: (_cols?: string) => ({
+        eq: (_col: string, val: any) => ({
+          maybeSingle: async () => {
+            const row = store.get(String(val));
+            if (!row) return { data: null, error: null };
+            return { data: { ...row }, error: null };
+          },
+        }),
+      }),
+      insert: (record: any) => ({
+        select: async () => {
+          store.set(String(record.id), { ...record });
+          return { data: [{ ...record }], error: null };
+        },
+      }),
+      update: (updates: any) => ({
+        eq: (_col1: string, idVal: any) => ({
+          eq: (_col2: string, verVal: any) => ({
+            select: async () => {
+              const row = store.get(String(idVal));
+              if (row && Number(row.metric_value) === Number(verVal)) {
+                row.metric_value = updates.metric_value;
+                row.metadata = updates.metadata;
+                row.recorded_at = updates.recorded_at;
+                return { data: [{ ...row }], error: null };
+              }
+              return { data: [], error: null };
+            },
+          }),
+        }),
+      }),
+    }),
+  };
+}
 
 function createBaselineTestState(): NewsroomPersistedState {
   const signalId = 'sig-durability-test-001';
@@ -123,62 +165,102 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
     NewsroomAuditService.clear();
   });
 
-  // ── 1. Authoritative Staging Database Integration ─────────────────────────────
-  it('commits mutation to staging database and survives fresh read in new instance', async () => {
-    if (!stagingUrl || !stagingKey || stagingUrl.includes('dummy')) {
-      console.warn('Skipping live staging test: STAGING_SUPABASE_URL not configured');
-      return;
+  // ── 1. Authoritative Persistence Integration (Local Disposable Default, Opt-In Live Staging) ──
+  it('commits mutation to authoritative database and survives fresh read in new instance', async () => {
+    const isLiveOptIn = process.env.RUN_LIVE_STAGING_TESTS === 'true';
+
+    if (isLiveOptIn) {
+      if (!stagingUrl || !stagingKey || stagingUrl.includes('dummy')) {
+        console.warn('Skipping live staging test: RUN_LIVE_STAGING_TESTS=true but STAGING_SUPABASE_URL or STAGING_SUPABASE_SERVICE_ROLE_KEY not configured');
+        return;
+      }
+      // Strictly verify target project is approved staging reference to prevent accidental production mutation
+      if (!stagingUrl.includes(APPROVED_STAGING_PROJECT_REF)) {
+        throw new Error(
+          `Security violation: STAGING_SUPABASE_URL target does not match approved staging project (${APPROVED_STAGING_PROJECT_REF}). Live tests refuse to execute against non-staging environments.`
+        );
+      }
     }
 
-    // Repository A: seed initial state
-    const repoA = new SupabaseStateRepository({ url: stagingUrl, key: stagingKey });
-    const initialState = createBaselineTestState();
-    await repoA.save(initialState);
+    // Isolate live test executions to a unique row ID so they never collide with real staging data
+    const testRowId = isLiveOptIn ? crypto.randomUUID() : SNAPSHOT_ROW_ID;
+    const localDb = isLiveOptIn ? null : createDisposableLocalDatabase();
 
-    // Initialize core over repoA
-    const core = NewsroomIntelligenceCore.resetInstance(repoA);
-    await core.ensureLoaded();
+    // Create client for live staging cleanup if opted in
+    const liveClient = isLiveOptIn
+      ? createClient(stagingUrl, stagingKey, { auth: { persistSession: false }, db: { schema: 'newsroom' } })
+      : null;
 
-    const deskService = new NewsroomDeskService(core);
+    try {
+      // Repository A: seed initial state with isolated row ID
+      const repoA = isLiveOptIn
+        ? new SupabaseStateRepository({ url: stagingUrl, key: stagingKey, rowId: testRowId })
+        : new SupabaseStateRepository({ client: localDb, rowId: testRowId });
+      const initialState = createBaselineTestState();
+      await repoA.save(initialState);
 
-    // Perform real editorial triage action: ESCALATE to P0
-    const triageResult = await deskService.executeTriageAction(
-      {
-        signalId: 'sig-durability-test-001',
-        action: 'ESCALATE',
-        escalatedPriority: 'P0',
-        note: 'High-impact policy decision with major manufacturing implications',
-      },
-      { id: 'editor-101', role: 'managing_editor', name: 'Lead Technology Editor' }
-    );
+      // Initialize core over repoA
+      const core = NewsroomIntelligenceCore.resetInstance(repoA);
+      await core.ensureLoaded();
 
+      const deskService = new NewsroomDeskService(core);
 
-    expect(triageResult.success).toBe(true);
-    expect(triageResult.item.priority).toBe('P0');
-    expect(triageResult.item.version).toBe(2);
+      // Perform real editorial triage action: ESCALATE to P0
+      const triageResult = await deskService.executeTriageAction(
+        {
+          signalId: 'sig-durability-test-001',
+          action: 'ESCALATE',
+          escalatedPriority: 'P0',
+          note: 'High-impact policy decision with major manufacturing implications',
+        },
+        { id: 'editor-101', role: 'managing_editor', name: 'Lead Technology Editor' }
+      );
 
-    // Verify durability: Create brand new Repository B with no local cache
-    const repoB = new SupabaseStateRepository({ url: stagingUrl, key: stagingKey });
-    const loadedState = await repoB.load();
+      expect(triageResult.success).toBe(true);
+      expect(triageResult.item.priority).toBe('P0');
+      expect(triageResult.item.version).toBe(2);
 
-    expect(loadedState).not.toBeNull();
-    const persistedSignal = loadedState!.signals.find((s) => s.id === 'sig-durability-test-001');
-    expect(persistedSignal).toBeDefined();
-    expect(persistedSignal!.priority).toBe('P0');
-    expect(persistedSignal!.version).toBe(2);
+      // Verify durability: Create brand new Repository B with no local cache
+      const repoB = isLiveOptIn
+        ? new SupabaseStateRepository({ url: stagingUrl, key: stagingKey, rowId: testRowId })
+        : new SupabaseStateRepository({ client: localDb, rowId: testRowId });
+      const loadedState = await repoB.load();
 
-    // Verify audit record was durably written to DB
-    const persistedAudit = loadedState!.audit.find(
-      (a) => a.signalId === 'sig-durability-test-001' && a.action === 'ESCALATE'
-    );
-    expect(persistedAudit).toBeDefined();
-    expect(persistedAudit!.action).toBe('ESCALATE');
-    expect(
-      persistedAudit!.actorId === 'editor-101' ||
-        persistedAudit!.actorName === 'Lead Technology Editor'
-    ).toBe(true);
-  });
+      expect(loadedState).not.toBeNull();
+      const persistedSignal = loadedState!.signals.find((s) => s.id === 'sig-durability-test-001');
+      expect(persistedSignal).toBeDefined();
+      expect(persistedSignal!.priority).toBe('P0');
+      expect(persistedSignal!.version).toBe(2);
 
+      // Verify audit record was durably written to DB
+      const persistedAudit = loadedState!.audit.find(
+        (a) => a.signalId === 'sig-durability-test-001' && a.action === 'ESCALATE'
+      );
+      expect(persistedAudit).toBeDefined();
+      expect(persistedAudit!.action).toBe('ESCALATE');
+      expect(
+        persistedAudit!.actorId === 'editor-101' ||
+          persistedAudit!.actorName === 'Lead Technology Editor'
+      ).toBe(true);
+    } finally {
+      if (isLiveOptIn && liveClient) {
+        // Clean up test row in finally block and verify cleanup completed
+        const { error: delError } = await liveClient
+          .from('pipeline_metrics')
+          .delete()
+          .eq('id', testRowId);
+        if (delError) {
+          console.error(`Failed to clean up test row ${testRowId}:`, delError.message);
+        }
+        const verifyClean = await liveClient
+          .from('pipeline_metrics')
+          .select('id')
+          .eq('id', testRowId)
+          .maybeSingle();
+        expect(verifyClean.data).toBeNull();
+      }
+    }
+  }, 20000);
 
   // ── 2. Forced Connection Failure & Atomic Rollback ───────────────────────────
   it('rolls back in-memory signal state and audit log when persistence fails', async () => {
@@ -218,7 +300,6 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
         },
         { id: 'editor-101', role: 'managing_editor', name: 'Lead Editor' }
       )
-
     ).rejects.toThrow(NewsroomPersistenceError);
 
     // Verify state was rolled back in memory

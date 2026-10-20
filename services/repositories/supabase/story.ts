@@ -1,6 +1,7 @@
 import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
 import { db } from '@/lib/api-v2';
-import type { StoryService } from '../../interfaces/story';
+import { getServiceClient } from '@/supabase/client';
+import type { StoryService, PublishScheduledStoryAtomicParams, PublishScheduledStoryAtomicResult } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
@@ -11,6 +12,42 @@ const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 
 function isUuid(value: string): boolean {
   return UUID_PATTERN.test(value);
+}
+
+export function isValidIsoTimestampWithTimezone(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const str = value.trim();
+  if (!str) return false;
+
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(?:Z|([+-]\d{2})(?::?(\d{2}))?)$/i.exec(str);
+  if (!match) return false;
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10);
+  const day = parseInt(match[3], 10);
+  const hour = parseInt(match[4], 10);
+  const min = parseInt(match[5], 10);
+  const sec = parseInt(match[6], 10);
+
+  if (month < 1 || month > 12) return false;
+  if (hour < 0 || hour > 23) return false;
+  if (min < 0 || min > 59) return false;
+  if (sec < 0 || sec > 59) return false;
+
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  if (day < 1 || day > daysInMonth) return false;
+
+  if (match[7] !== undefined) {
+    const tzHour = Math.abs(parseInt(match[7], 10));
+    if (tzHour > 23) return false;
+  }
+  if (match[8] !== undefined) {
+    const tzMin = parseInt(match[8], 10);
+    if (tzMin < 0 || tzMin > 59) return false;
+  }
+
+  const time = new Date(str).getTime();
+  return !isNaN(time);
 }
 
 export class SupabaseStoryRepository implements StoryService {
@@ -50,7 +87,7 @@ export class SupabaseStoryRepository implements StoryService {
     return data ? rowToStory(data) : undefined;
   }
 
-  async saveStory(story: Story, options?: { publicationToken?: string }) {
+  async saveStory(story: Story, options?: { publicationToken?: string; expectedVersion?: number }) {
     // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
     if (story.status === 'published' || story.publicationStatus === 'published') {
       const token = options?.publicationToken || (story as any)._publicationToken;
@@ -61,9 +98,305 @@ export class SupabaseStoryRepository implements StoryService {
       }
     }
 
+    if (options?.expectedVersion !== undefined) {
+      return this.saveStoryOCC(story, options.expectedVersion, options);
+    }
+
     const { data, error } = await db().from('stories').upsert(rowFromStory(story)).select().single();
     if (error) throw error;
     return rowToStory(data);
+  }
+
+  async saveStoryOCC(story: Story, expectedVersion: number, options?: { publicationToken?: string }): Promise<Story> {
+    if (story.status === 'published' || story.publicationStatus === 'published') {
+      const token = options?.publicationToken || (story as any)._publicationToken;
+      if (!token || !consumePublicationToken(token, story.id)) {
+        throw new DirectPublicationForbiddenError(
+          `Direct saveStoryOCC with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
+        );
+      }
+    }
+
+    const row = rowFromStory(story);
+    row.version = (expectedVersion || 0) + 1;
+
+    let query = db()
+      .from('stories')
+      .update(row)
+      .eq('id', story.id)
+      .eq('version', expectedVersion || 0);
+
+    if (story.status === 'published') {
+      query = query.neq('status', 'published');
+    }
+
+    const { data, error } = await query.select().maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error(`OCC_FAILURE: Story ${story.id} has been modified concurrently or already published.`);
+    }
+
+    return rowToStory(data);
+  }
+
+  async publishScheduledStoryAtomic(
+    params: PublishScheduledStoryAtomicParams,
+  ): Promise<PublishScheduledStoryAtomicResult> {
+    if (!params.publicationToken || !consumePublicationToken(params.publicationToken, params.storyId)) {
+      return {
+        success: false,
+        code: 'TOKEN_INVALID',
+        error: `Invalid or already consumed publication token for story ${params.storyId}`,
+      };
+    }
+
+    const client = getServiceClient();
+    const { data, error } = await (client as any).rpc('fn_publish_story_fenced', {
+      p_schedule_id: params.scheduleId,
+      p_story_id: params.storyId,
+      p_expected_validated_at: params.expectedValidatedAt,
+      p_expected_version: params.expectedVersion,
+      p_published_at: params.publishedAt || new Date().toISOString(),
+      p_updated_by: params.updatedBy || 'system-scheduler',
+      p_gate_checks: params.gateChecks ?? [],
+      p_gate_checked_at: params.gateCheckedAt || null,
+      p_triggered_by: params.triggeredBy || 'cron',
+    });
+
+    if (error) {
+      if (typeof error.message === 'string' && error.message.includes('AUDIT_LOG_FAILED')) {
+        return {
+          success: false,
+          code: 'AUDIT_LOG_FAILED',
+          error: error.message,
+        };
+      }
+      return {
+        success: false,
+        code: 'DATABASE_ERROR',
+        error: error.message,
+      };
+    }
+
+    const rpcResult = data as {
+      success?: boolean;
+      code?: string;
+      error?: string;
+      story_id?: string;
+      schedule_id?: string;
+      status?: string;
+      version?: number;
+      published_at?: string;
+      updated_at?: string;
+      updated_by?: string | null;
+      actor?: string;
+      scheduled_by?: string | null;
+    };
+
+    if (!rpcResult || typeof rpcResult !== 'object') {
+      return {
+        success: false,
+        code: 'DATABASE_ERROR',
+        error: 'Atomic publish RPC returned invalid or empty response',
+      };
+    }
+
+    // Contradictory outcome: code 'PUBLISHED' with success != true
+    if (rpcResult.code === 'PUBLISHED' && rpcResult.success !== true) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: "RPC response contract violation: contradictory 'PUBLISHED' code with non-success status",
+      };
+    }
+
+    if (!rpcResult.success) {
+      return {
+        success: false,
+        code: (rpcResult.code as any) || 'DATABASE_ERROR',
+        error: rpcResult.error || 'Atomic publish RPC returned failure',
+      };
+    }
+
+    // ── STRICT RPC RESPONSE SELF-CONSISTENCY VALIDATION ──
+    // Because the transaction may already have committed by the time this response
+    // is inspected, any violation is recorded as a RECONCILIATION_ERROR rather than
+    // a standard database error. Legacy fallback writes must NEVER be attempted.
+
+    if (rpcResult.code !== 'PUBLISHED') {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: expected code 'PUBLISHED', got '${rpcResult.code}'`,
+      };
+    }
+
+    // Exact identity validation: story_id must strictly equal params.storyId
+    if (
+      !rpcResult.story_id ||
+      typeof rpcResult.story_id !== 'string' ||
+      rpcResult.story_id.trim() === '' ||
+      rpcResult.story_id !== params.storyId
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: story_id mismatch or missing (expected '${params.storyId}', got '${rpcResult.story_id}')`,
+      };
+    }
+
+    // Exact identity validation: schedule_id must strictly equal params.scheduleId
+    if (
+      !rpcResult.schedule_id ||
+      typeof rpcResult.schedule_id !== 'string' ||
+      rpcResult.schedule_id.trim() === '' ||
+      rpcResult.schedule_id !== params.scheduleId
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: schedule_id mismatch or missing (expected '${params.scheduleId}', got '${rpcResult.schedule_id}')`,
+      };
+    }
+
+    // Mandatory publication status: must strictly equal 'published'
+    if (!rpcResult.status || rpcResult.status !== 'published') {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: expected status 'published', got '${rpcResult.status}'`,
+      };
+    }
+
+    // Mandatory version: must strictly equal expectedVersion + 1
+    if (
+      typeof rpcResult.version !== 'number' ||
+      !Number.isInteger(rpcResult.version) ||
+      rpcResult.version !== params.expectedVersion + 1
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: story version ${rpcResult.version} is not expected increment (${params.expectedVersion + 1})`,
+      };
+    }
+
+    // Mandatory published_at timestamp: must be valid ISO 8601 string with explicit timezone
+    if (!isValidIsoTimestampWithTimezone(rpcResult.published_at)) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: invalid or missing published_at timestamp',
+      };
+    }
+
+    // Mandatory updated_at timestamp: must be valid ISO 8601 string with explicit timezone
+    if (!isValidIsoTimestampWithTimezone(rpcResult.updated_at)) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: invalid or missing updated_at timestamp',
+      };
+    }
+
+    // Future clock skew policy: neither published_at nor updated_at may exceed the 1-minute tolerance
+    const maxAllowedFuture = Date.now() + 60000; // allow at most 1m clock skew
+
+    const publishedAtTime = new Date(rpcResult.published_at).getTime();
+    if (publishedAtTime > maxAllowedFuture) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: published_at '${rpcResult.published_at}' is in the future`,
+      };
+    }
+
+    const updatedAtTime = new Date(rpcResult.updated_at).getTime();
+    if (updatedAtTime > maxAllowedFuture) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: updated_at '${rpcResult.updated_at}' is in the future`,
+      };
+    }
+
+    // Mandatory attribution contracts:
+    // updated_by: property must be present; permits null, or valid UUID string
+    if (!('updated_by' in rpcResult) || rpcResult.updated_by === undefined) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: missing updated_by property',
+      };
+    }
+    if (
+      rpcResult.updated_by !== null &&
+      (typeof rpcResult.updated_by !== 'string' || !isUuid(rpcResult.updated_by))
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: updated_by '${rpcResult.updated_by}' violates UUID schema contract`,
+      };
+    }
+
+    // actor: property must be present; non-empty string
+    if (!('actor' in rpcResult) || rpcResult.actor === undefined) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: missing actor property',
+      };
+    }
+    if (
+      rpcResult.actor === null ||
+      typeof rpcResult.actor !== 'string' ||
+      rpcResult.actor.trim() === ''
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: actor '${rpcResult.actor}' violates text schema contract`,
+      };
+    }
+
+    // scheduled_by: property must be present; permits null, or string
+    if (!('scheduled_by' in rpcResult) || rpcResult.scheduled_by === undefined) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: 'RPC response contract violation: missing scheduled_by property',
+      };
+    }
+    if (
+      rpcResult.scheduled_by !== null &&
+      typeof rpcResult.scheduled_by !== 'string'
+    ) {
+      return {
+        success: false,
+        code: 'RECONCILIATION_ERROR',
+        error: `RPC response contract violation: scheduled_by '${rpcResult.scheduled_by}' violates text schema contract`,
+      };
+    }
+
+    const updatedStory: Story = {
+      ...params.publishedStory,
+      status: 'published',
+      publicationStatus: 'published',
+      version: rpcResult.version,
+      publishedAt: rpcResult.published_at,
+      updatedAt: rpcResult.updated_at,
+      updatedBy: rpcResult.updated_by || undefined,
+    };
+
+    return {
+      success: true,
+      code: 'PUBLISHED',
+      story: updatedStory,
+      actor: rpcResult.actor,
+      scheduledBy: rpcResult.scheduled_by,
+    };
   }
 
   async deleteStory(id: string) {

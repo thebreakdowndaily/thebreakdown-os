@@ -53,12 +53,17 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   private cachedState: NewsroomPersistedState | null = null;
   private lastLoadedVersion = 0;
   private _isDegradedReadOnly = false;
+  private rowId: string = SNAPSHOT_ROW_ID;
 
   get isDegradedReadOnly(): boolean {
     return this._isDegradedReadOnly;
   }
 
-  constructor(options?: { client?: any; url?: string; key?: string }) {
+  constructor(options?: { client?: any; url?: string; key?: string; rowId?: string }) {
+    if (options?.rowId) {
+      this.rowId = options.rowId;
+    }
+
     if (options?.client) {
       this.client = options.client;
       return;
@@ -86,10 +91,16 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
+      this._isDegradedReadOnly = true;
+      if (process.env.DATA_PROVIDER === 'supabase' || process.env.NODE_ENV === 'production') {
+        throw new NewsroomPersistenceError(
+          'Supabase client unavailable: Missing credentials or invalid configuration',
+          'PERSISTENCE_FAILED'
+        );
+      }
       console.warn(
         '[SupabaseStateRepository] Supabase client unavailable: falling back to read-only degraded mode.'
       );
-      this._isDegradedReadOnly = true;
       return null;
     }
 
@@ -97,7 +108,7 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       const { data, error } = await this.client
         .from('pipeline_metrics')
         .select('metric_value, metadata')
-        .eq('id', SNAPSHOT_ROW_ID)
+        .eq('id', this.rowId)
         .maybeSingle();
 
       if (error) {
@@ -117,14 +128,20 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       this._isDegradedReadOnly = false;
       return null;
     } catch (err) {
-      console.warn('[SupabaseStateRepository] Load exception, enabling read-only degraded mode:', err);
+      console.warn('[SupabaseStateRepository] Load exception:', err);
       this._isDegradedReadOnly = true;
-      return null;
+      throw err;
     }
   }
 
   async save(state: NewsroomPersistedState): Promise<void> {
-    if (this._isDegradedReadOnly || !this.client) {
+    if (!this.client) {
+      throw new NewsroomPersistenceError(
+        'Supabase client unavailable: Missing credentials or invalid configuration',
+        'PERSISTENCE_FAILED'
+      );
+    }
+    if (this._isDegradedReadOnly) {
       throw new NewsroomPersistenceError(
         'Database persistence unavailable: Newsroom is in read-only degraded mode. Editorial mutations cannot be committed.',
         'PERSISTENCE_DEGRADED_READONLY'
@@ -137,7 +154,7 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
         const { data: remoteRow, error: fetchErr } = await this.client
           .from('pipeline_metrics')
           .select('metric_value, metadata')
-          .eq('id', SNAPSHOT_ROW_ID)
+          .eq('id', this.rowId)
           .maybeSingle();
 
         if (fetchErr) {
@@ -164,7 +181,7 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
           const { data, error } = await this.client
             .from('pipeline_metrics')
             .insert({
-              id: SNAPSHOT_ROW_ID,
+              id: this.rowId,
               metric_name: 'state_snapshot',
               metric_value: nextVersion,
               metadata: stateToSave,
@@ -181,7 +198,7 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
               metadata: stateToSave,
               recorded_at: new Date().toISOString(),
             })
-            .eq('id', SNAPSHOT_ROW_ID)
+            .eq('id', this.rowId)
             .eq('metric_value', remoteVersion)
             .select();
           resError = error;

@@ -19,10 +19,156 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateAndPublishDueStories } from '@/services/editorial/schedule';
+import { validateAndPublishDueStories, ensureCanonicalEventConsumers } from '@/services/editorial/schedule';
+import {
+  RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES,
+  type EditorialPublishOutcome,
+  type PostPublicationErrorCategory,
+  type PublicationGateResult,
+} from '@/types/editorial-calendar';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
+
+export type { EditorialPublishOutcome, PostPublicationErrorCategory };
+
+function logOutcomeAnomaly(
+  result: PublicationGateResult,
+  event: 'editorial.publish_due.unknown_outcome' | 'editorial.publish_due.inconsistent_outcome',
+  reason: string,
+): void {
+  console.warn(
+    JSON.stringify({
+      event,
+      storyId: result.storyId,
+      scheduleId: result.scheduleId,
+      passed: result.passed,
+      outcome: result.outcome ?? null,
+      reason,
+      classification: 'blocked',
+      timestamp: new Date().toISOString(),
+    }),
+  );
+}
+
+function classifyGateResult(result: PublicationGateResult): EditorialPublishOutcome {
+  const { outcome, passed, checks } = result;
+
+  // 1. Missing or unrecognized outcome -> fail closed to 'blocked'
+  if (!outcome || !RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES.includes(outcome as EditorialPublishOutcome)) {
+    logOutcomeAnomaly(
+      result,
+      'editorial.publish_due.unknown_outcome',
+      !outcome ? 'missing_outcome' : 'unrecognized_outcome',
+    );
+    return 'blocked';
+  }
+
+  const hasFailedCheck = checks.some(c => !c.passed);
+  const hasAlreadyPublishedMarker = checks.some(c => c.name === 'already_published');
+  const hasAlreadyClaimedMarker = checks.some(c => c.name === 'already_claimed');
+
+  // 2. Explicit 'blocked' outcome:
+  // Must NEVER be overridden by check names (e.g. already_published or already_claimed).
+  // If contradictory markers exist or passed is true, log inconsistency and remain blocked.
+  if (outcome === 'blocked') {
+    if (passed === true || hasAlreadyPublishedMarker || hasAlreadyClaimedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'blocked_with_contradictory_state_or_markers',
+      );
+    }
+    return 'blocked';
+  }
+
+  // 3. Explicit 'published' outcome:
+  // Requires passed === true, zero failed checks, and no conflicting markers.
+  if (outcome === 'published') {
+    if (passed !== true || hasFailedCheck || hasAlreadyPublishedMarker || hasAlreadyClaimedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'published_with_failed_checks_or_invalid_state',
+      );
+      return 'blocked';
+    }
+    return 'published';
+  }
+
+  // 4. Explicit 'already_published' outcome:
+  // Requires passed === true, zero failed checks, and no conflicting skipped markers.
+  if (outcome === 'already_published') {
+    if (passed !== true || hasFailedCheck || hasAlreadyClaimedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'already_published_with_inconsistent_state',
+      );
+      return 'blocked';
+    }
+    return 'already_published';
+  }
+
+  // 5. Explicit 'skipped' outcome:
+  // Requires passed === false (did not publish) and no conflicting already_published markers.
+  if (outcome === 'skipped') {
+    if (passed !== false || hasAlreadyPublishedMarker) {
+      logOutcomeAnomaly(
+        result,
+        'editorial.publish_due.inconsistent_outcome',
+        'skipped_with_inconsistent_state',
+      );
+      return 'blocked';
+    }
+    return 'skipped';
+  }
+
+  // Fall-through safety (unreachable due to RECOGNIZED_EDITORIAL_PUBLISH_OUTCOMES guard)
+  logOutcomeAnomaly(result, 'editorial.publish_due.unknown_outcome', 'unhandled_outcome_branch');
+  return 'blocked';
+}
+
+function categorizePublishingError(error: unknown): string {
+  if (!error) return 'UNKNOWN_ERROR';
+  const msg = (error instanceof Error ? error.message : String(error)).toLowerCase();
+
+  if (
+    msg.includes('password') ||
+    msg.includes('user "') ||
+    msg.includes('role "') ||
+    msg.includes('credential') ||
+    msg.includes('token') ||
+    msg.includes('secret') ||
+    msg.includes('auth')
+  ) {
+    return 'DATABASE_AUTH_ERROR';
+  }
+  if (
+    msg.includes('connect') ||
+    msg.includes('econnrefused') ||
+    msg.includes('etimedout') ||
+    msg.includes('host') ||
+    msg.includes('network') ||
+    msg.includes('socket')
+  ) {
+    return 'DATABASE_NETWORK_ERROR';
+  }
+  if (
+    msg.includes('syntax') ||
+    msg.includes('relation') ||
+    msg.includes('table') ||
+    msg.includes('column') ||
+    msg.includes('query') ||
+    msg.includes('sql')
+  ) {
+    return 'DATABASE_QUERY_ERROR';
+  }
+  if (error instanceof TypeError) {
+    return 'TYPE_ERROR';
+  }
+  return 'INTERNAL_PUBLISHING_ERROR';
+}
 
 export async function GET(request: NextRequest) {
   // MANDATORY: CRON_SECRET must be set in the environment.
@@ -43,30 +189,76 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const results = await validateAndPublishDueStories();
+    if (typeof ensureCanonicalEventConsumers === 'function') {
+      ensureCanonicalEventConsumers();
+    }
+    const rawResults = await validateAndPublishDueStories();
 
-    const published = results.filter(r => r.passed);
-    const blocked = results.filter(r => !r.passed);
+    const categorized = rawResults.map(r => ({
+      raw: r,
+      outcome: classifyGateResult(r),
+    }));
+
+    const newlyPublished = categorized.filter(c => c.outcome === 'published');
+    const alreadyPublished = categorized.filter(c => c.outcome === 'already_published');
+    const blocked = categorized.filter(c => c.outcome === 'blocked');
+    const skipped = categorized.filter(c => c.outcome === 'skipped');
 
     return NextResponse.json({
       ok: true,
       timestamp: new Date().toISOString(),
-      totalChecked: results.length,
-      published: published.length,
+      totalChecked: rawResults.length,
+      published: newlyPublished.length,
+      alreadyPublished: alreadyPublished.length,
       blocked: blocked.length,
-      results: results.map(r => ({
-        storyId: r.storyId,
-        passed: r.passed,
-        checksCount: r.checks.length,
-        failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
-      })),
+      skipped: skipped.length,
+      results: categorized.map(c => {
+        const passed = c.outcome === 'published' || c.outcome === 'already_published';
+        let failedChecks = c.raw.checks.filter(chk => !chk.passed).map(chk => chk.name);
+        if (c.outcome === 'blocked' && failedChecks.length === 0) {
+          failedChecks = ['gate_blocked'];
+        } else if (c.outcome === 'published' || c.outcome === 'already_published') {
+          failedChecks = [];
+        }
+        return {
+          storyId: c.raw.storyId,
+          passed,
+          outcome: c.outcome,
+          checksCount: c.raw.checks.length,
+          failedChecks,
+          ...(c.raw.postPublicationError
+            ? {
+                postPublicationError: true,
+                ...(c.raw.postPublicationErrorCategory
+                  ? { postPublicationErrorCategory: c.raw.postPublicationErrorCategory }
+                  : {}),
+                ...(c.raw.correlationId ? { correlationId: c.raw.correlationId } : {}),
+              }
+            : {}),
+        };
+      }),
     });
   } catch (error) {
-    console.error('[Editorial Cron] Error:', error);
+    const correlationId = request.headers.get('x-request-id') || crypto.randomUUID();
+    const category = categorizePublishingError(error);
+    const errorName = error instanceof Error ? error.name : 'UnknownError';
+
+    console.error(
+      '[Editorial Cron] Scheduled publishing run failed:',
+      JSON.stringify({
+        event: 'editorial.publish_due.failed',
+        correlationId,
+        category,
+        errorName,
+        timestamp: new Date().toISOString(),
+      }),
+    );
+
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: 'An internal error occurred while processing scheduled publishing',
+        correlationId,
         timestamp: new Date().toISOString(),
       },
       { status: 500 },

@@ -1,15 +1,18 @@
 import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical';
-import type { StoryService } from '../../interfaces/story';
+import type { StoryService, PublishScheduledStoryAtomicParams, PublishScheduledStoryAtomicResult } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
+import { sanitizeDiagnosticError } from '@/lib/security/diagnostic-sanitizer';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
 export class MemoryStoryService implements StoryService {
   private stories: Map<string, Story>;
   private evidenceVault?: EvidenceVaultService;
+  private schedules = new Map<string, any>();
+  private simulateAuditFailure = false;
 
   constructor(stories: Story[] = [], evidenceVault?: EvidenceVaultService) {
     this.stories = new Map(stories.map(s => [s.id, s]));
@@ -22,6 +25,14 @@ export class MemoryStoryService implements StoryService {
 
   public getEvidenceVault(): EvidenceVaultService | undefined {
     return this.evidenceVault;
+  }
+
+  public setSchedule(entry: { id: string; status: string; validated_at?: string; story_id: string; [key: string]: any }): void {
+    this.schedules.set(entry.id, { ...entry });
+  }
+
+  public setSimulateAuditFailure(simulate: boolean): void {
+    this.simulateAuditFailure = simulate;
   }
 
   async getStories(params?: APIListParams): Promise<APIResponse<Story[]>> {
@@ -46,7 +57,11 @@ export class MemoryStoryService implements StoryService {
     return Array.from(this.stories.values()).find(s => s.slug === slug);
   }
 
-  async saveStory(story: Story, options?: { publicationToken?: string }) {
+  async saveStory(story: Story, options?: { publicationToken?: string; expectedVersion?: number }) {
+    if (options?.expectedVersion !== undefined) {
+      return this.saveStoryOCC(story, options.expectedVersion, options);
+    }
+
     // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
     if (story.status === 'published' || story.publicationStatus === 'published') {
       const token = options?.publicationToken || (story as any)._publicationToken;
@@ -60,6 +75,348 @@ export class MemoryStoryService implements StoryService {
     this.stories.set(story.id, { ...story, updatedAt: new Date().toISOString() });
     return this.stories.get(story.id)!;
   }
+
+  async saveStoryOCC(story: Story, expectedVersion: number, options?: { publicationToken?: string }): Promise<Story> {
+    if (story.status === 'published' || story.publicationStatus === 'published') {
+      const token = options?.publicationToken || (story as any)._publicationToken;
+      if (!token || !consumePublicationToken(token, story.id)) {
+        throw new DirectPublicationForbiddenError(
+          `Direct saveStoryOCC with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
+        );
+      }
+    }
+
+    const existing = this.stories.get(story.id);
+    const currentVersion = existing?.version ?? 1;
+    if (!existing || currentVersion !== expectedVersion || existing.status === 'published') {
+      throw new Error(`OCC_FAILURE: Story ${story.id} has been modified concurrently (expected version ${expectedVersion}) or already published.`);
+    }
+
+    const updated = {
+      ...story,
+      version: currentVersion + 1,
+      updatedAt: new Date().toISOString(),
+    };
+    this.stories.set(story.id, updated);
+    return updated;
+  }
+
+  async publishScheduledStoryAtomic(
+    params: PublishScheduledStoryAtomicParams,
+  ): Promise<PublishScheduledStoryAtomicResult> {
+    if (!params.publicationToken || !consumePublicationToken(params.publicationToken, params.storyId)) {
+      return {
+        success: false,
+        code: 'TOKEN_INVALID',
+        error: `Invalid or already consumed publication token for story ${params.storyId}`,
+      };
+    }
+
+    // 1. Resolve and verify schedule lease entity
+    let scheduleEntry = this.schedules.get(params.scheduleId);
+    let dbClient: any = null;
+    let isDatabaseBacked = false;
+
+    if (!scheduleEntry) {
+      try {
+        const { getInjectedServiceClient, getServiceClient } = await import('@/supabase/client');
+        const injected = getInjectedServiceClient();
+        if (injected) {
+          dbClient = injected;
+        } else {
+          const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+          const isRealConfig = Boolean(
+            serviceRoleKey &&
+            serviceRoleKey !== 'dummy-admin-key' &&
+            supabaseUrl &&
+            !supabaseUrl.includes('placeholder.supabase.co') &&
+            !supabaseUrl.includes('127.0.0.1')
+          );
+          if (isRealConfig) {
+            dbClient = getServiceClient();
+          } else {
+            dbClient = null;
+          }
+        }
+      } catch {
+        dbClient = null;
+      }
+
+      if (dbClient && typeof dbClient.from === 'function') {
+        try {
+          const { data, error: fetchErr } = await dbClient
+            .from('editorial_schedule')
+            .select('*')
+            .eq('id', params.scheduleId)
+            .maybeSingle();
+
+          if (fetchErr) {
+            return {
+              success: false,
+              code: 'DATABASE_ERROR',
+              error: sanitizeDiagnosticError(`Database schedule lookup failed: ${fetchErr.message || fetchErr}`),
+            };
+          }
+          if (data) {
+            scheduleEntry = data;
+            isDatabaseBacked = true;
+          }
+        } catch (fetchEx: any) {
+          return {
+            success: false,
+            code: 'DATABASE_ERROR',
+            error: sanitizeDiagnosticError(fetchEx?.message || 'Database schedule lookup threw error'),
+          };
+        }
+      }
+    }
+
+    if (!scheduleEntry) {
+      return {
+        success: false,
+        code: 'SCHEDULE_NOT_FOUND',
+        error: `Schedule entry ${params.scheduleId} not found`,
+      };
+    }
+
+    if (scheduleEntry.status !== 'validated') {
+      return {
+        success: false,
+        code: 'SCHEDULE_NOT_VALIDATED',
+        error: `Schedule entry status is ${scheduleEntry.status}, expected validated`,
+      };
+    }
+    // Finding G1: Strict lease timestamp validation
+    if (
+      !params.expectedValidatedAt ||
+      typeof params.expectedValidatedAt !== 'string' ||
+      params.expectedValidatedAt.trim() === '' ||
+      !scheduleEntry.validated_at ||
+      typeof scheduleEntry.validated_at !== 'string' ||
+      scheduleEntry.validated_at.trim() === ''
+    ) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_LOST',
+        error: 'Schedule lease validation timestamp is missing or null',
+      };
+    }
+
+    const expectedTime = Date.parse(params.expectedValidatedAt);
+    const validatedTime = Date.parse(scheduleEntry.validated_at);
+
+    if (Number.isNaN(expectedTime) || Number.isNaN(validatedTime)) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_LOST',
+        error: 'Schedule lease validation timestamp is invalid or unparseable',
+      };
+    }
+
+    if (scheduleEntry.validated_at !== params.expectedValidatedAt) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_LOST',
+        error: 'Schedule lease was claimed or modified by another worker',
+      };
+    }
+
+    const nowMs = Date.now();
+    const leaseAgeMs = nowMs - validatedTime;
+    const futureSkewMs = validatedTime - nowMs;
+
+    // Canonical finite lease boundary: age >= 5 minutes is expired (matches migration 033: validated_at <= clock_timestamp() - 5m)
+    if (leaseAgeMs >= 5 * 60 * 1000) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_EXPIRED',
+        error: 'Schedule lease has expired (>= 5 minutes)',
+      };
+    }
+
+    // Canonical clock-skew boundary: future timestamp > 10 seconds is strictly invalid (matches migration 033: validated_at > clock_timestamp() + 10s)
+    if (futureSkewMs > 10 * 1000) {
+      return {
+        success: false,
+        code: 'SCHEDULE_LEASE_EXPIRED',
+        error: 'Schedule lease timestamp is in the future beyond permitted clock-skew (10s)',
+      };
+    }
+
+    // Finding G2: Strict schedule/story identity validation
+    if (
+      !scheduleEntry.story_id ||
+      typeof scheduleEntry.story_id !== 'string' ||
+      scheduleEntry.story_id.trim() === '' ||
+      !params.storyId ||
+      typeof params.storyId !== 'string' ||
+      params.storyId.trim() === '' ||
+      scheduleEntry.story_id !== params.storyId
+    ) {
+      return {
+        success: false,
+        code: 'SCHEDULE_STORY_MISMATCH',
+        error: 'Schedule entry references a different, missing, or invalid story_id',
+      };
+    }
+
+    // 2. Resolve and verify story entity
+    const existing = this.stories.get(params.storyId);
+    if (!existing) {
+      return {
+        success: false,
+        code: 'STORY_NOT_FOUND',
+        error: `Story ${params.storyId} not found in repository`,
+      };
+    }
+
+    if (existing.status === 'published' || existing.publicationStatus === 'published') {
+      return {
+        success: false,
+        code: 'ALREADY_PUBLISHED',
+        error: 'Story is already published',
+      };
+    }
+
+    const currentVersion = existing.version ?? 1;
+    if (currentVersion !== params.expectedVersion) {
+      return {
+        success: false,
+        code: 'STORY_VERSION_CONFLICT',
+        error: `Story version conflict: expected ${params.expectedVersion}, found ${currentVersion}`,
+      };
+    }
+
+    // 3. Atomically record mandatory publication gate audit log before mutating state
+    if (this.simulateAuditFailure || (params as any)?.simulateAuditFailure) {
+      return {
+        success: false,
+        code: 'AUDIT_LOG_FAILED',
+        error: 'AUDIT_LOG_FAILED: simulated gate log write failure',
+      };
+    }
+
+    const nowIso = new Date().toISOString();
+    // published_at contract: preserve historical past date; clamp future date or null to now
+    const existingPublishedAt = existing.publishedAt;
+    const publishedAt = (existingPublishedAt && existingPublishedAt <= nowIso)
+      ? existingPublishedAt
+      : (params.publishedAt && params.publishedAt <= nowIso ? params.publishedAt : nowIso);
+
+    const updatedByUuid = params.updatedBy === 'system-scheduler'
+      ? '00000000-0000-0000-0000-000000000001'
+      : (params.updatedBy && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(params.updatedBy)
+          ? params.updatedBy
+          : '00000000-0000-0000-0000-000000000001');
+
+    let rpcResult: any = null;
+
+    if (isDatabaseBacked) {
+      if (!dbClient || typeof dbClient.rpc !== 'function') {
+        return {
+          success: false,
+          code: 'DATABASE_ERROR',
+          error: 'MemoryStoryService requires canonical atomic RPC fn_publish_story_fenced for database-backed publication; non-atomic direct-table fallback is forbidden',
+        };
+      }
+
+      // When a publication involves database-backed schedule state, use the canonical
+      // atomic publication RPC (fn_publish_story_fenced) to guarantee single-transaction
+      // atomicity across schedule, audit log, and outbox.
+      try {
+        const { data, error: rpcError } = await dbClient.rpc('fn_publish_story_fenced', {
+          p_schedule_id: params.scheduleId,
+          p_story_id: params.storyId,
+          p_expected_validated_at: params.expectedValidatedAt,
+          p_expected_version: params.expectedVersion,
+          p_published_at: publishedAt,
+          p_updated_by: params.updatedBy || 'system-scheduler',
+          p_gate_checks: params.gateChecks ?? [],
+          p_gate_checked_at: params.gateCheckedAt || null,
+          p_triggered_by: params.triggeredBy || 'cron',
+        });
+
+        if (rpcError) {
+          const isAuditSpecific = typeof rpcError.message === 'string' && (
+            rpcError.message.includes('AUDIT_LOG_FAILED') ||
+            rpcError.message.includes('INJECTED_AUDIT_LOG_FAILURE')
+          );
+          return {
+            success: false,
+            code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+            error: sanitizeDiagnosticError(rpcError.message || 'Atomic publish RPC failed'),
+          };
+        }
+
+        if (!data || typeof data !== 'object') {
+          return {
+            success: false,
+            code: 'DATABASE_ERROR',
+            error: 'Atomic publish RPC returned invalid response',
+          };
+        }
+
+        if (!data.success) {
+          const isAuditSpecific = typeof data.error === 'string' && (
+            data.error.includes('AUDIT_LOG_FAILED') ||
+            data.error.includes('INJECTED_AUDIT_LOG_FAILURE')
+          );
+          return {
+            success: false,
+            code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : ((data.code as any) || 'DATABASE_ERROR'),
+            error: sanitizeDiagnosticError(data.error || 'Atomic publish RPC reported failure'),
+          };
+        }
+
+        rpcResult = data;
+      } catch (err: any) {
+        const isAuditSpecific = typeof err?.message === 'string' && (
+          err.message.includes('AUDIT_LOG_FAILED') ||
+          err.message.includes('INJECTED_AUDIT_LOG_FAILURE')
+        );
+        return {
+          success: false,
+          code: isAuditSpecific ? 'AUDIT_LOG_FAILED' : 'DATABASE_ERROR',
+          error: sanitizeDiagnosticError(err?.message || 'Database RPC invocation threw error'),
+        };
+      }
+    }
+
+    // 4. Commit atomic transition: both schedule and story state transition simultaneously
+    const storyData = params.publishedStory || (params as any).updatedStory || existing;
+    const newVersion = rpcResult?.version ?? (currentVersion + 1);
+    const storyPublishedAt = rpcResult?.published_at ?? publishedAt;
+    const storyUpdatedAt = rpcResult?.updated_at ?? nowIso;
+    const storyUpdatedBy = rpcResult?.updated_by ?? updatedByUuid;
+
+    const updatedStory: Story = {
+      ...storyData,
+      status: 'published',
+      publicationStatus: 'published',
+      version: newVersion,
+      publishedAt: storyPublishedAt,
+      updatedAt: storyUpdatedAt,
+      updatedBy: storyUpdatedBy,
+    };
+    this.stories.set(params.storyId, updatedStory);
+
+    if (this.schedules.has(params.scheduleId)) {
+      const s = this.schedules.get(params.scheduleId)!;
+      s.status = 'published';
+      s.published_at = storyPublishedAt;
+      s.updated_at = storyUpdatedAt;
+    }
+
+    return {
+      success: true,
+      code: 'PUBLISHED',
+      story: updatedStory,
+      actor: rpcResult?.actor || params.updatedBy || 'system-scheduler',
+      scheduledBy: rpcResult?.scheduled_by ?? (existing as any).scheduled_by ?? (existing as any).scheduledBy ?? params.updatedBy ?? 'system-scheduler',
+    };
+  }
+
 
   async deleteStory(id: string) {
     this.stories.delete(id);

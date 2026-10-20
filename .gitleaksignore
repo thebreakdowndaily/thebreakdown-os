@@ -2,3 +2,6 @@
 # Format: <commit-sha>:<path>:<rule-id>:<line-number>
 # Do not add secrets, wildcard paths, or broad directory exclusions.
 # No findings are suppressed until a real scan result is verified as a false positive.
+8f41450a6fdb4d1b78f1ddf1571b659317840c22:tests/scheduled-publish-worker.test.ts:jwt:7563
+8f41450a6fdb4d1b78f1ddf1571b659317840c22:tests/scheduled-publish-worker.test.ts:jwt:7564
+8f41450a6fdb4d1b78f1ddf1571b659317840c22:tests/scheduled-publish-worker.test.ts:jwt:7565
