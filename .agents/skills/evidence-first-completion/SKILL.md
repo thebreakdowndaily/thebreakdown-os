@@ -1,3 +1,11 @@
+---
+name: evidence-first-completion
+description: >
+  Mandatory evidence-based completion and adversarial verification for non-trivial engineering tasks.
+  Use before implementation planning, before declaring a task complete, reviewing claims that tests passed,
+  handling security or publication changes, or verifying an exact branch/commit/PR state.
+---
+
 # Evidence-First Completion & Adversarial Verification
 
 **Status:** Mandatory completion gate for every non-trivial engineering task.
