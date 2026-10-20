@@ -215,8 +215,20 @@ DO $$ BEGIN
 END $$;
 GRANT EXECUTE ON FUNCTION public.fn_claim_publication_outbox(INT, INT) TO service_role;
 
--- Drop legacy 3-argument overload if present
-DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT);
+-- Fail-closed precondition: verify no unmanaged 3-argument overload pre-exists
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'public'
+          AND p.proname = 'fn_complete_publication_outbox'
+          AND p.pronargs = 3
+    ) THEN
+        RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_complete_publication_outbox(3 arguments) pre-exists. Refusing to proceed or overwrite unmanaged database objects.';
+    END IF;
+END $$;
 
 -- Outbox worker completion function: fenced by claim_token and processing status
 CREATE OR REPLACE FUNCTION public.fn_complete_publication_outbox(
@@ -610,8 +622,20 @@ GRANT EXECUTE ON FUNCTION public.fn_block_schedule_entry_fenced(UUID, UUID, TIME
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 4. ATOMIC PUBLICATION LEASE FENCE & OUTBOX ENQUEUE
 -- ═══════════════════════════════════════════════════════════════════════════
--- Drop legacy 6-argument overload if present
-DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT);
+-- Fail-closed precondition: verify no unmanaged 6-argument overload pre-exists
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'public'
+          AND p.proname = 'fn_publish_story_fenced'
+          AND p.pronargs = 6
+    ) THEN
+        RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_publish_story_fenced(6 arguments) pre-exists. Refusing to proceed or overwrite unmanaged database objects.';
+    END IF;
+END $$;
 
 CREATE OR REPLACE FUNCTION public.fn_publish_story_fenced(
     p_schedule_id UUID,

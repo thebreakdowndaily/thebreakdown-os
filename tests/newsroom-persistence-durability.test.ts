@@ -31,6 +31,46 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 const stagingUrl = process.env.STAGING_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const stagingKey = process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
+function createDisposableLocalDatabase() {
+  const store = new Map<string, { id: string; metric_value: number; metadata: any; recorded_at?: string }>();
+  return {
+    from: (_table: string) => ({
+      select: (_cols?: string) => ({
+        eq: (_col: string, val: any) => ({
+          maybeSingle: async () => {
+            const row = store.get(String(val));
+            if (!row) return { data: null, error: null };
+            return { data: { ...row }, error: null };
+          },
+        }),
+      }),
+      insert: (record: any) => ({
+        select: async () => {
+          store.set(String(record.id), { ...record });
+          return { data: [{ ...record }], error: null };
+        },
+      }),
+      update: (updates: any) => ({
+        eq: (_col1: string, idVal: any) => ({
+          eq: (_col2: string, verVal: any) => ({
+            select: async () => {
+              const row = store.get(String(idVal));
+              if (row && Number(row.metric_value) === Number(verVal)) {
+                row.metric_value = updates.metric_value;
+                row.metadata = updates.metadata;
+                row.recorded_at = updates.recorded_at;
+                return { data: [{ ...row }], error: null };
+              }
+              return { data: [], error: null };
+            },
+          }),
+        }),
+      }),
+    }),
+  };
+}
+
+
 
 function createBaselineTestState(): NewsroomPersistedState {
   const signalId = 'sig-durability-test-001';
@@ -123,15 +163,21 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
     NewsroomAuditService.clear();
   });
 
-  // ── 1. Authoritative Staging Database Integration ─────────────────────────────
-  it('commits mutation to staging database and survives fresh read in new instance', async () => {
-    if (!stagingUrl || !stagingKey || stagingUrl.includes('dummy')) {
-      console.warn('Skipping live staging test: STAGING_SUPABASE_URL not configured');
+  // ── 1. Authoritative Persistence Integration (Local Disposable Default, Opt-In Live Staging) ──
+  it('commits mutation to authoritative database and survives fresh read in new instance', async () => {
+    const isLiveOptIn = process.env.RUN_LIVE_STAGING_TESTS === 'true';
+
+    if (isLiveOptIn && (!stagingUrl || !stagingKey || stagingUrl.includes('dummy'))) {
+      console.warn('Skipping live staging test: RUN_LIVE_STAGING_TESTS=true but STAGING_SUPABASE_URL not configured');
       return;
     }
 
+    const localDb = isLiveOptIn ? null : createDisposableLocalDatabase();
+
     // Repository A: seed initial state
-    const repoA = new SupabaseStateRepository({ url: stagingUrl, key: stagingKey });
+    const repoA = isLiveOptIn
+      ? new SupabaseStateRepository({ url: stagingUrl, key: stagingKey })
+      : new SupabaseStateRepository({ client: localDb });
     const initialState = createBaselineTestState();
     await repoA.save(initialState);
 
@@ -152,13 +198,14 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       { id: 'editor-101', role: 'managing_editor', name: 'Lead Technology Editor' }
     );
 
-
     expect(triageResult.success).toBe(true);
     expect(triageResult.item.priority).toBe('P0');
     expect(triageResult.item.version).toBe(2);
 
     // Verify durability: Create brand new Repository B with no local cache
-    const repoB = new SupabaseStateRepository({ url: stagingUrl, key: stagingKey });
+    const repoB = isLiveOptIn
+      ? new SupabaseStateRepository({ url: stagingUrl, key: stagingKey })
+      : new SupabaseStateRepository({ client: localDb });
     const loadedState = await repoB.load();
 
     expect(loadedState).not.toBeNull();

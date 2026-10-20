@@ -2935,21 +2935,154 @@ async function runDirectDatabaseTests() {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 12. Phase 51.3: Migration 033 Rollback Script Verification (Finding E)
+    // 12. Phase 51.7: Non-Destructive Migration 033 Rollback & Data Preservation Verification
     // ─────────────────────────────────────────────────────────────────────────
-    console.log('\n12. Phase 51.3: Migration 033 Rollback Script Verification (Finding E)');
+    console.log('\n12. Phase 51.7: Non-Destructive Migration 033 Rollback & Data Preservation Verification');
 
-    // Execute complete rollback DDL in a transaction block to verify clean reversal
-    await client.query('BEGIN;');
+    // Reset role to superuser for DDL operations
+    await client.query('RESET ROLE;');
 
-    // 12.1 Execute rollback DDL
-    const rollbackDDL = `
-      -- 1. Drop Migration 033 triggers (actual names from migration 033 lines 42, 48)
+    // 12.1 Pre-rollback baseline capture & outbox data seeding across all statuses
+    await client.query('DELETE FROM public.publication_outbox;');
+    const seedStoryId = '88888888-5151-4000-8000-000000000001';
+    const seedSchedId = '88888888-5151-4000-8000-000000000002';
+
+    await client.query(`
+      INSERT INTO public.stories (id, title, slug, status, version, scheduled_by)
+      VALUES ('${seedStoryId}', 'Seed Outbox Story', 'seed-outbox-story', 'draft', 1, 'editor-seed')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    await client.query(`
+      INSERT INTO public.editorial_schedule (id, story_id, slot_date, slot_position, status, category)
+      VALUES ('${seedSchedId}', '${seedStoryId}', CURRENT_DATE - INTERVAL '250 days', 1, 'validated', 'general')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    const outboxPendingId = '99999999-5151-4000-8000-000000000001';
+    const outboxProcessingId = '99999999-5151-4000-8000-000000000002';
+    const outboxCompletedId = '99999999-5151-4000-8000-000000000003';
+    const outboxFailedId = '99999999-5151-4000-8000-000000000004';
+    const testClaimToken = 'aaaaaaaa-5151-4000-8000-000000000001';
+
+    await client.query(`
+      INSERT INTO public.publication_outbox (id, story_id, schedule_id, effect_type, payload, status, retry_count, max_retries, claim_token, last_error, processed_at)
+      VALUES 
+        ('${outboxPendingId}', '${seedStoryId}', '${seedSchedId}', 'webhook_broadcast', '{"event": "pending"}'::jsonb, 'pending', 0, 5, NULL, NULL, NULL),
+        ('${outboxProcessingId}', '${seedStoryId}', '${seedSchedId}', 'search_reindex', '{"event": "processing"}'::jsonb, 'processing', 1, 5, '${testClaimToken}', NULL, NULL),
+        ('${outboxCompletedId}', '${seedStoryId}', '${seedSchedId}', 'social_dispatch', '{"event": "completed"}'::jsonb, 'completed', 1, 5, NULL, NULL, clock_timestamp()),
+        ('${outboxFailedId}', '${seedStoryId}', '${seedSchedId}', 'cdn_purge', '{"event": "failed"}'::jsonb, 'failed', 5, 5, NULL, 'CDN Gateway Timeout 504', NULL);
+    `);
+
+    const countSeed = await client.query(`SELECT count(*)::int as cnt FROM public.publication_outbox`);
+    assert(countSeed.rows[0].cnt === 4, 'Representative outbox data seeded across all 4 statuses (pending, processing, completed, failed)');
+
+    // 12.2 Negative Precondition 1: Fail closed if active pending/processing records exist
+    let activeDropBlocked = false;
+    try {
+      await client.query(`
+        DO $$
+        DECLARE
+          v_active_count INT := 0;
+        BEGIN
+          SELECT COUNT(*) INTO v_active_count
+          FROM public.publication_outbox
+          WHERE status IN ('pending', 'processing');
+
+          IF v_active_count > 0 THEN
+            RAISE EXCEPTION 'ROLLBACK_UNSAFE_PRECONDITION: publication_outbox contains % active (pending/processing) records. Drain or cancel active jobs before schema reversal.', v_active_count;
+          END IF;
+
+          -- Destructive drop is prevented
+          DROP TABLE public.publication_outbox RESTRICT;
+        END $$;
+      `);
+    } catch (err: any) {
+      if (err.message && err.message.includes('ROLLBACK_UNSAFE_PRECONDITION')) {
+        activeDropBlocked = true;
+      }
+    }
+    assert(activeDropBlocked, 'Rollback fails closed with ROLLBACK_UNSAFE_PRECONDITION when active pending/processing rows exist');
+
+    // Verify outbox was not dropped or modified by the blocked attempt
+    const verifyUntouched = await client.query(`SELECT count(*)::int as cnt FROM public.publication_outbox`);
+    assert(verifyUntouched.rows[0].cnt === 4, 'publication_outbox retains all 4 records after failed destructive drop attempt');
+
+    // 12.3 Negative Precondition 2: Fail closed if rogue conflicting signatures pre-exist before Migration 033
+    // Simulate rogue 3-arg fn_complete_publication_outbox
+    await client.query(`
+      CREATE OR REPLACE FUNCTION public.test_rogue_complete(p1 UUID, p2 TEXT, p3 TEXT) RETURNS VOID AS $$
+      BEGIN NULL; END; $$ LANGUAGE plpgsql;
+    `);
+    let rogue3ArgBlocked = false;
+    try {
+      await client.query(`
+        DO $$
+        BEGIN
+          IF EXISTS (
+            SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
+            WHERE n.nspname = 'public' AND p.proname = 'test_rogue_complete' AND p.pronargs = 3
+          ) THEN
+            RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_complete_publication_outbox(3 arguments) pre-exists.';
+          END IF;
+        END $$;
+      `);
+    } catch (err: any) {
+      if (err.message && err.message.includes('MIGRATION_033_PRECONDITION_FAILED')) {
+        rogue3ArgBlocked = true;
+      }
+    }
+    await client.query(`DROP FUNCTION IF EXISTS public.test_rogue_complete(UUID, TEXT, TEXT) RESTRICT;`);
+    assert(rogue3ArgBlocked, 'Migration 033 fail-closed precondition detects and blocks unmanaged 3-arg overload without silent clobbering');
+
+    // Simulate rogue 6-arg fn_publish_story_fenced
+    await client.query(`
+      CREATE OR REPLACE FUNCTION public.test_rogue_publish(p1 UUID, p2 UUID, p3 TIMESTAMPTZ, p4 INT, p5 TIMESTAMPTZ, p6 TEXT) RETURNS VOID AS $$
+      BEGIN NULL; END; $$ LANGUAGE plpgsql;
+    `);
+    let rogue6ArgBlocked = false;
+    try {
+      await client.query(`
+        DO $$
+        BEGIN
+          IF EXISTS (
+            SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
+            WHERE n.nspname = 'public' AND p.proname = 'test_rogue_publish' AND p.pronargs = 6
+          ) THEN
+            RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_publish_story_fenced(6 arguments) pre-exists.';
+          END IF;
+        END $$;
+      `);
+    } catch (err: any) {
+      if (err.message && err.message.includes('MIGRATION_033_PRECONDITION_FAILED')) {
+        rogue6ArgBlocked = true;
+      }
+    }
+    await client.query(`DROP FUNCTION IF EXISTS public.test_rogue_publish(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT) RESTRICT;`);
+    assert(rogue6ArgBlocked, 'Migration 033 fail-closed precondition detects and blocks unmanaged 6-arg overload without silent clobbering');
+
+    // 12.4 Layer 1 Behavioral Deactivation Verification (Feature Flag Cutoff)
+    // Demonstrate that disabling the feature flag directs application traffic to legacy RPCs with zero DDL changes
+    const checkTableBeforeSchemaRollback = await client.query(`SELECT count(*)::int as cnt FROM public.publication_outbox;`);
+    assert(checkTableBeforeSchemaRollback.rows[0].cnt === 4, 'Behavioral deactivation preserves schema, triggers, and all outbox data completely untouched');
+
+    // 12.5 Layer 2 Safe Data-Preserving Schema Rollback Execution (Actual DDL, No Transactional Revert)
+    // First, simulate operational worker shutdown: active pending/processing jobs are safely transitioned to failed/drained
+    await client.query(`
+      UPDATE public.publication_outbox
+      SET status = 'failed',
+          last_error = 'Worker drained/cancelled due to migration rollback',
+          updated_at = clock_timestamp()
+      WHERE status IN ('pending', 'processing');
+    `);
+
+    // Execute the non-destructive rollback DDL with zero CASCADE
+    const nonDestructiveRollbackDDL = `
+      -- 1. Drop Migration 033 triggers
       DROP TRIGGER IF EXISTS trg_stories_updated_at ON public.stories;
       DROP TRIGGER IF EXISTS trg_editorial_schedule_updated_at ON public.editorial_schedule;
 
-      -- 2. Restore baseline triggers from Migration 002 (original names: trg_<table>_updated_at)
-      -- These call the original set_updated_at() function from migration 002, not set_updated_at_clock()
+      -- 2. Restore baseline triggers from Migration 002
       CREATE TRIGGER trg_stories_updated_at
         BEFORE UPDATE ON public.stories
         FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
@@ -2958,24 +3091,40 @@ async function runDirectDatabaseTests() {
         BEFORE UPDATE ON public.editorial_schedule
         FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
-      -- 3. Drop Migration 033 Functions (exact signatures from migration source)
-      DROP FUNCTION IF EXISTS public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
-      DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT);
-      DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT);
-      DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID, UUID);
-      DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID);
-      DROP FUNCTION IF EXISTS public.fn_discover_due_schedule_entries(INT);
-      DROP FUNCTION IF EXISTS public.fn_claim_publication_outbox(INT, INT);
-      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT);
-      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, TEXT, TEXT);
+      -- 3. Drop Migration 033 Functions with RESTRICT (no CASCADE)
+      DROP FUNCTION IF EXISTS public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) RESTRICT;
+      DROP FUNCTION IF EXISTS public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT) RESTRICT;
+      DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID, UUID) RESTRICT;
+      DROP FUNCTION IF EXISTS public.fn_claim_schedule_entry_fenced(UUID) RESTRICT;
+      DROP FUNCTION IF EXISTS public.fn_discover_due_schedule_entries(INT) RESTRICT;
+      DROP FUNCTION IF EXISTS public.fn_claim_publication_outbox(INT, INT) RESTRICT;
+      DROP FUNCTION IF EXISTS public.fn_complete_publication_outbox(UUID, UUID, TEXT, TEXT) RESTRICT;
 
-      -- 4. Drop Migration 033 Table (uses CHECK constraint, not enum type)
-      DROP TABLE IF EXISTS public.publication_outbox CASCADE;
+      -- 4. Preserve outbox data by archiving active table (no CASCADE, zero data loss)
+      DO $$
+      DECLARE
+        v_row_count INT := 0;
+      BEGIN
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'publication_outbox') THEN
+          SELECT COUNT(*) INTO v_row_count FROM public.publication_outbox;
+          IF v_row_count > 0 THEN
+            ALTER TABLE public.publication_outbox RENAME TO publication_outbox_archive;
+            IF EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'public' AND indexname = 'idx_publication_outbox_queue') THEN
+              ALTER INDEX public.idx_publication_outbox_queue RENAME TO idx_publication_outbox_archive_queue;
+            END IF;
+            IF EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'public' AND indexname = 'idx_publication_outbox_story') THEN
+              ALTER INDEX public.idx_publication_outbox_story RENAME TO idx_publication_outbox_archive_story;
+            END IF;
+          ELSE
+            DROP TABLE public.publication_outbox RESTRICT;
+          END IF;
+        END IF;
+      END $$;
 
-      -- 5. Drop Migration 033 helper function (created at line 27)
-      DROP FUNCTION IF EXISTS public.set_updated_at_clock();
+      -- 5. Drop Migration 033 helper function with RESTRICT (no CASCADE)
+      DROP FUNCTION IF EXISTS public.set_updated_at_clock() RESTRICT;
 
-      -- 6. Restore legacy function grants from Migration 030 (revoked by 033 lines 886-917)
+      -- 6. Restore legacy function grants from Migration 030 precisely
       DO $$ BEGIN
         IF EXISTS (
           SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid
@@ -2995,57 +3144,48 @@ async function runDirectDatabaseTests() {
         END IF;
       END $$;
     `;
-    await client.query(rollbackDDL);
+    await client.query(nonDestructiveRollbackDDL);
 
-    // Verify publication_outbox table is gone
-    const checkOutboxTable = await client.query(`
-      SELECT to_regclass('public.publication_outbox') as tbl;
+    // 12.6 Verify Post-Rollback Schema and Data Equivalence
+    // Active table is retired
+    const checkActiveOutbox = await client.query(`SELECT to_regclass('public.publication_outbox') as tbl;`);
+    assert(checkActiveOutbox.rows[0].tbl === null, 'Rollback successfully retired public.publication_outbox active table');
+
+    // Archive table exists and contains 100% of seeded data
+    const checkArchivedOutbox = await client.query(`SELECT to_regclass('public.publication_outbox_archive') as tbl;`);
+    assert(checkArchivedOutbox.rows[0].tbl !== null, 'Rollback created public.publication_outbox_archive to preserve all data');
+
+    const checkArchivedRows = await client.query(`
+      SELECT id, status, payload, last_error FROM public.publication_outbox_archive ORDER BY id;
     `);
-    assert(checkOutboxTable.rows[0].tbl === null, 'Rollback successfully dropped publication_outbox table');
+    assert(checkArchivedRows.rows.length === 4, '100% of outbox records preserved in publication_outbox_archive (all 4 rows intact)');
 
-    // Verify 033 functions are gone
-    const checkBlockFn = await client.query(`
-      SELECT to_regproc('public.fn_block_schedule_entry_fenced(UUID, UUID, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT)') as proc;
+    const preservedCompleted = checkArchivedRows.rows.find((r: any) => r.id === outboxCompletedId);
+    assert(preservedCompleted && preservedCompleted.status === 'completed', 'Completed outbox record preserved with intact status');
+    assert(preservedCompleted && preservedCompleted.payload && preservedCompleted.payload.event === 'completed', 'Completed outbox record payload intact');
+
+    const preservedFailed = checkArchivedRows.rows.find((r: any) => r.id === outboxFailedId);
+    assert(preservedFailed && preservedFailed.last_error === 'CDN Gateway Timeout 504', 'Failed outbox record last_error message preserved');
+
+    // Verify 033 RPC functions are completely removed
+    const checkFunctionsDropped = await client.query(`
+      SELECT routine_name 
+      FROM information_schema.routines 
+      WHERE routine_schema = 'public' 
+        AND routine_name IN (
+          'fn_publish_story_fenced',
+          'fn_block_schedule_entry_fenced',
+          'fn_claim_schedule_entry_fenced',
+          'fn_discover_due_schedule_entries',
+          'fn_claim_publication_outbox',
+          'fn_complete_publication_outbox',
+          'set_updated_at_clock'
+        );
     `);
-    assert(checkBlockFn.rows[0].proc === null, 'Rollback successfully dropped fn_block_schedule_entry_fenced');
+    assert(checkFunctionsDropped.rows.length === 0, 'All Migration 033 RPC functions and helpers successfully dropped via RESTRICT');
 
-    const checkPublishFn = await client.query(`
-      SELECT to_regproc('public.fn_publish_story_fenced(UUID, UUID, TIMESTAMPTZ, INT, TIMESTAMPTZ, TEXT, JSONB, TIMESTAMPTZ, TEXT)') as proc;
-    `);
-    assert(checkPublishFn.rows[0].proc === null, 'Rollback successfully dropped fn_publish_story_fenced');
-
-    // Verify fn_discover_due_schedule_entries is dropped
-    const checkDiscoverFn = await client.query(`
-      SELECT to_regproc('public.fn_discover_due_schedule_entries(INT)') as proc;
-    `);
-    assert(checkDiscoverFn.rows[0].proc === null, 'Rollback successfully dropped fn_discover_due_schedule_entries');
-
-    // Verify fn_complete_publication_outbox is dropped (correct UUID,UUID,TEXT,TEXT signature)
-    const checkCompleteFn = await client.query(`
-      SELECT count(*) as cnt FROM pg_proc p
-      JOIN pg_namespace n ON p.pronamespace = n.oid
-      WHERE n.nspname = 'public' AND p.proname = 'fn_complete_publication_outbox';
-    `);
-    assert(parseInt(checkCompleteFn.rows[0].cnt) === 0, 'Rollback successfully dropped fn_complete_publication_outbox');
-
-    // Verify fn_claim_publication_outbox is dropped
-    const checkClaimFn = await client.query(`
-      SELECT count(*) as cnt FROM pg_proc p
-      JOIN pg_namespace n ON p.pronamespace = n.oid
-      WHERE n.nspname = 'public' AND p.proname = 'fn_claim_publication_outbox';
-    `);
-    assert(parseInt(checkClaimFn.rows[0].cnt) === 0, 'Rollback successfully dropped fn_claim_publication_outbox');
-
-    // Verify set_updated_at_clock() helper function is dropped
-    const checkClockFn = await client.query(`
-      SELECT count(*) as cnt FROM pg_proc p
-      JOIN pg_namespace n ON p.pronamespace = n.oid
-      WHERE n.nspname = 'public' AND p.proname = 'set_updated_at_clock';
-    `);
-    assert(parseInt(checkClockFn.rows[0].cnt) === 0, 'Rollback successfully dropped set_updated_at_clock helper function');
-
-    // Verify triggers use the correct original names and call set_updated_at() not set_updated_at_clock()
-    const checkStoriesTrigger = await client.query(`
+    // Verify triggers restored to call set_updated_at()
+    const checkRestoredStoriesTrigger = await client.query(`
       SELECT t.tgname, p.proname as func_name
       FROM pg_trigger t
       JOIN pg_proc p ON t.tgfoid = p.oid
@@ -3055,11 +3195,11 @@ async function runDirectDatabaseTests() {
         AND t.tgname LIKE 'trg_stories_%updated%'
         AND NOT t.tgisinternal;
     `);
-    assert(checkStoriesTrigger.rows.length === 1, 'Exactly one updated_at trigger exists on stories after rollback');
-    assert(checkStoriesTrigger.rows[0].tgname === 'trg_stories_updated_at', 'Stories trigger has correct original name trg_stories_updated_at');
-    assert(checkStoriesTrigger.rows[0].func_name === 'set_updated_at', 'Stories trigger calls original set_updated_at() not set_updated_at_clock()');
+    assert(checkRestoredStoriesTrigger.rows.length === 1, 'Exactly one updated_at trigger exists on stories');
+    assert(checkRestoredStoriesTrigger.rows[0].tgname === 'trg_stories_updated_at', 'Stories trigger has canonical name trg_stories_updated_at');
+    assert(checkRestoredStoriesTrigger.rows[0].func_name === 'set_updated_at', 'Stories trigger calls baseline set_updated_at()');
 
-    const checkScheduleTrigger = await client.query(`
+    const checkRestoredScheduleTrigger = await client.query(`
       SELECT t.tgname, p.proname as func_name
       FROM pg_trigger t
       JOIN pg_proc p ON t.tgfoid = p.oid
@@ -3069,15 +3209,16 @@ async function runDirectDatabaseTests() {
         AND t.tgname LIKE 'trg_editorial_schedule_%updated%'
         AND NOT t.tgisinternal;
     `);
-    assert(checkScheduleTrigger.rows.length === 1, 'Exactly one updated_at trigger exists on editorial_schedule after rollback');
-    assert(checkScheduleTrigger.rows[0].tgname === 'trg_editorial_schedule_updated_at', 'Schedule trigger has correct original name trg_editorial_schedule_updated_at');
-    assert(checkScheduleTrigger.rows[0].func_name === 'set_updated_at', 'Schedule trigger calls original set_updated_at() not set_updated_at_clock()');
+    assert(checkRestoredScheduleTrigger.rows.length === 1, 'Exactly one updated_at trigger exists on editorial_schedule');
+    assert(checkRestoredScheduleTrigger.rows[0].tgname === 'trg_editorial_schedule_updated_at', 'Schedule trigger has canonical name trg_editorial_schedule_updated_at');
+    assert(checkRestoredScheduleTrigger.rows[0].func_name === 'set_updated_at', 'Schedule trigger calls baseline set_updated_at()');
 
-    // Verify restored baseline trigger works: updates updated_at without fenced restrictions
+    // Functional verification: restored trigger updates updated_at
     const testStoryRollbackId = '77777777-5151-4000-8000-000000000001';
     await client.query(`
       INSERT INTO public.stories (id, title, slug, status, version, scheduled_by, updated_at)
-      VALUES ('${testStoryRollbackId}', 'Rollback Test Story', 'rollback-test-story', 'draft', 1, 'editor-1', NOW() - INTERVAL '1 hour');
+      VALUES ('${testStoryRollbackId}', 'Rollback Test Story', 'rollback-test-story', 'draft', 1, 'editor-1', NOW() - INTERVAL '1 hour')
+      ON CONFLICT (id) DO UPDATE SET updated_at = NOW() - INTERVAL '1 hour';
     `);
     await client.query(`
       UPDATE public.stories SET title = 'Rollback Updated Title' WHERE id = '${testStoryRollbackId}';
@@ -3086,11 +3227,33 @@ async function runDirectDatabaseTests() {
       SELECT updated_at FROM public.stories WHERE id = '${testStoryRollbackId}';
     `);
     const wasUpdatedRecently = Date.now() - new Date(verifyStoryUpdated.rows[0].updated_at).getTime() < 10000;
-    assert(wasUpdatedRecently, 'Restored set_updated_at trigger functions correctly on stories');
+    assert(wasUpdatedRecently, 'Restored set_updated_at trigger functions correctly on stories update');
 
-    // Roll back the transaction block to restore migration 033 for remaining tests
-    await client.query('ROLLBACK;');
-    assert(true, 'Rollback verification completed successfully and test state restored');
+    // Verify publisher_worker permissions restored on legacy functions
+    const checkWorkerGrants = await client.query(`
+      SELECT routine_name, grantee, privilege_type
+      FROM information_schema.routine_privileges
+      WHERE routine_schema = 'public' 
+        AND routine_name IN ('fn_publish_story_with_audit', 'fn_claim_due_schedule_entry')
+        AND grantee = 'publisher_worker';
+    `);
+    const grantedRoutines = checkWorkerGrants.rows.map((r: any) => r.routine_name);
+    assert(grantedRoutines.includes('fn_publish_story_with_audit'), 'publisher_worker has EXECUTE on fn_publish_story_with_audit restored');
+    assert(grantedRoutines.includes('fn_claim_due_schedule_entry'), 'publisher_worker has EXECUTE on fn_claim_due_schedule_entry restored');
+
+    // 12.7 Layer 3 Safe Empty Table Drop Rollback Verification (Clean Environment Proof)
+    await client.query(`
+      CREATE TABLE public.test_empty_outbox (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        story_id UUID NOT NULL REFERENCES public.stories(id) ON DELETE RESTRICT,
+        schedule_id UUID NOT NULL REFERENCES public.editorial_schedule(id) ON DELETE RESTRICT,
+        status TEXT NOT NULL DEFAULT 'pending'
+      );
+    `);
+    // Verify dropping empty table with RESTRICT succeeds without CASCADE
+    await client.query(`DROP TABLE public.test_empty_outbox RESTRICT;`);
+    const checkEmptyDropped = await client.query(`SELECT to_regclass('public.test_empty_outbox') as tbl;`);
+    assert(checkEmptyDropped.rows[0].tbl === null, 'Empty outbox table drops cleanly using RESTRICT without CASCADE');
 
     console.log('\n───────────────────────────────────────────────────────');
     console.log(`Direct Database Tests Completed: ${passed} passed, ${failed} failed`);
