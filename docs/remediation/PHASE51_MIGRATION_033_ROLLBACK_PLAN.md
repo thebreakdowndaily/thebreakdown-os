@@ -13,17 +13,22 @@
 
 The Breakdown OS distinguishes three separate operational layers during any rollback event. These layers must never be conflated:
 
-1. **Layer 1: Behavioral Deactivation (Zero DDL, Zero Downtime)**
-   - Disable the publication-fence feature flag in application configuration (`NEXT_PUBLIC_ENABLE_SCHEDULED_PUBLISH_FENCE=false` or runtime environment configuration).
-   - When disabled, application runners instantly bypass `fn_publish_story_fenced` and `fn_claim_schedule_entry_fenced`, reverting application traffic to legacy publication mechanisms (`fn_claim_due_schedule_entry` and `fn_publish_story_with_audit`).
-   - Requires zero database mutations, avoids transactional lock contention, and leaves the schema, triggers, and all outbox data completely untouched and queryable.
+1. **Layer 1: Worker Suspension / Pre-emption (Zero DDL, Zero Downtime Safe Mitigation)**
+   - **Runtime Behavioral Flag Deactivation is UNAVAILABLE:** The scheduled publication pipeline (`app/api/editorial/publish-due/route.ts`, `services/editorial/schedule.ts`, `services/repositories/supabase/story.ts`) strictly enforces atomic single-transaction lease fencing via `fn_publish_story_fenced` and explicitly prohibits non-atomic direct-table fallback (`MemoryStoryService requires canonical atomic RPC fn_publish_story_fenced... non-atomic direct-table fallback is forbidden`). Legacy RPC `fn_publish_story_with_audit` lacks lease verification, lock ordering, outbox insertion, and publication gate payloads. Attempting a runtime flag-switch to legacy publication RPCs would create catastrophic publication invariant violations.
+   - **Operational Mitigation:** The safe, zero-DDL emergency mitigation is to **suspend or pre-empt background publisher workers** (`kubectl scale deployment publisher-worker --replicas=0` or pausing external cron triggers). This halts scheduled publication immediately without touching database schema, triggers, or outbox records.
 
 2. **Layer 2: Data-Preserving Schema Rollback with Outbox Archival (Default Rollback Path)**
-   - If Migration 033 DDL must be reversed after being active and processing stories, all records in `public.publication_outbox` (pending, processing, completed, and failed) **MUST BE PRESERVED**.
-   - Fails closed if active `pending` or `processing` rows exist, requiring workers to drain or abort prior to schema changes.
-   - Renames `public.publication_outbox` to `public.publication_outbox_archive` without dropping table or records.
+   - **Canonical Artifact:** `supabase/migrations/rollback_033_atomic_scheduled_publish_fence.sql`
+   - If Migration 033 DDL must be reversed after being active and processing stories, all records in `public.publication_outbox` **MUST BE PRESERVED**.
+   - **Precondition Gates (Fail-Closed):**
+     - Refuses to run and aborts if active `pending` or `processing` rows exist, requiring workers to drain or abort prior to schema changes.
+     - Refuses to run and aborts if `public.publication_outbox_archive` or its archive indexes already exist (preventing silent overwrite or collision).
+   - **Record Preservation vs. Status Preservation:**
+     - *Record Preservation:* 100% of outbox records, payloads, timestamps, and error details are preserved without loss in `public.publication_outbox_archive`.
+     - *Status Preservation:* Terminal-status records (`completed`, `failed`) retain their exact state. In-flight records (`pending`, `processing`) must be explicitly cancelled/transitioned to `failed` (with `last_error` documenting worker pre-emption/cancellation) prior to rollback execution to satisfy the safety precondition and ensure work is not silently abandoned.
    - Reverts triggers `trg_stories_updated_at` and `trg_editorial_schedule_updated_at` to call baseline `public.set_updated_at()`.
    - Drops Migration 033 functions using `RESTRICT` (never `CASCADE`).
+   - Drops `public.set_updated_at_clock()` with `RESTRICT`.
    - Restores exact legacy permissions for `publisher_worker` on `fn_claim_due_schedule_entry()` and `fn_publish_story_with_audit(UUID)`.
 
 3. **Layer 3: Safe Empty Table Drop Rollback (Clean Environment Rollback)**
@@ -34,14 +39,14 @@ The Breakdown OS distinguishes three separate operational layers during any roll
 
 ## 2. Tested Rollback DDL: Data-Preserving Archive Path (Layer 2)
 
-The following DDL is verified in Section 12 of `tests/security/database-enforcement.test.ts`:
+The canonical rollback artifact is maintained at `supabase/migrations/rollback_033_atomic_scheduled_publish_fence.sql`. It is verified in Section 12 of `tests/security/database-enforcement.test.ts`:
 
 ```sql
 BEGIN;
 
 -- ============================================================================
 -- 1. PRECONDITION & ACTIVE WORKER SAFETY CHECK
--- Fail closed if active pending or processing records exist to prevent data loss
+-- Fail closed if active pending/processing records exist, or if archive collides
 -- ============================================================================
 DO $$
 DECLARE
@@ -56,7 +61,21 @@ BEGIN
     FROM public.publication_outbox;
 
     IF v_active_count > 0 THEN
-      RAISE EXCEPTION 'ROLLBACK_UNSAFE_PRECONDITION: publication_outbox contains % active (pending/processing) records. Drain or cancel active jobs before schema reversal.', v_active_count;
+      RAISE EXCEPTION 'ROLLBACK_UNSAFE_PRECONDITION: publication_outbox contains % active (pending/processing) records. Drain or cancel active jobs before executing rollback.', v_active_count;
+    END IF;
+
+    IF v_total_count > 0 THEN
+      IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'publication_outbox_archive') THEN
+        RAISE EXCEPTION 'ROLLBACK_UNSAFE_PRECONDITION: Archive table public.publication_outbox_archive already exists. Manual inspection required to avoid collision.';
+      END IF;
+
+      IF EXISTS (
+        SELECT 1 FROM pg_indexes 
+        WHERE schemaname = 'public' 
+          AND indexname IN ('idx_publication_outbox_archive_queue', 'idx_publication_outbox_archive_story')
+      ) THEN
+        RAISE EXCEPTION 'ROLLBACK_UNSAFE_PRECONDITION: Archive index public.idx_publication_outbox_archive_* already exists. Manual inspection required.';
+      END IF;
     END IF;
   END IF;
 END $$;
@@ -171,7 +190,7 @@ COMMIT;
 ### Step 3.2: Execution
 Execute the transactional rollback script as a superuser or schema owner:
 ```bash
-psql "$SUPABASE_DB_URL" -f rollback_migration_033.sql
+psql "$SUPABASE_DB_URL" -f supabase/migrations/rollback_033_atomic_scheduled_publish_fence.sql
 ```
 
 ### Step 3.3: Post-Rollback Verification Assertions

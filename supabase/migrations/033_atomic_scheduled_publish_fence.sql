@@ -22,6 +22,36 @@
 -- ==============================================================================
 
 -- ═══════════════════════════════════════════════════════════════════════════
+-- 0. PRECONDITION GATES: Fail-Closed Signature & Object Invariants
+-- ═══════════════════════════════════════════════════════════════════════════
+DO $$
+BEGIN
+    -- Precondition Gate 1: Fail closed if legacy 3-argument fn_complete_publication_outbox pre-exists
+    IF EXISTS (
+        SELECT 1
+        FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'public'
+          AND p.proname = 'fn_complete_publication_outbox'
+          AND p.pronargs = 3
+    ) THEN
+        RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_complete_publication_outbox(3 arguments) pre-exists. Refusing to proceed or overwrite unmanaged database objects.';
+    END IF;
+
+    -- Precondition Gate 2: Fail closed if legacy 6-argument fn_publish_story_fenced pre-exists
+    IF EXISTS (
+        SELECT 1
+        FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'public'
+          AND p.proname = 'fn_publish_story_fenced'
+          AND p.pronargs = 6
+    ) THEN
+        RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_publish_story_fenced(6 arguments) pre-exists. Refusing to proceed or overwrite unmanaged database objects.';
+    END IF;
+END $$;
+
+-- ═══════════════════════════════════════════════════════════════════════════
 -- 1. TRIGGER HARDENING: Table-Specific Clock Timestamp Triggers (Checkpoint B)
 -- ═══════════════════════════════════════════════════════════════════════════
 CREATE OR REPLACE FUNCTION public.set_updated_at_clock()
@@ -215,20 +245,7 @@ DO $$ BEGIN
 END $$;
 GRANT EXECUTE ON FUNCTION public.fn_claim_publication_outbox(INT, INT) TO service_role;
 
--- Fail-closed precondition: verify no unmanaged 3-argument overload pre-exists
-DO $$
-BEGIN
-    IF EXISTS (
-        SELECT 1
-        FROM pg_proc p
-        JOIN pg_namespace n ON p.pronamespace = n.oid
-        WHERE n.nspname = 'public'
-          AND p.proname = 'fn_complete_publication_outbox'
-          AND p.pronargs = 3
-    ) THEN
-        RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_complete_publication_outbox(3 arguments) pre-exists. Refusing to proceed or overwrite unmanaged database objects.';
-    END IF;
-END $$;
+-- Precondition Gate 1 verified in Section 0: fn_complete_publication_outbox(UUID, TEXT, TEXT) must not pre-exist.
 
 -- Outbox worker completion function: fenced by claim_token and processing status
 CREATE OR REPLACE FUNCTION public.fn_complete_publication_outbox(
@@ -622,20 +639,7 @@ GRANT EXECUTE ON FUNCTION public.fn_block_schedule_entry_fenced(UUID, UUID, TIME
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 4. ATOMIC PUBLICATION LEASE FENCE & OUTBOX ENQUEUE
 -- ═══════════════════════════════════════════════════════════════════════════
--- Fail-closed precondition: verify no unmanaged 6-argument overload pre-exists
-DO $$
-BEGIN
-    IF EXISTS (
-        SELECT 1
-        FROM pg_proc p
-        JOIN pg_namespace n ON p.pronamespace = n.oid
-        WHERE n.nspname = 'public'
-          AND p.proname = 'fn_publish_story_fenced'
-          AND p.pronargs = 6
-    ) THEN
-        RAISE EXCEPTION 'MIGRATION_033_PRECONDITION_FAILED: Unexpected conflicting signature public.fn_publish_story_fenced(6 arguments) pre-exists. Refusing to proceed or overwrite unmanaged database objects.';
-    END IF;
-END $$;
+-- Precondition Gate 2 verified in Section 0: fn_publish_story_fenced(6 args) must not pre-exist.
 
 CREATE OR REPLACE FUNCTION public.fn_publish_story_fenced(
     p_schedule_id UUID,

@@ -29,7 +29,7 @@ export function verifyMigrations(migrationsDir?: string): { success: boolean; re
   }
 
   const allEntries = fs.readdirSync(targetDir);
-  const sqlFiles = allEntries.filter(f => f.endsWith('.sql')).sort();
+  const sqlFiles = allEntries.filter(f => f.endsWith('.sql') && !f.startsWith('rollback_')).sort();
 
   const results: MigrationCheckResult[] = [];
   let expectedSeq = 1;
