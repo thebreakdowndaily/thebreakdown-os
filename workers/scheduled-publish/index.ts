@@ -79,8 +79,9 @@ export default {
         duration,
         error: error instanceof Error ? error.message : 'Unknown error',
       }));
-      // Do not rethrow — Cloudflare will retry on unhandled exceptions,
-      // but we want bounded retries. Log and exit cleanly.
+      // Propagate the failure so the Cron Event is recorded as failed.
+      // Swallowing this error would make a broken publication run look successful.
+      throw error;
     }
   },
 
