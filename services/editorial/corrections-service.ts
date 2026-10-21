@@ -639,8 +639,14 @@ export async function getReaderCorrectionById(id: string): Promise<ReaderCorrect
       if (error) {
         throw new Error(error.message || 'database query failed');
       }
-      // A successful DB miss is a real "not found", never permission to use a stale cache.
-      return data ? rowToReaderCorrection(data) : undefined;
+      if (data) {
+        return rowToReaderCorrection(data);
+      }
+      // Production trusts a successful database miss. Only local development/test
+      // may consult the process-local cache for legacy fixtures.
+      if (process.env.NODE_ENV === 'production') {
+        return undefined;
+      }
     } catch (err: any) {
       if (process.env.NODE_ENV === 'production') {
         throw new Error(`Reader correction lookup failed: ${err?.message || 'database communication error'}`);
