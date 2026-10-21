@@ -84,6 +84,16 @@ export type ConfidenceTier = 1 | 2 | 3 | 4 | 5;
 
 export type UserRole = 'admin' | 'editor' | 'writer' | 'researcher' | 'designer' | 'reader';
 
+export type IntelRole =
+  | 'owner'
+  | 'managing_editor'
+  | 'editor'
+  | 'reporter'
+  | 'researcher'
+  | 'analyst'
+  | 'fact_checker'
+  | 'guest';
+
 // ─── Content Models ─────────────────────────────────────────────────────────
 
 export type FreshnessStatus = 'Fresh' | 'Monitoring' | 'Changed' | 'Review Required' | 'Approved' | 'Archived';
@@ -749,6 +759,7 @@ export interface Claim {
   evidenceId?: string;
   confidence: number;
   status: 'verified' | 'strong' | 'moderate' | 'unverified';
+  verification?: string;
   verificationLevel?: 'primary' | 'secondary';
   verifiedAt?: string;
   sourceCount?: number;
@@ -1068,6 +1079,8 @@ export interface TOCItem {
 
 export interface TopicTerminalViewModel {
   topic: Topic;
+  totalStories?: number;
+  allStories?: Story[];
   storyGroups: {
     latest: Story[];
     important: Story[];
@@ -1075,6 +1088,8 @@ export interface TopicTerminalViewModel {
     trending: Story[];
     historical: Story[];
     recommended: Story[];
+    all?: Story[];
+    totalCount?: number;
   };
   rankedEntities: {
     entity: Entity;

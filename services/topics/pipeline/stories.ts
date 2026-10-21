@@ -89,8 +89,10 @@ export class StoryAggregator implements TopicAggregator {
     // Recommended: Editor's pick or highly scored
     const recommended = highestEvidence.slice(0, 3);
 
-    return {
+        return {
       topic,
+      totalStories: uniqueStories.length,
+      allStories: uniqueStories,
       storyGroups: {
         latest: latest.slice(0, 10),
         important: important.slice(0, 5),
@@ -98,6 +100,8 @@ export class StoryAggregator implements TopicAggregator {
         trending,
         historical: historical.slice(0, 5),
         recommended,
+        all: uniqueStories,
+        totalCount: uniqueStories.length,
       },
     };
   }
