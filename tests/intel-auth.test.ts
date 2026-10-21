@@ -317,6 +317,66 @@ function testMiddlewareEnforcement() {
   assert(content.includes("status: 403"), 'middleware returns 403 on forbidden module');
 }
 
+
+function testServerActionActorBoundary() {
+  console.log('\n=== 9. Structural: internal actor-taking helpers are not remotely exported ===');
+
+  const actionModules = [
+    {
+      path: 'features/intel/story-builder/actions.ts',
+      auth: 'requireStoryActor',
+      wrappers: [
+        ['createStoryDraftAction', 'createStoryDraftActionCore'],
+        ['transitionStoryAction', 'transitionStoryActionCore'],
+        ['assignStoryEditorAction', 'assignStoryEditorActionCore'],
+        ['addStoryNoteAction', 'addStoryNoteActionCore'],
+      ],
+    },
+    {
+      path: 'features/intel/verification/actions.ts',
+      auth: 'requireVerificationActor',
+      wrappers: [
+        ['transitionVerificationAction', 'transitionVerificationActionCore'],
+        ['assignVerificationReviewerAction', 'assignVerificationReviewerActionCore'],
+        ['addVerificationNoteAction', 'addVerificationNoteActionCore'],
+      ],
+    },
+  ] as const;
+
+  for (const module of actionModules) {
+    const absolutePath = path.join(REPO_ROOT, module.path);
+    const source = fs.readFileSync(absolutePath, 'utf8');
+    assert(source.startsWith("'use server';"), `${module.path}: explicitly declares server-action module`);
+
+    for (const [, helper] of module.wrappers) {
+      assert(
+        !new RegExp(`^\\s*export\\s+(?:async\\s+)?function\\s+${helper}\\b`, 'm').test(source),
+        `${module.path}: ${helper} is not exported as a remotely callable action`
+      );
+      assert(
+        new RegExp(`^\\s*async\\s+function\\s+${helper}\\b`, 'm').test(source),
+        `${module.path}: ${helper} remains a module-private helper`
+      );
+    }
+
+    for (const [wrapper, helper] of module.wrappers) {
+      const start = source.indexOf(`export async function ${wrapper}(`);
+      assert(start !== -1, `${module.path}: ${wrapper} is the public FormData action`);
+      if (start === -1) continue;
+
+      const nextExport = source.indexOf('\nexport async function ', start + 1);
+      const body = source.slice(start, nextExport === -1 ? source.length : nextExport);
+      const authIndex = body.indexOf(`await ${module.auth}()`);
+      const helperIndex = body.indexOf(`${helper}(`);
+      assert(authIndex !== -1, `${module.path}: ${wrapper} requires server-derived identity`);
+      assert(helperIndex !== -1 && authIndex !== -1 && authIndex < helperIndex,
+        `${module.path}: ${wrapper} authenticates before internal mutation`);
+      assert(!/export async function \\w+ActionCore\\([^)]*actor\\s*:\\s*\\{/.test(body),
+        `${module.path}: no public action accepts a caller-provided actor object`);
+    }
+  }
+}
+
 async function run() {
   console.log('Intel Authorization Security Suite');
   testRoleNormalization();
@@ -327,6 +387,7 @@ async function run() {
   testStructuralPageGating();
   testBoundaryIsolation();
   testMiddlewareEnforcement();
+  testServerActionActorBoundary();
 
   console.log(`\n${'='.repeat(40)}`);
   console.log(`Intel Auth Tests: ${passed} passed, ${failed} failed`);
