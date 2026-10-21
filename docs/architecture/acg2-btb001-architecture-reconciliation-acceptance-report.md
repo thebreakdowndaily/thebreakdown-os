@@ -240,3 +240,19 @@ Five active skills listed in `.agents/skills.md` and referenced by `AGENTS.md` w
 
 ### Verification boundary
 The earlier [CI run #39618832976](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832976), [infrastructure run #39618832941](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832941), and [audit run #39618832980](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832980) passed on `1d386a82804bd42d1357f91b9b6214035090608b`. These results predate the server-action hardening, its new regression tests, and the restored skills. **They are not verification of this follow-up.** A new PR head must pass the relevant test, typecheck, lint, build, security, audit, and browser gates. Staging and production deployment-health jobs were skipped on the earlier infrastructure run and remain external release gates.
+
+
+---
+
+## Release Review Follow-up — Editorial Write Integrity & Test Exit Semantics
+
+### Finding 1: editorial actions could return false success on database-write errors
+The previous `scheduleStoryAction` awaited a Supabase update without checking its returned `error` or confirming an affected story row. The previous `publishNowAction` did the same, so a refused/failed write could be reported as success. The scheduling/publishing actions now check the returned error and matched row. If the story scheduling write fails after a calendar slot was created, the action reports partial failure and tries to mark the slot blocked. If the story publish succeeds but schedule reconciliation fails, the action reports confirmed publication with a warning rather than claiming the whole operation failed or silently hiding the discrepancy.
+
+Regression tests in `tests/editorial-actions-persistence.test.ts` exercise scheduling-write failure, publication-write failure, and schedule reconciliation failure after confirmed publication.
+
+### Finding 2: forced `process.exit(0)` in publication safety tests
+`tests/publication-safety-p1.test.ts` used an unreferenced timer to force `process.exit(0)`. That bypasses normal test-runner shutdown and risks concealing late asynchronous work. The forced process exit was removed. The test now runs through the Node test runner with its explicit force-exit option, which is intended to stop leaked handles while preserving the runner's recorded test outcome. The suite was added explicitly to the package test chain.
+
+### Candidate and verification boundary
+These changes were committed after SHA `78b15bf9054d551b7373d18808730358f493a363`. The green CI/security/audit results recorded above apply to that earlier candidate, not this follow-up. The current commit is **implemented but NOT YET VERIFIED** until a fresh PR run completes against its exact head. No PR merge, deployment, live database mutation, or publication is authorized by these changes.

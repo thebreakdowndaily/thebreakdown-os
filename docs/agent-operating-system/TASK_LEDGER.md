@@ -14,6 +14,20 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261021-13: Editorial Write Integrity & Test Runner Exit Semantics
+- **Priority:** P1 (Publication/Data Integrity; Test Reliability)
+- **Scope:** `features/intel/editorial/actions.ts`, `components/intel/editorial/CalendarView.tsx`, `tests/publication-safety-p1.test.ts`, `tests/editorial-actions-persistence.test.ts`, `package.json`, and `vitest.config.js`.
+- **Finding A:** Scheduling/publishing actions ignored Supabase write `error` values and did not confirm an updated row, allowing false success or silent partial state.
+- **Fix A:** Check error and affected row on story writes. If scheduling fails after slot creation, mark the slot blocked when possible and return an explicit partial-failure message. If publication is confirmed but calendar reconciliation fails, return a warning describing the actual state.
+- **Regression A:** Added runtime tests for a failed story-scheduling write, a failed publication write, and a failed calendar-reconciliation write following confirmed publication.
+- **Finding B:** Publication-safety test installed a timer that called `process.exit(0)`, which can bypass ordinary test-runner failure/shutdown handling; the suite also was not part of the primary `npm test` chain.
+- **Fix B:** Removed direct process termination, added a Node test-runner script, and wired the suite into `npm test`.
+- **Verification:** These changes postdate the previously verified SHA `78b15bf9054d551b7373d18808730358f493a363`; fresh CI and audit are required on the resulting candidate. Do not transfer earlier green results.
+- **Status:** IN_PROGRESS pending exact-head checks.
+- **Next Action:** Open the updated candidate as the single review PR, verify all CI/security/audit/workflow gates on its full SHA, then request independent human review. Preserve publication and staging/production gates.
+ 
+---
+
 ### TASK-20261021-12: ACG-2 Server-Action Boundary & Completion-Gate Repair
 - **Priority:** P1 (Remote Authorization Boundary / Evidence-First Completion)
 - **Role:** Security Reviewer, Verification Specialist, Release Engineer
