@@ -272,11 +272,13 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
+    const originalCI = process.env.CI;
 
     try {
       process.env.NODE_ENV = 'production';
       process.env.NEXT_PHASE = 'phase-production-build';
       process.env.DATA_PROVIDER = 'memory';
+      process.env.CI = 'true';
       setCorrectionsDbClient(null);
       resetCorrectionsMemoryStore(true);
 
@@ -291,6 +293,8 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
       else process.env.NEXT_PHASE = originalNextPhase;
       if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
       else process.env.DATA_PROVIDER = originalDataProvider;
+      if (originalCI === undefined) delete process.env.CI;
+      else process.env.CI = originalCI;
       setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
     }
   });
@@ -299,11 +303,13 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
+    const originalCI = process.env.CI;
 
     try {
       process.env.NODE_ENV = 'production';
       process.env.NEXT_PHASE = 'phase-production-server';
       process.env.DATA_PROVIDER = 'memory';
+      process.env.CI = 'false';
       setCorrectionsDbClient(null);
 
       await expect(listPublishedCorrections()).rejects.toThrow(
@@ -316,6 +322,8 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
       else process.env.NEXT_PHASE = originalNextPhase;
       if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
       else process.env.DATA_PROVIDER = originalDataProvider;
+      if (originalCI === undefined) delete process.env.CI;
+      else process.env.CI = originalCI;
       setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
     }
   });
