@@ -14,6 +14,20 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261021-12: ACG-2 Server-Action Boundary & Completion-Gate Repair
+- **Priority:** P1 (Remote Authorization Boundary / Evidence-First Completion)
+- **Role:** Security Reviewer, Verification Specialist, Release Engineer
+- **Scope:** `features/intel/{story-builder,verification}/actions.ts`, `tests/intel-auth.test.ts`, `.agents/skills/{issue-to-completion,adversarial-verification,publication-safety,release-readiness,evidence-first-completion}/SKILL.md`, and ACG-2 acceptance/continuity documentation.
+- **Finding:** Two `'use server'` modules exposed exported `*ActionCore` functions accepting caller-provided `actor` objects. Exported async functions in such modules can be remotely callable; trusting the supplied actor would violate the server-derived identity boundary.
+- **Remediation:** Made all seven actor-taking core helpers module-private. Public wrappers accept `FormData`, derive actor identity from server-side session/role checks, and invoke helpers only after authorization.
+- **Regression:** Added a structural adversarial test to `tests/intel-auth.test.ts` for the no-export rule, FormData-only signatures, and auth-before-mutation ordering.
+- **Additional gap:** The five registered/mandatory engineering skill files were absent despite references from `AGENTS.md`; this follow-up adds the missing skill documents.
+- **Verification:** CI, infrastructure validation, audit verification, and security scans passed on earlier SHA `1d386a82804bd42d1357f91b9b6214035090608b`, but those runs predate this remediation. Current follow-up code and skill validation are **NOT YET VERIFIED**.
+- **Status:** IN_PROGRESS — remediation authored, exact-head CI required.
+- **Next Action:** Open a fresh PR for the final candidate commit; verify typecheck, lint, security, database/migration safety, all tests, production build, browser accessibility, skill validation, audit, and release checks on the exact head. Keep publication and live DB operations blocked.
+
+---
+
 ### TASK-20261021-11: TB-ORIGINAL-REPORTING-006A — Final Dispatch Readiness
 - **Priority:** P1 (Official Directory Verification, Public Authority Separation & Dispatch Readiness)
 - **Role:** Investigative Editor, Legal & Standards Auditor, Public Records Specialist

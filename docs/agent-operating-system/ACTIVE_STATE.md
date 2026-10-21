@@ -56,3 +56,35 @@
 ## 4. Single Highest-Priority Next Action
 
 **Next Action:** Present ACG-2 BTB-001 Architecture Reconciliation Acceptance Report to product owner and editorial board. Keep Plassey investigation fail-closed in draft status. Do not author Panipat, Talikota, or Buxar until formal authorization is granted. Standing by for instructions.
+
+
+---
+
+## ACG-2 Branch Follow-up Checkpoint — 2026-10-21
+
+This entry tracks a separate candidate branch and does not replace the active local-workspace mission above.
+
+- **Candidate branch:** `feat/btb-001-plassey-architecture-reconciliation-current-head`
+- **Source checkpoint before this follow-up commit:** `a28f081fecb4095e258274a9b44b4ecc8ad0f87f`
+- **Finding:** Next.js server-action modules exported actor-taking `*ActionCore` functions, creating a potential remote identity-spoofing path.
+- **Remediation:** The story-builder and verification core helpers are now module-private; FormData wrappers derive identity server-side before mutation.
+- **Regression evidence added:** `tests/intel-auth.test.ts` statically checks the export boundary and authentication order.
+- **Process gap repaired:** The five engineering skills required by `AGENTS.md` and registered in `.agents/skills.md` were absent from the tree; their skill files are included in the follow-up.
+- **Last verified candidate:** Main CI, infrastructure validation, and audit checks passed on `1d386a82804bd42d1357f91b9b6214035090608b`, before these follow-up changes. Do not carry those results forward.
+- **Next action:** Create a review PR from the final follow-up head and rerun CI, security scans, audit verification, and release checks against that exact SHA. Keep the PR unmerged; do not publish the Plassey draft or mutate staging/production databases.
+
+
+---
+
+## ACG-2 Branch Follow-up Checkpoint — 2026-10-21
+
+This entry tracks a separate candidate branch and does not replace the active local-workspace mission above.
+
+- **Candidate branch:** `feat/btb-001-plassey-architecture-reconciliation-current-head`
+- **Source checkpoint before this follow-up commit:** `a28f081fecb4095e258274a9b44b4ecc8ad0f87f`
+- **Finding:** Next.js server-action modules exported actor-taking `*ActionCore` functions, creating a potential remote identity-spoofing path.
+- **Remediation:** The story-builder and verification core helpers are now module-private; FormData wrappers derive identity server-side before mutation.
+- **Regression evidence added:** `tests/intel-auth.test.ts` checks the export boundary and authentication order.
+- **Process gap repaired:** The five engineering skills required by `AGENTS.md` and registered in `.agents/skills.md` were absent from the tree; their skill files are included in the follow-up.
+- **Last verified candidate:** Main CI, infrastructure validation, and audit checks passed on `1d386a82804bd42d1357f91b9b6214035090608b`, before these follow-up changes. Do not carry those results forward.
+- **Next action:** Create a review PR from the final follow-up head and rerun checks on that exact SHA. Keep the PR unmerged; do not publish the Plassey draft or mutate staging/production databases.

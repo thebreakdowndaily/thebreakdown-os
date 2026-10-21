@@ -214,4 +214,29 @@ The first successful CI run above was executed on commit `9e5daeb0ba533df3977549
 
 Corrective commit `12add5e3c5731c6d4415f1bff7a3d1bc27b4708f` extracts reading-history storage into `lib/retention/history.ts`, keeps the existing `StoryMemoryWriter` exports compatible, and adds regression assertions for SSR, malformed entries, inaccessible localStorage, and invalid JSON.
 
-**Current acceptance status:** draft PR [#97](https://github.com/thebreakdowndaily/thebreakdown-os/pull/97) remains open. A fresh CI run on the exact final PR head is still required; earlier green gates do not certify later commits. Do not merge or promote the Plassey pilot based on this report alone. Publication remains draft-gated, and live database mutations remain unauthorized.
+**Status at this checkpoint:** PR #97 was superseded and closed; PR #98 was opened against candidate SHA `1d386a82804bd42d1357f91b9b6214035090608b`. The follow-up security remediation and regression test described below were committed after that SHA, so the prior PR #98 checks do not certify the updated candidate. A fresh review PR and full CI on its exact head are required before merge. Publication remains draft-gated, and live database mutations remain unauthorized.
+
+
+---
+
+## Adversarial Security Follow-up — 2026-10-21
+
+### Finding: actor-taking core helpers were remotely exported
+The `features/intel/story-builder/actions.ts` and `features/intel/verification/actions.ts` files use Next.js `'use server'`. They previously exported asynchronous `*ActionCore` helpers that accepted an `actor` object supplied in their arguments. In a server-action module, exported async functions can be exposed as remote actions; a caller must never be trusted to assert their own identity.
+
+**Remediation committed:**
+- Story Builder's four actor-taking core helpers are module-private.
+- Verification's three actor-taking core helpers are module-private.
+- Only the FormData wrappers remain exported. Each wrapper derives the actor from the server session/role check before calling its private helper.
+- `tests/intel-auth.test.ts` now includes an adversarial structural regression that rejects exported core helpers, verifies the public wrapper signatures accept `FormData`, and checks authentication precedes mutation.
+
+### Mandatory engineering skills restored
+Five active skills listed in `.agents/skills.md` and referenced by `AGENTS.md` were missing from the candidate tree. This follow-up restores:
+- `.agents/skills/issue-to-completion/SKILL.md`
+- `.agents/skills/adversarial-verification/SKILL.md`
+- `.agents/skills/publication-safety/SKILL.md`
+- `.agents/skills/release-readiness/SKILL.md`
+- `.agents/skills/evidence-first-completion/SKILL.md`
+
+### Verification boundary
+The earlier [CI run #39618832976](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832976), [infrastructure run #39618832941](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832941), and [audit run #39618832980](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832980) passed on `1d386a82804bd42d1357f91b9b6214035090608b`. These results predate the server-action hardening, its new regression tests, and the restored skills. **They are not verification of this follow-up.** A new PR head must pass the relevant test, typecheck, lint, build, security, audit, and browser gates. Staging and production deployment-health jobs were skipped on the earlier infrastructure run and remain external release gates.
