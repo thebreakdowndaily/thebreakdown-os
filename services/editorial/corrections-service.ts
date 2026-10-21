@@ -636,13 +636,20 @@ export async function getReaderCorrectionById(id: string): Promise<ReaderCorrect
         .eq('id', id)
         .maybeSingle();
 
-      if (!error && data) {
-        return rowToReaderCorrection(data);
+      if (error) {
+        throw new Error(error.message || 'database query failed');
       }
-    } catch {
-      // Fall through to memory
+      // A successful DB miss is a real "not found", never permission to use a stale cache.
+      return data ? rowToReaderCorrection(data) : undefined;
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Reader correction lookup failed: ${err?.message || 'database communication error'}`);
+      }
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction lookup unavailable: durable database storage is required.');
   }
+
   return memoryReaderCorrections.get(id);
 }
 
@@ -660,12 +667,20 @@ export async function listReaderCorrections(
         query = query.eq('story_slug', options.storySlug.toLowerCase());
       }
       const { data, error } = await query.order('created_at', { ascending: false });
-      if (!error && data && Array.isArray(data)) {
-        return data.map(rowToReaderCorrection);
+      if (error) {
+        throw new Error(error.message || 'database query failed');
       }
-    } catch {
-      // Fall through to memory
+      if (!Array.isArray(data)) {
+        throw new Error('database returned an invalid result');
+      }
+      return data.map(rowToReaderCorrection);
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Reader correction queue query failed: ${err?.message || 'database communication error'}`);
+      }
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction queue unavailable: durable database storage is required.');
   }
 
   let list = Array.from(memoryReaderCorrections.values());
@@ -690,13 +705,15 @@ export async function triageReaderCorrection(
     throw new Error(`Unauthorized: User role '${staffContext.role}' cannot triage reader corrections.`);
   }
 
-  const record = (await getReaderCorrectionById(input.correctionId)) || memoryReaderCorrections.get(input.correctionId);
+  const db = getCorrectionsDbClient();
+  const record = db || process.env.NODE_ENV === 'production'
+    ? await getReaderCorrectionById(input.correctionId)
+    : memoryReaderCorrections.get(input.correctionId);
   if (!record) {
     throw new Error(`Correction submission not found: ${input.correctionId}`);
   }
 
   const now = new Date().toISOString();
-  const db = getCorrectionsDbClient();
   const isPublishing = input.status === 'resolved' && Boolean(input.publishedCorrection);
 
   if (!db && process.env.NODE_ENV === 'production') {
