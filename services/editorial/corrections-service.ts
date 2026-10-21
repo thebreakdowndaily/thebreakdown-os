@@ -983,13 +983,14 @@ export async function listPublishedCorrections(
     return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
-  // Next.js statically prerenders routes during "next build". CI deliberately uses
-  // DATA_PROVIDER=memory and has no production database credentials; in that
-  // build-only context, render the immutable built-in seed notices so static
-  // artifacts remain complete. This exception must never be active at runtime.
+  // Next.js statically prerenders routes during "next build". The CI workflow
+  // explicitly sets BREAKDOWN_CI_STATIC_BUILD for this build only and uses the
+  // in-memory provider without production database credentials. In that one
+  // fixture context, emit known seed notices so CI can test prerendering. The
+  // marker is not configured in deployed environments, so runtime still fails closed.
   const isMemoryOnlyProductionBuild =
     process.env.NODE_ENV === 'production' &&
-    (process.env.NEXT_PHASE === 'phase-production-build' || process.env.CI === 'true') &&
+    process.env.BREAKDOWN_CI_STATIC_BUILD === 'true' &&
     process.env.DATA_PROVIDER === 'memory';
 
   if (process.env.NODE_ENV === 'production' && !isMemoryOnlyProductionBuild) {
