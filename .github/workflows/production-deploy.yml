@@ -1,36 +1,54 @@
 name: POP-1.0 Production Infrastructure Pipeline
 
 on:
-  # Run release verification only after the shared CI Pipeline succeeds on a
-  # branch promotion. Pull requests are fully validated by ci.yml.
+  # The PR gate runs only the unique regression tests. The shared CI Pipeline
+  # owns typecheck, lint, security, migration safety, accessibility and build.
+  pull_request:
+    branches: [main, staging]
+  # Live deployment smoke checks run only after blocking CI completes.
   workflow_run:
     workflows: ["CI Pipeline"]
     types: [completed]
+    branches: [main, staging]
 
 permissions:
   contents: read
 
 jobs:
-  # Preserve the historical PR status context without rerunning tests/builds.
-  # This job evaluates only the trusted CI conclusion; it never checks out or
-  # executes code from the pull request.
+  # Keep the historical PR status context, but run only checks not already
+  # covered by the shared CI Pipeline.
   validate-and-test:
     name: 1. Validate & Test (CI)
-    if: ${{ github.event.workflow_run.event == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Enforce blocking CI result
-        env:
-          CI_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
-          CI_RUN_ID: ${{ github.event.workflow_run.id }}
-          CI_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      - name: Checkout Pull Request
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Architecture & Operational Regression Gate
         run: |
-          echo "Blocking CI run $CI_RUN_ID for $CI_HEAD_SHA concluded: $CI_CONCLUSION"
-          if [ "$CI_CONCLUSION" != "success" ]; then
-            echo "The shared CI Pipeline did not pass."
-            exit 1
-          fi
-          echo "Shared CI Pipeline passed; no duplicate build was run."
+          npx tsx tests/canonical-domain.test.ts
+          npx tsx tests/projections/all-projections.test.ts
+          npx tsx tests/cache-policy.test.ts
+          npx tsx tests/reference-story.test.ts
+          npx tsx tests/reader-product-surface.test.ts
+          npx tsx tests/editorial-operating-system.test.ts
+          npx tsx tests/e2e-workflow.test.ts
+          npx tsx tests/production-readiness.test.ts
+          npx tsx tests/data-integrity.test.ts
+
+      - name: Release-Control Safety & Deployment Health Suites
+        run: |
+          npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts
 
   deploy-staging:
     name: 2. Verify Staging Deployment Health
