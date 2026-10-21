@@ -268,7 +268,59 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(allReceived.length).toBe(1);
     expect(allReceived[0].id).toBe(submissionId);
   });
-  it('8. Published corrections are durable and reload after a cold start', async () => {
+  it('8. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    const originalNextPhase = process.env.NEXT_PHASE;
+    const originalDataProvider = process.env.DATA_PROVIDER;
+
+    try {
+      process.env.NODE_ENV = 'production';
+      process.env.NEXT_PHASE = 'phase-production-build';
+      process.env.DATA_PROVIDER = 'memory';
+      setCorrectionsDbClient(null);
+      resetCorrectionsMemoryStore(true);
+
+      const seeded = await listPublishedCorrections();
+      expect(seeded.length).toBeGreaterThan(0);
+      expect(seeded.some(row => row.storySlug === 'electoral-bonds')).toBe(true);
+      expect(seeded.some(row => row.storySlug === 'mgnrega-reform')).toBe(true);
+    } finally {
+      if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = originalNodeEnv;
+      if (originalNextPhase === undefined) delete process.env.NEXT_PHASE;
+      else process.env.NEXT_PHASE = originalNextPhase;
+      if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
+      else process.env.DATA_PROVIDER = originalDataProvider;
+      setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    }
+  });
+
+  it('9. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    const originalNextPhase = process.env.NEXT_PHASE;
+    const originalDataProvider = process.env.DATA_PROVIDER;
+
+    try {
+      process.env.NODE_ENV = 'production';
+      process.env.NEXT_PHASE = 'phase-production-server';
+      process.env.DATA_PROVIDER = 'memory';
+      setCorrectionsDbClient(null);
+
+      await expect(listPublishedCorrections()).rejects.toThrow(
+        /Public corrections ledger is unavailable: durable database storage is required/
+      );
+    } finally {
+      if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = originalNodeEnv;
+      if (originalNextPhase === undefined) delete process.env.NEXT_PHASE;
+      else process.env.NEXT_PHASE = originalNextPhase;
+      if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
+      else process.env.DATA_PROVIDER = originalDataProvider;
+      setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    }
+  });
+
+  it('10. Published corrections are durable and reload after a cold start', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'The border was demarcated in 1960 according to this passage.',
@@ -301,7 +353,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(reloaded[0].correctedWording).toBe('The LAC remains undemarcated across multiple disputed sectors.');
   });
 
-  it('9. Failed correction publication never reports success or partially updates the submission', async () => {
+  it('11. Failed correction publication never reports success or partially updates the submission', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'A passage that must not create a correction on failure.',
