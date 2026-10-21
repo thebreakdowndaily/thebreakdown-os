@@ -49,16 +49,36 @@ export async function scheduleStoryAction(params: {
       status: 'planned',
     });
 
-    // Also update the story's scheduled_at
+    // Also update the story's scheduled_at. Supabase errors are returned in
+    // the result object, so explicitly check both the error and matched row.
     const db = getServiceClient();
-    await db
+    const { data: scheduledStory, error: scheduleError } = await db
       .from('stories')
       .update({
         scheduled_at: `${params.slotDate}T09:00:00Z`,
         status: 'scheduled',
         updated_at: new Date().toISOString(),
       })
-      .eq('id', params.storyId);
+      .eq('id', params.storyId)
+      .select('id')
+      .maybeSingle();
+
+    if (scheduleError || !scheduledStory) {
+      const reason = scheduleError?.message || 'story record was not found';
+      let recoveryNote = '';
+      try {
+        await updateScheduleEntry(entry.id, {
+          status: 'blocked',
+          blockReason: `Story scheduling failed: ${reason}`,
+        });
+      } catch (recoveryError) {
+        recoveryNote = ` The schedule entry could not be marked blocked: ${recoveryError instanceof Error ? recoveryError.message : 'unknown error'}.`;
+      }
+      return {
+        success: false,
+        error: `Schedule entry ${entry.id} was created, but the story was not scheduled: ${reason}.${recoveryNote}`,
+      };
+    }
 
     revalidatePath('/intel/editorial/calendar');
     revalidatePath('/intel/editorial');
@@ -100,7 +120,7 @@ export async function cancelScheduleAction(
 export async function validateStoryAction(
   storyId: string,
   scheduleId?: string,
-): Promise<{ success: boolean; result?: PublicationGateResult; error?: string }> {
+): Promise<{ success: boolean; result?: PublicationGateResult; error?: string; warning?: string }> {
   try {
     await requireRole('editor');
     const db = getServiceClient();
@@ -219,22 +239,40 @@ export async function publishNowAction(
 
     if (result.passed) {
       const now = new Date().toISOString();
-      await db
+      const { data: publishedStory, error: publishError } = await db
         .from('stories')
         .update({
           status: 'published',
           published_at: now,
           updated_at: now,
         })
-        .eq('id', storyId);
+        .eq('id', storyId)
+        .select('id')
+        .maybeSingle();
 
-      if (scheduleId) {
-        await updateScheduleEntry(scheduleId, {
-          status: 'published',
-        });
+      if (publishError || !publishedStory) {
+        return {
+          success: false,
+          error: `Story publication was not confirmed: ${publishError?.message || 'story record was not updated'}.`,
+        };
       }
 
       result.publishedAt = now;
+      if (scheduleId) {
+        try {
+          await updateScheduleEntry(scheduleId, { status: 'published' });
+        } catch (scheduleError) {
+          // The story write is already confirmed. Tell the caller the true state
+          // and surface the failed calendar reconciliation as a warning.
+          revalidatePath('/intel/editorial/calendar');
+          revalidatePath('/intel/editorial');
+          return {
+            success: true,
+            result,
+            warning: `Story was published, but schedule entry ${scheduleId} could not be reconciled: ${scheduleError instanceof Error ? scheduleError.message : 'unknown error'}.`,
+          };
+        }
+      }
     }
 
     revalidatePath('/intel/editorial/calendar');

@@ -9,7 +9,7 @@
  *   - TEST 5: Canonical regression for published rbi-repo-rate
  */
 
-import { describe, it, beforeEach, afterEach, after } from 'node:test';
+import { describe, it, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { isPubliclyPublished, isCanonicalStoryPublic } from '../lib/story/publication';
 import { resolveStory, resolveCanonicalStory } from '../lib/story/resolver';
@@ -26,10 +26,6 @@ describe('P1 Publication Safety Suite', () => {
     process.env.CANONICAL_READ_PATH = originalEnv;
     delete (CANONICAL_ELIGIBILITY_REGISTRY as any)['kashmir-the-first-test'];
     delete (CANONICAL_ELIGIBILITY_REGISTRY as any)['india-china-border-lac'];
-  });
-
-  after(() => {
-    setTimeout(() => process.exit(0), 100).unref();
   });
 
   // ─── TEST 1: DRAFT CHAPTER REDIRECT (F-01) ──────────────────────────────────

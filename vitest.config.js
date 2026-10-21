@@ -140,6 +140,7 @@ module.exports = {
       'tests/wave3-remaining-paths.test.ts',
       'tests/phase2b1-reconciliation.test.ts',
       'tests/continuous-newsroom-os.test.ts',
+      'tests/editorial-actions-persistence.test.ts',
       'services/radar/__tests__/change-detection.test.ts',
       'services/radar/__tests__/document-mutation-reconciliation.test.ts',
       'services/radar/__tests__/end-to-end-latency-instrumentation.test.ts',
