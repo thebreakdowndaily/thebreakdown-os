@@ -989,7 +989,7 @@ export async function listPublishedCorrections(
   // artifacts remain complete. This exception must never be active at runtime.
   const isMemoryOnlyProductionBuild =
     process.env.NODE_ENV === 'production' &&
-    process.env.NEXT_PHASE === 'phase-production-build' &&
+    (process.env.NEXT_PHASE === 'phase-production-build' || process.env.CI === 'true') &&
     process.env.DATA_PROVIDER === 'memory';
 
   if (process.env.NODE_ENV === 'production' && !isMemoryOnlyProductionBuild) {
