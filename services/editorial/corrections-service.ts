@@ -30,19 +30,41 @@ function isValidUuid(id?: string | null): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 }
 
+function rowToPublishedCorrection(row: any): PublishedCorrection {
+  const relatedStory = Array.isArray(row.stories) ? row.stories[0] : row.stories;
+  return {
+    id: row.id,
+    storyId: row.story_id,
+    storyTitle: relatedStory?.title || undefined,
+    storySlug: relatedStory?.slug || row.story_slug || undefined,
+    storyVersionId: row.story_version_id || undefined,
+    claimId: row.claim_id || undefined,
+    verificationEventId: row.verification_event_id || undefined,
+    category: row.category as CorrectionCategory,
+    previousWording: row.previous_wording || '',
+    correctedWording: row.corrected_wording || '',
+    explanation: row.explanation,
+    supersededById: row.superseded_by_id || undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at || row.created_at,
+  };
+}
+
 function rowToReaderCorrection(row: any): ReaderCorrection {
   const mem = memoryReaderCorrections.get(row.id);
   return {
     id: row.id,
-    storyId: mem?.storyId || row.story_id || undefined,
+    storyId: row.story_id || mem?.storyId || undefined,
     storySlug: row.story_slug,
-    claimId: mem?.claimId || row.claim_id || undefined,
+    claimId: row.claim_id || undefined,
+    resolvedCorrectionId: row.resolved_correction_id || mem?.resolvedCorrectionId || undefined,
     category: row.category as CorrectionCategory,
     passageExcerpt: row.passage_excerpt,
     suggestedCorrection: row.suggested_correction,
     submitterEmail: row.submitter_email || undefined,
     supportingEvidenceUrl: row.supporting_evidence_url || undefined,
     status: row.status,
+    triageNotes: row.triage_notes || mem?.triageNotes || undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -106,6 +128,8 @@ export function createMockCorrectionsClient(options: {
       let filterFn = (r: any) => true;
       let insertedPayload: any = null;
       let updatedPayload: any = null;
+      let orderBy: string | null = null;
+      let orderAscending = true;
 
       const builder: any = {
         select: (_cols?: string) => builder,
@@ -114,7 +138,11 @@ export function createMockCorrectionsClient(options: {
           filterFn = (r: any) => prev(r) && r[col] === val;
           return builder;
         },
-        order: (_col: string, _opts?: { ascending?: boolean }) => builder,
+        order: (col: string, opts?: { ascending?: boolean }) => {
+          orderBy = col;
+          orderAscending = opts?.ascending ?? true;
+          return builder;
+        },
         insert: (payload: any) => {
           insertedPayload = payload;
           return builder;
@@ -175,11 +203,90 @@ export function createMockCorrectionsClient(options: {
             const matching = store.readerCorrections.filter(filterFn);
             return Promise.resolve({ data: matching, error: null }).then(resolve);
           }
+          if (table === 'corrections') {
+            const matching = store.corrections
+              .filter(filterFn)
+              .map((row: any) => ({
+                ...row,
+                stories: store.stories.find((story: any) => story.id === row.story_id) || row.stories || null,
+              }));
+            if (orderBy) {
+              matching.sort((a: any, b: any) => {
+                const left = a[orderBy!];
+                const right = b[orderBy!];
+                const compare = String(left ?? '').localeCompare(String(right ?? ''));
+                return orderAscending ? compare : -compare;
+              });
+            }
+            return Promise.resolve({ data: matching, error: null }).then(resolve);
+          }
           return Promise.resolve({ data: [], error: null }).then(resolve);
         },
       };
 
       return builder;
+    },
+    rpc: async (functionName: string, params: Record<string, any>) => {
+      if (options.shouldThrow) {
+        throw new Error('Database connection failed');
+      }
+      if (functionName !== 'publish_reader_correction') {
+        return { data: null, error: { message: `Unknown mock RPC: ${functionName}` } };
+      }
+      if (options.shouldFailInsert) {
+        return { data: null, error: { message: 'Database insert constraint violation' } };
+      }
+
+      const submission = store.readerCorrections.find((row: any) => row.id === params.p_reader_correction_id);
+      if (!submission) {
+        return { data: null, error: { message: 'Reader correction not found' } };
+      }
+      if (submission.resolved_correction_id) {
+        if (params.p_triage_notes !== null && params.p_triage_notes !== undefined) {
+          submission.triage_notes = params.p_triage_notes;
+        }
+        const existing = store.corrections.find((row: any) => row.id === submission.resolved_correction_id);
+        return existing
+          ? { data: [{ ...existing, stories: store.stories.find((story: any) => story.id === existing.story_id) || null }], error: null }
+          : { data: null, error: { message: 'Linked published correction is missing' } };
+      }
+      if (submission.status === 'rejected') {
+        return { data: null, error: { message: 'Rejected submissions cannot be published' } };
+      }
+
+      const story = store.stories.find((row: any) =>
+        row.id === submission.story_id || row.slug === submission.story_slug
+      );
+      if (!story) {
+        return { data: null, error: { message: 'Canonical story not found' } };
+      }
+
+      const now = new Date().toISOString();
+      const published = {
+        id: params.p_published_correction_id,
+        story_id: story.id,
+        story_version_id: null,
+        claim_id: params.p_claim_id || submission.claim_id || null,
+        verification_event_id: null,
+        category: params.p_category,
+        previous_wording: params.p_previous_wording,
+        corrected_wording: params.p_corrected_wording,
+        explanation: params.p_explanation,
+        superseded_by_id: null,
+        created_at: now,
+        updated_at: now,
+      };
+      // Mutate both rows only after validation, mirroring the SQL function transaction.
+      store.corrections.push(published);
+      Object.assign(submission, {
+        story_id: story.id,
+        claim_id: published.claim_id,
+        status: 'resolved',
+        resolved_correction_id: published.id,
+        triage_notes: params.p_triage_notes ?? submission.triage_notes ?? null,
+        updated_at: now,
+      });
+      return { data: [{ ...published, stories: story }], error: null };
     },
   };
 }
@@ -529,13 +636,26 @@ export async function getReaderCorrectionById(id: string): Promise<ReaderCorrect
         .eq('id', id)
         .maybeSingle();
 
-      if (!error && data) {
+      if (error) {
+        throw new Error(error.message || 'database query failed');
+      }
+      if (data) {
         return rowToReaderCorrection(data);
       }
-    } catch {
-      // Fall through to memory
+      // Production trusts a successful database miss. Only local development/test
+      // may consult the process-local cache for legacy fixtures.
+      if (process.env.NODE_ENV === 'production') {
+        return undefined;
+      }
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Reader correction lookup failed: ${err?.message || 'database communication error'}`);
+      }
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction lookup unavailable: durable database storage is required.');
   }
+
   return memoryReaderCorrections.get(id);
 }
 
@@ -553,12 +673,20 @@ export async function listReaderCorrections(
         query = query.eq('story_slug', options.storySlug.toLowerCase());
       }
       const { data, error } = await query.order('created_at', { ascending: false });
-      if (!error && data && Array.isArray(data)) {
-        return data.map(rowToReaderCorrection);
+      if (error) {
+        throw new Error(error.message || 'database query failed');
       }
-    } catch {
-      // Fall through to memory
+      if (!Array.isArray(data)) {
+        throw new Error('database returned an invalid result');
+      }
+      return data.map(rowToReaderCorrection);
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Reader correction queue query failed: ${err?.message || 'database communication error'}`);
+      }
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction queue unavailable: durable database storage is required.');
   }
 
   let list = Array.from(memoryReaderCorrections.values());
@@ -583,35 +711,21 @@ export async function triageReaderCorrection(
     throw new Error(`Unauthorized: User role '${staffContext.role}' cannot triage reader corrections.`);
   }
 
-  const record = (await getReaderCorrectionById(input.correctionId)) || memoryReaderCorrections.get(input.correctionId);
+  const db = getCorrectionsDbClient();
+  const record = db || process.env.NODE_ENV === 'production'
+    ? await getReaderCorrectionById(input.correctionId)
+    : memoryReaderCorrections.get(input.correctionId);
   if (!record) {
     throw new Error(`Correction submission not found: ${input.correctionId}`);
   }
 
   const now = new Date().toISOString();
-  record.status = input.status;
-  record.updatedAt = now;
-  if (input.triageNotes) {
-    record.triageNotes = input.triageNotes;
+  const isPublishing = input.status === 'resolved' && Boolean(input.publishedCorrection);
+
+  if (!db && process.env.NODE_ENV === 'production') {
+    throw new Error('Correction triage is unavailable: durable database storage is required.');
   }
 
-  // Update durable store if available
-  const db = getCorrectionsDbClient();
-  if (db) {
-    try {
-      await db
-        .from('reader_corrections')
-        .update({
-          status: input.status,
-          updated_at: now,
-        })
-        .eq('id', input.correctionId);
-    } catch (err) {
-      console.error('[CorrectionsService] Failed to update reader correction status in database:', err);
-    }
-  }
-
-  // Automated claim-level verification handoff (GAP-VS8-04)
   let handoffRecord: VerificationHandoffRecord | undefined;
   if (input.verificationHandoff) {
     const handoffResult = await handoffCorrectionToVerification(
@@ -625,31 +739,94 @@ export async function triageReaderCorrection(
     handoffRecord = handoffResult.handoffRecord;
   }
 
-  // If resolved with published correction, append to public.corrections projection
-  if (input.status === 'resolved' && input.publishedCorrection) {
+  let publishedNotice: PublishedCorrection | undefined;
+  if (isPublishing && input.publishedCorrection) {
     const publishedId = randomUUID();
-    const publishedNotice: PublishedCorrection = {
-      id: publishedId,
-      storyId: record.storyId || record.storySlug,
-      storySlug: record.storySlug,
-      claimId: handoffRecord?.claimId || record.claimId,
-      verificationEventId: handoffRecord?.handoffId,
-      category: input.publishedCorrection.category || record.category,
-      previousWording: input.publishedCorrection.previousWording,
-      correctedWording: input.publishedCorrection.correctedWording,
-      explanation: input.publishedCorrection.explanation,
-      createdAt: now,
-      updatedAt: now,
+
+    if (db) {
+      let result: any;
+      try {
+        result = await db.rpc('publish_reader_correction', {
+          p_reader_correction_id: input.correctionId,
+          p_published_correction_id: publishedId,
+          p_category: input.publishedCorrection.category || record.category,
+          p_previous_wording: input.publishedCorrection.previousWording,
+          p_corrected_wording: input.publishedCorrection.correctedWording,
+          p_explanation: input.publishedCorrection.explanation,
+          p_claim_id: handoffRecord?.claimId || record.claimId || null,
+          p_triage_notes: input.triageNotes ?? null,
+        });
+      } catch (err: any) {
+        throw new Error(`Failed to publish correction durably: ${err?.message || 'database communication error'}`);
+      }
+
+      const { data, error } = result || {};
+      const publishedRow = Array.isArray(data) ? data[0] : data;
+      if (error || !publishedRow?.id || !publishedRow?.story_id) {
+        throw new Error(`Failed to publish correction durably: ${error?.message || 'database returned no correction record'}`);
+      }
+
+      const mapped = rowToPublishedCorrection(publishedRow);
+      publishedNotice = {
+        ...mapped,
+        storyId: publishedRow.story_id,
+        storySlug: mapped.storySlug || record.storySlug,
+      };
+      record.storyId = publishedRow.story_id;
+    } else {
+      // Explicit non-production fallback for isolated local/dev execution only.
+      publishedNotice = {
+        id: publishedId,
+        storyId: record.storyId || record.storySlug,
+        storySlug: record.storySlug,
+        claimId: handoffRecord?.claimId || record.claimId,
+        category: input.publishedCorrection.category || record.category,
+        previousWording: input.publishedCorrection.previousWording,
+        correctedWording: input.publishedCorrection.correctedWording,
+        explanation: input.publishedCorrection.explanation,
+        createdAt: now,
+        updatedAt: now,
+      };
+    }
+  } else if (db) {
+    const triageUpdate: Record<string, string> = {
+      status: input.status,
+      updated_at: now,
     };
+    if (input.triageNotes !== undefined) {
+      triageUpdate.triage_notes = input.triageNotes;
+    }
 
-    memoryPublishedCorrections.set(publishedId, publishedNotice);
-    record.resolvedCorrectionId = publishedId;
+    const { error } = await db
+      .from('reader_corrections')
+      .update(triageUpdate)
+      .eq('id', input.correctionId);
 
+    if (error) {
+      throw new Error(`Failed to persist reader correction triage status: ${error.message || 'database update failed'}`);
+    }
+  }
+
+  // Remember existing linkage to suppress duplicate publication events on idempotent retries.
+  const previousResolvedCorrectionId = record.resolvedCorrectionId;
+
+  // Update in-process caches only after the durable mutation succeeds.
+  record.status = input.status;
+  record.updatedAt = now;
+  if (input.triageNotes) {
+    record.triageNotes = input.triageNotes;
+  }
+  if (publishedNotice) {
+    memoryPublishedCorrections.set(publishedNotice.id, publishedNotice);
+    record.resolvedCorrectionId = publishedNotice.id;
+  }
+
+  if (publishedNotice && previousResolvedCorrectionId !== publishedNotice.id) {
     try {
       eventBus.publish({
         type: 'correction:published',
         payload: {
-          publishedId,
+          publishedId: publishedNotice.id,
           storySlug: record.storySlug,
           category: publishedNotice.category,
         },
@@ -813,14 +990,55 @@ export async function listVerificationHandoffs(correctionId?: string): Promise<V
 export async function listPublishedCorrections(
   storySlugOrId?: string
 ): Promise<PublishedCorrection[]> {
-  let list = Array.from(memoryPublishedCorrections.values());
+  const db = getCorrectionsDbClient();
 
-  if (storySlugOrId) {
-    list = list.filter(
-      p => p.storySlug === storySlugOrId || p.storyId === storySlugOrId
-    );
+  if (db) {
+    let result: any;
+    try {
+      result = await db
+        .from('corrections')
+        .select('*, stories(slug, title)')
+        .order('created_at', { ascending: false });
+    } catch (err: any) {
+      throw new Error(`Public corrections ledger query failed: ${err?.message || 'database communication error'}`);
+    }
+
+    const { data, error } = result || {};
+    if (error || !Array.isArray(data)) {
+      throw new Error(`Public corrections ledger query failed: ${error?.message || 'database returned an invalid result'}`);
+    }
+
+    let list = data.map(rowToPublishedCorrection);
+    if (storySlugOrId) {
+      list = list.filter(
+        correction => correction.storySlug === storySlugOrId || correction.storyId === storySlugOrId
+      );
+    }
+    return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
+  // Next.js statically prerenders routes during "next build". The CI workflow
+  // explicitly sets NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD for this build only and uses the
+  // in-memory provider without production database credentials. In that one
+  // fixture context, emit known seed notices so CI can test prerendering. The
+  // marker is not configured in deployed environments, so runtime still fails closed.
+  const isMemoryOnlyProductionBuild =
+    process.env.NODE_ENV === 'production' &&
+    process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD === 'true' &&
+    process.env.DATA_PROVIDER === 'memory';
+
+  if (process.env.NODE_ENV === 'production' && !isMemoryOnlyProductionBuild) {
+    throw new Error('Public corrections ledger is unavailable: durable database storage is required.');
+  }
+
+  // Memory seed data is a development fallback or a build-only CI fixture.
+  // Deployed production requests always require the durable database ledger.
+  let list = Array.from(memoryPublishedCorrections.values());
+  if (storySlugOrId) {
+    list = list.filter(
+      correction => correction.storySlug === storySlugOrId || correction.storyId === storySlugOrId
+    );
+  }
   return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
@@ -837,30 +1055,45 @@ export async function getCorrectionsHealthMetrics(): Promise<CorrectionsHealthMe
   const db = getCorrectionsDbClient();
   if (db) {
     try {
-      const { data, error } = await db.from('reader_corrections').select('status, created_at');
-      if (!error && data && Array.isArray(data)) {
-        const pending = data.filter((r: any) => r.status === 'received').length;
-        const inReview = data.filter((r: any) => r.status === 'in_review').length;
-        const lastSubmission = data.length > 0
-          ? data.reduce((latest: string, r: any) => (r.created_at > latest ? r.created_at : latest), data[0].created_at)
-          : 'UNKNOWN';
-
-        return {
-          pendingQueueDepth: pending,
-          inReviewCount: inReview,
-          publishedErrataCount: memoryPublishedCorrections.size,
-          lastSubmissionAt: lastSubmission,
-        };
+      const { data: readerData, error: readerError } = await db
+        .from('reader_corrections')
+        .select('status, created_at');
+      if (readerError || !Array.isArray(readerData)) {
+        throw new Error(readerError?.message || 'Reader correction query returned an invalid result');
       }
-    } catch {
-      // Fall through to memory
+
+      const { data: correctionsData, error: correctionsError } = await db
+        .from('corrections')
+        .select('id');
+      if (correctionsError || !Array.isArray(correctionsData)) {
+        throw new Error(correctionsError?.message || 'Published correction query returned an invalid result');
+      }
+
+      const pending = readerData.filter((row: any) => row.status === 'received').length;
+      const inReview = readerData.filter((row: any) => row.status === 'in_review').length;
+      const lastSubmission = readerData.length > 0
+        ? readerData.reduce((latest: string, row: any) => (row.created_at > latest ? row.created_at : latest), readerData[0].created_at)
+        : 'UNKNOWN';
+
+      return {
+        pendingQueueDepth: pending,
+        inReviewCount: inReview,
+        publishedErrataCount: correctionsData.length,
+        lastSubmissionAt: lastSubmission,
+      };
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Correction health metrics query failed: ${err?.message || 'database communication error'}`);
+      }
+      // Local tests/development may fall back when the mock or database is unavailable.
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Correction health metrics are unavailable: durable database storage is required.');
   }
 
   const all = Array.from(memoryReaderCorrections.values());
   const pending = all.filter(r => r.status === 'received').length;
   const inReview = all.filter(r => r.status === 'in_review').length;
-  const published = memoryPublishedCorrections.size;
   const lastSubmission = all.length > 0
     ? all.reduce((latest, r) => (r.createdAt > latest ? r.createdAt : latest), all[0].createdAt)
     : 'UNKNOWN';
@@ -868,8 +1101,7 @@ export async function getCorrectionsHealthMetrics(): Promise<CorrectionsHealthMe
   return {
     pendingQueueDepth: pending,
     inReviewCount: inReview,
-    publishedErrataCount: published,
+    publishedErrataCount: memoryPublishedCorrections.size,
     lastSubmissionAt: lastSubmission,
   };
 }
-
