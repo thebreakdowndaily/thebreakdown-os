@@ -272,13 +272,13 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
-    const originalBuildMarker = process.env.BREAKDOWN_CI_STATIC_BUILD;
+    const originalBuildMarker = process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
 
     try {
       process.env.NODE_ENV = 'production';
       process.env.NEXT_PHASE = 'phase-production-build';
       process.env.DATA_PROVIDER = 'memory';
-      process.env.BREAKDOWN_CI_STATIC_BUILD = 'true';
+      process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD = 'true';
       setCorrectionsDbClient(null);
       resetCorrectionsMemoryStore(true);
 
@@ -293,8 +293,8 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
       else process.env.NEXT_PHASE = originalNextPhase;
       if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
       else process.env.DATA_PROVIDER = originalDataProvider;
-      if (originalBuildMarker === undefined) delete process.env.BREAKDOWN_CI_STATIC_BUILD;
-      else process.env.BREAKDOWN_CI_STATIC_BUILD = originalBuildMarker;
+      if (originalBuildMarker === undefined) delete process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
+      else process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD = originalBuildMarker;
       setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
     }
   });
@@ -303,13 +303,13 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
-    const originalBuildMarker = process.env.BREAKDOWN_CI_STATIC_BUILD;
+    const originalBuildMarker = process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
 
     try {
       process.env.NODE_ENV = 'production';
       process.env.NEXT_PHASE = 'phase-production-server';
       process.env.DATA_PROVIDER = 'memory';
-      delete process.env.BREAKDOWN_CI_STATIC_BUILD;
+      delete process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
       setCorrectionsDbClient(null);
 
       await expect(listPublishedCorrections()).rejects.toThrow(
@@ -322,8 +322,8 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
       else process.env.NEXT_PHASE = originalNextPhase;
       if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
       else process.env.DATA_PROVIDER = originalDataProvider;
-      if (originalBuildMarker === undefined) delete process.env.BREAKDOWN_CI_STATIC_BUILD;
-      else process.env.BREAKDOWN_CI_STATIC_BUILD = originalBuildMarker;
+      if (originalBuildMarker === undefined) delete process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
+      else process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD = originalBuildMarker;
       setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
     }
   });
