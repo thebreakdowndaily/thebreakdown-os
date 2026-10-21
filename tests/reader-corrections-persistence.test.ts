@@ -291,7 +291,55 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(reloaded?.triageNotes).toBe('Assigned for primary-source review; verify the original document.');
   });
 
-  it('9. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
+  it('9. Production queue reads fail closed on database query errors even if memory has a record', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'A reader report for production read-failure verification.',
+      suggestedCorrection: 'The submitted correction should still come from the database.',
+    });
+    expect(submission.success).toBe(true);
+
+    const originalNodeEnv = process.env.NODE_ENV;
+    try {
+      process.env.NODE_ENV = 'production';
+      setCorrectionsDbClient(createMockCorrectionsClient({
+        store: mockStore,
+        shouldThrow: true,
+      }));
+
+      await expect(getReaderCorrectionById(submission.submissionId!)).rejects.toThrow(
+        /Reader correction lookup failed/
+      );
+      await expect(listReaderCorrections()).rejects.toThrow(
+        /Reader correction queue query failed/
+      );
+    } finally {
+      if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = originalNodeEnv;
+      setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    }
+  });
+
+  it('10. Production queue reads fail closed when the database client is unavailable', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    try {
+      process.env.NODE_ENV = 'production';
+      setCorrectionsDbClient(null);
+
+      await expect(getReaderCorrectionById('11111111-1111-1111-1111-111111111111')).rejects.toThrow(
+        /Reader correction lookup unavailable: durable database storage is required/
+      );
+      await expect(listReaderCorrections()).rejects.toThrow(
+        /Reader correction queue unavailable: durable database storage is required/
+      );
+    } finally {
+      if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = originalNodeEnv;
+      setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    }
+  });
+
+  it('11. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
@@ -322,7 +370,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     }
   });
 
-  it('10. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
+  it('12. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
@@ -351,7 +399,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     }
   });
 
-  it('11. Published corrections are durable and reload after a cold start', async () => {
+  it('13. Published corrections are durable and reload after a cold start', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'The border was demarcated in 1960 according to this passage.',
@@ -386,7 +434,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(reloaded[0].correctedWording).toBe('The LAC remains undemarcated across multiple disputed sectors.');
   });
 
-  it('12. Failed correction publication never reports success or partially updates the submission', async () => {
+  it('14. Failed correction publication never reports success or partially updates the submission', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'A passage that must not create a correction on failure.',
