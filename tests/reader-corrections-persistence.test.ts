@@ -268,4 +268,67 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(allReceived.length).toBe(1);
     expect(allReceived[0].id).toBe(submissionId);
   });
+  it('8. Published corrections are durable and reload after a cold start', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'The border was demarcated in 1960 according to this passage.',
+      suggestedCorrection: 'The LAC remains undemarcated across multiple disputed sectors.',
+    });
+    expect(submission.success).toBe(true);
+
+    await triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'resolved',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'The border was demarcated in 1960 according to this passage.',
+        correctedWording: 'The LAC remains undemarcated across multiple disputed sectors.',
+        explanation: 'The original wording overstated the status of demarcation.',
+      },
+    }, { userId: 'editor-ledger-test', role: 'editor' });
+
+    expect(mockStore.corrections).toHaveLength(1);
+    const storedSubmission = mockStore.readerCorrections.find(row => row.id === submission.submissionId);
+    expect(storedSubmission?.status).toBe('resolved');
+    expect(storedSubmission?.resolved_correction_id).toBe(mockStore.corrections[0].id);
+
+    resetCorrectionsMemoryStore(false);
+    setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    const reloaded = await listPublishedCorrections('india-china-border-lac');
+    expect(reloaded).toHaveLength(1);
+    expect(reloaded[0].id).toBe(mockStore.corrections[0].id);
+    expect(reloaded[0].storyId).toBe('11111111-1111-1111-1111-111111111111');
+    expect(reloaded[0].correctedWording).toBe('The LAC remains undemarcated across multiple disputed sectors.');
+  });
+
+  it('9. Failed correction publication never reports success or partially updates the submission', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'A passage that must not create a correction on failure.',
+      suggestedCorrection: 'A suggested change that will fail publication.',
+    });
+    expect(submission.success).toBe(true);
+
+    setCorrectionsDbClient(createMockCorrectionsClient({
+      store: mockStore,
+      shouldFailInsert: true,
+    }));
+
+    await expect(triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'resolved',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'Original wording.',
+        correctedWording: 'Corrected wording.',
+        explanation: 'Publication should fail as the mock database rejects the transaction.',
+      },
+    }, { userId: 'editor-ledger-failure-test', role: 'editor' })).rejects.toThrow(/Failed to publish correction durably/);
+
+    expect(mockStore.corrections).toHaveLength(0);
+    const storedSubmission = mockStore.readerCorrections.find(row => row.id === submission.submissionId);
+    expect(storedSubmission?.status).toBe('received');
+    expect(storedSubmission?.resolved_correction_id).toBeUndefined();
+  });
+
 });
