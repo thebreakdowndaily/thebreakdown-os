@@ -268,7 +268,30 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(allReceived.length).toBe(1);
     expect(allReceived[0].id).toBe(submissionId);
   });
-  it('8. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
+  it('8. Triage notes persist across service instances and a cold start', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'A paragraph with a potentially misleading attribution.',
+      suggestedCorrection: 'The attribution requires primary-source verification.',
+    });
+    expect(submission.success).toBe(true);
+
+    await triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'in_review',
+      triageNotes: 'Assigned for primary-source review; verify the original document.',
+    }, { userId: 'editor-notes-test', role: 'editor' });
+
+    const stored = mockStore.readerCorrections.find(row => row.id === submission.submissionId);
+    expect(stored?.triage_notes).toBe('Assigned for primary-source review; verify the original document.');
+
+    resetCorrectionsMemoryStore(false);
+    setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    const reloaded = await getReaderCorrectionById(submission.submissionId!);
+    expect(reloaded?.triageNotes).toBe('Assigned for primary-source review; verify the original document.');
+  });
+
+  it('9. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
@@ -299,7 +322,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     }
   });
 
-  it('9. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
+  it('10. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
@@ -328,7 +351,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     }
   });
 
-  it('10. Published corrections are durable and reload after a cold start', async () => {
+  it('11. Published corrections are durable and reload after a cold start', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'The border was demarcated in 1960 according to this passage.',
@@ -361,7 +384,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(reloaded[0].correctedWording).toBe('The LAC remains undemarcated across multiple disputed sectors.');
   });
 
-  it('11. Failed correction publication never reports success or partially updates the submission', async () => {
+  it('12. Failed correction publication never reports success or partially updates the submission', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'A passage that must not create a correction on failure.',
