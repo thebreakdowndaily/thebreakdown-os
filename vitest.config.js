@@ -83,6 +83,7 @@ module.exports = {
       'tests/problem-helpers.test.ts',
       'tests/public-platform.test.ts',
       'tests/research-workspace.test.ts',
+      'tests/ai-copilot-production.test.ts',
       'tests/research/invariant.test.ts',
       'tests/resilience.test.ts',
       'tests/security.test.ts',
