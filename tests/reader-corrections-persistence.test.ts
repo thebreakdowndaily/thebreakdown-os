@@ -362,6 +362,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     await triageReaderCorrection({
       correctionId: submission.submissionId!,
       status: 'resolved',
+      triageNotes: 'Verified by an editor against the primary document.',
       publishedCorrection: {
         category: 'factual',
         previousWording: 'The border was demarcated in 1960 according to this passage.',
@@ -374,6 +375,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     const storedSubmission = mockStore.readerCorrections.find(row => row.id === submission.submissionId);
     expect(storedSubmission?.status).toBe('resolved');
     expect(storedSubmission?.resolved_correction_id).toBe(mockStore.corrections[0].id);
+    expect(storedSubmission?.triage_notes).toBe('Verified by an editor against the primary document.');
 
     resetCorrectionsMemoryStore(false);
     setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
