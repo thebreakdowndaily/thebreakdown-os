@@ -6,12 +6,32 @@ on:
   workflow_run:
     workflows: ["CI Pipeline"]
     types: [completed]
-    branches: [main, staging]
 
 permissions:
   contents: read
 
 jobs:
+  # Preserve the historical PR status context without rerunning tests/builds.
+  # This job evaluates only the trusted CI conclusion; it never checks out or
+  # executes code from the pull request.
+  validate-and-test:
+    name: 1. Validate & Test (CI)
+    if: ${{ github.event.workflow_run.event == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce blocking CI result
+        env:
+          CI_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          CI_RUN_ID: ${{ github.event.workflow_run.id }}
+          CI_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          echo "Blocking CI run $CI_RUN_ID for $CI_HEAD_SHA concluded: $CI_CONCLUSION"
+          if [ "$CI_CONCLUSION" != "success" ]; then
+            echo "The shared CI Pipeline did not pass."
+            exit 1
+          fi
+          echo "Shared CI Pipeline passed; no duplicate build was run."
+
   deploy-staging:
     name: 2. Verify Staging Deployment Health
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'staging' }}
