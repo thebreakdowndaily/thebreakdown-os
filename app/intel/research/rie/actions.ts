@@ -5,6 +5,7 @@ import { getSession } from '@/features/auth/auth-server';
 import { canAccessIntelModule, normalizeIntelRole, intelRoleLabel } from '@/features/auth/roles';
 import { researchIntelligenceCore } from '@/services/intelligence/research';
 import { ensureResearchRuntime } from '@/lib/intelligence/research-bootstrap';
+import type { ResearchRun } from '@/types/research-intelligence';
 
 // Governing document: docs/research/RESEARCH_INTELLIGENCE_OPERATING_STANDARD.md
 // Server actions for the Research Intelligence workspace. Authorization happens
@@ -83,7 +84,7 @@ export async function runPipelineActionCore(projectId: string, actor: { id: stri
   if (!researchIntelligenceCore.getProject(projectId)) {
     return { success: false, error: 'Project not found.' };
   }
-  let run;
+  let run: ResearchRun;
   try {
     run = await researchIntelligenceCore.runPipeline(projectId, { triggeredBy: actor.id });
   } catch {
