@@ -3,6 +3,7 @@ import { guardIntelModule } from '@/features/auth/intel-server';
 import { getSession } from '@/features/auth/auth-server';
 import { researchIntelligenceCore } from '@/services/intelligence/research';
 import { ResearchPersistenceError } from '@/services/intelligence/research/persistence/state';
+import type { ResearchRun } from '@/types/research-intelligence';
 
 export async function POST(
   _req: NextRequest,
@@ -23,7 +24,7 @@ export async function POST(
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
 
-  let run;
+  let run: ResearchRun;
   try {
     run = await researchIntelligenceCore.runPipeline(id, {
       triggeredBy: session.user.id,
