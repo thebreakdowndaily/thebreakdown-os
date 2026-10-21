@@ -32,7 +32,7 @@ export function createResearchStateRepository(options?: {
     process.env.APP_ENV === 'production' ||
     (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build');
   const provider =
-    requestedProvider ?? (process.env.NODE_ENV === 'production' ? 'supabase' : 'memory');
+    requestedProvider ?? (runtimeIsProduction || process.env.NODE_ENV === 'production' ? 'supabase' : 'memory');
 
   if (runtimeIsProduction && provider !== 'supabase') {
     throw new ResearchPersistenceError(
