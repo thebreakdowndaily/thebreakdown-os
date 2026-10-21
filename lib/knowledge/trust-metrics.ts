@@ -44,6 +44,23 @@ export function countChapterOneSources(
   return sources.filter((source) => source.chapterIds.includes(FOUNDING_CHAPTER_ID)).length;
 }
 
+/**
+ * Read the authoritative correction ledger. A verified zero is a number;
+ * a failed/unavailable query is undefined so the UI can distinguish them.
+ */
+export async function getCanonicalCorrectionCount(): Promise<number | undefined> {
+  try {
+    const { count, error } = await getServiceClient()
+      .from('corrections')
+      .select('id', { count: 'exact', head: true });
+    if (error) throw error;
+    return typeof count === 'number' ? count : undefined;
+  } catch (error) {
+    console.error('Failed to load canonical correction count:', error);
+    return undefined;
+  }
+}
+
 export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<TrustMetrics> {
   try {
     seedAll();
@@ -93,18 +110,7 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
     const openScholarlyDisagreements = claimsWithDisagreements.length;
     const counterArgumentsDocumented = claimsWithDisagreements.reduce((acc, c) => acc + (c.counterArguments?.length || 0), 0);
 
-    // Correction counts come from the durable correction ledger, not a hard-coded
-    // fallback. An unavailable query is shown as unavailable, never as zero.
-    let correctionsIssued: number | undefined;
-    try {
-      const { count, error } = await getServiceClient()
-        .from('corrections')
-        .select('id', { count: 'exact', head: true });
-      if (error) throw error;
-      correctionsIssued = typeof count === 'number' ? count : undefined;
-    } catch (error) {
-      console.error('Failed to load canonical correction count:', error);
-    }
+    const correctionsIssued = await getCanonicalCorrectionCount();
 
     const chap1Claims = countChapterOneClaims(allClaims);
     const chap1Sources = countChapterOneSources(allSources);
