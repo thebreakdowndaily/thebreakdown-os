@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Trust Dashboard',
-  description: 'Live transparency dashboard for The Breakdown Knowledge Platform — see our editorial standards, chapter status, claim counts, evidence sources, and verification history.',
+  description: 'Transparency dashboard for The Breakdown Knowledge Platform — registry-backed chapter, claim, and source counts with correction-ledger totals and verification history.',
   alternates: {
     canonical: 'https://thebreakdown.in/trust',
   },
@@ -39,7 +39,7 @@ export default async function TrustPage() {
     <Container>
       <div className="py-8 max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mb-2">Trust Dashboard</h1>
-        <p className="text-gray-400 mb-2">Live transparency for The Breakdown Knowledge Platform.</p>
+        <p className="text-gray-400 mb-2">Registry-backed knowledge counts and correction-ledger totals.</p>
         <blockquote className="border-l-4 border-amber-400 pl-4 italic text-gray-300 mb-8 text-sm">
           Evidence before conclusions. Context before certainty.
         </blockquote>
@@ -58,7 +58,7 @@ export default async function TrustPage() {
           <div className="flex items-center gap-2 mb-2">
             <span className="text-amber-400 text-sm font-semibold">★ Founding Edition v1.0</span>
           </div>
-          <p className="text-gray-300 text-sm">The Breakdown Knowledge Library — Founding Edition. <strong>Founding Chapter 001</strong> published. All metrics below reflect current state of the editorial infrastructure.</p>
+          <p className="text-gray-300 text-sm">The Breakdown Knowledge Library — Founding Edition. <strong>Founding Chapter 001</strong> is the designated flagship chapter. Chapter, claim, source, and evidence totals reflect the in-process knowledge registry; corrections are queried from the canonical correction ledger. A dash means the value could not be verified. Zero means a successful query found no matching records.</p>
         </div>
 
         {/* Platform Status */}
