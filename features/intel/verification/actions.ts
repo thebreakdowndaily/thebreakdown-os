@@ -17,8 +17,8 @@ import type { VerificationStatus } from '@/lib/intel/verification';
 // before any workflow mutation — there is no client-side security boundary. All transitions pass
 // through the explicit transition map in the Verification Service store.
 //
-// The exported server actions are form-action compatible (void). The internal *_core functions
-// return actionable results and are the testable seam.
+// Only the FormData wrappers below are exported as remote server actions.
+// Core helpers remain module-private so callers cannot submit a fabricated actor object.
 
 type ActionResult =
   | { success: true; message: string }
@@ -47,7 +47,7 @@ async function seedFor(caseId: string): Promise<ActionResult | null> {
   }
 }
 
-export async function transitionVerificationActionCore(caseId: string, to: VerificationStatus, note: string | undefined, actor: { id: string; name: string }): Promise<ActionResult> {
+async function transitionVerificationActionCore(caseId: string, to: VerificationStatus, note: string | undefined, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!caseId || !to) return { success: false, error: 'Missing case id or target status.' };
   const seedError = await seedFor(caseId);
   if (seedError) return seedError;
@@ -70,7 +70,7 @@ export async function transitionVerificationAction(formData: FormData): Promise<
   );
 }
 
-export async function assignVerificationReviewerActionCore(caseId: string, actor: { id: string; name: string }): Promise<ActionResult> {
+async function assignVerificationReviewerActionCore(caseId: string, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!caseId) return { success: false, error: 'Missing case id.' };
   const seedError = await seedFor(caseId);
   if (seedError) return seedError;
@@ -88,7 +88,7 @@ export async function assignVerificationReviewerAction(formData: FormData): Prom
   await assignVerificationReviewerActionCore(String(formData.get('caseId') ?? '').trim(), auth.actor);
 }
 
-export async function addVerificationNoteActionCore(caseId: string, note: string, actor: { id: string; name: string }): Promise<ActionResult> {
+async function addVerificationNoteActionCore(caseId: string, note: string, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!caseId) return { success: false, error: 'Missing case id.' };
   if (!note) return { success: false, error: 'Review note cannot be empty.' };
   const seedError = await seedFor(caseId);
