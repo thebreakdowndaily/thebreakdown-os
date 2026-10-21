@@ -263,3 +263,10 @@ These changes were committed after SHA `78b15bf9054d551b7373d18808730358f493a363
 The first fresh CI on this review follow-up correctly rejected two TypeScript mistakes in the review fixes: the optional `warning` result field was added to `validateStoryAction` instead of `publishNowAction`, and the UI treated the warning narrowed by an `in` check as `unknown`. The signatures and UI narrowing have now been corrected. The runtime persistence regression suite is also explicitly included in the primary test chain rather than merely registered in the Vitest config.
 
 **Current source state is unverified until fresh CI passes on its resulting exact SHA.** The tracked `tsconfig.frontend.tsbuildinfo` file is restored to the base branch version to avoid including compiler-cache output in the feature diff.
+
+
+### Test-runner invocation correction — 2026-10-21
+
+The latest PR CI passed typecheck, lint, and the other early gates but failed when starting `test:publication-safety-p1`: Node 22 could not resolve `tsx` from `node --import tsx` because `tsx` is not installed as a project-local dependency. Existing repository commands use `npx tsx`. The script has been corrected to `npx tsx --test --test-force-exit tests/publication-safety-p1.test.ts`, preserving actual Node test-runner outcomes without direct `process.exit(0)`.
+
+The candidate is not verified until both the publication-safety suite and the new editorial persistence regression suite pass as part of the normal test chain on the exact final SHA.

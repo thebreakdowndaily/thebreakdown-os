@@ -99,3 +99,8 @@ This entry tracks a separate candidate branch and does not replace the active lo
 - **First new CI result:** Candidate `a5eb7f63f2e19f697a8644ea6a07b9c10624f123` failed strict typecheck on the new warning typing. Corrected in follow-up; exact current head must pass fresh CI before claiming completion.
 - **Remaining gates:** Fresh CI/security/audit/infra run, human diff review, main-integration review. The staging and production health jobs may be skipped on a PR and are separate operational gates.
 - **Next action:** Verify exact candidate SHA, keep publication/database operations blocked, then request human review.
+
+
+## ACG-2 Test-Runner Follow-up — 2026-10-21
+
+The first run of the wired publication-safety suite failed before loading tests because `node --import tsx` could not resolve `tsx` as a local module. The project uses `npx tsx`; the runner now follows that supported invocation. Confirm the publication safety suite and editorial persistence regression suite both pass on the next exact SHA. All prior green CI results apply only to their recorded SHAs.

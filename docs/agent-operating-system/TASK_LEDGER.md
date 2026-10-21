@@ -649,3 +649,12 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 - **Verification:** The previous candidate SHA `a5eb7f63f2e19f697a8644ea6a07b9c10624f123` failed typecheck as expected. The corrected follow-up is **NOT YET VERIFIED**; rerun CI, security, audit, and infrastructure gates on the exact final SHA.
 - **Status:** IN_PROGRESS pending current-head verification.
 - **Next Action:** Submit a fresh review candidate and require its exact-head CI before review/merge.
+
+
+### TASK-20261021-15: Publication-Safety Test Runner Resolution
+- **Priority:** P1 (Test Reliability)
+- **Finding:** The initial runner command `node --import tsx --test ...` fails because `tsx` is supplied via existing `npx tsx` scripts but is not resolvable as a project-local module.
+- **Fix:** Changed the script to `npx tsx --test --test-force-exit tests/publication-safety-p1.test.ts`, using the repository's existing TSX invocation pattern and the built-in test runner. Direct forced-success process termination remains removed.
+- **Verification:** The first attempt failed at module resolution before loading any suite assertions; no test passes are claimed from that invocation. The corrected script requires fresh execution on the next exact candidate SHA.
+- **Status:** IN_PROGRESS — fresh test/CI required.
+- **Next Action:** Open updated candidate and verify publication safety and editorial persistence regression tests in the main test chain, then rerun all release gates.
