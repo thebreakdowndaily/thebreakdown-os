@@ -15,6 +15,7 @@ import {
   updateScheduleEntry,
   getWeeklyPlan,
   validateAndPublishDueStories,
+  rowToStory,
 } from '@/services/editorial/schedule';
 import { validateStoryForPublication } from '@/lib/editorial/publication-gate';
 import { getServiceClient } from '@/supabase/client';
@@ -192,7 +193,7 @@ export async function publishNowAction(
   scheduleId?: string,
 ): Promise<{ success: boolean; result?: PublicationGateResult; error?: string; warning?: string }> {
   try {
-    await requireRole('editor');
+    const principal = await requireRole('editor');
     const db = getServiceClient();
     const { data: storyRow, error: storyError } = await db
       .from('stories')
@@ -204,74 +205,124 @@ export async function publishNowAction(
       return { success: false, error: 'Story not found' };
     }
 
-    const story = {
-      id: storyRow.id,
-      title: storyRow.title,
-      slug: storyRow.slug,
-      headline: storyRow.headline || storyRow.title,
-      summary: storyRow.summary || '',
-      heroImage: storyRow.hero_image || '',
-      author: storyRow.author || '',
-      category: storyRow.category || '',
-      status: storyRow.status,
-      storyType: 'standard',
-      evidenceScore: storyRow.evidence_score || 0,
-      readingTime: storyRow.reading_time || 0,
-      publishedAt: storyRow.published_at || '',
-      createdAt: storyRow.created_at,
-      updatedAt: storyRow.updated_at,
-      tags: storyRow.tags || [],
-      blocks: storyRow.blocks || [],
-      sources: storyRow.sources || [],
-      claims: storyRow.claims || [],
-      timeline: storyRow.timeline || [],
-      faq: storyRow.faq || [],
-      charts: storyRow.charts || [],
-      relatedStoryIds: storyRow.related_story_ids || [],
-      relatedEntityIds: storyRow.related_entity_ids || [],
-      relatedTopicIds: storyRow.related_topic_ids || [],
-    };
+    // Manual publication must use the same canonical async contract as the
+    // scheduled worker. The synchronous gate omits Evidence Gate 13 and the
+    // single-use publication token enforced by the story repository.
+    const story = rowToStory(storyRow as unknown as Record<string, unknown>);
+    const { evaluatePublicationContractAsync, executePostPublicationEffects } =
+      await import('@/lib/editorial/canonical-publication');
+    const { RepositoryFactory } = await import('@/services/factory/repository');
 
-    const result = validateStoryForPublication(
-      { storyId, scheduleId, triggeredBy: 'manual' },
-      story as never,
+    const decision = await evaluatePublicationContractAsync(
+      story,
+      story,
+      principal,
+      {
+        scheduleId,
+        triggeredBy: 'manual',
+        notes: `Manual publication requested by ${principal.name}`,
+      },
     );
-
-    if (result.passed) {
-      const now = new Date().toISOString();
-      const { data: publishedStory, error: publishError } = await db
-        .from('stories')
-        .update({
-          status: 'published',
-          published_at: now,
-          updated_at: now,
-        })
-        .eq('id', storyId)
-        .select('id')
-        .maybeSingle();
-
-      if (publishError || !publishedStory) {
-        return {
-          success: false,
-          error: `Story publication was not confirmed: ${publishError?.message || 'story record was not updated'}.`,
+    const checkedAt = new Date().toISOString();
+    const result: PublicationGateResult = decision.gateResult
+      ? { ...decision.gateResult, checks: [...decision.gateResult.checks] }
+      : {
+          storyId,
+          scheduleId,
+          passed: false,
+          checks: [{
+            name: 'canonical_publication_contract',
+            passed: false,
+            reason: decision.error || 'Canonical publication returned no gate evidence',
+          }],
+          checkedAt,
+          triggeredBy: 'manual',
         };
+
+    // Fail closed if the canonical contract denies publication or omits any
+    // artifact needed to complete a token-authorized write.
+    if (!decision.allowed || !decision.updatedStory || !decision.publicationToken || !result.passed) {
+      const reason = decision.error
+        || result.checks.filter(check => !check.passed).map(check => `${check.name}: ${check.reason}`).join('; ')
+        || 'Canonical publication contract did not authorize publication';
+      result.passed = false;
+
+      if (!result.checks.some(check => !check.passed)) {
+        result.checks.push({
+          name: 'canonical_publication_contract',
+          passed: false,
+          reason,
+        });
       }
 
-      result.publishedAt = now;
+      let recoveryNote = '';
       if (scheduleId) {
         try {
-          await updateScheduleEntry(scheduleId, { status: 'published' });
+          await updateScheduleEntry(scheduleId, { status: 'blocked', blockReason: reason });
         } catch (scheduleError) {
-          // The story write is already confirmed. Tell the caller the true state
-          // and surface the failed calendar reconciliation as a warning.
-          revalidatePath('/intel/editorial/calendar');
-          revalidatePath('/intel/editorial');
-          return {
-            success: true,
-            result,
-            warning: `Story was published, but schedule entry ${scheduleId} could not be reconciled: ${scheduleError instanceof Error ? scheduleError.message : 'unknown error'}.`,
-          };
+          recoveryNote = ` Schedule entry ${scheduleId} could not be marked blocked: ${scheduleError instanceof Error ? scheduleError.message : 'unknown error'}.`;
         }
+      }
+
+      revalidatePath('/intel/editorial/calendar');
+      revalidatePath('/intel/editorial');
+      return { success: false, result, error: `${reason}.${recoveryNote}` };
+    }
+
+    // Repository guard consumes the canonical single-use token and refuses
+    // any direct published write that did not pass the canonical contract.
+    const storyRepository = RepositoryFactory.getStoryRepository();
+    try {
+      await storyRepository.saveStory(decision.updatedStory, {
+        publicationToken: decision.publicationToken,
+      });
+    } catch (publishError) {
+      const reason = publishError instanceof Error ? publishError.message : 'unknown repository error';
+      result.passed = false;
+      result.checks.push({
+        name: 'repository_publish_failed',
+        passed: false,
+        reason,
+      });
+
+      let recoveryNote = '';
+      if (scheduleId) {
+        try {
+          await updateScheduleEntry(scheduleId, {
+            status: 'blocked',
+            blockReason: `Repository publication failed: ${reason}`,
+          });
+        } catch (scheduleError) {
+          recoveryNote = ` Schedule entry ${scheduleId} could not be marked blocked: ${scheduleError instanceof Error ? scheduleError.message : 'unknown error'}.`;
+        }
+      }
+
+      revalidatePath('/intel/editorial/calendar');
+      revalidatePath('/intel/editorial');
+      return {
+        success: false,
+        result,
+        error: `Canonical publication passed its gates, but the story repository write failed: ${reason}.${recoveryNote}`,
+      };
+    }
+
+    result.passed = true;
+    result.publishedAt = decision.updatedStory.publishedAt;
+    executePostPublicationEffects(decision.updatedStory, principal, result);
+
+    if (scheduleId) {
+      try {
+        await updateScheduleEntry(scheduleId, { status: 'published' });
+      } catch (scheduleError) {
+        // Story publication is confirmed; report the schedule mismatch rather
+        // than treating an already-published story as an overall failure.
+        revalidatePath('/intel/editorial/calendar');
+        revalidatePath('/intel/editorial');
+        return {
+          success: true,
+          result,
+          warning: `Story was published, but schedule entry ${scheduleId} could not be reconciled: ${scheduleError instanceof Error ? scheduleError.message : 'unknown error'}.`,
+        };
       }
     }
 
