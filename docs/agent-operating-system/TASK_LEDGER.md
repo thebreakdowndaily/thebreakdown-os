@@ -637,3 +637,15 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 - **Status:** VERIFIED
 - **Final Gate Decision:** Gates 1 through 6 certified PASSED. Series expansion to Panipat, Talikota, and Buxar remains GATED pending product owner authorization. Story publication remains strictly GATED pending editorial board review. Production and staging migrations remain GATED (`BLOCKED-01`, `BLOCKED-02`, `BLOCKED-03`).
 - **Next Action:** Present ACG-2 final acceptance report to product owner and editorial board. Standing by for instructions.
+
+
+### TASK-20261021-14: Typecheck Feedback Loop & Test Chain Closure
+- **Priority:** P1
+- **Scope:** `features/intel/editorial/actions.ts`, `components/intel/editorial/CalendarView.tsx`, `package.json`, `tsconfig.frontend.tsbuildinfo`.
+- **Finding:** The first fresh typecheck on TASK-13 found that the warning field was declared on the validator action rather than the publish action and that an un-narrowed warning value was passed to React state.
+- **Fix:** Correct the action return type and explicitly narrow warning to a string at the UI boundary.
+- **Coverage wiring:** Added `test:editorial-actions-persistence` and chained it into the main test script so the new runtime regression tests execute in the primary suite.
+- **Diff hygiene:** Restore tracked TypeScript incremental compiler output to its base-branch blob to avoid generated cache noise.
+- **Verification:** The previous candidate SHA `a5eb7f63f2e19f697a8644ea6a07b9c10624f123` failed typecheck as expected. The corrected follow-up is **NOT YET VERIFIED**; rerun CI, security, audit, and infrastructure gates on the exact final SHA.
+- **Status:** IN_PROGRESS pending current-head verification.
+- **Next Action:** Submit a fresh review candidate and require its exact-head CI before review/merge.

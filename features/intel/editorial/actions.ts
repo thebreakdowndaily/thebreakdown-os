@@ -120,7 +120,7 @@ export async function cancelScheduleAction(
 export async function validateStoryAction(
   storyId: string,
   scheduleId?: string,
-): Promise<{ success: boolean; result?: PublicationGateResult; error?: string; warning?: string }> {
+): Promise<{ success: boolean; result?: PublicationGateResult; error?: string }> {
   try {
     await requireRole('editor');
     const db = getServiceClient();
@@ -190,7 +190,7 @@ export async function validateStoryAction(
 export async function publishNowAction(
   storyId: string,
   scheduleId?: string,
-): Promise<{ success: boolean; result?: PublicationGateResult; error?: string }> {
+): Promise<{ success: boolean; result?: PublicationGateResult; error?: string; warning?: string }> {
   try {
     await requireRole('editor');
     const db = getServiceClient();

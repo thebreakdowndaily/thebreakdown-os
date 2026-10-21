@@ -106,7 +106,7 @@ export function CalendarView() {
       }
       if (result && !result.success) {
         setError(result.error || 'Action failed');
-      } else if (result && 'warning' in result && result.warning) {
+      } else if (result && 'warning' in result && typeof result.warning === 'string') {
         setError(result.warning);
       }
       await loadPlan();

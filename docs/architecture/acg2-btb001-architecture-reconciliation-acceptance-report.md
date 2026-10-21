@@ -256,3 +256,10 @@ Regression tests in `tests/editorial-actions-persistence.test.ts` exercise sched
 
 ### Candidate and verification boundary
 These changes were committed after SHA `78b15bf9054d551b7373d18808730358f493a363`. The green CI/security/audit results recorded above apply to that earlier candidate, not this follow-up. The current commit is **implemented but NOT YET VERIFIED** until a fresh PR run completes against its exact head. No PR merge, deployment, live database mutation, or publication is authorized by these changes.
+
+
+### Compiler feedback loop — 2026-10-21
+
+The first fresh CI on this review follow-up correctly rejected two TypeScript mistakes in the review fixes: the optional `warning` result field was added to `validateStoryAction` instead of `publishNowAction`, and the UI treated the warning narrowed by an `in` check as `unknown`. The signatures and UI narrowing have now been corrected. The runtime persistence regression suite is also explicitly included in the primary test chain rather than merely registered in the Vitest config.
+
+**Current source state is unverified until fresh CI passes on its resulting exact SHA.** The tracked `tsconfig.frontend.tsbuildinfo` file is restored to the base branch version to avoid including compiler-cache output in the feature diff.

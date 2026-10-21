@@ -88,3 +88,14 @@ This entry tracks a separate candidate branch and does not replace the active lo
 - **Process gap repaired:** The five engineering skills required by `AGENTS.md` and registered in `.agents/skills.md` were absent from the tree; their skill files are included in the follow-up.
 - **Last verified candidate:** Main CI, infrastructure validation, and audit checks passed on `1d386a82804bd42d1357f91b9b6214035090608b`, before these follow-up changes. Do not carry those results forward.
 - **Next action:** Create a review PR from the final follow-up head and rerun checks on that exact SHA. Keep the PR unmerged; do not publish the Plassey draft or mutate staging/production databases.
+
+
+---
+
+## ACG-2 Latest Review Gate — 2026-10-21
+
+- **Review finding:** Editorial schedule/publish actions silently ignored Supabase write failures; a publication-safety test used a forced `process.exit(0)`.
+- **Corrections:** Write errors and affected-row outcomes are checked; partial publication/calendar reconciliation is reported honestly; the forced direct exit was removed; the safety suite and runtime persistence regression tests are included in the primary test chain.
+- **First new CI result:** Candidate `a5eb7f63f2e19f697a8644ea6a07b9c10624f123` failed strict typecheck on the new warning typing. Corrected in follow-up; exact current head must pass fresh CI before claiming completion.
+- **Remaining gates:** Fresh CI/security/audit/infra run, human diff review, main-integration review. The staging and production health jobs may be skipped on a PR and are separate operational gates.
+- **Next action:** Verify exact candidate SHA, keep publication/database operations blocked, then request human review.
