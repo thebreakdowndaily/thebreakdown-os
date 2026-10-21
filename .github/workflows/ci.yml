@@ -1,10 +1,16 @@
 name: CI Pipeline
 
 on:
+  # PR checks cover feature-branch commits; reserve push runs for branch
+  # promotion so the same feature SHA is not built twice.
   push:
-    branches-ignore:
-      - 'dependabot/**'
+    branches: [main, staging]
   pull_request:
+
+# Cancel superseded CI on a branch or PR, but never cancel release/deploy jobs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint-and-build:
