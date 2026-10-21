@@ -54,12 +54,15 @@ export async function GET(request: NextRequest) {
       totalChecked: results.length,
       published: published.length,
       blocked: blocked.length,
+      // Compact summary is useful to monitoring clients; the cron Worker
+      // consumes the typed full result set so it can verify and log each gate.
       results: results.map(r => ({
         storyId: r.storyId,
         passed: r.passed,
         checksCount: r.checks.length,
         failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
       })),
+      gateResults: results,
     });
   } catch (error) {
     console.error('[Editorial Cron] Error:', error);
