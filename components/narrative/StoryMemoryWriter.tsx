@@ -10,33 +10,12 @@
  */
 
 import { useEffect } from 'react';
+import { readStoryHistory, READING_HISTORY_STORAGE_KEY } from '@/lib/retention/history';
+export { readStoryHistory } from '@/lib/retention/history';
+export type { HistoryEntry } from '@/lib/retention/history';
 
 const STORAGE_KEY_LAST = 'tb_last_story';
-const STORAGE_KEY_HISTORY = 'tb_reading_history';
 const MAX_HISTORY = 20;
-
-export interface HistoryEntry {
-  slug: string;
-  headline: string;
-  readAt: number;
-}
-
-export function readStoryHistory(): HistoryEntry[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_HISTORY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      return parsed.filter(
-        (item) => typeof item.slug === 'string' && typeof item.headline === 'string' && typeof item.readAt === 'number'
-      ) as HistoryEntry[];
-    }
-  } catch {
-    // Ignore errors
-  }
-  return [];
-}
 
 interface StoryMemoryWriterProps {
   slug: string;
@@ -65,7 +44,7 @@ export default function StoryMemoryWriter({ slug, headline }: StoryMemoryWriterP
         filtered.length = MAX_HISTORY;
       }
       
-      localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(filtered));
+      localStorage.setItem(READING_HISTORY_STORAGE_KEY, JSON.stringify(filtered));
     } catch {
       // localStorage may be unavailable (private browsing, storage full, etc.)
       // Fail silently — this is a non-critical enhancement.

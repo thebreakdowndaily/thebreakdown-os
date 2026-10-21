@@ -233,6 +233,56 @@ async function runTests() {
     failed++;
   }
 
+  // ── 2c. Shared reading-history storage (SSR-safe, validated, fail-soft) ──
+
+  try {
+    const { readStoryHistory, READING_HISTORY_STORAGE_KEY } = await import('../../lib/retention/history');
+    const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
+
+    try {
+      Reflect.deleteProperty(globalThis, 'window');
+      assert(readStoryHistory().length === 0, 'reading history safely returns empty during SSR');
+
+      const storedHistory = [
+        { slug: 'valid-story', headline: 'Valid Story', readAt: 200 },
+        null,
+        { slug: 'bad-time', headline: 'Bad timestamp', readAt: 'later' },
+        { slug: 42, headline: 'Bad slug', readAt: 100 },
+      ];
+      Object.defineProperty(globalThis, 'window', {
+        configurable: true,
+        value: {
+          localStorage: {
+            getItem: (key: string) => key === READING_HISTORY_STORAGE_KEY ? JSON.stringify(storedHistory) : null,
+          },
+        },
+      });
+
+      const history = readStoryHistory();
+      assert(history.length === 1 && history[0].slug === 'valid-story', 'reading history filters malformed entries without discarding valid ones');
+
+      Object.defineProperty(globalThis, 'window', {
+        configurable: true,
+        value: {
+          get localStorage() { throw new Error('storage unavailable'); },
+        },
+      });
+      assert(readStoryHistory().length === 0, 'reading history fails soft when localStorage is inaccessible');
+
+      Object.defineProperty(globalThis, 'window', {
+        configurable: true,
+        value: { localStorage: { getItem: () => '{not json' } },
+      });
+      assert(readStoryHistory().length === 0, 'reading history fails soft on corrupt JSON');
+    } finally {
+      if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow);
+      else Reflect.deleteProperty(globalThis, 'window');
+    }
+  } catch (e) {
+    console.error('  FAIL: shared reading-history contract threw', e);
+    failed++;
+  }
+
   // ── 3. Retention taxonomy contract ──────────────────────────────────────
 
   try {
