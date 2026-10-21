@@ -14,6 +14,19 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261021-16: Canonicalize Manual Publication Entry Point
+- **Priority:** P1 (Publication Authority / Evidence Integrity)
+- **Scope:** `features/intel/editorial/actions.ts`, `services/editorial/schedule.ts`, `tests/editorial-actions-persistence.test.ts`, and ACG-2 acceptance evidence.
+- **Finding:** Manual `publishNowAction` used the synchronous gate and wrote the `stories` table directly, bypassing the asynchronous evidence-vault gate, the repository's single-use publication-token guard, and canonical post-publication side effects.
+- **Fix:** Manual publication now obtains the authenticated principal from `requireRole('editor')`, calls `evaluatePublicationContractAsync`, and persists through `RepositoryFactory.getStoryRepository().saveStory` with the publication token. It triggers canonical cache/event effects only after successful persistence.
+- **Fail-closed behavior:** Canonical gate denial or repository write failure returns failure and tries to block a linked schedule entry; a confirmed story write followed by schedule-reconciliation failure is reported as success with a warning.
+- **Regression:** Added cases for Gate 13/canonical rejection, repository write failure, and schedule reconciliation failure.
+- **Verification:** Previous green workflows correspond to SHA `0913daa7ffb57a8c8f3ed6975ef41ef278dc5eb0` and predate this change. The new candidate is **NOT YET VERIFIED** until fresh exact-SHA CI/security/audit/infrastructure checks pass.
+- **Status:** IN_PROGRESS — code and regressions authored; exact-head checks required.
+- **Next Action:** Open a fresh review PR, require all checks on the new head, then request human code review. Keep Plassey draft-only and production operations blocked.
+
+---
+
 ### TASK-20261021-13: Editorial Write Integrity & Test Runner Exit Semantics
 - **Priority:** P1 (Publication/Data Integrity; Test Reliability)
 - **Scope:** `features/intel/editorial/actions.ts`, `components/intel/editorial/CalendarView.tsx`, `tests/publication-safety-p1.test.ts`, `tests/editorial-actions-persistence.test.ts`, `package.json`, and `vitest.config.js`.

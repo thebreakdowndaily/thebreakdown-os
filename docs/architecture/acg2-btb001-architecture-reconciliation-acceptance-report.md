@@ -270,3 +270,22 @@ The first fresh CI on this review follow-up correctly rejected two TypeScript mi
 The latest PR CI passed typecheck, lint, and the other early gates but failed when starting `test:publication-safety-p1`: Node 22 could not resolve `tsx` from `node --import tsx` because `tsx` is not installed as a project-local dependency. Existing repository commands use `npx tsx`. The script has been corrected to `npx tsx --test --test-force-exit tests/publication-safety-p1.test.ts`, preserving actual Node test-runner outcomes without direct `process.exit(0)`.
 
 The candidate is not verified until both the publication-safety suite and the new editorial persistence regression suite pass as part of the normal test chain on the exact final SHA.
+
+
+---
+
+## Manual Publication Contract Reconciliation — 2026-10-21
+
+### Finding: manual publishing bypassed the canonical asynchronous contract
+The manual `publishNowAction` used the synchronous gate and directly updated the `stories` table. This path omitted the asynchronous Evidence Vault gate (Gate 13), the single-use publication token checked by the story repository, and canonical post-publication event/cache effects. The scheduled worker already used the full canonical contract, so these two entry points did not enforce equivalent publication guarantees.
+
+**Correction committed after the previously green candidate:**
+- Manual publishing now requires the server-derived `Principal` from `requireRole('editor')`.
+- It converts the Supabase row through the shared `rowToStory` mapper and calls `evaluatePublicationContractAsync`, including the evidence-vault gate.
+- It persists only through `RepositoryFactory.getStoryRepository().saveStory` with the contract's single-use publication token.
+- It executes canonical publication side effects only after the repository save succeeds.
+- Gate denial or repository write failure returns an explicit failure and attempts to block any linked schedule entry. Successful publication with a later schedule reconciliation failure returns a warning reflecting the actual state.
+- `tests/editorial-actions-persistence.test.ts` now covers canonical gate denial, repository persistence failure, and schedule reconciliation failure.
+
+### Verification boundary
+Earlier CI/security/audit/infrastructure workflows passed on `0913daa7ffb57a8c8f3ed6975ef41ef278dc5eb0`. This publication-path correction was authored on subsequent commit `6e5042713bdceeb6619dfd7310bca5dc23acbd04`, so **those results do not certify it**. The new PR candidate including the documentation update must complete fresh CI, security, audit, and infrastructure checks on its exact SHA before human review.

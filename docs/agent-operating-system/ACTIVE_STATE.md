@@ -104,3 +104,8 @@ This entry tracks a separate candidate branch and does not replace the active lo
 ## ACG-2 Test-Runner Follow-up — 2026-10-21
 
 The first run of the wired publication-safety suite failed before loading tests because `node --import tsx` could not resolve `tsx` as a local module. The project uses `npx tsx`; the runner now follows that supported invocation. Confirm the publication safety suite and editorial persistence regression suite both pass on the next exact SHA. All prior green CI results apply only to their recorded SHAs.
+
+
+## ACG-2 Manual Publication Contract Follow-up — 2026-10-21
+
+Manual editorial publication previously differed from the scheduled worker: it used the synchronous publication gate and direct DB write. It now uses the canonical async publication contract and a single-use token-authorized repository save, with publication effects only after successful persistence. The regression suite covers gate denial, repository write failure, and schedule reconciliation failure. Earlier green CI was for a parent SHA and must not be carried forward; the follow-up candidate requires fresh exact-SHA CI/security/audit/infrastructure checks.
