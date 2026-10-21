@@ -14,9 +14,9 @@
  *         → publication gate (10 checks)
  *           → publish or block
  *
- * Environment variables required:
- *   SUPABASE_URL              — Supabase project URL
- *   SUPABASE_SERVICE_ROLE_KEY — Supabase service role key (bypasses RLS)
+ * Bindings required:
+ *   APP_URL       — HTTPS origin for the canonical application endpoint
+ *   CRON_SECRET   — secret binding matching the application's cron secret
  */
 
 import { publishDueStories } from '../../services/editorial/schedule-cf';
@@ -32,8 +32,6 @@ interface ExecutionContext {
 }
 
 export interface Env {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
   CRON_SECRET: string;
   APP_URL: string;
 }
