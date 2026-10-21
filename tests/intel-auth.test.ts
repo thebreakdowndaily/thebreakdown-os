@@ -371,8 +371,10 @@ function testServerActionActorBoundary() {
       assert(authIndex !== -1, `${module.path}: ${wrapper} requires server-derived identity`);
       assert(helperIndex !== -1 && authIndex !== -1 && authIndex < helperIndex,
         `${module.path}: ${wrapper} authenticates before internal mutation`);
-      assert(!/export async function \\w+ActionCore\\([^)]*actor\\s*:\\s*\\{/.test(body),
-        `${module.path}: no public action accepts a caller-provided actor object`);
+      const signatureEnd = source.indexOf('): Promise', start);
+      const signature = source.slice(start, signatureEnd === -1 ? start : signatureEnd);
+      assert(signature.includes('(formData: FormData'),
+        `${module.path}: ${wrapper} accepts FormData, not a caller-supplied actor`);
     }
   }
 }
