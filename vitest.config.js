@@ -83,10 +83,10 @@ module.exports = {
       'tests/problem-helpers.test.ts',
       'tests/public-platform.test.ts',
       'tests/research-workspace.test.ts',
-      'tests/ai-copilot-production.test.ts',
       'tests/research/invariant.test.ts',
       'tests/resilience.test.ts',
       'tests/security.test.ts',
+      'tests/ai-copilot-production.test.ts',
       'tests/solution-comparison.test.ts',
       // 'tests/story/canonical-adapter.test.ts', // Excluded: mgnrega-reform & rbi-repo-rate decommissioned to NEEDS_REVIEW
       'tests/story/chart-contract.test.ts',
