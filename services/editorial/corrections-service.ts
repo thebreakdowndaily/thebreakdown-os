@@ -54,9 +54,10 @@ function rowToReaderCorrection(row: any): ReaderCorrection {
   const mem = memoryReaderCorrections.get(row.id);
   return {
     id: row.id,
-    storyId: mem?.storyId || row.story_id || undefined,
+    storyId: row.story_id || mem?.storyId || undefined,
     storySlug: row.story_slug,
-    claimId: mem?.claimId || row.claim_id || undefined,
+    claimId: row.claim_id || undefined,
+    resolvedCorrectionId: row.resolved_correction_id || mem?.resolvedCorrectionId || undefined,
     category: row.category as CorrectionCategory,
     passageExcerpt: row.passage_excerpt,
     suggestedCorrection: row.suggested_correction,
@@ -772,6 +773,9 @@ export async function triageReaderCorrection(
     }
   }
 
+  // Remember existing linkage to suppress duplicate publication events on idempotent retries.
+  const previousResolvedCorrectionId = record.resolvedCorrectionId;
+
   // Update in-process caches only after the durable mutation succeeds.
   record.status = input.status;
   record.updatedAt = now;
@@ -783,7 +787,7 @@ export async function triageReaderCorrection(
     record.resolvedCorrectionId = publishedNotice.id;
   }
 
-  if (publishedNotice) {
+  if (publishedNotice && previousResolvedCorrectionId !== publishedNotice.id) {
     try {
       eventBus.publish({
         type: 'correction:published',
