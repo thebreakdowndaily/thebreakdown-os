@@ -189,6 +189,7 @@ module.exports = {
       'services/radar/__tests__/decision-engine.test.ts',
       'services/radar/__tests__/review-orchestrator.test.ts',
       'tests/newsroom-persistence-durability.test.ts',
+      'tests/trust-metrics-integrity.test.ts',
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
