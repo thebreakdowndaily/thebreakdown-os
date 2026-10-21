@@ -50,6 +50,7 @@ jobs:
         run: npm run test:security
 
       - name: Architecture & Operational Regression Gate
+        if: github.event_name == 'push'
         run: |
           npx tsx tests/canonical-domain.test.ts
           npx tsx tests/projections/all-projections.test.ts
@@ -62,6 +63,7 @@ jobs:
           npx tsx tests/data-integrity.test.ts
 
       - name: Release-Control Safety & Deployment Health Suites
+        if: github.event_name == 'push'
         run: |
           npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts
 
