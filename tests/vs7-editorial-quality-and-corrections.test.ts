@@ -155,8 +155,9 @@ describe('VS7 — Reader Corrections Pipeline & Errata Transparency', () => {
     const publicList = await listPublishedCorrections();
     expect(publicList.length).toBeGreaterThan(0);
 
-    const published = publicList.find(c => c.storyId === 'story-vol1-chap1');
+    const published = publicList.find(c => c.storySlug === 'the-partition-and-its-legacies');
     expect(published).toBeDefined();
+    expect(published?.storyId).toBe('33333333-3333-3333-3333-333333333333');
     expect(published?.correctedWording).toBe('The award was officially gazetted on August 17, 1947.');
 
     // Invariant: Submitter email and internal notes are NOT present on public model
