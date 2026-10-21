@@ -53,6 +53,7 @@ module.exports = {
       'tests/compare-helpers.test.ts',
       'tests/control-plane.test.ts',
       'tests/editorial-decision-intelligence.test.ts',
+      'tests/editorial-scheduled-publish-dispatch.test.ts',
       'tests/editorial-mission-control.test.ts',
       'tests/evidence-evolution.test.ts',
       'tests/evolution.test.ts',
