@@ -192,6 +192,13 @@ module.exports = {
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
+      'tests/architecture-fitness.test.ts',
+      'tests/before-the-battle-plassey.test.ts',
+      'tests/editorial/claim-integrity-audit.test.ts',
+      'tests/editorial/pli-evidence-reconciliation.test.ts',
+      'tests/editorial/pli-pre-dispatch-audit.test.ts',
+      'tests/editorial/pli-current-state-refresh.test.ts',
+      'tests/editorial/pli-human-reporting-activation.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

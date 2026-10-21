@@ -13,6 +13,7 @@ import type {
 } from './types';
 import { investigationChapterStories, namamiGangeInvestigation } from './investigation-data';
 import { accountabilityStory } from './accountability-story';
+import { plasseyStory, plasseyEntities } from './plassey-story';
 
 /* ── Internal Store ────────────────────────────────────────────────── */
 
@@ -204,18 +205,19 @@ function seed(): DataStore {
       { date: '2026-04-01', title: 'Investigation Published', description: 'The Breakdown publishes investigation across 6 states.', source: 'The Breakdown' },
     ],
     facts: [
-      { label: 'Claims Pending Beyond 60 Days', value: '42%', source: 'State Govt Data' },
-      { label: 'Farmers Affected', value: '1.2 crore', source: 'CAG Report 2024' },
-      { label: 'Total Premium Collected', value: '₹29,000 crore', source: 'Annual Report' },
-      { label: 'Claims Actually Paid', value: '₹13,400 crore', source: 'Annual Report' },
+      { label: 'Claims Pending Beyond 60 Days', value: '42% [UNVERIFIED — Editorial Review Required]', source: 'Unverified: Primary national audit source cannot be established' },
+      { label: 'Farmers Affected', value: '1.2 crore [UNVERIFIED — Source Under Review]', source: 'Unverified: CAG Report 2024 citation invalid' },
+      { label: 'Total Premium Collected', value: '₹29,000 crore', source: 'Ministry of Agriculture Annual Report' },
+      { label: 'Claims Actually Paid', value: '₹13,400 crore', source: 'Ministry of Agriculture Annual Report' },
     ],
     claims: [
       { claim: 'Insurance companies are deliberately delaying claim settlements to earn interest.', source: 'Farmer Unions', verification: 'unverifiable', explanation: 'While delays are documented, intent cannot be verified without regulatory investigation.', confidence: 0.6 },
-      { claim: 'States are not contributing their share of premium on time.', source: 'Union Agriculture Ministry', verification: 'true', explanation: '4 states have pending premium contributions exceeding ₹2,000 crore.', confidence: 0.85 },
+      { claim: 'States are not contributing their share of premium on time.', source: 'Union Agriculture Ministry', verification: 'true', explanation: 'Ministry of Agriculture disclosures to Parliament and Standing Committee reports confirm pending state matching premium subsidies exceeding ₹2,000 crore across key states, contractually triggering payout holdbacks.', confidence: 0.88 },
     ],
     sources: [
-      { name: 'CAG Report on PMFBY 2024', url: 'https://cag.gov.in', type: 'government', tier: 1 },
-      { name: 'State Government Data Compilation', url: '', type: 'primary', tier: 2 },
+      { name: 'Ministry of Agriculture Lok Sabha Disclosures (Unstarred Q. 3470)', url: 'https://sansad.in', type: 'government', tier: 1 },
+      { name: 'PMFBY Operational Guidelines & NCIP Portal', url: 'https://pmfby.gov.in', type: 'government', tier: 1 },
+      { name: 'CAG Report No. 7 of 2017 on Crop Insurance Schemes (Predecessor Baseline)', url: 'https://cag.gov.in', type: 'government', tier: 1 },
     ],
     charts: [
       { type: 'bar', title: 'Claims Settlement Ratio by State (2025-26)', data: [
@@ -338,27 +340,32 @@ function seed(): DataStore {
     keyPoints: [
       'Supreme Court declared right to privacy a fundamental right in 2017',
       'DPDP Act 2023 received presidential assent after 6 years of deliberation',
-      '2026 amendments expanded regulatory scope and compliance requirements',
-      'Tech companies face fines up to ₹250 crore for non-compliance',
+      'Data Protection Board of India legally established on November 13, 2025 via Gazette notifications G.S.R. 843(E), 844(E), and 845(E)',
+      'Substantive fiduciary obligations and statutory penalties up to ₹250 crore take effect on May 13, 2027 under phased commencement schedule',
     ],
     timeline: [
       { date: '2017-08-24', title: 'Right to Privacy Judgment', description: 'Supreme Court in Justice K.S. Puttaswamy case declares right to privacy a fundamental right under Article 21.', source: 'Supreme Court of India' },
       { date: '2018-07-27', title: 'Srikrishna Committee Report', description: 'BN Srikrishna-led committee submits draft Personal Data Protection Bill to the government.', source: 'MeitY' },
       { date: '2019-12-11', title: 'PDP Bill Introduced', description: 'Personal Data Protection Bill 2019 introduced in Lok Sabha, later referred to Joint Parliamentary Committee.', source: 'PRS Legislative' },
       { date: '2023-08-11', title: 'DPDP Act Receives Assent', description: 'Digital Personal Data Protection Act 2023 receives presidential assent, replacing the 2019 bill.', source: 'Gazette of India' },
+      { date: '2025-11-13', title: 'DPBI Established & Enforcement Phases Notified', description: 'MeitY issues G.S.R. 843(E) commencing institutional Sections 18–26 and setting phased implementation milestones, G.S.R. 844(E) formally establishing the Data Protection Board of India in NCR, and G.S.R. 845(E) specifying 1 Chairperson + 4 Members. Substantive duties and penalties (Sections 28–34) scheduled for May 13, 2027.', source: 'Gazette of India (MeitY)' },
       { date: '2026-03-20', title: '2026 Amendments Pass Lok Sabha', description: 'Amendments to DPDP Act passed in Lok Sabha, expanding data fiduciary obligations and cross-border data flow rules.', source: 'Lok Sabha Digital Records' },
     ],
     facts: [
-      { label: 'Maximum Fine for Non-Compliance', value: '₹250 crore', source: 'DPDP Act 2023' },
-      { label: 'Implementation Timeline', value: '24 months from notification', source: 'MeitY' },
-      { label: 'Exempted Government Agencies', value: '15 notified agencies', source: 'Central Government Notification' },
+      { label: 'DPBI Legal Establishment', value: 'Established Nov 13, 2025 (G.S.R. 844(E)); staffing & portal operationalisation in progress', source: 'Gazette of India' },
+      { label: 'Substantive Enforcement Date', value: 'May 13, 2027 (G.S.R. 843(E) 18-month tranche)', source: 'MeitY Notification' },
+      { label: 'Maximum Statutory Penalty', value: 'Up to ₹250 crore per violation (effective May 13, 2027)', source: 'DPDP Act 2023 Schedule' },
+      { label: 'Exempted Government Agencies', value: 'Case-by-case notification under Sec 17(2)', source: 'DPDP Act 2023' },
     ],
     claims: [
-      { claim: 'India\'s DPDP Act imposes the highest data privacy fines in the world.', source: 'Industry Association Report', verification: 'misleading', explanation: 'While ₹250 crore is significant, EU GDPR fines can reach €20 million or 4% of global turnover, which is substantially higher for large tech firms.', confidence: 0.85 },
-      { claim: 'The DPDP Act exempts government agencies from all provisions.', source: 'Digital Rights Advocacy Group', verification: 'true', explanation: 'Section 17 of the Act allows the central government to exempt any instrumentality of the state by notification, and 15 agencies have been exempted as of 2026.', confidence: 0.88 },
+      { claim: 'India\'s DPDP Act imposes the highest data privacy fines in the world.', source: 'Industry Association Report', verification: 'misleading', explanation: 'While ₹250 crore is significant, EU GDPR fines can reach €20 million or 4% of global turnover, which is substantially higher for large multinational tech firms. Furthermore, while the Data Protection Board of India was legally established on November 13, 2025 (G.S.R. 844(E)), statutory penalty adjudication under Sections 28–34 only commences on May 13, 2027 under G.S.R. 843(E).', confidence: 0.85 },
+      { claim: 'The DPDP Act exempts government agencies from all provisions.', source: 'Digital Rights Advocacy Group', verification: 'misleading', explanation: 'Section 17(2) allows the central government to exempt specific state instrumentalities by notification on defined grounds (sovereignty, integrity, security of the State, public order), but this is a conditional notification power and not a blanket statutory exemption for all government bodies across all provisions.', confidence: 0.88 },
     ],
     sources: [
       { name: 'Digital Personal Data Protection Act 2023', url: 'https://meity.gov.in/dpdp', type: 'government', tier: 1 },
+      { name: 'Gazette Notification G.S.R. 843(E) — Phased Commencement of DPDP Provisions', url: 'https://meity.gov.in', type: 'government', tier: 1 },
+      { name: 'Gazette Notification G.S.R. 844(E) — Establishment of Data Protection Board of India', url: 'https://meity.gov.in', type: 'government', tier: 1 },
+      { name: 'Gazette Notification G.S.R. 845(E) — Composition of Data Protection Board of India', url: 'https://meity.gov.in', type: 'government', tier: 1 },
       { name: 'PRS Legislative Analysis', url: 'https://prsindia.org', type: 'research', tier: 2 },
     ],
     charts: [],
@@ -667,7 +674,7 @@ function seed(): DataStore {
     ],
     claims: [
       { claim: 'Digitization has eliminated all leakages in the PDS system.', source: 'Government Press Release', verification: 'misleading', explanation: 'While leakage has been significantly reduced from ~40% to under 10%, pilferage continues through ghost cards in states with incomplete Aadhaar seeding and manual reconciliation loopholes.', confidence: 0.81 },
-      { claim: 'ONORC has benefited over 50 crore interstate migrant workers.', source: 'Ministry of Consumer Affairs', verification: 'true', explanation: 'Government data shows 50.7 crore portable transactions recorded under ONORC between 2020 and 2026, supporting this claim.', confidence: 0.87 },
+      { claim: 'ONORC has benefited over 50 crore interstate migrant workers.', source: 'Ministry of Consumer Affairs', verification: 'misleading', explanation: 'Government dashboards record 50.7 crore cumulative portability transactions under ONORC, not 50 crore unique individuals. A single migrant household makes multiple monthly transactions; the actual interstate migrant workforce is estimated at 4-5 crore.', confidence: 0.87 },
     ],
     sources: [
       { name: 'Ministry of Consumer Affairs Annual Report', url: 'https://consumeraffairs.gov.in', type: 'government', tier: 1 },
@@ -2409,7 +2416,7 @@ function seed(): DataStore {
     primaryEntityId: 'election-commission',
     keyPoints: [
       'Total electoral bonds worth ₹12,769 crore sold between April 2019 and February 2024 across 29 tranches',
-      'BJP received ₹6,060 crore (47.5% of total) — more than the next five largest recipient parties combined',
+      'BJP received ₹6,060.5 crore (47.5% of total) — more than the next five largest recipient parties combined (₹5,660.60 crore by ₹399.90 crore)',
       'Future Gaming and Hotel Services donated ₹1,368 crore — the single largest donor, now under ED investigation',
       '41 companies under CBI/ED/IT investigation donated ₹2,471 crore to the BJP',
       '30 shell companies with no real business operations donated ₹143.2 crore',
@@ -2459,32 +2466,31 @@ function seed(): DataStore {
     charts: [
       {
         type: 'bar', title: 'Party-wise Electoral Bond Donations (₹ Crore)', data: [
-          { party: 'BJP', amount: 6061 },
-          { party: 'TMC', amount: 1610 },
-          { party: 'INC', amount: 1422 },
-          { party: 'BRS', amount: 1215 },
-          { party: 'BJD', amount: 776 },
-          { party: 'DMK', amount: 632 },
-          { party: 'YSRCP', amount: 443 },
-          { party: 'AAP', amount: 86 },
-          { party: 'Others', amount: 516 },
+          { party: 'BJP', amount: 6060.5 },
+          { party: 'TMC', amount: 1609.5 },
+          { party: 'INC', amount: 1421.9 },
+          { party: 'BRS', amount: 1214.7 },
+          { party: 'BJD', amount: 775.5 },
+          { party: 'DMK', amount: 639.0 },
+          { party: 'YSRCP', amount: 337.0 },
+          { party: 'TDP', amount: 218.9 },
+          { party: 'Others', amount: 492.0 },
         ], xKey: 'party', yKey: 'amount' },
       {
         type: 'bar', title: 'Donor Categories — Total Contributions', data: [
-          { category: 'Under Investigation', amount: 2573 },
-          { category: 'Govt Contractors', amount: 1751 },
-          { category: 'Shell Companies', amount: 143 },
-          { category: 'Other Corporates', amount: 8302 },
+          { category: 'Under Investigation', amount: 2573.0 },
+          { category: 'Govt Contractors', amount: 1751.0 },
+          { category: 'Shell Companies', amount: 143.2 },
+          { category: 'Other Corporates', amount: 8301.8 },
         ], xKey: 'category', yKey: 'amount' },
       {
-        type: 'line', title: 'Electoral Bond Sales by Tranche (₹ Crore)', data: [
-          { year: '2018', amount: 1055 },
-          { year: '2019', amount: 3946 },
-          { year: '2020', amount: 1075 },
-          { year: '2021', amount: 1599 },
-          { year: '2022', amount: 2194 },
-          { year: '2023', amount: 2330 },
-          { year: '2024', amount: 570 },
+        type: 'line', title: 'Electoral Bond Sales by Period (₹ Crore, ECI Disclosed Tranches)', data: [
+          { year: '2019', amount: 3946.0 },
+          { year: '2020', amount: 1075.0 },
+          { year: '2021', amount: 1599.0 },
+          { year: '2022', amount: 2194.0 },
+          { year: '2023', amount: 2330.0 },
+          { year: '2024', amount: 1625.0 },
         ], xKey: 'year', yKey: 'amount' },
     ],
     faq: [
@@ -3493,6 +3499,7 @@ function seed(): DataStore {
 
   // ── Audited Investigative Explainer ──────────────────────────────
   stories.set(accountabilityStory.slug, accountabilityStory);
+  stories.set(plasseyStory.slug, plasseyStory);
 
   // ── Investigations ────────────────────────────────────────────────
   investigations.set(namamiGangeInvestigation.slug, namamiGangeInvestigation);
@@ -4394,6 +4401,11 @@ function seed(): DataStore {
     if (e.type === 'organization') organizations.set(e.slug, e);
   });
 
+  plasseyEntities.forEach((pe) => {
+    entities.set(pe.slug, pe);
+    if (pe.type === 'organization') organizations.set(pe.slug, pe);
+  });
+
   // ── Topics ────────────────────────────────────────────────────────
 
   const topicDefs = [
@@ -5013,6 +5025,10 @@ export function getEntities(params: QueryParams = {}): APIListResponse<APIEntity
   const s = getStore();
   let items = Array.from(s.entities.values());
 
+  if (!(params as any).includeDrafts) {
+    items = items.filter((e) => (e as any).publicationStatus !== 'draft');
+  }
+
   if (params.type) items = items.filter((e) => e.type === params.type);
   if (params.search) items = searchFilter(items, params.search, ['name', 'description', 'aliases']);
   if (params.sort) items = sortItems(items, params.sort, params.order);
@@ -5078,6 +5094,10 @@ export function getCountry(slug: string): APICountry | null {
 export function getOrganizations(params: QueryParams = {}): APIListResponse<APIOrganization> {
   const s = getStore();
   let items = Array.from(s.organizations.values());
+
+  if (!(params as any).includeDrafts) {
+    items = items.filter((o) => (o as any).publicationStatus !== 'draft');
+  }
 
   if (params.search) items = searchFilter(items, params.search, ['name', 'description']);
   if (params.sort) items = sortItems(items, params.sort, params.order);
