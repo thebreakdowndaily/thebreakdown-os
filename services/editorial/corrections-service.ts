@@ -64,6 +64,7 @@ function rowToReaderCorrection(row: any): ReaderCorrection {
     submitterEmail: row.submitter_email || undefined,
     supportingEvidenceUrl: row.supporting_evidence_url || undefined,
     status: row.status,
+    triageNotes: row.triage_notes || mem?.triageNotes || undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -726,6 +727,7 @@ export async function triageReaderCorrection(
           p_corrected_wording: input.publishedCorrection.correctedWording,
           p_explanation: input.publishedCorrection.explanation,
           p_claim_id: handoffRecord?.claimId || record.claimId || null,
+          p_triage_notes: input.triageNotes ?? null,
         });
       } catch (err: any) {
         throw new Error(`Failed to publish correction durably: ${err?.message || 'database communication error'}`);
@@ -760,12 +762,17 @@ export async function triageReaderCorrection(
       };
     }
   } else if (db) {
+    const triageUpdate: Record<string, string> = {
+      status: input.status,
+      updated_at: now,
+    };
+    if (input.triageNotes !== undefined) {
+      triageUpdate.triage_notes = input.triageNotes;
+    }
+
     const { error } = await db
       .from('reader_corrections')
-      .update({
-        status: input.status,
-        updated_at: now,
-      })
+      .update(triageUpdate)
       .eq('id', input.correctionId);
 
     if (error) {
