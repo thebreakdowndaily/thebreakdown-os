@@ -57,8 +57,10 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Tested Commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Node.js (v22)
         uses: actions/setup-node@v4
