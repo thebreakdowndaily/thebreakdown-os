@@ -151,8 +151,8 @@ describe('Research Intelligence Core — persistence round-trips', () => {
       createdBy: 'file-test',
     });
 
-    // File saves are async fire-and-forget; flush deterministically here.
-    await repository.save(core.snapshot());
+    // The core write queue is the authoritative persistence barrier.
+    await core.flushPersistence();
 
     const reloaded = new ResearchFileStateRepository(filePath);
     const persisted = await reloaded.load();
