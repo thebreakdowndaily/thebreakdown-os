@@ -242,6 +242,9 @@ export function createMockCorrectionsClient(options: {
         return { data: null, error: { message: 'Reader correction not found' } };
       }
       if (submission.resolved_correction_id) {
+        if (params.p_triage_notes !== null && params.p_triage_notes !== undefined) {
+          submission.triage_notes = params.p_triage_notes;
+        }
         const existing = store.corrections.find((row: any) => row.id === submission.resolved_correction_id);
         return existing
           ? { data: [{ ...existing, stories: store.stories.find((story: any) => story.id === existing.story_id) || null }], error: null }
@@ -280,6 +283,7 @@ export function createMockCorrectionsClient(options: {
         claim_id: published.claim_id,
         status: 'resolved',
         resolved_correction_id: published.id,
+        triage_notes: params.p_triage_notes ?? submission.triage_notes ?? null,
         updated_at: now,
       });
       return { data: [{ ...published, stories: story }], error: null };
