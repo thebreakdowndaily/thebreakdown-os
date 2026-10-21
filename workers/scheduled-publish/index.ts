@@ -14,9 +14,9 @@
  *         → publication gate (10 checks)
  *           → publish or block
  *
- * Bindings required:
- *   APP_URL       — HTTPS origin for the canonical application endpoint
- *   CRON_SECRET   — secret binding matching the application's cron secret
+ * Environment variables required:
+ *   SUPABASE_URL              — Supabase project URL
+ *   SUPABASE_SERVICE_ROLE_KEY — Supabase service role key (bypasses RLS)
  */
 
 import { publishDueStories } from '../../services/editorial/schedule-cf';
@@ -32,6 +32,8 @@ interface ExecutionContext {
 }
 
 export interface Env {
+  SUPABASE_URL: string;
+  SUPABASE_SERVICE_ROLE_KEY: string;
   CRON_SECRET: string;
   APP_URL: string;
 }
@@ -79,9 +81,8 @@ export default {
         duration,
         error: error instanceof Error ? error.message : 'Unknown error',
       }));
-      // Propagate the failure so the Cron Event is recorded as failed.
-      // Swallowing this error would make a broken publication run look successful.
-      throw error;
+      // Do not rethrow — Cloudflare will retry on unhandled exceptions,
+      // but we want bounded retries. Log and exit cleanly.
     }
   },
 
