@@ -983,11 +983,21 @@ export async function listPublishedCorrections(
     return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
-  if (process.env.NODE_ENV === 'production') {
+  // Next.js statically prerenders routes during "next build". CI deliberately uses
+  // DATA_PROVIDER=memory and has no production database credentials; in that
+  // build-only context, render the immutable built-in seed notices so static
+  // artifacts remain complete. This exception must never be active at runtime.
+  const isMemoryOnlyProductionBuild =
+    process.env.NODE_ENV === 'production' &&
+    process.env.NEXT_PHASE === 'phase-production-build' &&
+    process.env.DATA_PROVIDER === 'memory';
+
+  if (process.env.NODE_ENV === 'production' && !isMemoryOnlyProductionBuild) {
     throw new Error('Public corrections ledger is unavailable: durable database storage is required.');
   }
 
-  // Memory seed data is solely a local development fallback.
+  // Memory seed data is a development fallback or a build-only CI fixture.
+  // Deployed production requests always require the durable database ledger.
   let list = Array.from(memoryPublishedCorrections.values());
   if (storySlugOrId) {
     list = list.filter(
