@@ -196,3 +196,22 @@ GitHub Actions Workflow Run **#39615169273** completed with **100% PASSING GATES
 - **Staging / Production Database Cutover:** **BLOCKED (Gated)** (`BLOCKED-01`, `BLOCKED-02`, `BLOCKED-03`)
 
 **Single Next Action:** Presentation of this verified report and GitHub Actions CI run results to the product owner and editorial board. Standing by for instructions.
+
+
+---
+
+## Verification Follow-up — 2026-10-21
+
+The first successful CI run above was executed on commit `9e5daeb0ba533df397754926c4908b0541eb86d6` and must not be treated as certification of later branch heads.
+
+| Run / Commit | Result | Finding |
+|---|---|---|
+| [CI #39616549016](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39616549016), `4c8727c0` | **FAIL — Typecheck** | Three Intel server-action implementation modules had been moved to feature paths without being added; references from app actions and components could not resolve. |
+| [PR CI #39617471636](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617471636), `ed74f189` | **FAIL — Typecheck** | The Intel modules had been restored, but retention consumers still imported missing `lib/retention/history`. |
+| [Security scan #39617473256](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617473256), `ed74f189` | **PASS** | Gitleaks and OSV scan jobs completed successfully for that earlier PR head. |
+| [Audit verification #39617471668](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617471668), `ed74f189` | **PASS** | Audit framework verification passed for that earlier PR head. |
+| [Infrastructure pipeline #39617471649](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617471649), `ed74f189` | **FAIL — Typecheck** | The same missing retention module blocked the dependent infrastructure verification stages. |
+
+Corrective commit `12add5e3c5731c6d4415f1bff7a3d1bc27b4708f` extracts reading-history storage into `lib/retention/history.ts`, keeps the existing `StoryMemoryWriter` exports compatible, and adds regression assertions for SSR, malformed entries, inaccessible localStorage, and invalid JSON.
+
+**Current acceptance status:** draft PR [#97](https://github.com/thebreakdowndaily/thebreakdown-os/pull/97) remains open. A fresh CI run on the exact final PR head is still required; earlier green gates do not certify later commits. Do not merge or promote the Plassey pilot based on this report alone. Publication remains draft-gated, and live database mutations remain unauthorized.
