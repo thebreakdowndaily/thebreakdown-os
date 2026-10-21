@@ -11,8 +11,8 @@
  * Storage keys are namespaced `tb_` and versioned for migration safety.
  */
 
-import type { HistoryEntry } from '@/components/narrative/StoryMemoryWriter';
-import { readStoryHistory } from '@/components/narrative/StoryMemoryWriter';
+import type { HistoryEntry } from '@/lib/retention/history';
+import { readStoryHistory } from '@/lib/retention/history';
 
 const FOLLOW_KEY = 'tb_followed_topics_v1';
 const SAVE_KEY = 'tb_saved_stories_v1';

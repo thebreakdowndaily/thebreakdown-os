@@ -906,7 +906,7 @@ export class NewsroomIntelligenceCore {
 export const newsroomIntelligenceCore = NewsroomIntelligenceCore.getInstance();
 
 export { NewsroomPersistenceError } from './persistence/state';
-export { NewsroomDeskService, newsroomDeskService } from './desk-service';
+export type { NewsroomDeskService } from './desk-service';
 export type {
   NewsroomDeskItem,
   NewsroomDeskFilter,

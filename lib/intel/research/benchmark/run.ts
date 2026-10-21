@@ -289,11 +289,6 @@ export async function runRecallBenchmark(
     const snapshot = snapshotProjectState(core, project.id, run);
     snapshot.topicId = topic.topicId;
 
-    if (topic.topicId === 'topic-gst-august') {
-      console.log('GST QUERIES:', project.queries.map(q => q.text));
-      console.log('GST SOURCES FOUND:', snapshot.sources.map(s => s.url));
-      console.log('GST DOCUMENTS FOUND:', snapshot.documents.map(d => d.url));
-    }
 
     const match = matchDiscoveredToGold(
       [...snapshot.sources, ...snapshot.documents].map((s) => {

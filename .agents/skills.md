@@ -12,6 +12,11 @@ A skill is a discrete, composable capability that one or more agents can invoke.
 
 | Skill ID | Description | Used By | Status |
 |----------|-------------|---------|--------|
+| issue-to-completion | Autonomous 10-step lifecycle driving issues from problem statement to verified, production-ready completion. | Coding agents / Antigravity default | active |
+| adversarial-verification | Rigorous failure-mode scrutiny, negative testing, concurrency checks, and privilege boundary verification. | Verification / Security / Code review | active |
+| publication-safety | Enforces publication invariants, fail-closed authorization, atomic transactions, and embargo rules. | Publishing / Data layer / Migrations | active |
+| release-readiness | Reconciles git commit SHA, 8-gate test suite, security inventory, and deployment prerequisites. | Release management / CI / Antigravity | active |
+| evidence-first-completion | Mandatory evidence-based completion and adversarial verification for non-trivial engineering tasks. | All agents / Completion gate | active |
 | gravitas | Reliability workflow for scoped reconnaissance, adaptive planning, verification, recovery, and evidence-backed completion. | Gemini / Google Antigravity / compatible Agent Skills hosts | pilot |
 | instagram-brand-voice | Apply The Breakdown's evidence-led, accessible brand voice. | Instagram editorial workflow | draft |
 | instagram-source-research | Build a claim-level source ledger and verified social angles. | Instagram editorial workflow | draft |

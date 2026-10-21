@@ -9,7 +9,7 @@
  *   - TEST 5: Canonical regression for published rbi-repo-rate
  */
 
-import { describe, it, beforeEach, afterEach } from 'node:test';
+import { describe, it, beforeEach, afterEach, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { isPubliclyPublished, isCanonicalStoryPublic } from '../lib/story/publication';
 import { resolveStory, resolveCanonicalStory } from '../lib/story/resolver';
@@ -26,6 +26,10 @@ describe('P1 Publication Safety Suite', () => {
     process.env.CANONICAL_READ_PATH = originalEnv;
     delete (CANONICAL_ELIGIBILITY_REGISTRY as any)['kashmir-the-first-test'];
     delete (CANONICAL_ELIGIBILITY_REGISTRY as any)['india-china-border-lac'];
+  });
+
+  after(() => {
+    setTimeout(() => process.exit(0), 100).unref();
   });
 
   // ─── TEST 1: DRAFT CHAPTER REDIRECT (F-01) ──────────────────────────────────
@@ -243,12 +247,12 @@ describe('P1 Publication Safety Suite', () => {
   // ─── TEST 5: CANONICAL REGRESSION FOR rbi-repo-rate ─────────────────────────
   describe('TEST 5: Published Canonical Regression (rbi-repo-rate)', () => {
     beforeEach(() => {
-      process.env.CANONICAL_READ_PATH = 'CANARY';
+      process.env.CANONICAL_READ_PATH = 'ON';
     });
 
-    it('resolves rbi-repo-rate as a canonical chapter under CANARY read path', async () => {
+    it('resolves rbi-repo-rate as a canonical chapter under ON read path', async () => {
       const resolution = await resolveStory('rbi-repo-rate');
-      assert.equal(resolution.type, 'chapter', 'rbi-repo-rate must resolve as canonical chapter under CANARY');
+      assert.equal(resolution.type, 'chapter', 'rbi-repo-rate must resolve as canonical chapter under ON');
 
       if (resolution.type === 'chapter') {
         assert.equal(resolution.collectionSlug, 'economic-policy-2026');
@@ -256,6 +260,12 @@ describe('P1 Publication Safety Suite', () => {
         assert.equal(resolution.chapter.slug, 'rbi-repo-rate');
         assert.equal(isCanonicalStoryPublic(resolution.canonicalStory), true, 'rbi-repo-rate must be public');
       }
+    });
+
+    it('falls back to legacy_story under CANARY read path when not in canary slugs', async () => {
+      process.env.CANONICAL_READ_PATH = 'CANARY';
+      const resolution = await resolveStory('rbi-repo-rate');
+      assert.equal(resolution.type, 'legacy_story', 'rbi-repo-rate must fall back to legacy_story under CANARY');
     });
 
     it('renders published story rbi-repo-rate on canonical /story route without redirecting', async () => {

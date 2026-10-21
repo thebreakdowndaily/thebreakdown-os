@@ -164,9 +164,35 @@ CLM-PLASSEY-019: Modern consensus: mercenary coup d'état, not military conquest
 
 ---
 
-## 7. Exact Next Actions
+## 7. Remote CI Reproducibility Results (Pushed Commit `9e5daeb0`)
 
-1. Commit reviewed changes to feature branch `feat/btb-001-plassey-architecture-reconciliation`.
-2. Push feature branch to `origin` without altering `main` or uncommitted user files.
-3. Attach this acceptance report directly at `docs/architecture/acg2-btb001-architecture-reconciliation-acceptance-report.md`.
-4. Monitor remote CI execution results on the pushed branch.
+The feature branch `feat/btb-001-plassey-architecture-reconciliation` was pushed to `origin`, containing both the Plassey pilot artifacts and the core canonical architectural modules.
+
+GitHub Actions Workflow Run **#39615169273** completed with **100% PASSING GATES** in 4m54s:
+
+- **Clean Dependencies Installation (`npm ci`):** PASS (Node.js v22 runner)
+- **Strict Typecheck Gate (`npm run check:type`):** PASS (0 errors)
+- **Strict Linting Gate (`npm run check:lint`):** PASS (0 errors, 536 baseline warnings)
+- **Security Regression Gate (`npm run test:security`):** PASS (1,429 assertions passed across 6 test suites)
+- **Database & Migration Safety Gate (`npm run test:migration`):** PASS (32 migrations applied, 33/33 DB assertions passed)
+- **Unit & Domain Test Suite (`npm run test`):** PASS (31 test suites passed)
+- **Forensic Root-Cause Regression Gate:** PASS
+- **Accessibility Token & Contrast Gate (`npm run test:a11y`):** PASS (13/13 tests passed)
+- **Production Next.js Build Verification (`npm run build`):** PASS (1,140 routes pre-rendered)
+- **Browser DOM Accessibility (Desktop & Mobile Chromium):** PASS
+
+**Remote Run URL:** https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39615169273
+
+---
+
+## 8. Exact Acceptance Status & Blocking Gates
+
+- **BTB-001 Pilot Compliance (Gates 1–6):** **PASS**
+- **Targeted Architecture Fitness:** **PASS**
+- **Remote CI Reproducibility:** **PASS (Run 39615169273 on commit `9e5daeb0`)**
+- **Whole-Platform Architecture Unification:** **PROVISIONAL / NOT YET INDEPENDENTLY CERTIFIED** (Pending complete database cutover and cross-domain consolidation)
+- **Plassey Publication:** **BLOCKED (Gated)** (Held in fail-closed draft pending editorial board authorization)
+- **Historical Series Expansion (Panipat, Talikota, Buxar):** **BLOCKED / DEFERRED** (Held pending complete architecture foundation and owner directive)
+- **Staging / Production Database Cutover:** **BLOCKED (Gated)** (`BLOCKED-01`, `BLOCKED-02`, `BLOCKED-03`)
+
+**Single Next Action:** Presentation of this verified report and GitHub Actions CI run results to the product owner and editorial board. Standing by for instructions.

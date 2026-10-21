@@ -91,7 +91,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
   const vm = await buildTopicPage(services, slug);
   if (!vm) notFound();
   
-  const { topic, storyGroups, rankedEntities, unifiedTimeline, statistics, qualityScore } = vm;
+  const { topic, storyGroups, rankedEntities, unifiedTimeline, statistics, qualityScore, totalStories: vmTotalStories, allStories = [] } = vm;
 
   // ── Topic Hub Content Model (TASK-09 Phase D) ─────────────────────────
   // Deterministic multi-section hub: In Focus → Latest → Deep Research →

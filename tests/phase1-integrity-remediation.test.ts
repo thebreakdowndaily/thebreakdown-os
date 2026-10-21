@@ -52,9 +52,9 @@ describe('Phase 1 Integrity Remediation', () => {
       const data = chart?.data as Array<{ party: string; amount: number }>;
       expect(data[0].party).toBe('BJP');
       expect(data[1].party).toBe('TMC');
-      expect(data[1].amount).toBe(1610);
+      expect(data[1].amount).toBe(1609.5);
       expect(data[2].party).toBe('INC');
-      expect(data[2].amount).toBe(1422);
+      expect(data[2].amount).toBe(1421.9);
 
       const facts = ebStory?.facts || [];
       const tmcFact = facts.find(f => f.label.includes('Trinamool') || f.value.includes('1,609.5'));

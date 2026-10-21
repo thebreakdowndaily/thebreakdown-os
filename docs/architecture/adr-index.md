@@ -118,3 +118,24 @@ The ADR records important architectural decisions that were made and their ratio
 - Factual summaries (highest evidence, lowest cost, fastest impact) are derived from canonical metadata, not stored separately.
 - Editorial recommendations, if provided, are explicitly labelled as editorial judgement — not algorithmic ranking.
 - Future contributors cannot gradually turn comparisons into content objects because the type system does not support it.
+
+
+---
+
+## ADR-0006 — Platform Architecture Unification & Bounded Domain Ownership
+
+**Date:** 2026-10-20  
+**Status:** Active  
+**Baseline:** Mission ACG-1  
+**Canonical File:** [`docs/adr/0006-platform-architecture-unification.md`](../adr/0006-platform-architecture-unification.md)
+
+**Decision:** Establish a unified 6-tier architecture (app -> features -> services -> lib -> types -> components) with strict layer boundaries, 0 circular dependencies, fail-closed public publication and test-artifact isolation, and exact parity between topic directories, headers, and rendered content. Canonical ADR governance is unified in `docs/adr/`, with historical framework setup decisions archived in `adr/`.
+
+**Rationale:** Multiple overlapping layers, truncated topic aggregation, circular dependency chains, and fragmented decision records created cognitive drag and risked data skew across public views.
+
+**Consequences:**
+- Zero runtime circular dependencies across all subsystems.
+- Presentation components never import Next.js server actions or entry points from `app/`.
+- Shared logic in `lib/` never imports presentation from `components/`.
+- Topic directory count strictly matches topic page header count and rendered cards count.
+- Public search index and knowledge graph projections strictly exclude unpublished drafts and test fixtures.

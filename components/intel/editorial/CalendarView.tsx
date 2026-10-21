@@ -9,7 +9,7 @@ import {
   cancelScheduleAction,
   runPublishDueAction,
   getAllScheduledEntriesAction,
-} from '@/app/intel/editorial/actions';
+} from '@/features/intel/editorial/actions';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

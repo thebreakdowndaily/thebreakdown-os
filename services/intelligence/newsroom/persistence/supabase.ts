@@ -86,10 +86,16 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
+      this._isDegradedReadOnly = true;
+      if (process.env.DATA_PROVIDER === 'supabase' || process.env.NODE_ENV === 'production') {
+        throw new NewsroomPersistenceError(
+          'Supabase client unavailable: Missing credentials or invalid configuration',
+          'PERSISTENCE_FAILED'
+        );
+      }
       console.warn(
         '[SupabaseStateRepository] Supabase client unavailable: falling back to read-only degraded mode.'
       );
-      this._isDegradedReadOnly = true;
       return null;
     }
 
@@ -117,14 +123,20 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       this._isDegradedReadOnly = false;
       return null;
     } catch (err) {
-      console.warn('[SupabaseStateRepository] Load exception, enabling read-only degraded mode:', err);
+      console.warn('[SupabaseStateRepository] Load exception:', err);
       this._isDegradedReadOnly = true;
-      return null;
+      throw err;
     }
   }
 
   async save(state: NewsroomPersistedState): Promise<void> {
-    if (this._isDegradedReadOnly || !this.client) {
+    if (!this.client) {
+      throw new NewsroomPersistenceError(
+        'Supabase client unavailable: Missing credentials or invalid configuration',
+        'PERSISTENCE_FAILED'
+      );
+    }
+    if (this._isDegradedReadOnly) {
       throw new NewsroomPersistenceError(
         'Database persistence unavailable: Newsroom is in read-only degraded mode. Editorial mutations cannot be committed.',
         'PERSISTENCE_DEGRADED_READONLY'

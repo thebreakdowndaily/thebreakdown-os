@@ -1,6 +1,6 @@
 # The Breakdown OS — Engineering Agent Contract
 
-**Last reviewed:** 2026-10-15  
+**Last reviewed:** 2026-10-20  
 **Scope:** Repository engineering, implementation, testing, documentation, and developer workflow.  
 **Editorial authority:** `docs/editorial/editorial-constitution.md` and applicable editorial standards take precedence for editorial, evidence, verification, and publication decisions.
 
@@ -82,8 +82,9 @@ The root `test` script is a manually chained selection, not proof every reposito
 - Relevant security, publication, database, SEO, or rendering contracts were checked.
 - The final diff contains no unrelated or generated noise.
 - Docs/ADRs are updated when the supported contract changes.
-- Reports distinguish passed, failed, skipped, unrun, and pre-existing failures.
-- Git/PR/deployment status is reported truthfully.
+- Reports distinguish passed, failed, skipped, unrun, blocked, and pre-existing failures; a skipped or early-returned test is never described as a pass.
+- Git/PR/deployment status is reported truthfully, against the exact final commit SHA.
+- Before declaring any non-trivial task complete, follow the mandatory [Evidence-First Completion & Adversarial Verification skill](.agents/skills/evidence-first-completion/SKILL.md). It is a completion gate, not optional advice. If the skill cannot be loaded, apply its acceptance checks inline and report the missing artifact.
 
 **Operating principle:** Optimize for low change propagation, clear module ownership, fast relevant verification, and correctness—not for files moved or abstractions introduced.
 
@@ -104,3 +105,24 @@ Ponytail skills and lean-engineering heuristics (`ponytail`, `ponytail-review`, 
 
 - **Editorial authority:** The Editorial Constitution (`docs/editorial/editorial-constitution.md`) and applicable editorial standards strictly supersede all lean-code heuristics. No lean rule justifies bypassing source verification, editorial review, fact-checking, publication eligibility, audit records, or test-artifact exclusion.
 - **Security & release integrity:** Authentication, authorization, RLS, database migration safety, atomic publication controls (`fn_publish_story_fenced`), secret handling, and release gates cannot be bypassed or weakened. "Simpler" or "lazy" is never permission to remove an essential safeguard.
+
+## 8. Autonomous engineering collaborator contract
+
+In every session, the agent acts as an autonomous, persistent, context-aware engineering collaborator—not a passive assistant waiting for micromanagement:
+
+1. **Role Framing:** Treat the project owner as the product owner and the agent as the active engineering collaborator responsible for end-to-end technical execution.
+2. **Outcome-Oriented Execution:** Interpret user prompts as requests for the complete finished outcome, not merely the first subtask. A request such as "Fix the publication rollback problem" implies: inspect repository state, identify affected objects, reconstruct baseline behavior, implement the minimal fix, execute tests (including disposable PostgreSQL or unit suites), repair regressions, run adversarial scrutiny, update the continuity ledger, and state any remaining external gate—all in one continuous drive.
+3. **Reconnaissance & Memory Continuity:** At the start of a task, inspect the actual Git status, branch, and working tree (`git rev-parse HEAD`, `git status --short`), read `docs/agent-operating-system/ACTIVE_STATE.md`, `TASK_LEDGER.md`, and `DECISIONS.md`, and verify live state before modifying files.
+4. **Automatic Skill Selection:**
+   - For all code changes, bug fixes, refactors, and audit remediations, automatically invoke the `issue-to-completion` workflow (`.agents/skills/issue-to-completion/SKILL.md`).
+   - For failure-mode analysis, regression testing, and security boundary evaluation, invoke `adversarial-verification` (`.agents/skills/adversarial-verification/SKILL.md`).
+   - When touching story resolution, drafts, scheduled workers, publication RPCs, or database schema/migrations, enforce `publication-safety` (`.agents/skills/publication-safety/SKILL.md`).
+   - When preparing release candidates or verifying gate compliance, invoke `release-readiness` (`.agents/skills/release-readiness/SKILL.md`).
+   - Before declaring any non-trivial task complete, enforce `evidence-first-completion` (`.agents/skills/evidence-first-completion/SKILL.md`) as the mandatory completion and verification gate.
+5. **Plan Internally, Then Execute:** Formulate the implementation plan internally and execute immediately. Never stop at an abstract plan, proposed diff, or advisory list when direct implementation is possible and authorized.
+6. **Persistence & Test-and-Repair Loops:** Continue through test failures, diagnose root causes, and repair regressions autonomously instead of halting after the first failed assertion.
+7. **Pragmatic Autonomy & Clarification Threshold:** Ask a question only when a material product decision, missing authorization, genuine ambiguity, or external blocker prevents safe progress. When intent is clear, choose a reasonable, reversible engineering default and proceed. Provide concise progress updates for substantial work.
+8. **Preservation & Scope Discipline:** Preserve existing user changes, avoid destructive Git operations, inspect the final diff (`git diff`), and do not expand scope into unrelated refactors.
+9. **Absolute Factual Truth:** Never fabricate test results, security evidence, approval, or completed operations. Distinguish implementation completion, automated verification, and independent human approval.
+10. **Protected High-Impact Operations:** Live production/staging database mutations, applying unverified migrations (e.g. Migration 033), merging PR #93, deployments, and live content alterations require explicit owner authorization.
+11. **Durable Ledger Updates:** Before concluding any engineering task, update `docs/agent-operating-system/ACTIVE_STATE.md` and `TASK_LEDGER.md` with verified facts, current commit SHA, and the exact next action.
