@@ -23,14 +23,16 @@ export function createResearchStateRepository(options?: {
   provider?: string;
   filePath?: string;
 }): ResearchStateRepository {
-  const requestedProvider = options?.provider ?? process.env.RESEARCH_STATE_PROVIDER;
+  const configuredProvider = options?.provider ?? process.env.RESEARCH_STATE_PROVIDER;
+  const requestedProvider = configuredProvider?.trim()
+    ? configuredProvider.trim().toLowerCase()
+    : undefined;
   const runtimeIsProduction =
     process.env.VERCEL_ENV === 'production' ||
     process.env.APP_ENV === 'production' ||
     (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build');
-  const provider = (
-    requestedProvider ?? (process.env.NODE_ENV === 'production' ? 'supabase' : 'memory')
-  ).trim().toLowerCase();
+  const provider =
+    requestedProvider ?? (process.env.NODE_ENV === 'production' ? 'supabase' : 'memory');
 
   if (runtimeIsProduction && provider !== 'supabase') {
     throw new ResearchPersistenceError(
@@ -43,12 +45,6 @@ export function createResearchStateRepository(options?: {
     return new ResearchSupabaseStateRepository();
   }
   if (provider === 'file') {
-    if (!options?.filePath && !process.env.RESEARCH_STATE_FILE && runtimeIsProduction) {
-      throw new ResearchPersistenceError(
-        'A durable research state provider is required in production.',
-        'PERSISTENCE_PROVIDER_INVALID'
-      );
-    }
     return new ResearchFileStateRepository(
       options?.filePath ?? process.env.RESEARCH_STATE_FILE ?? DEFAULT_RESEARCH_STATE_FILE
     );
