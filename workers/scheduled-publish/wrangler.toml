@@ -7,7 +7,9 @@ compatibility_flags = ["nodejs_compat"]
 crons = ["0 * * * *"]
 
 [vars]
-SUPABASE_URL = ""
-SUPABASE_SERVICE_ROLE_KEY = ""
-CRON_SECRET = ""
-APP_URL = ""
+APP_URL = "https://thebreakdown.in"
+
+# Set CRON_SECRET using a Cloudflare Worker secret binding, not a plaintext var:
+#   npx wrangler secret put CRON_SECRET
+# It must match the application's CRON_SECRET. Do not add Supabase service-role
+# credentials to this Worker; all publication goes through the guarded API.
