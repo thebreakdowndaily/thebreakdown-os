@@ -6,6 +6,7 @@ import { canAccessIntelModule, normalizeIntelRole, intelRoleLabel } from '@/feat
 import { researchIntelligenceCore } from '@/services/intelligence/research';
 import { ensureResearchRuntime } from '@/lib/intelligence/research-bootstrap';
 import type { ResearchRun } from '@/types/research-intelligence';
+import { ResearchPersistenceError } from '@/services/intelligence/research/persistence/state';
 
 // Governing document: docs/research/RESEARCH_INTELLIGENCE_OPERATING_STANDARD.md
 // Server actions for the Research Intelligence workspace. Authorization happens
@@ -87,8 +88,11 @@ export async function runPipelineActionCore(projectId: string, actor: { id: stri
   let run: ResearchRun;
   try {
     run = await researchIntelligenceCore.runPipeline(projectId, { triggeredBy: actor.id });
-  } catch {
-    return { success: false, error: 'Research results could not be durably saved; the run was not confirmed.' };
+  } catch (error) {
+    if (error instanceof ResearchPersistenceError) {
+      return { success: false, error: 'Research results could not be durably saved; the run was not confirmed.' };
+    }
+    return { success: false, error: 'Research run failed unexpectedly; no successful result was confirmed.' };
   }
   revalidatePath(`/intel/research/rie/${projectId}`);
   if (run.status === 'FAILED') {
