@@ -984,13 +984,13 @@ export async function listPublishedCorrections(
   }
 
   // Next.js statically prerenders routes during "next build". The CI workflow
-  // explicitly sets BREAKDOWN_CI_STATIC_BUILD for this build only and uses the
+  // explicitly sets NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD for this build only and uses the
   // in-memory provider without production database credentials. In that one
   // fixture context, emit known seed notices so CI can test prerendering. The
   // marker is not configured in deployed environments, so runtime still fails closed.
   const isMemoryOnlyProductionBuild =
     process.env.NODE_ENV === 'production' &&
-    process.env.BREAKDOWN_CI_STATIC_BUILD === 'true' &&
+    process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD === 'true' &&
     process.env.DATA_PROVIDER === 'memory';
 
   if (process.env.NODE_ENV === 'production' && !isMemoryOnlyProductionBuild) {
