@@ -64,6 +64,7 @@ function rowToReaderCorrection(row: any): ReaderCorrection {
     submitterEmail: row.submitter_email || undefined,
     supportingEvidenceUrl: row.supporting_evidence_url || undefined,
     status: row.status,
+    triageNotes: row.triage_notes || mem?.triageNotes || undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -241,6 +242,9 @@ export function createMockCorrectionsClient(options: {
         return { data: null, error: { message: 'Reader correction not found' } };
       }
       if (submission.resolved_correction_id) {
+        if (params.p_triage_notes !== null && params.p_triage_notes !== undefined) {
+          submission.triage_notes = params.p_triage_notes;
+        }
         const existing = store.corrections.find((row: any) => row.id === submission.resolved_correction_id);
         return existing
           ? { data: [{ ...existing, stories: store.stories.find((story: any) => story.id === existing.story_id) || null }], error: null }
@@ -279,6 +283,7 @@ export function createMockCorrectionsClient(options: {
         claim_id: published.claim_id,
         status: 'resolved',
         resolved_correction_id: published.id,
+        triage_notes: params.p_triage_notes ?? submission.triage_notes ?? null,
         updated_at: now,
       });
       return { data: [{ ...published, stories: story }], error: null };
@@ -631,13 +636,20 @@ export async function getReaderCorrectionById(id: string): Promise<ReaderCorrect
         .eq('id', id)
         .maybeSingle();
 
-      if (!error && data) {
-        return rowToReaderCorrection(data);
+      if (error) {
+        throw new Error(error.message || 'database query failed');
       }
-    } catch {
-      // Fall through to memory
+      // A successful DB miss is a real "not found", never permission to use a stale cache.
+      return data ? rowToReaderCorrection(data) : undefined;
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Reader correction lookup failed: ${err?.message || 'database communication error'}`);
+      }
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction lookup unavailable: durable database storage is required.');
   }
+
   return memoryReaderCorrections.get(id);
 }
 
@@ -655,12 +667,20 @@ export async function listReaderCorrections(
         query = query.eq('story_slug', options.storySlug.toLowerCase());
       }
       const { data, error } = await query.order('created_at', { ascending: false });
-      if (!error && data && Array.isArray(data)) {
-        return data.map(rowToReaderCorrection);
+      if (error) {
+        throw new Error(error.message || 'database query failed');
       }
-    } catch {
-      // Fall through to memory
+      if (!Array.isArray(data)) {
+        throw new Error('database returned an invalid result');
+      }
+      return data.map(rowToReaderCorrection);
+    } catch (err: any) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Reader correction queue query failed: ${err?.message || 'database communication error'}`);
+      }
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    throw new Error('Reader correction queue unavailable: durable database storage is required.');
   }
 
   let list = Array.from(memoryReaderCorrections.values());
@@ -685,13 +705,15 @@ export async function triageReaderCorrection(
     throw new Error(`Unauthorized: User role '${staffContext.role}' cannot triage reader corrections.`);
   }
 
-  const record = (await getReaderCorrectionById(input.correctionId)) || memoryReaderCorrections.get(input.correctionId);
+  const db = getCorrectionsDbClient();
+  const record = db || process.env.NODE_ENV === 'production'
+    ? await getReaderCorrectionById(input.correctionId)
+    : memoryReaderCorrections.get(input.correctionId);
   if (!record) {
     throw new Error(`Correction submission not found: ${input.correctionId}`);
   }
 
   const now = new Date().toISOString();
-  const db = getCorrectionsDbClient();
   const isPublishing = input.status === 'resolved' && Boolean(input.publishedCorrection);
 
   if (!db && process.env.NODE_ENV === 'production') {
@@ -726,6 +748,7 @@ export async function triageReaderCorrection(
           p_corrected_wording: input.publishedCorrection.correctedWording,
           p_explanation: input.publishedCorrection.explanation,
           p_claim_id: handoffRecord?.claimId || record.claimId || null,
+          p_triage_notes: input.triageNotes ?? null,
         });
       } catch (err: any) {
         throw new Error(`Failed to publish correction durably: ${err?.message || 'database communication error'}`);
@@ -760,12 +783,17 @@ export async function triageReaderCorrection(
       };
     }
   } else if (db) {
+    const triageUpdate: Record<string, string> = {
+      status: input.status,
+      updated_at: now,
+    };
+    if (input.triageNotes !== undefined) {
+      triageUpdate.triage_notes = input.triageNotes;
+    }
+
     const { error } = await db
       .from('reader_corrections')
-      .update({
-        status: input.status,
-        updated_at: now,
-      })
+      .update(triageUpdate)
       .eq('id', input.correctionId);
 
     if (error) {
@@ -983,13 +1011,14 @@ export async function listPublishedCorrections(
     return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
-  // Next.js statically prerenders routes during "next build". CI deliberately uses
-  // DATA_PROVIDER=memory and has no production database credentials; in that
-  // build-only context, render the immutable built-in seed notices so static
-  // artifacts remain complete. This exception must never be active at runtime.
+  // Next.js statically prerenders routes during "next build". The CI workflow
+  // explicitly sets NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD for this build only and uses the
+  // in-memory provider without production database credentials. In that one
+  // fixture context, emit known seed notices so CI can test prerendering. The
+  // marker is not configured in deployed environments, so runtime still fails closed.
   const isMemoryOnlyProductionBuild =
     process.env.NODE_ENV === 'production' &&
-    process.env.NEXT_PHASE === 'phase-production-build' &&
+    process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD === 'true' &&
     process.env.DATA_PROVIDER === 'memory';
 
   if (process.env.NODE_ENV === 'production' && !isMemoryOnlyProductionBuild) {

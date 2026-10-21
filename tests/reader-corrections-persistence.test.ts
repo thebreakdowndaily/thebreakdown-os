@@ -268,15 +268,88 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(allReceived.length).toBe(1);
     expect(allReceived[0].id).toBe(submissionId);
   });
-  it('8. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
+  it('8. Triage notes persist across service instances and a cold start', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'A paragraph with a potentially misleading attribution.',
+      suggestedCorrection: 'The attribution requires primary-source verification.',
+    });
+    expect(submission.success).toBe(true);
+
+    await triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'in_review',
+      triageNotes: 'Assigned for primary-source review; verify the original document.',
+    }, { userId: 'editor-notes-test', role: 'editor' });
+
+    const stored = mockStore.readerCorrections.find(row => row.id === submission.submissionId);
+    expect(stored?.triage_notes).toBe('Assigned for primary-source review; verify the original document.');
+
+    resetCorrectionsMemoryStore(false);
+    setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    const reloaded = await getReaderCorrectionById(submission.submissionId!);
+    expect(reloaded?.triageNotes).toBe('Assigned for primary-source review; verify the original document.');
+  });
+
+  it('9. Production queue reads fail closed on database query errors even if memory has a record', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'A reader report for production read-failure verification.',
+      suggestedCorrection: 'The submitted correction should still come from the database.',
+    });
+    expect(submission.success).toBe(true);
+
+    const originalNodeEnv = process.env.NODE_ENV;
+    try {
+      process.env.NODE_ENV = 'production';
+      setCorrectionsDbClient(createMockCorrectionsClient({
+        store: mockStore,
+        shouldThrow: true,
+      }));
+
+      await expect(getReaderCorrectionById(submission.submissionId!)).rejects.toThrow(
+        /Reader correction lookup failed/
+      );
+      await expect(listReaderCorrections()).rejects.toThrow(
+        /Reader correction queue query failed/
+      );
+    } finally {
+      if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = originalNodeEnv;
+      setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    }
+  });
+
+  it('10. Production queue reads fail closed when the database client is unavailable', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    try {
+      process.env.NODE_ENV = 'production';
+      setCorrectionsDbClient(null);
+
+      await expect(getReaderCorrectionById('11111111-1111-1111-1111-111111111111')).rejects.toThrow(
+        /Reader correction lookup unavailable: durable database storage is required/
+      );
+      await expect(listReaderCorrections()).rejects.toThrow(
+        /Reader correction queue unavailable: durable database storage is required/
+      );
+    } finally {
+      if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = originalNodeEnv;
+      setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
+    }
+  });
+
+  it('11. Static production build can prerender seed notices only in the explicit CI memory phase', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
+    const originalBuildMarker = process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
 
     try {
       process.env.NODE_ENV = 'production';
       process.env.NEXT_PHASE = 'phase-production-build';
       process.env.DATA_PROVIDER = 'memory';
+      process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD = 'true';
       setCorrectionsDbClient(null);
       resetCorrectionsMemoryStore(true);
 
@@ -291,19 +364,23 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
       else process.env.NEXT_PHASE = originalNextPhase;
       if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
       else process.env.DATA_PROVIDER = originalDataProvider;
+      if (originalBuildMarker === undefined) delete process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
+      else process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD = originalBuildMarker;
       setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
     }
   });
 
-  it('9. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
+  it('12. Deployed production still fails closed when the durable corrections ledger is unavailable', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     const originalNextPhase = process.env.NEXT_PHASE;
     const originalDataProvider = process.env.DATA_PROVIDER;
+    const originalBuildMarker = process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
 
     try {
       process.env.NODE_ENV = 'production';
       process.env.NEXT_PHASE = 'phase-production-server';
       process.env.DATA_PROVIDER = 'memory';
+      delete process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
       setCorrectionsDbClient(null);
 
       await expect(listPublishedCorrections()).rejects.toThrow(
@@ -316,11 +393,13 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
       else process.env.NEXT_PHASE = originalNextPhase;
       if (originalDataProvider === undefined) delete process.env.DATA_PROVIDER;
       else process.env.DATA_PROVIDER = originalDataProvider;
+      if (originalBuildMarker === undefined) delete process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD;
+      else process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD = originalBuildMarker;
       setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
     }
   });
 
-  it('10. Published corrections are durable and reload after a cold start', async () => {
+  it('13. Published corrections are durable and reload after a cold start', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'The border was demarcated in 1960 according to this passage.',
@@ -331,6 +410,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     await triageReaderCorrection({
       correctionId: submission.submissionId!,
       status: 'resolved',
+      triageNotes: 'Verified by an editor against the primary document.',
       publishedCorrection: {
         category: 'factual',
         previousWording: 'The border was demarcated in 1960 according to this passage.',
@@ -343,6 +423,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     const storedSubmission = mockStore.readerCorrections.find(row => row.id === submission.submissionId);
     expect(storedSubmission?.status).toBe('resolved');
     expect(storedSubmission?.resolved_correction_id).toBe(mockStore.corrections[0].id);
+    expect(storedSubmission?.triage_notes).toBe('Verified by an editor against the primary document.');
 
     resetCorrectionsMemoryStore(false);
     setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore }));
@@ -353,7 +434,7 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(reloaded[0].correctedWording).toBe('The LAC remains undemarcated across multiple disputed sectors.');
   });
 
-  it('11. Failed correction publication never reports success or partially updates the submission', async () => {
+  it('14. Failed correction publication never reports success or partially updates the submission', async () => {
     const submission = await submitReaderCorrection({
       storySlug: 'india-china-border-lac',
       passageExcerpt: 'A passage that must not create a correction on failure.',

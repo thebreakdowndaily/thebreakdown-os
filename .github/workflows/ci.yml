@@ -16,6 +16,9 @@ jobs:
     # this loopback port; these values must never be copied to deployment env.
     env:
       DATA_PROVIDER: memory
+      # Explicit build-only fixture marker for static prerender paths that read
+      # durable data. This must not be configured in Vercel or production envs.
+      NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD: 'true'
       NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-only-placeholder-anon-key-not-valid-for-production
     steps:

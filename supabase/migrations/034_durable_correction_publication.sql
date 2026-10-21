@@ -6,6 +6,9 @@ ALTER TABLE public.reader_corrections
   ADD COLUMN IF NOT EXISTS resolved_correction_id UUID
   REFERENCES public.corrections(id) ON DELETE SET NULL;
 
+ALTER TABLE public.reader_corrections
+  ADD COLUMN IF NOT EXISTS triage_notes TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_reader_corrections_resolved_correction_id
   ON public.reader_corrections(resolved_correction_id);
 
@@ -66,7 +69,8 @@ CREATE OR REPLACE FUNCTION public.publish_reader_correction(
   p_previous_wording TEXT,
   p_corrected_wording TEXT,
   p_explanation TEXT,
-  p_claim_id UUID
+  p_claim_id UUID,
+  p_triage_notes TEXT
 )
 RETURNS SETOF public.corrections
 LANGUAGE plpgsql
@@ -89,6 +93,13 @@ BEGIN
 
   -- Locking and the linkage column make retrying the publication idempotent.
   IF v_submission.resolved_correction_id IS NOT NULL THEN
+    IF p_triage_notes IS NOT NULL THEN
+      UPDATE public.reader_corrections
+         SET triage_notes = p_triage_notes,
+             updated_at = pg_catalog.now()
+       WHERE id = p_reader_correction_id;
+    END IF;
+
     RETURN QUERY
       SELECT c.* FROM public.corrections AS c
        WHERE c.id = v_submission.resolved_correction_id;
@@ -103,7 +114,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'A published correction ID is required';
   END IF;
 
-  IF p_category NOT IN ('factual', 'source', 'interpretive', 'clarification', 'context_update', 'retraction') THEN
+  IF p_category IS NULL OR p_category NOT IN ('factual', 'source', 'interpretive', 'clarification', 'context_update', 'retraction') THEN
     RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'Invalid correction category';
   END IF;
 
@@ -144,6 +155,7 @@ BEGIN
          claim_id = v_claim_id,
          status = 'resolved',
          resolved_correction_id = p_published_correction_id,
+         triage_notes = COALESCE(p_triage_notes, triage_notes),
          updated_at = pg_catalog.now()
    WHERE id = p_reader_correction_id;
 
@@ -153,10 +165,10 @@ BEGIN
 END;
 $function$;
 
-REVOKE ALL ON FUNCTION public.publish_reader_correction(UUID, UUID, TEXT, TEXT, TEXT, TEXT, UUID)
+REVOKE ALL ON FUNCTION public.publish_reader_correction(UUID, UUID, TEXT, TEXT, TEXT, TEXT, UUID, TEXT)
   FROM PUBLIC, anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.publish_reader_correction(UUID, UUID, TEXT, TEXT, TEXT, TEXT, UUID)
+GRANT EXECUTE ON FUNCTION public.publish_reader_correction(UUID, UUID, TEXT, TEXT, TEXT, TEXT, UUID, TEXT)
   TO service_role;
 
-COMMENT ON FUNCTION public.publish_reader_correction(UUID, UUID, TEXT, TEXT, TEXT, TEXT, UUID)
+COMMENT ON FUNCTION public.publish_reader_correction(UUID, UUID, TEXT, TEXT, TEXT, TEXT, UUID, TEXT)
   IS 'Atomically publishes an editorial correction and links it to the resolved reader submission. Service-role only.';
