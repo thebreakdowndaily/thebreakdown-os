@@ -58,13 +58,13 @@ These are proposed teaching practices, not skills measured by the BaSE survey. W
 
 ## The school curriculum is beginning to respond
 
-The Central Board of Secondary Education (CBSE) lists a 2026–27 curriculum in Computational Thinking and Artificial Intelligence, along with student and teacher resource books for Classes III–VIII. Its circular of 9 April 2026 describes computational thinking as a foundation for learning about AI and includes data-informed decision-making, the AI project lifecycle, and ethical questions such as bias and fairness. [3][4]
+The Central Board of Secondary Education (CBSE) lists a 2026–27 curriculum in Computational Thinking and Artificial Intelligence, along with student and teacher resource books for Classes III–VIII. Its 1 April 2026 launch circular describes the curriculum's aims, including logical reasoning, problem-solving, pattern recognition and responsible use of technology. A subsequent circular dated 9 April announced the student and teacher resource books for Classes III–VIII. [3][4][5]
 
 This direction is broader than teaching children to write prompts. Logical reasoning, problem decomposition, pattern recognition, data literacy and ethical decision-making can help learners understand both what a digital tool can do and what it cannot establish.
 
 The existence of a curriculum and handbooks, however, is evidence of published policy—not proof of how consistently schools are delivering it, how much classroom time it receives, or whether students’ verification skills improve. The available BaSE figures do not evaluate the impact of CBSE’s 2026–27 curriculum.
 
-UNESCO’s guidance on generative AI in education likewise stresses human-centred, age-appropriate use, data privacy and the need for educational institutions to validate tools rather than adopt them uncritically. This is an international framework for considering responsible implementation, not evidence that any specific Indian school is succeeding or failing. [5]
+UNESCO’s guidance on generative AI in education likewise stresses human-centred, age-appropriate use, data privacy and the need for educational institutions to validate tools rather than adopt them uncritically. This is an international framework for considering responsible implementation, not evidence that any specific Indian school is succeeding or failing. [6]
 
 ## What the survey says about benefits—and what it cannot prove
 
@@ -103,7 +103,8 @@ This is a document-led explainer based on published CSF/BaSE and CBSE materials,
 1. Central Square Foundation, *BaSE: Bharat Survey for EdTech 2025* (published February 2026), especially the executive summary on GenAI use and the survey methodology. [Full report PDF](https://www.edtechbase.centralsquarefoundation.org/BaSE%20Report%202025.pdf) · [Official report page](https://www.centralsquarefoundation.org/reports/base-2025)
 2. Central Square Foundation, [“Beyond Access: Insights from the Bharat Survey for EdTech 2025”](https://www.centralsquarefoundation.org/articles/beyond-access-the-next-phase-of-edtech-and-ai-in-bharat), 24 February 2026.
 3. CBSE, [Computational Thinking and Artificial Intelligence (CT&AI) curriculum page](https://cbseacademic.nic.in/ct-ai.html), academic year 2026–27.
-4. CBSE, [Circular Acad-18/2026](https://cbseacademic.nic.in/web_material/Circulars/2026/18_Circular_2026.pdf), 9 April 2026, on student and teacher resource books for Classes III–VIII.
-5. UNESCO, [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research), originally published 7 September 2023; last updated 16 January 2026.
+4. CBSE, [Circular Acad-15/2026](https://cbseacademic.nic.in/web_material/Circulars/2026/15_Circular_2026.pdf), 1 April 2026, launching the CT&AI curriculum framework for Classes III–VIII.
+5. CBSE, [Circular Acad-18/2026](https://cbseacademic.nic.in/web_material/Circulars/2026/18_Circular_2026.pdf), 9 April 2026, announcing student and teacher resource books for Classes III–VIII.
+6. UNESCO, [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research), originally published 7 September 2023; last updated 16 January 2026.
 
 **Editorial status:** Draft for human review. Not yet approved for public release.
