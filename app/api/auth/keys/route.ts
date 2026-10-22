@@ -83,8 +83,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Forbidden', message: 'Admin access required to create API keys' }, { status: 403 });
   }
 
+  let body: CreateKeyRequestBody;
   try {
-    const body = (await request.json()) as CreateKeyRequestBody;
+    body = (await request.json()) as CreateKeyRequestBody;
+  } catch {
+    return NextResponse.json({ error: 'Bad Request', message: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  try {
     const name = (body.name || 'Unnamed Key').trim();
     if (!name) {
       return NextResponse.json({ error: 'Bad Request', message: 'Key name is required' }, { status: 400 });
@@ -128,7 +134,16 @@ export async function POST(request: NextRequest) {
     );
     rateLimiter.applyHeaders(response.headers, rate);
     return response;
-  } catch {
-    return NextResponse.json({ error: 'Bad Request', message: 'Invalid JSON body' }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '';
+    if (message.includes('persistence') || message.includes('persisted')) {
+      console.error('[API Keys] durable key creation failed:', error instanceof Error ? error.name : 'unknown');
+      return NextResponse.json(
+        { error: 'Service Unavailable', message: 'API key could not be issued because durable storage is unavailable.' },
+        { status: 503 }
+      );
+    }
+    console.error('[API Keys] creation failed:', error instanceof Error ? error.name : 'unknown');
+    return NextResponse.json({ error: 'Internal Server Error', message: 'API key creation failed.' }, { status: 500 });
   }
 }
