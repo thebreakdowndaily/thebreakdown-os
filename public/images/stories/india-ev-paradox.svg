@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">India's electric vehicle transition</title>
+  <desc id="desc">Editorial illustration of an electric car at a charging station, a battery pack, and shipping containers representing charging infrastructure and battery supply chains.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071b2b"/><stop offset="1" stop-color="#123b48"/></linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#263f4b"/><stop offset="1" stop-color="#142c38"/></linearGradient>
+    <linearGradient id="car" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7fbfb"/><stop offset="1" stop-color="#9bc7cb"/></linearGradient>
+    <linearGradient id="battery" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#a4f0c0"/><stop offset="1" stop-color="#37a878"/></linearGradient>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M56 0H0V56" fill="none" stroke="#7ec8c8" stroke-opacity=".1" stroke-width="2"/></pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#grid)"/>
+  <circle cx="1240" cy="190" r="230" fill="#3fc8aa" opacity=".09"/><circle cx="210" cy="190" r="160" fill="#56b5d5" opacity=".12"/>
+  <path d="M0 620 Q450 550 900 630T1600 600V900H0Z" fill="url(#road)"/><path d="M0 730L1600 660" stroke="#d8e4d7" stroke-opacity=".26" stroke-width="4" stroke-dasharray="32 28"/>
+  <ellipse cx="620" cy="690" rx="420" ry="52" fill="#000" opacity=".35" filter="url(#shadow)"/>
+  <!-- charging canopy -->
+  <path d="M120 210H510L470 252H160Z" fill="#4dd6bf"/><path d="M155 252V430M465 252V420" stroke="#9debdc" stroke-width="15"/><path d="M183 270H440" stroke="#173e4a" stroke-width="6"/>
+  <rect x="205" y="314" width="92" height="158" rx="16" fill="#eaf8f4"/><rect x="218" y="330" width="66" height="52" rx="8" fill="#163b48"/><path d="M251 337l-15 25h15l-5 13 19-26h-15Z" fill="#6ce4ba"/><path d="M250 470v43q0 18 18 18h24" fill="none" stroke="#c8f7e7" stroke-width="12" stroke-linecap="round"/>
+  <rect x="328" y="314" width="92" height="158" rx="16" fill="#eaf8f4"/><rect x="341" y="330" width="66" height="52" rx="8" fill="#163b48"/><path d="M374 337l-15 25h15l-5 13 19-26h-15Z" fill="#6ce4ba"/>
+  <!-- car silhouette -->
+  <path d="M350 585L402 518Q425 487 480 480L706 462Q758 458 798 499L862 557Q897 567 909 600L908 653H343Z" fill="url(#car)" stroke="#d2f3ef" stroke-width="6"/>
+  <path d="M452 516L493 490L590 481L590 551H414Z" fill="#1a4151"/><path d="M612 480L697 476Q740 474 769 508L805 551H612Z" fill="#1a4151"/>
+  <path d="M349 592H899" stroke="#53c7b5" stroke-width="8"/><rect x="858" y="586" width="30" height="12" rx="6" fill="#f2c76d"/><rect x="357" y="585" width="31" height="12" rx="6" fill="#f2c76d"/>
+  <circle cx="463" cy="653" r="61" fill="#0b1e29" stroke="#6a8990" stroke-width="10"/><circle cx="463" cy="653" r="27" fill="#b4cdd0"/><circle cx="463" cy="653" r="12" fill="#365b66"/>
+  <circle cx="792" cy="653" r="61" fill="#0b1e29" stroke="#6a8990" stroke-width="10"/><circle cx="792" cy="653" r="27" fill="#b4cdd0"/><circle cx="792" cy="653" r="12" fill="#365b66"/>
+  <!-- battery block -->
+  <g transform="translate(1050 350)">
+    <rect x="0" y="40" width="310" height="218" rx="24" fill="#153a48" stroke="#6acbb6" stroke-width="5"/><rect x="28" y="14" width="68" height="26" rx="8" fill="#6acbb6"/><rect x="214" y="14" width="68" height="26" rx="8" fill="#6acbb6"/>
+    <rect x="28" y="68" width="76" height="78" rx="12" fill="url(#battery)"/><rect x="116" y="68" width="76" height="78" rx="12" fill="url(#battery)"/><rect x="204" y="68" width="76" height="78" rx="12" fill="url(#battery)"/>
+    <path d="M162 164l-30 44h31l-8 29 42-52h-32l13-21Z" fill="#f6d56d"/>
+    <path d="M35 226H275" stroke="#91d9c9" stroke-opacity=".5" stroke-width="5"/>
+  </g>
+  <!-- shipping containers -->
+  <g transform="translate(1060 650)">
+    <rect width="205" height="118" fill="#c97946"/><path d="M20 8V110M45 8V110M70 8V110M95 8V110M120 8V110M145 8V110M170 8V110" stroke="#f4bd8b" stroke-opacity=".7" stroke-width="4"/>
+    <rect x="215" y="-36" width="205" height="154" fill="#2c91a0"/><path d="M235 -28V110M260 -28V110M285 -28V110M310 -28V110M335 -28V110M360 -28V110M385 -28V110" stroke="#83d1d2" stroke-opacity=".65" stroke-width="4"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#f2fbf8"><text x="120" y="115" font-size="28" letter-spacing="6" fill="#72d9c4">THE BREAKDOWN / VISUAL EXPLAINER</text><text x="1055" y="315" font-size="22" letter-spacing="4" fill="#a3ddd3">BATTERY SUPPLY CHAIN</text><text x="122" y="820" font-size="34" font-weight="700">ELECTRIC MOBILITY</text><text x="122" y="858" font-size="20" letter-spacing="3" fill="#a6c8cb">CHARGING • BATTERIES • IMPORT DEPENDENCE</text></g>
+</svg>
