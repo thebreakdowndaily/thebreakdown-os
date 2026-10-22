@@ -1,5 +1,40 @@
 import type { Block, HeroBlockData } from '@/utils/cms-data';
 
+export interface CMSHeroStoryFields {
+  id: string;
+  title: string;
+  headline?: string;
+  summary?: string;
+  heroImage?: string;
+  category?: string;
+  author?: string;
+  publishedAt?: string;
+}
+
+/**
+ * The canonical model stores the hero image on Story.heroImage, while the CMS
+ * editor exposes it as a hero block. Synthesize that editor block for legacy
+ * stories so editors can actually change the field which the public reader uses.
+ */
+export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Block[] {
+  if (blocks.some((block) => block.type === 'hero')) return blocks;
+
+  const data: HeroBlockData = {
+    headline: story.headline || story.title,
+    summary: story.summary || '',
+    heroImage: story.heroImage || '',
+    category: story.category || '',
+    author: story.author || '',
+    publishedAt: story.publishedAt || '',
+  };
+
+  return [
+    { id: `cms-hero-${story.id}`, type: 'hero', data, collapsed: false },
+    ...blocks,
+  ];
+}
+
+
 /**
  * Resolve the canonical reader-facing hero image from the CMS hero block.
  *
