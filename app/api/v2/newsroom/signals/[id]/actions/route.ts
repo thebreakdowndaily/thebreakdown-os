@@ -34,7 +34,7 @@ export async function POST(
     await newsroomIntelligenceCore.ensureLoaded();
     // Actor identity is derived exclusively from the authenticated session.
     // Body-supplied actorId/actorName are ignored to prevent identity spoofing.
-    const updated = newsroomIntelligenceCore.executeAction({
+    const updated = await newsroomIntelligenceCore.executeActionAsync({
       signalId: id,
       action,
       actorId: session.user.id,

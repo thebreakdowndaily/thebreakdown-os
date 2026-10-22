@@ -20,6 +20,53 @@ import { verifyWebhookSignature } from '@/services/notifications';
 
 const MAX_PAYLOAD_BYTES = 256 * 1024; // 256 KB safety bound
 
+type BoundedBodyResult =
+  | { ok: true; rawBody: string }
+  | { ok: false; status: 400 | 413; message: string };
+
+async function readBoundedBody(request: NextRequest): Promise<BoundedBodyResult> {
+  const declaredLength = request.headers.get('content-length');
+  if (declaredLength && /^\\d+$/.test(declaredLength) && Number(declaredLength) > MAX_PAYLOAD_BYTES) {
+    return { ok: false, status: 413, message: 'Payload exceeds maximum permitted size (256 KB)' };
+  }
+
+  const stream = request.body;
+  if (!stream) return { ok: false, status: 400, message: 'Request body is required' };
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      totalBytes += value.byteLength;
+      if (totalBytes > MAX_PAYLOAD_BYTES) {
+        try { await reader.cancel(); } catch { /* best-effort cancellation */ }
+        return { ok: false, status: 413, message: 'Payload exceeds maximum permitted size (256 KB)' };
+      }
+      chunks.push(value);
+    }
+  } catch {
+    return { ok: false, status: 400, message: 'Failed to read request stream' };
+  } finally {
+    try { reader.releaseLock(); } catch { /* stream may already be released */ }
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  try {
+    return { ok: true, rawBody: new TextDecoder('utf-8', { fatal: true }).decode(bytes) };
+  } catch {
+    return { ok: false, status: 400, message: 'Request body must be valid UTF-8' };
+  }
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const secret = process.env.RADAR_ALERT_WEBHOOK_SECRET;
   if (!secret) {
@@ -47,23 +94,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  // 3. Read raw payload with size boundary
-  let rawBody: string;
-  try {
-    rawBody = await request.text();
-  } catch (err) {
-    return NextResponse.json(
-      { error: 'Failed to read request stream' },
-      { status: 400 }
-    );
+  // 3. Read a bounded byte stream before allocating the whole payload.
+  const bodyResult = await readBoundedBody(request);
+  if (!bodyResult.ok) {
+    return NextResponse.json({ error: bodyResult.message }, { status: bodyResult.status });
   }
-
-  if (rawBody.length > MAX_PAYLOAD_BYTES) {
-    return NextResponse.json(
-      { error: 'Payload exceeds maximum permitted size (256 KB)' },
-      { status: 413 }
-    );
-  }
+  const { rawBody } = bodyResult;
 
   // 4. Verify HMAC-SHA256 signature and replay window (300s)
   const sigCheck = verifyWebhookSignature(rawBody, signatureHeader, secret, 300);

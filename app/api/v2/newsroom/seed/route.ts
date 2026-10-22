@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { guardIntelModule } from '@/features/auth/intel-server';
 import { getSession } from '@/features/auth/auth-server';
 import { INTEL_ROLE_ORDER } from '@/features/auth/roles';
+import { isDemoMode } from '@/features/auth/demo';
 import { newsroomIntelligenceCore } from '@/services/intelligence/newsroom';
 import { seedNewsroomDemoBaseline } from '@/lib/intelligence/newsroom-demo-baseline';
 
@@ -24,6 +25,10 @@ export async function POST(_req: NextRequest): Promise<NextResponse> {
       { error: 'forbidden: editor or above required to seed signals' },
       { status: 403 }
     );
+  }
+
+  if (!isDemoMode()) {
+    return NextResponse.json({ error: 'Demo seeding is disabled outside demo mode' }, { status: 404 });
   }
 
   await newsroomIntelligenceCore.ensureLoaded();

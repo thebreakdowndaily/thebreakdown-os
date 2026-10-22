@@ -99,15 +99,19 @@ export async function createApiKey(input: CreateApiKeyInput): Promise<CreateApiK
         .select('id')
         .single();
 
-      if (error) {
-        inMemoryKeys.set(keyHash, record);
-      } else if (data.id) {
-        record.id = data.id;
-      }
+      if (error || !data?.id) throw new Error('API key insert was not durably confirmed.');
+      record.id = data.id;
     } catch {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('API key could not be durably persisted; no key was issued.');
+      }
+      // Local development and tests may use an explicitly non-durable test store.
       inMemoryKeys.set(keyHash, record);
     }
   } else {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('API key persistence is not configured; no key was issued.');
+    }
     inMemoryKeys.set(keyHash, record);
   }
 
@@ -196,7 +200,7 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
   }
 
   // 3. Fallback to inMemory store (unit tests / seed fallback)
-  if (!record) {
+  if (!record && process.env.NODE_ENV !== 'production') {
     record = inMemoryKeys.get(keyHash) || null;
   }
 
@@ -397,7 +401,7 @@ export async function listApiKeys(actor: Principal): Promise<MaskedApiKey[]> {
     }
   }
 
-  if (records.length === 0 && inMemoryKeys.size > 0) {
+  if (process.env.NODE_ENV !== 'production' && records.length === 0 && inMemoryKeys.size > 0) {
     for (const rec of inMemoryKeys.values()) {
       if (isAdmin || rec.owner_id === actor.userId) {
         records.push(rec);

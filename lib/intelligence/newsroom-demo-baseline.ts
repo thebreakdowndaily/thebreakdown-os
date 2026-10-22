@@ -11,6 +11,7 @@
  */
 
 import { NewsroomObservation, StoryCluster } from '@/types/newsroom-intelligence';
+import { isDemoMode } from '@/features/auth/demo';
 
 export interface DemoSeedResult {
   observationsSeeded: number;
@@ -50,6 +51,10 @@ const SCENARIOS: DemoScenario[] = [
 
 export function seedNewsroomDemoBaseline(
   core: {
+  if (!isDemoMode()) {
+    throw new Error('Demo newsroom baseline is disabled outside demo mode.');
+  }
+
     ingestObservation(obs: NewsroomObservation): void;
     upsertCluster(cluster: StoryCluster): unknown;
   }
