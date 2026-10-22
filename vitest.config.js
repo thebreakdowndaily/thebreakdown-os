@@ -37,6 +37,8 @@ const path = require('path');
  * Governing document: AGENTS.md — Testing (npm run lint / typecheck / build).
  */
 module.exports = {
+  // The Next.js tsconfig preserves JSX; Vitest must transform TSX server pages it imports.
+  esbuild: { jsx: 'automatic' },
   test: {
     globals: true,
     environment: 'node',
