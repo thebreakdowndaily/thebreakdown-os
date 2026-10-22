@@ -13,6 +13,11 @@ import type {
 } from './types';
 import { investigationChapterStories, namamiGangeInvestigation } from './investigation-data';
 import { accountabilityStory } from './accountability-story';
+import { plasseyStory, plasseyEntities } from './plassey-story';
+import {
+  isEntityPubliclyPublishable,
+  canPubliclyViewEntity,
+} from '@/lib/story/publication';
 
 /* ── Internal Store ────────────────────────────────────────────────── */
 
@@ -3493,6 +3498,7 @@ function seed(): DataStore {
 
   // ── Audited Investigative Explainer ──────────────────────────────
   stories.set(accountabilityStory.slug, accountabilityStory);
+  stories.set(plasseyStory.slug, plasseyStory);
 
   // ── Investigations ────────────────────────────────────────────────
   investigations.set(namamiGangeInvestigation.slug, namamiGangeInvestigation);
@@ -4394,6 +4400,11 @@ function seed(): DataStore {
     if (e.type === 'organization') organizations.set(e.slug, e);
   });
 
+  plasseyEntities.forEach((pe) => {
+    entities.set(pe.slug, pe);
+    if (pe.type === 'organization') organizations.set(pe.slug, pe);
+  });
+
   // ── Topics ────────────────────────────────────────────────────────
 
   const topicDefs = [
@@ -5009,15 +5020,59 @@ export function getStory(slug: string): APIStory | null {
   return getStore().stories.get(slug) || null;
 }
 
+
+export function entityIsPublic(
+  entityOrRef: { id?: string; slug?: string; name?: string; type?: string; publicationStatus?: string; isTestArtifact?: boolean; status?: string } | undefined | null,
+  s: DataStore = getStore()
+): boolean {
+  if (!entityOrRef) return false;
+
+  const id = entityOrRef.id || entityOrRef.slug;
+  if (id) {
+    const storeEntity =
+      s.entities.get(id) ||
+      (entityOrRef.slug ? s.entities.get(entityOrRef.slug) : undefined) ||
+      Array.from(s.entities.values()).find((e) => e.slug === id || e.id === id || e.aliases?.includes(id));
+    if (storeEntity) {
+      if (!isEntityPubliclyPublishable(storeEntity as any)) {
+        return false;
+      }
+      if (
+        entityOrRef.isTestArtifact === true ||
+        entityOrRef.publicationStatus === 'draft' ||
+        entityOrRef.publicationStatus === 'quarantined' ||
+        entityOrRef.status === 'draft'
+      ) {
+        return false;
+      }
+      return true;
+    }
+  }
+
+  return isEntityPubliclyPublishable(entityOrRef as any);
+}
+
 export function getEntities(params: QueryParams = {}): APIListResponse<APIEntity> {
   const s = getStore();
   let items = Array.from(s.entities.values());
+
+  if (!(params as any).includeDrafts) {
+    items = items.filter((e) => entityIsPublic(e, s));
+  }
 
   if (params.type) items = items.filter((e) => e.type === params.type);
   if (params.search) items = searchFilter(items, params.search, ['name', 'description', 'aliases']);
   if (params.sort) items = sortItems(items, params.sort, params.order);
 
   return paginate(items, params);
+}
+
+
+export function getPublicEntity(slug: string): APIEntity | null {
+  const s = getStore();
+  const entity = s.entities.get(slug);
+  if (!entity) return null;
+  return entityIsPublic(entity, s) ? entity : null;
 }
 
 export function getEntity(slug: string): APIEntity | null {
@@ -5113,6 +5168,17 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
   const links: APIGraphLink[] = [];
   const now = new Date();
 
+  // Fail closed if requested focus entity is unpublishable/quarantined
+  if (params.entity) {
+    const entityTarget = params.entity;
+    const focusEntity =
+      s.entities.get(entityTarget) ||
+      Array.from(s.entities.values()).find((e) => e.slug === entityTarget || e.id === entityTarget || e.aliases?.includes(entityTarget));
+    if (focusEntity && !entityIsPublic(focusEntity, s)) {
+      return { nodes: [], links: [] };
+    }
+  }
+
   // A public graph may only be rooted in public stories. This raw data-layer
   // graph is consumed independently of the canonical service repository, so
   // enforce the publication boundary here as well as at API routes.
@@ -5133,6 +5199,7 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
     });
 
     story.relatedEntities.forEach((re) => {
+      if (!entityIsPublic(re, s)) return;
       nodes.set(re.id, {
         id: re.id,
         label: re.name,
@@ -5176,9 +5243,11 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
     });
   });
 
+  const validLinks = links.filter((l) => nodes.has(l.source) && nodes.has(l.target));
+
   return {
     nodes: Array.from(nodes.values()),
-    links: links.filter((l, i, arr) => {
+    links: validLinks.filter((l, i, arr) => {
       // Deduplicate links.
       return i === arr.findIndex((l2) => l2.source === l.source && l2.target === l.target);
     }),

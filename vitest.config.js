@@ -118,6 +118,7 @@ module.exports = {
       'tests/reader-journey-loop.test.ts',
       'tests/publication-integrity-p0.test.ts',
       'tests/publication-boundary-api.test.ts',
+      'tests/publication-boundary-regression.test.ts',
       'tests/public-chapter-visibility.test.ts',
       'tests/source-integrity-loop2.test.ts',
       'tests/phase1-integrity-remediation.test.ts',
