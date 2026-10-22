@@ -3,6 +3,8 @@ import { matchImageToStoryContext } from '../lib/image-intelligence/context-matc
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
 import { getStories } from '../utils/data-layer/store';
 import { validateImageFile } from '../lib/image-intelligence/asset-validator';
+import { validateStoryForPublication } from '../lib/editorial/publication-gate';
+import type { Story } from '../types/canonical';
 
 const indiaUK = {
   slug: 'india-uk-relations',
@@ -73,4 +75,53 @@ for (const [slug, expectedImage] of Object.entries(expectedAssignments)) {
   assert.equal(matchImageToStoryContext(expectedImage, { slug, headline: story.headline, category: story.category, tags: story.tags }, getManifestEntry).isMatch, true, `${slug} illustration must pass the story-context gate via its manifest`);
 }
 
-console.log('Image context mismatch regression tests: 29 assertions passed');
+
+const publicationFixture: Story = {
+  id: 'india-indonesia-relations',
+  slug: 'india-indonesia-relations',
+  title: 'India-Indonesia relations',
+  headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific',
+  summary: 'A review of maritime security, trade and diplomacy.',
+  heroImage: '/images/stories/india-europe-relations.jpg',
+  heroImageAlt: 'An image of an India-Europe summit',
+  heroImageIsDecorative: false,
+  author: 'The Breakdown Editorial',
+  category: 'geopolitics',
+  status: 'review',
+  publicationStatus: 'review',
+  storyType: 'standard',
+  evidenceScore: 90,
+  readingTime: 10,
+  publishedAt: '2026-10-22T00:00:00.000Z',
+  createdAt: '2026-10-20T00:00:00.000Z',
+  updatedAt: '2026-10-22T00:00:00.000Z',
+  tags: ['India-Indonesia', 'maritime security', 'ASEAN', 'Indo-Pacific', 'trade'],
+  blocks: [{ id: 'body-1', type: 'text', region: 'main', data: { text: 'Story body for publication-gate regression.' } }],
+  sources: [{ title: 'Official source', url: 'https://example.com/source', accessedAt: '2026-10-22', tier: 1 }],
+  claims: [{ id: 'claim-1', claim: 'India and Indonesia cooperate on maritime issues.', data: '', source: 'Official source', sourceUrl: 'https://example.com/source', tier: 1, confidence: 0.9, status: 'verified' }],
+  timeline: [],
+  faq: [],
+  charts: [],
+  relatedStoryIds: [],
+  relatedEntityIds: [],
+  relatedTopicIds: [],
+};
+const publicationInput = { storyId: publicationFixture.id, triggeredBy: 'manual' as const };
+const badPublication = validateStoryForPublication(publicationInput, publicationFixture, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  badPublication.checks.find((check) => check.name === 'hero_image_context')?.passed,
+  false,
+  'publication gate must reject an EU image assigned to an India-Indonesia story',
+);
+const goodPublication = validateStoryForPublication(publicationInput, {
+  ...publicationFixture,
+  heroImage: '/images/stories/india-indonesia-relations.svg',
+  heroImageAlt: 'Editorial illustration connecting India and Indonesia across a maritime route with a cargo ship and the two countries\' flags.',
+}, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  goodPublication.checks.find((check) => check.name === 'hero_image_context')?.passed,
+  true,
+  'publication gate must accept the story-specific registered illustration',
+);
+
+console.log('Image context mismatch regression tests: 31 assertions passed');
