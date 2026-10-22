@@ -167,6 +167,7 @@ async function runDirectDatabaseTests() {
       JOIN pg_namespace n ON n.oid = c.relnamespace
       WHERE (n.nspname = 'public' AND c.relname IN ('stories', 'topics', 'entities', 'timelines', 'fixes', 'media_items', 'datasets', 'user_roles'))
          OR (n.nspname IN ('public', 'identity') AND c.relname IN ('bookmarks', 'users'))
+         OR (n.nspname = 'audit' AND c.relname = 'activity_log')
       ORDER BY n.nspname, c.relname;
     `);
     for (const row of rlsQuery.rows) {
@@ -410,6 +411,82 @@ async function runDirectDatabaseTests() {
     }
 
     // ─────────────────────────────────────────────────────────────────
+    // 6. Append-Only Audit Integrity & Tamper Prevention (audit.activity_log)
+    // ─────────────────────────────────────────────────────────────────
+    console.log('\n6. Append-Only Audit Integrity (audit.activity_log)');
+    const auditEntryId = '77777777-7777-7777-7777-777777777777';
+
+    // Anonymous visitor cannot read audit logs
+    await client.query('BEGIN');
+    await actAs(client, 'anon', {});
+    let anonAuditSelectDenied = false;
+    try {
+      const res = await client.query('SELECT id FROM audit.activity_log');
+      if (res.rowCount === 0) anonAuditSelectDenied = true;
+    } catch {
+      anonAuditSelectDenied = true;
+    }
+    assert(anonAuditSelectDenied, 'Anonymous caller CANNOT read audit.activity_log (rejected by permissions/RLS)');
+    await client.query('ROLLBACK');
+
+    // Anonymous visitor cannot insert into audit logs
+    await client.query('BEGIN');
+    await actAs(client, 'anon', {});
+    let anonAuditInsertFailed = false;
+    try {
+      await client.query(`
+        INSERT INTO audit.activity_log (id, event_type, entity_type, entity_id)
+        VALUES ('${auditEntryId}', 'story:published', 'story', 'test-story')
+      `);
+    } catch {
+      anonAuditInsertFailed = true;
+    }
+    assert(anonAuditInsertFailed, 'Anonymous caller CANNOT insert into audit.activity_log (rejected by RLS)');
+    await client.query('ROLLBACK');
+
+    // Authenticated editor (staff) can insert into audit.activity_log
+    const staffAuditUserId = '88888888-8888-8888-8888-888888888888';
+    await client.query(`
+      INSERT INTO public.user_roles (user_id, role, status)
+      VALUES ('${staffAuditUserId}', 'editor', 'active')
+      ON CONFLICT (user_id) DO NOTHING;
+    `);
+
+    await client.query('BEGIN');
+    await actAs(client, 'authenticated', { sub: staffAuditUserId });
+    await client.query(`
+      INSERT INTO audit.activity_log (id, event_type, entity_type, entity_id, user_id)
+      VALUES ('${auditEntryId}', 'story:published', 'story', 'test-story', '${staffAuditUserId}')
+    `);
+    const staffAuditSelect = await client.query(`SELECT id FROM audit.activity_log WHERE id = '${auditEntryId}'`);
+    assert(staffAuditSelect.rowCount === 1, 'Staff caller CAN insert and read audit.activity_log');
+
+    // Tamper Prevention Test: Staff cannot UPDATE audit.activity_log (rejected by trigger and privileges)
+    let staffUpdateFailed = false;
+    try {
+      await client.query(`
+        UPDATE audit.activity_log
+        SET entity_id = 'tampered-story'
+        WHERE id = '${auditEntryId}'
+      `);
+    } catch {
+      staffUpdateFailed = true;
+    }
+    assert(staffUpdateFailed, 'UPDATE on audit.activity_log is strictly prohibited and rejected');
+
+    // Tamper Prevention Test: Staff cannot DELETE audit.activity_log (rejected by trigger and privileges)
+    let staffDeleteFailed = false;
+    try {
+      await client.query(`
+        DELETE FROM audit.activity_log
+        WHERE id = '${auditEntryId}'
+      `);
+    } catch {
+      staffDeleteFailed = true;
+    }
+    assert(staffDeleteFailed, 'DELETE on audit.activity_log is strictly prohibited and rejected');
+    await client.query('ROLLBACK');
+
     // Summary
     // ─────────────────────────────────────────────────────────────────
     console.log('\n───────────────────────────────────────────────────────');
