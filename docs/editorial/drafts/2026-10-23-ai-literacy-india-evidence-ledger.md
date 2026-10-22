@@ -19,8 +19,8 @@
 | AI-06 | 73% used GenAI for doubt-solving/practice; 48% for language/skill learning or translation; 32% for test preparation | BaSE report, PDF page 9 | Self-reported use cases | Multiple responses possible; do not sum |
 | AI-07 | 84% of respondents reported improved learning from GenAI | BaSE report, PDF page 9 | Perceived impact | Do not describe as a measured or causal learning gain |
 | AI-08 | 72% of surveyed children had smartphone access; 68% had shared access and 4% dedicated access | BaSE report, PDF page 7 | Descriptive survey findings | Scope to the surveyed sample |
-| AI-09 | CBSE lists CT&AI curriculum and student/teacher resources for Classes III–VIII in 2026–27 | CBSE CT&AI page; circular Acad-18/2026 (9 April 2026) | Official policy document | Evidence of published curriculum/resources, not of delivery quality or outcomes |
-| AI-10 | The curriculum covers computational thinking and AI, including data-driven decision-making and ethics such as bias/fairness | CBSE circular Acad-18/2026 and curriculum material | Official curriculum description | Attribute curriculum aims; do not imply that all schools have implemented every element |
+| AI-09 | CBSE lists CT&AI curriculum and student/teacher resources for Classes III–VIII in 2026–27 | CBSE CT&AI page; Circular Acad-15/2026 (1 April) and Acad-18/2026 (9 April) | Official policy document | Evidence of published curriculum/resources, not of delivery quality or outcomes |
+| AI-10 | The curriculum aims to develop computational thinking, problem-solving, pattern recognition, digital literacy and responsible technology use | CBSE Circular Acad-15/2026 and curriculum material | Official curriculum description | Attribute curriculum aims; do not imply that all schools have implemented every element |
 | AI-11 | UNESCO guidance highlights human-centred, age-appropriate use, data privacy and institutional validation | UNESCO guidance, updated 16 January 2026 | International policy guidance | Context only; not evidence about any particular Indian school |
 
 ## Source metadata
@@ -43,15 +43,19 @@
    URL: https://cbseacademic.nic.in/ct-ai.html  
    Official page lists curriculum and separate student/teacher materials for Grades 3–8. **Production Evidence Vault archive ID: NOT CREATED.**
 
-4. **CBSE Circular Acad-18/2026, 9 April 2026**  
-   URL: https://cbseacademic.nic.in/web_material/Circulars/2026/18_Circular_2026.pdf  
-   Official source for published student/teacher resource books and the board's stated approach. **Production Evidence Vault archive ID: NOT CREATED.**
+4. **CBSE Circular Acad-15/2026, 1 April 2026**  
+   URL: https://cbseacademic.nic.in/web_material/Circulars/2026/15_Circular_2026.pdf  
+   Launches the CT&AI curriculum framework for Classes III–VIII for academic year 2026–27 and describes the curriculum's stated aims. **Production Evidence Vault archive ID: NOT CREATED.**
 
-5. **Press Information Bureau / Ministry of Education — CBSE CT&AI curriculum launch, 1 April 2026**  
+5. **CBSE Circular Acad-18/2026, 9 April 2026**  
+   URL: https://cbseacademic.nic.in/web_material/Circulars/2026/18_Circular_2026.pdf  
+   Official source for the student and teacher resource books. **Production Evidence Vault archive ID: NOT CREATED.**
+
+6. **Press Information Bureau / Ministry of Education — CBSE CT&AI curriculum launch, 1 April 2026**  
    URL: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2247963&lang=1&reg=3  
    Official account of the curriculum launch and stated objectives.
 
-6. **UNESCO — Guidance for Generative AI in Education and Research**  
+7. **UNESCO — Guidance for Generative AI in Education and Research**  
    URL: https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research  
    Published 7 September 2023; last updated 16 January 2026. International policy guidance, not a country-specific implementation audit.
 
