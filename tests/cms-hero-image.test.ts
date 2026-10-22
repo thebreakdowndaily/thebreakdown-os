@@ -69,6 +69,7 @@ const unchanged = withCMSHeroBlock([existingHero, ...legacyBlocks], {
   id: 'story-with-hero',
   title: 'Story with hero',
   heroImage: staleImage,
+  heroImageAlt: 'Existing image description.',
 });
 assert.equal(unchanged[0].data && (unchanged[0].data as { heroImage: string }).heroImage, selectedImage, 'an existing CMS hero block remains authoritative');
 assert.equal((unchanged[0].data as { heroImageAlt: string }).heroImageAlt, 'Existing image description.', 'legacy hero blocks should hydrate missing alt text from the canonical story');
