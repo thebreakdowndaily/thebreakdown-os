@@ -148,7 +148,14 @@ export function matchImageToStoryContext(
   let overlapCount = 0;
   for (const token of imageTokens) {
     // Exclude generic tokens
-    if (['images', 'stories', 'library', 'maps', 'jpg', 'png', 'svg', 'chapter'].includes(token)) {
+    // Broad country and relationship words are not enough to prove that
+    // a photo is about the same bilateral relationship. For an India-focused
+    // publisher, "india" + "relations" would otherwise approve EU imagery for
+    // India-UK, India-Indonesia, India-Russia, and similar stories.
+    if ([
+      'images', 'stories', 'library', 'maps', 'jpg', 'png', 'svg', 'chapter',
+      'india', 'relation', 'relations',
+    ].includes(token)) {
       continue;
     }
     if (storyTokens.has(token)) {
