@@ -44,7 +44,7 @@ assert.equal(
   'the saved image URL must be trimmed',
 );
 
-console.log('CMS hero image sync tests: 4 passed, 0 failed');
+console.log('CMS hero image sync tests: 8 assertions passed');
 
 const legacyBlocks: Block[] = [{ id: 'body-1', type: 'text', data: { html: '<p>Body</p>' } }];
 const converted = withCMSHeroBlock(legacyBlocks, {
@@ -67,5 +67,3 @@ const unchanged = withCMSHeroBlock([existingHero, ...legacyBlocks], {
   heroImage: staleImage,
 });
 assert.equal(unchanged[0].data && (unchanged[0].data as { heroImage: string }).heroImage, selectedImage, 'an existing CMS hero block remains authoritative');
-
-console.log('CMS hero image bridge tests: 6 additional assertions passed');
