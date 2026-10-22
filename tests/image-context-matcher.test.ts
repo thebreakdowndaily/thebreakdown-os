@@ -73,4 +73,4 @@ for (const [slug, expectedImage] of Object.entries(expectedAssignments)) {
   assert.equal(matchImageToStoryContext(expectedImage, { slug, headline: story.headline, category: story.category, tags: story.tags }, getManifestEntry).isMatch, true, `${slug} illustration must pass the story-context gate via its manifest`);
 }
 
-console.log('Image context mismatch regression tests: 32 assertions passed');
+console.log('Image context mismatch regression tests: 29 assertions passed');
