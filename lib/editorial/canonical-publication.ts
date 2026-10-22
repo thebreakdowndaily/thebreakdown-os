@@ -44,7 +44,7 @@ export interface PublicationOptions {
 
 /**
  * Evaluates whether a story can transition to 'published' under the canonical publication contract.
- * Asynchronously checks all 12 publication gates AND Gate 13 (Evidence Vault Reconstructibility).
+ * Asynchronously checks the 13 editorial gates (including hero-image integrity) plus Gate 14 (Evidence Vault Reconstructibility).
  */
 export async function evaluatePublicationContractAsync(
   existingStory: Story | undefined,
