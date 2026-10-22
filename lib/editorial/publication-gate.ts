@@ -60,14 +60,6 @@ export async function validateStoryForPublicationAsync(
     details: evidenceRes.violations.length > 0 ? evidenceRes.violations.join('\n') : undefined,
   });
 
-  // Gate 13: Hero image must match the story context (Editorial Visual Audit)
-  const heroImageContext = validateHeroImageContext(story);
-  checks.push({
-    name: 'hero_image_context',
-    passed: heroImageContext.passed,
-    reason: heroImageContext.reason,
-  });
-
   const allPassed = checks.every(c => c.passed);
   return buildResult(input, checks, allPassed, now);
 }
@@ -188,6 +180,14 @@ export function validateStoryForPublication(
     reason: !hasRetractedSources
       ? 'No retracted sources detected in story evidence'
       : 'Story cites one or more retracted sources — publication blocked',
+  });
+
+  // Gate 13: Hero image must match the story context (Editorial Visual Audit)
+  const heroImageContext = validateHeroImageContext(story);
+  checks.push({
+    name: 'hero_image_context',
+    passed: heroImageContext.passed,
+    reason: heroImageContext.reason,
   });
 
   const allPassed = checks.every(c => c.passed);
