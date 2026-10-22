@@ -55,8 +55,8 @@ These are not all confirmed errors; they require editorial review for relevance 
 - Keep the CMS-only hero metadata block out of narrative content.
 - Correct the three confirmed seed assignments to story-specific original illustrations.
 - Exclude broad country/relationship terms from semantic image-match approval.
-- Add publication Gate 13 to reject a supplied hero image that fails story-context matching; the evidence-vault verification is Gate 14.
-- Add regression tests for image synchronization, context mismatch, manifest consistency, alt text, local SVG validity and the publication gate.
+- Add publication Gate 13 to reject a supplied hero image that fails story-context matching or points to a missing/corrupt local asset; the evidence-vault verification is Gate 14.
+- Add regression tests for image synchronization, context mismatch, manifest consistency, alt text, local SVG validity, missing-asset rejection, and the publication gate.
 
 ## Required production follow-up
 
