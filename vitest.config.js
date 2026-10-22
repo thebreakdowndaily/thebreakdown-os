@@ -136,6 +136,7 @@ module.exports = {
       'tests/supabase-identifier-resolution.test.ts',
       'tests/public-v1-story-api.test.ts',
       'tests/public-v2-story-api.test.ts',
+      'tests/draft-story-preview-authorization.test.ts',
       'tests/sanitize-rich-html.test.ts',
       'tests/wave3-remaining-paths.test.ts',
       'tests/phase2b1-reconciliation.test.ts',
