@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
+import { getStories } from '../utils/data-layer/store';
 
 const indiaUK = {
   slug: 'india-uk-relations',
@@ -52,4 +53,18 @@ assert.equal(
   'an explicitly registered neutral category placeholder is acceptable until a verified image is sourced',
 );
 
-console.log('Image context mismatch regression tests: 5 assertions passed');
+
+const seededStories = getStories({ pageSize: 1000 }).data;
+const expectedAssignments: Record<string, string> = {
+  'india-ev-paradox': '/images/placeholders/environment-placeholder.svg',
+  'india-indonesia-relations': '/images/placeholders/policy-placeholder.svg',
+  'india-uk-relations': '/images/placeholders/policy-placeholder.svg',
+};
+for (const [slug, expectedImage] of Object.entries(expectedAssignments)) {
+  const story = seededStories.find((item) => item.slug === slug);
+  assert.ok(story, `the seed registry includes ${slug}`);
+  assert.equal(story.heroImage, expectedImage, `${slug} must not reuse a cross-topic hero photo`);
+  assert.equal(getManifestEntry(slug)?.approvedImage, expectedImage, `${slug} manifest must match its seed assignment`);
+}
+
+console.log('Image context mismatch regression tests: 14 assertions passed');
