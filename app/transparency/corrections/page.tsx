@@ -71,9 +71,9 @@ export default async function CorrectionsPage() {
               <svg className="w-8 h-8 text-text-muted mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <h3 className="text-sm font-semibold text-text-primary">Zero Unresolved Errata</h3>
+              <h3 className="text-sm font-semibold text-text-primary">No Published Corrections Listed</h3>
               <p className="text-xs text-text-muted mt-1 max-w-sm mx-auto">
-                All currently published knowledge objects have passed the Gold Standard Review with zero open factual challenges.
+                This ledger lists formal corrections and clarifications approved for publication. An empty ledger is not, by itself, proof that every story has passed every review gate or that no questions remain.
               </p>
             </div>
           ) : (

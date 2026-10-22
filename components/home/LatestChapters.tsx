@@ -27,7 +27,6 @@ const FOUNDING_CHAPTER = {
   subtitle:
     'Partition left India with disputed borders, a shattered economy, 565 princely states, and a foreign policy philosophy it would spend fifteen years trying to define.',
   readingTime: 30,
-  evidenceGrade: 'A',
 };
 
 // Editorial publishing commitment
@@ -201,7 +200,7 @@ export default function LatestChapters({ trustMetrics }: LatestChaptersProps = {
                 className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-mono"
                 style={{ color: 'var(--color-text-muted)' }}
               >
-                <span>Fully Sourced &amp; Fact-Checked</span>
+                <span>{claims} linked claims · {sources} linked sources</span>
                 <span aria-hidden="true">·</span>
                 <span>{FOUNDING_CHAPTER.readingTime} min read</span>
                 <span aria-hidden="true">·</span>

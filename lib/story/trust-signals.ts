@@ -20,7 +20,11 @@ export function getReaderTrustSignals(story: any): TrustSignal[] {
   const raw = story.raw || story;
   const sources: any[] = raw.sources || [];
   const claims: any[] = raw.claims || [];
-  const publicationStatus = raw.publicationStatus || 'published';
+  const publicationStatus = raw.publicationStatus;
+
+  // Public-reader trust labels only apply to records explicitly marked published.
+  // Missing lifecycle metadata must fail closed, matching lib/story/publication.ts.
+  if (publicationStatus !== 'published') return signals;
 
   // 1. Primary documents / Tier-1 sources check
   const hasPrimarySource = sources.some(
@@ -39,7 +43,7 @@ export function getReaderTrustSignals(story: any): TrustSignal[] {
     (c) => c.verification === 'true' || c.status === 'verified'
   ).length;
 
-  if (publicationStatus === 'published' && (verifiedClaimsCount > 0 || sources.length > 0)) {
+  if (verifiedClaimsCount > 0) {
     signals.push({
       id: 'evidence-reviewed',
       label: 'Evidence reviewed',
@@ -68,15 +72,8 @@ export function getReaderTrustSignals(story: any): TrustSignal[] {
     });
   }
 
-  // Default fallback if no other signal matched
-  if (signals.length === 0) {
-    signals.push({
-      id: 'evidence-reviewed',
-      label: 'Evidence reviewed',
-      type: 'verified',
-    });
-  }
-
+  // No evidence signal is better than an invented assurance. An empty array
+  // means the structured evidence does not support a reader-facing trust label.
   return signals;
 }
 
@@ -142,9 +139,12 @@ export function getStoryEvidenceSummary(story: any): StoryEvidenceSummary {
 
   const reviewStatus =
     raw.publicationStatus === 'published' ? 'Published'
+    : raw.publicationStatus === 'draft' || raw.status === 'draft' ? 'Draft'
     : raw.status === 'fact_check' ? 'Fact-Checked'
-    : raw.status === 'review' ? 'In Editorial Review'
-    : 'Published';
+    : raw.status === 'review' || raw.publicationStatus === 'review' ? 'In Editorial Review'
+    : raw.publicationStatus === 'scheduled' ? 'Scheduled'
+    : raw.publicationStatus === 'archived' ? 'Archived'
+    : 'Unknown';
 
   return {
     claimsTotal: claims.length,
