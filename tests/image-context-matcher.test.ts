@@ -109,7 +109,7 @@ const publicationFixture: Story = {
 const publicationInput = { storyId: publicationFixture.id, triggeredBy: 'manual' as const };
 const badPublication = validateStoryForPublication(publicationInput, publicationFixture, new Date('2026-10-22T00:00:00.000Z'));
 assert.equal(
-  badPublication.checks.find((check) => check.name === 'hero_image_context')?.passed,
+  badPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
   false,
   'publication gate must reject an EU image assigned to an India-Indonesia story',
 );
@@ -119,9 +119,20 @@ const goodPublication = validateStoryForPublication(publicationInput, {
   heroImageAlt: 'Editorial illustration connecting India and Indonesia across a maritime route with a cargo ship and the two countries\' flags.',
 }, new Date('2026-10-22T00:00:00.000Z'));
 assert.equal(
-  goodPublication.checks.find((check) => check.name === 'hero_image_context')?.passed,
+  goodPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
   true,
   'publication gate must accept the story-specific registered illustration',
 );
+const missingAssetPublication = validateStoryForPublication(publicationInput, {
+  ...publicationFixture,
+  heroImage: '/images/stories/does-not-exist.jpg',
+  heroImageAlt: 'Story-specific editorial image that is missing from the repository.',
+}, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  missingAssetPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
+  false,
+  'publication gate must reject a local image path that does not exist',
+);
 
-console.log('Image context mismatch regression tests: 31 assertions passed');
+
+console.log('Image context mismatch regression tests: 32 assertions passed');
