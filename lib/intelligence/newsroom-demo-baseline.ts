@@ -51,14 +51,13 @@ const SCENARIOS: DemoScenario[] = [
 
 export function seedNewsroomDemoBaseline(
   core: {
-  if (!isDemoMode() && process.env.NODE_ENV !== 'test') {
-    throw new Error('Demo newsroom baseline is disabled outside demo mode.');
-  }
-
     ingestObservation(obs: NewsroomObservation): void;
     upsertCluster(cluster: StoryCluster): unknown;
   }
 ): DemoSeedResult {
+  if (!isDemoMode() && process.env.NODE_ENV !== 'test') {
+    throw new Error('Demo newsroom baseline is disabled outside demo mode.');
+  }
   let observationsSeeded = 0;
   let clustersSeeded = 0;
   let signalsCreated = 0;
