@@ -22,7 +22,7 @@ disclosure: "Document-led analysis based on published institutional documents. N
 
 ## Two numbers, one question
 
-On page nine of the *Bharat Survey for EdTech (BaSE) 2025* report, two findings sit close together. Among children who had heard of generative AI, 85% said they understood how it worked. Yet 72% of that same aware group described it as an internet-search application. [1]
+In the executive summary of the *Bharat Survey for EdTech (BaSE) 2025* report, two findings sit close together. Among children who had heard of generative AI, 85% said they understood how it worked. Yet 72% of that same aware group described it as an internet-search application. [1]
 
 The figures are striking, but they are not the result of a technical examination. The survey reports what respondents said about their understanding and their conception of the tool; it does not show students taking a test to explain how a chatbot generates an answer, check a citation, or spot a false claim. The contrast is a signal to investigate—not proof that children cannot use AI well.
 
