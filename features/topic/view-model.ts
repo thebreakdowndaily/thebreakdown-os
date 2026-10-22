@@ -20,10 +20,12 @@ export async function buildTopicPage(services: Services, slug: string): Promise<
 
   const knowledgeTopic = await pipeline.execute(topic);
 
-  return {
+    return {
     topic: knowledgeTopic.topic,
+    totalStories: knowledgeTopic.totalStories ?? knowledgeTopic.storyGroups?.totalCount ?? 0,
+    allStories: knowledgeTopic.allStories ?? knowledgeTopic.storyGroups?.all ?? [],
     storyGroups: knowledgeTopic.storyGroups || {
-      latest: [], important: [], highestEvidence: [], trending: [], historical: [], recommended: []
+      latest: [], important: [], highestEvidence: [], trending: [], historical: [], recommended: [], all: [], totalCount: 0
     },
     rankedEntities: knowledgeTopic.rankedEntities || [],
     unifiedTimeline: knowledgeTopic.unifiedTimeline || [],

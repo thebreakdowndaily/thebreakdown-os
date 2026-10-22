@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { bootstrapServices } from '@/lib/bootstrap';
+import { canPubliclyViewEntity } from '@/lib/story/publication';
 
 export async function GET(
   _request: NextRequest,
@@ -9,7 +10,7 @@ export async function GET(
   const services = bootstrapServices();
   const entity = (await services.entities.getEntityBySlug(slug)) || (await services.entities.getEntity(slug));
 
-  if (!entity) {
+  if (!entity || !canPubliclyViewEntity(entity)) {
     return NextResponse.json({ error: `Entity not found: ${slug}`, status: 404 }, { status: 404 });
   }
 

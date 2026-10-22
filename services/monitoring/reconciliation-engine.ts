@@ -12,7 +12,7 @@
 
 import { getPublicStories, getEntities, getTopics, getFixes } from '@/utils/data-layer/store';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
-import sitemap from '@/app/sitemap';
+import { buildSitemap } from '@/lib/seo/sitemap';
 
 export type SurfaceType = 'sitemap' | 'search_index' | 'json_ld' | 'metadata' | 'feed';
 export type AnomalySeverity = 'critical' | 'high' | 'medium' | 'low';
@@ -107,7 +107,7 @@ export class ReconciliationEngine {
     // 2. Audit against Sitemap entries
     let sitemapSynced = 0;
     const siteUrl = 'https://thebreakdown.in';
-    const sitemapEntries = await sitemap();
+    const sitemapEntries = await buildSitemap();
     const sitemapUrls = new Set(sitemapEntries.map((e) => e.url));
 
     for (const s of stories) {

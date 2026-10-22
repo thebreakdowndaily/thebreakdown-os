@@ -2,6 +2,8 @@ import type { Topic, Story, Entity, TimelineEvent } from '@/types/canonical';
 
 export interface KnowledgeTopic {
   topic: Topic;
+  totalStories?: number;
+  allStories?: Story[];
   storyGroups?: {
     latest: Story[];
     important: Story[];
@@ -9,6 +11,8 @@ export interface KnowledgeTopic {
     trending: Story[];
     historical: Story[];
     recommended: Story[];
+    all?: Story[];
+    totalCount?: number;
   };
   rankedEntities?: {
     entity: Entity;

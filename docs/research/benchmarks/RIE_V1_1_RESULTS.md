@@ -1,6 +1,6 @@
 # RIE v1.1 Recall Benchmark — Results
 
-**Timestamp:** 2026-09-26T14:48:37.541Z
+**Timestamp:** 2026-10-20T05:47:04.965Z
 **Corpus Version:** 1.1
 **Benchmark Tag:** rie-v1.1-expanded
 **Approved Sources Count:** 15

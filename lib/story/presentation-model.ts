@@ -327,13 +327,17 @@ export function buildStoryPresentationModel(
 
   // 10. Evidence presentation
   const claimsList = (story.claims || []).map((c, i) => {
-    const status = c.status === 'verified' || c.status === 'strong'
-      ? 'supported'
-      : (c as any).verification === 'misleading' || c.status === 'moderate'
-      ? 'mixed'
-      : (c as any).verification === 'false'
-      ? 'not_supported'
-      : 'unverified';
+    const rawVer = (c as any).verification;
+    const status =
+      rawVer === 'false'
+        ? 'not_supported'
+        : rawVer === 'misleading' || rawVer === 'outdated'
+        ? 'mixed'
+        : rawVer === 'true' || c.status === 'verified' || c.status === 'strong'
+        ? 'supported'
+        : c.status === 'moderate'
+        ? 'mixed'
+        : 'unverified';
 
     return {
       id: c.id || `claim-${story.slug}-${i}`,

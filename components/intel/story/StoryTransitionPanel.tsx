@@ -5,7 +5,7 @@ import {
   transitionStoryAction,
   assignStoryEditorAction,
   addStoryNoteAction,
-} from '@/app/intel/story-builder/actions';
+} from '@/features/intel/story-builder/actions';
 
 // Governing document: docs/intelligence/tbios-master-prompt-v1.md (Story Builder — Editorial Workflow)
 // Server-component workflow panel. Every mutation is a server action that re-authorizes the

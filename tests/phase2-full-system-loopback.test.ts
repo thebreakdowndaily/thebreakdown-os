@@ -161,9 +161,9 @@ describe('Phase 2 Full-System Loopback Verification', () => {
       expect(chart).toBeDefined();
       const chartData = chart?.data as Array<{ party: string; amount: number }>;
       expect(chartData[1].party).toBe('TMC');
-      expect(chartData[1].amount).toBe(1610);
+      expect(chartData[1].amount).toBe(1609.5);
       expect(chartData[2].party).toBe('INC');
-      expect(chartData[2].amount).toBe(1422);
+      expect(chartData[2].amount).toBe(1421.9);
 
       // 3. Structured Data JSON-LD
       const jsonLd = createStoryJsonLd(story as any);

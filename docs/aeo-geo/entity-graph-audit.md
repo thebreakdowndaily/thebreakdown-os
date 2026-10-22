@@ -2,7 +2,7 @@
 
 **Audit Date:** 2026-09-29  
 **Target:** Knowledge Graph Topography & Citation Traceability  
-**Scope:** 41 Public Stories · 41 Entities · 5 Chapters · 191 Sourced Citations
+**Scope:** 41 Public Stories · 50 Entities · 5 Chapters · 191 Sourced Citations
 
 ---
 
@@ -11,7 +11,7 @@
 | Dimension | Count | Health State |
 |---|---|---|
 | **Public Stories** | 41 | Verified in store |
-| **Entities in Registry** | 41 | Registered |
+| **Entities in Registry** | 50 | Registered |
 | **Chapters (Knowledge Library)** | 5 | Structured knowledge objects |
 | **Authors in Registry** | 1 | Canonical byline profiles |
 | **Total Source Citations** | 191 | Attached across stories |
@@ -45,11 +45,11 @@ Top covered entities by story frequency:
 | `india` | 41 |
 | `rbi` | 5 |
 | `un` | 5 |
+| `cag` | 3 |
 | `ministry-of-finance` | 3 |
 | `brics` | 3 |
 | `ministry-of-rural-development` | 2 |
 | `ministry-of-agriculture` | 2 |
-| `cag` | 2 |
 | `imf` | 2 |
 | `g20` | 2 |
 | `quad` | 2 |

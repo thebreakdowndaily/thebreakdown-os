@@ -409,7 +409,7 @@ function rowToEntry(row: Record<string, unknown>): EditorialScheduleEntry {
   };
 }
 
-function rowToStory(row: Record<string, unknown>) {
+export function rowToStory(row: Record<string, unknown>) {
   const status = (row.status as string) || 'draft';
   const publicationStatus =
     status === 'published' ? 'published'
