@@ -32,7 +32,8 @@ export async function saveStoryAction(cmsStory: CMSStory) {
     title: cmsStory.title,
     slug: cmsStory.slug,
     status: cmsStory.status as any,
-    blocks: cmsStory.blocks as StoryBlock[],
+    // Hero metadata lives on Story.heroImage; do not persist the CMS-only hero block into narrative content.
+    blocks: cmsStory.blocks.filter((block) => block.type !== 'hero') as unknown as StoryBlock[],
     updatedAt: new Date().toISOString(),
     createdAt: existing?.createdAt || new Date().toISOString(),
     
