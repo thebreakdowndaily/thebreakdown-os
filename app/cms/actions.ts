@@ -2,7 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { bootstrapServices } from '@/services/bootstrap';
-import { resolveCMSHeroImage } from '@/lib/editorial/cms-hero-image';
+import { resolveCMSHeroImage, resolveCMSHeroMetadata } from '@/lib/editorial/cms-hero-image';
 import type { CMSStory } from '@/utils/cms-data';
 import type { Story, StoryBlock } from '@/types/canonical';
 import { getCurrentPrincipal } from '@/features/auth/principal';
@@ -24,6 +24,11 @@ export async function saveStoryAction(cmsStory: CMSStory) {
   // Keep the canonical field in sync; a blank value in an existing hero block clears it,
   // while legacy stories without a hero block preserve their already-saved image.
   const heroImage = resolveCMSHeroImage(cmsStory.blocks, existing?.heroImage || '');
+  const heroMetadata = resolveCMSHeroMetadata(
+    cmsStory.blocks,
+    existing?.heroImageAlt || '',
+    existing?.heroImageIsDecorative || false,
+  );
 
   const updatedStory: Story = {
     ...existing,
@@ -41,6 +46,8 @@ export async function saveStoryAction(cmsStory: CMSStory) {
     headline: cmsStory.title,
     summary: existing?.summary || '',
     heroImage,
+    heroImageAlt: heroMetadata.heroImageAlt,
+    heroImageIsDecorative: heroMetadata.heroImageIsDecorative,
     author: existing?.author || principal.name,
     category: existing?.category || '',
     evidenceScore: existing?.evidenceScore || 0,

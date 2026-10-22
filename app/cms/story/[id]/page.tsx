@@ -49,6 +49,8 @@ export default async function StoryEditorPage({ params }: { params: Promise<{ id
         headline: canonical.headline,
         summary: canonical.summary,
         heroImage: canonical.heroImage,
+        heroImageAlt: canonical.heroImageAlt,
+        heroImageIsDecorative: canonical.heroImageIsDecorative,
         category: canonical.category,
         author: canonical.author,
         publishedAt: canonical.publishedAt,

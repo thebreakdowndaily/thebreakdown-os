@@ -121,7 +121,29 @@ const goodPublication = validateStoryForPublication(publicationInput, {
 assert.equal(
   goodPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
   true,
-  'publication gate must accept the story-specific registered illustration',
+  'publication gate must accept the story-specific registered illustration with descriptive alt text',
+);
+const missingAltPublication = validateStoryForPublication(publicationInput, {
+  ...publicationFixture,
+  heroImage: '/images/stories/india-indonesia-relations.svg',
+  heroImageAlt: '',
+  heroImageIsDecorative: false,
+}, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  missingAltPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
+  false,
+  'publication gate must reject an informative hero without alt text',
+);
+const decorativeImagePublication = validateStoryForPublication(publicationInput, {
+  ...publicationFixture,
+  heroImage: '/images/stories/india-indonesia-relations.svg',
+  heroImageAlt: '',
+  heroImageIsDecorative: true,
+}, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  decorativeImagePublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
+  true,
+  'publication gate may accept an explicitly decorative hero image without alt text',
 );
 const missingAssetPublication = validateStoryForPublication(publicationInput, {
   ...publicationFixture,

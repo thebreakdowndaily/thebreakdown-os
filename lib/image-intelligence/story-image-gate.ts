@@ -16,11 +16,19 @@ export interface HeroImageContextValidation {
  */
 export function validateHeroImageContext(story: Pick<
   Story,
-  'slug' | 'title' | 'headline' | 'category' | 'tags' | 'heroImage' | 'primaryEntityId' | 'relatedEntityIds'
+  'slug' | 'title' | 'headline' | 'category' | 'tags' | 'heroImage' | 'heroImageAlt' | 'heroImageIsDecorative' | 'primaryEntityId' | 'relatedEntityIds'
 >): HeroImageContextValidation {
   const image = typeof story.heroImage === 'string' ? story.heroImage.trim() : '';
   if (!image) {
     return { passed: true, skipped: true, reason: 'No hero image assigned; image-context check skipped.' };
+  }
+
+  if (story.heroImageIsDecorative !== true && !(typeof story.heroImageAlt === 'string' && story.heroImageAlt.trim())) {
+    return {
+      passed: false,
+      skipped: false,
+      reason: 'Informative hero images require meaningful alt text; mark the image decorative only when it conveys no additional information.',
+    };
   }
 
   // Local public paths must resolve to a real, decodable image. This catches
