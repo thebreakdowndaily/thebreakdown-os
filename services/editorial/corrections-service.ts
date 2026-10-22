@@ -118,6 +118,9 @@ export function createMockCorrectionsClient(options: {
       { id: '44444444-4444-4444-4444-444444444444', slug: 'electoral-bonds' },
       { id: '55555555-5555-5555-5555-555555555555', slug: 'mgnrega-reform' },
       { id: 'investigation-01', slug: 'investigation-01' },
+      { id: 'story-alpha', slug: 'story-alpha' },
+      { id: 'story-beta', slug: 'story-beta' },
+      { id: 'story-gamma', slug: 'story-gamma' },
     ],
     corrections: [],
   };

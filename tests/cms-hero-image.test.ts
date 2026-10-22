@@ -47,9 +47,6 @@ assert.equal(
   'the saved image URL must be trimmed',
 );
 
-  });
-});
-
 
 const legacyBlocks: Block[] = [{ id: 'body-1', type: 'text', data: { html: '<p>Body</p>' } }];
 const converted = withCMSHeroBlock(legacyBlocks, {
@@ -83,3 +80,6 @@ const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage)], '  E
 assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained and alt text is normalized');
 const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage)], 'stale description', true);
 assert.deepEqual(decorativeMetadata, { heroImageAlt: '', heroImageIsDecorative: true }, 'decorative images must not retain informative alt text');
+
+  });
+});
