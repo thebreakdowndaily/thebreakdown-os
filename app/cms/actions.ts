@@ -2,6 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { bootstrapServices } from '@/services/bootstrap';
+import { resolveCMSHeroImage } from '@/utils/cms-data';
 import type { CMSStory } from '@/utils/cms-data';
 import type { Story, StoryBlock } from '@/types/canonical';
 import { getCurrentPrincipal } from '@/features/auth/principal';
@@ -17,8 +18,13 @@ export async function saveStoryAction(cmsStory: CMSStory) {
   const services = await bootstrapServices();
   
   // Fetch existing story to preserve fields that the CMS editor doesn't touch right now
-  let existing = await services.stories.getStory(cmsStory.id);
-  
+  const existing = await services.stories.getStory(cmsStory.id);
+
+  // The public story reader renders Story.heroImage, not the nested CMS hero block.
+  // Keep the canonical field in sync; a blank value in an existing hero block clears it,
+  // while legacy stories without a hero block preserve their already-saved image.
+  const heroImage = resolveCMSHeroImage(cmsStory.blocks, existing?.heroImage || '');
+
   const updatedStory: Story = {
     ...existing,
     storyType: existing?.storyType || 'standard',
@@ -33,7 +39,7 @@ export async function saveStoryAction(cmsStory: CMSStory) {
     // Default fallback for missing fields if this is a new story
     headline: cmsStory.title,
     summary: existing?.summary || '',
-    heroImage: existing?.heroImage || '',
+    heroImage,
     author: existing?.author || principal.name,
     category: existing?.category || '',
     evidenceScore: existing?.evidenceScore || 0,
