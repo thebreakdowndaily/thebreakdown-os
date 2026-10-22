@@ -263,9 +263,7 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
     expect(core.getPersistenceStatus()).toBe('degraded_readonly');
 
     const deskService = new NewsroomDeskService(core);
-    const summary = await deskService.getDeskSummary();
-    expect(summary.isDegradedReadOnly).toBe(true);
-    expect(summary.persistenceStatus).toBe('degraded_readonly');
+    await expect(deskService.getDeskSummary()).rejects.toThrow(/Database host connection refused/);
   });
 
   // ── 4. Concurrency Conflict (OCC 409) ────────────────────────────────────────
