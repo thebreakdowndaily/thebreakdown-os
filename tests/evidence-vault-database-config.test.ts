@@ -23,4 +23,13 @@ describe('Evidence Vault database configuration', () => {
 
     expect(() => new EvidenceVaultService()).toThrow(/requires an explicit database URL/);
   });
+
+  it('rejects the production database host even when supplied as a staging URL', () => {
+    process.env.NODE_ENV = 'test';
+    delete process.env.DATABASE_URL;
+    process.env.STAGING_DATABASE_URL =
+      'postgresql://postgres:test-password@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres';
+
+    expect(() => new EvidenceVaultService()).toThrow(/Production database targeted/);
+  });
 });

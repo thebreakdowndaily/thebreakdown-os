@@ -213,6 +213,7 @@ module.exports = {
       'tests/security/migration-target.test.ts',
       'tests/security/api-key-persistence-fail-closed.test.ts',
       'tests/security/repository-production-fail-closed.test.ts',
+      'tests/security/newsroom-webhook-body-limit.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

@@ -26,7 +26,7 @@ type BoundedBodyResult =
 
 async function readBoundedBody(request: NextRequest): Promise<BoundedBodyResult> {
   const declaredLength = request.headers.get('content-length');
-  if (declaredLength && /^\\d+$/.test(declaredLength) && Number(declaredLength) > MAX_PAYLOAD_BYTES) {
+  if (declaredLength && /^\d+$/.test(declaredLength) && Number(declaredLength) > MAX_PAYLOAD_BYTES) {
     return { ok: false, status: 413, message: 'Payload exceeds maximum permitted size (256 KB)' };
   }
 

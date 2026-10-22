@@ -49,8 +49,8 @@ export async function POST(req: Request) {
     const response = NextResponse.json({ data: mediaItem });
     rateLimiter.applyHeaders(response.headers, rate);
     return response;
-  } catch (error: any) {
-    console.error('Image Intelligence Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('Image Intelligence Error:', error instanceof Error ? error.name : 'unknown');
+    return NextResponse.json({ error: 'Image resolution failed' }, { status: 500 });
   }
 }

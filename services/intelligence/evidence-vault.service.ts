@@ -275,8 +275,17 @@ export class EvidenceVaultService {
         );
       }
 
-      // Never allow non-production processes to target the production vault.
-      if (process.env.NODE_ENV !== 'production' && url.includes('lvfovvidtowadmnggzzf')) {
+      // Inspect the actual hostname, not arbitrary credentials or query-string text.
+      let databaseHost: string;
+      try {
+        databaseHost = new URL(url).hostname.toLowerCase();
+      } catch {
+        throw new Error('FATAL: Evidence vault database URL is invalid.');
+      }
+      if (
+        process.env.NODE_ENV !== 'production' &&
+        databaseHost.includes('lvfovvidtowadmnggzzf')
+      ) {
         throw new Error('FATAL: Production database targeted from a non-production runtime.');
       }
 
