@@ -100,7 +100,7 @@ This is a document-led explainer based on published CSF/BaSE and CBSE materials,
 
 ## Sources
 
-1. Central Square Foundation, *BaSE: Bharat Survey for EdTech 2025* (published February 2026), especially the executive summary on GenAI use and the survey methodology. [Full report PDF](https://res.cloudinary.com/dmfdkajkq/images/v1771575969/BaSE-Report-2025_compressed/BaSE-Report-2025_compressed.pdf?_i=AA) · [Official report page](https://www.centralsquarefoundation.org/reports/base-2025)
+1. Central Square Foundation, *BaSE: Bharat Survey for EdTech 2025* (published February 2026), especially the executive summary on GenAI use and the survey methodology. [Full report PDF](https://www.edtechbase.centralsquarefoundation.org/BaSE%20Report%202025.pdf) · [Official report page](https://www.centralsquarefoundation.org/reports/base-2025)
 2. Central Square Foundation, [“Beyond Access: Insights from the Bharat Survey for EdTech 2025”](https://www.centralsquarefoundation.org/articles/beyond-access-the-next-phase-of-edtech-and-ai-in-bharat), 24 February 2026.
 3. CBSE, [Computational Thinking and Artificial Intelligence (CT&AI) curriculum page](https://cbseacademic.nic.in/ct-ai.html), academic year 2026–27.
 4. CBSE, [Circular Acad-18/2026](https://cbseacademic.nic.in/web_material/Circulars/2026/18_Circular_2026.pdf), 9 April 2026, on student and teacher resource books for Classes III–VIII.
