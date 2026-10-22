@@ -2,7 +2,8 @@ import { bootstrapServices } from '@/services/bootstrap';
 import { redirect } from 'next/navigation';
 import CMSShell from '@/components/cms/CMSShell';
 import StoryEditorWrapper from './StoryEditorWrapper';
-import type { CMSStory } from '@/utils/cms-data';
+import type { CMSStory, Block } from '@/utils/cms-data';
+import { withCMSHeroBlock } from '@/lib/editorial/cms-hero-image';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,20 +26,34 @@ export default async function StoryEditorPage({ params }: { params: Promise<{ id
   let cmsStory: CMSStory;
 
   if (!story && id === 'new') {
-    cmsStory = {
+    const createdAt = new Date().toISOString();
+    const newStory = {
       id: `story-new-${Date.now()}`,
       title: 'Untitled Story',
       slug: 'untitled-story',
-      status: 'draft',
-      blocks: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      status: 'draft' as const,
+      createdAt,
+      updatedAt: createdAt,
+    };
+    cmsStory = {
+      ...newStory,
+      blocks: withCMSHeroBlock([], newStory),
     };
   } else {
+    const canonical = story!;
     cmsStory = {
-      ...story,
-      blocks: story!.blocks || [],
-    } as any;
+      ...canonical,
+      blocks: withCMSHeroBlock((canonical.blocks || []) as unknown as Block[], {
+        id: canonical.id,
+        title: canonical.title,
+        headline: canonical.headline,
+        summary: canonical.summary,
+        heroImage: canonical.heroImage,
+        category: canonical.category,
+        author: canonical.author,
+        publishedAt: canonical.publishedAt,
+      }),
+    } as unknown as CMSStory;
   }
 
   return (
