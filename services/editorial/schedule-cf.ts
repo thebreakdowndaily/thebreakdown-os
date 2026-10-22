@@ -26,6 +26,31 @@ interface CanonicalDispatchPayload {
 
 const MAX_DISPATCH_ATTEMPTS = 3;
 const INITIAL_RETRY_DELAY_MS = 250;
+const ALLOWED_CANONICAL_HOSTS = ['thebreakdown.in'] as const;
+
+function canonicalPublishingEndpoint(appUrl: string): string {
+  let base: URL;
+  try {
+    base = new URL(appUrl);
+  } catch {
+    throw new Error('Canonical publication dispatch requires a valid APP_URL.');
+  }
+
+  if (
+    base.protocol !== 'https:' ||
+    base.username !== '' ||
+    base.password !== '' ||
+    base.pathname !== '/' ||
+    base.search !== '' ||
+    base.hash !== '' ||
+    base.port !== '' ||
+    !(ALLOWED_CANONICAL_HOSTS as readonly string[]).includes(base.hostname.toLowerCase())
+  ) {
+    throw new Error('Canonical publication dispatch requires the approved HTTPS origin.');
+  }
+
+  return new URL('/api/editorial/publish-due', base.origin).toString();
+}
 
 function isDispatchResult(value: unknown): value is CanonicalDispatchResult {
   if (!value || typeof value !== 'object') return false;
@@ -51,16 +76,7 @@ export async function publishDueStories(
     throw new Error('Canonical publication dispatch requires CRON_SECRET.');
   }
 
-  let endpoint: string;
-  try {
-    const base = new URL(env.APP_URL);
-    if (base.protocol !== 'https:' && base.hostname !== 'localhost' && base.hostname !== '127.0.0.1') {
-      throw new Error('APP_URL must use HTTPS outside local development.');
-    }
-    endpoint = new URL('/api/editorial/publish-due', base).toString();
-  } catch {
-    throw new Error('Canonical publication dispatch requires a valid APP_URL.');
-  }
+  const endpoint = canonicalPublishingEndpoint(env.APP_URL);
 
   let lastStatus: number | undefined;
   let lastErrorName: string | undefined;
@@ -71,8 +87,9 @@ export async function publishDueStories(
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${env.CRON_SECRET}`,
+          Authorization: `Bearer ${env.CRON_SECRET.trim()}`,
         },
+        redirect: 'error',
       });
       attemptStatus = response.status;
 
@@ -81,7 +98,7 @@ export async function publishDueStories(
       }
 
       const body = (await response.json()) as CanonicalDispatchPayload;
-      if (!body || !Array.isArray(body.results) || !body.results.every(isDispatchResult)) {
+      if (body?.ok !== true || !Array.isArray(body.results) || !body.results.every(isDispatchResult)) {
         throw new Error('Canonical publication API returned an invalid response contract.');
       }
 
