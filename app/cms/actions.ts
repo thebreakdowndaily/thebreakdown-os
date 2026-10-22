@@ -2,7 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { bootstrapServices } from '@/services/bootstrap';
-import { resolveCMSHeroImage } from '@/utils/cms-data';
+import { resolveCMSHeroImage } from '@/lib/editorial/cms-hero-image';
 import type { CMSStory } from '@/utils/cms-data';
 import type { Story, StoryBlock } from '@/types/canonical';
 import { getCurrentPrincipal } from '@/features/auth/principal';
