@@ -29,7 +29,7 @@
    Publisher: Central Square Foundation  
    Publication date: February 2026  
    URLs:  
-   - https://res.cloudinary.com/dmfdkajkq/images/v1771575969/BaSE-Report-2025_compressed/BaSE-Report-2025_compressed.pdf?_i=AA  
+   - https://www.edtechbase.centralsquarefoundation.org/BaSE%20Report%202025.pdf  
    - https://www.centralsquarefoundation.org/reports/base-2025  
    Accessed during this review: 23 October 2026. The relevant GenAI findings were checked against the report text and screenshot of its executive-summary page. **Production Evidence Vault archive ID: NOT CREATED.**
 
