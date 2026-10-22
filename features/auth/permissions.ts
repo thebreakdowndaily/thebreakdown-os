@@ -26,6 +26,9 @@ export type AppPermission =
   | 'intel.tasks'
   | 'intel.newsroom'
   | 'intel.demand'
+  // Resource-intensive Radar ingestion controls
+  | 'radar.poll'
+  | 'radar.poll.force'
   // Administrative & Security
   | 'api_key.read'
   | 'api_key.create'
