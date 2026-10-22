@@ -4,6 +4,7 @@ import { requireApiPermission } from '@/features/auth/require-role';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 import type { Story, StoryStatus } from '@/types/canonical';
+import { PUBLIC_STORY_SELECT, toPublicDatabaseStory } from '@/lib/story/public-story-projection';
 
 export async function GET(
   _request: NextRequest,
@@ -14,7 +15,7 @@ export async function GET(
     // Public route: only return currently published, non-test stories.
     const { data, error } = await db()
       .from('stories')
-      .select('*')
+      .select(PUBLIC_STORY_SELECT)
       .eq('slug', slug)
       .eq('status', 'published')
       .eq('is_test_artifact', false)
@@ -22,7 +23,7 @@ export async function GET(
       .maybeSingle();
     if (error) throw error;
     if (!data) return notFound('Story');
-    return ok(data);
+    return ok(toPublicDatabaseStory(data));
   } catch (e) { return serverError(e); }
 }
 
