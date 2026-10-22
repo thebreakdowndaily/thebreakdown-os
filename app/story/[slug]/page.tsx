@@ -21,8 +21,8 @@ interface StoryEntityRef {
   title?: string;
 }
 
-import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { getCurrentPrincipal } from '@/features/auth/principal';
+import { can } from '@/features/auth/policy';
 
 export const dynamicParams = true;
 export const revalidate = 60;
@@ -52,22 +52,12 @@ export default async function StoryPage({
 
   const canonicalStory = resolution.canonicalStory;
 
-  // Fail-closed publication safety check: unauthenticated visitors cannot view unpublished stories or receive canonical chapter redirects
+  // Unpublished stories are editorial-only; authentication by itself does not grant preview access.
+  // Use the authoritative server-side principal and centralized policy so guests,
+  // reporters, unauthenticated users, and suspended accounts cannot preview drafts.
   if (!isCanonicalStoryPublic(canonicalStory)) {
-    let isAuthenticated = false;
-    try {
-      const cookieStore = await cookies();
-      const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key',
-        { cookies: { getAll: () => cookieStore.getAll() } }
-      );
-      const { data: { user }, error } = await supabase.auth.getUser();
-      isAuthenticated = Boolean(!error && user);
-    } catch {
-      // Ignore
-    }
-    if (!isAuthenticated) notFound();
+    const principal = await getCurrentPrincipal();
+    if (!can(principal, 'intel.editorial')) notFound();
   }
 
   // TASK-08 EXP-05: internal-link strip — only emit links to topics/entities
