@@ -1,8 +1,8 @@
 import { XMLParser } from 'fast-xml-parser';
 import { createHash } from 'node:crypto';
 import { RadarCollector, sanitizeHtml } from './interface';
-import { RadarSourceDefinition, CollectorResult, RawArtifact, CollectorConfig, DEFAULT_COLLECTOR_CONFIG } from '../types';
-import { isSafeExternalUrl } from './security';
+import { RadarSourceDefinition, CollectorResult, CollectorConfig, DEFAULT_COLLECTOR_CONFIG } from '../types';
+import { safeFetch } from './security';
 
 export class RssCollector implements RadarCollector {
   readonly type = 'rss';
@@ -21,20 +21,27 @@ export class RssCollector implements RadarCollector {
       const abortController = new AbortController();
       const timeoutId = setTimeout(() => abortController.abort(), this.config.timeoutMs);
 
+      let response: Response;
       if (!this.config.allowPrivateIps) {
-        const check = isSafeExternalUrl(source.url);
-        if (!check.safe) {
-          throw new Error(`SSRF blocked: ${check.reason}`);
-        }
+        response = await safeFetch(source.url, {
+          signal: abortController.signal,
+          headers: {
+            'User-Agent': this.config.userAgent,
+            'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml',
+          },
+          dnsResolver: this.config.dnsResolver,
+          fetchFn: this.config.fetchFn,
+        });
+      } else {
+        const fetchToUse = this.config.fetchFn || fetch;
+        response = await fetchToUse(source.url, {
+          signal: abortController.signal,
+          headers: {
+            'User-Agent': this.config.userAgent,
+            'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml',
+          },
+        });
       }
-
-      const response = await fetch(source.url, {
-        signal: abortController.signal,
-        headers: {
-          'User-Agent': this.config.userAgent,
-          'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml'
-        }
-      });
 
       clearTimeout(timeoutId);
       result.httpStatus = response.status;
