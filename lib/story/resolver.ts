@@ -69,6 +69,14 @@ export interface NotFoundResolution {
 
 export type StoryResolution = ChapterResolution | LegacyStoryResolution | NotFoundResolution;
 
+/**
+ * Public chapter routes and static params must share one visibility rule.
+ * Keep this aligned with chapterToCanonicalAdapter and app/sitemap.ts.
+ */
+export function isPublicChapterStatus(status: Chapter['status']): boolean {
+  return status === 'published' || status === 'verified';
+}
+
 export const tryLoadChapter = cache(async function tryLoadChapter(slug: string): Promise<Omit<ChapterResolution, 'type' | 'canonicalStory' | 'candidateTimelineEvents' | 'relatedStories' | 'enrichedClaims' | 'claimCount' | 'evidenceCount' | 'thinkerCount' | 'documentCount'> & { chapter: Chapter } | null> {
   try {
     seedAll();
@@ -77,7 +85,7 @@ export const tryLoadChapter = cache(async function tryLoadChapter(slug: string):
     for (const library of libraries) {
       for (const c of library.collections) {
       for (const v of c.volumes) {
-        const ch = v.chapters.find((ch) => ch.slug === slug || ch.title === slug || ch.title.toLowerCase() === slug.toLowerCase());
+        const ch = v.chapters.find((ch) => isPublicChapterStatus(ch.status) && (ch.slug === slug || ch.title === slug || ch.title.toLowerCase() === slug.toLowerCase()));
         if (ch) {
           let nextChapter = null;
           if (ch.recommendedNext && ch.recommendedNext.length > 0) {
@@ -293,7 +301,7 @@ export async function getAllStoryAndChapterSlugs(): Promise<{ slug: string }[]> 
       for (const c of library.collections) {
         for (const v of c.volumes) {
           for (const ch of v.chapters) {
-            chapterSlugs.push({ slug: ch.slug });
+            if (isPublicChapterStatus(ch.status)) chapterSlugs.push({ slug: ch.slug });
           }
         }
       }

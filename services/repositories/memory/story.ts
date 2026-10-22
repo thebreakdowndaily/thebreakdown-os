@@ -101,6 +101,8 @@ export class MemoryStoryService implements StoryService {
   }
 
   private isPublic(story: Story, now: Date): boolean {
+    // Quarantine is an invariant and must take precedence over the legacy slug allowlist.
+    if (story.isTestArtifact === true) return false;
     if (isPubliclyPublished(storyPublicationContext(story), now)) return true;
     const pubAt = story.publishedAt;
     if (LEGACY_PUBLIC_SLUGS.has(story.slug) && pubAt && new Date(pubAt).getTime() <= now.getTime()) return true;

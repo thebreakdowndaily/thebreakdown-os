@@ -314,6 +314,11 @@ export interface Topic {
   freshness?: FreshnessMetadata;
   createdAt: string;
   updatedAt: string;
+  publicationStatus?: import("@/utils/data-layer/types").PublicationStatus | string | null;
+  status?: string | null;
+  isTestArtifact?: boolean;
+  isDraft?: boolean;
+  isQuarantined?: boolean;
 }
 
 export interface Entity {
@@ -336,6 +341,11 @@ export interface Entity {
   claims?: Claim[];
   createdAt: string;
   updatedAt: string;
+  publicationStatus?: import("@/utils/data-layer/types").PublicationStatus | string | null;
+  status?: string | null;
+  isTestArtifact?: boolean;
+  isDraft?: boolean;
+  isQuarantined?: boolean;
 }
 
 // ─── Entity Models (Phase 1) ────────────────────────────────────────────────────────────
@@ -417,6 +427,11 @@ export interface Timeline {
   events: TimelineEvent[];
   createdAt: string;
   updatedAt: string;
+  publicationStatus?: import("@/utils/data-layer/types").PublicationStatus | string | null;
+  status?: string | null;
+  isTestArtifact?: boolean;
+  isDraft?: boolean;
+  isQuarantined?: boolean;
 }
 
 
@@ -1326,6 +1341,7 @@ export interface APIResponse<T> {
     total: number;
     page: number;
     pageSize: number;
+    totalPages?: number;
   };
   error?: string;
 }

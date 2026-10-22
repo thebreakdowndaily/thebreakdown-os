@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseEntityRepository } from '@/services/repositories/supabase/entity';
 import type { Entity, APIResponse } from '@/types/canonical';
 import { syncEntity, deleteEntity } from '@/lib/data-sync';
+import { canPubliclyViewEntity } from '@/lib/story/publication';
 
 const repo = new SupabaseEntityRepository();
 
@@ -12,7 +13,7 @@ export async function GET(
   const { slug } = await context.params;
   const entity = await repo.getEntityBySlug(slug);
 
-  if (!entity) {
+  if (!entity || !canPubliclyViewEntity(entity)) {
     return NextResponse.json({ error: `Entity not found: ${slug}` }, { status: 404 });
   }
 
@@ -34,7 +35,11 @@ export async function PUT(
   const body = (await request.json()) as Partial<Entity>;
   const updated: Entity = { ...existing, ...body, slug: existing.slug, id: existing.id, updatedAt: new Date().toISOString() };
   const saved = await repo.save(updated);
-  syncEntity(saved);
+  try {
+    syncEntity(saved);
+  } catch (e) {
+    console.error(e);
+  }
   const res: APIResponse<Entity> = { data: saved };
   return NextResponse.json(res);
 }

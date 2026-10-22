@@ -54,6 +54,8 @@ export interface APIStory {
   status?: 'breaking' | 'developing' | 'verified' | 'explainer' | 'archive';
   /** Publication lifecycle â€” controls public visibility. Missing = draft (fail-closed). */
   publicationStatus?: PublicationStatus;
+  /** Quarantine flag for synthetic/test stories; public paths must always exclude these. */
+  isTestArtifact?: boolean;
   scheduledAt?: string;
   versionHistory?: Array<{ date: string; description: string }>;
   confidenceBreakdown?: {
@@ -95,6 +97,7 @@ export interface APIFact {
 }
 
 export interface APIClaim {
+  isLegacy?: boolean;
   id?: string;
   claim: string;
   source: string;
