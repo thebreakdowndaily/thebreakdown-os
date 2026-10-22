@@ -5,7 +5,7 @@
 **Agent-System Checkpoint Branch:** `chore/agent-system-checkpoint`  
 **Checkpoint Commit SHA:** `1c8b6d8625e3ff73c2d12aff93d255d52b230aa4` (Local & `origin/chore/agent-system-checkpoint`)  
 **Base HEAD SHA:** `4c8727c0e76f4076933984463c7fa77d741c9d1a`  
-**Current Commit SHA:** `78738f67451a94fa4cf318df2831278fffa55a29`  
+**Current Commit SHA:** `0a7437b12cf502570081d6f455bf9344c2196621`  
 **Working Tree Status:** Mission "Integrate Gemini into The Breakdown OS" verified and completed. Integrated official `@google/genai` SDK (v2.30.0) as an optional server-side AI provider in `services/ai/providers/gemini.ts`. Added provider factory `services/ai/providers/factory.ts`. Kept Gemini optional and disabled by default (`MockProvider` remains the active default). Read `GEMINI_API_KEY` exclusively from server-side environment variable. Configurable model via `GEMINI_MODEL`, defaulting to verified `gemini-3.8-flash`. Bound prompt sizes (4,000 chars), max tokens (2048), and timeouts (30s). Secret-safe error redaction implemented and verified. All 31 Gemini tests passing, 8/8 architectural fitness passing, 1,578 vitest assertions passing, typecheck clean (0 errors), Next.js production build clean (1,141 routes).
 
 ---
