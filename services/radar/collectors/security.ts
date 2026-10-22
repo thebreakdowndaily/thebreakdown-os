@@ -522,8 +522,12 @@ export async function safeFetch(
     // 3. Pin the production socket to one of the validated DNS answers.
     // Custom fetch functions are explicit test/dependency-injection seams; the
     // default production transport never performs a second uncontrolled lookup.
-    const response = customFetch
-      ? await customFetch(currentUrl.toString(), {
+    // In tests, honor Vitest's global fetch stub so failure-injection tests stay deterministic.
+    // Outside tests, the default production path is the DNS-pinned Node transport below.
+    const testFetch = process.env.NODE_ENV === 'test' ? fetch : undefined;
+    const fetchOverride = customFetch ?? testFetch;
+    const response = fetchOverride
+      ? await fetchOverride(currentUrl.toString(), {
           ...init,
           redirect: 'manual',
         })

@@ -33,7 +33,7 @@ const componentSource = readFileSync(
   'utf8',
 );
 assert.match(componentSource, /getHeroImageFallbackPath/);
-assert.match(componentSource, /alt=\{hasError\s*\?\s*""\s*:\s*alt\}/);
+assert.match(componentSource, /alt=\{hasError\s*\?\s*''\s*:\s*alt\}/);
 assert.match(componentSource, /src=\{[^}]*getHeroImageFallbackPath/);
 
 
