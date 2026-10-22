@@ -265,26 +265,34 @@ export class EvidenceVaultService {
       this.db = customDb;
     } else {
       const url =
-        process.env.STAGING_DATABASE_URL ||
-        process.env.DATABASE_URL ||
-        'postgresql://postgres:Ntn%40supabase403@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres';
+        process.env.NODE_ENV === 'production'
+          ? process.env.DATABASE_URL
+          : process.env.STAGING_DATABASE_URL || process.env.DATABASE_URL;
 
-      // Safety check: protect production against accidental test runs
-      if (process.env.NODE_ENV !== 'production' && url.includes('mskyhaunnlwtwvsqcmav') && !process.env.ALLOW_PROD_VAULT) {
-        throw new Error('FATAL: Production database targeted without explicit authorization.');
+      if (!url) {
+        throw new Error(
+          'FATAL: Evidence vault requires an explicit database URL; configure DATABASE_URL in production or STAGING_DATABASE_URL for staging.'
+        );
+      }
+
+      // Never allow non-production processes to target the production vault.
+      if (process.env.NODE_ENV !== 'production' && url.includes('lvfovvidtowadmnggzzf')) {
+        throw new Error('FATAL: Production database targeted from a non-production runtime.');
       }
 
       const PgClientClass = getPgClientClass();
       if (!PgClientClass) {
-        this.db = { query: async () => ({ rows: [] }) };
-      } else {
-        const client = new PgClientClass({ connectionString: url, ssl: { rejectUnauthorized: false } });
-        client.connect().catch((err: any) => {
-          console.error('[EvidenceVaultService] Database connection error:', err);
-        });
-        this.db = client;
-        this.ownsClient = true;
+        throw new Error(
+          'FATAL: PostgreSQL driver is unavailable; evidence vault cannot start without durable storage.'
+        );
       }
+
+      const client = new PgClientClass({ connectionString: url, ssl: { rejectUnauthorized: true } });
+      client.connect().catch((err: any) => {
+        console.error('[EvidenceVaultService] Database connection error:', err);
+      });
+      this.db = client;
+      this.ownsClient = true;
     }
 
     if (storageProvider) {
