@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import StoryImage from '../components/story/StoryImage';
 import { getHeroImageFallbackPath } from '../lib/image-intelligence/placeholder-fallback';
 import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 
@@ -22,4 +25,15 @@ for (const [category, expected] of cases) {
   assert.equal(validateImageFile(resolved).isValid, true, `fallback asset ${resolved} must exist and be a valid image`);
 }
 
-console.log('Hero image fallback tests: 22 assertions passed');
+
+const emptyImageMarkup = renderToStaticMarkup(
+  React.createElement(StoryImage, {
+    src: '',
+    category: 'geopolitics',
+    alt: 'This description belongs to an unavailable photo',
+  }),
+);
+assert.match(emptyImageMarkup, /src="\\/images\\/placeholders\\/policy-placeholder\\.svg"/, 'an empty source should render an existing category fallback immediately');
+assert.match(emptyImageMarkup, /alt=""/, 'a generic fallback should not retain the original unavailable photo description');
+
+console.log('Hero image fallback tests: 24 assertions passed');
