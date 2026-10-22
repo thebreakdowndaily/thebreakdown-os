@@ -380,4 +380,142 @@ describe('Publication boundary — graph and explorer projections', () => {
     expect(storyIndexCall?.inValues).toEqual(['visible-story']);
   });
 
+  it('safely paginates and resolves public stories when repository contains more than 1,000 published stories', async () => {
+    const calls: Array<{ table: string; inColumn?: string; inValues?: string[]; rangeStart?: number; rangeEnd?: number }> = [];
+
+    // Simulate 1,050 published stories in the database
+    const batch1 = Array.from({ length: 1000 }, (_, i) => ({ slug: `story-${i + 1}` }));
+    const batch2 = Array.from({ length: 50 }, (_, i) => ({ slug: `story-${1000 + i + 1}` }));
+
+    const makeBuilder = (table: string) => {
+      let inCol: string | undefined;
+      let inVals: string[] | undefined;
+      const builder: any = {
+        select: vi.fn(() => builder),
+        eq: vi.fn(() => builder),
+        neq: vi.fn(() => builder),
+        lte: vi.fn(() => builder),
+        in: vi.fn((col: string, vals: string[]) => {
+          inCol = col;
+          inVals = vals;
+          return builder;
+        }),
+        textSearch: vi.fn(() => builder),
+        or: vi.fn(() => builder),
+        order: vi.fn(() => builder),
+        range: vi.fn(async (start: number, end: number) => {
+          calls.push({ table, inColumn: inCol, inValues: inVals, rangeStart: start, rangeEnd: end });
+          if (table === 'stories') {
+            if (start === 0) {
+              return { data: batch1, count: 1050, error: null };
+            }
+            if (start === 1000) {
+              return { data: batch2, count: 1050, error: null };
+            }
+            return { data: [], count: 1050, error: null };
+          }
+          // index_entries for story query at page 52 (items 1020..1039)
+          return {
+            data: [
+              { ref_id: 'story-1025-id', ref_type: 'story', ref_slug: 'story-1025', title: 'Deep story 1025', score: 99 },
+            ],
+            count: 1050,
+            error: null,
+          };
+        }),
+      };
+      return builder;
+    };
+
+    mocks.db.mockReset().mockReturnValue({
+      from: (table: string) => makeBuilder(table),
+    });
+
+    // Request page 52 (items beyond 1,000) with type=story
+    const response = await getV2Search(
+      new NextRequest('http://localhost/api/v2/search?q=needle&type=story&page=52&pageSize=20'),
+    );
+    const result = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(result.data.length).toBe(1);
+    expect(result.data[0].ref_slug).toBe('story-1025');
+    expect(result.meta.page).toBe(52);
+    expect(result.meta.total).toBe(1050);
+
+    // Verify stories table was batched across both ranges: 0..999 and 1000..1999
+    const storyCalls = calls.filter((c) => c.table === 'stories');
+    expect(storyCalls.length).toBe(2);
+    expect(storyCalls[0].rangeStart).toBe(0);
+    expect(storyCalls[0].rangeEnd).toBe(999);
+    expect(storyCalls[1].rangeStart).toBe(1000);
+    expect(storyCalls[1].rangeEnd).toBe(1999);
+
+    // Verify index_entries in query contains stories beyond 1,000
+    const indexCall = calls.find((c) => c.table === 'index_entries');
+    expect(indexCall?.inColumn).toBe('ref_slug');
+    expect(indexCall?.inValues?.includes('story-1025')).toBe(true);
+    expect(indexCall?.inValues?.length).toBe(1050);
+  });
+
+  it('safely handles mixed search pagination past index 1,000 without returning empty array', async () => {
+    const makeBuilder = (table: string) => {
+      const state: { equalities: Record<string, unknown>; notEqualities: Record<string, unknown> } = {
+        equalities: {},
+        notEqualities: {},
+      };
+      const builder: any = {
+        select: vi.fn(() => builder),
+        eq: vi.fn((col: string, val: unknown) => {
+          state.equalities[col] = val;
+          return builder;
+        }),
+        neq: vi.fn((col: string, val: unknown) => {
+          state.notEqualities[col] = val;
+          return builder;
+        }),
+        lte: vi.fn(() => builder),
+        in: vi.fn(() => builder),
+        textSearch: vi.fn(() => builder),
+        or: vi.fn(() => builder),
+        order: vi.fn(() => builder),
+        range: vi.fn(async (start: number, end: number) => {
+          if (table === 'stories') {
+            return { data: [{ slug: 'visible-story' }], count: 1, error: null };
+          }
+          if (table === 'index_entries') {
+            if (state.equalities.ref_type === 'story') {
+              return { data: [], count: 0, error: null };
+            }
+            const rows = Array.from({ length: end + 1 }, (_, i) => ({
+              ref_id: `item-${i + 1}`,
+              ref_type: 'topic',
+              ref_slug: `topic-${i + 1}`,
+              title: `Topic ${i + 1}`,
+              score: 2000 - i,
+            }));
+            return { data: rows, count: 2000, error: null };
+          }
+          return { data: [], count: 0, error: null };
+        }),
+      };
+      return builder;
+    };
+
+    mocks.db.mockReset().mockReturnValue({
+      from: (table: string) => makeBuilder(table),
+    });
+
+    // Request page 51 (items 1000..1019)
+    const response = await getV2Search(
+      new NextRequest('http://localhost/api/v2/search?q=needle&page=51&pageSize=20'),
+    );
+    const result = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(result.data.length).toBe(20);
+    expect(result.meta.page).toBe(51);
+    expect(result.data[0].ref_id).toBe('item-1001');
+  });
+
 });

@@ -8,6 +8,9 @@ type SearchRow = {
   score: number | null;
 };
 
+const STORY_BATCH_SIZE = 1000;
+const MAX_SEARCH_WINDOW = 10000;
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -24,28 +27,38 @@ export async function GET(request: NextRequest) {
       return list([], 0, page, pageSize);
     }
 
-    // Resolve the public story set under the caller's RLS scope. A search index
-    // can outlive a publication transition, so never trust an indexed story hit
-    // without rechecking its current canonical row.
+    // Resolve the public story set under the caller's RLS scope.
+    // Safely paginate through all published stories in batches so catalogs
+    // with more than 1,000 stories are completely discovered.
     const now = new Date().toISOString();
-    const { data: publicStories, error: publicStoriesError } = await db()
-      .from('stories')
-      .select('id, slug')
-      .eq('status', 'published')
-      .eq('is_test_artifact', false)
-      .lte('published_at', now)
-      .range(0, 999);
-    if (publicStoriesError) throw publicStoriesError;
+    const publicStorySlugs: string[] = [];
+    let storyBatchStart = 0;
 
-    const publicStorySlugs = [...new Set(
-      (publicStories || [])
-        .filter((story) => typeof story.slug === 'string' && story.slug.length > 0)
-        .map((story) => story.slug),
-    )];
+    while (true) {
+      const { data: batch, error: batchError } = await db()
+        .from('stories')
+        .select('slug')
+        .eq('status', 'published')
+        .eq('is_test_artifact', false)
+        .lte('published_at', now)
+        .range(storyBatchStart, storyBatchStart + STORY_BATCH_SIZE - 1);
+
+      if (batchError) throw batchError;
+      if (!batch || batch.length === 0) break;
+
+      for (const story of batch) {
+        if (typeof story.slug === 'string' && story.slug.length > 0) {
+          publicStorySlugs.push(story.slug);
+        }
+      }
+
+      if (batch.length < STORY_BATCH_SIZE) break;
+      storyBatchStart += STORY_BATCH_SIZE;
+    }
+
+    const uniquePublicStorySlugs = [...new Set(publicStorySlugs)];
 
     const tsq = q.split(/\s+/).filter(Boolean).join(' & ');
-    const endExclusive = Math.min(page * pageSize, 1000);
-    const end = Math.max(0, endExclusive - 1);
 
     const buildTextQuery = () => {
       let query = db().from('index_entries').select('*', { count: 'exact' });
@@ -57,42 +70,79 @@ export async function GET(request: NextRequest) {
       return query;
     };
 
+    const start = (page - 1) * pageSize;
+
+    // Single-type optimization: when querying stories only, paginate directly in the database.
+    if (type === 'story') {
+      if (uniquePublicStorySlugs.length === 0) {
+        return list([], 0, page, pageSize);
+      }
+      const { data, count, error } = await buildTextQuery()
+        .eq('ref_type', 'story')
+        .in('ref_slug', uniquePublicStorySlugs)
+        .order('score', { ascending: false })
+        .range(start, start + pageSize - 1);
+
+      if (error) throw error;
+      return list((data || []) as SearchRow[], count || 0, page, pageSize);
+    }
+
+    // Single-type optimization: when querying non-story types only, paginate directly in the database.
+    if (type && type !== 'story') {
+      const { data, count, error } = await buildTextQuery()
+        .eq('ref_type', type)
+        .order('score', { ascending: false })
+        .range(start, start + pageSize - 1);
+
+      if (error) throw error;
+      return list((data || []) as SearchRow[], count || 0, page, pageSize);
+    }
+
+    // Mixed cross-type search: query candidate slices up to the requested window,
+    // bounded by MAX_SEARCH_WINDOW to prevent memory exhaustion on extreme deep pages.
+    const endExclusive = Math.min(page * pageSize, MAX_SEARCH_WINDOW);
+    const end = Math.max(0, endExclusive - 1);
+
     let nonStoryRows: SearchRow[] = [];
     let nonStoryCount = 0;
     let storyRows: SearchRow[] = [];
     let storyCount = 0;
 
-    // Query non-story results independently from stories. For the story branch,
-    // constrain ref_slug at the database query itself so private titles/content
-    // never reach the response and cannot inflate the public result count.
-    if (type !== 'story') {
-      let query = buildTextQuery();
-      query = type ? query.eq('ref_type', type) : query.neq('ref_type', 'story');
-      const { data, count, error } = await query
-        .order('score', { ascending: false })
-        .range(0, end);
-      if (error) throw error;
-      nonStoryRows = (data || []) as SearchRow[];
-      nonStoryCount = count || 0;
-    }
+    const { data: nonStoryData, count: nonStoryExactCount, error: nonStoryError } = await buildTextQuery()
+      .neq('ref_type', 'story')
+      .order('score', { ascending: false })
+      .range(0, end);
+    if (nonStoryError) throw nonStoryError;
+    nonStoryRows = (nonStoryData || []) as SearchRow[];
+    nonStoryCount = nonStoryExactCount || 0;
 
-    if ((!type || type === 'story') && publicStorySlugs.length > 0) {
-      const { data, count, error } = await buildTextQuery()
+    if (uniquePublicStorySlugs.length > 0) {
+      const { data: storyData, count: storyExactCount, error: storyError } = await buildTextQuery()
         .eq('ref_type', 'story')
-        .in('ref_slug', publicStorySlugs)
+        .in('ref_slug', uniquePublicStorySlugs)
         .order('score', { ascending: false })
         .range(0, end);
-      if (error) throw error;
-      storyRows = (data || []) as SearchRow[];
-      storyCount = count || 0;
+      if (storyError) throw storyError;
+      storyRows = (storyData || []) as SearchRow[];
+      storyCount = storyExactCount || 0;
     }
 
     const total = nonStoryCount + storyCount;
-    const start = (page - 1) * pageSize;
+    const isCapped = total > MAX_SEARCH_WINDOW && page * pageSize > MAX_SEARCH_WINDOW;
+
     const merged = [...nonStoryRows, ...storyRows].sort(
       (left, right) => (right.score || 0) - (left.score || 0),
     );
-    return list(merged.slice(start, start + pageSize), total, page, pageSize);
+
+    const paginatedItems = merged.slice(start, start + pageSize);
+    const response = list(paginatedItems, total, page, pageSize);
+
+    if (isCapped) {
+      response.headers.set('X-Search-Capped', 'true');
+      response.headers.set('X-Search-Scan-Ceiling', String(MAX_SEARCH_WINDOW));
+    }
+
+    return response;
   } catch (e) {
     return serverError(e);
   }
