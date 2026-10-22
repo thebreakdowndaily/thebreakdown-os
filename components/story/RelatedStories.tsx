@@ -1,4 +1,5 @@
 import React from 'react';
+import StoryImage from '@/components/story/StoryImage';
 
 interface RelatedStoriesProps {
   stories: Array<{
@@ -42,9 +43,10 @@ const RelatedStories: React.FC<RelatedStoriesProps> = ({ stories }) => {
             >
               {hasImage && (
                 <div className="aspect-video overflow-hidden bg-neutral-950">
-                  <img
-                    src={story.heroImage}
-                    alt={story.headline}
+                  <StoryImage
+                    src={story.heroImage || ''}
+                    category={story.category}
+                    alt=""
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
                   />
                 </div>
