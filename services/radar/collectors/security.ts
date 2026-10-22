@@ -355,7 +355,7 @@ export function createPinnedDnsLookup(
   hostname: string,
   approvedAddresses: Array<{ address: string; family: number }>
 ): typeof dns.lookup {
-  const expectedHost = hostname.replace(/^\\[|\\]$/g, '').toLowerCase();
+  const expectedHost = hostname.replace(/^\[|\]$/g, '').toLowerCase();
   const safeAddresses = approvedAddresses.filter((entry) => isSafeIp(entry.address).safe);
   if (safeAddresses.length === 0) {
     throw new Error('SSRF blocked: no validated address available for pinned connection');
@@ -366,7 +366,7 @@ export function createPinnedDnsLookup(
     options: unknown,
     callback: (...args: any[]) => void
   ) => {
-    const normalizedHost = requestedHost.replace(/^\\[|\\]$/g, '').toLowerCase();
+    const normalizedHost = requestedHost.replace(/^\[|\]$/g, '').toLowerCase();
     if (normalizedHost !== expectedHost) {
       callback(new Error('Pinned DNS lookup hostname mismatch'));
       return;
@@ -531,6 +531,12 @@ export async function safeFetch(
 
     // 4. Handle Redirects
     if (response.status >= 300 && response.status < 400 && response.headers.has('location')) {
+      // Release the first response socket before issuing a separately validated redirect request.
+      try {
+        await response.body?.cancel();
+      } catch {
+        // Untrusted redirect bodies may already be closed.
+      }
       if (redirectCount >= maxRedirects) {
         throw new Error(`Too many redirects (max ${maxRedirects})`);
       }
