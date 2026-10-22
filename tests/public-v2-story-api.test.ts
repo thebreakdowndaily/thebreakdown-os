@@ -8,6 +8,7 @@ const state = vi.hoisted(() => {
     builder[method] = vi.fn(() => builder);
   }
 
+  builder.from = vi.fn(() => builder);
   builder.maybeSingle = vi.fn();
   builder.then = vi.fn((resolve: (value: unknown) => unknown, reject: (reason: unknown) => unknown) =>
     Promise.resolve({ data: [], count: 0, error: null }).then(resolve, reject),
