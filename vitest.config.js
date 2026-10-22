@@ -94,7 +94,6 @@ module.exports = {
       'tests/certification/canonical-certification.test.ts',
       'tests/telemetry.test.ts',
       'tests/newsroom-intelligence.test.ts',
-      'tests/newsroom-os.test.ts',
       'tests/newsroom-remediation.test.ts',
       'tests/newsroom-pib-adapter.test.ts',
       'tests/newsroom-pib-coverage.test.ts',
