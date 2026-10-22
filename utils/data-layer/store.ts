@@ -1559,7 +1559,7 @@ function seed(): DataStore {
     headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific',
     summary: 'India and Indonesia share 2,000 years of civilisational links and are now deepening a Comprehensive Strategic Partnership focused on maritime security, trade, and countering Chinese influence in Southeast Asia.',
     heroImage: '/images/stories/india-indonesia-relations.svg',
-    heroImageAlt: 'Editorial illustration connecting India and Indonesia across a maritime route with a cargo ship and the two countries' flags.',
+    heroImageAlt: 'Editorial illustration connecting India and Indonesia across a maritime route with a cargo ship and the two countries\' flags.',
     heroImageIsDecorative: false,
     publishedAt: '2026-08-18T10:00:00Z',
     updatedAt: '2026-08-18T10:00:00Z',
