@@ -89,7 +89,7 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       this._isDegradedReadOnly = true;
       throw new NewsroomPersistenceError(
         'Supabase client unavailable: durable newsroom state cannot be loaded.',
-        'PERSISTENCE_NOT_CONFIGURED'
+        'PERSISTENCE_UNAVAILABLE'
       );
     }
     try {
@@ -101,8 +101,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       if (error) {
         this._isDegradedReadOnly = true;
         throw new NewsroomPersistenceError(
-          `Newsroom state load failed: ${error.message || 'database query failed'}`,
-          'PERSISTENCE_LOAD_FAILED'
+          error.message || 'Database query failed',
+          'PERSISTENCE_FAILED'
         );
       }
       if (data && data.metadata) {
@@ -118,8 +118,8 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       this._isDegradedReadOnly = true;
       if (error instanceof NewsroomPersistenceError) throw error;
       throw new NewsroomPersistenceError(
-        `Newsroom state load failed: ${error instanceof Error ? error.message : 'unknown database error'}`,
-        'PERSISTENCE_LOAD_FAILED'
+        error instanceof Error ? error.message : 'Unknown database error',
+        'PERSISTENCE_FAILED'
       );
     }
   }
