@@ -193,6 +193,25 @@ describe('Radar Collector SSRF Hardening & DNS Protection', () => {
       expect(result).toEqual({ address: '93.184.216.34', family: 4 });
     });
 
+    it('normalizes brackets around literal IPv6 hosts before pinning', async () => {
+      const lookup = createPinnedDnsLookup('[2606:4700:4700::1111]', [
+        { address: '2606:4700:4700::1111', family: 6 },
+      ]) as unknown as (
+        hostname: string,
+        options: Record<string, unknown>,
+        callback: (error: Error | null, address?: string, family?: number) => void
+      ) => void;
+
+      const result = await new Promise<{ address: string; family: number }>((resolve, reject) => {
+        lookup('2606:4700:4700::1111', {}, (error, address, family) => {
+          if (error) return reject(error);
+          resolve({ address: address!, family: family! });
+        });
+      });
+
+      expect(result).toEqual({ address: '2606:4700:4700::1111', family: 6 });
+    });
+
     it('rejects attempts to reuse a pinned lookup for a different hostname', async () => {
       const lookup = createPinnedDnsLookup('example.com', [
         { address: '93.184.216.34', family: 4 },
