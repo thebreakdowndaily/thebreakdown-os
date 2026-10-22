@@ -46,6 +46,12 @@ jobs:
       - name: 5. Database & Migration Safety Gate
         run: npm run test:migration
 
+      - name: 5a. Registered Vitest Regression Suite
+        run: npm run test:vitest
+
+      - name: 5b. Full Package and Intelligence Test Matrix
+        run: npm run test:all
+
       - name: 6. Unit & Domain Test Suite
         run: npm run test
 
