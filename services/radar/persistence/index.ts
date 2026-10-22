@@ -22,7 +22,7 @@ export function createRadarPersistenceRepository(options?: {
   provider?: string;
   filePath?: string;
 }): RadarPersistenceRepository {
-  const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '').trim();
+  const url = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim();
   const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
   const hasSupabase = Boolean(url && serviceKey && url !== 'https://dummy.supabase.co');
 

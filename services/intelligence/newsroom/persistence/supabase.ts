@@ -64,8 +64,17 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       return;
     }
 
-    const url = options?.url || process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.STAGING_SUPABASE_URL || '';
-    const key = options?.key || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || '';
+    const isProductionRuntime =
+      process.env.VERCEL_ENV === 'production' ||
+      process.env.APP_ENV === 'production' ||
+      process.env.NODE_ENV === 'production';
+
+    // Explicit constructor options are for dependency injection. Environment
+    // defaults may use staging credentials only in non-production runtimes.
+    const url = options?.url || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      (!isProductionRuntime ? process.env.STAGING_SUPABASE_URL : '') || '';
+    const key = options?.key || process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      (!isProductionRuntime ? process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY : '') || '';
 
     if (url && key && url !== 'https://dummy.supabase.co') {
       try {
