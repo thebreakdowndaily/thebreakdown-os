@@ -1,20 +1,20 @@
 # Active Engineering State
 
-**Last Updated:** 2026-10-22T11:20:00Z  
+**Last Updated:** 2026-10-22T11:45:00Z  
 **Governing Branch:** `feat/gemini-provider-integration` (Active feature workspace)  
 **Local Backup Reference:** `backup/gemini-integration-pre-reconciliation`  
 **Remote Feature Branch:** `origin/feat/gemini-provider-integration`  
-**Reconciled Integration Branch:** `feat/gemini-provider-integration-reconciled` (HEAD `cfac9da9753f7bd9b20371b34d75f601f6053882`)  
+**Reconciled Integration Branch:** `feat/gemini-provider-integration-reconciled` (HEAD `562b3c21f3aae44bc06808f9775989e4413c13d6`)  
 **Base origin/main SHA:** `59e69c7c0521948b7cccf6898c7d66e106e51044`  
-**Draft Pull Request:** [#122](https://github.com/thebreakdowndaily/thebreakdown-os/pull/122) (`feat(ai): integrate Google Gemini API as optional AI provider`)  
-**Working Tree Status:** Cleanly reconciled against current `origin/main` in isolated worktree `C:/newsjack-content/thebreakdown-os-gemini-reconciled`. Diff strictly contains only the 9 Gemini integration files (no unrelated commits or workspace leaks). All user working-tree modifications in the primary repository (`app/api/graph/evidence/route.ts`, `app/api/v2/explorer/route.ts`, `tsconfig.frontend.tsbuildinfo`, `utils/data-layer/store.ts`) preserved intact. Full test verification on reconciled branch: Gemini suite (31/31 passed), typecheck clean (0 errors), lint clean (0 errors), Next.js build clean (1,141 pages compiled), security suite clean (32/32 migrations, 75/75 RLS, 45/45 API security, 1205/1205 Intel auth).
+**Draft Pull Request:** [#122](https://github.com/thebreakdowndaily/thebreakdown-os/pull/122) (`feat(ai): integrate Google Gemini API as optional AI provider (@google/genai)`)  
+**Working Tree Status:** Cleanly reconciled against current `origin/main` in isolated worktree `C:/newsjack-content/thebreakdown-os-gemini-reconciled`. Diff strictly contains only the 9 Gemini integration files (no unrelated commits or workspace leaks). All user working-tree modifications in the primary repository (`app/api/graph/evidence/route.ts`, `app/api/v2/explorer/route.ts`, `tsconfig.frontend.tsbuildinfo`, `utils/data-layer/store.ts`) preserved intact. Full test verification on reconciled branch: Gemini suite (39/39 passed), typecheck clean (0 errors), lint clean (0 errors), Next.js build clean (1,141 pages compiled), security suite clean (32/32 migrations, 75/75 RLS, 45/45 API security, 1205/1205 Intel auth). Full Vitest baseline comparison proves all 5 failing test files are 100% pre-existing on `origin/main`.
 
 ---
 
 ## 1. Active Mission
 
-**Mission:** Recovery Mission — Gemini Integration: Traceability and Safe Reconciliation  
-**Current Objective:** Mission complete. Established local truth, backed up original feature commit history, published `feat/gemini-provider-integration` to `origin`, transplanted isolated Gemini implementation onto `origin/main` in a dedicated worktree, fully verified clean build/lint/typecheck/security, published `feat/gemini-provider-integration-reconciled` to remote, and submitted Draft PR #122 for independent review without merging. Standing by for product owner review.
+**Mission:** Follow-up Engineering Mission — Gemini PR #122: Fix Acceptance Blockers  
+**Current Objective:** Mission complete. Hardened request lifecycle in `services/ai/providers/gemini.ts` with `AbortController` signal propagation, strict configuration validation, timer cleanup in `finally` across all paths, consumer cancellation handling, and double-closing prevention. Expanded test suite in `tests/ai-gemini-provider.test.ts` to 39/39 passing tests using Gitleaks-safe dynamically constructed key fixtures. Reconciled full-suite failures against exact `origin/main` baseline, proving 5 failing files are 100% pre-existing. Updated PR #122 description and pushed to remote. Standing by for product owner review.
 
 ---
 
@@ -22,7 +22,7 @@
 
 | Gate / Subsystem | Command | Result | Verified SHA | Notes |
 |---|---|---|---|---|
-| **Gemini AI Provider Suite** | `npx vitest run tests/ai-gemini-provider.test.ts` | **PASS (31/31 tests)** | `feat/gemini-provider-integration` | Verified provider config, missing API key fail-closed, mocked streaming & blocking responses, API error handling, timeouts, empty responses, MockProvider preservation, regex secret sanitization, and route handler integration |
+| **Gemini AI Provider Suite** | `npx vitest run tests/ai-gemini-provider.test.ts` | **PASS (39/39 tests)** | `562b3c21` | Verified provider config validation, missing API key fail-closed, mocked streaming & blocking responses, AbortSignal propagation, deterministic timeouts, consumer cancellation, timer cleanup in finally, MockProvider preservation, regex secret sanitization, and route handler integration |
 | **Human Reporting Activation & Dispatch Readiness Suite** | `npx vitest run tests/editorial/pli-human-reporting-activation.test.ts` | **PASS (7/7 tests)** | `2b4eed0d` | Verified 6 deliverables, 8 submissions (7 READY FOR EXPLICIT APPROVAL, 1 BLOCKED), recipient directory verification, source URLs, MeitY vs IFCI public authority separation, ₹10 fees, 14-day editorial newsroom deadlines, MPMS provenance transparency, and gate criteria |
 | **Current-State Refresh Unit Suite** | `npx vitest run tests/editorial/pli-current-state-refresh.test.ts` | **PASS (11/11 tests)** | `2b4eed0d` | Verified 8 deliverables, 19 primary sources, 12 revised claims, LSEM end-of-scheme metrics, SEBI chronology, DVA reconciliation, financial comparison, quarantine invariants, and year-by-year MPMS schedule integrity |
 | **Pre-Dispatch Audit Unit Suite** | `npx vitest run tests/editorial/pli-pre-dispatch-audit.test.ts` | **PASS (6/6 tests)** | `2b4eed0d` | Verified 8 deliverables, 11 prioritized claims, DVA scenario calibration, ACC causal separation, financial denominators, and handoff quarantine invariants |

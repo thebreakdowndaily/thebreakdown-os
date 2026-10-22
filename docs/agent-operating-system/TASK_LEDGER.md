@@ -14,6 +14,27 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261022-02: Follow-up Mission — Gemini PR #122 Fix Acceptance Blockers
+- **Priority:** P1 (Provider Lifecycle Hardening, AbortSignal Propagation, Cancellation Cleanup, Suite Baseline Reconciliation)
+- **Role:** Autonomous Engineering Collaborator, Verification Specialist
+- **Scope:** `services/ai/providers/gemini.ts`, `tests/ai-gemini-provider.test.ts`, PR #122 on `feat/gemini-provider-integration-reconciled` (HEAD `562b3c21f3aae44bc06808f9775989e4413c13d6`).
+- **Reproduction / Verification:**
+  - Implemented per-request `AbortController` in `GeminiProvider.generate()` and `GeminiProvider.generateStream()`, propagating `config.abortSignal` to `@google/genai` SDK.
+  - Implemented timer cleanup in `finally` across all paths (success, error, timeout) and in `setTimeout` handlers.
+  - Implemented consumer cancellation handling on `ReadableStream.cancel(reason)` to clear timers and abort local SDK requests.
+  - Implemented race condition safeguards (`isClosedOrErrored` flag, `safeError`, `safeClose`) to prevent double-closing or double-erroring.
+  - Documented client-side AbortSignal limits regarding Google backend billing for already processed tokens.
+  - Added strict configuration validation rejecting non-positive, non-finite, or non-integer `timeoutMs` and `maxOutputTokens`.
+  - Expanded test suite from 31 to 39 tests (`npx vitest run tests/ai-gemini-provider.test.ts`: 39/39 PASSED).
+  - Used dynamically generated synthetic test keys to eliminate Gitleaks false positives on test files.
+  - Full Vitest suite baseline comparison: Reproduced identical 5 failing test files on clean detached worktree of `origin/main` (`59e69c7c0521948b7cccf6898c7d66e106e51044`), proving all 5 are pre-existing issues (`tests/seeder.test.ts`, `tests/newsroom-concurrency-idempotency.test.ts`, `tests/phase2b1-reconciliation.test.ts`, `tests/public-v2-story-api.test.ts`, `tests/vs5-intelligence-decision-support.test.ts`).
+  - Ran `npm run check:type` (PASS, 0 errors), `npm run check:lint` (PASS, 0 errors, 512 pre-existing warnings), `npm run build` (PASS, 1,141 static pages compiled).
+  - Updated PR #122 description with baseline comparison and live smoke test status.
+  - Pushed commit `562b3c21f3aae44bc06808f9775989e4413c13d6` to `origin/feat/gemini-provider-integration-reconciled`.
+- **Status:** VERIFIED
+- **Evidence:** PR #122 updated; 39/39 provider tests passing; typecheck/lint/build passing; clean baseline reconciliation.
+- **Next Action:** Independent review and approval of PR #122.
+
 ### TASK-20261022-01: Recovery Mission — Gemini Integration Traceability and Safe Reconciliation
 - **Priority:** P1 (Traceability, History Preservation, Worktree Isolation & Safe Review Submission)
 - **Role:** Autonomous Engineering Collaborator, Verification Specialist
