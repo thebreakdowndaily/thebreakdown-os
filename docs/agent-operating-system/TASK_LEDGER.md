@@ -14,6 +14,28 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261022-01: ACG-2 Multi-Branch Reconciliation & Publication Safety Integration
+- **Priority:** P1 (Platform Unification / Publication Safety Boundary / Review Gate Integrity)
+- **Role:** Autonomous Engineering Collaborator, Security Reviewer, Verification Specialist
+- **Scope:** `lib/story/resolver.ts`, `tests/public-chapter-visibility.test.ts`, `utils/data-layer/types.ts`, `utils/data-layer/store.ts`, PR #103, PR #123, PR #126, `fix/btb-001-publication-boundary-acceptance`.
+- **Finding A:** PR #123 and PR #126 introduced publication boundary fixes on separate branches. When merged into PR #103, a duplicate `isLegacy` declaration occurred on `APIClaim`.
+- **Fix A:** Removed duplicate `isLegacy` declaration in `utils/data-layer/types.ts` (`dd380bee`).
+- **Finding B:** PR #126 added `isPublicChapterStatus(ch.status)` to `tryLoadChapter`, causing `resolveCanonicalStory` to emit false P1 operational alarms (`CANONICAL_RESOLUTION_FAILURE`) and breaking `publication-safety-p1.test.ts` where draft chapter resolution is tested.
+- **Fix B:** Reconciled `lib/story/resolver.ts` so `tryLoadChapter` resolves the chapter, guards `services?.investigations?.getInvestigations`, and supports `options?.publicOnly` in `resolveCanonicalStory`. Public-only calls cleanly return `not_found` without alarms; default canonical calls resolve the chapter with `publicationStatus = 'draft'` where `isCanonicalStoryPublic()` evaluates to `false`. Defensive `chapter.content || []` added (`b32a827d`).
+- **Finding C (Governance):** PR #103 has received zero human code reviews (`reviews: []`). The remote `main` branch has no branch protection rules enabled (HTTP 404).
+- **Verification:** All checks executed against exact candidate commit `b32a827d79e051a18cb4eab18b3984f027c81ef4`:
+  - `npm run check:type` (PASS, 0 errors)
+  - `npm run check:lint` (PASS, 0 errors, 516 baseline warnings)
+  - `npm run test` (PASS, all 32 suites passed)
+  - `npm run test:security` (PASS, 1,444 assertions across 6 suites)
+  - `npm run test:migration` (PASS, 32 applied, 33 DB assertions)
+  - `npm run build` (PASS, Next.js 15.5.27, 1,140 static routes)
+  - Targeted suites: `publication-boundary-regression` (110/110), `public-chapter-visibility` (3/3), `publication-boundary-api` (6/6), `publication-quarantine-regression` (3/3), `architecture-fitness` (8/8), `before-the-battle-plassey` (12/12).
+- **Status:** VERIFIED (Consolidated candidate ready for human review)
+- **Next Action:** Present consolidated report to product owner and editorial board. Fast-forward PR #103 branch to `b32a827d`, close superseded draft PRs #123 and #126, configure branch protection on `main`, and conduct independent human code review before merge.
+
+---
+
 ### TASK-20261021-16: Canonicalize Manual Publication Entry Point
 - **Priority:** P1 (Publication Authority / Evidence Integrity)
 - **Scope:** `features/intel/editorial/actions.ts`, `services/editorial/schedule.ts`, `tests/editorial-actions-persistence.test.ts`, and ACG-2 acceptance evidence.

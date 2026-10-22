@@ -109,3 +109,27 @@ The first run of the wired publication-safety suite failed before loading tests 
 ## ACG-2 Manual Publication Contract Follow-up — 2026-10-21
 
 Manual editorial publication previously differed from the scheduled worker: it used the synchronous publication gate and direct DB write. It now uses the canonical async publication contract and a single-use token-authorized repository save, with publication effects only after successful persistence. The regression suite covers gate denial, repository write failure, and schedule reconciliation failure. Earlier green CI was for a parent SHA and must not be carried forward; the follow-up candidate requires fresh exact-SHA CI/security/audit/infrastructure checks.
+
+
+---
+
+## ACG-2 Consolidated PR Reconciliation & Publication Safety Checkpoint — 2026-10-22
+
+- **Consolidated Branch:** `reconcile/acg2-btb-001`
+- **Verified Candidate Commit SHA:** `b32a827d79e051a18cb4eab18b3984f027c81ef4`
+- **Reconciliation Scope:** Reconciled PR #103 (`feat/acg2-btb-001-canonical-publication`), PR #123 (`fix/story-quarantine-legacy-fallback-2026-10-22`), PR #126 (`fix/publication-boundary-apis-2026-10-22`), and branch `fix/btb-001-publication-boundary-acceptance`.
+- **Architectural Findings & Remediations:**
+  1. *Duplicate Type Declaration:* Fixed duplicate `isLegacy` declaration on `APIClaim` in `utils/data-layer/types.ts` (`dd380bee`).
+  2. *Resolver & Publication Safety Contradiction:* In PR #126, filtering in `tryLoadChapter` caused `resolveCanonicalStory` to emit false P1 operational alarms (`CANONICAL_RESOLUTION_FAILURE`) and broke `tests/publication-safety-p1.test.ts`. Remediated in `b32a827d` by allowing `tryLoadChapter` to return chapters with optional `options?.publicOnly` support in `resolveCanonicalStory`, properly returning `{ type: 'not_found' }` for public queries without false alarms, and returning `{ type: 'chapter', canonicalStory: { publicationStatus: 'draft' } }` for canonical resolution where `isCanonicalStoryPublic()` evaluates to `false`. Defensive `chapter.content || []` added.
+- **Human Code Review Audit:** Confirmed PR #103 has received **ZERO independent human code reviews** (`reviews: []`).
+- **Branch Protection Audit:** Confirmed `main` has **NO branch protection enabled** (HTTP 404, `required_status_checks: off`).
+- **Verified Quality Gates on Exact SHA `b32a827d`:**
+  - `npm run check:type`: PASS (0 errors)
+  - `npm run check:lint`: PASS (0 errors, 516 warnings matching baseline)
+  - `npm run test`: PASS (all 32 unit suites, including `test:publication-safety-p1` (14/14) and `test:editorial-actions-persistence` (4/4))
+  - `npm run test:security`: PASS (1,444 assertions across 32 migrations, 30 auth, 9 redirect, 75 RLS, 49 API security, 1,249 intel auth)
+  - `npm run test:migration`: PASS (32 migrations applied, 33 DB assertions passed)
+  - `npm run build`: PASS (Next.js 15.5.27, 1,140 static routes compiled cleanly)
+  - Targeted suites: `publication-boundary-regression` (110/110), `public-chapter-visibility` (3/3), `publication-boundary-api` (6/6), `publication-quarantine-regression` (3/3), `architecture-fitness` (8/8), `before-the-battle-plassey` (12/12).
+- **PR Supersession:** PR #123 and PR #126 are superseded by candidate branch `reconcile/acg2-btb-001`.
+- **Next Action:** Present ACG-2 Consolidated Reconciliation Report to product owner and editorial board. Update PR #103 with candidate commit `b32a827d`, close superseded draft PRs #123 and #126, enable branch protection on `main`, and require independent human code review before merge. Keep Plassey strictly draft-only.

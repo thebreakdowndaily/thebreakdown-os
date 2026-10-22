@@ -1,130 +1,122 @@
-# ACG-2 — BTB-001 Architecture Reconciliation & Platform Acceptance Report (Reconciled Close-Out)
+# ACG-2 — BTB-001 Architecture Reconciliation & Platform Acceptance Report (Consolidated Close-Out)
 
 **Mission ID:** ACG-2  
 **Series Pilot:** BTB-001 — Before the Battle: Plassey, 1757  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
-**Base Commit HEAD:** `2b4eed0dad13c6cf925126c8818f4280b77263de` (Merged into remote `main` at `59e69c7c` via PR #94)  
-**Target Feature Branch:** `feat/btb-001-plassey-architecture-reconciliation`  
-**Evaluation & Close-Out Date:** 2026-10-21  
+**Consolidated Candidate Branch:** `reconcile/acg2-btb-001`  
+**Verified Candidate Commit SHA:** `b32a827d79e051a18cb4eab18b3984f027c81ef4`  
+**Reconciled Branches & PRs:**
+- PR #103 (`feat/acg2-btb-001-canonical-publication`, commit `1db06ef7`)
+- PR #123 (`fix/story-quarantine-legacy-fallback-2026-10-22`, commit `b535e8f3`)
+- PR #126 (`fix/publication-boundary-apis-2026-10-22`, commit `b7c3fe31`)
+- Branch `fix/btb-001-publication-boundary-acceptance` (commit `eb01d406`)
+**Evaluation Date:** 2026-10-22  
 **Operating Standard:** Engineering Agent Contract (`AGENTS.md`) & Evidence-First Completion Gate
 
 ---
 
 ## Executive Summary & Acceptance Classification
 
-The ACG-2 mission independently audited, reconciled, and verified the **BTB-001 ("Before the Battle: Plassey, 1757")** historical investigation pilot against the architecture of **The Breakdown OS**.
+The ACG-2 mission independently audited, reconciled, and verified the **BTB-001 ("Before the Battle: Plassey, 1757")** historical investigation pilot against the architecture of **The Breakdown OS**, reconciling PR #103, PR #123, and PR #126 into a single consolidated, verified candidate branch (`reconcile/acg2-btb-001` at commit `b32a827d`).
 
-Following adversarial review, the platform claims are strictly partitioned between **Targeted Architecture Fitness** (which is verified by automated invariant suites) and **Whole-Platform Architecture Unification** (which remains provisional and not yet certified across every platform domain):
+Following adversarial review, the platform claims remain strictly partitioned between **Targeted Architecture Fitness & Publication Boundary Isolation** (which is verified by passing automated invariant suites) and **Whole-Platform Architecture Unification** (which remains provisional and not yet independently certified across every legacy domain):
 
 | Assessment Area | Status | Evidence & Limitation Summary |
 |---|---|---|
 | **BTB-001 Pilot Artifact Baseline (Gate 1)** | **PASS** | All 5 BTB-001 artifacts verified on disk; branch and commit verified; pre-existing user work preserved. |
 | **BTB-001 Canonical Architecture Ownership (Gate 2)** | **PASS** | Pilot strictly uses canonical types (`Story`, `Claim`, `Source`, `Entity`, `StoryBlock`). Single pipeline from `plassey-story.ts` through `store.ts`, `adapters.ts`, `StoryService`, and view models. |
-| **Fail-Closed Publication & Draft Containment (Gate 3)** | **PASS** | 100% containment verified across public routes, RSS, sitemaps, search index, and knowledge graph. Public story count remains strictly 41. |
-| **Evidence & Historiographical Rigor (Gate 4)** | **PASS** | Reconciled claim count from 4 to all 19 claims matching evidence ledger 1:1. 3 historiographical disputes documented with balanced citations. |
+| **Fail-Closed Publication & Draft Containment (Gate 3)** | **PASS** | 100% containment verified across public routes, RSS, sitemaps, search APIs (`/api/search`, `/api/v1/search`, `/api/v2/search`), explorer (`/api/v2/explorer`), and evidence graph (`/api/graph/evidence`). Public story count remains strictly 41. |
+| **Evidence & Historiographical Rigor (Gate 4)** | **PASS** | Reconciled claim count: all 19 claims matching evidence ledger 1:1. 3 historiographical disputes documented with balanced citations. |
 | **Targeted Architecture Fitness (Gate 5)** | **PASS** | 8/8 invariants passing in `tests/architecture-fitness.test.ts`. 0 circular dependencies across all 17 root directories (1,918 source files). Service-to-presentation isolation enforced. |
-| **Production Build & Test Chain Integrity (Gate 6)** | **PASS** | Static typechecks (`check:type`, `check:type:frontend`), linter (`check:lint`), unit/integration suites (`test`), and Next.js production build (`build`) all passed. |
+| **Production Build & Test Chain Integrity (Gate 6)** | **PASS** | Static typechecks (`check:type`), linter (`check:lint`), standard test chain (32 unit/integration suites in `test`), security chain (1,444 assertions in `test:security`), and Next.js 15.5.27 production build (`build` — 1,140 routes) all passed. |
 | **Whole-Platform Architecture Unification** | **PROVISIONAL / NOT YET CERTIFIED** | Scanning 1,918 files for cycles and enforcing layer boundaries does not prove that every legacy domain has a single authoritative schema or that all public consumers use identical pipelines. Platform still maintains dual memory/database paths. |
 | **Plassey Pilot Publication** | **BLOCKED (Gated)** | Story remains strictly `publicationStatus: 'draft'`. Live publication requires human editorial board authorization. |
 | **Historical Series Expansion (Panipat, Talikota, Buxar)** | **DEFERRED / BLOCKED (Gated)** | Development of new historical investigations is held until whole-platform architecture unification and remote CI reproducibility are fully established. |
 
 ---
 
-## 1. Resolution of Inconsistencies & Remote Commit Trace
+## 1. Branch, PR & Merge Order Reconciliation
 
-### 1.1 Remote Commit & Branch Traceability
-- **Remote `main` Baseline:** The remote `origin/main` branch is at commit `59e69c7c0521948b7cccf6898c7d66e106e51044` ("Merge pull request #94 from thebreakdowndaily/chore/ponytail-integration").
-- **Local Commit HEAD:** The local workspace base was `2b4eed0dad13c6cf925126c8818f4280b77263de`, which is the immediate parent commit merged into `origin/main` via PR #94.
-- **Remote Inspection Gap:** The BTB-001 pilot files, architecture fitness tests, and acceptance report were created and validated in the local working tree. To enable independent remote inspection without overwriting or discarding local changes, the reviewed changes are committed to dedicated feature branch `feat/btb-001-plassey-architecture-reconciliation`, pushed to `origin`, and tracked with this report attached at `docs/architecture/acg2-btb001-architecture-reconciliation-acceptance-report.md`.
+### 1.1 PR Relationships & Redundancy
+1. **PR #126 (`fix/publication-boundary-apis-2026-10-22`):** Introduced draft filtering across search APIs (`/api/search`, `/api/v1/search`, `/api/v2/search`), evidence graph (`/api/graph/evidence`), explorer (`/api/v2/explorer`), static params (`getAllStoryAndChapterSlugs`), and added `tests/publication-boundary-api.test.ts` and `tests/public-chapter-visibility.test.ts`.
+2. **PR #123 (`fix/story-quarantine-legacy-fallback-2026-10-22`):** Introduced memory store test-artifact quarantine and added `tests/publication-quarantine-regression.test.ts`.
+3. **Branch `fix/btb-001-publication-boundary-acceptance`:** Merged PR #126 and PR #123, added canonical publication predicates in `lib/story/publication.ts`, and added the 110-test suite `tests/publication-boundary-regression.test.ts`.
+4. **PR #103 (`feat/acg2-btb-001-canonical-publication`):** Baseline PR containing the core ACG-1/ACG-2 platform unification work (19-claim Plassey story, `architecture-fitness.test.ts`, `before-the-battle-plassey.test.ts`, server-action private helpers, canonical block synthesis, and `publication-safety-p1.test.ts`).
 
-### 1.2 Reconciliation of Security Assertion Counts
-The earlier variance between `1,342+` and `1,283+` assertions has been reconciled by inspecting the exact execution log of `npm run test:security`:
+### 1.2 Consolidated Candidate Branch (`reconcile/acg2-btb-001`)
+A consolidated candidate branch was created from PR #103 HEAD (`1db06ef7`) and merged with `origin/fix/btb-001-publication-boundary-acceptance` (`eb01d406`). Two defects were diagnosed and resolved:
+- **Duplicate Type Declaration:** Resolved duplicate `isLegacy` declaration on `APIClaim` in `utils/data-layer/types.ts` (Commit `dd380bee`).
+- **Resolver Architectural Conflict:** Remediated contradictory chapter resolution contracts between PR #126 and `tests/publication-safety-p1.test.ts` (Commit `b32a827d`).
 
-```
-1. scripts/verify-migrations.ts:           32 migration DDL files audited (PASS)
-2. tests/security/auth-regression.test.ts: 30 privilege & role escalation assertions (PASS)
-3. tests/security/auth-redirect.test.ts:    9 open redirect & sanitization assertions (PASS)
-4. tests/security/rls.test.ts:             75 database RLS & policy assertions (PASS)
-5. tests/security/api-security.test.ts:    49 API key & rate limiting assertions (PASS)
-6. tests/intel-auth.test.ts:            1,234 Intel module authorization assertions (PASS)
-─────────────────────────────────────────────────────────────────────────────
-Total Test Assertions:                  1,397 passed, 0 failed
-Total Migration DDL Audits:                32 passed, 0 failed
-─────────────────────────────────────────────────────────────────────────────
-GRAND TOTAL VERIFIED SECURITY CHECKS:   1,429 passed, 0 failed (Exit Code: 0)
-```
-*Discrepancy Explanation:* The figure `1,283` reflected solely the sum of suites 5 and 6 (49 + 1,234 = 1,283), while `1,342+` was a historical figure from an earlier checkpoint. The true, verified count across all 6 test files is **1,429 passed assertions**.
-
-### 1.3 Reconciliation of Next.js Version
-- **Repository Manifests (`package.json` & `package-lock.json`):** Specify `next: ^15.5.27` and locked version `15.5.27` (patched security release).
-- **Installed Local Binary (`node_modules/next/package.json`):** `15.5.18`.
-- **Runtime Execution:** `next build` executed using the locally installed Next.js `15.5.18` binary (compiling 1,140 static routes cleanly).
-*Action Note:* The lockfile specifies `15.5.27`. A subsequent `npm ci` in remote CI will build against `15.5.27`. Local build parity is verified on `15.5.18`.
+### 1.3 Recommended Merge Order
+**PR #123 and PR #126 are completely superseded by this consolidated branch.**
+Merging order:
+1. Close PR #123 and PR #126 as superseded.
+2. Fast-forward update PR #103 branch (`feat/acg2-btb-001-canonical-publication`) to commit `b32a827d`.
+3. Run remote CI and require independent human code review before merging PR #103 into `main`.
 
 ---
 
-## 2. Distinction: Targeted Fitness vs. Whole-Platform Unification
+## 2. Root Cause Analysis: Chapter Resolution & Publication Safety
 
-The user assessment correctly noted that scanning for circular dependencies and enforcing service-to-presentation boundaries does not by itself establish whole-platform architecture unification. The platform status is therefore distinguished:
+### 2.1 The Defect
+PR #126 added `isPublicChapterStatus(ch.status)` directly into `tryLoadChapter` in `lib/story/resolver.ts`. While intended to block public access to non-public chapters, it introduced two major platform bugs:
+1. **Broken Publication Safety Contract:** `tests/publication-safety-p1.test.ts` line 39 verifies that `resolveCanonicalStory('kashmir-the-first-test')` resolves the chapter, sets `canonicalStory.publicationStatus = 'draft'`, and confirms `isCanonicalStoryPublic() === false`. When `tryLoadChapter` suppressed drafts, `resolveCanonicalStory` returned `not_found`, failing the test.
+2. **False-Positive P1 Operational Alarms:** `resolveCanonicalStory` treats a missing chapter as an unexpected invariant violation, logging `[ALARM][P1] CANONICAL_RESOLUTION_FAILURE`. Because `tryLoadChapter` suppressed drafts, requesting any draft chapter in canonical mode fired a false P1 alarm.
+3. **Editor Preview Denial:** In `app/story/[slug]/page.tsx`, authenticated staff preview drafts via server-side session checks. Suppressing drafts in `tryLoadChapter` prevented authorized editorial previews.
 
-### What Is Proven & Certified (Targeted Fitness):
-1. **Zero Runtime Circular Dependencies:** All 1,918 source files across all 17 root directories (`app`, `components`, `design-system`, `features`, `services`, `lib`, `packages`, `plugins`, `types`, `utils`, `hooks`, `providers`, `schemas`, `stories`, `data`, `registry`, `styles`) have zero circular import chains (`Invar-01`).
-2. **Layer Boundary Isolation:** `components/` never imports from `app/` (`Invar-02`); `lib/` never imports from `components/` (`Invar-03`); `types/` never imports outer layers (`Invar-04`); non-test `services/` never imports from `components/` or `app/` (`Invar-08`).
-3. **BTB-001 Pipeline Compliance:** The Plassey pilot introduces zero parallel models, uses canonical `StoryBlock` synthesis, implements canonical `APIEntity` contracts, and routes through `StoryService`.
-4. **Draft Containment:** All public entry points (routes, SSG, sitemaps, RSS, graph, search, APIs) strictly filter out `publicationStatus: 'draft'`.
-
-### What Remains Provisional (Whole-Platform Unification):
-1. **Dual Persistence Model:** The application still maintains dual data paths: an in-memory mock store (`utils/data-layer/store.ts`) alongside Supabase PostgreSQL providers. Full unification requires completing the database provider cutovers.
-2. **Domain-by-Domain Schemas:** Certain legacy subsystems (e.g., UP403, older election trackers) have bespoke data structures that are mapped via adapters rather than sharing a single unified schema at rest.
-3. **Remote CI Reproducibility:** While all tests pass locally, full remote reproducibility on GitHub Actions CI across all matrix environments remains to be confirmed upon pushing the feature branch.
-
----
-
-## 3. Final Git Working Tree & Changes Made
-
-### 3.1 Files Changed and Purpose
-
-| File | Change Type | Purpose |
-|---|---|---|
-| `utils/data-layer/plassey-story.ts` | Modified | Reconciled all 19 claims matching evidence ledger 1:1; completed full `APIEntity` contract on 5 historical entities; preserved `publicationStatus: 'draft'`. |
-| `utils/data-layer/types.ts` | Modified | Added optional `isLegacy?: boolean` to `APIClaim` interface for pre-vault archival sources. |
-| `utils/data-layer/store.ts` | Modified | Registered Plassey story and entities; added entity draft filtering in `getEntities()` and `getOrganizations()`. |
-| `lib/story/adapters.ts` | Modified | Propagated `isLegacy` in `toCanonicalClaim`; replaced inline block generator with canonical import from `lib/story/block-synthesis.ts`. |
-| `tests/before-the-battle-plassey.test.ts` | New / Modified | Pilot negative guard suite (12 tests); explicitly asserts `expect(apiStory?.claims.length).toBe(19)` and validates evidence completeness. |
-| `tests/architecture-fitness.test.ts` | New / Modified | Enforces 8 architectural invariants across all 17 root directories (1,918 source files). |
-| `vitest.config.js` | Modified | Added architecture fitness and Plassey test patterns to test runner. |
-| `docs/architecture/acg2-btb001-architecture-reconciliation-acceptance-report.md` | New | Attached acceptance report directly to repository documentation. |
-| `docs/agent-operating-system/ACTIVE_STATE.md` | Modified | Reconciled active engineering state and quality gate numbers. |
-| `docs/agent-operating-system/TASK_LEDGER.md` | Modified | Logged task `TASK-20261021-03` recording ACG-2 close-out. |
+### 2.2 The Remediation
+- In `lib/story/resolver.ts`:
+  - `tryLoadChapter` finds the chapter without suppression, guarding `services?.investigations?.getInvestigations` and falling back safely.
+  - `resolveCanonicalStory` supports an optional `options?: { publicOnly?: boolean }` parameter.
+  - If `options?.publicOnly && !isPublicChapterStatus(chapter.status)`, it returns `{ type: 'not_found' }` without logging an alarm.
+  - When called without `publicOnly`, it constructs the canonical story with `publicationStatus = 'draft'`, allowing downstream callers (`StoryPage`) to fail closed for unauthenticated visitors and allow authenticated staff previews.
+  - Added defensive handling for `chapterContent = chapter.content || []`.
+- In `tests/public-chapter-visibility.test.ts`:
+  - Provided `investigations` service mock.
+  - Explicitly tests `resolveCanonicalStory('draft-chapter', { publicOnly: true })` returns `{ type: 'not_found' }`.
+  - Explicitly tests `resolveCanonicalStory('draft-chapter')` returns `type: 'chapter'` with `isCanonicalStoryPublic() === false`.
 
 ---
 
-## 4. Evidence-Ledger Audit Results (19 Claims)
+## 3. Independent Security, Review & Branch Protection Audit
 
-The 19 claims in `utils/data-layer/plassey-story.ts` were verified against `before-the-battle-plassey-evidence-ledger.md`:
+### 3.1 Human Code Review Audit
+- **Audit Command:** `gh pr view 103 --json reviewDecision,reviews`
+- **Result:** `reviews: []`, `reviewDecision: ""`
+- **Finding:** PR #103 has received **ZERO independent human code reviews**. Automated CI passes alone do not constitute approval. In accordance with Section 8 of `AGENTS.md`, independent non-author human review is an inviolable gate prior to merge.
 
-```
-CLM-PLASSEY-001: EIC private trade abuses (Marshall 1976, Chaudhury 2000) ── [Confidence: 0.95]
-CLM-PLASSEY-002: Siraj ud-Daulah's sovereign demands (Hill 1905, Gupta 1962) ── [Confidence: 0.92]
-CLM-PLASSEY-003: Black Hole casualties qualified to 43-64 (Gupta 1962, Little 1915) ── [Confidence: 0.94]
-CLM-PLASSEY-004: Treaty of Alinagar February 1757 (Aitchison Vol. II, Dalrymple 2019) ── [Confidence: 0.90]
-CLM-PLASSEY-005: Capture of Chandernagore (Hill Vol. 2, Jean Law 1913) ── [Confidence: 0.88]
-CLM-PLASSEY-006: Jagat Seth imperial banking monopoly (Little 1967, Bayly 1983) ── [Confidence: 0.96]
-CLM-PLASSEY-007: Siraj's extortion and durbar conflict with Seths (Tabatabai 1789) ── [Confidence: 0.93]
-CLM-PLASSEY-008: Conspiracy initiated by Murshidabad grandees, EIC as mercenaries (Marshall 1987) ── [Confidence: 0.96]
-CLM-PLASSEY-009: Clive's forged Red Treaty deceiving Omichund (House of Commons 1772) ── [Confidence: 0.99]
-CLM-PLASSEY-010: Secret Treaty of 4 June 1757 & private bribes (Aitchison, Dalrymple) ── [Confidence: 0.98]
-CLM-PLASSEY-011: Army numbers disparity 50,000 vs 3,000 (Orme 1778, Hill Vol. 2) ── [Confidence: 0.97]
-CLM-PLASSEY-012: Noon monsoon rain & tarpaulin powder protection (Orme 1778, Scrafton 1763) ── [Confidence: 0.95]
-CLM-PLASSEY-013: Mir Madan's mortal charge and psychological impact (Tabatabai 1789) ── [Confidence: 0.95]
-CLM-PLASSEY-014: Mir Jafar's false Quran oath and treasonous advice (Tabatabai 1789, Hill) ── [Confidence: 0.96]
-CLM-PLASSEY-015: 35,000 troops under conspirators standing motionless (Orme 1778) ── [Confidence: 0.98]
-CLM-PLASSEY-016: British combat casualties of 22 killed / 50 wounded (Clive Return BL IOR/H/193) ── [Confidence: 0.99]
-CLM-PLASSEY-017: Siraj ud-Daulah capture and assassination on 2 July 1757 (Tabatabai 1789) ── [Confidence: 0.97]
-CLM-PLASSEY-018: Post-Plassey treasury depletion & silver drain (Parliamentary Report 1773) ── [Confidence: 0.96]
-CLM-PLASSEY-019: Modern consensus: mercenary coup d'état, not military conquest (Marshall, Bayly) ── [Confidence: 0.98]
-```
-*Audit Conclusion:* 100% concordance between evidence ledger propositions, scholarly citations, and code implementation.
+### 3.2 Branch Protection Audit
+- **Audit Command:** `gh api repos/thebreakdowndaily/thebreakdown-os/branches/main/protection`
+- **Result:** `HTTP 404: Branch not protected`; rulesets returned `[]`; `required_status_checks: off`.
+- **Finding:** The `main` branch currently has **NO branch protection rules enabled**. Any authorized collaborator could technically push or merge without green status checks.
+- **Remediation Recommendation:** Before merging PR #103, repository administrators must configure branch protection on `main` requiring:
+  - Required pull request reviews before merging (minimum 1 eligible non-author review).
+  - Required status checks: CI Pipeline, Security Scans, and Production Build.
+  - Require branches to be up to date before merging.
+
+---
+
+## 4. Verification Evidence on Consolidated Candidate (`b32a827d`)
+
+Every test suite was executed against the exact consolidated candidate commit:
+
+| Verification Suite | Execution Command | Result | Notes |
+|---|---|---|---|
+| **TypeScript Typecheck** | `npm run check:type` | **PASS (0 errors)** | Full project `tsc --noEmit` clean. |
+| **ESLint Gate** | `npm run check:lint` | **PASS (0 errors, 516 warnings)** | Exactly matches project baseline; 0 errors. |
+| **P1 Publication Safety Suite** | `npm run test:publication-safety-p1` | **PASS (14/14 tests)** | F-01 redirect gate, F-02 search filter, F-03 metadata gate, Test 4 future embargo, Test 5 canonical regression. |
+| **Editorial Persistence Suite** | `npm run test:editorial-actions-persistence` | **PASS (4/4 tests)** | Save, schedule, publish, and rollback actions verified. |
+| **Standard Test Chain** | `npm run test` | **PASS (32/32 suites)** | All 30 unit suites + publication-safety-p1 + editorial-actions-persistence passing. |
+| **Security Regression Suite** | `npm run test:security` | **PASS (1,444 assertions)** | 32 migrations, 30 auth, 9 redirect, 75 RLS, 49 API security, 1,249 Intel auth assertions. |
+| **Database & Migration Safety** | `npm run test:migration` | **PASS (32 migrations applied, 33 DB tests)** | Verified against isolated PostgreSQL instance. |
+| **Publication Boundary Regression** | `npx vitest run tests/publication-boundary-regression.test.ts` | **PASS (110/110 tests)** | Verified discovery, dynamic routes, pagination bounds, lifecycle durability. |
+| **Publication Boundary API Suite** | `npx vitest run tests/publication-boundary-api.test.ts` | **PASS (6/6 tests)** | Search, graph, and explorer API boundaries verified. |
+| **Public Chapter Visibility Suite** | `npx vitest run tests/public-chapter-visibility.test.ts` | **PASS (3/3 tests)** | Static params, publicOnly gate, and canonical draft status verified. |
+| **Quarantine Regression Suite** | `npx vitest run tests/publication-quarantine-regression.test.ts` | **PASS (3/3 tests)** | Test artifacts excluded from memory and fallback reads. |
+| **Architecture Fitness Invariants** | `npx vitest run tests/architecture-fitness.test.ts` | **PASS (8/8 tests)** | 1,918 source files scanned; 0 circular dependencies; layer boundaries verified. |
+| **Before the Battle Pilot Suite** | `npx vitest run tests/before-the-battle-plassey.test.ts` | **PASS (12/12 tests)** | 19 claims matched 1:1; 5 draft entities; fail-closed draft isolation. |
+| **Next.js Production Build** | `npm run build` | **PASS (1,140/1,140 pages)** | Compiled under Next.js 15.5.27; 0 SSG errors. |
 
 ---
 
@@ -132,13 +124,14 @@ CLM-PLASSEY-019: Modern consensus: mercenary coup d'état, not military conquest
 
 | Surface | Mechanism | Verified Behavior |
 |---|---|---|
-| **Dynamic Reader** (`/story/[slug]`) | `isCanonicalStoryPublic()` | Unauthenticated requests return `notFound()` (HTTP 404). |
-| **Static SSG Build** (`generateStaticParams`) | `getPublicStories()` | Plassey excluded from build export. 41 public stories built. |
+| **Dynamic Reader** (`/story/[slug]`) | `isCanonicalStoryPublic()` | Unauthenticated requests return `notFound()` (HTTP 404). Authenticated staff can preview. |
+| **Static SSG Build** (`generateStaticParams`) | `getAllStoryAndChapterSlugs()` | Plassey excluded from build export. 41 public stories built. |
 | **XML Sitemaps** (`/sitemap.xml`) | `lib/seo/sitemap.ts` | Plassey URL strictly omitted. |
 | **RSS / Feeds** (`/feed.xml`, `/rss`) | `isPubliclyPublished()` | Draft story excluded from syndication streams. |
-| **Search Index** (`services/search`) | `canPubliclyViewStory()` | Query returns 0 hits for Plassey story. |
-| **Knowledge Graph** (`/api/v2/graph`) | `canPubliclyViewStory()` | 0 draft nodes or draft edges emitted into topology. |
-| **Public APIs** (`/api/v1/stories`, `/api/v2/stories`) | SQL / adapter filter | Only `status = 'published'` returned. |
+| **Search APIs** (`/api/search`, `/api/v1/search`, `/api/v2/search`) | `isPubliclyPublished()` / RLS query | Query returns 0 hits for Plassey story. Public totals not inflated. |
+| **Evidence Graph** (`/api/graph/evidence`) | Repository public reads | 0 draft nodes or draft edges emitted into topology. |
+| **Explorer** (`/api/v2/explorer`) | `canPubliclyViewStory()` | Draft stories and test artifacts excluded. |
+| **Public Story APIs** (`/api/v1/stories`) | SQL / adapter filter | Only `status = 'published'` returned. |
 
 ---
 
@@ -151,7 +144,7 @@ CLM-PLASSEY-019: Modern consensus: mercenary coup d'état, not military conquest
 | **Gate 3** | Fail-Closed Publication & Draft Containment | **PASS** | Zero leaks across all public surfaces. |
 | **Gate 4** | Evidence & Historiographical Rigor | **PASS** | 19 claims matched 1:1; balanced historiography. |
 | **Gate 5** | Architectural Invariant Verification | **PASS** | 8/8 fitness checks passed across 1,918 source files. |
-| **Gate 6** | Production Build & Release Gate Integrity | **PASS** | Full test chain and Next.js SSG build green. |
+| **Gate 6** | Production Build & Release Gate Integrity | **PASS** | Full test chain (32 suites), 1,444 security checks, and Next.js SSG build green. |
 
 ### Operational Governance Gates
 
@@ -160,132 +153,18 @@ CLM-PLASSEY-019: Modern consensus: mercenary coup d'état, not military conquest
 | **Whole-Platform Unification** | **PROVISIONAL** | Requires whole-platform runtime data-flow audit and database provider cutover. |
 | **Plassey Live Publication** | **BLOCKED** | Retained strictly in `publicationStatus: 'draft'`. Requires human editorial board authorization. |
 | **Historical Series Expansion** | **BLOCKED / DEFERRED** | Defer Panipat, Talikota, and Buxar authoring until platform cutover is certified and owner directs expansion. |
-| **Staging / Prod DB Migrations** | **BLOCKED** | `BLOCKED-01`, `BLOCKED-02`, `BLOCKED-03` held for scheduled operational window. Zero live DB mutations performed. |
+| **PR #103 Merge** | **BLOCKED** | Requires independent human code review (currently 0 reviews) and branch protection setup. |
+| **Staging / Prod DB Migrations** | **BLOCKED** | Migration 033 and PR #93 held for scheduled operational window. Zero live DB mutations performed. |
 
 ---
 
-## 7. Remote CI Reproducibility Results (Pushed Commit `9e5daeb0`)
-
-The feature branch `feat/btb-001-plassey-architecture-reconciliation` was pushed to `origin`, containing both the Plassey pilot artifacts and the core canonical architectural modules.
-
-GitHub Actions Workflow Run **#39615169273** completed with **100% PASSING GATES** in 4m54s:
-
-- **Clean Dependencies Installation (`npm ci`):** PASS (Node.js v22 runner)
-- **Strict Typecheck Gate (`npm run check:type`):** PASS (0 errors)
-- **Strict Linting Gate (`npm run check:lint`):** PASS (0 errors, 536 baseline warnings)
-- **Security Regression Gate (`npm run test:security`):** PASS (1,429 assertions passed across 6 test suites)
-- **Database & Migration Safety Gate (`npm run test:migration`):** PASS (32 migrations applied, 33/33 DB assertions passed)
-- **Unit & Domain Test Suite (`npm run test`):** PASS (31 test suites passed)
-- **Forensic Root-Cause Regression Gate:** PASS
-- **Accessibility Token & Contrast Gate (`npm run test:a11y`):** PASS (13/13 tests passed)
-- **Production Next.js Build Verification (`npm run build`):** PASS (1,140 routes pre-rendered)
-- **Browser DOM Accessibility (Desktop & Mobile Chromium):** PASS
-
-**Remote Run URL:** https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39615169273
-
----
-
-## 8. Exact Acceptance Status & Blocking Gates
+## 7. Exact Acceptance Status & Next Action
 
 - **BTB-001 Pilot Compliance (Gates 1–6):** **PASS**
-- **Targeted Architecture Fitness:** **PASS**
-- **Remote CI Reproducibility:** **PASS (Run 39615169273 on commit `9e5daeb0`)**
-- **Whole-Platform Architecture Unification:** **PROVISIONAL / NOT YET INDEPENDENTLY CERTIFIED** (Pending complete database cutover and cross-domain consolidation)
-- **Plassey Publication:** **BLOCKED (Gated)** (Held in fail-closed draft pending editorial board authorization)
-- **Historical Series Expansion (Panipat, Talikota, Buxar):** **BLOCKED / DEFERRED** (Held pending complete architecture foundation and owner directive)
-- **Staging / Production Database Cutover:** **BLOCKED (Gated)** (`BLOCKED-01`, `BLOCKED-02`, `BLOCKED-03`)
+- **Targeted Architecture Fitness & Boundary Isolation:** **PASS**
+- **Branch & PR Reconciliation:** **COMPLETE** (Branch `reconcile/acg2-btb-001` at `b32a827d` supersedes PR #123 and PR #126)
+- **Whole-Platform Architecture Unification:** **PROVISIONAL / NOT YET INDEPENDENTLY CERTIFIED**
+- **Plassey Publication:** **BLOCKED (Gated)**
+- **Historical Series Expansion (Panipat, Talikota, Buxar):** **BLOCKED / DEFERRED**
 
-**Single Next Action:** Presentation of this verified report and GitHub Actions CI run results to the product owner and editorial board. Standing by for instructions.
-
-
----
-
-## Verification Follow-up — 2026-10-21
-
-The first successful CI run above was executed on commit `9e5daeb0ba533df397754926c4908b0541eb86d6` and must not be treated as certification of later branch heads.
-
-| Run / Commit | Result | Finding |
-|---|---|---|
-| [CI #39616549016](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39616549016), `4c8727c0` | **FAIL — Typecheck** | Three Intel server-action implementation modules had been moved to feature paths without being added; references from app actions and components could not resolve. |
-| [PR CI #39617471636](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617471636), `ed74f189` | **FAIL — Typecheck** | The Intel modules had been restored, but retention consumers still imported missing `lib/retention/history`. |
-| [Security scan #39617473256](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617473256), `ed74f189` | **PASS** | Gitleaks and OSV scan jobs completed successfully for that earlier PR head. |
-| [Audit verification #39617471668](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617471668), `ed74f189` | **PASS** | Audit framework verification passed for that earlier PR head. |
-| [Infrastructure pipeline #39617471649](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39617471649), `ed74f189` | **FAIL — Typecheck** | The same missing retention module blocked the dependent infrastructure verification stages. |
-
-Corrective commit `12add5e3c5731c6d4415f1bff7a3d1bc27b4708f` extracts reading-history storage into `lib/retention/history.ts`, keeps the existing `StoryMemoryWriter` exports compatible, and adds regression assertions for SSR, malformed entries, inaccessible localStorage, and invalid JSON.
-
-**Status at this checkpoint:** PR #97 was superseded and closed; PR #98 was opened against candidate SHA `1d386a82804bd42d1357f91b9b6214035090608b`. The follow-up security remediation and regression test described below were committed after that SHA, so the prior PR #98 checks do not certify the updated candidate. A fresh review PR and full CI on its exact head are required before merge. Publication remains draft-gated, and live database mutations remain unauthorized.
-
-
----
-
-## Adversarial Security Follow-up — 2026-10-21
-
-### Finding: actor-taking core helpers were remotely exported
-The `features/intel/story-builder/actions.ts` and `features/intel/verification/actions.ts` files use Next.js `'use server'`. They previously exported asynchronous `*ActionCore` helpers that accepted an `actor` object supplied in their arguments. In a server-action module, exported async functions can be exposed as remote actions; a caller must never be trusted to assert their own identity.
-
-**Remediation committed:**
-- Story Builder's four actor-taking core helpers are module-private.
-- Verification's three actor-taking core helpers are module-private.
-- Only the FormData wrappers remain exported. Each wrapper derives the actor from the server session/role check before calling its private helper.
-- `tests/intel-auth.test.ts` now includes an adversarial structural regression that rejects exported core helpers, verifies the public wrapper signatures accept `FormData`, and checks authentication precedes mutation.
-
-### Mandatory engineering skills restored
-Five active skills listed in `.agents/skills.md` and referenced by `AGENTS.md` were missing from the candidate tree. This follow-up restores:
-- `.agents/skills/issue-to-completion/SKILL.md`
-- `.agents/skills/adversarial-verification/SKILL.md`
-- `.agents/skills/publication-safety/SKILL.md`
-- `.agents/skills/release-readiness/SKILL.md`
-- `.agents/skills/evidence-first-completion/SKILL.md`
-
-### Verification boundary
-The earlier [CI run #39618832976](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832976), [infrastructure run #39618832941](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832941), and [audit run #39618832980](https://github.com/thebreakdowndaily/thebreakdown-os/actions/runs/39618832980) passed on `1d386a82804bd42d1357f91b9b6214035090608b`. These results predate the server-action hardening, its new regression tests, and the restored skills. **They are not verification of this follow-up.** A new PR head must pass the relevant test, typecheck, lint, build, security, audit, and browser gates. Staging and production deployment-health jobs were skipped on the earlier infrastructure run and remain external release gates.
-
-
----
-
-## Release Review Follow-up — Editorial Write Integrity & Test Exit Semantics
-
-### Finding 1: editorial actions could return false success on database-write errors
-The previous `scheduleStoryAction` awaited a Supabase update without checking its returned `error` or confirming an affected story row. The previous `publishNowAction` did the same, so a refused/failed write could be reported as success. The scheduling/publishing actions now check the returned error and matched row. If the story scheduling write fails after a calendar slot was created, the action reports partial failure and tries to mark the slot blocked. If the story publish succeeds but schedule reconciliation fails, the action reports confirmed publication with a warning rather than claiming the whole operation failed or silently hiding the discrepancy.
-
-Regression tests in `tests/editorial-actions-persistence.test.ts` exercise scheduling-write failure, publication-write failure, and schedule reconciliation failure after confirmed publication.
-
-### Finding 2: forced `process.exit(0)` in publication safety tests
-`tests/publication-safety-p1.test.ts` used an unreferenced timer to force `process.exit(0)`. That bypasses normal test-runner shutdown and risks concealing late asynchronous work. The forced process exit was removed. The test now runs through the Node test runner with its explicit force-exit option, which is intended to stop leaked handles while preserving the runner's recorded test outcome. The suite was added explicitly to the package test chain.
-
-### Candidate and verification boundary
-These changes were committed after SHA `78b15bf9054d551b7373d18808730358f493a363`. The green CI/security/audit results recorded above apply to that earlier candidate, not this follow-up. The current commit is **implemented but NOT YET VERIFIED** until a fresh PR run completes against its exact head. No PR merge, deployment, live database mutation, or publication is authorized by these changes.
-
-
-### Compiler feedback loop — 2026-10-21
-
-The first fresh CI on this review follow-up correctly rejected two TypeScript mistakes in the review fixes: the optional `warning` result field was added to `validateStoryAction` instead of `publishNowAction`, and the UI treated the warning narrowed by an `in` check as `unknown`. The signatures and UI narrowing have now been corrected. The runtime persistence regression suite is also explicitly included in the primary test chain rather than merely registered in the Vitest config.
-
-**Current source state is unverified until fresh CI passes on its resulting exact SHA.** The tracked `tsconfig.frontend.tsbuildinfo` file is restored to the base branch version to avoid including compiler-cache output in the feature diff.
-
-
-### Test-runner invocation correction — 2026-10-21
-
-The latest PR CI passed typecheck, lint, and the other early gates but failed when starting `test:publication-safety-p1`: Node 22 could not resolve `tsx` from `node --import tsx` because `tsx` is not installed as a project-local dependency. Existing repository commands use `npx tsx`. The script has been corrected to `npx tsx --test --test-force-exit tests/publication-safety-p1.test.ts`, preserving actual Node test-runner outcomes without direct `process.exit(0)`.
-
-The candidate is not verified until both the publication-safety suite and the new editorial persistence regression suite pass as part of the normal test chain on the exact final SHA.
-
-
----
-
-## Manual Publication Contract Reconciliation — 2026-10-21
-
-### Finding: manual publishing bypassed the canonical asynchronous contract
-The manual `publishNowAction` used the synchronous gate and directly updated the `stories` table. This path omitted the asynchronous Evidence Vault gate (Gate 13), the single-use publication token checked by the story repository, and canonical post-publication event/cache effects. The scheduled worker already used the full canonical contract, so these two entry points did not enforce equivalent publication guarantees.
-
-**Correction committed after the previously green candidate:**
-- Manual publishing now requires the server-derived `Principal` from `requireRole('editor')`.
-- It converts the Supabase row through the shared `rowToStory` mapper and calls `evaluatePublicationContractAsync`, including the evidence-vault gate.
-- It persists only through `RepositoryFactory.getStoryRepository().saveStory` with the contract's single-use publication token.
-- It executes canonical publication side effects only after the repository save succeeds.
-- Gate denial or repository write failure returns an explicit failure and attempts to block any linked schedule entry. Successful publication with a later schedule reconciliation failure returns a warning reflecting the actual state.
-- `tests/editorial-actions-persistence.test.ts` now covers canonical gate denial, repository persistence failure, and schedule reconciliation failure.
-
-### Verification boundary
-Earlier CI/security/audit/infrastructure workflows passed on `0913daa7ffb57a8c8f3ed6975ef41ef278dc5eb0`. This publication-path correction was authored on subsequent commit `6e5042713bdceeb6619dfd7310bca5dc23acbd04`, so **those results do not certify it**. The new PR candidate including the documentation update must complete fresh CI, security, audit, and infrastructure checks on its exact SHA before human review.
+**Single Next Action:** Present this consolidated reconciliation report to the product owner and editorial board. Update PR #103 with candidate commit `b32a827d`, close superseded draft PRs #123 and #126, enable branch protection on `main`, and conduct independent human code review. Standing by for instructions.
