@@ -38,7 +38,7 @@ const path = require('path');
  */
 module.exports = {
   // The Next.js tsconfig preserves JSX; Vitest must transform TSX server pages it imports.
-  esbuild: { jsx: 'automatic' },
+  oxc: { jsx: { runtime: 'automatic' } },
   test: {
     globals: true,
     environment: 'node',
