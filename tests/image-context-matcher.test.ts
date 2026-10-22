@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
 import { getStories } from '../utils/data-layer/store';
+import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 
 const indiaUK = {
   slug: 'india-uk-relations',
@@ -56,15 +57,20 @@ assert.equal(
 
 const seededStories = getStories({ pageSize: 1000 }).data;
 const expectedAssignments: Record<string, string> = {
-  'india-ev-paradox': '/images/placeholders/environment-placeholder.svg',
-  'india-indonesia-relations': '/images/placeholders/policy-placeholder.svg',
-  'india-uk-relations': '/images/placeholders/policy-placeholder.svg',
+  'india-ev-paradox': '/images/stories/india-ev-paradox.svg',
+  'india-indonesia-relations': '/images/stories/india-indonesia-relations.svg',
+  'india-uk-relations': '/images/stories/india-uk-relations.svg',
 };
 for (const [slug, expectedImage] of Object.entries(expectedAssignments)) {
   const story = seededStories.find((item) => item.slug === slug);
   assert.ok(story, `the seed registry includes ${slug}`);
   assert.equal(story.heroImage, expectedImage, `${slug} must not reuse a cross-topic hero photo`);
   assert.equal(getManifestEntry(slug)?.approvedImage, expectedImage, `${slug} manifest must match its seed assignment`);
+  assert.equal(getManifestEntry(slug)?.assetType, 'editorial-illustration', `${slug} asset must be identified honestly as an editorial illustration`);
+  assert.equal(story.heroImageIsDecorative, false, `${slug} illustration must not be hidden from assistive technology`);
+  assert.ok((story.heroImageAlt || '').trim().length > 20, `${slug} must have meaningful alt text`);
+  assert.equal(validateImageFile(expectedImage).isValid, true, `${slug} asset must exist and pass image signature validation`);
+  assert.equal(matchImageToStoryContext(expectedImage, { slug, headline: story.headline, category: story.category, tags: story.tags }, getManifestEntry).isMatch, true, `${slug} illustration must pass the story-context gate via its manifest`);
 }
 
-console.log('Image context mismatch regression tests: 14 assertions passed');
+console.log('Image context mismatch regression tests: 32 assertions passed');
