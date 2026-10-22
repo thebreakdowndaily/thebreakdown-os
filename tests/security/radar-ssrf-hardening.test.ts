@@ -3,6 +3,7 @@ import {
   isSafeIp,
   isSafeExternalUrl,
   resolveDnsSafe,
+  createPinnedDnsLookup,
   safeFetch,
 } from '@/services/radar/collectors/security';
 import { HtmlCollector } from '@/services/radar/collectors/html';
@@ -166,6 +167,49 @@ describe('Radar Collector SSRF Hardening & DNS Protection', () => {
       const res = await resolveDnsSafe('example.com', mockDns);
       expect(res.safe).toBe(true);
       expect(res.addresses).toHaveLength(2);
+    });
+  });
+
+  describe('DNS pinning at the outbound socket boundary', () => {
+    it('returns only prevalidated addresses for the original hostname', async () => {
+      const lookup = createPinnedDnsLookup('example.com', [
+        { address: '93.184.216.34', family: 4 },
+        // Defensive filter: a private address is not selectable even if a caller
+        // accidentally bypasses the outer resolveDnsSafe result.
+        { address: '127.0.0.1', family: 4 },
+      ]) as unknown as (
+        hostname: string,
+        options: Record<string, unknown>,
+        callback: (error: Error | null, address?: string, family?: number) => void
+      ) => void;
+
+      const result = await new Promise<{ address: string; family: number }>((resolve, reject) => {
+        lookup('example.com', {}, (error, address, family) => {
+          if (error) return reject(error);
+          resolve({ address: address!, family: family! });
+        });
+      });
+
+      expect(result).toEqual({ address: '93.184.216.34', family: 4 });
+    });
+
+    it('rejects attempts to reuse a pinned lookup for a different hostname', async () => {
+      const lookup = createPinnedDnsLookup('example.com', [
+        { address: '93.184.216.34', family: 4 },
+      ]) as unknown as (
+        hostname: string,
+        options: Record<string, unknown>,
+        callback: (error: Error | null, address?: string, family?: number) => void
+      ) => void;
+
+      await expect(
+        new Promise<void>((resolve, reject) => {
+          lookup('internal-victim.local', {}, (error) => {
+            if (error) reject(error);
+            else resolve();
+          });
+        })
+      ).rejects.toThrow(/hostname mismatch/);
     });
   });
 
