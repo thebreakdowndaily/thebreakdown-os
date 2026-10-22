@@ -85,6 +85,9 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
               const fallback = getHeroImageFallbackPath(hero.category);
               target.srcset = '';
               if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                // The bundled category graphic is a decorative fallback, not
+                // the original story-specific image; clear stale descriptive alt text.
+                target.alt = '';
                 target.src = fallback;
               }
             }}
