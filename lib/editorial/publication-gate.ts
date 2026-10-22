@@ -182,7 +182,7 @@ export function validateStoryForPublication(
       : 'Story cites one or more retracted sources — publication blocked',
   });
 
-  // Gate 13: Hero image must match the story context (Editorial Visual Audit)
+  // Gate 13: Hero image asset integrity and story-context match (Editorial Visual Audit)
   const heroImageContext = validateHeroImageContext(story);
   checks.push({
     name: 'hero_image_integrity',
