@@ -32,22 +32,30 @@ declare const __non_webpack_require__: typeof require | undefined;
 function getProvider(): 'memory' | 'supabase' {
   const configured = process.env.DATA_PROVIDER?.trim().toLowerCase();
   const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+  const deployment = process.env.VERCEL_ENV?.toLowerCase();
+  const appEnvironment = process.env.APP_ENV?.toLowerCase();
   const isProductionRuntime =
     !isBuildPhase &&
-    (process.env.APP_ENV?.toLowerCase() === 'production' ||
-      process.env.VERCEL_ENV?.toLowerCase() === 'production' ||
-      (process.env.NODE_ENV === 'production' && process.env.CI !== 'true'));
+    (appEnvironment === 'production' ||
+      deployment === 'production' ||
+      (!deployment && !appEnvironment && process.env.NODE_ENV === 'production'));
 
   if (configured && configured !== 'memory' && configured !== 'supabase') {
     throw new Error(`Invalid DATA_PROVIDER '${configured}'. Expected 'supabase' or 'memory'.`);
   }
 
-  if (!configured && isProductionRuntime) {
-    throw new Error("Production requires explicit DATA_PROVIDER='supabase'; refusing non-durable memory storage.");
-  }
-
-  if (configured === 'memory' && isProductionRuntime) {
-    throw new Error("DATA_PROVIDER='memory' is forbidden in production because it is not durable.");
+  if (isProductionRuntime) {
+    if (!configured) {
+      throw new Error("Production requires explicit DATA_PROVIDER='supabase'; refusing non-durable memory storage.");
+    }
+    if (configured === 'memory') {
+      throw new Error("DATA_PROVIDER='memory' is forbidden in production because it is not durable.");
+    }
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error(
+        'Production DATA_PROVIDER=supabase requires NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.'
+      );
+    }
   }
 
   return configured === 'supabase' ? 'supabase' : 'memory';
