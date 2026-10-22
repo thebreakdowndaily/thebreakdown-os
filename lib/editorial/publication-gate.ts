@@ -17,6 +17,10 @@
  *   8. Story has a publishedAt timestamp
  *   9. Story's publicationStatus is not 'archived' or 'superseded'
  *  10. Story is not blocked (no block_reason set)
+ *  11. Gold Standard Review / evidence density passes
+ *  12. No cited source is retracted
+ *  13. Any assigned hero image matches the story subject / approved manifest
+ *  14. (Async) Evidence Vault can reconstruct the story's evidence
  */
 
 import type { Story, StoryStatus } from '@/types/canonical';
