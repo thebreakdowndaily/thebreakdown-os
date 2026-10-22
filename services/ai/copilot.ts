@@ -1,8 +1,8 @@
 import { StreamService } from './core/stream-service';
 import { GroundingValidator } from './core/grounding-validator';
-import { MockProvider } from './providers/mock';
+import { AIClient } from './core/ai-client';
+import { getAIProvider, ProviderFactoryOptions } from './providers/factory';
 import { EntitySkill } from './skills/entity';
-import { EntityCopilotContext } from '@/types/canonical';
 
 /**
  * KnowledgeCopilot
@@ -11,18 +11,37 @@ import { EntityCopilotContext } from '@/types/canonical';
 export class KnowledgeCopilot {
   private streamService: StreamService;
   private validator: GroundingValidator;
+  private currentProvider: AIClient;
   
   // Skills
   public entity: EntitySkill;
 
-  constructor() {
+  constructor(options?: ProviderFactoryOptions | AIClient) {
     this.streamService = new StreamService();
     this.validator = new GroundingValidator();
+
+    if (options && typeof options === 'object' && 'generateStream' in options && 'generate' in options) {
+      this.currentProvider = options as AIClient;
+    } else {
+      this.currentProvider = getAIProvider(options as ProviderFactoryOptions | undefined);
+    }
     
-    // Defaulting to MockProvider for development
-    const provider = new MockProvider();
-    
-    this.entity = new EntitySkill(provider, this.validator);
+    this.entity = new EntitySkill(this.currentProvider, this.validator);
+  }
+
+  /**
+   * Dynamically switch the underlying AI provider.
+   */
+  public setProvider(provider: AIClient): void {
+    this.currentProvider = provider;
+    this.entity = new EntitySkill(this.currentProvider, this.validator);
+  }
+
+  /**
+   * Returns the currently configured AI provider.
+   */
+  public getProvider(): AIClient {
+    return this.currentProvider;
   }
 
   createStreamResponse(stream: ReadableStream): Response {
