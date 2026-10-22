@@ -3,7 +3,7 @@ import { copilot } from '@/services/ai/copilot';
 import { EntityCopilotContext } from '@/types/canonical';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
   const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
