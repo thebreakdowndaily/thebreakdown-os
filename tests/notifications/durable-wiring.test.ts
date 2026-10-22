@@ -62,7 +62,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => createAlertDispatcher()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /Supabase Radar persistence was requested.*SUPABASE_SERVICE_ROLE_KEY/
       );
       expect(() => new AlertDispatcher()).toThrow(
         /In-memory fallback is strictly prohibited in Supabase runtime/
@@ -75,7 +75,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 
       expect(() => createAlertDispatcher()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /Supabase Radar persistence was requested.*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 
@@ -85,7 +85,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => createAlertDispatcher()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /Supabase Radar persistence was requested.*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 
@@ -157,7 +157,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => new RadarPipeline(dummySources)).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /Supabase Radar persistence was requested.*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 
@@ -193,7 +193,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => globalAlertDispatcher.getDurableStore()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /Supabase Radar persistence was requested.*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 

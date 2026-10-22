@@ -34,7 +34,8 @@ const componentSource = readFileSync(
 );
 assert.match(componentSource, /getHeroImageFallbackPath/);
 assert.match(componentSource, /alt=\{hasError\s*\?\s*''\s*:\s*alt\}/);
-assert.match(componentSource, /src=\{[^}]*getHeroImageFallbackPath/);
+assert.match(componentSource, /const getFallback = \(cat: StoryCategory\) => getHeroImageFallbackPath\(cat\)/);
+assert.match(componentSource, /setImgSrc\(getFallback\(category\)\)/);
 
 
   });
