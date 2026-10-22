@@ -5369,6 +5369,7 @@ import {
 
 function isLegacyPublic(story: APIStory, now: Date): boolean {
   return (
+    story.isTestArtifact !== true &&
     LEGACY_PUBLIC_SLUGS.has(story.slug) &&
     !!story.publishedAt &&
     new Date(story.publishedAt).getTime() <= now.getTime()
@@ -5376,7 +5377,13 @@ function isLegacyPublic(story: APIStory, now: Date): boolean {
 }
 
 function storyIsPublic(story: APIStory, now: Date = new Date()): boolean {
-  if (isPubliclyPublished({ publicationStatus: story.publicationStatus, publishedAt: story.publishedAt }, now)) {
+  // Test-artifact quarantine supersedes all compatibility allowlists.
+  if (story.isTestArtifact === true) return false;
+  if (isPubliclyPublished({
+    publicationStatus: story.publicationStatus,
+    publishedAt: story.publishedAt,
+    isTestArtifact: story.isTestArtifact,
+  }, now)) {
     return true;
   }
   if (isLegacyPublic(story, now)) {
