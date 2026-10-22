@@ -37,6 +37,17 @@ export function badRequest(message: string) {
 
 export function serverError(error: unknown) {
   const msg = error instanceof Error ? error.message : String(error);
+  // Keep diagnostic detail in server-side logs, never in production responses.
+  // Database errors may include schema, table, constraint, or query metadata.
   console.error('[API v2]', msg);
-  return NextResponse.json({ error: 'Internal server error', details: msg }, { status: 500 });
+
+  const body: { error: string; details?: string } = {
+    error: 'Internal server error',
+  };
+
+  if (process.env.NODE_ENV !== 'production') {
+    body.details = msg;
+  }
+
+  return NextResponse.json(body, { status: 500 });
 }
