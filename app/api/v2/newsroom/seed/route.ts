@@ -5,6 +5,7 @@ import { INTEL_ROLE_ORDER } from '@/features/auth/roles';
 import { isDemoMode } from '@/features/auth/demo';
 import { newsroomIntelligenceCore } from '@/services/intelligence/newsroom';
 import { seedNewsroomDemoBaseline } from '@/lib/intelligence/newsroom-demo-baseline';
+import { NewsroomPersistenceError } from '@/services/intelligence/newsroom/persistence/state';
 
 export async function POST(_req: NextRequest): Promise<NextResponse> {
   const gate = await guardIntelModule('newsroom');
@@ -31,15 +32,24 @@ export async function POST(_req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Demo seeding is disabled outside demo mode' }, { status: 404 });
   }
 
-  await newsroomIntelligenceCore.ensureLoaded();
-  const result = seedNewsroomDemoBaseline(newsroomIntelligenceCore);
-  newsroomIntelligenceCore.persist();
+  try {
+    await newsroomIntelligenceCore.ensureLoaded();
+    const result = seedNewsroomDemoBaseline(newsroomIntelligenceCore);
+    await newsroomIntelligenceCore.persistAsync();
 
-  return NextResponse.json({
-    success: true,
-    observationsSeeded: result.observationsSeeded,
-    clustersSeeded: result.clustersSeeded,
-    signalsCreated: result.signalsCreated,
-    timestamp: new Date().toISOString(),
-  });
+    return NextResponse.json({
+      success: true,
+      observationsSeeded: result.observationsSeeded,
+      clustersSeeded: result.clustersSeeded,
+      signalsCreated: result.signalsCreated,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    if (error instanceof NewsroomPersistenceError) {
+      console.error('[NewsroomSeed] durable write failed:', error.code);
+      return NextResponse.json({ error: 'Demo baseline could not be durably saved' }, { status: 503 });
+    }
+    console.error('[NewsroomSeed] operation failed:', error instanceof Error ? error.name : 'unknown');
+    return NextResponse.json({ error: 'Demo baseline seeding failed' }, { status: 500 });
+  }
 }

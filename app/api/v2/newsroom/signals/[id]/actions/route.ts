@@ -3,6 +3,7 @@ import { guardIntelModule } from '@/features/auth/intel-server';
 import { getSession } from '@/features/auth/auth-server';
 import { newsroomIntelligenceCore } from '@/services/intelligence/newsroom';
 import { NewsroomActionPayload, NewsroomTriageAction } from '@/types/newsroom-intelligence';
+import { NewsroomPersistenceError } from '@/services/intelligence/newsroom/persistence/state';
 
 export async function POST(
   req: NextRequest,
@@ -55,10 +56,20 @@ export async function POST(
       signal: updated,
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Forbidden';
-    if (message.includes('Version conflict')) {
-      return NextResponse.json({ error: message }, { status: 409 });
+    if (err instanceof NewsroomPersistenceError) {
+      console.error('[NewsroomAction] durable write failed:', err.code);
+      return NextResponse.json({ error: 'Newsroom action could not be durably saved' }, { status: 503 });
     }
-    return NextResponse.json({ error: message }, { status: 403 });
+
+    const message = err instanceof Error ? err.message : '';
+    if (message.includes('Version conflict')) {
+      return NextResponse.json({ error: 'Version conflict; refresh the signal and retry' }, { status: 409 });
+    }
+    if (message.includes('Access denied')) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    console.error('[NewsroomAction] failed:', err instanceof Error ? err.name : 'unknown');
+    return NextResponse.json({ error: 'Newsroom action failed' }, { status: 500 });
   }
 }
