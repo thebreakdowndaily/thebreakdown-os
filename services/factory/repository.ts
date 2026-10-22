@@ -30,8 +30,27 @@ import type { EvidenceVaultService } from '../intelligence/evidence-vault.servic
 declare const __non_webpack_require__: typeof require | undefined;
 
 function getProvider(): 'memory' | 'supabase' {
-  const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
-  return provider === 'supabase' ? 'supabase' : 'memory';
+  const configured = process.env.DATA_PROVIDER?.trim().toLowerCase();
+  const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+  const isProductionRuntime =
+    !isBuildPhase &&
+    (process.env.APP_ENV?.toLowerCase() === 'production' ||
+      process.env.VERCEL_ENV?.toLowerCase() === 'production' ||
+      (process.env.NODE_ENV === 'production' && process.env.CI !== 'true'));
+
+  if (configured && configured !== 'memory' && configured !== 'supabase') {
+    throw new Error(`Invalid DATA_PROVIDER '${configured}'. Expected 'supabase' or 'memory'.`);
+  }
+
+  if (!configured && isProductionRuntime) {
+    throw new Error("Production requires explicit DATA_PROVIDER='supabase'; refusing non-durable memory storage.");
+  }
+
+  if (configured === 'memory' && isProductionRuntime) {
+    throw new Error("DATA_PROVIDER='memory' is forbidden in production because it is not durable.");
+  }
+
+  return configured === 'supabase' ? 'supabase' : 'memory';
 }
 
 export class RepositoryFactory {
