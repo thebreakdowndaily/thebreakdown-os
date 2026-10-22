@@ -5,6 +5,7 @@ import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
+import { OptimisticLockError } from '../errors';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
 export class MemoryStoryService implements StoryService {
@@ -12,7 +13,7 @@ export class MemoryStoryService implements StoryService {
   private evidenceVault?: EvidenceVaultService;
 
   constructor(stories: Story[] = [], evidenceVault?: EvidenceVaultService) {
-    this.stories = new Map(stories.map(s => [s.id, s]));
+    this.stories = new Map(stories.map(s => [s.id, { ...s, version: s.version ?? 1 }]));
     this.evidenceVault = evidenceVault;
   }
 
@@ -57,8 +58,33 @@ export class MemoryStoryService implements StoryService {
       }
     }
 
-    this.stories.set(story.id, { ...story, updatedAt: new Date().toISOString() });
-    return this.stories.get(story.id)!;
+    const existing = this.stories.get(story.id);
+    let nextVersion = 1;
+
+    if (existing) {
+      const currentVersion = existing.version ?? 1;
+      if (story.version !== undefined && story.version !== currentVersion) {
+        throw new OptimisticLockError(
+          `Conflict: Story ${story.id} has been modified concurrently. Expected version ${story.version}, but current version is ${currentVersion}.`,
+          story.id,
+          story.version,
+          currentVersion
+        );
+      }
+      nextVersion = currentVersion + 1;
+    } else if (story.version !== undefined) {
+      nextVersion = story.version;
+    }
+
+    const savedStory: Story = {
+      ...story,
+      version: nextVersion,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.stories.set(story.id, savedStory);
+    return savedStory;
+
   }
 
   async deleteStory(id: string) {
