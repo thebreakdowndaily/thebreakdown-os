@@ -249,8 +249,7 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       },
     });
 
-    const loaded = await offlineRepo.load();
-    expect(loaded).toBeNull();
+    await expect(offlineRepo.load()).rejects.toThrow(/Database host connection refused/);
     expect(offlineRepo.isDegradedReadOnly).toBe(true);
 
     // Attempting to save in degraded mode must reject

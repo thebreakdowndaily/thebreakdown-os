@@ -22,7 +22,7 @@ interface StoryEntityRef {
 }
 
 import { getCurrentPrincipal } from '@/features/auth/principal';
-import { can } from '@/features/auth/policy';
+import { canPreviewUnpublishedStory } from '@/lib/story/preview-authorization';
 
 export const dynamicParams = true;
 export const revalidate = 60;
@@ -57,7 +57,7 @@ export default async function StoryPage({
   // reporters, unauthenticated users, and suspended accounts cannot preview drafts.
   if (!isCanonicalStoryPublic(canonicalStory)) {
     const principal = await getCurrentPrincipal();
-    if (!can(principal, 'intel.editorial')) notFound();
+    if (!canPreviewUnpublishedStory(principal)) notFound();
   }
 
   // TASK-08 EXP-05: internal-link strip — only emit links to topics/entities
