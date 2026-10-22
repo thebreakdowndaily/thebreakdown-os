@@ -156,3 +156,27 @@ Manual editorial publication previously differed from the scheduled worker: it u
   - CI Pipeline Push (Run #39811808789): PASS (6m0s)
 - **Plassey Publication Status:** Strictly preserved in `publicationStatus: 'draft'`.
 - **Next Action:** Await independent human maintainer code review and approval on PR #103. Once approved, report ready for authorized merge.
+
+
+---
+
+## ACG-3B Exact-SHA Verification & PR-103 Merge Readiness — 2026-10-22
+
+- **Active Candidate Commit SHA:** `2260e2ed8de69345a74cc46c1554109226cb6680`
+- **Base Commit SHA:** `59e69c7c0521948b7cccf6898c7d66e106e51044`
+- **PR #103 URL:** https://github.com/thebreakdowndaily/thebreakdown-os/pull/103
+- **Search Pagination Edge Case Resolved:** `app/api/v2/search/route.ts` safely batches public story catalog queries (`STORY_BATCH_SIZE = 1000`) across 1,000+ catalog sizes without truncation, optimizes single-type database queries directly, and bounds deep mixed pagination (`MAX_SEARCH_WINDOW = 10000`).
+- **Regression Tests Added:** 2 automated tests in `tests/publication-boundary-api.test.ts` (8/8 tests pass).
+- **Exact-SHA Remote CI Checks (Exact Candidate `2260e2ed8`):**
+  - Continuous Integration & Release Gates (Run #39818683643, Job #119963818912): **PASS** (12m40s)
+  - 1. Validate & Test (CI) (Run #39818683571, Job #119963818839): **PASS** (4m53s)
+  - Gitleaks — scan changed commits (Run #39818684203, Job #119963821635): **PASS** (11s)
+  - OSV — block newly introduced vulnerabilities (Run #39818684203, Job #119963822475): **PASS** (30s)
+  - verify (Run #39818683627, Job #119963819167): **PASS** (1m8s)
+  - Vercel Preview Deployment: **PASS** (Deployment completed)
+  - Truthfully reported skipped checks: Staging deploy, production deploy, and scheduled OSV cron jobs are truthfully classified as `skipping`.
+- **Branch Protection Status:** Verified active on `main`: `strict: true`, 5 required check contexts, `required_approving_review_count: 1`, `dismiss_stale_reviews: true`, `allow_force_pushes: false`, `allow_deletions: false`, `enforce_admins: false`.
+- **Review Protocol & Reviewer Assignment:** Review packet referencing candidate `2260e2ed8` posted to PR #103 ([Comment 6346718293](https://github.com/thebreakdowndaily/thebreakdown-os/pull/103#issuecomment-6346718293)). Because PR author is `thebreakdowndaily`, GitHub API restricts self-review requests. An independent maintainer must approve via Web UI.
+- **Plassey Publication Status:** Strictly preserved in `publicationStatus: 'draft'`.
+- **Final Acceptance Status:** **BLOCKED ON INDEPENDENT HUMAN CODE REVIEW APPROVAL**. PR #103 is otherwise fully merge-ready.
+- **Single Next Action:** Await independent human maintainer code review and approval on PR #103 via GitHub Web UI. Once approved, report ready for authorized merge.

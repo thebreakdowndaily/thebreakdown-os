@@ -14,6 +14,32 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261022-03: ACG-3B Exact-SHA Verification, Search Pagination & Review Blocker Resolution
+- **Priority:** P0 (Exact-SHA Validation / Pagination Hardening / Review Protocol)
+- **Role:** Autonomous Engineering Collaborator, Release Engineer, Security Reviewer
+- **Scope:** `app/api/v2/search/route.ts`, `tests/publication-boundary-api.test.ts`, PR #103, `main` branch protection.
+- **Action 1 (Search Pagination Edge Case):** Resolved deep search pagination contract in `app/api/v2/search/route.ts`:
+  - Implemented safe batched story resolution (`STORY_BATCH_SIZE = 1000`) in a loop to discover 100% of published stories under caller RLS scope regardless of catalog scale.
+  - Implemented direct SQL range pagination for single-type queries (`type === 'story'` and non-story types).
+  - Bounded mixed cross-type queries to `MAX_SEARCH_WINDOW = 10000` with descriptive headers (`X-Search-Capped`, `X-Search-Scan-Ceiling`).
+  - Added 2 new automated regression tests to `tests/publication-boundary-api.test.ts` (8/8 tests pass).
+- **Action 2 (Exact-SHA Remote Verification):** Pushed commit `2260e2ed8de69345a74cc46c1554109226cb6680` to `origin feat/acg2-btb-001-canonical-publication`. Verified all 5 required checks passed on this exact SHA:
+  - `Continuous Integration & Release Gates` (Run #39818683643, Job #119963818912): **PASS** (12m40s)
+  - `1. Validate & Test (CI)` (Run #39818683571, Job #119963818839): **PASS** (4m53s)
+  - `Gitleaks — scan changed commits` (Run #39818684203, Job #119963821635): **PASS** (11s)
+  - `OSV — block newly introduced vulnerabilities` (Run #39818684203, Job #119963822475): **PASS** (30s)
+  - `verify` (Run #39818683627, Job #119963819167): **PASS** (1m8s)
+  - `Vercel Preview Deployment`: **PASS** (Deployment completed)
+  - Skipped deployment-health jobs (`deploy-staging`, `deploy-production`, scheduled inventory) truthfully reported as `skipping`.
+- **Action 3 (Reviewer Assignment Protocol & Blocker Resolution):**
+  - Posted review packet for candidate `2260e2ed8` to PR #103 ([Comment 6346718293](https://github.com/thebreakdowndaily/thebreakdown-os/pull/103#issuecomment-6346718293)).
+  - Documented that PR author is `thebreakdowndaily`; GitHub API restricts self-review requests. An independent maintainer must approve via Web UI.
+- **Action 4 (Branch Protection Audit):** Verified active enforcement on `main`: strict check contexts, 1 approving review required, stale reviews dismissed, force pushes blocked, deletions blocked.
+- **Status:** BLOCKED ON INDEPENDENT HUMAN CODE REVIEW APPROVAL (PR #103 is otherwise 100% merge-ready)
+- **Next Action:** Stand by for authorized human maintainer review and approval on PR #103 via GitHub Web UI. Once approved, report ready for authorized merge. Keep Plassey strictly draft-only.
+
+---
+
 ### TASK-20261022-02: ACG-3 Governance Hardening & PR-103 Merge Readiness
 - **Priority:** P0 (Branch Protection / Merge Governance / Review Integrity)
 - **Role:** Autonomous Engineering Collaborator, Release Engineer, Security Reviewer
