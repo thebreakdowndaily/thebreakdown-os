@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { StoryHeroModel } from '@/lib/story/presentation-model';
+import { getHeroImageFallbackPath } from '@/lib/image-intelligence/placeholder-fallback';
 
 interface StoryHeroCanonicalProps {
   hero: StoryHeroModel;
@@ -81,7 +82,7 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
             className="object-cover"
             onError={(e) => {
               const target = e.currentTarget;
-              const fallback = `/images/placeholders/${(hero.category || 'story').toLowerCase()}-placeholder.svg`;
+              const fallback = getHeroImageFallbackPath(hero.category);
               target.srcset = '';
               if (target.src !== fallback && !target.src.endsWith(fallback)) {
                 target.src = fallback;
