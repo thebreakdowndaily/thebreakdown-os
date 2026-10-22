@@ -609,3 +609,58 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 - **Status:** VERIFIED
 - **Final Gate Decision:** Gates 1 through 6 certified PASSED. Series expansion to Panipat, Talikota, and Buxar remains GATED pending product owner authorization. Story publication remains strictly GATED pending editorial board review. Production and staging migrations remain GATED (`BLOCKED-01`, `BLOCKED-02`, `BLOCKED-03`).
 - **Next Action:** Present ACG-2 final acceptance report to product owner and editorial board. Standing by for instructions.
+
+### TASK-20261022-01: Integrate Google Gemini API as Optional AI Provider
+- **Priority:** P1 (AI Subsystem Extension & Security Assurance)
+- **Role:** Autonomous Engineering Collaborator
+- **Scope:** `services/ai/providers/gemini.ts`, `services/ai/providers/factory.ts`, `services/ai/copilot.ts`, `app/api/ai/copilot/route.ts`, `.env.example`, `tests/ai-gemini-provider.test.ts`, `vitest.config.js`
+- **Reproduction / Objectives:**
+  - Support `@google/genai` official SDK (v2.30.0) in Node.js >= 22 runtime.
+  - Read `GEMINI_API_KEY` exclusively from server-side environment variable.
+  - Make model configurable via `GEMINI_MODEL`, defaulting to verified `gemini-3.8-flash`.
+  - Maintain `MockProvider` as default; Gemini disabled unless explicitly configured (`AI_PROVIDER=gemini`).
+  - Provide secret-safe error handling and logging (prevent API key leakage, regex sanitization for `AIza...` keys and URL query parameters).
+  - Support streaming (`generateStream`) and blocking (`generate`) modes matching `AIClient` interface.
+  - Bounded prompt size (4,000 chars) and configurable token limits (`maxOutputTokens: 2048`) and timeout (`timeoutMs: 30000`).
+  - Unit and integration tests covering: missing key, successful mocked response, timeout, API errors, empty responses, and existing provider preservation.
+- **Status:** VERIFIED
+- **Evidence:**
+  - `npx vitest run tests/ai-gemini-provider.test.ts`: PASSED (31/31 tests passed in 3.11s)
+  - `npx vitest run tests/architecture-fitness.test.ts`: PASSED (8/8 tests passed; Invar-01 through Invar-08 verified)
+  - `npm run check:type`: PASSED (0 errors)
+  - `npm run check:type:frontend`: PASSED (0 errors)
+  - `npm run check:lint`: PASSED (0 errors, 536 baseline warnings preserved)
+  - `npm run test:security`: PASSED (32 migrations, 49 API security tests, 1,234 Intel auth tests)
+  - `npm run build`: PASSED (1,141 static routes compiled and pre-rendered; 0 errors)
+  - `npm run test:vitest`: PASSED (157 test suites, 1,578 passed, 5 skipped)
+- **Final Gate Decision:** PASSED. Gemini is integrated cleanly as an optional provider with zero disruption to default mock provider behavior. Automated tests run 100% offline with zero live credentials required.
+- **Next Action:** Stand by for product owner review or optional authorization of live `GEMINI_API_KEY` in deployment environment.
+
+### TASK-20261022-02: BTB-001-PUBBOUND-VERIFY — Publication Boundary Regression Audit
+- **Priority:** P1 (Publication Boundary Audit, Fail-Closed Containment & Defect Remediation)
+- **Role:** Implementation Engineer (Architecture Lead & Independent Acceptance Reviewer: ChatGPT)
+- **Scope:** Direct article routes, dynamic resolution, sitemaps, RSS/atom feeds, public search, content listings, cards, topics, entities, evidence/knowledge graphs, `tests/publication-boundary-regression.test.ts`, `utils/data-layer/store.ts`, `app/api/graph/evidence/route.ts`, `app/api/v2/explorer/route.ts`, `vitest.config.js`.
+- **Reproduction / Verification:**
+  - `npx vitest run tests/publication-boundary-regression.test.ts` (35/35 PASSED).
+  - `npx vitest run tests/before-the-battle-plassey.test.ts` (12/12 PASSED).
+  - `npx vitest run tests/wave1-public-surfaces.test.ts` (7/7 PASSED).
+  - `npx vitest run tests/wave2-api-routes.test.ts` (20/20 PASSED).
+  - `npx vitest run tests/wave3-remaining-paths.test.ts` (19/19 PASSED).
+  - `npx vitest run tests/architecture-fitness.test.ts` (8/8 PASSED).
+  - `npx tsx tests/publication-safety-p1.test.ts` (14/14 PASSED).
+  - `npx tsx tests/adapters.test.ts` (153/153 PASSED).
+  - `npm run check:type` (PASSED, 0 errors).
+  - `npm run check:type:frontend` (PASSED, 0 errors).
+  - `npm run check:lint` (PASSED, 0 errors, 536 baseline warnings).
+  - `npm run test:vitest` (PASSED, 157 test files, 1578 passed, 5 skipped, 0 failures).
+  - `npm run test:security` (PASSED, 32 migrations, 49 API security tests, 1234 Intel auth tests, 75 RLS tests).
+  - `npm run test:migration` (PASSED, 32/32 migrations, 33/33 DB assertions on disposable PostgreSQL).
+  - `npm run build` (PASSED, 1,141 pages compiled and pre-rendered).
+- **Defects Discovered & Remediated:**
+  1. `utils/data-layer/store.ts` (`getGraph`): Added `if (!storyIsPublic(story)) return;` and draft entity check `if ((entity as any).publicationStatus === 'draft') return;` to prevent quarantined story/entity nodes/links from leaking to `/api/graphs`.
+  2. `app/api/graph/evidence/route.ts`: Replaced unconstrained `bootstrapServices()` and `services.stories.getStories({ pageSize: 1000 })` with `bootstrapServices({ publicOnly: true })` and `services.stories.getPublicStories({ pageSize: 1000 })`.
+  3. `app/api/v2/explorer/route.ts`: Replaced unconstrained `bootstrapServices()` and `services.stories.getStories({ pageSize: 1000 })` with `bootstrapServices({ publicOnly: true })` and `services.stories.getPublicStories({ pageSize: 1000 })`.
+- **Status:** Awaiting independent acceptance
+- **Evidence:** 35/35 assertions passing in `tests/publication-boundary-regression.test.ts`. Quarantined BTB-001 (`before-the-battle-plassey-1757`) completely excluded across all 7 public surface categories. Positive control (`mgnrega-reform`) verified present across all surfaces. 0 database migrations run; Migration 033 untouched; 0 live DB mutations; editorial quarantine strictly preserved.
+- **Next Action:** Await independent architecture review and acceptance sign-off from ChatGPT.
+

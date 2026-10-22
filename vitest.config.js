@@ -199,6 +199,8 @@ module.exports = {
       'tests/editorial/pli-pre-dispatch-audit.test.ts',
       'tests/editorial/pli-current-state-refresh.test.ts',
       'tests/editorial/pli-human-reporting-activation.test.ts',
+      'tests/publication-boundary-regression.test.ts',
+      'tests/ai-gemini-provider.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],
