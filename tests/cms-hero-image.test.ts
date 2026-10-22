@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import type { Block } from '../utils/cms-data';
-import { resolveCMSHeroImage } from '../lib/editorial/cms-hero-image';
+import { resolveCMSHeroImage, withCMSHeroBlock } from '../lib/editorial/cms-hero-image';
 
 function heroBlock(heroImage: string): Block {
   return {
@@ -45,3 +45,27 @@ assert.equal(
 );
 
 console.log('CMS hero image sync tests: 4 passed, 0 failed');
+
+const legacyBlocks: Block[] = [{ id: 'body-1', type: 'text', data: { html: '<p>Body</p>' } }];
+const converted = withCMSHeroBlock(legacyBlocks, {
+  id: 'legacy-story',
+  title: 'Legacy story',
+  summary: 'Existing summary',
+  heroImage: staleImage,
+  category: 'policy',
+  author: 'Editor',
+  publishedAt: '2026-10-22T00:00:00.000Z',
+});
+assert.equal(converted[0].type, 'hero', 'legacy stories should receive an editable hero block');
+assert.equal((converted[0].data as { heroImage: string }).heroImage, staleImage, 'the synthesized hero block should expose the existing canonical image');
+assert.equal(converted[1].id, 'body-1', 'existing narrative block order must be preserved');
+
+const existingHero = heroBlock(selectedImage);
+const unchanged = withCMSHeroBlock([existingHero, ...legacyBlocks], {
+  id: 'story-with-hero',
+  title: 'Story with hero',
+  heroImage: staleImage,
+});
+assert.equal(unchanged[0].data && (unchanged[0].data as { heroImage: string }).heroImage, selectedImage, 'an existing CMS hero block remains authoritative');
+
+console.log('CMS hero image bridge tests: 6 additional assertions passed');
