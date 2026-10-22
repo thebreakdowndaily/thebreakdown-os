@@ -33,7 +33,7 @@ const emptyImageMarkup = renderToStaticMarkup(
     alt: 'This description belongs to an unavailable photo',
   }),
 );
-assert.match(emptyImageMarkup, /src="\\/images\\/placeholders\\/policy-placeholder\\.svg"/, 'an empty source should render an existing category fallback immediately');
+assert.match(emptyImageMarkup, /src="\/images\/placeholders\/policy-placeholder\.svg"/, 'an empty source should render an existing category fallback immediately');
 assert.match(emptyImageMarkup, /alt=""/, 'a generic fallback should not retain the original unavailable photo description');
 
 console.log('Hero image fallback tests: 24 assertions passed');
