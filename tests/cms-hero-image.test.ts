@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { resolveCMSHeroImage, type Block } from '../utils/cms-data';
+import type { Block } from '../utils/cms-data';
+import { resolveCMSHeroImage } from '../lib/editorial/cms-hero-image';
 
 function heroBlock(heroImage: string): Block {
   return {
