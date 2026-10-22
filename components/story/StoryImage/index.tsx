@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getHeroImageFallbackPath } from '@/lib/image-intelligence/placeholder-fallback';
 
 interface StoryImageProps {
