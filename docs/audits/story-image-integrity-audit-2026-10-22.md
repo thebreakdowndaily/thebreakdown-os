@@ -12,6 +12,7 @@ owner: editorial-engineering
 Read-only audit of the production `public.stories` table, repository story seed records, the verified image manifest, CMS save path, public story presentation model, and image-context matcher.
 
 The production database query returned 41 published records excluding test artifacts, 31 distinct hero-image paths, 9 paths containing `placeholder`, 38 records with empty `hero_image_alt`, and 38 records marked `hero_image_is_decorative = true`.
+A read-only query of `storage.buckets` in the connected production Supabase project returned only the private `evidence-vault` bucket; it did not expose a story-image storage bucket to back the `/images/stories/*.jpg` paths. The paths may still be served elsewhere, so this is evidence of no matching tracked/local storage, not proof that every live HTTP request returns 404.
 
 Repeated URLs alone are not proof of a mismatch: some stories are legitimately related. The following clusters are candidates for visual review; cross-topic assignments below are confirmed from the associated story titles and the asset/manifest descriptions.
 
