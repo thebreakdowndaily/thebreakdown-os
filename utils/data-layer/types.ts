@@ -97,7 +97,6 @@ export interface APIFact {
 }
 
 export interface APIClaim {
-  isLegacy?: boolean;
   id?: string;
   claim: string;
   source: string;
