@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import StoryImage from '../components/story/StoryImage';
 import { getHeroImageFallbackPath } from '../lib/image-intelligence/placeholder-fallback';
 import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 
+describe('Story image category fallback', () => {
+  it('resolves only existing neutral placeholders and hides unavailable-photo alt text', () => {
 const cases: Array<[string, string]> = [
   ['geopolitics', '/images/placeholders/policy-placeholder.svg'],
   ['governance', '/images/placeholders/policy-placeholder.svg'],
@@ -36,4 +39,6 @@ const emptyImageMarkup = renderToStaticMarkup(
 assert.match(emptyImageMarkup, /src="\/images\/placeholders\/policy-placeholder\.svg"/, 'an empty source should render an existing category fallback immediately');
 assert.match(emptyImageMarkup, /alt=""/, 'a generic fallback should not retain the original unavailable photo description');
 
-console.log('Hero image fallback tests: 24 assertions passed');
+  });
+});
+

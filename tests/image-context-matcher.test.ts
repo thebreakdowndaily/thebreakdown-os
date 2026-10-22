@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
 import { getStories } from '../utils/data-layer/store';
@@ -6,6 +7,8 @@ import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 import { validateStoryForPublication } from '../lib/editorial/publication-gate';
 import type { Story } from '../types/canonical';
 
+describe('Image context and publication image-integrity regression', () => {
+  it('rejects mismatches and accepts manifest-approved assets', () => {
 const indiaUK = {
   slug: 'india-uk-relations',
   headline: 'India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership',
@@ -157,4 +160,6 @@ assert.equal(
 );
 
 
-console.log('Image context mismatch regression tests: 32 assertions passed');
+  });
+});
+

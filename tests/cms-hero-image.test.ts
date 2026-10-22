@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
+import { describe, it } from 'vitest';
 import type { Block } from '../utils/cms-data';
 import { resolveCMSHeroImage, resolveCMSHeroMetadata, withCMSHeroBlock } from '../lib/editorial/cms-hero-image';
 
+describe('CMS hero image synchronization', () => {
+  it('keeps the editable hero block and canonical image metadata in sync', () => {
 function heroBlock(heroImage: string): Block {
   return {
     id: 'hero-1',
@@ -44,7 +47,9 @@ assert.equal(
   'the saved image URL must be trimmed',
 );
 
-console.log('CMS hero image sync tests: 8 assertions passed');
+  });
+});
+
 
 const legacyBlocks: Block[] = [{ id: 'body-1', type: 'text', data: { html: '<p>Body</p>' } }];
 const converted = withCMSHeroBlock(legacyBlocks, {
