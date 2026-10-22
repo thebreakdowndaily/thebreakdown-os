@@ -185,7 +185,7 @@ export function validateStoryForPublication(
   // Gate 13: Hero image must match the story context (Editorial Visual Audit)
   const heroImageContext = validateHeroImageContext(story);
   checks.push({
-    name: 'hero_image_context',
+    name: 'hero_image_integrity',
     passed: heroImageContext.passed,
     reason: heroImageContext.reason,
   });
