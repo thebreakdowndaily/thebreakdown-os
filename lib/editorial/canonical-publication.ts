@@ -85,7 +85,7 @@ export async function evaluatePublicationContractAsync(
     };
   }
 
-  // 4. Publication Gate Check (13 editorial gates + Gate 14 Evidence Vault)
+  // 4. Publication Gate Check (13 editorial gates (including hero-image asset integrity) + Gate 14 Evidence Vault)
   const storyToValidate: Story = {
     ...targetStory,
     status: fromStatus === 'draft' ? 'draft' : (fromStatus === 'published' ? 'scheduled' : fromStatus),
