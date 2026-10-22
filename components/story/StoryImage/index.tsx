@@ -26,8 +26,9 @@ export default function StoryImage({
   height,
   wrapperClassName,
 }: StoryImageProps) {
-  const [imgSrc, setImgSrc] = useState(src || getFallback(category));
-  const [hasError, setHasError] = useState(false);
+  const hasOriginalSource = typeof src === 'string' && src.trim().length > 0;
+  const [imgSrc, setImgSrc] = useState(hasOriginalSource ? src : getFallback(category));
+  const [hasError, setHasError] = useState(!hasOriginalSource);
 
   function getFallback(cat?: string): string {
     return getHeroImageFallbackPath(cat);
