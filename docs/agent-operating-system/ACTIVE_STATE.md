@@ -133,3 +133,26 @@ Manual editorial publication previously differed from the scheduled worker: it u
   - Targeted suites: `publication-boundary-regression` (110/110), `public-chapter-visibility` (3/3), `publication-boundary-api` (6/6), `publication-quarantine-regression` (3/3), `architecture-fitness` (8/8), `before-the-battle-plassey` (12/12).
 - **PR Supersession:** PR #123 and PR #126 are superseded by candidate branch `reconcile/acg2-btb-001`.
 - **Next Action:** Present ACG-2 Consolidated Reconciliation Report to product owner and editorial board. Update PR #103 with candidate commit `b32a827d`, close superseded draft PRs #123 and #126, enable branch protection on `main`, and require independent human code review before merge. Keep Plassey strictly draft-only.
+
+
+---
+
+## ACG-3 Governance Hardening & PR-103 Merge Readiness — 2026-10-22
+
+- **Active Candidate Commit SHA:** `bcf496ef791a893b6783d3062a5bea32228f8e9b`
+- **PR #103 URL:** https://github.com/thebreakdowndaily/thebreakdown-os/pull/103
+- **Branch Protection Status:** **ACTIVE on `main`** (Verified via GitHub API):
+  - Requires pull request before merging with minimum 1 approving review (`required_approving_review_count: 1`, `dismiss_stale_reviews: true`).
+  - Required checks: `Continuous Integration & Release Gates`, `1. Validate & Test (CI)`, `Gitleaks — scan changed commits and periodically audit history`, `OSV — block newly introduced dependency vulnerabilities / osv-scan`, `verify`.
+  - Excluded skipped deployment jobs: `deploy-staging`, `deploy-production`.
+  - Enforced invariants: `allow_force_pushes: false`, `allow_deletions: false`, `enforce_admins: false`.
+- **PR Reconciliation:** PR #123 and PR #126 confirmed superseded and closed on GitHub with reference to PR #103.
+- **Review Protocol & Governance:** Inspection protocol posted to PR #103 covering all 7 inspection areas. PR #103 `reviewDecision` is now `REVIEW_REQUIRED`.
+- **Remote CI Evidence (Exact Candidate `bcf496ef`):**
+  - CI Pipeline (Run #39811816906): PASS (13m37s)
+  - POP-1.0 Production Infrastructure Pipeline (Run #39811816928): PASS (3m41s)
+  - Security Scans (Run #39811817609): PASS (31s)
+  - Audit Framework Verification (Run #39811817194): PASS (1m13s)
+  - CI Pipeline Push (Run #39811808789): PASS (6m0s)
+- **Plassey Publication Status:** Strictly preserved in `publicationStatus: 'draft'`.
+- **Next Action:** Await independent human maintainer code review and approval on PR #103. Once approved, report ready for authorized merge.
