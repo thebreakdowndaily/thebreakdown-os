@@ -14,6 +14,28 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
 
 ## Active & Historical Tasks
 
+### TASK-20261022-03: Finalization Mission — Gemini Integration Without Force-Pushing
+- **Priority:** P1 (Non-destructive Squash Migration, Gitleaks Remediation, Clean Replacement PR #127)
+- **Role:** Autonomous Engineering Collaborator, Verification Specialist
+- **Scope:** Isolated branch `feat/gemini-provider-clean` (HEAD `7a23ee7d48c8bfaef2ee3c8a9d18c94eb1828551`) in worktree `C:/newsjack-content/thebreakdown-os-gemini-clean`, superseding PR #122 with PR #127.
+- **Reproduction / Verification:**
+  - Fetched and verified `origin/main` SHA `59e69c7c0521948b7cccf6898c7d66e106e51044`.
+  - Created isolated branch `feat/gemini-provider-clean` directly from `59e69c7c0521948b7cccf6898c7d66e106e51044`.
+  - Applied final tree from `origin/feat/gemini-provider-integration-reconciled` as a single squash commit `7a23ee7d48c8bfaef2ee3c8a9d18c94eb1828551`. Preserved previous branches (`feat/gemini-provider-integration`, `feat/gemini-provider-integration-reconciled`, `backup/gemini-integration-pre-reconciliation`) without force-pushing or rewriting shared history.
+  - Verified diff against `origin/main`: strictly the 9 intended Gemini integration files, including dynamically constructed synthetic test keys.
+  - Ran local Gitleaks scanner (v8.30.1) across commit range `59e69c7c..7a23ee7d`: 1 commit scanned, 0 leaks found (exit code 0).
+  - Verified test suite: `npx vitest run tests/ai-gemini-provider.test.ts` (39/39 PASSED in 4.05s).
+  - Verified static checks: `npm run check:type` (PASS, 0 errors), `npm run check:lint` (PASS, 0 errors, 512 pre-existing warnings), `npm run build` (PASS, 1,141 static pages compiled).
+  - Verified security suite: `npm run test:security` (PASS: 32 migrations, 75 RLS, 45 API security, 1205 Intel auth).
+  - Pushed `feat/gemini-provider-clean` to `origin`.
+  - Created replacement Draft PR #127: `https://github.com/thebreakdowndaily/thebreakdown-os/pull/127`.
+  - Remote CI Security Scans on PR #127: Gitleaks job passed in 10s with SUCCESS (`ID 119705171734`), OSV scan passed with SUCCESS (`ID 119705172024`).
+  - Investigated Vercel failure: Established organizational free-tier rate limit (`upgradeToPro=build-rate-limit`) on `bholebababhakti108-makers-projects` account; confirmed local production build is 100% clean and deployment policy strictly adheres to zero paid upgrades and zero unneeded triggers.
+  - Updated superseded PR #122 with replacement URL to PR #127 and closed PR #122 while preserving its full commit history and branch.
+- **Status:** VERIFIED
+- **Evidence:** Draft PR #127 active; remote Gitleaks CI passing; 39/39 tests passing; PR #122 closed and documented; zero force-pushes executed.
+- **Next Action:** Product owner review and approval of Draft PR #127.
+
 ### TASK-20261022-02: Follow-up Mission — Gemini PR #122 Fix Acceptance Blockers
 - **Priority:** P1 (Provider Lifecycle Hardening, AbortSignal Propagation, Cancellation Cleanup, Suite Baseline Reconciliation)
 - **Role:** Autonomous Engineering Collaborator, Verification Specialist
@@ -704,5 +726,54 @@ This ledger tracks findings, remediations, bug fixes, refactors, and feature imp
   3. `app/api/v2/explorer/route.ts`: Replaced unconstrained `bootstrapServices()` and `services.stories.getStories({ pageSize: 1000 })` with `bootstrapServices({ publicOnly: true })` and `services.stories.getPublicStories({ pageSize: 1000 })`.
 - **Status:** Awaiting independent acceptance
 - **Evidence:** 35/35 assertions passing in `tests/publication-boundary-regression.test.ts`. Quarantined BTB-001 (`before-the-battle-plassey-1757`) completely excluded across all 7 public surface categories. Positive control (`mgnrega-reform`) verified present across all surfaces. 0 database migrations run; Migration 033 untouched; 0 live DB mutations; editorial quarantine strictly preserved.
+- **Next Action:** Follow-up acceptance fix implemented under BTB-001-PUBBOUND-ACCEPTANCE-FIX-01.
+
+### TASK-20261022-03: BTB-001-PUBBOUND-ACCEPTANCE-FIX-01 — Publication Boundary Independent Review Gap Closure
+- **Priority:** P1 (Graph Entity Isolation, Explorer Discovery Safeguards & Dual-Provider Parity)
+- **Role:** Implementation Engineer (Architecture Lead & Independent Acceptance Reviewer: ChatGPT)
+- **Parent Task:** `TASK-20261022-02` (`BTB-001-PUBBOUND-VERIFY`)
+- **Scope:** `lib/story/publication.ts`, `utils/data-layer/store.ts`, `app/api/v1/entities/[slug]/route.ts`, `app/api/v1/entities/route.ts`, `app/api/v2/explorer/route.ts`, `tests/publication-boundary-regression.test.ts`.
+- **Reproduction / Verification:**
+  - `npx vitest run tests/publication-boundary-regression.test.ts` (63/63 PASSED in 1.19s).
+  - `npx vitest run tests/before-the-battle-plassey.test.ts tests/wave1-public-surfaces.test.ts tests/wave2-api-routes.test.ts tests/wave3-remaining-paths.test.ts tests/architecture-fitness.test.ts` (66/66 PASSED in 1.77s).
+  - `npx tsx tests/publication-safety-p1.test.ts` (14/14 PASSED).
+  - `npx tsx tests/adapters.test.ts` (153/153 PASSED).
+  - `npm run check:type` (PASSED, 0 errors).
+  - `npm run check:type:frontend` (PASSED, 0 errors).
+  - `npm run check:lint` (PASSED, 0 errors, 536 baseline warnings).
+  - `npm run build` (PASSED, 1,141 pages compiled and pre-rendered; 0 errors).
+- **Independent Review Gap Resolutions:**
+  1. **Canonical Entity Publication Predicates (`lib/story/publication.ts`):** Implemented `isEntityPubliclyPublishable` and `canPubliclyViewEntity` as authoritative fail-closed guards matching story publication contracts: rejects null/undefined, `isTestArtifact: true`, draft/quarantined/review statuses.
+  2. **Graph Entity Isolation (`utils/data-layer/store.ts`):** Added store helper `entityIsPublic(entityOrRef, s)`. Sanitized `getGraph()` to filter out unpublishable entities referenced by published stories (`story.relatedEntities`), unpublishable related entities (`entity.relatedEntities`), unpublishable focus entities (`params.entity`), and strictly dropped dangling graph edges where either endpoint is excluded (`validLinks`).
+  3. **Dual-Provider Parity Fix (DEC-004 in `app/api/v1/entities/[slug]/route.ts` & `app/api/v1/entities/route.ts`):** Replaced hardcoded `new SupabaseEntityRepository()` with `RepositoryFactory.getEntityRepository()`, preventing 5s timeouts and fallback failures in memory/offline modes.
+  4. **Explorer, Entity Lookups & Discovery Isolation:** Verified real routes and service adapters against Plassey entities (`Plassey`, `Robert Clive`, `mir-jafar` / `plassey-mir-jafar`, `east-india-company-bengal`, `Siraj-ud-Daulah`). All direct lookups return 404/null; search and explorer endpoints return 0 draft leaks; topic and timeline discovery return 0 draft leaks; published controls (`mgnrega-reform`, `uidai`, `rbi`) remain 100% accessible.
+- **Status:** Awaiting independent acceptance
+- **Evidence:** 63/63 assertions passing in `tests/publication-boundary-regression.test.ts`. 0 database migrations run; Migration 033 untouched; 0 live DB mutations; editorial quarantine strictly preserved.
+- **Next Action:** Follow-up acceptance fix implemented under BTB-001-PUBBOUND-ACCEPTANCE-FIX-02.
+
+### TASK-20261022-04: BTB-001-PUBBOUND-ACCEPTANCE-FIX-02 — Entity Publication Policy Correction & Persistent Storage Preservation
+- **Priority:** High (Fail-Closed Entity Policy, Supabase State Preservation & Persistent Storage Verification)
+- **Role:** Implementation Engineer (Architecture Lead & Independent Acceptance Reviewer: ChatGPT)
+- **Parent Task:** `TASK-20261022-03` (`BTB-001-PUBBOUND-ACCEPTANCE-FIX-01`) / `TASK-20261022-02` (`BTB-001-PUBBOUND-VERIFY`)
+- **Scope:** `lib/story/publication.ts`, `services/repositories/supabase/entity.ts`, `utils/data-layer/store.ts`, `app/api/entities/[slug]/route.ts`, `app/api/v1/entities/[slug]/route.ts`, `app/api/v1/entities/route.ts`, `tests/publication-boundary-regression.test.ts`.
+- **Reproduction / Verification:**
+  - `npx vitest run tests/publication-boundary-regression.test.ts` (67/67 PASSED in 127ms).
+  - `npx vitest run tests/before-the-battle-plassey.test.ts tests/wave1-public-surfaces.test.ts tests/wave2-api-routes.test.ts tests/wave3-remaining-paths.test.ts tests/architecture-fitness.test.ts tests/supabase-identifier-resolution.test.ts tests/public-v2-story-api.test.ts` (74/74 PASSED in 2.25s).
+  - `npx tsx tests/publication-safety-p1.test.ts` (14/14 PASSED).
+  - `npx tsx tests/adapters.test.ts` (153/153 PASSED).
+  - `npm run check:type` (PASSED, 0 errors).
+  - `npm run check:type:frontend` (PASSED, 0 errors).
+  - `npm run check:lint` (PASSED, 0 errors, 536 baseline warnings).
+  - `npm run build` (PASSED, 1,141 static pages, SSG routes, dynamic endpoints compiled; 0 errors).
+- **Independent Review Blockers Remediated:**
+  1. **Source State Reconciliation:** Confirmed worktree root `C:/newsjack-content/thebreakdown-os`, branch `feat/gemini-provider-integration`, HEAD `bd8c29d228ec56a83506fb3d6304ddf4a300f684`. All concurrent Gemini changes preserved in isolated worktree `thebreakdown-os-gemini-reconciled`. All untracked user files preserved intact.
+  2. **Entity Publication Policy Correction (`lib/story/publication.ts`):** Eliminated silent pass-through of unknown or unsupported publication statuses. Explicitly defined fail-closed rules: `null`/`undefined` -> false; empty `{}` or incomplete records missing `id`/`slug`, `name`, or `type` -> false; `isTestArtifact: true`, `isDraft: true`, `isQuarantined: true` -> false; `publicationStatus` null or non-published (`'unknown'`, `'pending'`, `'draft'`, `'review'`, `'archived'`, etc.) -> false; `status` null or non-published -> false; explicit `published`/`active` -> true. Legitimate legacy catalog entities without a `publicationStatus` column remain accessible only when possessing valid structural identity (`id`/`slug`, `name`, `type`).
+  3. **Persistent Storage Preservation in `app/api/v1/entities`:** Restored `const repo = new SupabaseEntityRepository();` in `app/api/v1/entities/route.ts` and `app/api/v1/entities/[slug]/route.ts`. Ensured existing write operations (`POST`, `PUT`, `DELETE`) target Supabase persistent storage and are NOT silently moved to ephemeral in-memory maps.
+  4. **Supabase Entity Record State Preservation (`services/repositories/supabase/entity.ts`):** Updated `rowToEntity` to preserve lifecycle and publication metadata (`publication_status`, `status`, `is_test_artifact`, `is_draft`, `is_quarantined`) if present on the row without inventing schema fields or running live migrations.
+  5. **Public API Enforcement Across All Endpoints:** Wired `canPubliclyViewEntity` into `GET /api/entities/[slug]`, `GET /api/v1/entities`, and `GET /api/v1/entities/[slug]`. Verified both quarantined entities (return 404) and approved controls (`uidai` returns 200).
+  6. **Graph & Discovery Edge Filtering:** In `store.ts` (`getGraph`), quarantined focus entities return empty graphs `{ nodes: [], links: [] }`, draft entities referenced by published stories produce no nodes, and all dangling links are strictly dropped via `nodes.has(source) && nodes.has(target)`.
+- **Status:** Awaiting independent acceptance
+- **Evidence:** 67/67 assertions passing in `tests/publication-boundary-regression.test.ts`. 0 database migrations run; Migration 033 untouched; 0 live DB mutations; editorial quarantine strictly preserved.
 - **Next Action:** Await independent architecture review and acceptance sign-off from ChatGPT.
+
 
