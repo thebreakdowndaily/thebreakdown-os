@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RadarPipeline } from '@/services/radar/pipeline';
 import { MP_RADAR_SOURCES } from '@/data/radar/sources-mp';
 import { isValidCronRequest } from '@/lib/security/cron-auth';
+import { validateApiKeyAsync } from '@/utils/api-auth';
+import { authorizeRadarPoll } from '@/features/auth/radar-poll-authorization';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -37,18 +39,26 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 async function handlePoll(req: NextRequest): Promise<NextResponse> {
   const isCronAuthorized = isValidCronRequest(req);
-  const hasApiKey = Boolean(req.headers.get('x-api-key'));
-  const isAuthorized = isCronAuthorized || hasApiKey;
+  const rawApiKey = req.headers.get('x-api-key');
+  const forceAll = req.nextUrl.searchParams.get('force') === 'true';
+  let keyPermissions: import('@/features/auth/permissions').AppPermission[] | null = null;
 
-  if (!isAuthorized) {
-    return NextResponse.json(
-      { error: 'unauthorized: invalid or missing cron secret' },
-      { status: 401 }
-    );
+  if (!isCronAuthorized && rawApiKey) {
+    try {
+      const validatedKey = await validateApiKeyAsync(rawApiKey);
+      if (validatedKey) keyPermissions = validatedKey.permissions ?? [];
+    } catch { keyPermissions = null; }
+  }
+
+  const authorization = authorizeRadarPoll({ isCronAuthorized, keyPermissions, forceAll });
+  if (!authorization.allowed) {
+    return NextResponse.json({
+      error: authorization.error === 'unauthorized' ? 'unauthorized' : 'forbidden',
+      message: authorization.error === 'unauthorized' ? 'Invalid or missing credentials' : 'API key lacks the required Radar polling permission',
+    }, { status: authorization.status });
   }
 
   try {
-    const forceAll = req.nextUrl.searchParams.get('force') === 'true';
     const pipeline = new RadarPipeline(MP_RADAR_SOURCES);
     const metrics = await pipeline.poll({ forceAll });
 

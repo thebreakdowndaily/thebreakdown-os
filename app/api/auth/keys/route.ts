@@ -3,10 +3,9 @@ import type { NextRequest } from 'next/server';
 import { getCurrentPrincipal, type Principal } from '@/features/auth/principal';
 import { can } from '@/features/auth/policy';
 import { verifyApiKey, createApiKey, listApiKeys } from '@/features/auth/api-keys/service';
-import type { ApiKeyRole, ApiKeyRateLimitTier } from '@/features/auth/api-keys/types';
-import type { AppPermission } from '@/features/auth/permissions';
+import { authorizeApiKeyDelegation } from '@/features/auth/api-keys/delegation';
+import { apiKeyRecordToPrincipal } from '@/features/auth/api-keys/principal';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
-import type { IntelRole } from '@/features/auth/roles';
 
 async function resolveRequestPrincipal(request: NextRequest): Promise<Principal | null> {
   // 1. Try authenticated session principal
@@ -18,15 +17,7 @@ async function resolveRequestPrincipal(request: NextRequest): Promise<Principal 
   if (apiKeyHeader) {
     const res = await verifyApiKey(apiKeyHeader);
     if (res.valid && res.key) {
-      return {
-        userId: res.key.owner_id || res.key.id,
-        email: `api_key:${res.key.name}`,
-        name: res.key.name,
-        role: res.key.role as IntelRole,
-        isSuperAdmin: res.key.role === 'owner',
-        status: res.key.revoked_at ? 'suspended' : 'active',
-        organizationId: null,
-      };
+      return apiKeyRecordToPrincipal(res.key);
     }
   }
 
@@ -64,9 +55,9 @@ export async function GET(request: NextRequest) {
 
 interface CreateKeyRequestBody {
   name?: string;
-  role?: ApiKeyRole;
-  permissions?: AppPermission[];
-  rateLimitTier?: ApiKeyRateLimitTier;
+  role?: unknown;
+  permissions?: unknown;
+  rateLimitTier?: unknown;
   expiresInDays?: number;
 }
 
@@ -99,10 +90,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Bad Request', message: 'Key name is required' }, { status: 400 });
     }
 
-    const validRoles: ApiKeyRole[] = ['reader', 'contributor', 'reporter', 'editor', 'admin', 'owner'];
-    const role = body.role && validRoles.includes(body.role) ? body.role : 'reader';
-    const permissions = Array.isArray(body.permissions) ? body.permissions : [];
-    const rateLimitTier: ApiKeyRateLimitTier = body.rateLimitTier || 'standard';
+    const delegation = authorizeApiKeyDelegation(principal, {
+      role: body.role === undefined ? 'reader' : body.role,
+      permissions: body.permissions,
+      rateLimitTier: body.rateLimitTier === undefined ? 'standard' : body.rateLimitTier,
+    });
+    if (!delegation.allowed) {
+      return NextResponse.json(
+        { error: delegation.status === 403 ? 'Forbidden' : 'Bad Request', code: delegation.code, message: delegation.message },
+        { status: delegation.status }
+      );
+    }
+    const { role, permissions, rateLimitTier } = delegation;
     const expiresInDays = typeof body.expiresInDays === 'number' && body.expiresInDays > 0 ? body.expiresInDays : null;
 
     const newKey = await createApiKey({
