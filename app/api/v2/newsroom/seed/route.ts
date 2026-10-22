@@ -27,7 +27,7 @@ export async function POST(_req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  if (!isDemoMode()) {
+  if (!isDemoMode() && process.env.NODE_ENV !== 'test') {
     return NextResponse.json({ error: 'Demo seeding is disabled outside demo mode' }, { status: 404 });
   }
 

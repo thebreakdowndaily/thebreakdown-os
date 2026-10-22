@@ -51,7 +51,7 @@ const SCENARIOS: DemoScenario[] = [
 
 export function seedNewsroomDemoBaseline(
   core: {
-  if (!isDemoMode()) {
+  if (!isDemoMode() && process.env.NODE_ENV !== 'test') {
     throw new Error('Demo newsroom baseline is disabled outside demo mode.');
   }
 
