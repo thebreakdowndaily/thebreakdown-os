@@ -7,7 +7,7 @@ describe('claim verification RPC privilege migration', () => {
     process.cwd(),
     'supabase/migrations/036_restrict_claim_verification_rpc.sql'
   );
-  const sql = fs.readFileSync(migrationPath, 'utf8');
+  const sql = fs.readFileSync(migrationPath, 'utf8').replace(/\r\n/g, '\n');
 
   it('only changes grants when the exact verification RPC exists', () => {
     expect(sql).toContain(
