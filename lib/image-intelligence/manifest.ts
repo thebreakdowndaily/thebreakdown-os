@@ -1,7 +1,7 @@
 export interface VerifiedImageRecord {
   storySlug: string;
   approvedImage: string;
-  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder';
+  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder' | 'editorial-illustration';
   provenance: string;
   license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR';
   description: string;
@@ -156,6 +156,22 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     license: 'PUBLIC_DOMAIN',
     description: 'India-United States strategic summit and critical technology partnership.',
   },
+  'india-indonesia-relations': {
+    storySlug: 'india-indonesia-relations',
+    approvedImage: '/images/stories/india-indonesia-relations.svg',
+    assetType: 'editorial-illustration',
+    provenance: 'Original artwork created for The Breakdown',
+    license: 'BRANDED_VECTOR',
+    description: 'Original vector illustration of India and Indonesia connected by maritime trade routes, with national flags and a container ship; an editorial illustration, not a documentary photograph.',
+  },
+  'india-uk-relations': {
+    storySlug: 'india-uk-relations',
+    approvedImage: '/images/stories/india-uk-relations.svg',
+    assetType: 'editorial-illustration',
+    provenance: 'Original artwork created for The Breakdown',
+    license: 'BRANDED_VECTOR',
+    description: 'Original vector illustration of Indian and British flags, parliament silhouettes, a globe, and trade containers; an editorial illustration, not a documentary photograph.',
+  },
   'india-europe-relations': {
     storySlug: 'india-europe-relations',
     approvedImage: '/images/stories/india-europe-relations.jpg',
@@ -230,11 +246,11 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-ev-paradox': {
     storySlug: 'india-ev-paradox',
-    approvedImage: '/images/stories/climate-finance.jpg',
-    assetType: 'authentic-photo',
-    provenance: 'Ministry of Heavy Industries / Climate Finance Archive',
-    license: 'PUBLIC_DOMAIN',
-    description: 'Electric vehicle manufacturing transition and environmental finance economics.',
+    approvedImage: '/images/stories/india-ev-paradox.svg',
+    assetType: 'editorial-illustration',
+    provenance: 'Original artwork created for The Breakdown',
+    license: 'BRANDED_VECTOR',
+    description: 'Original vector illustration of EV charging infrastructure, a battery pack, and shipping containers; an editorial illustration, not a documentary photograph.',
   },
   'ng-ch-01-the-promise': {
     storySlug: 'ng-ch-01-the-promise',
