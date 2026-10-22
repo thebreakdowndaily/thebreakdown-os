@@ -1,8 +1,37 @@
 import { seedAll, getKnowledgeCore } from '@/lib/knowledge/knowledge-core';
-import { isPubliclyPublished } from '@/lib/story/publication';
+import { isChapterPubliclyPublished } from '@/lib/knowledge/chapter-publication';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { bootstrapServices } from '@/lib/bootstrap';
+import { listPublishedCorrections } from '@/services/editorial/corrections-service';
+import type { CanonicalClaim, CanonicalSource } from '@/types/canonical';
+
+export interface ChapterEvidenceCounts {
+  claims: number;
+  sources: number;
+}
+
+/**
+ * Count chapter evidence only through explicit canonical relationships.
+ * An unrelated chapter appearance, a story slug with the same name, or an ID
+ * prefix is not evidence that a claim belongs to this chapter.
+ */
+export function getChapterEvidenceCounts(
+  chapterId: string,
+  claims: readonly CanonicalClaim[],
+  sources: readonly CanonicalSource[],
+): ChapterEvidenceCounts {
+  return {
+    claims: claims.filter((claim) =>
+      claim.appearsIn?.some(
+        (appearance) =>
+          appearance.contentType === 'chapter' && appearance.contentId === chapterId,
+      ),
+    ).length,
+    sources: sources.filter((source) => source.chapterIds?.includes(chapterId)).length,
+  };
+}
+
 
 export interface TrustMetrics {
   publishedChapters: number;
@@ -39,11 +68,7 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
       for (const col of lib.collections) {
         for (const vol of col.volumes) {
           for (const chap of vol.chapters) {
-            const pubCtx = {
-              publicationStatus: (chap.status === 'published' ? 'published' : (chap as any).publicationStatus) as any,
-              publishedAt: (chap as any).publishedAt || chap.createdAt,
-            };
-            if (chap.status === 'published' || (chap.status === 'verified' && isPubliclyPublished(pubCtx, now))) {
+            if (isChapterPubliclyPublished(chap, now)) {
               publishedChaptersCount++;
             } else if (chap.status === 'review') {
               chaptersInReviewCount++;
@@ -53,16 +78,23 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
       }
     }
 
-    if (publishedChaptersCount === 0) {
-      publishedChaptersCount = 1;
-    }
 
     const allClaims = core.claims.all();
     const totalClaims = allClaims.length;
 
     const allSources = core.sources.all();
     const sourcesInRegistry = allSources.length;
-    const primarySourcesCited = allSources.filter(s => s.tier === 1 || (s as any).tier === 't1').length;
+    const primarySourcesCited = allSources.filter((source) =>
+      (source.tier === 1 || (source as any).tier === 't1') &&
+      Boolean(
+        source.claimIds?.length ||
+        source.documentIds?.length ||
+        source.chapterIds?.length ||
+        source.thinkerIds?.length ||
+        source.storyIds?.length ||
+        source.datasetIds?.length
+      ),
+    ).length;
 
     const allEvidence = core.evidence.all();
     const evidenceEntries = allEvidence.length;
@@ -77,16 +109,17 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
     const openScholarlyDisagreements = claimsWithDisagreements.length;
     const counterArgumentsDocumented = claimsWithDisagreements.reduce((acc, c) => acc + (c.counterArguments?.length || 0), 0);
 
-    const correctionsIssued = 0;
+    const correctionsIssued = (await listPublishedCorrections()).length;
 
-    const chap1Claims = allClaims.filter(c => c.appearsIn?.some(a => a.contentId === 'kl-ch-1' || a.contentType === 'chapter') || c.id.startsWith('claim.partition') || c.id.startsWith('claim.kashmir') || c.id.startsWith('claim.nonalignment') || c.id.startsWith('claim.secular')).length || 18;
-    const chap1Sources = 31;
+    const chapterOneEvidence = getChapterEvidenceCounts('kl-ch-1', allClaims, allSources);
+    const chap1Claims = chapterOneEvidence.claims;
+    const chap1Sources = chapterOneEvidence.sources;
 
     // 1. Average Trust Score — Restrict to canonical stories
     let averageTrustScore: number | undefined = undefined;
     try {
       const services = bootstrapServices({ publicOnly: true });
-      const storiesRes = await services.stories.getStories({ pageSize: 100 });
+      const storiesRes = await services.stories.getPublicStories({ pageSize: 100 });
       const allStories = storiesRes.data;
       const scoreStories = allStories.filter(s => typeof s.evidenceScore === 'number' && s.evidenceScore > 0);
       if (scoreStories.length > 0) {

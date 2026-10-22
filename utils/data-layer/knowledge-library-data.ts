@@ -79,7 +79,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-exec-summary', type: 'callout',
     data: {
       variant: 'info',
-      text: '• FOUNDATIONAL TRAUMA: India began its independent existence in August 1947 amid the trauma of Partition — the largest forced migration in human history, displacing 14.5 million people and claiming 800,000 to 1 million lives.\n• STRATEGIC VULNERABILITY: The immediate outbreak of war in Kashmir and its subsequent referral to the United Nations Security Council in 1948 created a permanent diplomatic and territorial friction point with Pakistan.\n• GEOPOLITICAL ALIGNMENT: To secure domestic unity and preserve its newly won sovereignty, India adopted a civic model of constitutional secularism and pursued strategic autonomy through Non-Alignment.',
+      text: "• FOUNDATIONAL TRAUMA: India became independent amid Partition's mass displacement and communal violence. Estimates vary, but roughly 12–20 million people crossed the new borders and deaths are commonly estimated in the hundreds of thousands to around one million.\n• STRATEGIC VULNERABILITY: The 1947–48 Kashmir war and India's referral to the UN created an enduring territorial and diplomatic dispute with Pakistan; the legal and political implications remain contested.\n• GEOPOLITICAL ALIGNMENT: India adopted constitutional secularism and pursued strategic autonomy through Non-Alignment, shaped by anti-colonial politics and the emerging Cold War as well as Partition.",
     },
   },
   // ── 2. Evidence Summaries ──
@@ -91,7 +91,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       confidence: 'established',
       primarySources: [
         { sourceId: 's11', relevance: 'direct', excerpt: 'The Indian Independence Act dissolved the British Indian Empire and transferred power to two dominions, creating the legal framework for the largest forced migration of the twentieth century.' },
-        { sourceId: 's13', relevance: 'direct', excerpt: 'The Radcliffe Award\'s borders were drawn in just five weeks by a commission that had never visited India, slicing through villages, irrigation systems, and communities.' },
+        { sourceId: 's13', relevance: 'direct', excerpt: 'The Radcliffe Award was produced under an exceptionally compressed timetable of about five weeks. Radcliffe himself had never previously visited India; the boundary lines cut through villages, irrigation systems, and communities.' },
       ],
       secondarySources: [
         { sourceId: 's1', relevance: 'direct', excerpt: 'Guha documents how Partition\'s violence created an immediate security crisis that consumed the new government\'s attention and shaped its institutional priorities.' },
@@ -134,7 +134,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-evidence-demographic', type: 'evidence-summary', depth: ['scholar', 'researcher'],
     data: {
       claim: 'The mass migration of 14.5 million people constituted the largest forced migration of the twentieth century and permanently transformed the demographic landscape of South Asia',
-      evidenceSummary: 'Between August and December 1947, approximately 14.5 million people crossed the new borders between India and Pakistan. The migration was concentrated in Punjab, where whole districts emptied and refilled within weeks. The 1951 Census documented the scale of the transformation: West Punjab\'s non-Muslim population fell from 16% to less than 1%; East Punjab\'s Muslim population fell from 33% to less than 5%. The exchange of populations was not planned by any government and was driven entirely by violence and fear. The demographic transformation created permanent constituencies of refugee voters in both countries whose political influence ensured that Partition grievances remained politically salient for generations.',
+      evidenceSummary: 'Between August and December 1947, approximately 14.5 million people crossed the new borders between India and Pakistan. The migration was concentrated in Punjab, where whole districts emptied and refilled within weeks. The 1951 Census documented the scale of the transformation: West Punjab\'s non-Muslim population fell from 16% to less than 1%; East Punjab\'s Muslim population fell from 33% to less than 5%. The population movements did not follow a single, comprehensive exchange plan. They unfolded through violence, fear, local decisions, and administrative responses as people sought safety across the new borders. The demographic transformation helped create long-lived refugee communities and political constituencies in both countries, keeping Partition memories and grievances salient for generations.',
       confidence: 'established',
       primarySources: [
         { sourceId: 's9', relevance: 'direct', excerpt: 'The 1941 Census provides the baseline demographic data against which the 1951 Census measured the transformation caused by Partition migration.' },
@@ -253,7 +253,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-empire-11', type: 'paragraph',
     data: {
-      text: 'The Mountbatten Plan, announced on 3 June 1947, proposed the partition of British India into two independent dominions: India and Pakistan. Punjab and Bengal, the two provinces with mixed Hindu-Muslim populations, would be divided. A Boundary Commission chaired by Sir Cyril Radcliffe, a British lawyer who had never visited India, would demarcate the borders. The princely states would be released from British paramountcy and left free to accede to either dominion. The entire transfer of power was scheduled for 15 August 1947 — just ten weeks after the plan\'s announcement. It was the fastest negotiated end to an empire in modern history.',
+      text: 'The Mountbatten Plan, announced on 3 June 1947, proposed the partition of British India into two independent dominions: India and Pakistan. Punjab and Bengal, the two provinces with mixed Hindu-Muslim populations, would be divided. A Boundary Commission chaired by Sir Cyril Radcliffe, a British lawyer who had never visited India, would demarcate the borders. The princely states would be released from British paramountcy and left free to accede to either dominion. The entire transfer of power was scheduled for 15 August 1947 — just ten weeks after the plan\'s announcement. It was among the most compressed negotiated transfers of imperial power in modern history.',
       citations: ['s1', 's11', 's12'],
     },
   },
@@ -288,7 +288,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-2', type: 'paragraph',
     data: {
-      text: 'The scale of the migration was staggering. An estimated 14.5 million people crossed the new borders between August and December 1947 alone — the largest forced migration in human history up to that point, and one of the largest of any era. columns of refugees stretching for miles moved in both directions: Muslims heading west into Pakistan, Hindus and Sikhs heading east into India. The migration was particularly concentrated in Punjab, where the entire non-Muslim population of the western districts — some 5.5 million people — departed, while the entire Muslim population of the eastern districts — some 4.5 million — fled in the opposite direction.',
+      text: "The scale of the migration was staggering. Estimates of the number crossing the new borders vary, often ranging from roughly 12 to 20 million; about 14.5 million is one widely cited estimate. It was one of the largest forced migrations in modern history. Columns of refugees moved in both directions: many Muslims headed west into Pakistan, while many Hindus and Sikhs headed east into India. Punjab saw some of the most complete population exchanges: large non-Muslim communities left western districts and large Muslim communities left eastern districts, although exact numbers and patterns varied by locality.",
       citations: ['s1', 's31'],
     },
   },
@@ -297,12 +297,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-3', type: 'paragraph',
     data: {
-      text: 'The violence that accompanied this migration was genocidal in its intensity. Entire trainloads of refugees were massacred. Villages were destroyed, women were abducted and raped, religious sites were desecrated, and children were orphaned by the tens of thousands. The British Indian Army, itself being divided between the two new states, was overwhelmed and in many cases unwilling to intervene. Estimates of the death toll range from 200,000 to 2 million, with the most careful scholarly calculations placing the figure at around 800,000 to 1 million killed in the first year alone.',
-      citations: ['s10', 's16', 's27'],
+      text: 'The violence that accompanied this migration was genocidal in its intensity. Entire trainloads of refugees were massacred. Villages were destroyed, women were abducted and raped, religious sites were desecrated, and children were orphaned by the tens of thousands. The British Indian Army, itself being divided between the two new states, was overwhelmed and in many cases unwilling to intervene. Estimates of the death toll vary widely—from several hundred thousand to perhaps two million—because records are incomplete and definitions differ. Some widely cited estimates cluster around 800,000 to one million deaths, but no single figure is definitive.',
+      citations: ['s19', 's16', 's27'],
     },
   },
   // Visual: death toll estimates — what the evidence shows
-  { id: 'b-vis-chart-1', type: 'chart', data: { title: 'Casualties of Partition — death toll estimates by source', caption: 'Death toll estimates from official, press, and scholarly sources, with consensus range 800k-1M.', chartType: 'bar', dataSource: 'Scholarly aggregates across cited historical sources', url: '/images/library/chapter-1/charts/chart-death-toll-estimates.svg', provenance: { source: 'Synthesis of cited estimates' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.death-toll'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — range/bar chart illustrating variance across sources' } } },
+  { id: 'b-vis-chart-1', type: 'chart', data: { title: 'Casualties of Partition — death toll estimates by source', caption: 'Death-toll estimates vary substantially across sources; the chart illustrates the range rather than asserting a single consensus figure.', chartType: 'bar', dataSource: 'Scholarly aggregates across cited historical sources', url: '/images/library/chapter-1/charts/chart-death-toll-estimates.svg', provenance: { source: 'Synthesis of cited estimates' }, status: 'recreated', aiGenerated: false, linkedClaims: ['claim.partition.death-toll'], archivalProvenance: { evidenceLevel: 'B', chartStrategy: 'RECREATE — range/bar chart illustrating variance across sources' } } },
   {
     id: 'b-p-narr-4', type: 'paragraph',
     data: {
@@ -321,8 +321,8 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-6', type: 'paragraph',
     data: {
-      text: 'The division of the British Indian Army was particularly consequential for national security. Of the approximately 1.2 million soldiers in undivided India\'s armed forces, roughly two-thirds went to India and one-third to Pakistan. The officer corps was divided proportionally, but individual soldiers were given the choice of which dominion to serve, leading to months of administrative chaos as troops redeployed across the new borders. The division of military hardware — tanks, aircraft, naval vessels, and ammunition stockpiles — was equally contentious, with Pakistan receiving a smaller share than it had demanded.',
-      citations: ['s1', 's29'],
+      text: 'The division of the British Indian Army was consequential for both successor states. The National Army Museum records that around 260,000 men, mainly Hindus and Sikhs, went to India and around 140,000, mainly Muslims, went to Pakistan; individual units were split, and the Brigade of Gurkhas was divided between India and Britain. The broader division of government assets and liabilities—including administrative departments, records, armed forces, and financial settlements—required extensive negotiation through Partition-era councils. This was not simply a chaotic allocation: the surviving scholarship documents both attempts at orderly division and disputes over what should be divided and how.',
+      citations: ['s1', 's11', 's35', 's36'],
     },
   },
   // Visual: military balance — the arithmetic of national security
@@ -394,7 +394,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-narr-15', type: 'paragraph',
     data: {
-      text: 'The internationalisation of Kashmir would prove deeply controversial in Indian strategic discourse. Critics argued that Nehru\'s faith in international institutions was naive and that by taking the case to the UN, India had voluntarily given Pakistan a seat at the table on a question India considered legally settled. The plebiscite demanded by Resolution 47 was never held — because, India later argued, Pakistan never withdrew its forces as required by the resolution — but the demand for it became the central plank of Pakistan\'s diplomatic position for the next seven decades.',
+      text: 'The internationalisation of Kashmir would prove deeply controversial in Indian strategic discourse. Critics argued that Nehru\'s faith in international institutions was naive and that by taking the case to the UN, India had voluntarily given Pakistan a seat at the table on a question India considered legally settled. The plebiscite envisaged by Resolution 47 was never held. India has cited Pakistan\'s failure to withdraw first; later disagreements over demilitarisation, sequencing, and the resolution\'s implementation also shaped the dispute.',
       citations: ['s1', 's6'],
     },
   },
@@ -529,7 +529,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
           description: 'India would invoke Article 35 of the UN Charter, referring the dispute to the Security Council while continuing military operations to defend Kashmir.',
           proponents: ['Jawaharlal Nehru', 'V.K. Krishna Menon', 'G.S. Bajpai'],
           opponents: ['Sardar Patel', 'The Hindu nationalist press', 'Some Congress hawks'],
-          outcome: 'The UN passed Resolution 47 calling for a ceasefire and plebiscite. The plebiscite was never held, but the resolution became the diplomatic foundation of Pakistan\'s position for 75 years.',
+          outcome: 'The UN Security Council adopted Resolution 47, setting out a ceasefire and a conditional process for a plebiscite. The conditions were not fully implemented, and the resolution remains central to competing Indian and Pakistani diplomatic narratives.',
           counterfactual: 'If India had not internationalised the dispute, Pakistan might have faced a purely bilateral military confrontation that it was losing, potentially leading to a more decisive Indian victory and a settlement on Indian terms.',
         },
         {
@@ -599,7 +599,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
         {
           id: 'ev-tl-5', date: 'Aug–Dec 1947', title: 'Partition Violence Peak',
           description: 'Mass communal violence across Punjab and Bengal. Up to 1 million killed.',
-          categories: ['conflict', 'social'], sources: ['s10', 's27'], entities: ['Punjab', 'Bengal'], documents: [], significance: 5,
+          categories: ['conflict', 'social'], sources: ['s19', 's27'], entities: ['Punjab', 'Bengal'], documents: [], significance: 5,
         },
         {
           id: 'ev-tl-6', date: 'Aug 1947 – Mar 1948', title: 'Princely States Integration',
@@ -715,7 +715,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
         },
         {
           title: 'Naive Internationalisation of Kashmir',
-          summary: 'By taking the Kashmir dispute to the UN, Nehru voluntarily internationalised a conflict that India was winning on the ground, giving Pakistan a diplomatic platform it would not otherwise have had and subjecting India to international pressure for a plebiscite that became a permanent diplomatic liability.',
+          summary: 'By taking the Kashmir dispute to the UN, Nehru internationalised a conflict in the expectation that international institutions would support India\'s position. Critics see this as a strategic error; others emphasize the immediate military context and the attempt to secure an international response. The long-term consequences remain debated.',
           counterarguments: [
             { sourceId: 's1', relevance: 'supporting', excerpt: 'Nehru genuinely believed the UN would recognise the validity of India\'s position, and the UN\'s failure to enforce its own resolution was a failure of the institution, not of India\'s approach.' },
           ],
@@ -941,7 +941,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       arguments: [
         {
           title: 'Accelerated Timetable',
-          summary: 'Mountbatten\'s single most consequential decision was to advance the date of British withdrawal from June 1948 to August 1947 — a compression of the transition from eleven months to three. He calculated that a longer transition would allow communal violence to spread, that the British political will for maintaining order was exhausted, and that the Indian parties would never agree on a united constitutional framework. The accelerated timetable, however, meant that the Radcliffe Boundary Commission had only five weeks to draw the borders of two new nations, with catastrophic consequences for the millions whose villages, irrigation systems, and communities were divided by a line drawn in haste by a British lawyer who had never visited India.',
+          summary: 'One of Mountbatten\'s most consequential decisions was to advance British withdrawal from June 1948 to August 1947, cutting the planned transition by roughly ten months. He calculated that a longer transition would allow communal violence to spread, that the British political will for maintaining order was exhausted, and that the Indian parties would never agree on a united constitutional framework. The accelerated timetable, however, meant that the Radcliffe Boundary Commission had only five weeks to draw the borders of two new nations, with catastrophic consequences for the millions whose villages, irrigation systems, and communities were divided by a line drawn in haste by a British lawyer who had never visited India.',
           supportingEvidence: [
             { sourceId: 's5', relevance: 'direct', excerpt: 'Freedom at Midnight documents Mountbatten\'s decision to advance the transfer of power and the chaotic process of boundary demarcation.' },
             { sourceId: 's16', relevance: 'direct', excerpt: 'Khan argues that the accelerated timetable was a direct cause of the administrative collapse that enabled Partition violence.' },
@@ -1172,7 +1172,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
       mainEntitySlug: 'india-pakistan-relations',
       relationships: [
         { entity: 'Kashmir', entitySlug: 'kashmir', relationshipType: 'disputed_territory', description: 'The Kashmir dispute has been the central territorial conflict between India and Pakistan since 1947, resulting in two major wars and numerous military crises.' },
-        { entity: 'Partition of India', entitySlug: 'partition', relationshipType: 'root_cause', description: 'The unfinished business of Partition — including competing claims to Kashmir, the status of minorities, and the very legitimacy of the two-nation theory — created the framework for permanent rivalry.' },
+        { entity: 'Partition of India', entitySlug: 'partition', relationshipType: 'root_cause', description: 'Partition\'s legacies—including competing claims over Kashmir, minority-rights concerns, and competing national narratives—have repeatedly shaped India–Pakistan relations, though the intensity of rivalry has varied over time.' },
         { entity: 'UN Security Council', entitySlug: 'un-security-council', relationshipType: 'mediator', description: 'The UN attempted to mediate the Kashmir dispute through Resolution 47, but the failure to implement the plebiscite left both sides dissatisfied and the issue unresolved.' },
         { entity: 'Liaquat Ali Khan', entitySlug: 'liaquat-ali-khan', relationshipType: 'negotiated_with', description: 'Pakistan\'s first Prime Minister signed the Liaquat-Nehru Pact of 1950, the only major bilateral agreement on minority rights between the two countries.' },
       ],
@@ -1339,8 +1339,8 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-histo-raghavan-2', type: 'paragraph',
     data: {
-      text: 'Raghavan\'s evidence base is exceptional in its breadth: he draws on Indian, British, American, and Pakistani archival sources, in multiple languages, to reconstruct the strategic calculations behind key decisions. His treatment of the Kashmir UN referral is a model of balanced analysis, situating Nehru\'s decision within the constraints of limited military capability, the need for international legitimacy, and the hope that the UN would pressure Pakistan to withdraw its forces. Critics from the nationalist school argue that Raghavan understates the normative dimension of Indian foreign policy — the genuine commitment to anti-colonialism and international law that Nehru articulated. From the realist side, critics contend that he overstates the coherence of Indian strategy, which was often reactive and improvised rather than planned. Regardless, War and Peace in Modern India is widely considered the definitive account of the subject, and Raghavan\'s later work — India\'s War: The Making of Modern South Asia, 1939-1945 (2016) and The Most Dangerous Place: A History of the United States in South Asia (2024) — has cemented his reputation as the leading historian of Indian international relations.',
-      citations: ['s32'],
+      text: 'Raghavan\'s evidence base is exceptional in its breadth: he draws on Indian, British, American, and Pakistani archival sources, in multiple languages, to reconstruct the strategic calculations behind key decisions. His treatment of the Kashmir UN referral is a model of balanced analysis, situating Nehru\'s decision within the constraints of limited military capability, the need for international legitimacy, and the hope that the UN would pressure Pakistan to withdraw its forces. Critics from the nationalist school argue that Raghavan understates the normative dimension of Indian foreign policy — the genuine commitment to anti-colonialism and international law that Nehru articulated. From the realist side, critics contend that he overstates the coherence of Indian strategy, which was often reactive and improvised rather than planned. Regardless, War and Peace in Modern India is widely considered the definitive account of the subject, and Raghavan\'s later work — India\'s War: The Making of Modern South Asia, 1939-1945 (2016) and The Most Dangerous Place: A History of the United States in South Asia (2018) — has cemented his reputation as the leading historian of Indian international relations.',
+      citations: ['s32', 's33', 's34'],
     },
   },
   // ── Ramachandra Guha ──
@@ -1443,7 +1443,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-strategic-learned-4', type: 'paragraph',
     data: {
-      text: 'Fourth, Partition showed that borders matter — and that uncertain borders are a permanent source of conflict. The Radcliffe Line, drawn in five weeks by a British lawyer who had never visited India, left the subcontinent with indefensible borders, divided river systems, separated villages from their markets, and created one of the world\'s most intractable territorial disputes in Kashmir. India\'s subsequent insistence on well-defined, internationally recognised borders — and its reluctance to enter into territorial negotiations that might reopen unsettled questions — reflects this painful lesson.',
+      text: 'Fourth, Partition showed that borders matter—and that disputed or poorly understood borders can become recurring sources of conflict. The Radcliffe Line, drawn in five weeks by a British lawyer who had never visited India, left the subcontinent with indefensible borders, divided river systems, separated villages from their markets, and created one of the world\'s most intractable territorial disputes in Kashmir. India\'s subsequent insistence on well-defined, internationally recognised borders — and its reluctance to enter into territorial negotiations that might reopen unsettled questions — reflects this painful lesson.',
       citations: ['s1', 's5'],
     },
   },
@@ -1475,7 +1475,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-strategic-fail-3', type: 'paragraph',
     data: {
       text: 'Third, India failed to learn that neighbourhood management requires sustained diplomatic engagement. Partition had left India with a complex neighbourhood — Pakistan as a hostile rival, Nepal and Burma as carefully neutral neighbours, Sri Lanka as a Dominion with its own ethnic tensions, and the Himalayan states of Bhutan and Sikkim as dependent buffer states. India\'s approach to these relationships was often reactive, moralising, and inconsistent. The failure to develop a coherent neighbourhood policy would have consequences that India would grapple with for decades.',
-      citations: ['s1', 's10'],
+      citations: ['s1', 's19'],
     },
   },
   {
@@ -1508,15 +1508,15 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-p-strategic-legacy-1', type: 'paragraph',
     data: {
-      text: 'The strategic legacy of Partition is not merely historical — it is visible in every major dimension of contemporary Indian foreign policy. India\'s relationship with Pakistan remains defined by the unresolved questions of 1947: Kashmir, cross-border terrorism, water sharing, and the fundamental dispute over the legitimacy of the two-nation theory. India\'s approach to China is coloured by the trauma of 1962, which itself was partly rooted in Nehru\'s post-Partition focus on Pakistan at the expense of Himalayan border security. India\'s insistence on strategic autonomy in its relationships with the United States, Russia, and China is a direct inheritance of Nehru\'s non-alignment, which was itself a response to the experience of Partition and the betrayal of British arbitration.',
-      citations: ['s1', 's4', 's9', 's10', 's21'],
+      text: 'Partition remains one influence on contemporary Indian foreign policy, particularly in relations with Pakistan and the dispute over Kashmir. Its effects interact with later conflicts, cross-border terrorism, water-sharing disputes, China's rise, domestic political change, and economic interests. Strategic autonomy also draws on the anti-colonial experience and Cold War non-alignment, so it should not be attributed to Partition alone.',
+      citations: ['s1', 's4', 's9', 's19', 's21'],
     },
   },
   {
     id: 'b-p-strategic-legacy-2', type: 'paragraph',
     data: {
       text: 'Understanding the strategic lessons of Partition does not provide neat policy prescriptions. History does not repeat itself, and the world of the 2020s is fundamentally different from that of the 1940s. But the patterns of strategic thinking established in the crucible of Partition — the suspicion of great powers, the commitment to autonomy, the sensitivity to sovereignty, the prioritisation of unity over diversity of opinion — continue to shape how Indian policymakers perceive threats, evaluate alliances, and make choices. A nation that understands why it made the choices it did is better equipped to make the choices that lie ahead.',
-      citations: ['s1', 's4', 's9', 's10', 's21'],
+      citations: ['s1', 's4', 's9', 's19', 's21'],
     },
   },
   // ── 9. Counterfactual ──
@@ -1549,7 +1549,7 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-why-matters', type: 'callout',
     data: {
       variant: 'info',
-      text: 'The founding conditions of 1947 continue to shape Indian foreign policy in the twenty-first century. The security paradigm created by Partition — viewing Pakistan as an existential threat, prioritising the western border, and maintaining strategic autonomy — has proven remarkably durable, surviving the end of the Cold War, the rise of China, and the transformation of the global order. The Kashmir dispute, unresolved since 1947, remains the single most dangerous flashpoint in South Asia and a potential nuclear flashpoint. India\'s relationship with Pakistan is still defined by the unfinished business of Partition: competing claims to Kashmir, mutual suspicion, and the refusal of either state to accept the other\'s foundational narrative. Understanding how these patterns were set in the crucible of 1947 is not merely a historical exercise — it is essential for understanding why India approaches the world the way it does today, and for evaluating whether those foundational assumptions still serve India\'s interests.',
+      text: "The conditions of 1947 remain one important influence on Indian foreign policy, alongside later wars, domestic political change, economic priorities, and China's rise. Partition and subsequent India–Pakistan conflicts helped sustain a focus on the western border and strategic autonomy, but that focus has coexisted with other security challenges and has shifted across governments and periods. Kashmir remains a serious and potentially dangerous flashpoint. Partition's legacies—including competing claims over Kashmir, minority-rights concerns, and mutual suspicion—continue to shape India–Pakistan relations, although periods of dialogue show that the relationship is not fixed or explained by 1947 alone. Understanding these patterns is useful for assessing how historical assumptions influence current choices, without treating them as inevitable.",
     },
   },
   // ── Evidence Challenges (Constitution v1.1 required section) ──
@@ -1558,14 +1558,14 @@ const chapter1Blocks: KnowledgeBlock[] = [
     id: 'b-p-evidence-challenges-1', type: 'paragraph',
     data: {
       text: 'The evidence base for Partition is deep but uneven. Colonial and post-colonial state records are extensive for administration, law, and demography, but they were produced by governments with their own interests and are silent on lived experience, particularly for women, the poor, and the displaced. The precise scale of mortality and displacement remains debated because contemporary counts were partial, politically charged, and often compiled after the fact; scholars therefore cite ranges rather than precise figures.',
-      citations: ['s10', 's27', 's26'],
+      citations: ['s19', 's27', 's26'],
     },
   },
   {
     id: 'b-p-evidence-challenges-2', type: 'paragraph',
     data: {
       text: 'Several specific challenges constrain confidence. First, records from the princely states and from the Radcliffe boundary commission remain partly closed or selectively released. Second, the violence of 1947 left few neutral contemporaneous accounts; much of what we know comes from memoir, oral history, and later commission reports, each with its own bias. Third, the demography of the border regions was altered by the very Partition it was meant to describe, making pre- and post-Partition comparisons difficult. Fourth, Pakistani and Indian national archives have at times restricted material that complicates the official foundational narratives of either state. Where a claim in this chapter depends on such contested material, it is flagged as interpretation and the disagreement is recorded.',
-      citations: ['s10', 's27', 's29', 's31'],
+      citations: ['s19', 's27', 's29', 's31'],
     },
   },
   // ── 11. Learning ──
@@ -1575,9 +1575,9 @@ const chapter1Blocks: KnowledgeBlock[] = [
     data: {
       variant: 'key-takeaways',
       items: [
-        { text: 'Partition was not merely a political division but a foundational trauma that created a permanent security consciousness in India\'s foreign policy, shaping every major strategic decision for decades.', sources: ['s1', 's3'] },
-        { text: 'The integration of 565 princely states, achieved primarily through diplomacy by Patel and Menon, was one of the most successful state-building projects of the twentieth century.', sources: ['s1', 's18'] },
-        { text: 'India\'s decision to refer the Kashmir dispute to the UN internationalised a conflict India was winning, creating a diplomatic framework that Pakistan exploited for seven decades.', sources: ['s1', 's6', 's22'] },
+        { text: 'Partition was both a political division and a major source of trauma; its effects on Indian security thinking interacted with colonial legacies, domestic politics, later wars, and regional change.', sources: ['s1', 's3'] },
+        { text: 'The integration of princely states, led by Sardar Patel and V. P. Menon, combined negotiation with administrative consolidation; cases such as Junagadh, Hyderabad, and Kashmir also involved coercion or military force and remain contested in historical interpretation.', sources: ['s1', 's18'] },
+        { text: 'India\'s decision to refer Kashmir to the UN internationalised the dispute and created a diplomatic process that India and Pakistan have interpreted differently; the consequences remain debated.', sources: ['s1', 's6', 's22'] },
         { text: 'The contradictory experiences of Partition — the trauma of division and the triumph of integration — created an enduring tension in India\'s strategic culture between assertive nationalism and internationalist idealism.', sources: ['s1', 's7', 's22'] },
         { text: 'India\'s secular nationalism, forged in explicit opposition to the Two-Nation theory, became both a domestic constitutional commitment and a foreign policy asset, particularly in relations with the Muslim world.', sources: ['s1', 's4'] },
       ],
@@ -1964,12 +1964,12 @@ const chapter1Blocks: KnowledgeBlock[] = [
       statement: 'The five-week Radcliffe boundary commission created indefensible borders that divided communities and established lasting territorial disputes.',
       confidence: 'established',
       evidence: [
-        { sourceId: 's13', relevance: 'direct', excerpt: 'The Radcliffe Award was drawn in five weeks by a commission that had never visited India.' },
-        { sourceId: 's16', relevance: 'direct', excerpt: 'Khan argues the accelerated timetable caused the administrative collapse that enabled Partition violence.' },
+        { sourceId: 's13', relevance: 'direct', excerpt: 'The Radcliffe Award established the Punjab and Bengal boundaries and was published on 17 August 1947, two days after independence.' },
+        { sourceId: 's16', relevance: 'direct', excerpt: 'Khan examines how the compressed timetable and limited transition planning contributed to administrative breakdown and violence.' },
       ],
       documentedFacts: [
         { fact: 'The Radcliffe Boundary Commission was established on 30 June 1947 and published its award on 17 August 1947 — only five weeks to draw borders across two provinces (Punjab and Bengal) covering over 400,000 square kilometres.', sources: ['s13'] },
-        { fact: 'Sir Cyril Radcliffe, a British lawyer who had never previously visited India, chaired the commission without ever seeing the territories he was dividing.', sources: ['s13'] },
+        { fact: 'Radcliffe had not previously visited India and did not tour the affected border regions during the commission’s short timetable.', sources: ['s16'] },
         { fact: 'The award was deliberately withheld until after the Independence celebrations on 14–15 August 1947 to avoid disrupting the transfer of power, and was published two days later.', sources: ['s13', 's16'] },
         { fact: 'The border divided agricultural communities, irrigation systems, railway lines, and military units, and left approximately 12 million people on the "wrong" side of the new boundary.', sources: ['s1', 's16'] },
       ],
@@ -1996,24 +1996,24 @@ const chapter1Blocks: KnowledgeBlock[] = [
   {
     id: 'b-claim-integration', type: 'claim',
     data: {
-      statement: 'The integration of 565 princely states through Patel\'s diplomacy was one of the most successful state-building projects of the twentieth century.',
-      confidence: 'established',
+      statement: "The integration of princely states, led by Patel and Menon, combined negotiation with administrative consolidation; cases such as Junagadh, Hyderabad, and Kashmir also involved coercion or military force and remain contested in historical interpretation.",
+      confidence: 'debated',
       evidence: [
         { sourceId: 's18', relevance: 'direct', excerpt: 'Menon\'s insider account details how Patel used diplomatic persuasion, financial pressure, and military threat.' },
         { sourceId: 's1', relevance: 'direct', excerpt: 'Guha documents the integration campaign as a critical success of India\'s founding period.' },
       ],
       documentedFacts: [
-        { fact: 'At independence, British India contained approximately 565 princely states covering 48% of the land area and 28% of the population, with no automatic legal accession to either India or Pakistan.', sources: ['s18', 's1'] },
+        { fact: 'At independence, the subcontinent contained approximately 565 princely states under British paramountcy. They were not directly governed as British Indian provinces, and their accession was handled separately under the transfer-of-power arrangements.', sources: ['s18', 's1'] },
         { fact: 'Sardar Vallabhbhai Patel, as Minister of Home Affairs, and V. P. Menon, as Secretary of the States Department, led the integration campaign between August 1947 and 1949.', sources: ['s18'] },
         { fact: 'The integration employed a spectrum of methods: diplomatic persuasion (most states), financial pressure (withholding of privy purse guarantees), legal instruments (standstill agreements, instruments of accession), and military force (Hyderabad, Junagadh).', sources: ['s18'] },
-        { fact: 'By 1949, all 565 states had acceded to India, most through negotiated instruments that preserved the rulers\' titles and privy purses (later abolished in 1971).', sources: ['s1', 's18'] },
+        { fact: 'By 1949, the princely states that acceded to India had largely been integrated into the Indian Union, most through negotiated instruments; some princely states acceded to Pakistan.', sources: ['s1', 's18'] },
       ],
       interpretations: [
         { historian: 'V. P. Menon', school: 'Insider/Administrative', argument: 'In his insider account "The Story of the Integration of the Indian States", Menon details the painstaking administrative and diplomatic process, presenting integration as a triumph of political skill and constitutional design.' },
         { historian: 'Ramachandra Guha', school: 'Liberal/Nationalist', argument: 'Documents the integration campaign as a critical success of the founding period, arguing that Patel\'s combination of firmness and flexibility prevented the balkanisation of India.' },
         { historian: 'H. M. Seervai', school: 'Constitutional Law', argument: 'Notes that the legal framework of accession — particularly the requirement for each ruler to sign an Instrument of Accession — was carefully designed to avoid allegations of coercion while making refusal practically impossible.' },
       ],
-      editorialSynthesis: 'The integration of the princely states was undeniably a state-building achievement of the highest order, comparable to the unification of Germany or Italy in its speed and scope. However, the narrative of seamless voluntary accession understates the coercive dimensions: financial pressure, military threat, and in the cases of Hyderabad and Junagadh, direct force. The integration process also created festering resentments in Kashmir, Hyderabad, and Manipur — states whose accessions were achieved through pressure or force — that remain politically unresolved. The achievement is real but should be described accurately, with the coercive dimensions acknowledged alongside the diplomatic success.',
+      editorialSynthesis: 'The integration of princely states was a major state-building achievement in speed and scope, but comparisons with European unification are interpretive rather than neutral fact. The narrative of seamless voluntary accession understates coercive dimensions: financial pressure, military threat, and direct force in cases such as Hyderabad. Kashmir, Hyderabad, and Manipur also have distinct and contested histories of accession or integration. A balanced account should acknowledge both diplomatic negotiation and coercion, without treating every state as following the same path.',
       counterArguments: [
         { viewpoint: 'Democratic consent critique', argument: 'Centralised integration through pressure tactics came at the cost of democratic consent. Critics argue that residents of Hyderabad, Kashmir, and Manipur were never given a genuine choice about their political future, and that the speed of integration sacrificed local autonomy for administrative uniformity.', proponents: 'Regional historians, Manipuri and Kashmiri scholars' },
         { viewpoint: 'Administrative necessity view', argument: 'In the context of Partition\'s violence and the threat of balkanisation, there was no time for deliberative democracy. The integration was a crisis response that prioritised national survival over procedural consent — a trade-off that was justified by circumstances even if imperfect in principle.' },
@@ -3065,7 +3065,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
               order: 1,
               difficulty: 2,
               version: { major: 1, minor: 0, patch: 0, label: 'initial' },
-              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 31, heroImageAlt: 'India map and historical documents' },
+              metadata: { editor: 'The Breakdown Editorial', wordCount: 11863, sourceCount: 37, heroImageAlt: 'India map and historical documents' },
               readingTime: { explorer: 30, scholar: 75, researcher: 200 },
               studyTime: { explorer: 45, scholar: 120, researcher: 480 },
               content: chapter1Blocks,
@@ -3140,7 +3140,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 },
                 {
                   misconception: 'The Radcliffe Line was drawn with care to minimise disruption.',
-                  correction: 'The boundary was drawn in five weeks by a British lawyer who had never visited India, deliberately kept unaware of the political implications of his decisions.',
+                  correction: 'The boundary was drawn under a five-week timetable by a British lawyer who had not previously visited India. Claims about what he understood or intended should be distinguished from documented facts.',
                   explanation: 'Radcliffe had no expertise in Indian geography or demography. The boundary split villages from their water sources, separated families from their land, and left key infrastructure on the wrong side of the border.',
                 },
                 {
@@ -3208,7 +3208,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 { term: 'Non-Alignment', definition: 'A foreign policy doctrine of not formally allying with either Cold War bloc, pioneered by Nehru and foundational to Indian strategic identity.' },
                 { term: 'Subaltern History', definition: 'An approach to historiography that centres the experiences of marginalised groups — peasants, workers, women — rather than elite political actors.' },
                 { term: 'Partition Violence', definition: 'The massacres, abductions, rapes, and forced migrations that accompanied the division of India, resulting in an estimated 800,000 to 1 million deaths.' },
-                { term: 'Refugee Crisis', definition: 'The largest mass migration in human history: approximately 14 million people crossed the new borders between India and Pakistan in 1947-48.' },
+                { term: 'Refugee Crisis', definition: 'One of the largest mass migrations in modern history: estimates suggest roughly 12–20 million people crossed the new borders between India and Pakistan in 1947–48.' },
                 { term: 'Princely States', definition: 'Approximately 565 semi-sovereign territories ruled by hereditary monarchs under British suzerainty, given the choice to accede to India or Pakistan in 1947.' },
                 { term: 'Standstill Agreement', definition: 'A temporary arrangement maintaining existing arrangements between a princely state and the new dominions pending final accession negotiations.' },
                 { term: 'United Nations Security Council Resolution 47', definition: 'The 1948 resolution establishing a UN Commission on Kashmir, calling for a ceasefire, Pakistani withdrawal, and a plebiscite on the state\'s future.' },
@@ -3300,7 +3300,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 { misconception: 'The tribal invasion was a spontaneous uprising of Pathan tribesmen acting alone.', correction: 'The invasion was planned and supported by Pakistan\'s political and military leadership.', explanation: 'Lamb and Jha\'s research demonstrates logistical coordination, arms supply, and the presence of Pakistani military personnel with the tribal forces.' },
                 { misconception: 'The Instrument of Accession was signed under duress and is therefore invalid.', correction: 'While signed under extreme military pressure, the accession was legally valid under the Indian Independence Act. The question is political, not strictly legal.', explanation: 'International law does not require accession to be free of pressure. The UN itself accepted India\'s right to administer Kashmir pending a plebiscite.' },
                 { misconception: 'India prevented the plebiscite because it knew it would lose.', correction: 'India\'s position was that Pakistan had not fulfilled the preconditions (withdrawal of forces) that the UN itself had established.', explanation: 'UNSCR 47 required Pakistan\'s withdrawal before the plebiscite. Pakistan never withdrew. India\'s objection was consistent with the UN resolution.' },
-                { misconception: 'The Line of Control is a temporary ceasefire line.', correction: 'The 1949 ceasefire line became the de facto permanent border, formalised as the LoC in the 1972 Simla Agreement.', explanation: 'What began as a temporary ceasefire line has been the border for 75+ years and has survived four wars and an insurgency.' },
+                { misconception: 'The Line of Control is a temporary ceasefire line.', correction: 'The 1949 ceasefire line was renamed the Line of Control under the 1972 Simla Agreement. It remains a line of control, not a mutually accepted final international border.', explanation: 'What began as a temporary ceasefire line has been the border for 75+ years and has survived four wars and an insurgency.' },
                 { misconception: 'Sheikh Abdullah was an Indian puppet.', correction: 'Abdullah had his own vision for Kashmir\'s autonomy and was imprisoned by India for 11 years (1953-1964) when he pursued independence.', explanation: 'Abdullah\'s relationship with India was complex — he chose accession to India but consistently demanded the autonomy guaranteed by Article 370 of the Indian Constitution.' },
               ],
               keyTerms: [
@@ -3357,7 +3357,7 @@ const indiaAndTheWorld: KnowledgeLibrary = {
                 { question: 'Why is the India-China border still unsettled after 75 years?', answer: 'Three structural reasons: irreconcilable territorial claims, strategic utility to both sides, and incompatible historical narratives. India sees the McMahon Line as a settled treaty; China sees it as a colonial imposition.', sources: ['s1', 's3'] },
                 { question: 'Could the 1962 war have been avoided?', answer: 'Scholars disagree. Maxwell argues India\'s Forward Policy provoked Chinese retaliation. The Indian official position holds that China planned to attack regardless. The evidence supports both interpretations.', sources: ['s12', 's1'] },
                 { question: 'Why did China withdraw in 1962?', answer: 'Two explanations: strategic (China demonstrated dominance without provoking wider war) and logistical (Chinese supply lines were overstretched). The evidence supports both.', sources: ['s12', 's5'] },
-                { question: 'Has the dispute management system worked?', answer: 'The 1993/1996 CBMs reduced crisis frequency for decades. But Galwan 2020 demonstrated the system\'s limits — the old model of managed conflict is no longer sufficient.', sources: ['s9', 's10'] },
+                { question: 'Has the dispute management system worked?', answer: 'The 1993/1996 CBMs reduced crisis frequency for decades. But Galwan 2020 demonstrated the system\'s limits — the old model of managed conflict is no longer sufficient.', sources: ['s9', 's19'] },
                 { question: 'Will the border ever be settled?', answer: 'A final settlement appears unlikely in the foreseeable future. Both sides\' positions are deeply entrenched, and neither can politically afford the concessions a settlement would require.', sources: ['s1', 's3', 's14'] },
               ],
               misconceptions: [
