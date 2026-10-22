@@ -1,15 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-const categoryFallback: Record<string, string> = {
-  economy: '/images/placeholders/economy-placeholder.svg',
-  technology: '/images/placeholders/technology-placeholder.svg',
-  environment: '/images/placeholders/environment-placeholder.svg',
-  education: '/images/placeholders/education-placeholder.svg',
-  policy: '/images/placeholders/policy-placeholder.svg',
-  investigation: '/images/placeholders/investigation-placeholder.svg',
-};
+import { getHeroImageFallbackPath } from '@/lib/image-intelligence/placeholder-fallback';
 
 interface StoryImageProps {
   src: string;
@@ -38,9 +30,7 @@ export default function StoryImage({
   const [hasError, setHasError] = useState(false);
 
   function getFallback(cat?: string): string {
-    if (cat && categoryFallback[cat]) return categoryFallback[cat];
-    if (cat === 'policy' || cat === 'investigation') return `/images/placeholders/${cat}-placeholder.svg`;
-    return '/images/placeholders/story-placeholder.svg';
+    return getHeroImageFallbackPath(cat);
   }
 
   function handleError() {
@@ -53,7 +43,7 @@ export default function StoryImage({
   const img = (
     <img
       src={imgSrc}
-      alt={alt}
+      alt={hasError ? '' : alt}
       className={className || undefined}
       style={style}
       width={fill ? undefined : width}
