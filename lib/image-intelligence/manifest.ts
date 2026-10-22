@@ -1,7 +1,7 @@
 export interface VerifiedImageRecord {
   storySlug: string;
   approvedImage: string;
-  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder';
+  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder' | 'editorial-illustration';
   provenance: string;
   license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR';
   description: string;
@@ -158,19 +158,19 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-indonesia-relations': {
     storySlug: 'india-indonesia-relations',
-    approvedImage: '/images/placeholders/policy-placeholder.svg',
-    assetType: 'branded-placeholder',
-    provenance: 'The Breakdown Editorial Graphics',
+    approvedImage: '/images/stories/india-indonesia-relations.svg',
+    assetType: 'editorial-illustration',
+    provenance: 'Original artwork created for The Breakdown',
     license: 'BRANDED_VECTOR',
-    description: 'Temporary generic geopolitics placeholder. Replace with a verified India-Indonesia diplomatic or maritime visual before publication.',
+    description: 'Original vector illustration of India and Indonesia connected by maritime trade routes, with national flags and a container ship; an editorial illustration, not a documentary photograph.',
   },
   'india-uk-relations': {
     storySlug: 'india-uk-relations',
-    approvedImage: '/images/placeholders/policy-placeholder.svg',
-    assetType: 'branded-placeholder',
-    provenance: 'The Breakdown Editorial Graphics',
+    approvedImage: '/images/stories/india-uk-relations.svg',
+    assetType: 'editorial-illustration',
+    provenance: 'Original artwork created for The Breakdown',
     license: 'BRANDED_VECTOR',
-    description: 'Temporary generic geopolitics placeholder. Replace with a verified India-UK diplomatic visual before publication.',
+    description: 'Original vector illustration of Indian and British flags, parliament silhouettes, a globe, and trade containers; an editorial illustration, not a documentary photograph.',
   },
   'india-europe-relations': {
     storySlug: 'india-europe-relations',
@@ -246,11 +246,11 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-ev-paradox': {
     storySlug: 'india-ev-paradox',
-    approvedImage: '/images/placeholders/environment-placeholder.svg',
-    assetType: 'branded-placeholder',
-    provenance: 'The Breakdown Editorial Graphics',
+    approvedImage: '/images/stories/india-ev-paradox.svg',
+    assetType: 'editorial-illustration',
+    provenance: 'Original artwork created for The Breakdown',
     license: 'BRANDED_VECTOR',
-    description: 'Temporary neutral placeholder for the EV charging and battery supply-chain investigation. Replace with a verified electric-vehicle, charging-station, or battery image before publication.',
+    description: 'Original vector illustration of EV charging infrastructure, a battery pack, and shipping containers; an editorial illustration, not a documentary photograph.',
   },
   'ng-ch-01-the-promise': {
     storySlug: 'ng-ch-01-the-promise',
