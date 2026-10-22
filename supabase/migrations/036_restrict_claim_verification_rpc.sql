@@ -20,7 +20,7 @@ BEGIN
   );
 
   IF function_signature IS NULL THEN
-    RAISE NOTICE 'Migration 033: claim verification RPC absent; no privilege changes required.';
+    RAISE NOTICE 'Migration 036: claim verification RPC absent; no privilege changes required.';
     RETURN;
   END IF;
 
