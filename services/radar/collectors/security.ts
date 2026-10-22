@@ -10,6 +10,9 @@
 
 import * as net from 'node:net';
 import * as dns from 'node:dns';
+import * as http from 'node:http';
+import * as https from 'node:https';
+import { Readable } from 'node:stream';
 
 export type DnsResolver = (hostname: string) => Promise<Array<{ address: string; family: number }>>;
 
@@ -342,6 +345,140 @@ export async function resolveDnsSafe(
   }
 }
 
+
+/**
+ * Build a resolver which pins Node's outbound socket lookup to the addresses
+ * already checked by resolveDnsSafe. This closes the gap where a second DNS
+ * lookup inside fetch() could resolve to a private/metadata address.
+ */
+export function createPinnedDnsLookup(
+  hostname: string,
+  approvedAddresses: Array<{ address: string; family: number }>
+): typeof dns.lookup {
+  const expectedHost = hostname.replace(/^\\[|\\]$/g, '').toLowerCase();
+  const safeAddresses = approvedAddresses.filter((entry) => isSafeIp(entry.address).safe);
+  if (safeAddresses.length === 0) {
+    throw new Error('SSRF blocked: no validated address available for pinned connection');
+  }
+
+  const lookup = ((
+    requestedHost: string,
+    options: unknown,
+    callback: (...args: any[]) => void
+  ) => {
+    const normalizedHost = requestedHost.replace(/^\\[|\\]$/g, '').toLowerCase();
+    if (normalizedHost !== expectedHost) {
+      callback(new Error('Pinned DNS lookup hostname mismatch'));
+      return;
+    }
+
+    const allRequested =
+      typeof options === 'object' &&
+      options !== null &&
+      'all' in options &&
+      (options as { all?: boolean }).all === true;
+
+    if (allRequested) {
+      callback(null, safeAddresses.map(({ address, family }) => ({ address, family })));
+      return;
+    }
+
+    const requestedFamily =
+      typeof options === 'number'
+        ? options
+        : typeof options === 'object' && options !== null && 'family' in options
+          ? Number((options as { family?: number }).family) || 0
+          : 0;
+    const chosen =
+      safeAddresses.find((entry) => requestedFamily === 0 || entry.family === requestedFamily) ??
+      safeAddresses[0];
+    callback(null, chosen.address, chosen.family);
+  }) as unknown as typeof dns.lookup;
+
+  return lookup;
+}
+
+async function requestWithPinnedDns(
+  url: URL,
+  init: SafeFetchOptions,
+  approvedAddresses: Array<{ address: string; family: number }>
+): Promise<Response> {
+  const method = (init.method || 'GET').toUpperCase();
+  const headers = new Headers(init.headers);
+  // The URL authority is canonical; a caller-supplied Host header must not override it.
+  headers.delete('host');
+
+  const nodeHeaders: Record<string, string> = {};
+  headers.forEach((value, key) => {
+    nodeHeaders[key] = value;
+  });
+  const lookup = createPinnedDnsLookup(url.hostname, approvedAddresses);
+
+  return await new Promise<Response>((resolve, reject) => {
+    let settled = false;
+    const finishWithError = (error: Error) => {
+      if (settled) return;
+      settled = true;
+      reject(error);
+    };
+
+    const onResponse = (incoming: http.IncomingMessage) => {
+      const responseHeaders = new Headers();
+      for (const [name, value] of Object.entries(incoming.headers)) {
+        if (typeof value === 'string') {
+          responseHeaders.append(name, value);
+        } else if (Array.isArray(value)) {
+          for (const item of value) responseHeaders.append(name, item);
+        }
+      }
+
+      const status = incoming.statusCode ?? 502;
+      const body =
+        method === 'HEAD' || status === 204 || status === 304
+          ? null
+          : (Readable.toWeb(incoming) as ReadableStream<Uint8Array>);
+      const response = new Response(body, {
+        status: status >= 200 && status <= 599 ? status : 502,
+        statusText: incoming.statusMessage,
+        headers: responseHeaders,
+      });
+      settled = true;
+      resolve(response);
+    };
+
+    const options: http.RequestOptions = {
+      method,
+      headers: nodeHeaders,
+      agent: false,
+      lookup,
+      signal: init.signal ?? undefined,
+      timeout: 15_000,
+      maxHeaderSize: 16 * 1024,
+    };
+    const req =
+      url.protocol === 'https:'
+        ? https.request(url, options, onResponse)
+        : http.request(url, options, onResponse);
+
+    req.on('error', finishWithError);
+    req.on('timeout', () => req.destroy(new Error('Radar outbound request timed out')));
+
+    if (init.body != null) {
+      const body = init.body;
+      if (typeof body === 'string' || Buffer.isBuffer(body) || body instanceof Uint8Array) {
+        req.write(body);
+      } else if (body instanceof URLSearchParams) {
+        req.write(body.toString());
+      } else {
+        req.destroy(new Error('Pinned Radar requests do not support streaming request bodies'));
+        return;
+      }
+    }
+
+    req.end();
+  });
+}
+
 export interface SafeFetchOptions extends RequestInit {
   maxRedirects?: number;
   dnsResolver?: DnsResolver;
@@ -382,12 +519,15 @@ export async function safeFetch(
       throw new Error(`SSRF blocked: ${dnsCheck.reason}`);
     }
 
-    // 3. Perform Fetch with redirect: 'manual'
-    const fetchToUse = customFetch || fetch;
-    const response = await fetchToUse(currentUrl.toString(), {
-      ...init,
-      redirect: 'manual',
-    });
+    // 3. Pin the production socket to one of the validated DNS answers.
+    // Custom fetch functions are explicit test/dependency-injection seams; the
+    // default production transport never performs a second uncontrolled lookup.
+    const response = customFetch
+      ? await customFetch(currentUrl.toString(), {
+          ...init,
+          redirect: 'manual',
+        })
+      : await requestWithPinnedDns(currentUrl, init ?? {}, dnsCheck.addresses ?? []);
 
     // 4. Handle Redirects
     if (response.status >= 300 && response.status < 400 && response.headers.has('location')) {
