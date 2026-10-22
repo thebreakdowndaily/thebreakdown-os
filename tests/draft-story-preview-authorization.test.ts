@@ -75,7 +75,7 @@ describe('unpublished story page authorization', () => {
     ['guest account', principal('guest')],
     ['reporter account', principal('reporter')],
     ['suspended editor', principal('editor', 'suspended')],
-  ])('returns not-found for a draft requested by %s', async (_label, caller) => {
+  ] as const)('returns not-found for a draft requested by %s', async (_label, caller) => {
     state.getCurrentPrincipal.mockResolvedValue(caller);
 
     await expect(
