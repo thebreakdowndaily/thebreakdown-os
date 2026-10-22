@@ -1,6 +1,7 @@
 import type { Story } from '@/types/canonical';
 import { matchImageToStoryContext } from './context-matcher';
 import { getManifestEntry } from './manifest';
+import { validateImageFile } from './asset-validator';
 
 export interface HeroImageContextValidation {
   passed: boolean;
@@ -22,6 +23,20 @@ export function validateHeroImageContext(story: Pick<
     return { passed: true, skipped: true, reason: 'No hero image assigned; image-context check skipped.' };
   }
 
+  // Local public paths must resolve to a real, decodable image. This catches
+  // stale URLs that would otherwise publish a broken image and broken fallback.
+  // Remote URLs are not fetched at publication time; they still require context match.
+  if (image.startsWith('/')) {
+    const asset = validateImageFile(image);
+    if (!asset.isValid) {
+      return {
+        passed: false,
+        skipped: false,
+        reason: `Hero image asset invalid: ${asset.error || 'unrecognized image asset'}`,
+      };
+    }
+  }
+
   const match = matchImageToStoryContext(image, {
     slug: story.slug,
     title: story.title,
@@ -36,7 +51,7 @@ export function validateHeroImageContext(story: Pick<
     passed: match.isMatch,
     skipped: false,
     reason: match.isMatch
-      ? `Hero image passed story-context check (${match.matchType}): ${match.reason}`
+      ? `Hero image passed asset and story-context checks (${match.matchType}): ${match.reason}`
       : `Hero image context mismatch: ${match.reason}`,
   };
 }
