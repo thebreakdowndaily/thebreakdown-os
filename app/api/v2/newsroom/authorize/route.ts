@@ -5,6 +5,7 @@ import { INTEL_ROLE_ORDER } from '@/features/auth/roles';
 import { beatRoutingService } from '@/services/intelligence/newsroom/beat-routing-service';
 import { newsroomIntelligenceCore } from '@/services/intelligence/newsroom';
 import { Phase2Authorization } from '@/types/newsroom-intelligence';
+import { NewsroomPersistenceError } from '@/services/intelligence/newsroom/persistence/state';
 
 /**
  * POST /api/v2/newsroom/authorize
@@ -43,7 +44,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  await newsroomIntelligenceCore.ensureLoaded();
+  try {
+    await newsroomIntelligenceCore.ensureLoaded();
+  } catch (error: unknown) {
+    console.error('[NewsroomAuthorize] durable state unavailable:', error instanceof Error ? error.name : 'unknown');
+    return NextResponse.json(
+      { error: 'Newsroom authorization state is unavailable; no change was applied.' },
+      { status: 503 }
+    );
+  }
+
+  const previousRoutingState = beatRoutingService.snapshot();
 
   const rawBody = (await req.json()) as unknown;
   if (rawBody === null || typeof rawBody !== 'object') {
@@ -80,7 +91,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     beatRoutingService.deauthorizePhase2();
   }
 
-  newsroomIntelligenceCore.persist();
+  try {
+    await newsroomIntelligenceCore.persistAsync();
+  } catch (error: unknown) {
+    // Do not leave Phase 2 enabled in memory when its authorization record
+    // could not be durably committed.
+    beatRoutingService.restore(previousRoutingState);
+    if (error instanceof NewsroomPersistenceError) {
+      console.error('[NewsroomAuthorize] durable write failed:', error.code);
+    } else {
+      console.error('[NewsroomAuthorize] durable write failed:', error instanceof Error ? error.name : 'unknown');
+    }
+    return NextResponse.json(
+      { error: 'Newsroom authorization could not be durably saved; no change was applied.' },
+      { status: 503 }
+    );
+  }
 
   return NextResponse.json({
     action,
