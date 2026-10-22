@@ -82,8 +82,8 @@ const publicationFixture: Story = {
   title: 'India-Indonesia relations',
   headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific',
   summary: 'A review of maritime security, trade and diplomacy.',
-  heroImage: '/images/stories/india-europe-relations.jpg',
-  heroImageAlt: 'An image of an India-Europe summit',
+  heroImage: '/images/placeholders/economy-placeholder.svg',
+  heroImageAlt: 'A generic economy illustration',
   heroImageIsDecorative: false,
   author: 'The Breakdown Editorial',
   category: 'geopolitics',
@@ -111,7 +111,7 @@ const badPublication = validateStoryForPublication(publicationInput, publication
 assert.equal(
   badPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
   false,
-  'publication gate must reject an EU image assigned to an India-Indonesia story',
+  'publication gate must reject a valid but off-topic economy placeholder assigned to an India-Indonesia story',
 );
 const goodPublication = validateStoryForPublication(publicationInput, {
   ...publicationFixture,
