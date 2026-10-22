@@ -5111,13 +5111,35 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
   const s = getStore();
   const nodes: Map<string, APIGraphNode> = new Map();
   const links: APIGraphLink[] = [];
+  const now = new Date();
 
-  // Build graph from story ↔ entity relationships
+  // A public graph may only be rooted in public stories. This raw data-layer
+  // graph is consumed independently of the canonical service repository, so
+  // enforce the publication boundary here as well as at API routes.
   s.stories.forEach((story) => {
-    nodes.set(story.slug, { id: story.slug, label: story.headline.slice(0, 40), type: 'story', group: story.category, size: story.evidenceScore / 10 });
+    if (
+      (story as APIStory & { isTestArtifact?: boolean }).isTestArtifact === true ||
+      !storyIsPublic(story, now)
+    ) {
+      return;
+    }
+
+    nodes.set(story.slug, {
+      id: story.slug,
+      label: story.headline.slice(0, 40),
+      type: 'story',
+      group: story.category,
+      size: story.evidenceScore / 10,
+    });
 
     story.relatedEntities.forEach((re) => {
-      nodes.set(re.id, { id: re.id, label: re.name, type: re.type, group: re.type, size: re.type === 'country' ? 15 : 8 });
+      nodes.set(re.id, {
+        id: re.id,
+        label: re.name,
+        type: re.type,
+        group: re.type,
+        size: re.type === 'country' ? 15 : 8,
+      });
       if (params.type && re.type !== params.type) return;
       links.push({ source: story.slug, target: re.id, type: 'mentions', weight: 3 });
     });
@@ -5135,11 +5157,21 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
     }
   });
 
-  // Entity ↔ entity links
+  // Do not create edges into entities that are absent from the public-story
+  // projection; those edges would otherwise leak unpublished entity IDs.
   s.entities.forEach((entity) => {
+    if (!nodes.has(entity.id)) return;
     entity.relatedEntities.forEach((re) => {
+      if (!nodes.has(re.id)) return;
       if (!params.type || entity.type === params.type || re.type === params.type) {
-        links.push({ source: entity.id, sourceType: entity.type, target: re.id, targetType: re.type, type: 'relates-to', weight: 2 });
+        links.push({
+          source: entity.id,
+          sourceType: entity.type,
+          target: re.id,
+          targetType: re.type,
+          type: 'relates-to',
+          weight: 2,
+        });
       }
     });
   });
@@ -5147,7 +5179,7 @@ export function getGraph(params: { type?: string; entity?: string } = {}): APIGr
   return {
     nodes: Array.from(nodes.values()),
     links: links.filter((l, i, arr) => {
-      // Deduplicate links
+      // Deduplicate links.
       return i === arr.findIndex((l2) => l2.source === l.source && l2.target === l.target);
     }),
   };

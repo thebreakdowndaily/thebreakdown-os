@@ -21,13 +21,17 @@ export async function GET(req: NextRequest) {
   const services = await bootstrapServices();
 
   const [storiesRes, topicsRes, entitiesRes, timelinesRes] = await Promise.all([
-    services.stories.getStories({ pageSize: 1000 }).catch(() => ({ data: [] })),
+    services.stories.getPublicStories({ pageSize: 1000 }).catch(() => ({ data: [] })),
     services.topics.getTopics({ pageSize: 1000 }).catch(() => ({ data: [] })),
     services.entities.getEntities({ pageSize: 1000 }).catch(() => ({ data: [] })),
     services.timelines.getTimelines({ pageSize: 1000 }).catch(() => ({ data: [] }))
   ]);
 
-  const stories = storiesRes.data || [];
+  // Defense in depth for any legacy repository adapter: quarantined artifacts
+  // must not leak via story, claim, source, or evidence search results.
+  const stories = (storiesRes.data || []).filter(
+    (story) => story.isTestArtifact !== true,
+  );
   const topics = topicsRes.data || [];
   const entities = entitiesRes.data || [];
   const timelines = timelinesRes.data || [];
