@@ -85,7 +85,7 @@ export const tryLoadChapter = cache(async function tryLoadChapter(slug: string):
     for (const library of libraries) {
       for (const c of library.collections) {
       for (const v of c.volumes) {
-        const ch = v.chapters.find((ch) => isPublicChapterStatus(ch.status) && (ch.slug === slug || ch.title === slug || ch.title.toLowerCase() === slug.toLowerCase()));
+        const ch = v.chapters.find((ch) => ch.slug === slug || ch.title === slug || ch.title.toLowerCase() === slug.toLowerCase());
         if (ch) {
           let nextChapter = null;
           if (ch.recommendedNext && ch.recommendedNext.length > 0) {
@@ -98,9 +98,12 @@ export const tryLoadChapter = cache(async function tryLoadChapter(slug: string):
           }
 
           const services = bootstrapServices({ publicOnly: true });
-          const { data: investigations } = await services.investigations.getInvestigations();
-          const relatedInvestigation =
-            investigations.find((inv) => inv.chapters.some((ich) => ich.storySlug === slug)) || null;
+          let relatedInvestigation = null;
+          if (services?.investigations?.getInvestigations) {
+            const { data: investigations } = await services.investigations.getInvestigations();
+            relatedInvestigation =
+              investigations?.find((inv: any) => inv.chapters?.some((ich: any) => ich.storySlug === slug)) || null;
+          }
 
           return {
             chapter: ch,
@@ -130,7 +133,7 @@ export function selectReadPath(slug: string): ReadPath {
   return 'legacy';
 }
 
-export async function resolveCanonicalStory(slug: string): Promise<StoryResolution> {
+export async function resolveCanonicalStory(slug: string, options?: { publicOnly?: boolean }): Promise<StoryResolution> {
   const flagState = getFeatureFlags().CANONICAL_READ_PATH;
   const chapterData = await tryLoadChapter(slug);
   if (!chapterData) {
@@ -157,11 +160,27 @@ export async function resolveCanonicalStory(slug: string): Promise<StoryResoluti
   }
 
   const { chapter, collectionSlug, volumeSlug, nextChapter, relatedInvestigation } = chapterData;
+
+  if (options?.publicOnly && !isPublicChapterStatus(chapter.status)) {
+    logResolverTelemetry({
+      event: 'story_read_resolution',
+      slug,
+      flag: flagState,
+      path: 'canonical',
+      chapterFound: true,
+      claimCount: 0,
+      evidenceCount: 0,
+      resolution: 'not_found',
+      fallbackUsed: false,
+    });
+    return { type: 'not_found' };
+  }
   const core = getKnowledgeCore();
   const conceptClaimIds =
     chapter.relatedConceptIds?.flatMap((cid) => core.claims.byConcept(cid)).map((c) => c.id) || [];
   
-  const inlineClaimIds = chapter.content
+  const chapterContent = chapter.content || [];
+  const inlineClaimIds = chapterContent
     .filter((b) => b.type === 'claim' && b.data?.claimId)
     .map((b) => b.data.claimId as string);
 
@@ -170,10 +189,10 @@ export async function resolveCanonicalStory(slug: string): Promise<StoryResoluti
     .map((id) => enrichClaimLazy(id))
     .filter(Boolean) as NonNullable<ReturnType<typeof enrichClaimLazy>>[];
 
-  const claimCount = enrichedClaims.length > 0 ? enrichedClaims.length : chapter.content.filter((b) => b.type === 'claim').length;
-  const evidenceCount = enrichedClaims.reduce((acc, c) => acc + (c.evidence?.length || 0), 0) + chapter.content.filter((b) => b.type === 'evidence-summary').length;
-  const thinkerCount = chapter.content.filter((b) => b.type === 'thinker').length;
-  const documentCount = chapter.content.filter((b) => b.type === 'document').length;
+  const claimCount = enrichedClaims.length > 0 ? enrichedClaims.length : chapterContent.filter((b) => b.type === 'claim').length;
+  const evidenceCount = enrichedClaims.reduce((acc, c) => acc + (c.evidence?.length || 0), 0) + chapterContent.filter((b) => b.type === 'evidence-summary').length;
+  const thinkerCount = chapterContent.filter((b) => b.type === 'thinker').length;
+  const documentCount = chapterContent.filter((b) => b.type === 'document').length;
 
   const canonicalStory = chapterToCanonicalAdapter(chapter);
   canonicalStory.claims = enrichedClaims.map(c => ({
@@ -279,11 +298,11 @@ export async function resolveLegacyStory(slug: string): Promise<StoryResolution>
   };
 }
 
-export async function resolveStory(slug: string): Promise<StoryResolution> {
+export async function resolveStory(slug: string, options?: { publicOnly?: boolean }): Promise<StoryResolution> {
   const path = selectReadPath(slug);
   
   if (path === 'canonical') {
-    return resolveCanonicalStory(slug);
+    return resolveCanonicalStory(slug, options);
   }
   
   return resolveLegacyStory(slug);

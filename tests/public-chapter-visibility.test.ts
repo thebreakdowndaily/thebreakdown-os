@@ -2,12 +2,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => {
   const chapters = [
-    { id: 'published-chapter-id', slug: 'published-chapter', title: 'Published chapter', status: 'published', order: 1 },
-    { id: 'verified-chapter-id', slug: 'verified-chapter', title: 'Verified chapter', status: 'verified', order: 2 },
-    { id: 'draft-chapter-id', slug: 'draft-chapter', title: 'Draft chapter', status: 'draft', order: 3 },
-    { id: 'review-chapter-id', slug: 'review-chapter', title: 'Review chapter', status: 'review', order: 4 },
-    { id: 'archived-chapter-id', slug: 'archived-chapter', title: 'Archived chapter', status: 'archived', order: 5 },
-    { id: 'updated-chapter-id', slug: 'updated-chapter', title: 'Updated but unapproved chapter', status: 'updated', order: 6 },
+    { id: 'published-chapter-id', slug: 'published-chapter', title: 'Published chapter', status: 'published', order: 1, content: [] },
+    { id: 'verified-chapter-id', slug: 'verified-chapter', title: 'Verified chapter', status: 'verified', order: 2, content: [] },
+    { id: 'draft-chapter-id', slug: 'draft-chapter', title: 'Draft chapter', status: 'draft', order: 3, content: [] },
+    { id: 'review-chapter-id', slug: 'review-chapter', title: 'Review chapter', status: 'review', order: 4, content: [] },
+    { id: 'archived-chapter-id', slug: 'archived-chapter', title: 'Archived chapter', status: 'archived', order: 5, content: [] },
+    { id: 'updated-chapter-id', slug: 'updated-chapter', title: 'Updated but unapproved chapter', status: 'updated', order: 6, content: [] },
   ];
   const libraries = [{
     id: 'test-library',
@@ -60,6 +60,7 @@ vi.mock('@/lib/knowledge/knowledge-core', () => ({
 }));
 
 import { getAllStoryAndChapterSlugs, resolveCanonicalStory } from '@/lib/story/resolver';
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
 
 describe('Public chapter visibility boundary', () => {
   beforeEach(() => {
@@ -90,8 +91,18 @@ describe('Public chapter visibility boundary', () => {
     expect(actual.has('updated-chapter')).toBe(false);
   });
 
-  it('returns not_found when a direct canonical request targets a non-public chapter', async () => {
-    const result = await resolveCanonicalStory('draft-chapter');
+  it('returns not_found when a public canonical request targets a non-public chapter', async () => {
+    const result = await resolveCanonicalStory('draft-chapter', { publicOnly: true });
     expect(result).toEqual({ type: 'not_found' });
+  });
+
+  it('marks non-public chapter as non-public when resolved canonically without publicOnly filter', async () => {
+    const result = await resolveCanonicalStory('draft-chapter');
+    expect(result.type).toBe('chapter');
+    if (result.type === 'chapter') {
+      expect(result.chapter.status).toBe('draft');
+      expect(result.canonicalStory.publicationStatus).toBe('draft');
+      expect(isCanonicalStoryPublic(result.canonicalStory)).toBe(false);
+    }
   });
 });
