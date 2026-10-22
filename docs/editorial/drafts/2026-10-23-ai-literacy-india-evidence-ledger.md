@@ -13,7 +13,7 @@
 |---|---|---|---|---|
 | AI-01 | BaSE 2025 covered 12,500 households and 2,500 teachers in ten states, focusing on low-income settings | CSF report page and BaSE report | Institutional report / sample description | State scope; do not call it a census of all Indian students |
 | AI-02 | Among EdTech-using children, 50% had heard of GenAI, 44% knew of its learning use, and 35% used it for learning | BaSE report, executive summary of the PDF | Descriptive survey findings | Keep the EdTech-using denominator visible |
-| AI-03 | Among children aware of GenAI, 85% said they understood how it worked and 72% mistook it for an internet-search application | BaSE report, PDF page 9 | Self-reported survey responses | Explicitly state that this was not a technical skills test |
+| AI-03 | Among children aware of GenAI, 85% said they understood how it worked and 72% mistook it for an internet-search application | BaSE report, executive summary | Self-reported survey responses | Explicitly state that this was not a technical skills test |
 | AI-04 | Among GenAI-using children, 69% reported daily use; 96% used it multiple times a week | BaSE report, PDF page 9 | Descriptive survey findings | Denominator is GenAI-using children |
 | AI-05 | Peer introduction: 68%; school/teacher discovery: 46% | BaSE report, PDF page 9 | Self-reported discovery channels | Channels may overlap; do not treat as exclusive |
 | AI-06 | 73% used GenAI for doubt-solving/practice; 48% for language/skill learning or translation; 32% for test preparation | BaSE report, PDF page 9 | Self-reported use cases | Multiple responses possible; do not sum |
