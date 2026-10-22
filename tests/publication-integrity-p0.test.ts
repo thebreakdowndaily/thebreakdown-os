@@ -61,7 +61,7 @@ function createValidStory(status: Story['status'] = 'scheduled'): Story {
     slug: 'valid-tested-story',
     headline: 'Valid Headline',
     summary: 'Comprehensive editorial summary meeting standard.',
-    heroImage: '/images/hero.jpg',
+    heroImage: '',
     author: 'Chief Editor',
     category: 'governance',
     status,

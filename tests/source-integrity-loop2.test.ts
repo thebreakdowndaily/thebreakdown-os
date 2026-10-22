@@ -166,7 +166,7 @@ function createCanaryStory(status: Story['status'] = 'scheduled'): Story {
     slug: 'canary-source-provenance',
     headline: 'Canary Headline',
     summary: 'Canary summary meeting editorial guidelines.',
-    heroImage: '/images/hero.jpg',
+    heroImage: '',
     author: 'Editorial Desk',
     category: 'governance',
     status,

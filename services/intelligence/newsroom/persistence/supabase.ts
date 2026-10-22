@@ -86,42 +86,44 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
-      console.warn(
-        '[SupabaseStateRepository] Supabase client unavailable: falling back to read-only degraded mode.'
-      );
       this._isDegradedReadOnly = true;
-      return null;
+      throw new NewsroomPersistenceError(
+        'Supabase client unavailable: durable newsroom state cannot be loaded.',
+        'PERSISTENCE_NOT_CONFIGURED'
+      );
     }
-
     try {
       const { data, error } = await this.client
         .from('pipeline_metrics')
         .select('metric_value, metadata')
         .eq('id', SNAPSHOT_ROW_ID)
         .maybeSingle();
-
       if (error) {
-        console.warn('[SupabaseStateRepository] Load failure, enabling read-only degraded mode:', error.message);
         this._isDegradedReadOnly = true;
-        return null;
+        throw new NewsroomPersistenceError(
+          `Newsroom state load failed: ${error.message || 'database query failed'}`,
+          'PERSISTENCE_LOAD_FAILED'
+        );
       }
-
       if (data && data.metadata) {
         this.lastLoadedVersion = Number(data.metric_value) || 0;
         this.cachedState = data.metadata as NewsroomPersistedState;
         this._isDegradedReadOnly = false;
         return this.cachedState;
       }
-
-      // No row found: empty initial table state, but client is healthy
+      // Only a successful query with no snapshot is treated as first-run state.
       this._isDegradedReadOnly = false;
       return null;
-    } catch (err) {
-      console.warn('[SupabaseStateRepository] Load exception, enabling read-only degraded mode:', err);
+    } catch (error) {
       this._isDegradedReadOnly = true;
-      return null;
+      if (error instanceof NewsroomPersistenceError) throw error;
+      throw new NewsroomPersistenceError(
+        `Newsroom state load failed: ${error instanceof Error ? error.message : 'unknown database error'}`,
+        'PERSISTENCE_LOAD_FAILED'
+      );
     }
   }
+
 
   async save(state: NewsroomPersistedState): Promise<void> {
     if (this._isDegradedReadOnly || !this.client) {
