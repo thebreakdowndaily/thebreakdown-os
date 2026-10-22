@@ -114,9 +114,10 @@ export function createMockCorrectionsClient(options: {
     stories: [
       { id: '11111111-1111-1111-1111-111111111111', slug: 'india-china-border-lac' },
       { id: '22222222-2222-2222-2222-222222222222', slug: 'kashmir-the-first-test' },
-      { id: '33333333-3333-3333-3333-333333333333', slug: 'the-partition-and-its-legacies' },
+      { id: 'story-vol1-chap1', slug: 'the-partition-and-its-legacies' },
       { id: '44444444-4444-4444-4444-444444444444', slug: 'electoral-bonds' },
       { id: '55555555-5555-5555-5555-555555555555', slug: 'mgnrega-reform' },
+      { id: 'investigation-01', slug: 'investigation-01' },
     ],
     corrections: [],
   };
