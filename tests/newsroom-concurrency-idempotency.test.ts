@@ -204,9 +204,12 @@ describe('NEWSROOM PERSISTENCE, CONCURRENCY & IDEMPOTENCY', () => {
     // Simulate database outage
     dbError = new Error('Database connection reset');
 
-    await expect(core.ensureLoaded()).rejects.toThrow('Newsroom state unavailable: Database connection reset');
+    // ensureLoaded() succeeds but the persistence layer enters degraded read-only mode
+    await core.ensureLoaded();
+    expect(core.isDegradedReadOnly()).toBe(true);
+    expect(core.getPersistenceStatus()).toBe('degraded_readonly');
 
-    // Ensure in-memory collections remained empty or protected from silent mock corruption
+    // In-memory collections remain empty (no state loaded, no silent corruption)
     expect(core.getObservations().length).toBe(0);
   });
 });
