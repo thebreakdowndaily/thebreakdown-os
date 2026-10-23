@@ -2,7 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { bootstrapServices } from '@/services/bootstrap';
-import { resolveCMSHeroImage, resolveCMSHeroMetadata } from '@/lib/editorial/cms-hero-image';
+import { resolveCMSHeroContent, resolveCMSHeroImage, resolveCMSHeroMetadata } from '@/lib/editorial/cms-hero-image';
 import type { CMSStory } from '@/utils/cms-data';
 import type { Story, StoryBlock } from '@/types/canonical';
 import { getCurrentPrincipal } from '@/features/auth/principal';
@@ -24,10 +24,17 @@ export async function saveStoryAction(cmsStory: CMSStory) {
   // Keep the canonical field in sync; a blank value in an existing hero block clears it,
   // while legacy stories without a hero block preserve their already-saved image.
   const heroImage = resolveCMSHeroImage(cmsStory.blocks, existing?.heroImage || '');
+  const heroContent = resolveCMSHeroContent(cmsStory.blocks, {
+    headline: existing?.headline && existing.headline !== existing.title ? existing.headline : cmsStory.title,
+    summary: existing?.summary ?? '',
+    category: existing?.category ?? '',
+    author: existing?.author || principal.name,
+  });
   const heroMetadata = resolveCMSHeroMetadata(
     cmsStory.blocks,
     existing?.heroImageAlt || '',
     existing?.heroImageIsDecorative || false,
+    existing?.heroImage || '',
   );
 
   const updatedStory: Story = {
@@ -43,13 +50,13 @@ export async function saveStoryAction(cmsStory: CMSStory) {
     createdAt: existing?.createdAt || new Date().toISOString(),
     
     // Default fallback for missing fields if this is a new story
-    headline: cmsStory.title,
-    summary: existing?.summary || '',
+    headline: heroContent.headline || cmsStory.title,
+    summary: heroContent.summary,
     heroImage,
     heroImageAlt: heroMetadata.heroImageAlt,
     heroImageIsDecorative: heroMetadata.heroImageIsDecorative,
-    author: existing?.author || principal.name,
-    category: existing?.category || '',
+    author: heroContent.author || principal.name,
+    category: heroContent.category,
     evidenceScore: existing?.evidenceScore || 0,
     readingTime: existing?.readingTime || 0,
     publishedAt: existing?.publishedAt || '',

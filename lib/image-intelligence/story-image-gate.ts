@@ -23,11 +23,22 @@ export function validateHeroImageContext(story: Pick<
     return { passed: true, skipped: true, reason: 'No hero image assigned; image-context check skipped.' };
   }
 
-  if (story.heroImageIsDecorative !== true && !(typeof story.heroImageAlt === 'string' && story.heroImageAlt.trim())) {
+  const altText = typeof story.heroImageAlt === 'string' ? story.heroImageAlt.trim() : '';
+  const isDecorative = story.heroImageIsDecorative === true;
+  const genericAlt = /^(?:image|photo|picture|hero image|mock alt text|placeholder)(?:\\s+\\d+)?[.!]?$/i.test(altText);
+
+  if (isDecorative && altText) {
     return {
       passed: false,
       skipped: false,
-      reason: 'Informative hero images require meaningful alt text; mark the image decorative only when it conveys no additional information.',
+      reason: 'Decorative hero images must use empty alt text.',
+    };
+  }
+  if (!isDecorative && (altText.length < 12 || genericAlt)) {
+    return {
+      passed: false,
+      skipped: false,
+      reason: 'Informative hero images require descriptive alt text of at least 12 characters; mark the image decorative only when it conveys no additional information.',
     };
   }
 

@@ -29,7 +29,7 @@ const CATEGORY_PLACEHOLDER_MAP: Record<string, string> = {
   climate: 'environment-placeholder.svg',
   policy: 'policy-placeholder.svg',
   politics: 'policy-placeholder.svg',
-  governance: 'governance-placeholder.svg',
+  governance: 'policy-placeholder.svg',
   institutions: 'governance-placeholder.svg',
   geopolitics: 'policy-placeholder.svg',
   diplomacy: 'policy-placeholder.svg',
@@ -171,7 +171,7 @@ export function matchImageToStoryContext(
     (story.slug === 'india-china-relations' && imagePath.includes('india-china-border-tensions')) ||
     (story.slug === 'fix-air-pollution' && imagePath.includes('climate-finance'));
 
-  if (overlapCount >= 1 || isSynergistic) {
+  if (overlapCount >= 2 || isSynergistic) {
     return {
       isMatch: true,
       aligned: true,

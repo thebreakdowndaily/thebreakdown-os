@@ -18,8 +18,20 @@ export interface ImageFileValidationResult {
  * truncated file, or corrupt text response.
  */
 export function validateImageFile(relativePath: string, rootDir: string = process.cwd()): ImageFileValidationResult {
-  const cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
-  const fullPath = path.join(rootDir, 'public', cleanPath);
+  const publicDir = path.resolve(rootDir, 'public');
+  const cleanPath = relativePath.replace(/\\/g, '/').replace(/^\\/+/, '');
+  const fullPath = path.resolve(publicDir, cleanPath);
+  const isInsidePublic = fullPath !== publicDir && fullPath.startsWith(`${publicDir}${path.sep}`);
+
+  if (!isInsidePublic) {
+    return {
+      isValid: false,
+      valid: false,
+      format: 'unknown',
+      sizeBytes: 0,
+      error: `Image path resolves outside public directory: ${relativePath}`,
+    };
+  }
 
   if (!fs.existsSync(fullPath)) {
     return {
@@ -28,6 +40,19 @@ export function validateImageFile(relativePath: string, rootDir: string = proces
       format: 'unknown',
       sizeBytes: 0,
       error: `File does not exist on disk: ${cleanPath}`,
+    };
+  }
+
+  // Check symlink targets too: a symlink inside public/ must not expose a non-public file.
+  const realPublicDir = fs.realpathSync(publicDir);
+  const realFilePath = fs.realpathSync(fullPath);
+  if (realFilePath === realPublicDir || !realFilePath.startsWith(`${realPublicDir}${path.sep}`)) {
+    return {
+      isValid: false,
+      valid: false,
+      format: 'unknown',
+      sizeBytes: 0,
+      error: `Image path resolves outside public directory: ${relativePath}`,
     };
   }
 

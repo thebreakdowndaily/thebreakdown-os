@@ -55,6 +55,26 @@ assert.equal(
   true,
   'an explicitly registered neutral category placeholder is acceptable until a verified image is sourced',
 );
+assert.equal(
+  matchImageToStoryContext('/images/stories/global-trade.jpg', {
+    slug: 'regional-policy-reform',
+    headline: 'Regional public policy reform',
+    category: 'policy',
+    tags: ['trade'],
+  }, getManifestEntry).isMatch,
+  false,
+  'one generic shared word such as trade must not prove that an image matches a story',
+);
+assert.equal(
+  validateImageFile('/../package.json').isValid,
+  false,
+  'asset validation must reject paths that resolve outside public/',
+);
+assert.match(
+  validateImageFile('/../package.json').error || '',
+  /outside public directory/i,
+  'path traversal is rejected before a filesystem target is inspected',
+);
 
 
 const seededStories = getStories({ pageSize: 1000 }).data;
@@ -145,10 +165,33 @@ assert.equal(
   true,
   'publication gate may accept an explicitly decorative hero image without alt text',
 );
+const genericAltPublication = validateStoryForPublication(publicationInput, {
+  ...publicationFixture,
+  heroImage: '/images/stories/india-indonesia-relations.svg',
+  heroImageAlt: 'Mock alt text',
+  heroImageIsDecorative: false,
+}, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  genericAltPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
+  false,
+  'publication gate must reject generic placeholder alt text',
+);
+const conflictingDecorativeAlt = validateStoryForPublication(publicationInput, {
+  ...publicationFixture,
+  heroImage: '/images/stories/india-indonesia-relations.svg',
+  heroImageAlt: 'A descriptive alt text that should not be used for a decorative image.',
+  heroImageIsDecorative: true,
+}, new Date('2026-10-22T00:00:00.000Z'));
+assert.equal(
+  conflictingDecorativeAlt.checks.find((check) => check.name === 'hero_image_integrity')?.passed,
+  false,
+  'decorative images must not carry descriptive alt text',
+);
 const missingAssetPublication = validateStoryForPublication(publicationInput, {
   ...publicationFixture,
   heroImage: '/images/stories/does-not-exist.jpg',
   heroImageAlt: 'Story-specific editorial image that is missing from the repository.',
+  heroImageIsDecorative: false,
 }, new Date('2026-10-22T00:00:00.000Z'));
 assert.equal(
   missingAssetPublication.checks.find((check) => check.name === 'hero_image_integrity')?.passed,

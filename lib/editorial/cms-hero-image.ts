@@ -18,23 +18,35 @@ export interface CMSHeroMetadata {
   heroImageIsDecorative: boolean;
 }
 
+export interface CMSHeroContentFields {
+  headline: string;
+  summary: string;
+  category: string;
+  author: string;
+}
+
 /**
  * The canonical model stores hero data on Story fields, while the CMS editor
  * exposes it as a hero block. Synthesize that block for legacy stories and
- * hydrate missing accessibility fields from the canonical record.
+ * hydrate accessibility metadata only when it belongs to the same image.
  */
 export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Block[] {
   const existingHero = blocks.find((block) => block.type === 'hero');
   if (existingHero) {
     const existingData = existingHero.data as HeroBlockData;
+    const blockImage = typeof existingData.heroImage === 'string' ? existingData.heroImage.trim() : '';
+    const canonicalImage = (story.heroImage || '').trim();
+    const canonicalMetadataMatches = !canonicalImage || !blockImage || canonicalImage === blockImage;
     const data: HeroBlockData = {
       ...existingData,
-      heroImageAlt: typeof existingData.heroImageAlt === 'string'
-        ? existingData.heroImageAlt
-        : (story.heroImageAlt || ''),
-      heroImageIsDecorative: typeof existingData.heroImageIsDecorative === 'boolean'
-        ? existingData.heroImageIsDecorative
-        : (story.heroImageIsDecorative ?? false),
+      // If the URL disagrees with the canonical record, never attach its old
+      // image description/decorative state to the selected asset.
+      heroImageAlt: canonicalMetadataMatches
+        ? (typeof existingData.heroImageAlt === 'string' ? existingData.heroImageAlt : (story.heroImageAlt || ''))
+        : '',
+      heroImageIsDecorative: canonicalMetadataMatches
+        ? (typeof existingData.heroImageIsDecorative === 'boolean' ? existingData.heroImageIsDecorative : (story.heroImageIsDecorative ?? false))
+        : false,
     };
     return blocks.map((block) => block.id === existingHero.id ? { ...block, data } : block);
   }
@@ -56,10 +68,7 @@ export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Bl
   ];
 }
 
-/**
- * Resolve the canonical reader-facing hero image from the CMS hero block.
- * A story without a hero block keeps the image already stored on its record.
- */
+/** The hero block is authoritative when present; legacy records retain their canonical image. */
 export function resolveCMSHeroImage(blocks: Block[], existingHeroImage = ''): string {
   const heroBlock = blocks.find((block) => block.type === 'hero');
   if (!heroBlock) return existingHeroImage;
@@ -68,15 +77,38 @@ export function resolveCMSHeroImage(blocks: Block[], existingHeroImage = ''): st
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
+/** Resolve the content fields exposed by HeroBlock into canonical Story fields. */
+export function resolveCMSHeroContent(
+  blocks: Block[],
+  fallback: CMSHeroContentFields,
+): CMSHeroContentFields {
+  const heroBlock = blocks.find((block) => block.type === 'hero');
+  if (!heroBlock) return fallback;
+
+  const data = heroBlock.data as Partial<HeroBlockData>;
+  return {
+    headline: typeof data.headline === 'string' && data.headline.trim()
+      ? data.headline.trim()
+      : fallback.headline,
+    // An explicit empty summary/category is allowed so an editor can clear a field.
+    summary: typeof data.summary === 'string' ? data.summary.trim() : fallback.summary,
+    category: typeof data.category === 'string' ? data.category.trim() : fallback.category,
+    author: typeof data.author === 'string' && data.author.trim()
+      ? data.author.trim()
+      : fallback.author,
+  };
+}
+
 /**
- * Preserve legacy metadata only when the editor block has no metadata field.
- * An explicit empty alt string therefore clears a stale description. Decorative
- * images do not keep an informative alt string in the canonical record.
+ * Preserve metadata only when the image is unchanged. If the URL changes, old
+ * alt text/decorative status are invalidated unless a distinct new description
+ * is supplied explicitly by the editor. Decorative images always use empty alt.
  */
 export function resolveCMSHeroMetadata(
   blocks: Block[],
   existingHeroImageAlt = '',
   existingHeroImageIsDecorative = false,
+  existingHeroImage = '',
 ): CMSHeroMetadata {
   const heroBlock = blocks.find((block) => block.type === 'hero');
   if (!heroBlock) {
@@ -87,15 +119,21 @@ export function resolveCMSHeroMetadata(
   }
 
   const data = heroBlock.data as Partial<HeroBlockData>;
-  const isDecorative = typeof data.heroImageIsDecorative === 'boolean'
+  const oldImage = existingHeroImage.trim();
+  const newImage = typeof data.heroImage === 'string' ? data.heroImage.trim() : '';
+  const imageChanged = Boolean(oldImage) && oldImage !== newImage;
+  const oldAlt = existingHeroImageAlt.trim();
+  const providedAlt = typeof data.heroImageAlt === 'string' ? data.heroImageAlt.trim() : undefined;
+
+  const candidateAlt = imageChanged && (!providedAlt || providedAlt === oldAlt)
+    ? ''
+    : (providedAlt ?? (imageChanged ? '' : oldAlt));
+  const decorative = typeof data.heroImageIsDecorative === 'boolean'
     ? data.heroImageIsDecorative
-    : existingHeroImageIsDecorative;
-  const altText = typeof data.heroImageAlt === 'string'
-    ? data.heroImageAlt.trim()
-    : existingHeroImageAlt.trim();
+    : (imageChanged ? false : existingHeroImageIsDecorative);
 
   return {
-    heroImageAlt: isDecorative ? '' : altText,
-    heroImageIsDecorative: isDecorative,
+    heroImageAlt: decorative ? '' : candidateAlt,
+    heroImageIsDecorative: decorative,
   };
 }

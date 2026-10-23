@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import type { Block } from '../utils/cms-data';
-import { resolveCMSHeroImage, resolveCMSHeroMetadata, withCMSHeroBlock } from '../lib/editorial/cms-hero-image';
+import { resolveCMSHeroContent, resolveCMSHeroImage, resolveCMSHeroMetadata, withCMSHeroBlock } from '../lib/editorial/cms-hero-image';
 
 function heroBlock(heroImage: string): Block {
   return {
@@ -74,7 +74,41 @@ const unchanged = withCMSHeroBlock([existingHero, ...legacyBlocks], {
 assert.equal(unchanged[0].data && (unchanged[0].data as { heroImage: string }).heroImage, selectedImage, 'an existing CMS hero block remains authoritative');
 assert.equal((unchanged[0].data as { heroImageAlt: string }).heroImageAlt, 'Existing image description.', 'legacy hero blocks should hydrate missing alt text from the canonical story');
 
-const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage)], '  Existing image description.  ', false);
-assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained and alt text is normalized');
-const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage)], 'stale description', true);
+const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false })], '  Existing image description.  ', false, selectedImage);
+assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained for the same image and alt text is normalized');
+const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: true })], 'stale description', true, selectedImage);
 assert.deepEqual(decorativeMetadata, { heroImageAlt: '', heroImageIsDecorative: true }, 'decorative images must not retain informative alt text');
+
+const changedImageMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: false })], 'Old photo description.', false, staleImage);
+assert.deepEqual(changedImageMetadata, { heroImageAlt: '', heroImageIsDecorative: false }, 'a replacement image cannot inherit old alt text or decorative status');
+const suppliedNewAlt = resolveCMSHeroMetadata(
+  [heroBlock(selectedImage, { heroImageAlt: 'A detailed replacement image description.', heroImageIsDecorative: false })],
+  'Old photo description.',
+  false,
+  staleImage,
+);
+assert.deepEqual(suppliedNewAlt, { heroImageAlt: 'A detailed replacement image description.', heroImageIsDecorative: false }, 'new metadata survives a URL change when supplied explicitly');
+
+const resolvedContent = resolveCMSHeroContent([heroBlock(selectedImage)], {
+  headline: 'Old headline',
+  summary: 'Old summary',
+  category: 'economy',
+  author: 'Old author',
+});
+assert.deepEqual(resolvedContent, {
+  headline: 'A test story',
+  summary: 'Test summary',
+  category: 'policy',
+  author: 'Test editor',
+}, 'all editable hero content fields resolve into canonical story fields');
+assert.deepEqual(resolveCMSHeroContent(legacyBlocks, {
+  headline: 'Existing headline',
+  summary: 'Existing summary',
+  category: 'environment',
+  author: 'Existing author',
+}), {
+  headline: 'Existing headline',
+  summary: 'Existing summary',
+  category: 'environment',
+  author: 'Existing author',
+}, 'stories without a hero block preserve canonical content fields');
