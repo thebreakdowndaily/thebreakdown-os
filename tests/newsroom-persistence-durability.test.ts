@@ -536,7 +536,7 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       expect(repo.load).toHaveBeenCalledTimes(1);
     });
 
-    it('REG-07: retries permitted after failure; old attempt cannot overwrite or invalidate successful retry', async () => {
+    it('REG-07: explicit retry permitted after prior failure has settled; restores state and clears failure without duplicate loads', async () => {
       const deferredAttempt1 = createDeferred<NewsroomPersistedState>();
       const deferredAttempt2 = createDeferred<NewsroomPersistedState>();
 
@@ -593,7 +593,7 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       expect(signal).toBeDefined();
       expect(signal!.title).toBe('Cabinet Approves Semiconductor Mission Expansion (Verified)');
 
-      // Verify old attempt's failure cannot invalidate or overwrite the successful retry
+      // Verify successful retry cleared prior failure state and restored operational readiness
       await expect(core.ensureLoaded()).resolves.toBeUndefined();
       expect(() => core.getSignals()).not.toThrow();
       expect(core.getSignals().length).toBe(1);
@@ -603,7 +603,7 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       expect(repo.load).toHaveBeenCalledTimes(2);
     });
 
-    it('REG-08: generation guard ensures stale attempt cannot overwrite state or set failure after newer attempt succeeds', async () => {
+    it('REG-08: generation guard ensures stale attempt cannot overwrite state with late resolution', async () => {
       const deferred1 = createDeferred<NewsroomPersistedState>();
       const deferred2 = createDeferred<NewsroomPersistedState>();
 
@@ -647,6 +647,77 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       expect(core.getSignal('sig-gen2-authoritative')).toBeDefined();
       expect(core.getSignal('sig-gen1-stale')).toBeUndefined();
       expect(core.getSignals().length).toBe(1);
+    });
+
+    it('REG-11: generation guard ensures late rejection from stale load attempt cannot set loadError or invalidate authoritative state', async () => {
+      const deferredGen1 = createDeferred<NewsroomPersistedState>();
+      const deferredGen2 = createDeferred<NewsroomPersistedState>();
+
+      let callCount = 0;
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(() => {
+          callCount++;
+          if (callCount === 1) return deferredGen1.promise;
+          return deferredGen2.promise;
+        }),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+
+      // 1. Starts generation 1 and leaves its repository load pending
+      const gen1Promise = core.ensureLoaded();
+      expect(repo.load).toHaveBeenCalledTimes(1);
+
+      // 2. Starts generation 2 through a controlled test path, leaving generation 1 unresolved.
+      // Seam documentation:
+      // In production, ensureLoaded() and retryLoad() intentionally reuse the in-flight
+      // loadPromise rather than spawning concurrent initialization attempts. To test the
+      // defense-in-depth generation guard against out-of-order stale completions (e.g., an
+      // orphaned or aborted background repository read rejecting after a newer generation
+      // has initialized), we invoke the private initiateLoad() method directly as the narrowest
+      // test seam, avoiding artificial expansion of the public production API.
+      const gen2Promise = (core as any).initiateLoad();
+      expect(repo.load).toHaveBeenCalledTimes(2);
+
+      // 3. Resolves generation 2 successfully with identifiable authoritative state
+      const stateGen2 = createBaselineTestState();
+      stateGen2.signals[0].id = 'sig-gen2-authoritative';
+      stateGen2.signals[0].title = 'Authoritative Gen-2 State';
+      deferredGen2.resolve(stateGen2);
+      await gen2Promise;
+
+      expect((core as any).isLoaded).toBe(true);
+      expect((core as any).loadError).toBeNull();
+      expect(core.getSignal('sig-gen2-authoritative')).toBeDefined();
+      expect(core.getSignals().length).toBe(1);
+
+      // 4. Rejects generation 1 only after generation 2 has completed
+      const staleRejection = new Error('Stale generation-1 database connection reset');
+      deferredGen1.reject(staleRejection);
+
+      // Await gen1Promise settling. Because gen1 generation !== loadGeneration,
+      // initiateLoad catches it and discards the late rejection.
+      await gen1Promise;
+
+      // 5. Verifies the late rejection cannot set or overwrite "loadError", invalidate the loaded state,
+      // or replace the authoritative collections
+      expect((core as any).loadError).toBeNull();
+      expect((core as any).isLoaded).toBe(true);
+      expect(core.getSignals().length).toBe(1);
+      expect(core.getSignal('sig-gen2-authoritative')).toBeDefined();
+      expect(core.getSignal('sig-gen2-authoritative')!.title).toBe('Authoritative Gen-2 State');
+
+      // 6. Verifies "ensureLoaded()" and synchronous state access continue to succeed and the authoritative
+      // generation-2 state remains intact
+      await expect(core.ensureLoaded()).resolves.toBeUndefined();
+      expect(() => core.getSignals()).not.toThrow();
+      expect(() => core.getObservations()).not.toThrow();
+      expect(() => core.getAlerts()).not.toThrow();
+      expect(() => core.buildPersistedState()).not.toThrow();
+      expect(core.buildPersistedState().signals[0].id).toBe('sig-gen2-authoritative');
     });
 
     it('REG-09: concurrent ensureLoaded() callers share one canonical Promise without duplicate loads', async () => {

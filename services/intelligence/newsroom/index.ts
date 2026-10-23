@@ -153,14 +153,14 @@ export class NewsroomIntelligenceCore {
   private loadGeneration = 0;
 
   public ensureLoaded(): Promise<void> {
+    if (this.loadError) {
+      return this.loadPromise ?? Promise.reject(this.loadError);
+    }
     if (this.isLoaded) {
       return this.loadPromise ?? Promise.resolve();
     }
     if (this.isLoading && this.loadPromise) {
       return this.loadPromise;
-    }
-    if (this.loadError) {
-      return this.loadPromise ?? Promise.reject(this.loadError);
     }
 
     return this.initiateLoad();
@@ -172,7 +172,7 @@ export class NewsroomIntelligenceCore {
    * Permits an explicit retry only after the prior attempt has definitively failed.
    */
   public retryLoad(): Promise<void> {
-    if (this.isLoaded) {
+    if (this.isLoaded && !this.loadError) {
       return this.loadPromise ?? Promise.resolve();
     }
     if (this.isLoading && this.loadPromise) {
@@ -212,6 +212,7 @@ export class NewsroomIntelligenceCore {
         const wrappedErr = new NewsroomPersistenceError(message, 'PERSISTENCE_UNAVAILABLE');
         (wrappedErr as any).cause = err;
         this.loadError = wrappedErr;
+        this.isLoaded = false;
         console.error('[NewsroomIntelligenceCore] Critical state load failure:', err);
         throw wrappedErr;
       } finally {
@@ -254,10 +255,10 @@ export class NewsroomIntelligenceCore {
   }
 
   private enforceReadiness(): void {
+    if (this.loadError) {
+      throw this.loadError;
+    }
     if (!this.isLoaded) {
-      if (this.loadError) {
-        throw this.loadError;
-      }
       throw new NewsroomPersistenceError(
         'Newsroom state not ready: ensureLoaded() must be awaited before accessing newsroom intelligence state.',
         'PERSISTENCE_UNAVAILABLE'
