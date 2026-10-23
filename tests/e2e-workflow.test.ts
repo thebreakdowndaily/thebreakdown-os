@@ -119,8 +119,24 @@ function runE2EWorkflowTests() {
     audit.phases.phase5VisualAudit.passed = true;
     audit.phases.phase6KnowledgeDensityAudit.passed = true;
     audit.phases.phase7DefensibilityAudit.passed = true;
+    const phases = [
+      audit.phases.phase1ExpertReview,
+      audit.phases.phase2ReaderReview,
+      audit.phases.phase3EvidenceAudit,
+      audit.phases.phase4BiasAudit,
+      audit.phases.phase5VisualAudit,
+      audit.phases.phase6KnowledgeDensityAudit,
+      audit.phases.phase7DefensibilityAudit,
+    ];
+    phases.forEach((phase, index) => {
+      phase.auditorId = `test-reviewer-${index + 1}`;
+      phase.auditDate = new Date().toISOString();
+      phase.notes = `Synthetic end-to-end review evidence for phase ${index + 1}.`;
+    });
+    audit.overallPassed = true;
+    audit.completedPhasesCount = 7;
 
-    assert(evaluateGoldStandardPass(audit) === true, 'Step 5a: Gold Standard 7-Phase audit passes');
+    assert(evaluateGoldStandardPass(audit) === true, 'Step 5a: Gold Standard 7-Phase audit with reviewer evidence passes');
 
     res = transitionEditorialState(editorialState, 'approved', 'editor_sarah', 'editor');
     editorialState = res.record;
