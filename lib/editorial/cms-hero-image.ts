@@ -77,7 +77,7 @@ export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Bl
       heroImageIsDecorative: trustBlockMetadata
         ? (typeof existingData.heroImageIsDecorative === 'boolean' ? existingData.heroImageIsDecorative : (story.heroImageIsDecorative ?? false))
         : (!blockHasImage ? (story.heroImageIsDecorative ?? false) : false),
-      heroImageMetadataConfirmed: trustBlockMetadata ? existingData.heroImageMetadataConfirmed : false,
+      heroImageMetadataConfirmed: Boolean(effectiveImage) && (!blockHasImage || trustBlockMetadata),
     };
     return blocks.map((block) => block.id === existingHero.id ? { ...block, data } : block);
   }
@@ -91,6 +91,7 @@ export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Bl
     publishedAt: story.publishedAt || '',
     heroImageAlt: story.heroImageAlt || '',
     heroImageIsDecorative: story.heroImageIsDecorative ?? false,
+    heroImageMetadataConfirmed: Boolean(story.heroImage),
   };
 
   return [
@@ -156,18 +157,16 @@ export function resolveCMSHeroMetadata(
   const oldAlt = existingHeroImageAlt.trim();
   const providedAlt = typeof data.heroImageAlt === 'string' ? data.heroImageAlt.trim() : undefined;
 
-  // The editor clears metadata when its image URL changes. Any non-undefined
-  // value here is therefore the editor's explicit current choice—even if it
-  // intentionally reuses the same alt description for a different crop/asset.
+  // Fail closed whenever the client has not explicitly confirmed that this
+  // metadata belongs to the current image URL. The URL-change handler clears
+  // this flag; older clients that omit it cannot carry stale descriptions forward.
   const metadataConfirmed = data.heroImageMetadataConfirmed === true;
-  const candidateAlt = imageChanged
-    ? (metadataConfirmed ? (providedAlt ?? '') : '')
-    : (providedAlt ?? oldAlt);
-  const decorative = imageChanged && !metadataConfirmed
-    ? false
-    : (typeof data.heroImageIsDecorative === 'boolean'
-      ? data.heroImageIsDecorative
-      : existingHeroImageIsDecorative);
+  const candidateAlt = metadataConfirmed
+    ? (providedAlt ?? (imageChanged ? '' : oldAlt))
+    : '';
+  const decorative = metadataConfirmed
+    ? (typeof data.heroImageIsDecorative === 'boolean' ? data.heroImageIsDecorative : existingHeroImageIsDecorative)
+    : false;
 
   return {
     heroImageAlt: decorative ? '' : candidateAlt,

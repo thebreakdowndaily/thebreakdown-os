@@ -163,9 +163,9 @@ assert.deepEqual(
   'blank legacy hero fields must be hydrated before editing so a save does not erase canonical values',
 );
 
-const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false })], '  Existing image description.  ', false, selectedImage);
+const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false, heroImageMetadataConfirmed: true })], '  Existing image description.  ', false, selectedImage);
 assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained for the same image and alt text is normalized');
-const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: true })], 'stale description', true, selectedImage);
+const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: true, heroImageMetadataConfirmed: true })], 'stale description', true, selectedImage);
 assert.deepEqual(decorativeMetadata, { heroImageAlt: '', heroImageIsDecorative: true }, 'decorative images must not retain informative alt text');
 
 const changedImageMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: false })], 'Old photo description.', false, staleImage);
@@ -198,6 +198,17 @@ assert.deepEqual(
   unconfirmedOldAlt,
   { heroImageAlt: '', heroImageIsDecorative: false },
   'a URL change without explicit metadata confirmation must invalidate the previous alt description',
+);
+const unconfirmedNewUrlWithOldAlt = resolveCMSHeroMetadata(
+  [heroBlock(selectedImage, { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false, heroImageMetadataConfirmed: false })],
+  'Old photo description.',
+  false,
+  '',
+);
+assert.deepEqual(
+  unconfirmedNewUrlWithOldAlt,
+  { heroImageAlt: '', heroImageIsDecorative: false },
+  'stale alt text must be invalidated even when the previous canonical URL was blank',
 );
 
 const resolvedContent = resolveCMSHeroContent([heroBlock(selectedImage)], {
