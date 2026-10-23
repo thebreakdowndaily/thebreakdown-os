@@ -4,7 +4,7 @@ import { resolveCMSHeroContent, resolveCMSHeroImage, resolveCMSHeroMetadata, wit
 
 function heroBlock(
   heroImage: string,
-  metadata: { heroImageAlt?: string; heroImageIsDecorative?: boolean } = {},
+  metadata: { heroImageAlt?: string; heroImageIsDecorative?: boolean; heroImageMetadataConfirmed?: boolean } = {},
 ): Block {
   return {
     id: 'hero-1',
@@ -97,14 +97,14 @@ assert.deepEqual(decorativeMetadata, { heroImageAlt: '', heroImageIsDecorative: 
 const changedImageMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: false })], 'Old photo description.', false, staleImage);
 assert.deepEqual(changedImageMetadata, { heroImageAlt: '', heroImageIsDecorative: false }, 'a replacement image cannot inherit old alt text or decorative status');
 const suppliedNewAlt = resolveCMSHeroMetadata(
-  [heroBlock(selectedImage, { heroImageAlt: 'A detailed replacement image description.', heroImageIsDecorative: false })],
+  [heroBlock(selectedImage, { heroImageAlt: 'A detailed replacement image description.', heroImageIsDecorative: false, heroImageMetadataConfirmed: true })],
   'Old photo description.',
   false,
   staleImage,
 );
 assert.deepEqual(suppliedNewAlt, { heroImageAlt: 'A detailed replacement image description.', heroImageIsDecorative: false }, 'new metadata survives a URL change when supplied explicitly');
 const intentionallyReusedAlt = resolveCMSHeroMetadata(
-  [heroBlock(selectedImage, { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false })],
+  [heroBlock(selectedImage, { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false, heroImageMetadataConfirmed: true })],
   'Old photo description.',
   false,
   staleImage,
@@ -112,7 +112,18 @@ const intentionallyReusedAlt = resolveCMSHeroMetadata(
 assert.deepEqual(
   intentionallyReusedAlt,
   { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false },
-  'an editor may explicitly reuse the same alt wording on a replacement image',
+  'an editor may explicitly reuse the same alt wording on a replacement image after confirming it',
+);
+const unconfirmedOldAlt = resolveCMSHeroMetadata(
+  [heroBlock(selectedImage, { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false, heroImageMetadataConfirmed: false })],
+  'Old photo description.',
+  false,
+  staleImage,
+);
+assert.deepEqual(
+  unconfirmedOldAlt,
+  { heroImageAlt: '', heroImageIsDecorative: false },
+  'a URL change without explicit metadata confirmation must invalidate the previous alt description',
 );
 
 const resolvedContent = resolveCMSHeroContent([heroBlock(selectedImage)], {

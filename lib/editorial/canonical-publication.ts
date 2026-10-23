@@ -161,7 +161,7 @@ export async function evaluatePublicationContractAsync(
 }
 
 /**
- * Synchronous backward-compatible evaluator (runs synchronous gates 1-12).
+ * Synchronous backward-compatible evaluator (runs synchronous editorial gates 1-13, including hero-image integrity).
  * Note: evaluatePublicationContractAsync should be preferred to enforce Evidence Vault Gate 14.
  */
 export function evaluatePublicationContract(
@@ -203,7 +203,7 @@ export function evaluatePublicationContract(
     };
   }
 
-  // 4. Publication Gate Check (Gates 1-12)
+  // 4. Publication Gate Check (synchronous editorial Gates 1-13, including hero-image integrity)
   const storyToValidate: Story = {
     ...targetStory,
     status: fromStatus === 'draft' ? 'draft' : (fromStatus === 'published' ? 'scheduled' : fromStatus),

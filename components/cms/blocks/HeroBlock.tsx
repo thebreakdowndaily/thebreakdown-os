@@ -122,7 +122,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
               onUpdate({
                 ...d,
                 heroImage: nextImage,
-                ...(imageChanged ? { heroImageAlt: '', heroImageIsDecorative: false } : {}),
+                ...(imageChanged ? { heroImageAlt: '', heroImageIsDecorative: false, heroImageMetadataConfirmed: false } : {}),
               });
             }}
             placeholder="/images/stories/..."
@@ -145,7 +145,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
           </label>
           <textarea
             value={d.heroImageAlt || ''}
-            onChange={(e) => { onUpdate({ ...d, heroImageAlt: e.target.value, heroImageIsDecorative: false }); }}
+            onChange={(e) => { onUpdate({ ...d, heroImageAlt: e.target.value, heroImageIsDecorative: false, heroImageMetadataConfirmed: true }); }}
             disabled={Boolean(d.heroImageIsDecorative)}
             placeholder="Describe the relevant details of this image for readers who cannot see it..."
             rows={2}
@@ -173,6 +173,7 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
                   ...d,
                   heroImageIsDecorative: isDecorative,
                   heroImageAlt: isDecorative ? '' : (d.heroImageAlt || ''),
+                  heroImageMetadataConfirmed: true,
                 });
               }}
             />

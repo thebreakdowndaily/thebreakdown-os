@@ -98,16 +98,27 @@ export function matchImageToStoryContext(
   story: StoryContextInput,
   manifestLookup?: (slug: string) => { approvedImage: string } | null
 ): ContextMatchResult {
-  // 1. Check if registered in verified manifest
+  // 1. An entry in the verified manifest is authoritative for this story.
+  // If another URL is supplied, do not let generic filename overlap override
+  // the editorially approved asset.
   if (manifestLookup) {
     const entry = manifestLookup(story.slug);
-    if (entry && entry.approvedImage === imagePath) {
+    if (entry) {
+      if (entry.approvedImage === imagePath) {
+        return {
+          isMatch: true,
+          aligned: true,
+          score: 1.0,
+          reason: 'Image is authoritatively registered in Verified Story Image Manifest.',
+          matchType: 'EXACT_MANIFEST',
+        };
+      }
       return {
-        isMatch: true,
-        aligned: true,
-        score: 1.0,
-        reason: 'Image is authoritatively registered in Verified Story Image Manifest.',
-        matchType: 'EXACT_MANIFEST',
+        isMatch: false,
+        aligned: false,
+        score: 0,
+        reason: `Image is not the approved asset registered for story "${story.slug}".`,
+        matchType: 'MISMATCH',
       };
     }
   }

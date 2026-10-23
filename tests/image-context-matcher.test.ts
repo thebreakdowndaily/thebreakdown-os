@@ -66,6 +66,11 @@ assert.equal(
   'one generic shared word such as trade must not prove that an image matches a story',
 );
 assert.equal(
+  matchImageToStoryContext('/images/stories/electric-vehicle-battery.jpg', indiaEV, getManifestEntry).isMatch,
+  false,
+  'a story manifest must reject an unapproved image even when multiple filename tokens match the topic',
+);
+assert.equal(
   matchImageToStoryContext('/images/placeholders/policy-placeholder.svg', {
     slug: 'institutional-reform',
     headline: 'Institutional reform and public accountability',
