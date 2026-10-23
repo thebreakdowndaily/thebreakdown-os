@@ -220,6 +220,11 @@ export interface Story {
     | 'interview'
     | 'investigation'
     | 'aggregated';
+
+  /** Gold Standard Review (Article XI) audit record */
+  goldStandardAudit?: import('@/lib/editorial/gold-standard-review').GoldStandardAuditRecord;
+  /** SHA-256 fingerprint of editorially meaningful content */
+  contentFingerprint?: string;
 }
 
 export interface TBSStory {

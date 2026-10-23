@@ -81,6 +81,17 @@ export class SupabaseStoryRepository implements StoryService {
       throw new PublicationBlockedError(validation.violations);
     }
 
+    // Gold Standard Review Integrity Guard (Article XI / CR-01..03)
+    const { validateGoldStandardAuditRecord } = await import('@/lib/editorial/gold-standard-review');
+    const auditValidation = validateGoldStandardAuditRecord(story.goldStandardAudit, story);
+    if (!auditValidation.valid) {
+      throw new PublicationBlockedError(
+        auditValidation.violations.length > 0
+          ? auditValidation.violations
+          : ['Gold Standard Review validation failed']
+      );
+    }
+
     // Mint server-side single-use publication token for the transition
     const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
     const token = issuePublicationToken(story.id);
@@ -241,6 +252,8 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
     relatedStoryIds: row.related_story_ids || [],
     relatedEntityIds: row.related_entity_ids || [],
     relatedTopicIds: row.related_topic_ids || [],
+    goldStandardAudit: (row.gold_standard_audit as any) || undefined,
+    contentFingerprint: row.content_fingerprint || undefined,
   };
 }
 
@@ -273,5 +286,7 @@ function rowFromStory(s: Story): import('@/supabase/client').TypedDatabase['publ
     published_at: s.publishedAt,
     updated_at: new Date().toISOString(),
     updated_by: s.updatedBy,
+    gold_standard_audit: s.goldStandardAudit ?? null,
+    content_fingerprint: s.contentFingerprint ?? null,
   };
 }

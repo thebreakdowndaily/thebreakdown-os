@@ -31,7 +31,7 @@ import { evaluatePublicationContract } from '../lib/editorial/canonical-publicat
 import { validateStoryForPublication } from '../lib/editorial/publication-gate';
 import { canTransition } from '../lib/editorial/workflow-state-machine';
 import { can } from '../features/auth/policy';
-import { createDefaultGoldStandardAudit } from '../lib/editorial/gold-standard-review';
+import { createDefaultGoldStandardAudit, createValidGoldStandardAudit } from '../lib/editorial/gold-standard-review';
 
 function createMockPrincipal(role: Principal['role'], id = 'usr-test-1'): Principal {
   return {
@@ -46,16 +46,7 @@ function createMockPrincipal(role: Principal['role'], id = 'usr-test-1'): Princi
 }
 
 function createValidStory(status: Story['status'] = 'scheduled'): Story {
-  const audit = createDefaultGoldStandardAudit('story-valid-1');
-  audit.phases.phase1ExpertReview.passed = true;
-  audit.phases.phase2ReaderReview.passed = true;
-  audit.phases.phase3EvidenceAudit.passed = true;
-  audit.phases.phase4BiasAudit.passed = true;
-  audit.phases.phase5VisualAudit.passed = true;
-  audit.phases.phase6KnowledgeDensityAudit.passed = true;
-  audit.phases.phase7DefensibilityAudit.passed = true;
-
-  return {
+  const story: Story = {
     id: 'story-valid-1',
     title: 'Valid Tested Story',
     slug: 'valid-tested-story',
@@ -81,8 +72,11 @@ function createValidStory(status: Story['status'] = 'scheduled'): Story {
     relatedStoryIds: [],
     relatedEntityIds: [],
     relatedTopicIds: [],
-    goldStandardAudit: audit as any,
   } as Story;
+
+  story.goldStandardAudit = createValidGoldStandardAudit(story);
+  story.contentFingerprint = story.goldStandardAudit.contentFingerprint;
+  return story;
 }
 
 describe('P0 PUBLICATION INTEGRITY REGRESSION SUITE', () => {
@@ -235,6 +229,8 @@ describe('P0 PUBLICATION INTEGRITY REGRESSION SUITE', () => {
     const editor = createMockPrincipal('editor');
     const publishedStory = createValidStory('published');
     const updatedStory = { ...publishedStory, headline: 'Updated Headline' };
+    updatedStory.goldStandardAudit = createValidGoldStandardAudit(updatedStory);
+    updatedStory.contentFingerprint = updatedStory.goldStandardAudit.contentFingerprint;
     const decision = evaluatePublicationContract(publishedStory, updatedStory, editor);
     expect(decision.allowed).toBe(true);
     expect(decision.httpStatus).toBe(200);

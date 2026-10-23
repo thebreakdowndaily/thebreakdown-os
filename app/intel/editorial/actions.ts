@@ -17,6 +17,11 @@ import {
   validateAndPublishDueStories,
 } from '@/services/editorial/schedule';
 import { validateStoryForPublication } from '@/lib/editorial/publication-gate';
+import {
+  evaluatePublicationContractAsync,
+  executePostPublicationEffects,
+} from '@/lib/editorial/canonical-publication';
+import { RepositoryFactory } from '@/services/factory/repository';
 import { getServiceClient } from '@/supabase/client';
 import { requireRole } from '@/features/auth/require-role';
 import type {
@@ -141,6 +146,8 @@ export async function validateStoryAction(
       relatedStoryIds: storyRow.related_story_ids || [],
       relatedEntityIds: storyRow.related_entity_ids || [],
       relatedTopicIds: storyRow.related_topic_ids || [],
+      goldStandardAudit: (storyRow as any).gold_standard_audit,
+      contentFingerprint: (storyRow as any).content_fingerprint,
     };
 
     const result = validateStoryForPublication(
@@ -172,74 +179,60 @@ export async function publishNowAction(
   scheduleId?: string,
 ): Promise<{ success: boolean; result?: PublicationGateResult; error?: string }> {
   try {
-    await requireRole('editor');
-    const db = getServiceClient();
-    const { data: storyRow, error: storyError } = await db
-      .from('stories')
-      .select('*')
-      .eq('id', storyId)
-      .single();
+    const principal = await requireRole('editor');
+    const repo = RepositoryFactory.getStoryRepository();
+    const existingStory = await repo.getStory(storyId);
 
-    if (storyError || !storyRow) {
+    if (!existingStory) {
       return { success: false, error: 'Story not found' };
     }
 
-    const story = {
-      id: storyRow.id,
-      title: storyRow.title,
-      slug: storyRow.slug,
-      headline: storyRow.headline || storyRow.title,
-      summary: storyRow.summary || '',
-      heroImage: storyRow.hero_image || '',
-      author: storyRow.author || '',
-      category: storyRow.category || '',
-      status: storyRow.status,
-      storyType: 'standard',
-      evidenceScore: storyRow.evidence_score || 0,
-      readingTime: storyRow.reading_time || 0,
-      publishedAt: storyRow.published_at || '',
-      createdAt: storyRow.created_at,
-      updatedAt: storyRow.updated_at,
-      tags: storyRow.tags || [],
-      blocks: storyRow.blocks || [],
-      sources: storyRow.sources || [],
-      claims: storyRow.claims || [],
-      timeline: storyRow.timeline || [],
-      faq: storyRow.faq || [],
-      charts: storyRow.charts || [],
-      relatedStoryIds: storyRow.related_story_ids || [],
-      relatedEntityIds: storyRow.related_entity_ids || [],
-      relatedTopicIds: storyRow.related_topic_ids || [],
-    };
-
-    const result = validateStoryForPublication(
-      { storyId, scheduleId, triggeredBy: 'manual' },
-      story as never,
+    const decision = await evaluatePublicationContractAsync(
+      existingStory,
+      existingStory,
+      principal,
+      { scheduleId, triggeredBy: 'manual' }
     );
 
-    if (result.passed) {
-      const now = new Date().toISOString();
-      await db
-        .from('stories')
-        .update({
-          status: 'published',
-          published_at: now,
-          updated_at: now,
-        })
-        .eq('id', storyId);
+    if (!decision.allowed) {
+      return {
+        success: false,
+        error: decision.error,
+        result: decision.gateResult,
+      };
+    }
 
-      if (scheduleId) {
-        await updateScheduleEntry(scheduleId, {
-          status: 'published',
-        });
-      }
+    if (!decision.publicationToken) {
+      return {
+        success: false,
+        error: 'Publication token was not issued',
+        result: decision.gateResult,
+      };
+    }
 
-      result.publishedAt = now;
+    const now = new Date().toISOString();
+    await repo.saveStory(
+      {
+        ...decision.updatedStory!,
+        status: 'published',
+        publicationStatus: 'published',
+        publishedAt: decision.updatedStory!.publishedAt || now,
+        updatedAt: now,
+      },
+      { publicationToken: decision.publicationToken }
+    );
+
+    executePostPublicationEffects(decision.updatedStory!, principal, decision.gateResult);
+
+    if (scheduleId) {
+      await updateScheduleEntry(scheduleId, {
+        status: 'published',
+      });
     }
 
     revalidatePath('/intel/editorial/calendar');
     revalidatePath('/intel/editorial');
-    return { success: true, result };
+    return { success: true, result: decision.gateResult };
   } catch (e) {
     return { success: false, error: e instanceof Error ? e.message : 'Unknown error' };
   }
