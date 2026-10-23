@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import StoryImage from '../components/story/StoryImage';
+import RelatedStories from '../components/story/RelatedStories';
 import { getHeroImageFallbackPath } from '../lib/image-intelligence/placeholder-fallback';
 import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 
@@ -37,3 +38,22 @@ assert.match(emptyImageMarkup, /src="\/images\/placeholders\/policy-placeholder\
 assert.match(emptyImageMarkup, /alt=""/, 'a generic fallback should not retain the original unavailable photo description');
 
 console.log('Hero image fallback tests: 24 assertions passed');
+
+
+const relatedStoryMarkup = renderToStaticMarkup(
+  React.createElement(RelatedStories, {
+    stories: [{
+      slug: 'legacy-story-without-hero',
+      headline: 'Legacy story without a hero image',
+      summary: 'A story record with no assigned hero asset.',
+      heroImage: '',
+      publishedAt: '2026-10-22T00:00:00.000Z',
+      readingTime: 5,
+      category: 'geopolitics',
+    }],
+  }),
+);
+assert.ok(
+  relatedStoryMarkup.includes('src="/images/placeholders/policy-placeholder.svg"'),
+  'related story cards with empty image URLs should render a real category fallback immediately',
+);

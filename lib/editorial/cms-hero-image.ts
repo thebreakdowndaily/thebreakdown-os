@@ -36,9 +36,14 @@ export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Bl
     const existingData = existingHero.data as HeroBlockData;
     const blockImage = typeof existingData.heroImage === 'string' ? existingData.heroImage.trim() : '';
     const canonicalImage = (story.heroImage || '').trim();
-    const canonicalMetadataMatches = !canonicalImage || !blockImage || canonicalImage === blockImage;
+    // Older CMS blocks sometimes have an empty image field even though the
+    // canonical Story still has one. Hydrate that legacy gap; once a clear is
+    // saved, both fields are empty and the image remains cleared.
+    const effectiveImage = blockImage || canonicalImage;
+    const canonicalMetadataMatches = effectiveImage === canonicalImage;
     const data: HeroBlockData = {
       ...existingData,
+      heroImage: effectiveImage,
       // If the URL disagrees with the canonical record, never attach its old
       // image description/decorative state to the selected asset.
       heroImageAlt: canonicalMetadataMatches

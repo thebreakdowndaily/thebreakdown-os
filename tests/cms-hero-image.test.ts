@@ -75,6 +75,16 @@ assert.equal(unchanged[0].data && (unchanged[0].data as { heroImage: string }).h
 assert.equal((unchanged[0].data as { heroImageAlt: string }).heroImageAlt, '', 'legacy hero blocks must not hydrate stale alt text when the image URL differs');
 assert.equal((unchanged[0].data as { heroImageIsDecorative: boolean }).heroImageIsDecorative, false, 'a mismatched image must not inherit the old decorative flag');
 
+const legacyBlankHero = withCMSHeroBlock([heroBlock(''), ...legacyBlocks], {
+  id: 'legacy-blank-hero',
+  title: 'Legacy block missing image field',
+  heroImage: staleImage,
+  heroImageAlt: 'Canonical image description.',
+  heroImageIsDecorative: false,
+});
+assert.equal((legacyBlankHero[0].data as { heroImage: string }).heroImage, staleImage, 'a legacy blank hero field must hydrate the canonical image rather than erase it on save');
+assert.equal((legacyBlankHero[0].data as { heroImageAlt: string }).heroImageAlt, 'Canonical image description.', 'the matching canonical alt text should accompany a hydrated legacy image');
+
 const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false })], '  Existing image description.  ', false, selectedImage);
 assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained for the same image and alt text is normalized');
 const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: true })], 'stale description', true, selectedImage);
