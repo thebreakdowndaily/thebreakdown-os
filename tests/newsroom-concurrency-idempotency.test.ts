@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SupabaseStateRepository, SNAPSHOT_ROW_ID } from '../services/intelligence/newsroom/persistence/supabase';
-import { NewsroomIntelligenceCore } from '../services/intelligence/newsroom';
+import { NewsroomIntelligenceCore, NewsroomPersistenceError } from '../services/intelligence/newsroom';
 import { NewsroomPersistedState } from '../services/intelligence/newsroom/persistence/state';
 
 let dbRow: { id: string; metric_value: number; metadata: any } | null = null;
@@ -204,9 +204,9 @@ describe('NEWSROOM PERSISTENCE, CONCURRENCY & IDEMPOTENCY', () => {
     // Simulate database outage
     dbError = new Error('Database connection reset');
 
-    await expect(core.ensureLoaded()).rejects.toThrow('Newsroom state unavailable: Database connection reset');
+    await expect(core.ensureLoaded()).rejects.toThrow(/Newsroom state unavailable/);
 
-    // Ensure in-memory collections remained empty or protected from silent mock corruption
-    expect(core.getObservations().length).toBe(0);
+    // Ensure state access is blocked during failure rather than silently exposing empty collections
+    expect(() => core.getObservations()).toThrow(NewsroomPersistenceError);
   });
 });

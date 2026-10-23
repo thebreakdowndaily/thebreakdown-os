@@ -126,7 +126,6 @@ module.exports = {
       'tests/phase8-production-promotion-and-validation.test.ts',
       'tests/master-loopback-engineering.test.ts',
       'tests/quarantine-isolation.test.ts',
-      'tests/seeder.test.ts',
       'tests/wave0-publication-status-mapping.test.ts',
       'tests/wave1-public-surfaces.test.ts',
       'tests/wave2-api-routes.test.ts',
