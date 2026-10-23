@@ -36,6 +36,7 @@ export async function validateStoryForPublicationAsync(
   story: Story | undefined,
   vault?: EvidenceVaultService,
   now: Date = new Date(),
+  options?: { vaultInitError?: string }
 ): Promise<PublicationGateResult> {
   const syncResult = validateStoryForPublication(input, story, now);
   const checks = [...syncResult.checks];
@@ -45,7 +46,7 @@ export async function validateStoryForPublicationAsync(
   }
 
   // Gate 13: Evidence Vault Completeness & Cryptographic Reconstructibility (Article III & IV)
-  const evidenceRes = await validateStoryEvidenceCompleteness(story, vault);
+  const evidenceRes = await validateStoryEvidenceCompleteness(story, vault, options);
   checks.push({
     name: 'evidence_preservation_vault',
     passed: evidenceRes.valid,

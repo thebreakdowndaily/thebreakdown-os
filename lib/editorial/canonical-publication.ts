@@ -98,15 +98,22 @@ export async function evaluatePublicationContractAsync(
   };
 
   let vault = options.vault;
+  let vaultInitError: string | undefined;
   if (!vault) {
     try {
       vault = getEvidenceVaultService();
-    } catch {
-      // Fallback if vault not accessible
+    } catch (err: any) {
+      vaultInitError = err?.message || 'Evidence Vault service failed to initialize';
     }
   }
 
-  const gateResult = await validateStoryForPublicationAsync(gateInput, storyToValidate, vault, now);
+  const gateResult = await validateStoryForPublicationAsync(
+    gateInput,
+    storyToValidate,
+    vault,
+    now,
+    vaultInitError ? { vaultInitError } : undefined
+  );
 
   if (!gateResult.passed) {
     const failedChecks = gateResult.checks.filter(c => !c.passed);
