@@ -37,21 +37,29 @@ export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Bl
     const blockImage = typeof existingData.heroImage === 'string' ? existingData.heroImage.trim() : '';
     const canonicalImage = (story.heroImage || '').trim();
     // Older CMS blocks sometimes have an empty image field even though the
-    // canonical Story still has one. Hydrate that legacy gap; once a clear is
-    // saved, both fields are empty and the image remains cleared.
+    // canonical Story still has one. Hydrate that legacy gap; if the canonical
+    // URL is empty, the persisted block is the only available image source.
     const effectiveImage = blockImage || canonicalImage;
-    const canonicalMetadataMatches = effectiveImage === canonicalImage;
+    const blockHasImage = Boolean(blockImage);
+    const canonicalHasImage = Boolean(canonicalImage);
+    const blockMatchesCanonical = blockHasImage && blockImage === canonicalImage;
+    const blockMetadataConfirmed = existingData.heroImageMetadataConfirmed === true;
+    const trustBlockMetadata = blockHasImage && (
+      !canonicalHasImage || blockMatchesCanonical || blockMetadataConfirmed
+    );
     const data: HeroBlockData = {
       ...existingData,
       heroImage: effectiveImage,
-      // If the URL disagrees with the canonical record, never attach its old
-      // image description/decorative state to the selected asset.
-      heroImageAlt: canonicalMetadataMatches
+      // Prefer canonical accessibility metadata when hydrating an empty block.
+      // If the block URL conflicts with a canonical URL, trust it only after the
+      // editor explicitly confirms its accessibility metadata for that URL.
+      heroImageAlt: trustBlockMetadata
         ? (typeof existingData.heroImageAlt === 'string' ? existingData.heroImageAlt : (story.heroImageAlt || ''))
-        : '',
-      heroImageIsDecorative: canonicalMetadataMatches
+        : (!blockHasImage ? (story.heroImageAlt || '') : ''),
+      heroImageIsDecorative: trustBlockMetadata
         ? (typeof existingData.heroImageIsDecorative === 'boolean' ? existingData.heroImageIsDecorative : (story.heroImageIsDecorative ?? false))
-        : false,
+        : (!blockHasImage ? (story.heroImageIsDecorative ?? false) : false),
+      heroImageMetadataConfirmed: trustBlockMetadata ? existingData.heroImageMetadataConfirmed : false,
     };
     return blocks.map((block) => block.id === existingHero.id ? { ...block, data } : block);
   }
