@@ -76,7 +76,15 @@ export function evaluateGoldStandardPass(record: GoldStandardAuditRecord): boole
   return phases.every((phase, index) => (
     !!phase &&
     phase.phaseId === index + 1 &&
+    typeof phase.phaseName === 'string' &&
+    phase.phaseName.trim().length > 0 &&
     phase.passed === true &&
+    typeof phase.auditorId === 'string' &&
+    phase.auditorId.trim().length > 0 &&
+    typeof phase.auditDate === 'string' &&
+    Number.isFinite(Date.parse(phase.auditDate)) &&
+    typeof phase.notes === 'string' &&
+    phase.notes.trim().length > 0 &&
     Number.isInteger(phase.blockingIssuesCount) &&
     phase.blockingIssuesCount === 0
   ));
