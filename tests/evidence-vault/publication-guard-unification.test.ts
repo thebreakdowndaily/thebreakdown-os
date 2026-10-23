@@ -230,12 +230,23 @@ function createMockServiceClient(initialStories: any[] = [], initialSchedule: an
 async function main() {
   console.log('\n=== Starting Phase 4B-2H Publication Guard Unification Test Suite ===\n');
 
-  const stagingUrl = process.env.STAGING_DATABASE_URL || 'postgresql://postgres:Ntn%40supabase403@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres';
-  const u = new URL(stagingUrl);
+  const stagingUrl = process.env.STAGING_DATABASE_URL;
+  if (!stagingUrl) {
+    console.error('FATAL: STAGING_DATABASE_URL environment variable is required to run this integration test suite. Aborting.');
+    process.exit(1);
+  }
+  let u: URL;
+  try {
+    u = new URL(stagingUrl);
+  } catch {
+    console.error('FATAL: STAGING_DATABASE_URL is not a valid URL. Aborting.');
+    process.exit(1);
+  }
   if (!u.host.includes('lvfovvidtowadmnggzzf') || u.host.includes('mskyhaunnlwtwvsqcmav')) {
     console.error('FATAL: Not connected to staging database or production attempted!');
     process.exit(1);
   }
+
 
   const client = new Client({
     connectionString: stagingUrl,

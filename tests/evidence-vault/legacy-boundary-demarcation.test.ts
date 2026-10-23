@@ -33,10 +33,21 @@ const editorPrincipal: Principal = {
 async function runSuite() {
   console.log('\n=== Starting Phase 4B-2K Legacy Demarcation Test Suite ===\n');
 
-  const stagingUrl = process.env.STAGING_DATABASE_URL || 'postgresql://postgres:Ntn%40supabase403@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres';
-  const u = new URL(stagingUrl);
+  const stagingUrl = process.env.STAGING_DATABASE_URL;
+  if (!stagingUrl) {
+    console.error('FATAL: STAGING_DATABASE_URL environment variable is required to run this integration test suite. Aborting.');
+    process.exit(1);
+  }
+  let u: URL;
+  try {
+    u = new URL(stagingUrl);
+  } catch {
+    console.error('FATAL: STAGING_DATABASE_URL is not a valid URL. Aborting.');
+    process.exit(1);
+  }
   if (!u.host.includes('lvfovvidtowadmnggzzf') || u.host.includes('mskyhaunnlwtwvsqcmav')) {
-    throw new Error('FATAL: Test must run ONLY against staging (lvfovvidtowadmnggzzf)');
+    console.error('FATAL: Test must run ONLY against staging (lvfovvidtowadmnggzzf)');
+    process.exit(1);
   }
 
   const client = new Client({

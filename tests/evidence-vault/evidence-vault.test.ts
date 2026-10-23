@@ -31,16 +31,28 @@ import { MemoryStoryService } from '../../services/stories/service';
 import type { Story, Claim } from '../../types/canonical';
 
 // ── Strict Staging Safety Interlock ──────────────────────────────────────────
-const STAGING_URL =
-  process.env.STAGING_DATABASE_URL ||
-  'postgresql://postgres:Ntn%40supabase403@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres';
+const STAGING_URL = process.env.STAGING_DATABASE_URL;
 
-const u = new URL(STAGING_URL);
+if (!STAGING_URL) {
+  console.error('FATAL: STAGING_DATABASE_URL environment variable is required to run this integration test suite. Aborting.');
+  process.exit(1);
+}
+
+let u: URL;
+try {
+  u = new URL(STAGING_URL);
+} catch {
+  console.error('FATAL: STAGING_DATABASE_URL is not a valid URL. Aborting.');
+  process.exit(1);
+}
+
 if (!u.host.includes('lvfovvidtowadmnggzzf')) {
-  throw new Error(`FATAL: Test targeted non-staging host ${u.host}! Aborting.`);
+  console.error(`FATAL: Test targeted non-staging host ${u.host}! Must target authorized staging (lvfovvidtowadmnggzzf). Aborting.`);
+  process.exit(1);
 }
 if (u.host.includes('mskyhaunnlwtwvsqcmav') || u.host.includes('swektehukscmsgxdzymw')) {
-  throw new Error('FATAL: Test targeted PRODUCTION project! Aborting immediately.');
+  console.error('FATAL: Test targeted PRODUCTION project! Aborting immediately.');
+  process.exit(1);
 }
 
 let passed = 0;
