@@ -116,6 +116,53 @@ assert.equal((staleBlockMetadata[0].data as { heroImage: string }).heroImage, se
 assert.equal((staleBlockMetadata[0].data as { heroImageAlt: string }).heroImageAlt, 'Alt text for the canonical image.', 'stale block metadata must not override canonical metadata during hydration');
 assert.equal((staleBlockMetadata[0].data as { heroImageIsDecorative: boolean }).heroImageIsDecorative, false, 'stale decorative state must not override the canonical record');
 
+const emptyLegacyContentBlock: Block = {
+  id: 'legacy-empty-hero-content',
+  type: 'hero',
+  data: {
+    headline: '',
+    summary: '',
+    heroImage: '',
+    category: '',
+    author: '',
+    publishedAt: '',
+  },
+};
+const hydratedLegacyContent = withCMSHeroBlock([emptyLegacyContentBlock, ...legacyBlocks], {
+  id: 'legacy-empty-fields',
+  title: 'Canonical title',
+  headline: 'Canonical headline',
+  summary: 'Canonical summary',
+  heroImage: selectedImage,
+  heroImageAlt: 'Canonical image description.',
+  heroImageIsDecorative: false,
+  category: 'environment',
+  author: 'Canonical author',
+  publishedAt: '2026-10-22T00:00:00.000Z',
+});
+const hydratedLegacyData = hydratedLegacyContent[0].data as {
+  headline: string; summary: string; heroImage: string; category: string; author: string; publishedAt: string;
+};
+assert.deepEqual(
+  {
+    headline: hydratedLegacyData.headline,
+    summary: hydratedLegacyData.summary,
+    heroImage: hydratedLegacyData.heroImage,
+    category: hydratedLegacyData.category,
+    author: hydratedLegacyData.author,
+    publishedAt: hydratedLegacyData.publishedAt,
+  },
+  {
+    headline: 'Canonical headline',
+    summary: 'Canonical summary',
+    heroImage: selectedImage,
+    category: 'environment',
+    author: 'Canonical author',
+    publishedAt: '2026-10-22T00:00:00.000Z',
+  },
+  'blank legacy hero fields must be hydrated before editing so a save does not erase canonical values',
+);
+
 const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false })], '  Existing image description.  ', false, selectedImage);
 assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained for the same image and alt text is normalized');
 const decorativeMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: '', heroImageIsDecorative: true })], 'stale description', true, selectedImage);

@@ -49,6 +49,24 @@ export function withCMSHeroBlock(blocks: Block[], story: CMSHeroStoryFields): Bl
     );
     const data: HeroBlockData = {
       ...existingData,
+      // Legacy hero blocks may have been persisted with blank metadata fields.
+      // Hydrate those fields from the canonical story before presenting the
+      // editor; deliberate blanking in the active editor still saves normally.
+      headline: typeof existingData.headline === 'string' && existingData.headline.trim()
+        ? existingData.headline
+        : (story.headline || story.title),
+      summary: typeof existingData.summary === 'string' && existingData.summary.trim()
+        ? existingData.summary
+        : (story.summary || ''),
+      category: typeof existingData.category === 'string' && existingData.category.trim()
+        ? existingData.category
+        : (story.category || ''),
+      author: typeof existingData.author === 'string' && existingData.author.trim()
+        ? existingData.author
+        : (story.author || ''),
+      publishedAt: typeof existingData.publishedAt === 'string' && existingData.publishedAt.trim()
+        ? existingData.publishedAt
+        : (story.publishedAt || ''),
       heroImage: effectiveImage,
       // Prefer canonical accessibility metadata when hydrating an empty block.
       // If the block URL conflicts with a canonical URL, trust it only after the
