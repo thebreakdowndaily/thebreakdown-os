@@ -19,7 +19,7 @@ export interface ImageFileValidationResult {
  */
 export function validateImageFile(relativePath: string, rootDir: string = process.cwd()): ImageFileValidationResult {
   const publicDir = path.resolve(rootDir, 'public');
-  const cleanPath = relativePath.replace(/\\/g, '/').replace(/^\\/+/, '');
+  const cleanPath = relativePath.replace(/\\/g, '/').replace(/^\/+/, '');
   const fullPath = path.resolve(publicDir, cleanPath);
   const isInsidePublic = fullPath !== publicDir && fullPath.startsWith(`${publicDir}${path.sep}`);
 

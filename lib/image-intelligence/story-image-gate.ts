@@ -25,7 +25,7 @@ export function validateHeroImageContext(story: Pick<
 
   const altText = typeof story.heroImageAlt === 'string' ? story.heroImageAlt.trim() : '';
   const isDecorative = story.heroImageIsDecorative === true;
-  const genericAlt = /^(?:image|photo|picture|hero image|mock alt text|placeholder)(?:\\s+\\d+)?[.!]?$/i.test(altText);
+  const genericAlt = /^(?:image|photo|picture|hero image|mock alt text|placeholder)(?:\s+\d+)?[.!]?$/i.test(altText);
 
   if (isDecorative && altText) {
     return {

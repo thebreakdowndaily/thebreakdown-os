@@ -72,7 +72,8 @@ const unchanged = withCMSHeroBlock([existingHero, ...legacyBlocks], {
   heroImageAlt: 'Existing image description.',
 });
 assert.equal(unchanged[0].data && (unchanged[0].data as { heroImage: string }).heroImage, selectedImage, 'an existing CMS hero block remains authoritative');
-assert.equal((unchanged[0].data as { heroImageAlt: string }).heroImageAlt, 'Existing image description.', 'legacy hero blocks should hydrate missing alt text from the canonical story');
+assert.equal((unchanged[0].data as { heroImageAlt: string }).heroImageAlt, '', 'legacy hero blocks must not hydrate stale alt text when the image URL differs');
+assert.equal((unchanged[0].data as { heroImageIsDecorative: boolean }).heroImageIsDecorative, false, 'a mismatched image must not inherit the old decorative flag');
 
 const resolvedMetadata = resolveCMSHeroMetadata([heroBlock(selectedImage, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false })], '  Existing image description.  ', false, selectedImage);
 assert.deepEqual(resolvedMetadata, { heroImageAlt: 'Existing image description.', heroImageIsDecorative: false }, 'legacy metadata is retained for the same image and alt text is normalized');
