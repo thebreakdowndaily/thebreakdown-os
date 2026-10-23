@@ -108,9 +108,27 @@ export class NewsroomIntelligenceCore {
     return this.radarRepository;
   }
 
-  private constructor(repository?: NewsroomStateRepository) {
+  public constructor(repository?: NewsroomStateRepository) {
     this.persistence = repository ?? createNewsroomStateRepository();
-    this.restoreFromPersistence();
+    // Synchronous hydration ONLY for synchronous repositories (memory/file).
+    // Asynchronous repositories must NOT launch an unobserved background load in the constructor.
+    if (this.persistence.kind === 'memory' || this.persistence.kind === 'file') {
+      try {
+        const state = this.persistence.load();
+        if (state && !(state instanceof Promise)) {
+          this.hydrateFromState(state);
+        }
+        this.isLoaded = true;
+        this.loadPromise = Promise.resolve();
+      } catch (err) {
+        const message = `Newsroom state unavailable: ${err instanceof Error ? err.message : String(err)}`;
+        const wrappedErr = new NewsroomPersistenceError(message, 'PERSISTENCE_UNAVAILABLE');
+        (wrappedErr as any).cause = err;
+        this.loadError = wrappedErr;
+        this.loadPromise = Promise.reject(wrappedErr);
+        this.loadPromise.catch(() => {});
+      }
+    }
   }
 
   public static getInstance(repository?: NewsroomStateRepository): NewsroomIntelligenceCore {
@@ -130,55 +148,51 @@ export class NewsroomIntelligenceCore {
 
   private isLoaded = false;
   private loadPromise: Promise<void> | null = null;
+  private loadError: Error | null = null;
 
   public async ensureLoaded(): Promise<void> {
     if (this.isLoaded) return;
+    if (this.loadError) {
+      throw this.loadError;
+    }
     if (this.loadPromise) return this.loadPromise;
 
     this.loadPromise = (async () => {
       try {
         const state = await this.persistence.load();
         if (state) {
-          this.observations.clear();
-          for (const o of state.observations) this.observations.set(o.id, o);
-          this.claims.clear();
-          for (const c of state.claims) this.claims.set(c.id, c);
-          this.clusters.clear();
-          for (const c of state.clusters) this.clusters.set(c.id, c);
-          this.signals.clear();
-          for (const s of state.signals) this.signals.set(s.id, s);
-          this.gaps.clear();
-          for (const g of state.gaps) this.gaps.set(g.id, g);
-
-          this.alertEngine.restore(state.alerts, state.engine);
-          beatRoutingService.restore({
-            beats: state.beats,
-            recipients: state.recipients,
-            authorization: state.authorization,
-            escalations: state.escalations,
-            fatigue: state.fatigue,
-          });
-          this.workflowService.restoreReputations(state.sourceReputations);
-          NewsroomAuditService.restoreAll(state.audit);
-
-          this.isLoaded = true;
-        } else {
-          this.isLoaded = true;
+          this.hydrateFromState(state);
         }
+        this.isLoaded = true;
       } catch (err) {
-        this.loadPromise = null;
+        const message = `Newsroom state unavailable: ${err instanceof Error ? err.message : String(err)}`;
+        const wrappedErr = new NewsroomPersistenceError(message, 'PERSISTENCE_UNAVAILABLE');
+        (wrappedErr as any).cause = err;
+        this.loadError = wrappedErr;
         console.error('[NewsroomIntelligenceCore] Critical state load failure:', err);
-        throw new Error(`Newsroom state unavailable: ${err instanceof Error ? err.message : String(err)}`);
+        throw wrappedErr;
       }
     })();
+
+    // Passive catch prevents Node unhandledRejection events while leaving the rejection
+    // fully observable when this.loadPromise is awaited or returned to callers.
+    this.loadPromise.catch(() => {});
 
     return this.loadPromise;
   }
 
-  private restoreFromPersistence(): void {
-    const state = this.persistence.load();
-    if (!state || state instanceof Promise) return;
+  /**
+   * Explicitly retries state restoration after a previous persistence failure.
+   * Clears the previous failed load state and initiates a new canonical load Promise.
+   */
+  public async retryLoad(): Promise<void> {
+    this.loadPromise = null;
+    this.loadError = null;
+    this.isLoaded = false;
+    return this.ensureLoaded();
+  }
 
+  private hydrateFromState(state: NewsroomPersistedState): void {
     this.observations.clear();
     for (const o of state.observations) this.observations.set(o.id, o);
     this.claims.clear();
@@ -200,7 +214,18 @@ export class NewsroomIntelligenceCore {
     });
     this.workflowService.restoreReputations(state.sourceReputations);
     NewsroomAuditService.restoreAll(state.audit);
-    this.isLoaded = true;
+  }
+
+  private enforceReadiness(): void {
+    if (!this.isLoaded) {
+      if (this.loadError) {
+        throw this.loadError;
+      }
+      throw new NewsroomPersistenceError(
+        'Newsroom state not ready: ensureLoaded() must be awaited before accessing newsroom intelligence state.',
+        'PERSISTENCE_UNAVAILABLE'
+      );
+    }
   }
 
   public isDegradedReadOnly(): boolean {
@@ -212,6 +237,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public buildPersistedState(): NewsroomPersistedState {
+    this.enforceReadiness();
     return {
       version: 1,
       savedAt: new Date().toISOString(),
@@ -237,6 +263,7 @@ export class NewsroomIntelligenceCore {
    * Throws if persistence fails or if the repository is in read-only degraded mode.
    */
   public async persistAsync(): Promise<void> {
+    this.enforceReadiness();
     const state = this.buildPersistedState();
     const res = this.persistence.save(state);
     if (res instanceof Promise) {
@@ -246,6 +273,7 @@ export class NewsroomIntelligenceCore {
 
   /** Builds and persists the current authoritative snapshot (best-effort async). */
   public persist(): void {
+    this.enforceReadiness();
     const state = this.buildPersistedState();
     const res = this.persistence.save(state);
     if (res instanceof Promise) {
@@ -259,6 +287,7 @@ export class NewsroomIntelligenceCore {
   // ── Ingestion & Clustering ──────────────────────────────────────────────────
 
   public ingestObservation(obs: NewsroomObservation): void {
+    this.enforceReadiness();
     if (this.observations.has(obs.id)) {
       return;
     }
@@ -334,6 +363,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public registerClaim(claim: NewsroomExtractedClaim): void {
+    this.enforceReadiness();
     this.claims.set(claim.id, claim);
     this.persist();
   }
@@ -342,6 +372,7 @@ export class NewsroomIntelligenceCore {
     signal: NewsroomSignal;
     alert: IntelligenceAlert | null;
   } {
+    this.enforceReadiness();
     this.clusters.set(cluster.id, cluster);
 
     const allObs = Array.from(this.observations.values());
@@ -393,6 +424,7 @@ export class NewsroomIntelligenceCore {
   // ── Queries & Queue ─────────────────────────────────────────────────────────
 
   public getSignals(userContext?: { id: string; role: string }): NewsroomSignal[] {
+    this.enforceReadiness();
     const list = Array.from(this.signals.values()).sort(
       (a, b) =>
         new Date(b.lastUpdatedAt).getTime() - new Date(a.lastUpdatedAt).getTime()
@@ -402,6 +434,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public getSignal(id: string, userContext?: { id: string; role: string }): NewsroomSignal | undefined {
+    this.enforceReadiness();
     const signal = this.signals.get(id);
     if (!signal) return undefined;
     if (userContext && !beatRoutingService.checkUserAccess(userContext, signal)) {
@@ -418,6 +451,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public getAlerts(unacknowledgedOnly = false, userContext?: { id: string; role: string }): IntelligenceAlert[] {
+    this.enforceReadiness();
     const list = this.alertEngine.getAlerts(unacknowledgedOnly);
     if (!userContext) return list;
     return list.filter((a) => {
@@ -428,6 +462,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public acknowledgeAlert(alertId: string, actorId: string, userRole?: string): boolean {
+    this.enforceReadiness();
     const alerts = this.getAlerts();
     const alert = alerts.find((a) => a.id === alertId);
     if (!alert) return false;
@@ -445,6 +480,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public getCoverageGaps(): CoverageGap[] {
+    this.enforceReadiness();
     return Array.from(this.gaps.values());
   }
 
@@ -456,32 +492,39 @@ export class NewsroomIntelligenceCore {
    * Governing document: NEWS_INTELLIGENCE_V1_2_COVERAGE_RECOVERY_REPORT.md
    */
   public registerCoverageGap(gap: CoverageGap): void {
+    this.enforceReadiness();
     this.gaps.set(gap.id, gap);
     this.persist();
   }
 
   /** Read accessor for ingestion deduplication (authoritative canonical state). */
   public getObservations(): NewsroomObservation[] {
+    this.enforceReadiness();
     return Array.from(this.observations.values());
   }
 
   public getObservation(id: string): NewsroomObservation | undefined {
+    this.enforceReadiness();
     return this.observations.get(id);
   }
 
   public getObservationsForUrl(url: string): NewsroomObservation[] {
+    this.enforceReadiness();
     return Array.from(this.observations.values()).filter((o) => o.canonicalUrl === url);
   }
 
   public getClusters(): StoryCluster[] {
+    this.enforceReadiness();
     return Array.from(this.clusters.values());
   }
 
   public getCluster(id: string): StoryCluster | undefined {
+    this.enforceReadiness();
     return this.clusters.get(id);
   }
 
   public runCoverageGapCheck(expectations: MonitoredTopicExpectation[]): CoverageGap[] {
+    this.enforceReadiness();
     const detected = CoverageGapEngine.detectCoverageGaps(
       Array.from(this.clusters.values()),
       Array.from(this.observations.values()),
@@ -512,6 +555,7 @@ export class NewsroomIntelligenceCore {
     payload: NewsroomActionPayload,
     userRole?: string
   ): Promise<NewsroomSignal | null> {
+    await this.ensureLoaded();
     if (this.persistence.isDegradedReadOnly) {
       throw new NewsroomPersistenceError(
         'Database persistence unavailable: Newsroom is in read-only degraded mode. Editorial mutations cannot be committed.',
@@ -602,6 +646,7 @@ export class NewsroomIntelligenceCore {
   }
 
   public executeAction(payload: NewsroomActionPayload, userRole?: string): NewsroomSignal | null {
+    this.enforceReadiness();
     if (this.persistence.isDegradedReadOnly) {
       throw new NewsroomPersistenceError(
         'Database persistence unavailable: Newsroom is in read-only degraded mode. Editorial mutations cannot be committed.',
@@ -714,10 +759,12 @@ export class NewsroomIntelligenceCore {
   }
 
   public getSourceReputations() {
+    this.enforceReadiness();
     return this.workflowService.getSourceReputations();
   }
 
   public registerSource(source: { id: string; name: string; tier: 't1' | 't2' | 't3' | 't4' | 't5' }) {
+    this.enforceReadiness();
     const rep = this.workflowService.registerSourceReputation(source);
     this.persist();
     return rep;
@@ -727,32 +774,38 @@ export class NewsroomIntelligenceCore {
     sourceId: string,
     outcome: 'confirmed' | 'contradicted' | 'false_alarm' | 'correction'
   ) {
+    this.enforceReadiness();
     const rep = this.workflowService.recordSourceFeedback(sourceId, outcome);
     if (rep) this.persist();
     return rep;
   }
 
   public setShadowMode(active: boolean) {
+    this.enforceReadiness();
     this.alertEngine.setShadowMode(active);
     this.persist();
   }
 
   public isShadowMode() {
+    this.enforceReadiness();
     return this.alertEngine.isShadowMode();
   }
 
   public activatePhase1InternalAlerting(authorized: boolean): boolean {
+    this.enforceReadiness();
     const activated = this.alertEngine.activatePhase1InternalAlerting(authorized);
     if (activated) this.persist();
     return activated;
   }
 
   public engageKillSwitch(): void {
+    this.enforceReadiness();
     this.alertEngine.engageKillSwitch();
     this.persist();
   }
 
   public isPhase1Active(): boolean {
+    this.enforceReadiness();
     return this.alertEngine.isPhase1Active();
   }
 
@@ -855,6 +908,7 @@ export class NewsroomIntelligenceCore {
     domain?: string,
     notes?: string
   ) {
+    this.enforceReadiness();
     const signal = this.signals.get(signalId);
     if (!signal) return null;
     return EditorialCalibrationService.recordJudgement(signal, judgement, reviewerId, domain, notes);
@@ -880,6 +934,7 @@ export class NewsroomIntelligenceCore {
    * (Baseline 1.2 freeze + observation-mode section).
    */
   public getScorecard() {
+    this.enforceReadiness();
     return computeNewsroomScorecard({
       observations: Array.from(this.observations.values()),
       clusters: Array.from(this.clusters.values()),

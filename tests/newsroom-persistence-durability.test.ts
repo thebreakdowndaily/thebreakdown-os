@@ -10,7 +10,7 @@
  * 6. Executed against isolated staging database (lvfovvidtowadmnggzzf), NOT production.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SupabaseStateRepository, SNAPSHOT_ROW_ID } from '@/services/intelligence/newsroom/persistence/supabase';
 import {
   NewsroomIntelligenceCore,
@@ -333,5 +333,164 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
     await expect(deniedRepo.save(createBaselineTestState())).rejects.toThrow(
       /permission denied/i
     );
+  });
+
+  // ── 6. Persistence Initialization Single-Flight & Durability Regression ──────
+  describe('Newsroom Persistence Initialization Single-Flight Invariants', () => {
+    it('REG-01: asynchronous repository load rejection causes no unhandled rejection and callers receive defined persistence failure', async () => {
+      let unhandledOccurred = false;
+      const onUnhandled = () => {
+        unhandledOccurred = true;
+      };
+      process.on('unhandledRejection', onUnhandled);
+
+      try {
+        const rejectError = new Error('Async network timeout during bootstrap');
+        const failingAsyncRepo = {
+          kind: 'supabase' as const,
+          isDegradedReadOnly: false,
+          load: vi.fn().mockRejectedValue(rejectError),
+          save: vi.fn().mockResolvedValue(undefined),
+        };
+
+        // Construction must not launch unobserved background load that triggers unhandled rejection
+        const core = NewsroomIntelligenceCore.resetInstance(failingAsyncRepo as any);
+
+        // Allow event loop ticks to verify no unhandled rejection occurs from construction
+        await new Promise((r) => setTimeout(r, 50));
+        expect(unhandledOccurred).toBe(false);
+
+        // Callers awaiting ensureLoaded receive the defined persistence failure
+        await expect(core.ensureLoaded()).rejects.toMatchObject({
+          name: 'NewsroomPersistenceError',
+          code: 'PERSISTENCE_UNAVAILABLE',
+          message: expect.stringContaining('Async network timeout during bootstrap'),
+        });
+
+        // Repeated calls return the same failure without hidden retries
+        await expect(core.ensureLoaded()).rejects.toMatchObject({
+          name: 'NewsroomPersistenceError',
+          code: 'PERSISTENCE_UNAVAILABLE',
+        });
+        expect(failingAsyncRepo.load).toHaveBeenCalledTimes(1);
+        expect(unhandledOccurred).toBe(false);
+      } finally {
+        process.off('unhandledRejection', onUnhandled);
+      }
+    });
+
+    it('REG-02: core initiates a single load for concurrent callers during initialization lifecycle', async () => {
+      let loadCalls = 0;
+      const slowRepo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(async () => {
+          loadCalls++;
+          await new Promise((r) => setTimeout(r, 30));
+          return createBaselineTestState();
+        }),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(slowRepo as any);
+      expect(loadCalls).toBe(0); // Construction did not launch load
+
+      // Concurrent ensureLoaded calls await the same single-flight promise
+      await Promise.all([
+        core.ensureLoaded(),
+        core.ensureLoaded(),
+        core.ensureLoaded(),
+      ]);
+
+      expect(loadCalls).toBe(1); // Single-flight, exact 1 load call
+      expect(core.getSignals().length).toBe(1);
+
+      // Subsequent call does not reload
+      await core.ensureLoaded();
+      expect(loadCalls).toBe(1);
+    });
+
+    it('REG-03: synchronous accessors and mutations enforce readiness and block uninitialized access', async () => {
+      const uninitializedRepo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(async () => {
+          await new Promise((r) => setTimeout(r, 30));
+          return createBaselineTestState();
+        }),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(uninitializedRepo as any);
+
+      // Reads throw readiness error
+      expect(() => core.getSignals()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getObservations()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getAlerts()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getCoverageGaps()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getScorecard()).toThrow(NewsroomPersistenceError);
+
+      // Mutations throw readiness error
+      expect(() => core.ingestObservation({ id: 'obs-premature' } as any)).toThrow(NewsroomPersistenceError);
+      expect(() => core.registerClaim({ id: 'claim-premature' } as any)).toThrow(NewsroomPersistenceError);
+      expect(() => core.upsertCluster({ id: 'cluster-premature' } as any)).toThrow(NewsroomPersistenceError);
+
+      // Await readiness
+      await core.ensureLoaded();
+
+      // Reads and mutations now succeed
+      expect(core.getSignals().length).toBe(1);
+      expect(core.getObservations().length).toBe(1);
+    });
+
+    it('REG-04: successful restoration hydrates state once and remains fully operational', async () => {
+      const state = createBaselineTestState();
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockResolvedValue(state),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+      await core.ensureLoaded();
+
+      expect(core.getSignals().length).toBe(1);
+      expect(core.getSignal('sig-durability-test-001')).toBeDefined();
+      expect(core.getObservations().length).toBe(1);
+      expect(core.getClusters().length).toBe(1);
+      expect(repo.load).toHaveBeenCalledTimes(1);
+    });
+
+    it('REG-05: explicit retryLoad allows controlled recovery after transient failure', async () => {
+      let attempts = 0;
+      const transientRepo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(async () => {
+          attempts++;
+          if (attempts === 1) {
+            throw new Error('Transient network glitch');
+          }
+          return createBaselineTestState();
+        }),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(transientRepo as any);
+
+      // First load fails
+      await expect(core.ensureLoaded()).rejects.toThrow('Transient network glitch');
+      expect(attempts).toBe(1);
+
+      // ensureLoaded does not trigger hidden retry
+      await expect(core.ensureLoaded()).rejects.toThrow('Transient network glitch');
+      expect(attempts).toBe(1);
+
+      // Explicit retry succeeds
+      await core.retryLoad();
+      expect(attempts).toBe(2);
+      expect(core.getSignals().length).toBe(1);
+    });
   });
 });
