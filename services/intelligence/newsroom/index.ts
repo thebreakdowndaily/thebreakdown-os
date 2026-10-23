@@ -200,6 +200,7 @@ export class NewsroomIntelligenceCore {
     }
 
     if (state) this.restorePersistedState(state);
+    else this.isLoaded = true;
   }
 
   public isDegradedReadOnly(): boolean {
