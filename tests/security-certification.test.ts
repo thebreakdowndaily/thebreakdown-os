@@ -80,13 +80,44 @@ function runSecurityCertificationTests() {
     const leakedPgAudit = auditSecretLeakage(leakedPgUrl);
     assert(leakedPgAudit.clean === false, 'Password-bearing PostgreSQL connection URL caught by scanner');
 
+    // Documented template placeholders MUST pass
     const safePgTemplate = 'TEST_DATABASE_URL=postgresql://[DB_USER]:[DB_PASSWORD]@[DB_HOST]:5432/[DB_NAME]';
     const safePgAudit = auditSecretLeakage(safePgTemplate);
-    assert(safePgAudit.clean === true, 'Redacted bracketed PostgreSQL placeholder template passes audit');
+    assert(safePgAudit.clean === true, 'Redacted bracketed [DB_PASSWORD] placeholder template passes audit');
 
     const safePgAngle = 'TEST_DATABASE_URL=postgresql://postgres:<password>@db.example.com:5432/postgres';
     const safePgAngleAudit = auditSecretLeakage(safePgAngle);
-    assert(safePgAngleAudit.clean === true, 'Redacted angle-bracket PostgreSQL placeholder template passes audit');
+    assert(safePgAngleAudit.clean === true, 'Redacted angle-bracket <password> placeholder template passes audit');
+
+    const safePgAngleDb = 'TEST_DATABASE_URL=postgresql://postgres:<DB_PASSWORD>@db.example.com:5432/postgres';
+    const safePgAngleDbAudit = auditSecretLeakage(safePgAngleDb);
+    assert(safePgAngleDbAudit.clean === true, 'Redacted angle-bracket <DB_PASSWORD> placeholder template passes audit');
+
+    const safePgYourPass = 'TEST_DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/db';
+    const safePgYourPassAudit = auditSecretLeakage(safePgYourPass);
+    assert(safePgYourPassAudit.clean === true, 'Redacted YOUR_PASSWORD placeholder template passes audit');
+
+    const safePgRedacted = 'TEST_DATABASE_URL=postgresql://postgres:[REDACTED]@localhost:5432/db';
+    const safePgRedactedAudit = auditSecretLeakage(safePgRedacted);
+    assert(safePgRedactedAudit.clean === true, 'Redacted [REDACTED] placeholder template passes audit');
+
+    // Fabricated passwords starting with [ but NOT exact placeholders MUST be detected
+    const bracketNonPlaceholder1 = 'TEST_DATABASE_URL=postgresql://mock_user:[secretPass123]@db.fabricated-test.supabase.co:5432/postgres';
+    assert(auditSecretLeakage(bracketNonPlaceholder1).clean === false, 'Password starting with [ that is not [DB_PASSWORD] is detected');
+
+    const bracketNonPlaceholder2 = 'TEST_DATABASE_URL=postgresql://mock_user:[DB_PASSWORD_LEAK]@db.fabricated-test.supabase.co:5432/postgres';
+    assert(auditSecretLeakage(bracketNonPlaceholder2).clean === false, 'Password with extended [DB_PASSWORD_LEAK] is detected');
+
+    // Fabricated passwords starting with < but NOT exact placeholders MUST be detected
+    const angleNonPlaceholder1 = 'TEST_DATABASE_URL=postgresql://mock_user:<myRealPassword>@db.fabricated-test.supabase.co:5432/postgres';
+    assert(auditSecretLeakage(angleNonPlaceholder1).clean === false, 'Password starting with < that is not <password> is detected');
+
+    const angleNonPlaceholder2 = 'TEST_DATABASE_URL=postgresql://mock_user:<p@ssword!>@db.fabricated-test.supabase.co:5432/postgres';
+    assert(auditSecretLeakage(angleNonPlaceholder2).clean === false, 'Password starting with < that is not a placeholder is detected');
+
+    // Fabricated passwords starting with YOUR_ but NOT YOUR_PASSWORD MUST be detected
+    const yourPrefixNonPlaceholder = 'TEST_DATABASE_URL=postgresql://mock_user:YOUR_SECRET_CREDENTIAL@db.fabricated-test.supabase.co:5432/postgres';
+    assert(auditSecretLeakage(yourPrefixNonPlaceholder).clean === false, 'Password starting with YOUR_ that is not YOUR_PASSWORD is detected');
 
     // Test 3c: Supabase Service Role JWT Detection
     const fabricatedServiceJwt = createFabricatedServiceRoleJwt('service_role');

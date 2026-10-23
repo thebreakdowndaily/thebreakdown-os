@@ -10,11 +10,27 @@ export interface SecretAuditResult {
   missingSecrets: string[];
 }
 
+/**
+ * Exact documented template placeholders permitted in database connection strings.
+ * Only these explicit values are exempted from secret leakage detection.
+ */
+export const DOCUMENTED_PASSWORD_PLACEHOLDERS = [
+  '[DB_PASSWORD]',
+  '<password>',
+  '<DB_PASSWORD>',
+  'YOUR_PASSWORD',
+  '[PASSWORD]',
+  '[REDACTED]',
+] as const;
+
+export const POSTGRES_CREDENTIAL_URL_PATTERN =
+  /postgres(?:ql)?:\/\/[^\s:]+:(?!\[DB_PASSWORD\]@|<password>@|<DB_PASSWORD>@|YOUR_PASSWORD@|\[PASSWORD\]@|\[REDACTED\]@)[^\s@]+@[^\s\/:]+/i;
+
 export const SECRET_LEAK_PATTERNS = [
   /BEGIN .*PRIVATE KEY/,
   /eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9/,
   /sk_live_[0-9a-zA-Z]{24}/,
-  /postgres(?:ql)?:\/\/[^\s:]+:(?!\[|<|YOUR_)[^\s@]+@[^\s\/:]+/i,
+  POSTGRES_CREDENTIAL_URL_PATTERN,
   /eyJ[A-Za-z0-9_-]*\.[A-Za-z0-9_-]*(?:service_role|c2VydmljZV9yb2xl|InJvbGUiOiJzZXJ2aWNlX3JvbGUi|cm9sZSI6InNlcnZpY2Vfcm9sZS)[A-Za-z0-9_-]*\.[A-Za-z0-9_-]*/,
 ];
 

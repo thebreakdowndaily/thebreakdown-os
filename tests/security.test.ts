@@ -297,6 +297,15 @@ describe('TEST-SECURITY: Security & Access Control Subsystem (Phase 18B)', () =>
     expect(auditSecretLeakage(anglePg).clean).toBe(true);
     const yourPassPg = 'TEST_DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/db';
     expect(auditSecretLeakage(yourPassPg).clean).toBe(true);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://postgres:<DB_PASSWORD>@db.example.com:5432/postgres').clean).toBe(true);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://postgres:[REDACTED]@localhost:5432/db').clean).toBe(true);
+
+    // 4b. Passwords starting with [ or < or YOUR_ that are NOT exact placeholders are detected
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:[secretPass123]@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:[DB_PASSWORD_CUSTOM]@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:<myRealPassword>@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:<custom_key_val>@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:YOUR_SECRET_CREDENTIAL@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
 
     // 5. Fabricated Supabase service-role JWT detected
     const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
