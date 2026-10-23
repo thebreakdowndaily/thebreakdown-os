@@ -130,9 +130,10 @@ export function resolveCMSHeroMetadata(
   const oldAlt = existingHeroImageAlt.trim();
   const providedAlt = typeof data.heroImageAlt === 'string' ? data.heroImageAlt.trim() : undefined;
 
-  const candidateAlt = imageChanged && (!providedAlt || providedAlt === oldAlt)
-    ? ''
-    : (providedAlt ?? (imageChanged ? '' : oldAlt));
+  // The editor clears metadata when its image URL changes. Any non-undefined
+  // value here is therefore the editor's explicit current choice—even if it
+  // intentionally reuses the same alt description for a different crop/asset.
+  const candidateAlt = imageChanged ? (providedAlt ?? '') : (providedAlt ?? oldAlt);
   const decorative = typeof data.heroImageIsDecorative === 'boolean'
     ? data.heroImageIsDecorative
     : (imageChanged ? false : existingHeroImageIsDecorative);

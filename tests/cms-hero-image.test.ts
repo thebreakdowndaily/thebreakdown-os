@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import type { Block } from '../utils/cms-data';
 import { resolveCMSHeroContent, resolveCMSHeroImage, resolveCMSHeroMetadata, withCMSHeroBlock } from '../lib/editorial/cms-hero-image';
 
-function heroBlock(heroImage: string): Block {
+function heroBlock(
+  heroImage: string,
+  metadata: { heroImageAlt?: string; heroImageIsDecorative?: boolean } = {},
+): Block {
   return {
     id: 'hero-1',
     type: 'hero',
@@ -13,6 +16,7 @@ function heroBlock(heroImage: string): Block {
       category: 'policy',
       author: 'Test editor',
       publishedAt: '',
+      ...metadata,
     },
   };
 }
@@ -99,6 +103,17 @@ const suppliedNewAlt = resolveCMSHeroMetadata(
   staleImage,
 );
 assert.deepEqual(suppliedNewAlt, { heroImageAlt: 'A detailed replacement image description.', heroImageIsDecorative: false }, 'new metadata survives a URL change when supplied explicitly');
+const intentionallyReusedAlt = resolveCMSHeroMetadata(
+  [heroBlock(selectedImage, { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false })],
+  'Old photo description.',
+  false,
+  staleImage,
+);
+assert.deepEqual(
+  intentionallyReusedAlt,
+  { heroImageAlt: 'Old photo description.', heroImageIsDecorative: false },
+  'an editor may explicitly reuse the same alt wording on a replacement image',
+);
 
 const resolvedContent = resolveCMSHeroContent([heroBlock(selectedImage)], {
   headline: 'Old headline',

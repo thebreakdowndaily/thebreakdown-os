@@ -200,4 +200,4 @@ assert.equal(
 );
 
 
-console.log('Image context mismatch regression tests: 32 assertions passed');
+console.log('Image context, accessibility and asset-integrity regression tests passed');
