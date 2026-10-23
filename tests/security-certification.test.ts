@@ -5,10 +5,26 @@
  * dependency security audit evaluation, rate limiting, and OWASP compliance.
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import { generateContentSecurityPolicy, generateCsrfToken, validateCsrfToken } from '../lib/security/csrf-protection';
 import { auditSecretLeakage, validateSecretIsolation } from '../lib/security/secret-audit';
 import { evaluateDependencyAudit, SecurityVulnerability } from '../lib/security/dependency-audit';
 import { checkRateLimit, sanitizeHtmlInput } from '../lib/infrastructure/security-audit';
+
+function createFabricatedServiceRoleJwt(role = 'service_role', alg = 'HS256') {
+  const header = Buffer.from(JSON.stringify({ alg, typ: 'JWT' })).toString('base64url');
+  const payload = Buffer.from(
+    JSON.stringify({
+      iss: 'supabase',
+      ref: 'fabricated-test-ref',
+      role,
+      iat: 1700000000,
+      exp: 2000000000,
+    })
+  ).toString('base64url');
+  return `${header}.${payload}.fabricated_sig_signature_only_mock_12345`;
+}
 
 function runSecurityCertificationTests() {
   let passed = 0;
@@ -58,6 +74,50 @@ function runSecurityCertificationTests() {
 
     const leakAudit = auditSecretLeakage(leakedText);
     assert(leakAudit.clean === false, 'Private key leak caught by scanner');
+
+    // Test 3b: Password-bearing PostgreSQL Connection URL Detection
+    const leakedPgUrl = 'TEST_DATABASE_URL=postgresql://mock_user:fabricated_password_987@db.fabricated-test.supabase.co:5432/postgres';
+    const leakedPgAudit = auditSecretLeakage(leakedPgUrl);
+    assert(leakedPgAudit.clean === false, 'Password-bearing PostgreSQL connection URL caught by scanner');
+
+    const safePgTemplate = 'TEST_DATABASE_URL=postgresql://[DB_USER]:[DB_PASSWORD]@[DB_HOST]:5432/[DB_NAME]';
+    const safePgAudit = auditSecretLeakage(safePgTemplate);
+    assert(safePgAudit.clean === true, 'Redacted bracketed PostgreSQL placeholder template passes audit');
+
+    const safePgAngle = 'TEST_DATABASE_URL=postgresql://postgres:<password>@db.example.com:5432/postgres';
+    const safePgAngleAudit = auditSecretLeakage(safePgAngle);
+    assert(safePgAngleAudit.clean === true, 'Redacted angle-bracket PostgreSQL placeholder template passes audit');
+
+    // Test 3c: Supabase Service Role JWT Detection
+    const fabricatedServiceJwt = createFabricatedServiceRoleJwt('service_role');
+    const jwtAudit = auditSecretLeakage(fabricatedServiceJwt);
+    assert(jwtAudit.clean === false, 'Fabricated Supabase service-role JWT caught by scanner');
+
+    const safeJwtPlaceholder = 'SUPABASE_SERVICE_ROLE_KEY=[REDACTED_SUPABASE_SERVICE_ROLE_KEY]';
+    const safeJwtAudit = auditSecretLeakage(safeJwtPlaceholder);
+    assert(safeJwtAudit.clean === true, 'Redacted Supabase service-role placeholder passes audit');
+
+    // Test 3d: Representative Unsafe HTML Fixture
+    const unsafeHtmlFixture = `
+      <html>
+        <body>
+          <div>TEST_DATABASE_URL=postgresql://mock_admin:fabricatedPass_secret@db.fabricated.supabase.co:5432/postgres</div>
+          <div>SUPABASE_SERVICE_ROLE_KEY=${fabricatedServiceJwt}</div>
+        </body>
+      </html>
+    `;
+    const unsafeFixtureAudit = auditSecretLeakage(unsafeHtmlFixture);
+    assert(unsafeFixtureAudit.clean === false && unsafeFixtureAudit.detectedPatterns >= 2, 'Representative unsafe fixture rejected by secret scanner');
+
+    // Test 3e: Verify on-disk batch1-data-access.html is clean
+    const batch1HtmlPath = path.resolve(__dirname, '../batch1-data-access.html');
+    if (fs.existsSync(batch1HtmlPath)) {
+      const batch1Html = fs.readFileSync(batch1HtmlPath, 'utf8');
+      const batch1Audit = auditSecretLeakage(batch1Html);
+      assert(batch1Audit.clean === true && batch1Audit.detectedPatterns === 0, 'On-disk batch1-data-access.html passes secret scanner cleanly');
+    } else {
+      assert(false, 'batch1-data-access.html must exist on disk for validation');
+    }
   } catch (err) {
     console.error('  ✗ FAIL: Secret leakage test failed', err);
     failed++;
