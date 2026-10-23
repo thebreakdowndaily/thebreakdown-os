@@ -51,9 +51,14 @@ assert.equal(
   'specific China/border/tensions overlap remains acceptable',
 );
 assert.equal(
-  matchImageToStoryContext('/images/placeholders/policy-placeholder.svg', indiaUK, getManifestEntry).isMatch,
+  matchImageToStoryContext('/images/placeholders/policy-placeholder.svg', {
+    slug: 'unmapped-policy-story',
+    headline: 'A public policy review',
+    category: 'policy',
+    tags: ['institutions'],
+  }).isMatch,
   true,
-  'an explicitly registered neutral category placeholder is acceptable until a verified image is sourced',
+  'a category placeholder may be used temporarily for stories without an approved manifest entry',
 );
 assert.equal(
   matchImageToStoryContext('/images/stories/global-trade.jpg', {
