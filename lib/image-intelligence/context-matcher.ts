@@ -30,7 +30,7 @@ const CATEGORY_PLACEHOLDER_MAP: Record<string, string> = {
   policy: 'policy-placeholder.svg',
   politics: 'policy-placeholder.svg',
   governance: 'policy-placeholder.svg',
-  institutions: 'governance-placeholder.svg',
+  institutions: 'policy-placeholder.svg',
   geopolitics: 'policy-placeholder.svg',
   diplomacy: 'policy-placeholder.svg',
   education: 'education-placeholder.svg',

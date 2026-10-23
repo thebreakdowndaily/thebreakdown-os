@@ -66,6 +66,15 @@ assert.equal(
   'one generic shared word such as trade must not prove that an image matches a story',
 );
 assert.equal(
+  matchImageToStoryContext('/images/placeholders/policy-placeholder.svg', {
+    slug: 'institutional-reform',
+    headline: 'Institutional reform and public accountability',
+    category: 'institutions',
+  }, getManifestEntry).isMatch,
+  true,
+  'institutional stories must accept the real policy-placeholder fallback used by the renderer',
+);
+assert.equal(
   validateImageFile('/../package.json').isValid,
   false,
   'asset validation must reject paths that resolve outside public/',

@@ -37,7 +37,7 @@ const emptyImageMarkup = renderToStaticMarkup(
 assert.match(emptyImageMarkup, /src="\/images\/placeholders\/policy-placeholder\.svg"/, 'an empty source should render an existing category fallback immediately');
 assert.match(emptyImageMarkup, /alt=""/, 'a generic fallback should not retain the original unavailable photo description');
 
-console.log('Hero image fallback regression tests passed');
+
 
 
 const relatedStoryMarkup = renderToStaticMarkup(
@@ -57,3 +57,5 @@ assert.ok(
   relatedStoryMarkup.includes('src="/images/placeholders/policy-placeholder.svg"'),
   'related story cards with empty image URLs should render a real category fallback immediately',
 );
+
+console.log('Hero image fallback regression tests passed');
