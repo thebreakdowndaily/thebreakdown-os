@@ -54,6 +54,8 @@ function createValidStory(status: Story['status'] = 'scheduled'): Story {
   audit.phases.phase5VisualAudit.passed = true;
   audit.phases.phase6KnowledgeDensityAudit.passed = true;
   audit.phases.phase7DefensibilityAudit.passed = true;
+  audit.overallPassed = true;
+  audit.completedPhasesCount = 7;
 
   return {
     id: 'story-valid-1',
@@ -160,6 +162,39 @@ describe('P0 PUBLICATION INTEGRITY REGRESSION SUITE', () => {
     expect(decision.allowed).toBe(false);
     expect(decision.httpStatus).toBe(422);
     expect(decision.error).toMatch(/gold_standard_review/);
+  });
+
+  it('P0-21: Missing Gold Standard audit record is blocked even when sources and claims exist', () => {
+    const editor = createMockPrincipal('editor');
+    const story = createValidStory('scheduled');
+    delete (story as any).goldStandardAudit;
+
+    const decision = evaluatePublicationContract(story, story, editor);
+    expect(decision.allowed).toBe(false);
+    expect(decision.httpStatus).toBe(422);
+    expect(decision.error).toMatch(/gold_standard_review.*audit record is missing/i);
+  });
+
+  it('P0-22: Gold Standard audit belonging to another story is blocked', () => {
+    const editor = createMockPrincipal('editor');
+    const story = createValidStory('scheduled');
+    (story as any).goldStandardAudit.storyId = 'different-story-id';
+
+    const decision = evaluatePublicationContract(story, story, editor);
+    expect(decision.allowed).toBe(false);
+    expect(decision.httpStatus).toBe(422);
+    expect(decision.error).toMatch(/audit belongs to a different story/i);
+  });
+
+  it('P0-23: Inconsistent Gold Standard summary metadata cannot override phase evidence', () => {
+    const editor = createMockPrincipal('editor');
+    const story = createValidStory('scheduled');
+    (story as any).goldStandardAudit.overallPassed = false;
+
+    const decision = evaluatePublicationContract(story, story, editor);
+    expect(decision.allowed).toBe(false);
+    expect(decision.httpStatus).toBe(422);
+    expect(decision.error).toMatch(/gold_standard_review/i);
   });
 
   it('P0-12: Managing editor and owner hold delete permission; editor and reporter do not', () => {
