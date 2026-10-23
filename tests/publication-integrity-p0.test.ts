@@ -197,6 +197,17 @@ describe('P0 PUBLICATION INTEGRITY REGRESSION SUITE', () => {
     expect(decision.error).toMatch(/gold_standard_review/i);
   });
 
+  it('P0-24: Malformed Gold Standard phase data is rejected safely', () => {
+    const editor = createMockPrincipal('editor');
+    const story = createValidStory('scheduled');
+    (story as any).goldStandardAudit.phases.phase4BiasAudit = null;
+
+    const decision = evaluatePublicationContract(story, story, editor);
+    expect(decision.allowed).toBe(false);
+    expect(decision.httpStatus).toBe(422);
+    expect(decision.error).toMatch(/gold_standard_review/i);
+  });
+
   it('P0-12: Managing editor and owner hold delete permission; editor and reporter do not', () => {
     const owner = createMockPrincipal('owner');
     const managingEditor = createMockPrincipal('managing_editor');
