@@ -520,8 +520,8 @@ describe('VS5 — Newsroom Intelligence & Editorial Decision Support Master Suit
       // 3. Supabase repository fails closed if client credentials are not available
       const brokenSupabaseRepo = new SupabaseStateRepository();
       // Without valid client credentials, load and save MUST throw, not silently return null
-      await expect(brokenSupabaseRepo.load()).rejects.toThrow(/Supabase client unavailable/);
-      await expect(brokenSupabaseRepo.save({} as any)).rejects.toThrow(/Supabase client unavailable/);
+      await expect(brokenSupabaseRepo.load()).rejects.toThrow(/Supabase client unavailable|Database persistence unavailable/);
+      await expect(brokenSupabaseRepo.save({} as any)).rejects.toThrow(/Supabase client unavailable|Database persistence unavailable/);
     } finally {
       process.env.DATA_PROVIDER = originalEnv;
       process.env.NODE_ENV = originalNodeEnv;

@@ -42,6 +42,10 @@ describe('Health Contract & Commit Parity Specification', () => {
       delete process.env.SUPABASE_URL;
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
       delete process.env.SUPABASE_ANON_KEY;
+      delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+      delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      delete process.env.STAGING_SUPABASE_URL;
+      delete process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY;
 
       const req = new NextRequest('https://thebreakdown.in/api/health?type=readiness');
       const res = await healthGet(req);

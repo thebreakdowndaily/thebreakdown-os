@@ -33,6 +33,30 @@ import { validateStoryForPublication } from '@/lib/editorial/publication-gate';
 import { CHAPTER_1_SOURCES, CHAPTER_1_CLAIMS } from '@/lib/editorial/chapter-1-data';
 import type { Story } from '@/types/canonical';
 
+function completeAuditForTest(audit: GoldStandardAuditRecord): GoldStandardAuditRecord {
+  const phases = [
+    audit.phases.phase1ExpertReview,
+    audit.phases.phase2ReaderReview,
+    audit.phases.phase3EvidenceAudit,
+    audit.phases.phase4BiasAudit,
+    audit.phases.phase5VisualAudit,
+    audit.phases.phase6KnowledgeDensityAudit,
+    audit.phases.phase7DefensibilityAudit,
+  ];
+
+  phases.forEach((phase, index) => {
+    phase.passed = true;
+    phase.auditorId = `test-reviewer-${index + 1}`;
+    phase.auditDate = new Date().toISOString();
+    phase.notes = `Synthetic test fixture for review phase ${index + 1}.`;
+    phase.blockingIssuesCount = 0;
+  });
+
+  audit.overallPassed = true;
+  audit.completedPhasesCount = 7;
+  return audit;
+}
+
 describe('VS7 — Reader Corrections Pipeline & Errata Transparency', () => {
   beforeEach(() => {
     resetCorrectionsMemoryStore();
@@ -227,6 +251,7 @@ describe('VS7 — Gold Standard Review & Quality Gate Enforcement', () => {
     audit.phases.phase5VisualAudit.passed = true;
     audit.phases.phase6KnowledgeDensityAudit.passed = true;
     audit.phases.phase7DefensibilityAudit.passed = true;
+    completeAuditForTest(audit);
 
     expect(evaluateGoldStandardPass(audit)).toBe(true);
 
@@ -244,6 +269,7 @@ describe('VS7 — Gold Standard Review & Quality Gate Enforcement', () => {
       blocks: [{ id: 'b1', type: 'paragraph', content: 'Story paragraph content.' }],
       sources: CHAPTER_1_SOURCES,
       claims: CHAPTER_1_CLAIMS,
+      goldStandardAudit: completeAuditForTest(createDefaultGoldStandardAudit('story-valid-pub')),
       publishedAt: '2026-07-25T00:00:00Z',
       status: 'scheduled',
       publicationStatus: 'scheduled',

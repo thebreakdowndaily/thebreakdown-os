@@ -51,5 +51,13 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   if (!updated) {
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
+  try {
+    await researchIntelligenceCore.flushPersistence();
+  } catch {
+    return NextResponse.json(
+      { error: 'Research state persistence failed; the update was not confirmed saved.' },
+      { status: 503 }
+    );
+  }
   return NextResponse.json({ project: updated });
 }

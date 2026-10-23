@@ -64,8 +64,17 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
       return;
     }
 
-    const url = options?.url || process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.STAGING_SUPABASE_URL || '';
-    const key = options?.key || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY || '';
+    const isProductionRuntime =
+      process.env.VERCEL_ENV === 'production' ||
+      process.env.APP_ENV === 'production' ||
+      process.env.NODE_ENV === 'production';
+
+    // Explicit constructor options are for dependency injection. Environment
+    // defaults may use staging credentials only in non-production runtimes.
+    const url = options?.url || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      (!isProductionRuntime ? process.env.STAGING_SUPABASE_URL : '') || '';
+    const key = options?.key || process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      (!isProductionRuntime ? process.env.STAGING_SUPABASE_SERVICE_ROLE_KEY : '') || '';
 
     if (url && key && url !== 'https://dummy.supabase.co') {
       try {
@@ -86,42 +95,44 @@ export class SupabaseStateRepository implements NewsroomStateRepository {
   async load(): Promise<NewsroomPersistedState | null> {
     if (this.cachedState) return this.cachedState;
     if (!this.client) {
-      console.warn(
-        '[SupabaseStateRepository] Supabase client unavailable: falling back to read-only degraded mode.'
-      );
       this._isDegradedReadOnly = true;
-      return null;
+      throw new NewsroomPersistenceError(
+        'Supabase client unavailable: durable newsroom state cannot be loaded.',
+        'PERSISTENCE_UNAVAILABLE'
+      );
     }
-
     try {
       const { data, error } = await this.client
         .from('pipeline_metrics')
         .select('metric_value, metadata')
         .eq('id', SNAPSHOT_ROW_ID)
         .maybeSingle();
-
       if (error) {
-        console.warn('[SupabaseStateRepository] Load failure, enabling read-only degraded mode:', error.message);
         this._isDegradedReadOnly = true;
-        return null;
+        throw new NewsroomPersistenceError(
+          error.message || 'Database query failed',
+          'PERSISTENCE_FAILED'
+        );
       }
-
       if (data && data.metadata) {
         this.lastLoadedVersion = Number(data.metric_value) || 0;
         this.cachedState = data.metadata as NewsroomPersistedState;
         this._isDegradedReadOnly = false;
         return this.cachedState;
       }
-
-      // No row found: empty initial table state, but client is healthy
+      // Only a successful query with no snapshot is treated as first-run state.
       this._isDegradedReadOnly = false;
       return null;
-    } catch (err) {
-      console.warn('[SupabaseStateRepository] Load exception, enabling read-only degraded mode:', err);
+    } catch (error) {
       this._isDegradedReadOnly = true;
-      return null;
+      if (error instanceof NewsroomPersistenceError) throw error;
+      throw new NewsroomPersistenceError(
+        error instanceof Error ? error.message : 'Unknown database error',
+        'PERSISTENCE_FAILED'
+      );
     }
   }
+
 
   async save(state: NewsroomPersistedState): Promise<void> {
     if (this._isDegradedReadOnly || !this.client) {

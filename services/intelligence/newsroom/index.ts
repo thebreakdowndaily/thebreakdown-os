@@ -138,33 +138,8 @@ export class NewsroomIntelligenceCore {
     this.loadPromise = (async () => {
       try {
         const state = await this.persistence.load();
-        if (state) {
-          this.observations.clear();
-          for (const o of state.observations) this.observations.set(o.id, o);
-          this.claims.clear();
-          for (const c of state.claims) this.claims.set(c.id, c);
-          this.clusters.clear();
-          for (const c of state.clusters) this.clusters.set(c.id, c);
-          this.signals.clear();
-          for (const s of state.signals) this.signals.set(s.id, s);
-          this.gaps.clear();
-          for (const g of state.gaps) this.gaps.set(g.id, g);
-
-          this.alertEngine.restore(state.alerts, state.engine);
-          beatRoutingService.restore({
-            beats: state.beats,
-            recipients: state.recipients,
-            authorization: state.authorization,
-            escalations: state.escalations,
-            fatigue: state.fatigue,
-          });
-          this.workflowService.restoreReputations(state.sourceReputations);
-          NewsroomAuditService.restoreAll(state.audit);
-
-          this.isLoaded = true;
-        } else {
-          this.isLoaded = true;
-        }
+        if (state) this.restorePersistedState(state);
+        else this.isLoaded = true;
       } catch (err) {
         this.loadPromise = null;
         console.error('[NewsroomIntelligenceCore] Critical state load failure:', err);
@@ -175,20 +150,22 @@ export class NewsroomIntelligenceCore {
     return this.loadPromise;
   }
 
-  private restoreFromPersistence(): void {
-    const state = this.persistence.load();
-    if (!state || state instanceof Promise) return;
-
+  /**
+   * Restore a snapshot already obtained from the repository.
+   * Keeping this in one place ensures sync and async persistence providers
+   * populate the core identically.
+   */
+  private restorePersistedState(state: NewsroomPersistedState): void {
     this.observations.clear();
-    for (const o of state.observations) this.observations.set(o.id, o);
+    for (const observation of state.observations) this.observations.set(observation.id, observation);
     this.claims.clear();
-    for (const c of state.claims) this.claims.set(c.id, c);
+    for (const claim of state.claims) this.claims.set(claim.id, claim);
     this.clusters.clear();
-    for (const c of state.clusters) this.clusters.set(c.id, c);
+    for (const cluster of state.clusters) this.clusters.set(cluster.id, cluster);
     this.signals.clear();
-    for (const s of state.signals) this.signals.set(s.id, s);
+    for (const signal of state.signals) this.signals.set(signal.id, signal);
     this.gaps.clear();
-    for (const g of state.gaps) this.gaps.set(g.id, g);
+    for (const gap of state.gaps) this.gaps.set(gap.id, gap);
 
     this.alertEngine.restore(state.alerts, state.engine);
     beatRoutingService.restore({
@@ -201,6 +178,29 @@ export class NewsroomIntelligenceCore {
     this.workflowService.restoreReputations(state.sourceReputations);
     NewsroomAuditService.restoreAll(state.audit);
     this.isLoaded = true;
+  }
+
+  private restoreFromPersistence(): void {
+    const state = this.persistence.load();
+    if (state instanceof Promise) {
+      // The constructor starts this initial load for backward compatibility.
+      // Preserve the same promise for ensureLoaded callers and explicitly observe
+      // its rejection so construction cannot leak an unhandled rejection when no
+      // caller requests async state.
+      this.loadPromise = state.then((loadedState) => {
+        if (loadedState) this.restorePersistedState(loadedState);
+        else this.isLoaded = true;
+      }).catch((err) => {
+        this.loadPromise = null;
+        console.error('[NewsroomIntelligenceCore] Critical state load failure:', err);
+        throw new Error(`Newsroom state unavailable: ${err instanceof Error ? err.message : String(err)}`);
+      });
+      void this.loadPromise.catch(() => undefined);
+      return;
+    }
+
+    if (state) this.restorePersistedState(state);
+    else this.isLoaded = true;
   }
 
   public isDegradedReadOnly(): boolean {

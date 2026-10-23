@@ -49,24 +49,43 @@ export function createDefaultGoldStandardAudit(storyId: string): GoldStandardAud
 }
 
 export function evaluateGoldStandardPass(record: GoldStandardAuditRecord): boolean {
-  const p = record.phases;
-  const allPassed =
-    p.phase1ExpertReview.passed &&
-    p.phase2ReaderReview.passed &&
-    p.phase3EvidenceAudit.passed &&
-    p.phase4BiasAudit.passed &&
-    p.phase5VisualAudit.passed &&
-    p.phase6KnowledgeDensityAudit.passed &&
-    p.phase7DefensibilityAudit.passed;
+  // Runtime data may come from persisted JSON and cannot be trusted merely
+  // because its TypeScript interface is complete at compile time.
+  if (!record || typeof record !== 'object') return false;
+  if (record.overallPassed !== true || record.completedPhasesCount !== 7) return false;
+  if (
+    typeof record.lastAuditTimestamp !== 'string' ||
+    !Number.isFinite(Date.parse(record.lastAuditTimestamp))
+  ) {
+    return false;
+  }
+  if (!record.phases || typeof record.phases !== 'object') return false;
 
-  const totalBlocking =
-    p.phase1ExpertReview.blockingIssuesCount +
-    p.phase2ReaderReview.blockingIssuesCount +
-    p.phase3EvidenceAudit.blockingIssuesCount +
-    p.phase4BiasAudit.blockingIssuesCount +
-    p.phase5VisualAudit.blockingIssuesCount +
-    p.phase6KnowledgeDensityAudit.blockingIssuesCount +
-    p.phase7DefensibilityAudit.blockingIssuesCount;
+  const phases = [
+    record.phases.phase1ExpertReview,
+    record.phases.phase2ReaderReview,
+    record.phases.phase3EvidenceAudit,
+    record.phases.phase4BiasAudit,
+    record.phases.phase5VisualAudit,
+    record.phases.phase6KnowledgeDensityAudit,
+    record.phases.phase7DefensibilityAudit,
+  ];
 
-  return allPassed && totalBlocking === 0;
+  // All seven distinct phases must be present, passed, and free of blockers.
+  // A denormalized overall flag cannot override incomplete phase evidence.
+  return phases.every((phase, index) => (
+    !!phase &&
+    phase.phaseId === index + 1 &&
+    typeof phase.phaseName === 'string' &&
+    phase.phaseName.trim().length > 0 &&
+    phase.passed === true &&
+    typeof phase.auditorId === 'string' &&
+    phase.auditorId.trim().length > 0 &&
+    typeof phase.auditDate === 'string' &&
+    Number.isFinite(Date.parse(phase.auditDate)) &&
+    typeof phase.notes === 'string' &&
+    phase.notes.trim().length > 0 &&
+    Number.isInteger(phase.blockingIssuesCount) &&
+    phase.blockingIssuesCount === 0
+  ));
 }

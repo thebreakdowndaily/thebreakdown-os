@@ -17,7 +17,7 @@ import { getPublicStories, getStory } from '@/utils/data-layer/store';
 import { getSource } from '@/lib/knowledge/source-registry';
 import { buildStoryPresentationModel } from '@/lib/story/presentation-model';
 import { ClaimBuilder } from '@/services/entities/builders/claims';
-import { listPublishedCorrections } from '@/services/editorial/corrections-service';
+import { getCorrectionsDbClient, listPublishedCorrections, setCorrectionsDbClient } from '@/services/editorial/corrections-service';
 import type { Entity, EntityBase, Story } from '@/types/canonical';
 
 describe('Phase 1 Integrity Remediation', () => {
@@ -197,14 +197,22 @@ describe('Phase 1 Integrity Remediation', () => {
 
   describe('7. Corrections & Errata Ledger', () => {
     it('should project published corrections for Electoral Bonds and MGNREGA', async () => {
-      const corrections = await listPublishedCorrections();
-      expect(corrections.length).toBeGreaterThanOrEqual(4);
+      // Verify the explicit memory fixture projection only. Production public
+      // corrections are read from the canonical database ledger and fail closed.
+      const priorClient = getCorrectionsDbClient();
+      setCorrectionsDbClient(null);
+      try {
+        const corrections = await listPublishedCorrections();
+        expect(corrections.length).toBeGreaterThanOrEqual(4);
 
-      const ebCorrections = corrections.filter(c => c.storySlug === 'electoral-bonds');
-      expect(ebCorrections.length).toBeGreaterThanOrEqual(3);
+        const ebCorrections = corrections.filter(c => c.storySlug === 'electoral-bonds');
+        expect(ebCorrections.length).toBeGreaterThanOrEqual(3);
 
-      const mgnregaCorrections = corrections.filter(c => c.storySlug === 'mgnrega-reform');
-      expect(mgnregaCorrections.length).toBeGreaterThanOrEqual(1);
+        const mgnregaCorrections = corrections.filter(c => c.storySlug === 'mgnrega-reform');
+        expect(mgnregaCorrections.length).toBeGreaterThanOrEqual(1);
+      } finally {
+        setCorrectionsDbClient(priorClient);
+      }
     });
   });
 });

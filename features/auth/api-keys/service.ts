@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { getServiceClient } from '@/supabase/client';
 import { logSecurityEvent } from '@/features/security/audit-logger';
 import type { Principal } from '../principal';
-import type { AppPermission } from '../permissions';
+import { isAppPermission, type AppPermission } from '../permissions';
 import type {
   ApiKeyRecord,
   CreateApiKeyInput,
@@ -99,15 +99,19 @@ export async function createApiKey(input: CreateApiKeyInput): Promise<CreateApiK
         .select('id')
         .single();
 
-      if (error) {
-        inMemoryKeys.set(keyHash, record);
-      } else if (data.id) {
-        record.id = data.id;
-      }
+      if (error || !data?.id) throw new Error('API key insert was not durably confirmed.');
+      record.id = data.id;
     } catch {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('API key could not be durably persisted; no key was issued.');
+      }
+      // Local development and tests may use an explicitly non-durable test store.
       inMemoryKeys.set(keyHash, record);
     }
   } else {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('API key persistence is not configured; no key was issued.');
+    }
     inMemoryKeys.set(keyHash, record);
   }
 
@@ -171,13 +175,15 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
         .maybeSingle();
 
       if (!error && data) {
+        const parsedPermissions = parsePermissions(data.permissions);
+        if (!parsedPermissions) return { valid: false, code: 'UNAUTHORIZED', error: 'API key permission record is invalid' };
         const rec: ApiKeyRecord = {
           id: data.id,
           owner_id: data.owner_id,
           name: data.name,
           key_prefix: data.key_prefix,
           key_hash: data.key_hash,
-          permissions: parsePermissions(data.permissions),
+          permissions: parsedPermissions,
           role: data.role as ApiKeyRole,
           rate_limit_tier: data.rate_limit_tier as ApiKeyRateLimitTier,
           created_at: data.created_at,
@@ -194,7 +200,7 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
   }
 
   // 3. Fallback to inMemory store (unit tests / seed fallback)
-  if (!record) {
+  if (!record && process.env.NODE_ENV !== 'production') {
     record = inMemoryKeys.get(keyHash) || null;
   }
 
@@ -247,18 +253,10 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
   return { valid: true, key: record };
 }
 
-function parsePermissions(raw: unknown): AppPermission[] {
-  if (!Array.isArray(raw)) return [];
-  const items: unknown[] = raw;
-  const permissions: AppPermission[] = [];
-  for (const item of items) {
-    if (typeof item === 'string') {
-      permissions.push(item as AppPermission);
-    }
-  }
-  return permissions;
+function parsePermissions(raw: unknown): AppPermission[] | null {
+  if (!Array.isArray(raw) || !raw.every(isAppPermission)) return null;
+  return [...new Set(raw)];
 }
-
 function isPrivilegedAdmin(actor: Principal): boolean {
   const role = actor.role;
   return actor.isSuperAdmin || role === 'owner' || role === 'managing_editor';
@@ -273,18 +271,25 @@ export async function revokeApiKey(
   actor: Principal
 ): Promise<{ success: boolean; error?: string }> {
   let targetKey: ApiKeyRecord | null = null;
+  let readFailed = false;
 
   if (isConfiguredSupabase()) {
     try {
-      const supabase = getServiceClient();
-      const { data } = await supabase.from('api_keys').select('*').eq('id', keyId).maybeSingle();
-      if (data) targetKey = data as ApiKeyRecord;
+      const { data, error } = await getServiceClient()
+        .from('api_keys')
+        .select('*')
+        .eq('id', keyId)
+        .maybeSingle();
+      if (error) readFailed = true;
+      else if (data) targetKey = data as ApiKeyRecord;
     } catch {
-      // Check in-memory
+      readFailed = true;
     }
+  } else if (process.env.NODE_ENV === 'production') {
+    return { success: false, error: 'Persistent API-key store is unavailable; revocation was not confirmed.' };
   }
 
-  if (!targetKey) {
+  if (!targetKey && process.env.NODE_ENV !== 'production') {
     for (const rec of inMemoryKeys.values()) {
       if (rec.id === keyId) {
         targetKey = rec;
@@ -294,13 +299,14 @@ export async function revokeApiKey(
   }
 
   if (!targetKey) {
+    if (process.env.NODE_ENV === 'production' && readFailed) {
+      return { success: false, error: 'Persistent API-key store is unavailable; revocation was not confirmed.' };
+    }
     return { success: false, error: 'Key not found' };
   }
 
-  // Ownership / admin authorization check
   const isOwner = actor.userId && targetKey.owner_id === actor.userId;
   const isAdmin = isPrivilegedAdmin(actor);
-
   if (!isOwner && !isAdmin) {
     logSecurityEvent({
       type: 'auth.privilege_escalation_attempt',
@@ -312,18 +318,29 @@ export async function revokeApiKey(
   }
 
   const revokedAt = new Date().toISOString();
-  targetKey.revoked_at = revokedAt;
-
-  // Explicitly cache the revoked record so any immediate subsequent request
-  // fails closed as REVOKED instantly without waiting for cache TTL or DB propagation
-  verificationCache.set(targetKey.key_hash, { record: targetKey, cachedAt: Date.now() });
-
-  try {
-    const supabase = getServiceClient();
-    await supabase.from('api_keys').update({ revoked_at: revokedAt }).eq('id', keyId);
-  } catch {
-    // In-memory fallback already updated
+  let persisted = false;
+  if (isConfiguredSupabase()) {
+    try {
+      const { error } = await getServiceClient()
+        .from('api_keys')
+        .update({ revoked_at: revokedAt })
+        .eq('id', keyId);
+      persisted = !error;
+    } catch {
+      persisted = false;
+    }
   }
+
+  if (process.env.NODE_ENV === 'production' && !persisted) {
+    // Best-effort local denial, but never report a cross-instance revocation as successful.
+    targetKey.revoked_at = revokedAt;
+    verificationCache.set(targetKey.key_hash, { record: targetKey, cachedAt: Date.now() });
+    return { success: false, error: 'Persistent revocation could not be confirmed; the key may remain active on other instances.' };
+  }
+
+  targetKey.revoked_at = revokedAt;
+  verificationCache.set(targetKey.key_hash, { record: targetKey, cachedAt: Date.now() });
+  if (!persisted) inMemoryKeys.set(targetKey.key_hash, targetKey);
 
   logSecurityEvent({
     type: 'api_key.revoked',
@@ -331,7 +348,6 @@ export async function revokeApiKey(
     actorId: actor.userId,
     keyPrefix: targetKey.key_prefix,
   });
-
   return { success: true };
 }
 
@@ -342,32 +358,33 @@ export async function deleteApiKey(
   keyId: string,
   actor: Principal
 ): Promise<{ success: boolean; error?: string }> {
-  const isAdmin = isPrivilegedAdmin(actor);
-  if (!isAdmin) {
+  if (!isPrivilegedAdmin(actor)) {
     return { success: false, error: 'Admin access required to delete API keys' };
   }
 
-  // Purge from verification cache immediately
-  for (const [hash, entry] of verificationCache.entries()) {
-    if (entry.record.id === keyId) {
-      verificationCache.delete(hash);
-    }
-  }
-
+  let persisted = false;
   if (isConfiguredSupabase()) {
     try {
-      const supabase = getServiceClient();
-      await supabase.from('api_keys').delete().eq('id', keyId);
+      const { error } = await getServiceClient()
+        .from('api_keys')
+        .delete()
+        .eq('id', keyId);
+      persisted = !error;
     } catch {
-      // In-memory cleanup
+      persisted = false;
     }
   }
 
+  if (process.env.NODE_ENV === 'production' && !persisted) {
+    return { success: false, error: 'Persistent API-key store is unavailable; deletion was not confirmed.' };
+  }
+
+  // Purge caches only after a durable delete succeeds (or an allowed dev/test memory delete).
+  for (const [hash, entry] of verificationCache.entries()) {
+    if (entry.record.id === keyId) verificationCache.delete(hash);
+  }
   for (const [hash, rec] of inMemoryKeys.entries()) {
-    if (rec.id === keyId) {
-      inMemoryKeys.delete(hash);
-      break;
-    }
+    if (rec.id === keyId) inMemoryKeys.delete(hash);
   }
 
   logSecurityEvent({
@@ -375,50 +392,51 @@ export async function deleteApiKey(
     keyId,
     actorId: actor.userId,
   });
-
   return { success: true };
 }
 
 /**
  * Lists API keys accessible to the given actor.
- * Raw keys are NEVER returned; only masked prefixes and status.
  */
 export async function listApiKeys(actor: Principal): Promise<MaskedApiKey[]> {
   const isAdmin = isPrivilegedAdmin(actor);
   let records: ApiKeyRecord[] = [];
 
-  if (isConfiguredSupabase()) {
+  if (!isConfiguredSupabase()) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('Persistent API-key store is not configured.');
+    }
+  } else {
     try {
       const supabase = getServiceClient();
       let query = supabase.from('api_keys').select('*').order('created_at', { ascending: false });
-      if (!isAdmin) {
-        query = query.eq('owner_id', actor.userId);
-      }
+      if (!isAdmin) query = query.eq('owner_id', actor.userId);
       const { data, error } = await query;
-      if (!error) {
-        records = data as ApiKeyRecord[];
+      if (error) {
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error('Persistent API-key store could not be queried.');
+        }
+      } else {
+        records = (data || []) as ApiKeyRecord[];
       }
     } catch {
-      // fall back to in-memory records
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Persistent API-key store could not be queried.');
+      }
     }
   }
 
-  if (records.length === 0 && inMemoryKeys.size > 0) {
+  if (process.env.NODE_ENV !== 'production' && records.length === 0 && inMemoryKeys.size > 0) {
     for (const rec of inMemoryKeys.values()) {
-      if (isAdmin || rec.owner_id === actor.userId) {
-        records.push(rec);
-      }
+      if (isAdmin || rec.owner_id === actor.userId) records.push(rec);
     }
   }
 
   const now = Date.now();
   return records.map((rec) => {
     let status: 'active' | 'revoked' | 'expired' = 'active';
-    if (rec.revoked_at) {
-      status = 'revoked';
-    } else if (rec.expires_at && new Date(rec.expires_at).getTime() <= now) {
-      status = 'expired';
-    }
+    if (rec.revoked_at) status = 'revoked';
+    else if (rec.expires_at && new Date(rec.expires_at).getTime() <= now) status = 'expired';
 
     return {
       id: rec.id,

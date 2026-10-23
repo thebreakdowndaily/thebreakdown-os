@@ -1,4 +1,5 @@
 import { Client } from 'pg';
+import { resolveMigrationDatabaseUrl } from './migration-target';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -15,13 +16,13 @@ envContent.split('\n').forEach((line) => {
 });
 
 async function main() {
-  const dbUrl = process.env.TEST_DATABASE_URL || process.env.DATABASE_URL;
+  const dbUrl = resolveMigrationDatabaseUrl();
   if (!dbUrl) {
     throw new Error('Missing TEST_DATABASE_URL or DATABASE_URL');
   }
 
   console.log('Applying Migration 016 to remote PostgreSQL...');
-  const client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: false } });
+  const client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: true } });
   await client.connect();
 
   const sqlPath = path.resolve(process.cwd(), 'supabase/migrations/016_api_keys_and_rate_limiting.sql');

@@ -6,6 +6,7 @@ import {
   DEFAULT_PIB_FEED_URL,
 } from '@/lib/intelligence/pib-adapter';
 import { isValidCronRequest } from '@/lib/security/cron-auth';
+import { NewsroomPersistenceError } from '@/services/intelligence/newsroom/persistence/state';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -34,6 +35,9 @@ async function handlePull(req: NextRequest): Promise<NextResponse> {
     const result = await pullPibObservations(newsroomIntelligenceCore, {
       feedUrl: process.env.PIB_FEED_URL || DEFAULT_PIB_FEED_URL,
     });
+    // Ingestion mutators use a best-effort synchronous API internally. Await
+    // the final snapshot so the HTTP success response means durable state exists.
+    await newsroomIntelligenceCore.persistAsync();
     return NextResponse.json({
       ...result,
       timestamp: new Date().toISOString(),
@@ -42,7 +46,15 @@ async function handlePull(req: NextRequest): Promise<NextResponse> {
     if (err instanceof PibFeedError) {
       return NextResponse.json({ error: err.message }, { status: 502 });
     }
-    throw err;
+    if (err instanceof NewsroomPersistenceError) {
+      console.error('[NewsroomPull] durable write failed:', err.code);
+      return NextResponse.json(
+        { error: 'Observations could not be durably saved; retry the pull.' },
+        { status: 503 }
+      );
+    }
+    console.error('[NewsroomPull] request failed:', err instanceof Error ? err.name : 'unknown');
+    return NextResponse.json({ error: 'Observation pull failed' }, { status: 500 });
   }
 }
 

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { guardIntelModule } from '@/features/auth/intel-server';
 import { getSession } from '@/features/auth/auth-server';
 import { researchIntelligenceCore } from '@/services/intelligence/research';
+import { ResearchPersistenceError } from '@/services/intelligence/research/persistence/state';
+import type { ResearchRun } from '@/types/research-intelligence';
 
 export async function POST(
   _req: NextRequest,
@@ -22,9 +24,20 @@ export async function POST(
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
 
-  const run = await researchIntelligenceCore.runPipeline(id, {
-    triggeredBy: session.user.id,
-  });
+  let run: ResearchRun;
+  try {
+    run = await researchIntelligenceCore.runPipeline(id, {
+      triggeredBy: session.user.id,
+    });
+  } catch (error) {
+    if (error instanceof ResearchPersistenceError) {
+      return NextResponse.json(
+        { error: 'Research results could not be durably saved; the run was not confirmed.' },
+        { status: 503 }
+      );
+    }
+    throw error;
+  }
 
   if (run.status === 'FAILED') {
     return NextResponse.json({ error: 'Pipeline failed', run }, { status: 502 });

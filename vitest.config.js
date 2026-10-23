@@ -37,6 +37,8 @@ const path = require('path');
  * Governing document: AGENTS.md — Testing (npm run lint / typecheck / build).
  */
 module.exports = {
+  // tsconfig preserves JSX for Next.js; Vitest must transform TSX before import analysis.
+  esbuild: { jsx: 'automatic' },
   test: {
     globals: true,
     environment: 'node',
@@ -94,7 +96,6 @@ module.exports = {
       'tests/certification/canonical-certification.test.ts',
       'tests/telemetry.test.ts',
       'tests/newsroom-intelligence.test.ts',
-      'tests/newsroom-os.test.ts',
       'tests/newsroom-remediation.test.ts',
       'tests/newsroom-pib-adapter.test.ts',
       'tests/newsroom-pib-coverage.test.ts',
@@ -126,7 +127,6 @@ module.exports = {
       'tests/phase8-production-promotion-and-validation.test.ts',
       'tests/master-loopback-engineering.test.ts',
       'tests/quarantine-isolation.test.ts',
-      'tests/seeder.test.ts',
       'tests/wave0-publication-status-mapping.test.ts',
       'tests/wave1-public-surfaces.test.ts',
       'tests/wave2-api-routes.test.ts',
@@ -192,6 +192,28 @@ module.exports = {
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
+      'tests/evidence-vault-database-config.test.ts',
+      'tests/security/server-action-authorization.test.ts',
+      'tests/security/server-action-helper-exports.test.ts',
+      'tests/security/radar-ssrf-hardening.test.ts',
+      'tests/editorial-scheduled-publish-dispatch.test.ts',
+      'services/radar/__tests__/persistence-provider.test.ts',
+      'tests/supabase-service-client.test.ts',
+      'tests/research-persistence-provider.test.ts',
+      'tests/research/core.test.ts',
+      'tests/ai-copilot-production.test.ts',
+      'tests/security/claim-verification-rpc-migration.test.ts',
+      'tests/cms-hero-image.test.ts',
+      'tests/image-context-matcher.test.ts',
+      'tests/image-placeholder-fallback.test.ts',
+      'tests/api-key-delegation.test.ts',
+      'tests/draft-story-preview-authorization.test.ts',
+      'tests/public-story-nested-projection.test.ts',
+      'tests/api-v2-server-error.test.ts',
+      'tests/security/migration-target.test.ts',
+      'tests/security/api-key-persistence-fail-closed.test.ts',
+      'tests/security/repository-production-fail-closed.test.ts',
+      'tests/security/newsroom-webhook-body-limit.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

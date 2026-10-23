@@ -1,35 +1,12 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
 import { getPublicStories, getFixes } from '@/utils/data-layer/store';
 import { SupabaseStoryRepository } from '@/services/repositories/supabase/story';
 import { SupabaseFixRepository } from '@/services/repositories/supabase/fix';
 import { resolveNextBestUnderstanding } from '@/lib/comprehension/next-best-understanding';
 import { getFixesForStory } from '@/lib/fix-helpers';
 
-// Bootstrap environment from .env.local
-const envPath = path.resolve(process.cwd(), '.env.local');
-if (fs.existsSync(envPath)) {
-  const content = fs.readFileSync(envPath, 'utf8');
-  for (const line of content.split('\n')) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eqIdx = trimmed.indexOf('=');
-    if (eqIdx > 0) {
-      const key = trimmed.slice(0, eqIdx).trim();
-      let val = trimmed.slice(eqIdx + 1).trim();
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-        val = val.slice(1, -1);
-      }
-      if (!process.env[key]) {
-        process.env[key] = val;
-      }
-    }
-  }
-}
-
 describe('Phase 2B-1: Publication State Reconciliation & Runtime Decoupling', () => {
-  it('achieves 1:1 public story count and slug parity between Memory and Supabase', async () => {
+  it.runIf(process.env.RUN_LIVE_SUPABASE_RECONCILIATION === 'true')('achieves 1:1 public story count and slug parity between Memory and Supabase', async () => {
     const memoryStories = await getPublicStories({ pageSize: 100 });
     const memorySlugs = memoryStories.data.map((s) => s.slug).sort();
 
@@ -42,7 +19,7 @@ describe('Phase 2B-1: Publication State Reconciliation & Runtime Decoupling', ()
     expect(supabaseSlugs).toEqual(memorySlugs);
   }, 15000);
 
-  it('achieves 1:1 public fix count and slug parity between Memory and Supabase', async () => {
+  it.runIf(process.env.RUN_LIVE_SUPABASE_RECONCILIATION === 'true')('achieves 1:1 public fix count and slug parity between Memory and Supabase', async () => {
     const memoryFixes = await getFixes();
     const memoryFixSlugs = memoryFixes.data.map((f) => f.slug).sort();
 
@@ -55,14 +32,14 @@ describe('Phase 2B-1: Publication State Reconciliation & Runtime Decoupling', ()
     expect(supabaseFixSlugs).toEqual(memoryFixSlugs);
   }, 15000);
 
-  it('ensures all 15 Namami Gange draft chapters remain strictly invisible in Supabase public read', async () => {
+  it.runIf(process.env.RUN_LIVE_SUPABASE_RECONCILIATION === 'true')('ensures all 15 Namami Gange draft chapters remain strictly invisible in Supabase public read', async () => {
     const storyRepo = new SupabaseStoryRepository();
     const supabaseStories = await storyRepo.getPublicStories();
     const draftChapterFound = supabaseStories.data.some(s => s.slug.startsWith('ng-ch-'));
     expect(draftChapterFound).toBe(false);
   }, 15000);
 
-  it('ensures all 17 quarantined test artifacts remain strictly invisible in Supabase public read', async () => {
+  it.runIf(process.env.RUN_LIVE_SUPABASE_RECONCILIATION === 'true')('ensures all 17 quarantined test artifacts remain strictly invisible in Supabase public read', async () => {
     const storyRepo = new SupabaseStoryRepository();
     const supabaseStories = await storyRepo.getPublicStories();
     const quarantinedFound = supabaseStories.data.some(s => s.isTestArtifact === true);

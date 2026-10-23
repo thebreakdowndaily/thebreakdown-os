@@ -27,6 +27,7 @@ import {
   SupabaseDurableDeliveryStore,
 } from '@/services/notifications';
 import { RadarPipeline } from '@/services/radar/pipeline';
+import { MemoryRadarRepository } from '@/services/radar/persistence';
 import type { RadarSourceDefinition } from '@/services/radar/types';
 
 describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails', () => {
@@ -61,7 +62,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => createAlertDispatcher()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /(?:Supabase Radar persistence was requested|DATA_PROVIDER=supabase requires).*SUPABASE_SERVICE_ROLE_KEY/
       );
       expect(() => new AlertDispatcher()).toThrow(
         /In-memory fallback is strictly prohibited in Supabase runtime/
@@ -74,7 +75,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 
       expect(() => createAlertDispatcher()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /(?:Supabase Radar persistence was requested|DATA_PROVIDER=supabase requires).*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 
@@ -84,7 +85,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => createAlertDispatcher()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /(?:Supabase Radar persistence was requested|DATA_PROVIDER=supabase requires).*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 
@@ -156,7 +157,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => new RadarPipeline(dummySources)).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /(?:Supabase Radar persistence was requested|DATA_PROVIDER=supabase requires).*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 
@@ -169,7 +170,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
         durableStore: new MemoryDurableDeliveryStore(),
       });
 
-      const pipeline = new RadarPipeline(dummySources, { alertDispatcher: customDispatcher });
+      const pipeline = new RadarPipeline(dummySources, { alertDispatcher: customDispatcher, repository: new MemoryRadarRepository() });
       expect(pipeline.getAlertDispatcher()).toBe(customDispatcher);
       expect(pipeline.getAlertDispatcher().getDurableStore()?.kind).toBe('memory');
     });
@@ -192,7 +193,7 @@ describe('Phase 4B-1 — Durable Store Runtime Wiring & Fail-Closed Guardrails',
       delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       expect(() => globalAlertDispatcher.getDurableStore()).toThrow(
-        /DATA_PROVIDER=supabase requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/
+        /(?:Supabase Radar persistence was requested|DATA_PROVIDER=supabase requires).*SUPABASE_SERVICE_ROLE_KEY/
       );
     });
 

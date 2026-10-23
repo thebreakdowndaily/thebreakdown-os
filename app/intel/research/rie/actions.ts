@@ -5,6 +5,8 @@ import { getSession } from '@/features/auth/auth-server';
 import { canAccessIntelModule, normalizeIntelRole, intelRoleLabel } from '@/features/auth/roles';
 import { researchIntelligenceCore } from '@/services/intelligence/research';
 import { ensureResearchRuntime } from '@/lib/intelligence/research-bootstrap';
+import type { ResearchRun } from '@/types/research-intelligence';
+import { ResearchPersistenceError } from '@/services/intelligence/research/persistence/state';
 
 // Governing document: docs/research/RESEARCH_INTELLIGENCE_OPERATING_STANDARD.md
 // Server actions for the Research Intelligence workspace. Authorization happens
@@ -37,7 +39,7 @@ async function ensureRuntime(): Promise<ActionResult | null> {
   }
 }
 
-export async function createResearchProjectActionCore(
+async function createResearchProjectActionCore(
   title: string,
   researchQuestion: string,
   description: string,
@@ -55,6 +57,11 @@ export async function createResearchProjectActionCore(
     priority: 'P2',
     createdBy: actor.id,
   });
+  try {
+    await researchIntelligenceCore.flushPersistence();
+  } catch {
+    return { success: false, error: 'Research state persistence failed; the project was not confirmed saved.' };
+  }
   revalidatePath('/intel/research/rie');
   revalidatePath(`/intel/research/rie/${project.id}`);
   return { success: true, message: `Research project "${project.title}" created.` };
@@ -71,14 +78,22 @@ export async function createResearchProjectAction(formData: FormData): Promise<v
   );
 }
 
-export async function runPipelineActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
+async function runPipelineActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
   if (!projectId) return { success: false, error: 'Missing project id.' };
   const runtimeError = await ensureRuntime();
   if (runtimeError) return runtimeError;
   if (!researchIntelligenceCore.getProject(projectId)) {
     return { success: false, error: 'Project not found.' };
   }
-  const run = await researchIntelligenceCore.runPipeline(projectId, { triggeredBy: actor.id });
+  let run: ResearchRun;
+  try {
+    run = await researchIntelligenceCore.runPipeline(projectId, { triggeredBy: actor.id });
+  } catch (error) {
+    if (error instanceof ResearchPersistenceError) {
+      return { success: false, error: 'Research results could not be durably saved; the run was not confirmed.' };
+    }
+    return { success: false, error: 'Research run failed unexpectedly; no successful result was confirmed.' };
+  }
   revalidatePath(`/intel/research/rie/${projectId}`);
   if (run.status === 'FAILED') {
     return { success: false, error: `Pipeline failed: ${run.errors[0] ?? 'unknown error'}` };
@@ -96,7 +111,7 @@ export async function runPipelineAction(formData: FormData): Promise<void> {
   await runPipelineActionCore(String(formData.get('projectId') ?? '').trim(), auth.actor);
 }
 
-export async function generateStoryBriefActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
+async function generateStoryBriefActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
   if (!projectId) return { success: false, error: 'Missing project id.' };
   const runtimeError = await ensureRuntime();
   if (runtimeError) return runtimeError;
@@ -106,6 +121,11 @@ export async function generateStoryBriefActionCore(projectId: string, actor: { i
   const brief = researchIntelligenceCore.generateStoryBrief(projectId, actor.id);
   if (!brief) {
     return { success: false, error: 'Brief generation failed.' };
+  }
+  try {
+    await researchIntelligenceCore.flushPersistence();
+  } catch {
+    return { success: false, error: 'Research state persistence failed; the brief was not confirmed saved.' };
   }
   revalidatePath(`/intel/research/rie/${projectId}`);
   return { success: true, message: `Story brief generated with ${String(brief.keyClaims.length)} key claims.` };

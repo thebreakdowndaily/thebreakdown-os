@@ -11,6 +11,7 @@ import {
 import { intelModuleFromPath } from './features/auth/intel-auth';
 import { normalizeIntelRole, canAccessIntelModule } from './features/auth/roles';
 import { isValidCronRequest } from './lib/security/cron-auth';
+import { authorizeRadarPoll } from './features/auth/radar-poll-authorization';
 
 const PUBLIC_API_PATHS = [
   '/api/docs',
@@ -135,9 +136,13 @@ export async function middleware(request: NextRequest) {
 
     const key = await validateApiKeyAsync(apiKey);
     if (!key) {
+      const isRadarPoll = pathname === '/api/v2/radar/poll';
       return NextResponse.json(
-        { error: 'Forbidden', message: 'Invalid, expired, or revoked API key' },
-        { status: 403, headers: SECURITY_HEADERS as HeadersInit }
+        {
+          error: isRadarPoll ? 'Unauthorized' : 'Forbidden',
+          message: 'Invalid, expired, or revoked API key',
+        },
+        { status: isRadarPoll ? 401 : 403, headers: SECURITY_HEADERS as HeadersInit }
       );
     }
 
@@ -147,10 +152,32 @@ export async function middleware(request: NextRequest) {
       endpoint: pathname,
       ip: clientIp,
     });
+
     if (!rate.allowed) {
       const resp = rateLimiter.create429Response(rate);
       Object.entries(SECURITY_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
       return resp;
+    }
+
+    // Count authenticated attempts before enforcing the scope, so repeated
+    // underprivileged requests are also subject to the existing rate limit.
+    if (pathname === '/api/v2/radar/poll') {
+      const authorization = authorizeRadarPoll({
+        isCronAuthorized: false,
+        keyPermissions: key.permissions ?? [],
+        forceAll: request.nextUrl.searchParams.get('force') === 'true',
+      });
+      if (!authorization.allowed) {
+        return NextResponse.json(
+          {
+            error: authorization.error === 'unauthorized' ? 'Unauthorized' : 'Forbidden',
+            message: authorization.error === 'unauthorized'
+              ? 'Invalid or missing credentials'
+              : 'API key lacks the required Radar polling permission',
+          },
+          { status: authorization.status, headers: SECURITY_HEADERS as HeadersInit }
+        );
+      }
     }
 
     const response = NextResponse.next();

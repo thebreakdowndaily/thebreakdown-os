@@ -1,4 +1,5 @@
 import { Client } from 'pg';
+import { resolveMigrationDatabaseUrl } from './migration-target';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -19,11 +20,11 @@ for (const envFile of ['.env.local', '.env.test']) {
 }
 
 async function main() {
-  const dbUrl = process.env.TEST_DATABASE_URL || process.env.DATABASE_URL;
+  const dbUrl = resolveMigrationDatabaseUrl();
   if (!dbUrl) throw new Error('Missing database connection URL');
 
   console.log('Connecting to PostgreSQL database...');
-  const client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: false } });
+  const client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: true } });
   await client.connect();
 
   console.log('Applying Migration 019 (019_geo_diagnostic_attribution.sql)...');

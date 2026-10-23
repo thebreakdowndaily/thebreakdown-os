@@ -70,7 +70,7 @@ export default {
         details: results.map(r => ({
           storyId: r.storyId,
           passed: r.passed,
-          failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
+          failedChecks: r.failedChecks,
         })),
       }));
     } catch (error) {
@@ -81,8 +81,10 @@ export default {
         duration,
         error: error instanceof Error ? error.message : 'Unknown error',
       }));
-      // Do not rethrow — Cloudflare will retry on unhandled exceptions,
-      // but we want bounded retries. Log and exit cleanly.
+      // Propagate failure so the Cron invocation is recorded as failed.
+      // Bounded HTTP retries happen inside publishDueStories; do not claim that
+      // Cloudflare automatically retries failed scheduled invocations.
+      throw error;
     }
   },
 

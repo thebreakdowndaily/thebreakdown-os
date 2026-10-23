@@ -33,6 +33,7 @@ import type {
 } from '@/types/research-intelligence';
 import type { ResearchSourceAdapter } from './adapters/interface';
 import type { ResearchPersistedState, ResearchStateRepository } from './persistence/state';
+import { ResearchPersistenceError } from './persistence/state';
 import { emptyPersistedState, RESEARCH_STATE_VERSION } from './persistence/state';
 import { createResearchStateRepository } from './persistence';
 import { ResearchAdapterRegistry } from './adapters/registry';
@@ -58,6 +59,8 @@ export class ResearchIntelligenceCore {
   private repository: ResearchStateRepository;
   private state: ResearchPersistedState;
   private loaded = false;
+  private pendingPersistence: Promise<void> = Promise.resolve();
+  private persistenceFailure: ResearchPersistenceError | null = null;
   private readonly adapterRegistry = new ResearchAdapterRegistry();
 
   private constructor(repository?: ResearchStateRepository, adapters?: ResearchSourceAdapter[]) {
@@ -85,11 +88,15 @@ export class ResearchIntelligenceCore {
   }
 
   public async ensureLoaded(): Promise<void> {
-    if (this.loaded) return;
+    if (this.loaded) {
+      await this.flushPersistence();
+      return;
+    }
     const persisted = await this.repository.load();
     if (persisted && persisted.version === RESEARCH_STATE_VERSION) {
       this.state = { ...emptyPersistedState(), ...persisted };
     }
+    this.persistenceFailure = null;
     this.loaded = true;
   }
 
@@ -98,12 +105,35 @@ export class ResearchIntelligenceCore {
     return this.state;
   }
 
-  /** Persist the current authoritative state to the durable repository. */
+  /** Queue a durable snapshot write. Call flushPersistence before acknowledging a mutation. */
   public persist(): void {
     this.state.savedAt = new Date().toISOString();
-    void Promise.resolve(this.repository.save(this.state)).catch((err) => {
-      console.error('[ResearchIntelligenceCore] persist failed:', err);
-    });
+    const snapshot = structuredClone(this.state);
+
+    this.pendingPersistence = this.pendingPersistence
+      .then(async () => {
+        await this.repository.save(snapshot);
+        this.persistenceFailure = null;
+      })
+      .catch((err: unknown) => {
+        this.persistenceFailure =
+          err instanceof ResearchPersistenceError
+            ? err
+            : new ResearchPersistenceError(
+                'Research state could not be saved to the configured durable repository.',
+                'PERSISTENCE_WRITE_FAILED'
+              );
+        this.loaded = false;
+        console.error('[ResearchIntelligenceCore] persist failed:', this.persistenceFailure.code);
+      });
+  }
+
+  /** Wait for all queued writes and fail if the latest durable write was not confirmed. */
+  public async flushPersistence(): Promise<void> {
+    await this.pendingPersistence;
+    if (this.persistenceFailure) {
+      throw this.persistenceFailure;
+    }
   }
 
   // ── Adapters ───────────────────────────────────────────────────────────────

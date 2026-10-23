@@ -159,6 +159,22 @@ function createCanaryStory(status: Story['status'] = 'scheduled'): Story {
   audit.phases.phase5VisualAudit.passed = true;
   audit.phases.phase6KnowledgeDensityAudit.passed = true;
   audit.phases.phase7DefensibilityAudit.passed = true;
+  const phases = [
+    audit.phases.phase1ExpertReview,
+    audit.phases.phase2ReaderReview,
+    audit.phases.phase3EvidenceAudit,
+    audit.phases.phase4BiasAudit,
+    audit.phases.phase5VisualAudit,
+    audit.phases.phase6KnowledgeDensityAudit,
+    audit.phases.phase7DefensibilityAudit,
+  ];
+  phases.forEach((phase, index) => {
+    phase.auditorId = `test-reviewer-${index + 1}`;
+    phase.auditDate = new Date().toISOString();
+    phase.notes = `Synthetic test fixture for review phase ${index + 1}.`;
+  });
+  audit.overallPassed = true;
+  audit.completedPhasesCount = 7;
 
   return {
     id: 'story-canary-1',
@@ -166,7 +182,7 @@ function createCanaryStory(status: Story['status'] = 'scheduled'): Story {
     slug: 'canary-source-provenance',
     headline: 'Canary Headline',
     summary: 'Canary summary meeting editorial guidelines.',
-    heroImage: '/images/hero.jpg',
+    heroImage: '',
     author: 'Editorial Desk',
     category: 'governance',
     status,

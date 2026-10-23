@@ -18,7 +18,9 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 3600; // 1 hour ISR
+// This ledger depends on the canonical database at request time. Do not bake an
+// empty or seeded fallback into a static build when database credentials are absent.
+export const dynamic = 'force-dynamic';
 
 export default async function CorrectionsPage() {
   const corrections = await listPublishedCorrections();

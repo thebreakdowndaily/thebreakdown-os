@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { RadarCollector, sanitizeHtml } from './interface';
-import { RadarSourceDefinition, CollectorResult, RawArtifact, CollectorConfig, DEFAULT_COLLECTOR_CONFIG } from '../types';
-import { isSafeExternalUrl } from './security';
+import { RadarSourceDefinition, CollectorResult, CollectorConfig, DEFAULT_COLLECTOR_CONFIG } from '../types';
+import { safeFetch } from './security';
 import { extractHtmlTables } from '../tables/html-extractor';
 
 export class HtmlCollector implements RadarCollector {
@@ -21,60 +21,26 @@ export class HtmlCollector implements RadarCollector {
       const abortController = new AbortController();
       const timeoutId = setTimeout(() => abortController.abort(), this.config.timeoutMs);
 
+      let finalResponse: Response;
       if (!this.config.allowPrivateIps) {
-        const check = isSafeExternalUrl(source.url);
-        if (!check.safe) {
-          throw new Error(`SSRF blocked: ${check.reason}`);
-        }
-      }
-
-      const response = await fetch(source.url, {
-        signal: abortController.signal,
-        redirect: 'manual',
-        headers: {
-          'User-Agent': this.config.userAgent,
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-        }
-      });
-
-      let finalResponse = response;
-      let redirectCount = 0;
-      const MAX_REDIRECTS = 5;
-      
-      // Handle redirects manually to prevent non-HTTP(S) redirects and enforce limits
-      while (
-        finalResponse.status >= 300 && 
-        finalResponse.status < 400 && 
-        finalResponse.headers.has('location')
-      ) {
-        if (redirectCount >= MAX_REDIRECTS) {
-          throw new Error(`Too many redirects (max ${MAX_REDIRECTS})`);
-        }
-        
-        const location = finalResponse.headers.get('location')!;
-        const redirectUrl = new URL(location, source.url);
-        
-        if (redirectUrl.protocol !== 'http:' && redirectUrl.protocol !== 'https:') {
-          throw new Error(`Invalid redirect protocol: ${redirectUrl.protocol}`);
-        }
-
-        if (!this.config.allowPrivateIps) {
-          const check = isSafeExternalUrl(redirectUrl.toString());
-          if (!check.safe) {
-            throw new Error(`SSRF redirect blocked: ${check.reason}`);
-          }
-        }
-        
-        finalResponse = await fetch(redirectUrl.toString(), {
+        finalResponse = await safeFetch(source.url, {
           signal: abortController.signal,
-          redirect: 'manual',
           headers: {
             'User-Agent': this.config.userAgent,
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-          }
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          },
+          dnsResolver: this.config.dnsResolver,
+          fetchFn: this.config.fetchFn,
         });
-        
-        redirectCount++;
+      } else {
+        const fetchToUse = this.config.fetchFn || fetch;
+        finalResponse = await fetchToUse(source.url, {
+          signal: abortController.signal,
+          headers: {
+            'User-Agent': this.config.userAgent,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          },
+        });
       }
 
       clearTimeout(timeoutId);

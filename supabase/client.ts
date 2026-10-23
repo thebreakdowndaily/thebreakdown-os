@@ -126,13 +126,28 @@ export function getServiceClient(): SupabaseClient<TypedDatabase> {
   }
   if (adminClient) return adminClient;
   const { url } = getConfig();
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-admin-key';
-  
-  if (process.env.NODE_ENV !== 'production' && !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    console.warn('SUPABASE_SERVICE_ROLE_KEY is missing. Using mock values.');
+  const configuredKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const isProductionRuntime =
+    process.env.NODE_ENV === 'production' ||
+    process.env.VERCEL_ENV === 'production' ||
+    process.env.APP_ENV === 'production';
+
+  if (!configuredKey && isProductionRuntime) {
+    throw new Error(
+      'SUPABASE_SERVICE_ROLE_KEY is required for privileged server-side database access in production.'
+    );
   }
-  
-  adminClient = createClient<TypedDatabase>(url, key);
+
+  // Keep inert credentials for local/test imports only. Production must never
+  // construct a privileged client that silently carries a dummy key.
+  const key = configuredKey || 'dummy-admin-key';
+  if (!configuredKey) {
+    console.warn('SUPABASE_SERVICE_ROLE_KEY is missing. Using a development-only placeholder.');
+  }
+
+  adminClient = createClient<TypedDatabase>(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
   return adminClient;
 }
 
