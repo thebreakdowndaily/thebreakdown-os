@@ -145,7 +145,7 @@ export function validateStoryForPublication(
   // Gate 11: Gold Standard Review — an evidence inventory is not a substitute for review.
   const auditRecord = (story as Story & { goldStandardAudit?: GoldStandardAuditRecord }).goldStandardAudit;
   const auditMatchesStory = !!auditRecord && auditRecord.storyId === story.id;
-  const passedGoldStandard = auditMatchesStory && evaluateGoldStandardPass(auditRecord);
+  const passedGoldStandard = !!auditRecord && auditRecord.storyId === story.id && evaluateGoldStandardPass(auditRecord);
 
   checks.push({
     name: 'gold_standard_review',
