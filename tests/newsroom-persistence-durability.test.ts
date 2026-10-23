@@ -337,6 +337,15 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
 
   // ── 6. Persistence Initialization Single-Flight & Durability Regression ──────
   describe('Newsroom Persistence Initialization Single-Flight Invariants', () => {
+    function createDeferred<T>() {
+      let resolve!: (value: T | PromiseLike<T>) => void;
+      let reject!: (reason?: any) => void;
+      const promise = new Promise<T>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      return { promise, resolve, reject };
+    }
     it('REG-01: asynchronous repository load rejection causes no unhandled rejection and callers receive defined persistence failure', async () => {
       let unhandledOccurred = false;
       const onUnhandled = () => {
@@ -491,6 +500,224 @@ describe('Newsroom Persistence Durability & Security Hardening Suite', () => {
       await core.retryLoad();
       expect(attempts).toBe(2);
       expect(core.getSignals().length).toBe(1);
+    });
+
+    it('REG-06: retryLoad() during an in-flight load does not cause a second concurrent repository load', async () => {
+      const deferred = createDeferred<NewsroomPersistedState>();
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(() => deferred.promise),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+
+      // Start in-flight load via ensureLoaded
+      const ensurePromise = core.ensureLoaded();
+      expect(repo.load).toHaveBeenCalledTimes(1);
+
+      // Call retryLoad while ensureLoaded is pending
+      const retryPromise = core.retryLoad();
+
+      // MUST NOT trigger a second repository load
+      expect(repo.load).toHaveBeenCalledTimes(1);
+      // MUST share / reuse the in-flight initialization promise
+      expect(retryPromise).toBe(ensurePromise);
+
+      // Resolve the deferred promise
+      const testState = createBaselineTestState();
+      deferred.resolve(testState);
+
+      // Both promises settle successfully
+      await Promise.all([ensurePromise, retryPromise]);
+
+      expect(core.getSignals().length).toBe(1);
+      expect(repo.load).toHaveBeenCalledTimes(1);
+    });
+
+    it('REG-07: retries permitted after failure; old attempt cannot overwrite or invalidate successful retry', async () => {
+      const deferredAttempt1 = createDeferred<NewsroomPersistedState>();
+      const deferredAttempt2 = createDeferred<NewsroomPersistedState>();
+
+      let callCount = 0;
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(() => {
+          callCount++;
+          if (callCount === 1) return deferredAttempt1.promise;
+          return deferredAttempt2.promise;
+        }),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+
+      // Attempt 1 fails
+      const initialLoad = core.ensureLoaded();
+      expect(repo.load).toHaveBeenCalledTimes(1);
+
+      deferredAttempt1.reject(new Error('Outage on primary persistence replica'));
+
+      await expect(initialLoad).rejects.toMatchObject({
+        name: 'NewsroomPersistenceError',
+        code: 'PERSISTENCE_UNAVAILABLE',
+        message: expect.stringContaining('Outage on primary persistence replica'),
+      });
+
+      // State access is blocked after failed attempt 1
+      expect(() => core.getSignals()).toThrow(NewsroomPersistenceError);
+
+      // Explicit retry is now permitted because prior attempt definitively failed
+      const retryPromise = core.retryLoad();
+      expect(repo.load).toHaveBeenCalledTimes(2);
+
+      // Concurrent ensureLoaded during retry reuses retry promise
+      const concurrentEnsure = core.ensureLoaded();
+      expect(concurrentEnsure).toBe(retryPromise);
+      expect(repo.load).toHaveBeenCalledTimes(2);
+
+      // Attempt 2 succeeds with fresh state
+      const retryState = createBaselineTestState();
+      retryState.signals[0].id = 'sig-retry-durability-002';
+      retryState.signals[0].title = 'Cabinet Approves Semiconductor Mission Expansion (Verified)';
+      deferredAttempt2.resolve(retryState);
+
+      await retryPromise;
+      await concurrentEnsure;
+
+      // Verify successful retry hydrated state
+      expect(core.getSignals().length).toBe(1);
+      const signal = core.getSignal('sig-retry-durability-002');
+      expect(signal).toBeDefined();
+      expect(signal!.title).toBe('Cabinet Approves Semiconductor Mission Expansion (Verified)');
+
+      // Verify old attempt's failure cannot invalidate or overwrite the successful retry
+      await expect(core.ensureLoaded()).resolves.toBeUndefined();
+      expect(() => core.getSignals()).not.toThrow();
+      expect(core.getSignals().length).toBe(1);
+
+      // Calling retryLoad again when already loaded does not cause a third load
+      await core.retryLoad();
+      expect(repo.load).toHaveBeenCalledTimes(2);
+    });
+
+    it('REG-08: generation guard ensures stale attempt cannot overwrite state or set failure after newer attempt succeeds', async () => {
+      const deferred1 = createDeferred<NewsroomPersistedState>();
+      const deferred2 = createDeferred<NewsroomPersistedState>();
+
+      let callCount = 0;
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(() => {
+          callCount++;
+          if (callCount === 1) return deferred1.promise;
+          return deferred2.promise;
+        }),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+
+      // Start generation 1
+      const gen1Promise = core.ensureLoaded();
+      expect(repo.load).toHaveBeenCalledTimes(1);
+
+      // Simulate a newer load generation (e.g. forced retry or next generation)
+      const gen2Promise = (core as any).initiateLoad();
+      expect(repo.load).toHaveBeenCalledTimes(2);
+
+      // Generation 2 succeeds first with authoritative state
+      const state2 = createBaselineTestState();
+      state2.signals[0].id = 'sig-gen2-authoritative';
+      deferred2.resolve(state2);
+      await gen2Promise;
+
+      expect(core.getSignal('sig-gen2-authoritative')).toBeDefined();
+
+      // Now generation 1 resolves late with stale state
+      const staleState = createBaselineTestState();
+      staleState.signals[0].id = 'sig-gen1-stale';
+      deferred1.resolve(staleState);
+      await gen1Promise;
+
+      // Generation guard MUST have ignored generation 1's stale state
+      expect(core.getSignal('sig-gen2-authoritative')).toBeDefined();
+      expect(core.getSignal('sig-gen1-stale')).toBeUndefined();
+      expect(core.getSignals().length).toBe(1);
+    });
+
+    it('REG-09: concurrent ensureLoaded() callers share one canonical Promise without duplicate loads', async () => {
+      const deferred = createDeferred<NewsroomPersistedState>();
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(() => deferred.promise),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+
+      const p1 = core.ensureLoaded();
+      const p2 = core.ensureLoaded();
+      const p3 = core.ensureLoaded();
+
+      expect(p2).toBe(p1);
+      expect(p3).toBe(p1);
+      expect(repo.load).toHaveBeenCalledTimes(1);
+
+      deferred.resolve(createBaselineTestState());
+      await Promise.all([p1, p2, p3]);
+
+      expect(core.getSignals().length).toBe(1);
+      expect(repo.load).toHaveBeenCalledTimes(1);
+    });
+
+    it('REG-10: failed initialization remains observable and state access remains blocked fail-closed', async () => {
+      const deferred = createDeferred<NewsroomPersistedState>();
+      const repo = {
+        kind: 'supabase' as const,
+        isDegradedReadOnly: false,
+        load: vi.fn().mockImplementation(() => deferred.promise),
+        save: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const core = NewsroomIntelligenceCore.resetInstance(repo as any);
+
+      const p1 = core.ensureLoaded();
+      const p2 = core.ensureLoaded();
+
+      // Reject deferred
+      const rootErr = new Error('Connection refused to database replica');
+      deferred.reject(rootErr);
+
+      await expect(p1).rejects.toMatchObject({
+        name: 'NewsroomPersistenceError',
+        code: 'PERSISTENCE_UNAVAILABLE',
+        message: expect.stringContaining('Connection refused to database replica'),
+      });
+      await expect(p2).rejects.toMatchObject({
+        name: 'NewsroomPersistenceError',
+        code: 'PERSISTENCE_UNAVAILABLE',
+      });
+
+      // Repeated call does not initiate hidden retry and throws failure
+      await expect(core.ensureLoaded()).rejects.toMatchObject({
+        name: 'NewsroomPersistenceError',
+        code: 'PERSISTENCE_UNAVAILABLE',
+      });
+      expect(repo.load).toHaveBeenCalledTimes(1);
+
+      // State access remains strictly blocked fail-closed
+      expect(() => core.getSignals()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getObservations()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getAlerts()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getCoverageGaps()).toThrow(NewsroomPersistenceError);
+      expect(() => core.getScorecard()).toThrow(NewsroomPersistenceError);
+      expect(() => core.buildPersistedState()).toThrow(NewsroomPersistenceError);
+      expect(() => core.ingestObservation({ id: 'obs-blocked' } as any)).toThrow(NewsroomPersistenceError);
     });
   });
 });

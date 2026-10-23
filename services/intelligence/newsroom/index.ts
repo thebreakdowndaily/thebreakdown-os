@@ -147,49 +147,86 @@ export class NewsroomIntelligenceCore {
   // ── Persistence ─────────────────────────────────────────────────────────────
 
   private isLoaded = false;
+  private isLoading = false;
   private loadPromise: Promise<void> | null = null;
   private loadError: Error | null = null;
+  private loadGeneration = 0;
 
-  public async ensureLoaded(): Promise<void> {
-    if (this.isLoaded) return;
-    if (this.loadError) {
-      throw this.loadError;
+  public ensureLoaded(): Promise<void> {
+    if (this.isLoaded) {
+      return this.loadPromise ?? Promise.resolve();
     }
-    if (this.loadPromise) return this.loadPromise;
+    if (this.isLoading && this.loadPromise) {
+      return this.loadPromise;
+    }
+    if (this.loadError) {
+      return this.loadPromise ?? Promise.reject(this.loadError);
+    }
 
-    this.loadPromise = (async () => {
+    return this.initiateLoad();
+  }
+
+  /**
+   * Explicitly retries state restoration after a previous persistence failure.
+   * Safe when initialization is pending: reuses the in-flight initialization.
+   * Permits an explicit retry only after the prior attempt has definitively failed.
+   */
+  public retryLoad(): Promise<void> {
+    if (this.isLoaded) {
+      return this.loadPromise ?? Promise.resolve();
+    }
+    if (this.isLoading && this.loadPromise) {
+      return this.loadPromise;
+    }
+    if (!this.loadError) {
+      return this.ensureLoaded();
+    }
+
+    this.loadError = null;
+    return this.initiateLoad();
+  }
+
+  private initiateLoad(): Promise<void> {
+    const generation = ++this.loadGeneration;
+    this.isLoading = true;
+    this.loadError = null;
+
+    const promise = (async () => {
       try {
         const state = await this.persistence.load();
+        if (generation !== this.loadGeneration) {
+          // Stale attempt: another generation has already taken over
+          return;
+        }
         if (state) {
           this.hydrateFromState(state);
         }
         this.isLoaded = true;
+        this.loadError = null;
       } catch (err) {
+        if (generation !== this.loadGeneration) {
+          // Stale attempt: do not overwrite current state or loadError
+          return;
+        }
         const message = `Newsroom state unavailable: ${err instanceof Error ? err.message : String(err)}`;
         const wrappedErr = new NewsroomPersistenceError(message, 'PERSISTENCE_UNAVAILABLE');
         (wrappedErr as any).cause = err;
         this.loadError = wrappedErr;
         console.error('[NewsroomIntelligenceCore] Critical state load failure:', err);
         throw wrappedErr;
+      } finally {
+        if (generation === this.loadGeneration) {
+          this.isLoading = false;
+        }
       }
     })();
 
     // Passive catch prevents Node unhandledRejection events while leaving the rejection
     // fully observable when this.loadPromise is awaited or returned to callers.
-    this.loadPromise.catch(() => {});
+    promise.catch(() => {});
 
-    return this.loadPromise;
-  }
-
-  /**
-   * Explicitly retries state restoration after a previous persistence failure.
-   * Clears the previous failed load state and initiates a new canonical load Promise.
-   */
-  public async retryLoad(): Promise<void> {
-    this.loadPromise = null;
-    this.loadError = null;
-    this.isLoaded = false;
-    return this.ensureLoaded();
+    this.loadPromise = promise;
+    return promise;
   }
 
   private hydrateFromState(state: NewsroomPersistedState): void {
