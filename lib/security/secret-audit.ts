@@ -14,6 +14,7 @@ const SECRET_LEAK_PATTERNS = [
   /BEGIN .*PRIVATE KEY/,
   /eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9/,
   /sk_live_[0-9a-zA-Z]{24}/,
+  /postgres(ql)?:\/\/[^:]+:[^@\s]+@[^/\s]+/i,
 ];
 
 export function auditSecretLeakage(payload: string): { clean: boolean; detectedPatterns: number } {

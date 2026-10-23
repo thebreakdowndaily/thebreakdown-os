@@ -58,6 +58,10 @@ function runSecurityCertificationTests() {
 
     const leakAudit = auditSecretLeakage(leakedText);
     assert(leakAudit.clean === false, 'Private key leak caught by scanner');
+
+    const dbLeakText = 'DATABASE_URL=postgresql://user:secretpass@db.example.com:5432/db';
+    const dbLeakAudit = auditSecretLeakage(dbLeakText);
+    assert(dbLeakAudit.clean === false, 'Database password URL leak caught by scanner');
   } catch (err) {
     console.error('  ✗ FAIL: Secret leakage test failed', err);
     failed++;

@@ -70,7 +70,7 @@
     "check:bundle": "next build",
     "check:lighthouse": "echo 'Lighthouse audit configured for deployment URL'",
     "check:audit": "npm run audit",
-    "check:performance": "npx tsx tests/performance.test.ts",
+    "check:performance": "vitest run tests/performance.test.ts",
     "check:security": "npm run test:security",
     "check:verify": "npm run checkpoint:b",
     "build:scheduled-worker": "node workers/scheduled-publish/build.mjs",

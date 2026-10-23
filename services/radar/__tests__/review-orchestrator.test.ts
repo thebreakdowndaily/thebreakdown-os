@@ -34,7 +34,9 @@ describe('Tabular Review Orchestrator (Phase 4B-3J)', () => {
     // Simulate that by default, vault verification check passes
     vaultService.getArtifactMetadata = vi.fn().mockResolvedValue({
       id: 'arch-1',
-      retentionState: 'verified'
+      retentionState: 'verified',
+      byteLength: 4096,
+      preservationState: 'preserved'
     });
     vaultService.verifyCryptographicIntegrity = vi.fn().mockResolvedValue(true);
   });
@@ -116,7 +118,7 @@ describe('Tabular Review Orchestrator (Phase 4B-3J)', () => {
   });
 
   it('processes APPROVE_NEW_BASELINE and updates story successfully', async () => {
-    vaultService.getArtifactMetadata.mockResolvedValue({ id: 'arch-2', retentionState: 'verified' } as any);
+    vaultService.getArtifactMetadata.mockResolvedValue({ id: 'arch-2', retentionState: 'verified', byteLength: 4096, preservationState: 'preserved' } as any);
     storyService.getStory.mockResolvedValueOnce(getBaseStory('c1'));
     storyService.saveStoryOCC.mockResolvedValueOnce(undefined as any);
 

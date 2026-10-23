@@ -38,9 +38,14 @@ export interface EvidenceValidationResult {
   violations: string[];
 }
 
+export interface EvidenceGuardOptions {
+  vaultInitError?: string;
+}
+
 export async function validateStoryEvidenceCompleteness(
   story: Story,
-  vault?: EvidenceVaultService
+  vault?: EvidenceVaultService,
+  options?: EvidenceGuardOptions
 ): Promise<EvidenceValidationResult> {
   const violations: string[] = [];
 
@@ -65,11 +70,25 @@ export async function validateStoryEvidenceCompleteness(
       continue;
     }
 
-    if (vault) {
-      // 4. Verify artifact exists and is locked
+    // 4. Fail closed if vault service is missing / unavailable or failed initialization
+    if (!vault) {
+      if (options?.vaultInitError) {
+        violations.push(
+          `Evidence Vault initialization failed (${options.vaultInitError}): Cannot verify archive identity ${claim.archiveId} for non-legacy claim "${claim.claim}".`
+        );
+      } else {
+        violations.push(
+          `Evidence Vault service unavailable: Cannot verify archive identity ${claim.archiveId} for non-legacy claim "${claim.claim}".`
+        );
+      }
+      continue;
+    }
+
+    // 5. Query vault with defensive error handling (vault query/connection failure must fail closed)
+    try {
       const artifact = await vault.getArtifactMetadata(claim.archiveId);
       if (!artifact) {
-        violations.push(`Archive artifact ${claim.archiveId} for claim "${claim.claim}" not found.`);
+        violations.push(`Archive artifact ${claim.archiveId} for claim "${claim.claim}" not found in Evidence Vault.`);
         continue;
       }
 
@@ -80,11 +99,23 @@ export async function validateStoryEvidenceCompleteness(
         continue;
       }
 
-      // 5. Cryptographic byte verification check
+      // Check for missing or empty bytes
+      if (!artifact.byteLength || artifact.byteLength <= 0 || artifact.preservationState === 'missing') {
+        violations.push(
+          `Archive artifact ${claim.archiveId} for claim "${claim.claim}" has missing or empty preserved bytes.`
+        );
+        continue;
+      }
+
+      // 6. Cryptographic byte verification check
       const isIntact = await vault.verifyCryptographicIntegrity(claim.archiveId);
       if (!isIntact) {
         violations.push(`Archive artifact ${claim.archiveId} failed cryptographic integrity verification.`);
       }
+    } catch (vaultErr: any) {
+      violations.push(
+        `Evidence Vault verification failed for claim "${claim.claim}" (${claim.archiveId}): ${vaultErr?.message || 'Vault operation failure'}`
+      );
     }
   }
 
