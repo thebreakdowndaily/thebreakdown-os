@@ -87,8 +87,24 @@ function runEditorialOSTests() {
     audit.phases.phase5VisualAudit.passed = true;
     audit.phases.phase6KnowledgeDensityAudit.passed = true;
     audit.phases.phase7DefensibilityAudit.passed = true;
+    const phases = [
+      audit.phases.phase1ExpertReview,
+      audit.phases.phase2ReaderReview,
+      audit.phases.phase3EvidenceAudit,
+      audit.phases.phase4BiasAudit,
+      audit.phases.phase5VisualAudit,
+      audit.phases.phase6KnowledgeDensityAudit,
+      audit.phases.phase7DefensibilityAudit,
+    ];
+    phases.forEach((phase, index) => {
+      phase.auditorId = `test-reviewer-${index + 1}`;
+      phase.auditDate = new Date().toISOString();
+      phase.notes = `Synthetic test fixture for review phase ${index + 1}.`;
+    });
+    audit.overallPassed = true;
+    audit.completedPhasesCount = 7;
 
-    assert(evaluateGoldStandardPass(audit) === true, 'Audit passes when all 7 phases pass with 0 blocking issues');
+    assert(evaluateGoldStandardPass(audit) === true, 'Audit passes when all 7 phases include reviewer evidence and 0 blocking issues');
   } catch (err) {
     console.error('  ✗ FAIL: Gold Standard Review evaluation threw exception', err);
     failed++;
