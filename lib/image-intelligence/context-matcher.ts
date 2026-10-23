@@ -29,8 +29,8 @@ const CATEGORY_PLACEHOLDER_MAP: Record<string, string> = {
   climate: 'environment-placeholder.svg',
   policy: 'policy-placeholder.svg',
   politics: 'policy-placeholder.svg',
-  governance: 'governance-placeholder.svg',
-  institutions: 'governance-placeholder.svg',
+  governance: 'policy-placeholder.svg',
+  institutions: 'policy-placeholder.svg',
   geopolitics: 'policy-placeholder.svg',
   diplomacy: 'policy-placeholder.svg',
   education: 'education-placeholder.svg',
@@ -98,16 +98,27 @@ export function matchImageToStoryContext(
   story: StoryContextInput,
   manifestLookup?: (slug: string) => { approvedImage: string } | null
 ): ContextMatchResult {
-  // 1. Check if registered in verified manifest
+  // 1. An entry in the verified manifest is authoritative for this story.
+  // If another URL is supplied, do not let generic filename overlap override
+  // the editorially approved asset.
   if (manifestLookup) {
     const entry = manifestLookup(story.slug);
-    if (entry && entry.approvedImage === imagePath) {
+    if (entry) {
+      if (entry.approvedImage === imagePath) {
+        return {
+          isMatch: true,
+          aligned: true,
+          score: 1.0,
+          reason: 'Image is authoritatively registered in Verified Story Image Manifest.',
+          matchType: 'EXACT_MANIFEST',
+        };
+      }
       return {
-        isMatch: true,
-        aligned: true,
-        score: 1.0,
-        reason: 'Image is authoritatively registered in Verified Story Image Manifest.',
-        matchType: 'EXACT_MANIFEST',
+        isMatch: false,
+        aligned: false,
+        score: 0,
+        reason: `Image is not the approved asset registered for story "${story.slug}".`,
+        matchType: 'MISMATCH',
       };
     }
   }
@@ -148,7 +159,14 @@ export function matchImageToStoryContext(
   let overlapCount = 0;
   for (const token of imageTokens) {
     // Exclude generic tokens
-    if (['images', 'stories', 'library', 'maps', 'jpg', 'png', 'svg', 'chapter'].includes(token)) {
+    // Broad country and relationship words are not enough to prove that
+    // a photo is about the same bilateral relationship. For an India-focused
+    // publisher, "india" + "relations" would otherwise approve EU imagery for
+    // India-UK, India-Indonesia, India-Russia, and similar stories.
+    if ([
+      'images', 'stories', 'library', 'maps', 'jpg', 'png', 'svg', 'chapter',
+      'india', 'relation', 'relations',
+    ].includes(token)) {
       continue;
     }
     if (storyTokens.has(token)) {
@@ -164,7 +182,7 @@ export function matchImageToStoryContext(
     (story.slug === 'india-china-relations' && imagePath.includes('india-china-border-tensions')) ||
     (story.slug === 'fix-air-pollution' && imagePath.includes('climate-finance'));
 
-  if (overlapCount >= 1 || isSynergistic) {
+  if (overlapCount >= 2 || isSynergistic) {
     return {
       isMatch: true,
       aligned: true,

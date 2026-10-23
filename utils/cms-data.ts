@@ -24,6 +24,12 @@ export type HeroBlockData = {
   category: string;
   author: string;
   publishedAt: string;
+  /** Describes an informative hero image for assistive technology. */
+  heroImageAlt?: string;
+  /** True only when the image conveys no information beyond nearby text. */
+  heroImageIsDecorative?: boolean;
+  /** Transient CMS state: accessibility metadata was reviewed for the current image URL. */
+  heroImageMetadataConfirmed?: boolean;
 };
 
 export type TextBlockData = { html: string };
@@ -97,7 +103,7 @@ export const BLOCK_META: Record<BlockType, {
     label: 'Hero',
     icon: '⭐',
     description: 'Headline, summary, hero image, category, author',
-    defaultData: { headline: '', summary: '', heroImage: '', category: '', author: '', publishedAt: '' },
+    defaultData: { headline: '', summary: '', heroImage: '', category: '', author: '', publishedAt: '', heroImageAlt: '', heroImageIsDecorative: false, heroImageMetadataConfirmed: false },
   },
   text: {
     label: 'Text',

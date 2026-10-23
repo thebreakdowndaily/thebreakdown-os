@@ -1,4 +1,5 @@
 import React from 'react';
+import StoryImage from '@/components/story/StoryImage';
 
 interface RelatedStoriesProps {
   stories: Array<{
@@ -29,8 +30,6 @@ const RelatedStories: React.FC<RelatedStoriesProps> = ({ stories }) => {
       <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">Related Stories</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {stories.map((story) => {
-          const hasImage = story.heroImage && !story.heroImage.includes('placehold.co') && story.heroImage.trim().length > 0;
-
           return (
             <a
               key={story.slug}
@@ -40,15 +39,14 @@ const RelatedStories: React.FC<RelatedStoriesProps> = ({ stories }) => {
               data-position={stories.indexOf(story) + 1}
               className="group bg-neutral-900/60 border border-neutral-800 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors flex flex-col backdrop-blur-sm"
             >
-              {hasImage && (
-                <div className="aspect-video overflow-hidden bg-neutral-950">
-                  <img
-                    src={story.heroImage}
-                    alt={story.headline}
+              <div className="aspect-video overflow-hidden bg-neutral-950">
+                  <StoryImage
+                    src={story.heroImage || ''}
+                    category={story.category}
+                    alt=""
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
                   />
-                </div>
-              )}
+              </div>
               <div className="p-5 flex flex-col flex-1 space-y-2.5">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 text-[10px] font-mono font-bold uppercase tracking-wider">

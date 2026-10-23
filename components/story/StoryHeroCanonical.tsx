@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { StoryHeroModel } from '@/lib/story/presentation-model';
+import { getHeroImageFallbackPath } from '@/lib/image-intelligence/placeholder-fallback';
 
 interface StoryHeroCanonicalProps {
   hero: StoryHeroModel;
@@ -11,6 +12,7 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
     month: 'long',
     day: 'numeric',
   });
+  const heroImageUrl = hero.heroMedia?.url || getHeroImageFallbackPath(hero.category);
 
   return (
     <header className="space-y-4 mb-8">
@@ -70,25 +72,28 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
       </div>
 
       {/* Hero Media */}
-      {hero.heroMedia?.url && (
+      {heroImageUrl && (
         <div className="w-full aspect-video rounded-2xl overflow-hidden border border-neutral-800 my-6 relative bg-neutral-900">
           <Image
-            src={hero.heroMedia.url}
-            alt={hero.heroMedia.altText}
+            src={heroImageUrl}
+            alt={hero.heroMedia?.url ? hero.heroMedia.altText : ''}
             fill
             sizes="(max-width: 1200px) 100vw, 1200px"
             priority
             className="object-cover"
             onError={(e) => {
               const target = e.currentTarget;
-              const fallback = `/images/placeholders/${(hero.category || 'story').toLowerCase()}-placeholder.svg`;
+              const fallback = getHeroImageFallbackPath(hero.category);
               target.srcset = '';
               if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                // The bundled category graphic is a decorative fallback, not
+                // the original story-specific image; clear stale descriptive alt text.
+                target.alt = '';
                 target.src = fallback;
               }
             }}
           />
-          {hero.heroMedia.caption && (
+          {hero.heroMedia?.caption && (
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-4 text-xs text-neutral-300">
               {hero.heroMedia.caption}
             </div>

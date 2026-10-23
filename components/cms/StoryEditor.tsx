@@ -190,7 +190,17 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
           <div style={{ flex: 1 }}>
             <input
               value={title}
-              onChange={(e) => { setTitle(e.target.value); markUnsaved(); }}
+              onChange={(e) => {
+                const nextTitle = e.target.value;
+                setTitle(nextTitle);
+                setBlocks((prev) => prev.map((block) => {
+                  if (block.type !== 'hero') return block;
+                  const heroData = block.data as HeroBlockData;
+                  if (heroData.headline !== title) return block;
+                  return { ...block, data: { ...heroData, headline: nextTitle } };
+                }));
+                markUnsaved();
+              }}
               placeholder="Story Title"
               style={{
                 width: '100%',

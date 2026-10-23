@@ -18,8 +18,20 @@ export interface ImageFileValidationResult {
  * truncated file, or corrupt text response.
  */
 export function validateImageFile(relativePath: string, rootDir: string = process.cwd()): ImageFileValidationResult {
-  const cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
-  const fullPath = path.join(rootDir, 'public', cleanPath);
+  const publicDir = path.resolve(rootDir, 'public');
+  const cleanPath = relativePath.replace(/\\/g, '/').replace(/^\/+/, '');
+  const fullPath = path.resolve(publicDir, cleanPath);
+  const isInsidePublic = fullPath !== publicDir && fullPath.startsWith(`${publicDir}${path.sep}`);
+
+  if (!isInsidePublic) {
+    return {
+      isValid: false,
+      valid: false,
+      format: 'unknown',
+      sizeBytes: 0,
+      error: `Image path resolves outside public directory: ${relativePath}`,
+    };
+  }
 
   if (!fs.existsSync(fullPath)) {
     return {
@@ -28,6 +40,19 @@ export function validateImageFile(relativePath: string, rootDir: string = proces
       format: 'unknown',
       sizeBytes: 0,
       error: `File does not exist on disk: ${cleanPath}`,
+    };
+  }
+
+  // Check symlink targets too: a symlink inside public/ must not expose a non-public file.
+  const realPublicDir = fs.realpathSync(publicDir);
+  const realFilePath = fs.realpathSync(fullPath);
+  if (realFilePath === realPublicDir || !realFilePath.startsWith(`${realPublicDir}${path.sep}`)) {
+    return {
+      isValid: false,
+      valid: false,
+      format: 'unknown',
+      sizeBytes: 0,
+      error: `Image path resolves outside public directory: ${relativePath}`,
     };
   }
 
@@ -48,7 +73,8 @@ export function validateImageFile(relativePath: string, rootDir: string = proces
   fs.closeSync(fd);
 
   // Check for HTML document pretending to be an image
-  const textHeader = buffer.toString('utf8', 0, Math.min(256, buffer.length)).toLowerCase();
+  const rawTextHeader = buffer.toString('utf8', 0, Math.min(512, buffer.length)).replace(/^\uFEFF/, '');
+  const textHeader = rawTextHeader.slice(0, 256).toLowerCase();
   if (
     textHeader.includes('<!doctype html') ||
     textHeader.includes('<html') ||
@@ -110,8 +136,14 @@ export function validateImageFile(relativePath: string, rootDir: string = proces
     };
   }
 
-  // SVG: text containing <svg
-  if (textHeader.includes('<svg') || textHeader.includes('<?xml')) {
+  // SVG: require an SVG root element. An XML declaration alone does not
+  // make a file renderable as an image and must not pass the publication gate.
+  const svgRootCandidate = rawTextHeader
+    .replace(/^\s*<\?xml\b[^?]*\?>\s*/i, '')
+    .replace(/^\s*<!doctype\b[^>]*>\s*/i, '')
+    .replace(/^(?:\s*<!--[\s\S]*?-->\s*)+/, '')
+    .trimStart();
+  if (/^<svg(?:\s|>)/i.test(svgRootCandidate)) {
     return {
       isValid: true,
       valid: true,

@@ -116,7 +116,15 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
           </label>
           <input
             value={d.heroImage || ''}
-            onChange={(e) => { onUpdate({ ...d, heroImage: e.target.value }); }}
+            onChange={(e) => {
+              const nextImage = e.target.value;
+              const imageChanged = nextImage.trim() !== (d.heroImage || '').trim();
+              onUpdate({
+                ...d,
+                heroImage: nextImage,
+                ...(imageChanged ? { heroImageAlt: '', heroImageIsDecorative: false, heroImageMetadataConfirmed: false } : {}),
+              });
+            }}
             placeholder="/images/stories/..."
             style={{
               width: '100%',
@@ -130,6 +138,50 @@ export default function HeroBlock({ block, onUpdate }: HeroBlockProps) {
               fontFamily: 'inherit',
             }}
           />
+        </div>
+        <div style={{ gridColumn: '1 / -1' }}>
+          <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '4px' }}>
+            Image description (alt text)
+          </label>
+          <textarea
+            value={d.heroImageAlt || ''}
+            onChange={(e) => { onUpdate({ ...d, heroImageAlt: e.target.value, heroImageIsDecorative: false, heroImageMetadataConfirmed: true }); }}
+            disabled={Boolean(d.heroImageIsDecorative)}
+            placeholder="Describe the relevant details of this image for readers who cannot see it..."
+            rows={2}
+            style={{
+              width: '100%',
+              border: '1px solid var(--color-border-subtle)',
+              borderRadius: '6px',
+              padding: '8px 10px',
+              fontSize: '13px',
+              color: 'var(--color-text-primary)',
+              background: 'var(--color-surface-secondary)',
+              outline: 'none',
+              resize: 'vertical',
+              fontFamily: 'inherit',
+              opacity: d.heroImageIsDecorative ? 0.6 : 1,
+            }}
+          />
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+            <input
+              type="checkbox"
+              checked={Boolean(d.heroImageIsDecorative)}
+              onChange={(e) => {
+                const isDecorative = e.target.checked;
+                onUpdate({
+                  ...d,
+                  heroImageIsDecorative: isDecorative,
+                  heroImageAlt: isDecorative ? '' : (d.heroImageAlt || ''),
+                  heroImageMetadataConfirmed: true,
+                });
+              }}
+            />
+            This image is decorative and adds no information beyond the story text
+          </label>
+          <p style={{ color: 'var(--color-text-tertiary)', fontSize: '12px', lineHeight: 1.5, marginTop: '6px' }}>
+            Informative images need a meaningful description. Mark an image decorative only when screen-reader users do not need its content.
+          </p>
         </div>
       </div>
     </div>
