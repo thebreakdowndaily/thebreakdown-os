@@ -142,27 +142,22 @@ export function validateStoryForPublication(
     reason: notBlocked ? 'Story is not blocked' : `Story is blocked: ${storyWithBlock.blockReason}`,
   });
 
-  // Gate 11: Gold Standard Review & Evidence Density (Article XI)
+  // Gate 11: Gold Standard Review — an evidence inventory is not a substitute for review.
   const auditRecord = (story as Story & { goldStandardAudit?: GoldStandardAuditRecord }).goldStandardAudit;
-  if (auditRecord) {
-    const passedGoldStandard = evaluateGoldStandardPass(auditRecord);
-    checks.push({
-      name: 'gold_standard_review',
-      passed: passedGoldStandard,
-      reason: passedGoldStandard
-        ? 'Gold Standard Review passed all 7 phases with zero blocking issues'
-        : 'Gold Standard Review has incomplete phases or unresolved blocking issues',
-    });
-  } else {
-    const hasDensity = hasSources && hasClaims;
-    checks.push({
-      name: 'gold_standard_review',
-      passed: hasDensity,
-      reason: hasDensity
-        ? 'Story meets foundational evidence and claim density requirements'
-        : 'Story lacks required evidence sources or claims for editorial density',
-    });
-  }
+  const auditMatchesStory = !!auditRecord && auditRecord.storyId === story.id;
+  const passedGoldStandard = auditMatchesStory && evaluateGoldStandardPass(auditRecord);
+
+  checks.push({
+    name: 'gold_standard_review',
+    passed: passedGoldStandard,
+    reason: passedGoldStandard
+      ? 'Gold Standard Review passed all 7 phases with zero blocking issues'
+      : !auditRecord
+        ? 'Gold Standard Review audit record is missing — publication blocked'
+        : !auditMatchesStory
+          ? 'Gold Standard Review audit belongs to a different story — publication blocked'
+          : 'Gold Standard Review audit is incomplete, inconsistent, malformed, or has unresolved blocking issues',
+  });
 
   // Gate 12: Retracted sources check (Article III & XIII)
   const hasRetractedSources = story.sources?.some((s: any) => {
