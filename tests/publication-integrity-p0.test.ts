@@ -47,13 +47,21 @@ function createMockPrincipal(role: Principal['role'], id = 'usr-test-1'): Princi
 
 function createValidStory(status: Story['status'] = 'scheduled'): Story {
   const audit = createDefaultGoldStandardAudit('story-valid-1');
-  audit.phases.phase1ExpertReview.passed = true;
-  audit.phases.phase2ReaderReview.passed = true;
-  audit.phases.phase3EvidenceAudit.passed = true;
-  audit.phases.phase4BiasAudit.passed = true;
-  audit.phases.phase5VisualAudit.passed = true;
-  audit.phases.phase6KnowledgeDensityAudit.passed = true;
-  audit.phases.phase7DefensibilityAudit.passed = true;
+  const auditPhases = [
+    audit.phases.phase1ExpertReview,
+    audit.phases.phase2ReaderReview,
+    audit.phases.phase3EvidenceAudit,
+    audit.phases.phase4BiasAudit,
+    audit.phases.phase5VisualAudit,
+    audit.phases.phase6KnowledgeDensityAudit,
+    audit.phases.phase7DefensibilityAudit,
+  ];
+  auditPhases.forEach((phase, index) => {
+    phase.passed = true;
+    phase.auditorId = `reviewer-${index + 1}`;
+    phase.auditDate = new Date().toISOString();
+    phase.notes = `Reviewed phase ${index + 1}; no unresolved blocking issues.`;
+  });
   audit.overallPassed = true;
   audit.completedPhasesCount = 7;
 
@@ -201,6 +209,17 @@ describe('P0 PUBLICATION INTEGRITY REGRESSION SUITE', () => {
     const editor = createMockPrincipal('editor');
     const story = createValidStory('scheduled');
     (story as any).goldStandardAudit.phases.phase4BiasAudit = null;
+
+    const decision = evaluatePublicationContract(story, story, editor);
+    expect(decision.allowed).toBe(false);
+    expect(decision.httpStatus).toBe(422);
+    expect(decision.error).toMatch(/gold_standard_review/i);
+  });
+
+  it('P0-25: A passed phase without reviewer evidence is blocked', () => {
+    const editor = createMockPrincipal('editor');
+    const story = createValidStory('scheduled');
+    delete (story as any).goldStandardAudit.phases.phase3EvidenceAudit.auditorId;
 
     const decision = evaluatePublicationContract(story, story, editor);
     expect(decision.allowed).toBe(false);
