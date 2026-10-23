@@ -5,6 +5,9 @@ import { AccessControlEngine } from '../lib/security/access-control';
 import { SessionManager } from '../lib/security/session';
 import { SecurityContextProjectionBuilder } from '../lib/security/projection';
 import { CHAPTER_1_FIX } from '../lib/editorial/chapter-1-data';
+import * as fs from 'fs';
+import * as path from 'path';
+import { auditSecretLeakage } from '../lib/security/secret-audit';
 
 describe('TEST-SECURITY: Security & Access Control Subsystem (Phase 18B)', () => {
   let sessionManager: SessionManager;
@@ -272,5 +275,64 @@ describe('TEST-SECURITY: Security & Access Control Subsystem (Phase 18B)', () =>
 
     expect(json1).toBe(json2);
     expect(json1).toContain('"role":"ADMIN"');
+  });
+
+  it('TEST-SECURITY-17: Secret Leakage & Credential Exposure Detection', () => {
+    // 1. Clean payload passes
+    expect(auditSecretLeakage('Public configuration parameters').clean).toBe(true);
+
+    // 2. Private key detected
+    expect(auditSecretLeakage('-----BEGIN RSA PRIVATE KEY-----\nkey_data\n-----END RSA PRIVATE KEY-----').clean).toBe(false);
+
+    // 3. Password-bearing PostgreSQL connection URL detected with fabricated credentials
+    const leakedPg = 'TEST_DATABASE_URL=postgresql://mock_user:fabricated_secret_pass_999@db.fabricated.supabase.co:5432/postgres';
+    const pgAudit = auditSecretLeakage(leakedPg);
+    expect(pgAudit.clean).toBe(false);
+    expect(pgAudit.detectedPatterns).toBeGreaterThanOrEqual(1);
+
+    // 4. Redacted PostgreSQL template placeholders pass
+    const bracketedPg = 'TEST_DATABASE_URL=postgresql://[DB_USER]:[DB_PASSWORD]@[DB_HOST]:5432/[DB_NAME]';
+    expect(auditSecretLeakage(bracketedPg).clean).toBe(true);
+    const anglePg = 'TEST_DATABASE_URL=postgresql://postgres:<password>@db.example.com:5432/postgres';
+    expect(auditSecretLeakage(anglePg).clean).toBe(true);
+    const yourPassPg = 'TEST_DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/db';
+    expect(auditSecretLeakage(yourPassPg).clean).toBe(true);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://postgres:<DB_PASSWORD>@db.example.com:5432/postgres').clean).toBe(true);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://postgres:[REDACTED]@localhost:5432/db').clean).toBe(true);
+
+    // 4b. Passwords starting with [ or < or YOUR_ that are NOT exact placeholders are detected
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:[secretPass123]@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:[DB_PASSWORD_CUSTOM]@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:<myRealPassword>@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:<custom_key_val>@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+    expect(auditSecretLeakage('TEST_DATABASE_URL=postgresql://mock_user:YOUR_SECRET_CREDENTIAL@db.fabricated-test.supabase.co:5432/postgres').clean).toBe(false);
+
+    // 5. Fabricated Supabase service-role JWT detected
+    const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+    const payload = Buffer.from(JSON.stringify({ iss: 'supabase', ref: 'mock-ref', role: 'service_role', iat: 1700000000, exp: 2000000000 })).toString('base64url');
+    const mockServiceJwt = `${header}.${payload}.fabricated_sig_signature_only_mock_12345`;
+    const jwtAudit = auditSecretLeakage(mockServiceJwt);
+    expect(jwtAudit.clean).toBe(false);
+
+    // 6. Redacted Supabase service-role placeholder passes
+    expect(auditSecretLeakage('SUPABASE_SERVICE_ROLE_KEY=[REDACTED_SUPABASE_SERVICE_ROLE_KEY]').clean).toBe(true);
+    expect(auditSecretLeakage('SUPABASE_ANON_KEY=[REDACTED_SUPABASE_ANON_KEY]').clean).toBe(true);
+
+    // 7. Representative unsafe HTML fixture fails
+    const unsafeHtml = `
+      <div>TEST_DATABASE_URL=postgresql://mock_user:fabricated_secret_pass_999@db.fabricated.supabase.co:5432/postgres</div>
+      <div>SUPABASE_SERVICE_ROLE_KEY=${mockServiceJwt}</div>
+    `;
+    const unsafeAudit = auditSecretLeakage(unsafeHtml);
+    expect(unsafeAudit.clean).toBe(false);
+    expect(unsafeAudit.detectedPatterns).toBeGreaterThanOrEqual(2);
+
+    // 8. On-disk batch1-data-access.html is clean
+    const htmlPath = path.resolve(__dirname, '../batch1-data-access.html');
+    expect(fs.existsSync(htmlPath)).toBe(true);
+    const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+    const onDiskAudit = auditSecretLeakage(htmlContent);
+    expect(onDiskAudit.clean).toBe(true);
+    expect(onDiskAudit.detectedPatterns).toBe(0);
   });
 });
