@@ -73,7 +73,8 @@ export function validateImageFile(relativePath: string, rootDir: string = proces
   fs.closeSync(fd);
 
   // Check for HTML document pretending to be an image
-  const textHeader = buffer.toString('utf8', 0, Math.min(256, buffer.length)).toLowerCase();
+  const rawTextHeader = buffer.toString('utf8', 0, Math.min(512, buffer.length)).replace(/^\uFEFF/, '');
+  const textHeader = rawTextHeader.slice(0, 256).toLowerCase();
   if (
     textHeader.includes('<!doctype html') ||
     textHeader.includes('<html') ||
@@ -135,8 +136,14 @@ export function validateImageFile(relativePath: string, rootDir: string = proces
     };
   }
 
-  // SVG: text containing <svg
-  if (textHeader.includes('<svg') || textHeader.includes('<?xml')) {
+  // SVG: require an SVG root element. An XML declaration alone does not
+  // make a file renderable as an image and must not pass the publication gate.
+  const svgRootCandidate = rawTextHeader
+    .replace(/^\s*<\?xml\b[^?]*\?>\s*/i, '')
+    .replace(/^\s*<!doctype\b[^>]*>\s*/i, '')
+    .replace(/^(?:\s*<!--[\s\S]*?-->\s*)+/, '')
+    .trimStart();
+  if (/^<svg(?:\s|>)/i.test(svgRootCandidate)) {
     return {
       isValid: true,
       valid: true,

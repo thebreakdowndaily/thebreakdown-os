@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
 import { getStories } from '../utils/data-layer/store';
@@ -94,6 +97,32 @@ assert.match(
   /outside public directory/i,
   'path traversal is rejected before a filesystem target is inspected',
 );
+
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'story-image-validator-'));
+try {
+  const publicDir = path.join(tempRoot, 'public');
+  fs.mkdirSync(publicDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(publicDir, 'not-an-image.xml'),
+    '<?xml version="1.0"?><document><item>not an image</item></document>',
+  );
+  fs.writeFileSync(
+    path.join(publicDir, 'valid-image.svg'),
+    '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10"/></svg>',
+  );
+  assert.equal(
+    validateImageFile('/not-an-image.xml', tempRoot).isValid,
+    false,
+    'an XML document with no SVG root must not be treated as a valid image',
+  );
+  assert.equal(
+    validateImageFile('/valid-image.svg', tempRoot).isValid,
+    true,
+    'a well-formed SVG with an SVG root remains an accepted image',
+  );
+} finally {
+  fs.rmSync(tempRoot, { recursive: true, force: true });
+}
 
 
 const seededStories = getStories({ pageSize: 1000 }).data;
