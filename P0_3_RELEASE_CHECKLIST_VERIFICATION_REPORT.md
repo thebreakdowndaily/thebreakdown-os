@@ -3,8 +3,8 @@
 **Project:** The Breakdown OS  
 **Repository:** `thebreakdowndaily/thebreakdown-os`  
 **Target Story:** `bcci-domestic-mandate-ranji-economics`  
-**Current Branch:** `feature/rebuild-story-quality-and-image-intelligence`  
-**Authoritative Candidate HEAD SHA:** `f869d216a7da0e0e0f8f8eb543fdf5a75168e3ea`  
+**Current Branch:** `fix/p0-story-quality-image-intelligence-2026-10-24 (PR #141)`  
+**Authoritative Candidate HEAD SHA:** `7b6ae245d8b79f2258950d24fa8eb7b8b21c4369`  
 **Release Hold Status:** **ACTIVE (ENFORCED)** (`EDITORIAL_RELEASE_HOLD_SLUGS`)
 
 ---
@@ -78,7 +78,7 @@ The story `bcci-domestic-mandate-ranji-economics` **remains quarantined under th
 
 ### 3. Publish Complete 2,018-word BCCI Narrative and P0.2 Report to Authoritative Candidate SHA
 * **Status:** **VERIFIED & COMMITTED**
-* **Authoritative Commit SHA:** `f869d216a7da0e0e0f8f8eb543fdf5a75168e3ea`
+* **Authoritative Commit SHA:** `7b6ae245d8b79f2258950d24fa8eb7b8b21c4369`
 * **Narrative File:** `lib/editorial/drafts/remediated-stories.ts` (`REMEDIATED_BCCI_CRICKET_STORY`)
 * **Narrative Metrics:**
   - Total narrative words: **2,018 words** (excluding metadata, headers, source lists, and UI controls).
