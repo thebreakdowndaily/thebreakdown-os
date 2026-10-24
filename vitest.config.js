@@ -133,6 +133,7 @@ module.exports = {
       'tests/topic-story-aggregator.test.ts',
       'tests/memory-story-topic-parity.test.ts',
       'tests/supabase-identifier-resolution.test.ts',
+      'tests/supabase-service-client.test.ts',
       'tests/public-v1-story-api.test.ts',
       'tests/public-v2-story-api.test.ts',
       'tests/sanitize-rich-html.test.ts',
