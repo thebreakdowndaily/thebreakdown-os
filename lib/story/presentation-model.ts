@@ -14,6 +14,7 @@ import type { Story, StoryBlock, TimelineEvent, Claim, Source, FAQItem } from '.
 import { deriveStoryTrustSignals, type TrustSignal } from './predicates/semantic';
 import { deriveStoryCapabilities, type StoryCapabilities } from './predicates/capability';
 import { filterRelevantTimelineEvents } from './predicates/relevance';
+import { resolveStoryHeroImage } from '../image-intelligence/service';
 
 export interface StoryHeroModel {
   category: string;
@@ -292,16 +293,27 @@ export function buildStoryPresentationModel(
     updatedAt: story.updatedAt || story.publishedAt,
     readingTimeMinutes: story.readingTime || 5,
     trustSignals,
-    heroMedia: story.heroImage && !story.heroImage.includes('placehold.co')
-      ? { 
-          url: story.heroImage, 
-          altText: (() => {
-            if (story.heroImageIsDecorative) return '';
-            if (story.heroImageAlt) return story.heroImageAlt;
-            throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
-          })()
-        }
-      : undefined,
+    heroMedia: (() => {
+      const resolvedHero = resolveStoryHeroImage(story);
+      const url = resolvedHero.hero?.src || (story.heroImage && !story.heroImage.includes('placehold.co') ? story.heroImage : undefined);
+      if (!url || url.includes('placehold.co')) return undefined;
+      const altText = story.heroImageIsDecorative
+        ? ''
+        : (story.heroImageAlt || resolvedHero.hero?.alt || story.headline);
+      if (!story.heroImageIsDecorative && !altText) {
+        throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
+      }
+      return {
+        url,
+        altText,
+        caption: resolvedHero.hero?.type === 'branded-placeholder'
+          ? undefined
+          : resolvedHero.hero?.credit
+            ? `Credit: ${resolvedHero.hero.credit}`
+            : undefined,
+        credit: resolvedHero.hero?.credit,
+      };
+    })(),
   };
 
   // 6. Orientation Model (optional)

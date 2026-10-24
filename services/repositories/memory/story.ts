@@ -75,6 +75,17 @@ export class MemoryStoryService implements StoryService {
       throw new PublicationBlockedError(validation.violations);
     }
 
+    // Gold Standard Review Integrity Guard (Article XI / CR-01..03)
+    const { validateGoldStandardAuditRecord } = await import('@/lib/editorial/gold-standard-review');
+    const auditValidation = validateGoldStandardAuditRecord(s.goldStandardAudit, s);
+    if (!auditValidation.valid) {
+      throw new PublicationBlockedError(
+        auditValidation.violations.length > 0
+          ? auditValidation.violations
+          : ['Gold Standard Review validation failed']
+      );
+    }
+
     const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
     const token = issuePublicationToken(s.id);
 

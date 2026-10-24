@@ -8,7 +8,12 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
   if (!research) return null;
 
   const { claims, sources, faq, versionHistory } = research;
-  if ((!claims || claims.length === 0) && (!sources || sources.length === 0) && (!faq || faq.length === 0)) {
+  const normalizedUrl = (url?: string) => (url || '').trim().replace(/#.*$/, '').replace(/\/$/, '').toLowerCase();
+  const uniqueSources = (sources || []).filter((source, index, all) => {
+    const key = normalizedUrl(source.url) || source.title.trim().toLowerCase();
+    return all.findIndex((candidate) => (normalizedUrl(candidate.url) || candidate.title.trim().toLowerCase()) === key) === index;
+  });
+  if ((!claims || claims.length === 0) && uniqueSources.length === 0 && (!faq || faq.length === 0)) {
     return null;
   }
 
@@ -72,14 +77,14 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
         </div>
       )}
 
-      {/* Sources List */}
-      {sources && sources.length > 0 && (
+      {/* De-duplicated sources list; claim cards retain claim-to-source traceability. */}
+      {uniqueSources.length > 0 && (
         <div className="space-y-4">
           <h4 className="text-xs uppercase font-mono font-bold tracking-widest text-emerald-400">
-            Primary Documentation & Sources ({sources.length})
+            Primary Documentation & Sources ({uniqueSources.length})
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {sources.map((src, i) => (
+            {uniqueSources.map((src, i) => (
               <div key={i} className="p-4 rounded-xl bg-neutral-900/40 border border-neutral-800/80 flex flex-col justify-between gap-3">
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between gap-2 flex-wrap">

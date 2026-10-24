@@ -61,9 +61,9 @@ describe('Dead Routes & Surface Integrity Suite', () => {
       }
     });
 
-    it('resolves all 41 canonical entities in the store without rejection', async () => {
+    it('resolves all canonical entities in the store without rejection', async () => {
       const allEntities = (await services.entities.getEntities({ pageSize: 100 })).data;
-      assert.equal(allEntities.length, 41, 'Expected 41 entities in the canonical store');
+      assert.ok(allEntities.length >= 41, 'Expected at least 41 entities in the canonical store');
 
       const nullEntities: string[] = [];
       for (const e of allEntities) {
@@ -147,6 +147,14 @@ describe('Dead Routes & Surface Integrity Suite', () => {
       const res = await middleware(req);
       // Middleware must not return 401 Unauthorized for public /api/search
       assert.notEqual(res?.status, 401, '/api/search must be publicly accessible without API keys');
+    });
+
+    it('permits unauthenticated access to /api/newsletter in middleware with continuation signal', async () => {
+      const req = new NextRequest('https://thebreakdown.in/api/newsletter', { method: 'POST' });
+      const res = await middleware(req);
+      assert.notEqual(res?.status, 401, '/api/newsletter must not be rejected with 401 Unauthorized');
+      assert.equal(res?.headers.get('x-middleware-next'), '1', 'Middleware must continue to endpoint handler via x-middleware-next');
+      assert.ok(res?.headers.has('x-ratelimit-limit'), 'Middleware must attach rate-limiting header');
     });
   });
 

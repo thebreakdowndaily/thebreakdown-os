@@ -14,6 +14,8 @@ export interface ContextMatchResult {
   score: number; // 0 to 1
   reason: string;
   matchType: 'EXACT_MANIFEST' | 'AUTHENTIC_KEYWORD_MATCH' | 'CATEGORY_PLACEHOLDER_MATCH' | 'MISMATCH';
+  /** True only when a human-approved, story-specific manifest record exists. */
+  editoriallyApproved?: boolean;
 }
 
 // Known category alias mappings for placeholders
@@ -98,6 +100,19 @@ export function matchImageToStoryContext(
   story: StoryContextInput,
   manifestLookup?: (slug: string) => { approvedImage: string } | null
 ): ContextMatchResult {
+  // Category placeholders are never evidence of relevance and cannot satisfy feature hero media.
+  if (imagePath.includes('/images/placeholders/')) {
+    const fileName = imagePath.split('/').pop() || '';
+    return {
+      isMatch: false,
+      aligned: false,
+      score: 0,
+      reason: `Generic placeholder "${fileName}" is not an approved story-specific hero asset.`,
+      matchType: 'MISMATCH',
+      editoriallyApproved: false,
+    };
+  }
+
   // 1. Check if registered in verified manifest
   if (manifestLookup) {
     const entry = manifestLookup(story.slug);
@@ -108,6 +123,7 @@ export function matchImageToStoryContext(
         score: 1.0,
         reason: 'Image is authoritatively registered in Verified Story Image Manifest.',
         matchType: 'EXACT_MANIFEST',
+        editoriallyApproved: false,
       };
     }
   }
@@ -164,13 +180,15 @@ export function matchImageToStoryContext(
     (story.slug === 'india-china-relations' && imagePath.includes('india-china-border-tensions')) ||
     (story.slug === 'fix-air-pollution' && imagePath.includes('climate-finance'));
 
-  if (overlapCount >= 1 || isSynergistic) {
+  // Filename/tag token overlap is discovery-only. It must never approve an editorial hero.
+  if (overlapCount >= 2 && isSynergistic) {
     return {
       isMatch: true,
       aligned: true,
       score: 0.95,
       reason: `Authentic asset matches story semantic tokens (${overlapCount} matching terms) or verified thematic synergy.`,
       matchType: 'AUTHENTIC_KEYWORD_MATCH',
+      editoriallyApproved: false,
     };
   }
 
