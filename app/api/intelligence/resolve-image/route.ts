@@ -4,6 +4,7 @@ import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
 import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
 import { bootstrapServices } from '@/lib/bootstrap';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
+import { REMEDIATED_STORIES_MAP } from '@/lib/editorial/drafts/remediated-stories';
 
 export async function POST(req: Request) {
   const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
@@ -23,42 +24,64 @@ export async function POST(req: Request) {
     // Ensure services are initialized
     bootstrapServices();
     
-    const body = await req.json();
-    if (!body || typeof body !== 'object' || Array.isArray(body)) {
-      return NextResponse.json({ error: 'Body must be a JSON object' }, { status: 400 });
-    }
-    const { storyId, slug } = body as { storyId?: unknown; slug?: unknown };
-    if (storyId !== undefined && (typeof storyId !== 'string' || !storyId.trim())) {
-      return NextResponse.json({ error: 'storyId must be a non-empty string' }, { status: 400 });
-    }
-    if (slug !== undefined && (typeof slug !== 'string' || !slug.trim())) {
-      return NextResponse.json({ error: 'slug must be a non-empty string' }, { status: 400 });
-    }
-    if (!storyId && !slug) {
-      return NextResponse.json({ error: 'Provide storyId or slug' }, { status: 400 });
+    let body: any = {};
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: 'Malformed JSON payload' }, { status: 400 });
     }
 
-    // Explicitly resolve by the identifier supplied; never validate one field and silently query another.
-    const services = getServices();
-    const story = storyId
-      ? await services.stories.getStory(storyId)
-      : await services.stories.getStoryBySlug(slug as string);
-    if (!story) {
-      return NextResponse.json({ error: 'Story not found' }, { status: 404 });
-    }
-    const knowledgeStory = await (new KnowledgeStoryPipeline().add(new VisualIntelligenceBuilder()).execute(story));
-    if (!story) {
-      return NextResponse.json({ error: 'Story not found' }, { status: 404 });
+    const { storyId, slug } = body || {};
+    
+    // Identifier contract: accept storyId, slug, or both
+    if (!storyId && !slug) {
+      return NextResponse.json({ error: 'Missing story identifier (provide storyId or slug)' }, { status: 400 });
     }
     
+    // Fetch the story using slug or storyId
+    const services = getServices();
+    let story: any = undefined;
+    try {
+      story = slug ? await services.stories.getStoryBySlug(slug) : undefined;
+      if (!story && storyId) {
+        story = await services.stories.getStory(storyId);
+        if (!story) {
+          // Fallback: check if storyId was passed as a slug
+          story = await services.stories.getStoryBySlug(storyId);
+        }
+      }
+    } catch (e) {
+      console.warn('[resolve-image] Database lookup failed, checking in-memory drafts', e);
+    }
+
+    // Fallback to remediated in-memory drafts if not found in database
+    if (!story && slug && REMEDIATED_STORIES_MAP[slug]) {
+      story = REMEDIATED_STORIES_MAP[slug];
+    }
+    if (!story && storyId) {
+      story = Object.values(REMEDIATED_STORIES_MAP).find((s) => s.id === storyId || s.slug === storyId);
+    }
+
+    if (!story) {
+      return NextResponse.json({ error: 'Story not found' }, { status: 404 });
+    }
+
+    const knowledgeStory = await (new KnowledgeStoryPipeline().add(new VisualIntelligenceBuilder()).execute(story));
+    
     // Resolve the image using the hierarchy
-    const mediaItem = await getServices().intelligence.resolveImageForStory(story);
+    const mediaItem = await getServices().intelligence.resolveImageForStory(knowledgeStory?.raw || story);
     
     if (!mediaItem) {
       return NextResponse.json({ error: 'Could not resolve or generate an image.' }, { status: 500 });
     }
     
-    const response = NextResponse.json({ data: mediaItem });
+    const payload = {
+      ...mediaItem,
+      url: mediaItem.src,
+      resolvedVia: mediaItem.id?.startsWith('manifest-') ? 'manifest' : 'fallback',
+    };
+
+    const response = NextResponse.json({ success: true, data: payload, image: payload });
     rateLimiter.applyHeaders(response.headers, rate);
     return response;
   } catch (error: any) {

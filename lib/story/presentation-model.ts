@@ -282,6 +282,20 @@ export function buildStoryPresentationModel(
   // 4. Derive semantic trust signals
   const trustSignals = deriveStoryTrustSignals(story);
 
+  function calculateNarrativeReadingTime(s: Story): number {
+    const mainBlocks = s.blocks?.filter((b) => !b.region || b.region === 'main') || [];
+    const textParts: string[] = [];
+    for (const block of mainBlocks) {
+      if (block.type === 'paragraph' || block.type === 'text' || block.type === 'lead') {
+        const text = (block.data as any)?.text || (block.data as any)?.content || (block as any).content || '';
+        if (text) textParts.push(text);
+      }
+    }
+    const words = textParts.join(' ').replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+    if (words < 100) return s.readingTime || 5;
+    return Math.max(1, Math.round(words / 200));
+  }
+
   // 5. Hero Model
   const hero: StoryHeroModel = {
     category: story.category || 'policy',
@@ -291,7 +305,7 @@ export function buildStoryPresentationModel(
     author: story.author || 'The Breakdown Editorial',
     publishedAt: story.publishedAt,
     updatedAt: story.updatedAt || story.publishedAt,
-    readingTimeMinutes: story.readingTime || 5,
+    readingTimeMinutes: calculateNarrativeReadingTime(story),
     trustSignals,
     heroMedia: (() => {
       const resolvedHero = resolveStoryHeroImage(story);

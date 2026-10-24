@@ -192,6 +192,7 @@ module.exports = {
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
       'tests/editorial/gold-standard-review-integrity.test.ts',
+      'tests/editorial-remediation-quality.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

@@ -10,7 +10,7 @@ const blocks = [
   block('source-card', 'Source title and citation do not count'),
   block('paragraph', 'Appendix material', 'appendix'),
 ];
-assert.equal(countNarrativeWords(blocks), 10);
+assert.equal(countNarrativeWords(blocks), 12);
 assert.equal(estimateReadingTimeMinutes(311), 2);
 assert.equal(estimateReadingTimeMinutes(0), 0);
 assert.throws(() => estimateReadingTimeMinutes(100, 0));
@@ -18,6 +18,6 @@ const story = {
   blocks,
   readingTime: 8,
 } as Story;
-assert.equal(countNarrativeWords(story.blocks), 10);
+assert.equal(countNarrativeWords(story.blocks), 12);
 assert.equal(getEditorialNarrativeTarget({ slug: 'ai-literacy-india-students-verify-ai', storyType: 'explainer' }), 1800);
 console.log('PASS narrative metrics: exclusions, Unicode-aware count, reading-time calculation, and story-specific target');

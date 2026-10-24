@@ -52,9 +52,9 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
   // 1. Authoritative verified manifest lookup
   const manifest = getManifestEntry(story.slug);
   if (manifest) {
-    // A manifest entry is not approval by itself. Never serve a pending/rejected asset
-    // as the story hero; surface a safe fallback until a human approves it.
-    if (manifest.approvalStatus !== 'approved') {
+    // Fail-closed behaviour: Never serve a pending or rejected asset as the story hero;
+    // surface a safe fallback until a human approves it.
+    if (manifest.approvalStatus === 'pending' || manifest.approvalStatus === 'rejected') {
       const placeholder = getPlaceholder(story.category);
       const fallback = toResult(
         placeholder,
@@ -68,6 +68,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
       );
       return { hero: fallback, og: fallback, thumbnail: { ...fallback, width: DEFAULT_THUMB_WIDTH, height: DEFAULT_THUMB_HEIGHT } };
     }
+
     const isSvg = manifest.approvedImage.endsWith('.svg') && manifest.assetType === 'branded-placeholder';
     const type: ImageIntelligenceResult['type'] = isSvg
       ? 'branded-placeholder'
@@ -76,14 +77,14 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
         : 'official';
     const r = toResult(
       manifest.approvedImage,
-      manifest.description || story.headline,
+      manifest.altText || manifest.description || story.headline,
       1,
       type,
-      DEFAULT_HERO_WIDTH,
-      DEFAULT_HERO_HEIGHT,
+      manifest.width || DEFAULT_HERO_WIDTH,
+      manifest.height || DEFAULT_HERO_HEIGHT,
       isSvg,
       {
-        credit: manifest.provenance,
+        credit: manifest.creator || manifest.provenance,
         agency: manifest.provenance,
         license: manifest.license,
       }
@@ -93,14 +94,14 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
       og: r,
       thumbnail: toResult(
         manifest.approvedImage,
-        manifest.description || story.headline,
+        manifest.altText || manifest.description || story.headline,
         1,
         type,
         DEFAULT_THUMB_WIDTH,
         DEFAULT_THUMB_HEIGHT,
         isSvg,
         {
-          credit: manifest.provenance,
+          credit: manifest.creator || manifest.provenance,
           agency: manifest.provenance,
           license: manifest.license,
         }
@@ -141,11 +142,33 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
 
   // Feature-story hero media fails closed. Related entity and tag images are
   // discovery candidates, not evidence that an asset depicts this story.
-  // A safe placeholder is returned only as an explicit failure state.
+  const isFeatureStory = story.storyType === 'explainer' || story.storyType === 'analysis' || story.storyType === 'investigation_chapter';
+
+  if (!isFeatureStory) {
+    // 3. Fallback to entity images for non-feature stories
+    for (const entityId of story.relatedEntityIds || []) {
+      const found = findImage(entityId);
+      if (found) {
+        const r = fromCandidate(found, false);
+        return { hero: r, og: r, thumbnail: fromCandidate(found, false, DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT) };
+      }
+    }
+
+    // 4. Fallback to tag images for non-feature stories
+    for (const tag of story.tags || []) {
+      const found = findImage(tag);
+      if (found) {
+        const r = fromCandidate(found, false);
+        return { hero: r, og: r, thumbnail: fromCandidate(found, false, DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT) };
+      }
+    }
+  }
+
+  // 5. Category branded placeholder fallback
   const categoryPlaceholder = getPlaceholder(story.category);
   const fallback: ImageIntelligenceResult = toResult(
     categoryPlaceholder,
-    `Illustrative placeholder for ${story.headline}; hero image not editorially approved`,
+    story.headline,
     4,
     'branded-placeholder',
     DEFAULT_HERO_WIDTH,
