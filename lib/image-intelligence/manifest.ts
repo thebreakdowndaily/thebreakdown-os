@@ -356,6 +356,30 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     license: 'EDITORIAL',
     description: 'Policy reform blueprint for river basin governance and urban sanitation.',
   },
+  'ai-literacy-india-students-verify-ai': {
+    storySlug: 'ai-literacy-india-students-verify-ai',
+    approvedImage: '/images/placeholders/education-placeholder.svg',
+    assetType: 'branded-placeholder',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'BRANDED_VECTOR',
+    description: 'Educational technology and artificial intelligence verification framework vector.',
+  },
+  'india-semiconductor-mission-fab-reality': {
+    storySlug: 'india-semiconductor-mission-fab-reality',
+    approvedImage: '/images/placeholders/technology-placeholder.svg',
+    assetType: 'branded-placeholder',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'BRANDED_VECTOR',
+    description: 'Semiconductor manufacturing facilities and industrial policy vector.',
+  },
+  'bcci-domestic-mandate-ranji-economics': {
+    storySlug: 'bcci-domestic-mandate-ranji-economics',
+    approvedImage: '/images/placeholders/governance-placeholder.svg',
+    assetType: 'branded-placeholder',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'BRANDED_VECTOR',
+    description: 'Sports administration, player contracts, and domestic cricket governance vector.',
+  },
 };
 
 export function getManifestEntry(storySlug: string): VerifiedImageRecord | null {

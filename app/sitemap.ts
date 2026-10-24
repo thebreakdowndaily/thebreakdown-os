@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next';
-import { bootstrapServices } from '@/lib/bootstrap';
+import { bootstrapServices } from '@/services/bootstrap';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
-  const services = bootstrapServices();
+  const services = await bootstrapServices();
 
   const [storiesRes, entitiesRes, topicsRes, fixesRes] = await Promise.all([
     services.stories.getPublicStories({ pageSize: 100 }),
