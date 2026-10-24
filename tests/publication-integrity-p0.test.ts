@@ -46,6 +46,7 @@ function createMockPrincipal(role: Principal['role'], id = 'usr-test-1'): Princi
 }
 
 function createValidStory(status: Story['status'] = 'scheduled'): Story {
+  const validNarrative = Array.from({ length: 460 }, (_, index) => `evidence${index}`).join(' ');
   const story: Story = {
     id: 'story-valid-1',
     title: 'Valid Tested Story',
@@ -58,12 +59,12 @@ function createValidStory(status: Story['status'] = 'scheduled'): Story {
     status,
     storyType: 'standard',
     evidenceScore: 92,
-    readingTime: 6,
+    readingTime: 3,
     publishedAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     tags: ['india', 'policy'],
-    blocks: [{ id: 'b1', type: 'paragraph', data: { text: 'Paragraph text' } }],
+    blocks: [{ id: 'b1', type: 'paragraph', region: 'main', data: { text: validNarrative } }],
     sources: [{ id: 's1', title: 'Primary White Paper', tier: 1, url: 'https://example.com' }],
     claims: [{ id: 'c1', claim: 'Factual claim', source: 'Primary White Paper', tier: 1, confidence: 95, status: 'verified' }],
     timeline: [],
