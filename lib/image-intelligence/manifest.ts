@@ -1,10 +1,23 @@
 export interface VerifiedImageRecord {
   storySlug: string;
   approvedImage: string;
-  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder';
+  assetType: 'authentic-photo' | 'authentic-map' | 'official-document' | 'original-editorial-graphic' | 'illustrative-image' | 'branded-placeholder';
   provenance: string;
-  license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR';
+  license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR' | 'OWNED_WORK';
   description: string;
+  assetId?: string;
+  sourceUrl?: string;
+  creator?: string;
+  rightsBasis?: string;
+  altText?: string;
+  caption?: string;
+  relevanceRationale?: string;
+  width?: number;
+  height?: number;
+  format?: 'jpeg' | 'png' | 'webp' | 'svg' | 'pdf' | 'unknown';
+  evidenceSourceUrls?: string[];
+  approvalStatus?: 'approved' | 'pending' | 'rejected';
+  approvalTimestamp?: string;
 }
 
 /**
@@ -358,27 +371,63 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ai-literacy-india-students-verify-ai': {
     storySlug: 'ai-literacy-india-students-verify-ai',
-    approvedImage: '/images/placeholders/education-placeholder.svg',
-    assetType: 'branded-placeholder',
+    approvedImage: '/images/editorial/ai-literacy-verification-path.svg',
+    assetType: 'original-editorial-graphic',
     provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
+    license: 'OWNED_WORK',
     description: 'Educational technology and artificial intelligence verification framework vector.',
+    assetId: 'tb-ai-literacy-india-students-verify-ai-graphic-v1',
+    sourceUrl: '/images/editorial/ai-literacy-verification-path.svg',
+    creator: 'The Breakdown Editorial Graphics',
+    rightsBasis: 'Original vector graphic created for The Breakdown; no third-party photograph incorporated.',
+    altText: 'A diagram showing the five steps: identify a factual claim; trace the answer\'s source; open the primary document; compare the source with the claim; record unresolved uncertainty.',
+    caption: 'A five-step verification workflow for AI-assisted schoolwork.',
+    relevanceRationale: 'CBSE CT&AI curriculum framework and resource books, with UNESCO\'s guidance on human-centred, age-appropriate AI use.',
+    width: 1200,
+    height: 630,
+    format: 'svg',
+    evidenceSourceUrls: ["https://cbseacademic.nic.in/web_material/Circulars/2026/15_Circular_2026.pdf","https://cbseacademic.nic.in/web_material/Circulars/2026/18_Circular_2026.pdf","https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research"],
+    approvalStatus: 'pending',
   },
   'india-semiconductor-mission-fab-reality': {
     storySlug: 'india-semiconductor-mission-fab-reality',
-    approvedImage: '/images/placeholders/technology-placeholder.svg',
-    assetType: 'branded-placeholder',
+    approvedImage: '/images/editorial/semiconductor-project-status.svg',
+    assetType: 'original-editorial-graphic',
     provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
+    license: 'OWNED_WORK',
     description: 'Semiconductor manufacturing facilities and industrial policy vector.',
+    assetId: 'tb-india-semiconductor-mission-fab-reality-graphic-v1',
+    sourceUrl: '/images/editorial/semiconductor-project-status.svg',
+    creator: 'The Breakdown Editorial Graphics',
+    rightsBasis: 'Original vector graphic created for The Breakdown; no third-party photograph incorporated.',
+    altText: 'An original comparison graphic separating approved semiconductor manufacturing units, cumulative approved investment and reported commercial production.',
+    caption: 'India Semiconductor Mission status: approvals, investment and commercial production.',
+    relevanceRationale: 'Official Cabinet release on Semicon 2.0 and PIB semiconductor programme progress notes; figures carry publication dates.',
+    width: 1200,
+    height: 630,
+    format: 'svg',
+    evidenceSourceUrls: ["https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2284784","https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160020"],
+    approvalStatus: 'pending',
   },
   'bcci-domestic-mandate-ranji-economics': {
     storySlug: 'bcci-domestic-mandate-ranji-economics',
-    approvedImage: '/images/placeholders/governance-placeholder.svg',
-    assetType: 'branded-placeholder',
+    approvedImage: '/images/editorial/bcci-domestic-fees.svg',
+    assetType: 'original-editorial-graphic',
     provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
+    license: 'OWNED_WORK',
     description: 'Sports administration, player contracts, and domestic cricket governance vector.',
+    assetId: 'tb-bcci-domestic-mandate-ranji-economics-graphic-v1',
+    sourceUrl: '/images/editorial/bcci-domestic-fees.svg',
+    creator: 'The Breakdown Editorial Graphics',
+    rightsBasis: 'Original vector graphic created for The Breakdown; no third-party photograph incorporated.',
+    altText: 'A fee schedule comparison for playing XI members by first-class match experience, excluding reserves and distinguishing daily fee from total income.',
+    caption: 'BCCI-announced senior men\'s domestic first-class playing fees per day, 2021 revision.',
+    relevanceRationale: 'BCCI Update—9th Apex Council Meeting, 20 September 2021; the dated schedule is not a claim that no later revision exists.',
+    width: 1200,
+    height: 630,
+    format: 'svg',
+    evidenceSourceUrls: ["https://www.bcci.tv/news/article/update-9th-apex-council-meeting","https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men"],
+    approvalStatus: 'pending',
   },
 };
 
