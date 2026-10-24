@@ -1,10 +1,16 @@
 name: CI Pipeline
 
 on:
+  # PR checks cover feature-branch commits; reserve push runs for branch
+  # promotion so the same feature SHA is not built twice.
   push:
-    branches-ignore:
-      - 'dependabot/**'
+    branches: [main, staging]
   pull_request:
+
+# Cancel superseded CI on a branch or PR, but never cancel release/deploy jobs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint-and-build:
@@ -42,6 +48,24 @@ jobs:
 
       - name: 4. Security Regression Gate
         run: npm run test:security
+
+      - name: Architecture & Operational Regression Gate
+        if: github.event_name == 'push'
+        run: |
+          npx tsx tests/canonical-domain.test.ts
+          npx tsx tests/projections/all-projections.test.ts
+          npx tsx tests/cache-policy.test.ts
+          npx tsx tests/reference-story.test.ts
+          npx tsx tests/reader-product-surface.test.ts
+          npx tsx tests/editorial-operating-system.test.ts
+          npx tsx tests/e2e-workflow.test.ts
+          npx tsx tests/production-readiness.test.ts
+          npx tsx tests/data-integrity.test.ts
+
+      - name: Release-Control Safety & Deployment Health Suites
+        if: github.event_name == 'push'
+        run: |
+          npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts
 
       - name: 5. Database & Migration Safety Gate
         run: npm run test:migration
