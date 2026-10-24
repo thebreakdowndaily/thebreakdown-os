@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { resolveStory } from './resolver';
+import { resolveStoryHeroImage } from '@/lib/image-intelligence/service';
 
 export async function buildStoryMetadata(slug: string): Promise<Metadata> {
   const resolution = await resolveStory(slug);
@@ -50,14 +51,22 @@ export async function buildStoryMetadata(slug: string): Promise<Metadata> {
       publishedTime: story.publishedAt,
       modifiedTime: story.updatedAt,
       url: `https://thebreakdown.in/story/${story.slug}`,
-      images: story.heroImage ? [{ url: story.heroImage, width: 1200, height: 630, alt: story.headline }] : [],
+      images: (() => {
+        const resolved = resolveStoryHeroImage(story);
+        const img = resolved.og?.src || story.heroImage;
+        return img ? [{ url: img, width: resolved.og?.width || 1200, height: resolved.og?.height || 630, alt: resolved.og?.alt || story.headline }] : [];
+      })(),
       tags: story.tags.slice(0, 6),
     },
     twitter: {
       card: 'summary_large_image',
       title: story.headline,
       description: desc,
-      images: story.heroImage ? [story.heroImage] : [],
+      images: (() => {
+        const resolved = resolveStoryHeroImage(story);
+        const img = resolved.og?.src || story.heroImage;
+        return img ? [img] : [];
+      })(),
     },
   };
 }
