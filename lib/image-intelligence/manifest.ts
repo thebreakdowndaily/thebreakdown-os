@@ -1,10 +1,23 @@
 export interface VerifiedImageRecord {
   storySlug: string;
   approvedImage: string;
-  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder';
+  assetType: 'authentic-photo' | 'authentic-map' | 'official-document' | 'original-editorial-graphic' | 'illustrative-image' | 'branded-placeholder';
   provenance: string;
-  license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR';
+  license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR' | 'OWNED_WORK';
   description: string;
+  assetId?: string;
+  sourceUrl?: string;
+  creator?: string;
+  rightsBasis?: string;
+  altText?: string;
+  caption?: string;
+  relevanceRationale?: string;
+  width?: number;
+  height?: number;
+  format?: 'jpeg' | 'png' | 'webp' | 'svg' | 'pdf' | 'unknown';
+  evidenceSourceUrls?: string[];
+  approvalStatus?: 'approved' | 'pending' | 'rejected';
+  approvalTimestamp?: string;
 }
 
 /**
@@ -376,9 +389,25 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     storySlug: 'bcci-domestic-mandate-ranji-economics',
     approvedImage: '/images/stories/bcci-ranji-trophy.jpg',
     assetType: 'authentic-photo',
-    provenance: 'Board of Control for Cricket in India / Wikimedia Commons Archive (Public Domain)',
+    provenance: 'Wikimedia Commons / Contributor: Shyamearth',
     license: 'PUBLIC_DOMAIN',
+    rightsBasis: 'Public domain dedication by author Shyamearth on Wikimedia Commons (File:Ranji_trophy.jpg), October 27, 2013. No copyright reserved.',
     description: 'The historic Ranji Trophy, India premier domestic first-class red-ball cricket championship.',
+    assetId: 'tb-bcci-ranji-trophy-photo-v1',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ranji_trophy.jpg',
+    creator: 'Shyamearth',
+    altText: 'The Ranji Trophy, India premier domestic first-class cricket championship trophy, displayed on an ornamental pedestal.',
+    caption: 'The Ranji Trophy, India premier first-class domestic cricket championship trophy.',
+    relevanceRationale: 'Authentic photograph of the Ranji Trophy, directly illustrating the red-ball domestic first-class cricket championship at the core of the BCCI mandate and player economics investigation.',
+    width: 1200,
+    height: 675,
+    format: 'jpeg',
+    evidenceSourceUrls: [
+      'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
+      'https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
+    ],
+    approvalStatus: 'approved',
+    approvalTimestamp: '2026-10-24T18:00:00.000Z',
   },
 };
 
