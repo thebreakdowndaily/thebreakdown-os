@@ -5,7 +5,7 @@
 **Production SHA:** `3018a3b057da82590e08cd8a4fce6ed6bf8f58ca`  
 **Candidate base SHA:** `24edd636ba6c7c7d5177e2718c870f4e920ae108`  
 **Repair branch:** `fix/p0-story-quality-image-intelligence-2026-10-24`  
-**Release status:** HOLD — no production story rows changed, no merge or deployment performed.
+**Release status:** HOLD — fail-closed narrative and hero checks are now wired into the synchronous publication gate; no production story rows changed, no merge or deployment performed.
 
 ## Executive decision
 
@@ -37,6 +37,10 @@ A reading-time estimate is a rough guide, not an editorial quality score. The va
 
 - Added `lib/story/narrative-metrics.ts` and `tests/story/narrative-metrics.test.ts` to count only narrative prose and calculate reading time.
 - Added `lib/image-intelligence/publication-validation.ts` and `tests/image-intelligence/publication-validation.test.ts` to fail closed when feature-story media lacks documented provenance, rights, alt text, dimensions, evidence sources or explicit human approval.
+- Wired narrative depth, reading-time consistency, and story-specific hero validation into `lib/editorial/publication-gate.ts` as blocking checks.
+- The resolver now refuses to serve manifest assets unless their approval status is explicitly `approved`; original editorial graphics are classified separately from generic placeholders.
+- Updated the semiconductor status graphic to the September 17–18, 2026 reported count of five units in commercial production. This fixes the outdated figure but does not constitute editorial approval.
+- De-duplicated the appendix's bibliography by canonicalized URL/title while retaining claim-level source links.
 - Expanded `VerifiedImageRecord` with asset identity, provenance, rights basis, alt text, caption, relevance rationale, dimensions, format, evidence URLs and approval status/timestamp.
 - Reclassified the three new original SVG graphics as pending editorial graphics, not authentic photographs and not approved heroes.
 - Removed arbitrary entity/tag fallback selection for story hero media. A category placeholder is an explicit failure state, not proof of successful resolution.
@@ -70,12 +74,12 @@ A reading-time estimate is a rough guide, not an editorial quality score. The va
 | Production record baseline | PASS | Read-only production database query returned all three story records |
 | Narrative/read-time mismatch | PASS | Word counts and declared reading times above |
 | Candidate/deployed source distinction | PASS | Production SHA 3018a3b…; candidate base 24edd636… |
-| Fail-closed hero validation module | NOT VERIFIED | Source and tests committed; suite not executed in a local checkout |
+| Fail-closed hero validation module and gate wiring | CODE CHANGED; NOT TESTED | Validator is now called by the synchronous publication gate; test suite not executed |
 | One-token false-positive regression | NOT VERIFIED | Matcher changed; existing tests not executed or extended in this run |
 | Image resolver API contract | NOT VERIFIED | Source changed; route tests and runtime behavior not executed |
-| Source appendix consolidation | FAIL | Duplicate claim/source display identified; component not yet consolidated |
+| Source appendix consolidation | PARTIAL | Duplicate bibliography entries are removed; claim cards still link to the same sources by design |
 | Story-specific media provenance | BLOCKED | Metadata added but approval status remains pending; no human approval timestamp |
-| Semiconductor graphic currentness | FAIL | SVG has July three-unit figure; September official update reports five |
+| Semiconductor graphic currentness | CODE CORRECTED; NOT APPROVED | SVG updated to five units and September source dates; requires source QA and human review |
 | Corrected full-length drafts | BLOCKED | Reporting outlines and fact corrections established; drafts need more primary-source verification and substantial narrative revision |
 | Public-page image load and responsive rendering | NOT VERIFIED | No authorized browser screenshot run available |
 | Mobile/desktop screenshots for all stories | NOT VERIFIED | No browser evidence captured |
@@ -84,9 +88,9 @@ A reading-time estimate is a rough guide, not an editorial quality score. The va
 
 ## Exact next actions
 
-1. Correct the semiconductor SVG from the September 17–18 releases and annotate the source date.
+1. Independently verify the corrected semiconductor SVG against the September 17–18 releases and obtain human media approval.
 2. Finish matcher regression tests (one-word false positive, first-entity/tag fallback, placeholder classification) and API tests (ID-only, slug-only, both, neither, invalid type, missing story).
-3. Wire `validateStoryHeroMedia` into the actual canonical publication gate. A standalone validator not called by the gate is not an effective control.
+3. Run tests/typecheck immediately for the newly wired narrative and hero gates; repair any fixture or compatibility failures. The gate wiring is in place, but has not been executed locally.
 4. Consolidate claim/source UI into inline claim links plus one de-duplicated expandable Sources and methodology appendix; preserve claim-to-source relationships.
 5. Rewrite the three drafts with complete claim-source matrices and second-pass editorial critiques. Keep the existing live stories unchanged.
 6. Run full project checks and capture actual 390px and 1440px browser screenshots. Record exact commands, output, build SHA and browser errors.
