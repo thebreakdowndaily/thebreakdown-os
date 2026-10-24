@@ -26,5 +26,13 @@ export async function POST(
   if (!brief) {
     return NextResponse.json({ error: 'Brief generation failed' }, { status: 500 });
   }
+  try {
+    await researchIntelligenceCore.flushPersistence();
+  } catch {
+    return NextResponse.json(
+      { error: 'Research state persistence failed; the brief was not confirmed saved.' },
+      { status: 503 }
+    );
+  }
   return NextResponse.json({ brief }, { status: 201 });
 }
