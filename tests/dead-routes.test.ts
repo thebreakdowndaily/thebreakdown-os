@@ -148,6 +148,13 @@ describe('Dead Routes & Surface Integrity Suite', () => {
       // Middleware must not return 401 Unauthorized for public /api/search
       assert.notEqual(res?.status, 401, '/api/search must be publicly accessible without API keys');
     });
+
+    it('permits unauthenticated access to /api/newsletter in middleware', async () => {
+      const req = new NextRequest('https://thebreakdown.in/api/newsletter', { method: 'POST' });
+      const res = await middleware(req);
+      // Middleware must not return 401 Unauthorized for public /api/newsletter
+      assert.notEqual(res?.status, 401, '/api/newsletter must be publicly accessible without API keys');
+    });
   });
 
   // ─── 4. Compare Page Metadata & Typo Remediation ─────────────────────────────
