@@ -5,7 +5,7 @@
 **Production SHA:** `3018a3b057da82590e08cd8a4fce6ed6bf8f58ca`  
 **Candidate base SHA:** `24edd636ba6c7c7d5177e2718c870f4e920ae108`  
 **Repair branch:** `fix/p0-story-quality-image-intelligence-2026-10-24`  
-**Release status:** HOLD — fail-closed narrative and hero checks are now wired into the synchronous publication gate; no production story rows changed, no merge or deployment performed.
+**Release status:** HOLD — fail-closed narrative and hero checks are wired into the synchronous publication gate. Draft PR #141 is open; no production story rows changed, no merge or deployment performed.
 
 ## Executive decision
 
@@ -83,8 +83,12 @@ A reading-time estimate is a rough guide, not an editorial quality score. The va
 | Corrected full-length drafts | BLOCKED | Reporting outlines and fact corrections established; drafts need more primary-source verification and substantial narrative revision |
 | Public-page image load and responsive rendering | NOT VERIFIED | No authorized browser screenshot run available |
 | Mobile/desktop screenshots for all stories | NOT VERIFIED | No browser evidence captured |
-| Full test suite, typecheck, lint, a11y, build | NOT VERIFIED | No local checkout/runner result available |
+| Full test suite, typecheck, lint, a11y, build | NOT VERIFIED | Draft PR #141 opened; no workflow run was returned and no local runner is available in this session |
 | Production mutation/deployment | PASS (safety) | None performed |
+
+## Review vehicle
+
+Draft PR: https://github.com/thebreakdowndaily/thebreakdown-os/pull/141. Its current CI status is unknown: querying workflow runs for the head commit returned no runs. Do not interpret this as a passing check.
 
 ## Exact next actions
 
