@@ -3,25 +3,62 @@ import { isPubliclyPublished } from '@/lib/story/publication';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
 import { RepositoryFactory } from '@/services/factory/repository';
 import { bootstrapServices } from '@/lib/bootstrap';
+import { getServiceClient } from '@/supabase/client';
+import type { CanonicalClaim, CanonicalSource } from '@/types/canonical';
 
 export interface TrustMetrics {
-  publishedChapters: number;
-  chaptersInReview: number;
-  totalClaims: number;
-  primarySourcesCited: number;
-  sourcesInRegistry: number;
-  evidenceEntries: number;
-  documentsReproduced: number;
-  thinkersProfiled: number;
-  openScholarlyDisagreements: number;
-  counterArgumentsDocumented: number;
-  correctionsIssued: number;
-  chapterOneClaims: number;
-  chapterOneSources: number;
+  publishedChapters?: number;
+  chaptersInReview?: number;
+  totalClaims?: number;
+  primarySourcesCited?: number;
+  sourcesInRegistry?: number;
+  evidenceEntries?: number;
+  documentsReproduced?: number;
+  thinkersProfiled?: number;
+  openScholarlyDisagreements?: number;
+  counterArgumentsDocumented?: number;
+  correctionsIssued?: number;
+  chapterOneClaims?: number;
+  chapterOneSources?: number;
   // TASK-25 Dynamic Trust metrics
   averageTrustScore?: number;
   evidenceDebt?: number;
   lastVerifiedDate: string;
+}
+
+const FOUNDING_CHAPTER_ID = 'kl-ch-1';
+
+/** Count only claims explicitly associated with the founding chapter. */
+export function countChapterOneClaims(
+  claims: ReadonlyArray<Pick<CanonicalClaim, 'appearsIn'>>,
+): number {
+  return claims.filter((claim) =>
+    claim.appearsIn.some((appearance) => appearance.contentId === FOUNDING_CHAPTER_ID),
+  ).length;
+}
+
+/** Count only sources explicitly associated with the founding chapter. */
+export function countChapterOneSources(
+  sources: ReadonlyArray<Pick<CanonicalSource, 'chapterIds'>>,
+): number {
+  return sources.filter((source) => source.chapterIds.includes(FOUNDING_CHAPTER_ID)).length;
+}
+
+/**
+ * Read the authoritative correction ledger. A verified zero is a number;
+ * a failed/unavailable query is undefined so the UI can distinguish them.
+ */
+export async function getCanonicalCorrectionCount(): Promise<number | undefined> {
+  try {
+    const { count, error } = await getServiceClient()
+      .from('corrections')
+      .select('id', { count: 'exact', head: true });
+    if (error) throw error;
+    return typeof count === 'number' ? count : undefined;
+  } catch (error) {
+    console.error('Failed to load canonical correction count:', error);
+    return undefined;
+  }
 }
 
 export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<TrustMetrics> {
@@ -53,10 +90,6 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
       }
     }
 
-    if (publishedChaptersCount === 0) {
-      publishedChaptersCount = 1;
-    }
-
     const allClaims = core.claims.all();
     const totalClaims = allClaims.length;
 
@@ -77,10 +110,10 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
     const openScholarlyDisagreements = claimsWithDisagreements.length;
     const counterArgumentsDocumented = claimsWithDisagreements.reduce((acc, c) => acc + (c.counterArguments?.length || 0), 0);
 
-    const correctionsIssued = 0;
+    const correctionsIssued = await getCanonicalCorrectionCount();
 
-    const chap1Claims = allClaims.filter(c => c.appearsIn?.some(a => a.contentId === 'kl-ch-1' || a.contentType === 'chapter') || c.id.startsWith('claim.partition') || c.id.startsWith('claim.kashmir') || c.id.startsWith('claim.nonalignment') || c.id.startsWith('claim.secular')).length || 18;
-    const chap1Sources = 31;
+    const chap1Claims = countChapterOneClaims(allClaims);
+    const chap1Sources = countChapterOneSources(allSources);
 
     // 1. Average Trust Score — Restrict to canonical stories
     let averageTrustScore: number | undefined = undefined;
@@ -149,7 +182,7 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
       documentsReproduced,
       thinkersProfiled,
       openScholarlyDisagreements,
-      counterArgumentsDocumented: counterArgumentsDocumented || openScholarlyDisagreements,
+      counterArgumentsDocumented,
       correctionsIssued,
       chapterOneClaims: chap1Claims,
       chapterOneSources: chap1Sources,
@@ -160,19 +193,20 @@ export async function getCanonicalTrustMetrics(now: Date = new Date()): Promise<
   } catch (err) {
     console.error('Failed to aggregate canonical trust metrics:', err);
     return {
-      publishedChapters: 0,
-      chaptersInReview: 0,
-      totalClaims: 0,
-      primarySourcesCited: 0,
-      sourcesInRegistry: 0,
-      evidenceEntries: 0,
-      documentsReproduced: 0,
-      thinkersProfiled: 0,
-      openScholarlyDisagreements: 0,
-      counterArgumentsDocumented: 0,
-      correctionsIssued: 0,
-      chapterOneClaims: 0,
-      chapterOneSources: 0,
+      // Do not turn a failed aggregation into a wall of false zeroes.
+      publishedChapters: undefined,
+      chaptersInReview: undefined,
+      totalClaims: undefined,
+      primarySourcesCited: undefined,
+      sourcesInRegistry: undefined,
+      evidenceEntries: undefined,
+      documentsReproduced: undefined,
+      thinkersProfiled: undefined,
+      openScholarlyDisagreements: undefined,
+      counterArgumentsDocumented: undefined,
+      correctionsIssued: undefined,
+      chapterOneClaims: undefined,
+      chapterOneSources: undefined,
       averageTrustScore: undefined,
       evidenceDebt: undefined,
       lastVerifiedDate: 'NOT VERIFIED',
