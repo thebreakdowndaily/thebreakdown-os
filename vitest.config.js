@@ -86,6 +86,8 @@ module.exports = {
       'tests/research/invariant.test.ts',
       'tests/resilience.test.ts',
       'tests/security.test.ts',
+      'tests/security/server-action-helper-exports.test.ts',
+      'tests/security/server-action-authorization.test.ts',
       'tests/solution-comparison.test.ts',
       // 'tests/story/canonical-adapter.test.ts', // Excluded: mgnrega-reform & rbi-repo-rate decommissioned to NEEDS_REVIEW
       'tests/story/chart-contract.test.ts',
