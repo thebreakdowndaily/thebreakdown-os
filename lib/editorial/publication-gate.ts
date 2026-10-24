@@ -27,13 +27,15 @@ import {
   type GoldStandardAuditRecord,
 } from './gold-standard-review';
 import { getSource } from '@/lib/knowledge/source-registry';
+import { validateStoryHeroMedia } from '@/lib/image-intelligence/publication-validation';
+import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
 import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
 
 /**
- * Full Async Publication Gate — evaluates Gates 1-12 plus Gate 13 (Evidence Vault Reconstructibility).
+ * Full async gate adds Gate 15: evidence-vault reconstructibility after all synchronous checks pass.
  */
 export async function validateStoryForPublicationAsync(
   input: PublicationGateInput,
@@ -49,7 +51,7 @@ export async function validateStoryForPublicationAsync(
     return { ...syncResult, checks };
   }
 
-  // Gate 13: Evidence Vault Completeness & Cryptographic Reconstructibility (Article III & IV)
+  // Gate 15: Evidence Vault Completeness & Cryptographic Reconstructibility (Article III & IV)
   const evidenceRes = await validateStoryEvidenceCompleteness(story, vault, options);
   checks.push({
     name: 'evidence_preservation_vault',
@@ -142,7 +144,40 @@ export function validateStoryForPublication(
     reason: notBlocked ? 'Story is not blocked' : `Story is blocked: ${storyWithBlock.blockReason}`,
   });
 
-  // Gate 11: Gold Standard Review Integrity (Article XI)
+  // Gate 11: Reader-facing narrative depth and reading-time integrity.
+  const narrativeWords = countNarrativeWords(story.blocks);
+  const narrativeTarget = getEditorialNarrativeTarget(story);
+  const calculatedReadingTime = estimateReadingTimeMinutes(narrativeWords);
+  const hasNarrativeDepth = narrativeWords >= narrativeTarget;
+  checks.push({
+    name: 'narrative_depth',
+    passed: hasNarrativeDepth,
+    reason: hasNarrativeDepth
+      ? `Narrative contains ${narrativeWords} words (minimum ${narrativeTarget} for this assignment).`
+      : `Publication blocked: narrative contains ${narrativeWords} words; requires at least ${narrativeTarget}. Headline, summary, source apparatus, claims, FAQ and timeline are excluded.`,
+    details: `storyType=${story.storyType}; target=${narrativeTarget}; actual=${narrativeWords}`,
+  });
+  const readingTimeConsistent = calculatedReadingTime > 0 && story.readingTime === calculatedReadingTime;
+  checks.push({
+    name: 'reading_time_matches_narrative',
+    passed: readingTimeConsistent,
+    reason: readingTimeConsistent
+      ? `Declared reading time matches ${calculatedReadingTime} minutes at 220 words/minute.`
+      : `Publication blocked: declared reading time is ${story.readingTime} minutes; narrative-based estimate is ${calculatedReadingTime} minutes at 220 words/minute.`,
+  });
+
+  // Gate 12: Story-specific hero asset, rights metadata, relevance rationale and human approval.
+  const heroValidation = validateStoryHeroMedia(story);
+  checks.push({
+    name: 'story_specific_hero_media',
+    passed: heroValidation.passed,
+    reason: heroValidation.passed
+      ? `Feature hero media is editorially eligible (${heroValidation.assetId || 'legacy manifest asset'}).`
+      : `Publication blocked: ${heroValidation.violations.join('; ')}`,
+    details: heroValidation.violations.length ? heroValidation.violations.join('\n') : undefined,
+  });
+
+  // Gate 13: Gold Standard Review Integrity (Article XI)
   const auditRecord = (story as Story & { goldStandardAudit?: GoldStandardAuditRecord }).goldStandardAudit;
   if (!auditRecord) {
     checks.push({
@@ -161,7 +196,7 @@ export function validateStoryForPublication(
     });
   }
 
-  // Gate 12: Retracted sources check (Article III & XIII)
+  // Gate 14: Retracted sources check (Article III & XIII)
   const hasRetractedSources = story.sources?.some((s: any) => {
     if (s.status === 'retracted' || s.verificationStatus === 'retracted') return true;
     if (s.id) {
