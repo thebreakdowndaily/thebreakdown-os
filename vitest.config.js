@@ -37,6 +37,8 @@ const path = require('path');
  * Governing document: AGENTS.md — Testing (npm run lint / typecheck / build).
  */
 module.exports = {
+  // The Next.js tsconfig preserves JSX; Vitest must transform TSX server pages it imports.
+  oxc: { jsx: { runtime: 'automatic' } },
   test: {
     globals: true,
     environment: 'node',
@@ -135,6 +137,7 @@ module.exports = {
       'tests/supabase-identifier-resolution.test.ts',
       'tests/public-v1-story-api.test.ts',
       'tests/public-v2-story-api.test.ts',
+      'tests/draft-story-preview-authorization.test.ts',
       'tests/sanitize-rich-html.test.ts',
       'tests/wave3-remaining-paths.test.ts',
       'tests/phase2b1-reconciliation.test.ts',
