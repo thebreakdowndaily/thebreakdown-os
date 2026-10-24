@@ -54,7 +54,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
   if (manifest) {
     // A manifest entry is not approval by itself. Never serve a pending/rejected asset
     // as the story hero; surface a safe fallback until a human approves it.
-    if (manifest.approvalStatus === 'pending' || manifest.approvalStatus === 'rejected') {
+    if (manifest.approvalStatus !== 'approved') {
       const placeholder = getPlaceholder(story.category);
       const fallback = toResult(
         placeholder,
@@ -81,7 +81,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
       type,
       DEFAULT_HERO_WIDTH,
       DEFAULT_HERO_HEIGHT,
-      isSvg,
+      isPlaceholder,
       {
         credit: manifest.provenance,
         agency: manifest.provenance,
@@ -98,7 +98,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
         type,
         DEFAULT_THUMB_WIDTH,
         DEFAULT_THUMB_HEIGHT,
-        isSvg,
+        isPlaceholder,
         {
           credit: manifest.provenance,
           agency: manifest.provenance,
