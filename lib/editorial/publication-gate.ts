@@ -29,6 +29,19 @@ import {
 import { getSource } from '@/lib/knowledge/source-registry';
 import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
+import { getManifestEntry } from '@/lib/image-intelligence/manifest';
+import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
+
+export const EDITORIAL_RELEASE_HOLD_SLUGS = [
+  'ai-literacy-india-students-verify-ai',
+  'india-semiconductor-mission-fab-reality',
+  'bcci-domestic-mandate-ranji-economics',
+];
+
+export interface PublicationGateOptions {
+  bypassEditorialHold?: boolean;
+  vaultInitError?: string;
+}
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
 
@@ -40,9 +53,9 @@ export async function validateStoryForPublicationAsync(
   story: Story | undefined,
   vault?: EvidenceVaultService,
   now: Date = new Date(),
-  options?: { vaultInitError?: string }
+  options?: PublicationGateOptions
 ): Promise<PublicationGateResult> {
-  const syncResult = validateStoryForPublication(input, story, now);
+  const syncResult = validateStoryForPublication(input, story, now, options);
   const checks = [...syncResult.checks];
 
   if (!syncResult.passed || !story) {
@@ -65,10 +78,41 @@ export async function validateStoryForPublicationAsync(
 }
 
 export function validateStoryForPublication(
-  input: PublicationGateInput,
-  story: Story | undefined,
-  now: Date = new Date(),
+  inputOrStory: PublicationGateInput | Story,
+  storyOrOptions?: Story | PublicationGateOptions,
+  nowOrOptions?: Date | PublicationGateOptions,
+  maybeOptions?: PublicationGateOptions,
 ): PublicationGateResult {
+  const isFirstArgStory = Boolean(
+    inputOrStory &&
+    typeof inputOrStory === 'object' &&
+    ('slug' in inputOrStory || 'category' in inputOrStory || 'blocks' in inputOrStory)
+  );
+
+  let input: PublicationGateInput;
+  let story: Story | undefined;
+  let now: Date;
+  let options: PublicationGateOptions | undefined;
+
+  if (isFirstArgStory) {
+    story = inputOrStory as Story;
+    input = {
+      storyId: story.id || 'unknown-id',
+      triggeredBy: 'manual',
+    };
+    if (storyOrOptions && typeof storyOrOptions === 'object' && !('blocks' in storyOrOptions) && !('slug' in storyOrOptions)) {
+      options = storyOrOptions as PublicationGateOptions;
+    } else if (maybeOptions) {
+      options = maybeOptions;
+    }
+    now = (nowOrOptions instanceof Date) ? nowOrOptions : new Date();
+  } else {
+    input = inputOrStory as PublicationGateInput;
+    story = storyOrOptions as Story | undefined;
+    now = (nowOrOptions instanceof Date) ? nowOrOptions : new Date();
+    options = maybeOptions || (typeof nowOrOptions === 'object' && !(nowOrOptions instanceof Date) ? (nowOrOptions as PublicationGateOptions) : undefined);
+  }
+
   const checks: GateCheck[] = [];
   const storyId = input.storyId;
 
@@ -114,6 +158,33 @@ export function validateStoryForPublication(
     name: 'has_claims',
     passed: hasClaims,
     reason: hasClaims ? `Story has ${story.claims.length} claim(s)` : 'Story has no claims — editorial claims required',
+  });
+
+  // Gate 7b: Claims Verification (Article III & P0 criteria)
+  const isEnforcedFeatureStory = Boolean(
+    (story as any).isFeatureStory ||
+    (story.storyType as string) === 'feature' ||
+    EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '')
+  );
+
+  const unverifiedClaims = (story.claims || []).filter((c: any) => {
+    const status = (c.status || c.verificationStatus || '').toLowerCase();
+    if (['unverified', 'unsupported', 'not_supported', 'rejected', 'disputed'].includes(status)) {
+      return true;
+    }
+    if (isEnforcedFeatureStory && !c.source && !c.sourceId && !c.sourceUrl) {
+      return true;
+    }
+    return false;
+  });
+
+  const claimsVerified = unverifiedClaims.length === 0;
+  checks.push({
+    name: 'claims_verified',
+    passed: claimsVerified,
+    reason: claimsVerified
+      ? `All ${story.claims?.length || 0} claims verified with supporting evidence`
+      : `Story contains ${unverifiedClaims.length} unverified or unsupported claim(s): ${unverifiedClaims.map((c: any) => `"${c.claim || c.text || c.id}"`).join('; ')} — all material claims must be verified before publication`,
   });
 
   // Gate 8: Has publishedAt
@@ -178,6 +249,78 @@ export function validateStoryForPublication(
       ? 'No retracted sources detected in story evidence'
       : 'Story cites one or more retracted sources — publication blocked',
   });
+
+  // Gate 14: Editorial Release Hold (Section 2 Rule 5)
+  const isUnderEditorialHold = EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '') && !options?.bypassEditorialHold;
+  checks.push({
+    name: 'editorial_release_hold',
+    passed: !isUnderEditorialHold,
+    reason: !isUnderEditorialHold
+      ? 'Story is not under active editorial release hold'
+      : `Story "${story.slug}" blocked: Editorial Release Hold is ACTIVE pending story quality and image remediation.`,
+  });
+
+  // Gate 15: Hero Media Quality & Relevance Check
+  if (isEnforcedFeatureStory) {
+    const heroImage = story.heroImage;
+    const isPlaceholder = typeof heroImage === 'string' && heroImage.includes('/images/placeholders/');
+
+    if (!heroImage || isPlaceholder) {
+      checks.push({
+        name: 'hero_media_quality',
+        passed: false,
+        reason: isPlaceholder
+          ? 'Feature/standard story cannot use generic SVG placeholder as hero image. Blocked generic placeholder asset. Verified authentic photography or bespoke visual required.'
+          : 'Feature/standard story missing required hero visual.',
+      });
+    } else {
+      const match = matchImageToStoryContext(heroImage, story, getManifestEntry);
+      checks.push({
+        name: 'hero_media_quality',
+        passed: match.aligned,
+        reason: match.aligned
+          ? `Hero media context verified: ${match.reason}`
+          : `Hero media failed context alignment check: ${match.reason}`,
+      });
+    }
+  }
+
+  // Gate 16: Narrative Depth and Reading Time Consistency
+  if (isEnforcedFeatureStory && story.readingTime && story.blocks && story.blocks.length > 0) {
+    const narrativeTexts = story.blocks
+      .filter((b: any) => b.type === 'paragraph' || b.type === 'text' || b.type === 'lead' || b.type === 'chapter-heading')
+      .map((b: any) => b.content || b.data?.text || b.data?.content || '')
+      .filter(Boolean);
+
+    const narrativeWords = narrativeTexts.join(' ').replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const calculatedReadingTime = Math.max(1, Math.round(narrativeWords / 200));
+    const diff = Math.abs(story.readingTime - calculatedReadingTime);
+    const percentDiff = diff / calculatedReadingTime;
+    const isConsistent = percentDiff <= 0.25 || diff <= 1;
+
+    checks.push({
+      name: 'reading_time_consistency',
+      passed: isConsistent,
+      reason: isConsistent
+        ? `Narrative word count (${narrativeWords} words) consistent with declared reading time (${story.readingTime} min declared vs ${calculatedReadingTime} min calculated)`
+        : `Reading time discrepancy exceeded: declared ${story.readingTime} min vs calculated ${calculatedReadingTime} min (${narrativeWords} words). Discrepancy ${(percentDiff * 100).toFixed(0)}% exceeds 25% tolerance limit.`,
+    });
+  }
+
+  // Gate 17: Visual Blocks Presence for Long-form Journalism
+  if (isEnforcedFeatureStory && story.blocks && story.blocks.length > 0) {
+    const visualBlocks = story.blocks.filter((b: any) =>
+      ['chart', 'comparison', 'timeline', 'key-numbers', 'map', 'dataset-reference', 'table'].includes(b.type)
+    );
+    const hasVisuals = visualBlocks.length > 0;
+    checks.push({
+      name: 'visual_intelligence_pipeline',
+      passed: hasVisuals,
+      reason: hasVisuals
+        ? `Story includes ${visualBlocks.length} supporting visual block(s) (${visualBlocks.map((v: any) => v.type).join(', ')})`
+        : 'Long-form journalism requires at least one supporting visual block (chart, comparison, timeline, key-numbers).',
+    });
+  }
 
   const allPassed = checks.every(c => c.passed);
 

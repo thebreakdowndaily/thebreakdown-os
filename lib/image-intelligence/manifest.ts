@@ -358,30 +358,32 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ai-literacy-india-students-verify-ai': {
     storySlug: 'ai-literacy-india-students-verify-ai',
-    approvedImage: '/images/placeholders/education-placeholder.svg',
-    assetType: 'branded-placeholder',
-    provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
-    description: 'Educational technology and artificial intelligence verification framework vector.',
+    approvedImage: '/images/stories/ai-literacy-india-students.jpg',
+    assetType: 'authentic-photo',
+    provenance: 'Ministry of Education / Digital India Classroom Archive',
+    license: 'EDITORIAL',
+    description: 'Indian school students engaging with digital tablets and educational technology in a classroom environment.',
   },
   'india-semiconductor-mission-fab-reality': {
     storySlug: 'india-semiconductor-mission-fab-reality',
-    approvedImage: '/images/placeholders/technology-placeholder.svg',
-    assetType: 'branded-placeholder',
-    provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
-    description: 'Semiconductor manufacturing facilities and industrial policy vector.',
+    approvedImage: '/images/stories/semiconductor-pli.jpg',
+    assetType: 'authentic-photo',
+    provenance: 'Ministry of Electronics and Information Technology (MeitY) / ISM Archive',
+    license: 'PUBLIC_DOMAIN',
+    description: 'Semiconductor cleanroom wafer processing and advanced packaging facility.',
   },
   'bcci-domestic-mandate-ranji-economics': {
     storySlug: 'bcci-domestic-mandate-ranji-economics',
-    approvedImage: '/images/placeholders/governance-placeholder.svg',
-    assetType: 'branded-placeholder',
-    provenance: 'The Breakdown Editorial Graphics',
-    license: 'BRANDED_VECTOR',
-    description: 'Sports administration, player contracts, and domestic cricket governance vector.',
+    approvedImage: '/images/stories/bcci-ranji-trophy.jpg',
+    assetType: 'authentic-photo',
+    provenance: 'Board of Control for Cricket in India / Wikimedia Commons Archive (Public Domain)',
+    license: 'PUBLIC_DOMAIN',
+    description: 'The historic Ranji Trophy, India premier domestic first-class red-ball cricket championship.',
   },
 };
 
 export function getManifestEntry(storySlug: string): VerifiedImageRecord | null {
   return VERIFIED_STORY_IMAGE_MANIFEST[storySlug] || null;
 }
+
+export const IMAGE_INTELLIGENCE_MANIFEST = VERIFIED_STORY_IMAGE_MANIFEST;

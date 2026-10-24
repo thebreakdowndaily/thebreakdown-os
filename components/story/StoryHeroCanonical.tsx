@@ -71,7 +71,7 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
 
       {/* Hero Media */}
       {hero.heroMedia?.url && (
-        <div className="w-full aspect-video rounded-2xl overflow-hidden border border-neutral-800 my-6 relative bg-neutral-900">
+        <figure className="w-full aspect-video rounded-2xl overflow-hidden border border-neutral-800 my-6 relative bg-neutral-900">
           <Image
             src={hero.heroMedia.url}
             alt={hero.heroMedia.altText}
@@ -88,12 +88,17 @@ export function StoryHeroCanonical({ hero }: StoryHeroCanonicalProps) {
               }
             }}
           />
-          {hero.heroMedia.caption && (
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-4 text-xs text-neutral-300">
-              {hero.heroMedia.caption}
-            </div>
+          {(hero.heroMedia.caption || hero.heroMedia.credit) && (
+            <figcaption className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-4 text-xs text-neutral-300 flex items-end justify-between gap-4">
+              <span className="line-clamp-2">{hero.heroMedia.caption}</span>
+              {hero.heroMedia.credit && (
+                <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-wider shrink-0 bg-black/40 px-2 py-0.5 rounded border border-neutral-800">
+                  {hero.heroMedia.credit}
+                </span>
+              )}
+            </figcaption>
           )}
-        </div>
+        </figure>
       )}
     </header>
   );

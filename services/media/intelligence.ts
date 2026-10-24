@@ -1,5 +1,6 @@
 import type { MediaItem, Story } from '@/types/canonical';
 import { getPlaceholder } from '@/lib/image-intelligence/registry';
+import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 
 export interface ImageIntelligenceService {
   resolveImageForStory(story: Story): Promise<MediaItem | null>;
@@ -11,6 +12,30 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
   private imageCache = new Map<string, MediaItem | null>();
 
   async resolveImageForStory(story: Story): Promise<MediaItem | null> {
+    // 1. Authoritative verified manifest lookup
+    const manifest = getManifestEntry(story.slug);
+    if (manifest) {
+      return {
+        id: `manifest-${story.slug}`,
+        type: 'image',
+        src: manifest.approvedImage,
+        alt: manifest.description || story.headline || story.title,
+        caption: manifest.description,
+        tags: [story.category, 'verified-manifest'],
+        credit: manifest.provenance,
+        version: 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        licenseType: manifest.license === 'CREATIVE_COMMONS' ? 'CC-BY' : (manifest.license as any),
+        imageCategory: manifest.assetType === 'authentic-photo' ? 'PHOTO' : manifest.assetType === 'authentic-map' ? 'MAP' : 'ILLUSTRATION',
+        editorialPriority: 'PRIMARY',
+        verificationStatus: 'SOURCE_VERIFIED',
+        isAiGenerated: false,
+        width: 1200,
+        height: 630,
+      };
+    }
+
     const context = story.tags?.length ? story.tags : undefined;
     // Use entity as primary query + tags as context for story-aware Wikipedia search
     const query = story.relatedEntityIds.length > 0 ? story.relatedEntityIds[0] : story.title;
@@ -45,15 +70,10 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
       };
     }
     
-    // Image resolution is used on public reader paths. It must stay read-only:
-    // persisting a discovered or placeholder image here turns page rendering
-    // into an anonymous write and creates noisy permission errors. Durable media
-    // writes belong in an authorized editorial/background ingestion workflow.
     return image;
   }
 
   async fetchOfficialImage(query: string, context?: string[]): Promise<MediaItem | null> {
-    // Form a story-aware search query: use the first relevant tag as context
     const searchTerms = context?.length
       ? `${query} ${context[0]}`
       : query;
@@ -65,7 +85,6 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
     try {
       const cleanQuery = searchTerms.replace(/-/g, ' ');
 
-      // Deterministic Network Isolation: Prevent live external network calls during automated testing
       const isTestExecution = process.env.ALLOW_EXTERNAL_API !== 'true' && (
         process.env.NODE_ENV === 'test' ||
         Boolean(process.env.CI) ||
@@ -98,81 +117,58 @@ export class DefaultImageIntelligenceService implements ImageIntelligenceService
           isAiGenerated: false,
           width: 800,
           height: 600,
-          sourceUrl: `https://en.wikipedia.org/wiki/${encodeURIComponent(cleanQuery)}`,
-          dominantColor: '#e0e0e0',
-          blurHash: 'LEHLk~WB2yk8pyo0adR*.7kCMdnj'
         };
         this.imageCache.set(cacheKey, mockMediaItem);
         return mockMediaItem;
       }
-      
-      console.log(`[ImageIntelligence] Fetching official image from Wikimedia for: ${cleanQuery}`);
-      
-      const headers = { 'User-Agent': 'TheBreakdownBot/1.0 (contact@thebreakdown.in)' };
-      
-      const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQuery)}&utf8=&format=json&origin=*`, { headers });
-      const searchData = await searchRes.json();
-      const firstResult = searchData.query?.search?.[0];
-      
-      if (!firstResult) {
+
+      const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(cleanQuery)}&prop=pageimages&format=json&pithumbsize=1200&origin=*`);
+      if (!res.ok) {
         this.imageCache.set(cacheKey, null);
         return null;
       }
-      
-      const pageRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&titles=${encodeURIComponent(firstResult.title)}&pithumbsize=1000&format=json&origin=*`, { headers });
-      const pageData = await pageRes.json();
-      
-      const pages = pageData.query?.pages;
+      const data = await res.json();
+      const pages = data.query?.pages;
       if (!pages) {
         this.imageCache.set(cacheKey, null);
         return null;
       }
-      
+
       const pageId = Object.keys(pages)[0];
       const page = pages[pageId];
-      
-      if (!page.thumbnail?.source) {
-        this.imageCache.set(cacheKey, null);
-        return null;
+
+      if (page && page.thumbnail) {
+        const item: MediaItem = {
+          id: `wiki-${page.pageid}`,
+          type: 'image',
+          src: page.thumbnail.source,
+          alt: page.title,
+          caption: `Official image from Wikipedia: ${page.title}`,
+          tags: [query, 'authentic', 'official'],
+          credit: 'Wikimedia Commons',
+          version: 1,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          licenseType: 'PUBLIC_DOMAIN',
+          imageCategory: 'PHOTO',
+          editorialPriority: 'PRIMARY',
+          verificationStatus: 'SOURCE_VERIFIED',
+          isAiGenerated: false,
+          width: page.thumbnail.width,
+          height: page.thumbnail.height,
+        };
+        this.imageCache.set(cacheKey, item);
+        return item;
       }
-
-      const mediaItem: MediaItem = {
-        id: `wiki-${searchTerms}-${pageId}`,
-        type: 'image',
-        src: page.thumbnail.source,
-        alt: `Official image for ${firstResult.title}`,
-        caption: `Source: Wikimedia Commons / Wikipedia (${firstResult.title})`,
-        tags: [query, firstResult.title, 'authentic', 'official'],
-        credit: 'Wikimedia Commons',
-        version: 1,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        licenseType: 'PUBLIC_DOMAIN',
-        imageCategory: 'PHOTO',
-        editorialPriority: 'PRIMARY',
-        verificationStatus: 'SOURCE_VERIFIED',
-        isAiGenerated: false,
-        width: page.thumbnail.width || 800,
-        height: page.thumbnail.height || 600,
-        sourceUrl: `https://en.wikipedia.org/wiki/${encodeURIComponent(firstResult.title)}`,
-        dominantColor: '#e0e0e0',
-        blurHash: 'LEHLk~WB2yk8pyo0adR*.7kCMdnj'
-      };
-
-      this.imageCache.set(cacheKey, mediaItem);
-      return mediaItem;
     } catch (e) {
-      console.error('[ImageIntelligence] Error fetching from Wikimedia:', e);
-      this.imageCache.set(cacheKey, null);
-      return null;
+      console.error('Error fetching official image:', e);
     }
+
+    this.imageCache.set(cacheKey, null);
+    return null;
   }
 
-  async generateAIImage(_prompt: string): Promise<MediaItem | null> {
-    // Runtime image generation is disabled in the public application.
-    // Editorial stories and entities rely exclusively on verified authentic assets
-    // or deterministic branded vector placeholders.
+  async generateAIImage(prompt: string): Promise<MediaItem | null> {
     return null;
   }
 }
-

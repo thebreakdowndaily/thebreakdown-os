@@ -754,6 +754,9 @@ export interface Claim {
   evidenceId?: string;
   confidence: number;
   status: 'verified' | 'strong' | 'moderate' | 'unverified';
+  verificationStatus?: string;
+  sourceId?: string;
+  quote?: string;
   verificationLevel?: 'primary' | 'secondary';
   verifiedAt?: string;
   sourceCount?: number;
