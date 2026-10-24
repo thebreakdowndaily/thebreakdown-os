@@ -18,7 +18,8 @@ This independent audit fulfills **Mission P0.2**, reconciling the working releas
 | Parameter | Value | Verification Status |
 | :--- | :--- | :--- |
 | **Working Branch** | `feature/rebuild-story-quality-and-image-intelligence` | Verified checked out |
-| **Authoritative Candidate HEAD SHA** | `19ebe6fd26e365ab9fdf9e591655fcc4702ba9cd` | Verified clean tree |
+| **Authoritative Candidate HEAD SHA** | `4381e395de3c6ea239849c0954a34c764888435b` | Verified clean tree |
+| **Reconciled Code Candidate SHA** | `19ebe6fd26e365ab9fdf9e591655fcc4702ba9cd` | All tests verified |
 | **Prior Candidate SHA** | `a610ce99d2d30ebdba3a819c72fb8732203c8b69` | Committed |
 | **Verified Base Commit SHA** | `24edd636ba6c7c7d5177e2718c870f4e920ae108` | `chore: integrate updated PR #140` |
 | **PR #141 Remote Branch** | `origin/fix/p0-story-quality-image-intelligence-2026-10-24` | Fetched |
