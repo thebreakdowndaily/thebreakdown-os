@@ -52,7 +52,23 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
   // 1. Authoritative verified manifest lookup
   const manifest = getManifestEntry(story.slug);
   if (manifest) {
-    const isSvg = manifest.approvedImage.endsWith('.svg');
+    // A manifest entry is not approval by itself. Never serve a pending/rejected asset
+    // as the story hero; surface a safe fallback until a human approves it.
+    if (manifest.approvalStatus === 'pending' || manifest.approvalStatus === 'rejected') {
+      const placeholder = getPlaceholder(story.category);
+      const fallback = toResult(
+        placeholder,
+        `Placeholder: editorial hero awaiting approval for ${story.headline}`,
+        4,
+        'branded-placeholder',
+        DEFAULT_HERO_WIDTH,
+        DEFAULT_HERO_HEIGHT,
+        true,
+        { license: 'BRANDED_VECTOR' }
+      );
+      return { hero: fallback, og: fallback, thumbnail: { ...fallback, width: DEFAULT_THUMB_WIDTH, height: DEFAULT_THUMB_HEIGHT } };
+    }
+    const isSvg = manifest.approvedImage.endsWith('.svg') && manifest.assetType === 'branded-placeholder';
     const type: ImageIntelligenceResult['type'] = isSvg
       ? 'branded-placeholder'
       : manifest.assetType === 'authentic-photo'
