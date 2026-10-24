@@ -123,28 +123,19 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
     }
   }
 
-  // 3. Fallback to entity images
-  for (const entityId of story.relatedEntityIds) {
-    const found = findImage(entityId);
-    if (found) {
-      const r = fromCandidate(found, false);
-      return { hero: r, og: r, thumbnail: fromCandidate(found, false, DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT) };
-    }
-  }
-
-  // 4. Fallback to tag images
-  for (const tag of story.tags) {
-    const found = findImage(tag);
-    if (found) {
-      const r = fromCandidate(found, false);
-      return { hero: r, og: r, thumbnail: fromCandidate(found, false, DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT) };
-    }
-  }
-
-  // 5. Category branded placeholder fallback
+  // Feature-story hero media fails closed. Related entity and tag images are
+  // discovery candidates, not evidence that an asset depicts this story.
+  // A safe placeholder is returned only as an explicit failure state.
   const categoryPlaceholder = getPlaceholder(story.category);
   const fallback: ImageIntelligenceResult = toResult(
-    categoryPlaceholder, story.headline, 4, 'branded-placeholder', DEFAULT_HERO_WIDTH, DEFAULT_HERO_HEIGHT, true
+    categoryPlaceholder,
+    `Illustrative placeholder for ${story.headline}; hero image not editorially approved`,
+    4,
+    'branded-placeholder',
+    DEFAULT_HERO_WIDTH,
+    DEFAULT_HERO_HEIGHT,
+    true,
+    { license: 'BRANDED_VECTOR' }
   );
   return { hero: fallback, og: fallback, thumbnail: { ...fallback, width: DEFAULT_THUMB_WIDTH, height: DEFAULT_THUMB_HEIGHT } };
 }
