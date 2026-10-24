@@ -4,6 +4,7 @@ import type { StoryService } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
+import { OptimisticLockError } from '../errors';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 
@@ -58,6 +59,42 @@ export class SupabaseStoryRepository implements StoryService {
         throw new DirectPublicationForbiddenError(
           `Direct saveStory with status='published' is prohibited for story ${story.id}. Publication must proceed via canonical publication contract or publishStory().`
         );
+      }
+    }
+
+    // Optimistic Concurrency Control (OCC)
+    if (story.version !== undefined) {
+      const existing = await this.getStory(story.id);
+      if (existing) {
+        if (existing.version !== undefined && existing.version !== story.version) {
+          throw new OptimisticLockError(
+            `Conflict: Story ${story.id} has been modified concurrently. Expected version ${story.version}, but found version ${existing.version}.`,
+            story.id,
+            story.version,
+            existing.version
+          );
+        }
+
+        const row = rowFromStory(story);
+        delete (row as any).version; // Let PostgreSQL bump_story_version trigger bump the version
+        const { data, error } = await db()
+          .from('stories')
+          .update(row)
+          .eq('id', story.id)
+          .eq('version', story.version)
+          .select()
+          .single();
+
+        if (error || !data) {
+          const current = await this.getStory(story.id);
+          throw new OptimisticLockError(
+            `Conflict: Story ${story.id} has been modified concurrently. Expected version ${story.version}, but current version is ${current?.version ?? 'unknown'}.`,
+            story.id,
+            story.version,
+            current?.version
+          );
+        }
+        return rowToStory(data);
       }
     }
 
@@ -241,6 +278,7 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
     relatedStoryIds: row.related_story_ids || [],
     relatedEntityIds: row.related_entity_ids || [],
     relatedTopicIds: row.related_topic_ids || [],
+    version: (row as any).version ?? 1,
   };
 }
 
@@ -273,5 +311,6 @@ function rowFromStory(s: Story): import('@/supabase/client').TypedDatabase['publ
     published_at: s.publishedAt,
     updated_at: new Date().toISOString(),
     updated_by: s.updatedBy,
+    version: s.version,
   };
 }

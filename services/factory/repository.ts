@@ -30,7 +30,29 @@ import type { EvidenceVaultService } from '../intelligence/evidence-vault.servic
 declare const __non_webpack_require__: typeof require | undefined;
 
 function getProvider(): 'memory' | 'supabase' {
-  const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isCiStaticBuild = process.env.NEXT_PUBLIC_BREAKDOWN_CI_STATIC_BUILD === 'true';
+
+  const rawProvider = (process.env.DATA_PROVIDER || (isProduction && !isCiStaticBuild ? 'supabase' : 'memory')).toLowerCase();
+
+  if (isProduction && !isCiStaticBuild) {
+    if (rawProvider === 'memory') {
+      throw new Error(
+        'CRITICAL PRODUCTION SAFETY ERROR: DATA_PROVIDER=memory is prohibited in production runtime. Ephemeral storage causes silent data loss.'
+      );
+    }
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error(
+        'CRITICAL PRODUCTION SAFETY ERROR: Missing required Supabase credentials (NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY / NEXT_PUBLIC_SUPABASE_ANON_KEY) in production environment.'
+      );
+    }
+    return 'supabase';
+  }
+
+  const provider = rawProvider;
   return provider === 'supabase' ? 'supabase' : 'memory';
 }
 

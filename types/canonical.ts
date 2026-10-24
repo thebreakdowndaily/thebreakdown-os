@@ -2243,3 +2243,4 @@ export interface ExplainerCard {
   showConnector?: boolean;
 }
 export type { Citation } from './citation';
+export { OptimisticLockError } from '@/services/repositories/errors';
