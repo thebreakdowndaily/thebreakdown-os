@@ -24,15 +24,25 @@ export async function POST(req: Request) {
     bootstrapServices();
     
     const body = await req.json();
-    const { storyId, slug } = body;
-    
-    if (!storyId) {
-      return NextResponse.json({ error: 'Missing storyId' }, { status: 400 });
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Body must be a JSON object' }, { status: 400 });
     }
-    
-    // Fetch the story
+    const { storyId, slug } = body as { storyId?: unknown; slug?: unknown };
+    if (storyId !== undefined && (typeof storyId !== 'string' || !storyId.trim())) {
+      return NextResponse.json({ error: 'storyId must be a non-empty string' }, { status: 400 });
+    }
+    if (slug !== undefined && (typeof slug !== 'string' || !slug.trim())) {
+      return NextResponse.json({ error: 'slug must be a non-empty string' }, { status: 400 });
+    }
+    if (!storyId && !slug) {
+      return NextResponse.json({ error: 'Provide storyId or slug' }, { status: 400 });
+    }
+
+    // Explicitly resolve by the identifier supplied; never validate one field and silently query another.
     const services = getServices();
-    const story = await services.stories.getStoryBySlug(slug);
+    const story = storyId
+      ? await services.stories.getStory(storyId)
+      : await services.stories.getStoryBySlug(slug as string);
     if (!story) {
       return NextResponse.json({ error: 'Story not found' }, { status: 404 });
     }
