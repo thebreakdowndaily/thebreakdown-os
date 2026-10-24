@@ -263,15 +263,17 @@ export function evaluatePublicationContract(
     options.notes || `Published via Canonical Publication Contract by ${principal.name}`
   );
 
-  const publicationToken = issuePublicationToken(targetStory.id);
-
+  // Synchronous evaluator is a pre-flight / dry-run check only (Gates 1-12).
+  // It does NOT evaluate Gate 13 (Evidence Vault) and must NEVER issue a
+  // publication token. Authoritative publication transitions require
+  // evaluatePublicationContractAsync.
   return {
     allowed: true,
     httpStatus: 200,
     gateResult,
     updatedStory,
     auditRecord: transitionRes.record,
-    publicationToken,
+    publicationToken: undefined,
   };
 }
 
