@@ -71,7 +71,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
     const isSvg = manifest.approvedImage.endsWith('.svg') && manifest.assetType === 'branded-placeholder';
     const type: ImageIntelligenceResult['type'] = isSvg
       ? 'branded-placeholder'
-      : manifest.assetType === 'authentic-photo'
+      : manifest.assetType === 'authentic-photo' || manifest.assetType === 'original-editorial-graphic'
         ? 'editorial'
         : 'official';
     const r = toResult(
@@ -81,7 +81,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
       type,
       DEFAULT_HERO_WIDTH,
       DEFAULT_HERO_HEIGHT,
-      isPlaceholder,
+      isSvg,
       {
         credit: manifest.provenance,
         agency: manifest.provenance,
@@ -98,7 +98,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
         type,
         DEFAULT_THUMB_WIDTH,
         DEFAULT_THUMB_HEIGHT,
-        isPlaceholder,
+        isSvg,
         {
           credit: manifest.provenance,
           agency: manifest.provenance,
