@@ -21,7 +21,11 @@
 
 import type { Story, StoryStatus } from '@/types/canonical';
 import type { GateCheck, PublicationGateResult, PublicationGateInput } from '@/types/editorial-calendar';
-import { evaluateGoldStandardPass, type GoldStandardAuditRecord } from './gold-standard-review';
+import {
+  evaluateGoldStandardPass,
+  validateGoldStandardAuditRecord,
+  type GoldStandardAuditRecord,
+} from './gold-standard-review';
 import { getSource } from '@/lib/knowledge/source-registry';
 import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
@@ -138,25 +142,22 @@ export function validateStoryForPublication(
     reason: notBlocked ? 'Story is not blocked' : `Story is blocked: ${storyWithBlock.blockReason}`,
   });
 
-  // Gate 11: Gold Standard Review & Evidence Density (Article XI)
+  // Gate 11: Gold Standard Review Integrity (Article XI)
   const auditRecord = (story as Story & { goldStandardAudit?: GoldStandardAuditRecord }).goldStandardAudit;
-  if (auditRecord) {
-    const passedGoldStandard = evaluateGoldStandardPass(auditRecord);
+  if (!auditRecord) {
     checks.push({
       name: 'gold_standard_review',
-      passed: passedGoldStandard,
-      reason: passedGoldStandard
-        ? 'Gold Standard Review passed all 7 phases with zero blocking issues'
-        : 'Gold Standard Review has incomplete phases or unresolved blocking issues',
+      passed: false,
+      reason: 'Missing Gold Standard Review record (all 7 phases required per Article XI)',
     });
   } else {
-    const hasDensity = hasSources && hasClaims;
+    const validation = validateGoldStandardAuditRecord(auditRecord, story);
     checks.push({
       name: 'gold_standard_review',
-      passed: hasDensity,
-      reason: hasDensity
-        ? 'Story meets foundational evidence and claim density requirements'
-        : 'Story lacks required evidence sources or claims for editorial density',
+      passed: validation.valid,
+      reason: validation.valid
+        ? 'Gold Standard Review passed all 7 phases with zero blocking issues and valid content fingerprint'
+        : `Gold Standard Review failed (incomplete phases or unresolved blocking issues): ${validation.violations.join('; ')}`,
     });
   }
 
