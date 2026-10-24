@@ -68,6 +68,12 @@ The story `bcci-domestic-mandate-ranji-economics` **remains quarantined under th
 * **`/` (Homepage):**
   - **Desktop & Mobile:** HTTP 200, Horizontal Overflow: PASS, Console Errors: 0.
 
+#### Story Resolution Smoke Test (`CANONICAL_READ_PATH=ON`)
+* Executed [`scripts/audit/test-story-resolution-smoke.ts`](file:///c:/newsjack-content/thebreakdown-os/scripts/audit/test-story-resolution-smoke.ts) verifying the intended reading path:
+  - Telemetry emitted: `{"event":"story_read_resolution","slug":"bcci-domestic-mandate-ranji-economics","flag":"ON","path":"legacy","chapterFound":true,"claimCount":5,"evidenceCount":5,"resolution":"success","fallbackUsed":false}`.
+  - Proves the story resolves with its **6 chapters** (15 blocks, 6 narrative chapters), **5 verified claims**, and **5 primary sources**.
+  - `isCanonicalStoryPublic`: Evaluates to `false`, confirming the active release hold fails closed to unauthenticated public requests with 404 while resolving fully in preview and authenticated paths.
+
 ---
 
 ### 3. Publish Complete 2,018-word BCCI Narrative and P0.2 Report to Authoritative Candidate SHA
@@ -77,7 +83,7 @@ The story `bcci-domestic-mandate-ranji-economics` **remains quarantined under th
 * **Narrative Metrics:**
   - Total narrative words: **2,018 words** (excluding metadata, headers, source lists, and UI controls).
   - Chapters: **6 structured chapters** (`ch-01` through `ch-06`).
-  - Stated reading time: **8 minutes** (matching 2,018 words @ 250 wpm = 8.07 mins, 0.9% deviation, well within 25% gate tolerance).
+  - Stated reading time: **10 minutes** (calculated at 200–220 words per minute: 2,018 words / 200 wpm = 10.09 min, rounded to 10 min, exactly matching declared `readingTime: 10` in `REMEDIATED_BCCI_CRICKET_STORY` and `lib/story/presentation-model.ts`).
 * **Audit Diff:**
   - Includes `P0_1_INDEPENDENT_ACCEPTANCE_REPORT.md` and `P0_2_INDEPENDENT_ACCEPTANCE_REPORT.md`.
 
