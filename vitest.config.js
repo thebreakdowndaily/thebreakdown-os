@@ -151,6 +151,7 @@ module.exports = {
       'services/radar/__tests__/scheduler.test.ts',
       'services/radar/__tests__/concurrency.test.ts',
       'services/radar/__tests__/persistence.test.ts',
+      'services/radar/__tests__/persistence-provider.test.ts',
       'services/radar/__tests__/failure-injection.test.ts',
       'services/radar/__tests__/poll-route.test.ts',
       'services/radar/__tests__/live-source.test.ts',
