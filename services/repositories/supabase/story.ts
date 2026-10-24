@@ -6,6 +6,7 @@ import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/public
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
+import { getServiceClient } from '@/supabase/client';
 
 const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 
@@ -14,6 +15,11 @@ function isUuid(value: string): boolean {
 }
 
 export class SupabaseStoryRepository implements StoryService {
+  private clientOverride?: any;
+
+  constructor(client?: any) {
+    this.clientOverride = client;
+  }
   private evidenceVault?: EvidenceVaultService;
 
   public setEvidenceVault(vault: EvidenceVaultService): void {
@@ -50,7 +56,7 @@ export class SupabaseStoryRepository implements StoryService {
     return data ? rowToStory(data) : undefined;
   }
 
-  async saveStory(story: Story, options?: { publicationToken?: string }) {
+  async saveStory(story: Story, options?: { publicationToken?: string; client?: any }) {
     // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
     if (story.status === 'published' || story.publicationStatus === 'published') {
       const token = options?.publicationToken || (story as any)._publicationToken;
@@ -61,13 +67,15 @@ export class SupabaseStoryRepository implements StoryService {
       }
     }
 
-    const { data, error } = await db().from('stories').upsert(rowFromStory(story)).select().single();
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const { data, error } = await client.from('stories').upsert(rowFromStory(story)).select().single();
     if (error) throw error;
     return rowToStory(data);
   }
 
-  async deleteStory(id: string) {
-    const { error } = await db().from('stories').delete().eq('id', id);
+  async deleteStory(id: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const { error } = await client.from('stories').delete().eq('id', id);
     if (error) throw error;
   }
   

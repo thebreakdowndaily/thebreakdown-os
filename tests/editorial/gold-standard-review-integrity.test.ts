@@ -8,7 +8,8 @@
  * Verifies all 12 core requirements for Gold Standard Review integrity.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { SupabaseStoryRepository } from '@/services/repositories/supabase/story';
 import type { Story, Claim, Source, StoryBlock } from '@/types/canonical';
 import type { Principal } from '@/features/auth/principal';
 import {
@@ -439,5 +440,42 @@ describe('Gold Standard Review Integrity Suite (CR-01, CR-02, CR-03)', () => {
     // 12c: Attempting to save directly as 'published' without a token is forbidden
     const illegalPublish = { ...draftStory, status: 'published' as const };
     await expect(repo.saveStory(illegalPublish)).rejects.toThrow(/Direct saveStory with status='published' is prohibited/);
+  });
+
+  // ─── Test 13: SupabaseStoryRepository client injection & publication guard ──
+  it('Test 13: SupabaseStoryRepository enforces publication token and routes writes through client override', async () => {
+    const upsertSpy = vi.fn().mockReturnValue({
+      select: () => ({
+        single: async () => ({
+          data: {
+            id: 'story-sb-1',
+            slug: 'test-sb-story',
+            status: 'draft',
+            headline: 'Test Headline',
+            created_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      }),
+    });
+
+    const mockClient: any = {
+      from: vi.fn().mockReturnValue({
+        upsert: upsertSpy,
+      }),
+    };
+
+    const repo = new SupabaseStoryRepository(mockClient);
+    const draftStory = buildBaseStory('story-sb-1');
+    draftStory.status = 'draft';
+
+    const saved = await repo.saveStory(draftStory);
+    expect(saved).toBeDefined();
+    expect(mockClient.from).toHaveBeenCalledWith('stories');
+    expect(upsertSpy).toHaveBeenCalled();
+
+    // Direct publish without token must be blocked before reaching database
+    const publishAttempt = { ...draftStory, status: 'published' as const };
+    await expect(repo.saveStory(publishAttempt)).rejects.toThrow(/Direct saveStory with status='published' is prohibited/);
   });
 });
