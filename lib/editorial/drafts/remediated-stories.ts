@@ -827,8 +827,8 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "src-bcci-season-2026-27",
-      "title": "BCCI Domestic Home Season 2026-27 to feature 1,788 matches",
-      "url": "https://www.bcci.tv/news/article/bcci-domestic-home-season-2026-27-to-feature-1788-matches",
+      "title": "BCCI 2026-27 Domestic Season Ready Reckoner",
+      "url": "https://documents.bcci.tv/bcci/documents/1779273276961_BCCI%202026-27%20Domestic%20Season%20Ready%20Reckoner.pdf",
       "publisher": "Board of Control for Cricket in India",
       "sourceType": "official",
       "tier": 1,

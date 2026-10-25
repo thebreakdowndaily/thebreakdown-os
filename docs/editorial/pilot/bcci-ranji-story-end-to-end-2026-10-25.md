@@ -17,7 +17,7 @@ Reframe the story as an evidence-led analysis, not an investigation claiming a m
 3. BCCI's 20 September 2021 Apex Council update lists senior men's domestic rates of ₹40,000, ₹50,000 and ₹60,000 per day across match-count bands, with different rates for reserves. The table says “matches”; the story does not mislabel it as first-class-only experience.
 4. The New Indian Express reported in May 2026 that the same senior men's rates were still in use. The story describes the 2021 BCCI publication as the latest public BCCI rate table located and qualifies the current-rate claim.
 5. BCCI's March 2024 Test Cricket Incentive Scheme sets additional per-match bonuses for a season assumed to contain nine Tests. Its published table lists fewer than four, five and six, and seven or more Tests; exactly four Tests are not classified in that table. The story flags the ambiguity rather than filling it in.
-6. BCCI's 2026–27 domestic calendar lists seven league matches per Ranji Trophy Elite team and five for a Plate team. The fee calculation is explicitly presented as a 28-scheduled-day scenario, not guaranteed salary.
+6. BCCI's 2026–27 Domestic Season Ready Reckoner (PDF) lists seven league matches per Ranji Trophy Elite team and five for a Plate team. The fee calculation is explicitly presented as a 28-scheduled-day scenario, not guaranteed salary.
 
 ## Image treatment
 

@@ -38,7 +38,7 @@ assert.equal(accountabilityHero.passed, true);
 assert.equal(accountabilityHero.assetId, 'tb-accountability-in-india-hero-v1');
 assert.equal(accountabilityHero.assetType, 'authentic-photo');
 
-// 3. Supporting BCCI domestic fees graphic passes validation
+// 3. Revised BCCI domestic-fees graphic remains blocked until a human re-approves it
 const bcciFeesGraphic = validateStoryHeroMedia(
   story('bcci-domestic-fees', 'explainer', '/images/editorial/bcci-domestic-fees.svg')
 );
