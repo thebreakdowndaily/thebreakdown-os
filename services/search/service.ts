@@ -1,3 +1,4 @@
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
 import type { SearchIndexEntry, APIListParams, APIResponse, Story, Topic, Entity, Timeline, Fix, Dataset } from '@/types/canonical';
 import type { Problem } from '@/lib/problem-helpers';
 
@@ -94,7 +95,9 @@ export class MemorySearchService implements SearchService {
   rebuild(stories: Story[], topics: Topic[], entities: Entity[], timelines: Timeline[], fixes: Fix[], datasets?: Dataset[], problems?: Problem[]): void {
     this.entries = [];
     const items: SearchIndexEntry[] = [
-      ...stories.map(s => toEntry(
+      ...stories
+        .filter(s => isCanonicalStoryPublic(s) && !s.isTestArtifact)
+        .map(s => toEntry(
         s.id,
         'story',
         s.title,

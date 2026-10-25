@@ -1,12 +1,5 @@
-export type IntelRole =
-  | 'owner'
-  | 'managing_editor'
-  | 'editor'
-  | 'reporter'
-  | 'researcher'
-  | 'analyst'
-  | 'fact_checker'
-  | 'guest';
+import type { IntelRole } from '@/types/canonical';
+export type { IntelRole };
 
 export type IntelModule =
   | 'dashboard'

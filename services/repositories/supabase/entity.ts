@@ -63,13 +63,45 @@ export class SupabaseEntityRepository implements RawEntityRepository {
   }
 }
 
-function rowToEntity(row: EntityRow): Entity {
+export function rowToEntity(row: EntityRow): Entity {
+  if (!row) return {} as Entity;
   const rawStats = row.statistics as any;
   const statistics: import('@/types/canonical').StatItem[] = Array.isArray(rawStats)
     ? rawStats
     : (rawStats && typeof rawStats === 'object')
     ? Object.entries(rawStats).map(([label, value]) => ({ label, value: String(value) }))
     : [];
+
+  const raw = row as any;
+  const lifecycle: Record<string, unknown> = {};
+
+  if ('publication_status' in raw) {
+    lifecycle.publicationStatus = raw.publication_status;
+  } else if ('publicationStatus' in raw) {
+    lifecycle.publicationStatus = raw.publicationStatus;
+  }
+
+  if ('status' in raw) {
+    lifecycle.status = raw.status;
+  }
+
+  if ('is_test_artifact' in raw) {
+    lifecycle.isTestArtifact = raw.is_test_artifact;
+  } else if ('isTestArtifact' in raw) {
+    lifecycle.isTestArtifact = raw.isTestArtifact;
+  }
+
+  if ('is_draft' in raw) {
+    lifecycle.isDraft = raw.is_draft;
+  } else if ('isDraft' in raw) {
+    lifecycle.isDraft = raw.isDraft;
+  }
+
+  if ('is_quarantined' in raw) {
+    lifecycle.isQuarantined = raw.is_quarantined;
+  } else if ('isQuarantined' in raw) {
+    lifecycle.isQuarantined = raw.isQuarantined;
+  }
 
   return {
     id: row.id,
@@ -89,10 +121,11 @@ function rowToEntity(row: EntityRow): Entity {
     faq: (row.faq as import('@/types/canonical').FAQItem[]) ?? [],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    ...lifecycle,
   };
 }
 
-function rowFromEntity(e: Entity): EntityInsert {
+export function rowFromEntity(e: Entity): EntityInsert {
   return {
     id: e.id,
     slug: e.slug,

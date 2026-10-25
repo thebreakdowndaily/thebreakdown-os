@@ -5,7 +5,7 @@ import {
   transitionVerificationAction,
   assignVerificationReviewerAction,
   addVerificationNoteAction,
-} from '@/app/intel/verification/actions';
+} from '@/features/intel/verification/actions';
 
 // Governing document: docs/intelligence/tbios-master-prompt-v1.md (Verification Workspace — Workflow)
 // Server-component workflow panel. Every mutation is a server action that re-authorizes the

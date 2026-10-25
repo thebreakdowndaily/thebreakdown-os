@@ -10,7 +10,7 @@
  * explainable StoryCluster and one coherent Signal.
  */
 
-import { IntelRole } from '@/features/auth/roles';
+import type { IntelRole } from '@/types/canonical';
 
 // ── 1. Observations & Ingestion ─────────────────────────────────────────────
 

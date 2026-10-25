@@ -1,6 +1,10 @@
-# ADRs — Architecture Decision Records
+# ADRs — Architecture Decision Records (Historical Archive)
 
-This directory captures significant architectural decisions made for The Breakdown OS.
+> [!NOTE]
+> **Canonical ADR Location:** All active and future Architecture Decision Records are canonically authored and maintained in [`docs/adr/`](../docs/adr/README.md).
+> Records in this directory (`adr/`) are preserved as a historical archive of early framework setup and prototype decisions (2024). All platform decisions across both registers are indexed in [`docs/architecture/adr-index.md`](../docs/architecture/adr-index.md).
+
+This directory captures significant foundational architectural decisions made during initial platform bootstrapping.
 
 ## Purpose
 

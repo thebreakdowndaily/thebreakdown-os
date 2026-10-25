@@ -1,6 +1,6 @@
 # RIE v1.2 — Primary-Source Discovery Benchmark
 
-**Timestamp:** 2026-09-26T14:48:36.852Z
+**Timestamp:** 2026-10-20T05:47:03.566Z
 **Corpus Version:** 1.1
 **Baseline Tag:** rie-v1.1-expanded
 **Candidate Tag:** rie-v1.2-primary-discovery

@@ -84,6 +84,16 @@ export type ConfidenceTier = 1 | 2 | 3 | 4 | 5;
 
 export type UserRole = 'admin' | 'editor' | 'writer' | 'researcher' | 'designer' | 'reader';
 
+export type IntelRole =
+  | 'owner'
+  | 'managing_editor'
+  | 'editor'
+  | 'reporter'
+  | 'researcher'
+  | 'analyst'
+  | 'fact_checker'
+  | 'guest';
+
 // ─── Content Models ─────────────────────────────────────────────────────────
 
 export type FreshnessStatus = 'Fresh' | 'Monitoring' | 'Changed' | 'Review Required' | 'Approved' | 'Archived';
@@ -304,6 +314,11 @@ export interface Topic {
   freshness?: FreshnessMetadata;
   createdAt: string;
   updatedAt: string;
+  publicationStatus?: import("@/utils/data-layer/types").PublicationStatus | string | null;
+  status?: string | null;
+  isTestArtifact?: boolean;
+  isDraft?: boolean;
+  isQuarantined?: boolean;
 }
 
 export interface Entity {
@@ -326,6 +341,11 @@ export interface Entity {
   claims?: Claim[];
   createdAt: string;
   updatedAt: string;
+  publicationStatus?: import("@/utils/data-layer/types").PublicationStatus | string | null;
+  status?: string | null;
+  isTestArtifact?: boolean;
+  isDraft?: boolean;
+  isQuarantined?: boolean;
 }
 
 // ─── Entity Models (Phase 1) ────────────────────────────────────────────────────────────
@@ -407,6 +427,11 @@ export interface Timeline {
   events: TimelineEvent[];
   createdAt: string;
   updatedAt: string;
+  publicationStatus?: import("@/utils/data-layer/types").PublicationStatus | string | null;
+  status?: string | null;
+  isTestArtifact?: boolean;
+  isDraft?: boolean;
+  isQuarantined?: boolean;
 }
 
 
@@ -749,6 +774,7 @@ export interface Claim {
   evidenceId?: string;
   confidence: number;
   status: 'verified' | 'strong' | 'moderate' | 'unverified';
+  verification?: string;
   verificationLevel?: 'primary' | 'secondary';
   verifiedAt?: string;
   sourceCount?: number;
@@ -1068,6 +1094,8 @@ export interface TOCItem {
 
 export interface TopicTerminalViewModel {
   topic: Topic;
+  totalStories?: number;
+  allStories?: Story[];
   storyGroups: {
     latest: Story[];
     important: Story[];
@@ -1075,6 +1103,8 @@ export interface TopicTerminalViewModel {
     trending: Story[];
     historical: Story[];
     recommended: Story[];
+    all?: Story[];
+    totalCount?: number;
   };
   rankedEntities: {
     entity: Entity;
@@ -1311,6 +1341,7 @@ export interface APIResponse<T> {
     total: number;
     page: number;
     pageSize: number;
+    totalPages?: number;
   };
   error?: string;
 }

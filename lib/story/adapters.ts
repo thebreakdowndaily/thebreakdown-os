@@ -1,19 +1,19 @@
 /**
- * THE BREAKDOWN — Canonical Story Source Adapters
+ * THE BREAKDOWN â€” Canonical Story Source Adapters
  *
  * Provides source adapters to convert any content source (APIStory, Chapter, or Database record)
  * into the canonical Story model before passing to presentation components.
  *
  * Source Adapters:
- *   APIStory      ──► apiStoryToCanonical()
- *   Chapter       ──► chapterToCanonical()
- *   DatabaseStory ──► dbStoryToCanonical()
+ *   APIStory      â”€â”€â–º apiStoryToCanonical()
+ *   Chapter       â”€â”€â–º chapterToCanonical()
+ *   DatabaseStory â”€â”€â–º dbStoryToCanonical()
  */
 
 import type { Story, Chapter, StoryBlock, Source, Claim, PublicationStatus, StoryStatus } from '@/types/canonical';
 import type { APIStory } from '@/utils/data-layer/types';
 import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
-import { createBlocksFromStory } from '@/lib/bootstrap';
+import { createBlocksFromStory } from '@/lib/story/block-synthesis';
 import { deterministicClaimId } from '@/lib/story/claim-identity';
 
 /**
@@ -52,14 +52,20 @@ export function apiStoryToCanonicalAdapter(s: APIStory): Story {
       sourceUrl: '',
       tier: 3,
       confidence: c.confidence || 0.5,
+      verification: (c as any).verification,
       status:
         c.verification === 'true'
-          ? 'verified'
+          ? ((c.confidence || 0) >= 0.8 ? 'verified' : 'strong')
+          : c.verification === 'misleading' || c.verification === 'outdated'
+          ? 'moderate'
+          : c.verification === 'false'
+          ? 'unverified'
           : (c.confidence || 0) >= 0.8
           ? 'strong'
           : (c.confidence || 0) >= 0.6
           ? 'moderate'
           : 'unverified',
+      isLegacy: !!(c as any).isLegacy,
       counterArguments: (c as any).counterArguments || [],
     })
   );

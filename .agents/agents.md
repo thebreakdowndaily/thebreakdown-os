@@ -10,9 +10,11 @@ Agents are autonomous or semi-autonomous routines that operate on content, data,
 
 ## Agent Registry
 
-| Agent ID | Role | Trigger | Status |
-|----------|------|---------|--------|
-| _(none yet)_ | — | — | — |
+| Agent ID | Role | Trigger | Status | Location |
+|----------|------|---------|--------|----------|
+| `codebase-researcher` | Read-only codebase researcher: maps source paths, call graphs, project conventions, and relevant history. | manual / subagent invocation | active | `.agents/agents/codebase-researcher/agent.md` |
+| `security-reviewer` | Read-only security and adversarial reviewer: independently inspects changes, validates authorization boundaries, RLS, secret hygiene, and failure modes. | manual / subagent invocation | active | `.agents/agents/security-reviewer/agent.md` |
+| `verification-specialist` | Test and verification specialist: designs and evaluates regression tests, executes test suites, and verifies test evidence. | manual / subagent invocation | active | `.agents/agents/verification-specialist/agent.md` |
 
 ---
 

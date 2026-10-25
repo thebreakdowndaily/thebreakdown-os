@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { bootstrapServices } from '@/services/bootstrap';
-import { KnowledgeExplorerResultItem, ExplorerSearchResponse, DiscoveryMode, ExplorerResultType, ClaimResult, SourceResult, EvidenceResult } from '@/types/explorer';
-import type { Story, Claim, Source, StoryBlock } from '@/types/canonical';
+import { KnowledgeExplorerResultItem, ExplorerSearchResponse, DiscoveryMode, ExplorerResultType } from '@/types/explorer';
+
+import { canPubliclyViewStory, storyPublicationContext, canPubliclyViewEntity, canPubliclyViewTopic, canPubliclyViewTimeline } from '@/lib/story/publication';
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
@@ -21,16 +22,26 @@ export async function GET(req: NextRequest) {
   const services = await bootstrapServices();
 
   const [storiesRes, topicsRes, entitiesRes, timelinesRes] = await Promise.all([
-    services.stories.getStories({ pageSize: 1000 }).catch(() => ({ data: [] })),
+    (services.stories.getPublicStories
+      ? services.stories.getPublicStories({ pageSize: 1000 })
+      : services.stories.getStories({ pageSize: 1000 })
+    ).catch(() => ({ data: [] })),
     services.topics.getTopics({ pageSize: 1000 }).catch(() => ({ data: [] })),
     services.entities.getEntities({ pageSize: 1000 }).catch(() => ({ data: [] })),
     services.timelines.getTimelines({ pageSize: 1000 }).catch(() => ({ data: [] }))
   ]);
 
-  const stories = storiesRes.data || [];
-  const topics = topicsRes.data || [];
-  const entities = entitiesRes.data || [];
-  const timelines = timelinesRes.data || [];
+  const rawStories = storiesRes.data || [];
+  const stories = rawStories.filter(s => canPubliclyViewStory(storyPublicationContext(s)));
+
+  const rawTopics = topicsRes.data || [];
+  const topics = rawTopics.filter(canPubliclyViewTopic);
+
+  const rawEntities = entitiesRes.data || [];
+  const entities = rawEntities.filter(canPubliclyViewEntity);
+
+  const rawTimelines = timelinesRes.data || [];
+  const timelines = rawTimelines.filter(canPubliclyViewTimeline);
 
   let allResults: KnowledgeExplorerResultItem[] = [];
 
@@ -39,7 +50,7 @@ export async function GET(req: NextRequest) {
     if (
       story.title.toLowerCase().includes(q) ||
       story.summary.toLowerCase().includes(q) ||
-      story.blocks.some(b => JSON.stringify(b.data).toLowerCase().includes(q))
+      story.blocks?.some(b => JSON.stringify(b.data).toLowerCase().includes(q))
     ) {
       allResults.push({
         id: story.id,
@@ -49,7 +60,7 @@ export async function GET(req: NextRequest) {
         href: `/story/${story.slug}`,
         matchReasons: ['Matched story content'],
         readingTime: story.readingTime,
-        verificationState: 'partially_verified' // or something from story if it exists
+        verificationState: 'partially_verified'
       });
     }
 
@@ -58,7 +69,7 @@ export async function GET(req: NextRequest) {
       if (
         claim.claim.toLowerCase().includes(q) ||
         (claim.data && claim.data.toLowerCase().includes(q)) ||
-        claim.source.toLowerCase().includes(q)
+        claim.source?.toLowerCase().includes(q)
       ) {
         allResults.push({
           id: claim.id || `claim-${Math.random()}`,
@@ -108,7 +119,7 @@ export async function GET(req: NextRequest) {
             summary: 'Matched evidence in story',
             href: `/story/${story.slug}#block-${block.id}`,
             matchReasons: ['Matched evidence content'],
-            claimId: (block.data.claimId as string) || '',
+            claimId: (block.data?.claimId as string) || '',
           });
         }
       }
@@ -152,7 +163,7 @@ export async function GET(req: NextRequest) {
     if (
       entity.name.toLowerCase().includes(q) ||
       entity.description.toLowerCase().includes(q) ||
-      entity.aliases.some(a => a.toLowerCase().includes(q))
+      entity.aliases?.some(a => a.toLowerCase().includes(q))
     ) {
       allResults.push({
         id: entity.id,
@@ -175,7 +186,7 @@ export async function GET(req: NextRequest) {
         type: 'timeline',
         title: timeline.title,
         summary: timeline.description,
-        href: `/timelines/${timeline.id}`, // or slug if it exists
+        href: `/timelines/${timeline.id}`,
         matchReasons: ['Matched timeline content'],
         eventCount: timeline.events?.length || 0
       });

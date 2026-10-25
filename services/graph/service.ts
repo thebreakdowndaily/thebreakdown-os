@@ -1,3 +1,4 @@
+import { canPubliclyViewStory, storyPublicationContext } from '@/lib/story/publication';
 import type { Graph, GraphNode, GraphEdge, RelationType } from '@/types/canonical';
 import type { Services } from '@/services/registry';
 import { EventBus } from '@/lib/events/event-bus';
@@ -353,7 +354,10 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     const nodes = new Map<string, GraphNode>();
     const rawEdges: RawEdge[] = [];
 
-    const stories = (await this.services.stories.getStories()).data;
+    const rawStories = this.services.stories.getPublicStories
+      ? (await this.services.stories.getPublicStories({ pageSize: 1000 })).data
+      : (await this.services.stories.getStories({ pageSize: 1000 })).data;
+    const stories = rawStories.filter(s => canPubliclyViewStory(storyPublicationContext(s)));
     const topics = (await this.services.topics.getTopics()).data;
     const entities = (await this.services.entities.getEntities()).data;
     const timelines = (await this.services.timelines.getTimelines()).data;
@@ -364,14 +368,14 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     for (const story of stories) {
       this.addNode(nodes, { id: story.id, type: 'story', title: story.title, slug: story.slug, subtitle: story.summary });
       for (const topicId of story.relatedTopicIds) {
-        const topic = topics.find(t => t.id === topicId);
+        const topic = topics.find(t => t.id === topicId || t.slug === topicId);
         if (topic) {
           this.addNode(nodes, { id: topic.id, type: 'topic', title: topic.name, slug: topic.slug, subtitle: topic.description });
           rawEdges.push({ from: story.id, to: topic.id, relation: 'belongs_to', baseConfidence: 0.9, sourceType: 'story', sourceId: story.id });
         }
       }
       for (const entityId of story.relatedEntityIds) {
-        const entity = entities.find(e => e.id === entityId);
+        const entity = entities.find(e => e.id === entityId || e.slug === entityId);
         if (entity) {
           this.addNode(nodes, { id: entity.id, type: entity.type, title: entity.name, slug: entity.slug, subtitle: entity.description });
           rawEdges.push({ from: story.id, to: entity.id, relation: 'mentions', baseConfidence: 0.9, sourceType: 'story', sourceId: story.id });
@@ -390,7 +394,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
         }
       }
       for (const entityId of topic.relatedEntityIds) {
-        const entity = entities.find(e => e.id === entityId);
+        const entity = entities.find(e => e.id === entityId || e.slug === entityId);
         if (entity) {
           this.addNodeIfMissing(nodes, entity);
           rawEdges.push({ from: entity.id, to: topic.id, relation: 'part_of', baseConfidence: 0.85, sourceType: 'topic', sourceId: topic.id });
@@ -402,7 +406,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
     for (const entity of entities) {
       this.addNode(nodes, { id: entity.id, type: entity.type, title: entity.name, slug: entity.slug, subtitle: entity.description });
       for (const relatedId of (entity.relatedEntityIds || [])) {
-        const related = entities.find(e => e.id === relatedId);
+        const related = entities.find(e => e.id === relatedId || e.slug === relatedId);
         if (related) {
           this.addNodeIfMissing(nodes, related);
           rawEdges.push({ from: entity.id, to: related.id, relation: 'related_to', baseConfidence: 0.8, sourceType: 'entity', sourceId: entity.id });
@@ -416,7 +420,7 @@ export class MemoryGraphProjectionService implements GraphProjectionService {
         }
       }
       for (const topicId of (entity.relatedTopicIds || [])) {
-        const topic = topics.find(t => t.id === topicId);
+        const topic = topics.find(t => t.id === topicId || t.slug === topicId);
         if (topic) {
           this.addNodeIfMissing(nodes, topic, 'topic');
           rawEdges.push({ from: entity.id, to: topic.id, relation: 'part_of', baseConfidence: 0.85, sourceType: 'entity', sourceId: entity.id });

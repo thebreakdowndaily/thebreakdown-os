@@ -1,4 +1,4 @@
-import { readStoryHistory } from '@/components/narrative/StoryMemoryWriter';
+import { readStoryHistory } from '@/lib/retention/history';
 
 export interface ReturningReaderState {
   isReturning: boolean;

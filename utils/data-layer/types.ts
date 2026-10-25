@@ -1,5 +1,5 @@
 /**
- * THE BREAKDOWN — API Platform Types
+ * THE BREAKDOWN â€” API Platform Types
  *
  * Public-facing API response types (enriched versions of internal types).
  */
@@ -9,11 +9,11 @@ import type { StoryBlock } from '@/components/story/blocks/types';
 export type APIStoryType = 'standard' | 'investigation_chapter' | 'explainer' | 'analysis' | 'briefing';
 
 /**
- * Publication lifecycle — controls public visibility.
+ * Publication lifecycle â€” controls public visibility.
  * Separate from the editorial/story status field.
  *
- *   draft/review/archived/scheduled → NOT public
- *   published + valid past publishedAt → public
+ *   draft/review/archived/scheduled â†’ NOT public
+ *   published + valid past publishedAt â†’ public
  */
 export type PublicationStatus = 'draft' | 'review' | 'scheduled' | 'published' | 'archived';
 
@@ -50,10 +50,12 @@ export interface APIStory {
   organisations?: APIRelatedEntity[];
   countries?: APIRelatedEntity[];
   whyItMatters?: string;
-  /** Editorial/story classification — NOT a publication gate. */
+  /** Editorial/story classification â€” NOT a publication gate. */
   status?: 'breaking' | 'developing' | 'verified' | 'explainer' | 'archive';
-  /** Publication lifecycle — controls public visibility. Missing = draft (fail-closed). */
+  /** Publication lifecycle â€” controls public visibility. Missing = draft (fail-closed). */
   publicationStatus?: PublicationStatus;
+  /** Quarantine flag for synthetic/test stories; public paths must always exclude these. */
+  isTestArtifact?: boolean;
   scheduledAt?: string;
   versionHistory?: Array<{ date: string; description: string }>;
   confidenceBreakdown?: {
@@ -101,6 +103,8 @@ export interface APIClaim {
   verification: string;
   explanation: string;
   confidence: number;
+  /** Pre-vault claims backed by archival/historical sources that predate the Evidence Vault. */
+  isLegacy?: boolean;
   counterArguments?: import('@/types/canonical').CounterArgument[];
 }
 
