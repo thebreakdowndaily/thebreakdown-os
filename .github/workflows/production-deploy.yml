@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main, staging ]
 
+# Avoid spending runner time validating obsolete PR commits. Main/staging push checks are preserved.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   validate-and-test:
     name: 1. Validate & Test (CI)
@@ -24,17 +29,24 @@ jobs:
         run: npm ci
 
       - name: TypeScript Verification
+        if: github.event_name != 'pull_request'
         run: npm run check:type
 
       - name: Strict Linting Verification
+        if: github.event_name != 'pull_request'
         run: npm run check:lint
 
       - name: Security Regression Gate
+        if: github.event_name != 'pull_request'
         run: npm run test:security
 
       - name: Database Migration Safety Gate
+        if: github.event_name != 'pull_request'
         run: npm run test:migration
 
+      # On pull requests, CI Pipeline owns the shared type/lint/security/migration,
+      # a11y and production-build gates. Keep this workflow focused on additional
+      # architecture and release-control suites that CI Pipeline does not cover.
       - name: Master Architectural & Operational Test Suite
         run: |
           npx tsx tests/canonical-domain.test.ts
@@ -44,15 +56,19 @@ jobs:
           npx tsx tests/reader-product-surface.test.ts
           npx tsx tests/editorial-operating-system.test.ts
           npx tsx tests/e2e-workflow.test.ts
-          npm run test:a11y
           npx tsx tests/production-readiness.test.ts
           npx tsx tests/data-integrity.test.ts
+
+      - name: Accessibility Token & Contrast Gate
+        if: github.event_name != 'pull_request'
+        run: npm run test:a11y
 
       - name: Release-Control Safety & Deployment Health Suites
         run: |
           npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts
 
       - name: Next.js Production Build Verification
+        if: github.event_name != 'pull_request'
         run: npm run build
 
   deploy-staging:

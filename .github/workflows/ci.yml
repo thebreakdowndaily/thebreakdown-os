@@ -1,10 +1,17 @@
 name: CI Pipeline
 
 on:
+  # Validate feature branches once through pull_request; validate direct main updates through push.
+  # This avoids running the full suite twice for each commit on an open PR branch.
   push:
-    branches-ignore:
-      - 'dependabot/**'
+    branches:
+      - main
   pull_request:
+
+# For PRs, keep only the latest revision's run. Never auto-cancel main push gates.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   lint-and-build:
