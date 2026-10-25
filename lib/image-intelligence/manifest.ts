@@ -18,6 +18,12 @@ export interface VerifiedImageRecord {
   evidenceSourceUrls?: string[];
   approvalStatus?: 'approved' | 'pending' | 'rejected';
   approvalTimestamp?: string;
+  authorizedStorySlugs?: string[];
+  expectedDigest?: string;
+  approvedDigest?: string;
+  reviewedBy?: string;
+  reviewerRole?: string;
+  sourceDataProvenance?: string;
 }
 
 /**
@@ -240,6 +246,9 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     ],
     approvalStatus: 'approved',
     approvalTimestamp: '2026-09-27T10:00:00.000Z',
+    approvedDigest: 'sha256:1797961054daf84a0f6fdde3192dc936c1e2ad474e8786b579b5edfe5bbc136f',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Photo Editor',
   },
   'indias-foreign-policy': {
     storySlug: 'indias-foreign-policy',
@@ -401,8 +410,14 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     provenance: 'Ministry of Electronics and Information Technology (MeitY) / ISM Archive',
     license: 'PUBLIC_DOMAIN',
     description: 'Semiconductor cleanroom wafer processing and advanced packaging facility.',
+    width: 1200,
+    height: 800,
+    format: 'jpeg',
     approvalStatus: 'approved',
     approvalTimestamp: '2026-09-27T10:00:00.000Z',
+    approvedDigest: 'sha256:3e44978e35a749bdc920961e3a07d27c747136f197f1b29d07018b33cce663a7',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Photo Editor',
   },
   'bcci-domestic-mandate-ranji-economics': {
     storySlug: 'bcci-domestic-mandate-ranji-economics',
@@ -425,11 +440,15 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
       'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
       'https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
     ],
+    expectedDigest: 'sha256:0e40c006907a6dd1c3457cf219ed472d04e2d68137f87fe29070f9b42e6c1d70',
+    authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
     approvalStatus: 'approved',
     approvalTimestamp: '2026-10-24T18:00:00.000Z',
   },
   'bcci-domestic-fees': {
-    storySlug: 'bcci-domestic-fees',
+    storySlug: 'bcci-domestic-mandate-ranji-economics',
+    authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
+    expectedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
     approvedImage: '/images/editorial/bcci-domestic-fees.svg',
     assetType: 'original-editorial-graphic',
     provenance: 'The Breakdown Editorial Graphics',
@@ -449,12 +468,46 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
       'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
       'https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s',
     ],
+    sourceDataProvenance: "BCCI Update—9th Apex Council Meeting (20 September 2021); senior men's domestic daily fee table.",
     approvalStatus: 'pending',
   },
 };
 
 export function getManifestEntry(storySlug: string): VerifiedImageRecord | null {
   return VERIFIED_STORY_IMAGE_MANIFEST[storySlug] || null;
+}
+
+/**
+ * Checks whether an asset explicitly authorizes usage by a given story slug.
+ * Supports legitimate shared assets only via explicit, auditable authorization.
+ */
+export function isAssetAuthorizedForStory(record: VerifiedImageRecord, storySlug: string): boolean {
+  if (record.storySlug === storySlug) return true;
+  if (Array.isArray(record.authorizedStorySlugs) && record.authorizedStorySlugs.includes(storySlug)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Resolves an approved image URL against the manifest and checks whether
+ * the requesting story is authorized to use it.
+ */
+export function findRegisteredAssetForStory(
+  src: string,
+  storySlug: string
+): { record: VerifiedImageRecord | null; isAuthorized: boolean } {
+  const record =
+    Object.values(VERIFIED_STORY_IMAGE_MANIFEST).find(
+      (candidate) => candidate.approvedImage === src
+    ) || null;
+
+  if (!record) {
+    return { record: null, isAuthorized: false };
+  }
+
+  const isAuthorized = isAssetAuthorizedForStory(record, storySlug);
+  return { record, isAuthorized };
 }
 
 export const IMAGE_INTELLIGENCE_MANIFEST = VERIFIED_STORY_IMAGE_MANIFEST;

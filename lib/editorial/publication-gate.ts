@@ -32,7 +32,7 @@ import type { EvidenceVaultService } from '@/services/intelligence/evidence-vaul
 import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
 import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
-import { validateStorySupportingMedia } from '@/lib/image-intelligence/publication-validation';
+import { validateStoryHeroMedia, validateStorySupportingMedia } from '@/lib/image-intelligence/publication-validation';
 
 export const EDITORIAL_RELEASE_HOLD_SLUGS = [
   'ai-literacy-india-students-verify-ai',
@@ -43,6 +43,7 @@ export const EDITORIAL_RELEASE_HOLD_SLUGS = [
 export interface PublicationGateOptions {
   bypassEditorialHold?: boolean;
   vaultInitError?: string;
+  requireDigestLock?: boolean;
 }
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
@@ -276,14 +277,24 @@ export function validateStoryForPublication(
           : 'Feature/standard story missing required hero visual.',
       });
     } else {
-      const match = matchImageToStoryContext(heroImage, story, getManifestEntry);
-      checks.push({
-        name: 'hero_media_quality',
-        passed: match.aligned,
-        reason: match.aligned
-          ? `Hero media context verified: ${match.reason}`
-          : `Hero media failed context alignment check: ${match.reason}`,
-      });
+      const heroValidation = validateStoryHeroMedia(story, options);
+      if (!heroValidation.passed) {
+        checks.push({
+          name: 'hero_media_quality',
+          passed: false,
+          reason: `Hero media validation failed: ${heroValidation.violations.join('; ')}`,
+          details: heroValidation.violations.join('\n'),
+        });
+      } else {
+        const match = matchImageToStoryContext(heroImage, story, getManifestEntry);
+        checks.push({
+          name: 'hero_media_quality',
+          passed: match.aligned,
+          reason: match.aligned
+            ? `Hero media context verified: ${match.reason}`
+            : `Hero media failed context alignment check: ${match.reason}`,
+        });
+      }
     }
   }
 
@@ -324,7 +335,7 @@ export function validateStoryForPublication(
 
   // Gate 17a: Supporting visual provenance and approval.
   if (isEnforcedFeatureStory && story.blocks && story.blocks.length > 0) {
-    const supportingMedia = validateStorySupportingMedia(story);
+    const supportingMedia = validateStorySupportingMedia(story, options);
     checks.push({
       name: 'supporting_media_approval',
       passed: supportingMedia.passed,
