@@ -8,7 +8,7 @@ import { buildChapterGraph } from '@/lib/knowledge/knowledge-graph';
 import { getEntityIndex } from '@/utils/data-layer/entity-index';
 import { enrichClaimLazy } from '@/lib/knowledge/knowledge-core';
 import { createArticleSchema, createBreadcrumbSchema } from '@/lib/seo/jsonld';
-import { isPubliclyPublished } from '@/lib/story/publication';
+import { isChapterPubliclyPublished } from '@/lib/knowledge/chapter-publication';
 
 export const revalidate = 60;
 
@@ -21,7 +21,7 @@ export async function generateStaticParams() {
     for (const col of lib.collections) {
       for (const vol of col.volumes) {
         for (const chap of vol.chapters) {
-          if (chap.status === 'published' || chap.status === 'verified') {
+          if (isChapterPubliclyPublished(chap)) {
             params.push({
               collectionSlug: col.slug,
               volumeSlug: vol.slug,
@@ -36,15 +36,6 @@ export async function generateStaticParams() {
   return params;
 }
 
-function isChapterPubliclyPublished(
-  chapter: { status?: string; createdAt?: string; publishedAt?: string },
-  now: Date = new Date()
-): boolean {
-  const isStatusPublic = chapter.status === 'published' || chapter.status === 'verified';
-  const pubStatus = isStatusPublic ? 'published' : 'draft';
-  const publishedAt = chapter.publishedAt || chapter.createdAt;
-  return isPubliclyPublished({ publicationStatus: pubStatus, publishedAt }, now);
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ collectionSlug: string; volumeSlug: string; chapterSlug: string }> }): Promise<Metadata> {
   const { collectionSlug, volumeSlug, chapterSlug } = await params;
