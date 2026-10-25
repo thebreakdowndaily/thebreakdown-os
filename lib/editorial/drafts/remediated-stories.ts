@@ -790,7 +790,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       "title": "In letter to top cricketers, BCCI secretary warns skipping domestic red-ball games will have severe implications",
       "url": "https://indianexpress.com/article/sports/cricket/jay-shah-bcci-letter-to-cricketers-skipping-domestic-games-severe-implications-9165765/",
       "publisher": "The Indian Express",
-      "sourceType": "reporting",
+      "sourceType": "news",
       "tier": 2,
       "accessedAt": "2026-10-25T00:00:00Z",
       "publishedAt": "2024-02-17T00:00:00Z"
@@ -810,7 +810,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       "title": "BCCI's domestic outlook: Focus on T20s",
       "url": "https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s",
       "publisher": "The New Indian Express",
-      "sourceType": "reporting",
+      "sourceType": "news",
       "tier": 2,
       "accessedAt": "2026-10-25T00:00:00Z",
       "publishedAt": "2026-05-20T00:00:00Z"
