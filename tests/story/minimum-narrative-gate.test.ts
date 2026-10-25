@@ -31,5 +31,8 @@ describe('Minimum narrative depth publication gate', () => {
     const depth = result.checks.find((check) => check.name === 'narrative_depth');
     expect(depth?.passed).toBe(true);
     expect(depth?.reason).toContain('words meets the 1800-word target');
+    const mediaApproval = result.checks.find((check) => check.name === 'supporting_media_approval');
+    expect(mediaApproval?.passed).toBe(false);
+    expect(mediaApproval?.reason).toContain('requires explicit human media approval');
   });
 });

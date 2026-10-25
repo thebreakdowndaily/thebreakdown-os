@@ -899,15 +899,15 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "clm-ranji-06",
-      "claim": "The public documents reviewed here do not establish a measured causal effect of the February 2024 directive on domestic appearances, selection outcomes or player availability.",
-      "data": "This is a scope-limited finding about the evidence located for this story, not proof that no internal BCCI data exists. Establishing an effect would require a defined player cohort, match-by-match availability and appearances, season comparisons, and documented exclusions.",
-      "sourceId": "src-bcci-letter-report",
-      "source": "src-bcci-letter-report",
-      "sourceUrl": "https://indianexpress.com/article/sports/cricket/jay-shah-bcci-letter-to-cricketers-skipping-domestic-games-severe-implications-9165765/",
+      "claim": "In May 2026, former India batter Amay Khurasiya argued that Ranji players should be paid more to support family financial needs and suggested state-association contracts as an alternative.",
+      "data": "This is a reported opinion from a named former player and coach; it is not representative evidence of player income or a measurement of how much compensation is needed.",
+      "sourceId": "src-fee-report-2026",
+      "source": "src-fee-report-2026",
+      "sourceUrl": "https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s",
       "tier": 2,
-      "status": "mixed",
-      "verificationStatus": "partially-verified",
-      "confidence": 0.82
+      "status": "verified",
+      "verificationStatus": "verified",
+      "confidence": 0.95
     }
   ],
   "timeline": [
@@ -1055,7 +1055,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       "id": "bcci-block-p4",
       "type": "paragraph",
       "data": {
-        "text": "<p>It is tempting to place a full Ranji season beside an IPL contract and declare the economic incentive obvious. The comparison can be useful, but only if it is honest about what the numbers represent. A domestic daily fee, a central retainership, a Test incentive and a franchise contract have different eligibility conditions, durations and degrees of certainty. They are not interchangeable salary lines.</p>\n<p>A fee calculation based on 28 scheduled days is an upper-bound illustration under an explicit assumption. It is not proof that every fixture lasts four days, that each player appears in every match, or that every scheduled day is paid in the same way. Likewise, an IPL auction base price is not evidence that a player was bought, selected to play, or paid that amount for a season. A central retainership is a separate contractual payment, and its value depends on the grade and terms. An annual income estimate would need the player's actual contract, appearances, absences and applicable payment rules.</p>\n<p>The economic problem is therefore not simply that one format “pays more.” Players weigh money alongside selection, career longevity, injury exposure, training, travel and the chance of being picked. The BCCI's stated rationale is that domestic cricket is a foundation for national selection and player development; that is a plausible sporting argument. But without attributable player interviews, contract detail and workload data, the newsroom cannot responsibly claim to know how an individual player calculated the trade-off.</p>\n<p>That restraint cuts both ways. A board may reasonably argue that domestic appearances sustain competitive depth and provide a current assessment of form. A player may reasonably need recovery time or a medical exemption. Neither argument should be accepted as a universal explanation. The reporting task is to examine the rules, record what happened and test each explanation against evidence—not to call every absence disloyal or every directive coercive by default.</p>"
+        "text": "<p>It is tempting to place a full Ranji season beside an IPL contract and declare the economic incentive obvious. The comparison can be useful, but only if it is honest about what the numbers represent. A domestic daily fee, a central retainership, a Test incentive and a franchise contract have different eligibility conditions, durations and degrees of certainty. They are not interchangeable salary lines.</p>\n<p>A fee calculation based on 28 scheduled days is an upper-bound illustration under an explicit assumption. It is not proof that every fixture lasts four days, that each player appears in every match, or that every scheduled day is paid in the same way. Likewise, an IPL auction base price is not evidence that a player was bought, selected to play, or paid that amount for a season. A central retainership is a separate contractual payment, and its value depends on the grade and terms. An annual income estimate would need the player's actual contract, appearances, absences and applicable payment rules.</p>\n<p>The economic problem is therefore not simply that one format “pays more.” Players weigh money alongside selection, career longevity, injury exposure, training, travel and the chance of being picked. The BCCI's stated rationale is that domestic cricket is a foundation for national selection and player development; that is a plausible sporting argument. But without attributable player interviews, contract detail and workload data, the newsroom cannot responsibly claim to know how an individual player calculated the trade-off.</p>\n<p>That restraint cuts both ways. A board may reasonably argue that domestic appearances sustain competitive depth and provide a current assessment of form. A player may reasonably need recovery time or a medical exemption. Neither argument should be accepted as a universal explanation. The reporting task is to examine the rules, record what happened and test each explanation against evidence—not to call every absence disloyal or every directive coercive by default.</p>\n<p>There is also a named counterargument. In May 2026, former India batter Amay Khurasiya told <em>The New Indian Express</em> that Ranji players should be paid substantially more so red-ball cricket can meet families' financial needs, or state associations should create contract systems <cite data-ref=\"src-fee-report-2026\">[4]</cite>. That is a policy argument from a former player and coach, not a representative survey of player incomes. It nevertheless points to a question the rate card alone cannot answer: how predictable is a player's income across a season, including days when they are not selected or a match ends early?</p>"
       }
     },
     {
@@ -1087,48 +1087,9 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       "data": {
         "text": "<p>The strongest case for the policy is institutional: domestic first-class cricket is not merely a fallback for players outside the national side. It is a competition in which form can be tested over longer spells, younger players can meet experienced opponents, and state teams maintain a development pathway. The BCCI's 2026–27 calendar continues to devote a substantial place to multi-day cricket, although it also reorganises other competitions and scheduling <cite data-ref=\"src-bcci-season-2026-27\">[6]</cite>. That confirms the format remains part of the board's structure; it does not measure whether the 2024 directive improved it.</p>\n<p>A fair evaluation should publish three things. First, a clear rule that distinguishes a board recommendation, a selection consideration, an annual-contract decision and a formal eligibility requirement. Second, a privacy-conscious record of player availability and domestic appearances by a pre-defined cohort. Third, a separate statement of how medical exceptions, national commitments and return-to-play decisions are handled. These would make the policy legible to players, state associations and the public without pretending that every absence has the same cause.</p>\n<p>The economic data should be equally clear. The BCCI should keep the date and scope of fee schedules easy to find, distinguish daily fees from annual contracts and bonuses, and explain the Test incentive's four-match edge case. State associations could help players understand what they may earn under realistic playing-day scenarios, instead of letting a maximum calculation be mistaken for a standard income. Those are practical transparency steps, not claims that payment alone can solve scheduling or workload conflicts.</p>\n<p>The defensible conclusion is narrower than the original headline suggested. In February 2024, the BCCI publicly strengthened its message that players should prioritise domestic cricket when not on national duty, and its annual-contract release coincided with the omission of Iyer and Kishan. Official records show domestic fee tiers and a separate Test incentive; they also show the limits of what the public data can settle. Whether the directive produced a sustained, measurable increase in domestic participation remains a question for a transparent dataset, not a slogan.</p>"
       }
-    },
-    {
-      "id": "bcci-block-timeline",
-      "type": "timeline",
-      "data": {
-        "title": "The policy and payment timeline",
-        "events": [
-          {
-            "date": "20 Sep 2021",
-            "title": "Domestic daily fee schedule published",
-            "description": "BCCI's ninth Apex Council update lists senior men's rates by match-count band and separate reserve rates.",
-            "source": "src-bcci-domestic-fee-table"
-          },
-          {
-            "date": "15–17 Feb 2024",
-            "title": "Public warning and reported letter",
-            "description": "Jay Shah publicly called for domestic red-ball participation; The Indian Express reported on a letter to centrally contracted and India A players.",
-            "source": "src-bcci-letter-report"
-          },
-          {
-            "date": "28 Feb 2024",
-            "title": "Annual contracts announced",
-            "description": "The release says Iyer and Kishan were not considered in that round and recommends prioritising domestic cricket when not on national duty.",
-            "source": "src-bcci-retainership-2024"
-          },
-          {
-            "date": "9 Mar 2024",
-            "title": "Test incentive scheme announced",
-            "description": "BCCI publishes participation-based bonuses on top of Test match fees, using a nine-Test season as its example.",
-            "source": "src-bcci-test-incentive"
-          },
-          {
-            "date": "20 May 2026",
-            "title": "2026–27 domestic calendar announced",
-            "description": "The BCCI confirms the structure of the next domestic season; contemporary reporting still quotes the 2021 senior fee tiers.",
-            "source": "src-bcci-season-2026-27"
-          }
-        ]
-      }
     }
   ]
-};
+}
 
 export const REMEDIATED_STORIES_REGISTRY: Record<string, Story> = {
   'ai-literacy-india-students-verify-ai': REMEDIATED_AI_LITERACY_STORY,

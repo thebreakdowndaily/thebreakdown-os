@@ -32,6 +32,7 @@ import type { EvidenceVaultService } from '@/services/intelligence/evidence-vaul
 import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
 import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
+import { validateStorySupportingMedia } from '@/lib/image-intelligence/publication-validation';
 
 export const EDITORIAL_RELEASE_HOLD_SLUGS = [
   'ai-literacy-india-students-verify-ai',
@@ -319,6 +320,19 @@ export function validateStoryForPublication(
         reason: 'Long-form stories must declare a positive readingTime that matches the shared narrative word-count model.',
       });
     }
+  }
+
+  // Gate 17a: Supporting visual provenance and approval.
+  if (isEnforcedFeatureStory && story.blocks && story.blocks.length > 0) {
+    const supportingMedia = validateStorySupportingMedia(story);
+    checks.push({
+      name: 'supporting_media_approval',
+      passed: supportingMedia.passed,
+      reason: supportingMedia.passed
+        ? `All ${supportingMedia.assetIds.length} supporting image asset(s) have provenance and explicit approval`
+        : `Supporting media is not publication-ready: ${supportingMedia.violations.join('; ')}`,
+      details: supportingMedia.violations.length ? supportingMedia.violations.join('\\n') : undefined,
+    });
   }
 
   // Gate 17: Visual Blocks Presence for Long-form Journalism

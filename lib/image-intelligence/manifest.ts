@@ -439,18 +439,17 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     sourceUrl: '/images/editorial/bcci-domestic-fees.svg',
     creator: 'The Breakdown Editorial Graphics',
     rightsBasis: 'Original vector graphic created for The Breakdown; no third-party photograph incorporated.',
-    altText: 'A fee schedule comparison for playing XI members by first-class match experience, excluding reserves and distinguishing daily fee from total income.',
-    caption: "BCCI-announced senior men's domestic first-class playing fees per day, 2021 revision.",
+    altText: 'Three senior men’s domestic daily fee tiers: ₹40,000, ₹50,000 and ₹60,000 across BCCI-published match-count bands; reserve fees are separate.',
+    caption: "BCCI's 20 September 2021 senior men's domestic daily fee table. It is a rate card, not annual salary; The New Indian Express reported the same tiers in May 2026.",
     relevanceRationale: 'BCCI Update—9th Apex Council Meeting, 20 September 2021; dated schedule separating daily fees by appearance tiers.',
     width: 1200,
     height: 630,
     format: 'svg',
     evidenceSourceUrls: [
       'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
-      'https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
+      'https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s',
     ],
-    approvalStatus: 'approved',
-    approvalTimestamp: '2026-10-24T18:00:00.000Z',
+    approvalStatus: 'pending',
   },
 };
 

@@ -43,8 +43,9 @@ const bcciFeesGraphic = validateStoryHeroMedia(
   story('bcci-domestic-fees', 'explainer', '/images/editorial/bcci-domestic-fees.svg')
 );
 assert.equal(bcciFeesGraphic.required, true);
-assert.equal(bcciFeesGraphic.passed, true);
+assert.equal(bcciFeesGraphic.passed, false);
+assert.ok(bcciFeesGraphic.violations.some((v) => v.includes('approval timestamp')));
 assert.equal(bcciFeesGraphic.assetId, 'tb-bcci-domestic-mandate-ranji-economics-graphic-v1');
 assert.equal(bcciFeesGraphic.assetType, 'original-editorial-graphic');
 
-console.log('PASS hero media gate: missing manifest, pending approval, approved photographic assets, approved editorial graphic, and non-feature compatibility');
+console.log('PASS hero media gate: missing manifest, pending approval, approved photographic assets, pending revised editorial graphic, and non-feature compatibility');

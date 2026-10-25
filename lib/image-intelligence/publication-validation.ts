@@ -1,5 +1,5 @@
 import type { Story } from '@/types/canonical';
-import { getManifestEntry } from './manifest';
+import { getManifestEntry, IMAGE_INTELLIGENCE_MANIFEST } from './manifest';
 
 export const FEATURE_STORY_TYPES = new Set(['explainer', 'analysis', 'investigation_chapter']);
 
@@ -46,4 +46,60 @@ export function validateStoryHeroMedia(story: Pick<Story, 'slug' | 'storyType' |
     violations.push('The story hero URL differs from the story-specific manifest asset.');
   }
   return { required, passed: violations.length === 0, assetId: record?.assetId, assetType: record?.assetType, violations };
+}
+
+
+export interface SupportingMediaValidation {
+  required: boolean;
+  passed: boolean;
+  assetIds: string[];
+  violations: string[];
+}
+
+/**
+ * Validate all authored image blocks in feature stories. A chart or infographic
+ * is not publication-ready merely because its URL exists or its SVG renders.
+ */
+export function validateStorySupportingMedia(
+  story: Pick<Story, 'slug' | 'storyType' | 'blocks'>
+): SupportingMediaValidation {
+  const required = FEATURE_STORY_TYPES.has(story.storyType);
+  if (!required) return { required, passed: true, assetIds: [], violations: [] };
+
+  const imageBlocks = (story.blocks || []).filter((block: any) => block.type === 'image');
+  const violations: string[] = [];
+  const assetIds: string[] = [];
+
+  for (const [index, block] of imageBlocks.entries()) {
+    const data = (block as any).data || {};
+    const src = typeof data.src === 'string' ? data.src : '';
+    if (!src) {
+      violations.push(`Supporting image ${index + 1} is missing a source URL.`);
+      continue;
+    }
+
+    const record = Object.values(IMAGE_INTELLIGENCE_MANIFEST).find((candidate) => candidate.approvedImage === src);
+    if (!record) {
+      violations.push(`Supporting image ${index + 1} (${src}) has no registered media manifest record.`);
+      continue;
+    }
+    if (record.assetType === 'branded-placeholder') violations.push(`Supporting image ${index + 1} is a generic placeholder.`);
+    if (!record.assetId) violations.push(`Supporting image ${index + 1} is missing a stable asset ID.`);
+    if (!record.provenance || !record.sourceUrl) violations.push(`Supporting image ${index + 1} is missing provenance or a source URL.`);
+    if (!record.license || !record.rightsBasis) violations.push(`Supporting image ${index + 1} is missing a license or rights basis.`);
+    if (!(typeof data.alt === 'string' && data.alt.trim()) || !record.altText) violations.push(`Supporting image ${index + 1} is missing informative alt text.`);
+    if (!(typeof data.caption === 'string' && data.caption.trim()) || !record.caption) violations.push(`Supporting image ${index + 1} is missing a visible caption.`);
+    if (!record.relevanceRationale) violations.push(`Supporting image ${index + 1} is missing a story-specific relevance rationale.`);
+    if (!(record.width && record.height && record.width >= 600 && record.height >= 315)) violations.push(`Supporting image ${index + 1} is missing usable dimensions (minimum 600×315).`);
+    if (!record.format || record.format === 'unknown') violations.push(`Supporting image ${index + 1} has no known file format.`);
+    if (record.assetType === 'original-editorial-graphic' && (!record.evidenceSourceUrls || record.evidenceSourceUrls.length === 0)) {
+      violations.push(`Supporting image ${index + 1} lacks links to its supporting evidence.`);
+    }
+    if (record.approvalStatus !== 'approved' || !record.approvalTimestamp || Number.isNaN(Date.parse(record.approvalTimestamp))) {
+      violations.push(`Supporting image ${index + 1} requires explicit human media approval after the latest revision.`);
+    }
+    if (record.assetId) assetIds.push(record.assetId);
+  }
+
+  return { required, passed: violations.length === 0, assetIds, violations };
 }

@@ -187,7 +187,7 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
               Methodology & Fact-Checking Standard
             </h5>
             <p className="leading-relaxed">
-              Every factual finding reported by The Breakdown is verified against primary statutory gazettes, parliamentary filings, regulatory disclosures, and peer-reviewed empirical datasets. All claims undergo our 7-Phase Gold Standard review. Where evidence is evolving or conflicting interpretations exist, findings are explicitly demarcated in the Claims Ledger.
+              Sources are labelled by type and linked to the claims they are used to support. Official documents and independent reporting are distinguished rather than treated as interchangeable. Publication remains subject to the documented editorial review; unresolved questions and limitations should be stated in the story. A source list alone is not proof that a claim has been independently verified.
             </p>
           </div>
 
