@@ -31,6 +31,7 @@ import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
+import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
 
 export const EDITORIAL_RELEASE_HOLD_SLUGS = [
   'ai-literacy-india-students-verify-ai',
@@ -163,7 +164,7 @@ export function validateStoryForPublication(
   // Gate 7b: Claims Verification (Article III & P0 criteria)
   const isEnforcedFeatureStory = Boolean(
     (story as any).isFeatureStory ||
-    (story.storyType as string) === 'feature' ||
+    ['feature', 'explainer', 'analysis', 'investigation_chapter'].includes(String(story.storyType || '')) ||
     EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '')
   );
 
@@ -285,26 +286,39 @@ export function validateStoryForPublication(
     }
   }
 
-  // Gate 16: Narrative Depth and Reading Time Consistency
-  if (isEnforcedFeatureStory && story.readingTime && story.blocks && story.blocks.length > 0) {
-    const narrativeTexts = story.blocks
-      .filter((b: any) => b.type === 'paragraph' || b.type === 'text' || b.type === 'lead' || b.type === 'chapter-heading')
-      .map((b: any) => b.content || b.data?.text || b.data?.content || '')
-      .filter(Boolean);
-
-    const narrativeWords = narrativeTexts.join(' ').replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-    const calculatedReadingTime = Math.max(1, Math.round(narrativeWords / 200));
-    const diff = Math.abs(story.readingTime - calculatedReadingTime);
-    const percentDiff = diff / calculatedReadingTime;
-    const isConsistent = percentDiff <= 0.25 || diff <= 1;
-
+  // Gate 16: Minimum narrative depth and reading-time consistency.
+  // Depth is an independent invariant: a short story cannot pass by merely declaring a short read time.
+  if (isEnforcedFeatureStory && story.blocks && story.blocks.length > 0) {
+    const narrativeWords = countNarrativeWords(story.blocks);
+    const minimumWords = getEditorialNarrativeTarget(story);
+    const hasMinimumDepth = narrativeWords >= minimumWords;
     checks.push({
-      name: 'reading_time_consistency',
-      passed: isConsistent,
-      reason: isConsistent
-        ? `Narrative word count (${narrativeWords} words) consistent with declared reading time (${story.readingTime} min declared vs ${calculatedReadingTime} min calculated)`
-        : `Reading time discrepancy exceeded: declared ${story.readingTime} min vs calculated ${calculatedReadingTime} min (${narrativeWords} words). Discrepancy ${(percentDiff * 100).toFixed(0)}% exceeds 25% tolerance limit.`,
+      name: 'narrative_depth',
+      passed: hasMinimumDepth,
+      reason: hasMinimumDepth
+        ? `Narrative depth passed: ${narrativeWords} words meets the ${minimumWords}-word target`
+        : `Long-form story requires at least ${minimumWords} narrative words; found ${narrativeWords}. Headlines, summaries, source lists, claims, timelines and metadata do not count.`,
     });
+
+    if (Number.isFinite(story.readingTime) && story.readingTime > 0) {
+      const calculatedReadingTime = estimateReadingTimeMinutes(narrativeWords);
+      const diff = Math.abs(story.readingTime - calculatedReadingTime);
+      const percentDiff = diff / Math.max(calculatedReadingTime, 1);
+      const isConsistent = percentDiff <= 0.25 || diff <= 1;
+      checks.push({
+        name: 'reading_time_consistency',
+        passed: isConsistent,
+        reason: isConsistent
+          ? `Narrative word count (${narrativeWords} words) consistent with declared reading time (${story.readingTime} min declared vs ${calculatedReadingTime} min calculated at 220 wpm)`
+          : `Reading time discrepancy exceeded: declared ${story.readingTime} min vs calculated ${calculatedReadingTime} min (${narrativeWords} words). Discrepancy ${(percentDiff * 100).toFixed(0)}% exceeds 25% tolerance limit.`,
+      });
+    } else {
+      checks.push({
+        name: 'reading_time_consistency',
+        passed: false,
+        reason: 'Long-form stories must declare a positive readingTime that matches the shared narrative word-count model.',
+      });
+    }
   }
 
   // Gate 17: Visual Blocks Presence for Long-form Journalism

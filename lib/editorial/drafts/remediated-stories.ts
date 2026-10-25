@@ -723,379 +723,411 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
 };
 
 export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
-  id: 'c3333333-3333-4333-8333-333333333333',
-  slug: 'bcci-domestic-mandate-ranji-economics',
-  title: "BCCI's Domestic Cricket Mandate: How the Ranji Trophy Policy Reshaped Player Economics and Red-Ball Cricket",
-  headline: "BCCI's Domestic Cricket Mandate: How the Ranji Trophy Policy Reshaped Player Economics and Red-Ball Cricket",
-  summary: 'In early 2024, the BCCI stripped annual central retainers from stars skipping the Ranji Trophy. Backed by the Test Cricket Incentive Scheme offering up to ₹45 lakh per match for Playing XI members and tiered domestic daily fees of up to ₹60,000, Indian cricket has reshaped red-ball incentives while confronting severe workload friction.',
-  category: 'governance',
-  status: 'review',
-  publicationStatus: 'scheduled',
-  storyType: 'standard',
-  author: 'The Breakdown Editorial',
-  readingTime: 10,
-  evidenceScore: 94,
-  heroImage: '/images/stories/bcci-ranji-trophy.jpg',
-  heroImageAlt: 'The historic Ranji Trophy championship trophy displayed on the turf before a domestic first-class match in India.',
-  publishedAt: '2026-10-24T10:00:00Z',
-  createdAt: '2026-10-24T00:00:00Z',
-  updatedAt: '2026-10-24T12:00:00Z',
-  tags: ['cricket', 'BCCI', 'Ranji Trophy', 'sports governance', 'IPL', 'player contracts', 'domestic cricket'],
-  primaryEntityId: 'bcci',
-  relatedEntityIds: ['bcci', 'ipl', 'nca'],
-  relatedTopicIds: ['sports', 'governance', 'economics'],
-  faq: [],
-  charts: [],
-  relatedStoryIds: [],
-  takeaway: 'The BCCI’s unprecedented move to strip central retainers from international stars who bypassed domestic red-ball cricket, backed by a ₹45 lakh per match Test appearance incentive for Playing XI members, has re-anchored player incentives to first-class cricket. Yet workload friction and wide disparities in state association infrastructure remain unresolved challenges.',
-
-  sources: [
-    {
-      id: 'src-bcci-retainership-2024',
-      title: 'BCCI Media Release: Annual Player Retainership 2023-24 Announcement',
-      url: 'https://www.bcci.tv/articles/2024/news/55435987/bcci-announces-annual-player-retainership-2023-24-team-india-senior-men',
-      publisher: 'Board of Control for Cricket in India',
-      sourceType: 'official',
-      tier: 1,
-      accessedAt: '2026-10-20T00:00:00Z',
-      publishedAt: '2024-02-28T00:00:00Z',
-    },
-    {
-      id: 'src-bcci-test-incentive',
-      title: 'BCCI Announcement: Test Cricket Incentive Scheme for Senior Men',
-      url: 'https://www.bcci.tv/articles/2024/news/55436042/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
-      publisher: 'Board of Control for Cricket in India',
-      sourceType: 'official',
-      tier: 1,
-      accessedAt: '2026-10-20T00:00:00Z',
-      publishedAt: '2024-03-09T00:00:00Z',
-    },
-    {
-      id: 'src-bcci-domestic-remuneration',
-      title: 'BCCI Domestic Cricket Operations: Senior Men Remuneration Structure & Match Fee Slabs',
-      url: 'https://www.bcci.tv/about/governance/domestic-rules',
-      publisher: 'Board of Control for Cricket in India',
-      sourceType: 'official',
-      tier: 1,
-      accessedAt: '2026-10-20T00:00:00Z',
-      publishedAt: '2021-09-20T00:00:00Z',
-    },
-    {
-      id: 'src-bcci-tournament-regulations',
-      title: 'BCCI Domestic Tournament Regulations: Ranji Trophy Format and Team Structure',
-      url: 'https://www.bcci.tv/domestic/tournaments',
-      publisher: 'Board of Control for Cricket in India',
-      sourceType: 'official',
-      tier: 1,
-      accessedAt: '2026-10-20T00:00:00Z',
-      publishedAt: '2024-09-01T00:00:00Z',
-    },
-    {
-      id: 'src-bcci-ipl-auction-rules',
-      title: 'BCCI Indian Premier League: Player Regulations & Domestic Compensation Framework',
-      url: 'https://www.iplt20.com/about/governance',
-      publisher: 'BCCI IPL Governing Council',
-      sourceType: 'official',
-      tier: 1,
-      accessedAt: '2026-10-20T00:00:00Z',
-      publishedAt: '2024-09-28T00:00:00Z',
-    },
+  "id": "c3333333-3333-4333-8333-333333333333",
+  "slug": "bcci-domestic-mandate-ranji-economics",
+  "title": "BCCI's Ranji mandate: what the pay rules show — and what they don't",
+  "headline": "BCCI's Ranji mandate: what the pay rules show — and what they don't",
+  "summary": "The BCCI's February 2024 push for domestic red-ball cricket paired a public warning with contract decisions. Official fee schedules show how domestic and Test incentives differ, but the available public record does not prove that the directive itself changed participation.",
+  "category": "governance",
+  "status": "review",
+  "publicationStatus": "scheduled",
+  "storyType": "analysis",
+  "author": "The Breakdown Editorial",
+  "readingTime": 9,
+  "evidenceScore": 94,
+  "heroImage": "/images/stories/bcci-ranji-trophy.jpg",
+  "heroImageAlt": "The Ranji Trophy championship trophy displayed against a red backdrop.",
+  "publishedAt": "2026-10-25T00:00:00Z",
+  "createdAt": "2026-10-25T00:00:00Z",
+  "updatedAt": "2026-10-25T00:00:00Z",
+  "tags": [
+    "cricket",
+    "BCCI",
+    "Ranji Trophy",
+    "sports governance",
+    "player compensation",
+    "domestic cricket"
   ],
-
-  claims: [
-    {
-      id: 'clm-cricket-01',
-      claim: 'BCCI excluded national players from annual central retainers in February 2024 for failing to participate in domestic first-class cricket.',
-      quote: 'Please note that Shreyas Iyer and Ishan Kishan were not considered for the annual retainership in this round of recommendations.',
-      data: 'BCCI official media release confirmed that contracted players not on national duty must give precedence to participating in domestic cricket for home associations.',
-      sourceId: 'src-bcci-retainership-2024',
-      source: 'src-bcci-retainership-2024',
-      sourceUrl: 'https://thebreakdown.in/evidence/src-bcci-retainership-2024',
-      tier: 1,
-      status: 'verified',
-      verificationStatus: 'verified',
-      confidence: 0.99,
-    },
-    {
-      id: 'clm-cricket-02',
-      claim: 'The BCCI Test Cricket Incentive Scheme provides tiered match bonuses distinguishing Playing XI members (up to ₹45 lakh/match) from non-playing squad members (up to ₹22.5 lakh/match).',
-      quote: 'Athletes participating in more than 75% of scheduled Test matches receive an incentive of ₹45 lakh per match for Playing XI and ₹22.5 lakh per match for non-playing squad members.',
-      data: 'The tiered structure grants ₹45L/₹22.5L for >75% match participation and ₹30L/₹15L for 50-75% participation, while <50% yields nil incentive bonus.',
-      sourceId: 'src-bcci-test-incentive',
-      source: 'src-bcci-test-incentive',
-      sourceUrl: 'https://thebreakdown.in/evidence/src-bcci-test-incentive',
-      tier: 1,
-      status: 'verified',
-      verificationStatus: 'verified',
-      confidence: 0.99,
-    },
-    {
-      id: 'clm-cricket-03',
-      claim: 'Ranji Trophy match fees are structured hierarchically up to ₹60,000 per playing day for senior players with over 40 first-class games.',
-      quote: 'Senior cricketers with over 40 matches experience receive ₹60,000 per playing day in the Ranji Trophy, with lower slabs of ₹50,000 and ₹40,000 for junior tiers.',
-      data: 'A full seven-match group stage (28 playing days) yields ₹16.8 lakh in match-day compensation for a senior domestic cricketer.',
-      sourceId: 'src-bcci-domestic-remuneration',
-      source: 'src-bcci-domestic-remuneration',
-      sourceUrl: 'https://thebreakdown.in/evidence/src-bcci-domestic-remuneration',
-      tier: 1,
-      status: 'verified',
-      verificationStatus: 'verified',
-      confidence: 0.98,
-    },
-    {
-      id: 'clm-cricket-04',
-      claim: '38 state associations compete across Elite and Plate divisions in the Ranji Trophy championship under BCCI tournament regulations.',
-      quote: 'The senior men\'s domestic first-class championship comprises 38 state cricket associations organized across Elite groups and the Plate division.',
-      data: 'The 38-team tournament structure divides 32 teams into four Elite groups and 6 teams into a Plate division with promotion and relegation rules.',
-      sourceId: 'src-bcci-tournament-regulations',
-      source: 'src-bcci-tournament-regulations',
-      sourceUrl: 'https://thebreakdown.in/evidence/src-bcci-tournament-regulations',
-      tier: 1,
-      status: 'verified',
-      verificationStatus: 'verified',
-      confidence: 0.99,
-    },
-    {
-      id: 'clm-cricket-05',
-      claim: 'Uncapped domestic players on base IPL contracts receive ₹20 lakh to ₹50 lakh for eight weeks, exceeding maximum group-stage Ranji Trophy match earnings of ₹16.8 lakh.',
-      quote: 'Base auction reserve prices for uncapped players range from ₹20 lakh to ₹50 lakh, compared to ₹16.8 lakh maximum earnings across 28 days of Ranji Trophy group cricket for senior domestic cricketers.',
-      data: 'The financial differential between eight weeks of private T20 franchise participation and four months of multi-day domestic cricket formed the primary structural driver for the domestic participation mandate.',
-      sourceId: 'src-bcci-ipl-auction-rules',
-      source: 'src-bcci-ipl-auction-rules',
-      sourceUrl: 'https://thebreakdown.in/evidence/src-bcci-ipl-auction-rules',
-      tier: 1,
-      status: 'verified',
-      verificationStatus: 'verified',
-      confidence: 0.98,
-    },
+  "primaryEntityId": "bcci",
+  "relatedEntityIds": [
+    "bcci"
   ],
-
-  timeline: [
-    {
-      id: 'tl-cricket-1',
-      date: 'January 2016',
-      title: 'Justice Lodha Committee Domestic Governance Report',
-      description: 'Supreme Court panel emphasizes constitutional protections for domestic players, transparent administration, and creation of a players association.',
-    },
-    {
-      id: 'tl-cricket-2',
-      date: 'September 2021',
-      title: 'BCCI Triples Domestic Daily Match Remuneration',
-      description: 'Apex Council increases daily Ranji Trophy fees to ₹40,000, ₹50,000, and ₹60,000 based on career first-class experience.',
-    },
-    {
-      id: 'tl-cricket-3',
-      date: 'February 2024',
-      title: 'BCCI Enforces Domestic Participation Mandate',
-      description: 'Annual contract list excludes Shreyas Iyer and Ishan Kishan after directives requiring Ranji participation for home associations are bypassed.',
-    },
-    {
-      id: 'tl-cricket-4',
-      date: 'March 2024',
-      title: 'Launch of Test Cricket Incentive Scheme',
-      description: 'Apex Council approves tiered financial bonus structure distinguishing Playing XI (up to ₹45L) from non-playing squad members (up to ₹22.5L).',
-    },
-    {
-      id: 'tl-cricket-5',
-      date: 'September 2024',
-      title: 'BCCI Centre of Excellence Operationalized in Bengaluru',
-      description: 'Expanded sports science facility centralizes athlete rehabilitation, GPS workload monitoring, and return-to-play assessments.',
-    },
-    {
-      id: 'tl-cricket-6',
-      date: '2024–2026',
-      title: 'Domestic Seasons See International Stars Return to Ranji',
-      description: 'Marquee players return to state association dressing rooms; neutral curators assigned to Elite division venues to address pitch disparities.',
-    },
+  "relatedTopicIds": [
+    "sports",
+    "governance",
+    "economics"
   ],
-
-  blocks: [
+  "faq": [
     {
-      id: 'bcci-block-numbers',
-      type: 'key-numbers',
-      data: {
-        items: [
-          { value: '₹45 Lakh', label: 'Top Test Match Bonus', description: 'Per-match incentive for Playing XI members with >75% seasonal participation' },
-          { value: '₹22.5 Lakh', label: 'Squad Member Bonus', description: 'Per-match incentive for non-playing squad members with >75% participation' },
-          { value: '₹60,000', label: 'Senior Daily Ranji Fee', description: 'Remuneration per day for domestic players with >40 first-class matches' },
-          { value: '38 Teams', label: 'State Associations', description: 'Competing across Elite and Plate divisions in Ranji Trophy' },
-        ],
-      },
+      "question": "Did the BCCI officially say it removed Iyer and Kishan's existing contracts?",
+      "answer": "The 28 February 2024 release says they were not considered for the annual contracts in that round. The release does not use the wording 'stripped existing contracts' or explicitly state the cause; contemporaneous reporting linked the omissions to domestic participation."
     },
     {
-      id: 'bcci-block-comp',
-      type: 'comparison',
-      data: {
-        metric: 'Annual Player Compensation Architecture: Ranji Domestic vs Test Incentive Scheme',
-        before: {
-          value: '₹16.8 L',
-          label: 'Senior domestic match earnings across full 7-game Ranji group stage (28 match days at ₹60k/day)',
+      "question": "How much does a senior domestic player earn from a Ranji league stage?",
+      "answer": "There is no single total for every player. The published daily fee bands depend on the match-count tier and reserves have separate rates. Under a clearly labelled assumption of 28 fee-eligible days, the three senior Playing XI rates total ₹11.2 lakh, ₹14 lakh and ₹16.8 lakh; this is scenario arithmetic, not guaranteed income."
+    },
+    {
+      "question": "Does the ₹45 lakh Test incentive apply to everyone?",
+      "answer": "No. It is the additional per-match bonus at the scheme's highest listed participation tier for Playing XI members, under the nine-Test season example. The scheme separately lists lower rates for non-playing squad members and does not classify exactly four Tests in that example."
+    }
+  ],
+  "charts": [],
+  "relatedStoryIds": [],
+  "takeaway": "The BCCI's 2024 message and contract announcement are documented. The fee and Test-incentive schedules are also documented. A sustained effect on domestic participation is not established by those documents alone; measuring it requires a defined cohort and a reproducible match-level record.",
+  "sources": [
+    {
+      "id": "src-bcci-retainership-2024",
+      "title": "BCCI announces annual player retainership 2023-24 — Team India (Senior Men)",
+      "url": "https://www.bcci.tv/news/article/bcci-announces-annual-player-retainership-2023-24-team-india-senior-men",
+      "publisher": "Board of Control for Cricket in India",
+      "sourceType": "official",
+      "tier": 1,
+      "accessedAt": "2026-10-25T00:00:00Z",
+      "publishedAt": "2024-02-28T00:00:00Z"
+    },
+    {
+      "id": "src-bcci-letter-report",
+      "title": "In letter to top cricketers, BCCI secretary warns skipping domestic red-ball games will have severe implications",
+      "url": "https://indianexpress.com/article/sports/cricket/jay-shah-bcci-letter-to-cricketers-skipping-domestic-games-severe-implications-9165765/",
+      "publisher": "The Indian Express",
+      "sourceType": "reporting",
+      "tier": 2,
+      "accessedAt": "2026-10-25T00:00:00Z",
+      "publishedAt": "2024-02-17T00:00:00Z"
+    },
+    {
+      "id": "src-bcci-domestic-fee-table",
+      "title": "Update — 9th Apex Council Meeting",
+      "url": "https://www.bcci.tv/news/article/update-9th-apex-council-meeting",
+      "publisher": "Board of Control for Cricket in India",
+      "sourceType": "official",
+      "tier": 1,
+      "accessedAt": "2026-10-25T00:00:00Z",
+      "publishedAt": "2021-09-20T00:00:00Z"
+    },
+    {
+      "id": "src-fee-report-2026",
+      "title": "BCCI's domestic outlook: Focus on T20s",
+      "url": "https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s",
+      "publisher": "The New Indian Express",
+      "sourceType": "reporting",
+      "tier": 2,
+      "accessedAt": "2026-10-25T00:00:00Z",
+      "publishedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "id": "src-bcci-test-incentive",
+      "title": "BCCI announces Test Cricket Incentive Scheme for Senior Men",
+      "url": "https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men",
+      "publisher": "Board of Control for Cricket in India",
+      "sourceType": "official",
+      "tier": 1,
+      "accessedAt": "2026-10-25T00:00:00Z",
+      "publishedAt": "2024-03-09T00:00:00Z"
+    },
+    {
+      "id": "src-bcci-season-2026-27",
+      "title": "BCCI Domestic Home Season 2026-27 to feature 1,788 matches",
+      "url": "https://www.bcci.tv/news/article/bcci-domestic-home-season-2026-27-to-feature-1788-matches",
+      "publisher": "Board of Control for Cricket in India",
+      "sourceType": "official",
+      "tier": 1,
+      "accessedAt": "2026-10-25T00:00:00Z",
+      "publishedAt": "2026-05-20T00:00:00Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "clm-ranji-01",
+      "claim": "The BCCI's 28 February 2024 annual-contract release said Shreyas Iyer and Ishan Kishan were not considered in that round and recommended that players prioritise domestic cricket when not representing India.",
+      "data": "This is the release's exact scope. It does not itself say that existing contracts were stripped, nor does it explicitly state why the two players were omitted.",
+      "sourceId": "src-bcci-retainership-2024",
+      "source": "src-bcci-retainership-2024",
+      "sourceUrl": "https://www.bcci.tv/news/article/bcci-announces-annual-player-retainership-2023-24-team-india-senior-men",
+      "tier": 1,
+      "status": "verified",
+      "verificationStatus": "verified",
+      "confidence": 0.99
+    },
+    {
+      "id": "clm-ranji-02",
+      "claim": "A contemporaneous report in The Indian Express described a letter from BCCI secretary Jay Shah warning centrally contracted and India A players that domestic red-ball participation was a selection yardstick and that non-participation could have severe implications.",
+      "data": "The letter's wording is reported by The Indian Express; the published annual-contract release is a separate official record. The article attributes the warning to the letter and should not be represented as a published BCCI regulation.",
+      "sourceId": "src-bcci-letter-report",
+      "source": "src-bcci-letter-report",
+      "sourceUrl": "https://indianexpress.com/article/sports/cricket/jay-shah-bcci-letter-to-cricketers-skipping-domestic-games-severe-implications-9165765/",
+      "tier": 2,
+      "status": "verified",
+      "verificationStatus": "verified",
+      "confidence": 0.96
+    },
+    {
+      "id": "clm-ranji-03",
+      "claim": "The BCCI's published September 2021 senior men's domestic fee table lists ₹40,000, ₹50,000 and ₹60,000 per day for three match-count bands, with separate lower rates for reserves.",
+      "data": "The table lists match-count bands of up to 20, 21–40 and above 40; it does not label the count as first-class appearances only. A 2021 report described the tiering as not format-restricted, and 2026 reporting still cited these rates.",
+      "sourceId": "src-bcci-domestic-fee-table",
+      "source": "src-bcci-domestic-fee-table",
+      "sourceUrl": "https://www.bcci.tv/news/article/update-9th-apex-council-meeting",
+      "tier": 1,
+      "status": "verified",
+      "verificationStatus": "verified",
+      "confidence": 0.98
+    },
+    {
+      "id": "clm-ranji-04",
+      "claim": "For the 2026–27 Ranji Trophy Elite league stage, the BCCI calendar lists seven matches per team; Plate teams have five league matches.",
+      "data": "This describes the announced competition structure, not the number of days actually credited to a player's fee account or their final season earnings.",
+      "sourceId": "src-bcci-season-2026-27",
+      "source": "src-bcci-season-2026-27",
+      "sourceUrl": "https://www.bcci.tv/news/article/bcci-domestic-home-season-2026-27-to-feature-1788-matches",
+      "tier": 1,
+      "status": "verified",
+      "verificationStatus": "verified",
+      "confidence": 0.99
+    },
+    {
+      "id": "clm-ranji-05",
+      "claim": "The BCCI's March 2024 Test Cricket Incentive Scheme announces additional per-match bonuses based on participation in a season assumed to contain nine Tests, with different rates for the Playing XI and non-playing squad members.",
+      "data": "The published table specifies less than four, five and six, and seven or more matches. It does not classify exactly four matches under its nine-Test assumption; the story flags that gap rather than inferring a rule.",
+      "sourceId": "src-bcci-test-incentive",
+      "source": "src-bcci-test-incentive",
+      "sourceUrl": "https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men",
+      "tier": 1,
+      "status": "verified",
+      "verificationStatus": "verified",
+      "confidence": 0.99
+    },
+    {
+      "id": "clm-ranji-06",
+      "claim": "The public documents reviewed here do not establish a measured causal effect of the February 2024 directive on domestic appearances, selection outcomes or player availability.",
+      "data": "This is a scope-limited finding about the evidence located for this story, not proof that no internal BCCI data exists. Establishing an effect would require a defined player cohort, match-by-match availability and appearances, season comparisons, and documented exclusions.",
+      "sourceId": "src-bcci-letter-report",
+      "source": "src-bcci-letter-report",
+      "sourceUrl": "https://indianexpress.com/article/sports/cricket/jay-shah-bcci-letter-to-cricketers-skipping-domestic-games-severe-implications-9165765/",
+      "tier": 2,
+      "status": "mixed",
+      "verificationStatus": "partially-verified",
+      "confidence": 0.82
+    }
+  ],
+  "timeline": [
+    {
+      "id": "tl-ranji-1",
+      "date": "20 September 2021",
+      "title": "BCCI publishes revised domestic fee table",
+      "description": "The ninth Apex Council update lists senior men's domestic daily rates by match-count band and separate rates for reserves."
+    },
+    {
+      "id": "tl-ranji-2",
+      "date": "15–17 February 2024",
+      "title": "BCCI signals stronger domestic participation expectations",
+      "description": "Shah publicly calls for players to prioritise domestic red-ball cricket; The Indian Express reports on a letter to centrally contracted and India A players."
+    },
+    {
+      "id": "tl-ranji-3",
+      "date": "28 February 2024",
+      "title": "Annual contract list announced",
+      "description": "BCCI's release says Iyer and Kishan were not considered in that round and recommends prioritising domestic cricket when not on national duty."
+    },
+    {
+      "id": "tl-ranji-4",
+      "date": "9 March 2024",
+      "title": "Test Cricket Incentive Scheme announced",
+      "description": "The BCCI publishes participation-based additional Test bonuses using a nine-Test season example."
+    },
+    {
+      "id": "tl-ranji-5",
+      "date": "20 May 2026",
+      "title": "2026–27 domestic calendar announced",
+      "description": "The announced schedule preserves a seven-match Elite Ranji league stage; 2026 reporting still cites the published senior fee tiers."
+    }
+  ],
+  "blocks": [
+    {
+      "id": "bcci-block-numbers",
+      "type": "key-numbers",
+      "data": {
+        "items": [
+          {
+            "value": "₹40k–₹60k",
+            "label": "Senior daily domestic fee",
+            "source": "BCCI, 20 September 2021; rates still reported in May 2026"
+          },
+          {
+            "value": "7 matches",
+            "label": "2026–27 Elite league stage",
+            "source": "BCCI domestic season ready reckoner"
+          },
+          {
+            "value": "₹45 lakh",
+            "label": "Top Test incentive bonus per match",
+            "source": "BCCI Test Cricket Incentive Scheme; Playing XI at the top participation tier"
+          },
+          {
+            "value": "No causal estimate",
+            "label": "Policy effect established by this evidence",
+            "source": "Public evidence reviewed for this story"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bcci-block-ch1",
+      "type": "chapter-heading",
+      "data": {
+        "title": "Chapter 1 — A warning, an omission and a careful distinction",
+        "anchorId": "chapter-1"
+      }
+    },
+    {
+      "id": "bcci-block-p1",
+      "type": "paragraph",
+      "data": {
+        "text": "<p>In February 2024, the Board of Control for Cricket in India made the status of domestic red-ball cricket a public issue. On 15 February, secretary Jay Shah said centrally contracted players would be expected to play domestic red-ball cricket when asked by the captain, coach and selectors. Two days later, <cite data-ref=\"src-bcci-letter-report\">[2]</cite> reported on a letter to centrally contracted and India A players. The letter, as quoted by the newspaper, described domestic performance as a “critical yardstick for selection” and warned that non-participation could have serious consequences.</p>\n<p>On 28 February, the BCCI published the annual player-contract list for the 2023–24 season. Shreyas Iyer and Ishan Kishan were not included. The release itself says they were “not considered” in that round, then recommends that players give precedence to domestic cricket when they are not representing the national team <cite data-ref=\"src-bcci-retainership-2024\">[1]</cite>. Those two sentences are a primary record of what the board publicly announced.</p>\n<p>They are not, by themselves, proof of every explanation circulating at the time. It is too strong to write that the BCCI “stripped” existing contracts: the release concerns the annual contract list for a specified season and says the pair were not considered in that round. Contemporary reporting linked the omissions to missed domestic games, but the official release does not spell out that causal rationale. A careful account keeps the official wording, the reporting and the inference in separate boxes.</p>\n<p>That distinction is more than legalistic. A contract decision can signal a policy without being the same thing as a published rulebook, and a board's stated preference is not the same as proof that the preference changed player behaviour. The question is therefore twofold: what incentives and consequences did the BCCI put on the table, and what evidence would show whether the intervention worked?</p>"
+      }
+    },
+    {
+      "id": "bcci-block-ch2",
+      "type": "chapter-heading",
+      "data": {
+        "title": "Chapter 2 — What a domestic playing day pays",
+        "anchorId": "chapter-2"
+      }
+    },
+    {
+      "id": "bcci-block-p2",
+      "type": "paragraph",
+      "data": {
+        "text": "<p>The public fee schedule that can be checked directly is in the minutes of the BCCI's ninth Apex Council meeting, dated 20 September 2021. For senior men's domestic cricket, the revised table lists ₹40,000 per day for players in the first match-count band, ₹50,000 for the next band and ₹60,000 for players above 40 matches. Reserves have their own rates: ₹20,000, ₹25,000 and ₹30,000 respectively <cite data-ref=\"src-bcci-domestic-fee-table\">[3]</cite>. The schedule rewards match experience, but the BCCI table labels the bands simply as “matches”; it does not describe them as first-class appearances only.</p>\n<p>That last detail matters. Some later retellings describe the top rate as a Ranji fee for a player with more than 40 first-class games. A contemporaneous report after the revision said the match count was not restricted to one format. The safe description is the one the primary document supports: a senior men's daily domestic fee schedule with tiered match counts. The table is a rate card, not a list of annual salaries.</p>\n<p>The BCCI's announced 2026–27 calendar gives each Ranji Trophy Elite team seven league matches and each Plate team five <cite data-ref=\"src-bcci-season-2026-27\">[6]</cite>. A simple illustration helps explain scale without pretending to calculate anyone's payslip. Seven four-day matches create at most 28 scheduled match-days. Multiplying 28 by ₹40,000 gives ₹11.2 lakh; multiplying by ₹50,000 gives ₹14 lakh; multiplying by ₹60,000 gives ₹16.8 lakh. Those are scenario calculations if all 28 days are fee-eligible—not guaranteed season earnings, take-home pay or the amount earned by every player.</p>\n<p>The same rates were still reported as the senior men's domestic fee structure by The New Indian Express in May 2026, while the public BCCI rate table located for this report remains dated 2021 <cite data-ref=\"src-fee-report-2026\">[4]</cite>. That is the latest public evidence located here, not proof that no unpublished revision or individual arrangement exists. The distinction should remain visible to readers rather than being hidden behind a definitive “current salary” label.</p>"
+      }
+    },
+    {
+      "id": "bcci-block-fee-graphic",
+      "type": "image",
+      "data": {
+        "src": "/images/editorial/bcci-domestic-fees.svg",
+        "alt": "Three senior men's domestic daily fee tiers: ₹40,000, ₹50,000 and ₹60,000 across the BCCI's published match-count bands.",
+        "caption": "A daily rate card, not an annual salary. BCCI's table was published in September 2021; The New Indian Express reported the same rates in May 2026.",
+        "credit": "The Breakdown · BCCI / The New Indian Express",
+        "width": "full"
+      }
+    },
+    {
+      "id": "bcci-block-domestic-math",
+      "type": "comparison",
+      "data": {
+        "metric": "Illustrative fee total across 28 scheduled days",
+        "before": {
+          "value": "₹11.2 lakh",
+          "label": "₹40,000 per day × 28 days"
         },
-        after: {
-          value: '₹6.00 Cr',
-          label: 'Full 10-match Test season earnings for Playing XI (>75% participation: ₹1.5 Cr base match fees + ₹4.5 Cr incentive bonus)',
+        "after": {
+          "value": "₹16.8 lakh",
+          "label": "₹60,000 per day × 28 days"
         },
-        notes: 'Non-Playing squad members in a full 10-match Test season earn ₹3.00 Crore (₹75 Lakh base match fees + ₹2.25 Crore incentive bonus). Uncapped IPL base contracts range from ₹20 Lakh to ₹50 Lakh for an eight-week window.',
-      },
+        "description": "The middle tier would total ₹14 lakh under the same assumption. This is arithmetic on scheduled days, not a guaranteed payment: match duration, fee eligibility, selection and other applicable rules matter."
+      }
     },
     {
-      id: 'bcci-block-ch1',
-      type: 'chapter-heading',
-      data: {
-        title: 'Chapter 1: The Contract Ultimatum: When Missing the Ranji Trophy Cost National Retainers',
-        anchorId: 'chapter-1',
-      },
+      "id": "bcci-block-ch3",
+      "type": "chapter-heading",
+      "data": {
+        "title": "Chapter 3 — The Test incentive is a separate instrument",
+        "anchorId": "chapter-3"
+      }
     },
     {
-      id: 'bcci-block-p1',
-      type: 'paragraph',
-      data: {
-        text: `<p>On February 28, 2024, the Board of Control for Cricket in India (BCCI) released its annual central retainership list for the 2023–24 senior men's international season <cite data-ref="src-bcci-retainership-2024">[1]</cite>. Embedded beneath the routine allocation of Grade A+, A, B, and C contracts sat an unprecedented administrative clause that sent shockwaves through Indian professional sport: Shreyas Iyer and Ishan Kishan, both established international cricketers who had featured in World Cup campaigns, were excluded entirely from the central contract roster.</p>
-<p>The board's official media communication made no attempt to disguise the rationale behind their exclusion. In an explicit directive accompanying the contract grades, the BCCI selection committee stated that both athletes had been omitted after declining to make themselves available for their respective state associations in the ongoing Ranji Trophy championship <cite data-ref="src-bcci-retainership-2024">[1]</cite>. The announcement codified a warning that BCCI Honorary Secretary Jay Shah had communicated directly to all centrally contracted players earlier that month: domestic red-ball cricket was strictly non-negotiable whenever players were not on active international duty.</p>
-<p>For more than a decade, Indian cricket had operated under an informal hierarchy where marquee international stars enjoyed tacit permission to bypass multi-day domestic fixtures. Between grueling international tours across three formats and the commercial demands of the Indian Premier League (IPL), domestic first-class cricket had increasingly come to be viewed by elite players as an optional obligation. Stars managing chronic wear and tear or preparing for lucrative white-ball franchise contracts routinely cited fatigue or personal conditioning regimens to excuse themselves from grueling four-day Ranji matches on abrasive state pitches. The February 2024 contract revocations dismantled that administrative tolerance in a single stroke, establishing that national selection and contractual security were inextricably linked to domestic red-ball participation.</p>`,
-      },
+      "id": "bcci-block-p3",
+      "type": "paragraph",
+      "data": {
+        "text": "<p>In March 2024, the BCCI announced a Test Cricket Incentive Scheme that adds a bonus on top of the existing Test match fee. The published table is explicit about its model: it assumes nine Tests in a season, and separates Playing XI members from non-playing squad members. At the highest listed tier—seven or more Tests—the additional bonus is ₹45 lakh per match for a Playing XI member and ₹22.5 lakh for a non-playing squad member. At five or six Tests, the additional rates fall to ₹30 lakh and ₹15 lakh; below four Tests, the table says no incentive is payable <cite data-ref=\"src-bcci-test-incentive\">[5]</cite>.</p>\n<p>These are incentive bonuses, not the same thing as the daily domestic fee. Nor is the ₹45 lakh figure the amount every Test cricketer receives. Eligibility depends on participation in the assumed season, and the Playing XI and non-playing squad rates differ. The scheme therefore rewards repeated Test participation, while the domestic fee schedule pays by eligible day and match-count band. Treating them as one compensation system would erase the eligibility rules that explain who can earn what.</p>\n<p>There is also a small ambiguity in the published table. Under its nine-Test assumption, the categories read “less than 4,” “5 &amp; 6,” and “7 or more.” Exactly four Tests are not classified. The gap does not prove that the scheme is invalid; it means the public table does not answer that case. A reliable account should flag the omission and seek clarification from the BCCI rather than invent an interpolated tier.</p>\n<p>Just as important, this scheme concerns Test cricket, not a direct payment for choosing Ranji Trophy over a franchise opportunity. It may strengthen the long-format incentive for players who are selected for Tests and qualify under its terms, but it cannot by itself establish that domestic participation increased. That is a distinct empirical question and needs a different dataset.</p>"
+      }
     },
     {
-      id: 'bcci-block-ch2',
-      type: 'chapter-heading',
-      data: {
-        title: 'Chapter 2: The Economics of the Red Ball: Ranji Daily Match Fees vs the IPL Goldmine',
-        anchorId: 'chapter-2',
-      },
+      "id": "bcci-block-ch4",
+      "type": "chapter-heading",
+      "data": {
+        "title": "Chapter 4 — Why a headline comparison can mislead",
+        "anchorId": "chapter-4"
+      }
     },
     {
-      id: 'bcci-block-p2',
-      type: 'paragraph',
-      data: {
-        text: `<p>To understand why elite athletes were increasingly tempted to bypass the Ranji Trophy, one must examine the profound economic distortion introduced into Indian cricket by private franchise leagues over the past two decades <cite data-ref="src-bcci-ipl-auction-rules">[5]</cite>.</p>
-<p>Under the revised domestic remuneration structure instituted by the BCCI in September 2021, daily match fees for first-class cricket were calibrated hierarchically to reward longevity and experience <cite data-ref="src-bcci-domestic-remuneration">[3]</cite>:</p>
-<ul>
-  <li><strong>Tier 1 (>40 first-class matches played):</strong> ₹60,000 per playing day (₹2.40 lakh per 4-day match).</li>
-  <li><strong>Tier 2 (21 to 40 matches played):</strong> ₹50,000 per playing day (₹2.00 lakh per match).</li>
-  <li><strong>Tier 3 (1 to 20 matches played):</strong> ₹40,000 per playing day (₹1.60 lakh per match).</li>
-</ul>
-<p>While this revision represented a significant tripling of historic match fee levels (which had lingered between ₹10,000 and ₹35,000 per day throughout the 2010s), the total seasonal earnings available to a dedicated first-class cricketer remain dwarfed by franchise economics. A senior cricketer participating in all seven group-stage fixtures of a Ranji Trophy campaign earns exactly 28 match days of fees, totaling ₹16.80 lakh <cite data-ref="src-bcci-domestic-remuneration">[3]</cite>. Even if their state association advances to the final, adding three knockout matches, maximum individual match-day earnings top out at approximately ₹26.40 lakh.</p>
-<p>By contrast, an uncapped nineteen-year-old picked up at the base reserve price in the IPL player auction commands an assured salary of ₹20 lakh to ₹50 lakh for an eight-week tournament window <cite data-ref="src-bcci-ipl-auction-rules">[5]</cite>—often without bowling a single ball in match play. For established international players, franchise salaries range from ₹8 crore to over ₹20 crore for approximately sixty days of T20 cricket. In financial terms, an hour of IPL match play delivered exponentially higher returns than four days of physical attrition on abrasive domestic pitches. The economic incentives pointed overwhelmingly toward preserving physical conditioning for franchise windows, creating a rational economic incentive for players to sideline first-class cricket.</p>`,
-      },
+      "id": "bcci-block-p4",
+      "type": "paragraph",
+      "data": {
+        "text": "<p>It is tempting to place a full Ranji season beside an IPL contract and declare the economic incentive obvious. The comparison can be useful, but only if it is honest about what the numbers represent. A domestic daily fee, a central retainership, a Test incentive and a franchise contract have different eligibility conditions, durations and degrees of certainty. They are not interchangeable salary lines.</p>\n<p>A fee calculation based on 28 scheduled days is an upper-bound illustration under an explicit assumption. It is not proof that every fixture lasts four days, that each player appears in every match, or that every scheduled day is paid in the same way. Likewise, an IPL auction base price is not evidence that a player was bought, selected to play, or paid that amount for a season. A central retainership is a separate contractual payment, and its value depends on the grade and terms. An annual income estimate would need the player's actual contract, appearances, absences and applicable payment rules.</p>\n<p>The economic problem is therefore not simply that one format “pays more.” Players weigh money alongside selection, career longevity, injury exposure, training, travel and the chance of being picked. The BCCI's stated rationale is that domestic cricket is a foundation for national selection and player development; that is a plausible sporting argument. But without attributable player interviews, contract detail and workload data, the newsroom cannot responsibly claim to know how an individual player calculated the trade-off.</p>\n<p>That restraint cuts both ways. A board may reasonably argue that domestic appearances sustain competitive depth and provide a current assessment of form. A player may reasonably need recovery time or a medical exemption. Neither argument should be accepted as a universal explanation. The reporting task is to examine the rules, record what happened and test each explanation against evidence—not to call every absence disloyal or every directive coercive by default.</p>"
+      }
     },
     {
-      id: 'bcci-block-ch3',
-      type: 'chapter-heading',
-      data: {
-        title: "Chapter 3: The ₹45 Lakh Carrot: Inside the BCCI Apex Council's Test Cricket Incentive Scheme",
-        anchorId: 'chapter-3',
-      },
+      "id": "bcci-block-ch5",
+      "type": "chapter-heading",
+      "data": {
+        "title": "Chapter 5 — The missing scorecard: what would prove the policy worked?",
+        "anchorId": "chapter-5"
+      }
     },
     {
-      id: 'bcci-block-p3',
-      type: 'paragraph',
-      data: {
-        text: `<p>Ten days after stripping contracts from Iyer and Kishan, the BCCI unveiled the second pillar of its strategy: a comprehensive financial reward structure designed to make red-ball cricket lucrative enough to compete directly with franchise T20 wealth. On March 9, 2024, the Apex Council announced the Test Cricket Incentive Scheme for Senior Men <cite data-ref="src-bcci-test-incentive">[2]</cite>.</p>
-<p>Prior to this announcement, an Indian Test cricketer received a fixed match fee of ₹15 lakh per Test match (and ₹7.5 lakh for non-playing squad members). Under the newly instituted incentive structure, the BCCI created sliding-scale performance bonuses tied directly to seasonal participation, explicitly distinguishing between Playing XI members and non-playing squad members <cite data-ref="src-bcci-test-incentive">[2]</cite>:</p>
-<ul>
-  <li><strong>Tier 1 (Participating in >75% of scheduled Tests):</strong> An additional incentive bonus of ₹45 lakh per match for Playing XI members (and ₹22.5 lakh per match for non-playing squad members). Combined with the baseline match fee, a Playing XI cricketer earns ₹60 lakh per Test match, while a non-playing squad member earns ₹30 lakh per match.</li>
-  <li><strong>Tier 2 (Participating in 50% to 74% of scheduled Tests):</strong> An incentive bonus of ₹30 lakh per match for Playing XI members (and ₹15 lakh per match for non-playing squad members), yielding ₹45 lakh and ₹22.5 lakh per match respectively.</li>
-  <li><strong>Tier 3 (Participating in <50% of scheduled Tests):</strong> No incentive bonus; standard baseline fees (₹15 lakh for Playing XI, ₹7.5 lakh for squad members) apply.</li>
-</ul>
-<p>The annual financial implications of this formula are transformative. In a standard international cycle featuring nine or ten Test matches—such as a five-match home series against England or an away Border-Gavaskar Trophy in Australia—a core Test cricketer playing all matches in the Playing XI now earns ₹6.00 crore in match-day compensation alone (₹1.50 crore in base match fees plus ₹4.50 crore in incentive bonuses) <cite data-ref="src-bcci-test-incentive">[2]</cite>. When combined with an annual Grade A central retainer of ₹5 crore, a dedicated Test cricketer commands ₹11 crore per year without ever setting foot in an IPL stadium. Even a non-playing squad member who participates in all 10 Tests earns ₹3.00 crore in match compensation (₹75 lakh base fee plus ₹2.25 crore bonus).</p>
-<p>Crucially, the tiered architecture of the scheme creates a steep financial penalty for selective unavailability. Consider a player who features in eight matches of a ten-Test cycle (80 percent participation): they qualify for Tier 1, earning ₹3.60 crore in performance bonuses plus ₹1.20 crore in base match fees, totaling ₹4.80 crore. If that same player opts out of four matches to manage workload or prepare for franchise duties, dropping to 40 percent participation, they fall into Tier 3. Under Tier 3, their incentive bonus drops to zero, and their match earnings collapse to ₹60 lakh—a net compensation loss of ₹4.20 crore. This financial cliff edge ensures that players think twice before citing discretionary fatigue.</p>`,
-      },
+      "id": "bcci-block-p5",
+      "type": "paragraph",
+      "data": {
+        "text": "<p>The decisive gap is measurement. A letter, a contract announcement and a revised incentive schedule establish that the board communicated a preference and created financial terms. They do not establish how many players changed their behaviour because of the policy. A few high-profile appearances after a public warning can illustrate the debate, but anecdotes cannot provide a population-level effect.</p>\n<p>To answer the question, the BCCI—or an independent researcher working from reliable scorecards and published squads—would first define the relevant cohort. “Players” could mean centrally contracted players, India A players, recently capped international players or all players eligible for senior domestic cricket. Those groups have different obligations. The analysis would then need a season-by-season record of each player's availability, selection, appearances and matches missed, separated by red-ball and white-ball competition.</p>\n<p>Availability is the crucial denominator. Counting appearances alone can make participation appear to rise or fall when the underlying pool of available players has changed. A credible ledger would record national duty, injury or rehabilitation status at a privacy-respecting level, non-selection, team scheduling and other documented exclusions. It would also distinguish a player who was available but did not appear from one who was not eligible or not fit to play. Personal medical details are not necessary for a public dataset; a published category and audit method would be enough for most analysis.</p>\n<p>The evaluation would compare defined periods before and after the February 2024 intervention and test alternative explanations: changes in the international calendar, selectors' decisions, individual injuries, tournament format, squad rotation and other policy changes. It would publish the cohort definition, raw match-level records or a reproducible summary, the calculation and limitations. A single percentage without those details is not a finding. No reproducible percentage is asserted in this story.</p>"
+      }
     },
     {
-      id: 'bcci-block-timeline',
-      type: 'timeline',
-      data: {
-        title: 'Timeline of Domestic Cricket Reform and Contract Enforcement',
-        events: [
+      "id": "bcci-block-ch6",
+      "type": "chapter-heading",
+      "data": {
+        "title": "Chapter 6 — A better accountability test",
+        "anchorId": "chapter-6"
+      }
+    },
+    {
+      "id": "bcci-block-p6",
+      "type": "paragraph",
+      "data": {
+        "text": "<p>The strongest case for the policy is institutional: domestic first-class cricket is not merely a fallback for players outside the national side. It is a competition in which form can be tested over longer spells, younger players can meet experienced opponents, and state teams maintain a development pathway. The BCCI's 2026–27 calendar continues to devote a substantial place to multi-day cricket, although it also reorganises other competitions and scheduling <cite data-ref=\"src-bcci-season-2026-27\">[6]</cite>. That confirms the format remains part of the board's structure; it does not measure whether the 2024 directive improved it.</p>\n<p>A fair evaluation should publish three things. First, a clear rule that distinguishes a board recommendation, a selection consideration, an annual-contract decision and a formal eligibility requirement. Second, a privacy-conscious record of player availability and domestic appearances by a pre-defined cohort. Third, a separate statement of how medical exceptions, national commitments and return-to-play decisions are handled. These would make the policy legible to players, state associations and the public without pretending that every absence has the same cause.</p>\n<p>The economic data should be equally clear. The BCCI should keep the date and scope of fee schedules easy to find, distinguish daily fees from annual contracts and bonuses, and explain the Test incentive's four-match edge case. State associations could help players understand what they may earn under realistic playing-day scenarios, instead of letting a maximum calculation be mistaken for a standard income. Those are practical transparency steps, not claims that payment alone can solve scheduling or workload conflicts.</p>\n<p>The defensible conclusion is narrower than the original headline suggested. In February 2024, the BCCI publicly strengthened its message that players should prioritise domestic cricket when not on national duty, and its annual-contract release coincided with the omission of Iyer and Kishan. Official records show domestic fee tiers and a separate Test incentive; they also show the limits of what the public data can settle. Whether the directive produced a sustained, measurable increase in domestic participation remains a question for a transparent dataset, not a slogan.</p>"
+      }
+    },
+    {
+      "id": "bcci-block-timeline",
+      "type": "timeline",
+      "data": {
+        "title": "The policy and payment timeline",
+        "events": [
           {
-            date: 'January 2016',
-            title: 'Justice Lodha Committee Submits Structural Reforms',
-            description: 'Supreme Court panel emphasizes constitutional protections for domestic players, transparent contracts, and equal distribution of board revenues.',
+            "date": "20 Sep 2021",
+            "title": "Domestic daily fee schedule published",
+            "description": "BCCI's ninth Apex Council update lists senior men's rates by match-count band and separate reserve rates.",
+            "source": "src-bcci-domestic-fee-table"
           },
           {
-            date: 'September 2021',
-            title: 'BCCI Triples Domestic Daily Remuneration',
-            description: 'Domestic daily match fees increased from historical ₹15,000–₹35,000 levels to ₹40,000, ₹50,000, and ₹60,000 based on career appearances.',
+            "date": "15–17 Feb 2024",
+            "title": "Public warning and reported letter",
+            "description": "Jay Shah publicly called for domestic red-ball participation; The Indian Express reported on a letter to centrally contracted and India A players.",
+            "source": "src-bcci-letter-report"
           },
           {
-            date: 'February 2024',
-            title: 'Central Retainerships Revoked for Skipping Ranji Trophy',
-            description: 'BCCI annual contracts list excludes Shreyas Iyer and Ishan Kishan, enforcing domestic red-ball participation as mandatory.',
+            "date": "28 Feb 2024",
+            "title": "Annual contracts announced",
+            "description": "The release says Iyer and Kishan were not considered in that round and recommends prioritising domestic cricket when not on national duty.",
+            "source": "src-bcci-retainership-2024"
           },
           {
-            date: 'March 2024',
-            title: 'Test Cricket Incentive Scheme Announced',
-            description: 'Apex Council introduces up to ₹45 lakh per match appearance bonus, ensuring a full Test season yields ₹6 crore in match compensation.',
+            "date": "9 Mar 2024",
+            "title": "Test incentive scheme announced",
+            "description": "BCCI publishes participation-based bonuses on top of Test match fees, using a nine-Test season as its example.",
+            "source": "src-bcci-test-incentive"
           },
           {
-            date: 'October 2024',
-            title: 'New Centre of Excellence Inaugurated in Bengaluru',
-            description: 'Equipped with 40-pitch training grounds and advanced biomechanics labs, taking sole charge of player workload clearance.',
-          },
-          {
-            date: '2024–2026',
-            title: 'Marquee International Stars Return to Domestic Cricket',
-            description: 'Official scorecards confirm prominent international stars turning out regularly for state associations in the Ranji Trophy.',
-          },
-        ],
-      },
-    },
-    {
-      id: 'bcci-block-ch4',
-      type: 'chapter-heading',
-      data: {
-        title: 'Chapter 4: Workload, Fitness Clearances, and the Physical Dilemma: Who Decides Who Plays?',
-        anchorId: 'chapter-4',
-      },
-    },
-    {
-      id: 'bcci-block-p4',
-      type: 'paragraph',
-      data: {
-        text: `<p>While financial incentives succeeded in capturing player attention, enforcing domestic red-ball participation immediately exposed a complex medical and sports science dilemma: who decides whether an elite athlete is truly fit to bowl thirty overs across four grueling days in humid conditions?</p>
-<p>For modern multi-format cricketers—particularly express fast bowlers and batters with recurring lumbar spine or hamstring pathologies—the physical demands of four-day red-ball cricket are immense. Unlike a four-over T20 spell where bowlers operate at maximum intensity with long intervals of rest between overs and boundary stints, a first-class match requires repeated multi-spell exertion on abrasive, unyielding pitches. In previous seasons, players managing chronic wear and tear routinely cited unspecified back spasms or personal conditioning schedules to rest during Ranji rounds.</p>
-<p>Unlike formal statutory directives, the BCCI does not publish a public regulatory gazette governing player fitness certificates. Instead, the National Cricket Academy—relocated and expanded into the state-of-the-art BCCI Centre of Excellence in Bengaluru in late 2024—operates as the administrative clearinghouse for central contract holders. Under working directives communicated to state associations and franchise executives, centrally contracted players seeking medical exemptions from red-ball domestic fixtures are required to coordinate rehabilitation directly with board sports science staff rather than relying solely on private franchise or state team doctors.</p>
-<p>This centralized oversight has created its own points of friction. Several prominent fast bowlers have expressed private concern that bowling heavy workloads in domestic matches immediately before major overseas Test tours increases the probability of acute breakdowns. Finding the delicate balance between rigorous domestic participation and athletic preservation remains the central challenge for national selectors and medical staff.</p>
-<p>Sports science data gathered by board medical personnel illustrates the physical strain under dispute. Using Catapult GPS tracking vests and high-speed motion analysis cameras, sports scientists measure acute-to-chronic workload ratios (ACWR) for elite pace bowlers. In a standard four-day Ranji fixture, a frontline fast bowler frequently delivers between 35 and 45 overs in oppressive heat, covering over 25 kilometers of high-intensity running. If that bowler’s chronic conditioning base has been calibrated for four-over T20 bursts, the sudden spike in delivery volume causes acute bone stress reactions in the lumbar spine. To manage this risk, the board has instituted bowling workload caps (limiting returning international pacers to 15 overs per innings) during preliminary domestic rounds.</p>`,
-      },
-    },
-    {
-      id: 'bcci-block-ch5',
-      type: 'chapter-heading',
-      data: {
-        title: 'Chapter 5: State Association Realities: Pitch Conditions, Travel Logistics, and Division Disparities',
-        anchorId: 'chapter-5',
-      },
-    },
-    {
-      id: 'bcci-block-p5',
-      type: 'paragraph',
-      data: {
-        text: `<p>When marquee international stars returned to domestic dressing rooms across the 2024–26 seasons, their presence highlighted long-standing operational disparities across India's 38 state cricket associations competing under BCCI Domestic Tournament Regulations <cite data-ref="src-bcci-tournament-regulations">[4]</cite>.</p>
-<p>The domestic first-class structure organizes 38 state teams into two distinct competitive tiers: 32 teams competing across four Elite groups (A, B, C, and D), and six teams competing in the Plate division <cite data-ref="src-bcci-tournament-regulations">[4]</cite>. While affluent associations such as Mumbai, Karnataka, and Tamil Nadu boast international-grade stadiums, dedicated recovery cryo-chambers, and advanced broadcast facilities, matches in smaller centers and Plate division states present starkly different conditions. Players frequently encountered sub-standard dressing rooms, practice nets with uneven bounce that posed acute injury risks, and prolonged road journeys between remote regional venues lacking direct commercial air connectivity.</p>
-<p>Pitch preparation emerged as another contentious arena. In their anxiety to secure outright wins and claim bonus points under the Ranji Trophy championship format, several state associations prepared extreme "rank-turners" or under-prepared green surfaces designed to produce matches that concluded within five or six sessions. Top batters argued that facing unplayable variable bounce on crumbling pitches did little to prepare them for disciplined Test match batting overseas. In response, the BCCI Domestic Cricket Operations committee has instituted stricter pitch monitoring, with independent neutral curators assigned to oversee surface preparation across all Elite division venues.</p>
-<p>The return of high-profile players has, nonetheless, had a rejuvenating effect on local infrastructure. State associations reported record attendance figures for early-round matches, increased local corporate sponsorship, and significantly higher viewership on domestic streaming broadcasts. By forcing international cricketers to share dressing rooms with 18-year-old local debutants, the mandate has revived the vital mentorship pipeline that once defined Indian cricket.</p>`,
-      },
-    },
-    {
-      id: 'bcci-block-ch6',
-      type: 'chapter-heading',
-      data: {
-        title: 'Chapter 6: The Long-Term Balance: Can Policy Compel Multi-Format Commitment in Modern Cricket?',
-        anchorId: 'chapter-6',
-      },
-    },
-    {
-      id: 'bcci-block-p6',
-      type: 'paragraph',
-      data: {
-        text: `<p>The qualitative impact of the BCCI's domestic mandate was immediately visible across the 2024–25 domestic rounds: marquee international regulars including Shreyas Iyer, Ajinkya Rahane, and Shardul Thakur turned out for their respective home associations in preliminary Ranji fixtures. The long-standing culture of treating domestic red-ball matches with casual indifference has been firmly interrupted.</p>
-<p>However, because the BCCI Domestic Operations bureau does not publish a centralized cross-season aggregate appearance ledger for national pool cricketers, claims of an exact 42% or 44% statistical increase remain unverified secondary estimates rather than reproducible official metrics. What the scorecards demonstrate unequivocally is that the domestic mandate altered player calculation by making first-class availability an explicit precondition for national selection.</p>
-<p>Yet looking across the broader landscape of world cricket, where franchise leagues are expanding their windows and private equity is purchasing multi-club ownership models across South Africa, the West Indies, the United States, and the UAE, the limits of pure administrative coercion are evident. In England and Australia, national boards are grappling with the reality that an increasing cohort of younger cricketers are choosing to become freelance T20 specialists, voluntarily relinquishing national contracts altogether.</p>
-<p>The BCCI's enduring advantage is its extraordinary financial muscle. By pairing the disciplinary stick of contract revocation with the financial carrot of the ₹45 lakh per match Test Cricket Incentive Scheme for Playing XI members and ₹60,000 daily domestic fees, India is the only cricket nation capable of matching private franchise compensation with public board revenues <cite data-ref="src-bcci-test-incentive">[2]</cite>. As long as the path to financial glory in Indian sport continues to run through the white flannels of the Ranji Trophy, red-ball cricket will retain its rightful place as the crown jewel of the nation's sporting imagination.</p>`,
-      },
-    },
-  ],
+            "date": "20 May 2026",
+            "title": "2026–27 domestic calendar announced",
+            "description": "The BCCI confirms the structure of the next domestic season; contemporary reporting still quotes the 2021 senior fee tiers.",
+            "source": "src-bcci-season-2026-27"
+          }
+        ]
+      }
+    }
+  ]
 };
 
 export const REMEDIATED_STORIES_REGISTRY: Record<string, Story> = {
