@@ -40,3 +40,11 @@ Ponytail is subordinate to the root `AGENTS.md` and `docs/editorial/editorial-co
 - Keep material factual claims connected to traceable source records.
 - Do not log into Instagram, scrape at scale, publish, schedule, like, follow, comment, message, or alter account settings.
 - A successful editorial audit means ready for human approval, never approved to publish.
+
+
+## GitHub Project Radar
+
+- Entry point: [`github-project-radar/SKILL.md`](github-project-radar/SKILL.md)
+- Invocation in Antigravity: `/github-project-radar`
+- Purpose: evidence-backed GitHub ecosystem discovery, license/security/maintenance checks, and reversible experiment proposals.
+- Boundary: discovery only; no automatic third-party dependency installation, runtime changes, or deployment.

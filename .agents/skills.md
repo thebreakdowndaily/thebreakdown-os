@@ -29,6 +29,7 @@ A skill is a discrete, composable capability that one or more agents can invoke.
 | ponytail-debt | Harvest and track `shortcut:` and `ponytail:` comments into a debt ledger. | Technical debt tracking / Antigravity | active |
 | ponytail-gain | Display measured agentic benchmark impact scoreboard. | Antigravity / Benchmarks | active |
 | ponytail-help | Reference card for Ponytail levels, skills, and command triggers. | Antigravity / Documentation | active |
+| github-project-radar | Evidence-based discovery and review of GitHub repositories; no automatic dependency adoption. | Antigravity / compatible Agent Skills hosts | pilot |
 
 ---
 
