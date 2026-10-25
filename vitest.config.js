@@ -191,6 +191,7 @@ module.exports = {
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
+      'tests/cloudflare-opennext-compatibility.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],
