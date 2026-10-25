@@ -5,6 +5,7 @@ import { syncStory } from '@/lib/data-sync';
 import { requireApiPermission } from '@/features/auth/require-role';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
+import { toPublicStory } from '@/lib/story/public-story-projection';
 
 const repo = RepositoryFactory.getStoryRepository();
 
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
   };
 
   const result = await repo.getPublicStories(params);
-  return NextResponse.json(result);
+  return NextResponse.json({ ...result, data: result.data.map(toPublicStory) });
 }
 
 export async function POST(request: NextRequest) {
