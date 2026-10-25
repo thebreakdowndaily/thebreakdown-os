@@ -155,7 +155,7 @@ describe('VS7 — Reader Corrections Pipeline & Errata Transparency', () => {
     const publicList = await listPublishedCorrections();
     expect(publicList.length).toBeGreaterThan(0);
 
-    const published = publicList.find(c => c.storyId === 'story-vol1-chap1');
+    const published = publicList.find(c => c.storySlug === 'the-partition-and-its-legacies');
     expect(published).toBeDefined();
     expect(published?.correctedWording).toBe('The award was officially gazetted on August 17, 1947.');
 
