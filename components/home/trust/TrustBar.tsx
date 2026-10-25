@@ -32,7 +32,7 @@ export function TrustBar({
 }: TrustBarProps) {
   const signals: TrustSignal[] = [
     {
-      label:    'Chapters Reviewed',
+      label:    'Published Chapters',
       value:    chaptersPublished && chaptersPublished > 0
                   ? `${chaptersPublished}`
                   : '—',

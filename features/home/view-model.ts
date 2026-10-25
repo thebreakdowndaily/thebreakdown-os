@@ -124,7 +124,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
       actionText: 'Understand the story →',
       stats: {
         claims: getStoryEvidenceSummary(rawLead).claimsTotal,
-        sources: getStoryEvidenceSummary(rawLead).primarySourcesCount || rawLead.sources.length,
+        sources: rawLead.sources.length,
         evidenceGrade: getStoryEvidenceSummary(rawLead).evidenceGrade,
         reviewStatus: getStoryEvidenceSummary(rawLead).reviewStatus,
       },

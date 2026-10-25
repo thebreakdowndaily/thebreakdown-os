@@ -17,6 +17,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { HomepageLeadStory } from '@/features/home/view-model';
+import type { TrustSignal } from '@/lib/story/trust-signals';
 import type { TrustMetrics } from '@/lib/knowledge/trust-metrics';
 
 // Canonical path for the founding chapter (fallback when CMS has no lead story)
@@ -29,8 +30,6 @@ const FOUNDING_CHAPTER_DEFAULTS = {
   category:     'FOUNDING CHAPTER',
   volume:       'VOLUME I · INDIA & THE WORLD',
   readingTime:  30,
-  evidenceGrade: 'A',
-  reviewStatus: 'Internal Gold Candidate',
 };
 
 interface HeroSectionProps {
@@ -41,29 +40,31 @@ interface HeroSectionProps {
 // ── Evidence signal strip ────────────────────────────────────────────────────
 
 function EvidenceSignalStrip({
+  claims,
+  sources,
   readingTime,
 }: {
   claims?: number | string;
   sources?: number | string;
   readingTime: number;
-  evidenceGrade?: string;
 }) {
+  const toPositiveCount = (value?: number | string): number | null => {
+    const count = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(count) && count > 0 ? count : null;
+  };
+  const claimCount = toPositiveCount(claims);
+  const sourceCount = toPositiveCount(sources);
+
   return (
     <div
       className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono"
       style={{ color: 'var(--color-earth-dust)' }}
     >
-      <span className="flex items-center gap-1.5">
-        <span style={{ color: 'var(--color-text-muted)' }}>{readingTime} min</span>
-        <span>read</span>
+      <span>
+        {readingTime} min read
       </span>
-      <span aria-hidden="true" style={{ color: 'var(--color-border-hover)' }}>·</span>
-      <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-        Primary Documentation
-      </span>
-      <span aria-hidden="true" style={{ color: 'var(--color-border-hover)' }}>·</span>
-      <span style={{ color: 'var(--color-earth-ochre)' }}>Archival Analysis</span>
+      {claimCount !== null && <span>{claimCount} claims</span>}
+      {sourceCount !== null && <span>{sourceCount} sources</span>}
     </div>
   );
 }
@@ -107,29 +108,23 @@ function PeriodBar() {
 // ── Featured editorial panel (right column) ──────────────────────────────────
 
 function FeaturedEditorialPanel({
-  claims,
-  sources,
   readingTime,
   isLeadStory,
-  updatedAt,
   category,
   heroImage,
   heroImageAlt,
-  headline,
   slug,
   byline,
+  trustSignals,
 }: {
-  claims: number | string;
-  sources: number | string;
   readingTime: number;
   isLeadStory: boolean;
-  updatedAt?: string;
   category: string;
   heroImage?: string;
   heroImageAlt?: string;
-  headline: string;
   slug?: string;
   byline?: string;
+  trustSignals: TrustSignal[];
 }) {
   const href = slug ? `/story/${slug}` : FOUNDING_CHAPTER_PATH;
 
@@ -177,10 +172,11 @@ function FeaturedEditorialPanel({
           <span className="text-neutral-400">
             {byline || 'The Breakdown Editorial'}
           </span>
-          <span className="text-emerald-400 font-semibold inline-flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            Verified &amp; Documented
-          </span>
+          {trustSignals[0] ? (
+            <span className="text-emerald-400 font-semibold">
+              {trustSignals[0].label}
+            </span>
+          ) : null}
         </div>
       </div>
     </div>
@@ -195,9 +191,6 @@ export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProp
   const dek          = leadStory?.dek          ?? FOUNDING_CHAPTER_DEFAULTS.dek;
   const category     = leadStory?.category     ?? FOUNDING_CHAPTER_DEFAULTS.category;
   const readingTime  = leadStory?.readingTime  ?? FOUNDING_CHAPTER_DEFAULTS.readingTime;
-  const evidenceGrade = leadStory?.stats?.evidenceGrade ?? FOUNDING_CHAPTER_DEFAULTS.evidenceGrade;
-  const reviewStatus = leadStory?.stats?.reviewStatus   ?? FOUNDING_CHAPTER_DEFAULTS.reviewStatus;
-
   const claims  = leadStory?.stats?.claims  ?? (trustMetrics?.chapterOneClaims  ?? '--');
   const sources = leadStory?.stats?.sources ?? (trustMetrics?.chapterOneSources ?? '--');
 
@@ -279,7 +272,6 @@ export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProp
               claims={claims}
               sources={sources}
               readingTime={readingTime}
-              evidenceGrade={evidenceGrade}
             />
 
             {/* CTA row */}
@@ -309,17 +301,14 @@ export default function HeroSection({ leadStory, trustMetrics }: HeroSectionProp
 
           {/* ── RIGHT: Featured editorial panel ── */}
           <FeaturedEditorialPanel
-            claims={claims}
-            sources={sources}
             readingTime={readingTime}
             isLeadStory={isLeadStory}
-            updatedAt={leadStory?.updatedAt}
             category={category}
             heroImage={leadStory?.heroImage}
             heroImageAlt={leadStory?.heroImageAlt}
-            headline={headline}
             slug={leadStory?.slug}
             byline={leadStory?.byline}
+            trustSignals={leadStory?.trustSignals ?? []}
           />
 
         </div>
