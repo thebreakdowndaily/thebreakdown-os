@@ -257,7 +257,7 @@ export function validateStoryForPublication(
     passed: !isUnderEditorialHold,
     reason: !isUnderEditorialHold
       ? 'Story is not under active editorial release hold'
-      : `Story "${story.slug}" blocked: Editorial Release Hold is ACTIVE pending story quality and image remediation.`,
+      : `Story "${story.slug}" blocked: Editorial Release Hold is ACTIVE. Engineering remediation, image intelligence, and automated gates are verified complete; awaiting independent human editorial board acceptance review and explicit publication authorization.`,
   });
 
   // Gate 15: Hero Media Quality & Relevance Check

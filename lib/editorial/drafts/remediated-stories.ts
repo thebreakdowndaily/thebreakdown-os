@@ -831,9 +831,9 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       id: 'clm-cricket-03',
-      claim: 'Ranji Trophy match fees are structured hierarchically up to ₹60,000 per playing day for senior players with over 40 first-class games.',
+      claim: 'Ranji Trophy match fees are structured hierarchically up to ₹60,000 per playing day for senior players with over 40 first-class games under the September 2021 Apex Council schedule.',
       quote: 'Senior cricketers with over 40 matches experience receive ₹60,000 per playing day in the Ranji Trophy, with lower slabs of ₹50,000 and ₹40,000 for junior tiers.',
-      data: 'A full seven-match group stage (28 playing days) yields ₹16.8 lakh in match-day compensation for a senior domestic cricketer.',
+      data: 'Instituted at the 9th Apex Council Meeting on September 20, 2021, this schedule remains the operative baseline through the 2023–24 and 2024–25 domestic seasons; a full seven-match group stage (28 playing days) yields ₹16.8 lakh in match-day compensation for a senior domestic cricketer.',
       sourceId: 'src-bcci-domestic-remuneration',
       source: 'src-bcci-domestic-remuneration',
       sourceUrl: 'https://thebreakdown.in/evidence/src-bcci-domestic-remuneration',
@@ -876,6 +876,12 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       date: 'January 2016',
       title: 'Justice Lodha Committee Domestic Governance Report',
       description: 'Supreme Court panel emphasizes constitutional protections for domestic players, transparent administration, and creation of a players association.',
+    },
+    {
+      id: 'tl-cricket-1b',
+      date: 'July 2018',
+      title: 'BCCI Expands Ranji Trophy to 38 State Teams',
+      description: 'Committee of Administrators (CoA) restructures domestic first-class championship, integrating nine new state associations across Elite and Plate divisions.',
     },
     {
       id: 'tl-cricket-2',
@@ -968,7 +974,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       type: 'paragraph',
       data: {
         text: `<p>To understand why elite athletes were increasingly tempted to bypass the Ranji Trophy, one must examine the profound economic distortion introduced into Indian cricket by private franchise leagues over the past two decades <cite data-ref="src-bcci-ipl-auction-rules">[5]</cite>.</p>
-<p>Under the revised domestic remuneration structure instituted by the BCCI in September 2021, daily match fees for first-class cricket were calibrated hierarchically to reward longevity and experience <cite data-ref="src-bcci-domestic-remuneration">[3]</cite>:</p>
+<p>Under the domestic remuneration structure instituted by the BCCI on September 20, 2021 during its 9th Apex Council Meeting—which remains the operative fee schedule through the 2023–24 and 2024–25 seasons, with subsequent revision proposals under active review—daily match fees for first-class cricket were calibrated hierarchically to reward longevity and experience <cite data-ref="src-bcci-domestic-remuneration">[3]</cite>:</p>
 <ul>
   <li><strong>Tier 1 (>40 first-class matches played):</strong> ₹60,000 per playing day (₹2.40 lakh per 4-day match).</li>
   <li><strong>Tier 2 (21 to 40 matches played):</strong> ₹50,000 per playing day (₹2.00 lakh per match).</li>
@@ -1011,6 +1017,11 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
             date: 'January 2016',
             title: 'Justice Lodha Committee Submits Structural Reforms',
             description: 'Supreme Court panel emphasizes constitutional protections for domestic players, transparent contracts, and equal distribution of board revenues.',
+          },
+          {
+            date: 'July 2018',
+            title: 'Ranji Trophy Tournament Expansion to 38 State Teams',
+            description: 'BCCI and Committee of Administrators (CoA) expand championship to 38 teams, integrating nine new state associations across Elite and Plate divisions.',
           },
           {
             date: 'September 2021',
@@ -1089,9 +1100,9 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       id: 'bcci-block-p6',
       type: 'paragraph',
       data: {
-        text: `<p>The qualitative impact of the BCCI's domestic mandate was immediately visible across the 2024–25 domestic rounds: marquee international regulars including Shreyas Iyer, Ajinkya Rahane, and Shardul Thakur turned out for their respective home associations in preliminary Ranji fixtures. The long-standing culture of treating domestic red-ball matches with casual indifference has been firmly interrupted.</p>
-<p>However, because the BCCI Domestic Operations bureau does not publish a centralized cross-season aggregate appearance ledger for national pool cricketers, claims of an exact 42% or 44% statistical increase remain unverified secondary estimates rather than reproducible official metrics. What the scorecards demonstrate unequivocally is that the domestic mandate altered player calculation by making first-class availability an explicit precondition for national selection.</p>
-<p>Yet looking across the broader landscape of world cricket, where franchise leagues are expanding their windows and private equity is purchasing multi-club ownership models across South Africa, the West Indies, the United States, and the UAE, the limits of pure administrative coercion are evident. In England and Australia, national boards are grappling with the reality that an increasing cohort of younger cricketers are choosing to become freelance T20 specialists, voluntarily relinquishing national contracts altogether.</p>
+        text: `<p>The practical effect of the BCCI's domestic directive was documented across subsequent domestic rounds: capped international players including Shreyas Iyer, Ajinkya Rahane, and Shardul Thakur registered appearances for their respective home associations in preliminary Ranji Trophy fixtures. Following the public omission of central retainers in February 2024, availability for domestic first-class matches was firmly established as an operative precondition for national red-ball selection.</p>
+<p>Because the BCCI Domestic Operations bureau does not publish a centralized cross-season aggregate appearance ledger tracking multi-season participation rates for centrally contracted players, broad percentage claims circulated in sports media remain unverified secondary assertions without reproducible official datasets. What official scorecards demonstrate directly is that following the contract directive, centrally contracted and national pool cricketers registered verified appearances across preliminary and knockout rounds of the Ranji Trophy.</p>
+<p>Across international cricket, national governing bodies face comparable contractual tension as year-round franchise leagues expand. The England and Wales Cricket Board (ECB) and New Zealand Cricket (NZC) have navigated multi-format athletes negotiating partial availability or relinquishing multi-year central contracts to pursue freelance T20 opportunities abroad (notably Trent Boult's casual arrangement with NZC and Jason Roy surrendering his ECB incremental contract in 2023). However, unlike England or New Zealand, the BCCI enforces a strict regulatory ban prohibiting active Indian players from participating in overseas franchise leagues, concentrating domestic player market power almost exclusively within BCCI-governed tournaments.</p>
 <p>The BCCI's enduring advantage is its extraordinary financial muscle. By pairing the disciplinary stick of contract revocation with the financial carrot of the ₹45 lakh per match Test Cricket Incentive Scheme for Playing XI members and ₹60,000 daily domestic fees, India is the only cricket nation capable of matching private franchise compensation with public board revenues <cite data-ref="src-bcci-test-incentive">[2]</cite>. As long as the path to financial glory in Indian sport continues to run through the white flannels of the Ranji Trophy, red-ball cricket will retain its rightful place as the crown jewel of the nation's sporting imagination.</p>`,
       },
     },
