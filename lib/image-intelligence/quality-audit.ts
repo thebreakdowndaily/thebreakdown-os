@@ -135,14 +135,20 @@ export function validateImageQualityBaseline(
 } {
   const activeExceptions = exceptions.filter((exception) => exception.expiresAt >= today);
   const expired = exceptions.filter((exception) => exception.expiresAt < today);
-  const invalidExceptions = exceptions.filter((exception) =>
-    !exception.id.trim() ||
-    !exception.reason.trim() ||
-    !exception.owner.trim() ||
-    !exception.evidence.trim() ||
-    !/^\\d{4}-\\d{2}-\\d{2}$/.test(exception.expiresAt) ||
-    !Number.isFinite(Date.parse(`${exception.expiresAt}T00:00:00Z`))
-  );
+  const invalidExceptions = exceptions.filter((exception) => {
+    const idValid = typeof exception.id === 'string' && Boolean(exception.id.trim());
+    const reasonValid = typeof exception.reason === 'string' && Boolean(exception.reason.trim());
+    const ownerValid = typeof exception.owner === 'string' && Boolean(exception.owner.trim());
+    const evidenceValid =
+      typeof exception.evidence === 'string' &&
+      /^https:\/\/\S+$/i.test(exception.evidence);
+    const expiryValid =
+      typeof exception.expiresAt === 'string' &&
+      /^\d{4}-\d{2}-\d{2}$/.test(exception.expiresAt) &&
+      Number.isFinite(Date.parse(`${exception.expiresAt}T00:00:00Z`)) &&
+      new Date(`${exception.expiresAt}T00:00:00Z`).toISOString().slice(0, 10) === exception.expiresAt;
+    return !idValid || !reasonValid || !ownerValid || !evidenceValid || !expiryValid;
+  });
   const seenIds = new Set<string>();
   const seenKeys = new Set<string>();
   for (const exception of exceptions) {
