@@ -8,6 +8,8 @@
 export interface CfEnv {
   APP_URL?: string;
   CRON_SECRET?: string;
+  /** Only the exact string "false" enables live publication; missing/invalid values stay in preflight. */
+  DRY_RUN?: string;
 }
 
 /** Compact contract returned by GET /api/editorial/publish-due. */
@@ -36,7 +38,7 @@ function isPublishDispatchSummary(value: unknown): value is PublishDispatchSumma
 }
 
 /** Accept an HTTPS origin only; never forward CRON_SECRET to an arbitrary URL or path. */
-function canonicalPublishEndpoint(appUrl: string): string | null {
+function canonicalPublishEndpoint(appUrl: string, dryRun: boolean): string | null {
   let parsed: URL;
   try {
     parsed = new URL(appUrl);
@@ -57,7 +59,10 @@ function canonicalPublishEndpoint(appUrl: string): string | null {
     return null;
   }
 
-  return new URL('/api/editorial/publish-due', parsed.origin).toString();
+  const path = dryRun
+    ? '/api/editorial/publish-due/preflight'
+    : '/api/editorial/publish-due';
+  return new URL(path, parsed.origin).toString();
 }
 
 function failedDispatch(check: string, reason: string): PublishDispatchSummary[] {
@@ -78,6 +83,8 @@ export async function publishDueStories(
   env: CfEnv,
   _now: Date = new Date(),
 ): Promise<PublishDispatchSummary[]> {
+  // Safe by default: only explicit DRY_RUN="false" enables live publication.
+  const dryRun = (env.DRY_RUN || 'true').trim().toLowerCase() !== 'false';
   const cronSecret = env.CRON_SECRET || '';
   if (!cronSecret.trim()) {
     return failedDispatch(
@@ -86,7 +93,7 @@ export async function publishDueStories(
     );
   }
 
-  const endpoint = canonicalPublishEndpoint(env.APP_URL || '');
+  const endpoint = canonicalPublishEndpoint(env.APP_URL || '', dryRun);
   if (!endpoint) {
     return failedDispatch(
       'canonical_app_url',
@@ -122,12 +129,21 @@ export async function publishDueStories(
     if (
       !isRecord(body) ||
       body.ok !== true ||
+      body.mode !== (dryRun ? 'preflight' : 'live') ||
+      body.dryRun !== dryRun ||
       !Array.isArray(body.results) ||
       !body.results.every(isPublishDispatchSummary)
     ) {
       return failedDispatch(
         'canonical_dispatch_response_shape',
-        'Expected { ok: true, results: [{ storyId, passed, checksCount, failedChecks }] }; publication summary rejected',
+        'Canonical endpoint returned an unexpected mode or summary contract; dispatch rejected',
+      );
+    }
+
+    if (dryRun && body.results.length !== 0) {
+      return failedDispatch(
+        'canonical_preflight_response_shape',
+        'Read-only preflight must return zero story results',
       );
     }
 

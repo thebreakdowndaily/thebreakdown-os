@@ -19,6 +19,7 @@ interface ExecutionContext {
 export interface Env {
   APP_URL?: string;
   CRON_SECRET?: string;
+  DRY_RUN?: string;
 }
 
 export default {
@@ -28,6 +29,7 @@ export default {
     _ctx: ExecutionContext,
   ): Promise<void> {
     const startTime = Date.now();
+    const dryRun = (env.DRY_RUN || 'true').trim().toLowerCase() !== 'false';
 
     console.log(JSON.stringify({
       event: 'editorial.publish_due.start',
@@ -42,7 +44,9 @@ export default {
       const blocked = results.filter((result) => !result.passed).length;
 
       console.log(JSON.stringify({
-        event: 'editorial.publish_due.complete',
+        event: dryRun ? 'editorial.publish_due.preflight.complete' : 'editorial.publish_due.complete',
+        mode: dryRun ? 'preflight' : 'live',
+        dryRun,
         timestamp: new Date().toISOString(),
         duration: Date.now() - startTime,
         totalChecked: results.length,

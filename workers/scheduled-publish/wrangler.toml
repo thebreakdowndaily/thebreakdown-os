@@ -8,6 +8,9 @@ crons = ["0 * * * *"]
 
 [vars]
 APP_URL = "https://thebreakdown.in"
+DRY_RUN = "true"
 
+# Safe by default: hourly cron calls only the read-only preflight endpoint.
+# Set DRY_RUN = "false" only after explicit publication-release authorization.
 # Configure CRON_SECRET with: wrangler secret put CRON_SECRET
 # Do not store CRON_SECRET or database credentials in [vars].

@@ -1,10 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { NextRequest } from 'next/server';
+import { GET as publishDuePreflight } from '../app/api/editorial/publish-due/preflight/route';
 import { publishDueStories } from '../services/editorial/schedule-cf';
 import scheduledWorker from '../workers/scheduled-publish/index';
 
 const APP_URL = 'https://thebreakdown.in';
 const CRON_SECRET = 'test-cron-secret';
 const NOW = new Date('2026-10-26T10:00:00.000Z');
+const ORIGINAL_CRON_SECRET = process.env.CRON_SECRET;
 
 function response(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -23,6 +26,37 @@ const validResult = {
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
+  if (ORIGINAL_CRON_SECRET === undefined) {
+    delete process.env.CRON_SECRET;
+  } else {
+    process.env.CRON_SECRET = ORIGINAL_CRON_SECRET;
+  }
+});
+
+describe('read-only scheduled publication preflight route', () => {
+  it('rejects unauthenticated callers and returns a fixed no-op contract only to the correct secret', async () => {
+    process.env.CRON_SECRET = CRON_SECRET;
+
+    const unauthenticated = await publishDuePreflight(
+      new NextRequest('https://thebreakdown.in/api/editorial/publish-due/preflight'),
+    );
+    expect(unauthenticated.status).toBe(401);
+
+    const authorized = await publishDuePreflight(new NextRequest(
+      'https://thebreakdown.in/api/editorial/publish-due/preflight',
+      { headers: { authorization: 'Bearer ' + CRON_SECRET } },
+    ));
+    expect(authorized.status).toBe(200);
+    expect(await authorized.json()).toMatchObject({
+      ok: true,
+      mode: 'preflight',
+      dryRun: true,
+      totalChecked: 0,
+      gatePassed: 0,
+      blocked: 0,
+      results: [],
+    });
+  });
 });
 
 describe('scheduled publish canonical dispatch contract', () => {
@@ -89,11 +123,39 @@ describe('scheduled publish canonical dispatch contract', () => {
     expect(customPort[0].failedChecks).toEqual(['canonical_app_url']);
   });
 
-  it('calls only the fixed canonical publish endpoint over HTTPS', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(response({ ok: true, results: [validResult] }));
+  it('defaults to a non-publishing preflight against the fixed canonical host', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(response({
+      ok: true,
+      mode: 'preflight',
+      dryRun: true,
+      results: [],
+    }));
     vi.stubGlobal('fetch', fetchMock);
 
     const result = await publishDueStories({ APP_URL, CRON_SECRET }, NOW);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://thebreakdown.in/api/editorial/publish-due/preflight',
+      expect.objectContaining({
+        method: 'GET',
+        redirect: 'error',
+        headers: { Authorization: 'Bearer ' + CRON_SECRET },
+      }),
+    );
+    expect(result).toEqual([]);
+  });
+
+  it('uses the live publishing endpoint only when DRY_RUN is explicitly false', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(response({
+      ok: true,
+      mode: 'live',
+      dryRun: false,
+      results: [validResult],
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await publishDueStories({ APP_URL, CRON_SECRET, DRY_RUN: 'false' }, NOW);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith(
@@ -124,6 +186,8 @@ describe('scheduled publish canonical dispatch contract', () => {
 
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({
       ok: true,
+      mode: 'preflight',
+      dryRun: true,
       results: [{ storyId: 'story-test-1', passed: true, checks: [] }],
     })));
     const invalidShape = await publishDueStories({ APP_URL, CRON_SECRET }, NOW);
@@ -143,13 +207,15 @@ describe('scheduled publish canonical dispatch contract', () => {
   });
 
   it('worker logs the canonical summary shape without dereferencing missing checks arrays', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({ ok: true, results: [validResult] })));
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({
+      ok: true, mode: 'live', dryRun: false, results: [validResult],
+    })));
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     await scheduledWorker.scheduled(
       { cron: '0 * * * *', scheduledTime: NOW.getTime() } as never,
-      { APP_URL, CRON_SECRET } as never,
+      { APP_URL, CRON_SECRET, DRY_RUN: 'false' } as never,
       {} as never,
     );
 
