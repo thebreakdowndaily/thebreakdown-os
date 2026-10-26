@@ -25,6 +25,7 @@ import { evaluateGoldStandardPass, type GoldStandardAuditRecord } from './gold-s
 import { getSource } from '@/lib/knowledge/source-registry';
 import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
+import { validateStoryHeroImageApproval } from '@/lib/image-intelligence/publication-approval';
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
 
@@ -177,6 +178,11 @@ export function validateStoryForPublication(
       ? 'No retracted sources detected in story evidence'
       : 'Story cites one or more retracted sources — publication blocked',
   });
+
+  // Gate 13: Story-specific hero-media approval. This check runs in the
+  // synchronous gate too, so the canonical async and compatibility paths
+  // share the same fail-closed publication decision.
+  checks.push(validateStoryHeroImageApproval(story));
 
   const allPassed = checks.every(c => c.passed);
 
