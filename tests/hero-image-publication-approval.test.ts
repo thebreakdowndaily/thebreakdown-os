@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import type { Story } from '../types/canonical';
+import type { Principal } from '../features/auth/principal';
+import { evaluatePublicationContractAsync } from '../lib/editorial/canonical-publication';
 import { validateStoryHeroImageApproval } from '../lib/image-intelligence/publication-approval';
 import type { VerifiedImageRecord } from '../lib/image-intelligence/manifest';
 import { validateStoryForPublication } from '../lib/editorial/publication-gate';
@@ -21,7 +23,7 @@ function check(
   return validateStoryHeroImageApproval(story, () => manifest);
 }
 
-function testRuntimeGateIntegration(): void {
+async function testRuntimeGateIntegration(): Promise<void> {
   const story = {
     id: 'story-live-1',
     title: 'A sufficiently described story',
@@ -60,9 +62,32 @@ function testRuntimeGateIntegration(): void {
   assert.equal(imageCheck.passed, false, 'live publication must fail closed without an approved manifest entry');
   assert.match(imageCheck.reason, /No individually approved hero-image manifest entry/);
   assert.equal(result.passed, false);
+
+  // The canonical contract used by the scheduler must reject before issuing a publication token.
+  const principal = {
+    userId: 'test-editor',
+    email: 'editor@example.org',
+    name: 'Test Editor',
+    role: 'owner',
+    isSuperAdmin: true,
+    status: 'active',
+    organizationId: null,
+  } as unknown as Principal;
+  const decision = await evaluatePublicationContractAsync(
+    story,
+    story,
+    principal,
+    { now: new Date('2026-10-26T00:00:00.000Z'), triggeredBy: 'manual' },
+  );
+  assert.equal(decision.allowed, false, 'canonical publication contract must block unapproved hero media');
+  assert.equal(decision.httpStatus, 422, 'hero approval failure must be an editorial gate rejection');
+  assert.equal(decision.publicationToken, undefined, 'blocked story must not receive a publication token');
+  const contractImageCheck = decision.gateResult?.checks.find((item) => item.name === 'hero_image_approved');
+  assert.ok(contractImageCheck, 'canonical contract must expose the image failure in its audit checks');
+  assert.equal(contractImageCheck.passed, false);
 }
 
-function run(): void {
+async function run(): Promise<void> {
   assert.equal(check(undefined, approved).passed, false, 'missing story must fail');
   assert.equal(check({ slug: 'story-a', heroImage: approved.approvedImage }, null).passed, false, 'missing manifest must fail');
   assert.equal(check({ slug: 'story-b', heroImage: approved.approvedImage }, approved).passed, false, 'manifest slug mismatch must fail');
@@ -121,8 +146,8 @@ function run(): void {
     'approved archival maps are valid visual assets; SVG extension alone does not mean placeholder',
   );
 
-  testRuntimeGateIntegration();
-  console.log('Hero-image publication approval tests: 20 assertions passed.');
+  await testRuntimeGateIntegration();
+  console.log('Hero-image publication approval tests: 25 assertions passed.');
 }
 
-run();
+run().catch((error) => { console.error(error); process.exitCode = 1; });
