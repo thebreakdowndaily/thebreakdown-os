@@ -30,7 +30,7 @@ function isHttpsUrl(value: unknown): value is string {
 }
 
 function sha256ForPublicAsset(assetPath: string): string {
-  const relative = path.posix.normalize(assetPath.replace(/^\\/+/, ''));
+  const relative = path.posix.normalize(assetPath.replace(/^\/+/, ''));
   if (!relative || relative === '.' || relative.startsWith('../') || path.isAbsolute(relative)) {
     throw new Error(`Unsafe local asset path: ${assetPath}`);
   }
@@ -143,7 +143,8 @@ function runPublicStoryImageQualityAudit(): void {
   const disposition = validateImageQualityBaseline(issues, baseline.exceptions, today);
 
   console.log(`Public stories audited: ${publicStories.length}`);
-  console.log(`Resolved images with valid file format/existence: ${qualityRecords.filter((r) => !technicalFailures.some((f) => f.slug === r.slug)).length}/${publicStories.length - technicalFailures.length + technicalFailures.length}`);
+  const technicalFailureSlugs = new Set(technicalFailures.map((failure) => failure.slug));
+  console.log(`Resolved images with valid file format/existence: ${publicStories.length - technicalFailureSlugs.size}/${publicStories.length}`);
   console.log(`Public images using generic placeholders: ${qualityRecords.filter((r) => r.isPlaceholder).length}`);
   console.log(`Public images without an individually matching manifest: ${qualityRecords.filter((r) => !r.hasManifest || !r.manifestMatchesResolvedAsset).length}`);
   console.log(`Public images without a verifiable HTTPS source URL: ${qualityRecords.filter((r) => !isHttpsUrl(r.manifestSourceUrl)).length}`);
