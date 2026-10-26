@@ -1,0 +1,866 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-26",
+  "policy": "Exact-match, expiring exceptions for known public-story image-quality defects only. New or changed issues fail closed.",
+  "exceptions": [
+    {
+      "kind": "duplicate-content",
+      "slugs": [
+        "anganwadi-icds",
+        "ayushman-bharat",
+        "who-cancer-report-2026"
+      ],
+      "assets": [
+        "/images/stories/anganwadi.jpg",
+        "/images/topics/health.jpg"
+      ],
+      "id": "LIMG-001",
+      "reason": "Different legacy asset paths contain identical bytes; verify provenance and replace incorrect assignments.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-content",
+      "slugs": [
+        "education-budget",
+        "ews-quota-upsc-investigation"
+      ],
+      "assets": [
+        "/images/stories/ews-quota-upsc-investigation.jpg",
+        "/images/topics/education.jpg"
+      ],
+      "id": "LIMG-002",
+      "reason": "Different legacy asset paths contain identical bytes; verify provenance and replace incorrect assignments.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-content",
+      "slugs": [
+        "india-china-border-lac",
+        "india-china-border-tensions",
+        "india-china-relations",
+        "india-us-relations"
+      ],
+      "assets": [
+        "/images/stories/india-china-border-tensions.jpg",
+        "/images/stories/india-us-relations.jpg"
+      ],
+      "id": "LIMG-003",
+      "reason": "Different legacy asset paths contain identical bytes; verify provenance and replace incorrect assignments.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "ayushman-bharat",
+        "who-cancer-report-2026"
+      ],
+      "assets": [
+        "/images/topics/health.jpg"
+      ],
+      "id": "LIMG-004",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "bjp-mission-360",
+        "india-russia-relations"
+      ],
+      "assets": [
+        "/images/placeholders/policy-placeholder.svg"
+      ],
+      "id": "LIMG-005",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "climate-finance",
+        "india-ev-paradox"
+      ],
+      "assets": [
+        "/images/stories/climate-finance.jpg"
+      ],
+      "id": "LIMG-006",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "income-inequality-india",
+        "mgnrega-reform",
+        "supply-chain-shift"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-007",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "india-5g-rollout",
+        "semiconductor-pli"
+      ],
+      "assets": [
+        "/images/placeholders/technology-placeholder.svg"
+      ],
+      "id": "LIMG-008",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "india-china-border-lac",
+        "india-china-border-tensions",
+        "india-china-relations"
+      ],
+      "assets": [
+        "/images/stories/india-china-border-tensions.jpg"
+      ],
+      "id": "LIMG-009",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "duplicate-path",
+      "slugs": [
+        "india-europe-relations",
+        "india-indonesia-relations",
+        "india-uk-relations"
+      ],
+      "assets": [
+        "/images/stories/india-europe-relations.jpg"
+      ],
+      "id": "LIMG-010",
+      "reason": "Legacy public stories reuse one hero path; replace with independently relevant and approved story assets.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "81-crore-data-breach"
+      ],
+      "assets": [
+        "/images/stories/aadhaar-sc.jpg"
+      ],
+      "id": "LIMG-011",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "accountability-in-india"
+      ],
+      "assets": [
+        "/images/stories/accountability-in-india.jpg"
+      ],
+      "id": "LIMG-012",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "anganwadi-icds"
+      ],
+      "assets": [
+        "/images/stories/anganwadi.jpg"
+      ],
+      "id": "LIMG-013",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "climate-finance"
+      ],
+      "assets": [
+        "/images/stories/climate-finance.jpg"
+      ],
+      "id": "LIMG-014",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "digital-payments-boom"
+      ],
+      "assets": [
+        "/images/stories/digital-payments.jpg"
+      ],
+      "id": "LIMG-015",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "dpdp-bill"
+      ],
+      "assets": [
+        "/images/stories/dpdp-bill.jpg"
+      ],
+      "id": "LIMG-016",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "electoral-bonds"
+      ],
+      "assets": [
+        "/images/stories/electoral-bonds.jpg"
+      ],
+      "id": "LIMG-017",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "ethanol-backlash"
+      ],
+      "assets": [
+        "/images/stories/ethanol-backlash.jpg"
+      ],
+      "id": "LIMG-018",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "ews-quota-upsc-investigation"
+      ],
+      "assets": [
+        "/images/stories/ews-quota-upsc-investigation.jpg"
+      ],
+      "id": "LIMG-019",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "groundwater-depletion"
+      ],
+      "assets": [
+        "/images/stories/groundwater-depletion.jpg"
+      ],
+      "id": "LIMG-020",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "india-china-border-lac"
+      ],
+      "assets": [
+        "/images/stories/india-china-border-tensions.jpg"
+      ],
+      "id": "LIMG-021",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "india-china-border-tensions"
+      ],
+      "assets": [
+        "/images/stories/india-china-border-tensions.jpg"
+      ],
+      "id": "LIMG-022",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "india-europe-relations"
+      ],
+      "assets": [
+        "/images/stories/india-europe-relations.jpg"
+      ],
+      "id": "LIMG-023",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "india-ev-paradox"
+      ],
+      "assets": [
+        "/images/stories/climate-finance.jpg"
+      ],
+      "id": "LIMG-024",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "india-us-relations"
+      ],
+      "assets": [
+        "/images/stories/india-us-relations.jpg"
+      ],
+      "id": "LIMG-025",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "indias-foreign-policy"
+      ],
+      "assets": [
+        "/images/library/chapter-1/photos/a-07-nehru-unga-1948.jpg"
+      ],
+      "id": "LIMG-026",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "kashmir-the-first-test"
+      ],
+      "assets": [
+        "/images/library/chapter-1/maps/map-kashmir-1947.svg"
+      ],
+      "id": "LIMG-027",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "mgnrega-reform"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-028",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "pm-fasal-bima-claims"
+      ],
+      "assets": [
+        "/images/stories/fasal-bima.jpg"
+      ],
+      "id": "LIMG-029",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "ration-digitization"
+      ],
+      "assets": [
+        "/images/stories/ration-digitization.jpg"
+      ],
+      "id": "LIMG-030",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "rbi-repo-rate"
+      ],
+      "assets": [
+        "/images/stories/rbi-repo-rate.jpg"
+      ],
+      "id": "LIMG-031",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "satluj-ban"
+      ],
+      "assets": [
+        "/images/stories/satluj-ban.jpg"
+      ],
+      "id": "LIMG-032",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "semiconductor-pli"
+      ],
+      "assets": [
+        "/images/placeholders/technology-placeholder.svg"
+      ],
+      "id": "LIMG-033",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "us-iran-relations"
+      ],
+      "assets": [
+        "/images/stories/us-iran-relations.jpg"
+      ],
+      "id": "LIMG-034",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "incomplete-manifest",
+      "slugs": [
+        "us-iran-war-strait-of-hormuz"
+      ],
+      "assets": [
+        "/images/stories/us-iran-war-strait-of-hormuz.jpg"
+      ],
+      "id": "LIMG-035",
+      "reason": "Legacy image manifest lacks a verifiable HTTPS source URL; add the original asset URL and confirm reuse rights.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "ayushman-bharat"
+      ],
+      "assets": [
+        "/images/topics/health.jpg"
+      ],
+      "id": "LIMG-036",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "bjp-mission-360"
+      ],
+      "assets": [
+        "/images/placeholders/policy-placeholder.svg"
+      ],
+      "id": "LIMG-037",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "education-budget"
+      ],
+      "assets": [
+        "/images/topics/education.jpg"
+      ],
+      "id": "LIMG-038",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "epf-scheme-2026"
+      ],
+      "assets": [
+        "/images/topics/economy.jpg"
+      ],
+      "id": "LIMG-039",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "gig-worker-rights"
+      ],
+      "assets": [
+        "/images/topics/employment.jpg"
+      ],
+      "id": "LIMG-040",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "income-inequality-india"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-041",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "india-5g-rollout"
+      ],
+      "assets": [
+        "/images/placeholders/technology-placeholder.svg"
+      ],
+      "id": "LIMG-042",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "india-china-relations"
+      ],
+      "assets": [
+        "/images/stories/india-china-border-tensions.jpg"
+      ],
+      "id": "LIMG-043",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "india-indonesia-relations"
+      ],
+      "assets": [
+        "/images/stories/india-europe-relations.jpg"
+      ],
+      "id": "LIMG-044",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "india-russia-relations"
+      ],
+      "assets": [
+        "/images/placeholders/policy-placeholder.svg"
+      ],
+      "id": "LIMG-045",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "india-uk-relations"
+      ],
+      "assets": [
+        "/images/stories/india-europe-relations.jpg"
+      ],
+      "id": "LIMG-046",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "indian-education-crisis"
+      ],
+      "assets": [
+        "/images/placeholders/education-placeholder.svg"
+      ],
+      "id": "LIMG-047",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "namami-gange-under-fire"
+      ],
+      "assets": [
+        "/images/topics/environment.jpg"
+      ],
+      "id": "LIMG-048",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "supply-chain-shift"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-049",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "who-cancer-report-2026"
+      ],
+      "assets": [
+        "/images/topics/health.jpg"
+      ],
+      "id": "LIMG-050",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "missing-manifest",
+      "slugs": [
+        "youth-mental-health-crisis"
+      ],
+      "assets": [
+        "/images/placeholders/health-placeholder.svg"
+      ],
+      "id": "LIMG-051",
+      "reason": "Legacy public story predates per-story image approval; add an explicit approved manifest entry with a source URL.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "bjp-mission-360"
+      ],
+      "assets": [
+        "/images/placeholders/policy-placeholder.svg"
+      ],
+      "id": "LIMG-052",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "income-inequality-india"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-053",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "india-5g-rollout"
+      ],
+      "assets": [
+        "/images/placeholders/technology-placeholder.svg"
+      ],
+      "id": "LIMG-054",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "india-russia-relations"
+      ],
+      "assets": [
+        "/images/placeholders/policy-placeholder.svg"
+      ],
+      "id": "LIMG-055",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "indian-education-crisis"
+      ],
+      "assets": [
+        "/images/placeholders/education-placeholder.svg"
+      ],
+      "id": "LIMG-056",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "mgnrega-reform"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-057",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "semiconductor-pli"
+      ],
+      "assets": [
+        "/images/placeholders/technology-placeholder.svg"
+      ],
+      "id": "LIMG-058",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "supply-chain-shift"
+      ],
+      "assets": [
+        "/images/placeholders/economy-placeholder.svg"
+      ],
+      "id": "LIMG-059",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    },
+    {
+      "kind": "placeholder",
+      "slugs": [
+        "youth-mental-health-crisis"
+      ],
+      "assets": [
+        "/images/placeholders/health-placeholder.svg"
+      ],
+      "id": "LIMG-060",
+      "reason": "Legacy public story uses a generic placeholder rather than a story-specific editorial visual.",
+      "owner": "Editor-in-Chief / Editorial Image Desk",
+      "evidence": "https://github.com/thebreakdowndaily/thebreakdown-os/issues/144",
+      "expiresAt": "2026-11-25"
+    }
+  ]
+}
