@@ -91,6 +91,23 @@ async function runVerification() {
     disallows.includes('/editorial/'),
     'Robots.txt contains /editorial/ with trailing slash to protect internal editorial tools'
   );
+  assert(
+    !disallows.includes('/subscribe'),
+    'Robots.txt does NOT disallow /subscribe',
+    '/subscribe is a public subscriber landing page and must remain crawlable'
+  );
+
+  const robotCollisions = sitemapEntries.filter((entry) => {
+    const pathname = new URL(entry.url).pathname;
+    return disallows.some((disallow) =>
+      disallow.endsWith('/') ? pathname.startsWith(disallow) : pathname === disallow || pathname.startsWith(disallow + '/')
+    );
+  });
+  assert(
+    robotCollisions.length === 0,
+    'Zero sitemap URLs are blocked by robots.txt disallow rules',
+    robotCollisions.map((e) => e.url).join(', ')
+  );
   const sitemaps = Array.isArray(robotRules.sitemap) ? robotRules.sitemap : [robotRules.sitemap];
   assert(
     sitemaps.includes('https://thebreakdown.in/sitemap.xml'),
@@ -164,6 +181,7 @@ async function runVerification() {
   if (passed !== total) {
     process.exit(1);
   }
+  process.exit(0);
 }
 
 runVerification().catch((err) => {

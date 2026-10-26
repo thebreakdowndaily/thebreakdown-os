@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { bootstrapServices } from '@/services/bootstrap';
 import { getKnowledgeLibrarySeedData } from '@/utils/data-layer/knowledge-library-data';
+import { parseValidContentDate, resolveDynamicPageFreshness } from '@/lib/seo/sitemap-freshness';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = 'https://thebreakdown.in';
@@ -13,30 +14,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     services.fixes.getFixes({ pageSize: 100 }),
   ]);
 
+  // Static trust, governance, and directory pages — use actual content review dates.
+  // Using new Date() on stable pages falsely signals daily changes and wastes crawl budget.
+  const STATIC_PAGE_DATES = {
+    homeBaseline: new Date('2026-09-29T00:00:00.000Z'),
+    trust: new Date('2026-07-01T00:00:00.000Z'),
+    methodology: new Date('2026-07-01T00:00:00.000Z'),
+    editorialConstitution: new Date('2026-07-01T00:00:00.000Z'),
+    about: new Date('2026-07-01T00:00:00.000Z'),
+    series: new Date('2026-07-30T00:00:00.000Z'),
+    topics: new Date('2026-07-30T00:00:00.000Z'),
+    entities: new Date('2026-07-30T00:00:00.000Z'),
+    investigations: new Date('2026-07-30T00:00:00.000Z'),
+    data: new Date('2026-07-30T00:00:00.000Z'),
+    trackers: new Date('2026-07-30T00:00:00.000Z'),
+    corrections: new Date('2026-09-29T00:00:00.000Z'),
+  } as const;
+
   const stories = storiesRes.data.map((s) => ({
     url: `${siteUrl}/story/${s.slug}`,
-    lastModified: new Date(s.updatedAt || s.publishedAt),
+    lastModified: parseValidContentDate(s.updatedAt || s.publishedAt) || STATIC_PAGE_DATES.homeBaseline,
     changeFrequency: 'daily' as const,
     priority: 0.9,
   }));
 
   const entities = entitiesRes.data.map((e) => ({
     url: `${siteUrl}/entity/${e.slug}`,
-    lastModified: new Date(e.updatedAt || e.createdAt),
+    lastModified: parseValidContentDate(e.updatedAt || e.createdAt) || STATIC_PAGE_DATES.entities,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
 
   const topics = topicsRes.data.map((t) => ({
     url: `${siteUrl}/topic/${t.slug}`,
-    lastModified: new Date(t.updatedAt || t.createdAt),
+    lastModified: parseValidContentDate(t.updatedAt || t.createdAt) || STATIC_PAGE_DATES.topics,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
   const fixes = fixesRes.data.map((f) => ({
     url: `${siteUrl}/fix/${f.slug}`,
-    lastModified: new Date(f.updatedAt || f.publishedAt),
+    lastModified: parseValidContentDate(f.updatedAt || f.publishedAt) || STATIC_PAGE_DATES.data,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -48,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const collection of library.collections) {
       canonicalEntries.push({
         url: `${siteUrl}/series/${collection.slug}`,
-        lastModified: new Date(collection.updatedAt || collection.createdAt),
+        lastModified: parseValidContentDate(collection.updatedAt || collection.createdAt) || STATIC_PAGE_DATES.series,
         changeFrequency: 'weekly',
         priority: 1.0,
       });
@@ -56,7 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       for (const volume of collection.volumes) {
         canonicalEntries.push({
           url: `${siteUrl}/series/${collection.slug}/volume/${volume.slug}`,
-          lastModified: new Date(volume.updatedAt || volume.createdAt),
+          lastModified: parseValidContentDate(volume.updatedAt || volume.createdAt) || STATIC_PAGE_DATES.series,
           changeFrequency: 'monthly',
           priority: 0.9,
         });
@@ -65,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           if (chapter.status === 'published' || chapter.status === 'verified') {
             canonicalEntries.push({
               url: `${siteUrl}/series/${collection.slug}/volume/${volume.slug}/chapter/${chapter.slug}`,
-              lastModified: new Date(chapter.updatedAt),
+              lastModified: parseValidContentDate(chapter.updatedAt) || STATIC_PAGE_DATES.series,
               changeFrequency: 'monthly',
               priority: 0.8,
             });
@@ -75,24 +93,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Static trust and editorial pages — use actual content review dates, not build time.
-  // Using new Date() on stable pages falsely signals daily changes and wastes crawl budget.
-  const STATIC_PAGE_DATES = {
-    home: new Date('2026-09-29'),
-    trust: new Date('2026-07-01'),
-    methodology: new Date('2026-07-01'),
-    editorialConstitution: new Date('2026-07-01'),
-    about: new Date('2026-07-01'),
-    series: new Date('2026-07-30'),
-    topics: new Date('2026-07-30'),
-    entities: new Date('2026-07-30'),
-    investigations: new Date('2026-07-30'),
-    data: new Date('2026-07-30'),
-    trackers: new Date('2026-07-30'),
-  } as const;
+  // Truthful, content-derived freshness for dynamic story inventory pages:
+  // - Homepage reflects the latest modification of stories rendered in its inventory (lead/briefings/deep-dives)
+  // - Stories Archive reflects the latest modification across the entire public story archive
+  const homeLastModified = resolveDynamicPageFreshness(storiesRes.data, {
+    sliceCount: 10,
+    fallbackDate: STATIC_PAGE_DATES.homeBaseline,
+  });
+
+  const storiesArchiveLastModified = resolveDynamicPageFreshness(storiesRes.data, {
+    fallbackDate: STATIC_PAGE_DATES.homeBaseline,
+  });
 
   const staticPages: MetadataRoute.Sitemap = [
-    { url: siteUrl, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'daily', priority: 1.0 },
+    { url: siteUrl, lastModified: homeLastModified, changeFrequency: 'daily', priority: 1.0 },
     { url: `${siteUrl}/about`, lastModified: STATIC_PAGE_DATES.about, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/series`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'daily', priority: 1.0 },
     { url: `${siteUrl}/topics`, lastModified: STATIC_PAGE_DATES.topics, changeFrequency: 'weekly', priority: 0.6 },
@@ -101,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/countries`, lastModified: STATIC_PAGE_DATES.entities, changeFrequency: 'weekly', priority: 0.5 },
     { url: `${siteUrl}/investigations`, lastModified: STATIC_PAGE_DATES.investigations, changeFrequency: 'weekly', priority: 0.8 },
     // Trust & transparency package — stable pages, real last-review dates
-    { url: `${siteUrl}/founding-edition`, lastModified: new Date('2026-07-30'), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${siteUrl}/founding-edition`, lastModified: new Date('2026-07-30T00:00:00.000Z'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${siteUrl}/methodology`, lastModified: STATIC_PAGE_DATES.methodology, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/trust`, lastModified: STATIC_PAGE_DATES.trust, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/editorial-constitution`, lastModified: STATIC_PAGE_DATES.editorialConstitution, changeFrequency: 'monthly', priority: 0.8 },
@@ -112,14 +126,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/trackers/pmfby`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/semiconductor`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/trackers/upi`, lastModified: STATIC_PAGE_DATES.trackers, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/stories`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${siteUrl}/stories`, lastModified: storiesArchiveLastModified, changeFrequency: 'daily', priority: 0.9 },
     { url: `${siteUrl}/fix`, lastModified: STATIC_PAGE_DATES.data, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${siteUrl}/transparency/corrections`, lastModified: STATIC_PAGE_DATES.home, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/transparency/corrections`, lastModified: STATIC_PAGE_DATES.corrections, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${siteUrl}/newsletter`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${siteUrl}/subscribe`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${siteUrl}/subscribe`, lastModified: STATIC_PAGE_DATES.about, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${siteUrl}/timeline`, lastModified: STATIC_PAGE_DATES.series, changeFrequency: 'weekly', priority: 0.7 },
   ];
 
   return [...staticPages, ...canonicalEntries, ...stories, ...entities, ...topics, ...fixes];
 }
-

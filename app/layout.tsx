@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      'application/rss+xml': 'https://thebreakdown.in/api/feed',
+      'application/rss+xml': 'https://thebreakdown.in/rss',
     },
   },
   // DNS TXT verification completed via Cloudflare
@@ -119,7 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-theme="dark" className={`${inter.variable} ${playfair.variable} ${sourceSerif.variable}`}>
       <head>
-        <link rel="alternate" type="application/rss+xml" title="The Breakdown RSS Feed" href="https://thebreakdown.in/api/feed" />
+        <link rel="alternate" type="application/rss+xml" title="The Breakdown RSS Feed" href="https://thebreakdown.in/rss" />
       </head>
       <body className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] font-sans flex flex-col antialiased">
         <script
