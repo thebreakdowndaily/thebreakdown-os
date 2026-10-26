@@ -46,6 +46,8 @@ function canonicalPublishEndpoint(appUrl: string): string | null {
 
   if (
     parsed.protocol !== 'https:' ||
+    parsed.hostname !== 'thebreakdown.in' ||
+    parsed.port !== '' ||
     parsed.username !== '' ||
     parsed.password !== '' ||
     parsed.search !== '' ||
@@ -97,6 +99,7 @@ export async function publishDueStories(
       method: 'GET',
       headers: { Authorization: 'Bearer ' + cronSecret },
       signal: AbortSignal.timeout(10000),
+      redirect: 'error',
     });
 
     if (!response.ok) {
