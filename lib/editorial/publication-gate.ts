@@ -30,7 +30,7 @@ import { validateStoryHeroImageApproval } from '@/lib/image-intelligence/publica
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
 
 /**
- * Full Async Publication Gate — evaluates Gates 1-12 plus Gate 13 (Evidence Vault Reconstructibility).
+ * Full Async Publication Gate — evaluates editorial Gates 1-13 plus Gate 14 (Evidence Vault Reconstructibility).
  */
 export async function validateStoryForPublicationAsync(
   input: PublicationGateInput,
@@ -46,7 +46,7 @@ export async function validateStoryForPublicationAsync(
     return { ...syncResult, checks };
   }
 
-  // Gate 13: Evidence Vault Completeness & Cryptographic Reconstructibility (Article III & IV)
+  // Gate 14: Evidence Vault Completeness & Cryptographic Reconstructibility (Article III & IV)
   const evidenceRes = await validateStoryEvidenceCompleteness(story, vault, options);
   checks.push({
     name: 'evidence_preservation_vault',
