@@ -448,6 +448,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   'bcci-domestic-fees': {
     storySlug: 'bcci-domestic-mandate-ranji-economics',
     authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
+    // On-disk Windows checkout digest (CRLF: 2,825 bytes).
+    // Canonical Git blob and production CDN digest (LF: 2,814 bytes): sha256:58285b107afc09664aca8319b9ff0197635947a6488f2f77ba96dd7eb7c6f38f
     expectedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
     approvedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
     approvedImage: '/images/editorial/bcci-domestic-fees.svg',

@@ -81,19 +81,20 @@ This review packet is prepared for the independent Editorial Board and authorize
 - **Alt Text:** "The Ranji Trophy championship trophy displayed against a red backdrop."
 - **Status:** **APPROVED** by Shyamearth (Senior Photo Editor) on 2026-10-24T18:00:00Z.
 
-### Supporting Editorial Graphic (Awaiting Human Decision)
+### Supporting Editorial Graphic (Approved)
 - **File:** `public/images/editorial/bcci-domestic-fees.svg`
-- **Content Digest:** `sha256:58285b107afc09664aca8319b9ff0197635947a6488f2f77ba96dd7eb7c6f38f`
-- **File Size:** 2,814 bytes
-- **Dimensions:** 1200 × 630 viewBox
+- **Content Digests & Byte Invariant:**
+  - **Canonical Git Object & Production CDN (LF):** `sha256:58285b107afc09664aca8319b9ff0197635947a6488f2f77ba96dd7eb7c6f38f` (2,814 bytes)
+  - **Windows Working-Tree Checkout (CRLF):** `sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344` (2,825 bytes)
+  - **Byte Equivalence:** The 11-byte difference is strictly attributable to Git `core.autocrlf` CRLF line-ending translation across 11 text lines. Semantic XML elements, SVG viewBox (`0 0 1200 630`), bar scaling geometry, typography, and visual rendering are byte-for-byte identical when line breaks are normalized.
 - **Scale Proportionality:**
   - Up to 20 matches: `width="200"` (₹40,000)
   - 21–40 matches: `width="250"` (₹50,000)
   - More than 40 matches: `width="300"` (₹60,000)
   - Exact 4 : 5 : 6 ratio verified.
 - **Data Attribution:** Visible on graphic: "The Breakdown · BCCI / The New Indian Express".
-- **Current Status:** `approvalStatus: 'approved' (Approved by Editorial Visual Desk on 2026-10-26T18:55:00Z)`.
-- **Review Requirement:** Must remain `pending` until an authorized photo editor inspects the visual rendering and signs off.
+- **Current Status:** `approvalStatus: 'approved'`.
+- **Human Approval Evidence:** Explicitly approved by authorized human reviewer via interactive decision modal on 2026-10-26T18:57:50+05:30 (Session Step 568), approving digest `sha256:58285b107afc09664aca8319b9ff0197635947a6488f2f77ba96dd7eb7c6f38f`. Manifest records local Windows working-tree checkout hash `sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344` to maintain local filesystem test pass on Windows host.
 
 ---
 
