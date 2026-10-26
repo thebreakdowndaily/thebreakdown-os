@@ -23,6 +23,10 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      # Fail early on missing/invalid/context-mismatched heroes before running expensive validation suites.
+      - name: Story Image Integrity & Context Gate
+        run: npm run check:images
+
       - name: TypeScript Verification
         run: npm run check:type
 
@@ -47,9 +51,6 @@ jobs:
           npm run test:a11y
           npx tsx tests/production-readiness.test.ts
           npx tsx tests/data-integrity.test.ts
-
-      - name: Story Image Integrity & Context Gate
-        run: npm run check:images
 
       - name: Release-Control Safety & Deployment Health Suites
         run: |
