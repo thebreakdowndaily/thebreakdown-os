@@ -30,7 +30,7 @@ function isHttpsUrl(value: unknown): value is string {
 }
 
 function sha256ForPublicAsset(assetPath: string): string {
-  const relative = path.posix.normalize(assetPath.replace(/^\/+/, ''));
+  const relative = path.posix.normalize(assetPath.startsWith('/') ? assetPath.slice(1) : assetPath);
   if (!relative || relative === '.' || relative.startsWith('../') || path.isAbsolute(relative)) {
     throw new Error(`Unsafe local asset path: ${assetPath}`);
   }
