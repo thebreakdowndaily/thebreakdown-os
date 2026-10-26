@@ -34,6 +34,9 @@ jobs:
       - name: 1. Clean Dependencies Installation
         run: npm ci
 
+      - name: 1a. Live Hero Publication Approval Tests
+        run: npm run test:image-publication
+
       - name: 2. Strict Typecheck Gate
         run: npm run check:type
 

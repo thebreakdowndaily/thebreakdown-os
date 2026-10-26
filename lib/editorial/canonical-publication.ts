@@ -7,7 +7,7 @@
  * Consolidates all publication authority behind ONE server-side contract:
  *   1. Authorization verification ('story.publish')
  *   2. State machine transition verification (canTransition)
- *   3. Publication gate evaluation (11 fail-closed checks)
+ *   3. Publication gate evaluation (13 fail-closed editorial checks; async Gate 14 preserves the evidence vault)
  *   4. Immutable audit logging
  *   5. Event emission & cache invalidation
  */
@@ -44,7 +44,7 @@ export interface PublicationOptions {
 
 /**
  * Evaluates whether a story can transition to 'published' under the canonical publication contract.
- * Asynchronously checks all 12 publication gates AND Gate 13 (Evidence Vault Reconstructibility).
+ * Asynchronously checks all 13 editorial publication gates plus Gate 14 (Evidence Vault Reconstructibility).
  */
 export async function evaluatePublicationContractAsync(
   existingStory: Story | undefined,
@@ -85,7 +85,7 @@ export async function evaluatePublicationContractAsync(
     };
   }
 
-  // 4. Publication Gate Check (All 12 editorial gates + Gate 13 Evidence Vault)
+  // 4. Publication Gate Check (13 editorial gates + Gate 14 Evidence Vault)
   const storyToValidate: Story = {
     ...targetStory,
     status: fromStatus === 'draft' ? 'draft' : (fromStatus === 'published' ? 'scheduled' : fromStatus),
@@ -168,8 +168,8 @@ export async function evaluatePublicationContractAsync(
 }
 
 /**
- * Synchronous backward-compatible evaluator (runs synchronous gates 1-12).
- * Note: evaluatePublicationContractAsync should be preferred to enforce Evidence Gate 13.
+ * Synchronous backward-compatible evaluator (runs synchronous editorial gates 1-13).
+ * Note: evaluatePublicationContractAsync should be preferred to enforce Evidence Vault Gate 14.
  */
 export function evaluatePublicationContract(
   existingStory: Story | undefined,
@@ -210,7 +210,7 @@ export function evaluatePublicationContract(
     };
   }
 
-  // 4. Publication Gate Check (Gates 1-12)
+  // 4. Publication Gate Check (Gates 1-13)
   const storyToValidate: Story = {
     ...targetStory,
     status: fromStatus === 'draft' ? 'draft' : (fromStatus === 'published' ? 'scheduled' : fromStatus),

@@ -30,6 +30,9 @@ jobs:
       - name: Image Quality Gate Unit Tests
         run: npm run test:image-quality
 
+      - name: Live Hero Publication Approval Tests
+        run: npm run test:image-publication
+
       - name: TypeScript Verification
         run: npm run check:type
 
