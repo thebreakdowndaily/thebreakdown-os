@@ -272,7 +272,7 @@ async function validateAndPublishEntry(
 
   if (decision.allowed && decision.publicationToken) {
     // ── PUBLISH via Story Repository with validated Publication Token
-    const repo = RepositoryFactory.getStoryRepository();
+    const repo = RepositoryFactory.getStoryRepository([], { client: db });
     const publishedAt = now.toISOString();
 
     try {

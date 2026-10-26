@@ -41,11 +41,12 @@ export class SupabaseStoryRepository implements StoryService {
     return { data: (data || []).map(rowToStory), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
   }
 
-  async getStory(id: string) {
+  async getStory(id: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
     // Story references are persisted as either UUIDs or slugs in legacy
     // topic/story data. Route each value to the correctly typed column.
     const column = isUuid(id) ? 'id' : 'slug';
-    const { data, error } = await db().from('stories').select('*').eq(column, id).maybeSingle();
+    const { data, error } = await client.from('stories').select('*').eq(column, id).maybeSingle();
     if (error) throw error;
     return data ? rowToStory(data) : undefined;
   }
@@ -79,8 +80,9 @@ export class SupabaseStoryRepository implements StoryService {
     if (error) throw error;
   }
   
-  async publishStory(id: string) {
-    const story = await this.getStory(id);
+  async publishStory(id: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const story = await this.getStory(id, { client });
     if (!story) return undefined;
 
     // Phase 4B-2E: Evidence Provenance Publication Guard
@@ -111,7 +113,7 @@ export class SupabaseStoryRepository implements StoryService {
       publishedAt: story.publishedAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    return this.saveStory(updated, { publicationToken: token });
+    return this.saveStory(updated, { publicationToken: token, client });
   }
 
   async count() {

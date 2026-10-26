@@ -38,10 +38,10 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
               </span>
             </div>
             <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
-              Evidence Ledger & Primary Documentation
+              Evidence Ledger & Source Notes
             </h3>
             <p className="text-xs sm:text-sm text-neutral-400">
-              {uniqueSources.length} primary source{uniqueSources.length === 1 ? '' : 's'} · {claims?.length || 0} documented claim{claims?.length === 1 ? '' : 's'} · Click to {isOpen ? 'collapse' : 'inspect verification ledger'}
+              {uniqueSources.length} source{uniqueSources.length === 1 ? '' : 's'} · {claims?.length || 0} documented claim{claims?.length === 1 ? '' : 's'} · Click to {isOpen ? 'collapse' : 'inspect verification ledger'}
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs font-mono font-medium text-neutral-400 group-hover:text-emerald-400 shrink-0 ml-4">
@@ -58,10 +58,10 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
             <div className="space-y-3" id="sources-ledger">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs uppercase font-mono font-bold tracking-widest text-emerald-400">
-                  Primary Documentation & Records ({uniqueSources.length})
+                  Documents & Reporting ({uniqueSources.length})
                 </h4>
                 <span className="text-[11px] font-mono text-neutral-400">
-                  De-duplicated official filings
+                  Source links, deduplicated
                 </span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -98,7 +98,7 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
                           rel="noopener noreferrer"
                           className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus-ring)] rounded text-xs text-emerald-400 hover:text-emerald-300 font-medium inline-flex items-center gap-1.5"
                         >
-                          <span>Open Primary Document</span>
+                          <span>Open source</span>
                           <span aria-hidden="true">↗</span>
                         </a>
                       ) : (
@@ -187,7 +187,7 @@ export function StoryResearchAppendix({ research }: StoryResearchAppendixProps) 
               Methodology & Fact-Checking Standard
             </h5>
             <p className="leading-relaxed">
-              Every factual finding reported by The Breakdown is verified against primary statutory gazettes, parliamentary filings, regulatory disclosures, and peer-reviewed empirical datasets. All claims undergo our 7-Phase Gold Standard review. Where evidence is evolving or conflicting interpretations exist, findings are explicitly demarcated in the Claims Ledger.
+              Sources are labelled by type and linked to the claims they are used to support. Official documents and independent reporting are distinguished rather than treated as interchangeable. Publication remains subject to the documented editorial review; unresolved questions and limitations should be stated in the story. A source list alone is not proof that a claim has been independently verified.
             </p>
           </div>
 

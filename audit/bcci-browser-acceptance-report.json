@@ -1,0 +1,60 @@
+{
+  "desktop": {
+    "status": 200,
+    "screenshot": "C:\\newsjack-content\\thebreakdown-os\\audit\\screenshots\\bcci-ranji-pilot-desktop-1440x900.png",
+    "hero": {
+      "found": true,
+      "src": "http://localhost:3100/images/stories/bcci-ranji-trophy.jpg",
+      "alt": "The Ranji Trophy championship trophy displayed against a red backdrop.",
+      "naturalWidth": 1200,
+      "naturalHeight": 675,
+      "renderedWidth": 766,
+      "renderedHeight": 430,
+      "aspectRatio": "1.781",
+      "captionText": "Credit: ShyamearthShyamearth",
+      "creditText": ""
+    },
+    "feeGraphic": {
+      "found": true,
+      "src": "http://localhost:3100/images/editorial/bcci-domestic-fees.svg",
+      "alt": "Three senior men's domestic daily fee tiers: ₹40,000, ₹50,000 and ₹60,000 across the BCCI's published match-count bands.",
+      "renderedWidth": 768,
+      "renderedHeight": 432,
+      "captionText": "A daily rate card, not an annual salary. BCCI's table was published in September 2021; The New Indian Express reported the same rates in May 2026.The Breakdown · BCCI / The New Indian Express"
+    },
+    "chapters": [
+      "Chapter 1 — A warning, an omission and a careful distinction",
+      "Chapter 2 — What a domestic playing day pays",
+      "Chapter 3 — The Test incentive is a separate instrument",
+      "Chapter 4 — Why a headline comparison can mislead",
+      "Chapter 5 — The missing scorecard: what would prove the policy worked?",
+      "Chapter 6 — A better accountability test"
+    ],
+    "readingTime": "9 min read",
+    "timelineCount": 0,
+    "consoleErrors": [],
+    "pageErrors": []
+  },
+  "mobile": {
+    "status": 200,
+    "screenshot": "C:\\newsjack-content\\thebreakdown-os\\audit\\screenshots\\bcci-ranji-pilot-mobile-390x844.png",
+    "hero": {
+      "found": true,
+      "renderedWidth": 356,
+      "renderedHeight": 199.375,
+      "aspectRatio": "1.786",
+      "fitsViewport": true
+    },
+    "feeGraphic": {
+      "found": true,
+      "renderedWidth": 358,
+      "renderedHeight": 201.375,
+      "fitsViewport": true
+    },
+    "hasHorizontalOverflow": false,
+    "consoleErrors": [],
+    "pageErrors": []
+  },
+  "errors": [],
+  "warnings": []
+}

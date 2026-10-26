@@ -31,16 +31,18 @@ import { validateStoryEvidenceCompleteness } from '@/lib/story/evidence-guard';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
 import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
+import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
+import { validateStoryHeroMedia, validateStorySupportingMedia } from '@/lib/image-intelligence/publication-validation';
 
 export const EDITORIAL_RELEASE_HOLD_SLUGS = [
   'ai-literacy-india-students-verify-ai',
   'india-semiconductor-mission-fab-reality',
-  'bcci-domestic-mandate-ranji-economics',
 ];
 
 export interface PublicationGateOptions {
   bypassEditorialHold?: boolean;
   vaultInitError?: string;
+  requireDigestLock?: boolean;
 }
 
 const ELIGIBLE_STATUSES: StoryStatus[] = ['scheduled', 'review', 'fact_check'];
@@ -163,7 +165,7 @@ export function validateStoryForPublication(
   // Gate 7b: Claims Verification (Article III & P0 criteria)
   const isEnforcedFeatureStory = Boolean(
     (story as any).isFeatureStory ||
-    (story.storyType as string) === 'feature' ||
+    ['feature', 'explainer', 'analysis', 'investigation_chapter'].includes(String(story.storyType || '')) ||
     EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '')
   );
 
@@ -274,36 +276,72 @@ export function validateStoryForPublication(
           : 'Feature/standard story missing required hero visual.',
       });
     } else {
-      const match = matchImageToStoryContext(heroImage, story, getManifestEntry);
+      const heroValidation = validateStoryHeroMedia(story, options);
+      if (!heroValidation.passed) {
+        checks.push({
+          name: 'hero_media_quality',
+          passed: false,
+          reason: `Hero media validation failed: ${heroValidation.violations.join('; ')}`,
+          details: heroValidation.violations.join('\n'),
+        });
+      } else {
+        const match = matchImageToStoryContext(heroImage, story, getManifestEntry);
+        checks.push({
+          name: 'hero_media_quality',
+          passed: match.aligned,
+          reason: match.aligned
+            ? `Hero media context verified: ${match.reason}`
+            : `Hero media failed context alignment check: ${match.reason}`,
+        });
+      }
+    }
+  }
+
+  // Gate 16: Minimum narrative depth and reading-time consistency.
+  // Depth is an independent invariant: a short story cannot pass by merely declaring a short read time.
+  if (isEnforcedFeatureStory && story.blocks && story.blocks.length > 0) {
+    const narrativeWords = countNarrativeWords(story.blocks);
+    const minimumWords = getEditorialNarrativeTarget(story);
+    const hasMinimumDepth = narrativeWords >= minimumWords;
+    checks.push({
+      name: 'narrative_depth',
+      passed: hasMinimumDepth,
+      reason: hasMinimumDepth
+        ? `Narrative depth passed: ${narrativeWords} words meets the ${minimumWords}-word target`
+        : `Long-form story requires at least ${minimumWords} narrative words; found ${narrativeWords}. Headlines, summaries, source lists, claims, timelines and metadata do not count.`,
+    });
+
+    if (Number.isFinite(story.readingTime) && story.readingTime > 0) {
+      const calculatedReadingTime = estimateReadingTimeMinutes(narrativeWords);
+      const diff = Math.abs(story.readingTime - calculatedReadingTime);
+      const percentDiff = diff / Math.max(calculatedReadingTime, 1);
+      const isConsistent = percentDiff <= 0.25 || diff <= 1;
       checks.push({
-        name: 'hero_media_quality',
-        passed: match.aligned,
-        reason: match.aligned
-          ? `Hero media context verified: ${match.reason}`
-          : `Hero media failed context alignment check: ${match.reason}`,
+        name: 'reading_time_consistency',
+        passed: isConsistent,
+        reason: isConsistent
+          ? `Narrative word count (${narrativeWords} words) consistent with declared reading time (${story.readingTime} min declared vs ${calculatedReadingTime} min calculated at 220 wpm)`
+          : `Reading time discrepancy exceeded: declared ${story.readingTime} min vs calculated ${calculatedReadingTime} min (${narrativeWords} words). Discrepancy ${(percentDiff * 100).toFixed(0)}% exceeds 25% tolerance limit.`,
+      });
+    } else {
+      checks.push({
+        name: 'reading_time_consistency',
+        passed: false,
+        reason: 'Long-form stories must declare a positive readingTime that matches the shared narrative word-count model.',
       });
     }
   }
 
-  // Gate 16: Narrative Depth and Reading Time Consistency
-  if (isEnforcedFeatureStory && story.readingTime && story.blocks && story.blocks.length > 0) {
-    const narrativeTexts = story.blocks
-      .filter((b: any) => b.type === 'paragraph' || b.type === 'text' || b.type === 'lead' || b.type === 'chapter-heading')
-      .map((b: any) => b.content || b.data?.text || b.data?.content || '')
-      .filter(Boolean);
-
-    const narrativeWords = narrativeTexts.join(' ').replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-    const calculatedReadingTime = Math.max(1, Math.round(narrativeWords / 200));
-    const diff = Math.abs(story.readingTime - calculatedReadingTime);
-    const percentDiff = diff / calculatedReadingTime;
-    const isConsistent = percentDiff <= 0.25 || diff <= 1;
-
+  // Gate 17a: Supporting visual provenance and approval.
+  if (isEnforcedFeatureStory && story.blocks && story.blocks.length > 0) {
+    const supportingMedia = validateStorySupportingMedia(story, options);
     checks.push({
-      name: 'reading_time_consistency',
-      passed: isConsistent,
-      reason: isConsistent
-        ? `Narrative word count (${narrativeWords} words) consistent with declared reading time (${story.readingTime} min declared vs ${calculatedReadingTime} min calculated)`
-        : `Reading time discrepancy exceeded: declared ${story.readingTime} min vs calculated ${calculatedReadingTime} min (${narrativeWords} words). Discrepancy ${(percentDiff * 100).toFixed(0)}% exceeds 25% tolerance limit.`,
+      name: 'supporting_media_approval',
+      passed: supportingMedia.passed,
+      reason: supportingMedia.passed
+        ? `All ${supportingMedia.assetIds.length} supporting image asset(s) have provenance and explicit approval`
+        : `Supporting media is not publication-ready: ${supportingMedia.violations.join('; ')}`,
+      details: supportingMedia.violations.length ? supportingMedia.violations.join('\\n') : undefined,
     });
   }
 

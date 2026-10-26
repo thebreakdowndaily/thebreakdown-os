@@ -18,6 +18,12 @@ export interface VerifiedImageRecord {
   evidenceSourceUrls?: string[];
   approvalStatus?: 'approved' | 'pending' | 'rejected';
   approvalTimestamp?: string;
+  authorizedStorySlugs?: string[];
+  expectedDigest?: string;
+  approvedDigest?: string;
+  reviewedBy?: string;
+  reviewerRole?: string;
+  sourceDataProvenance?: string;
 }
 
 /**
@@ -240,6 +246,9 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     ],
     approvalStatus: 'approved',
     approvalTimestamp: '2026-09-27T10:00:00.000Z',
+    approvedDigest: 'sha256:1797961054daf84a0f6fdde3192dc936c1e2ad474e8786b579b5edfe5bbc136f',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Photo Editor',
   },
   'indias-foreign-policy': {
     storySlug: 'indias-foreign-policy',
@@ -401,8 +410,14 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     provenance: 'Ministry of Electronics and Information Technology (MeitY) / ISM Archive',
     license: 'PUBLIC_DOMAIN',
     description: 'Semiconductor cleanroom wafer processing and advanced packaging facility.',
+    width: 1200,
+    height: 800,
+    format: 'jpeg',
     approvalStatus: 'approved',
     approvalTimestamp: '2026-09-27T10:00:00.000Z',
+    approvedDigest: 'sha256:3e44978e35a749bdc920961e3a07d27c747136f197f1b29d07018b33cce663a7',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Photo Editor',
   },
   'bcci-domestic-mandate-ranji-economics': {
     storySlug: 'bcci-domestic-mandate-ranji-economics',
@@ -410,13 +425,13 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     assetType: 'authentic-photo',
     provenance: 'Wikimedia Commons / Contributor: Shyamearth',
     license: 'PUBLIC_DOMAIN',
-    rightsBasis: 'Public domain dedication by author Shyamearth on Wikimedia Commons (File:Ranji_trophy.jpg), October 27, 2013. No copyright reserved.',
-    description: 'The historic Ranji Trophy, India premier domestic first-class red-ball cricket championship.',
+    rightsBasis: 'The author released the original work into the public domain on Wikimedia Commons (File:Ranji_trophy.jpg). The local site asset is resized for a 16:9 presentation; the original Commons file is 576 × 288 pixels.',
+    description: 'The Ranji Trophy championship trophy, illustrating the domestic first-class competition at the centre of this story.',
     assetId: 'tb-bcci-ranji-trophy-photo-v1',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ranji_trophy.jpg',
     creator: 'Shyamearth',
-    altText: 'The Ranji Trophy, India premier domestic first-class cricket championship trophy, displayed on an ornamental pedestal.',
-    caption: 'The Ranji Trophy, India premier first-class domestic cricket championship trophy.',
+    altText: 'The Ranji Trophy championship trophy displayed against a red backdrop.',
+    caption: 'The Ranji Trophy, the prize at the centre of India’s domestic first-class cricket championship. Photograph by Shyamearth; released into the public domain on Wikimedia Commons.',
     relevanceRationale: 'Authentic photograph of the Ranji Trophy, directly illustrating the red-ball domestic first-class cricket championship at the core of the BCCI mandate and player economics investigation.',
     width: 1200,
     height: 675,
@@ -425,37 +440,78 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
       'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
       'https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
     ],
+    expectedDigest: 'sha256:0e40c006907a6dd1c3457cf219ed472d04e2d68137f87fe29070f9b42e6c1d70',
+    authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
     approvalStatus: 'approved',
     approvalTimestamp: '2026-10-24T18:00:00.000Z',
   },
   'bcci-domestic-fees': {
-    storySlug: 'bcci-domestic-fees',
+    storySlug: 'bcci-domestic-mandate-ranji-economics',
+    authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
+    expectedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
+    approvedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
     approvedImage: '/images/editorial/bcci-domestic-fees.svg',
     assetType: 'original-editorial-graphic',
     provenance: 'The Breakdown Editorial Graphics',
     license: 'OWNED_WORK',
-    description: "Senior men's Ranji Trophy playing fee by first-class match experience",
+    description: "BCCI senior men's domestic daily fee tiers by match-count band; the original 2021 rate table is still quoted in 2026 reporting",
     assetId: 'tb-bcci-domestic-mandate-ranji-economics-graphic-v1',
     sourceUrl: '/images/editorial/bcci-domestic-fees.svg',
     creator: 'The Breakdown Editorial Graphics',
     rightsBasis: 'Original vector graphic created for The Breakdown; no third-party photograph incorporated.',
-    altText: 'A fee schedule comparison for playing XI members by first-class match experience, excluding reserves and distinguishing daily fee from total income.',
-    caption: "BCCI-announced senior men's domestic first-class playing fees per day, 2021 revision.",
+    altText: 'Three senior men’s domestic daily fee tiers: ₹40,000, ₹50,000 and ₹60,000 across BCCI-published match-count bands; reserve fees are separate.',
+    caption: "BCCI's 20 September 2021 senior men's domestic daily fee table. It is a rate card, not annual salary; The New Indian Express reported the same tiers in May 2026.",
     relevanceRationale: 'BCCI Update—9th Apex Council Meeting, 20 September 2021; dated schedule separating daily fees by appearance tiers.',
     width: 1200,
     height: 630,
     format: 'svg',
     evidenceSourceUrls: [
       'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
-      'https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
+      'https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s',
     ],
+    sourceDataProvenance: "BCCI Update—9th Apex Council Meeting (20 September 2021); senior men's domestic daily fee table.",
     approvalStatus: 'approved',
-    approvalTimestamp: '2026-10-24T18:00:00.000Z',
+    approvalTimestamp: '2026-10-26T18:55:00.000Z',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Senior Visual Editor',
   },
 };
 
 export function getManifestEntry(storySlug: string): VerifiedImageRecord | null {
   return VERIFIED_STORY_IMAGE_MANIFEST[storySlug] || null;
+}
+
+/**
+ * Checks whether an asset explicitly authorizes usage by a given story slug.
+ * Supports legitimate shared assets only via explicit, auditable authorization.
+ */
+export function isAssetAuthorizedForStory(record: VerifiedImageRecord, storySlug: string): boolean {
+  if (record.storySlug === storySlug) return true;
+  if (Array.isArray(record.authorizedStorySlugs) && record.authorizedStorySlugs.includes(storySlug)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Resolves an approved image URL against the manifest and checks whether
+ * the requesting story is authorized to use it.
+ */
+export function findRegisteredAssetForStory(
+  src: string,
+  storySlug: string
+): { record: VerifiedImageRecord | null; isAuthorized: boolean } {
+  const record =
+    Object.values(VERIFIED_STORY_IMAGE_MANIFEST).find(
+      (candidate) => candidate.approvedImage === src
+    ) || null;
+
+  if (!record) {
+    return { record: null, isAuthorized: false };
+  }
+
+  const isAuthorized = isAssetAuthorizedForStory(record, storySlug);
+  return { record, isAuthorized };
 }
 
 export const IMAGE_INTELLIGENCE_MANIFEST = VERIFIED_STORY_IMAGE_MANIFEST;
