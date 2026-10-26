@@ -51,10 +51,20 @@ describe('scheduled publish canonical dispatch contract', () => {
       APP_URL: 'https://thebreakdown.in/untrusted-path',
       CRON_SECRET,
     }, NOW);
+    const foreignHost = await publishDueStories({
+      APP_URL: 'https://attacker.example',
+      CRON_SECRET,
+    }, NOW);
+    const customPort = await publishDueStories({
+      APP_URL: 'https://thebreakdown.in:8443',
+      CRON_SECRET,
+    }, NOW);
 
     expect(fetchMock).not.toHaveBeenCalled();
     expect(insecure[0].failedChecks).toEqual(['canonical_app_url']);
     expect(pathInjected[0].failedChecks).toEqual(['canonical_app_url']);
+    expect(foreignHost[0].failedChecks).toEqual(['canonical_app_url']);
+    expect(customPort[0].failedChecks).toEqual(['canonical_app_url']);
   });
 
   it('calls only the fixed canonical publish endpoint over HTTPS', async () => {
@@ -68,6 +78,7 @@ describe('scheduled publish canonical dispatch contract', () => {
       'https://thebreakdown.in/api/editorial/publish-due',
       expect.objectContaining({
         method: 'GET',
+        redirect: 'error',
         headers: { Authorization: 'Bearer ' + CRON_SECRET },
       }),
     );
