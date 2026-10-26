@@ -13,6 +13,7 @@ export default function robots(): MetadataRoute.Robots {
           '/editorial-constitution',
           '/series',
           '/story',
+          '/stories',
           '/fix',
           '/data',
           '/datasets',
@@ -27,6 +28,10 @@ export default function robots(): MetadataRoute.Robots {
           '/investigations',
           '/compare',
           '/trackers',
+          '/newsletter',
+          '/subscribe',
+          '/timeline',
+          '/transparency/corrections',
         ],
         disallow: [
           // Internal tools — must never be indexed
@@ -53,9 +58,8 @@ export default function robots(): MetadataRoute.Robots {
           '/tracking',
           // Sub-products / experimental routes not ready for public
           '/up403',
-          // Empty pages
+          // Non-existent or legacy plural paths
           '/timelines',
-          '/subscribe',
         ],
       },
     ],
