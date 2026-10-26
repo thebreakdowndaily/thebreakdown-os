@@ -27,6 +27,9 @@ jobs:
       - name: Story Image Integrity & Context Gate
         run: npm run check:images
 
+      - name: Image Quality Gate Unit Tests
+        run: npm run test:image-quality
+
       - name: TypeScript Verification
         run: npm run check:type
 

@@ -3,6 +3,8 @@ export interface VerifiedImageRecord {
   approvedImage: string;
   assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder';
   provenance: string;
+  /** HTTPS URL to the original asset or authoritative licensing/source page. Required for clean image-quality approval. */
+  sourceUrl?: string;
   license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR';
   description: string;
 }
