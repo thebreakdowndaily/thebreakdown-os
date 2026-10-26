@@ -27,6 +27,9 @@ jobs:
       - name: Story Image Integrity & Context Gate
         run: npm run check:images
 
+      - name: Live Hero Publication Approval Tests
+        run: npm run test:image-publication
+
       - name: TypeScript Verification
         run: npm run check:type
 
