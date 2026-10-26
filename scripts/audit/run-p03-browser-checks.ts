@@ -48,6 +48,36 @@ const routes = [
     description: 'Public path for held BCCI story (must fail-closed with 404 until released)'
   },
   {
+    path: '/evidence/src-bcci-retainership-2024',
+    expectedStatus: 200,
+    expectedHeroSubstr: '',
+    description: 'Primary Evidence Dossier: Retainership 2024'
+  },
+  {
+    path: '/evidence/src-bcci-test-incentive',
+    expectedStatus: 200,
+    expectedHeroSubstr: '',
+    description: 'Primary Evidence Dossier: Test Incentive Scheme'
+  },
+  {
+    path: '/evidence/src-bcci-domestic-remuneration',
+    expectedStatus: 200,
+    expectedHeroSubstr: '',
+    description: 'Primary Evidence Dossier: Domestic Fee Schedule'
+  },
+  {
+    path: '/evidence/src-bcci-tournament-regulations',
+    expectedStatus: 200,
+    expectedHeroSubstr: '',
+    description: 'Primary Evidence Dossier: Tournament Regulations'
+  },
+  {
+    path: '/evidence/src-bcci-ipl-auction-rules',
+    expectedStatus: 200,
+    expectedHeroSubstr: '',
+    description: 'Primary Evidence Dossier: IPL Auction Regulations'
+  },
+  {
     path: '/',
     expectedStatus: 200,
     expectedHeroSubstr: '',
