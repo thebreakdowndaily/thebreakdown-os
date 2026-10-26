@@ -1,133 +1,139 @@
 /**
- * Editorial Schedule - Cloudflare Worker variant
+ * Editorial Schedule - Cloudflare Worker variant.
  *
- * In accordance with Phase 4B-2G/2H Unified Publication Authority,
- * Cloudflare Worker cron dispatches exclusively to the central Next.js canonical publication API
- * which runs the authoritative Node.js EvidenceVaultService, cryptographic integrity verification,
- * and fenced atomic publication controls.
- *
- * Direct database RPC fallback (fn_publish_story_with_audit) and synchronous gate bypasses
- * are strictly removed: if canonical dispatch is unauthenticated, unavailable, or fails,
- * all stories remain unpublished and an auditable failure is emitted.
+ * The Worker dispatches only to the canonical Next.js publication API.
+ * It never writes stories directly or falls back to privileged database RPCs.
  */
 
-import type { PublicationGateResult } from '@/types/editorial-calendar';
-
 export interface CfEnv {
-  SUPABASE_URL?: string;
-  SUPABASE_SERVICE_ROLE_KEY?: string;
   APP_URL?: string;
   CRON_SECRET?: string;
 }
 
+/** Compact contract returned by GET /api/editorial/publish-due. */
+export interface PublishDispatchSummary {
+  storyId: string;
+  passed: boolean;
+  checksCount: number;
+  failedChecks: string[];
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isPublishDispatchSummary(value: unknown): value is PublishDispatchSummary {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.storyId === 'string' &&
+    typeof value.passed === 'boolean' &&
+    typeof value.checksCount === 'number' &&
+    Number.isInteger(value.checksCount) &&
+    value.checksCount >= 0 &&
+    Array.isArray(value.failedChecks) &&
+    value.failedChecks.every((check) => typeof check === 'string')
+  );
+}
+
+/** Accept an HTTPS origin only; never forward CRON_SECRET to an arbitrary URL or path. */
+function canonicalPublishEndpoint(appUrl: string): string | null {
+  let parsed: URL;
+  try {
+    parsed = new URL(appUrl);
+  } catch {
+    return null;
+  }
+
+  if (
+    parsed.protocol !== 'https:' ||
+    parsed.username !== '' ||
+    parsed.password !== '' ||
+    parsed.search !== '' ||
+    parsed.hash !== '' ||
+    (parsed.pathname !== '' && parsed.pathname !== '/')
+  ) {
+    return null;
+  }
+
+  return new URL('/api/editorial/publish-due', parsed.origin).toString();
+}
+
+function failedDispatch(check: string, reason: string): PublishDispatchSummary[] {
+  console.error('[Cloudflare Scheduler] Audit Failure: ' + check + ': ' + reason);
+  return [{
+    storyId: 'unknown',
+    passed: false,
+    checksCount: 1,
+    failedChecks: [check],
+  }];
+}
+
 /**
- * Publish due stories - Cloudflare Worker entry point.
- *
- * Dispatches to the canonical Next.js publication API.
- * Fails closed on missing CRON_SECRET, network errors, timeouts, or non-200 responses.
+ * Dispatch due stories through the canonical publication API.
+ * Missing configuration, bad response contracts, network errors and timeouts fail closed.
  */
 export async function publishDueStories(
   env: CfEnv,
-  now: Date = new Date(),
-): Promise<PublicationGateResult[]> {
-  const appUrl = env.APP_URL || '';
-  const cronSecret = env.CRON_SECRET;
-
-  if (!cronSecret) {
-    const reason = 'CRON_SECRET missing: canonical dispatch cannot be authenticated; publication halted';
-    console.error(`[Cloudflare Scheduler] Audit Failure: ${reason}`);
-    return [
-      {
-        storyId: 'unknown',
-        scheduleId: 'none',
-        passed: false,
-        checks: [
-          {
-            name: 'canonical_cron_secret',
-            passed: false,
-            reason,
-          },
-        ],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      },
-    ];
+  _now: Date = new Date(),
+): Promise<PublishDispatchSummary[]> {
+  const cronSecret = env.CRON_SECRET || '';
+  if (!cronSecret.trim()) {
+    return failedDispatch(
+      'canonical_cron_secret',
+      'CRON_SECRET missing: canonical dispatch cannot be authenticated; publication halted',
+    );
   }
 
-  if (!appUrl) {
-    const reason = 'APP_URL missing: canonical publication endpoint cannot be resolved; publication halted';
-    console.error(`[Cloudflare Scheduler] Audit Failure: ${reason}`);
-    return [
-      {
-        storyId: 'unknown',
-        scheduleId: 'none',
-        passed: false,
-        checks: [
-          {
-            name: 'canonical_app_url',
-            passed: false,
-            reason,
-          },
-        ],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      },
-    ];
+  const endpoint = canonicalPublishEndpoint(env.APP_URL || '');
+  if (!endpoint) {
+    return failedDispatch(
+      'canonical_app_url',
+      'APP_URL must be an HTTPS origin with no credentials, path, query, or fragment; publication halted',
+    );
   }
 
   try {
-    const resp = await fetch(`${appUrl}/api/editorial/publish-due`, {
+    const response = await fetch(endpoint, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${cronSecret}`,
-      },
+      headers: { Authorization: 'Bearer ' + cronSecret },
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!resp.ok) {
-      const reason = `Canonical cron dispatch returned HTTP ${resp.status}`;
-      console.error(`[Cloudflare Scheduler] Audit Failure: ${reason}`);
-      return [
-        {
-          storyId: 'unknown',
-          scheduleId: 'none',
-          passed: false,
-          checks: [
-            {
-              name: 'canonical_dispatch_response',
-              passed: false,
-              reason,
-            },
-          ],
-          checkedAt: now.toISOString(),
-          triggeredBy: 'cron',
-        },
-      ];
+    if (!response.ok) {
+      return failedDispatch(
+        'canonical_dispatch_response',
+        'Canonical cron dispatch returned HTTP ' + response.status,
+      );
     }
 
-    const body = (await resp.json()) as any;
-    return body.results || [];
-  } catch (err: any) {
-    const isTimeout = err?.name === 'TimeoutError' || err?.name === 'AbortError';
-    const reason = isTimeout
+    let body: unknown;
+    try {
+      body = await response.json();
+    } catch {
+      return failedDispatch(
+        'canonical_dispatch_invalid_json',
+        'Canonical cron dispatch returned a non-JSON response',
+      );
+    }
+
+    if (
+      !isRecord(body) ||
+      body.ok !== true ||
+      !Array.isArray(body.results) ||
+      !body.results.every(isPublishDispatchSummary)
+    ) {
+      return failedDispatch(
+        'canonical_dispatch_response_shape',
+        'Expected { ok: true, results: [{ storyId, passed, checksCount, failedChecks }] }; publication summary rejected',
+      );
+    }
+
+    return body.results;
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    const reason = err.name === 'TimeoutError' || err.name === 'AbortError'
       ? 'Canonical cron dispatch timed out (10s)'
-      : `Canonical cron dispatch failed: ${err instanceof Error ? err.message : String(err)}`;
-    console.error(`[Cloudflare Scheduler] Audit Failure: ${reason}`);
-    return [
-      {
-        storyId: 'unknown',
-        scheduleId: 'none',
-        passed: false,
-        checks: [
-          {
-            name: 'canonical_dispatch_reachability',
-            passed: false,
-            reason,
-          },
-        ],
-        checkedAt: now.toISOString(),
-        triggeredBy: 'cron',
-      },
-    ];
+      : 'Canonical cron dispatch failed: ' + err.message;
+    return failedDispatch('canonical_dispatch_reachability', reason);
   }
 }
