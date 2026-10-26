@@ -146,6 +146,24 @@ describe('scheduled publish canonical dispatch contract', () => {
     expect(result).toEqual([]);
   });
 
+  it('keeps preflight enabled for uppercase or malformed DRY_RUN values', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(response({
+      ok: true,
+      mode: 'preflight',
+      dryRun: true,
+      results: [],
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await publishDueStories({ APP_URL, CRON_SECRET, DRY_RUN: 'FALSE' }, NOW);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://thebreakdown.in/api/editorial/publish-due/preflight',
+      expect.objectContaining({ redirect: 'error' }),
+    );
+    expect(result).toEqual([]);
+  });
+
   it('uses the live publishing endpoint only when DRY_RUN is explicitly false', async () => {
     const fetchMock = vi.fn().mockResolvedValue(response({
       ok: true,

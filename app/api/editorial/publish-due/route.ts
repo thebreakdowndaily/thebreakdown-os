@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
       totalChecked: results.length,
       gatePassed,
-      blocked: blocked.length,
+      blocked,
       results: results.map(r => ({
         storyId: r.storyId,
         passed: r.passed,

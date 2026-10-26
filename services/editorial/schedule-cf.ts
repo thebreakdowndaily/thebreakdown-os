@@ -84,7 +84,7 @@ export async function publishDueStories(
   _now: Date = new Date(),
 ): Promise<PublishDispatchSummary[]> {
   // Safe by default: only explicit DRY_RUN="false" enables live publication.
-  const dryRun = (env.DRY_RUN || 'true').trim().toLowerCase() !== 'false';
+  const dryRun = (env.DRY_RUN || 'true').trim() !== 'false';
   const cronSecret = env.CRON_SECRET || '';
   if (!cronSecret.trim()) {
     return failedDispatch(

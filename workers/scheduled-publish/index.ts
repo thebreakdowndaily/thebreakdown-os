@@ -29,7 +29,7 @@ export default {
     _ctx: ExecutionContext,
   ): Promise<void> {
     const startTime = Date.now();
-    const dryRun = (env.DRY_RUN || 'true').trim().toLowerCase() !== 'false';
+    const dryRun = (env.DRY_RUN || 'true').trim() !== 'false';
 
     console.log(JSON.stringify({
       event: 'editorial.publish_due.start',
