@@ -26,6 +26,7 @@ import {
 } from '@/services/editorial/corrections-service';
 import {
   createDefaultGoldStandardAudit,
+  createValidGoldStandardAudit,
   evaluateGoldStandardPass,
   type GoldStandardAuditRecord,
 } from '@/lib/editorial/gold-standard-review';
@@ -248,6 +249,8 @@ describe('VS7 — Gold Standard Review & Quality Gate Enforcement', () => {
       status: 'scheduled',
       publicationStatus: 'scheduled',
     } as unknown as Story;
+    validStory.goldStandardAudit = createValidGoldStandardAudit(validStory);
+    validStory.contentFingerprint = validStory.goldStandardAudit.contentFingerprint;
 
     const result = validateStoryForPublication(
       { storyId: 'story-valid-pub', scheduleId: 'sched-01', triggeredBy: 'test' },

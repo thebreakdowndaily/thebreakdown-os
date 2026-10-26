@@ -1,10 +1,29 @@
 export interface VerifiedImageRecord {
   storySlug: string;
   approvedImage: string;
-  assetType: 'authentic-photo' | 'authentic-map' | 'branded-placeholder';
+  assetType: 'authentic-photo' | 'authentic-map' | 'official-document' | 'original-editorial-graphic' | 'illustrative-image' | 'branded-placeholder';
   provenance: string;
-  license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR';
+  license: 'PUBLIC_DOMAIN' | 'EDITORIAL' | 'CREATIVE_COMMONS' | 'BRANDED_VECTOR' | 'OWNED_WORK';
   description: string;
+  assetId?: string;
+  sourceUrl?: string;
+  creator?: string;
+  rightsBasis?: string;
+  altText?: string;
+  caption?: string;
+  relevanceRationale?: string;
+  width?: number;
+  height?: number;
+  format?: 'jpeg' | 'png' | 'webp' | 'svg' | 'pdf' | 'unknown';
+  evidenceSourceUrls?: string[];
+  approvalStatus?: 'approved' | 'pending' | 'rejected';
+  approvalTimestamp?: string;
+  authorizedStorySlugs?: string[];
+  expectedDigest?: string;
+  approvedDigest?: string;
+  reviewedBy?: string;
+  reviewerRole?: string;
+  sourceDataProvenance?: string;
 }
 
 /**
@@ -211,6 +230,25 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     provenance: 'The Breakdown Editorial Graphics',
     license: 'EDITORIAL',
     description: 'The Machinery of Public Accountability in India: Constitutional oversight, parliamentary audit trails, and institutional responsibility.',
+    assetId: 'tb-accountability-in-india-hero-v1',
+    sourceUrl: '/images/stories/accountability-in-india.jpg',
+    creator: 'The Breakdown Editorial Graphics',
+    rightsBasis: 'Commissioned bespoke visual package for The Breakdown flagship investigation; all rights owned and verified.',
+    altText: 'The Machinery of Public Accountability in India: Constitutional oversight, parliamentary audit trails, and institutional responsibility.',
+    caption: 'The Machinery of Public Accountability in India: Constitutional oversight and audit trails.',
+    relevanceRationale: 'Bespoke editorial photography and composite visual created specifically for the flagship investigation on constitutional oversight, Comptroller and Auditor General audits, and public accountability.',
+    width: 1920,
+    height: 1080,
+    format: 'jpeg',
+    evidenceSourceUrls: [
+      'https://cag.gov.in',
+      'https://thebreakdown.in/evidence/cag-audit-mp-mgnrega'
+    ],
+    approvalStatus: 'approved',
+    approvalTimestamp: '2026-09-27T10:00:00.000Z',
+    approvedDigest: 'sha256:1797961054daf84a0f6fdde3192dc936c1e2ad474e8786b579b5edfe5bbc136f',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Photo Editor',
   },
   'indias-foreign-policy': {
     storySlug: 'indias-foreign-policy',
@@ -356,8 +394,124 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     license: 'EDITORIAL',
     description: 'Policy reform blueprint for river basin governance and urban sanitation.',
   },
+  'ai-literacy-india-students-verify-ai': {
+    storySlug: 'ai-literacy-india-students-verify-ai',
+    approvedImage: '/images/stories/ai-literacy-india-students.jpg',
+    assetType: 'authentic-photo',
+    provenance: 'Ministry of Education / Digital India Classroom Archive',
+    license: 'EDITORIAL',
+    description: 'Indian school students engaging with digital tablets and educational technology in a classroom environment.',
+    approvalStatus: 'pending',
+  },
+  'india-semiconductor-mission-fab-reality': {
+    storySlug: 'india-semiconductor-mission-fab-reality',
+    approvedImage: '/images/stories/semiconductor-pli.jpg',
+    assetType: 'authentic-photo',
+    provenance: 'Ministry of Electronics and Information Technology (MeitY) / ISM Archive',
+    license: 'PUBLIC_DOMAIN',
+    description: 'Semiconductor cleanroom wafer processing and advanced packaging facility.',
+    width: 1200,
+    height: 800,
+    format: 'jpeg',
+    approvalStatus: 'approved',
+    approvalTimestamp: '2026-09-27T10:00:00.000Z',
+    approvedDigest: 'sha256:3e44978e35a749bdc920961e3a07d27c747136f197f1b29d07018b33cce663a7',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Photo Editor',
+  },
+  'bcci-domestic-mandate-ranji-economics': {
+    storySlug: 'bcci-domestic-mandate-ranji-economics',
+    approvedImage: '/images/stories/bcci-ranji-trophy.jpg',
+    assetType: 'authentic-photo',
+    provenance: 'Wikimedia Commons / Contributor: Shyamearth',
+    license: 'PUBLIC_DOMAIN',
+    rightsBasis: 'The author released the original work into the public domain on Wikimedia Commons (File:Ranji_trophy.jpg). The local site asset is resized for a 16:9 presentation; the original Commons file is 576 × 288 pixels.',
+    description: 'The Ranji Trophy championship trophy, illustrating the domestic first-class competition at the centre of this story.',
+    assetId: 'tb-bcci-ranji-trophy-photo-v1',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ranji_trophy.jpg',
+    creator: 'Shyamearth',
+    altText: 'The Ranji Trophy championship trophy displayed against a red backdrop.',
+    caption: 'The Ranji Trophy, the prize at the centre of India’s domestic first-class cricket championship. Photograph by Shyamearth; released into the public domain on Wikimedia Commons.',
+    relevanceRationale: 'Authentic photograph of the Ranji Trophy, directly illustrating the red-ball domestic first-class cricket championship at the core of the BCCI mandate and player economics investigation.',
+    width: 1200,
+    height: 675,
+    format: 'jpeg',
+    evidenceSourceUrls: [
+      'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
+      'https://www.bcci.tv/news/article/bcci-announces-test-cricket-incentive-scheme-for-senior-men',
+    ],
+    expectedDigest: 'sha256:0e40c006907a6dd1c3457cf219ed472d04e2d68137f87fe29070f9b42e6c1d70',
+    authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
+    approvalStatus: 'approved',
+    approvalTimestamp: '2026-10-24T18:00:00.000Z',
+  },
+  'bcci-domestic-fees': {
+    storySlug: 'bcci-domestic-mandate-ranji-economics',
+    authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
+    expectedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
+    approvedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
+    approvedImage: '/images/editorial/bcci-domestic-fees.svg',
+    assetType: 'original-editorial-graphic',
+    provenance: 'The Breakdown Editorial Graphics',
+    license: 'OWNED_WORK',
+    description: "BCCI senior men's domestic daily fee tiers by match-count band; the original 2021 rate table is still quoted in 2026 reporting",
+    assetId: 'tb-bcci-domestic-mandate-ranji-economics-graphic-v1',
+    sourceUrl: '/images/editorial/bcci-domestic-fees.svg',
+    creator: 'The Breakdown Editorial Graphics',
+    rightsBasis: 'Original vector graphic created for The Breakdown; no third-party photograph incorporated.',
+    altText: 'Three senior men’s domestic daily fee tiers: ₹40,000, ₹50,000 and ₹60,000 across BCCI-published match-count bands; reserve fees are separate.',
+    caption: "BCCI's 20 September 2021 senior men's domestic daily fee table. It is a rate card, not annual salary; The New Indian Express reported the same tiers in May 2026.",
+    relevanceRationale: 'BCCI Update—9th Apex Council Meeting, 20 September 2021; dated schedule separating daily fees by appearance tiers.',
+    width: 1200,
+    height: 630,
+    format: 'svg',
+    evidenceSourceUrls: [
+      'https://www.bcci.tv/news/article/update-9th-apex-council-meeting',
+      'https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s',
+    ],
+    sourceDataProvenance: "BCCI Update—9th Apex Council Meeting (20 September 2021); senior men's domestic daily fee table.",
+    approvalStatus: 'approved',
+    approvalTimestamp: '2026-10-26T18:55:00.000Z',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Senior Visual Editor',
+  },
 };
 
 export function getManifestEntry(storySlug: string): VerifiedImageRecord | null {
   return VERIFIED_STORY_IMAGE_MANIFEST[storySlug] || null;
 }
+
+/**
+ * Checks whether an asset explicitly authorizes usage by a given story slug.
+ * Supports legitimate shared assets only via explicit, auditable authorization.
+ */
+export function isAssetAuthorizedForStory(record: VerifiedImageRecord, storySlug: string): boolean {
+  if (record.storySlug === storySlug) return true;
+  if (Array.isArray(record.authorizedStorySlugs) && record.authorizedStorySlugs.includes(storySlug)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Resolves an approved image URL against the manifest and checks whether
+ * the requesting story is authorized to use it.
+ */
+export function findRegisteredAssetForStory(
+  src: string,
+  storySlug: string
+): { record: VerifiedImageRecord | null; isAuthorized: boolean } {
+  const record =
+    Object.values(VERIFIED_STORY_IMAGE_MANIFEST).find(
+      (candidate) => candidate.approvedImage === src
+    ) || null;
+
+  if (!record) {
+    return { record: null, isAuthorized: false };
+  }
+
+  const isAuthorized = isAssetAuthorizedForStory(record, storySlug);
+  return { record, isAuthorized };
+}
+
+export const IMAGE_INTELLIGENCE_MANIFEST = VERIFIED_STORY_IMAGE_MANIFEST;

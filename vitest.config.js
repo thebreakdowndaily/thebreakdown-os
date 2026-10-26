@@ -191,6 +191,10 @@ module.exports = {
       'tests/reconcile-cloudflare-safety.test.ts',
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
+      'tests/editorial/gold-standard-review-integrity.test.ts',
+      'tests/editorial-remediation-quality.test.ts',
+      'tests/story/minimum-narrative-gate.test.ts',
+      'tests/image-intelligence/image-contract-regression.test.ts',
     ],
 
     exclude: ['node_modules/**', 'tests/e2e/**'],

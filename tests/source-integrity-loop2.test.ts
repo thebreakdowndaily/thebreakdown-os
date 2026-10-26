@@ -20,7 +20,7 @@ import { validateSourceIntegrity } from '@/lib/knowledge/source-validator';
 import type { CanonicalClaim, CanonicalSource, Story } from '@/types/canonical';
 import type { Principal } from '@/features/auth/principal';
 import { evaluatePublicationContract } from '@/lib/editorial/canonical-publication';
-import { createDefaultGoldStandardAudit } from '@/lib/editorial/gold-standard-review';
+import { createDefaultGoldStandardAudit, createValidGoldStandardAudit } from '@/lib/editorial/gold-standard-review';
 import { NextRequest } from 'next/server';
 import { POST as postV2Source } from '@/app/api/v2/sources/route';
 
@@ -151,16 +151,7 @@ function createMockPrincipal(role: Principal['role'], id = 'usr-editor-1'): Prin
 }
 
 function createCanaryStory(status: Story['status'] = 'scheduled'): Story {
-  const audit = createDefaultGoldStandardAudit('story-canary-1');
-  audit.phases.phase1ExpertReview.passed = true;
-  audit.phases.phase2ReaderReview.passed = true;
-  audit.phases.phase3EvidenceAudit.passed = true;
-  audit.phases.phase4BiasAudit.passed = true;
-  audit.phases.phase5VisualAudit.passed = true;
-  audit.phases.phase6KnowledgeDensityAudit.passed = true;
-  audit.phases.phase7DefensibilityAudit.passed = true;
-
-  return {
+  const story: Story = {
     id: 'story-canary-1',
     title: 'Canary Story on Source Provenance',
     slug: 'canary-source-provenance',
@@ -186,8 +177,11 @@ function createCanaryStory(status: Story['status'] = 'scheduled'): Story {
     relatedStoryIds: [],
     relatedEntityIds: [],
     relatedTopicIds: [],
-    goldStandardAudit: audit as any,
   } as Story;
+
+  story.goldStandardAudit = createValidGoldStandardAudit(story);
+  story.contentFingerprint = story.goldStandardAudit.contentFingerprint;
+  return story;
 }
 
 describe('LOOP 2 — PUBLICATION & LIVE SECURITY CANARIES (SCENARIOS A - F)', () => {

@@ -272,7 +272,7 @@ async function validateAndPublishEntry(
 
   if (decision.allowed && decision.publicationToken) {
     // ── PUBLISH via Story Repository with validated Publication Token
-    const repo = RepositoryFactory.getStoryRepository();
+    const repo = RepositoryFactory.getStoryRepository([], { client: db });
     const publishedAt = now.toISOString();
 
     try {
@@ -446,6 +446,8 @@ function rowToStory(row: Record<string, unknown>) {
     relatedEntityIds: (row.related_entity_ids as string[]) || [],
     relatedTopicIds: (row.related_topic_ids as string[]) || [],
     blockReason: (row.block_reason as string) || undefined,
+    goldStandardAudit: (row.gold_standard_audit as any) || undefined,
+    contentFingerprint: (row.content_fingerprint as string) || undefined,
   } as import('@/types/canonical').Story;
 }
 

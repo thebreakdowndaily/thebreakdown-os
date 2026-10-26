@@ -178,7 +178,7 @@ const Footer: React.FC = () => (
             <FooterHeading>Legal & Contact</FooterHeading>
             <ul className="space-y-2 list-none p-0 m-0 mb-8">
               {legalLinks.map((link) => (
-                <FooterLink key={link.href} href={link.href}>{link.label}</FooterLink>
+                <FooterLink key={link.label} href={link.href}>{link.label}</FooterLink>
               ))}
             </ul>
           </nav>

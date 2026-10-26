@@ -21,9 +21,6 @@ interface StoryEntityRef {
   title?: string;
 }
 
-import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
-
 export const dynamicParams = true;
 export const revalidate = 60;
 
@@ -54,20 +51,7 @@ export default async function StoryPage({
 
   // Fail-closed publication safety check: unauthenticated visitors cannot view unpublished stories or receive canonical chapter redirects
   if (!isCanonicalStoryPublic(canonicalStory)) {
-    let isAuthenticated = false;
-    try {
-      const cookieStore = await cookies();
-      const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key',
-        { cookies: { getAll: () => cookieStore.getAll() } }
-      );
-      const { data: { user }, error } = await supabase.auth.getUser();
-      isAuthenticated = Boolean(!error && user);
-    } catch {
-      // Ignore
-    }
-    if (!isAuthenticated) notFound();
+    notFound();
   }
 
   // TASK-08 EXP-05: internal-link strip — only emit links to topics/entities

@@ -22,6 +22,7 @@ const PUBLIC_API_PATHS = [
   '/api/v1/auth/register',
   '/api/corrections/submit',
   '/api/health',
+  '/api/newsletter',
 ];
 
 const AUTHENTICATED_PAGES = [

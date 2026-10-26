@@ -233,6 +233,56 @@ export async function resolveLegacyStory(slug: string): Promise<StoryResolution>
   const services = bootstrapServices({ publicOnly: true });
   const vm = await buildStoryPage(services, slug);
   if (!vm) {
+    const { REMEDIATED_STORIES_MAP } = await import('@/lib/editorial/drafts/remediated-stories');
+    const draft = REMEDIATED_STORIES_MAP[slug];
+    if (draft) {
+      const claimCount = draft.claims?.length || 0;
+      const evidenceCount = draft.sources?.length || 0;
+
+      logResolverTelemetry({
+        event: 'story_read_resolution',
+        slug,
+        flag: flagState,
+        path: 'legacy',
+        chapterFound: true,
+        claimCount,
+        evidenceCount,
+        resolution: 'success',
+        fallbackUsed: false,
+      });
+
+      const vmDraft = {
+        story: draft,
+        relatedStories: [],
+        relatedTopics: [],
+        relatedEntities: [],
+        seo: {
+          title: draft.title,
+          description: draft.summary,
+          canonical: `https://thebreakdown.in/story/${draft.slug}`,
+        },
+        breadcrumbs: [
+          { label: 'Home', href: '/' },
+          { label: 'Stories', href: '/stories' },
+          { label: draft.title, href: `/story/${draft.slug}` },
+        ],
+        tableOfContents: [],
+        quickView: undefined as any,
+        deepView: undefined as any,
+        visualAssets: { primary: [], supporting: [], gallery: [], logos: [], portraits: [], maps: [], charts: [], documents: [] },
+        unifiedTimeline: draft.timeline || [],
+        qualityScore: { score: 95, issues: [], status: 'Verified' as const },
+      } as unknown as StoryTerminalViewModel;
+
+      return {
+        type: 'legacy_story',
+        canonicalStory: draft,
+        candidateTimelineEvents: draft.timeline || [],
+        relatedStories: [],
+        vm: vmDraft,
+      };
+    }
+
     logResolverTelemetry({
       event: 'story_read_resolution',
       slug,

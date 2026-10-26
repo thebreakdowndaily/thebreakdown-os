@@ -86,6 +86,8 @@ export interface StoryRow {
     created_at: string;
     updated_at: string;
     updated_by: string | null;
+    gold_standard_audit?: unknown;
+    content_fingerprint?: string | null;
   };
   Insert: {
     id?: string;
@@ -124,6 +126,8 @@ export interface StoryRow {
     created_at?: string;
     updated_at?: string;
     updated_by?: string | null;
+    gold_standard_audit?: unknown;
+    content_fingerprint?: string | null;
   };
   Update: {
     id?: string;
@@ -162,6 +166,8 @@ export interface StoryRow {
     created_at?: string;
     updated_at?: string;
     updated_by?: string | null;
+    gold_standard_audit?: unknown;
+    content_fingerprint?: string | null;
   };
 }
 

@@ -6,6 +6,7 @@ import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/public
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
 import type { EvidenceVaultService } from '@/services/intelligence/evidence-vault.service';
+import { getServiceClient } from '@/supabase/client';
 
 const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 
@@ -14,6 +15,11 @@ function isUuid(value: string): boolean {
 }
 
 export class SupabaseStoryRepository implements StoryService {
+  private clientOverride?: any;
+
+  constructor(client?: any) {
+    this.clientOverride = client;
+  }
   private evidenceVault?: EvidenceVaultService;
 
   public setEvidenceVault(vault: EvidenceVaultService): void {
@@ -35,11 +41,12 @@ export class SupabaseStoryRepository implements StoryService {
     return { data: (data || []).map(rowToStory), meta: { total: count || 0, page: params?.page || 1, pageSize: params?.pageSize || (data?.length || 0) } };
   }
 
-  async getStory(id: string) {
+  async getStory(id: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
     // Story references are persisted as either UUIDs or slugs in legacy
     // topic/story data. Route each value to the correctly typed column.
     const column = isUuid(id) ? 'id' : 'slug';
-    const { data, error } = await db().from('stories').select('*').eq(column, id).maybeSingle();
+    const { data, error } = await client.from('stories').select('*').eq(column, id).maybeSingle();
     if (error) throw error;
     return data ? rowToStory(data) : undefined;
   }
@@ -50,7 +57,7 @@ export class SupabaseStoryRepository implements StoryService {
     return data ? rowToStory(data) : undefined;
   }
 
-  async saveStory(story: Story, options?: { publicationToken?: string }) {
+  async saveStory(story: Story, options?: { publicationToken?: string; client?: any }) {
     // Repository Publication Guard: Direct saves to 'published' must present a valid server-side publication token
     if (story.status === 'published' || story.publicationStatus === 'published') {
       const token = options?.publicationToken || (story as any)._publicationToken;
@@ -61,24 +68,38 @@ export class SupabaseStoryRepository implements StoryService {
       }
     }
 
-    const { data, error } = await db().from('stories').upsert(rowFromStory(story)).select().single();
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const { data, error } = await client.from('stories').upsert(rowFromStory(story)).select().single();
     if (error) throw error;
     return rowToStory(data);
   }
 
-  async deleteStory(id: string) {
-    const { error } = await db().from('stories').delete().eq('id', id);
+  async deleteStory(id: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const { error } = await client.from('stories').delete().eq('id', id);
     if (error) throw error;
   }
   
-  async publishStory(id: string) {
-    const story = await this.getStory(id);
+  async publishStory(id: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const story = await this.getStory(id, { client });
     if (!story) return undefined;
 
     // Phase 4B-2E: Evidence Provenance Publication Guard
     const validation = await validateStoryEvidenceCompleteness(story, this.evidenceVault);
     if (!validation.valid) {
       throw new PublicationBlockedError(validation.violations);
+    }
+
+    // Gold Standard Review Integrity Guard (Article XI / CR-01..03)
+    const { validateGoldStandardAuditRecord } = await import('@/lib/editorial/gold-standard-review');
+    const auditValidation = validateGoldStandardAuditRecord(story.goldStandardAudit, story);
+    if (!auditValidation.valid) {
+      throw new PublicationBlockedError(
+        auditValidation.violations.length > 0
+          ? auditValidation.violations
+          : ['Gold Standard Review validation failed']
+      );
     }
 
     // Mint server-side single-use publication token for the transition
@@ -92,7 +113,7 @@ export class SupabaseStoryRepository implements StoryService {
       publishedAt: story.publishedAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    return this.saveStory(updated, { publicationToken: token });
+    return this.saveStory(updated, { publicationToken: token, client });
   }
 
   async count() {
@@ -241,6 +262,8 @@ function rowToStory(row: import('@/supabase/client').TypedDatabase['public']['Ta
     relatedStoryIds: row.related_story_ids || [],
     relatedEntityIds: row.related_entity_ids || [],
     relatedTopicIds: row.related_topic_ids || [],
+    goldStandardAudit: (row.gold_standard_audit as any) || undefined,
+    contentFingerprint: row.content_fingerprint || undefined,
   };
 }
 
@@ -273,5 +296,7 @@ function rowFromStory(s: Story): import('@/supabase/client').TypedDatabase['publ
     published_at: s.publishedAt,
     updated_at: new Date().toISOString(),
     updated_by: s.updatedBy,
+    gold_standard_audit: s.goldStandardAudit ?? null,
+    content_fingerprint: s.contentFingerprint ?? null,
   };
 }

@@ -103,6 +103,18 @@ export class CanonicalStoryService implements StoryService {
       throw new PublicationBlockedError(validation.violations);
     }
 
+    // Publication Gate verification — ensure all gates pass before issuing token
+    const { validateStoryForPublicationAsync } = await import('@/lib/editorial/publication-gate');
+    const gateResult = await validateStoryForPublicationAsync(
+      { storyId: story.id, triggeredBy: 'manual' },
+      story,
+      this.evidenceVault
+    );
+    if (!gateResult.passed) {
+      const violations = gateResult.checks.filter(c => !c.passed).map(c => `${c.name}: ${c.reason}`);
+      throw new PublicationBlockedError(violations);
+    }
+
     const { issuePublicationToken } = await import('@/lib/editorial/publication-token');
     const token = issuePublicationToken(story.id);
 

@@ -17,7 +17,7 @@ export class MemoryStoryService implements StoryService {
   private stories: Map<string, Story>;
   private evidenceVault?: EvidenceVaultService;
 
-  constructor(stories: Story[], evidenceVault?: EvidenceVaultService) {
+  constructor(stories: Story[] = [], evidenceVault?: EvidenceVaultService) {
     this.stories = new Map(stories.map(s => [s.id, s]));
     this.evidenceVault = evidenceVault;
   }
@@ -79,6 +79,18 @@ export class MemoryStoryService implements StoryService {
     const validation = await validateStoryEvidenceCompleteness(s, this.evidenceVault);
     if (!validation.valid) {
       throw new PublicationBlockedError(validation.violations);
+    }
+
+    // Publication Gate verification — ensure all gates pass before issuing token
+    const { validateStoryForPublicationAsync } = await import('@/lib/editorial/publication-gate');
+    const gateResult = await validateStoryForPublicationAsync(
+      { storyId: s.id, triggeredBy: 'manual' },
+      s,
+      this.evidenceVault
+    );
+    if (!gateResult.passed) {
+      const violations = gateResult.checks.filter(c => !c.passed).map(c => `${c.name}: ${c.reason}`);
+      throw new PublicationBlockedError(violations);
     }
 
     const { issuePublicationToken } = await import('@/lib/editorial/publication-token');

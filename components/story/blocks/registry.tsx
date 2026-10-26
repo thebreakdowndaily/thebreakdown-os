@@ -119,10 +119,15 @@ export function getBlockComponent(type: string): React.ComponentType<any> | null
 }
 
 export function BlockRenderer({ block }: { block: StoryBlock }) {
+  const data = (block.data as any) || (block as any).content || {};
+  if (block.type === 'paragraph' || block.type === 'text') {
+    const text = data?.text || data?.content || (block as any).content || '';
+    return <TextBlockClient content={text} />;
+  }
   const Component = blockComponents[block.type as BlockType];
   if (!Component) {
     console.warn(`[BlockRenderer] Unknown block type: "${block.type}"`);
     return null;
   }
-  return <Component {...(block.data as any)} />;
+  return <Component {...data} />;
 }
