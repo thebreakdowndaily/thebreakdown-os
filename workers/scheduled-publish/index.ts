@@ -38,16 +38,16 @@ export default {
 
     try {
       const results = await publishDueStories(env);
-      const published = results.filter((result) => result.passed);
-      const blocked = results.filter((result) => !result.passed);
+      const gatePassed = results.filter((result) => result.passed).length;
+      const blocked = results.filter((result) => !result.passed).length;
 
       console.log(JSON.stringify({
         event: 'editorial.publish_due.complete',
         timestamp: new Date().toISOString(),
         duration: Date.now() - startTime,
         totalChecked: results.length,
-        published: published.length,
-        blocked: blocked.length,
+        gatePassed,
+        blocked,
         details: results.map((result) => ({
           storyId: result.storyId,
           passed: result.passed,
