@@ -48,6 +48,9 @@ jobs:
           npx tsx tests/production-readiness.test.ts
           npx tsx tests/data-integrity.test.ts
 
+      - name: Story Image Integrity & Context Gate
+        run: npm run check:images
+
       - name: Release-Control Safety & Deployment Health Suites
         run: |
           npx vitest run tests/reconcile-cloudflare-safety.test.ts tests/verify-deployment-health.test.ts tests/staging-corrections-smoke.test.ts tests/reader-corrections-persistence.test.ts
