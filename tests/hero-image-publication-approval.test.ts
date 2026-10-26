@@ -122,7 +122,7 @@ function run(): void {
   );
 
   testRuntimeGateIntegration();
-  console.log('Hero-image publication approval tests: 16 assertions passed.');
+  console.log('Hero-image publication approval tests: 20 assertions passed.');
 }
 
 run();
