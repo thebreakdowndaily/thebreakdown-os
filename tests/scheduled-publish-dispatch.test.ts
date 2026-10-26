@@ -159,10 +159,13 @@ describe('scheduled publish canonical dispatch contract', () => {
 
     expect(completionLine).toBeDefined();
     const completion = JSON.parse(completionLine as string) as {
+      gatePassed: number;
       blocked: number;
       details: Array<{ failedChecks: string[]; checksCount: number }>;
     };
+    expect(completion.gatePassed).toBe(0);
     expect(completion.blocked).toBe(1);
+    expect(completion).not.toHaveProperty('published');
     expect(completion.details[0]).toMatchObject({
       checksCount: 1,
       failedChecks: ['hero_image_approval'],
