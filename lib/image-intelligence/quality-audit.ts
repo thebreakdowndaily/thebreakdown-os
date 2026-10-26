@@ -1,5 +1,6 @@
 export type ImageQualityIssueKind =
   | 'missing-manifest'
+  | 'manifest-mismatch'
   | 'incomplete-manifest'
   | 'placeholder'
   | 'duplicate-path'
@@ -9,6 +10,12 @@ export interface ImageQualityRecord {
   slug: string;
   assetPath: string;
   sha256: string;
+  publicationStatus?: string;
+  manifestProvenance?: string;
+  manifestLicense?: string;
+  manifestSourceUrl?: string;
+  resolutionType?: string;
+  isFallback?: boolean;
   hasManifest: boolean;
   manifestMatchesResolvedAsset: boolean;
   manifestComplete: boolean;
@@ -59,8 +66,10 @@ export function detectImageQualityIssues(
   const issues: ImageQualityIssue[] = [];
 
   for (const record of records) {
-    if (!record.hasManifest || !record.manifestMatchesResolvedAsset) {
+    if (!record.hasManifest) {
       issues.push(groupIssue('missing-manifest', [record], [record.assetPath]));
+    } else if (!record.manifestMatchesResolvedAsset) {
+      issues.push(groupIssue('manifest-mismatch', [record], [record.assetPath]));
     } else if (!record.manifestComplete) {
       issues.push(groupIssue('incomplete-manifest', [record], [record.assetPath]));
     }
@@ -122,10 +131,28 @@ export function validateImageQualityBaseline(
   unapproved: ImageQualityIssue[];
   expired: ImageQualityException[];
   stale: ImageQualityException[];
+  invalidExceptions: ImageQualityException[];
 } {
-  const currentByKey = new Map(issues.map((issue) => [imageQualityIssueKey(issue), issue]));
   const activeExceptions = exceptions.filter((exception) => exception.expiresAt >= today);
   const expired = exceptions.filter((exception) => exception.expiresAt < today);
+  const invalidExceptions = exceptions.filter((exception) =>
+    !exception.id.trim() ||
+    !exception.reason.trim() ||
+    !exception.owner.trim() ||
+    !exception.evidence.trim() ||
+    !/^\\d{4}-\\d{2}-\\d{2}$/.test(exception.expiresAt) ||
+    !Number.isFinite(Date.parse(`${exception.expiresAt}T00:00:00Z`))
+  );
+  const seenIds = new Set<string>();
+  const seenKeys = new Set<string>();
+  for (const exception of exceptions) {
+    const key = imageQualityIssueKey(exception);
+    if (seenIds.has(exception.id) || seenKeys.has(key)) {
+      if (!invalidExceptions.includes(exception)) invalidExceptions.push(exception);
+    }
+    seenIds.add(exception.id);
+    seenKeys.add(key);
+  }
   const approvedLegacy: Array<{ issue: ImageQualityIssue; exception: ImageQualityException }> = [];
   const unapproved: ImageQualityIssue[] = [];
   const consumed = new Set<string>();
@@ -142,5 +169,5 @@ export function validateImageQualityBaseline(
   }
 
   const stale = activeExceptions.filter((exception) => !consumed.has(exception.id));
-  return { approvedLegacy, unapproved, expired, stale };
+  return { approvedLegacy, unapproved, expired, stale, invalidExceptions };
 }
