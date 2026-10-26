@@ -1,27 +1,12 @@
 /**
- * Cloudflare Cron Worker — Editorial Calendar Autonomous Publishing
+ * Cloudflare Cron Worker — Editorial Calendar Autonomous Publishing.
  *
- * Governing document: AGENTS.md (Editorial Calendar + Autonomous Weekly Publishing)
- *
- * This is a standalone Cloudflare Worker that handles Cron Trigger events.
- * It reuses the existing publish-due service and publication gate from the
- * main application — zero duplicated business logic.
- *
- * Architecture:
- *   Cloudflare Cron Trigger (hourly)
- *     → scheduled()
- *       → publishDueStories() from services/editorial/schedule.ts
- *         → publication gate (10 checks)
- *           → publish or block
- *
- * Environment variables required:
- *   SUPABASE_URL              — Supabase project URL
- *   SUPABASE_SERVICE_ROLE_KEY — Supabase service role key (bypasses RLS)
+ * This Worker delegates publication to the canonical Next.js API. It must not
+ * duplicate editorial policy or directly mutate publication state in Supabase.
  */
 
 import { publishDueStories } from '../../services/editorial/schedule-cf';
 
-// Minimal Cloudflare Worker type declarations (avoids @cloudflare/workers-types dependency)
 interface ScheduledController {
   readonly cron: string;
   readonly scheduledTime: number;
@@ -32,10 +17,9 @@ interface ExecutionContext {
 }
 
 export interface Env {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
-  CRON_SECRET: string;
-  APP_URL: string;
+  APP_URL?: string;
+  CRON_SECRET?: string;
+  DRY_RUN?: string;
 }
 
 export default {
@@ -45,6 +29,7 @@ export default {
     _ctx: ExecutionContext,
   ): Promise<void> {
     const startTime = Date.now();
+    const dryRun = (env.DRY_RUN || 'true').trim() !== 'false';
 
     console.log(JSON.stringify({
       event: 'editorial.publish_due.start',
@@ -56,44 +41,67 @@ export default {
     try {
       const results = await publishDueStories(env);
 
-      const published = results.filter(r => r.passed);
-      const blocked = results.filter(r => !r.passed);
-      const duration = Date.now() - startTime;
+      if (dryRun) {
+        const failure = results.find((result) => !result.passed);
+        if (failure) {
+          console.error(JSON.stringify({
+            event: 'editorial.publish_due.preflight.failed',
+            mode: 'preflight',
+            dryRun: true,
+            timestamp: new Date().toISOString(),
+            duration: Date.now() - startTime,
+            failedChecks: failure.failedChecks,
+          }));
+        } else {
+          console.log(JSON.stringify({
+            event: 'editorial.publish_due.preflight.complete',
+            mode: 'preflight',
+            dryRun: true,
+            timestamp: new Date().toISOString(),
+            duration: Date.now() - startTime,
+            status: 'ok',
+          }));
+        }
+        return;
+      }
+
+      const gatePassed = results.filter((result) => result.passed).length;
+      const blocked = results.filter((result) => !result.passed).length;
 
       console.log(JSON.stringify({
         event: 'editorial.publish_due.complete',
+        mode: 'live',
+        dryRun: false,
         timestamp: new Date().toISOString(),
-        duration,
+        duration: Date.now() - startTime,
         totalChecked: results.length,
-        published: published.length,
-        blocked: blocked.length,
-        details: results.map(r => ({
-          storyId: r.storyId,
-          passed: r.passed,
-          failedChecks: r.checks.filter(c => !c.passed).map(c => c.name),
+        gatePassed,
+        blocked,
+        details: results.map((result) => ({
+          storyId: result.storyId,
+          passed: result.passed,
+          checksCount: result.checksCount,
+          failedChecks: result.failedChecks,
         })),
       }));
-    } catch (error) {
-      const duration = Date.now() - startTime;
+    } catch (error: unknown) {
       console.error(JSON.stringify({
         event: 'editorial.publish_due.failed',
         timestamp: new Date().toISOString(),
-        duration,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        duration: Date.now() - startTime,
+        error: error instanceof Error ? error.message : String(error),
       }));
-      // Do not rethrow — Cloudflare will retry on unhandled exceptions,
-      // but we want bounded retries. Log and exit cleanly.
     }
   },
 
   async fetch(_request: Request, _env: Env, _ctx: ExecutionContext): Promise<Response> {
-    return new Response(
-      JSON.stringify({
-        service: 'thebreakdown-scheduled-publish',
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-      }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    return new Response(JSON.stringify({
+      service: 'thebreakdown-scheduled-publish',
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   },
 };

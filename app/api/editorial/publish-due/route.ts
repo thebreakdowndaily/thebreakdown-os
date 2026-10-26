@@ -45,15 +45,17 @@ export async function GET(request: NextRequest) {
   try {
     const results = await validateAndPublishDueStories();
 
-    const published = results.filter(r => r.passed);
-    const blocked = results.filter(r => !r.passed);
+    const gatePassed = results.filter(r => r.passed).length;
+    const blocked = results.filter(r => !r.passed).length;
 
     return NextResponse.json({
       ok: true,
+      mode: 'live',
+      dryRun: false,
       timestamp: new Date().toISOString(),
       totalChecked: results.length,
-      published: published.length,
-      blocked: blocked.length,
+      gatePassed,
+      blocked,
       results: results.map(r => ({
         storyId: r.storyId,
         passed: r.passed,

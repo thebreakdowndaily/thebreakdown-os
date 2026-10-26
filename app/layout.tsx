@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Inter, Playfair_Display, Source_Serif_4 } from 'next/font/google';
+import localFont from 'next/font/local';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/layout/Footer';
 import { AuthWrapper } from '@/features/auth/components/AuthWrapper';
@@ -11,18 +11,47 @@ import { isProductionAnalytics } from '@/lib/analytics/environment';
 import { Suspense } from 'react';
 import '@/styles/globals.css';
 
-const inter = Inter({
-  subsets: ['latin'],
+/**
+ * Self-hosted typefaces: removes the build-time Google Fonts network dependency.
+ * WOFF2 assets are the Latin subsets under app/fonts; licensing and attribution
+ * are documented in docs/engineering/self-hosted-fonts.md.
+ *
+ * All three families use static weight faces. Disable preload for the full face
+ * arrays so the browser downloads only the weight/style actually used, rather
+ * than preloading every face.
+ */
+const inter = localFont({
+  src: [
+    { path: './fonts/inter/inter-latin-100-normal.woff2', weight: '100', style: 'normal' },
+    { path: './fonts/inter/inter-latin-200-normal.woff2', weight: '200', style: 'normal' },
+    { path: './fonts/inter/inter-latin-300-normal.woff2', weight: '300', style: 'normal' },
+    { path: './fonts/inter/inter-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/inter/inter-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/inter/inter-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/inter/inter-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/inter/inter-latin-800-normal.woff2', weight: '800', style: 'normal' },
+    { path: './fonts/inter/inter-latin-900-normal.woff2', weight: '900', style: 'normal' },
+    { path: './fonts/inter/inter-latin-400-italic.woff2', weight: '400', style: 'italic' },
+    { path: './fonts/inter/inter-latin-700-italic.woff2', weight: '700', style: 'italic' }
+  ],
   display: 'swap',
+  preload: false,
   variable: '--font-inter',
 });
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
+const playfair = localFont({
+  src: [
+    { path: './fonts/playfair-display/playfair-display-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/playfair-display/playfair-display-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/playfair-display/playfair-display-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/playfair-display/playfair-display-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/playfair-display/playfair-display-latin-800-normal.woff2', weight: '800', style: 'normal' },
+    { path: './fonts/playfair-display/playfair-display-latin-400-italic.woff2', weight: '400', style: 'italic' },
+    { path: './fonts/playfair-display/playfair-display-latin-700-italic.woff2', weight: '700', style: 'italic' }
+  ],
   display: 'swap',
+  preload: false,
   variable: '--font-playfair',
-  weight: ['400', '500', '600', '700', '800'],
-  style: ['normal', 'italic'],
 });
 
 /**
@@ -31,12 +60,18 @@ const playfair = Playfair_Display({
  * Part of The Breakdown's three-level typographic system:
  *   Display (Playfair) + Reading (Source Serif 4) + Interface (Inter)
  */
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
+const sourceSerif = localFont({
+  src: [
+    { path: './fonts/source-serif-4/source-serif-4-latin-300-normal.woff2', weight: '300', style: 'normal' },
+    { path: './fonts/source-serif-4/source-serif-4-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/source-serif-4/source-serif-4-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/source-serif-4/source-serif-4-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/source-serif-4/source-serif-4-latin-400-italic.woff2', weight: '400', style: 'italic' },
+    { path: './fonts/source-serif-4/source-serif-4-latin-700-italic.woff2', weight: '700', style: 'italic' }
+  ],
   display: 'swap',
+  preload: false,
   variable: '--font-source-serif',
-  weight: ['300', '400', '600', '700'],
-  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
