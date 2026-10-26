@@ -839,6 +839,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
   "claims": [
     {
       "id": "clm-ranji-01",
+      "isLegacy": true,
       "claim": "The BCCI's 28 February 2024 annual-contract release said Shreyas Iyer and Ishan Kishan were not considered in that round and recommended that players prioritise domestic cricket when not representing India.",
       "data": "This is the release's exact scope. It does not itself say that existing contracts were stripped, nor does it explicitly state why the two players were omitted.",
       "sourceId": "src-bcci-retainership-2024",
@@ -851,6 +852,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "clm-ranji-02",
+      "isLegacy": true,
       "claim": "A contemporaneous report in The Indian Express described a letter from BCCI secretary Jay Shah warning centrally contracted and India A players that domestic red-ball participation was a selection yardstick and that non-participation could have severe implications.",
       "data": "The letter's wording is reported by The Indian Express; the published annual-contract release is a separate official record. The article attributes the warning to the letter and should not be represented as a published BCCI regulation.",
       "sourceId": "src-bcci-letter-report",
@@ -863,6 +865,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "clm-ranji-03",
+      "isLegacy": true,
       "claim": "The BCCI's published September 2021 senior men's domestic fee table lists ₹40,000, ₹50,000 and ₹60,000 per day for three match-count bands, with separate lower rates for reserves.",
       "data": "The table lists match-count bands of up to 20, 21–40 and above 40; it does not label the count as first-class appearances only. A 2021 report described the tiering as not format-restricted, and 2026 reporting still cited these rates.",
       "sourceId": "src-bcci-domestic-fee-table",
@@ -875,6 +878,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "clm-ranji-04",
+      "isLegacy": true,
       "claim": "For the 2026–27 Ranji Trophy Elite league stage, the BCCI calendar lists seven matches per team; Plate teams have five league matches.",
       "data": "This describes the announced competition structure, not the number of days actually credited to a player's fee account or their final season earnings.",
       "sourceId": "src-bcci-season-2026-27",
@@ -887,6 +891,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "clm-ranji-05",
+      "isLegacy": true,
       "claim": "The BCCI's March 2024 Test Cricket Incentive Scheme announces additional per-match bonuses based on participation in a season assumed to contain nine Tests, with different rates for the Playing XI and non-playing squad members.",
       "data": "The published table specifies less than four, five and six, and seven or more matches. It does not classify exactly four matches under its nine-Test assumption; the story flags that gap rather than inferring a rule.",
       "sourceId": "src-bcci-test-incentive",
@@ -899,6 +904,7 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "clm-ranji-06",
+      "isLegacy": true,
       "claim": "In May 2026, former India batter Amay Khurasiya argued that Ranji players should be paid more to support family financial needs and suggested state-association contracts as an alternative.",
       "data": "This is a reported opinion from a named former player and coach; it is not representative evidence of player income or a measurement of how much compensation is needed.",
       "sourceId": "src-fee-report-2026",
