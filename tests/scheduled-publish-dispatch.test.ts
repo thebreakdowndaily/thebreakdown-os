@@ -41,6 +41,28 @@ describe('scheduled publish canonical dispatch contract', () => {
     });
   });
 
+  it('fails closed when APP_URL is missing and when dispatch times out', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const missingAppUrl = await publishDueStories({ CRON_SECRET }, NOW);
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(missingAppUrl[0].failedChecks).toEqual(['canonical_app_url']);
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockRejectedValue(new DOMException('The operation timed out', 'TimeoutError')),
+    );
+    const timedOut = await publishDueStories({ APP_URL, CRON_SECRET }, NOW);
+
+    expect(timedOut[0].passed).toBe(false);
+    expect(timedOut[0].failedChecks).toEqual(['canonical_dispatch_reachability']);
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('Canonical cron dispatch timed out (10s)'),
+    );
+  });
+
   it('rejects HTTP URLs and non-origin APP_URL values before sending the secret', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
