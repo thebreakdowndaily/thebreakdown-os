@@ -355,25 +355,34 @@ describe('Mission H.2: Image Intelligence Contract & Adversarial Regression Suit
 
   // Case 12: The revised BCCI fee graphic remaining blocked while approval is pending
   it('Case 12: strictly blocks publication while the revised BCCI fee graphic remains pending approval', () => {
-    // Real canonical story against real manifest
-    const supportingValidation = validateStorySupportingMedia(REMEDIATED_BCCI_CRICKET_STORY);
-    expect(supportingValidation.passed).toBe(false);
-    expect(
-      supportingValidation.violations.some((v) =>
-        v.includes('requires explicit human media approval after the latest revision')
-      )
-    ).toBe(true);
+    const originalEntry = { ...VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] };
+    try {
+      VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] = {
+        ...originalEntry,
+        approvalStatus: 'pending',
+      };
+      // Real canonical story against real manifest
+      const supportingValidation = validateStorySupportingMedia(REMEDIATED_BCCI_CRICKET_STORY);
+      expect(supportingValidation.passed).toBe(false);
+      expect(
+        supportingValidation.violations.some((v) =>
+          v.includes('requires explicit human media approval after the latest revision')
+        )
+      ).toBe(true);
 
-    const gateResult = validateStoryForPublication(
-      { storyId: REMEDIATED_BCCI_CRICKET_STORY.id },
-      REMEDIATED_BCCI_CRICKET_STORY,
-      new Date(),
-      { bypassEditorialHold: true }
-    );
-    const supportingGate = gateResult.checks.find((c) => c.name === 'supporting_media_approval');
-    expect(supportingGate?.passed).toBe(false);
-    expect(supportingGate?.reason).toContain('requires explicit human media approval');
-    expect(gateResult.passed).toBe(false);
+      const gateResult = validateStoryForPublication(
+        { storyId: REMEDIATED_BCCI_CRICKET_STORY.id },
+        REMEDIATED_BCCI_CRICKET_STORY,
+        new Date(),
+        { bypassEditorialHold: true }
+      );
+      const supportingGate = gateResult.checks.find((c) => c.name === 'supporting_media_approval');
+      expect(supportingGate?.passed).toBe(false);
+      expect(supportingGate?.reason).toContain('requires explicit human media approval');
+      expect(gateResult.passed).toBe(false);
+    } finally {
+      VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] = originalEntry;
+    }
   });
 
   // Case 13: Existing legitimate image-manifest cases and unrelated publication gates remaining correct

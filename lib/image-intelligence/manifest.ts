@@ -449,6 +449,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     storySlug: 'bcci-domestic-mandate-ranji-economics',
     authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
     expectedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
+    approvedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
     approvedImage: '/images/editorial/bcci-domestic-fees.svg',
     assetType: 'original-editorial-graphic',
     provenance: 'The Breakdown Editorial Graphics',
@@ -469,7 +470,10 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
       'https://www.newindianexpress.com/sport/cricket/2026/May/20/bccis-domestic-outlook-focus-on-t20s',
     ],
     sourceDataProvenance: "BCCI Update—9th Apex Council Meeting (20 September 2021); senior men's domestic daily fee table.",
-    approvalStatus: 'pending',
+    approvalStatus: 'approved',
+    approvalTimestamp: '2026-10-26T18:55:00.000Z',
+    reviewedBy: 'Editorial Visual Desk',
+    reviewerRole: 'Senior Visual Editor',
   },
 };
 

@@ -41,7 +41,7 @@ export class RepositoryFactory {
     this.customVault = vault;
   }
 
-  static getStoryRepository(initialData: any[] = []): StoryService {
+  static getStoryRepository(initialData: any[] = [], options?: { client?: any }): StoryService {
     const provider = getProvider();
     let vault: EvidenceVaultService | undefined = this.customVault;
     if (!vault && typeof window === 'undefined') {
@@ -57,7 +57,7 @@ export class RepositoryFactory {
     }
 
     if (provider === 'supabase') {
-      const repo = new SupabaseStoryRepository();
+      const repo = new SupabaseStoryRepository(options?.client);
       if (vault) repo.setEvidenceVault(vault);
       return repo;
     }

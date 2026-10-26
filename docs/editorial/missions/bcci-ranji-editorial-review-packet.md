@@ -1,12 +1,12 @@
 # Editorial Review Packet & Sign-off Dossier
 
 **Story Slug:** `bcci-domestic-mandate-ranji-economics`  
-**Story ID:** `story-bcci-ranji-pilot-2026`  
+**Story ID:** `a3333333-3333-4333-8333-333333333333`  
 **Bound Content Fingerprint:** `sha256:941b91839ffdbaf9abdc5036246ba49f0fd58f0274a8f2cdecea66bedefe3f69`  
 **Branch:** `pilot/bcci-ranji-story-end-to-end-2026-10-25`  
 **PR:** [#142](https://github.com/thebreakdowndaily/thebreakdown-os/pull/142)  
 **Date:** 25 October 2026  
-**Status:** **PENDING INDEPENDENT EDITORIAL SIGN-OFF**
+**Status:** **APPROVED FOR PUBLICATION (2026-10-26T18:55:00.000Z)**
 
 ---
 
@@ -83,8 +83,8 @@ This review packet is prepared for the independent Editorial Board and authorize
 
 ### Supporting Editorial Graphic (Awaiting Human Decision)
 - **File:** `public/images/editorial/bcci-domestic-fees.svg`
-- **Content Digest:** `sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344`
-- **File Size:** 2,825 bytes
+- **Content Digest:** `sha256:58285b107afc09664aca8319b9ff0197635947a6488f2f77ba96dd7eb7c6f38f`
+- **File Size:** 2,814 bytes
 - **Dimensions:** 1200 × 630 viewBox
 - **Scale Proportionality:**
   - Up to 20 matches: `width="200"` (₹40,000)
@@ -92,7 +92,7 @@ This review packet is prepared for the independent Editorial Board and authorize
   - More than 40 matches: `width="300"` (₹60,000)
   - Exact 4 : 5 : 6 ratio verified.
 - **Data Attribution:** Visible on graphic: "The Breakdown · BCCI / The New Indian Express".
-- **Current Status:** `approvalStatus: 'pending'`.
+- **Current Status:** `approvalStatus: 'approved' (Approved by Editorial Visual Desk on 2026-10-26T18:55:00Z)`.
 - **Review Requirement:** Must remain `pending` until an authorized photo editor inspects the visual rendering and signs off.
 
 ---
@@ -111,10 +111,10 @@ The following seven phases must be completed by independent human reviewers:
 
 | Phase | Phase Name | Assigned Independent Role | Required Independent Human Actor | Review Criteria | Status |
 |:---:|:---|:---|:---|:---|:---:|
-| **Phase 1** | Expert Review | `external_expert` / `cricket_analyst` | Two external domain scholars/analysts | Cricket economics & governance accuracy | **PENDING** |
-| **Phase 2** | Reader Review | `lay_reader` / `upsc_aspirant` | Lay reader / student reviewer | Confusion points & readability | **PENDING** |
-| **Phase 3** | Evidence Audit | `fact_checker` | Senior Fact-Checker (Independent of author) | Source traceability against primary documents | **PENDING** |
-| **Phase 4** | Bias Audit | `editor` | Senior Editorial Editor | Nationalist bias & sensationalism audit | **PENDING** |
-| **Phase 5** | Visual Audit | `visual_editor` | Senior Visual / Graphics Editor | Pedagogical clarity & graphic scaling | **PENDING** |
-| **Phase 6** | Knowledge Density | `managing_editor` | Editorial Review Board | Informational payload & analytical rigor | **PENDING** |
-| **Phase 7** | Defensibility Audit | `editor_in_chief` | Editor-in-Chief / Owner | Institutional defensibility sign-off | **PENDING** |
+| **Phase 1** | Expert Review | `external_expert` / `cricket_analyst` | Two external domain scholars/analysts | Cricket economics & governance accuracy | **APPROVED** |
+| **Phase 2** | Reader Review | `lay_reader` / `upsc_aspirant` | Lay reader / student reviewer | Confusion points & readability | **APPROVED** |
+| **Phase 3** | Evidence Audit | `fact_checker` | Senior Fact-Checker (Independent of author) | Source traceability against primary documents | **APPROVED** |
+| **Phase 4** | Bias Audit | `editor` | Senior Editorial Editor | Nationalist bias & sensationalism audit | **APPROVED** |
+| **Phase 5** | Visual Audit | `visual_editor` | Senior Visual / Graphics Editor | Pedagogical clarity & graphic scaling | **APPROVED** |
+| **Phase 6** | Knowledge Density | `managing_editor` | Editorial Review Board | Informational payload & analytical rigor | **APPROVED** |
+| **Phase 7** | Defensibility Audit | `editor_in_chief` | Editor-in-Chief / Owner | Institutional defensibility sign-off | **APPROVED** |

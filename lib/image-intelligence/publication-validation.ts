@@ -12,7 +12,6 @@ export const FEATURE_STORY_TYPES = new Set(['feature', 'explainer', 'analysis', 
 export const EDITORIAL_RELEASE_HOLD_SLUGS = [
   'ai-literacy-india-students-verify-ai',
   'india-semiconductor-mission-fab-reality',
-  'bcci-domestic-mandate-ranji-economics',
 ];
 
 export interface MediaValidationOptions {

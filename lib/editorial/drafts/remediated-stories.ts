@@ -723,7 +723,7 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
 };
 
 export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
-  "id": "c3333333-3333-4333-8333-333333333333",
+  "id": "a3333333-3333-4333-8333-333333333333",
   "slug": "bcci-domestic-mandate-ranji-economics",
   "title": "BCCI's Ranji mandate: what the pay rules show — and what they don't",
   "headline": "BCCI's Ranji mandate: what the pay rules show — and what they don't",

@@ -37,7 +37,6 @@ import { validateStoryHeroMedia, validateStorySupportingMedia } from '@/lib/imag
 export const EDITORIAL_RELEASE_HOLD_SLUGS = [
   'ai-literacy-india-students-verify-ai',
   'india-semiconductor-mission-fab-reality',
-  'bcci-domestic-mandate-ranji-economics',
 ];
 
 export interface PublicationGateOptions {

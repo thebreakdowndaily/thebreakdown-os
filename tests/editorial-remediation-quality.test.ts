@@ -448,15 +448,24 @@ describe('Editorial Remediation & Quality Audit Suite', () => {
         ...REMEDIATED_BCCI_CRICKET_STORY,
         goldStandardAudit: createValidGoldStandardAudit(REMEDIATED_BCCI_CRICKET_STORY),
       };
-      const pendingResult = validateStoryForPublication(
-        { storyId: unapprovedStory.id },
-        unapprovedStory,
-        new Date(),
-        { bypassEditorialHold: true }
-      );
-      expect(pendingResult.passed).toBe(false);
-      const supportingCheck = pendingResult.checks.find((c) => c.name === 'supporting_media_approval');
-      expect(supportingCheck?.passed).toBe(false);
+      const origFees = { ...VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] };
+      try {
+        VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] = {
+          ...origFees,
+          approvalStatus: 'pending',
+        };
+        const pendingResult = validateStoryForPublication(
+          { storyId: unapprovedStory.id },
+          unapprovedStory,
+          new Date(),
+          { bypassEditorialHold: true }
+        );
+        expect(pendingResult.passed).toBe(false);
+        const supportingCheck = pendingResult.checks.find((c) => c.name === 'supporting_media_approval');
+        expect(supportingCheck?.passed).toBe(false);
+      } finally {
+        VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] = origFees;
+      }
 
       // Verify that when media approval is explicitly authorized by human reviewer, all gates pass
       const prev = { ...VERIFIED_STORY_IMAGE_MANIFEST['bcci-domestic-fees'] };
