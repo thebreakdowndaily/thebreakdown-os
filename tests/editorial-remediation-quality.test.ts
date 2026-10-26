@@ -349,8 +349,8 @@ describe('Editorial Remediation & Quality Audit Suite', () => {
 
     it('should reject an unreviewed story placed under active editorial release hold', () => {
       const result = validateStoryForPublication(
-        { storyId: REMEDIATED_BCCI_CRICKET_STORY.id },
-        REMEDIATED_BCCI_CRICKET_STORY
+        { storyId: REMEDIATED_AI_LITERACY_STORY.id },
+        REMEDIATED_AI_LITERACY_STORY
       );
       expect(result.passed).toBe(false);
       const holdCheck = result.checks.find((c) => c.name === 'editorial_release_hold');

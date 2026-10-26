@@ -42,7 +42,7 @@ export class SupabaseStoryRepository implements StoryService {
   }
 
   async getStory(id: string, options?: { client?: any }) {
-    const client = options?.client || this.clientOverride || (typeof window === 'undefined' ? getServiceClient() : db());
+    const client = options?.client || this.clientOverride || db();
     // Story references are persisted as either UUIDs or slugs in legacy
     // topic/story data. Route each value to the correctly typed column.
     const column = isUuid(id) ? 'id' : 'slug';
@@ -51,8 +51,9 @@ export class SupabaseStoryRepository implements StoryService {
     return data ? rowToStory(data) : undefined;
   }
 
-  async getStoryBySlug(slug: string) {
-    const { data, error } = await db().from('stories').select('*').eq('slug', slug).single();
+  async getStoryBySlug(slug: string, options?: { client?: any }) {
+    const client = options?.client || this.clientOverride || db();
+    const { data, error } = await client.from('stories').select('*').eq('slug', slug).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data ? rowToStory(data) : undefined;
   }

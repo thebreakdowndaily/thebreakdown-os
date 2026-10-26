@@ -117,6 +117,7 @@ module.exports = {
       'tests/loop-visual-validation.test.ts',
       'tests/reader-journey-loop.test.ts',
       'tests/publication-integrity-p0.test.ts',
+      'tests/publication-persistence-isolation.test.ts',
       'tests/source-integrity-loop2.test.ts',
       'tests/phase1-integrity-remediation.test.ts',
       'tests/phase2-full-system-loopback.test.ts',
