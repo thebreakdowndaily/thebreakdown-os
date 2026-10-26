@@ -6,17 +6,19 @@
  * Principle: A story is NEVER published by scheduled timestamp alone.
  * Every gate check is auditable. Every failure is logged.
  *
- * Gate checks (all must pass):
- *   1. Story exists and is not deleted
- *   2. Story status is 'scheduled' or 'review' or 'fact_check' (eligible for gate)
- *   3. Story has a non-empty title
- *   4. Story has a non-empty summary
- *   5. Story has at least one block (content)
- *   6. Story has at least one source (evidence)
- *   7. Story has at least one claim
- *   8. Story has a publishedAt timestamp
- *   9. Story's publicationStatus is not 'archived' or 'superseded'
- *  10. Story is not blocked (no block_reason set)
+ * Synchronous editorial checks (all must pass):
+ *   1. Story exists
+ *   2. Story status is eligible for review/fact-check/scheduling
+ *   3. Title and summary are present
+ *   4. Content blocks, sources, and claims are present
+ *   5. Publication timestamp is present
+ *   6. Story is not archived, superseded, or blocked
+ *   7. Gold Standard Review / evidence density passes
+ *   8. No source is retracted
+ *   9. Hero image is individually approved for this story, matches the exact
+ *      manifest asset, has provenance/licensing/source metadata, and is not a placeholder
+ *   10. The async wrapper adds the evidence-vault reconstructibility check
+ *       before the canonical publication token can be issued.
  */
 
 import type { Story, StoryStatus } from '@/types/canonical';
