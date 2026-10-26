@@ -206,6 +206,57 @@ describe('scheduled publish canonical dispatch contract', () => {
     expect(result[0].failedChecks).toEqual(['canonical_dispatch_reachability']);
   });
 
+  it('worker logs successful preflight as a non-publishing check', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({
+      ok: true, mode: 'preflight', dryRun: true, results: [],
+    })));
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await scheduledWorker.scheduled(
+      { cron: '0 * * * *', scheduledTime: NOW.getTime() } as never,
+      { APP_URL, CRON_SECRET } as never,
+      {} as never,
+    );
+
+    const completionLine = logSpy.mock.calls
+      .map(([line]) => String(line))
+      .find((line) => line.includes('"event":"editorial.publish_due.preflight.complete"'));
+
+    expect(completionLine).toBeDefined();
+    expect(JSON.parse(completionLine as string)).toMatchObject({
+      mode: 'preflight',
+      dryRun: true,
+      status: 'ok',
+    });
+    expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('worker logs preflight failures separately from editorial story blocks', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('unavailable', { status: 503 })));
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await scheduledWorker.scheduled(
+      { cron: '0 * * * *', scheduledTime: NOW.getTime() } as never,
+      { APP_URL, CRON_SECRET } as never,
+      {} as never,
+    );
+
+    const failureLine = errorSpy.mock.calls
+      .map(([line]) => String(line))
+      .find((line) => String(line).includes('"event":"editorial.publish_due.preflight.failed"'));
+
+    expect(failureLine).toBeDefined();
+    expect(JSON.parse(failureLine as string)).toMatchObject({
+      event: 'editorial.publish_due.preflight.failed',
+      mode: 'preflight',
+      dryRun: true,
+      failedChecks: ['canonical_dispatch_response'],
+    });
+    expect(logSpy.mock.calls.some(([line]) => String(line).includes('"event":"editorial.publish_due.preflight.complete"'))).toBe(false);
+  });
+
   it('worker logs the canonical summary shape without dereferencing missing checks arrays', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({
       ok: true, mode: 'live', dryRun: false, results: [validResult],

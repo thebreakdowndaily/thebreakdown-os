@@ -40,13 +40,38 @@ export default {
 
     try {
       const results = await publishDueStories(env);
+
+      if (dryRun) {
+        const failure = results.find((result) => !result.passed);
+        if (failure) {
+          console.error(JSON.stringify({
+            event: 'editorial.publish_due.preflight.failed',
+            mode: 'preflight',
+            dryRun: true,
+            timestamp: new Date().toISOString(),
+            duration: Date.now() - startTime,
+            failedChecks: failure.failedChecks,
+          }));
+        } else {
+          console.log(JSON.stringify({
+            event: 'editorial.publish_due.preflight.complete',
+            mode: 'preflight',
+            dryRun: true,
+            timestamp: new Date().toISOString(),
+            duration: Date.now() - startTime,
+            status: 'ok',
+          }));
+        }
+        return;
+      }
+
       const gatePassed = results.filter((result) => result.passed).length;
       const blocked = results.filter((result) => !result.passed).length;
 
       console.log(JSON.stringify({
-        event: dryRun ? 'editorial.publish_due.preflight.complete' : 'editorial.publish_due.complete',
-        mode: dryRun ? 'preflight' : 'live',
-        dryRun,
+        event: 'editorial.publish_due.complete',
+        mode: 'live',
+        dryRun: false,
         timestamp: new Date().toISOString(),
         duration: Date.now() - startTime,
         totalChecked: results.length,
