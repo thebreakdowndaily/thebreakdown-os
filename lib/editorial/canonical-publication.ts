@@ -7,7 +7,7 @@
  * Consolidates all publication authority behind ONE server-side contract:
  *   1. Authorization verification ('story.publish')
  *   2. State machine transition verification (canTransition)
- *   3. Publication gate evaluation (11 fail-closed checks)
+ *   3. Publication gate evaluation (13 fail-closed editorial checks; async Gate 14 preserves the evidence vault)
  *   4. Immutable audit logging
  *   5. Event emission & cache invalidation
  */
