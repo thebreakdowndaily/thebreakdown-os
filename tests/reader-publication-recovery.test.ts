@@ -129,8 +129,8 @@ async function runRecoveryTests() {
   });
 
   // 6. Content State Inventory & Quarantine Audit
-  test('Content state correctly identifies 41 published and 15 quarantined draft stories', () => {
-    assert.strictEqual(publicStories.length, 41, `Expected exactly 41 published stories, found ${publicStories.length}`);
+  test('Content state correctly identifies 40 published (held stories excluded) and 15 quarantined draft stories', () => {
+    assert.strictEqual(publicStories.length, 40, `Expected exactly 40 published stories, found ${publicStories.length}`);
     const quarantinedDrafts = allStories.filter((s) => s.slug.startsWith('ng-ch-'));
     assert.strictEqual(quarantinedDrafts.length, 15, `Expected 15 quarantined Namami Gange draft chapters, found ${quarantinedDrafts.length}`);
     for (const q of quarantinedDrafts) {
@@ -139,7 +139,7 @@ async function runRecoveryTests() {
   });
 
   // 7. Route & Slug Resolution
-  test('All 41 public story slugs and 15 topics form valid canonical route targets', () => {
+  test('All 40 public story slugs and 15 topics form valid canonical route targets', () => {
     const topics = getTopics({ pageSize: 100 }).data;
     for (const story of publicStories) {
       assert.match(story.slug, /^[a-z0-9-]+$/, `Story slug ${story.slug} must be URL-safe`);

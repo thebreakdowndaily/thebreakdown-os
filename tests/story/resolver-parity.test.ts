@@ -24,7 +24,6 @@ async function runTests() {
   const unmappedSlugs = [
     'digital-payments-boom',
     'pm-fasal-bima-claims',
-    'semiconductor-pli',
     'dpdp-bill',
     'climate-finance',
     'education-budget',

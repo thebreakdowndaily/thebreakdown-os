@@ -237,7 +237,9 @@ function extractTOC(
   }
 
   for (const ch of chapters) {
-    toc.push({ id: ch.id, label: ch.title, level: 1 });
+    if (ch.title && ch.title !== 'Main Narrative') {
+      toc.push({ id: ch.id, label: ch.title, level: 1 });
+    }
   }
 
   if (capabilities.hasMeaningfulTimeline) {
@@ -286,7 +288,10 @@ export function buildStoryPresentationModel(
   function calculateNarrativeReadingTime(s: Story): number {
     const mainBlocks = s.blocks?.filter((b) => !b.region || b.region === 'main') || [];
     const words = countNarrativeWords(mainBlocks);
-    if (words < 100) return s.readingTime || 5;
+    if (words === 0) {
+      const summaryWords = s.summary ? s.summary.split(/\s+/).filter(Boolean).length : 0;
+      return estimateReadingTimeMinutes(summaryWords) || 1;
+    }
     return estimateReadingTimeMinutes(words);
   }
 
@@ -305,21 +310,26 @@ export function buildStoryPresentationModel(
       const resolvedHero = resolveStoryHeroImage(story);
       const url = resolvedHero.hero?.src || (story.heroImage && !story.heroImage.includes('placehold.co') ? story.heroImage : undefined);
       if (!url || url.includes('placehold.co')) return undefined;
+      const isFallback = Boolean(resolvedHero.hero?.isFallback || resolvedHero.hero?.type === 'branded-placeholder');
       const altText = story.heroImageIsDecorative
         ? ''
-        : (story.heroImageAlt || resolvedHero.hero?.alt || story.headline);
+        : isFallback
+          ? (resolvedHero.hero?.alt || `Editorial coverage placeholder for ${story.headline}`)
+          : (story.heroImageAlt || resolvedHero.hero?.alt || story.headline);
       if (!story.heroImageIsDecorative && !altText) {
         throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
       }
       return {
         url,
         altText,
-        caption: resolvedHero.hero?.type === 'branded-placeholder'
+        caption: isFallback
           ? undefined
-          : resolvedHero.hero?.credit
-            ? `Credit: ${resolvedHero.hero.credit}`
-            : undefined,
-        credit: resolvedHero.hero?.credit,
+          : resolvedHero.hero?.caption
+            ? resolvedHero.hero.caption
+            : resolvedHero.hero?.credit
+              ? `Credit: ${resolvedHero.hero.credit}`
+              : undefined,
+        credit: isFallback ? undefined : resolvedHero.hero?.credit,
       };
     })(),
   };

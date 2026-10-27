@@ -47,10 +47,10 @@ function seed(): DataStore {
     id: 'mgnrega-reform',
     slug: 'mgnrega-reform',
     headline: 'MGNREGA 2026: The 125-Day Rural Employment Guarantee Explained',
-    summary: 'Two decades of India\'s flagship rural employment guarantee scheme (2005–2026) — and what changed on 1 July 2026 with the repeal of MGNREGA 2005 and commencement of the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025), expanding the statutory guarantee from 100 to 125 days.',
+    summary: 'Two decades of India\'s flagship rural employment guarantee scheme (2005–2026) — and what changed on 1 July 2026 with the repeal of MGNREGA 2005 and commencement of the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 36 of 2025), expanding the statutory guarantee from 100 to 125 days.',
     heroImage: '/images/placeholders/economy-placeholder.svg',
     heroImageIsDecorative: true,
-    takeaway: 'Effective July 1, 2026, the VB-G RAM G Act, 2025 (Act No. 18 of 2025) officially replaces MGNREGA 2005, expanding the statutory employment guarantee from 100 to 125 days per household per financial year.',
+    takeaway: 'Effective July 1, 2026, the VB-G RAM G Act, 2025 (Act No. 36 of 2025) officially replaces MGNREGA 2005, expanding the statutory employment guarantee from 100 to 125 days per household per financial year.',
     whyItMatters: 'This statutory shift marks the largest legislative overhaul of India\'s rural safety net in twenty years, transitioning administrative and funding frameworks while preserving existing job cards.',
     publishedAt: '2026-07-23T10:00:00Z',
     updatedAt: '2026-07-23T10:00:00Z',
@@ -65,10 +65,10 @@ function seed(): DataStore {
     relatedTopicIds: ['economy', 'policy', 'agriculture', 'employment'],
     keyPoints: [
       'MGNREGA 2005 completed 20 years of operation in 2026, delivering 100 days of guaranteed wage employment.',
-      'Parliament enacted the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025) to replace MGNREGA 2005.',
-      'Ministry of Rural Development notified S.O. 2415(E) fixing nation-wide commencement effective July 1, 2026.',
+      'Parliament enacted the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 36 of 2025) to replace MGNREGA 2005.',
+      'Ministry of Rural Development notified S.O. 2382(E) dated 11 May 2026 fixing nation-wide commencement effective July 1, 2026.',
       'Statutory wage employment guarantee expanded from 100 days to 125 days per rural household per financial year under the 2025 Act.',
-      'MGNREGA 2005 stood repealed under Section 36(1) of Act No. 18 of 2025 with full transitional protection for existing job card holders.',
+      'MGNREGA 2005 stood repealed under Section 37(1) of Act No. 36 of 2025 with full transitional protection for existing job card holders.',
     ],
     timeline: [
       { date: '2006-02-02', title: 'MGNREGA 2005 Enacted', description: 'Parliament passes the National Rural Employment Guarantee Act (Act No. 42 of 2005) guaranteeing 100 days of work.', source: 'PRS Legislative' },
@@ -76,9 +76,9 @@ function seed(): DataStore {
       { date: '2013-09-01', title: 'Enhanced Wage Structure', description: 'Wage rates revised with CPI-AL linkage.', source: 'Gazette Notification' },
       { date: '2020-04-01', title: 'COVID-19 Relief Surge', description: 'Demand for work surges 40% during pandemic lockdowns.', source: 'MoRD Annual Report' },
       { date: '2026-02-02', title: '20th Anniversary Milestone', description: 'Cumulative historical expenditure exceeds ₹8 lakh crore over two decades.', source: 'The Breakdown Analysis' },
-      { date: '2025-12-18', title: 'VB-G RAM G Act Enacted', description: 'Parliament passes the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025).', source: 'Gazette of India' },
-      { date: '2026-06-15', title: 'Commencement Notification', description: 'MoRD issues Notification S.O. 2415(E) fixing July 1, 2026 as the date of nationwide commencement.', source: 'Ministry of Rural Development' },
-      { date: '2026-07-01', title: 'What Changed on 1 July 2026?', description: 'VB-G RAM G Act 2025 comes into force; 125-day statutory guarantee operationalized; MGNREGA 2005 repealed under Sec 36(1).', source: 'The Breakdown Gazette Analysis' },
+      { date: '2025-12-18', title: 'VB-G RAM G Act Enacted', description: 'Parliament passes the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 36 of 2025).', source: 'Gazette of India' },
+      { date: '2026-06-15', title: 'Commencement Notification', description: 'MoRD issues Notification S.O. 2382(E) dated 11 May 2026 fixing July 1, 2026 as the date of nationwide commencement.', source: 'Ministry of Rural Development' },
+      { date: '2026-07-01', title: 'What Changed on 1 July 2026?', description: 'VB-G RAM G Act 2025 comes into force; 125-day statutory guarantee operationalized; MGNREGA 2005 repealed under Sec 37(1).', source: 'The Breakdown Gazette Analysis' },
     ],
     facts: [
       { label: 'Statutory Guarantee (Current Law)', value: '125 days/year', source: 'VB-G RAM G Act 2025 (w.e.f. July 1, 2026)' },
@@ -87,12 +87,12 @@ function seed(): DataStore {
       { label: 'Women Participation (2025-26)', value: '55.3%', source: 'MoRD Annual Report' },
     ],
     claims: [
-      { claim: 'MGNREGA 2005 remains the active statutory law governing rural wage employment in India.', source: 'Public Statements', verification: 'misleading', explanation: 'MGNREGA 2005 was repealed under Section 36(1) of Act No. 18 of 2025. Effective July 1, 2026, the operative statute is the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (VB-G RAM G Act, 2025).', confidence: 0.98 },
+      { claim: 'MGNREGA 2005 remains the active statutory law governing rural wage employment in India.', source: 'Public Statements', verification: 'misleading', explanation: 'MGNREGA 2005 was repealed under Section 37(1) of Act No. 36 of 2025. Effective July 1, 2026, the operative statute is the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (VB-G RAM G Act, 2025).', confidence: 0.98 },
       { claim: 'The statutory guarantee for rural wage employment is 100 days per household.', source: 'Historical Manuals', verification: 'outdated', explanation: 'While 100 days was the statutory limit under MGNREGA 2005, the VB-G RAM G Act, 2025 expanded the statutory guarantee to 125 days per household per financial year starting 1 July 2026.', confidence: 0.96 },
     ],
     sources: [
-      { name: 'Gazette of India Notification S.O. 2415(E) — VB-G RAM G Act 2025 Commencement', url: 'https://egazette.gov.in', type: 'government', tier: 1 },
-      { name: 'Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025)', url: 'https://rural.gov.in', type: 'government', tier: 1 },
+      { name: 'Gazette of India Notification S.O. 2382(E) dated 11 May 2026 — VB-G RAM G Act 2025 Commencement', url: 'https://egazette.gov.in', type: 'government', tier: 1 },
+      { name: 'Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 36 of 2025)', url: 'https://rural.gov.in', type: 'government', tier: 1 },
       { name: 'Ministry of Rural Development Annual Report 2025-26', url: 'https://rural.gov.in', type: 'government', tier: 1 },
     ],
     charts: [
@@ -104,7 +104,7 @@ function seed(): DataStore {
     ],
     faq: [
       { question: 'Who is eligible for work under the current rural employment law?', answer: 'Any adult rural household member willing to do unskilled manual work is eligible under the VB-G RAM G Act, 2025. All existing MGNREGA job cards remain valid during the transition.' },
-      { question: 'What is the guaranteed number of days of employment?', answer: 'Under the historical 2005 Act, 100 days were guaranteed. Effective 1 July 2026, under the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 18 of 2025), the statutory guarantee is expanded to 125 days of wage employment per rural household per financial year.' },
+      { question: 'What is the guaranteed number of days of employment?', answer: 'Under the historical 2005 Act, 100 days were guaranteed. Effective 1 July 2026, under the Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) Act, 2025 (Act No. 36 of 2025), the statutory guarantee is expanded to 125 days of wage employment per rural household per financial year.' },
     ],
     relatedStories: [
       { slug: 'digital-payments-boom', headline: 'Digital Payments in Rural India', summary: 'UPI\'s role in rural financial inclusion.', publishedAt: '2026-06-12T08:00:00Z', readingTime: 8, evidenceScore: 88, category: 'technology' },
@@ -1558,7 +1558,7 @@ function seed(): DataStore {
     slug: 'india-indonesia-relations',
     headline: 'India-Indonesia: How Maritime Neighbours Are Reshaping the Indo-Pacific',
     summary: 'India and Indonesia share 2,000 years of civilisational links and are now deepening a Comprehensive Strategic Partnership focused on maritime security, trade, and countering Chinese influence in Southeast Asia.',
-    heroImage: '/images/stories/india-europe-relations.jpg',
+    heroImage: '/images/placeholders/policy-placeholder.svg',
     heroImageAlt: "Mock alt text",
     publishedAt: '2026-08-18T10:00:00Z',
     updatedAt: '2026-08-18T10:00:00Z',
@@ -1784,7 +1784,7 @@ function seed(): DataStore {
     slug: 'india-uk-relations',
     headline: 'India-UK Relations: Beyond Colonial History to a Modern Strategic Partnership',
     summary: 'The India-UK relationship has reinvented itself through a Comprehensive Strategic Partnership, FTA negotiations, and robust diaspora links — but difficult conversations on historical reparations, migration, and trade-offs persist.',
-    heroImage: '/images/stories/india-europe-relations.jpg',
+    heroImage: '/images/placeholders/policy-placeholder.svg',
     heroImageAlt: "Mock alt text",
     publishedAt: '2026-08-23T10:00:00Z',
     updatedAt: '2026-08-23T10:00:00Z',
@@ -5325,6 +5325,7 @@ export const LEGACY_PUBLIC_SLUGS: ReadonlySet<string> = new Set([
   'accountability-in-india',
 ]);
 
+import { getEditorialReleaseHold } from '@/lib/editorial/release-holds';
 import type { PublicationStatus } from './types';
 import {
   isPubliclyPublished,
@@ -5336,6 +5337,12 @@ import {
 } from '@/lib/story/publication';
 
 function isLegacyPublic(story: APIStory, now: Date): boolean {
+  if (story.slug) {
+    const hold = getEditorialReleaseHold(story.slug);
+    if (hold && hold.status === 'HOLD') {
+      return false;
+    }
+  }
   return (
     LEGACY_PUBLIC_SLUGS.has(story.slug) &&
     !!story.publishedAt &&
@@ -5344,7 +5351,23 @@ function isLegacyPublic(story: APIStory, now: Date): boolean {
 }
 
 function storyIsPublic(story: APIStory, now: Date = new Date()): boolean {
-  if (isPubliclyPublished({ publicationStatus: story.publicationStatus, publishedAt: story.publishedAt }, now)) {
+  if (story.slug) {
+    const hold = getEditorialReleaseHold(story.slug);
+    if (hold && hold.status === 'HOLD') {
+      return false;
+    }
+  }
+  if (
+    isPubliclyPublished(
+      {
+        slug: story.slug,
+        publicationStatus: story.publicationStatus,
+        publishedAt: story.publishedAt,
+        isStory: true,
+      },
+      now
+    )
+  ) {
     return true;
   }
   if (isLegacyPublic(story, now)) {
@@ -5379,9 +5402,11 @@ export function getPublicStory(slug: string): APIStory | null {
 export function getPublicStoryDiagnostics(now: Date = new Date()) {
   const s = getStore();
   return Array.from(s.stories.values()).map((st) => {
-    const ps: { publicationStatus?: PublicationStatus; publishedAt?: string } = {
+    const ps = {
+      slug: st.slug,
       publicationStatus: st.publicationStatus,
       publishedAt: st.publishedAt,
+      isStory: true,
     };
     const diag = diagnosePublication(st.slug, ps, now);
     if (!diag.isPublic && isLegacyPublic(st, now)) {

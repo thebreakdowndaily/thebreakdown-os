@@ -236,7 +236,12 @@ export function validateLocalAssetDetailed(
   }
 
   const fullBuffer = fs.readFileSync(fullPath);
-  const digest = calculateContentDigest(fullBuffer);
+  const isSvg = cleanPath.toLowerCase().endsWith('.svg');
+  // For text-based formats (SVG), canonicalize CRLF to LF so line endings do not break digest validation across OS environments
+  const canonicalBuffer = isSvg
+    ? Buffer.from(fullBuffer.toString('utf8').replace(/\r\n/g, '\n'), 'utf8')
+    : fullBuffer;
+  const digest = calculateContentDigest(canonicalBuffer);
 
   // Check for HTML document pretending to be an image
   const textHeader = fullBuffer.toString('utf8', 0, Math.min(512, fullBuffer.length)).toLowerCase();

@@ -10,6 +10,7 @@ export interface ImageIntelligenceResult {
   height: number;
   priority: ImagePriority;
   type: 'official' | 'editorial' | 'creative-commons' | 'ai-illustration' | 'branded-placeholder';
+  caption?: string;
   credit?: string;
   agency?: string;
   license?: string;
@@ -84,6 +85,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
       manifest.height || DEFAULT_HERO_HEIGHT,
       isSvg,
       {
+        caption: manifest.caption,
         credit: manifest.creator || manifest.provenance,
         agency: manifest.provenance,
         license: manifest.license,
@@ -101,6 +103,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
         DEFAULT_THUMB_HEIGHT,
         isSvg,
         {
+          caption: manifest.caption,
           credit: manifest.creator || manifest.provenance,
           agency: manifest.provenance,
           license: manifest.license,
@@ -168,7 +171,7 @@ export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
   const categoryPlaceholder = getPlaceholder(story.category);
   const fallback: ImageIntelligenceResult = toResult(
     categoryPlaceholder,
-    story.headline,
+    `Placeholder: editorial hero awaiting approval for ${story.headline}`,
     4,
     'branded-placeholder',
     DEFAULT_HERO_WIDTH,

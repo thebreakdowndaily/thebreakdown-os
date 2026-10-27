@@ -1,3 +1,4 @@
+import { resolveStoryHeroImage } from '@/lib/image-intelligence/service';
 /**
  * lib/seo/jsonld-story.ts
  * Builds JSON-LD structured data for Story pages.
@@ -101,13 +102,16 @@ export function createStoryJsonLd(
   const wordCount =
     story.blocks?.reduce((sum, b) => sum + Math.round(JSON.stringify(b).length / 5), 0) ?? 0;
 
+  const resolvedHero = resolveStoryHeroImage(story);
+  const heroUrl = resolvedHero.hero?.src || (story.heroImage && !story.heroImage.includes('placehold.co') ? story.heroImage : undefined);
+
   const ld: Record<string, unknown>[] = [
     // 1. NewsArticle — primary schema
     createArticleSchema({
       headline: story.headline,
       summary: story.summary,
       url: storyUrl,
-      image: story.heroImage,
+      image: heroUrl,
       publishedAt: story.publishedAt,
       updatedAt: story.updatedAt,
       authorName: extractAuthorName(story.author),

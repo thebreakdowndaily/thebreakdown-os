@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { resolveStory } from './resolver';
+import { isCanonicalStoryPublic } from './publication';
 import { resolveStoryHeroImage } from '@/lib/image-intelligence/service';
 
 export async function buildStoryMetadata(slug: string): Promise<Metadata> {
   const resolution = await resolveStory(slug);
 
-  if (resolution.type === 'not_found') {
+  if (resolution.type === 'not_found' || !isCanonicalStoryPublic(resolution.canonicalStory)) {
     return { title: 'Story Not Found — The Breakdown' };
   }
 
@@ -53,8 +54,12 @@ export async function buildStoryMetadata(slug: string): Promise<Metadata> {
       url: `https://thebreakdown.in/story/${story.slug}`,
       images: (() => {
         const resolved = resolveStoryHeroImage(story);
-        const img = resolved.og?.src || story.heroImage;
-        return img ? [{ url: img, width: resolved.og?.width || 1200, height: resolved.og?.height || 630, alt: resolved.og?.alt || story.headline }] : [];
+        const img = resolved.og?.src || resolved.hero?.src || story.heroImage;
+        const isFallback = Boolean(resolved.og?.isFallback || resolved.hero?.isFallback || resolved.og?.type === 'branded-placeholder');
+        const alt = isFallback
+          ? (resolved.og?.alt || resolved.hero?.alt || `Editorial coverage placeholder for ${story.headline}`)
+          : (story.heroImageAlt || resolved.og?.alt || story.headline);
+        return img ? [{ url: img, width: resolved.og?.width || 1200, height: resolved.og?.height || 630, alt }] : [];
       })(),
       tags: story.tags.slice(0, 6),
     },
@@ -64,7 +69,7 @@ export async function buildStoryMetadata(slug: string): Promise<Metadata> {
       description: desc,
       images: (() => {
         const resolved = resolveStoryHeroImage(story);
-        const img = resolved.og?.src || story.heroImage;
+        const img = resolved.og?.src || resolved.hero?.src || story.heroImage;
         return img ? [img] : [];
       })(),
     },

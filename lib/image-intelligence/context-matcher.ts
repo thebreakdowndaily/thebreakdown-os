@@ -55,7 +55,7 @@ const GENERIC_STOP_TOKENS = new Set([
   'images', 'stories', 'library', 'maps', 'charts', 'jpg', 'png', 'svg', 'jpeg', 'webp',
   'chapter', 'india', 'indian', 'report', 'reform', 'policy', 'state', 'national',
   'central', 'government', 'public', 'standard', 'story', 'article', 'news', 'daily',
-  'what', 'when', 'where', 'which', 'who', 'whom', 'this', 'that', 'from', 'with', 'into'
+  'what', 'when', 'where', 'which', 'who', 'whom', 'this', 'that', 'from', 'with', 'into', 'relations', 'relation', 'between'
 ]);
 
 /**
@@ -242,10 +242,7 @@ export function matchImageToStoryContext(
     (story.slug === 'fix-farm-income' && imagePath.includes('fasal-bima')) ||
     (story.slug === 'india-china-relations' && imagePath.includes('india-china-border-tensions')) ||
     (story.slug === 'fix-air-pollution' && imagePath.includes('climate-finance')) ||
-    (story.slug.includes('semiconductor') && imagePath.includes('semiconductor')) ||
-    (story.slug.includes('ai-literacy') && (imagePath.includes('ai-literacy') || imagePath.includes('education'))) ||
-    (story.slug.includes('ranji') && (imagePath.includes('ranji') || imagePath.includes('cricket') || imagePath.includes('bcci'))) ||
-    (story.slug.includes('-relations') && imagePath.includes('india-europe-relations'));
+    (story.slug.includes('ranji') && (imagePath.includes('ranji') || imagePath.includes('bcci')));
 
   const isChart = imagePath.includes('/images/charts/');
   const classification: AssetClassification = isChart ? 'editorial-chart' : 'authentic-photo';
@@ -253,7 +250,8 @@ export function matchImageToStoryContext(
   // Distinctive single token (>= 5 characters matching slug or title directly)
   const isDistinctiveSingleToken =
     nonGenericMatchingTokens.length === 1 &&
-    nonGenericMatchingTokens[0].length >= 5 &&
+    nonGenericMatchingTokens[0].length >= 6 &&
+    !['relations', 'relation', 'reform', 'policy', 'mission', 'status', 'future', 'review', 'system'].includes(nonGenericMatchingTokens[0]) &&
     (story.slug.includes(nonGenericMatchingTokens[0]) || (story.headline || story.title || '').toLowerCase().includes(nonGenericMatchingTokens[0]));
 
   // Require at least 2 distinct semantic tokens OR distinctive single token OR documented domain synergy

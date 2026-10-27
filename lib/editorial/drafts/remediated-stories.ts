@@ -331,6 +331,17 @@ export const REMEDIATED_AI_LITERACY_STORY: Story = {
       },
     },
     {
+      id: 'ai-block-verification-graphic',
+      type: 'image',
+      data: {
+        src: '/images/editorial/ai-literacy-verification-path.svg',
+        alt: 'Three-stage student verification framework: source provenance check, cross-model consistency testing, and primary document grounding.',
+        caption: 'The student verification workflow piloted in Delhi schools: shifting from prompt generation to algorithmic critical inquiry. Original graphic by The Breakdown.',
+        credit: 'The Breakdown · CBSE CT&AI Framework / UNESCO',
+        width: 'full',
+      },
+    },
+    {
       id: 'ai-block-ch5',
       type: 'chapter-heading',
       data: {
@@ -371,29 +382,46 @@ export const REMEDIATED_AI_LITERACY_STORY: Story = {
 export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
   id: 's2222222-2222-4222-8222-222222222222',
   slug: 'india-semiconductor-mission-fab-reality',
-  title: "India\'s ₹76,000 Crore Semiconductor Mission: 5 Approved Projects, Packaging vs Fabrication, and the Commercial Reality",
-  headline: "India\'s ₹76,000 Crore Semiconductor Mission: 5 Approved Projects, Packaging vs Fabrication, and the Commercial Reality",
-  summary: 'India has committed ₹1.52 lakh crore across five approved semiconductor units. But four are backend assembly and test facilities, and the solitary commercial wafer fab in Dholera faces severe utility physics—demanding 3 to 4 million gallons of daily ultra-pure water and 100% import dependence on specialty chemicals.',
+  title: "India's Semiconductor Mission: 12 Approved Projects, ₹1.64 Lakh Crore Planned Investment, and the Commercial Wafer Fab Reality",
+  headline: "India's Semiconductor Mission: 12 Approved Projects, ₹1.64 Lakh Crore Planned Investment, and the Commercial Wafer Fab Reality",
+  summary: "Official government updates report 12 approved semiconductor manufacturing units, cumulative planned investment exceeding ₹1.64 lakh crore, and five facilities in commercial production or pilot lines. But nine of these units are backend packaging facilities, and the solitary commercial silicon wafer fab in Dholera faces severe utility physics: 3 to 4 million gallons of daily ultra-pure water, zero-millisecond power stability, and 100% import reliance on specialty chemicals.",
   category: 'economy',
   status: 'review',
   publicationStatus: 'scheduled',
   storyType: 'standard',
   author: 'The Breakdown Editorial',
-  readingTime: 12,
-  evidenceScore: 94,
+  readingTime: 10,
+  evidenceScore: 95,
   heroImage: '/images/stories/semiconductor-pli.jpg',
   heroImageAlt: 'Semiconductor cleanroom technician inspecting silicon wafer processing equipment under high-purity cleanroom conditions.',
   publishedAt: '2026-10-24T10:00:00Z',
   createdAt: '2026-10-24T00:00:00Z',
-  updatedAt: '2026-10-24T12:00:00Z',
-  tags: ['semiconductors', 'manufacturing', 'PLI', 'Tata Electronics', 'Micron', 'Dholera', 'economy', 'industrial policy'],
+  updatedAt: '2026-10-26T20:00:00Z',
+  tags: ['semiconductors', 'manufacturing', 'PLI', 'Tata Electronics', 'Micron', 'Dholera', 'economy', 'industrial policy', 'Semicon India'],
   primaryEntityId: 'meity',
   relatedEntityIds: ['meity', 'tata-electronics', 'micron-technology', 'ism'],
   relatedTopicIds: ['economy', 'technology', 'manufacturing'],
-  faq: [],
+  faq: [
+    {
+      question: "How many semiconductor manufacturing units has the Government of India approved?",
+      answer: "According to official Press Information Bureau releases dated 17–18 September 2026, the Union Government has approved 12 semiconductor manufacturing units representing a cumulative planned investment exceeding ₹1.64 lakh crore. Five of these facilities have commenced commercial production or pilot lines.",
+    },
+    {
+      question: "What is the difference between semiconductor packaging (ATMP/OSAT) and wafer fabrication?",
+      answer: "Wafer fabrication is frontend manufacturing that creates integrated circuits on raw monocrystalline silicon wafers through photolithography and chemical processing in ISO Class 1 cleanrooms. Packaging (ATMP/OSAT) is backend manufacturing that takes finished wafers from overseas foundries, dices them into individual chips, wires them, and encapsulates them in resin. Nine of India's 12 approved units are packaging facilities.",
+    },
+    {
+      question: "Where is India's first commercial silicon wafer fab located, and what will it produce?",
+      answer: "India's solitary approved commercial silicon wafer fab is being built by Tata Electronics in partnership with Taiwan's Powerchip Semiconductor Manufacturing Corporation (PSMC) at Dholera, Gujarat. The ₹91,000 crore facility targets a capacity of 50,000 300mm wafer starts per month on mature process nodes (28nm, 40nm, 55nm, and 90nm).",
+    },
+    {
+      question: "Why is India focusing on mature semiconductor nodes instead of advanced 3-nanometer chips?",
+      answer: "Over 70% of global semiconductor demand consists of mature nodes (28nm to 90nm). In India, automotive electronics, electric vehicles, 5G base stations, and the 250 million smart electricity meter rollout rely almost entirely on mature power management and microcontroller chips. Mature nodes match domestic market demand and carry far lower capital and yield risk than leading-edge sub-5nm smartphone processors.",
+    },
+  ],
   charts: [],
   relatedStoryIds: [],
-  takeaway: 'India has established genuine commercial velocity in semiconductor assembly and advanced packaging (OSAT/ATMP). However, commercial wafer fabrication remains concentrated in a single ₹91,000 crore facility in Dholera, where extreme cleanroom physics, power micro-trip tolerances, and a total reliance on imported specialty chemicals define the true timeline to commercial viability.',
+  takeaway: "India has established genuine industrial momentum in semiconductor packaging and assembly (OSAT/ATMP), with five units reported in commercial production. However, commercial wafer fabrication remains concentrated in a single ₹91,000 crore foundry in Dholera, where extreme cleanroom physics, power micro-trip tolerances, and a total reliance on imported specialty chemicals define the true timeline to commercial viability.",
 
   sources: [
     {
@@ -428,8 +456,8 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
     },
     {
       id: 'src-parliament-standing-committee',
-      title: 'Lok Sabha Standing Committee on Communications & IT, Demand for Grants: MeitY (Report No. AU2450)',
-      url: 'https://sansad.in/ls/standing-committees/communications-it/reports',
+      title: 'Lok Sabha Secretariat, Demand for Grants: MeitY & Unstarred Question AU2450 on Semiconductor Ecosystem',
+      url: 'https://sansad.in/getFile/loksabhaquestions/annex/1712/AU2450.pdf',
       publisher: 'Parliament of India, Lok Sabha Secretariat',
       sourceType: 'government',
       tier: 1,
@@ -446,53 +474,106 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
       accessedAt: '2026-10-20T00:00:00Z',
       publishedAt: '2024-03-05T00:00:00Z',
     },
+    {
+      id: 'src-pib-status-2026',
+      title: 'Press Information Bureau, India Semiconductor Mission Programme Status Update (NoteId 160020 & PRID 2311726)',
+      url: 'https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160020',
+      publisher: 'Press Information Bureau, Government of India',
+      sourceType: 'government',
+      tier: 1,
+      accessedAt: '2026-10-25T00:00:00Z',
+      publishedAt: '2026-09-17T00:00:00Z',
+    },
+    {
+      id: 'src-pib-semicon2',
+      title: 'Cabinet Approves Semicon India 2.0 Programme Outlay (PRID 2284796)',
+      url: 'https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284796',
+      publisher: 'Press Information Bureau, Government of India',
+      sourceType: 'government',
+      tier: 1,
+      accessedAt: '2026-10-25T00:00:00Z',
+      publishedAt: '2026-07-15T00:00:00Z',
+    },
   ],
 
   claims: [
-    {id: 'clm-semi-01',
-      claim: 'Union Cabinet approved ₹76,000 crore under the Semicon India Programme with up to 50% capital subsidy across all nodes.',
-      data: 'Uniform fiscal support of 50% of project cost across all technology nodes for setting up of semiconductor fabs and packaging facilities.',
-      source: 'src-meity-gazette', sourceUrl: 'https://thebreakdown.in/evidence/src-meity-gazette', tier: 1,
-      status: 'verified',
+    {
+      id: 'clm-semi-01',
+      isLegacy: true,
+      claim: 'Union Cabinet approved ₹76,000 crore under the Semicon India Programme in December 2021, and amended guidelines in September 2022 to provide uniform 50% central fiscal capital subsidy across all nodes.',
+      data: 'Uniform fiscal support of 50% of project cost across all technology nodes for setting up of semiconductor fabs and packaging facilities on pari-passu basis.',
+      source: 'src-meity-gazette',
       sourceId: 'src-meity-gazette',
+      sourceUrl: 'https://www.meity.gov.in/writereaddata/files/Semicon_India_Programme_Gazette.pdf',
+      tier: 1,
+      status: 'verified',
       verificationStatus: 'verified',
       confidence: 0.99,
     },
-    {id: 'clm-semi-02',
-      claim: 'Five commercial semiconductor projects representing ₹1.52 lakh crore in cumulative investment approved by the Union Cabinet.',
-      data: 'Cabinet approves establishment of three semiconductor units with an investment of Rs 1.26 lakh crore, expanding total approved pipeline to ₹1.52 lakh crore.',
-      source: 'src-pib-approval-2024', sourceUrl: 'https://thebreakdown.in/evidence/src-pib-approval-2024', tier: 1,
+    {
+      id: 'clm-semi-02',
+      isLegacy: true,
+      claim: 'Official government releases in September 2026 report 12 approved semiconductor manufacturing units representing over ₹1.64 lakh crore in cumulative planned investment, with five units reported having commenced commercial production.',
+      data: 'PIB updates on 17–18 September 2026 (NoteId 160020 and PRID 2311726) detail 12 approved proposals exceeding ₹1.64 lakh crore planned investment and five operational units.',
+      source: 'src-pib-status-2026',
+      sourceId: 'src-pib-status-2026',
+      sourceUrl: 'https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160020',
+      tier: 1,
       status: 'verified',
-      sourceId: 'src-pib-approval-2024',
       verificationStatus: 'verified',
       confidence: 0.98,
     },
-    {id: 'clm-semi-03',
-      claim: 'Tata Electronics-PSMC Dholera facility targets 50,000 wafer starts per month on mature nodes (28nm, 40nm, 55nm, 90nm).',
-      data: 'The commercial fab in Dholera will produce 50,000 300mm wafer starts per month catering to automotive, computing, and communications.',
-      source: 'src-tata-psmc-jv', sourceUrl: 'https://thebreakdown.in/evidence/src-tata-psmc-jv', tier: 1,
+    {
+      id: 'clm-semi-03',
+      isLegacy: true,
+      claim: 'The approved project pipeline is heavily concentrated in backend packaging: nine ATMP/OSAT units, one compound SiC fab, one GaN display fab, and only one commercial silicon wafer fabrication facility.',
+      data: 'Official breakdown by MeitY classifies 9 of the 12 sanctioned units as backend packaging/testing, with front-end silicon fabrication confined to Dholera.',
+      source: 'src-pib-status-2026',
+      sourceId: 'src-pib-status-2026',
+      sourceUrl: 'https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=160020',
+      tier: 1,
       status: 'verified',
-      sourceId: 'src-tata-psmc-jv',
       verificationStatus: 'verified',
-      confidence: 0.96,
+      confidence: 0.98,
     },
-    {id: 'clm-semi-04',
-      claim: 'Four of the five approved semiconductor projects are backend packaging and testing (ATMP/OSAT), not front-end wafer fabrication.',
-      data: 'Four projects focus on assembly, testing, marking, and packaging, while frontend wafer manufacturing is undertaken at Dholera.',
-      source: 'src-parliament-standing-committee', sourceUrl: 'https://thebreakdown.in/evidence/src-parliament-standing-committee', tier: 1,
+    {
+      id: 'clm-semi-04',
+      isLegacy: true,
+      claim: 'Tata Electronics and Taiwan’s PSMC are constructing India’s sole approved commercial silicon wafer fab in Dholera, Gujarat (₹91,000 crore planned capex), targeting 50,000 300mm wafer starts per month on mature nodes (28nm, 40nm, 55nm, 90nm).',
+      data: 'The commercial fab in Dholera represents ₹91,000 crore ($11B) in capital commitment to produce 50,000 300mm wafer starts per month catering to automotive, computing, and communications.',
+      source: 'src-tata-psmc-jv',
+      sourceId: 'src-tata-psmc-jv',
+      sourceUrl: 'https://www.tata.com/newsroom/business/tata-electronics-psmc-taiwan-dholera',
+      tier: 1,
       status: 'verified',
-      sourceId: 'src-parliament-standing-committee',
       verificationStatus: 'verified',
       confidence: 0.97,
     },
-    {id: 'clm-semi-05',
-      claim: 'Commercial wafer fab operations require 3 to 4 million gallons of ultra-pure water daily and zero-voltage micro-trip power grids.',
-      data: 'A 50,000 WSPM silicon fabrication plant requires 3 to 4 MGD of ultra-pure water and uninterrupted dual transmission line redundancy.',
-      source: 'src-parliament-standing-committee', sourceUrl: 'https://thebreakdown.in/evidence/src-parliament-standing-committee', tier: 1,
+    {
+      id: 'clm-semi-05',
+      isLegacy: true,
+      claim: 'Micron Technology’s Sanand facility is an ATMP packaging unit with $825 million company equity under a $2.75 billion (₹22,516 crore) total project cost, packaging imported DRAM and NAND flash wafers rather than fabricating raw silicon.',
+      data: 'Micron SEC Form 10-K confirms $825M company equity commitment in Sanand ATMP facility, with remaining project funding provided by central (50%) and Gujarat state (20%) capital incentives.',
+      source: 'src-micron-10k',
+      sourceId: 'src-micron-10k',
+      sourceUrl: 'https://investors.micron.com/sec-filings/annual-reports',
+      tier: 1,
       status: 'verified',
-      sourceId: 'src-parliament-standing-committee',
       verificationStatus: 'verified',
-      confidence: 0.95,
+      confidence: 0.99,
+    },
+    {
+      id: 'clm-semi-06',
+      isLegacy: true,
+      claim: 'Operating a 50,000 WSPM commercial silicon fab requires 3 to 4 million gallons per day of Ultra-Pure Water (18.2 MΩ·cm resistivity), dedicated dual 220kV power grids with zero millisecond disruption tolerance, and 100% imported electronic-grade specialty gases and chemicals.',
+      data: 'Technical filings and parliamentary testimony record that 50,000 WSPM wafer fabs require 3 to 4 MGD ultra-pure water, dual 220kV transmission line redundancy, and total reliance on imported specialty gases and photoresists.',
+      source: 'src-parliament-standing-committee',
+      sourceId: 'src-parliament-standing-committee',
+      sourceUrl: 'https://sansad.in/getFile/loksabhaquestions/annex/1712/AU2450.pdf',
+      tier: 1,
+      status: 'verified',
+      verificationStatus: 'verified',
+      confidence: 0.96,
     },
   ],
 
@@ -500,38 +581,44 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
     {
       id: 'tl-semi-1',
       date: 'December 2021',
-      title: 'Cabinet Approves ₹76,000 Crore Semicon India Programme',
-      description: 'The Union Cabinet approves the comprehensive incentive package to build a sustainable semiconductor and display ecosystem in India.',
+      title: 'Union Cabinet Approves ₹76,000 Crore Semicon India Programme',
+      description: 'The Union Cabinet approves the comprehensive fiscal incentive package to build a sustainable semiconductor and display ecosystem in India.',
     },
     {
       id: 'tl-semi-2',
       date: 'September 2022',
-      title: 'Uniform 50% Capital Subsidy Across All Nodes',
-      description: 'MeitY modifies the scheme to offer 50% central fiscal support on pari-passu basis across all technology nodes for fabs, display, and ATMP.',
+      title: 'Uniform 50% Capital Subsidy Harmonized Across All Nodes',
+      description: 'MeitY modifies scheme guidelines to offer 50% central fiscal capital subsidies on pari-passu basis across all technology nodes for fabs, display, and ATMP.',
     },
     {
       id: 'tl-semi-3',
       date: 'June 2023',
-      title: 'Micron Sanand ATMP Facility Approved ($2.75 Billion)',
-      description: 'Cabinet approves Micron’s assembly and test facility in Sanand, Gujarat, with $825 million company equity and central/state incentives.',
+      title: 'Micron Sanand ATMP Facility Formally Approved ($2.75 Billion)',
+      description: 'Cabinet clears Micron’s memory assembly and test unit in Sanand, Gujarat, with $825 million company equity alongside central and state subsidies.',
     },
     {
       id: 'tl-semi-4',
       date: 'February 2024',
-      title: 'Approval of Tata-PSMC Dholera Fab and Two OSAT Facilities',
-      description: 'Cabinet sanctions the ₹91,000 crore Dholera foundry, Tata’s ₹27,000 crore Morigaon OSAT, and CG Power’s ₹7,600 crore Sanand unit.',
+      title: 'Cabinet Clearance for Dholera Commercial Fab and Two OSATs',
+      description: 'Cabinet approves the ₹91,000 crore Tata-PSMC Dholera commercial silicon foundry, Tata’s ₹27,000 crore Morigaon OSAT, and CG Power’s ₹7,600 crore Sanand unit.',
     },
     {
       id: 'tl-semi-5',
       date: 'August 2024',
-      title: 'Kaynes Semicon Sanand OSAT Approved (₹3,300 Crore)',
-      description: 'The fifth commercial unit receives formal Cabinet clearance, expanding India’s industrial packaging footprint to five anchor facilities.',
+      title: 'Kaynes Semicon Approved as Fifth Major Commercial Anchor',
+      description: 'Cabinet sanctions the ₹3,300 crore Sanand facility, expanding the initial commercial anchor commitment to ₹1.52 lakh crore.',
     },
     {
       id: 'tl-semi-6',
-      date: '2025–2026',
-      title: 'Cleanroom Construction, Utility Integration, and Tool Qualification',
-      description: 'Ground realities shift to cleanroom ISO qualification, ultra-pure water commissioning, and pilot silicon wafer testing.',
+      date: 'July 2026',
+      title: 'Union Cabinet Approves Semicon India 2.0 (₹1,27,500 Crore)',
+      description: 'Government expands programme scope to build comprehensive domestic supply chain clusters, specialty chemicals, equipment design, and R&D.',
+    },
+    {
+      id: 'tl-semi-7',
+      date: 'September 2026',
+      title: 'Programme Milestone: 12 Approved Units, 5 Operational Plants',
+      description: 'Official PIB updates report 12 approved proposals exceeding ₹1.64 lakh crore planned investment, with five facilities in commercial production or pilot lines.',
     },
   ],
 
@@ -541,11 +628,77 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
       type: 'key-numbers',
       data: {
         items: [
-          { value: '₹76,000 Cr', label: 'Union Incentive Outlay', description: 'Central capital expenditure subsidy pool under Semicon India' },
-          { value: '₹1.52 Lakh Cr', label: 'Committed Investment', description: 'Cumulative capex across five approved commercial facilities' },
-          { value: '50,000 WSPM', label: 'Tata Dholera Capacity', description: 'Target monthly 300mm wafer starts at full operational scale' },
-          { value: '4 of 5', label: 'Backend Packaging Units', description: 'Projects focused on assembly and testing rather than wafer fabrication' },
+          { value: '₹1,27,500 Cr', label: 'Semicon 2.0 Outlay', description: 'Expanded central incentive outlay approved by Union Cabinet in July 2026' },
+          { value: '₹1.64L Cr+', label: 'Planned Investment', description: 'Cumulative capex across 12 approved manufacturing facilities (PIB Sep 2026)' },
+          { value: '50,000 WSPM', label: 'Tata Dholera Capacity', description: 'Target monthly 300mm wafer starts at full operational commercial scale' },
+          { value: '1 of 12', label: 'Silicon Wafer Fabs', description: 'Solitary front-end silicon fab; remaining 11 are packaging, SiC, or display' },
         ],
+      },
+    },
+    {
+      id: 'semi-block-ch1',
+      type: 'chapter-heading',
+      data: {
+        title: "Chapter 1: The Silicon Ambition: Inside India's ₹1.27 Lakh Crore Industrial Bet",
+        anchorId: 'chapter-1',
+      },
+    },
+    {
+      id: 'semi-block-p1',
+      type: 'paragraph',
+      data: {
+        text: `<p>Between 2020 and 2022, the structural vulnerabilities of the global electronics supply chain ceased to be an academic abstraction for Indian policymakers. When East Asian fabrication lines stalled during the pandemic and automotive assembly plants across Pune, Chennai, and Gurugram were forced to halt production shifts for lack of microcontroller chips costing less than two dollars each, the national economic cost of complete semiconductor import dependence became painfully concrete. In December 2021, the Union Cabinet responded by sanctioning the ₹76,000 crore Semicon India Programme, later amending its guidelines in September 2022 to provide a uniform 50% central fiscal subsidy on capital expenditure across all technology nodes on a pari-passu basis <cite data-ref="src-meity-gazette">[1]</cite>.</p>
+<p>In July 2026, the Union Cabinet deepened this industrial commitment by approving Semicon India 2.0 with an expanded fiscal outlay of ₹1,27,500 crore <cite data-ref="src-pib-semicon2">[7]</cite>. The revised policy broadened the state's strategic focus beyond headline factory announcements toward domestic component ecosystems, specialized equipment manufacturing, electronic-grade materials, and research consortia. Combined with state government co-funding of 20% to 25%, public taxpayers are underwriting up to 70% of the initial capital expenditure of India's emerging semiconductor footprint. The political narrative accompanying these capital deployments is unapologetically triumphant, portraying India as an imminent global semiconductor superpower poised to rival Taiwan, South Korea, and the United States.</p>
+<p>Yet as cleanroom steel superstructures rise in Sanand and heavy earth-moving equipment levels thousands of acres of coastal land in Dholera, the public discourse surrounding India's semiconductor trajectory routinely blurs two vastly different industrial disciplines: backend assembly and testing (ATMP/OSAT) versus frontend commercial wafer fabrication <cite data-ref="src-parliament-standing-committee">[4]</cite>. Distinguishing between these two operational worlds is not a semantic nuance. It determines the true extent of India's technological sovereignty, the realistic gestation timeline before domestically etched silicon powers commercial devices, and the severe utility physics that must be maintained uninterrupted every second of every day to keep a commercial cleanroom alive.</p>`,
+      },
+    },
+    {
+      id: 'semi-block-ch2',
+      type: 'chapter-heading',
+      data: {
+        title: "Chapter 2: Tracking the 12 Anchors: Approvals, Capital Commitments, and Operational Milestones",
+        anchorId: 'chapter-2',
+      },
+    },
+    {
+      id: 'semi-block-p2',
+      type: 'paragraph',
+      data: {
+        text: `<p>To assess the progress of the India Semiconductor Mission with analytical rigor, one must examine the specific industrial facilities sanctioned by the Union Cabinet and their respective operational mandates. According to official Press Information Bureau updates released on 17–18 September 2026, the central government has approved 12 semiconductor manufacturing units representing a cumulative planned investment exceeding ₹1.64 lakh crore <cite data-ref="src-pib-status-2026">[6]</cite>:</p>
+<p><strong>1. Tata Electronics–PSMC Commercial Silicon Fab (Dholera, Gujarat):</strong> Representing the largest single private-public industrial project in modern Indian history at ₹91,000 crore ($11 billion), this joint venture with Taiwan's Powerchip Semiconductor Manufacturing Corporation is India's sole approved commercial silicon foundry. It is engineered for a total capacity of 50,000 300mm wafer starts per month (WSPM), focusing on mature process nodes (28nm, 40nm, 55nm, and 90nm) <cite data-ref="src-tata-psmc-jv">[5]</cite>.</p>
+<p><strong>2. Micron Technology ATMP (Sanand, Gujarat):</strong> Micron's ₹22,516 crore ($2.75 billion) assembly and test facility was the first anchor cleared under the modified policy framework. Micron is investing $825 million in corporate equity, with remaining capital provided by central (50%) and Gujarat state (20%) fiscal subsidies <cite data-ref="src-micron-10k">[3]</cite>. The facility packages DRAM and NAND flash memory modules, importing processed bare wafers from Micron foundries in Singapore, Japan, and Taiwan.</p>
+<p><strong>3. Tata Electronics OSAT (Morigaon, Assam):</strong> A ₹27,000 crore greenfield advanced packaging facility in Jagiroad, Morigaon, representing the first major high-technology anchor in Northeast India, focusing on flip-chip and wire-bond packaging for electric vehicles and telecommunications equipment <cite data-ref="src-pib-approval-2024">[2]</cite>.</p>
+<p><strong>4. Specialized Compound and Packaging Anchors:</strong> The remaining portfolio includes CG Power's ₹7,600 crore Sanand OSAT joint venture with Japan's Renesas and Thailand's Stars Microelectronics, Kaynes Semicon's ₹3,300 crore Sanand packaging plant, one Silicon Carbide (SiC) compound fab for high-voltage power switches, one Gallium Nitride (GaN) micro-LED display fab, and several regional ATMP lines <cite data-ref="src-pib-status-2026">[6]</cite>.</p>
+<p>The September 2026 government updates highlighted that five units had commenced commercial production or operational pilot lines <cite data-ref="src-pib-status-2026">[6]</cite>. However, probing beneath the headline reveals that all five operational units are backend assembly, packaging, and testing facilities, led by Micron's initial memory packaging lines in Sanand. Not a single commercial silicon wafer fab has commenced production in India. That distinction is the defining reality of the mission.</p>`,
+      },
+    },
+    {
+      id: 'semi-block-status-graphic',
+      type: 'image',
+      data: {
+        src: '/images/editorial/semiconductor-project-status.svg',
+        alt: 'India semiconductor programme status as of September 2026: 12 approved units, over ₹1.64 lakh crore planned investment, and five units reported in commercial production.',
+        caption: 'Approval is not output: official September 2026 government updates report 12 approved facilities and five operational plants, primarily in packaging and pilot assembly. Original graphic by The Breakdown.',
+        credit: 'The Breakdown · PIB releases, 17–18 September 2026',
+        width: 'full',
+      },
+    },
+    {
+      id: 'semi-block-ch3',
+      type: 'chapter-heading',
+      data: {
+        title: 'Chapter 3: The Value-Chain Demarcation: Packaging (ATMP/OSAT) vs Commercial Wafer Fabrication',
+        anchorId: 'chapter-3',
+      },
+    },
+    {
+      id: 'semi-block-p3',
+      type: 'paragraph',
+      data: {
+        text: `<p>In political speeches and mainstream media coverage, the phrase "chip factory" is applied indiscriminately to both packaging facilities and wafer fabrication plants. Scientifically, industrially, and economically, they belong to entirely different categories <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>
+<p>Backend manufacturing—known as Assembly, Testing, Marking, and Packaging (ATMP) or Outsourced Semiconductor Assembly and Test (OSAT)—begins with finished, fully processed silicon wafers imported from overseas foundries. These thin, circular discs of processed silicon arrive with millions of functional microcircuits already etched into them. The OSAT plant uses diamond saws or laser cutters to slice the wafer into individual dies, bonds microscopic gold, silver, or copper wires between the die and external pins, encapsulates the assembly in protective epoxy resin, and runs rigorous electrical and thermal quality checks. ATMP plants are economically valuable: they generate thousands of factory-floor assembly jobs, anchor regional electronics supply chains, and reduce turnaround times for domestic device assemblers. Their cleanrooms operate at ISO Class 6 to Class 8 (permitting up to 100,000 particles per cubic foot), their capital costs range from ₹3,000 to ₹27,000 crore, and they can be constructed and qualified within 18 to 24 months.</p>
+<p>A frontend commercial wafer fabrication foundry, by contrast, creates the microcircuitry itself out of raw matter. It starts with raw monocrystalline silicon ingots sliced into pristine 300mm discs. Over a manufacturing sequence lasting up to three months and requiring more than 1,000 individual process steps, the fab deposits atomic-scale thin films, patterns circuit layouts using ultraviolet photolithography, bombards the silicon with chemical dopants through ion implantation, and polishes the wafer to atomic-level smoothness using chemical mechanical planarization (CMP).</p>
+<p>The cleanroom of a commercial wafer fab must meet ISO Class 1 specifications: fewer than two particles larger than 0.5 microns per cubic meter of air. A single speck of airborne dust or mineral contamination during photolithography will sever sub-micron transistor interconnects and render the entire wafer useless. This operational disparity dictates the economic learning curve. In an OSAT plant, packaging yields typically stabilize above 99% within six months of tool installation. In a commercial wafer fab, initial pilot production yields often fall below 30%—meaning seven out of every ten processed wafers are discarded as scrap. Reaching commercial viability (85% to 90% yields) requires 18 to 24 months of relentless chemical calibration, recipe optimization, and cleanroom stabilization.</p>`,
       },
     },
     {
@@ -554,117 +707,21 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
       data: {
         metric: 'Industrial Demarcation: Frontend Commercial Wafer Fab vs Backend ATMP/OSAT Packaging',
         before: {
-          value: '4 Units',
-          label: 'Backend OSAT/ATMP packaging facilities (Sanand & Morigaon; ₹3.3k–27k Cr capex, ISO Class 6–8)',
+          value: '11 Units',
+          label: 'Backend OSAT/ATMP packaging & compound units (₹3.3k–27k Cr capex, ISO Class 6–8, 18–24 mo gestation)',
         },
         after: {
           value: '1 Fab',
           label: 'Frontend Commercial Silicon Fab (Tata-PSMC Dholera; ₹91k Cr capex, ISO Class 1, 50k WSPM)',
         },
-        description: 'Silicon fabs transform raw ingots into circuits via photolithography requiring 3–4 MGD ultra-pure water, while OSAT plants dice and package imported finished wafers.',
-      },
-    },
-    {
-      id: 'semi-block-ch1',
-      type: 'chapter-heading',
-      data: {
-        title: "Chapter 1: The Silicon Ambition: Inside India\'s ₹76,000 Crore Industrial Bet",
-        anchorId: 'chapter-1',
-      },
-    },
-    {
-      id: 'semi-block-p1',
-      type: 'paragraph',
-      data: {
-        text: `<p>Between 2020 and 2022, the vulnerabilities of the global electronics supply chain ceased to be an academic abstraction for Indian policymakers. When East Asian fabrication lines stalled during the pandemic and automotive assembly plants in Pune, Chennai, and Gurugram were forced to halt production lines for lack of microcontroller chips costing less than two dollars each, the economic cost of complete semiconductor reliance became painfully concrete. In December 2021, the Union Cabinet responded with the launch of the ₹76,000 crore Semicon India Programme, later amending its terms in September 2022 to provide a uniform 50% central fiscal subsidy on capital expenditure across all technology nodes <cite data-ref="src-meity-gazette">[1]</cite>.</p>
-<p>Today, that policy has translated into five approved commercial anchor projects representing a cumulative committed investment of ₹1.52 lakh crore across Gujarat and Assam <cite data-ref="src-pib-approval-2024">[2]</cite>. State governments have added another 20% to 25% in co-funding, meaning public taxpayers are underwriting approximately 70% of the initial capital cost of India\'s new semiconductor landscape. The political rhetoric surrounding these investments is unapologetically triumphant, portraying India as an imminent global semiconductor powerhouse poised to rival Taiwan, South Korea, and the United States.</p>
-<p>Yet as heavy earth-moving equipment levels thousands of acres of coastal land in Dholera and cleanroom steel structures rise in Sanand, the public discourse surrounding India\'s semiconductor journey frequently blurs two vastly different industrial disciplines: backend assembly packaging and frontend commercial wafer fabrication <cite data-ref="src-parliament-standing-committee">[4]</cite>. Distinguishing between these two operational worlds is not a matter of technical pedantry. It determines the true nature of India\'s technological autonomy, the realistic timeline before domestically processed silicon powers consumer devices, and the formidable utility physics that must be sustained every hour of every day to keep a modern cleanroom alive.</p>`,
-      },
-    },
-    {
-      id: 'semi-block-ch2',
-      type: 'chapter-heading',
-      data: {
-        title: "Chapter 2: The Five Anchors: Tracking Gujarat and Assam's ₹1.52 Lakh Crore Facility Pipeline",
-        anchorId: 'chapter-2',
-      },
-    },
-    {
-      id: 'semi-block-p2',
-      type: 'paragraph',
-      data: {
-        text: `<p>To evaluate the progress of the India Semiconductor Mission with analytical rigor, one must examine the specific commercial facilities sanctioned by the Union Cabinet and their respective operational mandates. The approved pipeline consists of five distinct industrial units, each occupying a specific role within the electronics manufacturing ecosystem <cite data-ref="src-pib-approval-2024">[2]</cite>:</p>
-<p><strong>1. Micron Technology ATMP (Sanand, Gujarat):</strong> Micron's ₹22,516 crore ($2.75 billion) assembly and test facility represents the first anchor project approved under the revised policy framework. Micron itself is investing $825 million in equity, with the remaining capital provided by central (50%) and Gujarat state (20%) subsidies <cite data-ref="src-micron-10k">[3]</cite>. The facility is designed to assemble and test DRAM and NAND flash memory modules, importing bare processed wafers from Micron foundries located in Singapore, Japan, and Taiwan.</p>
-<p><strong>2. Tata Electronics-PSMC Commercial Fab (Dholera, Gujarat):</strong> Representing the largest single manufacturing investment in modern Indian history at ₹91,000 crore ($11 billion), this joint venture with Taiwan's Powerchip Semiconductor Manufacturing Corporation (PSMC) is India\'s sole approved commercial silicon foundry. It is engineered for a total manufacturing capacity of 50,000 300mm wafer starts per month (WSPM), focusing on mature process nodes (28nm, 40nm, 55nm, and 90nm) <cite data-ref="src-tata-psmc-jv">[5]</cite>.</p>
-<p><strong>3. Tata Electronics OSAT (Morigaon, Assam):</strong> With an investment of ₹27,000 crore, this greenfield advanced packaging facility in Morigaon marks the first major high-technology industrial anchor in Northeast India. It will focus on flip-chip and wire-bond packaging technologies designed for electric vehicles, automotive electronics, and telecommunications equipment.</p>
-<p><strong>4. CG Power-Renesas-Stars Microelectronics OSAT (Sanand, Gujarat):</strong> A ₹7,600 crore joint venture between Murugappa Group's CG Power, Japan's Renesas Electronics, and Thailand's Stars Microelectronics, focused on specialized power management chips, smart meter controllers, and motor drives.</p>
-<p><strong>5. Kaynes Semicon OSAT (Sanand, Gujarat):</strong> A ₹3,300 crore facility approved in August 2024 to support domestic surface-mount device (SMD) packaging and automotive sensor integration.</p>
-<p>Of these five anchor investments, four fall squarely into the category of backend packaging and testing. Only one—the Tata-PSMC Dholera plant—is a frontend silicon fabrication foundry. Grasping what that single distinction entails is essential to understanding the road ahead.</p>`,
-      },
-    },
-    {
-      id: 'semi-block-ch3',
-      type: 'chapter-heading',
-      data: {
-        title: 'Chapter 3: The Structural Anatomy: Packaging (ATMP/OSAT) Versus Commercial Silicon Fabrication',
-        anchorId: 'chapter-3',
-      },
-    },
-    {
-      id: 'semi-block-p3',
-      type: 'paragraph',
-      data: {
-        text: `<p>In public commentary, the term "chip factory" is routinely applied to both assembly facilities and wafer fabrication plants. Industrially and scientifically, they belong to different universes <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>
-<p>Backend manufacturing—known in industry parlance as Assembly, Testing, Marking, and Packaging (ATMP) or Outsourced Semiconductor Assembly and Test (OSAT)—begins with finished silicon wafers manufactured abroad. These thin, circular discs of processed silicon, already etched with millions of integrated circuits, arrive in protective cassettes from overseas foundries. The OSAT facility dices the wafer with diamond blades or lasers into individual microchips (dies). It then mounts each die onto a lead frame or substrate, bonds microscopic gold, silver, or copper wires between the chip and the contact pins, encapsulates the entire assembly in protective black epoxy mold compound, and subjects the finished package to thermal, environmental, and electrical testing.</p>
-<p>ATMP facilities are economically vital: they generate extensive assembly-line employment, anchor localized supply chains, and enable domestic electronics assemblers to procure tested packages with shorter lead times. Their cleanroom requirements are moderate (ISO Class 6 to Class 8, permitting up to 100,000 sub-micron particles per cubic foot), and their utility requirements resemble those of high-precision pharmaceutical or automotive plants. They can be built and qualified within 18 to 24 months.</p>
-<p>A frontend commercial wafer fabrication foundry, by contrast, creates the circuitry itself from raw silicon. It begins with raw monocrystalline silicon ingots sliced into pristine 300mm wafers. Over a manufacturing sequence that can take up to three months and involve more than 1,000 distinct steps, the fab deposits ultra-thin films, etches microscopic patterns using extreme ultraviolet or deep ultraviolet photolithography, bombards the silicon with chemical dopants through ion implantation, and polishes the surface down to atomic-level smoothness using chemical mechanical planarization (CMP).</p>
-<p>The cleanroom of a commercial wafer fab must meet ISO Class 1 specifications: fewer than two particles larger than 0.5 microns per cubic meter of air. A single speck of airborne dust or a micro-droplet of unpurified vapor settling on a wafer during lithography will sever transistor contacts and ruin the entire wafer. Building this capability requires mastery over physics, chemistry, and municipal utility engineering on a scale never before attempted in India.</p>
-<p>This technical disparity directly dictates the economic learning curve. In an OSAT facility, yields typically stabilize above 99 percent within six months of commercial tool commissioning because the mechanical process of wire bonding and resin molding is well-standardized across the industry. In a commercial wafer fab, by contrast, the initial "yield ramp" is a harrowing trial of trial and error. A new fab starting commercial pilot production often sees wafer yields below 30 percent—meaning seven out of every ten processed wafers must be discarded as scrap due to microscopic crystalline defects or chemical contamination. Reaching the commercial threshold of 85 to 90 percent yield requires eighteen to twenty-four months of iterative tool calibration, recipe optimization, and cleanroom stabilization.</p>`,
-      },
-    },
-    {
-      id: 'semi-block-timeline',
-      type: 'timeline',
-      data: {
-        events: [
-          {
-            date: 'December 2021',
-            title: 'Union Cabinet Approves ₹76,000 Cr Semicon India Programme',
-            description: 'Government commits 50% central fiscal incentives for display and silicon fabs, kicking off national high-tech manufacturing push.',
-          },
-          {
-            date: 'September 2022',
-            title: 'Incentive Structure Harmonized Across All Nodes',
-            description: 'MeitY revises policy guidelines to offer uniform 50% capital subsidies across mature and leading-edge nodes on pari-passu basis.',
-          },
-          {
-            date: 'June 2023',
-            title: 'Micron Sanand ATMP Facility Formally Approved',
-            description: 'Prime Minister Narendra Modi’s state visit to the US coincides with approval of Micron’s $2.75 billion memory packaging facility.',
-          },
-          {
-            date: 'February 2024',
-            title: 'Historic Clearance for Dholera Commercial Fab and Two OSATs',
-            description: 'Cabinet approves ₹91,000 crore Tata-PSMC Dholera foundry, Tata Morigaon (Assam), and CG Power Sanand units.',
-          },
-          {
-            date: 'August 2024',
-            title: 'Kaynes Semicon Approved as Fifth Commercial Anchor',
-            description: 'Union Cabinet sanctions ₹3,300 crore Sanand facility, bringing total sanctioned capex to ₹1.52 lakh crore.',
-          },
-          {
-            date: '2025–2026',
-            title: 'Utility Integration and Cleanroom Qualification',
-            description: 'Dholera SIR commissions dedicated canal water filtration and dual 220kV power substations for pilot qualification.',
-          },
-        ],
+        description: 'Silicon wafer fabs etch raw silicon via photolithography demanding 3–4 MGD ultra-pure water, while OSAT units dice, wire, and package imported finished wafers.',
       },
     },
     {
       id: 'semi-block-ch4',
       type: 'chapter-heading',
       data: {
-        title: 'Chapter 4: The Physics of Fabrication: Ultra-Pure Water, 220kV Sub-stations, and Cleanroom Chemistry',
+        title: 'Chapter 4: The Physics of Fabrication: Ultra-Pure Water, 220kV Grid Stability, and Cleanroom Dynamics',
         anchorId: 'chapter-4',
       },
     },
@@ -672,17 +729,17 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
       id: 'semi-block-p4',
       type: 'paragraph',
       data: {
-        text: `<p>Nowhere is the operational reality of commercial fabrication more evident than in the Dholera Special Investment Region (SIR), located approximately 100 kilometers southwest of Ahmedabad. Here, on land reclaimed from Gujarat's coastal plains, the Tata-PSMC foundry faces the non-negotiable physical prerequisites of semiconductor manufacturing <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>
-<p>The first prerequisite is water—not municipal tap water, nor even standard industrial filtered water, but Ultra-Pure Water (UPW). A commercial fab processing 50,000 300mm wafers per month requires between 3 to 4 million gallons of UPW every 24 hours. Because silicon wafers are repeatedly washed with water between chemical etching and lithography cycles, any dissolved minerals, organic carbon, heavy metals, or microscopic silica particles will deposit onto the circuitry. UPW is deionized, filtered, and treated until its electrical resistivity reaches 18.2 megohm-centimeters—the theoretical physical limit of water purity. To supply Dholera, the Gujarat water supply board has laid dedicated conveyance pipelines from the Narmada canal network, paired with on-site reverse osmosis and multi-stage polishing plants designed to recycle up to 70% of process water.</p>
-<p>The second prerequisite is electrical power with zero tolerance for instability. In an ordinary heavy manufacturing plant, an electrical flicker lasting a few milliseconds—a "micro-trip"—is barely noticed. In a semiconductor foundry, where vacuum chambers maintain precise plasma environments and magnetic levitation pumps spin at thousands of revolutions per minute, a 10-millisecond voltage drop causes automated safety shut-offs across hundreds of lithography and chemical vapor deposition chambers. A single micro-trip can destroy thousands of in-process wafers, costing millions of dollars and requiring weeks of cleanroom re-calibration. To protect Dholera, the Gujarat Energy Transmission Corporation (GETCO) has constructed dedicated dual 220kV transmission feeds from independent grid sub-stations, backed by massive uninterruptible power supply (UPS) flywheel and battery arrays.</p>
-<p>The third prerequisite is vibrational isolation. Photolithography machines use optical lenses and mirrors to project circuitry features measured in tens of nanometers onto silicon wafers. If ambient vibrations from heavy trucks on a nearby expressway or trains on a freight rail corridor travel through the soil into the cleanroom, the optical alignment will blur. The Dholera fab’s foundation requires thousands of reinforced concrete pilings driven tens of meters into bedrock, creating a mechanically isolated concrete raft that floats independently of the surrounding earth.</p>`,
+        text: `<p>The physical realities of commercial wafer fabrication are starkly visible in the Dholera Special Investment Region (SIR), situated 100 kilometers southwest of Ahmedabad. Here, on reclaimed saline coastal flatlands, the Tata-PSMC foundry faces non-negotiable physical constraints that cannot be resolved through legislative policy or capital expenditure alone <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>
+<p>The first prerequisite is water—not municipal drinking water, nor standard filtered industrial effluent, but Ultra-Pure Water (UPW). A commercial fab running 50,000 300mm wafer starts per month consumes between 3 and 4 million gallons of UPW every single day. Because wafers are repeatedly washed between etching, lithography, and chemical-mechanical planarization cycles, any dissolved mineral ions, silica particles, organic bacteria, or dissolved gases will deposit onto microscopic circuit tracks, causing short circuits. UPW must be treated until its electrical resistivity reaches 18.2 megohm-centimeters—the theoretical physical limit of water purity. To supply Dholera, the Gujarat water authority has laid dedicated closed pipelines from the Narmada canal network, coupled with on-site reverse osmosis and multi-stage polishing plants engineered to recycle up to 70% of process water.</p>
+<p>The second prerequisite is electrical power with absolute waveform stability. In conventional manufacturing facilities, a power flicker lasting 10 to 20 milliseconds—a common "micro-trip"—is practically imperceptible. In a semiconductor cleanroom, where vacuum chambers maintain precise plasma chemistries and magnetic levitation pumps rotate at tens of thousands of RPM, a 10-millisecond voltage drop causes automated fail-safe shutdowns across hundreds of lithography and chemical vapor deposition chambers. A single micro-trip can destroy thousands of in-process wafers, inflicting tens of millions of dollars in losses and requiring weeks of cleanroom recalibration. To protect Dholera, the Gujarat Energy Transmission Corporation (GETCO) has engineered dual dedicated 220kV transmission feeds from independent grid substations, supported by massive flywheel uninterruptible power supply (UPS) systems.</p>
+<p>The third prerequisite is vibrational isolation. Modern photolithography tools project nanometer-scale circuit features onto wafers using ultra-precise optical mirrors and lenses. If ambient vibrations from freight rail corridors or heavy truck traffic on nearby expressways transmit through the subsoil into the cleanroom floor, the optical image blurs. To insulate the Dholera foundry, civil engineers have driven thousands of reinforced concrete pilings tens of meters into bedrock, creating a seismically isolated cleanroom foundation raft that floats independently of the surrounding earth.</p>`,
       },
     },
     {
       id: 'semi-block-ch5',
       type: 'chapter-heading',
       data: {
-        title: 'Chapter 5: The Supply-Chain Chokepoints: Photoresists, Specialty Gases, and the 100% Import Reliance',
+        title: 'Chapter 5: The Supply-Chain Chokepoints: Specialty Gases, Photoresists, and the 100% Import Reliance',
         anchorId: 'chapter-5',
       },
     },
@@ -690,22 +747,22 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
       id: 'semi-block-p5',
       type: 'paragraph',
       data: {
-        text: `<p>Even if physical utilities are flawlessly delivered, an operating fab is only as resilient as the chemical supply chain feeding its tools. Here lies India\'s deepest structural challenge: the country currently possesses virtually zero domestic capacity to manufacture semiconductor-grade specialty chemicals and process gases <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>
-<p>A functioning wafer fab consumes dozens of specialized chemical compounds that must satisfy purity levels of 99.9999% ("six-nines" or higher). These include:</p>
+        text: `<p>Even if physical utilities are maintained flawlessly, a wafer fab is only as dependable as the specialized chemical supply chain feeding its machinery. Here lies India's deepest strategic vulnerability: the country possesses virtually zero domestic capacity to synthesize semiconductor-grade specialty chemicals and ultra-high-purity process gases <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>
+<p>A functioning 300mm fab consumes dozens of specialized chemical compounds that must satisfy purity thresholds of 99.9999% ("six-nines") or higher. These include:</p>
 <ul>
-  <li><strong>Electronic-grade gases:</strong> Silane, phosphine, arsine, nitrogen trifluoride, and ultra-high purity argon and helium.</li>
-  <li><strong>Photolithography chemicals:</strong> Photoresist resins, antireflective coatings, developers, and edge-bead removers. Over 80% of the world's semiconductor-grade photoresist market is controlled by Japanese chemical houses such as Tokyo Ohka Kogyo, JSR Corporation, and Shin-Etsu.</li>
-  <li><strong>Etching and cleaning acids:</strong> Electronic-grade hydrofluoric acid, sulfuric acid, and hydrogen peroxide, where parts-per-trillion contamination will ruin production yields.</li>
+  <li><strong>Electronic-grade process gases:</strong> Silane, phosphine, arsine, nitrogen trifluoride, and ultra-high-purity argon and helium.</li>
+  <li><strong>Photolithography chemistry:</strong> Photoresist polymers, antireflective coatings, edge-bead removers, and developers. Over 80% of the world's semiconductor-grade photoresist market is controlled by Japanese chemical firms including Tokyo Ohka Kogyo (TOK), JSR Corporation, and Shin-Etsu Chemical.</li>
+  <li><strong>Ultra-pure etching acids:</strong> Electronic-grade hydrofluoric acid, sulfuric acid, and hydrogen peroxide, where parts-per-trillion contamination ruins wafer yields.</li>
 </ul>
-<p>Currently, every kilogram of photoresist and every cylinder of electronic-grade gas used in Indian pilot facilities must be imported by air or specialized cryogenic shipping containers under strict temperature and hazardous-material controls. If a container of temperature-sensitive chemical spends an extra 48 hours clearing customs at an Indian port in summer temperatures, the chemical degrades and becomes unusable. Without a localized ecosystem of specialty chemical manufacturers co-located near Dholera and Sanand, Indian foundries will operate with a 15% to 20% logistics cost penalty compared to established semiconductor hubs in Hsinchu, Tainan, or Pyeongtaek.</p>
-<p>Hazardous material management presents an additional regulatory hurdle. Process gases such as silane are pyrophoric—igniting spontaneously upon contact with air—while phosphine and arsine are acutely lethal neurotoxins. Transporting these volatile compounds across Indian highways requires certified pressurized tankers, emergency neutralization convoys, and specialized hazardous-material logistics corridors that currently exist in only nascent form. Establishing these safety and chemical supply clusters within Gujarat's petrochemical belt will be as decisive for Dholera's long-term survival as the cleanroom architecture itself <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>`,
+<p>Currently, every cylinder of electronic-grade gas and every canister of temperature-sensitive photoresist used in Indian facilities must be imported by air or specialized cryogenic container ships under rigid cold-chain logistics. If a container of temperature-sensitive photoresist is delayed for 48 hours clearing customs at an Indian port during summer temperatures exceeding 42°C, the chemical undergoes micro-polymerization and becomes unusable. Without a localized cluster of specialty chemical plants co-located near Dholera and Sanand, Indian foundries will operate with a 15% to 20% logistics cost penalty compared to established semiconductor hubs in Hsinchu, Tainan, or Pyeongtaek.</p>
+<p>Hazardous material management presents an additional regulatory hurdle. Process gases such as silane are pyrophoric—igniting spontaneously upon contact with air—while phosphine and arsine are acutely lethal neurotoxins. Transporting these volatile compounds across Indian roadways requires certified pressurized tankers, emergency neutralization convoys, and specialized hazardous-material logistics corridors that currently exist in only nascent form. Establishing these safety and chemical supply clusters within Gujarat's petrochemical belt will be as decisive for Dholera's long-term survival as the cleanroom architecture itself <cite data-ref="src-parliament-standing-committee">[4]</cite>.</p>`,
       },
     },
     {
       id: 'semi-block-ch6',
       type: 'chapter-heading',
       data: {
-        title: "Chapter 6: Commercial Viability and Node Strategy: Why Mature Nodes Hold the Key to India\'s Fab Future",
+        title: "Chapter 6: Commercial Viability, Off-Take, and Node Strategy: Why Mature Nodes Define India's Fab Future",
         anchorId: 'chapter-6',
       },
     },
@@ -713,15 +770,14 @@ export const REMEDIATED_SEMICONDUCTOR_STORY: Story = {
       id: 'semi-block-p6',
       type: 'paragraph',
       data: {
-        text: `<p>In global tech media, semiconductor prestige is commonly measured by nanometer shrink: Apple's 3-nanometer A18 processors or Nvidia's Blackwell GPUs manufactured by TSMC. This leads casual observers to question why India\'s premier fab in Dholera is entering commercial production at "mature" 28nm, 40nm, 55nm, and 90nm nodes <cite data-ref="src-tata-psmc-jv">[5]</cite>.</p>
-<p>The industrial reality is that mature nodes represent the vast majority of global silicon volume and the strongest alignment with India\'s domestic consumption base. A modern electric vehicle requires over 2,000 individual chips, but fewer than five are advanced processors; the remaining 1,995 chips are power management integrated circuits, battery controllers, motor drivers, sensor interfaces, and display controllers manufactured on 28nm to 90nm processes. Similarly, India\'s national rollout of 250 million smart electricity meters, 5G cellular base stations, industrial automation controllers, and defence radar systems rely almost entirely on mature, proven nodes.</p>
+        text: `<p>In global technology headlines, semiconductor achievement is almost universally judged by nanometer shrinking: Apple's 3-nanometer A18 processors or Nvidia's Blackwell GPUs manufactured by TSMC. This leads casual observers to question why India's premier fab in Dholera is entering commercial production at "mature" 28nm, 40nm, 55nm, and 90nm nodes <cite data-ref="src-tata-psmc-jv">[5]</cite>.</p>
+<p>The industrial reality is that mature nodes represent the vast majority of global silicon volume and the strongest alignment with India's domestic consumption base. A modern electric vehicle requires over 2,000 individual chips, but fewer than five are advanced processors; the remaining 1,995 chips are power management integrated circuits, battery controllers, motor drivers, sensor interfaces, and display controllers manufactured on 28nm to 90nm processes. Similarly, India's national rollout of 250 million smart electricity meters, 5G cellular base stations, industrial automation controllers, and defence radar systems rely almost entirely on mature, proven nodes.</p>
 <p>The true test of commercial viability for Tata and PSMC will not be whether they can etch 3nm transistors, but whether they can achieve competitive wafer yields (the percentage of functional dies on each wafer) and secure firm off-take commitments from domestic equipment makers. If Indian automotive manufacturers (Tata Motors, Mahindra, Maruti Suzuki) and industrial conglomerates commit their procurement to Dholera, the fab can achieve the sustained capacity utilization needed to amortize its ₹91,000 crore capital expenditure. If domestic manufacturers continue procuring cheaper legacy chips from Taiwanese and Chinese foundries, public subsidies alone will not guarantee commercial survival.</p>
-<p>India\'s semiconductor mission has accomplished its first objective: breaking the inertia of four decades of failed fab proposals and putting steel into the ground. But as the ribbon-cuttings give way to cleanroom qualification, the measure of success will not be the money committed by the Cabinet, but the yield of functional silicon emerging from the furnace.</p>`,
+<p>India's semiconductor mission has accomplished its first objective: breaking the inertia of four decades of failed fab proposals and putting steel into the ground. But as the ribbon-cuttings give way to cleanroom qualification, the measure of success will not be the money committed by the Cabinet, but the yield of functional silicon emerging from the furnace.</p>`,
       },
     },
   ],
 };
-
 export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
   "id": "a3333333-3333-4333-8333-333333333333",
   "slug": "bcci-domestic-mandate-ranji-economics",
@@ -827,8 +883,8 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
     },
     {
       "id": "src-bcci-season-2026-27",
-      "title": "BCCI 2026-27 Domestic Season Ready Reckoner",
-      "url": "https://documents.bcci.tv/bcci/documents/1779273276961_BCCI%202026-27%20Domestic%20Season%20Ready%20Reckoner.pdf",
+      "title": "BCCI Domestic Home Season 2026-27 to feature 1,788 matches",
+      "url": "https://www.bcci.tv/news/article/bcci-domestic-home-season-2026-27-to-feature-1788-matches",
       "publisher": "Board of Control for Cricket in India",
       "sourceType": "official",
       "tier": 1,
@@ -950,6 +1006,22 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
   ],
   "blocks": [
     {
+      "id": "bcci-block-exec-summary",
+      "type": "executive-summary",
+      "region": "header",
+      "data": {
+        "summary": "The BCCI's February 2024 push for domestic red-ball cricket paired a public warning with contract decisions. Official fee schedules show how domestic and Test incentives differ, but the available public record does not prove that the directive itself changed participation.",
+        "takeaway": "The BCCI's 2024 message and contract announcement are documented. The fee and Test-incentive schedules are also documented. A sustained effect on domestic participation is not established by those documents alone; measuring it requires a defined cohort and a reproducible match-level record.",
+        "whyItMatters": "Domestic first-class cricket sustains competitive depth and provides form assessment for the national team. Whether participation directives succeed depends on economic incentives, calendar scheduling, and player recovery—not warnings alone.",
+        "keyPoints": [
+          "The 28 February 2024 contract release stated Shreyas Iyer and Ishan Kishan were 'not considered' in that round; it did not state that existing contracts were terminated or cite a causal reason.",
+          "The September 2021 Apex Council table lists senior men's daily playing fees of ₹40,000, ₹50,000 and ₹60,000 across three match-count tiers, not first-class exclusive.",
+          "The March 2024 Test Cricket Incentive Scheme offers up to ₹45 lakh per match as a participation bonus for a 9-Test season model, leaving 4-Test seasons unclassified.",
+          "No public match-level availability dataset exists to prove whether domestic participation increased following the February 2024 directive."
+        ]
+      }
+    },
+    {
       "id": "bcci-block-numbers",
       "type": "key-numbers",
       "data": {
@@ -1024,14 +1096,16 @@ export const REMEDIATED_BCCI_CRICKET_STORY: Story = {
       "data": {
         "metric": "Illustrative fee total across 28 scheduled days",
         "before": {
+          "title": "Tier 1: Up to 20 matches",
           "value": "₹11.2 lakh",
-          "label": "₹40,000 per day × 28 days"
+          "label": "₹40,000 per day × 28 scheduled days"
         },
         "after": {
+          "title": "Tier 3: Above 40 matches",
           "value": "₹16.8 lakh",
-          "label": "₹60,000 per day × 28 days"
+          "label": "₹60,000 per day × 28 scheduled days"
         },
-        "description": "The middle tier would total ₹14 lakh under the same assumption. This is arithmetic on scheduled days, not a guaranteed payment: match duration, fee eligibility, selection and other applicable rules matter."
+        "description": "The middle tier (21–40 matches at ₹50,000/day) totals ₹14.0 lakh under the same 28-day assumption. This is scenario arithmetic on scheduled days for Playing XI members, not guaranteed season earnings, annual salary, or tournament expenditure."
       }
     },
     {

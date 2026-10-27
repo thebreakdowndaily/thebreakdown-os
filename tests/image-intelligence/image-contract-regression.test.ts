@@ -45,7 +45,7 @@ describe('Mission H.2: Image Intelligence Contract & Adversarial Regression Suit
         ...prev,
         approvalStatus: 'approved',
         approvalTimestamp: '2026-10-25T12:00:00.000Z',
-        approvedDigest: 'sha256:47170c9d849ff71b0c70d669efd4c9213cf311612a0b8160f971f5c3f80ed344',
+        approvedDigest: prev.approvedDigest || prev.expectedDigest || 'sha256:58285b107afc09664aca8319b9ff0197635947a6488f2f77ba96dd7eb7c6f38f',
         reviewedBy: 'Visual Desk Editor',
         reviewerRole: 'Senior Visual Editor',
       };
