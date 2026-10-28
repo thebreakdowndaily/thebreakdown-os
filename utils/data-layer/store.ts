@@ -5334,6 +5334,7 @@ import {
   shouldIncludeInFeed,
   shouldIncludeInDiscovery,
   diagnosePublication,
+  type PublicationContext,
 } from '@/lib/story/publication';
 
 function isLegacyPublic(story: APIStory, now: Date): boolean {
@@ -5360,10 +5361,8 @@ function storyIsPublic(story: APIStory, now: Date = new Date()): boolean {
   if (
     isPubliclyPublished(
       {
-        slug: story.slug,
         publicationStatus: story.publicationStatus,
         publishedAt: story.publishedAt,
-        isStory: true,
       },
       now
     )
@@ -5402,11 +5401,9 @@ export function getPublicStory(slug: string): APIStory | null {
 export function getPublicStoryDiagnostics(now: Date = new Date()) {
   const s = getStore();
   return Array.from(s.stories.values()).map((st) => {
-    const ps = {
-      slug: st.slug,
+    const ps: PublicationContext = {
       publicationStatus: st.publicationStatus,
       publishedAt: st.publishedAt,
-      isStory: true,
     };
     const diag = diagnosePublication(st.slug, ps, now);
     if (!diag.isPublic && isLegacyPublic(st, now)) {
