@@ -453,7 +453,7 @@ function rowToStory(row: Record<string, unknown>) {
 
 async function logGateResult(result: PublicationGateResult): Promise<void> {
   const db = getServiceClient();
-  await db.from('publication_gate_log').insert({
+  const { error } = await db.from('publication_gate_log').insert({
     story_id: result.storyId,
     schedule_id: result.scheduleId || null,
     gate_result: result.passed ? 'pass' : 'fail',
@@ -462,6 +462,18 @@ async function logGateResult(result: PublicationGateResult): Promise<void> {
     published_at: result.publishedAt || null,
     triggered_by: result.triggeredBy,
   });
+
+  // A passing gate without a durable audit row is not a publishable decision.
+  // Fail closed rather than silently proceeding when the audit insert fails.
+  if (error) {
+    console.error('[Editorial Gate] Failed to persist publication gate result', {
+      storyId: result.storyId,
+      scheduleId: result.scheduleId || null,
+      passed: result.passed,
+      message: error.message,
+    });
+    throw new Error(`Publication gate audit logging failed for story ${result.storyId}: ${error.message}`);
+  }
 }
 
 function formatDate(d: Date): string {
