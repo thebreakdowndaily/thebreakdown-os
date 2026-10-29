@@ -114,7 +114,6 @@ function FeaturedEditorialPanel({
   updatedAt,
   category,
   heroImage,
-  heroImageAlt,
   headline,
   slug,
   byline,
