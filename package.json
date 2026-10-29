@@ -107,7 +107,7 @@
     "@axe-core/playwright": "^4.12.1",
     "@next/bundle-analyzer": "^16.2.10",
     "@playwright/test": "^1.62.1",
-    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
     "@types/d3": "^7.4.0",
     "@types/js-yaml": "^4.0.9",
