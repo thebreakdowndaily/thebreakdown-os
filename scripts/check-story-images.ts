@@ -5,6 +5,7 @@ import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
 import { resolveStoryHeroImage } from '../lib/image-intelligence/service';
+import { EDITORIAL_RELEASE_HOLDS } from '../lib/editorial/release-holds';
 
 interface StoryAuditResult {
   slug: string;
@@ -15,6 +16,7 @@ interface StoryAuditResult {
   contextValid: boolean;
   matchType: string;
   reason: string;
+  blockedByHold: boolean;
   error?: string;
 }
 
@@ -53,7 +55,11 @@ function runStoryImageGate(): boolean {
     );
 
     const isSuccess = fileValidation.isValid && contextValidation.isMatch;
-    if (!isSuccess) {
+    const blockedByHold = Object.prototype.hasOwnProperty.call(EDITORIAL_RELEASE_HOLDS, story.slug);
+    // A known held story may remain blocked while this code safely renders a
+    // placeholder. Do not misreport it as PASS, and do not let this distinction
+    // clear or bypass the independent editorial publication hold.
+    if (!isSuccess && !blockedByHold) {
       hasFailures = true;
     }
 
@@ -68,6 +74,7 @@ function runStoryImageGate(): boolean {
       reason: imageResolution.hero.isFallback
         ? `Safe category placeholder used because the story-specific hero is not approved. ${contextValidation.reason}`
         : contextValidation.reason,
+      blockedByHold,
       error: fileValidation.error,
     });
   }
@@ -88,7 +95,7 @@ function runStoryImageGate(): boolean {
   console.log('-'.repeat(120));
 
   for (const r of results) {
-    const statusTag = r.fileValid && r.contextValid ? ' PASS ' : ' FAIL ';
+    const statusTag = r.fileValid && r.contextValid ? ' PASS ' : r.blockedByHold ? ' HOLD ' : ' FAIL ';
     console.log(
       `[${statusTag}] ` +
         r.slug.padEnd(30) +
@@ -102,16 +109,18 @@ function runStoryImageGate(): boolean {
         r.heroImage
     );
     if (!r.fileValid || !r.contextValid) {
-      console.log(`       >>> ERROR: ${r.error || r.reason}`);
+      console.log(`       >>> ${r.blockedByHold ? 'EDITORIAL HOLD (not publishable)' : 'ERROR'}: ${r.error || r.reason}`);
     }
   }
 
   console.log('\n------------------------------------------------------------------------');
   const passCount = results.filter((r) => r.fileValid && r.contextValid).length;
-  const failCount = results.length - passCount;
+  const holdCount = results.filter((r) => r.blockedByHold && !(r.fileValid && r.contextValid)).length;
+  const failCount = results.filter((r) => !(r.fileValid && r.contextValid) && !r.blockedByHold).length;
   console.log(`TOTAL STORIES: ${results.length}`);
   console.log(`PASSED: ${passCount}`);
-  console.log(`FAILED: ${failCount}`);
+  console.log(`HELD (NOT PUBLISHABLE): ${holdCount}`);
+  console.log(`FAILED (UNHELD): ${failCount}`);
   console.log('------------------------------------------------------------------------\n');
 
   if (hasFailures) {
@@ -119,7 +128,7 @@ function runStoryImageGate(): boolean {
     return false;
   }
 
-  console.log('✅ GATE PASSED: All rendered hero assets are valid and context-aligned; unapproved assets resolve to safe placeholders. Feature stories still require approved story-specific media.');
+  console.log(`✅ IMAGE INTEGRITY CHECK PASSED FOR UNHELD STORIES. ${holdCount} held story/stories remain explicitly BLOCKED and must not be published until the independent editorial gate passes.`);
   return true;
 }
 
