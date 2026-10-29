@@ -52,4 +52,7 @@ for (const slug of ['ai-literacy-india-students-verify-ai','india-semiconductor-
   assert.equal(EDITORIAL_RELEASE_HOLDS[slug]?.status, 'HOLD', `${slug} remains held`);
 for (const relative of ['lib/editorial/publication-gate.ts','lib/image-intelligence/publication-validation.ts'])
   assert.ok(fs.readFileSync(path.join(process.cwd(), relative), 'utf8').includes('Object.keys(EDITORIAL_RELEASE_HOLDS)'));
+const scheduleService = fs.readFileSync(path.join(process.cwd(), 'services/editorial/schedule.ts'), 'utf8');
+assert.ok(scheduleService.includes('if (error) {'), 'gate-log write failures are handled');
+assert.ok(scheduleService.includes('Publication gate audit logging failed'), 'gate-log failure prevents an unlogged publication decision');
 console.log(`PASS: story image approval and release-hold checks (${entries.length} manifest entries)`);
