@@ -1,6 +1,7 @@
 import React from 'react';
 import StoryImage from '@/components/story/StoryImage';
 import Container from '@/components/layout/Container';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface Story {
   slug: string;
@@ -47,7 +48,7 @@ const TrendingAnalysis: React.FC<TrendingAnalysisProps> = ({ stories }) => {
             {story.heroImage && (
               <div className="w-full h-40 overflow-hidden">
                 <StoryImage
-                  src={story.heroImage}
+                  src={getStoryImagePresentation(story).src}
                   category={story.category}
                   alt=""
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
