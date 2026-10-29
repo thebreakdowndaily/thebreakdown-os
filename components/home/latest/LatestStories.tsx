@@ -21,6 +21,7 @@ export default function LatestStories({ stories }: LatestStoriesProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {stories.map((story, index) => {
+            const visualAssets = story.visualAssets;
             const imagePresentation = getStoryImagePresentation({
               slug: story.raw?.slug || '',
               headline: story.raw?.headline || story.raw?.title || 'Story',
