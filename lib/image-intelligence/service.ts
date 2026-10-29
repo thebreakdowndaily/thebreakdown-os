@@ -66,8 +66,10 @@ function hasPublicHeroApproval(record: VerifiedImageRecord, slug: string): boole
     && record.license !== 'BRANDED_VECTOR'
     && isAssetAuthorizedForStory(record, slug)
     && Boolean(record.approvalTimestamp && !Number.isNaN(Date.parse(record.approvalTimestamp)))
-    && Boolean(record.expectedDigest && SHA256_DIGEST.test(record.expectedDigest))
-    && Boolean(record.approvedDigest && SHA256_DIGEST.test(record.approvedDigest) && record.approvedDigest === record.expectedDigest)
+    && Boolean(record.approvedDigest && SHA256_DIGEST.test(record.approvedDigest))
+    && (!record.expectedDigest || (
+      SHA256_DIGEST.test(record.expectedDigest) && record.approvedDigest === record.expectedDigest
+    ))
     && Boolean(record.rightsBasis?.trim())
     && Boolean((record.creator || record.provenance)?.trim())
     && Boolean(record.sourceUrl?.trim())
