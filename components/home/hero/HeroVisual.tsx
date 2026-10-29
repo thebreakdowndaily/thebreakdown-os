@@ -1,8 +1,11 @@
 import Image from 'next/image';
 import type { APITimelineEvent, APIChart, APIGeoData } from '@/utils/data-layer/types';
 import Card from '@/components/ui/Card';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface HeroVisualProps {
+  slug?: string;
+  category?: string;
   heroImage?: string;
   headline: string;
   timeline?: APITimelineEvent[];
@@ -10,7 +13,13 @@ interface HeroVisualProps {
   geoData?: APIGeoData;
 }
 
-export default function HeroVisual({ heroImage, headline, timeline }: HeroVisualProps) {
+export default function HeroVisual({ slug, category, heroImage, headline, timeline }: HeroVisualProps) {
+  const imagePresentation = getStoryImagePresentation({
+    slug: slug || '',
+    category: category || 'policy',
+    headline,
+    heroImage,
+  });
   const showTimeline = timeline && timeline.length > 0;
 
   return (
@@ -19,10 +28,10 @@ export default function HeroVisual({ heroImage, headline, timeline }: HeroVisual
       accent="none"
       className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[320px] overflow-hidden border border-[#2A2A2A] group"
     >
-      {heroImage ? (
+      {imagePresentation.src ? (
         <Image
-          src={heroImage}
-          alt={headline}
+          src={imagePresentation.src}
+          alt={imagePresentation.alt}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
