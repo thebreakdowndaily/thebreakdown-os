@@ -16,6 +16,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 import type { HomepageLeadStory } from '@/features/home/view-model';
 import type { TrustMetrics } from '@/lib/knowledge/trust-metrics';
 
