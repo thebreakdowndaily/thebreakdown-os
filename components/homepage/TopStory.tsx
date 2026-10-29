@@ -1,6 +1,7 @@
 import React from 'react';
 import StoryImage from '@/components/story/StoryImage';
 import Container from '@/components/layout/Container';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface Story {
   slug: string;
@@ -35,7 +36,7 @@ const TopStory: React.FC<TopStoryProps> = ({ story }) => (
     {story.heroImage && (
       <>
         <StoryImage
-          src={story.heroImage}
+          src={getStoryImagePresentation(story).src}
           category={story.category}
           alt=""
           className="absolute inset-0 w-full h-full object-cover"

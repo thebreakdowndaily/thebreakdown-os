@@ -6,13 +6,11 @@ import {
   IMAGE_INTELLIGENCE_MANIFEST,
 } from './manifest';
 import { validateLocalAssetDetailed } from './asset-validator';
+import { EDITORIAL_RELEASE_HOLDS } from '@/lib/editorial/release-holds';
 
 export const FEATURE_STORY_TYPES = new Set(['feature', 'explainer', 'analysis', 'investigation_chapter']);
 
-export const EDITORIAL_RELEASE_HOLD_SLUGS = [
-  'ai-literacy-india-students-verify-ai',
-  'india-semiconductor-mission-fab-reality',
-];
+export const EDITORIAL_RELEASE_HOLD_SLUGS = Object.keys(EDITORIAL_RELEASE_HOLDS);
 
 export interface MediaValidationOptions {
   requireDigestLock?: boolean;

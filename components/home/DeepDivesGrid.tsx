@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import type { HomepageDeepDive } from '@/features/home/view-model';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface DeepDivesGridProps {
   deepDives: HomepageDeepDive[];
@@ -52,7 +53,7 @@ export default function DeepDivesGrid({ deepDives }: DeepDivesGridProps) {
               >
                 {item.heroImage ? (
                   <img
-                    src={item.heroImage}
+                    src={getStoryImagePresentation(item).src}
                     alt=""
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />

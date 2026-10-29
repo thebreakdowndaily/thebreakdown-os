@@ -276,7 +276,11 @@ export function buildStoryPresentationModel(
       category: rs.category,
       publishedAt: rs.publishedAt,
       readingTimeMinutes: rs.readingTime || 5,
-      image: rs.heroImage && !rs.heroImage.includes('placehold.co') ? { url: rs.heroImage, altText: (() => { if (rs.heroImageIsDecorative) return ''; if (rs.heroImageAlt) return rs.heroImageAlt; throw new Error('DATA_QUALITY_FAILURE: Missing informative image description'); })() } : undefined,
+      image: (() => {
+        const resolved = resolveStoryHeroImage(rs).hero;
+        if (resolved.isFallback || !resolved.src) return undefined;
+        return { url: resolved.src, altText: rs.heroImageIsDecorative ? '' : resolved.alt };
+      })(),
     }));
 
   // 3. Derive capabilities
@@ -308,14 +312,12 @@ export function buildStoryPresentationModel(
     trustSignals,
     heroMedia: (() => {
       const resolvedHero = resolveStoryHeroImage(story);
-      const url = resolvedHero.hero?.src || (story.heroImage && !story.heroImage.includes('placehold.co') ? story.heroImage : undefined);
-      if (!url || url.includes('placehold.co')) return undefined;
-      const isFallback = Boolean(resolvedHero.hero?.isFallback || resolvedHero.hero?.type === 'branded-placeholder');
+      const url = resolvedHero.hero?.src;
+      if (!url) return undefined;
+      const isFallback = resolvedHero.hero.isFallback;
       const altText = story.heroImageIsDecorative
         ? ''
-        : isFallback
-          ? (resolvedHero.hero?.alt || `Editorial coverage placeholder for ${story.headline}`)
-          : (story.heroImageAlt || resolvedHero.hero?.alt || story.headline);
+        : (resolvedHero.hero.alt || `Editorial placeholder: hero image for ${story.headline} awaits verification.`);
       if (!story.heroImageIsDecorative && !altText) {
         throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
       }

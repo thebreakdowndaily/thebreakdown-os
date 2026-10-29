@@ -8,6 +8,7 @@
 
 import Link from 'next/link';
 import type { HomepageLeadStory } from '@/features/home/view-model';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface LeadStoryHeroProps {
   story: HomepageLeadStory | null;
@@ -85,7 +86,7 @@ export default function LeadStoryHero({ story }: LeadStoryHeroProps) {
             >
               {story.heroImage ? (
                 <img
-                  src={story.heroImage}
+                  src={getStoryImagePresentation(story).src}
                   alt=""
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />

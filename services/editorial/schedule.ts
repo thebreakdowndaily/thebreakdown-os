@@ -136,8 +136,47 @@ export async function validateAndPublishDueStories(
   if (fetchError) throw fetchError;
 
   for (const entry of dueEntries || []) {
-    const result = await validateAndPublishEntry(entry, now);
-    results.push(result);
+    try {
+      const result = await validateAndPublishEntry(entry, now);
+      results.push(result);
+    } catch (error) {
+      const storyId = String(entry.story_id || '');
+      const scheduleId = String(entry.id || '');
+      const message = error instanceof Error ? error.message : 'Unknown publication workflow error';
+      console.error('[Editorial Gate] Scheduled entry processing failed; publication was not authorized', {
+        storyId,
+        scheduleId,
+        message,
+      });
+
+      // Release the atomic claim for a later retry. The story itself is not
+      // published here; a future run must repeat the complete gate workflow.
+      const { error: resetError } = await db
+        .from('editorial_schedule')
+        .update({ status: 'ready', updated_at: now.toISOString() } as never)
+        .eq('id', scheduleId)
+        .eq('status', 'in_progress');
+      if (resetError) {
+        console.error('[Editorial Gate] Failed to release schedule claim after processing error', {
+          storyId,
+          scheduleId,
+          message: resetError.message,
+        });
+      }
+
+      results.push({
+        storyId,
+        scheduleId,
+        passed: false,
+        checks: [{
+          name: 'publication_workflow_error',
+          passed: false,
+          reason: 'The publication workflow failed before a completed gate decision could be recorded. The entry was returned to ready for a later retry.',
+        }],
+        checkedAt: now.toISOString(),
+        triggeredBy: 'cron',
+      });
+    }
   }
 
   return results;
@@ -159,12 +198,12 @@ async function validateAndPublishEntry(
   const scheduleId = entry.id as string;
   const currentScheduleStatus = entry.status as string;
 
-  // ── ATOMIC CLAIM: transition schedule from current status → 'validated'
-  // Only one worker can win this race. If another already claimed it,
-  // this update affects 0 rows.
+  // ── ATOMIC CLAIM: transition the row to 'in_progress'.
+  // Unlike validated → validated, this is a real state change. Only one
+  // worker can win the WHERE status=currentScheduleStatus compare-and-set.
   const { data: claimedEntry, error: claimError } = await db
     .from('editorial_schedule')
-    .update({ status: 'validated', updated_at: now.toISOString() } as never)
+    .update({ status: 'in_progress', updated_at: now.toISOString() } as never)
     .eq('id', scheduleId)
     .eq('status', currentScheduleStatus)  // atomic: only if still in expected state
     .select()
@@ -207,6 +246,16 @@ async function validateAndPublishEntry(
       triggeredBy: 'cron',
     };
     await logGateResult(result);
+    await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: 'Story not found in database',
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'in_progress');
     return result;
   }
 
@@ -453,7 +502,7 @@ function rowToStory(row: Record<string, unknown>) {
 
 async function logGateResult(result: PublicationGateResult): Promise<void> {
   const db = getServiceClient();
-  await db.from('publication_gate_log').insert({
+  const { error } = await db.from('publication_gate_log').insert({
     story_id: result.storyId,
     schedule_id: result.scheduleId || null,
     gate_result: result.passed ? 'pass' : 'fail',
@@ -462,6 +511,18 @@ async function logGateResult(result: PublicationGateResult): Promise<void> {
     published_at: result.publishedAt || null,
     triggered_by: result.triggeredBy,
   });
+
+  // A passing gate without a durable audit row is not a publishable decision.
+  // Fail closed rather than silently proceeding when the audit insert fails.
+  if (error) {
+    console.error('[Editorial Gate] Failed to persist publication gate result', {
+      storyId: result.storyId,
+      scheduleId: result.scheduleId || null,
+      passed: result.passed,
+      message: error.message,
+    });
+    throw new Error(`Publication gate audit logging failed for story ${result.storyId}: ${error.message}`);
+  }
 }
 
 function formatDate(d: Date): string {

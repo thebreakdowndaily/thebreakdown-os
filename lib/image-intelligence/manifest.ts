@@ -17,6 +17,8 @@ export interface VerifiedImageRecord {
   format?: 'jpeg' | 'png' | 'webp' | 'svg' | 'pdf' | 'unknown';
   evidenceSourceUrls?: string[];
   approvalStatus?: 'approved' | 'pending' | 'rejected';
+  /** Why a previously considered candidate cannot be used for this story. */
+  rejectionReason?: string;
   approvalTimestamp?: string;
   authorizedStorySlugs?: string[];
   expectedDigest?: string;
@@ -33,6 +35,7 @@ export interface VerifiedImageRecord {
 export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> = {
   'mgnrega-reform': {
     storySlug: 'mgnrega-reform',
+    approvalStatus: 'pending',
     approvedImage: '/images/placeholders/economy-placeholder.svg',
     assetType: 'branded-placeholder',
     provenance: 'The Breakdown Editorial Graphics',
@@ -41,6 +44,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'digital-payments-boom': {
     storySlug: 'digital-payments-boom',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/digital-payments.jpg',
     assetType: 'authentic-photo',
     provenance: 'NPCI / UPI Merchant Transaction Archive',
@@ -49,6 +53,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'pm-fasal-bima-claims': {
     storySlug: 'pm-fasal-bima-claims',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/fasal-bima.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Agriculture and Farmers Welfare',
@@ -57,6 +62,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'semiconductor-pli': {
     storySlug: 'semiconductor-pli',
+    approvalStatus: 'pending',
     approvedImage: '/images/placeholders/technology-placeholder.svg',
     assetType: 'branded-placeholder',
     provenance: 'The Breakdown Editorial Graphics',
@@ -65,6 +71,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'dpdp-bill': {
     storySlug: 'dpdp-bill',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/dpdp-bill.jpg',
     assetType: 'authentic-photo',
     provenance: 'Parliament of India / Digital Personal Data Protection Act Archive',
@@ -73,6 +80,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'rbi-repo-rate': {
     storySlug: 'rbi-repo-rate',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/rbi-repo-rate.jpg',
     assetType: 'authentic-photo',
     provenance: 'Reserve Bank of India Monetary Policy Committee',
@@ -81,6 +89,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'climate-finance': {
     storySlug: 'climate-finance',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/climate-finance.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of New and Renewable Energy',
@@ -89,6 +98,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'groundwater-depletion': {
     storySlug: 'groundwater-depletion',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Central Ground Water Board / Ministry of Jal Shakti',
@@ -97,6 +107,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ration-digitization': {
     storySlug: 'ration-digitization',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/ration-digitization.jpg',
     assetType: 'authentic-photo',
     provenance: 'Department of Food and Public Distribution',
@@ -105,6 +116,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'anganwadi-icds': {
     storySlug: 'anganwadi-icds',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/anganwadi.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Women and Child Development',
@@ -113,6 +125,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ethanol-backlash': {
     storySlug: 'ethanol-backlash',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/ethanol-backlash.jpg',
     assetType: 'authentic-map',
     provenance: 'The Breakdown Policy Graphics',
@@ -121,6 +134,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'satluj-ban': {
     storySlug: 'satluj-ban',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/satluj-ban.jpg',
     assetType: 'authentic-map',
     provenance: 'The Breakdown Editorial Vector Graphics',
@@ -129,6 +143,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ews-quota-upsc-investigation': {
     storySlug: 'ews-quota-upsc-investigation',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/ews-quota-upsc-investigation.jpg',
     assetType: 'authentic-photo',
     provenance: 'UPSC Examination Analysis Desk',
@@ -137,6 +152,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'us-iran-relations': {
     storySlug: 'us-iran-relations',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/us-iran-relations.jpg',
     assetType: 'authentic-photo',
     provenance: 'International Diplomatic Archives',
@@ -145,6 +161,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-china-border-tensions': {
     storySlug: 'india-china-border-tensions',
+    approvalStatus: 'rejected',
+    rejectionReason: "The recorded bytes depict an India–Europe diplomatic event, not the China border.",
     approvedImage: '/images/stories/india-china-border-tensions.jpg',
     assetType: 'authentic-photo',
     provenance: 'Indian Army Border Communications Desk',
@@ -153,6 +171,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-china-border-lac': {
     storySlug: 'india-china-border-lac',
+    approvalStatus: 'rejected',
+    rejectionReason: "The recorded bytes depict an India–Europe diplomatic event, not the Line of Actual Control.",
     approvedImage: '/images/stories/india-china-border-tensions.jpg',
     assetType: 'authentic-photo',
     provenance: 'Indian Army Border Communications Desk',
@@ -161,6 +181,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'kashmir-the-first-test': {
     storySlug: 'kashmir-the-first-test',
+    approvalStatus: 'pending',
     approvedImage: '/images/library/chapter-1/maps/map-kashmir-1947.svg',
     assetType: 'authentic-map',
     provenance: '1947 Partition Historical Map Archive',
@@ -169,6 +190,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-us-relations': {
     storySlug: 'india-us-relations',
+    approvalStatus: 'rejected',
+    rejectionReason: "The recorded bytes depict an India–Europe diplomatic event, not India–US relations.",
     approvedImage: '/images/stories/india-us-relations.jpg',
     assetType: 'authentic-photo',
     provenance: 'US State Department & MEA India Joint Briefing',
@@ -177,6 +200,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-europe-relations': {
     storySlug: 'india-europe-relations',
+    approvalStatus: 'rejected',
+    rejectionReason: "The recorded bytes depict an India–Russia map and are not a verified visual for this India–EU story.",
     approvedImage: '/images/stories/india-europe-relations.jpg',
     assetType: 'authentic-photo',
     provenance: 'European External Action Service & MEA',
@@ -185,6 +210,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   '81-crore-data-breach': {
     storySlug: '81-crore-data-breach',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/aadhaar-sc.jpg',
     assetType: 'authentic-photo',
     provenance: 'Supreme Court of India Aadhaar Judgment Archive',
@@ -193,6 +219,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'electoral-bonds': {
     storySlug: 'electoral-bonds',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/electoral-bonds.jpg',
     assetType: 'authentic-photo',
     provenance: 'Election Commission of India / SBI Disclosures Archive',
@@ -201,6 +228,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'us-iran-war-strait-of-hormuz': {
     storySlug: 'us-iran-war-strait-of-hormuz',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/us-iran-war-strait-of-hormuz.jpg',
     assetType: 'authentic-photo',
     provenance: 'US Energy Information Administration / Maritime Traffic',
@@ -209,6 +237,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'fix-farm-income': {
     storySlug: 'fix-farm-income',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/fasal-bima.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Agriculture and Farmers Welfare',
@@ -217,6 +246,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'fix-judicial-pendency': {
     storySlug: 'fix-judicial-pendency',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/aadhaar-sc.jpg',
     assetType: 'authentic-photo',
     provenance: 'Supreme Court of India Archive',
@@ -252,6 +282,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'indias-foreign-policy': {
     storySlug: 'indias-foreign-policy',
+    approvalStatus: 'pending',
     approvedImage: '/images/library/chapter-1/photos/a-07-nehru-unga-1948.jpg',
     assetType: 'authentic-photo',
     provenance: 'United Nations Photo Archive / Ministry of External Affairs Historical Division',
@@ -260,6 +291,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'namami-gange': {
     storySlug: 'namami-gange',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Central Ground Water Board / Ministry of Jal Shakti Archive',
@@ -268,6 +300,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'india-ev-paradox': {
     storySlug: 'india-ev-paradox',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/climate-finance.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Heavy Industries / Climate Finance Archive',
@@ -276,6 +309,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-01-the-promise': {
     storySlug: 'ng-ch-01-the-promise',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Jal Shakti / National Mission for Clean Ganga Archive',
@@ -284,6 +318,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-02-follow-the-money': {
     storySlug: 'ng-ch-02-follow-the-money',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Jal Shakti / National Mission for Clean Ganga Archive',
@@ -292,6 +327,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-03-the-sewage-problem': {
     storySlug: 'ng-ch-03-the-sewage-problem',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Jal Shakti / National Mission for Clean Ganga Archive',
@@ -300,6 +336,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-04-the-audit-trail': {
     storySlug: 'ng-ch-04-the-audit-trail',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Comptroller and Auditor General of India / NMCG',
@@ -308,6 +345,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-05-procurement-and-accountability': {
     storySlug: 'ng-ch-05-procurement-and-accountability',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Central Vigilance Commission / Ministry of Jal Shakti',
@@ -316,6 +354,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-06-why-stps-dont-work': {
     storySlug: 'ng-ch-06-why-stps-dont-work',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Central Pollution Control Board / NMCG',
@@ -324,6 +363,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-07-water-quality': {
     storySlug: 'ng-ch-07-water-quality',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Central Pollution Control Board Water Quality Monitoring Network',
@@ -332,6 +372,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-08-city-report-cards': {
     storySlug: 'ng-ch-08-city-report-cards',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'State Pollution Control Boards / Urban Local Bodies',
@@ -340,6 +381,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-09-contractors': {
     storySlug: 'ng-ch-09-contractors',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'National Mission for Clean Ganga EPC Contract Database',
@@ -348,6 +390,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-10-timeline-of-delays': {
     storySlug: 'ng-ch-10-timeline-of-delays',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Ministry of Jal Shakti Project Monitoring Group',
@@ -356,6 +399,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-11-ecology': {
     storySlug: 'ng-ch-11-ecology',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Wildlife Institute of India / Biodiversity Board',
@@ -364,6 +408,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-12-voices-from-the-river': {
     storySlug: 'ng-ch-12-voices-from-the-river',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'The Breakdown Field Reporting Archive',
@@ -372,6 +417,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-13-government-response': {
     storySlug: 'ng-ch-13-government-response',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'Press Information Bureau / Ministry of Jal Shakti',
@@ -380,6 +426,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-14-what-worked': {
     storySlug: 'ng-ch-14-what-worked',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'National Mission for Clean Ganga Success Documentation',
@@ -388,6 +435,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
   },
   'ng-ch-15-recommendations': {
     storySlug: 'ng-ch-15-recommendations',
+    approvalStatus: 'pending',
     approvedImage: '/images/stories/groundwater-depletion.jpg',
     assetType: 'authentic-photo',
     provenance: 'The Breakdown Policy Analysis Desk',
@@ -414,7 +462,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     format: 'jpeg',
     expectedDigest: 'sha256:8fd5be70fbd1b7645ec218eca2ec259980b7b2a3d84fe2dfcc99a710c18991b1',
     approvedDigest: 'sha256:8fd5be70fbd1b7645ec218eca2ec259980b7b2a3d84fe2dfcc99a710c18991b1',
-    approvalStatus: 'pending',
+    approvalStatus: 'rejected',
+    rejectionReason: "The recorded bytes depict an office building, not students or classroom learning.",
   },
   'ai-literacy-verification-path': {
     storySlug: 'ai-literacy-india-students-verify-ai',
@@ -463,7 +512,8 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     expectedDigest: 'sha256:3e44978e35a749bdc920961e3a07d27c747136f197f1b29d07018b33cce663a7',
     approvedDigest: 'sha256:3e44978e35a749bdc920961e3a07d27c747136f197f1b29d07018b33cce663a7',
     authorizedStorySlugs: ['india-semiconductor-mission-fab-reality'],
-    approvalStatus: 'pending',
+    approvalStatus: 'rejected',
+    rejectionReason: "The recorded bytes depict a deer and are unrelated to semiconductor manufacturing.",
   },
   'semiconductor-project-status': {
     storySlug: 'india-semiconductor-mission-fab-reality',
@@ -515,7 +565,7 @@ export const VERIFIED_STORY_IMAGE_MANIFEST: Record<string, VerifiedImageRecord> 
     ],
     expectedDigest: 'sha256:0e40c006907a6dd1c3457cf219ed472d04e2d68137f87fe29070f9b42e6c1d70',
     authorizedStorySlugs: ['bcci-domestic-mandate-ranji-economics'],
-    approvalStatus: 'approved',
+    approvalStatus: 'pending',
     approvalTimestamp: '2026-10-24T18:00:00.000Z',
   },
   'bcci-domestic-fees': {

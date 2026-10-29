@@ -16,6 +16,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 import type { HomepageLeadStory } from '@/features/home/view-model';
 import type { TrustMetrics } from '@/lib/knowledge/trust-metrics';
 
@@ -114,7 +115,6 @@ function FeaturedEditorialPanel({
   updatedAt,
   category,
   heroImage,
-  heroImageAlt,
   headline,
   slug,
   byline,
@@ -132,6 +132,7 @@ function FeaturedEditorialPanel({
   byline?: string;
 }) {
   const href = slug ? `/story/${slug}` : FOUNDING_CHAPTER_PATH;
+  const imagePresentation = slug ? getStoryImagePresentation({ slug, headline, category, heroImage }) : null;
 
   return (
     <div
@@ -143,11 +144,11 @@ function FeaturedEditorialPanel({
       aria-label="Featured Story Spotlight"
     >
       {/* Featured visual */}
-      {heroImage ? (
+      {imagePresentation ? (
         <Link href={href} className="block group aspect-[16/10] rounded-xl overflow-hidden relative bg-neutral-900 border border-neutral-800">
           <Image
-            src={heroImage}
-            alt={heroImageAlt || ""}
+            src={imagePresentation.src}
+            alt={imagePresentation.alt}
             fill
             sizes="(max-width: 1024px) 100vw, 420px"
             priority={isLeadStory}

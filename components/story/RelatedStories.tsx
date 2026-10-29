@@ -1,4 +1,5 @@
 import React from 'react';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface RelatedStoriesProps {
   stories: Array<{
@@ -29,7 +30,8 @@ const RelatedStories: React.FC<RelatedStoriesProps> = ({ stories }) => {
       <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">Related Stories</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {stories.map((story) => {
-          const hasImage = story.heroImage && !story.heroImage.includes('placehold.co') && story.heroImage.trim().length > 0;
+          const imagePresentation = getStoryImagePresentation(story);
+          const hasImage = Boolean(story.heroImage) && !imagePresentation.isFallback;
 
           return (
             <a
@@ -43,8 +45,8 @@ const RelatedStories: React.FC<RelatedStoriesProps> = ({ stories }) => {
               {hasImage && (
                 <div className="aspect-video overflow-hidden bg-neutral-950">
                   <img
-                    src={story.heroImage}
-                    alt={story.headline}
+                    src={imagePresentation.src}
+                    alt={imagePresentation.alt}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
                   />
                 </div>

@@ -33,11 +33,9 @@ import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
 import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
 import { validateStoryHeroMedia, validateStorySupportingMedia } from '@/lib/image-intelligence/publication-validation';
+import { EDITORIAL_RELEASE_HOLDS } from './release-holds';
 
-export const EDITORIAL_RELEASE_HOLD_SLUGS = [
-  'ai-literacy-india-students-verify-ai',
-  'india-semiconductor-mission-fab-reality',
-];
+export const EDITORIAL_RELEASE_HOLD_SLUGS = Object.keys(EDITORIAL_RELEASE_HOLDS);
 
 export interface PublicationGateOptions {
   bypassEditorialHold?: boolean;

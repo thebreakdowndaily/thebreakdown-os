@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { KnowledgeStory } from '@/services/stories/pipeline/builder';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface LatestStoriesProps {
   stories: any[]; // These are resolved KnowledgeStory outputs
@@ -21,7 +22,15 @@ export default function LatestStories({ stories }: LatestStoriesProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {stories.map((story, index) => {
             const visualAssets = story.visualAssets;
-            const heroImage = visualAssets?.hero?.resolvedAsset?.optimization.cdnUrl || story.raw?.heroImage;
+            const imagePresentation = getStoryImagePresentation({
+              slug: story.raw?.slug || '',
+              headline: story.raw?.headline || story.raw?.title || 'Story',
+              category: story.raw?.category || 'policy',
+              heroImage: story.raw?.heroImage,
+              storyType: story.raw?.storyType,
+              tags: story.raw?.tags,
+            });
+            const heroImage = imagePresentation.src;
             const logos = visualAssets?.logos || [];
 
             return (
@@ -38,7 +47,7 @@ export default function LatestStories({ stories }: LatestStoriesProps) {
                     {heroImage && (
                       <img
                         src={heroImage}
-                        alt={story.raw?.headline}
+                        alt={imagePresentation.alt}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                     )}

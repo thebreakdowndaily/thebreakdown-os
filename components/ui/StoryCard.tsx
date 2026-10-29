@@ -1,6 +1,7 @@
 import React from 'react';
 import StoryImage from '@/components/story/StoryImage';
 import { cn } from '@/utils/cn';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface StoryCardStory {
   slug: string;
@@ -40,7 +41,7 @@ const FeaturedStory: React.FC<StoryCardProps> = ({ story }) => (
       {story.heroImage && (
         <div className="relative w-full md:w-3/5 h-64 md:h-full shrink-0 border-b md:border-b-0 md:border-r border-border">
           <StoryImage
-            src={story.heroImage}
+            src={getStoryImagePresentation(story).src}
             category={story.category}
             alt=""
             className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-slow"
@@ -95,7 +96,7 @@ const CompactStory: React.FC<StoryCardProps> = ({ story }) => (
       </div>
       {story.heroImage && (
         <div className="shrink-0 w-16 h-16 bg-surface-tertiary border border-border">
-          <StoryImage src={story.heroImage} category={story.category} alt="" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-fast" />
+          <StoryImage src={getStoryImagePresentation(story).src} category={story.category} alt="" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-fast" />
         </div>
       )}
     </a>
@@ -112,7 +113,7 @@ const DefaultStory: React.FC<StoryCardProps> = ({ story }) => (
       {story.heroImage && (
         <div className="w-full h-48 border-b border-border overflow-hidden bg-surface-tertiary">
           <StoryImage
-            src={story.heroImage}
+            src={getStoryImagePresentation(story).src}
             category={story.category}
             alt=""
             className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-fast"
