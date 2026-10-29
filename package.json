@@ -81,7 +81,7 @@
     "test:seo-integrity": "npx tsx tests/sitemap-robots-consistency.test.ts && npx tsx tests/sitemap-freshness.test.ts && npx tsx tests/rss-integrity.test.ts"
   },
   "dependencies": {
-    "@sentry/nextjs": "^10.63.0",
+    "@sentry/nextjs": "^11.9.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.0",
     "clsx": "^2.1.1",
