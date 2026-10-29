@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import StoryMetadata from './StoryMetadata';
 import Skeleton from '@/components/ui/Skeleton';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface FeaturedStoriesProps {
   stories: APIStory[];
@@ -48,8 +49,8 @@ export default function FeaturedStories({ stories }: FeaturedStoriesProps) {
               <Card className="relative h-full overflow-hidden" accent="gold">
                 <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[320px] lg:min-h-[420px] overflow-hidden">
                   <Image
-                    src={hero.heroImage || '/images/og-default.jpg'}
-                    alt={hero.headline}
+                    src={getStoryImagePresentation(hero).src}
+                    alt={getStoryImagePresentation(hero).alt}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -92,8 +93,8 @@ export default function FeaturedStories({ stories }: FeaturedStoriesProps) {
                   <Card className="relative overflow-hidden" accent="gold">
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <Image
-                        src={story.heroImage || '/images/og-default.jpg'}
-                        alt={story.headline}
+                        src={getStoryImagePresentation(story).src}
+                        alt={getStoryImagePresentation(story).alt}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"

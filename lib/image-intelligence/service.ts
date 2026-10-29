@@ -1,7 +1,6 @@
-import type { Story, Topic, Entity } from '@/types/canonical';
+import type { Topic, Entity } from '@/types/canonical';
 import { findImage, getPlaceholder, type ImageCandidate, type ImagePriority } from './registry';
-import { getManifestEntry } from './manifest';
-import { matchImageToStoryContext } from './context-matcher';
+import { getManifestEntry, isAssetAuthorizedForStory, type VerifiedImageRecord } from './manifest';
 
 export interface ImageIntelligenceResult {
   src: string;
@@ -49,134 +48,68 @@ function fromCandidate(c: ImageCandidate, isFallback: boolean, w = DEFAULT_HERO_
   });
 }
 
-export function resolveStoryHeroImage(story: Story): ResolvedStoryImage {
-  // 1. Authoritative verified manifest lookup
+export interface StoryHeroImageInput {
+  slug: string;
+  headline?: string;
+  title?: string;
+  category?: string | null;
+  heroImage?: string | null;
+  storyType?: string;
+  tags?: string[];
+  relatedEntityIds?: string[];
+}
+const SHA256_DIGEST = /^sha256:[a-f0-9]{64}$/i;
+
+function hasPublicHeroApproval(record: VerifiedImageRecord, slug: string): boolean {
+  return record.approvalStatus === 'approved'
+    && record.assetType !== 'branded-placeholder'
+    && record.license !== 'BRANDED_VECTOR'
+    && isAssetAuthorizedForStory(record, slug)
+    && Boolean(record.approvalTimestamp && !Number.isNaN(Date.parse(record.approvalTimestamp)))
+    && Boolean(record.approvedDigest && SHA256_DIGEST.test(record.approvedDigest))
+    && Boolean(record.rightsBasis?.trim())
+    && Boolean((record.creator || record.provenance)?.trim())
+    && Boolean(record.sourceUrl?.trim())
+    && Boolean(record.relevanceRationale?.trim())
+    && Boolean((record.altText || record.description)?.trim());
+}
+function storyPlaceholder(category?: string | null): string {
+  const normalized = (category || 'story').trim().toLowerCase();
+  const aliases: Record<string, string> = {
+    geopolitics: 'policy', politics: 'policy', governance: 'policy',
+    'health policy': 'health', 'public policy': 'policy',
+  };
+  return getPlaceholder(aliases[normalized] || normalized);
+}
+
+export function resolveStoryHeroImage(story: StoryHeroImageInput): ResolvedStoryImage {
+  const headline = story.headline || story.title || story.slug || 'this story';
   const manifest = getManifestEntry(story.slug);
-  if (manifest) {
-    // Fail-closed behaviour: Never serve a pending or rejected asset as the story hero;
-    // surface a safe fallback until a human approves it.
-    if (manifest.approvalStatus === 'pending' || manifest.approvalStatus === 'rejected') {
-      const placeholder = getPlaceholder(story.category);
-      const fallback = toResult(
-        placeholder,
-        `Placeholder: editorial hero awaiting approval for ${story.headline}`,
-        4,
-        'branded-placeholder',
-        DEFAULT_HERO_WIDTH,
-        DEFAULT_HERO_HEIGHT,
-        true,
-        { license: 'BRANDED_VECTOR' }
-      );
-      return { hero: fallback, og: fallback, thumbnail: { ...fallback, width: DEFAULT_THUMB_WIDTH, height: DEFAULT_THUMB_HEIGHT } };
-    }
-
-    const isSvg = manifest.approvedImage.endsWith('.svg') && manifest.assetType === 'branded-placeholder';
-    const type: ImageIntelligenceResult['type'] = isSvg
-      ? 'branded-placeholder'
-      : manifest.assetType === 'authentic-photo' || manifest.assetType === 'original-editorial-graphic'
-        ? 'editorial'
-        : 'official';
-    const r = toResult(
-      manifest.approvedImage,
-      manifest.altText || manifest.description || story.headline,
-      1,
-      type,
-      manifest.width || DEFAULT_HERO_WIDTH,
-      manifest.height || DEFAULT_HERO_HEIGHT,
-      isSvg,
-      {
-        caption: manifest.caption,
-        credit: manifest.creator || manifest.provenance,
-        agency: manifest.provenance,
-        license: manifest.license,
-      }
+  // File name, semantic match, tags and checksum alone cannot prove relevance,
+  // rights, story authorization or human approval.
+  if (manifest && hasPublicHeroApproval(manifest, story.slug)) {
+    const type: ImageIntelligenceResult['type'] =
+      manifest.assetType === 'official-document' || manifest.assetType === 'authentic-map'
+        ? 'official'
+        : manifest.assetType === 'illustrative-image'
+          ? 'ai-illustration'
+          : manifest.license === 'CREATIVE_COMMONS'
+            ? 'creative-commons'
+            : 'editorial';
+    const hero = toResult(
+      manifest.approvedImage, manifest.altText || manifest.description, 1, type,
+      manifest.width || DEFAULT_HERO_WIDTH, manifest.height || DEFAULT_HERO_HEIGHT, false,
+      { caption: manifest.caption, credit: manifest.creator || manifest.provenance,
+        agency: manifest.provenance, license: manifest.license, sourceUrl: manifest.sourceUrl }
     );
-    return {
-      hero: r,
-      og: r,
-      thumbnail: toResult(
-        manifest.approvedImage,
-        manifest.altText || manifest.description || story.headline,
-        1,
-        type,
-        DEFAULT_THUMB_WIDTH,
-        DEFAULT_THUMB_HEIGHT,
-        isSvg,
-        {
-          caption: manifest.caption,
-          credit: manifest.creator || manifest.provenance,
-          agency: manifest.provenance,
-          license: manifest.license,
-        }
-      ),
-    };
+    return { hero, og: hero, thumbnail: { ...hero, width: DEFAULT_THUMB_WIDTH, height: DEFAULT_THUMB_HEIGHT } };
   }
-
-  // 2. Validate story.heroImage context alignment if present
-  if (story.heroImage && !story.heroImage.includes('placehold.co')) {
-    const match = matchImageToStoryContext(story.heroImage, story, getManifestEntry);
-    if (match.aligned) {
-      const isSvg = story.heroImage.endsWith('.svg');
-      const r = toResult(
-        story.heroImage,
-        story.headline,
-        1,
-        isSvg ? 'branded-placeholder' : 'editorial',
-        DEFAULT_HERO_WIDTH,
-        DEFAULT_HERO_HEIGHT,
-        isSvg,
-        { credit: 'The Breakdown', agency: 'The Breakdown', license: 'EDITORIAL' }
-      );
-      return {
-        hero: r,
-        og: r,
-        thumbnail: toResult(
-          story.heroImage,
-          story.headline,
-          1,
-          isSvg ? 'branded-placeholder' : 'editorial',
-          DEFAULT_THUMB_WIDTH,
-          DEFAULT_THUMB_HEIGHT,
-          isSvg
-        ),
-      };
-    }
-  }
-
-  // Feature-story hero media fails closed. Related entity and tag images are
-  // discovery candidates, not evidence that an asset depicts this story.
-  const isFeatureStory = story.storyType === 'explainer' || story.storyType === 'analysis' || story.storyType === 'investigation_chapter';
-
-  if (!isFeatureStory) {
-    // 3. Fallback to entity images for non-feature stories
-    for (const entityId of story.relatedEntityIds || []) {
-      const found = findImage(entityId);
-      if (found) {
-        const r = fromCandidate(found, false);
-        return { hero: r, og: r, thumbnail: fromCandidate(found, false, DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT) };
-      }
-    }
-
-    // 4. Fallback to tag images for non-feature stories
-    for (const tag of story.tags || []) {
-      const found = findImage(tag);
-      if (found) {
-        const r = fromCandidate(found, false);
-        return { hero: r, og: r, thumbnail: fromCandidate(found, false, DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT) };
-      }
-    }
-  }
-
-  // 5. Category branded placeholder fallback
-  const categoryPlaceholder = getPlaceholder(story.category);
-  const fallback: ImageIntelligenceResult = toResult(
-    categoryPlaceholder,
-    `Placeholder: editorial hero awaiting approval for ${story.headline}`,
-    4,
-    'branded-placeholder',
-    DEFAULT_HERO_WIDTH,
-    DEFAULT_HERO_HEIGHT,
-    true,
+  // Unknown, legacy, pending, rejected, incomplete or unauthorized entries
+  // never expose raw database paths; use a clear placeholder until review.
+  const fallback = toResult(
+    storyPlaceholder(story.category),
+    `Editorial placeholder: the hero image for “${headline}” has not been verified for publication.`,
+    4, 'branded-placeholder', DEFAULT_HERO_WIDTH, DEFAULT_HERO_HEIGHT, true,
     { license: 'BRANDED_VECTOR' }
   );
   return { hero: fallback, og: fallback, thumbnail: { ...fallback, width: DEFAULT_THUMB_WIDTH, height: DEFAULT_THUMB_HEIGHT } };

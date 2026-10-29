@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { APIStory } from '@/utils/data-layer/types';
 import type { Story } from '@/types/canonical';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface StoriesArchiveProps {
   initialStories: (APIStory | Story)[];
@@ -133,7 +134,7 @@ export default function StoriesArchive({ initialStories }: StoriesArchiveProps) 
                 ? story.author
                 : story.author?.name || 'The Breakdown Editorial';
 
-            const heroImg = story.heroImage || `/images/placeholders/${(story.category || 'policy').toLowerCase()}-placeholder.svg`;
+            const heroImage = getStoryImagePresentation(story);
 
             return (
               <article
@@ -142,18 +143,13 @@ export default function StoriesArchive({ initialStories }: StoriesArchiveProps) 
               >
                 {/* Story Image */}
                 <Link href={`/story/${story.slug}`} className="block relative aspect-video w-full overflow-hidden bg-neutral-900">
-                  <img
-                    src={heroImg}
-                    alt={story.headline}
+                  <Image
+                    src={heroImage.src}
+                    alt={heroImage.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      const fallback = `/images/placeholders/${(story.category || 'policy').toLowerCase()}-placeholder.svg`;
-                      if (target.src !== fallback && !target.src.endsWith(fallback)) {
-                        target.src = fallback;
-                      }
-                    }}
+                    className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3 flex gap-2">
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-black/80 text-amber-300 border border-amber-500/30 backdrop-blur-md">

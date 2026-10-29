@@ -240,7 +240,6 @@ export function matchImageToStoryContext(
     (story.slug === 'fix-judicial-pendency' && imagePath.includes('aadhaar-sc')) ||
     (story.slug === '81-crore-data-breach' && imagePath.includes('aadhaar-sc')) ||
     (story.slug === 'fix-farm-income' && imagePath.includes('fasal-bima')) ||
-    (story.slug === 'india-china-relations' && imagePath.includes('india-china-border-tensions')) ||
     (story.slug === 'fix-air-pollution' && imagePath.includes('climate-finance')) ||
     (story.slug.includes('ranji') && (imagePath.includes('ranji') || imagePath.includes('bcci')));
 

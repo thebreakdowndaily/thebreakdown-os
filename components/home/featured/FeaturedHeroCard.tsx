@@ -4,6 +4,7 @@ import type { APIStory } from '@/utils/data-layer/types';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import StoryMetadata from './StoryMetadata';
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 interface FeaturedHeroCardProps {
   story: APIStory;
@@ -16,8 +17,8 @@ export default function FeaturedHeroCard({ story }: FeaturedHeroCardProps) {
         <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[280px] overflow-hidden">
           {story.heroImage && (
             <Image
-              src={story.heroImage}
-              alt={story.headline}
+              src={getStoryImagePresentation(story).src}
+              alt={getStoryImagePresentation(story).alt}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"

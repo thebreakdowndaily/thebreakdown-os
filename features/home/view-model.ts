@@ -7,15 +7,11 @@
  */
 
 import type { Services } from '@/services/registry';
-import { KnowledgeStoryPipeline } from '@/services/stories/pipeline';
-import { VisualIntelligenceBuilder } from '@/services/stories/pipeline/visuals';
-import { QualityBuilder } from '@/services/stories/pipeline/quality';
-import { TimelineBuilder } from '@/services/stories/pipeline/timeline';
-import { EntityBuilder } from '@/services/stories/pipeline/entities';
 import { getReaderTrustSignals, getStoryEvidenceSummary, TrustSignal } from '@/lib/story/trust-signals';
 import { extractFinancialFeature, FinancialFeatureData } from '@/lib/story/financial-eligibility';
 
 
+import { getStoryImagePresentation } from '@/lib/image-intelligence/presentation';
 
 export interface HomepageLeadStory {
   slug: string;
@@ -86,19 +82,12 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   const allStoriesRaw = [...(await services.stories.getPublicStories({ pageSize: 100 })).data]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-  const pipeline = new KnowledgeStoryPipeline()
-    .add(new EntityBuilder())
-    .add(new VisualIntelligenceBuilder())
-    .add(new TimelineBuilder())
-    .add(new QualityBuilder());
-
   // 1. Lead Story — dominant editorial priority
   const rawLead = allStoriesRaw[0];
   let leadStory: HomepageLeadStory | null = null;
 
   if (rawLead) {
-    const executedLead: any = await pipeline.execute(rawLead);
-    const heroImg: string | undefined = executedLead?.visualAssets?.hero?.resolvedAsset?.optimization?.cdnUrl || rawLead.heroImage;
+    const heroImage = getStoryImagePresentation(rawLead);
     const authorName = rawLead.author;
 
     leadStory = {
@@ -114,12 +103,8 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
       }),
       byline: authorName || 'The Breakdown Desk',
       trustSignals: getReaderTrustSignals(rawLead),
-      heroImage: heroImg,
-      heroImageAlt: (() => {
-        if (rawLead.heroImageIsDecorative) return '';
-        if (rawLead.heroImageAlt) return rawLead.heroImageAlt;
-        throw new Error('DATA_QUALITY_FAILURE: Missing informative image description');
-      })(),
+      heroImage: heroImage.src,
+      heroImageAlt: heroImage.alt,
       heroImageIsDecorative: rawLead.heroImageIsDecorative,
       actionText: 'Understand the story →',
       stats: {
@@ -146,8 +131,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   const rawDeepDives = allStoriesRaw.slice(5, 9);
   const deepDives: HomepageDeepDive[] = await Promise.all(
     rawDeepDives.map(async (s) => {
-      const executed: any = await pipeline.execute(s);
-      const heroImg: string | undefined = executed?.visualAssets?.hero?.resolvedAsset?.optimization?.cdnUrl || s.heroImage;
+      const heroImage = getStoryImagePresentation(s);
       return {
         slug: s.slug,
         category: s.category || 'investigation',
@@ -155,7 +139,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
         summary: s.summary,
         readingTime: s.readingTime || 12,
         trustSignals: getReaderTrustSignals(s),
-        heroImage: heroImg,
+        heroImage: heroImage.src,
       };
     })
   );
