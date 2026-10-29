@@ -48,6 +48,11 @@ for (const relative of surfaces) {
 const presentation = fs.readFileSync(path.join(process.cwd(), 'lib/story/presentation-model.ts'), 'utf8');
 assert.ok(presentation.includes('resolveStoryHeroImage(rs).hero'));
 assert.ok(!presentation.includes('url: rs.heroImage'));
+const imageGate = fs.readFileSync(path.join(process.cwd(), 'scripts/check-story-images.ts'), 'utf8');
+assert.ok(imageGate.includes('resolveStoryHeroImage(story)'), 'CI image gate validates the rendered resolver output');
+assert.ok(imageGate.includes('const hero = imageResolution.hero.src'), 'CI image gate does not validate raw database paths as approved images');
+const matcher = fs.readFileSync(path.join(process.cwd(), 'lib/image-intelligence/context-matcher.ts'), 'utf8');
+assert.ok(matcher.includes("entry.approvalStatus !== 'approved'"), 'context matching rejects pending/rejected manifest assets');
 for (const slug of ['ai-literacy-india-students-verify-ai','india-semiconductor-mission-fab-reality','bcci-domestic-mandate-ranji-economics'])
   assert.equal(EDITORIAL_RELEASE_HOLDS[slug]?.status, 'HOLD', `${slug} remains held`);
 for (const relative of ['lib/editorial/publication-gate.ts','lib/image-intelligence/publication-validation.ts'])
