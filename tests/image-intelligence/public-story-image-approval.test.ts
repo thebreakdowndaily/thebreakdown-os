@@ -55,4 +55,8 @@ for (const relative of ['lib/editorial/publication-gate.ts','lib/image-intellige
 const scheduleService = fs.readFileSync(path.join(process.cwd(), 'services/editorial/schedule.ts'), 'utf8');
 assert.ok(scheduleService.includes('if (error) {'), 'gate-log write failures are handled');
 assert.ok(scheduleService.includes('Publication gate audit logging failed'), 'gate-log failure prevents an unlogged publication decision');
+assert.ok(scheduleService.includes(".update({ status: 'in_progress', updated_at: now.toISOString() } as never)"),
+  'scheduled publication claim uses a real atomic state transition');
+assert.ok(scheduleService.includes(".eq('status', 'in_progress')"),
+  'recovery and completion paths are scoped to the claimed state');
 console.log(`PASS: story image approval and release-hold checks (${entries.length} manifest entries)`);
