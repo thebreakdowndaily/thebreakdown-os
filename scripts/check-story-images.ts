@@ -4,6 +4,7 @@ import { getStories, getInvestigations } from '../utils/data-layer/store';
 import { validateImageFile } from '../lib/image-intelligence/asset-validator';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
+import { resolveStoryHeroImage } from '../lib/image-intelligence/service';
 
 interface StoryAuditResult {
   slug: string;
@@ -29,22 +30,10 @@ function runStoryImageGate(): boolean {
   console.log(`Auditing ${stories.length} stories...\n`);
 
   for (const story of stories) {
-    const hero = story.heroImage;
-    if (!hero) {
-      results.push({
-        slug: story.slug,
-        category: story.category,
-        heroImage: 'NONE',
-        fileValid: false,
-        format: 'missing',
-        contextValid: false,
-        matchType: 'MISMATCH',
-        reason: 'No hero image defined',
-        error: 'Missing heroImage property',
-      });
-      hasFailures = true;
-      continue;
-    }
+    // Resolve first. The gate must validate the image actually rendered by
+    // public pages, not a raw database path that may be pending/rejected.
+    const imageResolution = resolveStoryHeroImage(story);
+    const hero = imageResolution.hero.src;
 
     // 1. File & Format validation (MIME / Magic bytes)
     const fileValidation = validateImageFile(hero);
@@ -76,7 +65,9 @@ function runStoryImageGate(): boolean {
       format: fileValidation.format,
       contextValid: contextValidation.isMatch,
       matchType: contextValidation.matchType,
-      reason: contextValidation.reason,
+      reason: imageResolution.hero.isFallback
+        ? `Safe category placeholder used because the story-specific hero is not approved. ${contextValidation.reason}`
+        : contextValidation.reason,
       error: fileValidation.error,
     });
   }
@@ -128,7 +119,7 @@ function runStoryImageGate(): boolean {
     return false;
   }
 
-  console.log('✅ GATE PASSED: All story images are verified on disk, valid format, and context-aligned.');
+  console.log('✅ GATE PASSED: All rendered hero assets are valid and context-aligned; unapproved assets resolve to safe placeholders. Feature stories still require approved story-specific media.');
   return true;
 }
 
