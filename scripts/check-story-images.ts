@@ -18,6 +18,7 @@ interface StoryAuditResult {
   reason: string;
   blockedByHold: boolean;
   expectedHold: boolean;
+  fallback: boolean;
   error?: string;
 }
 
@@ -79,6 +80,7 @@ function runStoryImageGate(): boolean {
         : contextValidation.reason,
       blockedByHold,
       expectedHold,
+      fallback: imageResolution.hero.isFallback,
       error: fileValidation.error,
     });
   }
@@ -99,7 +101,7 @@ function runStoryImageGate(): boolean {
   console.log('-'.repeat(120));
 
   for (const r of results) {
-    const statusTag = r.blockedByHold ? ' HOLD ' : r.fileValid && r.contextValid ? ' PASS ' : ' FAIL ';
+    const statusTag = r.blockedByHold ? ' HOLD ' : r.fallback ? ' FALLBACK ' : r.fileValid && r.contextValid ? ' PASS ' : ' FAIL ';
     console.log(
       `[${statusTag}] ` +
         r.slug.padEnd(30) +
@@ -112,18 +114,21 @@ function runStoryImageGate(): boolean {
         ' | ' +
         r.heroImage
     );
-    if (!r.fileValid || !r.contextValid) {
-      console.log(`       >>> ${r.expectedHold ? 'EDITORIAL HOLD (not publishable)' : 'ERROR'}: ${r.error || r.reason}`);
+    if (!r.fileValid || !r.contextValid || r.fallback) {
+      const label = r.expectedHold ? 'EDITORIAL HOLD (not publishable)' : r.fallback ? 'SAFE PLACEHOLDER (manual image review required)' : 'ERROR';
+      console.log(`       >>> ${label}: ${r.error || r.reason}`);
     }
   }
 
   console.log('\n------------------------------------------------------------------------');
   const passCount = results.filter((r) => r.fileValid && r.contextValid && !r.blockedByHold).length;
   const holdCount = results.filter((r) => r.blockedByHold).length;
+  const fallbackCount = results.filter((r) => r.fallback && !r.blockedByHold).length;
   const failCount = results.filter((r) => !(r.fileValid && r.contextValid) && !r.expectedHold).length;
   console.log(`TOTAL STORIES: ${results.length}`);
   console.log(`PASSED: ${passCount}`);
   console.log(`HELD (NOT PUBLISHABLE): ${holdCount}`);
+  console.log(`SAFE PLACEHOLDERS (IMAGE REVIEW REQUIRED): ${fallbackCount}`);
   console.log(`FAILED (UNHELD): ${failCount}`);
   console.log('------------------------------------------------------------------------\n');
 
@@ -132,7 +137,7 @@ function runStoryImageGate(): boolean {
     return false;
   }
 
-  console.log(`✅ IMAGE INTEGRITY CHECK PASSED FOR UNHELD STORIES. ${holdCount} held story/stories remain explicitly BLOCKED and must not be published until the independent editorial gate passes.`);
+  console.log(`✅ IMAGE SAFETY CHECK PASSED FOR UNHELD STORIES. ${fallbackCount} story/stories use explicit safe placeholders pending image review; ${holdCount} held story/stories remain blocked and must not be published until the independent editorial gate passes.`);
   return true;
 }
 
