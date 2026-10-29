@@ -51,6 +51,8 @@ assert.ok(!presentation.includes('url: rs.heroImage'));
 const imageGate = fs.readFileSync(path.join(process.cwd(), 'scripts/check-story-images.ts'), 'utf8');
 assert.ok(imageGate.includes('resolveStoryHeroImage(story)'), 'CI image gate validates the rendered resolver output');
 assert.ok(imageGate.includes('const hero = imageResolution.hero.src'), 'CI image gate does not validate raw database paths as approved images');
+assert.ok(imageGate.includes('validateLocalAssetDetailed(hero)'), 'CI verifies on-disk bytes for approved hero assets');
+assert.ok(imageGate.includes('record.approvedDigest !== localAsset.digest'), 'CI rejects stale approved asset digests');
 assert.ok(imageGate.includes('SAFE PLACEHOLDERS (IMAGE REVIEW REQUIRED)'), 'CI reports unverified-but-safely-fallbacked images explicitly');
 assert.ok(imageGate.includes('EDITORIAL HOLD (not publishable)'), 'CI does not disguise held stories as passing');
 const matcher = fs.readFileSync(path.join(process.cwd(), 'lib/image-intelligence/context-matcher.ts'), 'utf8');
