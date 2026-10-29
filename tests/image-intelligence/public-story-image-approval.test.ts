@@ -33,7 +33,8 @@ const surfaces = [
   'components/stories/StoriesArchive.tsx','components/home/DeepDivesGrid.tsx',
   'components/home/featured/FeaturedStories.tsx','components/home/featured/FeaturedStoryCard.tsx',
   'components/home/featured/FeaturedHeroCard.tsx','components/homepage/TopStory.tsx',
-  'components/homepage/LatestInvestigations.tsx','components/ui/StoryCard.tsx',
+  'components/homepage/LatestInvestigations.tsx','components/homepage/TrendingAnalysis.tsx',
+  'components/homepage/GlobalWatch.tsx','components/ui/StoryCard.tsx',
   'components/story/RelatedStories.tsx','components/home/latest/LatestStories.tsx',
   'components/home/LeadStoryHero.tsx','features/home/view-model.ts',
 ];
