@@ -115,7 +115,7 @@ function extractStemTokens(text: string): Set<string> {
 export function matchImageToStoryContext(
   imagePath: string,
   story: StoryContextInput,
-  manifestLookup?: (slug: string) => { approvedImage: string; assetType?: string } | null
+  manifestLookup?: (slug: string) => { approvedImage: string; assetType?: string; approvalStatus?: 'approved' | 'pending' | 'rejected' } | null
 ): ContextMatchResult {
   const isFeatureStory = Boolean(
     story.isFeatureStory ||
@@ -130,6 +130,22 @@ export function matchImageToStoryContext(
     const entry = manifestLookup(story.slug);
     if (entry && entry.approvedImage === imagePath) {
       const isPlaceholder = entry.approvedImage.includes('/images/placeholders/');
+
+      // A matching filename/path is not approval. Explicitly pending or
+      // rejected real assets must not fall through to semantic keyword matching.
+      if (entry.approvalStatus !== 'approved' && !isPlaceholder) {
+        return {
+          isMatch: false,
+          aligned: false,
+          score: 0,
+          reason: `Manifest asset for "${story.slug}" is ${entry.approvalStatus || 'missing approval status'} and cannot be treated as publication-approved.`,
+          matchType: 'MISMATCH',
+          classification: 'authentic-photo',
+          isEditorialBlocker: true,
+        };
+      }
+
+      if (entry.approvalStatus === 'approved') {
       const classification: AssetClassification = isPlaceholder
         ? 'generic-placeholder'
         : entry.assetType === 'authentic-photo'
@@ -158,6 +174,9 @@ export function matchImageToStoryContext(
         matchType: 'EXACT_MANIFEST',
         classification,
       };
+      }
+      // Pending/rejected placeholders fall through to the category-placeholder
+      // policy below; they are never classified as approved manifest assets.
     }
   }
 
