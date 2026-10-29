@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { getStories, getInvestigations } from '../utils/data-layer/store';
-import { validateImageFile } from '../lib/image-intelligence/asset-validator';
+import { validateImageFile, validateLocalAssetDetailed } from '../lib/image-intelligence/asset-validator';
 import { matchImageToStoryContext } from '../lib/image-intelligence/context-matcher';
 import { getManifestEntry } from '../lib/image-intelligence/manifest';
 import { resolveStoryHeroImage } from '../lib/image-intelligence/service';
@@ -12,6 +12,7 @@ interface StoryAuditResult {
   category: string;
   heroImage: string;
   fileValid: boolean;
+  integrityValid: boolean;
   format: string;
   contextValid: boolean;
   matchType: string;
@@ -42,6 +43,33 @@ function runStoryImageGate(): boolean {
     // 1. File & Format validation (MIME / Magic bytes)
     const fileValidation = validateImageFile(hero);
 
+    // 1b. Cryptographic digest parity for any explicitly approved asset.
+    // The browser resolver cannot hash bytes at runtime, so CI validates the
+    // exact on-disk bytes before an approved manifest asset can ship.
+    const record = getManifestEntry(story.slug);
+    let integrityValid = true;
+    let integrityError: string | undefined;
+    if (record && !imageResolution.hero.isFallback) {
+      const localAsset = validateLocalAssetDetailed(hero);
+      if (!localAsset.isPathContained || !localAsset.isValid) {
+        integrityValid = false;
+        integrityError = localAsset.error || 'Approved asset path or file is invalid.';
+      } else {
+        if (record.expectedDigest && record.expectedDigest !== localAsset.digest) {
+          integrityValid = false;
+          integrityError = `Expected digest ${record.expectedDigest} does not match file digest ${localAsset.digest}.`;
+        }
+        if (record.approvedDigest && record.approvedDigest !== localAsset.digest) {
+          integrityValid = false;
+          integrityError = `Approved digest ${record.approvedDigest} does not match file digest ${localAsset.digest}.`;
+        }
+        if (record.expectedDigest && record.approvedDigest && record.expectedDigest !== record.approvedDigest) {
+          integrityValid = false;
+          integrityError = 'Expected and approved digests disagree.';
+        }
+      }
+    }
+
     // 2. Context & Needs validation
     const contextValidation = matchImageToStoryContext(
       hero,
@@ -56,7 +84,7 @@ function runStoryImageGate(): boolean {
       getManifestEntry
     );
 
-    const isSuccess = fileValidation.isValid && contextValidation.isMatch;
+    const isSuccess = fileValidation.isValid && integrityValid && contextValidation.isMatch;
     const blockedByHold = Object.prototype.hasOwnProperty.call(EDITORIAL_RELEASE_HOLDS, story.slug);
     // A known held story may remain blocked while a valid safe placeholder is
     // rendered. Only that expected placeholder state is non-failing here.
@@ -72,6 +100,7 @@ function runStoryImageGate(): boolean {
       category: story.category,
       heroImage: hero,
       fileValid: fileValidation.isValid,
+      integrityValid,
       format: fileValidation.format,
       contextValid: contextValidation.isMatch,
       matchType: contextValidation.matchType,
@@ -81,7 +110,7 @@ function runStoryImageGate(): boolean {
       blockedByHold,
       expectedHold,
       fallback: imageResolution.hero.isFallback,
-      error: fileValidation.error,
+      error: integrityError || fileValidation.error,
     });
   }
 
@@ -101,7 +130,7 @@ function runStoryImageGate(): boolean {
   console.log('-'.repeat(120));
 
   for (const r of results) {
-    const statusTag = r.blockedByHold ? ' HOLD ' : r.fallback ? ' FALLBACK ' : r.fileValid && r.contextValid ? ' PASS ' : ' FAIL ';
+    const statusTag = r.blockedByHold ? ' HOLD ' : r.fallback ? ' FALLBACK ' : r.fileValid && r.integrityValid && r.contextValid ? ' PASS ' : ' FAIL ';
     console.log(
       `[${statusTag}] ` +
         r.slug.padEnd(30) +
@@ -114,17 +143,17 @@ function runStoryImageGate(): boolean {
         ' | ' +
         r.heroImage
     );
-    if (!r.fileValid || !r.contextValid || r.fallback) {
+    if (!r.fileValid || !r.integrityValid || !r.contextValid || r.fallback) {
       const label = r.expectedHold ? 'EDITORIAL HOLD (not publishable)' : r.fallback ? 'SAFE PLACEHOLDER (manual image review required)' : 'ERROR';
       console.log(`       >>> ${label}: ${r.error || r.reason}`);
     }
   }
 
   console.log('\n------------------------------------------------------------------------');
-  const passCount = results.filter((r) => r.fileValid && r.contextValid && !r.blockedByHold).length;
+  const passCount = results.filter((r) => r.fileValid && r.integrityValid && r.contextValid && !r.blockedByHold).length;
   const holdCount = results.filter((r) => r.blockedByHold).length;
   const fallbackCount = results.filter((r) => r.fallback && !r.blockedByHold).length;
-  const failCount = results.filter((r) => !(r.fileValid && r.contextValid) && !r.expectedHold).length;
+  const failCount = results.filter((r) => !(r.fileValid && r.integrityValid && r.contextValid) && !r.expectedHold).length;
   console.log(`TOTAL STORIES: ${results.length}`);
   console.log(`PASSED: ${passCount}`);
   console.log(`HELD (NOT PUBLISHABLE): ${holdCount}`);
