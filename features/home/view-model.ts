@@ -130,7 +130,7 @@ export async function buildHomepage(services: Services): Promise<HomepageData> {
   // 3. Deep Dives (2–4 items)
   const rawDeepDives = allStoriesRaw.slice(5, 9);
   const deepDives: HomepageDeepDive[] = await Promise.all(
-    rawDeepDives.map(async (s) => {
+    rawDeepDives.map((s) => {
       const heroImage = getStoryImagePresentation(s);
       return {
         slug: s.slug,
