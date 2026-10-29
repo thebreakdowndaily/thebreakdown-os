@@ -17,6 +17,7 @@ interface StoryAuditResult {
   matchType: string;
   reason: string;
   blockedByHold: boolean;
+  expectedHold: boolean;
   error?: string;
 }
 
@@ -56,10 +57,12 @@ function runStoryImageGate(): boolean {
 
     const isSuccess = fileValidation.isValid && contextValidation.isMatch;
     const blockedByHold = Object.prototype.hasOwnProperty.call(EDITORIAL_RELEASE_HOLDS, story.slug);
-    // A known held story may remain blocked while this code safely renders a
-    // placeholder. Do not misreport it as PASS, and do not let this distinction
-    // clear or bypass the independent editorial publication hold.
-    if (!isSuccess && !blockedByHold) {
+    // A known held story may remain blocked while a valid safe placeholder is
+    // rendered. Only that expected placeholder state is non-failing here.
+    // Corrupt files and other failures remain CI failures even for held stories.
+    const expectedHold = blockedByHold && imageResolution.hero.isFallback
+      && fileValidation.isValid && !contextValidation.isMatch;
+    if (!isSuccess && !expectedHold) {
       hasFailures = true;
     }
 
@@ -75,6 +78,7 @@ function runStoryImageGate(): boolean {
         ? `Safe category placeholder used because the story-specific hero is not approved. ${contextValidation.reason}`
         : contextValidation.reason,
       blockedByHold,
+      expectedHold,
       error: fileValidation.error,
     });
   }
@@ -95,7 +99,7 @@ function runStoryImageGate(): boolean {
   console.log('-'.repeat(120));
 
   for (const r of results) {
-    const statusTag = r.fileValid && r.contextValid ? ' PASS ' : r.blockedByHold ? ' HOLD ' : ' FAIL ';
+    const statusTag = r.blockedByHold ? ' HOLD ' : r.fileValid && r.contextValid ? ' PASS ' : ' FAIL ';
     console.log(
       `[${statusTag}] ` +
         r.slug.padEnd(30) +
@@ -109,14 +113,14 @@ function runStoryImageGate(): boolean {
         r.heroImage
     );
     if (!r.fileValid || !r.contextValid) {
-      console.log(`       >>> ${r.blockedByHold ? 'EDITORIAL HOLD (not publishable)' : 'ERROR'}: ${r.error || r.reason}`);
+      console.log(`       >>> ${r.expectedHold ? 'EDITORIAL HOLD (not publishable)' : 'ERROR'}: ${r.error || r.reason}`);
     }
   }
 
   console.log('\n------------------------------------------------------------------------');
-  const passCount = results.filter((r) => r.fileValid && r.contextValid).length;
-  const holdCount = results.filter((r) => r.blockedByHold && !(r.fileValid && r.contextValid)).length;
-  const failCount = results.filter((r) => !(r.fileValid && r.contextValid) && !r.blockedByHold).length;
+  const passCount = results.filter((r) => r.fileValid && r.contextValid && !r.blockedByHold).length;
+  const holdCount = results.filter((r) => r.blockedByHold).length;
+  const failCount = results.filter((r) => !(r.fileValid && r.contextValid) && !r.expectedHold).length;
   console.log(`TOTAL STORIES: ${results.length}`);
   console.log(`PASSED: ${passCount}`);
   console.log(`HELD (NOT PUBLISHABLE): ${holdCount}`);
