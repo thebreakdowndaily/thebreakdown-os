@@ -103,4 +103,18 @@ Ponytail skills and lean-engineering heuristics (`ponytail`, `ponytail-review`, 
 ### Instruction precedence & boundaries
 
 - **Editorial authority:** The Editorial Constitution (`docs/editorial/editorial-constitution.md`) and applicable editorial standards strictly supersede all lean-code heuristics. No lean rule justifies bypassing source verification, editorial review, fact-checking, publication eligibility, audit records, or test-artifact exclusion.
-- **Security & release integrity:** Authentication, authorization, RLS, database migration safety, atomic publication controls (`fn_publish_story_fenced`), secret handling, and release gates cannot be bypassed or weakened. "Simpler" or "lazy" is never permission to remove an essential safeguard.
+- **Security & release integrity:** Authentication, authorization, RLS, database migration safety, atomic publication controls (the current publish RPC is `fn_publish_story_with_audit` in `supabase/migrations/030_publisher_worker_rpc.sql`; verify whether an atomic fence is actually present before citing one), secret handling, and release gates cannot be bypassed or weakened. "Simpler" or "lazy" is never permission to remove an essential safeguard.
+
+## 8. Engineering skill boundaries
+
+Three registered skills cover engineering delivery: `evidence-first-completion`, `publication-safety`, and `release-readiness` in [`.agents/skills/`](.agents/skills/). Apply them as follows:
+
+- **Completion gate:** Before reporting a non-trivial task complete, apply [`evidence-first-completion`](.agents/skills/evidence-first-completion/SKILL.md). It requires evidence bound to the exact delivered SHA and forbids reporting skipped, blocked, or unrun checks as passes. If the file is unavailable, apply the same checks inline and say so.
+- **Publication changes:** Any change touching story resolution, public routes, feeds, sitemap, search, scheduled workers, publication RPCs, or schema must satisfy [`publication-safety`](.agents/skills/publication-safety/SKILL.md).
+- **Release assessment:** Candidate promotion, release PRs, and acceptance reporting must follow [`release-readiness`](.agents/skills/release-readiness/SKILL.md) and classify every gate as PASS, FAIL, SKIPPED, BLOCKED, or NOT RUN.
+
+Boundaries that these skills do not move:
+
+- Editorial authority remains with the Editorial Constitution and the `.ai/agents/*` editorial roles and workflows. Those determine whether a claim is verified and whether content may be published.
+- Human authorization in `.ai/workflows/publish.md` is the only release decision. No engineering skill, green CI run, or "READY FOR HUMAN APPROVAL" audit result substitutes for it.
+- `issue-to-completion` and `adversarial-verification` are intentionally unregistered because they restate `gravitas`. See [`docs/engineering/agent-skills-audit-2026-10-30.md`](docs/engineering/agent-skills-audit-2026-10-30.md) for where those copies live.

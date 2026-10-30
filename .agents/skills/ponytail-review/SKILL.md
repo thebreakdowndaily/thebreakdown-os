@@ -105,4 +105,4 @@ Lists findings, changes no code.
 - **Precedence:** Subordinate to root `AGENTS.md` and `docs/editorial/editorial-constitution.md`.
 - **Editorial & verification standards:** Review findings must respect the Editorial Constitution. Lean suggestions must never recommend pruning evidence verification, confidence scoring, or editorial audit pipelines.
 - **Architecture contracts:** Dual repository implementations (`services/repositories/memory/` and `services/repositories/supabase/`) and canonical knowledge models are intentional architectural requirements, not speculative abstractions.
-- **Security & release gates:** Authentication, authorization, RLS, migration safety, atomic publication controls (`fn_publish_story_fenced`), secret handling, and release gates are non-negotiable.
+- **Security & release gates:** Authentication, authorization, RLS, migration safety, atomic publication controls (`fn_publish_story_with_audit`), secret handling, and release gates are non-negotiable.

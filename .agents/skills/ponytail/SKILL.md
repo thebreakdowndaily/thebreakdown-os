@@ -55,5 +55,5 @@ Never cut: validation at trust boundaries, error handling that prevents data los
 
 - **Precedence:** Subordinate to root `AGENTS.md` and `docs/editorial/editorial-constitution.md`.
 - **Editorial standard:** Never cut or bypass source verification, editorial review, fact-checking, publication eligibility, audit records, or test-artifact exclusion.
-- **Security & release controls:** Authentication, authorization, RLS, migration safety, atomic publication controls (`fn_publish_story_fenced`), secret handling, and release gates are non-negotiable and cannot be bypassed.
+- **Security & release controls:** Authentication, authorization, RLS, migration safety, atomic publication controls (`fn_publish_story_with_audit`), secret handling, and release gates are non-negotiable and cannot be bypassed.
 - **Architecture preservation:** Preserve the Service Layer, Repository Pattern, canonical knowledge models, and existing type definitions.

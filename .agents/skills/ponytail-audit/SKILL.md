@@ -106,4 +106,4 @@ One-shot report, changes no code.
 
 - **Precedence:** Subordinate to root `AGENTS.md` and `docs/editorial/editorial-constitution.md`.
 - **Protected systems:** Audit passes must not propose removing editorial verification workflows, fact-checking infrastructure, canonical registry models, or dual storage providers (memory and Supabase).
-- **Security & release safeguards:** RLS policies, cryptographic verification, audit log tables, publication gates (`fn_publish_story_fenced`), and release testing scripts are required institutional infrastructure and must not be marked as bloat.
+- **Security & release safeguards:** RLS policies, cryptographic verification, audit log tables, publication gates (`fn_publish_story_with_audit`), and release testing scripts are required institutional infrastructure and must not be marked as bloat.

@@ -1,6 +1,6 @@
 # GRAVITAS Core pilot — The Breakdown OS
 
-**Status:** Merged on 2026-10-15. Structural integration and repository CI compatibility checks passed; controlled trials are **reported complete**, with raw evidence publication and independent audit still pending.  \
+**Status:** Merged on 2026-10-15. Structural integration and repository CI compatibility checks passed. The controlled evaluation is complete: it found no measurable quality advantage over standard repository instructions and recommends keeping Core **optional, not mandated**. The raw scorecards and the T1 disqualification are recorded on the unmerged branch `docs/gravitas-raw-results-evidence` (commit `eac7ae5f`); they are not yet on `main`, and independent review remains pending.  \
 **Pilot PR:** [#24](https://github.com/thebreakdowndaily/thebreakdown-os/pull/24)  \
 **Upstream:** [`udaysharmadev/Gravitas`](https://github.com/udaysharmadev/Gravitas)  \
 **Pinned source commit:** [`5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5`](https://github.com/udaysharmadev/Gravitas/commit/5fb2fcb8011e1d20db61ce385ae6a7e47deb2be5)  \

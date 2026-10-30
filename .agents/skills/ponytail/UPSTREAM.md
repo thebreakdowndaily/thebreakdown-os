@@ -18,6 +18,6 @@ This is a vendored integration of the official Ponytail coding-agent skills into
 
 1. **Subordinate Engineering Contract:** Ponytail principles operate strictly within and subordinate to the repository's root `AGENTS.md` and `docs/editorial/editorial-constitution.md`.
 2. **Editorial Protection:** No lean rule may be used to justify bypassing source verification, the Evidence Spine, editorial peer review, Gold Standard Review, or publication gates.
-3. **Security Safeguards:** Database constraints, Row Level Security (RLS), atomic publishing gates (`fn_publish_story_fenced`), migration safety, authorization checks, and secret containment cannot be skipped or simplified away.
+3. **Security Safeguards:** Database constraints, Row Level Security (RLS), atomic publishing gates (`fn_publish_story_with_audit`), migration safety, authorization checks, and secret containment cannot be skipped or simplified away.
 4. **Architecture Boundaries:** The Breakdown OS enforces the Service Layer and Repository Pattern (`services/repositories/memory/` and `services/repositories/supabase/`). Audit skills must respect these dual-provider architecture patterns rather than classifying them as unneeded wrappers.
 5. **No Runtime Dependencies:** This integration introduces pure agent skill workflows, documentation, and registry metadata. No npm dependencies, build scripts, migrations, or application code are modified.

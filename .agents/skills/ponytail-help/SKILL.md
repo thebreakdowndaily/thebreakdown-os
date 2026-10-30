@@ -76,4 +76,4 @@ Full docs + examples: https://github.com/DietrichGebert/ponytail
 ## The Breakdown OS Compatibility & Precedence
 
 - **Precedence:** Subordinate to root `AGENTS.md` and `docs/editorial/editorial-constitution.md`.
-- **Editorial & security boundaries:** All skills operate within The Breakdown OS repository contracts. Never bypass editorial verification, fact checking, RLS, audit logs, atomic publishing controls (`fn_publish_story_fenced`), or release gates.
+- **Editorial & security boundaries:** All skills operate within The Breakdown OS repository contracts. Never bypass editorial verification, fact checking, RLS, audit logs, atomic publishing controls (`fn_publish_story_with_audit`), or release gates.
