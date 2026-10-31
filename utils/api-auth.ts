@@ -29,6 +29,15 @@ export interface ApiKey {
   createdAt: string;
   lastUsed: string | null;
   enabled: boolean;
+  permissions?: string[];
+}
+
+export class CredentialStoreUnavailableError extends Error {
+  readonly status = 503;
+  constructor(message = 'Credential store temporarily unavailable') {
+    super(message);
+    this.name = 'CredentialStoreUnavailableError';
+  }
 }
 
 // In-memory synchronous fast-cache for synchronous callers (e.g. legacy tests)
@@ -45,6 +54,9 @@ function hashKeySync(rawKey: string): string {
  */
 export async function validateApiKeyAsync(rawKey: string): Promise<ApiKey | null> {
   const result = await persistentVerifyApiKey(rawKey);
+  if (result.code === 'STORE_UNAVAILABLE') {
+    throw new CredentialStoreUnavailableError(result.error);
+  }
   if (!result.valid || !result.key) {
     return null;
   }
@@ -63,6 +75,7 @@ export async function validateApiKeyAsync(rawKey: string): Promise<ApiKey | null
     createdAt: result.key.created_at,
     lastUsed: result.key.last_used_at,
     enabled: !result.key.revoked_at,
+    permissions: result.key.permissions || [],
   };
 
   syncCache.set(rawKey, entry);

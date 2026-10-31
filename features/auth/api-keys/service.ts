@@ -170,7 +170,20 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
         .eq('key_hash', keyHash)
         .maybeSingle();
 
-      if (!error && data) {
+      if (error) {
+        logSecurityEvent({
+          type: 'api_key.auth_failed',
+          keyPrefix: trimmed.slice(0, 12),
+          reason: 'STORE_UNAVAILABLE',
+        });
+        return {
+          valid: false,
+          code: 'STORE_UNAVAILABLE',
+          error: `Credential store database error: ${error.message}`,
+        };
+      }
+
+      if (data) {
         const rec: ApiKeyRecord = {
           id: data.id,
           owner_id: data.owner_id,
@@ -188,8 +201,17 @@ export async function verifyApiKey(rawKey: string): Promise<ApiKeyValidationResu
         record = rec;
         verificationCache.set(keyHash, { record: rec, cachedAt: now });
       }
-    } catch {
-      // Ignore query error, check in-memory fallback
+    } catch (err) {
+      logSecurityEvent({
+        type: 'api_key.auth_failed',
+        keyPrefix: trimmed.slice(0, 12),
+        reason: 'STORE_UNAVAILABLE',
+      });
+      return {
+        valid: false,
+        code: 'STORE_UNAVAILABLE',
+        error: `Credential store connection failure: ${err instanceof Error ? err.message : String(err)}`,
+      };
     }
   }
 

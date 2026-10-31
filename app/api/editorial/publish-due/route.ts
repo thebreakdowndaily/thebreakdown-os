@@ -20,14 +20,24 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAndPublishDueStories } from '@/services/editorial/schedule';
+import { isValidCronRequest } from '@/lib/security/cron-auth';
+import { recordPublishJobExecution, type PublishJobLedgerRecord } from '@/services/editorial/publish-ledger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 export async function GET(request: NextRequest) {
+  return handlePublishDue(request);
+}
+
+export async function POST(request: NextRequest) {
+  return handlePublishDue(request);
+}
+
+async function handlePublishDue(request: NextRequest) {
   // MANDATORY: CRON_SECRET must be set in the environment.
   // If not set, the endpoint is fully locked down — no requests accepted.
-  const cronSecret = process.env.CRON_SECRET;
+  const cronSecret = process.env.CRON_SECRET?.trim();
   if (!cronSecret) {
     console.error('[Editorial Cron] CRON_SECRET not configured — rejecting all requests');
     return NextResponse.json(
@@ -37,23 +47,53 @@ export async function GET(request: NextRequest) {
   }
 
   // Verify this is a legitimate cron request via Bearer token
-  const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!isValidCronRequest(request)) {
+    return NextResponse.json(
+      { error: 'Unauthorized', message: 'Invalid or missing cron credentials' },
+      { status: 401 }
+    );
   }
+
+  const startTime = Date.now();
+  const started_at = new Date(startTime).toISOString();
+  const job_id = crypto.randomUUID();
 
   try {
     const results = await validateAndPublishDueStories();
 
     const published = results.filter(r => r.passed);
     const blocked = results.filter(r => !r.passed);
+    const completed_at = new Date().toISOString();
+    const duration_ms = Date.now() - startTime;
+    const status: 'success' | 'partial' | 'failed' =
+      blocked.length === 0 ? 'success' : 'partial';
+
+    const ledger: PublishJobLedgerRecord = {
+      job_id,
+      started_at,
+      completed_at,
+      status,
+      stories_checked: results.length,
+      stories_published: published.length,
+      stories_blocked: blocked.length,
+      error: null,
+      duration_ms,
+    };
+
+    await recordPublishJobExecution(ledger);
 
     return NextResponse.json({
       ok: true,
-      timestamp: new Date().toISOString(),
+      jobId: job_id,
+      startedAt: started_at,
+      completedAt: completed_at,
+      durationMs: duration_ms,
+      status,
+      timestamp: completed_at,
       totalChecked: results.length,
       published: published.length,
       blocked: blocked.length,
+      ledger,
       results: results.map(r => ({
         storyId: r.storyId,
         passed: r.passed,
@@ -63,11 +103,33 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('[Editorial Cron] Error:', error);
+    const completed_at = new Date().toISOString();
+    const duration_ms = Date.now() - startTime;
+    const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+
+    const ledger: PublishJobLedgerRecord = {
+      job_id,
+      started_at,
+      completed_at,
+      status: 'failed',
+      stories_checked: 0,
+      stories_published: 0,
+      stories_blocked: 0,
+      error: errorMsg,
+      duration_ms,
+    };
+
+    await recordPublishJobExecution(ledger);
+
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
+        jobId: job_id,
+        status: 'failed',
+        durationMs: duration_ms,
+        error: errorMsg,
+        timestamp: completed_at,
+        ledger,
       },
       { status: 500 },
     );

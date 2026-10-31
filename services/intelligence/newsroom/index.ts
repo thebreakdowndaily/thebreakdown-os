@@ -42,6 +42,18 @@ import type { RadarLatencyRecord } from '@/services/radar/types';
 import type { RadarPersistenceRepository } from '@/services/radar/persistence/types';
 import { createRadarPersistenceRepository } from '@/services/radar/persistence';
 import { recordEditorialVerification, recordStoryPublication } from '@/services/radar/latency-tracker';
+import { ResearchIntelligenceCore } from '@/services/intelligence/research/core';
+import { createNewsroomResearchBridge } from '@/services/intelligence/research/newsroom-bridge';
+
+export interface ResearchBridgeOutboxEntry {
+  id: string;
+  signalId: string;
+  enqueuedAt: string;
+  processedAt?: string;
+  status: 'PENDING' | 'PROCESSED' | 'FAILED';
+  error?: string;
+  reason?: string;
+}
 
 const HOUR_MS = 60 * 60 * 1000;
 const MINUTE_MS = 60 * 1000;
@@ -86,6 +98,7 @@ export class NewsroomIntelligenceCore {
    * Governing document: docs/research/source-governance.md
    */
   private researchBridge: ((signal: NewsroomSignal) => void | Promise<void>) | null = null;
+  private researchBridgeOutbox: Map<string, ResearchBridgeOutboxEntry> = new Map();
 
   private clusters: Map<string, StoryCluster> = new Map();
   private observations: Map<string, NewsroomObservation> = new Map();
@@ -157,11 +170,20 @@ export class NewsroomIntelligenceCore {
   private loadError: Error | null = null;
   private loadGeneration = 0;
 
-  public ensureLoaded(): Promise<void> {
+  public async ensureLoaded(): Promise<void> {
     if (this.loadError) {
       return this.loadPromise ?? Promise.reject(this.loadError);
     }
     if (this.isLoaded) {
+      if (!this.researchBridge) {
+        try {
+          const researchCore = ResearchIntelligenceCore.getInstance();
+          await researchCore.ensureLoaded();
+          this.researchBridge = createNewsroomResearchBridge({ core: researchCore });
+        } catch (e) {
+          console.warn('[NewsroomIntelligenceCore] Warning: Failed to wire Research Intelligence Core:', e);
+        }
+      }
       return this.loadPromise ?? Promise.resolve();
     }
     if (this.isLoading && this.loadPromise) {
@@ -211,6 +233,18 @@ export class NewsroomIntelligenceCore {
             'PERSISTENCE_UNAVAILABLE'
           );
         }
+
+        // Bridge wiring: ensure Research Intelligence Core is loaded and mounted
+        try {
+          const researchCore = ResearchIntelligenceCore.getInstance();
+          await researchCore.ensureLoaded();
+          if (!this.researchBridge) {
+            this.researchBridge = createNewsroomResearchBridge({ core: researchCore });
+          }
+        } catch (researchErr) {
+          console.warn('[NewsroomIntelligenceCore] Warning: Failed to wire Research Intelligence Core during bootstrap:', researchErr);
+        }
+
         this.isLoaded = true;
         this.loadError = null;
       } catch (err) {
@@ -450,13 +484,9 @@ export class NewsroomIntelligenceCore {
       contradictions.length > 0
     );
 
-    // Offer the signal to the research bridge (gated internally; fire-and-forget).
+    // Offer the signal to the research bridge via traceable outbox dispatch.
     if (this.researchBridge) {
-      try {
-        void this.researchBridge(signal);
-      } catch (err) {
-        console.error('[NewsroomIntelligenceCore] research bridge error:', err);
-      }
+      void this.dispatchToResearchBridge(signal, 'observation_processed');
     }
 
     this.persist();
@@ -472,6 +502,88 @@ export class NewsroomIntelligenceCore {
 
   public getResearchBridge(): ((signal: NewsroomSignal) => void | Promise<void>) | null {
     return this.researchBridge;
+  }
+
+  public getResearchBridgeOutbox(): ResearchBridgeOutboxEntry[] {
+    return Array.from(this.researchBridgeOutbox.values());
+  }
+
+  public clearResearchBridgeOutbox(): void {
+    this.researchBridgeOutbox.clear();
+  }
+
+  /**
+   * Dispatches a signal to the research bridge via durable outbox record and audit logging.
+   * Eliminates untracked fire-and-forget signal loss and guarantees end-to-end traceability.
+   */
+  public async dispatchToResearchBridge(
+    signal: NewsroomSignal,
+    reason = 'signal_evaluation'
+  ): Promise<void> {
+    if (!this.researchBridge) {
+      return;
+    }
+
+    const outboxId = `bridge-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const outboxEntry: ResearchBridgeOutboxEntry = {
+      id: outboxId,
+      signalId: signal.id,
+      enqueuedAt: new Date().toISOString(),
+      status: 'PENDING',
+      reason,
+    };
+    this.researchBridgeOutbox.set(outboxId, outboxEntry);
+
+    NewsroomAuditService.logAction({
+      signalId: signal.id,
+      clusterId: signal.clusterId,
+      actorId: 'system:research-bridge',
+      actorName: 'Newsroom Research Bridge',
+      actorRole: 'automated_system',
+      action: 'SYSTEM_STATE_TRANSITION',
+      previousState: signal.lifecycleState,
+      newState: 'QUEUED_FOR_RESEARCH',
+      reason: `Signal ${signal.id} enqueued for research bridge (${reason})`,
+      metadata: { outboxId, reason, signalTitle: signal.title },
+    });
+
+    try {
+      await this.researchBridge(signal);
+      outboxEntry.status = 'PROCESSED';
+      outboxEntry.processedAt = new Date().toISOString();
+
+      NewsroomAuditService.logAction({
+        signalId: signal.id,
+        clusterId: signal.clusterId,
+        actorId: 'system:research-bridge',
+        actorName: 'Newsroom Research Bridge',
+        actorRole: 'automated_system',
+        action: 'SYSTEM_STATE_TRANSITION',
+        previousState: 'QUEUED_FOR_RESEARCH',
+        newState: 'RESEARCH_DISPATCHED',
+        reason: `Signal ${signal.id} successfully processed by research bridge`,
+        metadata: { outboxId, completedAt: outboxEntry.processedAt },
+      });
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      outboxEntry.status = 'FAILED';
+      outboxEntry.error = errorMsg;
+      outboxEntry.processedAt = new Date().toISOString();
+      console.error(`[NewsroomIntelligenceCore] Research bridge dispatch failed for signal ${signal.id}:`, err);
+
+      NewsroomAuditService.logAction({
+        signalId: signal.id,
+        clusterId: signal.clusterId,
+        actorId: 'system:research-bridge',
+        actorName: 'Newsroom Research Bridge',
+        actorRole: 'automated_system',
+        action: 'SYSTEM_STATE_TRANSITION',
+        previousState: 'QUEUED_FOR_RESEARCH',
+        newState: 'RESEARCH_DISPATCH_FAILED',
+        reason: `Research bridge dispatch failed: ${errorMsg}`,
+        metadata: { outboxId, error: errorMsg },
+      });
+    }
   }
 
   // ── Queries & Queue ─────────────────────────────────────────────────────────
@@ -674,13 +786,9 @@ export class NewsroomIntelligenceCore {
       throw persistErr;
     }
 
-    // If human editor explicitly promoted signal to research, trigger the bridge
+    // If human editor explicitly promoted signal to research, trigger the bridge via traceable outbox dispatch
     if (payload.action === 'PROMOTE_TO_RESEARCH' && this.researchBridge) {
-      try {
-        void this.researchBridge(updated);
-      } catch (err) {
-        console.error('[NewsroomIntelligenceCore] research bridge promotion error:', err);
-      }
+      void this.dispatchToResearchBridge(updated, 'editorial_promotion');
     }
 
     // Bridge human verification into radar latency measurement
@@ -750,13 +858,9 @@ export class NewsroomIntelligenceCore {
     const updated = this.workflowService.applyAction(signal, payload);
     this.signals.set(updated.id, updated);
 
-    // If human editor explicitly promoted signal to research, trigger the bridge
+    // If human editor explicitly promoted signal to research, trigger the bridge via traceable outbox dispatch
     if (payload.action === 'PROMOTE_TO_RESEARCH' && this.researchBridge) {
-      try {
-        void this.researchBridge(updated);
-      } catch (err) {
-        console.error('[NewsroomIntelligenceCore] research bridge promotion error:', err);
-      }
+      void this.dispatchToResearchBridge(updated, 'editorial_promotion');
     }
 
     // Bridge human verification into radar latency measurement

@@ -3,11 +3,14 @@ import { NextRequest } from 'next/server';
 import { isValidCronRequest } from '@/lib/security/cron-auth';
 import { GET as newsroomGET, POST as newsroomPOST } from '@/app/api/v2/newsroom/observations/pull/route';
 import { GET as radarGET, POST as radarPOST } from '@/app/api/v2/radar/poll/route';
+import { GET as publishDueGET, POST as publishDuePOST } from '@/app/api/editorial/publish-due/route';
 import { middleware } from '@/middleware';
 import { RadarPipeline } from '@/services/radar/pipeline';
 import * as pibAdapter from '@/lib/intelligence/pib-adapter';
 import { newsroomIntelligenceCore } from '@/services/intelligence/newsroom';
 import * as apiAuth from '@/utils/api-auth';
+import * as scheduleService from '@/services/editorial/schedule';
+import * as publishLedger from '@/services/editorial/publish-ledger';
 
 describe('Phase 2F — Cron Authentication & Remediation', () => {
   const TEST_SECRET = 'test-cron-secret-super-secure-token-987';
@@ -191,15 +194,294 @@ describe('Phase 2F — Cron Authentication & Remediation', () => {
       expect(json.runId).toBe('mock-radar-run');
     });
 
-    it('accepts request when authenticated via x-api-key', async () => {
+    it('accepts an authorized operational admin API key', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_admin_api_key',
+        name: 'Radar operational admin key',
+        role: 'admin',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: [],
+      });
       const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
         method: 'GET',
-        headers: { 'x-api-key': 'tb_live_test_api_key' },
+        headers: { 'x-api-key': 'tb_live_admin_api_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(200);
+      expect(apiAuth.validateApiKeyAsync).toHaveBeenCalledWith('tb_live_admin_api_key');
+      const json = await res.json();
+      expect(json.runId).toBe('mock-radar-run');
+    });
+
+    it('accepts an editor API key with explicit radar:poll permission', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_editor_poll_key',
+        name: 'Editor radar crawler key',
+        role: 'editor',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['radar:poll'],
+      });
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_editor_poll_key' },
       });
       const res = await radarGET(req);
       expect(res.status).toBe(200);
       const json = await res.json();
       expect(json.runId).toBe('mock-radar-run');
+    });
+
+    it('rejects a reader API key with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_reader_key',
+        name: 'Reader consumer key',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['story.read'],
+      });
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_reader_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      const json = await res.json();
+      expect(json.error).toContain('insufficient permissions');
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('rejects an editor key without polling permission with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_editor_key',
+        name: 'General editor key',
+        role: 'editor',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+        permissions: ['story.create', 'story.update'],
+      });
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_editor_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      const json = await res.json();
+      expect(json.error).toContain('insufficient permissions');
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('rejects an arbitrary non-empty random string API-key header with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue(null);
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'not-a-real-key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      expect(apiAuth.validateApiKeyAsync).toHaveBeenCalledWith('not-a-real-key');
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('rejects a revoked API key with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_revoked_key',
+        name: 'Revoked test key',
+        role: 'admin',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: false,
+      });
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_revoked_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('rejects an expired API key with 403', async () => {
+      // Expired keys resolve to null in validateApiKeyAsync (or enabled: false)
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue(null);
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_expired_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('fails closed with 503 when the API-key store is unavailable (real database failure path)', async () => {
+      // Simulate real Supabase failure propagating through validateApiKeyAsync
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockRejectedValue(
+        new apiAuth.CredentialStoreUnavailableError('Database connection refused')
+      );
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_operational_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(503);
+      const json = await res.json();
+      expect(json.error).toBe('api_key_validation_unavailable');
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Route: /api/editorial/publish-due', () => {
+    it('rejects unauthenticated GET requests with 401', async () => {
+      const req = new NextRequest('http://localhost:3000/api/editorial/publish-due', {
+        method: 'GET',
+      });
+      const res = await publishDueGET(req);
+      expect(res.status).toBe(401);
+      const json = await res.json();
+      expect(json.error).toBe('Unauthorized');
+    });
+
+    it('rejects GET requests with incorrect Bearer secret with 401', async () => {
+      const req = new NextRequest('http://localhost:3000/api/editorial/publish-due', {
+        method: 'GET',
+        headers: { authorization: 'Bearer wrong-secret' },
+      });
+      const res = await publishDueGET(req);
+      expect(res.status).toBe(401);
+      const json = await res.json();
+      expect(json.error).toBe('Unauthorized');
+    });
+
+    it('fails closed with 500 when CRON_SECRET is not configured', async () => {
+      delete process.env.CRON_SECRET;
+      const req = new NextRequest('http://localhost:3000/api/editorial/publish-due', {
+        method: 'GET',
+        headers: { authorization: `Bearer ${TEST_SECRET}` },
+      });
+      const res = await publishDueGET(req);
+      expect(res.status).toBe(500);
+      const json = await res.json();
+      expect(json.error).toContain('CRON_SECRET not set');
+    });
+
+    it('accepts GET request with valid Bearer secret and executes publishing evaluation with durable ledger', async () => {
+      const recordSpy = vi.spyOn(publishLedger, 'recordPublishJobExecution').mockResolvedValue(true);
+
+      vi.spyOn(scheduleService, 'validateAndPublishDueStories').mockResolvedValue([
+        {
+          storyId: 'story-1',
+          scheduleId: 'sched-1',
+          passed: true,
+          checks: [{ name: 'gate-1', passed: true }],
+          checkedAt: new Date().toISOString(),
+          triggeredBy: 'cron',
+        },
+        {
+          storyId: 'story-2',
+          scheduleId: 'sched-2',
+          passed: false,
+          checks: [{ name: 'gate-2', passed: false, reason: 'missing fact check' }],
+          checkedAt: new Date().toISOString(),
+          triggeredBy: 'cron',
+        },
+      ]);
+
+      const req = new NextRequest('http://localhost:3000/api/editorial/publish-due', {
+        method: 'GET',
+        headers: { authorization: `Bearer ${TEST_SECRET}` },
+      });
+      const res = await publishDueGET(req);
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.ok).toBe(true);
+      expect(json.jobId).toBeDefined();
+      expect(json.status).toBe('partial');
+      expect(json.totalChecked).toBe(2);
+      expect(json.published).toBe(1);
+      expect(json.blocked).toBe(1);
+      expect(json.ledger).toBeDefined();
+      expect(json.ledger.job_id).toBe(json.jobId);
+      expect(json.ledger.status).toBe('partial');
+      expect(json.ledger.stories_checked).toBe(2);
+      expect(json.ledger.stories_published).toBe(1);
+      expect(json.ledger.stories_blocked).toBe(1);
+      expect(json.ledger.error).toBeNull();
+      expect(json.ledger.duration_ms).toBeGreaterThanOrEqual(0);
+      expect(json.results).toHaveLength(2);
+      expect(json.results[0].passed).toBe(true);
+      expect(json.results[1].passed).toBe(false);
+      expect(json.results[1].failedChecks).toContain('gate-2');
+
+      expect(recordSpy).toHaveBeenCalledTimes(1);
+      expect(recordSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          job_id: json.jobId,
+          status: 'partial',
+          stories_checked: 2,
+          stories_published: 1,
+          stories_blocked: 1,
+          error: null,
+        })
+      );
+    });
+
+    it('accepts POST request with valid Bearer secret and records clean execution ledger', async () => {
+      const recordSpy = vi.spyOn(publishLedger, 'recordPublishJobExecution').mockResolvedValue(true);
+      vi.spyOn(scheduleService, 'validateAndPublishDueStories').mockResolvedValue([]);
+
+      const req = new NextRequest('http://localhost:3000/api/editorial/publish-due', {
+        method: 'POST',
+        headers: { authorization: `Bearer ${TEST_SECRET}` },
+      });
+      const res = await publishDuePOST(req);
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.ok).toBe(true);
+      expect(json.status).toBe('success');
+      expect(json.totalChecked).toBe(0);
+      expect(json.ledger.status).toBe('success');
+      expect(json.ledger.stories_checked).toBe(0);
+      expect(recordSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('returns 500 and records failed ledger when publication execution encounters an unexpected error', async () => {
+      const recordSpy = vi.spyOn(publishLedger, 'recordPublishJobExecution').mockResolvedValue(true);
+      vi.spyOn(scheduleService, 'validateAndPublishDueStories').mockRejectedValue(
+        new Error('Database transaction timeout')
+      );
+
+      const req = new NextRequest('http://localhost:3000/api/editorial/publish-due', {
+        method: 'GET',
+        headers: { authorization: `Bearer ${TEST_SECRET}` },
+      });
+      const res = await publishDueGET(req);
+      expect(res.status).toBe(500);
+      const json = await res.json();
+      expect(json.ok).toBe(false);
+      expect(json.status).toBe('failed');
+      expect(json.error).toContain('Database transaction timeout');
+      expect(json.ledger).toBeDefined();
+      expect(json.ledger.status).toBe('failed');
+      expect(json.ledger.error).toContain('Database transaction timeout');
+      expect(recordSpy).toHaveBeenCalledTimes(1);
+      expect(recordSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'failed',
+          error: 'Database transaction timeout',
+        })
+      );
     });
   });
 

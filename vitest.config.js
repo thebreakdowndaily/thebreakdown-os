@@ -176,6 +176,8 @@ module.exports = {
       'services/radar/__tests__/global-pilot.test.ts',
       'services/intelligence/newsroom/__tests__/desk-service.test.ts',
       'tests/cron-auth.test.ts',
+      'tests/editorial/publish-due-route.test.ts',
+      'tests/research-bridge-wiring.test.ts',
       'tests/notifications/alert-dispatcher.test.ts',
       'tests/notifications/stage-b-transport-verification.test.ts',
       'tests/notifications/durable-idempotency.test.ts',

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { POST, GET } from '@/app/api/v2/radar/poll/route';
 import { RadarPipeline } from '@/services/radar/pipeline';
+import * as apiAuth from '@/utils/api-auth';
 
 describe('/api/v2/radar/poll Scheduled Endpoint', () => {
   const originalEnv = process.env.CRON_SECRET;
@@ -156,5 +157,138 @@ describe('/api/v2/radar/poll Scheduled Endpoint', () => {
     const body = await res.json();
     expect(body.status).toBe('failed');
     expect(body.error).toContain('Concurrency lock');
+  });
+
+  it('accepts requests with a valid operational admin x-api-key header', async () => {
+    vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+      key: 'tb_live_test_key_abc',
+      name: 'Test Operational Admin Key',
+      role: 'admin',
+      createdAt: new Date().toISOString(),
+      lastUsed: null,
+      enabled: true,
+      permissions: [],
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'tb_live_test_key_abc',
+      },
+    });
+
+    const res = await GET(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.runId).toBe('mock-run-123');
+  });
+
+  it('accepts requests with an editor key having radar:poll permission', async () => {
+    vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+      key: 'tb_live_editor_key',
+      name: 'Editor Crawler Key',
+      role: 'editor',
+      createdAt: new Date().toISOString(),
+      lastUsed: null,
+      enabled: true,
+      permissions: ['radar:poll'],
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'tb_live_editor_key',
+      },
+    });
+
+    const res = await GET(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.runId).toBe('mock-run-123');
+  });
+
+  it('rejects reader API key with 403', async () => {
+    vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+      key: 'tb_live_reader_key',
+      name: 'Reader Key',
+      role: 'reader',
+      createdAt: new Date().toISOString(),
+      lastUsed: null,
+      enabled: true,
+      permissions: ['story.read'],
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'tb_live_reader_key',
+      },
+    });
+
+    const res = await GET(req);
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toContain('insufficient permissions');
+  });
+
+  it('rejects editor API key without polling permission with 403', async () => {
+    vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+      key: 'tb_live_editor_noperm_key',
+      name: 'Editor Key Without Polling',
+      role: 'editor',
+      createdAt: new Date().toISOString(),
+      lastUsed: null,
+      enabled: true,
+      permissions: ['story.create'],
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'tb_live_editor_noperm_key',
+      },
+    });
+
+    const res = await GET(req);
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toContain('insufficient permissions');
+  });
+
+  it('rejects requests with an arbitrary unverified x-api-key with 403', async () => {
+    vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue(null);
+
+    const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'random_unverified_key',
+      },
+    });
+
+    const res = await GET(req);
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toContain('forbidden');
+  });
+
+  it('rejects requests with a disabled or revoked x-api-key with 403', async () => {
+    vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+      key: 'tb_live_revoked_key',
+      name: 'Revoked Key',
+      role: 'admin',
+      createdAt: new Date().toISOString(),
+      lastUsed: null,
+      enabled: false,
+    });
+
+    const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'tb_live_revoked_key',
+      },
+    });
+
+    const res = await GET(req);
+    expect(res.status).toBe(403);
   });
 });

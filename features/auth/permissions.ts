@@ -26,6 +26,8 @@ export type AppPermission =
   | 'intel.tasks'
   | 'intel.newsroom'
   | 'intel.demand'
+  | 'radar:poll'
+  | 'radar.poll'
   // Administrative & Security
   | 'api_key.read'
   | 'api_key.create'

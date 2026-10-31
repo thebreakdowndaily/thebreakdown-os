@@ -57,7 +57,7 @@ export interface MaskedApiKey {
 
 export interface ApiKeyValidationResult {
   valid: boolean;
-  code?: 'INVALID_FORMAT' | 'NOT_FOUND' | 'REVOKED' | 'EXPIRED' | 'UNAUTHORIZED';
+  code?: 'INVALID_FORMAT' | 'NOT_FOUND' | 'REVOKED' | 'EXPIRED' | 'UNAUTHORIZED' | 'STORE_UNAVAILABLE';
   error?: string;
   key?: ApiKeyRecord;
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RadarPipeline } from '@/services/radar/pipeline';
 import { MP_RADAR_SOURCES } from '@/data/radar/sources-mp';
 import { isValidCronRequest } from '@/lib/security/cron-auth';
+import { validateApiKeyAsync } from '@/utils/api-auth';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -37,14 +38,52 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 async function handlePoll(req: NextRequest): Promise<NextResponse> {
   const isCronAuthorized = isValidCronRequest(req);
-  const hasApiKey = Boolean(req.headers.get('x-api-key'));
-  const isAuthorized = isCronAuthorized || hasApiKey;
 
-  if (!isAuthorized) {
-    return NextResponse.json(
-      { error: 'unauthorized: invalid or missing cron secret' },
-      { status: 401 }
-    );
+  // Route-level defense-in-depth: validate API key if not cron-authorized.
+  // Handlers can be invoked directly in tests, internal jobs, or alternate deployment runtimes;
+  // a non-empty header is never proof of identity or authorization.
+  if (!isCronAuthorized) {
+    const apiKey = req.headers.get('x-api-key')?.trim();
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: 'unauthorized: invalid or missing cron secret' },
+        { status: 401 }
+      );
+    }
+
+    try {
+      const validatedKey = await validateApiKeyAsync(apiKey);
+      if (!validatedKey || !validatedKey.enabled) {
+        return NextResponse.json(
+          { error: 'forbidden: invalid, expired, or revoked API key' },
+          { status: 403 }
+        );
+      }
+
+      // Operational endpoint privilege enforcement:
+      // Triggering continuous external crawling and persistence requires admin role
+      // or explicit radar:poll / intel.newsroom permission. Public readers and unpermitted
+      // editors are strictly blocked.
+      const isAuthorizedRole = validatedKey.role === 'admin';
+      const hasPollPermission = Boolean(
+        validatedKey.permissions?.includes('radar:poll') ||
+        validatedKey.permissions?.includes('radar.poll') ||
+        validatedKey.permissions?.includes('intel.newsroom')
+      );
+
+      if (!isAuthorizedRole && !hasPollPermission) {
+        return NextResponse.json(
+          { error: 'forbidden: insufficient permissions for radar operations' },
+          { status: 403 }
+        );
+      }
+    } catch {
+      // Do not run crawler operations when the credential store cannot validate keys
+      return NextResponse.json(
+        { error: 'api_key_validation_unavailable' },
+        { status: 503 }
+      );
+    }
   }
 
   try {
