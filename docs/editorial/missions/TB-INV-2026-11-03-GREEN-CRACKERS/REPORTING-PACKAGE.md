@@ -126,7 +126,7 @@ Until those records are disclosed and independently examined, neither effective 
 - The dates above are taken from the 29 October 2026 Supreme Court order: manufacture 2–6 Nov; sale 4–6 Nov; bursting 7–8 Nov in the specified time windows; complete prohibition restored 9 Nov.
 - The 3 November market allegations are attributed to Hindustan Times. Do not convert them into The Breakdown's own findings.
 - The earlier draft's numerical AQI references (including 324/331) are removed pending reconciliation against CPCB/DPCC station-level records. A surfaced CPCB page and the Delhi portal can show different measures/time windows; do not mix them.
-- Do not claim that The Breakdown conducted market inspections, QR scans, interviews, RTIs or obtained official data unless those activities are actually completed and logged.
+- Do not claim that The Breakdown conducted market inspections, QR scans, interviews or obtained official data unless those activities are actually completed and logged. No RTI application is authorised or to be filed for this investigation.
 - Do not describe green crackers as pollution-free. Explain the comparative emissions standard and its limits.
 - The 2025 evidence failure is attributed to the Supreme Court's own assessment in the 29 October 2026 order.
 - The article is a desk-researched accountability explainer, not yet a completed field investigation.
@@ -161,58 +161,75 @@ Until those records are disclosed and independently examined, neither effective 
 | V13 | Post-event pollution impact | Event not yet occurred as of research cut-off | Not available |
 | V14 | Hospital admission impact | Data through 30 Nov not yet available | Not available |
 
-## Field reporting and official-record request plan
+## Public-source reporting and right-of-reply plan — NO RTI
 
-### Immediate written questions
+**Binding editorial instruction:** No RTI application is authorised or to be filed for this investigation. The former RTI draft pack is withdrawn from the working branch. Do not prepare, submit, pay for, or ask the user to identify themselves for any RTI application. This instruction supersedes any earlier reporting plan.
 
-**Delhi Police / district police**
-1. Number and locations of designated sales sites.
-2. Number of patrol teams and deployment dates/times.
-3. Inspections conducted, shops checked and QR codes scanned.
-4. Number of violations, seizures, FIRs/prosecutions and case status.
-5. Complaints received and disposal status.
+### Public evidence collection
 
-**Delhi Government / District Magistrates**
-1. Copies of designation notifications and maps.
-2. List of traders whose licences were restored, with validity dates.
-3. Security deposit amount, collection and forfeiture records.
-4. No-cracker-zone notifications and marking/compliance records.
-5. Market inspection reports and inter-agency coordination records.
+Use only material lawfully and publicly accessible without an RTI application:
+
+- Supreme Court orders, cause lists, publicly accessible pleadings and compliance affidavits.
+- Official CSIR-NEERI product/manufacturer lists, registration guidance, test-report information and public notices.
+- Publicly accessible PESO licence information, circulars, advisories and enforcement notices.
+- CPCB, DPCC and CAQM dashboards, downloadable station-level data, bulletins and published reports.
+- GNCTD and NCR district notifications naming designated sale locations, trader eligibility and no-cracker zones.
+- Delhi Police and NCR police press releases, public seizure/prosecution statements and publicly released enforcement summaries.
+- Government press releases, parliamentary answers, published budget/procurement records and other public datasets.
+- Peer-reviewed studies and attributable reporting by credible news organisations.
+- Interviews and on-record comments, if separately authorised by the editor and actually conducted.
+
+If a record is not publicly available, log it as unavailable. Do not imply that a request was filed, that an authority refused disclosure, or that absence from a website proves the underlying action did not occur.
+
+### Public-facing right of reply — prepare, do not send without approval
+
+Prepare questions for the relevant official media/press contacts. Do not send messages, emails or submissions on the user's behalf without explicit authorisation. Preserve the exact questions, recipient, dispatch evidence, deadline and complete response if this is later authorised.
 
 **CSIR-NEERI**
-1. Dated list of approved manufacturers and product categories applicable to the 2026 order.
-2. Public verification method for product-specific QR codes and batch records.
-3. How consumers and enforcement teams can distinguish authentic QR codes from catalogue links or copied codes.
-4. Whether the public can verify registration status and test certificates by product/batch.
-5. Clarification of what the published emission-reduction criteria do and do not establish.
+1. Your 16 October 2025 press release says NEERI issues registration letters and does not provide QR/barcodes. The 29 October 2026 Supreme Court order requires product- and batch-specific non-transferable QR codes. Has the system or NEERI's role changed since 2025?
+2. Who generates the QR code, who hosts its destination, and which agency validates authenticity?
+3. What official public verification URL or process should consumers and enforcement officers use?
+4. How does the system prevent copying, reuse or transfer across products and batches?
+5. Does the public approved-product list expose batch and test-certificate details?
 
-**PESO**
-1. Publicly verifiable licence lookup process.
-2. Relevant manufacturer licences and status-check procedure.
-3. Product sampling and testing referral process under the Court's directions.
+**Delhi Police / NCR district police**
+1. Which designated sales locations were covered by patrols and inspections?
+2. How many shops, products and QR codes were checked, and what validation method was used?
+3. What aggregate seizures, prosecutions and complaints have been publicly recorded?
+4. What steps were taken after the market allegations reported on 3 November?
+
+**GNCTD / District Magistrates**
+1. Where can the public inspect the complete designated-site list and relevant notifications?
+2. How many trader licences were temporarily restored, and what public record confirms their validity?
+3. What security-deposit and forfeiture rules were applied?
+4. What complaint channel and public inspection summaries are available?
 
 **CPCB / DPCC / CAQM**
-1. Station-wise hourly AQI and pollutant data for 2–30 November.
-2. Station uptime, missing observations, calibration/quality-control flags.
-3. Sampling locations, collection protocols, lab names, analytes and results for sand/water samples.
-4. Reports filed pursuant to the Supreme Court's directions.
-5. Weather data used for interpretation.
+1. Where will station-wise hourly pollutant data, station uptime and quality flags be published?
+2. Which stations reported complete data during each reporting window?
+3. Where and when were sand/water samples collected, and which laboratories will publish results?
+4. What methods and meteorological context will accompany any assessment of fireworks' contribution?
 
-**Hospitals / health authorities**
-1. Aggregate daily emergency visits and admissions by relevant respiratory/irritant categories, subject to privacy safeguards.
-2. Facility coverage and baseline comparison periods.
-3. Coding definitions, exclusions, and any change in reporting practice.
-4. Whether data are provisional or audited.
+**Health authorities / hospitals**
+1. What aggregate admission data and facility coverage will be published?
+2. What clinical categories, baseline period and counting method will be used?
+3. What limitations prevent causal attribution to fireworks alone?
 
-### Safe field protocol
+### Safe, lawful field protocol
 
 - Do not buy, handle, transport, open or ignite fireworks for verification.
-- Photograph only from lawful public vantage points and avoid identifying private individuals unnecessarily.
-- Record date, time, location, product packaging and the exact observation.
-- Do not state that a product is illegal based only on a missing or non-working QR code; seek regulator/manufacturer confirmation.
-- A QR scan is not conclusive unless the destination and product/batch match are independently validated.
-- Keep original photos, notes, URLs, timestamps and source correspondence.
-- Seek responses from every named authority before publication and include material denials or explanations.
+- Observe only from lawful public vantage points; do not trespass or obstruct enforcement.
+- Avoid identifying private individuals unnecessarily. Do not publish personal data.
+- Record date, time, location, what was directly visible, and the limits of the observation.
+- QR scanning is optional and only where lawful and safe; do not handle or open a package. Preserve the destination URL/domain and timestamp, but do not treat a QR result alone as proof of authenticity or illegality.
+- Match product, batch, manufacturer, NEERI registration, licence and test record before making a product-level claim.
+- A missing, copied-looking or non-working QR code is a lead requiring regulator/manufacturer confirmation, not by itself a conclusive finding of illegality.
+- Preserve original photographs, notes, URLs, timestamps and correspondence with a source log and file checksum.
+- Seek a meaningful right of reply before publication; distinguish no response from denial.
+
+### Evidence logging
+
+For each public record or observation, record: evidence ID; issuing authority/source; original URL; access date/time; document date; relevant page/row/field; exact claim supported or contradicted; provenance; completeness; limitations; and reviewer sign-off. Preserve original files and checksums. Separate direct observation, official statement, third-party reporting and editorial inference.
 
 ## Publishing metadata (provisional)
 
