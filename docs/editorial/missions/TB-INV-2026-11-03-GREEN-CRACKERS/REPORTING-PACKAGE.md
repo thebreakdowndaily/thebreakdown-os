@@ -149,6 +149,12 @@ Until those records are disclosed and independently examined, neither effective 
 6. CPCB real-time AQI portal: https://app.cpcbccr.com/
 7. LiveLaw, “Supreme Court Questions Lack Of Data On Enforcing Firecracker Restrictions During Diwali In Delhi NCR”, 29 October 2026: https://www.livelaw.in/amp/top-stories/supreme-court-questions-lack-of-data-on-enforcing-firecracker-restrictions-during-diwali-in-delhi-ncr-556533
 8. The Indian Express, “Supreme Court relaxes Delhi fireworks ban for Diwali, designates time for ‘green crackers’”, 3 November 2026: https://indianexpress.com/article/legal-news/supreme-court-green-crackers-delhi-ncr-diwali-timings-sale-rules-10948099/
+9. Hindustan Times, “Firecrackers enforcement in residential areas not feasible: Delhi Police”, 3 November 2026: https://www.hindustantimes.com/cities/delhi-news/firecrackers-enforcement-in-residential-areas-not-feasible-delhi-police-101793644748345.html
+10. Hindustan Times, “‘Everything available’: Firecrackers sold openly in Delhi”, 3 November 2026: https://www.hindustantimes.com/cities/delhi-news/everything-available-firecrackers-sold-openly-in-delhi-101793644696771.html
+11. Delhi Police, official public press-release index, including 15 October 2026 firecracker seizure entries: https://kpkb.delhipolice.gov.in/newpressrelease
+12. CSIR-NEERI, press note on green-cracker registration and QR-code responsibilities, 16 October 2025: https://www.neeri.res.in/file_homes/35509814_Press%20Release_Green%20firecrackers.pdf
+13. Government of NCT Delhi, Department of Environment, notifications and directions index: https://environment.delhi.gov.in/doit-content/notifications-and-directions-2022-onwards
+14. Delhi Police, notifications index: https://delhipolice.gov.in/notifications.html
 
 ## Verification ledger
 
@@ -164,10 +170,14 @@ Until those records are disclosed and independently examined, neither effective 
 | V08 | NEERI authentic-document statement | Official NEERI page | Verified desk research |
 | V09 | NEERI comparative emission definition | Official NEERI page | Verified desk research |
 | V10 | AQI averaging/missing station method | Delhi Government AQI explainer | Verified desk research |
-| V11 | Enforcement actions actually performed | No primary dataset obtained | Not verified |
+| V11 | Enforcement actions actually performed | Delhi Police public press-release index lists 15 Oct 2026 seizure entries; HT reports attributed district DCP figures | Limited entries/statements only; no consolidated or reconciled enforcement dataset |
 | V12 | Complete market QR-code authenticity | No direct scans or manufacturer match | Not verified |
 | V13 | Post-event pollution impact | Event not yet occurred as of research cut-off | Not available |
 | V14 | Hospital admission impact | Data through 30 Nov not yet available | Not available |
+| V15 | Delhi Police district enforcement outputs and residential patrol limits | HT report quoting north, outer-north and east district DCPs | Attributed official statements; different periods/geographies; not a consolidated dataset; do not sum | 
+| V16 | Two 15 Oct 2026 firecracker seizure entries | Delhi Police public press-release index | Official index titles/quantities surfaced; full incident releases and final case outcomes not archived | 
+| V17 | QR code generation/verification roles described by NEERI | NEERI press note dated 16 Oct 2025 | Historical system description; 2026 batch-level validation workflow still untested | 
+| V18 | NEERI official certificates and manufacturer list | NEERI official page | Page reviewed; current linked list not retrieved or audited |
 
 ## Public-source reporting and right-of-reply plan — NO RTI
 
