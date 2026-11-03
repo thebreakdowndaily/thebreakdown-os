@@ -34,6 +34,9 @@ jobs:
       - name: 1. Clean Dependencies Installation
         run: npm ci
 
+      - name: Scheduled Publisher Bundle Verification
+        run: npm run build:scheduled-worker
+
       - name: 2. Strict Typecheck Gate
         run: npm run check:type
 
@@ -48,6 +51,9 @@ jobs:
 
       - name: 6. Unit & Domain Test Suite
         run: npm run test
+
+      - name: Scheduled Publisher Contract Tests
+        run: npx vitest run tests/scheduled-publish-dispatch.test.ts
 
       - name: Forensic Root-Cause Regression Gate
         run: npm run test:forensic

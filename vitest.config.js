@@ -91,6 +91,7 @@ module.exports = {
       'tests/story/chart-contract.test.ts',
       'tests/story/timeline-duplication.test.ts',
       'tests/diagnostic-routes.test.ts',
+      'tests/scheduled-publish-dispatch.test.ts',
       'tests/certification/canonical-certification.test.ts',
       'tests/telemetry.test.ts',
       'tests/newsroom-intelligence.test.ts',
