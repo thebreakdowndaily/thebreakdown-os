@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { bootstrapServices } from '@/lib/bootstrap';
 import Container from '@/components/layout/Container';
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
 
 /**
  * Investigations page — Editorial landing surface
@@ -26,6 +27,9 @@ export const metadata: Metadata = {
     url:         'https://thebreakdown.in/investigations',
   },
 };
+
+export const dynamicParams = true;
+export const revalidate = 60;
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
@@ -168,16 +172,17 @@ function EmptyState() {
   );
 }
 
-interface Investigation {
+interface InvestigationCardItem {
   slug: string;
   title: string;
   subtitle?: string;
   summary?: string;
   chapters: unknown[];
+  publishedChapterCount: number;
   publishedAt: string;
 }
 
-function InvestigationCard({ inv }: { inv: Investigation }) {
+function InvestigationCard({ inv }: { inv: InvestigationCardItem }) {
   return (
     <Link
       href={`/investigation/${inv.slug}`}
@@ -241,7 +246,11 @@ function InvestigationCard({ inv }: { inv: Investigation }) {
             paddingTop:   '0.75rem',
           }}
         >
-          <span>{inv.chapters.length} chapters</span>
+          <span>
+            {inv.publishedChapterCount > 0
+              ? `${inv.publishedChapterCount} of ${inv.chapters.length} chapters published`
+              : `${inv.chapters.length} chapters in progress`}
+          </span>
           <span aria-hidden="true">·</span>
           <span>
             {new Date(inv.publishedAt).toLocaleDateString('en-IN', {
@@ -258,7 +267,23 @@ function InvestigationCard({ inv }: { inv: Investigation }) {
 
 export default async function InvestigationsPage() {
   const services = bootstrapServices({ publicOnly: true });
-  const { data: investigations } = await services.investigations.getInvestigations();
+  const { data: rawInvestigations } = await services.investigations.getInvestigations();
+
+  const investigations: InvestigationCardItem[] = await Promise.all(
+    rawInvestigations.map(async (inv) => {
+      let publishedCount = 0;
+      for (const ch of inv.chapters || []) {
+        const publicStory = await services.stories.getPublicStoryBySlug(ch.storySlug);
+        if (publicStory && isCanonicalStoryPublic(publicStory)) {
+          publishedCount++;
+        }
+      }
+      return {
+        ...inv,
+        publishedChapterCount: publishedCount,
+      };
+    })
+  );
 
   return (
     <main id="main-content">

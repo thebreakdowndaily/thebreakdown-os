@@ -207,6 +207,7 @@ export interface APIInvestigation {
   heroImageIsDecorative?: boolean;
   publishedAt: string;
   updatedAt: string;
+  overviewStorySlug?: string;
   chapters: Array<{
     id: string;
     slug: string;
