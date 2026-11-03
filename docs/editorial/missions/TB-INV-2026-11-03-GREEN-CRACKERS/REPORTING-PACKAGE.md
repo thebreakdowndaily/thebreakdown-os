@@ -55,7 +55,11 @@ On 3 November, the Supreme Court took note of a Hindustan Times report describin
 
 The Court asked the Centre, Delhi government and police to look into the report.
 
-Those observations should be treated carefully. The market findings are reported by Hindustan Times; The Breakdown has not independently visited those markets, purchased or inspected products, or scanned any QR code. The Court's reference to the report establishes that the allegations were brought to its attention, not that every allegation has been judicially proved.
+A separate Hindustan Times report on 3 November quoted Delhi Police officers describing both enforcement activity and practical limits. The DCP for north district said police had registered more than 13 FIRs and seized about 1,200 kg of firecrackers in the preceding 12 days. The DCP for outer north district cited 2,878 kg seized between 1 October and 2 November, while the east district DCP cited seven cases and more than 1,700 kg recovered. The same report quoted police saying that continuous patrols inside residential areas to identify people bursting crackers were not feasible, although police would respond to information and complaints.
+
+These are district-level figures and statements reported by Hindustan Times, not a consolidated Delhi-wide dataset supplied by police. The periods and geographic units differ, and the figures should not be added together. They also do not reveal the total volume of illegal stock in circulation, the number of inspections or QR checks, or the proportion of violations detected.
+
+Those observations should be treated carefully. The market findings are reported by Hindustan Times; The Breakdown has not independently visited those markets, purchased or inspected products, or scanned any QR code. The Court's reference to the report establishes that the allegations were brought to its attention, not that every allegation has been judicially proved. The police figures are attributed statements reported by the newspaper; they have not been independently reconciled against police records.
 
 The allegations nevertheless point to a verifiable regulatory question: can a consumer, trader or enforcement officer establish that a particular sealed box and batch correspond to an authentic certification record?
 
@@ -354,3 +358,17 @@ The 16 October 2025 NEERI press note states that product-specific QR codes are d
 Official sources:
 - NEERI green-firecracker page: https://neeri.res.in/contents/details/green-firecrackers-national-centre-of-excellence
 - NEERI press note, 16 October 2025: https://www.neeri.res.in/file_homes/35509814_Press%20Release_Green%20firecrackers.pdf
+
+
+### Enforcement reporting: attributed district figures, no consolidated dataset
+
+A second Hindustan Times report dated 3 November quotes several Delhi Police district officers:
+- North district DCP: more than 13 FIRs and approximately 1,200 kg seized in the preceding 12 days.
+- Outer North district DCP: 2,878 kg seized between 1 October and 2 November, with four cases and eight arrests also reported.
+- East district DCP: seven cases and more than 1,700 kg recovered.
+- Police also described continuous residential-area patrols to locate people bursting crackers as impracticable, while saying they would respond to calls/information.
+
+These figures are not a consolidated police dataset. The reported time windows and police-district boundaries differ; do not add the weights or FIR counts into a Delhi-wide total. They are attributable statements reported by Hindustan Times, not records independently obtained by The Breakdown. They do, however, add a useful accountability dimension: reported enforcement outputs exist alongside an acknowledged operational limit in residential areas, while the scale of the overall market and detection rate remain unknown.
+
+Source: https://www.hindustantimes.com/cities/delhi-news/firecrackers-enforcement-in-residential-areas-not-feasible-delhi-police-101793644748345-amp.html
+
