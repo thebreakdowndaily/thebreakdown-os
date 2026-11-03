@@ -33,7 +33,7 @@ import { getManifestEntry } from '@/lib/image-intelligence/manifest';
 import { matchImageToStoryContext } from '@/lib/image-intelligence/context-matcher';
 import { countNarrativeWords, estimateReadingTimeMinutes, getEditorialNarrativeTarget } from '@/lib/story/narrative-metrics';
 import { validateStoryHeroMedia, validateStorySupportingMedia } from '@/lib/image-intelligence/publication-validation';
-import { EDITORIAL_RELEASE_HOLDS } from './release-holds';
+import { EDITORIAL_RELEASE_HOLDS, getEditorialReleaseHold } from './release-holds';
 
 export const EDITORIAL_RELEASE_HOLD_SLUGS = Object.keys(EDITORIAL_RELEASE_HOLDS);
 
@@ -161,10 +161,11 @@ export function validateStoryForPublication(
   });
 
   // Gate 7b: Claims Verification (Article III & P0 criteria)
+  const hold = getEditorialReleaseHold(story.slug || '');
   const isEnforcedFeatureStory = Boolean(
     (story as any).isFeatureStory ||
     ['feature', 'explainer', 'analysis', 'investigation_chapter'].includes(String(story.storyType || '')) ||
-    EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '')
+    (hold && hold.status === 'HOLD')
   );
 
   const unverifiedClaims = (story.claims || []).filter((c: any) => {
@@ -251,13 +252,18 @@ export function validateStoryForPublication(
   });
 
   // Gate 14: Editorial Release Hold (Section 2 Rule 5)
-  const isUnderEditorialHold = EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '') && !options?.bypassEditorialHold;
+  // Scheduled cron workers must NEVER bypass an active editorial release hold.
+  const isCronTrigger = input.triggeredBy === 'cron';
+  const releaseHold = getEditorialReleaseHold(story.slug || '');
+  const hasActiveHold = Boolean(releaseHold && releaseHold.status === 'HOLD');
+  const isUnderEditorialHold = hasActiveHold && (isCronTrigger || !options?.bypassEditorialHold);
+
   checks.push({
     name: 'editorial_release_hold',
     passed: !isUnderEditorialHold,
     reason: !isUnderEditorialHold
       ? 'Story is not under active editorial release hold'
-      : `Story "${story.slug}" blocked: Editorial Release Hold is ACTIVE. Engineering remediation, image intelligence, and automated gates are verified complete; awaiting independent human editorial board acceptance review and explicit publication authorization.`,
+      : `Story "${story.slug}" blocked: Editorial Release Hold is ACTIVE (${releaseHold?.reason || 'Awaiting human editorial board review'}). Scheduled workers and unauthorized workflows cannot bypass this hold.`,
   });
 
   // Gate 15: Hero Media Quality & Relevance Check
