@@ -41,3 +41,7 @@
 - No RTI applications, fees, submissions or requests requiring applicant identity.
 - Do not send outreach without explicit authorisation.
 - Publication remains on hold until material claims are verified, right of reply is addressed and the editor approves.
+
+| PE-010 | Hindustan Times market visits, 3 Nov 2026 — https://www.hindustantimes.com/cities/delhi-news/everything-available-firecrackers-sold-openly-in-delhi-101793644696771-amp.html | HT reports visits on 22 Oct and 2 Nov to named Delhi markets and describes displays, QR-code issues and vendor accounts | Not The Breakdown fieldwork; vendor statements and product legality not independently established | Secondary reporting; attribute precisely |
+| PE-011 | Indian Express, 3 Nov 2026 — https://indianexpress.com/article/legal-news/supreme-court-green-crackers-delhi-ncr-diwali-timings-sale-rules-10948099/ | Explains operative Supreme Court windows, conditions and Court's implementation/data concerns | Does not independently establish market-level violations or actual enforcement | Secondary report of court order |
+| PE-012 | CSIR-NEERI press note, 16 Oct 2025 — https://www.neeri.res.in/file_homes/35509814_Press%20Release_Green%20firecrackers.pdf | NEERI states it issues registration letters and does not provide QR/barcodes on products | Does not establish the QR arrangement in force under the 2026 order; system may have changed or roles may be divided | Primary historical statement; 2026 workflow clarification outstanding |
