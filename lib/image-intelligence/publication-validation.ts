@@ -6,7 +6,7 @@ import {
   IMAGE_INTELLIGENCE_MANIFEST,
 } from './manifest';
 import { validateLocalAssetDetailed } from './asset-validator';
-import { EDITORIAL_RELEASE_HOLDS } from '@/lib/editorial/release-holds';
+import { EDITORIAL_RELEASE_HOLDS, getEditorialReleaseHold } from '@/lib/editorial/release-holds';
 
 export const FEATURE_STORY_TYPES = new Set(['feature', 'explainer', 'analysis', 'investigation_chapter']);
 
@@ -32,10 +32,11 @@ export function validateStoryHeroMedia(
   story: Pick<Story, 'slug' | 'storyType' | 'heroImage'> & Partial<Pick<Story, 'heroImageAlt'>>,
   options?: MediaValidationOptions
 ): HeroMediaValidation {
+  const hold = getEditorialReleaseHold(story.slug || '');
   const isFeature =
     FEATURE_STORY_TYPES.has(story.storyType) ||
     Boolean((story as any).isFeatureStory) ||
-    EDITORIAL_RELEASE_HOLD_SLUGS.includes(story.slug || '');
+    Boolean(hold && hold.status === 'HOLD');
 
   if (!isFeature) return { required: false, passed: true, violations: [] };
 

@@ -50,6 +50,33 @@ export const EDITORIAL_RELEASE_HOLDS: Record<string, EditorialReleaseHold> = {
   },
 };
 
+/**
+ * Canonical alias mapping for release holds: ensures legacy or alternate
+ * identifiers cannot bypass the release hold on their canonical target.
+ */
+export const RELEASE_HOLD_ALIASES: Record<string, string> = {
+  'semiconductor-pli': 'india-semiconductor-mission-fab-reality',
+  'ai-literacy': 'ai-literacy-india-students-verify-ai',
+  'bcci-ranji': 'bcci-domestic-mandate-ranji-economics',
+};
+
+export function normalizeHoldSlug(rawSlug: string): string {
+  if (!rawSlug || typeof rawSlug !== 'string') return '';
+  return rawSlug
+    .trim()
+    .toLowerCase()
+    .replace(/^\/?story\//, '')
+    .replace(/^\/+|\/+$/g, '');
+}
+
 export function getEditorialReleaseHold(slug: string): EditorialReleaseHold | null {
-  return EDITORIAL_RELEASE_HOLDS[slug] || null;
+  const normalized = normalizeHoldSlug(slug);
+  if (!normalized) return null;
+  const canonical = RELEASE_HOLD_ALIASES[normalized] || normalized;
+  return EDITORIAL_RELEASE_HOLDS[canonical] || null;
+}
+
+export function isStoryUnderReleaseHold(slug: string): boolean {
+  const hold = getEditorialReleaseHold(slug);
+  return Boolean(hold && hold.status === 'HOLD');
 }
