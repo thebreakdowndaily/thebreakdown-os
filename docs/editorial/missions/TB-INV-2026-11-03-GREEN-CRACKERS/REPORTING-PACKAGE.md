@@ -61,7 +61,7 @@ The allegations nevertheless point to a verifiable regulatory question: can a co
 
 CSIR-NEERI says that registration certificates and test reports issued through its official online system are the only authentic and valid documents. Its published guidance describes registration as product-specific and linked to manufacturers holding the relevant PESO or District Magistrate licence. That makes matching the product, manufacturer, registration and batch more important than merely finding a QR symbol on a package.
 
-There is also a specific question about the QR system's institutional hand-off. In a press note dated 16 October 2025, NEERI said it issues registration letters and does not provide QR codes or barcodes on products. The Supreme Court's 2026 order now requires a non-transferable, product- and batch-specific QR code on every box, exposing the manufacturer, NEERI registration, PESO or District Magistrate licence, formulation and test certificate. The two statements are not necessarily contradictory: the QR-generation and validation arrangement may have changed or may sit with manufacturers and enforcement agencies. But the public-facing chain needs to be explicit. Who generates the code, where does it resolve, who validates the underlying record, and how is copying or reuse detected? The 2025 press note alone cannot establish the arrangement in 2026.
+There is also a specific question about the QR system's institutional hand-off. In its 16 October 2025 press note, NEERI said manufacturers develop product-specific QR codes and regulatory agencies such as PESO and CPCB verify them; NEERI itself issues registration letters and does not provide QR codes or barcodes on products. NEERI's current public page also says that its official online registration certificates and test reports are the only authentic documents, and links to a registered-manufacturer list. The Supreme Court's 2026 order now requires a non-transferable QR code specific to each product and batch, displaying the manufacturer, NEERI registration, PESO or District Magistrate licence, formulation and test certificate. The broad division of responsibility is therefore described by NEERI, but a remaining question is whether the 2026 batch-level requirement is implemented in the public verification process: how is a batch bound to the registration and test report, where does the code resolve, and how can an officer detect copying or reuse? The actual current manufacturer/product list and the 2026 batch-validation workflow have not yet been independently retrieved and tested by this desk.
 
 A QR code is a pointer, not proof by itself. Verification requires checking where it resolves, whether the record is authentic, whether the product and batch match, and whether the underlying registration and licence are valid.
 
@@ -340,3 +340,17 @@ This is a legitimate accountability question, but not yet proof of a compliance 
 - The Indian Express explainer of the Supreme Court's 2026 directions, published 3 November 2026: https://indianexpress.com/article/legal-news/supreme-court-green-crackers-delhi-ncr-diwali-timings-sale-rules-10948099/
 - CSIR-NEERI press note, 16 October 2025, including its statement on QR/barcodes: https://www.neeri.res.in/file_homes/35509814_Press%20Release_Green%20firecrackers.pdf
 
+
+### NEERI page and 2025 QR allocation — clarification
+
+A further search result exposes more detail on the official NEERI page than was captured in the previous pass. The page:
+- says registration certificates and test reports issued through NEERI's official online website are the only authentic and valid documents;
+- links to a list of registered firecracker manufacturers;
+- says registration is product-specific and is granted to manufacturers with the relevant PESO explosives licence or District Magistrate authority;
+- describes green-cracker reductions as comparative to conventional compositions in the same category.
+
+The 16 October 2025 NEERI press note states that product-specific QR codes are developed by manufacturers and verified by regulatory agencies such as PESO and CPCB. This resolves the basic 2025 division of responsibility. It does not, by itself, prove how the stricter 2026 product-and-batch QR requirement is encoded, updated or validated. The actual linked current list was not retrieved in this pass, so no 2026 manufacturer/product match has been performed.
+
+Official sources:
+- NEERI green-firecracker page: https://neeri.res.in/contents/details/green-firecrackers-national-centre-of-excellence
+- NEERI press note, 16 October 2025: https://www.neeri.res.in/file_homes/35509814_Press%20Release_Green%20firecrackers.pdf
