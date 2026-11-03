@@ -249,23 +249,25 @@ For each public record or observation, record: evidence ID; issuing authority/so
 - Tags: Delhi Pollution; Green Crackers; Supreme Court; Air Quality; Environmental Governance; Diwali 2026; Public Health; Regulatory Enforcement
 - Category: Environment & Public Health
 - Secondary category: Governance & Accountability
-- Article type: Investigative policy explainer
+- Article type: Desk-researched accountability explainer
 - Excerpt: The Supreme Court has permitted certified green crackers in Delhi-NCR for a limited period. But product verification, market enforcement and scientific monitoring will determine whether the experiment produces reliable evidence.
-- Featured image: commission original documentary-style Delhi-NCR winter haze image; do not use a generic firecracker photo as evidence of a reported event.
-- Alt text: Delhi-NCR skyline under winter haze during the 2026 green-cracker regulatory experiment.
+- Featured image: **not selected**. Obtain a rights-cleared, provenance-documented image or commission a clearly labelled explanatory visual. Do not depict an unobserved raid, vendor, product, QR scan or Diwali event as documentary evidence.
+- Alt text: write only after the final asset is selected; describe what is actually visible and do not imply the image documents the investigation.
+- Reading time: approximately 10 minutes at the platform's 220-words-per-minute estimate (about 2,064 narrative words).
+- Reporting classification: desk-researched document analysis / accountability explainer; do not label as original field reporting.
 - Schema: NewsArticle; author The Breakdown Research Desk; datePublished only on actual publication; dateModified on actual revision.
 - Canonical: set by the existing publication system; do not hand-author a second canonical.
 - GEO: identify Delhi-NCR, Delhi, Haryana NCR districts and Uttar Pradesh NCR districts only where directly relevant; do not invent precise coordinates or imply a field visit.
 
 ## Release gates
 
-- [x] Legal order checked against full-text reproduction and corroborating coverage.
+- [x] Legal order text reviewed through an IndiaKanoon reproduction and corroborating coverage; official Supreme Court-hosted PDF still needs to be archived before final publication.
 - [x] Sale/manufacture date distinction corrected.
 - [x] Market claims attributed to Hindustan Times.
 - [x] NEERI technical definition sourced to official page.
 - [x] AQI methodology sourced to Delhi Government portal.
 - [ ] Obtain official district sale-site and licence notifications.
-- [ ] Obtain enforcement records and police response.
+- [ ] Obtain/reconcile incident-level enforcement records and a consolidated police response; current public evidence consists of attributed district statements and official press-release index entries.
 - [ ] Verify at least a small, documented sample of product QR codes with NEERI/PESO.
 - [ ] Obtain station-level AQI dataset and quality flags.
 - [ ] Obtain environmental sample results.
