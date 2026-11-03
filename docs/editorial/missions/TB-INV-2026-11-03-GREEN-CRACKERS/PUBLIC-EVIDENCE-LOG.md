@@ -55,3 +55,5 @@
 
 The 29 October 2026 judgment is the primary legal authority for the directions described. The text consulted in this desk pass is reproduced on IndiaKanoon; an official Supreme Court-hosted PDF was not retrieved and archived. Before publication, the editor/fact-checker should compare the reproduced text against the official Supreme Court record if available and preserve the official PDF. Until then, identify the source as the order's reproduced full text, not as a downloaded official court PDF.
 
+
+| PE-016 | Delhi Police official public press-release index — https://kpkb.delhipolice.gov.in/newpressrelease | Index lists 15 Oct 2026 Crime Branch recovery of 2,260 kg illegal firecrackers and Outer North district AATS seizure of 338.5 kg | Full incident-level press releases not retrieved in this pass; index entries do not establish product testing, final case outcomes or a consolidated total; do not add to other district figures without reconciliation | Primary official index listing; incident records outstanding |
