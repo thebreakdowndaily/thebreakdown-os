@@ -15,6 +15,7 @@
 
 import { getServiceClient } from '@/supabase/client';
 import { validateStoryForPublication } from '@/lib/editorial/publication-gate';
+import { getEditorialReleaseHold } from '@/lib/editorial/release-holds';
 import type {
   EditorialScheduleEntry,
   PublicationGateResult,
@@ -285,6 +286,35 @@ async function validateAndPublishEntry(
 
   // ── Convert story row to canonical Story shape for validation
   const story = rowToStory(storyRow);
+
+  // ── RELEASE HOLD GUARD: scheduled worker must never publish a story on release hold
+  const hold = getEditorialReleaseHold(story.slug);
+  if (hold && hold.status === 'HOLD') {
+    const holdResult: PublicationGateResult = {
+      storyId,
+      scheduleId,
+      passed: false,
+      checks: [{
+        name: 'editorial_release_hold',
+        passed: false,
+        reason: `Story "${story.slug}" is under active editorial release hold: ${hold.reason}. Scheduled publishing is prohibited until human editorial board explicitly releases the hold.`,
+      }],
+      checkedAt: now.toISOString(),
+      triggeredBy: 'cron',
+    };
+    await logGateResult(holdResult);
+    await db
+      .from('editorial_schedule')
+      .update({
+        status: 'blocked',
+        block_reason: `Editorial Release Hold: ${hold.reason}`,
+        blocked_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      } as never)
+      .eq('id', scheduleId)
+      .eq('status', 'in_progress');
+    return holdResult;
+  }
 
   // ── Run Canonical Publication Contract (All 12 Gates + Gate 13 Evidence Vault)
   const { evaluatePublicationContractAsync, executePostPublicationEffects } = await import('@/lib/editorial/canonical-publication');

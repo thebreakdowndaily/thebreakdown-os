@@ -314,6 +314,7 @@ export const investigationChapterStories: APIStory[] = [ch01ThePromise, ch02Foll
 export const namamiGangeInvestigation: APIInvestigation = {
   id: 'namami-gange',
   slug: 'namami-gange',
+  overviewStorySlug: 'namami-gange-under-fire',
   title: 'Namami Gange',
   subtitle: '₹20,000+ Crore to Clean India\'s Holiest River — Why Is the Ganga Still Polluted?',
   summary: 'An evidence-based investigation into delays, underperforming sewage treatment plants, planning failures, procurement issues, and the governance challenges behind India\'s flagship river-cleaning mission. Twelve years and ₹26,824 crore into the programme, the Ganga is cleaner in stretches — but 37 river stretches remain biologically dead, and the communities the programme was meant to serve have been displaced by the very infrastructure built in their name.',

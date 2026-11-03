@@ -1,16 +1,19 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { bootstrapServices } from '@/lib/bootstrap';
-import type { Investigation } from '@/types/canonical';
 import Container from '@/components/layout/Container';
 import Badge from '@/components/ui/Badge';
 import Link from 'next/link';
 import SourcesList from '@/components/story/SourcesList';
 import SpatialNarrativeBreadcrumb from '@/components/narrative/SpatialNarrativeBreadcrumb';
+import { isCanonicalStoryPublic } from '@/lib/story/publication';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+export const dynamicParams = true;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const services = bootstrapServices({ publicOnly: true });
@@ -43,6 +46,32 @@ export default async function InvestigationPage({ params }: Props) {
   const inv = await services.investigations.getInvestigationBySlug(slug);
   if (!inv) notFound();
 
+  // Evaluate public publication eligibility for each chapter fail-closed
+  const evaluatedChapters = await Promise.all(
+    inv.chapters.map(async (ch) => {
+      const publicStory = await services.stories.getPublicStoryBySlug(ch.storySlug);
+      const isPublished = Boolean(publicStory && isCanonicalStoryPublic(publicStory));
+      return {
+        ...ch,
+        isPublished,
+      };
+    })
+  );
+
+  const publishedChapters = evaluatedChapters.filter((c) => c.isPublished);
+  const publishedCount = publishedChapters.length;
+  const totalCount = evaluatedChapters.length;
+
+  // Resolve overview story: explicit overviewStorySlug or first published chapter or verified overview candidate
+  const candidateOverviewSlug =
+    inv.overviewStorySlug ||
+    (publishedChapters[0]?.storySlug) ||
+    (inv.slug === 'namami-gange' ? 'namami-gange-under-fire' : undefined);
+
+  const overviewStory = candidateOverviewSlug
+    ? await services.stories.getPublicStoryBySlug(candidateOverviewSlug)
+    : undefined;
+
   return (
     <>
       <script
@@ -56,6 +85,15 @@ export default async function InvestigationPage({ params }: Props) {
             datePublished: inv.publishedAt,
             dateModified: inv.updatedAt,
             about: { '@type': 'Thing', name: inv.title },
+            ...(publishedChapters.length > 0
+              ? {
+                  hasPart: publishedChapters.map((pc) => ({
+                    '@type': 'Article',
+                    name: pc.title,
+                    url: `https://thebreakdown.in/story/${pc.storySlug}`,
+                  })),
+                }
+              : {}),
           }).replace(/</g, '\\u003c'),
         }}
       />
@@ -85,7 +123,11 @@ export default async function InvestigationPage({ params }: Props) {
               {inv.summary}
             </p>
             <div className="flex flex-wrap gap-4 mt-6 text-sm text-gray-500">
-              <span>{inv.chapters.length} chapters</span>
+              <span>
+                {publishedCount > 0
+                  ? `${publishedCount} of ${totalCount} chapters published`
+                  : `0 of ${totalCount} chapters published (${totalCount} in investigation)`}
+              </span>
               <span>Published {new Date(inv.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </div>
           </div>
@@ -129,32 +171,68 @@ export default async function InvestigationPage({ params }: Props) {
       {/* Chapters */}
       <section className="py-8 border-b border-[#2A2A2A]">
         <Container>
-          <h2 className="text-xl font-semibold text-amber-400 mb-6">Chapters</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-amber-400">Chapters</h2>
+            <span className="text-sm text-gray-400">
+              {publishedCount} of {totalCount} published
+            </span>
+          </div>
           <div className="space-y-3">
-            {inv.chapters.map((ch) => (
-              <Link
-                key={ch.id}
-                href={`/story/${ch.storySlug}`}
-                className="flex items-center gap-4 p-4 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-amber-500/50 transition-colors group"
-              >
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/10 text-amber-400 font-bold text-sm shrink-0">
-                  {String(ch.order).padStart(2, '0')}
+            {evaluatedChapters.map((ch) => {
+              if (ch.isPublished) {
+                return (
+                  <Link
+                    key={ch.id}
+                    href={`/story/${ch.storySlug}`}
+                    className="flex items-center gap-4 p-4 bg-[#151515] rounded-lg border border-[#2A2A2A] hover:border-amber-500/50 transition-colors group"
+                  >
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/10 text-amber-400 font-bold text-sm shrink-0">
+                      {String(ch.order).padStart(2, '0')}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-white font-medium group-hover:text-amber-400 transition-colors">
+                        {ch.title}
+                      </h3>
+                      {ch.subtitle && (
+                        <p className="text-sm text-gray-400 truncate">{ch.subtitle}</p>
+                      )}
+                    </div>
+                    <div className="ml-auto text-gray-500 shrink-0">
+                      {ch.evidenceScore && (
+                        <Badge variant="evidence">{ch.evidenceScore}%</Badge>
+                      )}
+                    </div>
+                  </Link>
+                );
+              }
+
+              return (
+                <div
+                  key={ch.id}
+                  className="flex items-center gap-4 p-4 bg-[#151515]/60 rounded-lg border border-[#262626] opacity-75"
+                >
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-800 text-neutral-400 font-bold text-sm shrink-0">
+                    {String(ch.order).padStart(2, '0')}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-neutral-300 font-medium">
+                        {ch.title}
+                      </h3>
+                      <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/10 text-amber-400/80 border border-amber-500/20">
+                        In Investigation
+                      </span>
+                    </div>
+                    {ch.subtitle && (
+                      <p className="text-sm text-neutral-500 truncate">{ch.subtitle}</p>
+                    )}
+                  </div>
+                  <div className="ml-auto text-xs text-neutral-500 shrink-0 font-mono">
+                    Quarantined Draft
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-white font-medium group-hover:text-amber-400 transition-colors">
-                    {ch.title}
-                  </h3>
-                  {ch.subtitle && (
-                    <p className="text-sm text-gray-400 truncate">{ch.subtitle}</p>
-                  )}
-                </div>
-                <div className="ml-auto text-gray-500 shrink-0">
-                  {ch.evidenceScore && (
-                    <Badge variant="evidence">{ch.evidenceScore}%</Badge>
-                  )}
-                </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         </Container>
       </section>
@@ -211,14 +289,14 @@ export default async function InvestigationPage({ params }: Props) {
       )}
 
       {/* Read the Overview Story */}
-      {inv.chapters.length > 0 && (
+      {overviewStory && (
         <section className="py-8">
           <Container>
             <div className="bg-gradient-to-r from-amber-500/10 to-transparent rounded-lg p-6 border border-amber-500/20">
               <h2 className="text-lg font-semibold text-white mb-2">Start with the Overview</h2>
               <p className="text-sm text-gray-400 mb-4">Get the full picture before diving into the chapters.</p>
               <Link
-                href={`/story/${inv.chapters[0].storySlug}`}
+                href={`/story/${overviewStory.slug}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-black font-medium rounded-md hover:bg-amber-400 transition-colors text-sm"
               >
                 Read the Overview Story →

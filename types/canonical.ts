@@ -62,6 +62,7 @@ export interface Investigation {
   publishedAt: string;
   updatedAt: string;
   status: StoryStatus;
+  overviewStorySlug?: string;
   chapters: InvestigationChapter[];
   keyFindings: string[];
   tags: string[];

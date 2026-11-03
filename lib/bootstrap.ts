@@ -316,6 +316,7 @@ export function apiInvestigationToCanonical(i: APIInvestigation): Investigation 
     publishedAt: i.publishedAt,
     updatedAt: i.updatedAt,
     status: (i as any).status || 'published',
+    overviewStorySlug: (i as any).overviewStorySlug,
     chapters: (i.chapters || []).map((ch) => ({
       id: ch.id,
       slug: ch.slug,

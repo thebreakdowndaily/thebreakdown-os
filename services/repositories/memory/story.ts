@@ -2,6 +2,7 @@ import type { Story, Topic, APIListParams, APIResponse } from '@/types/canonical
 import type { StoryService } from '../../interfaces/story';
 import { isPubliclyPublished, storyPublicationContext } from '@/lib/story/publication';
 import { LEGACY_PUBLIC_SLUGS } from '@/utils/data-layer/store';
+import { getEditorialReleaseHold } from '@/lib/editorial/release-holds';
 
 import { validateStoryEvidenceCompleteness, PublicationBlockedError, DirectPublicationForbiddenError } from '@/lib/story/evidence-guard';
 import { consumePublicationToken } from '@/lib/editorial/publication-token';
@@ -114,6 +115,10 @@ export class MemoryStoryService implements StoryService {
   private isPublic(story: Story, now: Date): boolean {
     if (isPubliclyPublished(storyPublicationContext(story), now)) return true;
     const pubAt = story.publishedAt;
+    if (story.slug) {
+      const hold = getEditorialReleaseHold(story.slug);
+      if (hold && hold.status === 'HOLD') return false;
+    }
     if (LEGACY_PUBLIC_SLUGS.has(story.slug) && pubAt && new Date(pubAt).getTime() <= now.getTime()) return true;
     return false;
   }

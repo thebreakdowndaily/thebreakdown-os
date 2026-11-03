@@ -11,6 +11,7 @@
 
 import type { APIStory, PublicationStatus } from '@/utils/data-layer/types';
 import type { Story } from '@/types/canonical';
+import { getEditorialReleaseHold } from '@/lib/editorial/release-holds';
 
 // ─── Date validation ───────────────────────────────────────────────────────────
 
@@ -33,10 +34,12 @@ function isFuture(dateStr: string | undefined, now: Date): boolean {
 // ─── Canonical publication predicate ──────────────────────────────────────────
 
 export interface PublicationContext {
+  slug?: string;
   publicationStatus?: PublicationStatus;
   publishedAt?: string;
   scheduledAt?: string;
   isTestArtifact?: boolean;
+  isStory?: boolean;
 }
 
 /**
@@ -56,6 +59,17 @@ export function isPubliclyPublished(
   now: Date = new Date(),
 ): boolean {
   if (ctx.isTestArtifact === true) return false;
+
+  // Fail closed if evaluated as a story but canonical slug identity is missing or empty
+  if (ctx.isStory === true && (!ctx.slug || ctx.slug.trim() === '')) {
+    return false;
+  }
+
+  // Central editorial release hold enforcement with alias resolution
+  if (ctx.slug) {
+    const hold = getEditorialReleaseHold(ctx.slug);
+    if (hold && hold.status === 'HOLD') return false;
+  }
 
   const ps = ctx.publicationStatus;
 
@@ -101,9 +115,11 @@ export function shouldIncludeInDiscovery(
 
 export function storyPublicationContext(story: Story): PublicationContext {
   return {
+    slug: story.slug,
     publicationStatus: (story as Story & { publicationStatus?: PublicationStatus }).publicationStatus,
     publishedAt: story.publishedAt,
     isTestArtifact: story.isTestArtifact,
+    isStory: true,
   };
 }
 
@@ -130,6 +146,21 @@ export function diagnosePublication(
   ctx: PublicationContext,
   now: Date = new Date(),
 ): PublicationDiagnostic {
+  const effectiveSlug = slug || ctx.slug || '';
+  if (effectiveSlug) {
+    const hold = getEditorialReleaseHold(effectiveSlug);
+    if (hold && hold.status === 'HOLD') {
+      return {
+        slug: effectiveSlug,
+        publicationStatus: ctx.publicationStatus,
+        publishedAt: ctx.publishedAt,
+        scheduledAt: ctx.scheduledAt,
+        isPublic: false,
+        reason: `Active editorial release hold: ${hold.reason}`,
+      };
+    }
+  }
+
   const ps = ctx.publicationStatus;
 
   if (ps === undefined || ps === null) {
