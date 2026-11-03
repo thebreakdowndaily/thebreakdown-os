@@ -48,6 +48,17 @@ export const EDITORIAL_RELEASE_HOLDS: Record<string, EditorialReleaseHold> = {
       'Story-specific hero asset with documented rights and rendered visual proof',
     ],
   },
+  'delhi-green-cracker-enforcement-diwali-2026': {
+    slug: 'delhi-green-cracker-enforcement-diwali-2026',
+    status: 'HOLD',
+    openedAt: '2026-11-03',
+    reason: 'Desk-researched accountability explainer complete and verified against primary court orders and institutional records; awaiting final independent human editorial board review and explicit publication authorization.',
+    requiredBeforeRelease: [
+      'Independent human editorial board acceptance review (Constitution Art. XI)',
+      'Final Editor-in-Chief defensibility sign-off',
+      'Explicit production publication authorization by authorized principal',
+    ],
+  },
 };
 
 export function getEditorialReleaseHold(slug: string): EditorialReleaseHold | null {
