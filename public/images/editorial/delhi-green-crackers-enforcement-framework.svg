@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <style>
+      .bg { fill: #0b0f19; }
+      .card { fill: #131b2e; stroke: #1e293b; stroke-width: 2; rx: 8; }
+      .card-accent { fill: #1e293b; stroke: #3b82f6; stroke-width: 2; rx: 8; }
+      .header-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; letter-spacing: 0.5px; }
+      .header-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 15px; fill: #94a3b8; }
+      .badge { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 700; fill: #60a5fa; letter-spacing: 1px; }
+      .section-heading { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #38bdf8; text-transform: uppercase; letter-spacing: 1px; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #f8fafc; }
+      .item-date { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 600; fill: #fbbf24; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #cbd5e1; line-height: 1.4; }
+      .footer-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #64748b; }
+      .grid-line { stroke: #1e293b; stroke-width: 1; stroke-dasharray: 4 4; }
+      .pill { rx: 4; fill: #1e3a8a; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 600; fill: #93c5fd; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" class="bg" />
+
+  <!-- Top Banner / Header -->
+  <g transform="translate(60, 45)">
+    <rect x="0" y="0" width="140" height="24" class="pill" />
+    <text x="70" y="16" text-anchor="middle" class="pill-text">THE BREAKDOWN</text>
+    <text x="0" y="55" class="header-title">Delhi-NCR Green-Cracker Regulatory Architecture</text>
+    <text x="0" y="80" class="header-sub">Supreme Court Compliance Framework (2026 INSC 1181) — Operational Windows &amp; Verification Gates</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="60" y1="140" x2="1140" y2="140" stroke="#1e293b" stroke-width="2" />
+
+  <!-- Section 1: Temporal Windows (Left Column / Top Half) -->
+  <g transform="translate(60, 160)">
+    <text x="0" y="0" class="section-heading">1. Mandated Regulatory Windows</text>
+    
+    <!-- Window 1: Manufacture -->
+    <g transform="translate(0, 15)">
+      <rect width="255" height="150" class="card" />
+      <rect x="15" y="15" width="80" height="22" rx="4" fill="#0f172a" />
+      <text x="55" y="30" text-anchor="middle" class="item-date">2–6 NOV</text>
+      <text x="15" y="60" class="item-title">Manufacture Window</text>
+      <text x="15" y="82" class="item-desc">CSIR-NEERI &amp; PESO certified</text>
+      <text x="15" y="100" class="item-desc">approved formulations only.</text>
+      <text x="15" y="122" class="item-desc">Sealed retail boxes required.</text>
+    </g>
+
+    <!-- Window 2: Retail Sale -->
+    <g transform="translate(275, 15)">
+      <rect width="255" height="150" class="card" />
+      <rect x="15" y="15" width="80" height="22" rx="4" fill="#0f172a" />
+      <text x="55" y="30" text-anchor="middle" class="item-date">4–6 NOV</text>
+      <text x="15" y="60" class="item-title">Licensed Retail Sale</text>
+      <text x="15" y="82" class="item-desc">Designated sites only.</text>
+      <text x="15" y="100" class="item-desc">Online &amp; courier sales banned.</text>
+      <text x="15" y="122" class="item-desc">Non-transferable batch QRs.</text>
+    </g>
+
+    <!-- Window 3: Permitted Bursting -->
+    <g transform="translate(550, 15)">
+      <rect width="255" height="150" class="card-accent" />
+      <rect x="15" y="15" width="80" height="22" rx="4" fill="#1e3a8a" />
+      <text x="55" y="30" text-anchor="middle" class="item-date" fill="#60a5fa">7–8 NOV</text>
+      <text x="15" y="60" class="item-title">Bursting Hours</text>
+      <text x="15" y="82" class="item-desc">Morning: 6:00 AM – 7:00 AM</text>
+      <text x="15" y="100" class="item-desc">Evening: 8:00 PM – 10:00 PM</text>
+      <text x="15" y="122" class="item-desc">Strict 3-hr daily total window.</text>
+    </g>
+
+    <!-- Window 4: Ban Restored -->
+    <g transform="translate(825, 15)">
+      <rect width="255" height="150" class="card" />
+      <rect x="15" y="15" width="95" height="22" rx="4" fill="#0f172a" />
+      <text x="62" y="30" text-anchor="middle" class="item-date" fill="#f87171">9 NOV &gt;&gt;</text>
+      <text x="15" y="60" class="item-title">Complete Prohibition</text>
+      <text x="15" y="82" class="item-desc">Total ban restored in NCR.</text>
+      <text x="15" y="100" class="item-desc">No sales or bursting permitted.</text>
+      <text x="15" y="122" class="item-desc">Compliance filings due 14 Dec.</text>
+    </g>
+  </g>
+
+  <!-- Section 2: Verification & Accountability Pillars (Bottom Half) -->
+  <g transform="translate(60, 360)">
+    <text x="0" y="0" class="section-heading">2. Institutional Verification &amp; Evidence Pillars</text>
+
+    <!-- Pillar A: Product & Batch QR -->
+    <g transform="translate(0, 15)">
+      <rect width="255" height="180" class="card" />
+      <text x="15" y="32" class="item-title">Product &amp; Batch QR</text>
+      <text x="15" y="55" class="item-desc">• Non-transferable QR code</text>
+      <text x="15" y="75" class="item-desc">• Exposes NEERI registration</text>
+      <text x="15" y="95" class="item-desc">• PESO/DM license verification</text>
+      <text x="15" y="115" class="item-desc">• Chemical formulation link</text>
+      <text x="15" y="135" class="item-desc">• Zero barium salts mandate</text>
+      <text x="15" y="155" class="item-desc">• Joined series (ladis) prohibited</text>
+    </g>
+
+    <!-- Pillar B: Spatial & Buffer Safeguards -->
+    <g transform="translate(275, 15)">
+      <rect width="255" height="180" class="card" />
+      <text x="15" y="32" class="item-title">Territorial Safeguards</text>
+      <text x="15" y="55" class="item-desc">• 300-metre strict buffer zone:</text>
+      <text x="25" y="75" class="item-desc">- Hospitals &amp; health centres</text>
+      <text x="25" y="95" class="item-desc">- Nursing &amp; old-age homes</text>
+      <text x="25" y="115" class="item-desc">- Schools &amp; silence zones</text>
+      <text x="15" y="135" class="item-desc">• Designated sale sites only</text>
+      <text x="15" y="155" class="item-desc">• Inter-state NCR border checks</text>
+    </g>
+
+    <!-- Pillar C: Police & PESO Enforcement -->
+    <g transform="translate(550, 15)">
+      <rect width="255" height="180" class="card" />
+      <text x="15" y="32" class="item-title">Police &amp; PESO Patrols</text>
+      <text x="15" y="55" class="item-desc">• Random market QR checks</text>
+      <text x="15" y="75" class="item-desc">• Unannounced product sampling</text>
+      <text x="15" y="95" class="item-desc">• PESO chemical laboratory tests</text>
+      <text x="15" y="115" class="item-desc">• Confiscation of illegal stock</text>
+      <text x="15" y="135" class="item-desc">• Monetary security forfeiture</text>
+      <text x="15" y="155" class="item-desc">• Criminal FIRs &amp; prosecutions</text>
+    </g>
+
+    <!-- Pillar D: Scientific & Health Evidence -->
+    <g transform="translate(825, 15)">
+      <rect width="255" height="180" class="card" />
+      <text x="15" y="32" class="item-title">Scientific Accountability</text>
+      <text x="15" y="55" class="item-desc">• Daily CPCB/SPCB AQI reports</text>
+      <text x="15" y="75" class="item-desc">• Pre-, during &amp; post-Diwali</text>
+      <text x="15" y="95" class="item-desc">• Soil, sand &amp; water testing</text>
+      <text x="15" y="115" class="item-desc">• Hospital admission data</text>
+      <text x="15" y="135" class="item-desc">• Complete CAAQMS uptime</text>
+      <text x="15" y="155" class="item-desc">• Court hearing: 16 Dec 2026</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <g transform="translate(60, 595)">
+    <text x="0" y="0" class="footer-text">Infographic: The Breakdown Editorial Graphics • Source: Supreme Court of India (Arjun Gopal v. Union of India, 2026 INSC 1181); CSIR-NEERI; CPCB</text>
+  </g>
+</svg>

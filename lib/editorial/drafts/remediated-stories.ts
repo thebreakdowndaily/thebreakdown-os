@@ -1,4 +1,5 @@
 import type { Story } from '@/types/canonical';
+import { DELHI_GREEN_CRACKER_STORY } from './delhi-green-crackers';
 
 /**
  * Remediated High-Quality Journalism Drafts for The Breakdown OS.
@@ -1175,6 +1176,7 @@ export const REMEDIATED_STORIES_REGISTRY: Record<string, Story> = {
   'ai-literacy-india-students-verify-ai': REMEDIATED_AI_LITERACY_STORY,
   'india-semiconductor-mission-fab-reality': REMEDIATED_SEMICONDUCTOR_STORY,
   'bcci-domestic-mandate-ranji-economics': REMEDIATED_BCCI_CRICKET_STORY,
+  'delhi-green-cracker-enforcement-diwali-2026': DELHI_GREEN_CRACKER_STORY,
 };
 
 export const REMEDIATED_STORIES_MAP = REMEDIATED_STORIES_REGISTRY;

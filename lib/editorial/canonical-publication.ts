@@ -86,9 +86,14 @@ export async function evaluatePublicationContractAsync(
   }
 
   // 4. Publication Gate Check (All 12 editorial gates + Gate 13 Evidence Vault)
+  // Ensure the candidate publication timestamp is passed to the gates so unpublished review
+  // stories do not require a premature/fake timestamp on their draft records.
+  const publishedAt = targetStory.publishedAt || existingStory?.publishedAt || now.toISOString();
+
   const storyToValidate: Story = {
     ...targetStory,
     status: fromStatus === 'draft' ? 'draft' : (fromStatus === 'published' ? 'scheduled' : fromStatus),
+    publishedAt,
   };
 
   const gateInput = {
@@ -127,8 +132,6 @@ export async function evaluatePublicationContractAsync(
   }
 
   // 5. Build Audited Story & Record State Machine Transition
-  const publishedAt = targetStory.publishedAt || existingStory?.publishedAt || now.toISOString();
-
   const updatedStory: Story = {
     ...targetStory,
     status: 'published',
@@ -211,9 +214,12 @@ export function evaluatePublicationContract(
   }
 
   // 4. Publication Gate Check (Gates 1-12)
+  const publishedAt = targetStory.publishedAt || existingStory?.publishedAt || now.toISOString();
+
   const storyToValidate: Story = {
     ...targetStory,
     status: fromStatus === 'draft' ? 'draft' : (fromStatus === 'published' ? 'scheduled' : fromStatus),
+    publishedAt,
   };
 
   const gateInput = {
@@ -234,8 +240,6 @@ export function evaluatePublicationContract(
       gateResult,
     };
   }
-
-  const publishedAt = targetStory.publishedAt || existingStory?.publishedAt || now.toISOString();
 
   const updatedStory: Story = {
     ...targetStory,

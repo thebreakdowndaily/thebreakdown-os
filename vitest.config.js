@@ -193,6 +193,7 @@ module.exports = {
       'tests/verify-deployment-health.test.ts',
       'tests/health-contract.test.ts',
       'tests/editorial/gold-standard-review-integrity.test.ts',
+      'tests/editorial/green-cracker-publication-safety.test.ts',
       'tests/editorial-remediation-quality.test.ts',
       'tests/story/minimum-narrative-gate.test.ts',
       'tests/image-intelligence/image-contract-regression.test.ts',
