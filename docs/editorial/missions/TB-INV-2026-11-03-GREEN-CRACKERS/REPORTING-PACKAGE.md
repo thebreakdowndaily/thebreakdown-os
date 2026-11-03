@@ -51,7 +51,7 @@ But the Court's order is not proof that these conditions have been implemented.
 
 ### A court order cannot verify a box on a shop counter
 
-On 3 November, the Supreme Court took note of a Hindustan Times report describing conventional and allegedly unauthorised firecrackers being offered in several Delhi markets. The report said some products lacked QR codes, while some codes reportedly led to catalogues rather than product-specific certification information. It also described alleged advance orders and concealed stocks.
+On 3 November, the Supreme Court took note of a Hindustan Times report describing conventional and allegedly unauthorised firecrackers being offered in several Delhi markets. Hindustan Times said its reporters visited markets on 22 October and 2 November, including Chandni Chowk, Sadar Bazaar, Shastri Nagar, Sarojini Nagar and New Friends Colony. It reported open displays, products with missing or difficult-to-scan QR codes, and some codes redirecting to catalogues rather than product-specific certification information. It also reported vendors offering conventional products on request and accepting advance orders. These are the newspaper's reported observations and vendor accounts; The Breakdown has not independently replicated them.
 
 The Court asked the Centre, Delhi government and police to look into the report.
 
@@ -60,6 +60,8 @@ Those observations should be treated carefully. The market findings are reported
 The allegations nevertheless point to a verifiable regulatory question: can a consumer, trader or enforcement officer establish that a particular sealed box and batch correspond to an authentic certification record?
 
 CSIR-NEERI says that registration certificates and test reports issued through its official online system are the only authentic and valid documents. Its published guidance describes registration as product-specific and linked to manufacturers holding the relevant PESO or District Magistrate licence. That makes matching the product, manufacturer, registration and batch more important than merely finding a QR symbol on a package.
+
+There is also a specific question about the QR system's institutional hand-off. In a press note dated 16 October 2025, NEERI said it issues registration letters and does not provide QR codes or barcodes on products. The Supreme Court's 2026 order now requires a non-transferable, product- and batch-specific QR code on every box, exposing the manufacturer, NEERI registration, PESO or District Magistrate licence, formulation and test certificate. The two statements are not necessarily contradictory: the QR-generation and validation arrangement may have changed or may sit with manufacturers and enforcement agencies. But the public-facing chain needs to be explicit. Who generates the code, where does it resolve, who validates the underlying record, and how is copying or reuse detected? The 2025 press note alone cannot establish the arrangement in 2026.
 
 A QR code is a pointer, not proof by itself. Verification requires checking where it resolves, whether the record is authentic, whether the product and batch match, and whether the underlying registration and licence are valid.
 
@@ -310,3 +312,31 @@ This update adds a fresh public-source review. It does not represent field repor
 | Hospital admissions | Not yet available for full reporting period | Published aggregate dataset with facility coverage and baseline methodology |
 
 **No-RTI compliance:** No RTI application has been filed or authorised. This update uses public web sources only. No official email, interview request or other outreach has been sent.
+
+
+## Research update — 3 November 2026, third desk pass
+
+### Market reporting: stronger attribution, not independent verification
+
+Hindustan Times published two related reports on 3 November. One describes its market visits on 22 October and 2 November and names Chandni Chowk, Sadar Bazaar, Shastri Nagar, Sarojini Nagar and New Friends Colony. It reports open displays, QR-code problems and vendors offering conventional products on request. A separate report describes the Supreme Court taking note of those findings and asking the Centre, Delhi Government and police to look into them.
+
+Editorial treatment:
+- Attribute the market observations to Hindustan Times and identify the reporting dates/markets.
+- Do not describe this as The Breakdown's fieldwork.
+- Do not treat the Court's request to look into a report as a judicial finding that every allegation is true.
+- The Indian Express independently explains the operative directions and the Court's broader implementation concern; it is not independent corroboration of the specific vendor encounters.
+
+### QR architecture: unresolved hand-off requiring a right of reply
+
+The 16 October 2025 NEERI press note explicitly says NEERI issues registration letters and does not provide QR/barcodes on products. The 2026 Supreme Court order requires a non-transferable QR code specific to each product and batch, exposing the manufacturer, NEERI registration, PESO/DM licence, formulation and test certificate.
+
+This is a legitimate accountability question, but not yet proof of a compliance defect. The arrangement could have changed after 2025 or QR generation could be performed by manufacturers while validation is performed by regulators. The article must ask for the 2026 workflow and avoid implying contradiction until NEERI/PESO/manufacturers clarify it.
+
+### New source references
+
+- Supreme Court order, 29 October 2026, *Arjun Gopal v. Union of India*, 2026 INSC 1181: https://indiankanoon.org/doc/113136598/
+- Hindustan Times market visits, published 3 November 2026: https://www.hindustantimes.com/cities/delhi-news/everything-available-firecrackers-sold-openly-in-delhi-101793644696771-amp.html
+- Hindustan Times report on Supreme Court taking note, updated 3 November 2026: https://www.hindustantimes.com/india-news/supreme-court-takes-note-of-ht-report-on-sale-firecrackers-delhi-ncr-qr-no-qr-everything-available-sc-101793686859170.html
+- The Indian Express explainer of the Supreme Court's 2026 directions, published 3 November 2026: https://indianexpress.com/article/legal-news/supreme-court-green-crackers-delhi-ncr-diwali-timings-sale-rules-10948099/
+- CSIR-NEERI press note, 16 October 2025, including its statement on QR/barcodes: https://www.neeri.res.in/file_homes/35509814_Press%20Release_Green%20firecrackers.pdf
+
