@@ -10,6 +10,17 @@
 
 The Editorial Constitution v1.1 is locked and takes precedence. The Editorial Review Checklist states that all seven review phases must pass before a chapter can be marked Published. The story must not be labelled Fact-Checked or Published merely because the desk research package is complete.
 
+## Canonical publication contract findings
+
+The repository's current canonical publication authority is `lib/editorial/canonical-publication.ts` plus `lib/editorial/publication-gate.ts`. Publication requires an authenticated principal with `story.publish`, a valid workflow transition, all fail-closed publication gates, a Gold Standard Review audit bound to the exact content fingerprint, and Evidence Vault reconstructibility. The API's published-story path evaluates the asynchronous contract before saving; a direct CMS/API write is not an acceptable bypass.
+
+The current article draft is approximately **2,064 narrative words**. It clears the 1,800-word minimum for an `explainer` but not the 2,200-word minimum for an `investigation_chapter`. Given that this is presently a desk-researched synthesis with no independent field visit or QR test, the defensible provisional classification is:
+- `storyType: explainer`
+- `reportingType: document_analysis` (or `aggregated` if the editor judges secondary reporting to dominate)
+- Do not classify as `original_reporting` or claim independent field investigation.
+
+The story still lacks a verified hero asset with provenance/licence and image-manifest approval, a canonical source/claim/evidence-vault package, a complete Gold Standard audit with independent reviewer identities, and the remaining editorial sign-offs. The CMS form's local draft behavior is not proof of canonical persistence; use the established repository/API and publication authority only after inspecting its current state and required contracts.
+
 ## Current state
 
 | Gate | Requirement | Status | Evidence / blocker |
