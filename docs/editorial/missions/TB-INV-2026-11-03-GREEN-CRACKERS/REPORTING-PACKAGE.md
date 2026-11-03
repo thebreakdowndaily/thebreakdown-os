@@ -269,3 +269,44 @@ For each public record or observation, record: evidence ID; issuing authority/so
 - [ ] Publish only after all mandatory gates are signed off.
 
 **Release recommendation:** HOLD. This file is a research package and desk-researched article draft. It is not evidence of completed field reporting and must not be pushed to the production CMS as a finished investigation.
+
+
+## Research update — 3 November 2026, second desk pass
+
+This update adds a fresh public-source review. It does not represent field reporting, direct regulator confirmation, a QR scan, an official response, or a complete enforcement audit.
+
+### Additional primary-source findings
+
+1. **The Supreme Court's operational directions are more specific than the article's short summary.** The order requires patrol teams to familiarise themselves with NEERI's registered products and QR codes, conduct reconnaissance at designated sites, take random samples for PESO analysis, confiscate unauthorised products, and check QR-code veracity/authenticity. It also prohibits firecrackers from entering NCR from outside the region. These requirements should be reflected in the enforcement scorecard. Source: https://indiankanoon.org/doc/113136598/
+2. **NEERI's official page contains a public registered-manufacturer list link and warns that only registration certificates and test reports issued through its official online website are authentic.** The search-accessible page describes registration as product-specific and linked to a manufacturer's PESO licence or District Magistrate authorisation. The actual linked manufacturer/product list was not independently retrieved and archived in this pass; do not claim that the current list was audited. Source: https://neeri.res.in/contents/details/green-firecrackers-national-centre-of-excellence
+3. **The Delhi Environment Department's public notifications index was reviewed.** It exposes numerous air-quality and GRAP notifications, but the indexed page reviewed did not surface a 2026 designated green-cracker sales-site list. Its visible 2025 green-cracker order is historical and cannot establish 2026 site designation. This is a limited portal-search result, not proof that no 2026 notification exists. Source: https://environment.delhi.gov.in/doit-content/notifications-and-directions-2022-onwards
+4. **The Delhi Home Department's notifications index was also reviewed.** No green-cracker sale-site notification was visible in the indexed entries reviewed. The page is not a complete cross-department register and was last updated 17 July 2026; absence there is not proof of non-issuance. Source: https://home.delhi.gov.in/notifications
+5. **A Delhi Police Licensing Division circular dated 16 October 2025 is publicly searchable.** It describes the previous year's temporary licensing framework. It is useful historical context only; it must not be represented as the governing 2026 circular or proof of 2026 deployment. Source: https://delhipolice.gov.in/WhatsNewFile/37836_use%20of%20green%20crackers.pdf
+6. **CPCB's Central Control Room portal links AQI bulletins, the AQI repository and CAAQMS station lists, and acknowledges CPCB, DPCC, HSPCB, RPCB and UPPCB data contributions.** It also says the worst station may be considered for health advisory/action in multi-station NCR reporting. This reinforces the need to retain station-level observations and not conflate a regional summary with each locality's exposure. Source: https://app.cpcbccr.com/ccr
+7. **Delhi's AQI explainer states that its city AQI is an average of reporting stations; stations without readings in the preceding two hours are excluded and shown as not reporting; readings are hourly and provisional pending CPCB quality checks.** This supports reporting station coverage, delayed readings and quality flags alongside any aggregate. Source: https://aqi.delhi.gov.in/about
+
+### Reporting consequences
+
+- Add the Court's random sampling, PESO referral, QR-authenticity and NCR-entry checks to the implementation scorecard.
+- Retrieve and preserve the current NEERI registered-manufacturer/product list before making any product-level comparison. The fact that the NEERI page links a list is not equivalent to having checked its contents.
+- Obtain the actual 2026 designated-site notifications from public district/department channels or on-site public notices. Do not infer that the list does not exist because it was not found in two index pages.
+- Treat the 2025 Delhi Police circular as historical precedent only. A 2026 licensing circular or official confirmation is still needed.
+- For AQI analysis, capture the same station IDs, pollutant concentrations, timestamp convention, missingness and quality flags for each period. Do not compare NCR PM-only trend values with the full National AQI as if they were the same metric.
+- Do not make causal health or pollution claims from before/after AQI values alone.
+
+### Updated evidence status
+
+| Evidence item | Current status | What would close the gap |
+|---|---|---|
+| Supreme Court 2026 order and directions | Public text reviewed | Preserve official court-hosted copy if accessible and reconcile paragraph/direction references |
+| NEERI registration authenticity guidance | Public NEERI page reviewed | Download current manufacturer/product list and verify list date/version |
+| Current 2026 approved product list | Not independently retrieved | Obtain and archive the actual NEERI list |
+| 2026 designated sale locations | Not independently located in reviewed public indexes | Locate district notifications/public notices or conduct documented lawful observation |
+| 2026 Delhi Police licensing/enforcement circular | Not located in this pass | Locate 2026 circular or obtain on-record confirmation |
+| QR code validation process | Not independently tested | Public documentation plus safe, lawful product-level verification and regulator confirmation |
+| Enforcement counts and outcomes | Not verified | Public police/district statements or published aggregate reports |
+| AQI source portals and methodology | Public portal/methodology reviewed | Export and quality-check actual hourly station records for each specified window |
+| Sand/water sampling and lab results | Not available in this pass | Published sampling protocol, locations, lab reports and chain-of-custody details |
+| Hospital admissions | Not yet available for full reporting period | Published aggregate dataset with facility coverage and baseline methodology |
+
+**No-RTI compliance:** No RTI application has been filed or authorised. This update uses public web sources only. No official email, interview request or other outreach has been sent.
