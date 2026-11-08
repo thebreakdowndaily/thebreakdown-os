@@ -1,8 +1,35 @@
 import { AIClient } from '../core/ai-client';
 import { PromptMessage } from '../core/prompt-builder';
 
+type ProviderEnvironment = {
+  NODE_ENV?: string;
+  VERCEL_ENV?: string;
+  APP_ENV?: string;
+};
+
+/**
+ * The simulated provider is allowed only outside the production deployment.
+ * Vercel preview builds often have NODE_ENV=production, so an explicit
+ * VERCEL_ENV takes precedence unless another deployment marker says production.
+ */
+export function isMockProviderAllowed(env: ProviderEnvironment = process.env): boolean {
+  if (env.VERCEL_ENV === 'production' || env.APP_ENV === 'production') return false;
+  if (env.VERCEL_ENV || env.APP_ENV) return true;
+  return env.NODE_ENV !== 'production';
+}
+
+function assertMockProviderAllowed(): void {
+  if (!isMockProviderAllowed()) {
+    throw new Error(
+      'Mock AI provider is disabled in production; configure a grounded provider.'
+    );
+  }
+}
+
+
 export class MockProvider implements AIClient {
   generateStream(messages: PromptMessage[]): ReadableStream {
+    assertMockProviderAllowed();
     const encoder = new TextEncoder();
     
     // Determine context based on what user asked to provide realistic mock answers
@@ -33,6 +60,7 @@ export class MockProvider implements AIClient {
   }
 
   async generate(messages: PromptMessage[]): Promise<string> {
+    assertMockProviderAllowed();
     const question = messages.find(m => m.role === 'user')?.content || '';
     return `Simulated blocking response to: ${question}`;
   }

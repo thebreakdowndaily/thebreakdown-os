@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { copilot } from '@/services/ai/copilot';
+import { isMockProviderAllowed } from '@/services/ai/providers/mock';
 import { EntityCopilotContext } from '@/types/canonical';
 import { rateLimiter } from '@/features/rate-limiting/limiter';
 
@@ -17,6 +18,17 @@ export async function POST(req: NextRequest) {
 
   if (!rate.allowed) {
     return rateLimiter.create429Response(rate);
+  }
+
+  // The only currently wired provider is simulated. Never expose it as real
+  // production intelligence until a grounded provider is configured.
+  if (!isMockProviderAllowed()) {
+    const response = NextResponse.json(
+      { error: 'AI copilot is unavailable: no grounded production provider is configured.' },
+      { status: 503 }
+    );
+    rateLimiter.applyHeaders(response.headers, rate);
+    return response;
   }
 
   try {
