@@ -264,26 +264,39 @@ export class EvidenceVaultService {
     if (customDb) {
       this.db = customDb;
     } else {
-      const url =
-        process.env.STAGING_DATABASE_URL ||
-        process.env.DATABASE_URL ||
-        'postgresql://postgres:Ntn%40supabase403@db.lvfovvidtowadmnggzzf.supabase.co:5432/postgres';
+      const url = process.env.STAGING_DATABASE_URL || process.env.DATABASE_URL;
 
-      // Safety check: protect production against accidental test runs
-      if (process.env.NODE_ENV !== 'production' && url.includes('mskyhaunnlwtwvsqcmav') && !process.env.ALLOW_PROD_VAULT) {
-        throw new Error('FATAL: Production database targeted without explicit authorization.');
-      }
-
-      const PgClientClass = getPgClientClass();
-      if (!PgClientClass) {
-        this.db = { query: async () => ({ rows: [] }) };
+      if (!url) {
+        // No implicit or embedded database target: DB-backed vault operations
+        // must fail closed until an operator explicitly configures the URL.
+        this.db = {
+          query: async () => {
+            throw new Error(
+              'Evidence vault database is not configured; set STAGING_DATABASE_URL or DATABASE_URL explicitly.'
+            );
+          },
+        };
       } else {
-        const client = new PgClientClass({ connectionString: url, ssl: { rejectUnauthorized: false } });
-        client.connect().catch((err: any) => {
-          console.error('[EvidenceVaultService] Database connection error:', err);
-        });
-        this.db = client;
-        this.ownsClient = true;
+        // Safety check: protect production against accidental test runs.
+        if (process.env.NODE_ENV !== 'production' && url.includes('mskyhaunnlwtwvsqcmav') && !process.env.ALLOW_PROD_VAULT) {
+          throw new Error('FATAL: Production database targeted without explicit authorization.');
+        }
+
+        const PgClientClass = getPgClientClass();
+        if (!PgClientClass) {
+          this.db = {
+            query: async () => {
+              throw new Error('PostgreSQL client unavailable; evidence vault operations are disabled.');
+            },
+          };
+        } else {
+          const client = new PgClientClass({ connectionString: url, ssl: { rejectUnauthorized: false } });
+          client.connect().catch((err: any) => {
+            console.error('[EvidenceVaultService] Database connection error:', err);
+          });
+          this.db = client;
+          this.ownsClient = true;
+        }
       }
     }
 
