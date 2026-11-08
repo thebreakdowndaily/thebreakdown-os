@@ -37,7 +37,7 @@ async function ensureRuntime(): Promise<ActionResult | null> {
   }
 }
 
-export async function createResearchProjectActionCore(
+async function createResearchProjectActionCore(
   title: string,
   researchQuestion: string,
   description: string,
@@ -71,7 +71,7 @@ export async function createResearchProjectAction(formData: FormData): Promise<v
   );
 }
 
-export async function runPipelineActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
+async function runPipelineActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
   if (!projectId) return { success: false, error: 'Missing project id.' };
   const runtimeError = await ensureRuntime();
   if (runtimeError) return runtimeError;
@@ -96,7 +96,7 @@ export async function runPipelineAction(formData: FormData): Promise<void> {
   await runPipelineActionCore(String(formData.get('projectId') ?? '').trim(), auth.actor);
 }
 
-export async function generateStoryBriefActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
+async function generateStoryBriefActionCore(projectId: string, actor: { id: string }): Promise<ActionResult> {
   if (!projectId) return { success: false, error: 'Missing project id.' };
   const runtimeError = await ensureRuntime();
   if (runtimeError) return runtimeError;

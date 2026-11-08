@@ -51,7 +51,7 @@ async function seedFor(storyId: string): Promise<ActionResult | null> {
 }
 
 /** Create (seed) a story draft for a constituency. Idempotent. */
-export async function createStoryDraftActionCore(storyId: string, actor: { id: string; name: string }): Promise<ActionResult> {
+async function createStoryDraftActionCore(storyId: string, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!storyId) return { success: false, error: 'Missing constituency id.' };
   const seedError = await seedFor(storyId);
   if (seedError) return seedError;
@@ -67,7 +67,7 @@ export async function createStoryDraftAction(formData: FormData): Promise<void> 
   await createStoryDraftActionCore(String(formData.get('storyId') ?? '').trim(), auth.actor);
 }
 
-export async function transitionStoryActionCore(storyId: string, to: StoryStatus, note: string | undefined, actor: { id: string; name: string }): Promise<ActionResult> {
+async function transitionStoryActionCore(storyId: string, to: StoryStatus, note: string | undefined, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!storyId || !to) return { success: false, error: 'Missing story id or target status.' };
   const seedError = await seedFor(storyId);
   if (seedError) return seedError;
@@ -91,7 +91,7 @@ export async function transitionStoryAction(formData: FormData): Promise<void> {
   );
 }
 
-export async function assignStoryEditorActionCore(storyId: string, actor: { id: string; name: string }): Promise<ActionResult> {
+async function assignStoryEditorActionCore(storyId: string, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!storyId) return { success: false, error: 'Missing story id.' };
   const seedError = await seedFor(storyId);
   if (seedError) return seedError;
@@ -109,7 +109,7 @@ export async function assignStoryEditorAction(formData: FormData): Promise<void>
   await assignStoryEditorActionCore(String(formData.get('storyId') ?? '').trim(), auth.actor);
 }
 
-export async function addStoryNoteActionCore(storyId: string, note: string, actor: { id: string; name: string }): Promise<ActionResult> {
+async function addStoryNoteActionCore(storyId: string, note: string, actor: { id: string; name: string }): Promise<ActionResult> {
   if (!storyId) return { success: false, error: 'Missing story id.' };
   if (!note) return { success: false, error: 'Story note cannot be empty.' };
   const seedError = await seedFor(storyId);
