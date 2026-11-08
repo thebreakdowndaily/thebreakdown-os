@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RadarPipeline } from '@/services/radar/pipeline';
 import { MP_RADAR_SOURCES } from '@/data/radar/sources-mp';
 import { isValidCronRequest } from '@/lib/security/cron-auth';
+import { validateApiKeyAsync } from '@/utils/api-auth';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -11,7 +12,7 @@ export const dynamic = 'force-dynamic';
  * GET /api/v2/radar/poll (for cron runners and monitoring probes)
  *
  * Continuous sensing endpoint for The Breakdown News Radar.
- * Authenticated via CRON_SECRET (matching Authorization: Bearer <secret>) or x-api-key.
+ * Authenticated via CRON_SECRET (matching Authorization: Bearer <secret>) or a valid, active x-api-key.
  *
  * Response schema matches Operating Standard §3:
  * {
@@ -37,14 +38,34 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 async function handlePoll(req: NextRequest): Promise<NextResponse> {
   const isCronAuthorized = isValidCronRequest(req);
-  const hasApiKey = Boolean(req.headers.get('x-api-key'));
-  const isAuthorized = isCronAuthorized || hasApiKey;
 
-  if (!isAuthorized) {
-    return NextResponse.json(
-      { error: 'unauthorized: invalid or missing cron secret' },
-      { status: 401 }
-    );
+  // Route-level enforcement is intentional even though middleware also
+  // validates API keys. Handlers can be invoked directly in tests, jobs, or
+  // future route compositions; a non-empty header is never proof of identity.
+  if (!isCronAuthorized) {
+    const apiKey = req.headers.get('x-api-key')?.trim();
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: 'unauthorized: invalid or missing cron credentials' },
+        { status: 401 }
+      );
+    }
+
+    try {
+      const validatedKey = await validateApiKeyAsync(apiKey);
+      if (!validatedKey || !validatedKey.enabled) {
+        return NextResponse.json(
+          { error: 'forbidden: invalid, expired, or revoked API key' },
+          { status: 403 }
+        );
+      }
+    } catch {
+      // Do not run a crawler when the credential store cannot validate keys.
+      return NextResponse.json(
+        { error: 'api_key_validation_unavailable' },
+        { status: 503 }
+      );
+    }
   }
 
   try {

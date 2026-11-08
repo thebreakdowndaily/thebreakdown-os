@@ -191,15 +191,50 @@ describe('Phase 2F — Cron Authentication & Remediation', () => {
       expect(json.runId).toBe('mock-radar-run');
     });
 
-    it('accepts request when authenticated via x-api-key', async () => {
+    it('accepts a valid API key after verifying it with the persistent API-key service', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue({
+        key: 'tb_live_test_api_key',
+        name: 'Radar integration test',
+        role: 'reader',
+        createdAt: new Date().toISOString(),
+        lastUsed: null,
+        enabled: true,
+      });
       const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
         method: 'GET',
         headers: { 'x-api-key': 'tb_live_test_api_key' },
       });
       const res = await radarGET(req);
       expect(res.status).toBe(200);
+      expect(apiAuth.validateApiKeyAsync).toHaveBeenCalledWith('tb_live_test_api_key');
       const json = await res.json();
       expect(json.runId).toBe('mock-radar-run');
+    });
+
+    it('rejects an arbitrary non-empty API-key header with 403', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockResolvedValue(null);
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'not-a-real-key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(403);
+      expect(apiAuth.validateApiKeyAsync).toHaveBeenCalledWith('not-a-real-key');
+      expect(pollSpy).not.toHaveBeenCalled();
+    });
+
+    it('fails closed if the API-key store is unavailable', async () => {
+      vi.spyOn(apiAuth, 'validateApiKeyAsync').mockRejectedValue(new Error('database unavailable'));
+      const pollSpy = vi.spyOn(RadarPipeline.prototype, 'poll');
+      const req = new NextRequest('http://localhost:3000/api/v2/radar/poll', {
+        method: 'GET',
+        headers: { 'x-api-key': 'tb_live_unverified_test_key' },
+      });
+      const res = await radarGET(req);
+      expect(res.status).toBe(503);
+      expect(apiAuth.validateApiKeyAsync).toHaveBeenCalled();
+      expect(pollSpy).not.toHaveBeenCalled();
     });
   });
 
