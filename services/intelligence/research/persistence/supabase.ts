@@ -10,9 +10,10 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import type {
-  ResearchPersistedState,
-  ResearchStateRepository,
+import {
+  ResearchPersistenceError,
+  type ResearchPersistedState,
+  type ResearchStateRepository,
 } from './state';
 
 /** Distinct snapshot row for the Research Intelligence Engine. */
@@ -75,7 +76,12 @@ export class ResearchSupabaseStateRepository implements ResearchStateRepository 
 
   async load(): Promise<ResearchPersistedState | null> {
     if (this.cachedState) return this.cachedState;
-    if (!this.client) return null;
+    if (!this.client) {
+      throw new ResearchPersistenceError(
+        'Research state persistence is not configured; refusing to load an empty in-memory state.',
+        'PERSISTENCE_NOT_CONFIGURED'
+      );
+    }
 
     try {
       const { data, error } = await this.client
@@ -86,7 +92,7 @@ export class ResearchSupabaseStateRepository implements ResearchStateRepository 
 
       if (error) {
         console.error('[ResearchSupabaseStateRepository] Load error:', error);
-        throw new Error(`Research state load failed: ${error.message}`);
+        throw new ResearchPersistenceError(`Research state load failed: ${error.message}`, 'PERSISTENCE_LOAD_FAILED');
       }
 
       if (data && data.metadata) {
@@ -96,15 +102,24 @@ export class ResearchSupabaseStateRepository implements ResearchStateRepository 
       }
     } catch (err) {
       console.error('[ResearchSupabaseStateRepository] Load exception:', err);
-      throw err;
+      this.cachedState = null;
+      if (err instanceof ResearchPersistenceError) throw err;
+      throw new ResearchPersistenceError(
+        'Research state load failed because the durable repository is unavailable or rejected the request.',
+        'PERSISTENCE_LOAD_FAILED'
+      );
     }
 
     return null;
   }
 
   async save(state: ResearchPersistedState): Promise<void> {
-    this.cachedState = state;
-    if (!this.client) return;
+    if (!this.client) {
+      throw new ResearchPersistenceError(
+        'Research state persistence is not configured; refusing to report an in-memory-only save as successful.',
+        'PERSISTENCE_NOT_CONFIGURED'
+      );
+    }
 
     let retries = 3;
     while (retries > 0) {
@@ -117,7 +132,7 @@ export class ResearchSupabaseStateRepository implements ResearchStateRepository 
 
         if (fetchErr) {
           console.error('[ResearchSupabaseStateRepository] Fetch remote version error:', fetchErr);
-          throw new Error(`Research state write failed: ${fetchErr.message}`);
+          throw new ResearchPersistenceError(`Research state write failed: ${fetchErr.message}`, 'PERSISTENCE_WRITE_FAILED');
         }
 
         const remoteVersion = remoteRow ? Number(remoteRow.metric_value) || 0 : 0;
@@ -161,7 +176,20 @@ export class ResearchSupabaseStateRepository implements ResearchStateRepository 
           resData = data;
         }
 
-        if (!resError && resData && (resData as unknown[]).length > 0) {
+        if (resError) {
+          const error = resError as { code?: string; message?: string };
+          if (error.code === '23505' && retries > 1) {
+            retries -= 1;
+            await new Promise((r) => setTimeout(r, 50 + Math.random() * 150));
+            continue;
+          }
+          throw new ResearchPersistenceError(
+            `Research state write failed: ${error.message ?? 'database rejected the write'}`,
+            'PERSISTENCE_WRITE_FAILED'
+          );
+        }
+
+        if (resData && (resData as unknown[]).length > 0) {
           this.cachedState = stateToSave;
           this.lastLoadedVersion = nextVersion;
           return;
@@ -169,12 +197,20 @@ export class ResearchSupabaseStateRepository implements ResearchStateRepository 
 
         retries -= 1;
         if (retries === 0) {
-          throw new Error('Database write concurrency limit exceeded');
+          throw new ResearchPersistenceError(
+            'Research state write could not commit after concurrent updates.',
+            'PERSISTENCE_WRITE_FAILED'
+          );
         }
         await new Promise((r) => setTimeout(r, 50 + Math.random() * 150));
       } catch (err) {
         console.error('[ResearchSupabaseStateRepository] Save exception:', err);
-        throw err;
+        this.cachedState = null;
+        if (err instanceof ResearchPersistenceError) throw err;
+        throw new ResearchPersistenceError(
+          'Research state write failed because the durable repository is unavailable or rejected the request.',
+          'PERSISTENCE_WRITE_FAILED'
+        );
       }
     }
   }

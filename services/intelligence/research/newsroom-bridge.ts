@@ -452,6 +452,7 @@ export async function applyNewsEventToResearch(
     return { filtered: true, reason: 'No approved research sources configured for discovery.' };
   }
 
+  await core.ensureLoaded();
   const existing = resolveResearchProject(core, event);
   const created = !existing;
   const project = existing ?? createResearchProjectFromEvent(core, event, actor, now);

@@ -83,6 +83,8 @@ module.exports = {
       'tests/problem-helpers.test.ts',
       'tests/public-platform.test.ts',
       'tests/research-workspace.test.ts',
+      'tests/research-persistence-provider.test.ts',
+      'tests/research/core.test.ts',
       'tests/research/invariant.test.ts',
       'tests/resilience.test.ts',
       'tests/security.test.ts',

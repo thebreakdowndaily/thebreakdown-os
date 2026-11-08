@@ -42,5 +42,14 @@ export async function POST(req: NextRequest) {
     createdBy: session.user.id,
   });
 
+  try {
+    await researchIntelligenceCore.flushPersistence();
+  } catch {
+    return NextResponse.json(
+      { error: 'Research state persistence failed; the project was not confirmed saved.' },
+      { status: 503 }
+    );
+  }
+
   return NextResponse.json({ project }, { status: 201 });
 }

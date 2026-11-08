@@ -818,6 +818,7 @@ export async function runResearchPipeline(
   project.updatedAt = nowIso;
   project.version += 1;
   core.persist();
+  await core.flushPersistence();
 
   return run;
 }

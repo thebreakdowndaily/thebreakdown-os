@@ -29,6 +29,22 @@ import type {
 
 export const RESEARCH_STATE_VERSION = 1 as const;
 
+export type ResearchPersistenceErrorCode =
+  | 'PERSISTENCE_NOT_CONFIGURED'
+  | 'PERSISTENCE_LOAD_FAILED'
+  | 'PERSISTENCE_WRITE_FAILED'
+  | 'PERSISTENCE_PROVIDER_INVALID';
+
+export class ResearchPersistenceError extends Error {
+  readonly code: ResearchPersistenceErrorCode;
+
+  constructor(message: string, code: ResearchPersistenceErrorCode) {
+    super(message);
+    this.name = 'ResearchPersistenceError';
+    this.code = code;
+  }
+}
+
 export interface ResearchPersistedState {
   version: typeof RESEARCH_STATE_VERSION;
   savedAt: string;
