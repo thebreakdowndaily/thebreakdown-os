@@ -140,6 +140,8 @@ export interface CollectorConfig {
   userAgent: string;
   maxRetries: number;
   allowPrivateIps?: boolean; // Default false (SSRF protection)
+  fetchFn?: typeof fetch;
+  dnsResolver?: (hostname: string) => Promise<Array<{ address: string; family: number }>>;
 }
 
 export const DEFAULT_COLLECTOR_CONFIG: CollectorConfig = {

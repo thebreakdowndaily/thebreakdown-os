@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { RadarCollector } from './interface';
 import { RadarSourceDefinition, CollectorResult, CollectorConfig, DEFAULT_COLLECTOR_CONFIG } from '../types';
-import { isSafeExternalUrl } from './security';
+import { safeFetch } from './security';
 import { parsePdfBuffer } from './pdf-parser';
 
 export const DEFAULT_PDF_MAX_BYTES = 10 * 1024 * 1024; // 10MB limit
@@ -25,23 +25,30 @@ export class PdfCollector implements RadarCollector {
     };
 
     try {
-      if (!this.config.allowPrivateIps) {
-        const check = isSafeExternalUrl(source.url);
-        if (!check.safe) {
-          throw new Error(`SSRF blocked: ${check.reason}`);
-        }
-      }
-
       const abortController = new AbortController();
       const timeoutId = setTimeout(() => abortController.abort(), this.config.timeoutMs);
 
-      const response = await fetch(source.url, {
-        signal: abortController.signal,
-        headers: {
-          'User-Agent': this.config.userAgent,
-          Accept: 'application/pdf,application/octet-stream,*/*',
-        },
-      });
+      let response: Response;
+      if (!this.config.allowPrivateIps) {
+        response = await safeFetch(source.url, {
+          signal: abortController.signal,
+          headers: {
+            'User-Agent': this.config.userAgent,
+            Accept: 'application/pdf,application/octet-stream,*/*',
+          },
+          dnsResolver: this.config.dnsResolver,
+          fetchFn: this.config.fetchFn,
+        });
+      } else {
+        const fetchToUse = this.config.fetchFn || fetch;
+        response = await fetchToUse(source.url, {
+          signal: abortController.signal,
+          headers: {
+            'User-Agent': this.config.userAgent,
+            Accept: 'application/pdf,application/octet-stream,*/*',
+          },
+        });
+      }
 
       clearTimeout(timeoutId);
       result.httpStatus = response.status;
