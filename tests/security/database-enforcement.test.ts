@@ -341,6 +341,18 @@ async function runDirectDatabaseTests() {
     // ─────────────────────────────────────────────────────────────────
     console.log('\n5. SECURITY DEFINER Functions & Privilege Escalation Resistance');
 
+    // The rate-limit mutator is intended for the trusted server-side service
+    // client only. Ordinary callers must not allocate arbitrary rate-limit buckets.
+    const rateLimitGrant = await client.query(`
+      SELECT
+        has_function_privilege('anon', 'public.increment_rate_limit(text,integer,integer)', 'EXECUTE') AS anon_execute,
+        has_function_privilege('authenticated', 'public.increment_rate_limit(text,integer,integer)', 'EXECUTE') AS authenticated_execute,
+        has_function_privilege('service_role', 'public.increment_rate_limit(text,integer,integer)', 'EXECUTE') AS service_role_execute;
+    `);
+    assert(rateLimitGrant.rows[0].anon_execute === false, 'increment_rate_limit() is not executable by anon');
+    assert(rateLimitGrant.rows[0].authenticated_execute === false, 'increment_rate_limit() is not executable by authenticated');
+    assert(rateLimitGrant.rows[0].service_role_execute === true, 'increment_rate_limit() remains executable by service_role');
+
     // Test A: Anonymous caller
     await client.query('BEGIN');
     await actAs(client, 'anon', {});
