@@ -268,4 +268,64 @@ describe('Reader Corrections Durable Persistence (Phase 3 Audit)', () => {
     expect(allReceived.length).toBe(1);
     expect(allReceived[0].id).toBe(submissionId);
   });
+  it('8. Resolved correction is written to the canonical ledger and survives a cold-start reset', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'The report states the border agreement was signed in 1962.',
+      suggestedCorrection: 'The agreement date requires primary-document verification.',
+      category: 'factual',
+    });
+    expect(submission.success).toBe(true);
+    const sharedClient = createMockCorrectionsClient({ store: mockStore });
+    setCorrectionsDbClient(sharedClient);
+
+    const triaged = await triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'resolved',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'The agreement was signed in 1962.',
+        correctedWording: 'The agreement date is under correction.',
+        explanation: 'The earlier date could not be substantiated by the cited primary record.',
+      },
+    }, { userId: 'editor-1', role: 'editor' });
+
+    expect(triaged.success).toBe(true);
+    expect(mockStore.corrections).toHaveLength(1);
+    expect(mockStore.corrections[0].story_id).toBe('11111111-1111-1111-1111-111111111111');
+    expect(mockStore.readerCorrections[0].status).toBe('resolved');
+
+    resetCorrectionsMemoryStore(false);
+    setCorrectionsDbClient(sharedClient);
+    const publicRows = await listPublishedCorrections('india-china-border-lac');
+    expect(publicRows).toHaveLength(1);
+    expect(publicRows[0].storySlug).toBe('india-china-border-lac');
+    expect(publicRows[0].correctedWording).toBe('The agreement date is under correction.');
+  });
+
+  it('9. Failed public correction persistence never marks the private submission resolved', async () => {
+    const submission = await submitReaderCorrection({
+      storySlug: 'india-china-border-lac',
+      passageExcerpt: 'The report states the border agreement was signed in 1962.',
+      suggestedCorrection: 'The agreement date requires primary-document verification.',
+      category: 'factual',
+    });
+    expect(submission.success).toBe(true);
+    setCorrectionsDbClient(createMockCorrectionsClient({ store: mockStore, shouldFailInsert: true }));
+
+    await expect(triageReaderCorrection({
+      correctionId: submission.submissionId!,
+      status: 'resolved',
+      publishedCorrection: {
+        category: 'factual',
+        previousWording: 'The agreement was signed in 1962.',
+        correctedWording: 'The agreement date is under correction.',
+        explanation: 'The earlier date could not be substantiated by the cited primary record.',
+      },
+    }, { userId: 'editor-2', role: 'editor' })).rejects.toThrow(/Failed to persist public correction/);
+
+    expect(mockStore.readerCorrections[0].status).toBe('received');
+    expect(mockStore.corrections).toHaveLength(0);
+  });
+
 });
