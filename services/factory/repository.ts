@@ -30,8 +30,32 @@ import type { EvidenceVaultService } from '../intelligence/evidence-vault.servic
 declare const __non_webpack_require__: typeof require | undefined;
 
 function getProvider(): 'memory' | 'supabase' {
-  const provider = (process.env.DATA_PROVIDER || 'memory').toLowerCase();
-  return provider === 'supabase' ? 'supabase' : 'memory';
+  const provider = (process.env.DATA_PROVIDER || '').trim().toLowerCase();
+  const isProduction =
+    process.env.VERCEL_ENV === 'production' ||
+    process.env.APP_ENV === 'production';
+
+  if (!provider) {
+    if (isProduction) {
+      throw new Error(
+        'DATA_PROVIDER must be explicitly set to "supabase" in production; in-memory storage is disabled.'
+      );
+    }
+    return 'memory';
+  }
+
+  if (provider === 'supabase') return 'supabase';
+
+  if (provider === 'memory') {
+    if (isProduction) {
+      throw new Error(
+        'DATA_PROVIDER="memory" is not allowed in production; configure "supabase" for authoritative storage.'
+      );
+    }
+    return 'memory';
+  }
+
+  throw new Error('Invalid DATA_PROVIDER value; expected "memory" or "supabase".');
 }
 
 export class RepositoryFactory {
