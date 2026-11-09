@@ -1,7 +1,7 @@
 'use client';
 
 import { sanitizeRichHtml } from '@/lib/security/sanitize-rich-html';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import type { CMSStory, Block, BlockType, BlockData, HeroBlockData, TextBlockData, QuoteBlockData, CalloutBlockData, EvidenceBlockData, StatisticsBlockData } from '@/utils/cms-data';
 import { reorderBlocks, updateBlock, removeBlock, addBlock, duplicateBlock, getBlockIcon, getBlockLabel } from '@/utils/cms-data';
 import BlockToolbar from './BlockToolbar';
@@ -22,7 +22,7 @@ import TableBlock from './blocks/TableBlock';
 
 interface StoryEditorProps {
   story: CMSStory;
-  onSave: (story: CMSStory) => void;
+  onSave: (story: CMSStory) => void | Promise<void>;
 }
 
 interface BlockRendererProps {
@@ -54,9 +54,14 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [savedIndicator, setSavedIndicator] = useState<'saved' | 'saving' | 'unsaved'>('saved');
+  const [savedIndicator, setSavedIndicator] = useState<'saved' | 'saving' | 'unsaved' | 'error'>('saved');
+  const saveInFlightRef = useRef(false);
+  const editRevisionRef = useRef(0);
 
-  const markUnsaved = useCallback(() => { setSavedIndicator('unsaved'); }, []);
+  const markUnsaved = useCallback(() => {
+    editRevisionRef.current += 1;
+    setSavedIndicator('unsaved');
+  }, []);
 
   const handleBlockUpdate = useCallback((blockId: string, data: Record<string, unknown>) => {
     setBlocks((prev) => {
@@ -151,8 +156,12 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
     setDragOverIndex(null);
   }, [markUnsaved]);
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
+    if (saveInFlightRef.current) return;
+
+    saveInFlightRef.current = true;
     setSavedIndicator('saving');
+    const saveRevision = editRevisionRef.current;
     const updated: CMSStory = {
       ...story,
       title,
@@ -160,9 +169,18 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
       blocks,
       updatedAt: new Date().toISOString(),
     };
-    onSave(updated);
-    setStory(updated);
-    setTimeout(() => { setSavedIndicator('saved'); }, 800);
+
+    try {
+      await onSave(updated);
+      setStory(updated);
+      // Do not mark newer edits as saved when they were made during this request.
+      setSavedIndicator(editRevisionRef.current === saveRevision ? 'saved' : 'unsaved');
+    } catch (error) {
+      console.error('Story save failed:', error);
+      setSavedIndicator(editRevisionRef.current === saveRevision ? 'error' : 'unsaved');
+    } finally {
+      saveInFlightRef.current = false;
+    }
   }, [story, title, slug, blocks, onSave]);
 
   // Auto-save on title/slug/blocks change
@@ -266,7 +284,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
                 textAlign: 'right',
               }}
             >
-              {savedIndicator === 'saved' ? '✓ Saved' : savedIndicator === 'saving' ? 'Saving...' : 'Unsaved'}
+              {savedIndicator === 'saved' ? '✓ Saved' : savedIndicator === 'saving' ? 'Saving...' : savedIndicator === 'error' ? 'Save failed' : 'Unsaved'}
             </span>
 
             {/* Preview toggle */}
@@ -302,7 +320,7 @@ export default function StoryEditor({ story: initialStory, onSave }: StoryEditor
                 fontFamily: 'inherit',
               }}
             >
-              {savedIndicator === 'saving' ? 'Saving...' : 'Save'}
+              {savedIndicator === 'saving' ? 'Saving...' : savedIndicator === 'error' ? 'Retry Save' : 'Save'}
             </button>
           </div>
         </div>
