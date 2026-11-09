@@ -8,7 +8,11 @@ import { getCurrentPrincipal } from '@/features/auth/principal';
 import { can } from '@/features/auth/policy';
 import { evaluatePublicationContract, evaluatePublicationContractAsync, executePostPublicationEffects } from '@/lib/editorial/canonical-publication';
 
-export async function saveStoryAction(cmsStory: CMSStory) {
+export type SaveStoryActionResult =
+  | { success: true; storyId: string }
+  | { success: false; error: string; details?: unknown };
+
+export async function saveStoryAction(cmsStory: CMSStory): Promise<SaveStoryActionResult> {
   const principal = await getCurrentPrincipal();
   if (!principal) {
     return { success: false, error: 'Unauthorized: Authentication required to edit stories.' };
@@ -63,7 +67,7 @@ export async function saveStoryAction(cmsStory: CMSStory) {
     if (!decision.allowed) {
       return {
         success: false,
-        error: decision.error,
+        error: decision.error || 'Publication contract rejected the story.',
         details: decision.gateResult,
       };
     }

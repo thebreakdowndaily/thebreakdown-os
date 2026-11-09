@@ -1,10 +1,11 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CMSShell from '@/components/cms/CMSShell';
 import StoryEditor from '@/components/cms/StoryEditor';
-import { createNewStory, mockCMSStories, type CMSStory } from '@/utils/cms-data';
+import { saveStoryAction } from '../../actions';
+import { createNewStory, type CMSStory } from '@/utils/cms-data';
 
 const TEMPLATES: Record<string, Partial<CMSStory>> = {
   explainer: {
@@ -59,10 +60,13 @@ function NewStoryForm() {
   const template = searchParams.get('template') || 'blank';
 
   const [story, setStory] = useState<CMSStory | null>(null);
+  const canonicalStoryIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     queueMicrotask(() => {
       const base = createNewStory();
+      // Reuse this ID on retries so a network timeout cannot create duplicate drafts.
+      base.id = crypto.randomUUID();
       const tmpl = (TEMPLATES as Record<string, Partial<CMSStory> | undefined>)[template];
       if (tmpl) {
         base.title = tmpl.title || base.title;
@@ -72,25 +76,40 @@ function NewStoryForm() {
           id: `blk-${String(Date.now())}-${Math.random().toString(36).slice(2, 6)}`,
         })) : base.blocks;
       }
-      mockCMSStories.unshift(base);
       setStory(base);
     });
   }, [template]);
 
-  const handleSave = async (updated: CMSStory) => {
-    const idx = mockCMSStories.findIndex((s) => s.id === updated.id);
-    if (idx >= 0) mockCMSStories[idx] = updated;
-    // Sync to canonical store via API v1
-    try {
-      await fetch('/api/v1/stories', {
+  const handleSave = async (updated: CMSStory): Promise<CMSStory> => {
+    if (!canonicalStoryIdRef.current) {
+      const response = await fetch('/api/v1/stories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated),
       });
-    } catch (e) {
-      console.error('Failed to sync new story to API:', e);
+
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(payload?.error || `Story creation failed (HTTP ${response.status})`);
+      }
+
+      const savedStory = payload?.data;
+      if (!savedStory?.id) {
+        throw new Error('Story creation returned no canonical story ID.');
+      }
+      canonicalStoryIdRef.current = savedStory.id;
+      return { ...updated, id: savedStory.id };
     }
-    router.replace(`/cms/story/${updated.id}`);
+
+    const result = await saveStoryAction({ ...updated, id: canonicalStoryIdRef.current });
+    if (!result.success) {
+      throw new Error(result.error || 'Story update was rejected.');
+    }
+    return { ...updated, id: canonicalStoryIdRef.current };
+  };
+
+  const handleSaveComplete = (saved: CMSStory) => {
+    router.replace(`/cms/story/${saved.id}`);
   };
 
   if (!story) {
@@ -105,7 +124,7 @@ function NewStoryForm() {
 
   return (
     <CMSShell>
-      <StoryEditor story={story} onSave={handleSave} />
+      <StoryEditor story={story} onSave={handleSave} onSaveComplete={handleSaveComplete} />
     </CMSShell>
   );
 }
