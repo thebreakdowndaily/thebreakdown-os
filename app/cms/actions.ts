@@ -67,7 +67,7 @@ export async function saveStoryAction(cmsStory: CMSStory): Promise<SaveStoryActi
     if (!decision.allowed) {
       return {
         success: false,
-        error: decision.error,
+        error: decision.error || 'Publication contract rejected the story.',
         details: decision.gateResult,
       };
     }
