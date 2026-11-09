@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CMSShell from '@/components/cms/CMSShell';
 import StoryEditor from '@/components/cms/StoryEditor';
-import { createNewStory, mockCMSStories, type CMSStory } from '@/utils/cms-data';
+import { createNewStory, type CMSStory } from '@/utils/cms-data';
 
 const TEMPLATES: Record<string, Partial<CMSStory>> = {
   explainer: {
@@ -78,19 +78,24 @@ function NewStoryForm() {
   }, [template]);
 
   const handleSave = async (updated: CMSStory) => {
-    const idx = mockCMSStories.findIndex((s) => s.id === updated.id);
-    if (idx >= 0) mockCMSStories[idx] = updated;
-    // Sync to canonical store via API v1
-    try {
-      await fetch('/api/v1/stories', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated),
-      });
-    } catch (e) {
-      console.error('Failed to sync new story to API:', e);
+    const response = await fetch('/api/v1/stories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
+
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(payload?.error || `Story creation failed (HTTP ${response.status})`);
     }
-    router.replace(`/cms/story/${updated.id}`);
+
+    const savedStory = payload?.data;
+    if (!savedStory?.id) {
+      throw new Error('Story creation returned no canonical story ID.');
+    }
+
+    // The API replaces temporary client IDs with the canonical UUID.
+    router.replace(`/cms/story/${savedStory.id}`);
   };
 
   if (!story) {
