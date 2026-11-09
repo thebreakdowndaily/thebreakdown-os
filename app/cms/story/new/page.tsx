@@ -76,7 +76,6 @@ function NewStoryForm() {
           id: `blk-${String(Date.now())}-${Math.random().toString(36).slice(2, 6)}`,
         })) : base.blocks;
       }
-      mockCMSStories.unshift(base);
       setStory(base);
     });
   }, [template]);
