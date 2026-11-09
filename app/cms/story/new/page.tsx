@@ -106,7 +106,7 @@ function NewStoryForm() {
     if (!result.success) {
       throw new Error(result.error || 'Story update was rejected.');
     }
-    return { ...updated, id: result.storyId || canonicalStoryIdRef.current };
+    return { ...updated, id: canonicalStoryIdRef.current };
   };
 
   const handleSaveComplete = (saved: CMSStory) => {
