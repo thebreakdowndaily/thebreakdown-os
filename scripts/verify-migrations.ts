@@ -20,7 +20,24 @@ interface MigrationCheckResult {
   warnings: string[];
 }
 
-export function verifyMigrations(migrationsDir?: string): { success: boolean; results: MigrationCheckResult[] } {
+/**
+ * Versions that are recorded in the live staging migration ledger but whose SQL
+ * is not present on `main`. They were applied out-of-band and must be
+ * reconciled (not guessed) before this repository owns the full history.
+ *
+ * See docs/security/2026-11-10-p0-staging-containment.md. Only these exact
+ * versions are tolerated; any other gap remains a hard failure.
+ */
+export const OUT_OF_BAND_MIGRATION_VERSIONS: ReadonlyMap<number, string> = new Map([
+  [34, '034_database_publication_authorization (staging ledger name; SQL not on main)'],
+  [35, 'staging ledger version 035 (name not recorded; SQL not on main)'],
+  [36, 'staging ledger version 036 (name not recorded; SQL not on main)'],
+]);
+
+export function verifyMigrations(
+  migrationsDir?: string,
+  outOfBandVersions: ReadonlyMap<number, string> = OUT_OF_BAND_MIGRATION_VERSIONS
+): { success: boolean; results: MigrationCheckResult[] } {
   const targetDir = migrationsDir || path.resolve(process.cwd(), 'supabase', 'migrations');
 
   if (!fs.existsSync(targetDir)) {
@@ -57,11 +74,28 @@ export function verifyMigrations(migrationsDir?: string): { success: boolean; re
     }
 
     const seqNumber = parseInt(nameMatch[1], 10);
-    if (seqNumber !== expectedSeq) {
-      errors.push(`Sequence gap or duplicate: expected ${String(expectedSeq).padStart(3, '0')}, found ${nameMatch[1]}`);
+    if (seqNumber < expectedSeq) {
+      errors.push(`Duplicate or out-of-order migration: found ${nameMatch[1]}, expected at least ${String(expectedSeq).padStart(3, '0')}`);
       overallSuccess = false;
+    } else if (seqNumber > expectedSeq) {
+      const missing: number[] = [];
+      for (let n = expectedSeq; n < seqNumber; n++) missing.push(n);
+
+      const unknown = missing.filter((n) => !outOfBandVersions.has(n));
+      if (unknown.length > 0) {
+        errors.push(
+          `Sequence gap: expected ${unknown.map((n) => String(n).padStart(3, '0')).join(', ')}, found ${nameMatch[1]}`
+        );
+        overallSuccess = false;
+      } else {
+        warnings.push(
+          `Out-of-band version(s) ${missing.map((n) => String(n).padStart(3, '0')).join(', ')} declared but not owned by main: ` +
+            missing.map((n) => outOfBandVersions.get(n)).join('; ') +
+            '. Reconcile before treating this chain as complete.'
+        );
+      }
     }
-    expectedSeq++;
+    expectedSeq = seqNumber + 1;
 
     // 2. Destructive DDL Checks
     const lines = content.split('\n');
@@ -124,6 +158,9 @@ export function verifyMigrations(migrationsDir?: string): { success: boolean; re
   for (const res of results) {
     if (res.errors.length === 0) {
       console.log(`  ✓ PASS: [${String(res.sequenceNumber).padStart(3, '0')}] ${res.file}`);
+      for (const warning of res.warnings) {
+        console.warn(`      ⚠ ${warning}`);
+      }
       passedCount++;
     } else {
       console.error(`  ✗ FAIL: ${res.file}`);
