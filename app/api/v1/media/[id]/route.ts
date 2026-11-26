@@ -3,7 +3,7 @@ import { SupabaseMediaRepository } from '@/services/repositories/supabase/media'
 import type { MediaItem, APIResponse } from '@/types/canonical';
 import { authorizeMediaEditor } from '@/lib/media/server/authorization';
 import { intelRoleRank } from '@/features/auth/roles';
-import { createServiceClient } from '@/supabase/client';
+import { createServiceClient, type TypedDatabase } from '@/supabase/client';
 
 export const runtime = 'nodejs';
 
@@ -65,7 +65,7 @@ export async function PUT(
       return NextResponse.json({ error: 'A media metadata object is required.' }, { status: 400 });
     }
     const value = body as Record<string, unknown>;
-    const update: Record<string, unknown> = {};
+    const update: TypedDatabase['public']['Tables']['media_items']['Update'] = {};
 
     const stringFields: Array<[string, string, number]> = [
       ['alt', 'alt', 500],
@@ -106,7 +106,8 @@ export async function PUT(
     }
 
     if (value.verificationStatus !== undefined) {
-      if (intelRoleRank(authorization.role) < intelRoleRank('fact_checker')) {
+      const verificationRoles = new Set(['owner', 'managing_editor', 'editor', 'fact_checker']);
+      if (value.verificationStatus !== 'PENDING' && !verificationRoles.has(authorization.role)) {
         return NextResponse.json({ error: 'A fact-checker or editor must verify media.' }, { status: 403 });
       }
       const allowedStatuses = new Set(['PENDING', 'EDITOR_VERIFIED', 'SOURCE_VERIFIED', 'AI_REVIEWED', 'REJECTED', 'ARCHIVED']);
@@ -124,7 +125,7 @@ export async function PUT(
     const service = createServiceClient();
     const { data, error } = await service
       .from('media_items')
-      .update(update)
+      .update(update as TypedDatabase['public']['Tables']['media_items']['Update'])
       .eq('id', id)
       .select('id')
       .maybeSingle();
