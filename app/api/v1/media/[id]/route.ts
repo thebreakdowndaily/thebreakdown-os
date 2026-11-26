@@ -65,7 +65,7 @@ export async function PUT(
       return NextResponse.json({ error: 'A media metadata object is required.' }, { status: 400 });
     }
     const value = body as Record<string, unknown>;
-    const update: TypedDatabase['public']['Tables']['media_items']['Update'] = {};
+    const update: Record<string, unknown> = {};
 
     const stringFields: Array<[string, string, number]> = [
       ['alt', 'alt', 500],
