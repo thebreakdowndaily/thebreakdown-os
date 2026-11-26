@@ -12,6 +12,24 @@ export const maxDuration = 30;
 const repo = new SupabaseMediaRepository();
 const MAX_MULTIPART_OVERHEAD = 64 * 1024;
 
+const LICENSE_TYPES: readonly NonNullable<MediaItem['licenseType']>[] = [
+  'EDITORIAL', 'OFFICIAL', 'PUBLIC_DOMAIN', 'CC0', 'CC-BY', 'CC-BY-SA',
+  'COMMERCIAL', 'LICENSED', 'FAIR_USE', 'AI',
+];
+const IMAGE_CATEGORIES: readonly NonNullable<MediaItem['imageCategory']>[] = [
+  'PHOTO', 'ILLUSTRATION', 'INFOGRAPHIC', 'MAP', 'CHART', 'DIAGRAM',
+  'DOCUMENT', 'SCREENSHOT', 'SATELLITE', 'LOGO',
+];
+const EDITORIAL_PRIORITIES: readonly NonNullable<MediaItem['editorialPriority']>[] = [
+  'PRIMARY', 'SECONDARY', 'SUPPORTING', 'THUMBNAIL', 'HERO',
+];
+
+function enumValue<T extends string>(value: unknown, allowed: readonly T[], fallback: T): T {
+  return typeof value === 'string' && (allowed as readonly string[]).includes(value)
+    ? value as T
+    : fallback;
+}
+
 async function readBoundedRequestBody(request: NextRequest, maxBytes: number): Promise<Buffer> {
   const reader = request.body?.getReader();
   if (!reader) return Buffer.alloc(0);
@@ -201,6 +219,9 @@ export async function POST(request: NextRequest) {
 
     const rawBytes = Buffer.from(await file.arrayBuffer());
     const sanitized = await sanitizeRasterImage(rawBytes, file.type);
+    const licenseType = enumValue(metadata.licenseType, LICENSE_TYPES, 'EDITORIAL');
+    const imageCategory = enumValue(metadata.imageCategory, IMAGE_CATEGORIES, 'PHOTO');
+    const editorialPriority = enumValue(metadata.editorialPriority, EDITORIAL_PRIORITIES, 'SECONDARY');
 
     const id = crypto.randomUUID();
     objectPath = `${authorization.userId}/${id}.webp`;
@@ -248,9 +269,9 @@ export async function POST(request: NextRequest) {
       copyright_owner: cleanText(metadata.copyrightOwner, 160) || null,
       photographer: cleanText(metadata.photographer, 160) || null,
       source_url: cleanText(metadata.sourceUrl, 2048) || null,
-      license_type: cleanText(metadata.licenseType, 40) || 'EDITORIAL',
-      image_category: cleanText(metadata.imageCategory, 40) || 'PHOTO',
-      editorial_priority: cleanText(metadata.editorialPriority, 40) || 'SECONDARY',
+      license_type: licenseType,
+      image_category: imageCategory,
+      editorial_priority: editorialPriority,
       long_description: cleanText(metadata.longDescription, 3000) || null,
       sha256_hash: sanitized.sha256,
       verification_status: 'PENDING',
@@ -286,9 +307,9 @@ export async function POST(request: NextRequest) {
         updatedAt: now,
         sha256Hash: sanitized.sha256,
         verificationStatus: 'PENDING',
-        licenseType: cleanText(metadata.licenseType, 40) || 'EDITORIAL',
-        imageCategory: cleanText(metadata.imageCategory, 40) || 'PHOTO',
-        editorialPriority: cleanText(metadata.editorialPriority, 40) || 'SECONDARY',
+        licenseType,
+        imageCategory,
+        editorialPriority,
         isAiGenerated: metadata.isAiGenerated === true,
       },
     };
