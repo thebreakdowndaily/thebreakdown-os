@@ -12,6 +12,30 @@ export const maxDuration = 30;
 const repo = new SupabaseMediaRepository();
 const MAX_MULTIPART_OVERHEAD = 64 * 1024;
 
+async function readBoundedRequestBody(request: NextRequest, maxBytes: number): Promise<Buffer> {
+  const reader = request.body?.getReader();
+  if (!reader) return Buffer.alloc(0);
+
+  const chunks: Buffer[] = [];
+  let totalBytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      totalBytes += value.byteLength;
+      if (totalBytes > maxBytes) {
+        await reader.cancel('Media request body exceeds the configured limit.');
+        throw new MediaSanitizationError('Image uploads must be 4 MB or smaller.', 413);
+      }
+      chunks.push(Buffer.from(value));
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  return Buffer.concat(chunks, totalBytes);
+}
+
 function hasSameOrigin(request: NextRequest): boolean {
   const origin = request.headers.get('origin');
   if (!origin) return false;
@@ -140,7 +164,21 @@ export async function POST(request: NextRequest) {
   const service = createServiceClient();
 
   try {
-    const formData = await request.formData();
+    const contentType = request.headers.get('content-type') ?? '';
+    if (!/^multipart\/form-data;\s*boundary=/i.test(contentType)) {
+      return NextResponse.json({ error: 'Media uploads must use multipart form data.' }, { status: 415 });
+    }
+
+    const boundedBody = await readBoundedRequestBody(
+      request,
+      MAX_IMAGE_UPLOAD_BYTES + MAX_MULTIPART_OVERHEAD
+    );
+    const parsedRequest = new Request(request.url, {
+      method: 'POST',
+      headers: request.headers,
+      body: boundedBody,
+    });
+    const formData = await parsedRequest.formData();
     const file = formData.get('file');
     if (!(file instanceof File)) {
       return NextResponse.json({ error: 'Choose a JPEG, PNG, WebP or AVIF image to upload.' }, { status: 400 });
