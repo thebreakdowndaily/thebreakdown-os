@@ -5,7 +5,7 @@ import sharp from 'sharp';
 
 export const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024;
 export const MAX_IMAGE_OUTPUT_BYTES = 4 * 1024 * 1024;
-export const MAX_IMAGE_INPUT_PIXELS = 30_000_000;
+export const MAX_IMAGE_INPUT_PIXELS = 20_000_000;
 export const MAX_IMAGE_DIMENSION = 2_560;
 
 export class MediaSanitizationError extends Error {
