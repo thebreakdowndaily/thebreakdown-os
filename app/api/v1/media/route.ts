@@ -175,10 +175,15 @@ export async function POST(request: NextRequest) {
     );
     const parsedRequest = new Request(request.url, {
       method: 'POST',
-      headers: request.headers,
+      headers: { 'content-type': contentType },
       body: boundedBody,
     });
-    const formData = await parsedRequest.formData();
+    let formData: FormData;
+    try {
+      formData = await parsedRequest.formData();
+    } catch {
+      return NextResponse.json({ error: 'The multipart upload is malformed.' }, { status: 400 });
+    }
     const file = formData.get('file');
     if (!(file instanceof File)) {
       return NextResponse.json({ error: 'Choose a JPEG, PNG, WebP or AVIF image to upload.' }, { status: 400 });
@@ -209,6 +214,8 @@ export async function POST(request: NextRequest) {
       });
 
     if (storageError) {
+      await service.storage.from('processed-media').remove([objectPath]);
+      objectPath = null;
       return NextResponse.json({ error: 'The processed image could not be stored.' }, { status: 502 });
     }
 
