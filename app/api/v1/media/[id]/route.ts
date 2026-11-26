@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseMediaRepository } from '@/services/repositories/supabase/media';
 import type { MediaItem, APIResponse } from '@/types/canonical';
 import { authorizeMediaEditor } from '@/lib/media/server/authorization';
-import { intelRoleRank } from '@/features/auth/roles';
 import { createServiceClient, type TypedDatabase } from '@/supabase/client';
 import { rateLimiter, type RateLimitTier } from '@/features/rate-limiting/limiter';
 
