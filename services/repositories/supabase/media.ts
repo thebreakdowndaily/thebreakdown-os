@@ -31,6 +31,9 @@ export class SupabaseMediaRepository implements MediaService {
     return (data || []).map(rowToMediaItem);
   }
 
+  // Browser-scoped repository writes are intentionally denied by migration 034.
+  // New and updated media assets must go through /api/v1/media so the server-side
+  // sanitizer owns the bytes and service-role write.
   async saveMediaItem(item: MediaItem) {
     const { data, error } = await sb().upsert(rowFromMediaItem(item)).select().single();
     if (error) throw error;
@@ -58,6 +61,31 @@ function rowToMediaItem(row: MediaRow): MediaItem {
     version: row.version ?? 1,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    agency: row.agency ?? undefined,
+    copyrightOwner: row.copyright_owner ?? undefined,
+    photographer: row.photographer ?? undefined,
+    capturedAt: row.captured_at ?? undefined,
+    sourceUrl: row.source_url ?? undefined,
+    licenseType: row.license_type ? (row.license_type as MediaItem['licenseType']) : undefined,
+    imageCategory: row.image_category ? (row.image_category as MediaItem['imageCategory']) : undefined,
+    editorialPriority: row.editorial_priority ? (row.editorial_priority as MediaItem['editorialPriority']) : undefined,
+    longDescription: row.long_description ?? undefined,
+    sha256Hash: row.sha256_hash ?? undefined,
+    blurHash: row.blur_hash ?? undefined,
+    focusPointX: row.focus_point_x ?? undefined,
+    focusPointY: row.focus_point_y ?? undefined,
+    dominantColor: row.dominant_color ?? undefined,
+    verificationStatus: row.verification_status ? (row.verification_status as MediaItem['verificationStatus']) : undefined,
+    isAiGenerated: row.is_ai_generated ?? undefined,
+    aiModel: row.ai_model ?? undefined,
+    aiPrompt: row.ai_prompt ?? undefined,
+    aiProvider: row.ai_provider ?? undefined,
+    generatedAt: row.generated_at ?? undefined,
+    orientation: row.orientation ?? undefined,
+    camera: row.camera ?? undefined,
+    lens: row.lens ?? undefined,
+    iso: row.iso ?? undefined,
+    gps: row.gps ?? undefined,
   };
 }
 

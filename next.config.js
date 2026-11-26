@@ -7,7 +7,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   outputFileTracingRoot: path.resolve(__dirname),
-  serverExternalPackages: ['pg', 'pg-connection-string'],
+  serverExternalPackages: ['pg', 'pg-connection-string', 'sharp'],
 
   images: {
     remotePatterns: [

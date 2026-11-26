@@ -113,6 +113,8 @@ module.exports = {
       'tests/staging-corrections-smoke.test.ts',
       'tests/vs8-cross-vertical-integration.test.ts',
       'tests/image-asset-integrity.test.ts',
+      'tests/media/image-sanitizer.test.ts',
+      'tests/media/processing-boundary.test.ts',
       'tests/story-image-context-gate.test.ts',
       'tests/loop-visual-validation.test.ts',
       'tests/reader-journey-loop.test.ts',
@@ -203,6 +205,7 @@ module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './'),
+      'server-only': path.resolve(__dirname, './tests/shims/server-only.ts'),
     },
   },
 };

@@ -74,6 +74,12 @@ export async function middleware(request: NextRequest) {
 
   // 2. API authentication & rate limiting (preserves existing API-key and cron gates).
   if (pathname.startsWith('/api/')) {
+    // Media routes authenticate the Supabase staff session and authoritative role
+    // at the route boundary, so browser CMS uploads do not need a separate API key.
+    // The routes themselves enforce authorization and fail closed.
+    if (pathname === '/api/v1/media' || pathname.startsWith('/api/v1/media/')) {
+      return NextResponse.next();
+    }
     if (pathname === '/api/v2/newsroom/observations/pull' || pathname === '/api/v2/radar/poll') {
       if (isValidCronRequest(request)) return NextResponse.next();
 
