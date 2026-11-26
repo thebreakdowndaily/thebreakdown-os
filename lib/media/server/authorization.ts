@@ -18,7 +18,7 @@ export async function authorizeMediaEditor(): Promise<MediaAuthorization> {
     const claims = claimsData?.claims as Record<string, unknown> | undefined;
     const userId = typeof claims?.sub === 'string' ? claims.sub : null;
 
-    if (claimsError || !userId) {
+    if (claimsError || !claims || !userId) {
       return { ok: false, status: 401, message: 'A valid signed-in staff session is required.' };
     }
 
