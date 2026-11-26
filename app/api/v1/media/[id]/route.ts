@@ -188,8 +188,8 @@ export async function DELETE(
   if (!authorization.ok) {
     return NextResponse.json({ error: authorization.message }, { status: authorization.status });
   }
-  if (intelRoleRank(authorization.role) < intelRoleRank('editor')) {
-    return NextResponse.json({ error: 'An editor or administrator is required to delete media.' }, { status: 403 });
+  if (authorization.role !== 'owner' && authorization.role !== 'managing_editor') {
+    return NextResponse.json({ error: 'An owner or managing editor is required to delete media.' }, { status: 403 });
   }
   if (!hasSameOrigin(_request)) {
     return NextResponse.json({ error: 'A same-origin browser request is required for media deletion.' }, { status: 403 });
