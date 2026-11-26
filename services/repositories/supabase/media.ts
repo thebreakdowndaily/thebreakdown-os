@@ -31,6 +31,9 @@ export class SupabaseMediaRepository implements MediaService {
     return (data || []).map(rowToMediaItem);
   }
 
+  // Browser-scoped repository writes are intentionally denied by migration 034.
+  // New and updated media assets must go through /api/v1/media so the server-side
+  // sanitizer owns the bytes and service-role write.
   async saveMediaItem(item: MediaItem) {
     const { data, error } = await sb().upsert(rowFromMediaItem(item)).select().single();
     if (error) throw error;
