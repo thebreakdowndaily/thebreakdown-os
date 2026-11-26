@@ -4,10 +4,33 @@ import type { MediaItem, APIResponse } from '@/types/canonical';
 import { authorizeMediaEditor } from '@/lib/media/server/authorization';
 import { intelRoleRank } from '@/features/auth/roles';
 import { createServiceClient, type TypedDatabase } from '@/supabase/client';
+import { rateLimiter, type RateLimitTier } from '@/features/rate-limiting/limiter';
 
 export const runtime = 'nodejs';
 
 const repo = new SupabaseMediaRepository();
+
+function hasSameOrigin(request: NextRequest): boolean {
+  const origin = request.headers.get('origin');
+  if (!origin) return false;
+  try {
+    return new URL(origin).origin === new URL(request.url).origin;
+  } catch {
+    return false;
+  }
+}
+
+async function applyMediaRateLimit(request: NextRequest, userId: string, tier: RateLimitTier) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const result = await rateLimiter.checkLimit({
+    key: userId,
+    tier,
+    endpoint: '/api/v1/media/[id]',
+    actorId: userId,
+    ip,
+  });
+  return result.allowed ? null : rateLimiter.create429Response(result, 'Media request rate limit exceeded.');
+}
 
 function cleanText(value: unknown, maxLength: number): string | undefined {
   if (typeof value !== 'string') return undefined;
@@ -37,6 +60,9 @@ export async function GET(
     return NextResponse.json({ error: authorization.message }, { status: authorization.status });
   }
 
+  const limitResponse = await applyMediaRateLimit(_request, authorization.userId, 'standard_api');
+  if (limitResponse) return limitResponse;
+
   const { id } = await context.params;
   const item = await repo.getMediaItem(id);
   if (!item) {
@@ -54,6 +80,12 @@ export async function PUT(
   if (!authorization.ok) {
     return NextResponse.json({ error: authorization.message }, { status: authorization.status });
   }
+  if (!hasSameOrigin(request)) {
+    return NextResponse.json({ error: 'A same-origin browser request is required for media updates.' }, { status: 403 });
+  }
+  const limitResponse = await applyMediaRateLimit(request, authorization.userId, 'mutation');
+  if (limitResponse) return limitResponse;
+
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ error: 'Trusted media storage is not configured.' }, { status: 503 });
   }
@@ -159,6 +191,12 @@ export async function DELETE(
   if (intelRoleRank(authorization.role) < intelRoleRank('editor')) {
     return NextResponse.json({ error: 'An editor or administrator is required to delete media.' }, { status: 403 });
   }
+  if (!hasSameOrigin(_request)) {
+    return NextResponse.json({ error: 'A same-origin browser request is required for media deletion.' }, { status: 403 });
+  }
+  const limitResponse = await applyMediaRateLimit(_request, authorization.userId, 'mutation');
+  if (limitResponse) return limitResponse;
+
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
     return NextResponse.json({ error: 'Trusted media storage is not configured.' }, { status: 503 });
   }
