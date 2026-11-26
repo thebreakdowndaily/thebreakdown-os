@@ -3,7 +3,8 @@ import { SupabaseMediaRepository } from '@/services/repositories/supabase/media'
 import type { MediaItem, APIResponse } from '@/types/canonical';
 import { authorizeMediaEditor } from '@/lib/media/server/authorization';
 import { createServiceClient, type TypedDatabase } from '@/supabase/client';
-import { rateLimiter, type RateLimitTier } from '@/features/rate-limiting/limiter';
+import { rateLimiter } from '@/features/rate-limiting/limiter';
+import type { RateLimitTier } from '@/features/rate-limiting/types';
 
 export const runtime = 'nodejs';
 
