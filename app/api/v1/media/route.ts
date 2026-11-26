@@ -66,7 +66,14 @@ function hasSameOrigin(request: NextRequest): boolean {
 
 function cleanText(value: unknown, maxLength: number): string {
   if (typeof value !== 'string') return '';
-  return value.replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, maxLength);
+  return Array.from(value)
+    .filter(character => {
+      const code = character.charCodeAt(0);
+      return code >= 32 && code !== 127;
+    })
+    .join('')
+    .trim()
+    .slice(0, maxLength);
 }
 
 function parseMetadata(value: FormDataEntryValue | null): Record<string, unknown> {
