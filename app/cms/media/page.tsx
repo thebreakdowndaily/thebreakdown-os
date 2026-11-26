@@ -18,6 +18,9 @@ export default function CMSMediaPage() {
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [draft, setDraft] = useState<CMSMediaItem | null>(null);
   const [activeTab, setActiveTab] = useState<'metadata' | 'editorial' | 'ai' | 'preview'>('metadata');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
   useEffect(() => {
     fetch('/api/v1/media')
@@ -33,21 +36,52 @@ export default function CMSMediaPage() {
   });
 
   async function saveItem() {
-    if (!draft) return;
-    if (draft.id) {
-      await fetch(`/api/v1/media/${draft.id}`, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(draft),
-      });
-    } else {
-      await fetch('/api/v1/media', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(draft),
-      });
+    if (!draft || saving) return;
+    setSaveError('');
+
+    if (!draft.id && !selectedFile) {
+      setSaveError('Select an image file before uploading.');
+      return;
     }
-    const res = await fetch('/api/v1/media').then(r => r.json()) as { data: CMSMediaItem[] };
-    setMedia(res.data || []);
-    setDraft(null);
+
+    setSaving(true);
+    try {
+      let response: Response;
+      if (draft.id) {
+        response = await fetch(`/api/v1/media/${encodeURIComponent(draft.id)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(draft),
+        });
+      } else {
+        const formData = new FormData();
+        formData.append('file', selectedFile as File);
+        formData.append('metadata', JSON.stringify(draft));
+        response = await fetch('/api/v1/media', {
+          method: 'POST',
+          body: formData,
+        });
+      }
+
+      const result = await response.json().catch(() => ({})) as { error?: string };
+      if (!response.ok) {
+        throw new Error(result.error || `Media save failed (${response.status}).`);
+      }
+
+      setDraft(null);
+      setSelectedFile(null);
+      const refreshed = await fetch('/api/v1/media', { cache: 'no-store' });
+      if (!refreshed.ok) {
+        setSaveError('Media was saved, but the library could not refresh. Reload the page to see it.');
+        return;
+      }
+      const payload = await refreshed.json() as { data?: CMSMediaItem[] };
+      setMedia(payload.data || []);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Media could not be saved.');
+    } finally {
+      setSaving(false);
+    }
   }
 
   const handleDraftChange = (field: keyof CMSMediaItem, value: any) => {
@@ -69,7 +103,7 @@ export default function CMSMediaPage() {
           <h1 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-primary)', margin: 0 }}>Image Intelligence</h1>
           <p style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', marginTop: '4px' }}>{media.length} items</p>
         </div>
-        <button onClick={() => { setDraft({ id: '', type: 'image', src: '', alt: '', caption: '', tags: [], credit: '', width: 0, height: 0, fileSize: 0, version: 1, createdAt: '', updatedAt: '', agency: '', copyrightOwner: '', photographer: '', licenseType: 'EDITORIAL', imageCategory: 'PHOTO', editorialPriority: 'SECONDARY', verificationStatus: 'PENDING', isAiGenerated: false, focusPointX: 50, focusPointY: 50 }); setActiveTab('metadata'); }} style={{ padding: '9px 18px', background: 'var(--color-amber-500)', color: '#000', borderRadius: '8px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>+ Add Media</button>
+        <button onClick={() => { setDraft({ id: '', type: 'image', src: '', alt: '', caption: '', tags: [], credit: '', width: 0, height: 0, fileSize: 0, version: 1, createdAt: '', updatedAt: '', agency: '', copyrightOwner: '', photographer: '', licenseType: 'EDITORIAL', imageCategory: 'PHOTO', editorialPriority: 'SECONDARY', verificationStatus: 'PENDING', isAiGenerated: false, focusPointX: 50, focusPointY: 50 }); setSelectedFile(null); setSaveError(''); setActiveTab('metadata'); }} style={{ padding: '9px 18px', background: 'var(--color-amber-500)', color: '#000', borderRadius: '8px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>+ Add Media</button>
       </div>
 
       {draft && (
@@ -85,12 +119,25 @@ export default function CMSMediaPage() {
           <div style={{ padding: '20px' }}>
             {activeTab === 'metadata' && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div><label>Source URL</label><input value={draft.src} onChange={e => { handleDraftChange('src', e.target.value); }} /></div>
-                <div><label>Format Type</label>
-                  <select value={draft.type} onChange={e => { handleDraftChange('type', e.target.value); }}>
-                    {['image', 'video', 'chart', 'document', 'svg', 'map'].map(t => <option key={t} value={t}>{t}</option>)}
-                  </select>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <label>{draft.id ? 'Processed image (read-only source)' : 'Upload image for server-side sanitization'}</label>
+                  {draft.id ? (
+                    <a href={draft.src} target="_blank" rel="noreferrer" style={{ fontSize: '12px', color: 'var(--color-amber-500)', wordBreak: 'break-all' }}>Open processed WebP image</a>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/avif"
+                        onChange={e => { setSelectedFile(e.target.files?.[0] || null); setSaveError(''); }}
+                      />
+                      <p style={{ fontSize: '11px', color: 'var(--color-text-tertiary)', margin: '6px 0 0' }}>
+                        JPEG, PNG, WebP or AVIF · maximum 4 MB. The server validates, re-encodes to WebP and strips EXIF/GPS metadata before storage.
+                      </p>
+                      {selectedFile && <p style={{ fontSize: '11px', color: 'var(--color-text-secondary)' }}>Selected: {selectedFile.name} ({formatSize(selectedFile.size)})</p>}
+                    </>
+                  )}
                 </div>
+                <div><label>Stored format</label><input value={draft.id ? draft.type.toUpperCase() : 'IMAGE · WEBP (server normalized)'} readOnly /></div>
                 <div style={{ gridColumn: '1 / -1' }}><label>Alt Text</label><input value={draft.alt} onChange={e => { handleDraftChange('alt', e.target.value); }} /></div>
                 <div style={{ gridColumn: '1 / -1' }}><label>Caption</label><textarea value={draft.caption} onChange={e => { handleDraftChange('caption', e.target.value); }} rows={3} /></div>
                 <div style={{ gridColumn: '1 / -1' }}><label>Long Description (Accessibility)</label><textarea value={draft.longDescription || ''} onChange={e => { handleDraftChange('longDescription', e.target.value); }} rows={3} /></div>
@@ -103,6 +150,7 @@ export default function CMSMediaPage() {
                 <div><label>Copyright Owner</label><input value={draft.copyrightOwner || ''} onChange={e => { handleDraftChange('copyrightOwner', e.target.value); }} /></div>
                 <div><label>Photographer</label><input value={draft.photographer || ''} onChange={e => { handleDraftChange('photographer', e.target.value); }} /></div>
                 <div><label>Agency</label><input value={draft.agency || ''} onChange={e => { handleDraftChange('agency', e.target.value); }} /></div>
+                <div style={{ gridColumn: '1 / -1' }}><label>Source / Attribution URL</label><input value={draft.sourceUrl || ''} onChange={e => { handleDraftChange('sourceUrl', e.target.value); }} placeholder="https://..." /></div>
                 
                 <div>
                   <label>License Type</label>
@@ -188,8 +236,9 @@ export default function CMSMediaPage() {
               </div>
             )}
             
+            {saveError && <p role="alert" style={{ color: '#DC2626', fontSize: '12px', marginTop: '16px' }}>{saveError}</p>}
             <div style={{ display: 'flex', gap: '8px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--color-border-subtle)' }}>
-              <button onClick={saveItem} style={{ padding: '8px 20px', background: 'var(--color-amber-500)', color: '#000', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>Save & Apply Policies</button>
+              <button onClick={saveItem} disabled={saving} style={{ padding: '8px 20px', background: 'var(--color-amber-500)', color: '#000', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.65 : 1, fontFamily: 'inherit' }}>{saving ? 'Processing securely…' : draft.id ? 'Save Metadata' : 'Upload & Sanitize Image'}</button>
               <button onClick={() => { setDraft(null); }} style={{ padding: '8px 16px', border: '1px solid var(--color-border-subtle)', borderRadius: '8px', background: 'none', color: 'var(--color-text-tertiary)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>Cancel</button>
             </div>
           </div>
@@ -206,7 +255,7 @@ export default function CMSMediaPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
         {filtered.map((item) => (
-          <div key={item.id} onClick={() => { setDraft({ ...item }); }} style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer', transition: 'border-color 0.15s' }}>
+          <div key={item.id} onClick={() => { setDraft({ ...item }); setSelectedFile(null); setSaveError(''); }} style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border-subtle)', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer', transition: 'border-color 0.15s' }}>
             <div style={{ height: '140px', background: 'var(--color-surface-secondary)', position: 'relative' }}>
               <div style={{ position: 'absolute', top: 8, right: 8, display: 'flex', gap: '4px', flexDirection: 'column', alignItems: 'flex-end' }}>
                 {item.isAiGenerated && renderBadge('AI GENERATED', '#EAB308')}
