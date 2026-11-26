@@ -53,10 +53,26 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: authorization.message }, { status: authorization.status });
   }
 
+  const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const readLimit = await rateLimiter.checkLimit({
+    key: authorization.userId,
+    tier: 'standard_api',
+    endpoint: '/api/v1/media',
+    actorId: authorization.userId,
+    ip: clientIp,
+  });
+  if (!readLimit.allowed) {
+    return rateLimiter.create429Response(readLimit, 'Media library rate limit exceeded.');
+  }
+
   try {
     const { searchParams } = new URL(request.url);
-    const page = Math.max(1, Number.parseInt(searchParams.get('page') ?? '1', 10) || 1);
-    const pageSize = Math.min(100, Math.max(1, Number.parseInt(searchParams.get('pageSize') ?? '100', 10) || 100));
+    const pageStr = searchParams.get('page');
+    const pageSizeStr = searchParams.get('pageSize');
+    const page = pageStr ? Math.max(1, Number.parseInt(pageStr, 10) || 1) : undefined;
+    const pageSize = pageSizeStr
+      ? Math.min(100, Math.max(1, Number.parseInt(pageSizeStr, 10) || 100))
+      : undefined;
     const params: APIListParams = {
       page,
       pageSize,
@@ -74,8 +90,8 @@ export async function GET(request: NextRequest) {
       meta: {
         ...result.meta,
         total: typeFilter ? filtered.length : result.meta.total,
-        page,
-        pageSize,
+        page: page ?? 1,
+        pageSize: pageSize ?? result.data.length,
       },
     };
     return NextResponse.json(response, { headers: { 'Cache-Control': 'private, no-store' } });
