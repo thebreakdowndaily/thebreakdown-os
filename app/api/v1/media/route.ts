@@ -12,6 +12,16 @@ export const maxDuration = 30;
 const repo = new SupabaseMediaRepository();
 const MAX_MULTIPART_OVERHEAD = 64 * 1024;
 
+function hasSameOrigin(request: NextRequest): boolean {
+  const origin = request.headers.get('origin');
+  if (!origin) return false;
+  try {
+    return new URL(origin).origin === new URL(request.url).origin;
+  } catch {
+    return false;
+  }
+}
+
 function cleanText(value: unknown, maxLength: number): string {
   if (typeof value !== 'string') return '';
   return value.replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, maxLength);
@@ -97,15 +107,8 @@ export async function POST(request: NextRequest) {
     return rateLimiter.create429Response(uploadLimit, 'Media upload rate limit exceeded.');
   }
 
-  const origin = request.headers.get('origin');
-  if (origin) {
-    try {
-      if (new URL(origin).origin !== request.nextUrl.origin) {
-        return NextResponse.json({ error: 'Cross-origin media uploads are not permitted.' }, { status: 403 });
-      }
-    } catch {
-      return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 });
-    }
+  if (!hasSameOrigin(request)) {
+    return NextResponse.json({ error: 'A same-origin browser request is required for media uploads.' }, { status: 403 });
   }
 
   const contentLength = Number(request.headers.get('content-length') ?? 0);
@@ -127,7 +130,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Choose a JPEG, PNG, WebP or AVIF image to upload.' }, { status: 400 });
     }
 
-    const metadata = parseMetadata(formData.get('metadata'));
+    let metadata: Record<string, unknown>;
+    try {
+      metadata = parseMetadata(formData.get('metadata'));
+    } catch {
+      return NextResponse.json({ error: 'A valid media metadata object is required.' }, { status: 400 });
+    }
     if (file.size < 1 || file.size > MAX_IMAGE_UPLOAD_BYTES) {
       return NextResponse.json({ error: 'Image uploads must be between 1 byte and 4 MB.' }, { status: 413 });
     }
@@ -235,12 +243,6 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof MediaSanitizationError) {
       return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    if (error instanceof SyntaxError || error instanceof Error) {
-      const message = error.message;
-      if (message.includes('metadata')) {
-        return NextResponse.json({ error: message }, { status: 400 });
-      }
     }
     return NextResponse.json({ error: 'Media upload failed. No original file was published.' }, { status: 500 });
   }
