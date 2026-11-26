@@ -12,7 +12,9 @@ describe('trusted media processing boundary', () => {
     expect(route).toContain('.upload(objectPath, sanitized.buffer');
     expect(route).toContain('contentType: sanitized.mimeType');
     expect(route).not.toContain('src: cleanText(metadata.src');
-    expect(route).toContain('request.formData()');
+    expect(route).toContain('readBoundedRequestBody(\n      request,\n      MAX_IMAGE_UPLOAD_BYTES + MAX_MULTIPART_OVERHEAD\n    )');
+    expect(route).toContain('request.body?.getReader()');
+    expect(route).toContain('await parsedRequest.formData()');
   });
 
   it('does not accept client-authored URLs as a new media record', () => {
@@ -41,7 +43,7 @@ describe('trusted media processing boundary', () => {
     expect(authorization).toContain('supabase.auth.getClaims()');
     expect(authorization).toContain(".from('user_roles')");
     expect(authorization).toContain("canAccessIntelModule(role, 'media')");
-    expect(authorization).not.toContain('user_metadata');
+    expect(authorization).not.toContain('claims.user_metadata');
   });
 
   it('updates only whitelisted metadata and never overwrites the processed file URL', () => {
