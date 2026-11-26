@@ -1,54 +1,234 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SupabaseMediaRepository } from '@/services/repositories/supabase/media';
 import type { MediaItem, APIResponse, APIListParams } from '@/types/canonical';
+import { authorizeMediaEditor } from '@/lib/media/server/authorization';
+import { sanitizeRasterImage, MediaSanitizationError, MAX_IMAGE_UPLOAD_BYTES } from '@/lib/media/server/image-sanitizer';
+import { createServiceClient } from '@/supabase/client';
+
+export const runtime = 'nodejs';
+export const maxDuration = 30;
 
 const repo = new SupabaseMediaRepository();
+const MAX_MULTIPART_OVERHEAD = 64 * 1024;
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-
-  const typeFilter = searchParams.get('type');
-
-  if (typeFilter) {
-    const result = await repo.getMedia();
-    const filtered = result.data.filter(item => item.type === typeFilter);
-    const res: APIResponse<MediaItem[]> = { data: filtered, meta: { total: filtered.length, page: 1, pageSize: filtered.length } };
-    return NextResponse.json(res);
-  }
-
-  const pageStr = searchParams.get('page');
-  const pageSizeStr = searchParams.get('pageSize');
-  const params: APIListParams = {
-    page: pageStr ? parseInt(pageStr, 10) : undefined,
-    pageSize: pageSizeStr ? parseInt(pageSizeStr, 10) : undefined,
-    search: searchParams.get('search') || undefined,
-  };
-
-  const result = await repo.getMedia(params);
-  return NextResponse.json(result);
+function cleanText(value: unknown, maxLength: number): string {
+  if (typeof value !== 'string') return '';
+  return value.replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, maxLength);
 }
 
+function parseMetadata(value: FormDataEntryValue | null): Record<string, unknown> {
+  if (typeof value !== 'string' || value.length > 32 * 1024) {
+    throw new Error('A valid media metadata object is required.');
+  }
+  const parsed: unknown = JSON.parse(value);
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new Error('Media metadata must be a JSON object.');
+  }
+  return parsed as Record<string, unknown>;
+}
+
+function cleanTags(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((tag): tag is string => typeof tag === 'string')
+    .map(tag => cleanText(tag, 40))
+    .filter(Boolean)
+    .slice(0, 20);
+}
+
+export async function GET(request: NextRequest) {
+  const authorization = await authorizeMediaEditor();
+  if (!authorization.ok) {
+    return NextResponse.json({ error: authorization.message }, { status: authorization.status });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(1, Number.parseInt(searchParams.get('page') ?? '1', 10) || 1);
+    const pageSize = Math.min(100, Math.max(1, Number.parseInt(searchParams.get('pageSize') ?? '50', 10) || 50));
+    const params: APIListParams = {
+      page,
+      pageSize,
+      search: cleanText(searchParams.get('search'), 120) || undefined,
+    };
+
+    const result = await repo.getMedia(params);
+    const typeFilter = searchParams.get('type');
+    const filtered = typeFilter
+      ? result.data.filter(item => item.type === typeFilter)
+      : result.data;
+
+    const response: APIResponse<MediaItem[]> = {
+      data: filtered,
+      meta: {
+        ...result.meta,
+        total: typeFilter ? filtered.length : result.meta.total,
+        page,
+        pageSize,
+      },
+    };
+    return NextResponse.json(response, { headers: { 'Cache-Control': 'private, no-store' } });
+  } catch {
+    return NextResponse.json({ error: 'Unable to load media library.' }, { status: 500 });
+  }
+}
+
+/**
+ * The only media creation path. Raw bytes are processed in memory, converted to
+ * WebP and stripped of metadata before the service-role client writes them.
+ * JSON/URL-based media creation is intentionally unsupported.
+ */
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as Partial<MediaItem>;
+  const authorization = await authorizeMediaEditor();
+  if (!authorization.ok) {
+    return NextResponse.json({ error: authorization.message }, { status: authorization.status });
+  }
 
-  const now = new Date().toISOString();
-  const item: MediaItem = {
-    id: body.id || crypto.randomUUID(),
-    type: body.type || 'image',
-    src: body.src || '',
-    alt: body.alt || '',
-    caption: body.caption || '',
-    tags: body.tags || [],
-    credit: body.credit || '',
-    width: body.width,
-    height: body.height,
-    fileSize: body.fileSize,
-    version: body.version || 1,
-    createdAt: now,
-    updatedAt: now,
-  };
+  const origin = request.headers.get('origin');
+  if (origin) {
+    try {
+      if (new URL(origin).origin !== request.nextUrl.origin) {
+        return NextResponse.json({ error: 'Cross-origin media uploads are not permitted.' }, { status: 403 });
+      }
+    } catch {
+      return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 });
+    }
+  }
 
-  const saved = await repo.saveMediaItem(item);
-  const res: APIResponse<MediaItem> = { data: saved };
-  return NextResponse.json(res, { status: 201 });
+  const contentLength = Number(request.headers.get('content-length') ?? 0);
+  if (contentLength > MAX_IMAGE_UPLOAD_BYTES + MAX_MULTIPART_OVERHEAD) {
+    return NextResponse.json({ error: 'Image uploads must be 4 MB or smaller.' }, { status: 413 });
+  }
+
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: 'Trusted media storage is not configured.' }, { status: 503 });
+  }
+
+  let objectPath: string | null = null;
+  const service = createServiceClient();
+
+  try {
+    const formData = await request.formData();
+    const file = formData.get('file');
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: 'Choose a JPEG, PNG, WebP or AVIF image to upload.' }, { status: 400 });
+    }
+
+    const metadata = parseMetadata(formData.get('metadata'));
+    if (file.size < 1 || file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      return NextResponse.json({ error: 'Image uploads must be between 1 byte and 4 MB.' }, { status: 413 });
+    }
+
+    const rawBytes = Buffer.from(await file.arrayBuffer());
+    const sanitized = await sanitizeRasterImage(rawBytes, file.type);
+
+    const id = crypto.randomUUID();
+    objectPath = `${authorization.userId}/${id}.webp`;
+
+    const { error: storageError } = await service.storage
+      .from('processed-media')
+      .upload(objectPath, sanitized.buffer, {
+        contentType: sanitized.mimeType,
+        cacheControl: '31536000',
+        upsert: false,
+      });
+
+    if (storageError) {
+      return NextResponse.json({ error: 'The processed image could not be stored.' }, { status: 502 });
+    }
+
+    const { data: publicUrlData } = service.storage
+      .from('processed-media')
+      .getPublicUrl(objectPath);
+    const publicUrl = publicUrlData.publicUrl;
+
+    if (!publicUrl || !/^https:\/\//.test(publicUrl)) {
+      await service.storage.from('processed-media').remove([objectPath]);
+      return NextResponse.json({ error: 'The processed media URL could not be resolved.' }, { status: 502 });
+    }
+
+    const now = new Date().toISOString();
+    const { error: databaseError } = await service.from('media_items').insert({
+      id,
+      title: cleanText(metadata.caption, 180) || 'Untitled image',
+      type: 'image',
+      url: publicUrl,
+      src: publicUrl,
+      alt: cleanText(metadata.alt, 500),
+      caption: cleanText(metadata.caption, 500),
+      credit: cleanText(metadata.credit, 240),
+      width: sanitized.width,
+      height: sanitized.height,
+      file_size: sanitized.fileSize,
+      version: 1,
+      tags: cleanTags(metadata.tags),
+      agency: cleanText(metadata.agency, 160) || null,
+      copyright_owner: cleanText(metadata.copyrightOwner, 160) || null,
+      photographer: cleanText(metadata.photographer, 160) || null,
+      source_url: cleanText(metadata.sourceUrl, 2048) || null,
+      license_type: cleanText(metadata.licenseType, 40) || 'EDITORIAL',
+      image_category: cleanText(metadata.imageCategory, 40) || 'PHOTO',
+      editorial_priority: cleanText(metadata.editorialPriority, 40) || 'SECONDARY',
+      long_description: cleanText(metadata.longDescription, 3000) || null,
+      sha256_hash: sanitized.sha256,
+      verification_status: 'PENDING',
+      focus_point_x: 50,
+      focus_point_y: 50,
+      is_ai_generated: metadata.isAiGenerated === true,
+      ai_model: cleanText(metadata.aiModel, 120) || null,
+      ai_provider: cleanText(metadata.aiProvider, 120) || null,
+      ai_prompt: cleanText(metadata.aiPrompt, 2000) || null,
+      updated_at: now,
+    });
+
+    if (databaseError) {
+      await service.storage.from('processed-media').remove([objectPath]);
+      objectPath = null;
+      return NextResponse.json({ error: 'The media record could not be created.' }, { status: 502 });
+    }
+
+    const response: APIResponse<MediaItem> = {
+      data: {
+        id,
+        type: 'image',
+        src: publicUrl,
+        alt: cleanText(metadata.alt, 500),
+        caption: cleanText(metadata.caption, 500),
+        tags: cleanTags(metadata.tags),
+        credit: cleanText(metadata.credit, 240),
+        width: sanitized.width,
+        height: sanitized.height,
+        fileSize: sanitized.fileSize,
+        version: 1,
+        createdAt: now,
+        updatedAt: now,
+        sha256Hash: sanitized.sha256,
+        verificationStatus: 'PENDING',
+        licenseType: cleanText(metadata.licenseType, 40) || 'EDITORIAL',
+        imageCategory: cleanText(metadata.imageCategory, 40) || 'PHOTO',
+        editorialPriority: cleanText(metadata.editorialPriority, 40) || 'SECONDARY',
+        isAiGenerated: metadata.isAiGenerated === true,
+      },
+    };
+    return NextResponse.json(response, { status: 201, headers: { 'Cache-Control': 'private, no-store' } });
+  } catch (error) {
+    if (objectPath) {
+      try {
+        await service.storage.from('processed-media').remove([objectPath]);
+      } catch {
+        // Best-effort cleanup; the failure is not exposed to the client.
+      }
+    }
+
+    if (error instanceof MediaSanitizationError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
+    if (error instanceof SyntaxError || error instanceof Error) {
+      const message = error.message;
+      if (message.includes('metadata')) {
+        return NextResponse.json({ error: message }, { status: 400 });
+      }
+    }
+    return NextResponse.json({ error: 'Media upload failed. No original file was published.' }, { status: 500 });
+  }
 }
