@@ -131,9 +131,9 @@ export async function GET(request: NextRequest) {
       data: filtered,
       meta: {
         ...result.meta,
-        total: typeFilter ? filtered.length : result.meta.total,
-        page: page ?? 1,
-        pageSize: pageSize ?? result.data.length,
+        total: typeFilter ? filtered.length : (result.meta?.total ?? filtered.length),
+        page: page ?? result.meta?.page ?? 1,
+        pageSize: pageSize ?? result.meta?.pageSize ?? result.data.length,
       },
     };
     return NextResponse.json(response, { headers: { 'Cache-Control': 'private, no-store' } });
@@ -194,7 +194,7 @@ export async function POST(request: NextRequest) {
     const parsedRequest = new Request(request.url, {
       method: 'POST',
       headers: { 'content-type': contentType },
-      body: boundedBody,
+      body: new Uint8Array(boundedBody),
     });
     let formData: FormData;
     try {
