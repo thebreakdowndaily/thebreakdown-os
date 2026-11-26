@@ -69,7 +69,9 @@ export async function sanitizeRasterImage(
   }
 
   const sourceFormat = metadata.format ?? '';
-  const expectedMimeType = INPUT_MIME_TYPES[sourceFormat];
+  const expectedMimeType = sourceFormat === 'heif' && metadata.compression === 'av1'
+    ? 'image/avif'
+    : INPUT_MIME_TYPES[sourceFormat];
   if (!expectedMimeType) {
     throw new MediaSanitizationError('Only JPEG, PNG, WebP and AVIF images are accepted.', 415);
   }
