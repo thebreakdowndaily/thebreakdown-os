@@ -34,7 +34,14 @@ async function applyMediaRateLimit(request: NextRequest, userId: string, tier: R
 
 function cleanText(value: unknown, maxLength: number): string | undefined {
   if (typeof value !== 'string') return undefined;
-  return value.replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, maxLength);
+  return Array.from(value)
+    .filter(character => {
+      const code = character.charCodeAt(0);
+      return code >= 32 && code !== 127;
+    })
+    .join('')
+    .trim()
+    .slice(0, maxLength);
 }
 
 function objectPathFromPublicUrl(value: string, supabaseUrl: string): string | null {
