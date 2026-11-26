@@ -4,6 +4,7 @@ import type { MediaItem, APIResponse, APIListParams } from '@/types/canonical';
 import { authorizeMediaEditor } from '@/lib/media/server/authorization';
 import { sanitizeRasterImage, MediaSanitizationError, MAX_IMAGE_UPLOAD_BYTES } from '@/lib/media/server/image-sanitizer';
 import { createServiceClient } from '@/supabase/client';
+import { rateLimiter } from '@/features/rate-limiting/limiter';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -82,6 +83,18 @@ export async function POST(request: NextRequest) {
   const authorization = await authorizeMediaEditor();
   if (!authorization.ok) {
     return NextResponse.json({ error: authorization.message }, { status: authorization.status });
+  }
+
+  const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const uploadLimit = await rateLimiter.checkLimit({
+    key: authorization.userId,
+    tier: 'mutation',
+    endpoint: '/api/v1/media',
+    actorId: authorization.userId,
+    ip: clientIp,
+  });
+  if (!uploadLimit.allowed) {
+    return rateLimiter.create429Response(uploadLimit, 'Media upload rate limit exceeded.');
   }
 
   const origin = request.headers.get('origin');
