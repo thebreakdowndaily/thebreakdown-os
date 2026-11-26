@@ -40,6 +40,9 @@ jobs:
       - name: 3. Strict Linting Gate
         run: npm run check:lint
 
+      - name: Trusted media server code lint
+        run: npm run lint:media-sanitization
+
       - name: 4. Security Regression Gate
         run: npm run test:security
 
